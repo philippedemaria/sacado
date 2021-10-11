@@ -203,21 +203,33 @@
 
         <div class="col-sm-12 col-md-4">
         {% if folder  %}
-                {% if folder.is_archive %}
-                    <a href="{% url 'folder_unarchive' folder.id   %}" class="btn btn-warning"> 
-                        <i class="fa fa-th"> </i>   Désarchiver
-                    </a>
-                {% else %}
-                    <a href="{% url 'folder_archive' folder.id  %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
-                        <i class="fa fa-archive"> </i>   Archiver
-                    </a>
-                {% endif %}
 
+                {% if group %}
+                    {% if folder.is_archive  %}
+                        <a href="{% url 'folder_unarchive' folder.id  group.id %}" class="btn btn-warning"> 
+                            <i class="fa fa-th"> </i>   Désarchiver
+                        </a>
+                    {% else %}
+                        <a href="{% url 'folder_archive' folder.id  group.id %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
+                            <i class="fa fa-archive"> </i>   Archiver
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {% if folder.is_archive %}
+                        <a href="{% url 'folder_unarchive' folder.id  0 %}" class="btn btn-warning"> 
+                            <i class="fa fa-th"> </i>   Désarchiver
+                        </a>
+                    {% else %}
+                        <a href="{% url 'folder_archive' folder.id 0 %}" class="btn btn-warning"  onclick="return TestArchive('ce dossier')"> 
+                            <i class="fa fa-archive"> </i>   Archiver
+                        </a>
+                    {% endif %}
+                {% endif %}  
+                
                 {% if group %}
                     <a href="{% url 'delete_folder' folder.id  group.id %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
                         <i class="fa fa-trash"> </i>   Supprimer
                     </a>
- 
                 {% else %}
                     <a href="{% url 'delete_folder' folder.id  0 %}" class="btn btn-danger"  onclick="return TestDeleteFolder('ce dossier')"> 
                         <i class="fa fa-trash"> </i>   Supprimer

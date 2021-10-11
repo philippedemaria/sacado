@@ -8129,24 +8129,24 @@ def update_folder(request,id,idg):
  
 
 @folder_exists
-def folder_archive(request,id):
+def folder_archive(request,id,idg):
 
-    parcours = Parcours.objects.get(id=id)
-    parcours.is_archive = 1
-    parcours.save()
-    subparcours = parcours.leaf_parcours.all()
+    folder = Folder.objects.get(id=id)
+    folder.is_archive = 1
+    folder.save()
+    parcourses = folder.parcours.all()
  
-    for p in subparcours :
+    for p in parcourses :
         p.is_archive = 1
         p.save()
 
-    return redirect('parcours')
+    return redirect('list_parcours_group' , idg )
 
 
 
 
 @folder_exists
-def folder_unarchive(request,id):
+def folder_unarchive(request,id,idg):
 
     folder = Folder.objects.get(id=id)
     folder.is_archive = 0

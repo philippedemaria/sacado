@@ -85,6 +85,9 @@ def list_knowledges(request):
 
     return render(request, 'socle/list_knowledges.html', {'communications' : [] , 'knowledges': knowledges})
 
+
+
+
 @user_is_superuser 
 def create_knowledge(request):
 

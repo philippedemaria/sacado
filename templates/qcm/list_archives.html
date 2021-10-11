@@ -79,7 +79,7 @@
                             <span class="fa-stack selector_favorite" id="selector_favorite{{ folder.id }}" data-fav="{% if folder.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ folder.id }}" style="cursor:pointer"  data-status="folder">
                                 
                                 <span id="is_favorite_id{{ folder.id }}" title="Cliquer pour changer l'état">
-                                    <i class="fa fa-2x {% if folder.is_favorite %}fa-eye text-success{% else  %}fa-eye-slash text-danger{% endif  %}"></i>
+                                    <i class="fa {% if folder.is_favorite %}fa-star text-success{% else  %}fa-star text-default{% endif  %}"></i>
                                 </span>
                             </span>
                         </td> 

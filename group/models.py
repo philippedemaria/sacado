@@ -3,7 +3,6 @@ from datetime import date
 from account.models import Student, Teacher, ModelWithCode, generate_code
 from school.models import School
 from socle.models import Level, Subject , Waiting , Vignette
-from account.models import ModelWithCode
 from django.apps import apps
 from django.utils import timezone
 from django.db.models import Q
