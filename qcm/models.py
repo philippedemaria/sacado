@@ -680,20 +680,30 @@ class Parcours(ModelWithCode):
         min score d'un parcours par élève
         """
         data = {}
-        max_tab = []
+        max_tab, max_tab_custom = [] , []
         nb_done = 0
-        exercises = set()
-        exercises.update(self.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 ))
 
-        nb_exo_in_parcours =  self.parcours_relationship.filter(is_publish=1,students=student, exercise__supportfile__is_title=0 ).count() 
+        exercises_ggb = self.parcours_relationship.filter(is_publish=1,students=student, exercise__supportfile__is_title=0  )
+ 
 
-        for exercise in exercises :
-            maxi = self.answers.filter( student=student , exercise = exercise )
+        for exercise in exercises_ggb :
+            maxi = self.answers.all()
             if maxi.count()>0 :
                 maximum = maxi.aggregate(Max('point'))
                 max_tab.append(maximum["point__max"])
                 nb_done +=1
 
+
+        custom_exercises = self.parcours_customexercises.filter(is_publish=1,students=student)
+        for custom_exercise in custom_exercises :
+            maxi = self.parcours_customknowledge_answer.filter( student=student , customexercise = custom_exercise )
+            if maxi.count()>0 :
+                maximum = maxi.aggregate(Max('point'))
+                max_tab_custom.append(maximum["point__max"])
+                nb_done +=1
+
+        nb_exo_in_parcours = exercises_ggb.count() + custom_exercises.count() 
+ 
         data["nb_cours"] = self.course.filter( is_publish =1 ).count()
         data["nb_quizz"] = self.quizz.filter( is_publish = 1 ).count()
         data["nb_exercise"] = nb_exo_in_parcours
