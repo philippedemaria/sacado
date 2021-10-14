@@ -60,21 +60,26 @@ def get_active_year():
     return active_year, int_year
 
 
-def get_active_abonnements():
+def get_active_abonnements(user):
 
     active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
-    start = datetime(this_year,7,15)
-    stop  = datetime(this_year+1,9,1)
+    strt = datetime(this_year,7,15)
+    stp  = datetime(this_year+1,9,1)
+    start = dt_naive_to_timezone(strt,user.time_zone)
+    stop  = dt_naive_to_timezone(stp,user.time_zone)
+
 
     abonnements = Abonnement.objects.filter(date_start__gte = start , date_stop__lte = stop).exclude(accounting__date_payment = None).order_by("school__country__name")
     return abonnements
 
 
-def get_pending_abonnements():
+def get_pending_abonnements(user):
 
     active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
-    start = datetime(this_year,7,15)
-    stop  = datetime(this_year+1,9,1)
+    strt = datetime(this_year,7,15)
+    stp  = datetime(this_year+1,9,1)
+    start = dt_naive_to_timezone(strt,user.time_zone)
+    stop  = dt_naive_to_timezone(stp,user.time_zone)
 
     abonnements = Abonnement.objects.filter(date_start__gte = start , date_stop__lte = stop, accounting__date_payment = None).order_by("school__country__name")
     return abonnements
@@ -82,7 +87,7 @@ def get_pending_abonnements():
 
 
 
-def get_accountings():
+def get_accountings(user):
 
     active_year, this_year = get_active_year()
     if this_year == 2021 : 
@@ -91,7 +96,10 @@ def get_accountings():
         date_start   = datetime(this_year, 7, 14) 
     date_stop    = datetime(this_year+1, 8, 1)
 
-    accountings = Accounting.objects.filter(date__gte = date_start , date__lte = date_stop )
+    start = dt_naive_to_timezone(date_start,user.time_zone)
+    stop  = dt_naive_to_timezone(date_stop,user.time_zone)
+
+    accountings = Accounting.objects.filter(date__gte = start , date__lte = stop )
 
     return accountings
 
@@ -196,7 +204,7 @@ def association_index(request):
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
 
-    abonnements  = get_active_abonnements()
+    abonnements  = get_active_abonnements(request.user)
     nb_schools   = abonnements.count()
 
     months       = [1,2,3,4,5,6,7,8,9,10,11,12]
@@ -323,7 +331,7 @@ def adhesions(request):
 def list_paypal(request):
 
 
-    accountings = get_accountings().filter(is_paypal=1).order_by("-date")
+    accountings = get_accountings(request.user).filter(is_paypal=1).order_by("-date")
 
 
     today = datetime.now()
@@ -412,19 +420,19 @@ def bank_bilan(request):
 def accountings(request):
     """ page d'accueil de la comptabilité"""
 
-    abonnements = get_active_abonnements() 
+    abonnements = get_active_abonnements(request.user)
 
     nb_schools        = abonnements.count()
     nb_schools_fr     = abonnements.filter(school__country_id = 5).count()
     nb_schools_no_fr  = abonnements.exclude(school__country_id =5).count() 
-    nb_schools_no_pay = get_pending_abonnements().count()
+    nb_schools_no_pay = get_pending_abonnements(request.user).count()
 
  
     active_year, this_year    = get_active_year() 
  
 
     product , charge , actif  , commission_paypal, result_bank , result_paypal = 0 , 0 , 0 , 0 , 0 , 0
-    accountings   = get_accountings().values_list("amount","is_credit","date_payment","objet","is_paypal") 
+    accountings   = get_accountings(request.user).values_list("amount","is_credit","date_payment","objet","is_paypal") 
 
 
     charges_list = list()
@@ -468,11 +476,11 @@ def list_accountings(request,tp):
  
 
     if tp == 0 :
-        accountings = get_accountings().filter(plan__code__gte=700)
+        accountings = get_accountings(request.user).filter(plan__code__gte=700)
     elif  tp == 1 :
-        accountings = get_accountings().filter(plan__code__gte=600, plan__code__lt=700 )
+        accountings = get_accountings(request.user).filter(plan__code__gte=600, plan__code__lt=700 )
     else :
-        accountings = get_accountings().exclude(date_payment=None)
+        accountings = get_accountings(request.user).exclude(date_payment=None)
 
     active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
     today = datetime.now()
