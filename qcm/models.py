@@ -844,12 +844,6 @@ class Parcours(ModelWithCode):
 
         return data
 
-
-
-
-
-
-
  
 class Folder(models.Model):
 
@@ -1347,20 +1341,32 @@ class Relationship(models.Model):
             point = -1
  
         if student.user.school :
-            school = student.user.school
-            stage = Stage.objects.get(school = school)
 
-     
-            if point > stage.up :
-                level = 4
-            elif point > stage.medium :
-                level = 3
-            elif point > stage.low :
-                level = 2
-            elif point > -1 :
-                level = 1
-            else :
-                level = 0
+            try :
+                school = student.user.school
+                stage = Stage.objects.get(school = school)
+                if point > stage.up :
+                    level = 4
+                elif point > stage.medium :
+                    level = 3
+                elif point > stage.low :
+                    level = 2
+                elif point > -1 :
+                    level = 1
+                else :
+                    level = 0
+            except :
+                stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+                if point > stage["up"] :
+                    level = 4
+                elif point > stage["medium"] :
+                    level = 3
+                elif point > stage["low"] :
+                    level = 2
+                elif point > -1 :
+                    level = 1
+                else :
+                    level = 0
 
         else : 
             stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
@@ -1384,19 +1390,31 @@ class Relationship(models.Model):
             studentanswer = Resultggbskill.objects.get(student=student, relationship= self,skill = skill )
             point = studentanswer.point
             if student.user.school :
-                school = student.user.school
-                stage = Stage.objects.get(school = school)
-         
-                if point > stage.up :
-                    level = 4
-                elif point > stage.medium :
-                    level = 3
-                elif point > stage.low :
-                    level = 2
-                elif point > -1 :
-                    level = 1
-                else :
-                    level = 0
+                try :
+                    school = student.user.school
+                    stage = Stage.objects.get(school = school)
+                    if point > stage.up :
+                        level = 4
+                    elif point > stage.medium :
+                        level = 3
+                    elif point > stage.low :
+                        level = 2
+                    elif point > -1 :
+                        level = 1
+                    else :
+                        level = 0
+                except :
+                    stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+                    if point > stage["up"] :
+                        level = 4
+                    elif point > stage["medium"] :
+                        level = 3
+                    elif point > stage["low"] :
+                        level = 2
+                    elif point > -1 :
+                        level = 1
+                    else :
+                        level = 0
             else : 
                 stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
  

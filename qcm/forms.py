@@ -52,8 +52,6 @@ class ParcoursForm(forms.ModelForm):
 				else :
 					groups    = teacher.groups.filter(level=group.level)
 
-			print(groups , shared_groups)
-				
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
  
