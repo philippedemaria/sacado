@@ -309,7 +309,7 @@ def register_student(request):
                     print("Attribution et création non établies")
 
                 user = authenticate(username=username, password=password)
-                login(request, user)
+                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 request.session["user_id"] = request.user.id
                 messages.success(request, "Inscription réalisée avec succès !")               
                 if user_form.cleaned_data['email']:
@@ -373,7 +373,7 @@ def switch_teacher_student(request,idg): #idg = group_id
     try :
         student  = group.students.filter(user__username__contains= "_e-test").last()
         user = authenticate(username=student.user.username, password = "sacado2020")
-        login(request, user)
+        login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
         request.session["user_id"] = request.user.id
         messages.success(request,"Vous êtes maintenant sur l'interface Elève de votre groupe.")
     except :
@@ -392,7 +392,7 @@ def switch_student_teacher(request): #idg = group_id
     user     = group.teacher.user
     try :
         user = authenticate(username= user.username, password = password)
-        login(request, user)
+        login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
         request.session["user_id"] = request.user.id
         messages.success(request,"Vous êtes revenu sur l'interface Enseignant.")
     except :
@@ -952,7 +952,7 @@ def register_teacher(request):
             username = user_form.cleaned_data['username']
             password = user_form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
-            login(request, user)
+            login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             teacher = Teacher.objects.create(user=user)
 
             try :
@@ -1318,7 +1318,7 @@ def register_parent(request):
                 parent.students.add(student)
             
                 user = authenticate(username=username, password = password)
-                login(request, user)
+                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 messages.success(request, "Inscription réalisée avec succès !")            
                 if user_form.cleaned_data['email'] :
                     sending_mail('Création de compte sur Sacado', 'Bonjour, votre compte SacAdo est maintenant disponible. \n\n Votre identifiant est '+str(username) +". \n\n votre mot de passe est "+str(password)+'.\n\n Pour vous connecter, redirigez-vous vers https://sacado.xyz.\n Ceci est un mail automatique. Ne pas répondre.', settings.DEFAULT_FROM_EMAIL, [request.POST.get("email")])
