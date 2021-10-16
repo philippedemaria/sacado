@@ -3,54 +3,27 @@ from datetime import datetime ,  date
 import requests
 
 
-def web_abonnement_xml(abonnement,new):
-
+def web_abonnement_xml(abonnement,id_abonnement , new):
     #Webservice du GAR
-    header = "<?xml version='1.0' encoding='UTF-8'?>"
-    header += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
-    header += "{ 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }"
-    header += "<idAbonnement>ABO_SACADO_" + str(abonnement.school.code_acad)+"</idAbonnement>"
-    header += "<commentaireAbonnement>Abonnement à SacAdo</commentaireAbonnement>"
-    header += "<idDistributeurCom>46173_832020065</idDistributeurCom>"
-    header += "<idRessource>ark:/46173/00001.p</idRessource>"
-    header += "<typeIdRessource>46173</typeIdRessource>"
-    header += "<libelleRessource>SACADO</libelleRessource>"
-    header += "<debutValidite>"+abonnement.date_start.isoformat()+"</debutValidite>"
-    header += "<finValidite>"+abonnement.date_stop.isoformat()+"</finValidite>"
-    header += "<anneeFinValidite></anneeFinValidite>"
-    header += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
-    header += "<codeNatureUAI></codeNatureUAI>"
-    header += "<categorieAffectation>transferable</categorieAffectation>"
-    header += "<typeAffectation>ETABL</typeAffectation>"
-    header += "<nbLicenceEnseignant></nbLicenceEnseignant>"
-    header += "<nbLicenceEleve></nbLicenceEleve>"
-    header += "<nbLicenceProfDoc></nbLicenceProfDoc>"
-    header += "<nbLicenceGlobale>ILLIMITE</nbLicenceGlobale>"
-    header += "<publicCible>ENSEIGNANT</publicCible>"
-    header += "<publicCible>ELEVE</publicCible>"
-    header += "<nbAccedantSimultane>3000</nbAccedantSimultane>"
-    header += "</abonnement>"
+    body = "<idAbonnement>" + id_abonnement +"</idAbonnement>"
+    body += "<commentaireAbonnement>Abonnement à SacAdo</commentaireAbonnement>"
+    body += "<idDistributeurCom>832020065_000000000000000</idDistributeurCom>"
+    body += "<idRessource>ark:/46173/00001.p</idRessource>"
+    body += "<typeIdRessource>ark</typeIdRessource>"
+    body += "<libelleRessource>SACADO</libelleRessource>"
+    body += "<debutValidite>"+abonnement.date_start.isoformat()+"</debutValidite>"
+    body += "<finValidite>"+abonnement.date_stop.isoformat()+"</finValidite>"
+    body += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
+    body += "<categorieAffectation>transferable</categorieAffectation>"
+    body += "<typeAffectation>INDIV</typeAffectation>"
+    body += "<nbLicenceEnseignant>500</nbLicenceEnseignant>"
+    body += "<nbLicenceEleve>"+abonnement.school.nbstudents+"</nbLicenceEleve>"
+    body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+    body += "<publicCible>ENSEIGNANT</publicCible>"
+    body += "<publicCible>ELEVE</publicCible>"
+    body += "</abonnement>"
 
-
-    # dico   = dict()
-    # dico["idAbonnement"]          = "ABO_SACADO_" + str(abonnement.school.code_acad)
-    # dico["commentaireAbonnement"] = "Abonnement à SacAdo"
-    # dico["idDistributeurCom"]     = "46173_832020065"
-    # dico["idRessource"]           = "ark:/46173/00001.p" # En production, il faut enlever le p 
-    # dico["typeIdRessource"]       = "ark"      
-    # dico["libelleRessource"]      = "SACADO"
-    # dico["debutValidite"]         = abonnement.date_start.isoformat()
-    # dico["finValidite"]           = abonnement.date_stop.isoformat() #.strftime("%Y-%m-%d")
-    # if new :
-    #     dico["uaiEtab"]           = abonnement.school.code_acad 
-    # dico["categorieAffectation"]  = "transferable"
-    # dico["typeAffectation"]       = "ETABL"
-    # dico["nbLicenceGlobale"]      = "ILLIMITE"     
-    # dico["publicCible"]           = "ELEVE"
-    # dico["publicCible"]           = "ENSEIGNANT"
-    # return dico
-
-
+    return body
 
 def date_abonnement(today):
     """Création d'un abonnement dans la base de données"""
@@ -62,36 +35,30 @@ def date_abonnement(today):
 
     return date_start, date_stop
 
-
-
-def create_abonnement(today,school,accounting_id,user):
-    """Création d'un abonnement dans la base de données"""
-    host   = "https://abonnement.partenaire.test-gar.education.fr/" # Adresse d'envoi
-    # Date d'abonnement du 1 septembre au 14 juillet
-    date_start, date_stop = date_abonnement(today)
-
-    # Create Web abonnement d'un établissement
-    abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = 1, defaults={ 'user' : user,  'is_active' : 0}  )
-    if not abo_created :
-        headers = {'host':host}
-        params  = web_abonnement_xml(abonnement,True)
-        r       = requests.post(str(abonnement.id),headers=headers,params=params)
-        abonnement.is_active=0
-        abonnement.save()
-        if r.status_code==200 :
-            abonnement.is_active = 1
-            abonnement.save()
-
-    else : 
-        headers = {'host':host}
-        params  = web_abonnement_xml(abonnement,False)
-        r = requests.put(str(abonnement.id),headers=headers,params=params)
-        if r.status_code==201 :
-            abonnement.is_active = 1
-            abonnement.save()
-
  
 
 
+def create_abonnement_gar(today,school,accounting_id,user):
+    """Création d'un abonnement dans la base de données"""
+
+    now = datetime.now()
+    timestamp = datetime.timestamp(now)
+
+    return True 
+
+    # En atente de la clé pem
+    # id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"+timestamp 
+    # host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
+    # directory = '/home/sacado/'
+
+    # header  = "{ 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }"
+    # body      = web_abonnement_xml(abonnement,id_abonnement, True) 
+    # r         = requests.put(host, data=body, headers=header, cert=(directory + 'mon_fichier.pem', directory + 'votre.key'))
+
+    # if r.status_code == 201 or r.status_code==200 :
+    #     return True 
+    # else :
+    #     return False 
+ 
 
 

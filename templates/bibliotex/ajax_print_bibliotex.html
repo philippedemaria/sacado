@@ -1,0 +1,20 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+            <label>Imprimer les savoir faire ? <input type="checkbox" name="knowledges"  id="knowledges"></label><br/>
+            <label>Imprimer les compétences ? <input type="checkbox" name="skills" id="skills"></label>
+            <hr/>
+
+            <button type="submit" class="btn btn-primary" > Télécharger le fichier </button>   
+            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+     </div> 
+</div> 
+
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>

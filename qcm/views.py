@@ -742,7 +742,7 @@ def ajax_populate(request):
             data["html"] = "<i class='fa fa-times'></i>"
             data["no_store"] = True
 
-    Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0            
+    #Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0            
     data["nb"] = parcours.exercises.count()
 
     return JsonResponse(data) 
@@ -8010,8 +8010,8 @@ def mastering_custom_done(request):
 def affectation_students_in_folder_and_affectation_groups_in_folder(nf,group_ids,parcours_ids):
 
     all_students = set()
-    for goup_id in group_ids :    
-        group = Group.objects.get(pk = goup_id)
+    for group_id in group_ids :    
+        group = Group.objects.get(pk = group_id)
         group_students = group.students.all()
         all_students.update( group_students )
     nf.students.set(all_students) 

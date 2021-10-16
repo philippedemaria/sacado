@@ -82,8 +82,6 @@ body {
 }
 
 
-
-
 .padding10 {
   padding: 10px;
 }
@@ -268,12 +266,12 @@ li label{
     font-size: 14px;
 }
 
-#id_students, #id_exercises, #id_courses, #id_themes, #id_groups, #id_parcours {
+#id_students, #id_exercises, #id_courses, #id_themes, #id_groups, #id_parcours ,  #id_folders {
   list-style: none;
   padding : 0px ;
 }
 
-#id_students li, #id_exercises li , #id_courses li, #id_themes li, #id_groups li, #id_parcours li  {
+#id_students li, #id_exercises li , #id_courses li, #id_themes li, #id_groups li, #id_parcours li ,  #id_folders li  {
   list-style: none;
 }
 
@@ -285,7 +283,6 @@ li label{
 
 .list_choice{
   background-color: #FFF;
-  border:1px solid #CCC;
   padding:5px;
 }
 
@@ -593,12 +590,120 @@ label {
   padding-top: 2px;
 }
 
+/******************************************** bibliotex  **************************************/
+
+.title_bibliotex{
+   font-size : 26px;
+   font-variant-caps: small-caps;
+}
+
+.click_this_level{
+    color: #007EE2;
+    cursor: pointer ;
+    margin-left: 15px;
+}
+
+ 
+
+.skill_knowledge_bibliotex_title{
+   font-size : 18px;
+   font-variant-caps: small-caps;
+}
+
+.skill_knowledge_body{
+   font-size : 12px;
+}
+
+.exotex{
+    width : 47%;
+    color : #666;
+    padding: 15px;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    height : 250px;
+    margin-top: 15px;
+    margin-right: 15px;
+    overflow-y: auto;
+    float:left;
+}
+
+.consigne{
+  font-size:16px;
+  border-left : 5px solid #5d4391 ;
+  padding: 10px;
+  margin-bottom: 10px ;
+
+}
+
+.fontsize12{
+  font-size : 12px;
+}
+
+.exotex_show_exercice{
+  font-size :20px;
+  background-color: #5d4391 ;
+  color: #FFF;
+  padding: 0px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px ;
+}
 
 
+.exotex_knowledges{
+  font-size :14px;
+  background-color: #f1eef7;
+  color: #5d4391 ;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px ;
+}
 
+.exotex_div_menu_label{
+  color: #998fa6 ;
+  height:40px;  
+}
+ 
 
+.relative_div_exotex{
+  position: relative;
+  list-style: none;
+  padding: 9px;
+  cursor: pointer;
+}
 
- /******************************************** real_time_live  **************************************/
+.relative_div_exotex:hover{
+  background-color: #f1eef7;
+  padding: 9px;
+  border-radius: 3px 0px 0px 3px ;
+}
+
+.relative_div_exotex:hover a, .relative_div_exotex:hover span {
+  color:  #5d4391!important ;
+}
+
+.legend_exotex_parameter{
+  display: none
+}
+
+.relative_div_exotex:hover .legend_exotex_parameter{
+  display: inline;
+  position:absolute;
+  width:200px;
+  height:40px;
+  padding: 10px;
+  z-index: 999;
+  left:40px;
+  top:0px;
+  background-color: #5d4391;
+  color: #FFF!important  ;
+  -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+  box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+  border-radius: 0px 3px 3px  0px;
+}
+
+/******************************************** real_time_live  **************************************/
 
 .no_live{
   color:#CCC;
@@ -2026,7 +2131,7 @@ width:100%;
 }
 
 /* Create a custom checkbox */
-.checkmark {
+.checkmark{
   position: absolute;
   top: 0;
   left: 0;
@@ -2036,30 +2141,40 @@ width:100%;
   border-radius: 4px;
 }
 
+.check_exotex{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 25px;
+  width: 25px;
+  border:1px solid #222;
+  border-radius: 4px;
+}
+
 /* On mouse-over, add a grey background color */
-.container_checkbox:hover input ~ .checkmark {
+.container_checkbox:hover input ~ .checkmark, .container_checkbox:hover input ~  .check_exotex {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container_checkbox input:checked ~ .checkmark {
+.container_checkbox input:checked ~ .checkmark, .container_checkbox:hover input ~  .check_exotex  {
   background-color: #00a65a;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
+.checkmark:after ,  .check_exotex:after {
   content: "";
   position: absolute;
   display: none;
 }
 
 /* Show the checkmark when checked */
-.container_checkbox input:checked ~ .checkmark:after {
+.container_checkbox input:checked ~ .checkmark:after , .container_checkbox input:checked ~ .check_exotex:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.container_checkbox .checkmark:after {
+.container_checkbox .checkmark:after , .container_checkbox .check_exotex:after  {
   left: 8px;
   top: 5px;
   width: 7px;
@@ -2431,7 +2546,10 @@ a.bilan_title:hover .fa-angle-down,a.bilan_title:focus .fa-angle-down {
 }
 
 
-
+a.surline:hover   {
+  background-color: #ffb400;
+  border-radius: 5px;
+}
 
 /* badges */
 .c1{
@@ -2546,13 +2664,6 @@ a.menuright:hover{
   font-size: 20px;
 }
 
-.consigne{
-  font-size:16px;
-  border-left : 5px solid #5d4391 ;
-  padding: 10px;
-  margin-bottom: 10px ;
-
-}
 /* Prelaoder */
  #preloader_groups {
   position: fixed;
@@ -6459,7 +6570,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   border: 1px solid #998fa6!important;
   margin-right: 5px;
 }
-.btn-new-violet:hover, .btn-new-violet:hover > a ,
+.btn-new-violet:hover, .btn-new-violet:hover > a , 
 .btn-new-violet:active, .btn-new-violet:active > a ,
 .btn-new-violet.hover,  .btn-new-violet.hover > a   {
   background-color: #f1eef7!important;/*   #dd4b39!important;*/

@@ -1,0 +1,30 @@
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new-violet "> Nouvelle BiblioTex <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+        {% if folder %}
+        <li> <a href="{% url 'create_bibliotex' folder.id %}"  > Créer une BiblioTex ici</a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_bibliotex' 0 %}"  > Créer une BiblioTex ici</em></a> </li>
+        {% endif %}
+        <li>{% if sacado_asso %} 
+        		<a href="{% url 'all_parcourses' 0 %}" > Récupérer une BiblioTex mutualisée  
+
+                {% if not group %} 
+                    <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >
+                                <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. Le parcours sera <br/>directement affecté à votre<br/> groupe.   
+                            </div>
+                    </span>
+                {% endif %} 
+                </a>
+
+        	{% else %}
+        		<a href="#"  class="no_sacado_asso" > Récupérer une BiblioTex mutualisée </a> 
+        	{% endif %}
+        </li>
+ 
+    </ul>
+</li> 

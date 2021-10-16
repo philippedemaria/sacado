@@ -1,0 +1,124 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+
+    <script>
+        require(['script/ajax-bibliotex']);
+    </script> 
+
+{% endblock %} 
+
+
+{% block page_title %}
+    <img src="{% static 'img/tex.png' %}" width="25px">  <img src="{% static 'img/angle-right.png' %}" width="25px"> 
+    {{ bibliotex }}
+    <small>Sélection des exercices </small>
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+     
+ 
+    <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
+
+{% endblock %}
+
+
+{% block body %}
+ 
+  
+     
+<section class="content_main">
+    <div class="col-sm-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+            <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
+            <div class="row">
+                <div class="col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <label>Enseignements</label>
+                        <select id="id_subject" name="subject" class="form-control select2">
+                            {% for s in teacher.subjects.all %}
+                                <option value="{{s.id}}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <label>Niveaux des exercices</label>
+                        <select id="id_level" name="level" class="form-control select2" >
+                            <option value=" ">Choisir un niveau</option>
+                            {% for l in levels %}
+                                <option value="{{l.id}}">{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label>Thèmes </label> <span style="font-size:12px"><em>choisir un niveau puis un ou plusieurs thèmes ci-dessous.</em></span>
+                        <select id="id_theme" name="theme" class="form-control select2" multiple>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-9 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <label>Compétences </label>
+                        <select id="id_skill" name="skill" class="form-control select2">
+                                <option value="">---------------------</option>
+                            {% for s in skills %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-md-1 col-lg-1">
+                    <div class="form-group">
+                        <label>Mot_clé </label>
+                        <input name="keyword" id="keyword" class="form-control" />
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div id="loader">
+                    </div>
+                    <div id="content_exercises" class="list_choice">
+ 
+                    </div>
+                </div>
+            </div> 
+        </form>
+    </div>
+</section>  
+
+
+
+
+{% endblock %}
+
+ 
+ 
+ 
+       
+ 
+ 

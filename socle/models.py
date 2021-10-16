@@ -234,6 +234,10 @@ class Waiting(models.Model):
 
 
 
+    def exotexs_counter(self) :
+        Exotex = apps.get_model('bibliotex', 'Exotex')
+        return Exotex.objects.filter(knowledge__waiting = self).count()
+
 
 class Knowledge(models.Model):
     level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")
@@ -380,6 +384,8 @@ class Knowledge(models.Model):
     def supportfile_counter(self):
         return self.supportfiles.count()
 
+    def exotexs_counter(self) :
+        return self.knowledge_exotexs.count()
 
 
 class Skill(models.Model): 

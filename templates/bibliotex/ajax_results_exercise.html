@@ -1,0 +1,33 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        {{ relationtex.exotex.title }}
+     </div> 
+</div> 
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <table class="table">
+
+            {%  for s in  students %}       
+            <tr><td>
+
+                {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
+
+            </td></tr>
+            {%  endfor %}
+        </table>
+     </div> 
+</div> 
+
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+ 
+

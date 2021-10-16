@@ -1,0 +1,135 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+           
+ 
+<div  class="box box-widget widget-user-2"  
+      style="cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};">
+    <div class="handler widget-user-header">
+        <!-- Add signet to folder -->
+ 
+        <div style="font-size:25px; margin-top:10px;color:#5d4391"> 
+
+ 
+                    {% if bibliotex.title|length > 26 %}
+                    <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
+                        <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                    </span>
+                    {% elif bibliotex.title|length > 22 %}
+                        {{ bibliotex.title|truncatechars:"22"}}
+                    {% elif bibliotex.title|length > 14 %}
+                        {{ bibliotex.title|truncatechars:"14" }}
+                    {% else %}
+                        {{ bibliotex.title}}
+                    {% endif %}
+        </div>
+
+        <span style="cursor:pointer" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show white" >
+            <div class="{% if not parcours.is_publish %}
+                            disc_persistant
+                        {% else %}
+                            disc 
+                        {% endif %}
+                        disc{{bibliotex.id }}" style="background-color:{% if bibliotex.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                 <i class="fa fa-circle-o-notch"></i>
+            </div>
+        </span> 
+ 
+
+         <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                savoir faire ciblés 
+            </div> 
+        </div>
+
+ 
+        {% for k in bibliotex.knowledges %}
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                {{ k.name }}
+            </div> 
+        </div>
+        {% endfor %}
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                compétences ciblées 
+            </div> 
+        </div>
+        
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                {% for s in bibliotex.skills %}
+                    {{ s }}. 
+                {% endfor %}
+            </div> 
+        </div>
+        
+
+
+    </div>
+
+    <!-- box-footer DES FONCTIONNALITES  -->
+
+
+
+    <div class="box-footer" style="position: relative; padding-top: 0px;">
+ 
+            <div class="row dossier"> 
+                <div class="col-xs-12 col-md-12 col-lg-12"> 
+                    {{  bibliotex.relationtex.nb_exotexs }} exercices dont {{ bibliotex.relationtex.nb_exotexs_published }} publié{{ bibliotex.relationtex.nb_exotexs_published|pluralize }} {% if    bibliotex.relationtex.care %} 
+                    <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
+                </div>
+            </div>
+
+            <div class="row extend"> 
+               <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
+                </div>
+               <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'show_bibliotex' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-eye"></i> <span class="label_icon">Consulter</span></a> 
+                </div>
+               <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'show_bibliotex' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-print"></i> <span class="label_icon">Imprimer</span></a> 
+                </div>
+
+            </div>
+
+            <div class="row extend"> 
+               <div class="col-lg-4 col-xs-4">
+
+                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
+                </div>
+               <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-clone"></i> <span class="label_icon">Dupliquer</span></a> 
+                </div>
+               <div class="col-lg-4 col-xs-4">
+
+                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individ.</span></a> 
+                </div>
+            </div>
+
+
+             <div class="row">  
+                <div class="col-lg-4 col-xs-4">
+
+                    <a href="{% url 'real_time' bibliotex.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" >
+                        <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
+                    </a>
+
+                </div>
+                <div class="col-lg-4 col-xs-4">
+                 
+                    <a  href="{% url 'exercise_bibliotex_individualise' bibliotex.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+                
+                </div>
+                 
+                <div class="col-lg-4 col-xs-4">
+                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                    </span>
+                </div> 
+            </div>
+ 
+    </div>
+
+</div>    
+ 

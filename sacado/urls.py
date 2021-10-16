@@ -33,7 +33,7 @@ urlpatterns = [
                   path('oauth/', include('social_django.urls')),
                   path('basthon/', include('basthon.urls')),    
                   path('association/', include('association.urls')),
-
+                  path('bibliotex/', include('bibliotex.urls')),
                   path('tool/', include('tool.urls')),  
                   path('payment/', include('payment.urls')),
                   path('aefe/', include('aefe.urls')),

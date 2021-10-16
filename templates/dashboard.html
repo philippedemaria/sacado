@@ -513,8 +513,11 @@
             <div class="col-lg-3 col-xs-3">
                 <small>{{ level.shortname }} </small> 
             </div>           
-            <div class="col-lg-4 col-xs-4">
-                <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_supportfiles' level.id  %}">Support</a>  
+            <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'admin_supportfiles' level.id  %}" class="surline"><img src="{% static 'img/ggb.png' %}" width="15px"></a>  
+            </div>  
+            <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'admin_exotexs' level.id  %}" class="surline"><img src="{% static 'img/tex.png' %}" width="15px"></a>  
             </div>  
             <div class="col-lg-3 col-xs-3"> 
                 <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 

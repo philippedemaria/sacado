@@ -1,0 +1,169 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if exotex %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-bibliotex']);
+    </script> 
+ 
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+   <img src="{% static 'img/tex.png' %}" width="25px">   {% include 'qcm/breadcrumb.html' %} BiblioTex
+    <small> Fiche d'exercices imprimable </small>
+
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+
+<div class="content_main">
+    <div class="col-xs-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+
+ 
+
+     
+                <div class="row">
+                    <div class="col-sm-12 col-md-7">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ form.title.label_tag }} <small><em>A privilégier</em></small>
+                                    {{ form.title |add_class:"form-control"  }}
+                                    {{ form.title.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    {{ form.vignette.label_tag }}<br/>
+                                    {{ form.vignette|add_class:"btn btn-default form-control"   }}
+                                    {{ form.vignette.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">         
+                                    <label>Affecter à mes groupes :</label> {% if group %}
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                            </span> {% endif %}
+                                    {{ form.groups|add_class:"select_all" }}
+                                    {{ form.groups.errors }}
+
+             
+                                </div>
+                                <div class="form-group">  
+                                    <div class="alert alert-warning">
+                                        <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la BiblioTex est partagée entre ces groupes.</p>
+                                        <p style="font-size:12px"><i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.</p>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="col-sm-12 col-md-6">
+                                <label>Inclure dans les dossiers proposés</label>
+                                <div class="form-group" id="cblist">
+                                     <div class="alert alert-warning">
+                                        <p style="font-size:12px">Choisir au moins un groupe.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="col-sm-12 col-md-5 setup_ggb">
+                        <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                             <table class="table borderless">
+                                    <tr>
+                                        <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >Visible par les élèves.</div>
+                                            </span></td>
+                                        <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                        <td>{{ form.is_publish.errors }}</td>
+                                    </tr>
+                                    <tr id="publication_div">
+                                        <td><label>Date de publication :</label>  
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                        <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                        <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                        </div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form.is_share.label_tag }}
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                        <td>{{ form.is_share.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form.is_archive.label_tag }}
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >Archive le fichier.</div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.is_archive |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                        <td>{{ form.is_archive.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form.stop.label_tag }} 
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >Rendu des exercices impossible après la date renseignée. 
+                                                    <br/> 
+                                                    <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                </div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.stop|add_class:"form-control datetimepicker"}}</td>
+                                        <td>{{ form.stop.errors}}{% for error in form.non_field_errors %}
+                                                <p class="alert alert-danger">{{error}}</p>
+                                            {% endfor %}</td>
+                                    </tr>
+                            </table>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px" >
+                    <div class="col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <input value="Créer et choisir les exercices" type="submit" class="btn btn-primary" id="click_button" />
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>
+                    </div>   
+                    {% if exotex %}
+                        <div class="col-sm-9 col-md-9">                                             
+                            <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
+                                <i class="fa fa-trash"> </i>   Supprimer
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

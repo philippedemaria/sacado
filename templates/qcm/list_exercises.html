@@ -20,6 +20,7 @@
 {% block page_menu_right %}
 
     {% if sacado_asso %}
+    <li> <a href="{% url 'my_bibliotexs' %}" class="btn btn-new"> Mes fiches d'exercices (Version Beta) <img src="{% static 'img/pdf.png' %}" width="15px" /></a> </li>
     <li> <a href="{% url 'exercise_custom_show_shared' %}" class="btn btn-new"> Exercices personnels mutualisés</a> </li>
     {% else %}
     <li> <a href="#" class="btn btn-new no_sacado_asso" title="Version établissement requise"> Exercices personnels mutualisés</a> </li>

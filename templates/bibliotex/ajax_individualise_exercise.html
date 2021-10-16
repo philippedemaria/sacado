@@ -1,0 +1,74 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+
+        {{ relationtex.exotex.title }}
+ 
+        <hr/>
+
+        {{ relationtex.exotex.content }}
+ 
+        <hr/>
+
+
+
+        <span class="btn btn-info select_student" 
+            id="selecteur{{ relationtex.id}}"    
+            data-student_id="0"  
+            data-relationtex_id="{{ relationtex.id }}" 
+            data-statut="False" style="min-width:75px; margin:1px; margin-right:0px" >Attribuer à tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"  
+            data-relationtex_id="{{ relationtex.id }}" 
+            data-statut="False"  />
+        </span>
+        <span class="btn btn-warning select_student" 
+            id="selecteur{{ relationtex.id}}"    
+            data-student_id="0"   
+            data-relationtex_id="{{ relationtex.id }}" 
+            data-statut="True" style="min-width:75px; margin:1px; margin-left:0px" >Détacher tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"  
+            data-relationtex_id="{{ relationtex.id }}" 
+            data-statut="True" />
+        </span>
+
+    </div> 
+    <div class="col-sm-12 col-md-6">
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+            {%  for s in  students %}
+
+ 
+
+ 
+
+                <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationtex.id}}" 
+                    id="student{{relationtex.id}}-{{s.user.id }}"
+                    data-student_id="{{ s.user.id }}" data-relationtex_id="{{ relationtex.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                    style="min-width:155px; margin:1px">
+
+
+
+
+
+                    {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
+                </span>
+
+            {%  endfor %}
+        </form>
+     </div> 
+</div> 
+
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+ 
+

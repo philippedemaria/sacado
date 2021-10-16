@@ -1,0 +1,60 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-bibliotex']);
+    </script> 
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+    <img src="{% static 'img/tex.png' %}" width="25px"> Mes BiblioTex <img src="{% static 'img/angle-right.png' %}"/> 
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+    <a href="{% url 'create_bibliotex' 0 %}"  class="btn btn-new-violet" > Créer une BiblioTex </a> 
+ 
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">
+
+<form method="POST">{% csrf_token%}
+    <div class="row">
+        <div class="col-sm-2 col-md-2">
+            {% for data in dataset %}
+                <h4 class="title_bibliotex">
+                    {% if data.subject.name|length > 17 %} {{ data.subject.shortname   }} {% else %} {{ data.subject.name }} {% endif %}
+                </h4>
+                {% for l in data.levels %}
+                    <div data-level_id="{{l.id}}" data-subject_id="{{data.subject.id}}" class="click_this_level">{{ l.name }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+
+        <div class="col-sm-10 col-md-10" id="my_biblio">
+
+        </div>
+
+
+    </div>
+</form>  
+ 
+
+</section>
+{% endblock %}                        
+ 

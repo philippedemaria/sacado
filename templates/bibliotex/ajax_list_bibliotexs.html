@@ -1,0 +1,19 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% for bibliotex in bibliotexs %}
+
+    {% include 'bibliotex/bibliotex_tag.html' %}
+
+{% endfor %}
+
+
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+ 
+

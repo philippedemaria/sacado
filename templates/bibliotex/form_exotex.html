@@ -1,0 +1,209 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if exotex %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-exotex']);
+    </script> 
+ 
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+<div id="new_style">
+    <img src="{% static 'img/tex.png' %}" width="25px"> Fichier Latex 
+    {% if knowledge  %}
+    <small>         
+        {{ knowledge.level.shortname }}, {{ knowledge.theme.name }},  {{ knowledge.name|truncatechars:"80" }}
+    </small>  
+    {% endif %} 
+</div>
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+<style>
+ul#id_skills li{
+    list-style: none;
+}
+</style>
+
+<div class="content_main">
+    <div class="col-xs-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="row" id="standard_layer">
+                {% if not exotex %}
+                        <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
+                        <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
+                        <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
+                {% else %}  
+                <div class="row">
+                    <div class="col-sm-12 col-md-2">
+                        <div class="form-group">
+                            {{ form.level.label_tag }}
+                            {{ form.level |add_class:"form-control select2" }}
+                            {{ form.level.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                        <div class="form-group">
+                            {{ form.theme.label_tag }}
+                            {{ form.theme |add_class:"form-control select2" }}
+                            {{ form.theme.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-8">
+                        <div class="form-group">
+                            <label>Savoir faire :</label><br>
+                            {{ form.knowledge |add_class:"form-control select2" }}
+                            {{ form.knowledge.errors }}
+                        </div>
+                    </div>
+                </div> 
+                {% endif %}  
+                <div class="row">
+                    <div class="col-sm-12 col-md-7">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    {{ form.title.label_tag }} <small><em>A privilégier</em></small>
+                                    {{ form.title |add_class:"form-control"  }}
+                                    {{ form.title.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    {{ form.content.label_tag }}<br/>
+                                    {{ form.content|attr:"cols:80"|attr:"rows:15"   }}
+                                    {{ form.content.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    Compétences ciblées<br>
+                                    {{ form.skills|add_class:"form-control select2" }}
+                                    {{ form.skills.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-9">
+                                <div class="form-group">
+                                    Autres savoir faire ciblés<br>
+                                    {{ form.knowledges|add_class:"form-control select2" }}
+                                    {{ form.knowledges.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
+                            <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
+                            <div id="enable_correction_div">
+                                <div class="col-sm-12 col-md-12">                        
+                                    <div class="form-group"> 
+                                        {{ form.content_cor.label_tag }}                        
+                                        {{ form.content_cor|attr:"cols:80"|attr:"rows:15" }}
+                                        {{ form.content_cor.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-2">   
+                                    <div class="form-group">
+                                        {{ form.is_publish_cor.label_tag }}
+                                        {{ form.is_publish_cor |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_publish_cor.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+ 
+                    <div class="col-sm-12 col-md-5 setup_ggb">
+                        <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                             <table class="table borderless">
+ 
+                                    <tr id="publication_div">
+                                        <td><label>Date de publication :</label>  
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                        <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                        <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                        </div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>     
+                                        <td>{{ form.duration.label_tag }} </td>
+                                        <td>{{ form.duration |add_class:"form-control" }}</td>
+                                        <td>{{ form.duration.errors }}</td>
+                                    </tr> 
+                                    <tr>     
+                                        <td>{{ form.calculator.label_tag }} </td>
+                                        <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}</td>
+                                        <td>{{ form.calculator.errors }}</td>
+                                    </tr> 
+
+                                    <tr>
+                                        <td>{{ form.is_share.label_tag }}
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                        <td>{{ form.is_share.errors }}</td>
+                                    </tr>
+ 
+                   
+                                    <tr>
+                                        <td>{{ form.is_python.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >contient du Python.</div></td>
+                                        <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                        <td>{{ form.is_python.errors }}</td>
+                                    </tr> 
+                                    <tr>
+                                        <td>{{ form.is_scratch.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >contient du Scratch.</div></td>
+                                        <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                        <td>{{ form.is_scratch.errors }}</td>
+                                    </tr> 
+                            </table>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px" >
+                    <div class="col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>
+                    </div>   
+                    {% if exotex %}
+                        <div class="col-sm-9 col-md-9">                                             
+                            <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
+                                <i class="fa fa-trash"> </i>   Supprimer
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

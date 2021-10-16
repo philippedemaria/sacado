@@ -1,0 +1,299 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+{% endblock %} 
+
+
+{% block page_title %}
+    <span style="color:{{ parcours.color }}"><i class="fa fa-user"></i> </span>
+    {% include 'qcm/breadcrumb.html' %}
+      <small> Individualiser </small> 
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+
+
+    {% if is_evaluation %}
+
+        {% include 'qcm/submenu_parcours.html' %} 
+    {% else  %}
+
+        {% include 'qcm/submenu_parcours.html' %} 
+    {% endif  %}
+
+
+{% endblock %}
+
+
+
+
+{% block body %}
+      
+<section class="content_main">
+<form action="" method="POST" enctype='multipart/form-data'> 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-warning">
+                <img src="{% static 'img/conseil.png' %}" height="40px"/> Affecter tous les exercices aux élèves choisis au premier exercice  
+                <input id="select_all_exercices"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non" /> 
+            </div>
+        </div>    
+    </div>
+    {% if nb_rc == 0 %}
+    <div class="row">
+        <div  class="col-sm-12 col-md-12">
+            <div class="alert alert-danger">  
+                Ce parcours ne contient aucun exercice. 
+                <a href="{% url 'peuplate_parcours'  parcours.id %}"   class="no_button"> Sélectionner les exercices</a> 
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+        <div class="col-sm-12 col-md-12">
+            {% csrf_token %}
+            {% for relationship in relationships  %} 
+
+                {% if not relationship.exercise.supportfile.is_title %}            
+                <div class="row" style="margin-top:8px; padding-top: 8px; border-top: 1px solid #CCC;  border-top: 1px solid #CCC ;{% if relationship.is_publish %} border-left: 3px solid #00a65a {% endif %}" id="relationship{{ relationship.id }}">                        
+                    <div  class="col-sm-12 col-md-12">  
+
+                        <div class="header_exercise"  style="clear:both" >
+                            <a href="{% url 'show_this_exercise' relationship.exercise.id   %}" class="listing" target="_blank">  {{ relationship.exercise.knowledge.name|capfirst }}</a>
+                        </div> 
+
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:8px; padding-bottom: 8px;{% if relationship.is_publish %} border-left: 3px solid #00a65a {% endif %} ">
+                    <div class="col-sm-12 col-md-5">        
+                        <a href="{% url 'show_this_exercise' relationship.exercise.id   %}"  target="_blank">  
+                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="imagefile"></a>
+                                                            
+
+
+
+                        {% if relationship.exercise.supportfile.title %}  
+                            {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}  
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        {% endif %}
+
+                    
+                        {% if relationship.exercise.supportfile.calculator %}
+                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                        {% else %}
+                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                        {% endif  %}  <br>
+                        <span style="font-size:16px;">    
+                            <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }} {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.knowledge.name|make_list|length < 140 %}<br>{% endif %}
+                            <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}  minimum
+                        </span>
+
+
+                        <br>
+                        <span id="loading{{ relationship.exercise.id }}" class="pull-right"></span>
+                            <br>
+
+
+                                    
+                         {% if relationship.is_publish %} 
+                            <p style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #00a65a; color: #FFF"> Exercice publié </p><br>
+                         {% endif %}
+
+
+
+                            <a href="{% url 'delete_relationship_by_individualise' relationship.id  relationship.parcours.id    %}" class="btn btn-danger" onclick="return TestDelete('cet exercice de ce parcours')"  >
+                                <i class="fa fa-trash"></i> Supprimer cet exercice du parcours
+                            </a>
+
+
+                    </div> 
+                    <div  class="col-sm-12 col-md-7">
+                            <span class="btn btn-info select_student" 
+                                id="selecteur{{relationship.exercise.id}}"    
+                                data-student_id="0"   data-custom=0
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="False"   
+                                data-parcours_id="{{ relationship.parcours.id }}"  style="min-width:75px; margin:1px; margin-right:0px" >Tous
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"    data-custom=0
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="False"   
+                                data-parcours_id="{{ relationship.parcours.id }}" />
+                            </span>
+                            <span class="btn btn-warning select_student" 
+                                id="selecteur{{relationship.exercise.id}}"    
+                                data-student_id="0"    data-custom=0
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="True"   
+                                data-parcours_id="{{ relationship.parcours.id }}"  style="min-width:75px; margin:1px; margin-left:0px" >Aucun
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"    data-custom=0
+                                data-exercise_id="{{ relationship.exercise.id }}" 
+                                data-statut="True"   
+                                data-parcours_id="{{ relationship.parcours.id }}" />
+                            </span>
+
+
+                        {%  for s in  group.just_students %}
+
+                            {% get_exercise s relationship as has_it %}
+                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationship.exercise.id}} selected_studentExo{{s.user.id }}" 
+                                id="student{{relationship.exercise.id}}-{{s.user.id }}"
+                                data-student_id="{{ s.user.id }}" data-exercise_id="{{ relationship.exercise.id }}"   data-custom=0 data-parcours_id="{{ relationship.parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                                style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:4 }}
+                            </span>
+
+                        {%  endfor %}
+                    </div>   
+                </div>                
+                {% else %}
+                <div class="row"  {% if relationship.is_publish %} style="border-left: 3px solid #00a65a" {% endif %}>                        
+                    <div  class="col-sm-12 col-md-12">
+                    {% if relationship.exercise.supportfile.is_subtitle %}
+                        <h3>{% if relationship.exercise.supportfile.title %}  
+                            {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}  
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        {% endif %}</h3>
+                    {% else %}
+                        <h2>{% if relationship.exercise.supportfile.title %}  
+                            {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}  
+                        {% else %}  
+                            {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }} 
+                        {% endif %}</h2>
+                    {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            {% for customexercise in customexercises  %}  
+
+                <div class="row" style="margin-bottom:8px; padding-bottom: 8px;{% if customexercise.is_publish %} border-left: 3px solid #00a65a {% endif %} ">
+                    <div class="col-sm-12 col-md-5">        
+                        {% if customexercise.imagefile %}
+                        <img src="{{ customexercise.imagefile.url }}" class="imagefile"> 
+                        {% else %}
+                        <img src="{% static 'img/custom_exercise.jpg' %}" class="imagefile"> 
+                        {% endif %}
+                                                            
+                         {{ customexercise.instruction|safe }}          
+                    
+                        {% if customexercise.calculator %}
+                          <img src="{% static 'img/calculator.png' %}" width="30px" />
+                        {% else %}
+                          <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
+                        {% endif  %}  <br>
+                        <span style="font-size:16px;">    
+                            <i class="fa fa-fw fa-barcode"></i> {{ customexercise.code }}  <br> 
+                            <i class="fa fa-fw fa-clock-o"></i> {{ customexercise.duration }} minutes  <br> 
+
+                        </span>
+
+
+                        <br>
+                        <span id="loadingCustom{{ customexercise.id }}" class="pull-right"></span>
+                            <br>
+
+
+                                    
+                         {% if customexercise.is_publish %} 
+                            <p style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #00a65a; color: #FFF"> Exercice publié </p><br>
+                         {% endif %}
+
+
+
+                            <a href="{%  url 'parcours_delete_custom_exercise' customexercise.id  parcours.id    %}" class="btn btn-danger" onclick="return TestDelete('cet exercice de ce parcours')"  >
+                                <i class="fa fa-trash"></i> Supprimer cet exercice du parcours
+                            </a>
+
+
+                    </div> 
+                    <div  class="col-sm-12 col-md-7">
+                            <span class="btn btn-info select_student" 
+                                id="selecteurCustom{{ customexercise.id}}"    
+                                data-student_id="0"  data-custom=1
+                                data-exercise_id="{{ customexercise.id }}" 
+                                data-statut="False"   
+                                data-parcours_id="{{parcours.id }}"  style="min-width:75px; margin:1px; margin-right:0px" >Tous
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"  data-custom=1
+                                data-exercise_id="{{ customexercise.id }}" 
+                                data-statut="False"   
+                                data-parcours_id="{{  parcours.id }}" />
+                            </span>
+                            <span class="btn btn-warning select_student" 
+                                id="selecteurCustom{{customexercise.id}}"    
+                                data-student_id="0"  data-custom=1
+                                data-exercise_id="{{ customexercise.id }}" 
+                                data-statut="True"   
+                                data-parcours_id="{{  parcours.id }}"  style="min-width:75px; margin:1px; margin-left:0px" >Aucun
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"  data-custom=1
+                                data-exercise_id="{{  customexercise.id }}" 
+                                data-statut="True"   
+                                data-parcours_id="{{   parcours.id }}" />
+                            </span>
+
+
+                        {%  for s in  group.just_students  %}
+
+                            {% get_customexercise s customexercise as has_it %}
+                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_studentCustom{{customexercise.id}} selected_studentCustomExo{{s.user.id }}" 
+                                id="studentCustom{{ customexercise.id}}-{{s.user.id }}"
+                                data-student_id="{{ s.user.id }}" data-exercise_id="{{ customexercise.id }}" data-custom=1  data-parcours_id="{{  parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                                style="min-width:155px; margin:1px" >{{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}</span>
+
+                        {%  endfor %}
+
+     
+
+                    </div>   
+                </div>                
+            {% endfor %}
+        </div>
+
+</form>
+
+
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+
+                <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
+        </div>
+    </div>
+
+
+</section>   
+{% endblock %}
+
+ 
+ 
+ 
+       
+ 
+ 

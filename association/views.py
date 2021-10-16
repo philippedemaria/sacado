@@ -612,6 +612,8 @@ def create_accounting(request,tp):
                     fa.school = nf.school
                     if nf.date_payment:
                         fa.active = 1
+                    if nf.is_gar: # appel de la fonction qui valide le Web Service
+                        create_abonnement_gar(today,school,nf.id,request.user)
                     fa.save()
         else :
             print(form.errors)
@@ -674,6 +676,8 @@ def renew_accounting(request,ids):
                     fa.school = nf.school
                     if nf.date_payment:
                         fa.active = 1
+                    if nf.is_gar: # appel de la fonction qui valide le Web Service
+                        create_abonnement_gar(today,school,nf.id,request.user)
                     fa.save()
         else :
             print(form.errors)
@@ -691,6 +695,7 @@ def renew_accounting(request,ids):
 @user_passes_test(user_is_board)
 def update_accounting(request, id):
 
+    today    = datetime.now()
     accounting = Accounting.objects.get(id=id)
     is_credit =  accounting.is_credit
     try :
@@ -723,7 +728,6 @@ def update_accounting(request, id):
 
             Accounting.objects.filter(pk = accounting.id).update( amount = som , is_credit = is_credit )
  
-
             if nf.is_abonnement :
                 if form_abo.is_valid():
                     fa = form_abo.save(commit = False)
@@ -733,13 +737,12 @@ def update_accounting(request, id):
                     if nf.mode == "Période de test" or  nf.date_payment:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
-
-                    if fa.is_gar:
-                        try :
-                            web_abonnement_xml(abonnement,new)
-                        except :
-                            pass
-
+                    if fa.is_gar: # appel de la fonction qui valide le Web Service
+                        test = create_abonnement_gar( today , nf.school , nf.id , request.user )
+                        if test :
+                            messages.success(request,"Activation du GAR réussie")
+                        else :
+                            messages.error(request,"Activation du GAR échouée")
                     fa.save()
                 else :
                     print(form_abo.errors)
@@ -757,10 +760,10 @@ def update_accounting(request, id):
 
 @user_passes_test(user_is_board)
 def delete_accounting(request, id):
-
-    accounting = Accounting.objects.get(id=id)
-    accounting.delete()
-    return redirect('list_accountings', accounting.tp)
+    pass
+    # accounting = Accounting.objects.get(id=id)
+    # accounting.delete()
+    # return redirect('list_accountings', accounting.tp)
     
 
 @user_passes_test(user_is_board)

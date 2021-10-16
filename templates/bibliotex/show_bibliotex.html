@@ -1,0 +1,210 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+    <script>
+        require(['script/ajax-bibliotex']);
+    </script> 
+{% endblock %} 
+
+  
+{% block page_title %}
+    <img src="{% static 'img/tex.png' %}" width="25px"> {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/> 
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+<form action="" method="POST" enctype='multipart/form-data' style="font-size:20px">  {% csrf_token %}  
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Paramètres <b class="caret"></b> </a>
+        <ul class="dropdown-menu clearfix pull-right" role="menu">
+            <li>
+                <a href="{% url 'create_bibliotex' 0 %}" > Créer une nouvelle BiblioTex </a> 
+            </li>
+            <li class="divider"></li> 
+            <li>
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" ><i class="fa fa-fw fa-cogs"></i> Configurer</a>
+            </li> 
+            <li>
+                <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex">
+                    <i class="fa fa-fw fa-print"></i> Imprimer  
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}"  ><i class="fa fa-fw fa-cloud"></i> Sélectionner des exercices</a> 
+            </li>
+            <li>
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}"  ><i class="fa fa-fw fa-clone"></i> Dupliquer</a> 
+            </li>
+            <li>
+                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}"  ><i class="fa fa-fw fa-user"></i> Individualiser</a> 
+            </li>
+            <li>
+                <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="fa fa-fw fa-bar-chart"></i> Lire les résultats</a> 
+            </li>
+        </ul>
+</li>
+</form>
+
+{% endblock %}
+
+
+{% block body %}
+<form action="" method="POST" enctype='multipart/form-data'> 
+<section class="content_container">
+
+{% csrf_token %}
+{% for r in relationtexs %} 
+    <div class="row" style="margin-bottom:20px">
+        <div class="col-sm-1 col-md-1 col-lg-1" >  
+ 
+            <li class="relative_div_exotex">  
+                <a href="{% url 'update_exotex' r.exotex.id  %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-cogs"></i><span class="legend_exotex_parameter"> Configurer </span></a>
+            </li>
+            <li class="relative_div_exotex action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
+                <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-print"></i> <span class="legend_exotex_parameter"> Imprimer </span> </span> 
+            </li>
+            <li class="relative_div_exotex action_exotex"  data-action="results" data-relationtex_id="{{ r.id }}"> 
+                <span data-toggle='modal' data-target='#results_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-trophy"></i> <span class="legend_exotex_parameter"> Résultats </span> </span> 
+            </li>
+            <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
+                <span data-toggle='modal' data-target='#individualise_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-users"></i> 
+                <span class="legend_exotex_parameter"> Individualiser  </span> </span>
+            </li>
+   
+ 
+        </div>   
+        <div class="col-sm-11 col-md-11 col-lg-11" >    
+            <div> 
+                <span class="exotex_show_exercice">Exercice {{ forloop.counter}}.</span> <label> {{ r.exotex.title }}</label>
+                    <small class="pull-right">
+                        {% for s in r.exotex.skills.all %}
+                            {{ s.name }}.
+                        {% endfor %}
+                    </small>
+            </div> 
+            <div class="exotex_knowledges">
+                {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+                {% for k in r.exotex.knowledges.all %}
+                    {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
+                {% endfor %}
+            </div>
+            {{ r.exotex.content }}
+        </div>  
+   
+    </div>
+{% endfor %} 
+</form>
+
+</section>
+
+
+
+
+<div class="modal fade" id="print_exotex" tabindex="-1" role="dialog" aria-labelledby="print_exotex">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+
+            <form action="{% url 'print_exotex' %}" method="POST" enctype='multipart/form-data'> 
+                {% csrf_token %}
+                <div class="modal-header">     
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                    <h2 id="print_exotex_title">  </h2> 
+                    <input type="hidden" id="print_exotex_id"  name="print_exotex_id">  
+                </div>
+                <div class="modal-body" id="print_exotex_body">
+     
+                </div>
+            </form>
+
+        </div>
+    </div> 
+</div>
+
+ 
+
+<div class="modal fade" id="print_bibliotex" tabindex="-1" role="dialog" aria-labelledby="print_bibliotex">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+
+            <form action="{% url 'print_bibliotex' %}" method="POST" enctype='multipart/form-data'> 
+                {% csrf_token %}
+                <div class="modal-header">     
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                    <h2 id="print_bibliotex_title">  </h2> 
+                    <input type="hidden" id="print_bibliotex_id"  name="print_bibliotex_id">  
+                </div>
+                <div class="modal-body" id="print_bibliotex_body">
+     
+                </div>
+            </form>
+
+        </div>
+    </div> 
+</div>
+
+
+
+<div class="modal fade" id="individualise_exotex" tabindex="-1" role="dialog" aria-labelledby="individualise_exotex">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+
+            <form action="#" method="POST" enctype='multipart/form-data'> 
+                {% csrf_token %}
+                <div class="modal-header">     
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                    <h2 id="individualise_exotex_title">  </h2> 
+                    <input type="hidden" id="individualise_exotex_id"  name="individualise_exotex_id">  
+                </div>
+                <div class="modal-body" id="individualise_exotex_body">
+     
+                </div>
+            </form>
+
+        </div>
+    </div> 
+</div>
+
+
+<div class="modal fade" id="results_exotex" tabindex="-1" role="dialog" aria-labelledby="results_exotex">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+
+            <form action="#" method="POST" enctype='multipart/form-data'> 
+                {% csrf_token %}
+                <div class="modal-header">     
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                    <h2 id="results_exotex_title">  </h2> 
+                    <input type="hidden" id="results_exotex_id"  name="results_exotex_id">  
+                </div>
+                <div class="modal-body" id="results_exotex_body">
+     
+                </div>
+            </form>
+
+        </div>
+    </div> 
+</div>
+
+
+
+
+{% endblock %}                        
+ 
+ 
