@@ -18,9 +18,8 @@ from django.contrib import messages
 
 from qcm.views import get_teacher_id_by_subject_id
 from group.models import Group , Sharing_group
-from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
 from socle.models import  Knowledge , Level , Skill , Waiting , Subject
-from bibliotex.models import  Bibliotex , Exotex , Relationtex
+from bibliotex.models import  Bibliotex , Exotex , Relationtex , Blacklistex
 from bibliotex.forms import  BibliotexForm , ExotexForm
 from django.views.decorators.csrf import csrf_exempt
 from tool.consumers import *
@@ -347,7 +346,7 @@ def delete_bibliotex(request, id):
 def show_bibliotex(request, id):
 
     bibliotex = Bibliotex.objects.get(id=id)
-    relationtexs = Relationtex.objects.filter(bibliotex_id=id)
+    relationtexs = Relationtex.objects.filter(bibliotex_id=id).order_by("ranking")
  
     context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs,   }
 
@@ -355,14 +354,67 @@ def show_bibliotex(request, id):
 
 
 
+
+def ajax_publish_bibliotex(request):
+
+    data = {} 
+    bibliotex_id = request.POST.get('bibliotex_id', None)
+    statut = request.POST.get("statut")
+
+
+    if statut == "True":
+        data["statut"] = "False"
+        data["publish"] = " n'est pas "
+        data["class"] = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["legendclass"] = "text-danger"
+        data["nolegendclass"] = "text-success"
+        data["color"] = "background-color:#dd4b39"
+        data["removedisc"] = "disc"
+        data["adddisc"] = "disc_persistant"
+        data["noget"] = ""
+        data["get"] = "noget"
+        status = 0
+
+    else:
+        data["statut"] = "True"
+        data["publish"] = "est"
+        data["class"] = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["legendclass"] = "text-success"        
+        data["nolegendclass"] = "text-danger"
+        data["color"] = "background-color:#00a65a"
+        data["removedisc"] = "disc_persistant"
+        data["adddisc"] = "disc"
+        data["get"] = "get"
+        data["noget"] = ""
+        status = 1
+   
+    Bibliotex.objects.filter(pk = int(bibliotex_id)).update(is_publish = status)    
+    return JsonResponse(data) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def exercise_bibliotex_results(request, id):
 
     bibliotex    = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id)
+    students     = bibliotex.students.exclude(user__username__contains="_e-test").order_by('user__last_name')
  
-    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs,   }
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'students' : students  }
 
-    return render(request, 'bibliotex/ajax_bibliotex_results.html', context )
+    return render(request, 'bibliotex/bibliotex_results.html', context )
 
 
 
@@ -377,16 +429,25 @@ def exercise_bibliotex_peuplate(request, id):
 
     teacher   = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)
-    skills    = Skill.objects.filter(subject_id=1)
-    context   = { 'bibliotex': bibliotex, 'teacher': teacher, 'skills' : skills  }
+    skills    = Skill.objects.filter(subject__in=teacher.subjects.all())
+    relationtexs = bibliotex.relationtexs.order_by("ranking")
+
+ 
+    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills  }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex.html', context )
  
  
 
-def  exercise_bibliotex_individualise(request):
-    pass
+def  exercise_bibliotex_individualise(request, id):
 
+    teacher   = request.user.teacher
+    bibliotex = Bibliotex.objects.get(id=id)
+
+    context   = { 'bibliotex': bibliotex,    'group':None }
+
+    return render(request, 'bibliotex/form_individualise_bibliotex.html', context )
+ 
 
 
 def real_time_bibliotex(request, id):
@@ -518,7 +579,7 @@ def ajax_set_exotex_in_bibliotex(request):
     if statut=="true" or statut == "True":
 
         r = Relationtex.objects.get(bibliotex_id=bibliotex_id , exotex_id = exotex_id )  
-        students = list(bibliotex.students.all())
+        students = list(stds)
         r.students.remove(*students)
 
         data["statut"] = "False"
@@ -534,6 +595,8 @@ def ajax_set_exotex_in_bibliotex(request):
                                                     is_publish = 1,  correction=exotex.correction ,is_publish_cor = 0 )
         relationtex.skills.set(skills)
         relationtex.knowledges.set(knowledges)
+        relationtex.students.set(stds)
+
 
         data["statut"]  = "True"
         data["class"]   = "btn btn-success"
@@ -547,6 +610,10 @@ def ajax_set_exotex_in_bibliotex(request):
 
 
 
+def unset_exotex_in_bibliotex(request,idr):
+    bibliotex_id = Relationtex.objects.get(pk = idr).bibliotex.id
+    Relationtex.objects.filter(pk = idr).delete()
+    return redirect("show_bibliotex" , bibliotex_id)
 ############################################################################################################
 ############################################################################################################
 #################  Résultats
@@ -577,8 +644,136 @@ def ajax_results_exotex(request):
 ############################################################################################################
 
 
-def ajax_individualise_exotex(request):
+def ajax_individualise(request):
+    """ A partir d'une bibliotex """    
+    data = {}
+    relationtex_id = request.POST.get('relationtex_id', None)
+    student_id     = request.POST.get('student_id', None)
+    statut         = request.POST.get('statut', None)
+    is_checked     = request.POST.get('is_checked', None)
 
+    relationtex    = Relationtex.objects.get(pk=relationtex_id)
+
+    if is_checked == "true" : # Pour tous lex exercices à partir du premier
+        for relationtex in relationtex.relationtexs.filter(is_publish=1 ) : 
+            if student_id ==  "0"  :
+                if statut=="true" or statut == "True" :
+                    somme = 0
+                    try :
+                        for s in parcours.students.all() :
+                            exercise = Exercise.objects.get(pk = exercise_id )
+                            if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                                relationship.students.remove(s)
+                                somme +=1
+                            Blacklist.objects.get_or_create(customexercise=None, student = s ,relationship = relationship   )
+                    except :
+                        pass
+   
+                    data["statut"] = "False"
+                    data["class"] = "btn btn-default"
+                    data["noclass"] = "btn btn-success"
+                    if somme == 0 :
+                        data["alert"] = True
+                    else :
+                        data["alert"] = False
+
+                else : 
+                    relationship.students.set(parcours.students.all())
+                    for s in parcours.students.all():
+                        if Blacklist.objects.filter(relationship=relationship, student = s ).count() > 0 :
+                            Blacklist.objects.get(relationship=relationship, student = s ).delete()   
+                    data["statut"] = "True"
+                    data["class"] = "btn btn-success"
+                    data["noclass"] = "btn btn-default"
+                    data["alert"] = False
+
+            else :
+                student = Student.objects.get(pk = student_id)  
+
+                if statut=="true" or statut == "True":
+
+                    if Studentanswer.objects.filter(student = student , relationtex = relationtex ).count() == 0 :
+                        relationship.students.remove(student)
+                        Blacklist.objects.get_or_create(relationtex=relationtex, student = student  )
+                        data["statut"] = "False"
+                        data["class"] = "btn btn-default"
+                        data["noclass"] = "btn btn-success"
+                        data["alert"] = False
+
+                    else :
+                        data["statut"] = "True"
+                        data["class"] = "btn btn-success"
+                        data["noclass"] = "btn btn-default"
+                        data["alert"] = True
+
+                else:
+                    relationship.students.add(student)
+                    if Blacklist.objects.filter(relationtex=relationtex, student = student  ).count()  > 0 :
+                        Blacklist.objects.get(relationtex=relationtex, student = student ).delete()
+                    data["statut"] = "True"
+                    data["class"] = "btn btn-success"
+                    data["noclass"] = "btn btn-default"
+                    data["alert"] = False
+    else :
+        if student_id ==  "0"  :
+            if statut=="true" or statut == "True" :
+                somme = 0
+                try :
+                    for s in relationtex.students.all() :
+                        Blacklistex.objects.get_or_create(student = s , relationtex = relationtex   )
+                except :
+                    pass
+
+                data["statut"] = "False"
+                data["class"] = "btn btn-default"
+                data["noclass"] = "btn btn-success"
+                if somme == 0 :
+                    data["alert"] = True
+                else :
+                    data["alert"] = False
+
+            else : 
+                relationtex.students.set(relationtex.bibliotex.students.all())
+                for s in relationtex.bibliotex.students.all():
+                    if Blacklistex.objects.filter(relationtex=relationtex, student = s ).count() > 0 :
+                        Blacklistex.objects.get(relationtex=relationtex, student = s ).delete()   
+                data["statut"] = "True"
+                data["class"] = "btn btn-success"
+                data["noclass"] = "btn btn-default"
+                data["alert"] = False
+
+        else :
+            student = Student.objects.get(pk = student_id)  
+
+            if statut=="true" or statut == "True":
+
+                relationtex.students.remove(student)
+                Blacklistex.objects.get_or_create(relationtex=relationtex, student = student  )
+                data["statut"] = "False"
+                data["class"] = "btn btn-default"
+                data["noclass"] = "btn btn-success"
+                data["alert"] = False
+ 
+
+            else:
+                relationtex.students.add(student)
+                if Blacklistex.objects.filter(relationtex=relationtex, student = student ).count()  > 0 :
+                    Blacklistex.objects.get(relationtex=relationtex, student = student  ).delete()
+                data["statut"] = "True"
+                data["class"] = "btn btn-success"
+                data["noclass"] = "btn btn-default"
+                data["alert"] = False
+ 
+
+    return JsonResponse(data)
+
+
+        
+
+
+
+def ajax_individualise_exotex(request):
+    """ A partir d'un exotex """
     data = {}
     relationtex_id = request.POST.get('relationtex_id', None)
     relationtex = Relationtex.objects.get(pk=relationtex_id)
@@ -591,8 +786,6 @@ def ajax_individualise_exotex(request):
     data["title"] = "Individualiser l'exercice "+relationtex.exotex.title
 
     return JsonResponse(data)
-
-
 ############################################################################################################
 ############################################################################################################
 #################   IMPRESSION

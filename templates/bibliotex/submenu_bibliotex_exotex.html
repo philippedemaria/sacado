@@ -1,0 +1,31 @@
+<form action="" method="POST" enctype='multipart/form-data' style="font-size:20px">  {% csrf_token %}  
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Paramètres <b class="caret"></b> </a>
+        <ul class="dropdown-menu clearfix pull-right" role="menu">
+            <li>
+                <a href="{% url 'create_bibliotex' 0 %}" > Créer une nouvelle BiblioTex </a> 
+            </li>
+            <li class="divider"></li> 
+            <li {% if 'update' in request.path %}class="active"{% endif %}>
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" ><i class="fa fa-fw fa-cogs"></i> Configurer</a>
+            </li> 
+            <li>
+                <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex">
+                    <i class="fa fa-fw fa-print"></i> Imprimer  
+                </a>
+            </li>
+            <li {% if 'peuplate' in request.path %}class="active"{% endif %}>
+                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}"  ><i class="fa fa-fw fa-cloud"></i> Sélectionner des exercices</a> 
+            </li>
+            <li {% if 'update' in request.path %}class="active"{% endif %}>
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}"  ><i class="fa fa-fw fa-clone"></i> Dupliquer</a> 
+            </li>
+            <li {% if 'individualise' in request.path %}class="active"{% endif %}>
+                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}"  ><i class="fa fa-fw fa-user"></i> Individualiser</a> 
+            </li>
+            <li {% if 'results' in request.path %}class="active"{% endif %}>
+                <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="fa fa-fw fa-bar-chart"></i> Lire les résultats</a> 
+            </li>
+        </ul>
+</li>
+</form>

@@ -5,32 +5,7 @@
 
 
 {% for exotex in exotexs %}
-<div class="exotex container_checkbox">
-
-    <div>
-        <label>
-
-            <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex_id}}" class="selector_exotex" 
-                   id="selected_exotex{{ exotex.id }}"  data-statut="{% if exotex_is_selected %}True{% else  %}False{% endif  %}" {% if exotex_is_selected %}checked{% endif  %}/>
-            <span class="check_exotex"></span>
-            {{ exotex.title }} 
-        </label> 
-        <small class="pull-right">
-            {% for s in exotex.skills.all %}
-                {{ s.name }}.
-            {% endfor %}
-        </small>
-    </div>
-    <div class="consigne fontsize12">
-        {{ exotex.knowledge.name }} {% if exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-        {% for k in exotex.knowledges.all %}
-            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
-        {% endfor %}
-    </div>
-    {{ exotex.content }}
-
-
-</div>
+    {% include 'bibliotex/exotex_tag.html' %}
 {% endfor %}
 <script>
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);

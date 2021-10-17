@@ -22,37 +22,7 @@
 
 {% block page_menu_right %}
  
-<form action="" method="POST" enctype='multipart/form-data' style="font-size:20px">  {% csrf_token %}  
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Paramètres <b class="caret"></b> </a>
-        <ul class="dropdown-menu clearfix pull-right" role="menu">
-            <li>
-                <a href="{% url 'create_bibliotex' 0 %}" > Créer une nouvelle BiblioTex </a> 
-            </li>
-            <li class="divider"></li> 
-            <li>
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}" ><i class="fa fa-fw fa-cogs"></i> Configurer</a>
-            </li> 
-            <li>
-                <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex">
-                    <i class="fa fa-fw fa-print"></i> Imprimer  
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}"  ><i class="fa fa-fw fa-cloud"></i> Sélectionner des exercices</a> 
-            </li>
-            <li>
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}"  ><i class="fa fa-fw fa-clone"></i> Dupliquer</a> 
-            </li>
-            <li>
-                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}"  ><i class="fa fa-fw fa-user"></i> Individualiser</a> 
-            </li>
-            <li>
-                <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="fa fa-fw fa-bar-chart"></i> Lire les résultats</a> 
-            </li>
-        </ul>
-</li>
-</form>
+ {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
 
 {% endblock %}
 
@@ -79,8 +49,9 @@
                 <span data-toggle='modal' data-target='#individualise_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-users"></i> 
                 <span class="legend_exotex_parameter"> Individualiser  </span> </span>
             </li>
-   
- 
+            <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
+                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-times"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
+            </li>
         </div>   
         <div class="col-sm-11 col-md-11 col-lg-11" >    
             <div> 

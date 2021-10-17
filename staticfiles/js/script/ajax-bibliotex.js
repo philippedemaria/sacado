@@ -2,8 +2,6 @@ define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-bibiotex.js OK");
 
-
-        $('#id_is_publish').prop('checked', true);
   
         $("#publication_div").hide();
  
@@ -289,6 +287,27 @@ define(['jquery', 'bootstrap'], function ($) {
     });
 
 
+ 
+
+
+    $('body').on('click', '.group_shower' , function (event) {
+            let bibliotex_id = $(this).data("bibliotex_id");
+            $("#group_show"+bibliotex_id).toggle(500);
+
+        });
+
+
+
+
+
+    $('body').on('click', '.overlay_show' , function (event) {
+            let bibliotex_id = $(this).data("bibliotex_id");
+            $("#overlay_show"+bibliotex_id).toggle(500);
+
+        });
+
+
+
 
     $('body').on('change', '.selector_exotex' , function (event) {
 
@@ -323,7 +342,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-    $('.action_exotex').on('click',   function (event) {
+    $('body').on('click', '.action_exotex',   function (event) {
 
         let relationtex_id = $(this).data("relationtex_id");
         let action = $(this).data("action");
@@ -333,7 +352,8 @@ define(['jquery', 'bootstrap'], function ($) {
         else if (action == "results") { url = "../ajax_results_exotex" ; label ="results_exotex" ;  }
         else if (action == "print_bibliotex") { url = "../ajax_print_bibliotex"  ; label ="print_bibliotex" ; }
         else if (action == "students") { url = "../ajax_individualise_exotex" ; label ="individualise_exotex" ;  }
-
+        else if (action == "print_bibliotex_out") { url = "ajax_print_bibliotex"  ; label ="print_bibliotex" ; }
+ 
 
         $("#"+label+"_id").val(relationtex_id) ;
 
@@ -355,6 +375,157 @@ define(['jquery', 'bootstrap'], function ($) {
             }
         )
     });
+
+
+
+    $('body').on('click', '.publisher',   function (event) {
+
+ 
+        let bibliotex_id = $(this).data("bibliotex_id"); 
+        let statut = $(this).data("statut");
+        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+        console.log(event , bibliotex_id , statut) ; 
+ 
+        $.ajax(
+            { 
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'bibliotex_id' : bibliotex_id,
+                    'statut'       : statut,
+                    csrfmiddlewaretoken: csrf_token
+                },
+                url : "ajax_publish_bibliotex" ,
+
+                success: function (data) {
+                    $('#publisher'+bibliotex_id).removeClass(data.noget).addClass(data.get);
+                    $('#publisher'+bibliotex_id).attr("data-statut",data.statut);           
+                    $('#accueil_visible'+bibliotex_id).html("").html(data.publish);
+                    $('#bibliotex_publisher'+bibliotex_id).removeClass(data.noclass).addClass(data.class);
+                    $('#accueil_text_color'+bibliotex_id).addClass(data.legendclass).removeClass(data.nolegendclass);
+                    $('#disc'+bibliotex_id).attr("style",data.color).addClass(data.adddisc).removeClass(data.removedisc);
+
+
+                }
+            }
+        )
+    });
+
+
+
+        // ===============================================================
+        // ===============================================================
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.select_student').on('click' ,  function () {
+
+            let relationtex_id = $(this).attr("data-relationtex_id"); 
+            let statut = $(this).attr("data-statut"); 
+            let student_id = $(this).attr("data-student_id");
+
+            let is_checked = false ;
+            if ($("#select_all_exercices").val()) { 
+                is_checked = $("#select_all_exercices").is(":checked") ;
+            }
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            
+
+            $("#loading"+relationtex_id).html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>"); 
+ 
+
+
+
+            $.ajax( 
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'relationtex_id': relationtex_id,
+                        'student_id'    : student_id,
+                        'statut'        : statut,
+                        'is_checked'    : is_checked ,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_individualise",
+                    success: function (data) {
+
+                        if (is_checked)
+                            {
+                                if (student_id == 0)
+                                    {  
+
+                                    $('.select_student' ).attr("data-statut",data.statut);                  
+                                    $('.select_student' ).removeClass(data.noclass);
+                                    $('.select_student' ).addClass(data.class);
+                                    }
+                                else 
+                                    { 
+                                    $('.selected_studentExo'+student_id).html(data.html);   
+                                    $('.selected_studentExo'+student_id).attr("data-statut",data.statut);                  
+                                    $('.selected_studentExo'+student_id).removeClass(data.noclass);
+                                    $('.selected_studentExo'+student_id).addClass(data.class);                      
+                                    }
+
+                                if (data.indiv_hide) 
+                                    { $('#individialise_id_student'+relationtex_id).removeClass("checkbox_no_display");
+                                      $('#nb_indiv_id_student'+relationtex_id).html("").html(data.indiv_nb);
+                                    }
+                                else{
+                                    { $('#individialise_id_student'+relationtex_id).addClass("checkbox_no_display");}
+                                }
+
+                                $("#loading"+relationtex_id).html("");  
+                                $('#selecteur'+relationtex_id).attr("data-statut",data.statut);    
+                            }
+                        else
+                            {
+     
+                                if (student_id != 0)
+                                    {       
+
+                                    $('#student'+relationtex_id+"-"+student_id).attr("data-statut",data.statut);                  
+                                    $('#student'+relationtex_id+"-"+student_id).removeClass(data.noclass);
+                                    $('#student'+relationtex_id+"-"+student_id).addClass(data.class);
+                                    }
+                                else 
+                                    { 
+
+                                    $('.selected_student'+relationtex_id).attr("data-statut",data.statut);                  
+                                    $('.selected_student'+relationtex_id).removeClass(data.noclass);
+                                    $('.selected_student'+relationtex_id).addClass(data.class);                      
+                                    }
+
+                                if (data.indiv_hide) 
+                                    { 
+                                        $('#individialise_id_student'+relationtex_id).removeClass("checkbox_no_display");
+                                        $('#nb_indiv_id_student'+relationtex_id).html("").html(data.indiv_nb); 
+                                    }
+                                else{
+                                    { $('#individialise_id_student'+relationtex_id).addClass("checkbox_no_display");}
+                                }
+
+                                $("#loading"+relationtex_id).html("");  
+                                $('#selecteur'+relationtex_id).attr("data-statut",data.statut);    
+
+                            }
+                        if (data.alert){ alert("Certains exercices ont fait l'objet d'une réponse par certains élèves. Vous ne pouvez plus les dissocier.");}
+                        }
+                })
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

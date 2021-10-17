@@ -703,6 +703,11 @@ label {
   border-radius: 0px 3px 3px  0px;
 }
 
+#my_biblio{
+  height:85vh;
+  overflow-y: auto
+}
+
 /******************************************** real_time_live  **************************************/
 
 .no_live{

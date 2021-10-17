@@ -11,21 +11,21 @@
             <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex_id}}" class="selector_exotex" 
                    id="selected_exotex{{ exotex.id }}"  data-statut="{% if exotex_is_selected %}True{% else  %}False{% endif  %}" {% if exotex_is_selected %}checked{% endif  %}/>
             <span class="check_exotex"></span>
-            {{ exotex.title }} 
+            {{ relationtex.exotex.title }} 
         </label> 
         <small class="pull-right">
-            {% for s in exotex.skills.all %}
+            {% for s in relationtex.exotex.skills.all %}
                 {{ s.name }}.
             {% endfor %}
         </small>
     </div>
     <div class="consigne fontsize12">
-        {{ exotex.knowledge.name }} {% if exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-        {% for k in exotex.knowledges.all %}
+        {{ relationtex.exotex.knowledge.name }} {% if relationtex.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+        {% for k in relationtex.exotex.knowledges.all %}
             {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
         {% endfor %}
     </div>
-    {{ exotex.content }}
+    {{ relationtex.exotex.content }}
 
 
 </div>

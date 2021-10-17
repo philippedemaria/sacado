@@ -4,7 +4,7 @@
            
  
 <div  class="box box-widget widget-user-2"  
-      style="cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};">
+      style="cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{bibliotex.color }};">
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
  
@@ -24,16 +24,51 @@
                     {% endif %}
         </div>
 
+        <div class="group_show  no_visu_on_load" id="group_show{{bibliotex.id }}"> 
+            <label>Cette bibliotex est attribuée à</label>
+            {% for g in bibliotex.groups.all %}
+                <li class="sanspuce">{{ g.name }} [{{ g.just_students_count }} élèves]</li>
+            {% endfor %}
+            <br/>
+            <label>et aux dossiers</label>
+            {% for f in bibliotex.folders.all %}
+                <li class="sanspuce">{{ f.title }} [{{ f.folder_only_students_count.nb }} élèves]</li>
+            {% endfor %}
+            <div style="clear:both"></div>
+        </div>
+
+
         <span style="cursor:pointer" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show white" >
-            <div class="{% if not parcours.is_publish %}
+            <div id="disc{{bibliotex.id }}" class="{% if not bibliotex.is_publish %}
                             disc_persistant
                         {% else %}
                             disc 
-                        {% endif %}
-                        disc{{bibliotex.id }}" style="background-color:{% if bibliotex.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                        {% endif %}" style="background-color:{% if bibliotex.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
                  <i class="fa fa-circle-o-notch"></i>
             </div>
         </span> 
+
+        <div class="overlay   no_visu_on_load" id="overlay_show{{bibliotex.id }}"> 
+            <div class="overlay_expand">
+                <a href="#" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show pull-right">
+                    <i class="fa fa-times"></i>
+                </a>
+                <div class="btn-group"  style="padding:0px;margin:0px;">
+                    <span style="cursor:pointer" class="btn btn-default btn-publisher publisher" id="publisher{{bibliotex.id}}" 
+                            data-bibliotex_id="{{bibliotex.id}}" data-statut="{{bibliotex.is_publish }}">  
+                        <i class="fa fa-circle-o-notch"></i>
+                    </span><span class="legend-btn legend-btn-{% if not bibliotex.is_publish %}danger{% else  %}success{% endif  %} size15" id="bibliotex_publisher{{bibliotex.id}}" style="cursor:auto" >  
+                      {% if bibliotex.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                    </span>
+                </div>
+                <br>
+                {% if bibliotex.is_publish %}
+                <span class="text-success" id="accueil_text_color{{ bibliotex.id }}">{% if bibliotex.is_evaluation %}Cette évaluation{% else %}Cette Bibliotex{% endif %} <span id="accueil_visible{{bibliotex.id }}">est</span> visible par vos élèves.</span>
+                {% else %}
+                <span class="text-danger" id="accueil_text_color{{ bibliotex.id }}">{% if bibliotex.is_evaluation %}Cette évaluation{% else %}Cette Bibliotex{% endif %} <span id="accueil_visible{{bibliotex.id }}">n'est pas</span> visible par vos élèves.</span>
+                {% endif %}
+            </div>
+        </div>
  
 
          <div class="row"> 
@@ -74,62 +109,61 @@
 
     <div class="box-footer" style="position: relative; padding-top: 0px;">
  
-            <div class="row dossier"> 
-                <div class="col-xs-12 col-md-12 col-lg-12"> 
-                    {{  bibliotex.relationtex.nb_exotexs }} exercices dont {{ bibliotex.relationtex.nb_exotexs_published }} publié{{ bibliotex.relationtex.nb_exotexs_published|pluralize }} {% if    bibliotex.relationtex.care %} 
-                    <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
-                </div>
+        <div class="row dossier"> 
+            <div class="col-xs-12 col-md-12 col-lg-12"> 
+                {{  bibliotex.relationtex.nb_exotexs }} exercices dont {{ bibliotex.relationtex.nb_exotexs_published }} publié{{ bibliotex.relationtex.nb_exotexs_published|pluralize }} {% if    bibliotex.relationtex.care %} 
+                <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}  
             </div>
+        </div>
 
-            <div class="row extend"> 
-               <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
-                </div>
-               <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'show_bibliotex' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-eye"></i> <span class="label_icon">Consulter</span></a> 
-                </div>
-               <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'show_bibliotex' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-print"></i> <span class="label_icon">Imprimer</span></a> 
-                </div>
+        <div class="row extend"> 
+           <div class="col-lg-4 col-xs-4">
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
+            </div>
+           <div class="col-lg-4 col-xs-4">
+                <a href="{% url 'show_bibliotex' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-eye"></i> <span class="label_icon">Consulter</span></a> 
+            </div>
+           <div class="col-lg-4 col-xs-4">
+                <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit"><i class="fa fa-fw fa-print"></i> 
+                    <span class="label_icon">Imprimer</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="row extend"> 
+           <div class="col-lg-4 col-xs-4">
+
+                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
+            </div>
+           <div class="col-lg-4 col-xs-4">
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-clone"></i> <span class="label_icon">Dupliquer</span></a> 
+            </div>
+           <div class="col-lg-4 col-xs-4">
+
+                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individ.</span></a> 
+            </div>
+        </div>
+
+
+         <div class="row">  
+            <div class="col-lg-4 col-xs-4">
+
+                <a href="{% url 'real_time' bibliotex.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" >
+                    <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
+                </a>
 
             </div>
-
-            <div class="row extend"> 
-               <div class="col-lg-4 col-xs-4">
-
-                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
-                </div>
-               <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-clone"></i> <span class="label_icon">Dupliquer</span></a> 
-                </div>
-               <div class="col-lg-4 col-xs-4">
-
-                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individ.</span></a> 
-                </div>
+            <div class="col-lg-4 col-xs-4">
+             
+                <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if bibliotex.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+            
             </div>
+             
+            <div class="col-lg-4 col-xs-4">
+                <span href="#" class="edit group_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                </span>
+            </div> 
+        </div>
 
-
-             <div class="row">  
-                <div class="col-lg-4 col-xs-4">
-
-                    <a href="{% url 'real_time' bibliotex.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" >
-                        <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
-                    </a>
-
-                </div>
-                <div class="col-lg-4 col-xs-4">
-                 
-                    <a  href="{% url 'exercise_bibliotex_individualise' bibliotex.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
-                
-                </div>
-                 
-                <div class="col-lg-4 col-xs-4">
-                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
-                    </span>
-                </div> 
-            </div>
- 
     </div>
-
 </div>    
- 

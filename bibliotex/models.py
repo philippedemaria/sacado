@@ -121,6 +121,22 @@ class Bibliotex(models.Model):
         data["care"] = care  
         return data
 
+
+    def only_students(self,group):
+
+        data = {}
+        if group :
+            group_students = group.students.all() #.exclude(user__username__contains="_e-test")
+            self_students = self.students.exclude(user__username__contains="_e-test")
+            intersection = list(set(group_students) & set(parcours_students))
+        else :
+            intersection = self.students.exclude(user__username__contains="_e-test")
+ 
+
+        data["nb"]= len(intersection)
+        data["students"] = intersection
+        return data 
+
 ########################################################################################################
 ########################################################################################################
 class Relationtex(models.Model):
@@ -158,9 +174,33 @@ class Relationtex(models.Model):
     courses = models.ManyToManyField(Course, related_name="relationtexs", blank=True, verbose_name="Cours éventuel"  )
     students = models.ManyToManyField(Student, related_name="relationtexs", editable=False)
 
-    def __str__(self): 
-        knowledge = self.knowledge.name[:20]       
-        return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
+    def __str__(self):       
+        return "{} > {}".format(self.bibliotex.title,self.exotex.title)
 
     class Meta:
         unique_together = ('exotex', 'bibliotex')
+
+
+    def only_students(self,group):
+
+        data = {}
+        if group :
+            group_students = group.students.all() #.exclude(user__username__contains="_e-test")
+            self_students = self.students.exclude(user__username__contains="_e-test")
+            intersection = list(set(group_students) & set(parcours_students))
+        else :
+            intersection = self.students.exclude(user__username__contains="_e-test")
+ 
+        data["nb"]= len(intersection)
+        data["students"] = intersection.order_by("user__last_name")
+        return data 
+
+
+class Blacklistex(models.Model):
+
+    relationtex = models.ForeignKey(Relationtex,  on_delete=models.CASCADE,   related_name='blacklistex', editable= False)
+    student = models.ForeignKey(Student,  on_delete=models.PROTECT, related_name="blacklistex", editable=False)
+   
+    def __str__(self):   
+        return "{} > {}".format(self.relationtex.id, self.student.user.id)
+
