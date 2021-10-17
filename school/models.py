@@ -106,7 +106,8 @@ class School(models.Model):
     def active_accounting(self) :
         today = datetime.now()
         try :
-            account  = self.abonnement.filter( is_active = 1 , date_start__lte = today , date_stop__gte = today ).last()
+            abonnement  = self.abonnement.filter( is_active = 1 , date_start__lte = today , date_stop__gte = today ).last()
+            account = abonnement.accounting
         except :
             account  = False
         return account
