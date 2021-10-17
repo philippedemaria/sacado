@@ -109,7 +109,7 @@
 
     <div class="box-footer" style="position: relative; padding-top: 0px;">
  
-        <div class="row dossier"> 
+        <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
                 {{  bibliotex.relationtex.nb_exotexs }} exercices dont {{ bibliotex.relationtex.nb_exotexs_published }} publié{{ bibliotex.relationtex.nb_exotexs_published|pluralize }} {% if    bibliotex.relationtex.care %} 
                 <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}  
@@ -160,7 +160,7 @@
             </div>
              
             <div class="col-lg-4 col-xs-4">
-                <span href="#" class="edit group_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                <span href="#" class="edit group_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-folder-open"></i>  <span class="label_icon">Attribut</span>
                 </span>
             </div> 
         </div>
