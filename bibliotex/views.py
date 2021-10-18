@@ -1054,7 +1054,7 @@ def print_exotex(request):
         my_tex +=str(e)
 
     f_tex = open(file+".tex","w")
-    f_tex.write(sum(my_tex))
+    f_tex.write(my_tex)
     f_tex.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode", file ])
