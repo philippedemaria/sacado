@@ -115,18 +115,11 @@ ul#id_skills li{
                             <div id="enable_correction_div">
                                 <div class="col-sm-12 col-md-12">                        
                                     <div class="form-group"> 
-                                        {{ form.content_cor.label_tag }}                        
-                                        {{ form.content_cor|attr:"cols:80"|attr:"rows:15" }}
-                                        {{ form.content_cor.errors }}
+                                        {{ form.correction.label_tag }}                        
+                                        {{ form.correction|attr:"cols:80"|attr:"rows:15" }}
+                                        {{ form.correction.errors }}
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-2">   
-                                    <div class="form-group">
-                                        {{ form.is_publish_cor.label_tag }}
-                                        {{ form.is_publish_cor |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                                        {{ form.is_publish_cor.errors }}
-                                    </div>
-                                </div>
+                                </div> 
                             </div>
                         </div>
 
