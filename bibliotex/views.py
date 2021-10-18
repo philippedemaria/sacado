@@ -815,94 +815,7 @@ def ajax_print_bibliotex(request):
 
     return JsonResponse(data)
 
-
-
-#def print_exotex(request):
-
-    relationtex_id = request.POST.get("print_exotex_id",None)  
-    skills         = request.POST.get("skills",None)  
-    knowledges     = request.POST.get("knowledges",None)  
-    relationtex    = Relationtex.objects.get(pk = relationtex_id) 
-    elements    = []     
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="'+str(relationtex.exotex.title).replace(" ","_")+'.pdf"'
-
-    doc = SimpleDocTemplate(response,   pagesize=A4, 
-                                        topMargin=0.3*inch,
-                                        leftMargin=0.3*inch,
-                                        rightMargin=0.3*inch,
-                                        bottomMargin=0.3*inch     )
-
-    sample_style_sheet = getSampleStyleSheet()
-
-    sacado = ParagraphStyle('sacado', 
-                            fontSize=20, 
-                            leading=26,
-                            borderPadding = 0,
-                            alignment= TA_CENTER,
-                            )
-
-    style_cell = TableStyle(
-            [
-                ('SPAN', (0, 1), (1, 1)),
-                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
-            ]
-        )
-
-
-    title = ParagraphStyle('title',  fontSize=16 )                   
-
-    normal = ParagraphStyle(name='Normal',fontSize=12,)    
-    red = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#cb2131"),) 
-    yellow = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#ffb400"),)
-    green = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#1bc074"),)
-    blue = ParagraphStyle(name='Normal',fontSize=14,  textColor=colors.HexColor("#005e74"),)
-    small = ParagraphStyle(name='Normal',fontSize=10,)    
-    violet = ParagraphStyle(name='Normal',fontSize=14,  textColor=colors.HexColor("#5d4391"),)
-    
-
-
-    skills_display = ""
-    if skills :   
-        if relationtex.skills.count():
-            sks =  relationtex.skills.all()
-        else :
-            sks =  relationtex.exotex.skills.all()
-        for s in sks :
-            skills_display +=  s.name+". "
-
-    exo = Paragraph("Exercice. " +  relationtex.exotex.title + ".    " +skills_display, violet )
-    elements.append(exo)
-
-
-
-    if knowledges :  
-        k_display = Paragraph( relationtex.exotex.knowledge.name , small )
-        elements.append(k_display)
-        if relationtex.knowledges.count():
-            kws =  relationtex.knowledges.all()
-        else :
-            kws =  relationtex.exotex.knowledges.all()
-        for k in kws :
-            ks_display = Paragraph( k.name , small )
-            elements.append(ks_display)
-
-    if  relationtex.content :
-        ctnt =  relationtex.content
-    else :
-        ctnt =  relationtex.exotex.content
-
-    content = Paragraph(ctnt , normal )
-    elements.append(content) 
-
-    doc.build(elements)
-
-    return response
-
  
-
-
 
 def print_bibliotex(request ):
 
@@ -910,47 +823,20 @@ def print_bibliotex(request ):
     skills       = request.POST.get("skills",None)  
     knowledges   = request.POST.get("knowledges",None)  
     bibliotex    = Bibliotex.objects.get(pk = bibliotex_id) 
-    elements     = []     
-   
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="'+str(bibliotex.title).replace(" ","_")+'.pdf"'
-
-    doc = SimpleDocTemplate(response,   pagesize=A4, 
-                                        topMargin=0.3*inch,
-                                        leftMargin=0.3*inch,
-                                        rightMargin=0.3*inch,
-                                        bottomMargin=0.3*inch     )
-
-    sample_style_sheet = getSampleStyleSheet()
-
-    sacado = ParagraphStyle('sacado', 
-                            fontSize=20, 
-                            leading=26,
-                            borderPadding = 0,
-                            alignment= TA_CENTER,
-                            )
-
-    style_cell = TableStyle(
-            [
-                ('SPAN', (0, 1), (1, 1)),
-                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
-            ]
-        )
-
-
-    title = ParagraphStyle('title',  fontSize=16 )                   
-
-    normal = ParagraphStyle(name='Normal',fontSize=12,)    
-    red = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#cb2131"),) 
-    yellow = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#ffb400"),)
-    green = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#1bc074"),)
-    blue = ParagraphStyle(name='Normal',fontSize=14,  textColor=colors.HexColor("#005e74"),)
-    small = ParagraphStyle(name='Normal',fontSize=10,)    
-    violet = ParagraphStyle(name='Normal',fontSize=14,  textColor=colors.HexColor("#5d4391"),)
+  
+         
+    elements = r"""\documentclass[12pt]{article}
+                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""preambule} 
+                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleCoursLycee} 
+                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleExercices} 
+                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""algobox}
+                        \begin{document}"""   
     
-    paragraph = Paragraph( bibliotex.title , title )
-    elements.append(paragraph)
+    elements += r"""\begin{titre}[Calculs numériques]
+                \TitreSansTemps{"""+ bibliotex.title +r"""} 
+                \end{titre}"""
+
+
 
     today = datetime.now()
 
@@ -958,45 +844,50 @@ def print_bibliotex(request ):
     i = 1
     for relationtex in relationtexs :
         
-        exo = Paragraph( "Exercice "+str(i)+". " +relationtex.exotex.title, violet )
-        elements.append(exo)
-
+        skills_display = ""
         if skills :   
-
             if relationtex.skills.count():
-                sks =  relationtex.knowledges.all()
+                sks =  relationtex.skills.all()
             else :
                 sks =  relationtex.exotex.skills.all()
             for s in sks :
                 skills_display +=  s.name+". "
-                sk_display = Paragraph( skills_display , small )
-                elements.append(sk_display)
+
+        elements = r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display+r"\\"
+
 
         if knowledges :  
-            k_display = Paragraph( relationtex.exotex.knowledge.name , small )
-            elements.append(k_display)
+            k_display = relationtex.exotex.knowledge.name
+            elements += k_display
+
             if relationtex.knowledges.count():
                 kws =  relationtex.knowledges.all()
             else :
                 kws =  relationtex.exotex.knowledges.all()
             for k in kws :
-                ks_display = Paragraph( k.name , small )
-                elements.append(sk_display)
- 
-
+                elements=+ k.name
 
         if  relationtex.content :
             ctnt =  relationtex.content
         else :
             ctnt =  relationtex.exotex.content
 
-        content = Paragraph( ctnt , normal )        
-        elements.append(content) 
-        i+=1
+        elements += ctnt+r"\\ \vspace{0.3cm}"
+    
+    elements +=  r"\end{document}" 
 
-    doc.build(elements)
 
-    return response
+    file = settings.DIR_TMP_TEX+"bibliotex"+str(bibliotex.id)
+     
+
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
+
+    return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
+
 
 
 
@@ -1008,14 +899,13 @@ def print_exotex(request):
     skills         = request.POST.get("skills",None)  
     knowledges     = request.POST.get("knowledges",None)  
     relationtex    = Relationtex.objects.get(pk = relationtex_id) 
-    elements       = [] 
 
-    elements.append(r"""\documentclass[12pt]{article}
+    elements = r"""\documentclass[12pt]{article}
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""preambule} 
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleCoursLycee} 
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleExercices} 
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""algobox}
-                        \begin{document}""")    
+                        \begin{document}"""    
 
 
 
@@ -1028,36 +918,32 @@ def print_exotex(request):
         for s in sks :
             skills_display +=  s.name+". "
 
-    exo = r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display
-    elements.append(exo+r"\\")
-
+    elements = r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display+r"\\"
 
 
     if knowledges :  
         k_display = relationtex.exotex.knowledge.name
-        elements.append(k_display)
+        elements += k_display
+
         if relationtex.knowledges.count():
             kws =  relationtex.knowledges.all()
         else :
             kws =  relationtex.exotex.knowledges.all()
         for k in kws :
-            elements.append(k.name)
+            elements=+ k.name
 
     if  relationtex.content :
         ctnt =  relationtex.content
     else :
         ctnt =  relationtex.exotex.content
 
-    elements.append(ctnt)
-    elements.append(r"\end{document}")
+    elements += ctnt+ r"\end{document}" 
 
     file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
-    my_tex = ""
-    for e in elements:
-        my_tex +=str(e)
+ 
 
     f_tex = open(file+".tex","w")
-    f_tex.write(my_tex)
+    f_tex.write(elements)
     f_tex.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
