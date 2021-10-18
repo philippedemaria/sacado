@@ -1028,8 +1028,8 @@ def print_exotex(request):
         for s in sks :
             skills_display +=  s.name+". "
 
-    exo = "Exercice. " +  relationtex.exotex.title + ".    " +skills_display+r"\vspace{0.4cm}"
-    elements.append(exo)
+    exo = "Exercice. " +  relationtex.exotex.title + ".    " +skills_display
+    elements.append(exo+r"\\")
 
 
 
