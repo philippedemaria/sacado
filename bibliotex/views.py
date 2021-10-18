@@ -1006,7 +1006,6 @@ def print_exotex(request):
     relationtex    = Relationtex.objects.get(pk = relationtex_id) 
     elements       = [] 
 
-
     elements.append(r"""\documentclass[12pt]{article}
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""preambule} 
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleCoursLycee} 
@@ -1014,42 +1013,6 @@ def print_exotex(request):
                         \input{"""+settings.DIR_PREAMBULE_TEX+r"""algobox}
                         \begin{document}""")    
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="'+str(relationtex.exotex.title).replace(" ","_")+'.pdf"'
-
-    doc = SimpleDocTemplate(response,   pagesize=A4, 
-                                        topMargin=0.3*inch,
-                                        leftMargin=0.3*inch,
-                                        rightMargin=0.3*inch,
-                                        bottomMargin=0.3*inch     )
-
-    sample_style_sheet = getSampleStyleSheet()
-
-    sacado = ParagraphStyle('sacado', 
-                            fontSize=20, 
-                            leading=26,
-                            borderPadding = 0,
-                            alignment= TA_CENTER,
-                            )
-
-    style_cell = TableStyle(
-            [
-                ('SPAN', (0, 1), (1, 1)),
-                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
-            ]
-        )
-
-
-    title = ParagraphStyle('title',  fontSize=16 )                   
-
-    normal = ParagraphStyle(name='Normal',fontSize=12,)    
-    red = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#cb2131"),) 
-    yellow = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#ffb400"),)
-    green = ParagraphStyle(name='Normal',fontSize=12,  textColor=colors.HexColor("#1bc074"),)
-    blue = ParagraphStyle(name='Normal',fontSize=14,  textColor=colors.HexColor("#005e74"),)
-    small = ParagraphStyle(name='Normal',fontSize=10,)    
-    violet = ParagraphStyle(name='Normal',fontSize=14,  textColor=colors.HexColor("#5d4391"),)
-    
 
 
     skills_display = ""
@@ -1061,30 +1024,27 @@ def print_exotex(request):
         for s in sks :
             skills_display +=  s.name+". "
 
-    exo = Paragraph("Exercice. " +  relationtex.exotex.title + ".    " +skills_display, violet )
+    exo = "Exercice. " +  relationtex.exotex.title + ".    " +skills_display
     elements.append(exo)
 
 
 
     if knowledges :  
-        k_display = Paragraph( relationtex.exotex.knowledge.name , small )
+        k_display = relationtex.exotex.knowledge.name
         elements.append(k_display)
         if relationtex.knowledges.count():
             kws =  relationtex.knowledges.all()
         else :
             kws =  relationtex.exotex.knowledges.all()
         for k in kws :
-            ks_display = Paragraph( k.name , small )
-            elements.append(ks_display)
+            elements.append(k.name)
 
     if  relationtex.content :
         ctnt =  relationtex.content
     else :
         ctnt =  relationtex.exotex.content
 
-    content = Paragraph(ctnt , normal )
-    elements.append(content)
-
+    elements.append(ctnt)
     elements.append(r"\end{document}")
 
     file = DIR_TMP_TEX+"exotex"+relationtex.id
@@ -1095,12 +1055,8 @@ def print_exotex(request):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode", file ])
 
-    print(result)
-
-
     fpdf = open( file+".pdf" , 'r')
     response = HttpResponse(fpdf, mimetype='application/pdf')
-
     return response
 
 
