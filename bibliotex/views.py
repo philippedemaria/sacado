@@ -1052,7 +1052,7 @@ def print_exotex(request):
     elements.append(ctnt)
     elements.append(r"\end{document}")
 
-    file = settings.DIR_TMP_TEX+"exotex"+relationtex.id
+    file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
 
     f_tex = open(file+".tex","w")
     f_tex.write(sum(elements))
