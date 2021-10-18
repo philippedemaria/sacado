@@ -900,6 +900,9 @@ def ajax_print_bibliotex(request):
 
     return response
 
+ 
+
+
 
 def print_bibliotex(request ):
 
@@ -1059,10 +1062,10 @@ def print_exotex(request):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
 
- 
+    with open(file, 'r') as pdf:
+        response = HttpResponse(pdf.read(), mimetype='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=exotex'+str(relationtex.id)+'.pdf' 
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="'+file+'.pdf"'
 
     return response
 
