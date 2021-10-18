@@ -2953,8 +2953,14 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         student["last_connexion"] = studentanswer.date
         student["score"] = int(score)
         student["score_tab"] = student_tab
-        student["percent"] = math.ceil(int(good_answer)/int(total_numexo) * 100)
-        student["ajust"] = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  ) 
+        percent = math.ceil(int(good_answer)/int(total_numexo) * 100)
+        if percent > 100 :
+            percent = 100
+        student["percent"] = percent
+        ajust = math.ceil( (nb_exo / total_nb_exo ) * int(good_answer)/int(total_numexo) * 100  ) 
+        if ajust > 100 :
+            ajust=100
+        student["ajust"] = ajust
 
         if duration > parcours_duration : 
             student["test_duration"] = True
