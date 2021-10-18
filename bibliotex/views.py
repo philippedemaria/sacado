@@ -11,7 +11,7 @@ from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
-from django.http import JsonResponse 
+from django.http import JsonResponse , FileResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
@@ -1062,12 +1062,7 @@ def print_exotex(request):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
 
-    with open(file, 'r') as pdf:
-        response = HttpResponse(pdf.read(), mimetype='application/pdf')
-        response['Content-Disposition'] = 'inline;filename='+file+'.pdf' 
-
-
-    return response
+    return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
 
 
 
