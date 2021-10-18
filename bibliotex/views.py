@@ -998,7 +998,7 @@ def print_bibliotex(request ):
 
 
 
-#def print_exotex(request):
+def print_exotex(request):
 
     relationtex_id = request.POST.get("print_exotex_id",None)  
     skills         = request.POST.get("skills",None)  
