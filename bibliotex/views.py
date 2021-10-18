@@ -1000,8 +1000,8 @@ def print_bibliotex(request ):
 
 def print_exotex(request):
 
-    file = settings.DIR_TMP_TEX+"exotex"+relationtex.id
-    f_toto = open("toto.tex","w")
+    file = settings.DIR_TMP_TEX+"exotex.tex"
+    f_toto = open(file,"w")
     f_toto.write("coucou")
     f_toto.close()
 
