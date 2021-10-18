@@ -1057,9 +1057,12 @@ def print_exotex(request):
     f_tex.write(my_tex)
     f_tex.close()
 
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode", file ])
+    result = subprocess.run(["/usr/bin/pdflatex", "-interaction","nonstopmode", file ])
+
+    print(result)
 
     fpdf = open( file+".pdf" , 'r')
+
     response = HttpResponse(fpdf, mimetype='application/pdf')
     return response
 
