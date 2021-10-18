@@ -1048,7 +1048,7 @@ def print_exotex(request):
     elements.append(ctnt)
     elements.append(r"\end{document}")
 
-    #file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
+    file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
     my_tex = ""
     for e in elements:
         my_tex +=str(e)
