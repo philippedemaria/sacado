@@ -1000,10 +1000,6 @@ def print_bibliotex(request ):
 
 def print_exotex(request):
 
-    file = settings.DIR_TMP_TEX+"exotex.tex"
-    f_toto = open(file,"w")
-    f_toto.write("coucou")
-    f_toto.close()
 
     relationtex_id = request.POST.get("print_exotex_id",None)  
     skills         = request.POST.get("skills",None)  
@@ -1052,10 +1048,13 @@ def print_exotex(request):
     elements.append(ctnt)
     elements.append(r"\end{document}")
 
-    file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
+    #file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
+    my_tex = ""
+    for e in elements:
+        my_tex +=e
 
     f_tex = open(file+".tex","w")
-    f_tex.write(sum(elements))
+    f_tex.write(sum(my_tex))
     f_tex.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode", file ])
