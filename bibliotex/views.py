@@ -1051,7 +1051,7 @@ def print_exotex(request):
     #file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
     my_tex = ""
     for e in elements:
-        my_tex +=e
+        my_tex +=str(e)
 
     f_tex = open(file+".tex","w")
     f_tex.write(sum(my_tex))
