@@ -1028,7 +1028,7 @@ def print_exotex(request):
         for s in sks :
             skills_display +=  s.name+". "
 
-    exo = "Exercice. " +  relationtex.exotex.title + ".    " +skills_display
+    exo = "Exercice. " +  relationtex.exotex.title + ".    " +skills_display+r"\vspace{0.4cm}"
     elements.append(exo)
 
 
@@ -1064,7 +1064,7 @@ def print_exotex(request):
 
     with open(file, 'r') as pdf:
         response = HttpResponse(pdf.read(), mimetype='application/pdf')
-        response['Content-Disposition'] = 'inline;filename=exotex'+str(relationtex.id)+'.pdf' 
+        response['Content-Disposition'] = 'inline;filename='+file+'.pdf' 
 
 
     return response
