@@ -1005,7 +1005,6 @@ def print_exotex(request):
     f_toto.write("coucou")
     f_toto.close()
 
-
     relationtex_id = request.POST.get("print_exotex_id",None)  
     skills         = request.POST.get("skills",None)  
     knowledges     = request.POST.get("knowledges",None)  
