@@ -1059,7 +1059,11 @@ def print_exotex(request):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
 
-    response = HttpResponse(file+".pdf", mimetype='application/pdf')
+ 
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="'+file+'.pdf"'
+
     return response
 
 
