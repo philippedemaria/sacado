@@ -1090,7 +1090,7 @@ def admin_tdb(request):
 
     school = request.user.school
     schools = request.user.schools.all()
-
+ 
     schools_tab = [school]
     for s in schools :
         schools_tab.append(s)
@@ -1102,6 +1102,7 @@ def admin_tdb(request):
     nb_groups = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
     
     is_lycee = False
+
     if not school.get_seconde_to_comp :
         for t in teachers :
             if t.groups.filter(level__gte=10).count() > 0 :

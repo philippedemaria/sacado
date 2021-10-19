@@ -2162,7 +2162,7 @@ width:100%;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container_checkbox input:checked ~ .checkmark, .container_checkbox:hover input ~  .check_exotex  {
+.container_checkbox input:checked ~ .checkmark, .container_checkbox:checked input ~  .check_exotex  {
   background-color: #00a65a;
 }
 

@@ -6,10 +6,9 @@
 <div class="exotex container_checkbox">
 
     <div>
-        <label>
-
-            <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex_id}}" class="selector_exotex" 
-                   id="selected_exotex{{ exotex.id }}"  data-statut="{% if exotex_is_selected %}True{% else  %}False{% endif  %}" {% if exotex_is_selected %}checked{% endif  %}/>
+        <label>             
+            <input type="checkbox"  data-exotex_id="{{ relationtex.exotex.id }}"  data-bibliotex_id="{{ relationtex.bibliotex.id}}" class="selector_exotex" 
+                   id="selected_exotex{{ relationtex.exotex.id }}"  data-statut="True" checked />
             <span class="check_exotex"></span>
             {{ relationtex.exotex.title }} 
         </label> 

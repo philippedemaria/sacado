@@ -195,6 +195,20 @@ class Relationtex(models.Model):
         data["students"] = intersection.order_by("user__last_name")
         return data 
 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Blacklistex(models.Model):
 
