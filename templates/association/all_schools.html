@@ -43,7 +43,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {{ school.name }}
+                        {{ school.name|lower|capfirst }}
                         {% if school.active_accounting %}
                             <a href="{% url 'update_accounting'  school.active_accounting.id %}" class="pull-right"><i class="fa fa-euro"></i></a>
                         {% else %}
@@ -51,8 +51,8 @@
                         {% endif %}
                
                     </td>
-                    <td>{{ school.town }}</td>
-                    <td>{{ school.country.name }}</td>
+                    <td>{{ school.town|lower|capfirst }}</td>
+                    <td>{{ school.country.name|lower|capfirst }}</td>
                     <td>{% for u in school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
                 </tr>
                 {% endfor %}
