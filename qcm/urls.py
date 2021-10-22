@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
 
-
+    path('folders', list_folders, name='folders'),
     #path('remove_parcours_folder', remove_parcours_folder, name='remove_parcours_folder'),
     #path('get_folder_to_folder', get_folder_to_folder, name='parcours'),
 
@@ -39,7 +39,7 @@ urlpatterns = [
     path('ajax_charge_group_from_target', ajax_charge_group_from_target, name='ajax_charge_group_from_target'), 
     path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'), 
 
-
+    path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
 
 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
@@ -189,8 +189,8 @@ urlpatterns = [
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     path('parcours_show_courses_from_folder/<int:idf>/0', show_courses_from_folder, name='show_courses_from_folder'),  
-
-  
+    path('only_create_course/0', only_create_course, name='only_create_course'), 
+    path('only_update_course/0', only_update_course, name='only_update_course'), 
 
     path('get_course_in_this_parcours/<int:id>', get_course_in_this_parcours, name='get_course_in_this_parcours'), 
     path('get_this_course_for_this_parcours/<int:typ>/<int:id_target>/<int:idp>', get_this_course_for_this_parcours, name='get_this_course_for_this_parcours'), 

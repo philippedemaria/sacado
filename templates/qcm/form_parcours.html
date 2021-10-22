@@ -77,7 +77,7 @@
                 </div>
 
  
-                <div class="col-sm-12  col-md-12">
+                <div class="col-sm-12  col-md-6">
                     <div class="form-group">         
                         <label>Affecter à mes groupes :</label> {% if group %}
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
@@ -85,9 +85,23 @@
                                 </span> {% endif %}
                         {{ form.groups|add_class:"select_all" }}
                         {{ form.groups.errors }}
-
- 
                     </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                    <label>Inclure dans un dossier</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                </span> 
+                    <div class="form-group" id="cblist">
+                         <div class="alert alert-warning">
+                            <p style="font-size:12px">Choisir au moins un groupe.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-12  col-md-12">
                     <div class="form-group">  
                         <div class="alert alert-warning">
                             <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.</p>
@@ -96,23 +110,8 @@
                     </div>
                 </div>
 
+
             </div>
-            {% if not folder %}
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12">
-                    <div class="alert alert-warning">
-                        <div class="row">
-                            <div class="col-sm-2 col-md-1 col-lg-1">
-                                <img src="{% static 'img/conseil.png' %}" height="40px" />
-                            </div>
-                            <div class="col-sm-10 col-md-11 col-lg-11">
-                                <small>Pour inclure ce parcours dans un dossier, cliquer sur la config. du dossier et cocher ce parcours.</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
         </div>
         <div class="col-sm-12 col-md-4">
                 {% if group_id %}

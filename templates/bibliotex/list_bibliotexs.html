@@ -18,7 +18,7 @@
 
   
 {% block page_title %}
-    <img src="{% static 'img/tex.png' %}" width="25px"> Mes BiblioTex <img src="{% static 'img/angle-right.png' %}"/> 
+    <span class="texfont">T<sub>E</sub>X</span>  <img src="{% static 'img/angle-right.png' %}"/> Mes BiblioTex <img src="{% static 'img/angle-right.png' %}"/> 
 {% endblock %}
 
 
@@ -32,30 +32,128 @@
 {% block body %}
 <section class="content_container">
 
-<form method="POST">{% csrf_token%}
-    <div class="row">
-        <div class="col-sm-2 col-md-2">
-            {% for data in dataset %}
-                <h4 class="title_bibliotex">
-                    {% if data.subject.name|length > 17 %} {{ data.subject.shortname   }} {% else %} {{ data.subject.name }} {% endif %}
-                </h4>
-                {% for l in data.levels %}
-                    <div data-level_id="{{l.id}}" data-subject_id="{{data.subject.id}}" class="click_this_level">{{ l.name }}</div>
-                {% endfor %}
-            {% endfor %}
-        </div>
 
-
-        <div class="col-sm-10 col-md-10" id="my_biblio">
-
-        </div>
-
-
-    </div>
-</form>  
  
 
+        <div class="row">    
+            <div class="col-sm-12 col-md-12">
+                {% csrf_token %}
+                <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
+                    <thead> 
+                        <tr> 
+                            <th style="width:20px"></th>
+                            <th style="width:20px;">
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-is_favorite"></i> Accessible<br/>depuis un dossier <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un dossier </div>
+                                </span>
+                            </th>   
+                            <th style="width:300px"></th>
+                            <th></th>     
+                            <th>Niveau</th>
+                            <th>Groupe </th>
+                            <th  style="width:150px;" >Mutualisation</th>
+                            <th>CoAnim.</th>
+                            <th style="width:160px">Publication 
+                                <span class="helper_tip"> 
+                                <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                                </span>
+                            </th>                    
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        {% for list_folder   in list_folders %} 
+                            <tr  style="{% if not list_folder.folder.is_publish %} border-left-color:#cb2131; border-left-style: 3px solid; {% endif  %}color:{{ list_folder.folder.color  }} "  class="selected_tr"  id="tr{{ forloop.counter }}" >
+                                <td style="position:relative; text-align:center;"><img src="{{ list_folder.folder.vignette.url }}" height="50px" /></td>
+                                <td></td>
+                                <td>  
+                                    <span class="accordion" data-target="{{ forloop.counter }}">{{ list_folder.folder.title }} <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}"   ></i></span>
+                                </td>
+                                <td></td> 
+                                <td style="width:100px">{{ list_folder.folder.level  }}</td>
+                                <td style="position:relative"></td>
+                                <td> </td>
+                                <td> </td>
+                                <td style="width:140px"></td>  
+                            </tr> 
+
+                            {% for bibliotex  in list_folder.bibliotexs.all %} 
+                                <tr style="display:none"  class="collapser subbibliotex{{ forloop.parentloop.counter }}"  > 
+                                    {% include 'bibliotex/bibliotex_data.html' %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ 
+ 
+        <div class="row">    
+            <div class="col-sm-12 col-md-12">
+                {% csrf_token %}
+                <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
+                    <thead> 
+                        <tr> 
+                            <th style="width:20px"></th>
+                            <th style="width:20px;">
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-is_favorite"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
+                                </span>
+                            </th>   
+                            <th style="width:300px"></th>
+                            <th></th>     
+                            <th>Niveau</th>
+                            <th>Groupe </th>
+                            <th  style="width:150px;" >Mutualisation</th>
+                            <th>CoAnim.</th>
+                            <th style="width:160px">Publication 
+                                <span class="helper_tip"> 
+                                <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                                </span>
+                            </th>                    
+                        </tr> 
+                    </thead>
+                    <tbody>
+                    {% for bibliotex in bibliotexs|dictsortreversed:"is_favorite" %}
+                        <tr {% if not bibliotex.is_publish %} style="border-left-color:#cb2131; border-left-style: 3px solid" {% endif  %}>
+                           {% include 'bibliotex/bibliotex_data.html' %}
+                        </tr>
+                    {% endfor  %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+ 
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces quizz')"> 
+                    <i class="fa fa-archive"> </i>   Archiver la sélection
+                </button>
+                <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces quizz')"> 
+                    <i class="fa fa-trash"> </i>   Supprimer la sélection
+                </button>
+         
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </form>
 </section>
+
+
+
+
+
 
 
 

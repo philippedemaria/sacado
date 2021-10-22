@@ -1,0 +1,87 @@
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<td style="position:relative; text-align:center;"> 
+    <input type="checkbox" name="selected_bibliotexs" value="{{ bibliotex.id}}"/>
+</td>  
+<td  style="width:20px;" >
+    <span class="fa-stack selector_favorite" id="selector_favorite{{ bibliotex.id }}" data-fav="{% if bibliotex.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ bibliotex.id }}" style="cursor:pointer"  data-status="bibliotex">
+        
+        <span id="is_favorite_id{{ bibliotex.id }}" title="Cliquer pour changer l'état">
+            <i class="fa {% if bibliotex.is_favorite %}fa-star text-success{% else  %}fa-star text-default{% endif  %}"></i>
+        </span>
+    </span>
+</td> 
+<td>
+    {{ bibliotex.title }}
+</td>  
+<td  style="width:20px;">
+ 
+        <a href="{% url 'update_bibliotex' bibliotex.id  %}"  > <i class="fa fa-edit  fa-xs"></i></a>
+ 
+</td>
+<td>
+    {% for l in bibliotex.levels.all %}{{ l.name }}{% empty %}<small class="alert-danger">RENSEIGNER LE NIVEAU</small>{% endfor %}
+</td> 
+<td style="position:relative">
+    <span id="new_group_affected{{ bibliotex.id}}">
+    {% for g in  bibliotex.groups.all  %}
+        <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+    {% endfor %}
+    </span>
+    <span class="select_div_group"  data-relationship_id="{{bibliotex.id}}"   title="Ajouter des groupes" ><i class="fa fa-plus-circle helper_tip"></i></span> 
+    <!-- Ajout de groupes par Ajax --->
+    <div id="affectation{{ bibliotex.id }}" class="card-skill no_visu_on_load"> 
+      <div class="row">
+            <div class="col-sm-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{bibliotex.id}}"><i class="fa fa-times"></i></span>         
+                Affecter aux Groupes 
+            </div>
+       </div> 
+    <hr style="padding:0px; margin:10px 0px"/><br>
+        {% for g in groups %}  
+              <label style="font-size:12px">
+              <input type="checkbox" name="affectation" data-group_id="{{g.id}}" data-status="bibliotex" value="{{bibliotex.id}}" class="prcrs_selector" {% if g in bibliotex.groups.all %} checked  {% endif %}  />
+              {{ g.name }} <span id="loader{{g.id}}"></span>
+              </label>{% if not forloop.last %}<br>{% endif %}
+        {% endfor %}
+    </div>
+</td>
+<td style="width:150px;" >
+    <div class="btn-group"  style="padding:0px;margin:0px;">
+        <a href="#" class="btn btn-default btn-publisher parcours_sharer"   id="parcours_sharer{{bibliotex.id}}" 
+            data-parcours_id="{{bibliotex.id}}" data-statut="{{bibliotex.is_share }}">  
+            <i class="fa fa-circle-o-notch"></i>
+        </a><span class="legend-btn  legend-btn-{% if bibliotex.is_share %}success{% else  %}danger{% endif  %} size13" id="parcours_sharer_statut{{bibliotex.id}}"  >  
+          {% if bibliotex.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
+        </span>
+    </div>
+</td>
+<td style="padding-left: 40px ">
+    {% if  bibliotex.is_coanimation   %}
+        <i class="fa fa-check text-success"></i> 
+    {% else %}
+        <i class="fa fa-times text-danger"></i>
+    {% endif %}
+</td>
+<td style="width:160px">
+    <div class="btn-group"  style="padding:0px;margin:0px;">
+        <a href="#" class="btn btn-default btn-publisher bibliotex_publisher" id="bibliotex_publisher{{bibliotex.id}}" 
+            data-is_disabled="{% if bibliotex.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+            data-bibliotex_id="{{bibliotex.id}}" data-statut="{{bibliotex.is_publish }}">  
+            <i class="fa fa-circle-o-notch"></i>
+        </a><span class="legend-btn  legend-btn-{% if not bibliotex.is_publish %}danger{% else  %}success{% endif  %} size13" id="bibliotex_statut{{bibliotex.id}}"  >  
+          {% if bibliotex.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+        </span>
+    </div>
+
+    <span class="label_icon">
+        {% if bibliotex.is_evaluation %}
+            {{  bibliotex.start|date:"d N Y H:i"  }}   
+            {% if bibliotex.stop %}
+               - {{  bibliotex.stop|date:"d N Y H:i"  }}     
+            {% endif %}                                
+        {% endif %}
+    </span>
+</td>

@@ -8,8 +8,13 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz']);
-    </script>     
+        require(['script/ajax-quizz-create']);
+    </script>  
+    {% if not quizz %}
+    <script>
+        require(['script/ajax-quizz-complement']);
+    </script> 
+    {% endif %}
 {% endblock %}
 
  
@@ -35,9 +40,278 @@
 {% block body %}
 <section class="content_main"> 
     <form action="#" method="POST"  enctype='multipart/form-data'>
+    	{% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-7">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+				            {{ form.title.label_tag }}
+				            {{ form.title|add_class:"form-control" }}
+                            {{ form.title.errors }}
+                        </div>
+                        <div class="form-group">
+				            <label>Enseignement</label>
+				            {{ form.subject|add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+				            {% if sacado_asso %}
+				            <div class="form-group"> 
+				                {{ form.vignette.label_tag }} <label><small>(Facultatif, l*h :300px*200px - 50Ko )</small></label>
+				                {{ form.vignette|add_class:"btn btn-default" }}
+				            </div>
+				            {% else %}
+				            <div class="alert alert-danger"> 
+				                Version établissement requise
+				            </div>
+				            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
+                        <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+	                    {% if quizz %}
+                            {{ form.groups  }}
+                            {{ form.groups.errors }}
+	                    {% else %}
+		                	{% if teacher.nb_boolean_multi_subjects %}
+	 	                        <div class="form-group" id="grplist">
+		                             <div class="alert alert-warning">
+		                                <p style="font-size:12px">Choisir au moins un enseignement.</p>
+		                            </div>
+		                        </div>
+							{% else %} 
+		                        <div class="form-group">         
+		                            <label>Affecter à mes groupes :</label> {% if group %}
+		                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+		                                        <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+		                                    </span> {% endif %}
+		                            {{ form.groups  }}
+		                            {{ form.groups.errors }}
+		                        </div>
+							{% endif %} 
+                    	{% endif %}
+	                </div>	
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">  
+                            <div class="alert alert-warning">
+                                <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le quizz est partagé entre ces groupes.</p>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    {% if quizz %}
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                            {{ form.folders|add_class:"select_all" }}
+                            {{ form.folders.errors }}
+                    </div>
+                    {% else %}
+                    <div class="col-sm-12 col-md-6">
+                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="form-group" id="cblist">
+                             <div class="alert alert-warning">
+                                <p style="font-size:12px">Choisir au moins un groupe.</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if quizz %}
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                        <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                            {{ form.parcours|add_class:"select_all_parcours" }}
+                            {{ form.parcours.errors }} 
+                    </div>
+                    {% else %}
+                    <div class="col-sm-12 col-md-6">
+                        <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="form-group" id="pclist">
+                             <div class="alert alert-warning">
+                                <p style="font-size:12px">Choisir au moins un dossier.</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-5 setup_ggb">
+                <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                     <table class="table borderless">
+                            <tr>
+                                <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Visible par les élèves.</div>
+                                    </span></td>
+                                <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                <td>{{ form.is_publish.errors }}</td>
+                            </tr>
+                            <tr id="publication_div">
+                                <td><label>Date de publication :</label>  
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                </div>
+                                    </span>
+                                </td>
+                                <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                                <td></td>
+                            </tr>
+				            {% if sacado_asso %}
+				                <tr>
+				                    <td>{{ form.is_share.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
+				                                </span> 
+				                    </td>
+				                    <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+				                </tr>
+
+				                <tr>
+				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Archiver vos quizz pour plus de clarté dans votre liste de quizz actifs.</div>
+				                                </span> 
+				                    </td>
+				                    <td> {{ form.is_archive|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+				                </tr>
+
+				            {% else %}
+
+				                <tr>
+				                    <td>{{ form.is_share.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
+				                                </span> 
+				                    </td>
+				                    <td> 
+				                        <div class="alert alert-danger"> 
+				                            Version établissement requise
+				                        </div>
+				                     </td>
+				                </tr>
+
+				                <tr>
+				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Archiver vos quizz pour plus de clarté dans votre liste de quizz actifs.</div>
+				                                </span> 
+				                    </td>
+				                    <td>             
+				                        <div class="alert alert-danger"> 
+				                            Version établissement requise
+				                        </div> 
+				                    </td>
+				                </tr>
+				            {% endif %}
+
+				            {% if teacher.user.is_superuser %}
+				                <tr style="background-color: #CCC">
+				                    <td class="no_border">{{ form.is_random.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Génération de questions aléatoires selon la matière, le niveaux et les thèmes renseignés.</div>
+				                                </span>  
+				                    </td>
+				                    <td>{{ form.is_random|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+				                    </td>
+				                </tr>
+				            {% endif %}
+                            <tr>
+                                <td>{{ form.is_archive.label_tag }}
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Archive le fichier.</div>
+                                    </span>
+                                </td>
+                                <td>{{ form.is_archive |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                <td>{{ form.is_archive.errors }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.stop.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Rendu des exercices impossible après la date renseignée. 
+                                            <br/> 
+                                            <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                        </div>
+                                    </span>
+                                </td>
+                                <td>{{ form.stop|add_class:"form-control datetimepicker"}}</td>
+                                <td>{{ form.stop.errors}}{% for error in form.non_field_errors %}
+                                        <p class="alert alert-danger">{{error}}</p>
+                                    {% endfor %}</td>
+                            </tr>
+
+			                <tr>
+			                    <td class="no_border">{{ form.is_numeric.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+			                                    <div class="helper_tip_text" >Papier si réponse sur feuille, Numérique si réponse avec smartphone, tablette, ordinateur ou mode jeu.</div>
+			                                </span> 
+			                    </td>
+			                    <td>{{ form.is_numeric|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}
+			                    </td>
+
+			                </tr>                                
+			                <tr class="div_is_mark">
+			                    <td class="no_border">{{ form.is_mark.label_tag }} </td>
+			                    <td>{{ form.is_mark|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+			                </tr>
+			                <tr class="div_is_mark">
+			                    <td class="no_border">{{ form.is_video.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+			                                    <div class="helper_tip_text" >Projection : utilisation projetée en classe avec réponse sur son smartphone. <br/>Individuelle : chaque élève travaille sur poste.</div>
+			                                </span> </td>
+			                    <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Projection"|attr:"data-off:Individuelle"|attr:"data-width:130" }}  </td>
+			                </tr>
+
+			 
+
+			                <tr class="div_interslide">
+			                    <td class="no_border">{{ form.interslide.label_tag }}
+			                    </td>
+			                    <td>{{ form.interslide|add_class:"form-control" }} </td>
+			                </tr>
+			            {% if quizz.is_numeric or not quizz %}
+			                <tr class="div_is_mark div_is_ranking">
+			                    <td class="no_border">{{ form.is_ranking.label_tag }} </td>
+			                    <td>{{ form.is_ranking|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+			                </tr>
+			                <tr class="div_is_mark div_is_ranking">
+			                    <td class="no_border">{{ form.is_shuffle.label_tag }}  </td>
+			                    <td>{{ form.is_shuffle|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+			                </tr>
+			                <tr class="div_is_mark div_is_ranking">
+			                    <td class="no_border">{{ form.is_back.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+			                                    <div class="helper_tip_text" >Permet de revenir sur les questions en arrière dans le quizz.</div>
+			                                </span> </td>
+			                    <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+			                </tr>
+			            {% endif %}
+			                <tr> 
+			                    <td class="no_border">{{ form.is_result.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+			                                    <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
+			                                </span> 
+			                    </td>
+			                    <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+			                </tr>
 
 
-        {% include 'tool/form_quizz_items.html' %}
+                    </table>
+            </div>
+        </div>
+	    <div class="row">
+	        <div class="col-sm-12 col-md-12"> 
+	            <div class="form-group">
+	                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+	            </div>
+	        </div>    
+	    </div>
  
     </form>  
 </section>

@@ -42,7 +42,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            url_ = "../ajax_charge_groups" ;
+            url_ = "../ajax_charge_folders" ;
 
             $.ajax(
                 {
@@ -415,6 +415,44 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+
+
+        function publisher_bibliotexs($actionner,$target,$targetStatut){
+
+                $actionner.on('click', function (event) {
+                    
+                let bibliotex_id = $(this).attr("data-bibliotex_id");
+                let statut = $(this).attr("data-statut");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'bibliotex_id': bibliotex_id,
+                            'statut': statut,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "ajax_publish_list_bibliotex" ,
+                        success: function (data) {
+                            $($target+bibliotex_id).attr("data-statut",data.statut);                  
+                            $($targetStatut+bibliotex_id).removeClass(data.noclass);
+                            $($targetStatut+bibliotex_id).addClass(data.class);
+                            $($targetStatut+bibliotex_id).html("").html(data.label);
+ 
+
+                        }  
+                    })
+                }); 
+            } ;
+
+        publisher_bibliotexs( $('.bibliotex_publisher') , '#bibliotex_publisher' ,'#bibliotex_statut' ) ;
+ 
+
+
+
+
         // ===============================================================
         // ===============================================================
         // Affiche dans la modal la liste des élèves du groupe sélectionné
@@ -520,10 +558,73 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+            $('.collapsed').hide() ;
+            collapser = 0 ;
+            $('.accordion').on('click', function (event) {
+
+                let target = $(this).attr("data-target");
+
+                $(".subbibliotex"+target).toggle(500);
+
+                if (collapser %2 == 0) 
+                    { 
+                        $("#pop"+target).removeClass('fa-chevron-down').addClass('fa-chevron-up');
+
+                        $(".selected_tr").addClass('no_visu_on_load');
+                        $("#tr"+target).removeClass('no_visu_on_load').addClass('bg_violet');
+                    } 
+                else 
+                    {
+                        $("#pop"+target).removeClass('fa-chevron-up').addClass('fa-chevron-down');
+
+                        $(".selected_tr").removeClass('no_visu_on_load');
+                        $("#tr"+target).removeClass('bg_violet');
+
+                    }
+                collapser++;                     
+             }) ;
 
 
 
 
+
+
+ 
+
+        $('#DataTables_Table_0_wrapper').find('.col-sm-6').first().append("<h1 class='thin sacado_color_text'><i class='fa fa-folder-open'></i>   dans des dossiers </h1> ") ;
+        $('#DataTables_Table_1_wrapper').find('.col-sm-6').first().append("<h1 class='thin sacado_color_text'><i class='fa fa-th-list'></i>   hors dossier</h1> ") ;
+ 
+
+
+
+
+
+        // Met en favori un parcours
+        $('.selector_favorite').on('click' ,function () {
+            let target_id = $(this).attr("data-target_id"); 
+            let statut = $(this).attr("data-fav"); 
+            let status = $(this).attr("data-status"); 
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'target_id': target_id,
+                        'statut': statut,
+                        'status': status,
+
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_is_favorite",
+                    success: function (data) {
+                        $('#is_favorite_id'+target_id).html(data.statut);
+                        $('#selector_favorite'+target_id).attr("data-fav",data.fav);      
+                    }
+                }
+            )
+        });
 
 
 

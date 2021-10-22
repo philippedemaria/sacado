@@ -38,7 +38,7 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         uploader: "lib/jquery.smartuploader",
- 
+        tex: "lib/tex_math_ml", 
 
     },
     shim: {
@@ -97,7 +97,7 @@ requirejs.config({
 });
 
 require(['jquery', 'bootstrap', 'bootstrap_popover',  'bcPicker',  'mathjax' , 'ckeditor_jquery', 'ckeditor', 'ckeditor_init',   'datatables', 'datatables_bootstrap',
-    'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'uploader',   'config_datatable', 
+    'config_select2', 'config_datepicker', 'config_toggle', 'config_colorpicker', 'fonctions_jquery', 'fonctions',   'uploader',   'config_datatable',  'tex' ,
     'multiselect', 'ui', 'slimscroll', 'chart']);
 
 // suppression de admin dans le chargement  : 'admin', 

@@ -40,36 +40,21 @@
 </li>
 
 <li class="dropdown {% if  request.session.tdb and 'parcours_group' in request.path %}active{% endif %}">
-    <a href="{% url 'index' %}" class="main" >
+    <a href="{% url 'index' %}" class="main closer_notification" >
         <i class="fa fa-tachometer-alt fa-2x"></i> 
         <div class="captionmenu">Tableau de bord</div>
     </a>
 </li>
 
-
-<li  class="dropdown {% if not request.session.tdb and 'parcours' in request.path and not 'parcours_group' in request.path  and not 'evaluation' in request.path and not 'parcourses_all/1/' in request.path %}active{% endif %}">
-    <a href="{% url 'parcours' %}" class="main" >
-        <i class="fa fa-th fa-2x" aria-hidden="true"></i> 
-        <div class="captionmenu">Parcours</div>
+<li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path  %}active{% endif %}">
+    <a href="#" class="main"  id="documents" style="cursor: grab;">
+        <i class="fa fa-folder fa-2x" aria-hidden="true"></i> 
+        <div class="captionmenu">Documents</div>
     </a>
-</li>
-<li  class="dropdown {% if not request.session.tdb and not request.session.tdb and 'evaluation' in request.path or 'parcourses_all/1/' in request.path    %}active{% endif %}">
-
-    {% if sacado_asso %}
-    <a href="{% url 'evaluations' %}" class="main" >
-        <i class="fa fa-th fa-trophy fa-2x" aria-hidden="true"></i> 
-        <div class="captionmenu">Evaluations</div>
-    </a>
-    {% else %}
-    <a href="#" class="main" style="cursor:not-allowed" title="Version établissement requise."  >
-        <i class="fa fa-th fa-trophy fa-2x" aria-hidden="true"></i> 
-        <div class="captionmenu">Evaluations</div>
-    </a>
-    {% endif %}
 </li>
 
  <li  class="dropdown {% if not request.session.tdb and '/exercise' in request.path  %}active{% endif %}">
-    <a href="{% url 'exercises' %}" class="main" >
+    <a href="{% url 'exercises' %}" class="main closer_notification" >
         <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>
     </a>
@@ -89,7 +74,7 @@
 <li  class="dropdown  {% if not request.session.tdb and '/sendmail' in request.path %} active{% endif %}">
 
     {% if sacado_asso %}
-    <a href="{% url 'emails' %}" class="main" >
+    <a href="{% url 'emails' %}" class="main closer_notification" >
         {% if nbe > 0 %}
         <span class="label label-warning notifications">{{nbe}}</span>
         {% endif %}
@@ -114,7 +99,7 @@
 
 
 <li class="dropdown {% if not request.session.tdb and '/aefe' in request.path %}active{% endif %}">
-    <a href="{% url 'aefe' %}" class="main">
+    <a href="{% url 'aefe' %}" class="main closer_notification">
         <i class="fa fa-database fa-2x"></i> 
         <div class="captionmenu">aefe</div>
     </a>
@@ -153,7 +138,7 @@
 
 {% elif request.user.is_testeur   %} <!-- testeur des documents -->
 <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
-    <a href="{% url 'admin_testeur' %}" class="main" >
+    <a href="{% url 'admin_testeur' %}" class="main closer_notification" >
         <i class="fa fa-cloud fa-2x"></i> 
         {% if not renew_propose %}
             <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
@@ -162,6 +147,18 @@
     </a>
 </li>
 
+{%  elif request.user.is_manager %}
+<div class="row">
+    <div class="col-lg-12 col-xs-12">
+        <a href="{% url 'admin_tdb' %}" class="main" >
+            {% if not renew_propose %}
+                <i class="fa fa-info-circle text-warning" aria-hidden="true" ></i> 
+            {% endif  %}
+            Admin  
+        </a>
+    </div>
+</div> 
+ 
 {% endif  %}
 
 

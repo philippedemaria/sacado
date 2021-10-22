@@ -16,7 +16,7 @@ from group.forms import GroupForm
 from group.models import Group , Sharing_group
 from school.models import Stage, School
 from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
-from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
+from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , Course_NonP_Form , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from django.http import JsonResponse 
@@ -1298,7 +1298,7 @@ def ajax_affectation_to_group(request):
         else :
             parcours.groups.add(group)
             groups = (group,)
-            attribute_all_documents_of_groups_to_all_new_student(groups)
+            attribute_all_documents_of_groups_to_all_new_students(groups)
         for g in parcours.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
 
@@ -1309,7 +1309,7 @@ def ajax_affectation_to_group(request):
         else :
             folder.groups.add(group)
             groups = (group,)
-            attribute_all_documents_of_groups_to_all_new_student(groups)
+            attribute_all_documents_of_groups_to_all_new_students(groups)
         for g in folder.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
         change_link = "change"
@@ -1347,6 +1347,32 @@ def ajax_charge_group_from_target(request):
 ##################     Listes dossiers parcours évaluation archives  #######################################################################
 ############################################################################################################################################
 ############################################################################################################################################
+
+def list_folders(request):
+
+    teacher = request.user.teacher
+    today   = time_zone_user(teacher.user)
+
+    folds   = teacher_has_folders(teacher, 0  ) #  is_archive
+    folders = folders_contains_evaluation(folds, False)
+
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
+    nb_base = len( folders ) 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
+    groups = teacher.has_groups()
+
+    if request.session.has_key("group_id"):
+        del request.session["group_id"]
+    if request.session.has_key("folder_id"):
+        del request.session["folder_id"]
+
+    return render(request, 'qcm/list_folders.html', { 'folders' : folders ,   'nb_base' : nb_base ,  'groups' : groups ,
+                    'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
+
+
+
+
 
 def list_parcours(request):
 
@@ -1949,7 +1975,7 @@ def all_attributions_for_this_nf(group_ids,nf) :
         group = Group.objects.get(pk=gid)
         all_students.update(group.students.all())
         groups.append(group)
-    attribute_all_documents_of_groups_to_all_new_student(groups)
+    attribute_all_documents_of_groups_to_all_new_students(groups)
     nf.students.set(all_students)
  
 
@@ -3356,7 +3382,7 @@ def ajax_is_favorite(request):
             data["fav"] = 0
         else :
             Parcours.objects.filter(pk = target_id).update(is_favorite = 1)  
-            data["statut"] = "<i class='fa fa-star text-success' ></i>"
+            data["statut"] = "<i class='fa fa-star text-is_favorite' ></i>"
             data["fav"] = 1
     else :
         if statut :
@@ -3365,7 +3391,7 @@ def ajax_is_favorite(request):
             data["fav"] = 0
         else :
             Folder.objects.filter(pk = target_id).update(is_favorite = 1)  
-            data["statut"] = "<i class='fa fa-star   text-success' ></i>"
+            data["statut"] = "<i class='fa fa-star   text-is_favorite' ></i>"
             data["fav"] = 1     
 
     return JsonResponse(data) 
@@ -5015,6 +5041,28 @@ def show_evaluation(request, id):
     return render(request, 'qcm/show_parcours.html', context)
 
 
+
+
+
+def ajax_charge_folders(request):
+
+    teacher = Teacher.objects.get(user= request.user)
+    data = {} 
+    group_ids = request.POST.getlist('group_ids', None)
+
+    if len(group_ids) :
+        grps = set()
+        for group_id in group_ids :
+            group = Group.objects.get(pk=group_id)
+            grps.update(group.group_folders.values_list("id","title").filter(is_trash=0))
+
+        data['folders'] =  list( grps )
+    else :
+        data['folders'] =  []
+
+    return JsonResponse(data)
+
+ 
  
 #####################################################################################################################################
 #####################################################################################################################################
@@ -6924,9 +6972,67 @@ def export_note(request,idg,idp):
 def list_courses(request):
 
     teacher = request.user.teacher
-    courses = Course.objects.filter(teacher = teacher)
+    courses = teacher.course.all()
 
-    return render(request, 'qcm/course/list_course.html', {'courses': courses,  })
+    return render(request, 'qcm/course/list_courses.html', {'courses': courses,  })
+
+#@user_is_parcours_teacher
+def only_create_course(request):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    teacher =  request.user.teacher
+    form = Course_NonP_Form(request.POST or None)
+    if request.method == "POST" :
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.parcours = parcours
+            nf.teacher = teacher
+            nf.author = teacher
+            nf.save()
+            try :
+                return redirect('show_course' , 0 , id)
+            except :
+                return redirect('index')
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher, 'course': None ,   }
+
+    return render(request, 'qcm/course/form_np_course.html', context)
+
+
+
+#@user_is_parcours_teacher
+def only_update_course(request,idc):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    teacher =  request.user.teacher
+    form = Course_NonP_Form(request.POST or None)
+    if request.method == "POST" :
+        if form.is_valid():
+            nf =  form.save(commit = False)
+            nf.parcours = parcours
+            nf.teacher = teacher
+            nf.author = teacher
+            nf.save()
+            try :
+                return redirect('show_course' , 0 , id)
+            except :
+                return redirect('index')
+        else:
+            print(form.errors)
+
+    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
+
+    return render(request, 'qcm/course/form_course.html', context)
+
+
+
+
+
+
 
 
 
@@ -6935,17 +7041,6 @@ def create_course(request, idc , id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
-    ######################################################    
-    #  Pour modifier un annoncement de cours
-    #courses = Course.objects.filter(annoncement__contains="iframe",author_id=2480)
-    #for course in courses :
-    #    annoncement = course.annoncement
-    #    course.annoncement = annoncement.replace("/888888/","/FFFFFF/")
-    #    course.save()
-
-    ######################################################
-
-
     parcours = Parcours.objects.get(pk =  id)
     teacher =  request.user.teacher
 
@@ -6970,9 +7065,6 @@ def create_course(request, idc , id ):
                 return redirect('index')
         else:
             print(form.errors)
-
-
-
 
     context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
 

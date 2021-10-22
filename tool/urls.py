@@ -74,6 +74,10 @@ urlpatterns = [
  
     path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
     path('ajax_chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
+    path('ajax_charge_groups', ajax_charge_groups, name='ajax_charge_groups'),
+    path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
+    path('ajax_charge_parcours', ajax_charge_parcours, name='ajax_charge_parcours'),
+
 
     path('question_sorter', question_sorter, name='question_sorter'), 
 

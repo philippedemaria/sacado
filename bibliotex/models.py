@@ -83,8 +83,9 @@ class Bibliotex(models.Model):
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
     stop = models.DateTimeField(null=True, blank=True, verbose_name="Date de verrouillage")
 
-    folders = models.ManyToManyField(Folder, blank=True,  related_name="bibliotexs", editable=False)
-    groups  = models.ManyToManyField(Group,  blank=True,  related_name="bibliotexs",  verbose_name="Groupe éventuel" )
+    folders  = models.ManyToManyField(Folder, blank=True,  related_name="bibliotexs", editable=False)
+    groups   = models.ManyToManyField(Group,  blank=True,  related_name="bibliotexs",  verbose_name="Groupe éventuel" )
+    parcours = models.ManyToManyField(Parcours, blank=True, related_name="bibliotexs"  ) 
 
     exotexs  = models.ManyToManyField(Exotex,  through="Relationtex", related_name="bibliotexs", editable=False)
     students = models.ManyToManyField(Student, related_name="bibliotexs", editable=False)

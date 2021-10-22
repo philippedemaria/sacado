@@ -404,16 +404,26 @@ class Parcours(ModelWithCode):
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
 
     def __str__(self):
+        flds = ""
+        for f in self.folders.all():
+            flds += f.title+" - "
+ 
         try :
-            if self.coteachers.count() > 0 :
-                return "[CoA] : {}".format(self.title)
+            if self.coteachers.count() > 0 and flds != "" :
+                return "{} > {} [CoA]".format(flds, self.title)
+            elif self.coteachers.count() > 0 and flds == "" :
+                return "{} [CoA]".format(self.title)
             else :
                 return "{}".format(self.title)
         except :
             return "{}".format(self.title)
 
  
-
+    def contains_exercises(self):
+        contains = False
+        if self.parcours_relationship.count() > 0 :
+            contains = True
+        return contains
 
     def contains_student(self):
         contains = False
@@ -880,7 +890,13 @@ class Folder(models.Model):
 
 
     def __str__(self):
-        return "{}".format(self.title)
+        grp = ""
+        for g in self.groups.all():
+            grp += g.name+" - "
+        if grp == "" :
+            return "{}".format(self.title)
+        else :
+            return "{} > {}".format(grp, self.title)
 
  
 
@@ -1956,10 +1972,10 @@ class Course(models.Model): # pour les
     students = models.ManyToManyField(Student, blank=True,  related_name='students_course', verbose_name="Attribuer à/au")
     creators = models.ManyToManyField(Student, blank=True,  related_name='creators_course', verbose_name="Co auteurs élève") 
     relationships = models.ManyToManyField(Relationship, blank=True,  related_name='relationships_courses', verbose_name="Lier ce cours à") 
- 
+
+
     def __str__(self):
         return self.title 
-
 
     def subjects(self):
         subjects = []

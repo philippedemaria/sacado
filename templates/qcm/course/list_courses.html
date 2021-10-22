@@ -1,238 +1,171 @@
 {% extends 'dashboard.html' %}
-
-{% load widget_tweaks %}
 {% load static %}
+{% load widget_tweaks %}
 {% load item_tags %}
 
 
-   
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-
-
-
-    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
     <script>
-        require(['script/ajax-course_this_parcours']);
+        require(['script/ajax-parcours']);
+        require(['script/ajax-parcours_inside_data']);
     </script> 
-    {% else %}
-        <script>
-            require(['script/ajax-course']);
-        </script> 
-    {% endif  %}
-
-{% endblock %} 
-
-  
-{% block page_title %}
-    
-    {% if parcours %} 
-        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
-        {% include 'qcm/breadcrumb.html' %}
-        <small> Les cours mutualisés  </small>
-    {% else  %} 
-        <i class="fa fa-laptop"></i> Les cours mutualisés 
-    {% endif  %} 
-
-
 {% endblock %}
+
+ 
+
+{% block page_title %}
+   <i class="fa fa-desktop sacado_color_text"></i> Mes cours
+{% endblock %}
+
+
+
+
+
 
 {% block page_menu_right %}
 
-    <li> <a href="{% url 'parcours' %}"   class="btn btn-new"> Mes parcours</a> </li>
-
-{% endblock %}
-
-
-{% block body %}
-<section class="content_main">
-
-<!-- Module de recherche -->
-
-<form method="POST"> 
-    <div class="row" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0;padding-top: 15px">
-
-        <div class="col-sm-12 col-md-4 col-lg-3">
-            <div class="form-group">
-                <select id="id_subject" name="subject" class="form-control select2">
-                    {% for s in teacher.subjects.all %}
-                        <option value="{{s.id}}">{{ s.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-2">
-            <div class="form-group">
-                <select id="id_level" name="level" class="form-control select2" >
-                    <option value=" ">Choisir un niveau</option>
-                    {% for l in teacher.levels.all %}
-                        <option value="{{l.id}}">{{ l.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-        </div>
-        <div class="col-sm-12 col-md-5 col-lg-3">
- 
-            <div class="form-group">
-                <select id="id_theme" name="theme" class="form-control select2" multiple>
-                    <option value=" ">Choisir un niveau puis un thème</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-4">
-            <div class="form-group">
-                <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
-            </div>
-        </div>
-    </div>
-    {% csrf_token %}
-    <div id="loader"></div>
-
-
-    {% if parcours %}
-         <input type="hidden" name="parcours_id" id="parcours_id" value="{{parcours.id }}"/>
-    {% endif %}
-
-
-    <div  style="height:35px"></div>
-
-
-
-    <div class="row" id="courses_details">
-        <div class="col-sm-12 col-md-12">
- 
-
-            {% regroup courses by parcours as parcours_list  %}
-            {% for pcs in parcours_list  %}
- 
-                <div  class="box_shared box-widget widget-user-2" 
-                    style="{% if pcs.grouper.vignette %}background-image: url('{{ pcs.grouper.vignette.url }}'); background-size: 100%;{% endif %}; background-color:{{pcs.grouper.color }}">
-
-
-                    <div class="handler widget-user-header">
-
-                        <div class="disc_course">
-
-                        {% if parcours %}
-                            <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course" style="color:white;"
-                                onclick="return get_this_confirmation('tous les cours')"  title="Récupérer ce cours"  >
-                                <i class="fa fa-clone"></i></a>
-                        {% else %} 
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit" title="Récupérer ce cours" >
-                                <i class="fa fa-clone"></i>
-                            </a>
-                        {% endif %}
-                        </div>
-
-
-                        {% if pcs.grouper.vignette %}                
-                            <div class="box_title_underlay_vignette" style="background-color:{{ pcs.grouper.color }};">
-                            </div> 
-                        {% endif  %}
-                        <div class="box_title_vignette"> 
-                            <a href="{% url 'show_parcours_visual'  pcs.grouper.id  %}" style="color:{{ pcs.grouper.color|contrast_color }};">
-                                {{ pcs.grouper.title|truncatechars:"28" }}
-                            </a>
-                        </div>
-                    </div>
-
-
-                    <div class="course_body_shared" style="background: white;padding:10px">
-                    {% for course in pcs.list  %}
-                        <li class="course_section">
-                            {% if course.title|length > 32 %} 
-                              <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
-                            {% else %} 
-                                {{ course.title }} 
-                            {% endif %}
-
-
-                            {% if parcours %} 
-                                <a href="{% url 'get_this_course_for_this_parcours' 1 parcours.id course.id %}" title="Récupérer ce cours"  
-                                    onclick="return get_this_confirmation('ce cours : {{ course.title }}')"  class="pull-right  getter_course edit"><i class="fa fa-clone fa-xs"></i></a>
-                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_this_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                            {% else %} 
-                                <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit" title="Récupérer ce cours" >
-                                    <i class="fa fa-clone fa-xs"></i></a>
-                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                            {% endif %}
-                                
-
-                        </li> 
-                    {% endfor %}
-                    </div>
-                    <div  style="background: white;padding:10px;height:35px;">
-
-                        <div class="col-sm-6 col-md-6">
-                        <label>{{ pcs.grouper.course.count }} chapitres</label>
-                        </div>
-
-                        <div class="col-sm-6 col-md-6">
-                        <label>{{ pcs.grouper.teacher|truncatechars:"16" }}</label>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %} 
-        </div>
-    </div>
-
-
- 
-
-
-
-
-
-
-
- 
-        
-               
-
-
-
-
-</form>     
-</section>
-
-
-<div class="modal fade" id="get_course" tabindex="-1" role="dialog" aria-labelledby="get_course">
-    <div class="modal-dialog" role="document"  style="width:850px">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h2 id="get_course_title" >Voir un cours</h2>
-            </div>
-
-            <div class="modal-body" id="get_course_body">
- 
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="clone_course" tabindex="-1" role="dialog" aria-labelledby="clone_course">
-    <div class="modal-dialog" role="document" style="width:850px">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <label >Cloner dans un ou plusieurs de mes parcours ci-dessous </label>
-            </div>
-            <form method="POST">
-                <div class="modal-body" id="get_course_result">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
- 
-{% endblock %}
-
+    {% include 'qcm/course/submenu_creation_course.html' %}
    
+{% endblock %}
+
+
+
+
+{% block body  %} 
+
+<section class="content_list"> 
+{% include 'preloader.html' %}
+
+ 
+<form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>
+    <div class="row">    
+        <div class="col-sm-12 col-md-12">
+            {% csrf_token %}
+            <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
+                <thead> 
+                    <tr> 
+                        <th style="width:20px"></th>
+                        <th style="width:50px">Favori 
+                        </th>
+                        <th style="width:50px; ">
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
+                            </span>
+                        </th>            
+                        <th style="width:300px">Nom</th>
+                        <th></th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th style="width:250px">Groupe </th>
+                        <th>Mutualisation</th>
+                        <th>CoAnim.</th>
+                        <th style="width:150px">Publication 
+                            <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                            </span>
+                        </th>                    
+                    </tr> 
+                </thead>
+                <tbody>
+                {% for folder in folders|dictsortreversed:"is_favorite" %}
+                    <tr style="{% if not folder.is_publish %} border-left-color:#cb2131; border-left-style: 3px solid;{% endif  %}height:60px"  class="selected_tr"  id="tr{{ forloop.counter }}" >
+                        <td style="position:relative; text-align:center;"> 
+                        </td>  
+                        <td style="text-align:center;" ></td> 
+                        <td style="position:relative; text-align:center; 
+                                    background-image:url({% if folder.vignette %}{{ folder.vignette.url }}{% endif %});
+                                    background-repeat: no-repeat;
+                                    background-size: 50px 50px;"> 
+                        </td> 
+                        <td {% if folder.is_folder %} style="padding-top:15px" {% endif %} >
+                                <span   class="accordion" data-target="{{ forloop.counter }}"  >{{ folder.title }}  </span>
+                                {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
+                        </td>  
+                        <td>
+                            <span   class="accordion" data-target="{{ forloop.counter }}"  > <i class="fa fa-chevron-down" id="pop{{ forloop.counter }}" ></i></span>
+                        </td>
+                        <td></td>
+                        <td>{{  folder.level  }}</td> 
+                        <td style="position:relative"></td>
+                        <td style="width:150px;" ><td>
+                        <td style="width:150px;"></td>
+                    </tr>
+                    {% block list_of_evaluation %}
+                        {% for parcours in folder.parcours.all %}  
+                            {% if not parcours.is_evaluation %}
+                            <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
+                                {% include 'qcm/list_parcours_data.html' %}
+                            </tr>
+                            {% endif %}  
+                        {% endfor  %}
+                    {% endblock  %}
+
+                {% endfor  %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="row">    
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
+                <thead> 
+                    <tr> 
+                        <th style="width:30px"></th> 
+                        <th style="width:50px">
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un dossier <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un dossier </div>
+                            </span>    
+                        </th> 
+                        <th style="width:300px">Titre</th>
+                        <th></th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th style="width:300px">Groupe
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >Le profil élève d'un enseignant n'est pas pris en compte. </div>
+                            </span>
+
+                        </th>
+                        <th  style="width:150px;" >Mutualisation</th>
+                        <th>Associations</th>
+                        <th style="width:160px">Publication 
+                            <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                            </span>
+                        </th>
+                    </tr> 
+                </thead>
+                <tbody> 
+                {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
+                    <tr >
+                       {% include 'qcm/list_parcours_data.html' %}
+                    </tr>
+                {% endfor  %} 
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" style="margin-top:50px">
+        <div class="col-sm-12 col-md-12">
+            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+                <i class="fa fa-archive"> </i>   Archiver la sélection
+            </button>
+            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+                <i class="fa fa-trash"> </i>   Supprimer la sélection
+            </button>
+        </div>
+    </div>
+</form>
+ 
+</section>
+ 
+ 
+{% endblock  %}   
+
+ 

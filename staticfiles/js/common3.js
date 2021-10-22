@@ -36,8 +36,7 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         uploader: "lib/jquery.smartuploader",
- 
-
+        tex: "lib/tex_math_ml",
 
     },
     shim: {
@@ -95,5 +94,5 @@ requirejs.config({
 });
 
 require(['jquery', 'bootstrap', 'uploader', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',  'uploader', 'ckeditor_jquery',
-    'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery',  
+    'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'tex' ,
     'fonctions',   'config_datatable', 'multiselect', 'ui',]);

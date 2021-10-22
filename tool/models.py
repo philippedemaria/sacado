@@ -4,7 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from group.models import Group
 from socle.models import *
 from account.models import Student, Teacher, ModelWithCode , User
-from qcm.models import Parcours , Exercise
+from qcm.models import Parcours , Exercise , Folder
  
 from django.utils import   timezone
 from django.db.models import Q
@@ -280,6 +280,7 @@ class Quizz(ModelWithCode):
     questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
     qrandoms     = models.ManyToManyField(Qrandom, blank=True, related_name="quizz" , editable=False)  
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="quizz"  ) 
+    folders      = models.ManyToManyField(Folder, blank=True, related_name="quizz"  ) 
     
     def __str__(self):
         return self.title 

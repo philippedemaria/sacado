@@ -15,59 +15,59 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
     $("#loading").hide(500); 
 
   // Affiche dans la modal la liste des élèves du groupe sélectionné
-        $('#id_levels').on('change', function (event) {
-            let id_level = $(this).val();
-            let id_subject = $("#id_subject").val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
-            $("#loading").show(); 
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    traditional: true,
-                    data: {
-                        'id_level': id_level,
-                        'id_subject': id_subject,                        
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url : "../../qcm/ajax/chargethemes_parcours",
-                    success: function (data) {
+    $('#id_levels').on('change', function (event) {
+        let id_level = $(this).val();
+        let id_subject = $("#id_subject").val();
+        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+        $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+        $("#loading").show(); 
+        $.ajax(
+            {
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'id_level': id_level,
+                    'id_subject': id_subject,                        
+                    csrfmiddlewaretoken: csrf_token
+                },
+                url : "../../qcm/ajax/chargethemes_parcours",
+                success: function (data) {
 
-                        themes = data["themes"];
-                        $('select[name=themes]').empty("");
-                        if (themes.length >0)
+                    themes = data["themes"];
+                    $('select[name=themes]').empty("");
+                    if (themes.length >0)
 
-                        { for (let i = 0; i < themes.length; i++) {
-                                    
+                    { for (let i = 0; i < themes.length; i++) {
+                                
 
-                                    console.log(themes[i]);
-                                    let themes_id = themes[i][0];
-                                    let themes_name =  themes[i][1]  ;
-                                    let option = $("<option>", {
-                                        'value': Number(themes_id),
-                                        'html': themes_name
-                                    });
-                                    $('select[name=themes]').append(option);
-                                }
-                        }
-                        else
-                        {
-                                    let option = $("<option>", {
-                                        'value': 0,
-                                        'html': "Aucun contenu disponible"
-                                    });
-                            $('select[name=themes]').append(option);
-                        }
-
-
- 
-
-                        $("#loading").hide(500); 
+                                console.log(themes[i]);
+                                let themes_id = themes[i][0];
+                                let themes_name =  themes[i][1]  ;
+                                let option = $("<option>", {
+                                    'value': Number(themes_id),
+                                    'html': themes_name
+                                });
+                                $('select[name=themes]').append(option);
+                            }
                     }
+                    else
+                    {
+                        let option = $("<option>", {
+                            'value': 0,
+                            'html': "Aucun contenu disponible"
+                        });
+                        $('select[name=themes]').append(option);
+                    }
+                    $("#loading").hide(500); 
                 }
-            )
-        });
+            }
+        )
+    });
+
+
+
+
 
 
 

@@ -9,7 +9,7 @@ from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide 
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
 from socle.models import Level, Waiting , Theme
-from qcm.models import  Parcours, Exercise
+from qcm.models import  Parcours, Exercise , Folder
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from socle.models import Knowledge, Waiting
@@ -359,24 +359,40 @@ def list_quizzes(request):
 
     request.session["parcours_id"] = False
     teacher = request.user.teacher 
-    quizzes = teacher.teacher_quizz.filter(is_archive=0)
+    quizzes = teacher.teacher_quizz.filter(is_archive=0 , folders=None) # non inclus dans un dossier
+    folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=0).exclude(folders=None).distinct().order_by("folders")#  inclus dans un dossier
+ 
+    list_folders = list()
+    for folder in folders :
+        quizzes_folders = dict()
+        quizzes_folders["folder"] = Folder.objects.get(pk=folder)
+        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=0 , folders=folder)  
+        list_folders.append(quizzes_folders)
+ 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     is_archive = False
     nba = teacher.teacher_quizz.filter(  is_archive=1).count()
-    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba  })
+    return render(request, 'tool/list_quizzes.html', { 'list_folders': list_folders , 'quizzes': quizzes , 'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba  })
 
 
 
 
 def all_quizzes_archived(request):
 
+
     teacher = request.user.teacher 
-    quizzes = Quizz.objects.filter(teacher =teacher,is_archive=1)
+    quizzes = teacher.teacher_quizz.filter(is_archive=1 , folders=None) # non inclus dans un dossier
+    folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=1).distinct().order_by("folders__level")#  inclus dans un dossier
+    list_folders = list()
+    for folder in folders :
+        quizzes_folders = dict()
+        quizzes_folders["folder"] = folder
+        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder)  
+        list_folders.append(quizzes_folders)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
+ 
     is_archive = True
-    return render(request, 'tool/list_quizzes.html', {'quizzes': quizzes , 'form': form,  'teacher': teacher, 'is_archive' : is_archive })
+    return render(request, 'tool/list_quizzes.html', {   'list_folders': list_folders , 'quizzes': quizzes ,  'teacher': teacher, 'is_archive' : is_archive })
 
 
 
@@ -387,7 +403,11 @@ def all_quizzes_archived(request):
 def create_quizz(request):
     
     teacher = request.user.teacher 
-    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher  )
+    if teacher.subjects.count() == 1 :
+        subject = teacher.subjects.first()
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = {'subject': subject } )
+    else :
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher  )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
     if form.is_valid():
@@ -396,6 +416,22 @@ def create_quizz(request):
         nf.is_questions = 1
         nf.save()
         form.save_m2m()
+
+        levels = set()
+        for group_id in request.POST.getlist("groups"):
+            g = Group.objects.get(pk= group_id)
+            print(g)
+            levels.update([g.level])
+        nf.levels.set(levels)
+        themes = set()
+        for parcours_id in request.POST.getlist("parcours"):
+            p = Parcours.objects.get(pk= parcours_id)
+            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
+            themes.update(thms)
+        nf.themes.set(themes)
+
+
+
         return redirect('create_question' , nf.pk , 0 )
     else:
         print(form.errors)
@@ -419,6 +455,20 @@ def update_quizz(request,id):
         nf.is_questions = 1
         nf.save()
         form.save_m2m()
+
+ 
+        levels = set()
+        for group_id in request.POST.getlist("groups"):
+            g = Group.objects.get(pk= group_id)
+            print(g)
+            levels.update([g.level])
+        nf.levels.set(levels)
+        themes = set()
+        for parcours_id in request.POST.getlist("parcours"):
+            p = Parcours.objects.get(pk= parcours_id)
+            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
+            themes.update(thms)
+        nf.themes.set(themes)
 
         parcours_id = request.session.get("parcours_id")
         if parcours_id :
@@ -522,6 +572,67 @@ def ajax_show_generated(request):
     data['html'] = render_to_string('tool/ajax_show_generated.html', context)
 
     return JsonResponse(data)  
+
+
+def ajax_charge_groups(request):
+
+    teacher = request.user.teacher
+    data = {} 
+    subject_id = request.POST.get('id_subject', None)
+    print(subject_id)
+    groups = teacher.groups.values_list("id","name").filter(subject_id =  subject_id)
+
+    data["groups"] = list(groups)
+
+    return JsonResponse(data)
+
+
+
+def ajax_charge_folders(request):
+
+    teacher = request.user.teacher
+    data = {} 
+    group_ids = request.POST.getlist('group_ids', None)
+
+    if len(group_ids) :
+        fldrs = set()
+        for group_id in group_ids :
+            group = Group.objects.get(pk=group_id)
+            fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
+
+        data['folders'] =  list( fldrs )
+    else :
+        data['folders'] =  []
+
+    return JsonResponse(data)
+
+
+def ajax_charge_parcours(request):
+
+    teacher = request.user.teacher
+    data = {} 
+    folder_ids = request.POST.getlist('folder_ids', None)
+
+    if len(folder_ids) :
+        parcourses = set()
+        for folder_id in folder_ids :
+            folder = Folder.objects.get(pk=folder_id)
+            parcourses.update(folder.parcours.values_list("id","title").filter(is_trash=0))
+
+        data['parcours'] =  list( parcourses )
+    else :
+        data['parcours'] =  []
+
+    return JsonResponse(data)
+
+
+
+
+
+
+
+
+
 
 
 

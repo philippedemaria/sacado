@@ -15,8 +15,8 @@ from django.http import JsonResponse , FileResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
-
-from qcm.views import get_teacher_id_by_subject_id
+from qcm.models import Folder
+from qcm.views import get_teacher_id_by_subject_id, all_levels
 from group.models import Group , Sharing_group
 from socle.models import  Knowledge , Level , Skill , Waiting , Subject
 from bibliotex.models import  Bibliotex , Exotex , Relationtex , Blacklistex
@@ -224,36 +224,38 @@ def my_bibliotexs(request):
 
     request.session["folder_id"] = None
     request.session["group_id"] = None
+    user = request.user
+    teacher = user.teacher
+    datas = all_levels(user, 0)
 
-    teacher = request.user.teacher
-    dataset = list()
-
-    sbj = set()
+    dataset = teacher.teacher_bibliotexs
 
 
+    bibliotexs = dataset.filter(folders=None)
+    bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
-    for s in teacher.subjects.all() :
-        data = {}   
-        lvl = set()
-        bibliotexs = Bibliotex.objects.filter( Q(author=teacher)|Q(teacher=teacher)|Q(coteachers=teacher)  , subjects = s  ).order_by("subjects","levels")
- 
-        for bibliotex in bibliotexs :
-            lvl.update( bibliotex.levels.order_by("ranking") )
- 
-        data['subject'] = s
-        data['levels']  = lvl
- 
-        dataset.append(data)
-        data = {}  
 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
  
-    return render(request, 'bibliotex/list_bibliotexs.html', {'bibliotexs': bibliotexs, 'dataset': dataset ,  })
+    list_folders = list()
+    for folder in bibliotexs_folders :
+        bibtexs_folders = dict()
+        bibtexs_folders["folder"] = Folder.objects.get(pk=folder)
+        teacher_bibliotexs = dataset.filter(is_archive=0 , folders=folder)
+        bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
+        list_folders.append(bibtexs_folders)
 
+    groups = teacher.has_groups()
 
  
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    is_archive = False
+    nba = teacher.teacher_quizz.filter(  is_archive=1).count()
+    return render(request, 'bibliotex/list_bibliotexs.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups, 'is_archive' : is_archive, 'nba' : nba  })
 
- 
+
+
 def ajax_my_bibliotexs(request):
 
     level_id = request.POST.get("level_id")
@@ -396,16 +398,6 @@ def ajax_publish_bibliotex(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
 def exercise_bibliotex_results(request, id):
 
     bibliotex    = Bibliotex.objects.get(id=id)
@@ -415,12 +407,6 @@ def exercise_bibliotex_results(request, id):
     context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'students' : students  }
 
     return render(request, 'bibliotex/bibliotex_results.html', context )
-
-
-
-
-
-
 
 
 
@@ -541,7 +527,7 @@ def ajax_level_exotex(request):
 
 
 
-def ajax_charge_groups(request):
+def ajax_charge_folders(request):
 
     teacher = Teacher.objects.get(user= request.user)
     data = {} 
@@ -614,6 +600,116 @@ def unset_exotex_in_bibliotex(request,idr):
     bibliotex_id = Relationtex.objects.get(pk = idr).bibliotex.id
     Relationtex.objects.filter(pk = idr).delete()
     return redirect("show_bibliotex" , bibliotex_id)
+
+
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_is_favorite(request):  
+
+    target_id = int(request.POST.get("target_id",None))
+    statut = int(request.POST.get("statut"))
+    status = request.POST.get("status") 
+    data = {}
+ 
+    if statut :
+        Bibliotex.objects.filter(pk = target_id).update(is_favorite = 0)
+        data["statut"] = "<i class='fa fa-star text-default' ></i>"
+        data["fav"] = 0
+    else :
+        Bibliotex.objects.filter(pk = target_id).update(is_favorite = 1)  
+        data["statut"] = "<i class='fa fa-star   text-is_favorite' ></i>"
+        data["fav"] = 1     
+
+    return JsonResponse(data) 
+
+
+
+def ajax_affectation_to_group(request):
+    group_id    = request.POST.get('group_id') 
+    status      = request.POST.get('status')
+    target_id   = request.POST.get('target_id')
+    checked     = request.POST.get('checked')
+
+    group       = Group.objects.get(pk=group_id)
+    data        = {}
+    html        = ""
+    change_link = "no"
+ 
+    bibliotex   = Bibliotex.objects.get(pk=target_id)
+    if checked == "false" :
+        bibliotex.groups.remove(group)
+    else :
+        bibliotex.groups.add(group)
+        groups = (group,)
+        attribute_all_documents_of_groups_to_all_new_students(groups)
+    for g in bibliotex.groups.all():
+        html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
+    change_link = "change"
+
+    data['html']        = html
+    data['change_link'] = change_link
+    return JsonResponse(data)
+
+
+ 
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_sharer_parcours(request):  
+
+    parcours_id = request.POST.get("parcours_id")
+    statut = request.POST.get("statut")
+    is_folder = request.POST.get("is_folder")
+ 
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"]  = "false"
+        data["share"]   = "Privé"
+        data["style"]   = "#dd4b39"
+        data["class"]   = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"]   = "Privé"
+    else:
+        statut = 1
+        data["statut"]  = "true"
+        data["share"]   = "Mutualisé"
+        data["style"]   = "#00a65a"
+        data["class"]   = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"]   = "Mutualisé"
+
+    Bibliotex.objects.filter(pk = int(parcours_id)).update(is_share = statut)
+ 
+    return JsonResponse(data) 
+
+
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_publish_list_bibliotex(request):  
+
+    bibliotex_id = request.POST.get("bibliotex_id")
+    statut = request.POST.get("statut")
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"] = "false"
+        data["style"] = "#dd4b39"
+        data["class"] = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"] = "Non publié"
+    else:
+        statut = 1
+        data["statut"] = "true"
+        data["style"] = "#00a65a"
+        data["class"] = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"] = "Publié"
+ 
+    Bibliotex.objects.filter(pk = int(bibliotex_id)).update(is_publish = statut)
+
+    return JsonResponse(data) 
+
+
+
 ############################################################################################################
 ############################################################################################################
 #################  Résultats

@@ -93,26 +93,6 @@
         </div>
         <!-- Fin de la fenetre  -->
         <!--EXPORTATION  -->
-        <div class="group_show  overlay_export{{parcours.id }} no_visu_on_load"> 
-            <div class="overlay_expand">
-                <h4 style="color:{{parcours.color }}">Exportation CSV 
-                <span  class="export_shower pull-right" data-parcours_id="{{parcours.id }}"><i class="fa fa-times"></i> </span>
-                <br><small>Pour exporter vers Pronote, les listes d'élèves Pronote et SACADO doivent être identiques.<span id="loading_export{{ parcours.id }}"></span></small></h4>
-                {% if sacado_asso %}
- 
-                    <div class="col-md-6 col-lg-6 col-xs-6">
-                        <input type="text" class="form-control" placeholder ="Noté sur ?" name="on_mark" id="on_mark{{ parcours.id }}" />
-                    </div>
-
-                    <div class="col-md-6 col-lg-6 col-xs-6" style="padding-left:5px">
-                        <button href="#" class="btn btn-primary exportation_de_note" type="submit" data-parcours_id="{{parcours.id }}"  data-group_id="{{group.id }}"> Export de notes</button>
-                    </div>
- 
-                {% else %}
-                    <span style="color:red;font-size: 14px">Action non permise - Version établissement requise.</span>
-                {% endif %}
-            </div> 
-        </div>
         {% if parcours.vignette %}                
             <div class="box_title_underlay_vignette" style="background-color:{{ parcours.color }};">
             </div> 
@@ -215,9 +195,9 @@
             <div class="row extend"> 
                 <div class="col-lg-4 col-xs-4">
                 {% if parcours.is_evaluation %}
-                    <a href="{% url 'update_evaluation' parcours.id  group.id  %}" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                    <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                 {% else  %}
-                    <a href="{% url 'update_parcours' parcours.id  group.id  %}"  style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                    <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                 {% endif  %}
                 </div> 
 
@@ -225,32 +205,33 @@
                     {% if not parcours.is_evaluation %}
                         <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
                     {% else  %}                 
-                        <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit"><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Sélect.</span>
+                        <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %}><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Exercices </span>
                         </a>  
                     {% endif  %}
                 </div> 
-                {% if parcours.subparcours.all|length == 0 %}
-                    <div class="col-lg-4 col-xs-4">
-                    {% if not parcours.is_evaluation %}
-                        {% comment %}
-                        <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"  class="edit" {% if parcours.is_sections_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-indent"></i> <span class="label_icon">Section.</span> </a>
-                        {% endcomment %}
-                        <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
-                            {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
-                             <span class="label_icon">Tâches</span>
-                        </a> 
 
-                    {% else  %}   
-                        <span href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span></span>              
-                    {% endif  %}
-                    </div> 
+                <div class="col-lg-4 col-xs-4">
+                {% if not parcours.is_evaluation %}
+ 
+                    <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
+                        {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
+                         <span class="label_icon">Tâches</span>
+                    </a> 
+
+                {% else  %}   
+
+                    <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                    </a> 
+    
                 {% endif  %}
+                </div> 
+
             </div>
 
             {% if not parcours.is_evaluation %}
             <div class="row extend">                              
                 <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit"><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Sélect.</span>
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Exercices</span>
                     </a>  
                 </div>  
                 <div class="col-lg-4 col-xs-4">
@@ -258,21 +239,8 @@
                     </a>   
                 </div>
                 <div class="col-lg-4 col-xs-4">
-                    {% if not parcours.is_evaluation %}
-    
-
-
-
                     <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
                     </a> 
-        
-
-
-
-                    {% else %} 
-                    <span href="#" class="edit export_shower" data-parcours_id="{{parcours.id }}"><i class="fa fa-fw fa-upload"></i>  <span class="label_icon">Export</span>
-                    </span>
-                    {% endif %} 
                 </div>
             </div>
             {% endif %} 

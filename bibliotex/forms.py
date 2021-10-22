@@ -45,13 +45,13 @@ class BibliotexForm(forms.ModelForm):
 			groups        = teacher.groups.filter(level = folder.level , subject = folder.subject)
 			shared_groups = teacher.teacher_group.filter(level = folder.level , subject = folder.subject)
 			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers")
+			all_groups    = these_groups.order_by("teachers","level")
 			folders = teacher.teacher_folders.filter(level = folder.level , subject = folder.subject)
 		elif teacher :
 			groups        = teacher.groups.all()
 			shared_groups = teacher.teacher_group.all()
 			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers")
+			all_groups    = these_groups.order_by("teachers","level")
 			folders = teacher.teacher_folders.all()
 
 		self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=True)

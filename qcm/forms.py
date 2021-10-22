@@ -244,6 +244,16 @@ class CourseForm(forms.ModelForm):
 		self.fields['relationships'] = forms.ModelMultipleChoiceField(queryset=relations, required=False )
 
 
+
+
+
+class Course_NonP_Form(forms.ModelForm):
+	class Meta:
+		model = Course
+		fields = '__all__'
+
+
+
 class DemandForm(forms.ModelForm):
 	class Meta:
 		model = Demand

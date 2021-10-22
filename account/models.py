@@ -639,6 +639,13 @@ class Teacher(models.Model):
         
 
 
+    def nb_boolean_multi_subjects(self):
+        nb = False
+        if self.subjects.count() > 1 :
+            nb = True
+        return nb
+        
+
 
 
 

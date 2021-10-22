@@ -326,7 +326,7 @@
 
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-            <a href="{% url 'profile' %}">Profil & Notifications </a> 
+            <a href="{% url 'profile' %}">Mon profil & Notifications </a> 
         </div>
     </div>
 
@@ -337,18 +337,23 @@
             <a href="{% url 'updatepassword' %}">Changer mon mot de passe</a>
         </div>
     </div>
-    {%  if request.user.is_teacher %}
-    <div class="row">
-        <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-            <a href="{% url 'get_school' %}">Rejoindre un établissement</a>
+    {%  if request.user.is_teacher %} 
+
+        {%  if not request.user.is_manager   %} <!-- manager dans un établissement -->
+        <hr/>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+                <a href="{% url 'get_school' %}">Rejoindre un établissement</a>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-            <a href="{% url 'close_my_account' %}">Clôturer mon compte</a>
-        </div>
-    </div>
-    <hr/>
+        {% endif%}
+        <hr/>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <a href="{% url 'close_my_account' %}">Clôturer mon compte</a>
+            </div>
+        </div>   
+        <hr/>
     {% elif request.user.is_student %}
         <div class="row">
             <div class="col-lg-12 col-xs-12" style=" padding-top: 5px;">
@@ -439,6 +444,70 @@
     <hr>
 </div>
 
+<div class="notification-container dismiss" id="notification-documents">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="text-align:center;">
+            <a href="#" id="closeDocuments" class="pull-right"> <i class="fa fa-times"></i></a>
+            <h1 class='sacado'>Mes documents</h1>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'folders' %}"><i class="fa fa-folder-open" ></i> Dossiers </a>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'parcours' %}"><i class="fa fa-th" ></i> Parcours </a>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            {% if sacado_asso %}
+            <a href="{% url 'evaluations' %}"> <i class="fa fa-trophy" ></i> Evaluations</a>
+            {% else %}
+            <a href="#" style="cursor:not-allowed" title="Version établissement requise."  > <i class="fa fa-trophy" ></i> Evaluations</div></a>
+            {% endif %}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            {% if sacado_asso %}
+            <a href="{% url 'list_quizzes' %}"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Quizz</a>
+            {% else %}
+            <a href="#" class="no_sacado_asso" title="Version établissement requise."  ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Quizz</div></a>
+            {% endif %}
+        </div>
+    </div>
+
+ 
+
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'courses' %}"><i class="fa fa-desktop" ></i> Cours </a>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'my_bibliotexs' %}"><span class="texfont">T<sub>E</sub>X</span> BiblioTex </a>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'courses' %}"><i class="fa fa-copyright" ></i> Exercices personnalisés </a>
+        </div>
+    </div>
+
+
+</div>
+
 <div class="notification-container dismiss" id="notification-tools">
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="text-align:center;">
@@ -446,19 +515,9 @@
             <h1 class='sacado'>Mes outils péda.</h1>
         </div>
     </div>    
-
+    <hr/>
  
-<!--     <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="#"   >Chat (<small class="text-danger">à venir</small>)</a>
-        </div>
-    </div> -->
-    
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a {% if sacado_asso %} href="{%  url 'list_quizzes' %}" {% else %} href="#" class="no_sacado_asso" title="Version Etablissement requise" {% endif %} >Quizz </a>
-        </div>
-    </div>   
+  
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a {% if sacado_asso %} href="{%  url 'list_diaporama' %}" {% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %}  >Présentations </a>
@@ -500,7 +559,8 @@
 <div class="notification-container dismiss"  id="notification-admin">
     {%  if user.is_manager  %}
         <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
+            <div class="col-lg-12 col-xs-12">            
+                <a href="#" id="closeTools" class="pull-right"> <i class="fa fa-times"></i></a> 
                 <a href="{% url 'admin_tdb' %}">{{ request.user.school.name }}</a>
             </div>  
         </div> 
@@ -609,7 +669,8 @@
 <div class="notification-container dismiss"  id="notification-admin">
     {%  if request.user.is_manager  %}
         <div class="row">
-            <div class="col-lg-12 col-xs-12"> 
+            <div class="col-lg-12 col-xs-12">            
+                <a href="#" id="closeTools" class="pull-right"> <i class="fa fa-times"></i></a>
                 <a href="{% url 'admin_tdb' %}">{{ request.user.school.name }}</a>
             </div>  
         </div> 
@@ -647,6 +708,9 @@
             </div>
         {% endfor %}    
 </div>
+
+
+
 {% endif %}
 
 

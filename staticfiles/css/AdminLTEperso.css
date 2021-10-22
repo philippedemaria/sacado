@@ -36,6 +36,20 @@ body {
  /*height : 100vh ;*/
 }
 
+
+.bg_violet{
+  background-color: #f1eef7 ;
+  }                
+.bg_gray{
+  background-color: #F0F0F0 ;
+  } 
+.bg_white{
+  background-color: #FFF ;
+  } 
+
+
+
+
 .sacado_color_text{
   color:  #5d4391 ;
 }
@@ -197,7 +211,18 @@ border-radius:0px;
     background-color: #007bff ;
     border-color: #007bff ;
 }
- 
+
+
+th.sorting, th.sorting_asc{
+  color: #7e738c ; /* #AAA; */
+  font-weight: normal;
+}
+
+.table td{
+  color: #998fa6 ; /* #AAA; */
+}
+
+
 .table_search > thead > tr > th, .table_search > tbody >  tr > td {
     padding: 8px;
     line-height: 1.42857143;
@@ -591,6 +616,12 @@ label {
 }
 
 /******************************************** bibliotex  **************************************/
+.texfont{
+  font-size: 20px; 
+  font-weight:800 ;
+  font-family: Times, serif;
+  letter-spacing: -3px;
+}
 
 .title_bibliotex{
    font-size : 26px;
@@ -1167,7 +1198,7 @@ a.selector_question:hover {
 
 
 .quizz_action{
-  margin-bottom:15px;
+  margin-bottom:5px;
 }
 
 .question_bank_top {
@@ -2004,6 +2035,13 @@ text-align: right;
     .text-success {
         color: #249a56!important;
     }
+
+
+
+    .text-is_favorite {
+        color:  #5d4391!important;
+    }
+
 
     a.listing{
       font-size:20px;
@@ -3400,6 +3438,7 @@ color: #FFF;
  *********************************************************************************************************/
 .accordion{
   cursor: pointer;
+  color : #007EE2;
 }
 
 

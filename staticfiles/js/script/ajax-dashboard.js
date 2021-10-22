@@ -212,15 +212,52 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         $('.content-wrapper').removeAttr("style");
 
-        $('#account').click(function(event) {
-          if ($('#notification-account').hasClass('dismiss')) {
-            $('#notification-account').removeClass('dismiss').addClass('selected').show();
-            $('#notification-admin').removeClass('selected').addClass('dismiss');
-            $('#notification-outil_peda').removeClass('selected').addClass('dismiss');
-          }
+
+
+
+        $('.closer_notification').mouseover(function(event) {
+            $('.dropdown').removeClass('active');
+            $('.dropdown').parent().addClass('active');
+            $('.notification-container').removeClass('selected').addClass('dismiss');
+            $('#documents').find('.fa').removeClass("fa-folder-open").addClass("fa-folder");
+                $('#account').find('.fa').removeClass("fa-user-circle").addClass("fa-user");
           event.preventDefault();
         });
 
+
+        $('#documents').mouseover(function(event) {
+                appear_panel('documents');
+                $('#documents').find('.fa').removeClass("fa-folder").addClass("fa-folder-open");
+        });
+
+
+        $('#tools').mouseover(function(event) {
+                appear_panel('tools')
+        });
+
+        $('#admin').mouseover(function(event) {
+                appear_panel('admin')
+        });
+
+        $('#account').mouseover(function(event) {
+                appear_panel('account');
+                $('#account').find('.fa').removeClass("fa-user").addClass("fa-user-circle");
+        });
+
+
+        function appear_panel(target) {
+          if ($('#notification-'+target).hasClass('dismiss')) {
+            $('.dropdown').removeClass('active');
+            $('.main').removeClass('active');
+            $('#'+target).parent().addClass('active');
+            $('.notification-container').removeClass('selected').addClass('dismiss');
+            $('#notification-'+target).removeClass('dismiss').addClass('selected').show();
+          }
+          event.preventDefault();
+        } 
+
+
+ 
 
 
         $('#closeAccount').click(function(event) {
@@ -230,6 +267,31 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           }
           event.preventDefault();
         });
+
+        $('#closeDocuments').click(function(event) {
+          if ($('#notification-documents').hasClass('selected')) {
+            $('#notification-documents').removeClass('selected').addClass('dismiss');
+            $('#notification-tools').removeClass('selected').addClass('dismiss');
+          }
+          event.preventDefault();
+        });
+
+
+ 
+ 
+        $('#closeTools').click(function(event) {
+          if ($('#notification-tools').hasClass('selected')) {
+            $('#notification-tools').removeClass('selected').addClass('dismiss');
+            $('#notification-admin').removeClass('selected').addClass('dismiss');
+          }
+          event.preventDefault();
+        });
+
+
+
+ 
+
+ 
 
 
         $('#right_menu_open').mouseover(function(event) {    
@@ -252,51 +314,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
-
-
-        $('#tools').click(function(event) {
-          if ($('#notification-tools').hasClass('dismiss')) {
-            $('#notification-tools').removeClass('dismiss').addClass('selected').show();
-            $('#notification-account').removeClass('selected').addClass('dismiss');
-            $('#notification-admin').removeClass('selected').addClass('dismiss');
  
-          }
-          event.preventDefault();
-        });
-
- 
-        $('#closeTools').click(function(event) {
-          if ($('#notification-tools').hasClass('selected')) {
-            $('#notification-tools').removeClass('selected').addClass('dismiss');
-            $('#notification-account').removeClass('selected').addClass('dismiss');
-            $('#notification-admin').removeClass('selected').addClass('dismiss');
-          }
-          event.preventDefault();
-        });
-
-
-
-
-
-
-
-        var pub = 0 ;
-
-        $('#admin').click(function(event) { 
-          if ( pub%2 == 0 ) {
-              if ($('#notification-admin').hasClass('dismiss')) {
-                $('#notification-admin').removeClass('dismiss').addClass('selected').show();
-                $('#notification-account').removeClass('selected').addClass('dismiss');
-              }
-
-            }
-            else
-            {
-              $('#notification-admin').removeClass('selected').addClass('dismiss');
-            }
-            event.preventDefault();        
-            pub ++ ;
-        });
 
         var show = 0 ;
 

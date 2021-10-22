@@ -12,7 +12,7 @@
         <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ parcours.id }}" style="cursor:pointer"  data-status="parcours">
             
             <span id="is_favorite_id{{ parcours.id }}">
-                <i class="fa  {% if parcours.is_favorite %}fa-star text-success{% else  %}fa-star text-default{% endif  %}"></i>
+                <i class="fa  {% if parcours.is_favorite %}fa-star text-is_favorite{% else  %}fa-star text-default{% endif  %}"></i>
             </span>
         </span>
     </td> 
@@ -28,23 +28,17 @@
         </a>
 
         <div style="font-size:14px;margin-top:-5px;">
-            <span class="helper_tip" >
-                <i class="fa fa-barcode"></i>
-                <div class="helper_tip_text_right">
-                    <br/><b>Code du parcours : {{ parcours.code }}</b><br/>
-                </div>
-            </span>
+ 
             {% with nbp=parcours.nb_exercises %}
                 {{ nbp }} exercice{{ nbp|pluralize }}
             {% endwith %}
-
             <small> {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. </small>
+        </div>
+        <div style="font-size:14px;margin-top:-5px;">
             {% if parcours.course.all|length > 0 %}
-                <i class="fa fa-desktop" title="cours associé"></i> <small>{{  parcours.duration_reader_course|int_minutes }}min. </small>
+                {{ parcours.course.count }} cours <small>{{  parcours.duration_reader_course|int_minutes }}min. </small>
             {% endif %}  
-  
-        </div> 
-   
+        </div>
     </td>  
     <td>
  
@@ -120,14 +114,7 @@
             <i class="fa fa-times text-danger"></i>
         {% endif %}
     </td>
-    <td>
  
-            <a href="#groupe_name_anchor" class="vue vue actiontarget btn btn-default" data-toggle='modal' style="float:left; margin-right:10px"  data-status='parcours'
-                 data-target_id='{{ parcours.id }}' data-status='parcours' data-target='#listing' > 
-                 <i class="fa fa-users"></i>
-            </a>
- 
-    </td>
     <td>
  
             <div class="btn-group"  style="padding:0px;margin:0px;">

@@ -82,7 +82,8 @@ class QuizzForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		super(QuizzForm, self).__init__(*args, **kwargs)
-		parcours =  teacher.teacher_parcours.exclude(is_archive=1) 
+		parcours =  teacher.teacher_parcours.exclude(is_archive=1)
+		all_folders = teacher.teacher_folders.all() 
 		coteacher_parcours = teacher.coteacher_parcours.exclude(is_archive=1) 
 		all_parcours = parcours|coteacher_parcours
 
@@ -92,17 +93,11 @@ class QuizzForm(forms.ModelForm):
 
 
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
-		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
-		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset = all_groups.order_by("level")  , required=False)
-		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), required=False)
+		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)	
+		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=True)
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
+		self.fields['folders'] = forms.ModelMultipleChoiceField(queryset = all_folders.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
 
-		if 'initial' in kwargs:
-			kwarg   = kwargs.get("initial")
-			level   = kwarg["levels"]
-			subject = kwarg["subject"]
-
-			thms = level.themes.filter(subject=subject).order_by("name")
-			self.fields['themes'] = forms.ModelMultipleChoiceField(queryset = thms, required=False)
 
 
 	def clean_content(self):
