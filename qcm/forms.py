@@ -109,15 +109,22 @@ class FolderForm(forms.ModelForm):
 		subject = kwargs.pop('subject')
 		super(FolderForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
-		if teacher:
+		if teacher and level and subject:
 			groups        = teacher.groups.filter(level = level , subject = subject)
 			shared_groups = teacher.teacher_group.filter(level = level , subject = subject)
 			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers")
-			coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name")  
+			all_groups    = these_groups.order_by("teacher")
+		else :
+			groups        = teacher.groups.all()
+			shared_groups = teacher.teacher_group.all()
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teacher")
+		
 
-			self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
+		coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name")
+
+		self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 
 		if subject and level :
 			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level,is_trash=0,is_archive=0).order_by("title")

@@ -10,7 +10,7 @@
  
 
     <script>
-        require(['script/ajax-parcours']);
+        require(['script/ajax-folders-create']);
     </script> 
 
     {% block require_complement %}
@@ -26,7 +26,7 @@
 
 {% block page_title %}
  
-    <span style="color:{{ group.color }}"><i class="fa fa-folder"></i> </span> 
+    <span style="color:{{ group.color }}"><i class="fa fa-folder-open sacado_color_text"></i> </span> 
  
 
       {% include 'qcm/breadcrumb.html' %}
@@ -65,7 +65,7 @@
     <form action="" method="POST" enctype='multipart/form-data'> 
     <div class="row">
 
-                <span style="display: none;">{{ form.groups|add_class:"select_all"}}</span>
+        <span style="display: none;">{{ form.groups|add_class:"select_all"}}</span>
 
         <div class="col-sm-12 col-md-4">
             {% csrf_token %}
@@ -77,8 +77,7 @@
                         {{ form.title.errors }}
                     </div>
                 </div>
-                        {{ form.subject.as_hidden}}
-                        {{ form.level.as_hidden  }}
+
                 <div class="col-sm-12  col-md-4  col-lg-3">
                       {{ form.color.label_tag }}      
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -90,26 +89,6 @@
                       </div>
                 </div>
             </div> 
-
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <label><b>Partager ce dossier entre</b></label>
-                        {{ form.groups|add_class:"groups_selector"  }}
-                </div>
-                <div class="col-sm-12 col-md-6" style="overflow-y:auto;height: 350px ">
-                    <label><b>Cocher les parcours à insérer </b></label>
-                    {% if not form.parcours  %}
-                          <div class="alert alert-warning">
-                                <small>Aucun parcours n'est créé encore dans ce niveau et cet enseignement</small>
-                          </div>
-                    {% else  %} 
-                            {{ form.parcours|add_class:"subparcours_selector"  }}
-                    {% endif  %}
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-12 col-md-4" style="position: relative">
             {% if not group %}  
             <div class="row">          
                 <div class="col-sm-12 col-md-6" >
@@ -127,11 +106,81 @@
                     </div>
                 </div> 
             </div> 
+            {% else %}
+
+                        {{ form.subject.as_hidden}}
+                        {{ form.level.as_hidden  }}
+
             {% endif %}
 
 
-            {% include 'qcm/insert_vignettes.html' %}
 
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
+                    <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                    </span> 
+                    {% if quizz %}
+                        {{ form.groups  }}
+                        {{ form.groups.errors }}
+                    {% else %}
+                        {% if teacher.nb_boolean_multi_subjects %}
+                            <div class="form-group" id="grplist">
+                                 <div class="alert alert-warning">
+                                    <p style="font-size:12px">Choisir au moins un enseignement et un niveau.</p>
+                                </div>
+                            </div>
+                        {% else %} 
+                            <div class="form-group">         
+                                <label>Affecter à mes groupes :</label> {% if group %}
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                            <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                        </span> {% endif %}
+                                {{ form.groups  }}
+                                {{ form.groups.errors }}
+                            </div>
+                        {% endif %} 
+                    {% endif %}
+                </div>  
+                {% if quizz %}
+                <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                    <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                    </span> 
+                        {{ form.parcours|add_class:"select_all_parcours" }}
+                        {{ form.parcours.errors }} 
+                </div>
+                {% else %}
+                <div class="col-sm-12 col-md-6">
+                    <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                    </span> 
+                    <div class="form-group" id="pclist">
+                         <div class="alert alert-warning">
+                            <p style="font-size:12px">Choisir au moins un groupe.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row">
+
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">  
+                        <div class="alert alert-warning">
+                            <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le dossier est partagé entre ces groupes.</p>
+                        </div>
+                    </div>
+                </div> 
+
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-4" style="position: relative">
+            {% include 'qcm/insert_vignettes.html' %}
         </div>
 
         <div class="col-sm-12 col-md-4">                      

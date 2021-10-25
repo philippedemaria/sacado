@@ -574,12 +574,11 @@ def ajax_show_generated(request):
     return JsonResponse(data)  
 
 
-def ajax_charge_groups(request):
+def ajax_charge_groups(request):  # utilisé par form_quizz et form_folder aussi
 
     teacher = request.user.teacher
     data = {} 
     subject_id = request.POST.get('id_subject', None)
-    print(subject_id)
     groups = teacher.groups.values_list("id","name").filter(subject_id =  subject_id)
 
     data["groups"] = list(groups)
@@ -587,8 +586,27 @@ def ajax_charge_groups(request):
     return JsonResponse(data)
 
 
+def ajax_charge_groups_level(request):  # utilisé par form_folder aussi
 
-def ajax_charge_folders(request):
+    teacher = request.user.teacher
+    data = {} 
+    subject_id = request.POST.get('id_subject', None)
+    level_id   = request.POST.get('id_level', None)
+    groups = teacher.groups.values_list("id","name").filter(subject_id =  subject_id, level_id =  level_id)
+
+    data["groups"] = list(groups)
+
+    # gère les propositions d'image d'accueil    
+    level =  Level.objects.get(pk = level_id)
+    data['imagefiles'] = None
+    imagefiles = level.level_folders.values_list("vignette", flat = True).filter(subject_id=subject_id).exclude(vignette=" ").distinct()
+    if imagefiles.count() > 0 :
+        data['imagefiles'] = list(imagefiles)
+
+    return JsonResponse(data)
+
+
+def ajax_charge_folders(request):  
 
     teacher = request.user.teacher
     data = {} 
@@ -607,7 +625,7 @@ def ajax_charge_folders(request):
     return JsonResponse(data)
 
 
-def ajax_charge_parcours(request):
+def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder aussi
 
     teacher = request.user.teacher
     data = {} 
@@ -627,7 +645,23 @@ def ajax_charge_parcours(request):
 
 
 
+def ajax_charge_parcours_without_folder(request): # utilisé que par form_folder mais placé ici pour homogénéiser la structure 
 
+    teacher = request.user.teacher
+    data = {} 
+    groups_ids = request.POST.getlist('groups_ids', None)
+
+    if len(groups_ids) :
+        parcourses = set()
+        for groups_id in groups_ids :
+            group = Group.objects.get(pk=groups_id)
+            parcourses.update(group.group_parcours.values_list("id","title").filter(is_trash=0))
+
+        data['parcours'] =  list( parcourses )
+    else :
+        data['parcours'] =  []
+
+    return JsonResponse(data)
 
 
 

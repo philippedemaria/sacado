@@ -1354,12 +1354,12 @@ def list_folders(request):
     teacher = request.user.teacher
     today   = time_zone_user(teacher.user)
 
-    folds   = teacher_has_folders(teacher, 0  ) #  is_archive
-    folders = folders_contains_evaluation(folds, False)
-
-    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
-    nb_base = len( folders ) 
+    folders   = teacher_has_folders(teacher, 0  ) #  is_archive
+    nb_base =  len( folders  )   
+    nb_archive =  len( teacher_has_folders(teacher, 1  )  ) 
+ 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
  
     groups = teacher.has_groups()
 
@@ -1368,9 +1368,31 @@ def list_folders(request):
     if request.session.has_key("folder_id"):
         del request.session["folder_id"]
 
-    return render(request, 'qcm/list_folders.html', { 'folders' : folders ,   'nb_base' : nb_base ,  'groups' : groups ,
+    return render(request, 'qcm/list_folders.html', { 'folders' : folders ,    'groups' : groups , 'nb_base' : nb_base , 
                     'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
+
+def list_folders_archives(request):
+
+    teacher = request.user.teacher
+    today   = time_zone_user(teacher.user)
+
+    folders   = teacher_has_folders(teacher, 1  ) #  is_archive
+    nb_base =  len( folders  )   
+ 
+ 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+ 
+    groups = teacher.has_groups()
+
+    if request.session.has_key("group_id"):
+        del request.session["group_id"]
+    if request.session.has_key("folder_id"):
+        del request.session["folder_id"]
+
+    return render(request, 'qcm/list_folders_archives.html', { 'folders' : folders ,    'groups' : groups , 'nb_base' : nb_base , 
+                    'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher ,  })
 
 
 
@@ -1409,12 +1431,13 @@ def list_archives(request):
 
     folders = teacher_has_folders(teacher, 1  ) #  is_archive
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_archive=1,is_trash=0)
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
  
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
     return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  
-                                                        'today' : today ,  'teacher' : teacher   })
+                                                        'today' : today ,  'teacher' : teacher , 'nb_base' : nb_archive   })
 
 
 
@@ -1447,14 +1470,15 @@ def list_evaluations(request):
 
 def list_evaluations_archives(request):
     teacher = request.user.teacher
-    parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive      
+    parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive 
+    nb_base = len( parcourses )  
     today = time_zone_user(teacher.user)
     try :
         del request.session["group_id"]
     except:
         pass  
 
-    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today , 'relationships' : []   })
+    return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today ,  'nb_base' : nb_base   })
 
 
 
@@ -1878,6 +1902,13 @@ def ajax_chargethemes_parcours(request):
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
 
+
+    # gère les propositions d'image d'accueil
+    data['imagefiles'] = None
+    imagefiles = level.level_parcours.values_list("vignette", flat = True).filter(subject_id=id_subject).exclude(vignette=" ").distinct()
+    if imagefiles.count() > 0 :
+        data['imagefiles'] = list(imagefiles)
+
     return JsonResponse(data)
 
 
@@ -1897,7 +1928,11 @@ def ajax_chargethemes_exercise(request):
     #data['html'] = render_to_string('qcm/ajax_list_exercises_by_level.html', { 'exercises': exercises  , "teacher" : teacher , "level_id" : level_id })
     data['html'] = "<div class='alert alert-info'>Choisir un thème</div>"
 
-
+    # gère les propositions d'image d'accueil
+    data['imagefiles'] = None
+    imagefiles = level.level_parcours.values_list("vignette", flat = True).filter(subject_id=id_subject).exclude(vignette=" ").distinct()
+    if imagefiles.count() > 0 :
+        data['imagefiles'] = list(imagefiles)
 
 
     return JsonResponse(data)
@@ -8292,7 +8327,7 @@ def create_folder(request,idg):
             if group :    
                 return redirect ("list_parcours_group", idg ) 
             else :
-                return redirect ("parcours") 
+                return redirect ("folders") 
         else:
             print(form.errors)
 
@@ -8461,7 +8496,7 @@ def ajax_subparcours_check(request):
 
 
 
-def actioner(request):
+def actioner_pef(request):
 
     teacher = request.user.teacher 
     idps = request.POST.getlist("selected_parcours")
@@ -8524,7 +8559,7 @@ def actioner(request):
             folder.delete()
 
  
-    else: 
+    elif request.POST.get("action") == "archiver" :   
 
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
@@ -8543,34 +8578,27 @@ def actioner(request):
                 p.is_archive = 1
                 p.is_favorite = 0
                 p.save()
-    return redirect('parcours')
-
-
-
-
-def unarchive(request):
-
-    idps = request.POST.getlist("selected_parcours")
-    idfs = request.POST.getlist("selected_folders")
+ 
+    else : 
   
+        for idp in idps :
+            parcours = Parcours.objects.get(id=idp) 
+            parcours.is_archive = 0
+            parcours.is_favorite = 0
+            parcours.save()
 
-    for idp in idps :
-        parcours = Parcours.objects.get(id=idp) 
-        parcours.is_archive = 0
-        parcours.is_favorite = 0
-        parcours.save()
 
+        for idf in idfs :
+            folder = Folder.objects.get(id=idf) 
+            folder.is_archive = 0
+            folder.is_favorite = 0
+            folder.save()
+            subparcours = folder.parcours.all()
+            for p in subparcours :
+                p.is_archive = 0
+                p.is_favorite = 0
+                p.save()
 
-    for idf in idfs :
-        folder = Folder.objects.get(id=idf) 
-        folder.is_archive = 0
-        folder.is_favorite = 0
-        folder.save()
-        subparcours = folder.parcours.all()
-        for p in subparcours :
-            p.is_archive = 0
-            p.is_favorite = 0
-            p.save()
     return redirect('parcours')
 
 

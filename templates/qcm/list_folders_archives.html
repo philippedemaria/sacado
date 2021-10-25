@@ -1,0 +1,41 @@
+{% extends 'qcm/list_folders.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+ 
+ 
+
+{% block page_title %}
+   <i class="fa fa-folder-open sacado_color_text"></i> Mes dossiers archivés
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+
+
+ <li><a href="{% url 'folders' %}"  class="no_button"> Mes dossiers</a></li> 
+ 
+ 
+   
+{% endblock %}
+
+
+
+
+{% block archive  %} 
+
+ 
+            <button class="btn btn-default" name="action" value="unarchiver" onclick="return TestArchive('ces dossiers')"> 
+                <i class="fa fa-archive"> </i>  Désarchiver la sélection
+            </button>
+             
+
+
+{% endblock  %}   
+
+ 

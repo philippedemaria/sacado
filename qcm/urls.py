@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
 
     path('folders', list_folders, name='folders'),
+    path('folders_archives', list_folders_archives, name='folders_archives'),
     #path('remove_parcours_folder', remove_parcours_folder, name='remove_parcours_folder'),
     #path('get_folder_to_folder', get_folder_to_folder, name='parcours'),
 
@@ -50,8 +51,7 @@ urlpatterns = [
 
     path('replace_exercise_into_parcours', replace_exercise_into_parcours, name='replace_exercise_into_parcours'), #Déplacer un execice de parcours
 
-    path('actioner', actioner, name='actioner'), #archiver ou supprimer une sélection
-    path('unarchive', unarchive, name='unarchive'),
+    path('actioner_pef', actioner_pef, name='actioner_pef'), #archiver ou supprimer une sélection
 
  
     # Résultats d'un parcours

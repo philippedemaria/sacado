@@ -2,7 +2,7 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
     $(document).ready(function () {
 
 
-    console.log(" ajax-quizz-create chargé ");
+    console.log(" ajax-folders-create chargé ");
 
 
 
@@ -11,7 +11,7 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
  
         let id_subject = $("#id_subject").val();
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        url_ = "../ajax_charge_groups" ;
+        url_ = "../../../tool/ajax_charge_groups" ;
         $.ajax(
             {
                 type: "POST",
@@ -42,14 +42,70 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
         )
     });
 
+ 
+
+    $('body').on('change', '#id_level' , function (event) {
+
+ 
+        let id_subject = $("#id_subject").val();
+        let id_level   = $(this).val();
+        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+        url_ = "../../../tool/ajax_charge_groups_level" ;
+        $.ajax(
+            {
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'id_subject': id_subject,   
+                    'id_level'  : id_level,                  
+                    csrfmiddlewaretoken: csrf_token
+                },
+                url : url_,
+                success: function (data) {
+
+
+                    if (data.imagefiles) { 
+
+                                $('#label_vignette').html("").html("<label>Proposition de vignettes - cliquer pour sélectionner</label>");
+
+                                $('#prop_vignette').html("");
+                                imgs = "";
+                                for (let i = 0; i < data.imagefiles.length; i++) {
+                             
+                                                imgs = imgs + "<img src='https://ressources.sacado.xyz/"+data.imagefiles[i]+"'  width='200px'  data-url_image='"+data.imagefiles[i]+"' class='selector_image_from_ajax' />";
+                                            }
+                                        
+                                        $('#prop_vignette').append(imgs);
+
+                                    }
+
+                    
+
+                    groups = data["groups"] ; 
+                    $('#grplist').empty("");
+
+                    if (groups.length >0)
+                    { for (let i = 0; i < groups.length ; i++) {
+                                
+                                let groups_id   = groups[i][0]; 
+                                let groups_name =  groups[i][1] ; 
+
+                                $('#grplist').append('<label for="cb'+Number(groups_id)+'"><input type="checkbox" id="cb'+Number(groups_id)+'" class="select_all" name="groups" value="'+Number(groups_id)+'" /> '+groups_name+'</label><br/>')
+                            }
+                    }
+
+                }
+            }
+        )
+    });
 
 
 
-
-    $('body').on('change', '.select_all' , function (event) {
+    $('body').on('change','.select_all',  function (event) {
 
         var valeurs = [];
-        $(".select_all").each(function() {
+        $('.select_all').each(function() {
 
             if ($(this).is(":checked"))
 
@@ -61,62 +117,14 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
         });
 
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        url_ = "../ajax_charge_folders" ;
+        url_ = "../../../tool/ajax_charge_parcours_without_folder" ;
         $.ajax(
             {
                 type: "POST",
                 dataType: "json",
                 traditional: true,
                 data: {
-                    'group_ids': valeurs,                       
-                    csrfmiddlewaretoken: csrf_token
-                },
-                url : url_,
-                success: function (data) {
-
-                    folders = data["folders"] ; 
-                    $('#cblist').empty("");
-
-                    if (folders.length >0)
-                    { for (let i = 0; i < folders.length ; i++) {
-                                
-                                let folders_id = folders[i][0]; 
-                                let folders_name =  folders[i][1] ; 
-
-                                $('#cblist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" class="select_folders" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
-                            }
-                    }
-
-                }
-            }
-        )
-    });
-
-
-
-    $('body').on('change','.select_folders',  function (event) {
-
-        var valeurs = [];
-        $('.select_folders').each(function() {
-
-            if ($(this).is(":checked"))
-
-                    {   let folder_id = $(this).val(); 
-                        if (folder_id !="")
-                            {valeurs.push(folder_id);}
-                    }
-
-        });
-
-        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        url_ = "../ajax_charge_parcours" ;
-        $.ajax(
-            {
-                type: "POST",
-                dataType: "json",
-                traditional: true,
-                data: {
-                    'folder_ids': valeurs,                       
+                    'groups_ids': valeurs,                       
                     csrfmiddlewaretoken: csrf_token
                 },
                 url : url_,

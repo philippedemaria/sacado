@@ -9,7 +9,7 @@
         <li> <a href="{% url 'create_bibliotex' 0 %}"  > Créer une BiblioTex </em></a> </li>
         {% endif %}
         <li>{% if sacado_asso %} 
-        		<a href="{% url 'all_bibliotexs'   %}" > Récupérer une BiblioTex mutualisée  </a>
+        		<a href="{% url 'bibliotexs'   %}" > Récupérer une BiblioTex mutualisée  </a>
 
         	{% else %}
         		<a href="#"  class="no_sacado_asso" > Récupérer une BiblioTex mutualisée </a> 

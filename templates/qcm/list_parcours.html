@@ -42,7 +42,7 @@
 
 
 {% if nb_base > 0 %}
-<form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>
+<form action="{% url 'actioner_pef' %}" method="POST" enctype='multipart/form-data'>
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
@@ -158,9 +158,12 @@
     </div>
     <div class="row" style="margin-top:50px">
         <div class="col-sm-12 col-md-12">
+            {% block archive %}
             <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
                 <i class="fa fa-archive"> </i>   Archiver la sélection
             </button>
+            {% endblock  %} 
+
             <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
                 <i class="fa fa-trash"> </i>   Supprimer la sélection
             </button>

@@ -79,8 +79,6 @@ define(['jquery','bootstrap'], function ($) {
                         if (themes.length >0)
                         { for (let i = 0; i < themes.length; i++) {
                                     
-
-                                    console.log(themes[i]);
                                     let themes_id = themes[i][0];
                                     let themes_name =  themes[i][1]  ;
                                     let option = $("<option>", {

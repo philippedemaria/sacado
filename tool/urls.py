@@ -77,6 +77,9 @@ urlpatterns = [
     path('ajax_charge_groups', ajax_charge_groups, name='ajax_charge_groups'),
     path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
     path('ajax_charge_parcours', ajax_charge_parcours, name='ajax_charge_parcours'),
+    path('ajax_charge_parcours_without_folder', ajax_charge_parcours_without_folder, name='ajax_charge_parcours_without_folder'),
+    path('ajax_charge_groups_level', ajax_charge_groups_level, name='ajax_charge_groups_level'),
+ 
 
 
     path('question_sorter', question_sorter, name='question_sorter'), 
