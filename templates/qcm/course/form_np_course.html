@@ -7,12 +7,11 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-parcours']);
+        require(['script/ajax-create-update-course']);
     </script> 
-
     {% if not course %}
     <script>
-        require(['script/ajax-parcours-complement']);
+        require(['script/ajax-course-complement']);
     </script> 
     {% endif %} 
     
@@ -83,56 +82,36 @@
             </div>
             <div class="col-sm-12 col-lg-4">
                 {% if request.user.user_type == 2 %}
-                   <label>Lier ce cours à </label> <br/>  
-                   {{ form.relationships|add_class:"form-control select2"}} 
-                   {{ form.relationships.errors }} 
-                    <h4 class="thin">Configuration</h4>
+                    <h4 class="thin"><i class="fa fa-cogs"></i> Configuration</h4>
+                        <table class="table borderless">
+                            <tr>
+                                <td><label>Enseignement</label> </td> 
+                                <td>{{ form.subject|add_class:"form-control select2" }}<br/>  
+                                    {{ form.subject.errors }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>Niveau</label> </td>
+                                <td>    {{ form.level|add_class:"form-control select2" }}<br/>  
+                                    {{ form.level.errors }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%"><label>Parcours</label> </td>
+                                <td>    
+                                    {{ form.parcours|add_class:"form-control select2"|attr:"required:True" }}<br/>  
+                                    {{ form.parcours.errors }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="alert alert-warning"> L'attribution des cours aux parcours ou aux exercices se fait directement depuis les parcours et exercices  
+                                </td>
+                            </tr>
+                        </table>
+
                     {% include 'qcm/course/content_details.html' %}
                 {% endif %}
-                <h4 class="thin">Liens vers</h4>
-                <div class="div_links">                
-                {% for relationship in relationships %}
-                    <div style="font-size: 16px;margin-top: 5px"> 
-
-                        <a href="https://sacado.xyz/qcm/show_this_exercise/{{ relationship.exercise.id }}/" target="_blank" > 
-
-                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="180px" height="100px"  style="float:left;margin-right: 5px">
-
-
-                                {% if relationship.exercise.supportfile.title %}
-                                    {{ relationship.exercise.supportfile.title|cleanhtml|capfirst }}
-                                {% elif relationship.exercise.supportfile.annoncement %}
-                                    {{ relationship.exercise.supportfile.annoncement|cleanhtml|capfirst }}
-                                {% else %}
-                                    {{ relationship.exercise.knowledge.name }}
-                                {% endif %}
-              
-
-
-                                {% if relationship.exercise.supportfile.calculator %}
-                                  <img src="{% static 'img/calculator.png' %}" width="20px" />
-                                {% else %}
-                                  <img src="{% static 'img/no_calculator.png' %}"  width="0px" />
-                                {% endif  %}
-
-
-                                 <br>
-                                <small>   
-                                    <i class="fa fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  
-                                    <i class="fa fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes <br> 
-                                    <i class="fa fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}}
-                                </small>
-
-                            </a>
-
-                        <div style="clear:both"> </div>   
-
-                    </div>
-
-
-
-                {% endfor %}                
-                </div>
+ 
         <!--/panel-group-->
 
 

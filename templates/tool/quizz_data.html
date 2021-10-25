@@ -53,29 +53,27 @@
     {% for g in quizz.groups.all %} 
         <div class="row">
             <div class="col-sm-6 col-md-6">
-                <label style="color:{{g.color}}"> {{ g }} </label><br/>
+                <label > {{ g }} </label><br/>
                 {% if sacado_asso %}
                     {% if  quizz.is_video %}
-                    <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px;color:{{g.color}};">
+                    <span class="sanspuce historic_li"  style="border:1px solid; border-radius:20px; width:70px;">
                         <i class="fa fa-gamepad"></i> Numérique
-                        <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" title="En version à tester"
-                            style="color:{{g.color}};"> <i class="fa fa-play fa-x"></i> Lancer
+                        <a href="{% url 'play_quizz_teacher'  quizz.id   g.id  %}" target="_blank"  class="quizz_action" title="En version à tester" > 
+                            <i class="fa fa-play fa-xs"></i> Lancer
                         </a>  
                     </span>
                     {% elif  quizz.is_numeric %}
-                    <span class="sanspuce historic_li"  style="border:1px solid {{g.color}}; border-radius:20px; width:70px;color:{{g.color}};">
+                    <span class="sanspuce historic_li"  style="border:1px solid; border-radius:20px; width:70px;">
                         <i class="fa fa-desktop"></i> Numérique
-                        <a href="{% url 'create_quizz_code'  quizz.id   g.id  %}" class="quizz_action" title="Générer un quizz"
-                            style="color:{{g.color}};"><i class="fa fa-play fa-xs"></i> Générer
+                        <a href="{% url 'create_quizz_code'  quizz.id   g.id  %}" class="quizz_action" title="Générer un quizz" ><i class="fa fa-play fa-xs"></i> Générer
                         </a>  |
-                        <a href="{% url 'show_quizz_group'  quizz.id   g.id  %}" class="quizz_action" title="voir ce quizz"  target="_blank"
-                            style="color:{{g.color}};"> <small>Voir</small>
+                        <a href="{% url 'show_quizz_group'  quizz.id   g.id  %}" class="quizz_action" title="voir ce quizz"  target="_blank" > <small>Voir</small>
                         </a> 
                     </span>
                     {% else %}
-                    <span  class="sanspuce historic_li"  style="color:{{g.color}};border:1px solid {{g.color}}; border-radius:20px; width:70px;margin-right: 10px;">
+                    <span  class="sanspuce historic_li"  style="border:1px solid ; border-radius:20px; width:70px;margin-right: 10px;">
                         <i class="fa fa-edit fa-xs"></i> Papier
-                        <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id  g.id %}{% endif %}" style="color:{{g.color}}"
+                        <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  g.id %}{% else %}{% url 'show_quizz_group'  quizz.id  g.id %}{% endif %}" 
                            class="quizz_action {% if quizz.is_random %} confirm_create_historic{% endif %}" target="_blank" >
                            <i class="fa fa-play fa-xs"></i>  Projeter
                         </a>
@@ -89,9 +87,9 @@
 
                     {% get_quizz_generated quizz g as generated_historic %} 
                         {% for gq in generated_historic %} 
-                        <li class="sanspuce historic_li btn-new">
+                        <li class="sanspuce historic_li btn-{% if  quizz.is_numeric %}new{% else %}new-quizz-list{% endif %}">
                             <a href="{% url 'delete_historic_quizz' gq.id %}" class="pull-right" 
-                               onclick="return TestDelete('cet historique et tous les résultats associés')">
+                               onclick="return TestDelete('ce quizz dupliqué et ces résultats')">
                                 <i class="fa fa-trash"></i>
                             </a> 
                             <small style="margin-right:10px"  class="pull-right" >{{ gq.date_created|date:"d-m-Y" }}</small>
@@ -137,7 +135,7 @@
     {% endfor %}
 </td>
 <td> 
-    <div class="quizz_action"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter/modifier des questions</a> 
+    <div class="quizz_action"  style="font-size:14px"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="fa fa-plus"></i> Ajouter/modifier des questions</a> 
         <span style="font-size:10px">
             <b>{% if quizz.is_random %}
             {{ quizz.nb_slide }}
@@ -149,12 +147,12 @@
 
     {% if not quizz.is_numeric and not quizz.is_video %}
         {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
-        <div class="quizz_action"><a href="{% url 'play_printing_teacher'  quizz.id   %}"  class="quizz_action"><i class="fa fa-print"></i> Créer les fiches réponses imprimables</a> </div>    
+        <div class="quizz_action"  style="font-size:14px"><a href="{% url 'play_printing_teacher'  quizz.id   %}" ><i class="fa fa-print"></i> Créer les fiches réponses imprimables</a> </div>    
         {% else  %}
         <div class="alert alert-danger"><i class="fa fa-ban"></i> Aucune question actuellement</div> 
         {% endif  %}
     {% else  %}
-        <div class="text-info" style="margin-bottom: 10px;"><i class="fa fa-desktop"></i> Version numérique sans fiche </div> 
+        <div class="text-info" style="margin-bottom: 10px;font-size:14px"><i class="fa fa-desktop"></i> Version numérique sans fiche </div> 
     {% endif  %}
-    <a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action"  onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a> 
+    <a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action"   style="font-size:14px" onclick="return TestDelete('ce quizz')"><i class="fa fa-trash"></i>  Supprimer</a> 
 </td>

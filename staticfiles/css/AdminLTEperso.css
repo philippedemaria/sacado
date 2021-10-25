@@ -36,6 +36,15 @@ body {
  /*height : 100vh ;*/
 }
 
+.search_bar{
+  margin-left:0px; 
+  margin-right:0px; 
+  border:1px solid #CCC; 
+  background: #F0F0F0;
+  padding-top: 15px; 
+  background-image: url('/static/img/fond_search.png')
+}
+
 
 .bg_violet{
   background-color: #f1eef7 ;
@@ -48,7 +57,12 @@ body {
   } 
 
 
-
+.errorlist{
+  list-style: none;
+  padding-left:5px;
+  background-color: red;
+  color: white;
+}
 
 .sacado_color_text{
   color:  #5d4391 ;
@@ -6604,6 +6618,22 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   color: white!important;
 }
 
+
+.btn-new-quizz-list {
+  color : #998fa6!important;
+  border-radius: 20px; /*radius des boutons*/
+  border: 1px solid #998fa6!important;
+  margin-right: 5px;
+}
+.btn-new-quizz-list:hover, 
+.btn-new-violet:active,
+.btn-new-quizz-list.hover,    {
+  background-color: #309ae4!important;/*   #dd4b39!important;*/
+  color: #309ae4!important;
+  text-decoration: none;
+  color : #fff;
+}
+ 
 
 /********************************************* violet hover :  #5d4391 ************************************/
 /********************************************* violet light :  #f1eef7 ************************************/

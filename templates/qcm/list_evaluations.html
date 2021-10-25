@@ -20,12 +20,10 @@
 
 {% block page_menu_right %}
 
- 
-        {% include 'qcm/submenu_creation_evaluation.html' %}
- 
-        {% include 'qcm/submenu_creation_folder.html' %}
-
     <li><a href="{% url 'evaluations_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Evaluation{{ nb_archive|pluralize }} archivée{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
+
+    {% include 'qcm/submenu_creation_evaluation.html' %}
+
 {% endblock %}
 
 

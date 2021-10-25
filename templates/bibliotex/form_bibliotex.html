@@ -69,24 +69,62 @@
                                             </span> {% endif %}
                                     {{ form.groups|add_class:"select_all" }}
                                     {{ form.groups.errors }}
-
-             
                                 </div>
+                            </div>                            
+                            <div class="col-sm-12 col-md-6">
                                 <div class="form-group">  
                                     <div class="alert alert-warning">
                                         <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la BiblioTex est partagée entre ces groupes.</p>
                                         <p style="font-size:12px"><i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.</p>
                                     </div>
                                 </div>
-                            </div>                            
-                            <div class="col-sm-12 col-md-6">
-                                <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                                </span> 
-                                <div class="form-group" id="cblist">
-                                     <div class="alert alert-warning">
-                                        <p style="font-size:12px">Choisir au moins un groupe.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                                <div class="form-group">  
+                                    {% if bibliotex %}
+                                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                        </span> 
+                                            {{ form.folders|add_class:"select_all" }}
+                                            {{ form.folders.errors }}
+                                    {% else %}
+ 
+                                    <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                    </span> 
+                                    <div class="form-group" id="cblist">
+                                         <div class="alert alert-warning">
+                                            <p style="font-size:12px">Choisir au moins un groupe.</p>
+                                        </div>
                                     </div>
+ 
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group">  
+                                    {% if bibliotex %}
+                                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                                        <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                        </span> 
+                                            {{ form.parcours|add_class:"select_all_parcours" }}
+                                            {{ form.parcours.errors }} 
+                                    </div>
+                                    {% else %}
+ 
+                                    <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                    </span> 
+                                    <div class="form-group" id="pclist">
+                                         <div class="alert alert-warning">
+                                            <p style="font-size:12px">Choisir au moins un dossier.</p>
+                                        </div>
+                                    </div>
+ 
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

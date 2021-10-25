@@ -61,8 +61,8 @@
                         <th style="width:250px">Groupe </th>
                         <th>Mutualisation</th>
                         <th>Coanimation</th>
-                        <th style="width:100px">Elèves</th>
-                        <th style="width:120px">Publication 
+                        <th style="width:180px">Elèves</th>
+                        <th style="width:150px">Publication 
                             <span class="helper_tip"> 
                             <i class="fa fa-question-circle"></i>
                             <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
@@ -173,7 +173,7 @@
                                         data-parcours_id="{{folder.id}}" data-statut="{{folder.is_publish }}">  
                                         <i class="fa fa-circle-o-notch"></i>
                                     </a><span class="legend-btn  legend-btn-{% if not folder.is_publish %}danger{% else  %}success{% endif  %} size13" id="folder_statut{{folder.id}}"  >  
-                                      {% if folder.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                                      {% if folder.is_publish %} Publié  {% else %} Non publié {% endif  %} 
                                     </span>
                                 </div>
              

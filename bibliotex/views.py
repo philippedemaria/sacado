@@ -285,7 +285,6 @@ def create_bibliotex(request,idf=0):
     else :
         group = None
 
-
     if folder_id :
         folder = Folder.objects.get(id=folder_id)
     else :
@@ -320,20 +319,32 @@ def create_bibliotex(request,idf=0):
 
 def update_bibliotex(request, id):
 
-    bibliotex = Bibliotex.objects.get(id=id)
     teacher = request.user.teacher
-    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher, folder = None)
-    if request.method == "POST" :
-        if form.is_valid():
-            form.save()
-            messages.success(request, "L'exercice a été créé avec succès !")
-            return redirect('bibliotexs')
-        else:
-            print(form.errors)
+    bibliotex = Bibliotex.objects.get(id=id)
 
-    context = {'form': form,  'bibliotex': bibliotex,   }
+    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = None)
 
-    return render(request, 'bibliotex/form_bibliotex.html', context )
+    if form.is_valid():
+        nf = form.save(commit = False) 
+        nf.author = teacher
+        nf.teacher = teacher
+        nf.save()
+        form.save_m2m() 
+
+        group_ids = request.POST.getlist("groups",[])
+        folder_ids = request.POST.getlist("folders",[])
+        nf.groups.set(group_ids)
+        nf.folders.set(folder_ids)
+        all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
+
+        return redirect('exercise_bibliotex_peuplate', nf.id)
+
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'bibliotex': bibliotex,   }
+
+    return render(request, 'bibliotex/form_bibliotex.html', context)
 
 
 def delete_bibliotex(request, id):
@@ -544,6 +555,29 @@ def ajax_charge_folders(request):
         data['folders'] =  []
 
     return JsonResponse(data)
+
+
+
+def ajax_charge_parcours(request):
+
+    teacher = request.user.teacher
+    data = {} 
+    folder_ids = request.POST.getlist('folder_ids', None)
+
+    if len(folder_ids) :
+        parcourses = set()
+        for folder_id in folder_ids :
+            folder = Folder.objects.get(pk=folder_id)
+            parcourses.update(folder.parcours.values_list("id","title").filter(is_trash=0))
+
+        data['parcours'] =  list( parcourses )
+    else :
+        data['parcours'] =  []
+
+    return JsonResponse(data)
+
+
+
 
 
 

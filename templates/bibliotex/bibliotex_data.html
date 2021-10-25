@@ -16,6 +16,15 @@
 </td> 
 <td>
     {{ bibliotex.title }}
+    <br/> 
+    {% with nbe=bibliotex.exotexs.count %}    
+        {{ nbe }} exercice{{ nbe|pluralize }}
+    {% endwith  %}
+
+    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}" title="Ajouter des exercices" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>
+
+
+
 </td>  
 <td  style="width:20px;">
  

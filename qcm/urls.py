@@ -40,6 +40,9 @@ urlpatterns = [
     path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'), 
 
     path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
+    path('ajax_course_charge_parcours', ajax_course_charge_parcours, name='ajax_course_charge_parcours'),
+
+    
 
 
     path('parcours_tasks_and_publishes/<int:id>/', parcours_tasks_and_publishes, name='parcours_tasks_and_publishes'), # gestion des taches
@@ -190,7 +193,7 @@ urlpatterns = [
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     path('parcours_show_courses_from_folder/<int:idf>/0', show_courses_from_folder, name='show_courses_from_folder'),  
     path('only_create_course/0', only_create_course, name='only_create_course'), 
-    path('only_update_course/0', only_update_course, name='only_update_course'), 
+    path('only_update_course/<int:idc>', only_update_course, name='only_update_course'), 
 
     path('get_course_in_this_parcours/<int:id>', get_course_in_this_parcours, name='get_course_in_this_parcours'), 
     path('get_this_course_for_this_parcours/<int:typ>/<int:id_target>/<int:idp>', get_this_course_for_this_parcours, name='get_this_course_for_this_parcours'), 
@@ -284,6 +287,11 @@ urlpatterns = [
     path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),
     path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'),
 
+
+    path('ajax_publish_course', ajax_publish_course, name='ajax_publish_course'),
+    path('ajax_sharer_course', ajax_sharer_course, name='ajax_sharer_course'),
+
+
     path('ajax/dates', ajax_dates, name='ajax_dates'), 
     path('ajax/skills', ajax_skills, name='ajax_skills'), 
     path('ajax/notes', ajax_notes, name='ajax_notes'), 
@@ -356,7 +364,11 @@ urlpatterns = [
 
     path('ajax_all_parcourses', ajax_all_parcourses, name='ajax_all_parcourses'),  
     path('ajax_all_folders', ajax_all_folders, name='ajax_all_folders'),  
-    path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'),  
+    path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'), 
+
+
+    path('all_courses', all_courses, name='all_courses'), 
+     
 
 
     path('ajax_closer_exercise', ajax_closer_exercise, name='ajax_closer_exercise'),

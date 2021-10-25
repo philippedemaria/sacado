@@ -16,7 +16,7 @@ from group.forms import GroupForm
 from group.models import Group , Sharing_group
 from school.models import Stage, School
 from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
-from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , Course_NonP_Form , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
+from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from django.http import JsonResponse 
@@ -679,7 +679,7 @@ def get_parcours_default(request):
 def ajax_chargethemes(request):
     ids_level =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
-
+    
     data = {}
     level =  Level.objects.get(pk = ids_level)
 
@@ -691,6 +691,7 @@ def ajax_chargethemes(request):
     imagefiles = level.level_parcours.values_list("vignette", flat = True).filter(subject_id=id_subject).exclude(vignette=" ").distinct()
     if imagefiles.count() > 0 :
         data['imagefiles'] = list(imagefiles)
+
 
     return JsonResponse(data)
 
@@ -5063,7 +5064,90 @@ def ajax_charge_folders(request):
     return JsonResponse(data)
 
  
+
+
+def ajax_course_charge_parcours(request):
+
+    teacher = Teacher.objects.get(user= request.user)
+    data = {} 
+    id_level = request.POST.get('id_level', None)
+    id_subject = request.POST.get('id_subject', None)
+    parcours = teacher.teacher_parcours.values_list("id","title").filter(subject_id = id_subject , level_id = id_level )
+
+    data['parcours'] =  list( parcours )
+
+    return JsonResponse(data)
+
+
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_publish_course(request):  
+
+    course_id = request.POST.get("course_id")
+    statut = request.POST.get("statut")
+    data = {}
+    if statut=="true" or statut == "True":
+        data["statut"]  = "false"
+        data["publish"] = "Non publié"
+        data["style"] = "#dd4b39"
+        data["class"] = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"] = "Non publié"
+        Course.objects.filter(pk = int(course_id)).update(is_publish = 0)
+    else:
+        data["statut"] = "true"
+        data["publish"] = "Publié" 
+        data["style"] = "#00a65a"
+        data["class"] = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"] = "Publié"
+        Course.objects.filter(pk = int(course_id)).update(is_publish = 1)
+
+    return JsonResponse(data) 
+
  
+ 
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_sharer_course(request):  
+
+    course_id = request.POST.get("course_id")
+    statut = request.POST.get("statut")
+ 
+ 
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"]  = "false"
+        data["share"]   = "Privé"
+        data["style"]   = "#dd4b39"
+        data["class"]   = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"]   = "Privé"
+    else:
+        statut = 1
+        data["statut"]  = "true"
+        data["share"]   = "Mutualisé"
+        data["style"]   = "#00a65a"
+        data["class"]   = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"]   = "Mutualisé"
+
+ 
+ 
+    Course.objects.filter(pk = int(course_id)).update(is_share = statut)
+
+    return JsonResponse(data) 
+
+
+
+
+
+
+
+
+
+
 #####################################################################################################################################
 #####################################################################################################################################
 ######   Correction des exercices
@@ -6972,32 +7056,33 @@ def export_note(request,idg,idp):
 def list_courses(request):
 
     teacher = request.user.teacher
-    courses = teacher.course.all()
+    parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=0).order_by("subject", "level", "ranking")
+    parcours_courses = list()
+    for parcours in parcours_dataset :
+        this_courses = dict()
+        this_courses["parcours"] = parcours
+        this_courses["courses"]  = parcours.course.all
+        parcours_courses.append(this_courses)
 
-    return render(request, 'qcm/course/list_courses.html', {'courses': courses,  })
+    return render(request, 'qcm/course/my_courses.html', { 'parcours_courses' : parcours_courses })
 
-#@user_is_parcours_teacher
+ 
 def only_create_course(request):
-    """
-    idc : course_id et id = parcours_id pour correspondre avec le decorateur
-    """
+ 
     teacher =  request.user.teacher
-    form = Course_NonP_Form(request.POST or None)
+    form    = CourseNPForm(request.POST or None, teacher = teacher)
     if request.method == "POST" :
         if form.is_valid():
-            nf =  form.save(commit = False)
-            nf.parcours = parcours
-            nf.teacher = teacher
-            nf.author = teacher
+            nf              = form.save(commit = False)
+            nf.teacher      = teacher
+            nf.author       = teacher
+            nf.parcours_id  = request.POST.get("parcours")
             nf.save()
-            try :
-                return redirect('show_course' , 0 , id)
-            except :
-                return redirect('index')
+            return redirect('courses')
         else:
             print(form.errors)
-
-    context = {'form': form,   'teacher': teacher, 'course': None ,   }
+    
+    context = {  'form': form , 'teacher': teacher, 'course': None ,   }
 
     return render(request, 'qcm/course/form_np_course.html', context)
 
@@ -7009,24 +7094,21 @@ def only_update_course(request,idc):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     teacher =  request.user.teacher
-    form = Course_NonP_Form(request.POST or None)
+    course  =  Course.objects.get(pk=idc)
+    form    =  CourseNPForm(request.POST or None, instance = course , teacher = teacher , initial = {   'subject' : course.parcours.subject  , 'level' : course.parcours.level })
     if request.method == "POST" :
         if form.is_valid():
             nf =  form.save(commit = False)
-            nf.parcours = parcours
             nf.teacher = teacher
             nf.author = teacher
             nf.save()
-            try :
-                return redirect('show_course' , 0 , id)
-            except :
-                return redirect('index')
+            return redirect('courses')
         else:
             print(form.errors)
 
-    context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
+    context = {  'form': form , 'teacher': teacher, 'course': None ,   }
 
-    return render(request, 'qcm/course/form_course.html', context)
+    return render(request, 'qcm/course/form_np_course.html', context)
 
 
 
@@ -7058,6 +7140,8 @@ def create_course(request, idc , id ):
             nf.parcours = parcours
             nf.teacher = teacher
             nf.author = teacher
+            nf.subject = parcours.subject
+            nf.level = parcours.level
             nf.save()
             try :
                 return redirect('show_course' , 0 , id)
@@ -7300,6 +7384,18 @@ def get_this_course_for_this_parcours(request,typ,id_target,idp):
 
  
  
+
+
+
+def all_courses(request):
+ 
+    teacher = request.user.teacher
+
+    context = {  'teacher': teacher ,    }
+    return render(request, 'qcm/course/list_courses.html', context )
+
+
+
 
 def get_course_in_this_parcours(request,id):
     parcours = Parcours.objects.get(pk = id) 

@@ -1,1 +1,9 @@
-<li> <a href="{% url 'only_create_course' %}" class="btn btn-new"  > Créer un cours</a> </li>  
+<li class="dropdown">
+
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau cours <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        <li> <a href="{% url 'only_create_course' %}" > Créer un cours</a> </li> 
+        <li> {% if sacado_asso %} <a href="{% url 'all_courses' %}" > Récupérer un cours mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un cours mutualisé </a> {% endif %} </li>         
+    </ul>
+</li>  

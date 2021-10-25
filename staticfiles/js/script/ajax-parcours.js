@@ -840,8 +840,6 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-
-    
         $('body').on('click', '.projection', function () {
 
             var content = $(this).html();
@@ -877,11 +875,8 @@ define(['jquery','bootstrap'], function ($) {
                                         $('#projection_div').find("iframe").attr("height", new_size / coeff );
                                     //}
                     }
- 
-
         });
  
-
 
  
         $('body').on('click', ".closer_projection_div", function () {
@@ -933,16 +928,6 @@ define(['jquery','bootstrap'], function ($) {
         });
 
 
-
-        // Pour le form_parcours
-        /*
-        if( $("#id_is_leaf").is(":checked")) { $('#folder_div').show(); } else { $('#folder_div').hide(); }
-
-        $("#id_is_leaf").on('change', function (event) {
-            $('#folder_div').toggle(500);
-        });
-
-        */
  
 
 

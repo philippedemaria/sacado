@@ -48,6 +48,8 @@ urlpatterns = [
     path('ajax_chargethemes', ajax_chargethemes, name='ajax_chargethemes'),
     path('ajax_level_exotex', ajax_level_exotex, name='ajax_level_exotex'),
     path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
+    path('ajax_charge_parcours', ajax_charge_parcours, name='ajax_charge_parcours'),
+
     path('ajax_my_bibliotexs', ajax_my_bibliotexs, name='ajax_my_bibliotexs'),
     path('ajax_set_exotex_in_bibliotex', ajax_set_exotex_in_bibliotex, name='ajax_set_exotex_in_bibliotex'),
 

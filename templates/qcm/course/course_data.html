@@ -1,0 +1,70 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+    <td style="text-align:center; padding-bottom: 0px;"> 
+        <input type="checkbox" name="selected_course" value="{{ course.id}}"/>
+    </td>  
+    <td {% if course.is_folder %} style="padding-top:15px" {% endif %} >
+
+        <a href="{% url 'show_course' 0 course.id %}" > {{ course.title }} </a>
+
+        <div style="font-size:14px;margin-top:-5px;">
+ 
+
+            <small>{{  course.duration|int_minutes  }}min. </small>
+        </div>
+        <div style="font-size:14px;margin-top:-5px;">
+            {% if course.course.all|length > 0 %}
+                {{ course.course.count }} cours <small>{{  course.duration_reader_course|int_minutes }}min. </small>
+            {% endif %}  
+        </div>
+    </td>  
+    <td>
+ 
+ 
+                <a href="{% url 'only_update_course' course.id   %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
+    </td>
+    <td>
+         {{ course.parcours.subject.shortname }}  
+    </td>
+    <td>
+         {{  course.parcours.level.name }} 
+    </td> 
+    <td >
+        {% if course.parcours.folders  %}
+            {% for f in  course.parcours.folders.all  %}
+                <small>{{ f.title }} <small> {% if not forloop.last %}, {% endif %}</small>
+            {% endfor %}
+        {% endif %}
+    </td>
+    <td>
+        <div class="btn-group"  style="padding:0px;margin:0px;">
+            <a href="#" class="btn btn-default btn-publisher course_sharer"  id="course_sharer{{course.id}}" 
+                data-course_id="{{course.id}}" data-statut="{{course.is_share }}">  
+                <i class="fa fa-circle-o-notch"></i>
+            </a><span class="legend-btn  legend-btn-{% if not course.is_share %}danger{% else  %}success{% endif  %} size13" id="course_sharer_statut{{course.id}}"  >  
+              {% if course.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
+            </span>
+        </div>
+    </td>
+    <td>
+        <div class="btn-group"  style="padding:0px;margin:0px;">
+            <a href="#" class="btn btn-default btn-publisher course_publisher"  id="course_publisher{{course.id}}" 
+                data-course_id="{{course.id}}" data-statut="{{course.is_publish }}">  
+                <i class="fa fa-circle-o-notch"></i>
+            </a><span class="legend-btn  legend-btn-{% if not course.is_publish %}danger{% else  %}success{% endif  %} size13" id="course_statut{{course.id}}"  >  
+              {% if course.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+            </span>
+        </div>
+        <span class="label_icon" style="color:{{ course.color   }};">
+            {% if course.is_evaluation %}
+                {{  course.start|date:"d N Y H:i"  }}   
+                {% if course.stop %}
+                   - {{  course.stop|date:"d N Y H:i"  }}     
+                {% endif %}                                
+            {% endif %}
+        </span>
+    </td>
+ 

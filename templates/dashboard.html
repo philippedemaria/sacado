@@ -560,7 +560,7 @@
     {%  if user.is_manager  %}
         <div class="row">
             <div class="col-lg-12 col-xs-12">            
-                <a href="#" id="closeTools" class="pull-right"> <i class="fa fa-times"></i></a> 
+                <a href="#" id="closeAdmin" class="pull-right"> <i class="fa fa-times"></i></a> 
                 <a href="{% url 'admin_tdb' %}">{{ request.user.school.name }}</a>
             </div>  
         </div> 
@@ -670,7 +670,7 @@
     {%  if request.user.is_manager  %}
         <div class="row">
             <div class="col-lg-12 col-xs-12">            
-                <a href="#" id="closeTools" class="pull-right"> <i class="fa fa-times"></i></a>
+                <a href="#" id="closeAdmin" class="pull-right"> <i class="fa fa-times"></i></a>
                 <a href="{% url 'admin_tdb' %}">{{ request.user.school.name }}</a>
             </div>  
         </div> 

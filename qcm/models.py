@@ -379,6 +379,7 @@ class Parcours(ModelWithCode):
     is_favorite = models.BooleanField(default=1, verbose_name="Favori ?")
 
     is_evaluation = models.BooleanField(default=0, editable=False)
+    is_active = models.BooleanField( default=0,  verbose_name="Page d'accueil élève")  
 
     is_next = models.BooleanField(default=0, verbose_name="Suivant ?")
     is_exit = models.BooleanField(default=0, verbose_name="Retour aux exercices ?")
@@ -1943,7 +1944,7 @@ class Exerciselocker(ModelWithCode):
 ########################################################################################################################################### 
 class Course(models.Model): # pour les 
 
-    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='course', editable=False) 
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='course') 
     title = models.CharField(max_length=50, default='',  blank=True, verbose_name="Titre")    
     annoncement = RichTextUploadingField( blank=True, verbose_name="Texte*") 
     author = models.ForeignKey(Teacher, related_name = "author_course", blank=True, null=True, on_delete=models.CASCADE, editable=False )
@@ -1972,6 +1973,10 @@ class Course(models.Model): # pour les
     students = models.ManyToManyField(Student, blank=True,  related_name='students_course', verbose_name="Attribuer à/au")
     creators = models.ManyToManyField(Student, blank=True,  related_name='creators_course', verbose_name="Co auteurs élève") 
     relationships = models.ManyToManyField(Relationship, blank=True,  related_name='relationships_courses', verbose_name="Lier ce cours à") 
+
+    level    = models.ForeignKey(Level, on_delete=models.CASCADE,  related_name="courses", default=None,  blank=True, null=True , verbose_name="Niveau")
+    subject  = models.ForeignKey(Subject, on_delete=models.CASCADE,  related_name="courses", default=None,   blank=True, null=True, verbose_name="Enseignement" )
+
 
 
     def __str__(self):

@@ -134,24 +134,24 @@ define(['jquery', 'bootstrap'], function ($) {
                             'id_subject': id_subject,                        
                             csrfmiddlewaretoken: csrf_token
                         },
-                        url : "ajax/chargethemes",
+                        url : "../../ajax_course_charge_folders",
                         success: function (data) {
 
-                            themes = data["themes"]
-                            $('select[name=theme]').empty("");
-                            if (themes.length >0)
+                            folders = data["folders"]
+                            $('select[name=folders]').empty("");
+                            if (folders.length >0)
 
-                            { for (let i = 0; i < themes.length; i++) {
+                            { for (let i = 0; i < folders.length; i++) {
                                         
 
-                                        console.log(themes[i]);
-                                        let themes_id = themes[i][0];
-                                        let themes_name =  themes[i][1]  ;
+                                        console.log(folders[i]);
+                                        let folders_id = folders[i][0];
+                                        let folders_name =  folders[i][1]  ;
                                         let option = $("<option>", {
-                                            'value': Number(themes_id),
-                                            'html': themes_name
+                                            'value': Number(folders_id),
+                                            'html': folders_name
                                         });
-                                        $('select[name=theme]').append(option);
+                                        $('select[name=folders]').append(option);
                                     }
                             }
                             else
@@ -160,7 +160,7 @@ define(['jquery', 'bootstrap'], function ($) {
                                             'value': 0,
                                             'html': "Aucun contenu disponible"
                                         });
-                                $('select[name=theme]').append(option);
+                                $('select[name=folders]').append(option);
                             }
 
                             $("#loading").html("").hide(500); 
@@ -205,8 +205,8 @@ define(['jquery', 'bootstrap'], function ($) {
             if ( param1.val() > 0  ) {var theme_id = param1.val() ; console.log(theme_id) ; } else {var theme_id = [] ; console.log(theme_id) ; }  
  
 
-
-            let keywords = $("#keywords").val();
+            let subject_id = $("#id_subject").val();
+            let keywords   = $("#keywords").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
             $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
@@ -221,6 +221,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     data: {
                         'level_id': level_id,
                         'theme_id': theme_id,
+                        'subject_id': subject_id,
                         'keywords': keywords,
                         csrfmiddlewaretoken: csrf_token
                     },

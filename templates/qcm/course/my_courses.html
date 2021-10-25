@@ -1,0 +1,108 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
+    <script>
+        require(['script/ajax-list-course']);
+    </script> 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+   <i class="fa fa-desktop sacado_color_text"></i> Mes cours
+{% endblock %}
+
+
+
+
+
+
+{% block page_menu_right %}
+
+    {% include 'qcm/course/submenu_creation_course.html' %}
+   
+{% endblock %}
+
+
+
+
+{% block body  %} 
+
+<section class="content_list"> 
+{% include 'preloader.html' %}
+
+ 
+<form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>
+    <div class="row">    
+        <div class="col-sm-12 col-md-12">
+            {% csrf_token %}
+            <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
+                <thead> 
+                    <tr> 
+                        <th style="width:20px;"></th>  
+                        <th style="width:300px;">Titre</th>
+                        <th style="width:80px;">Durée</th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th>Dossiers </th>
+                        <th style="width:180px;">Mutualisation</th>
+                        <th style="width:150px;">Publication 
+                            <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                            </span>
+                        </th>                    
+                    </tr> 
+                </thead>
+                <tbody>
+                {% for parcours_course in parcours_courses %} 
+                    <tr style="{% if not parcours_course.parcours.is_publish %} border-left-color:#cb2131; border-left-style: 3px solid;{% endif  %}height:60px"  class="selected_tr"  id="tr{{ forloop.counter }}" >
+                        <td style="position:relative; text-align:center; 
+                                    background-image:url({% if parcours_course.parcours.vignette %}{{ parcours_course.parcours.vignette.url }}{% endif %});
+                                    background-repeat: no-repeat;
+                                    background-size: 50px 50px;"> 
+                        </td> 
+                        <td>
+                            <span class="accordion" data-target="{{ forloop.counter }}"  >{{ parcours_course.parcours.title }}  <i class="fa fa-chevron-down pull-right" id="pop{{ forloop.counter }}" ></i></span>
+                        </td>  
+                        <td>{{ parcours_course.parcours.duration_overall|int_minutes  }} min. 
+                        </td>
+                        <td>{{  parcours_course.parcours.subject.name  }}</td> 
+                        <td>{{  parcours_course.parcours.level.name  }}</td> 
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% for course in parcours_course.courses %} 
+                        <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
+                            {% include 'qcm/course/course_data.html' %}
+                        </tr>
+                    {% endfor  %}
+                {% endfor  %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" style="margin-top:50px">
+        <div class="col-sm-12 col-md-12">
+            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+                <i class="fa fa-archive"> </i>   Archiver la sélection
+            </button>
+            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+                <i class="fa fa-trash"> </i>   Supprimer la sélection
+            </button>
+        </div>
+    </div>
+</form>
+ 
+</section>
+ 
+ 
+{% endblock  %}   
+
+ 

@@ -34,17 +34,12 @@
 <section class="content_main"> 
     <form method="POST"> 
     {% csrf_token %}
-    <div class="row alert" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0; background-image: url({% static 'img/fond_search.png' %});">
-        <div class="col-sm-12 col-md-1 col-lg-1">
-            <div class="form-group">
-                <h4 class="thin" style="background: #FFF; padding :5px; padding-top :4px; border-radius:10px;font-size:1vw"> Recherche</h4>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3">
+    <div class="row alert search_bar" >
+        <div class="col-sm-12 col-md-2 col-lg-2">
             <div class="form-group">
                 <select id="id_subject" name="subject" class="form-control select2">
                     {% for s in teacher.subjects.all %}
-                        <option value="{{s.id}}">{{ s.name }}</option>
+                        <option value="{{s.id}}">{{ s.shortname }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -71,6 +66,14 @@
                 </select>
             </div>
         </div>
+        <div class="col-sm-12 col-md-2 col-lg-2">
+            <div class="form-group">
+                <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
+                <input type="hidden" name="is_eval" id="is_eval"  value="{{ is_eval }}" />
+            </div>
+        </div>
+
+
     </div>
 
 
