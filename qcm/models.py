@@ -1962,7 +1962,7 @@ class Course(models.Model): # pour les
     is_paired = models.BooleanField( default=0,    verbose_name="Elèves créateurs ?") 
     is_active = models.BooleanField( default=0,  verbose_name="Contenu en cours")  
     is_share = models.BooleanField( default=0,  verbose_name="Mutualisé ?")  
- 
+
     date_limit = models.DateTimeField( null=True, blank=True, verbose_name="Date limite du rendu")
 
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")

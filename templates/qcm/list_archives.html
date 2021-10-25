@@ -7,20 +7,21 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
     <script>
-        require(['script/ajax-parcours']);
+        require(['script/ajax-parcours']);        
+        require(['script/ajax-parcours_inside_data']);
     </script> 
 {% endblock %}
 
  
 
 {% block page_title %}
-    <i class="fa fa-folder"></i> Mes dossiers et parcours archivés
+    <i class="fa fa-folder sacado_color_text"></i> Mes parcours archivés
 
 {% endblock %}
 
 {% block page_menu_right %}
 
-    <li><a href="{% url 'parcours' %}"  class="no_button">Mes dossier et parcours</a></li>
+    <li><a href="{% url 'parcours' %}"  class="no_button">Mes  parcours</a></li>
 
 {% endblock %}
 
@@ -37,13 +38,8 @@
 <form action="{% url 'unarchive' %}" method="POST" enctype='multipart/form-data'>
     <div class="row">    
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes dossiers archivés</h1> 
-        </div>
-    </div>
-    <div class="row">    
-        <div class="col-sm-12 col-md-12">
             {% csrf_token %}
-            <table class="table table-hovered display1000"  style="width:100%" >
+            <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
                 <thead> 
                     <tr> 
                         <th style="width:20px"></th>
@@ -186,14 +182,10 @@
             </table>
         </div>
     </div>
+
     <div class="row">    
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" style="margin-bottom:0px;"><i class="fa fa-th"></i> Mes parcours archivés</h1> 
-        </div>
-    </div>
-    <div class="row">    
-        <div class="col-sm-12 col-md-12">
-            <table class="table table-hovered display1000"  style="width:100%" >
+            <table class="table table-hovered borderless display_no_details100"  style="width:100%" >
                 <thead> 
                     <tr> 
                         <th style="width:30px"></th> 

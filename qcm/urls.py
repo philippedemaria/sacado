@@ -185,15 +185,16 @@ urlpatterns = [
     path('my_child_tasks/<int:id>', my_child_tasks, name='my_child_tasks'), #taches du groupe 
     #################################### Les cours dans les parcours ###########################################
 
-    path('parcours_courses', list_courses, name='courses'),
+    path('parcours_my_courses', list_courses, name='courses'),
+    path('parcours_my_courses_archives', list_courses_archives, name='courses_archives'),
     path('parcours_create_course/<int:idc>/<int:id>', create_course, name='create_course'), # id = id du parcours, idc = id du cours
     path('parcours_update_course/<int:idc>/<int:id>', update_course, name='update_course'),
     path('parcours_delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     path('parcours_show_courses_from_folder/<int:idf>/0', show_courses_from_folder, name='show_courses_from_folder'),  
-    path('only_create_course/0', only_create_course, name='only_create_course'), 
-    path('only_update_course/<int:idc>', only_update_course, name='only_update_course'), 
+    path('parcours_only_create_course/0', only_create_course, name='only_create_course'), 
+    path('parcours_only_update_course/<int:idc>', only_update_course, name='only_update_course'), 
 
     path('get_course_in_this_parcours/<int:id>', get_course_in_this_parcours, name='get_course_in_this_parcours'), 
     path('get_this_course_for_this_parcours/<int:typ>/<int:id_target>/<int:idp>', get_this_course_for_this_parcours, name='get_this_course_for_this_parcours'), 

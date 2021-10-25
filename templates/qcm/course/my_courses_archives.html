@@ -1,0 +1,23 @@
+{% extends 'qcm/course/my_courses.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+ 
+
+
+
+
+
+{% block page_menu_right %}
+
+    <li><a href="{% url 'courses' %}"  class="no_button"> Mes cours</a></li>
+
+    {% include 'qcm/course/submenu_creation_course.html' %}
+   
+{% endblock %}
+
+
+
+
+ 

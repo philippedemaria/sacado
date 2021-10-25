@@ -7064,9 +7064,40 @@ def list_courses(request):
         this_courses["courses"]  = parcours.course.all
         parcours_courses.append(this_courses)
 
-    return render(request, 'qcm/course/my_courses.html', { 'parcours_courses' : parcours_courses })
+    nb_archive = Course.objects.filter(  teacher=teacher ,  parcours__is_archive=1).count()
+
+    return render(request, 'qcm/course/my_courses.html', { 'parcours_courses' : parcours_courses , 'nb_archive' : nb_archive })
 
  
+
+
+
+
+def list_courses_archives(request):
+
+    teacher = request.user.teacher
+    parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=1).exclude(course=None).order_by("subject", "level", "ranking")
+    parcours_courses = list()
+    for parcours in parcours_dataset :
+        this_courses = dict()
+        this_courses["parcours"] = parcours
+        this_courses["courses"]  = parcours.course.all
+        parcours_courses.append(this_courses)
+ 
+
+    return render(request, 'qcm/course/my_courses_archives.html', { 'parcours_courses' : parcours_courses  })
+
+ 
+
+
+
+
+
+
+
+
+
+
 def only_create_course(request):
  
     teacher =  request.user.teacher
