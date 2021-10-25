@@ -15,20 +15,22 @@ urlpatterns = [
     path('create_exotex_knowledge/<int:idk>', create_exotex_knowledge , name='create_exotex_knowledge'),
     path('exercise_exotex_update/<int:id>', update_exotex, name='update_exotex'),
     path('exercise_exotex_delete/<int:id>', delete_exotex, name='delete_exotex'), 
-
-    # path('exercise_exotex_archive/<int:id>', archive_exotex, name='archive_exotex'),
-    # path('exercise_exotex_unarchive/<int:id>', unarchive_exotex, name='unarchive_exotex'), 
-    # path('exercise_exotex_show/<int:id>', show_exotex, name='show_exotex'), 
+ 
 
     path('bibliotexs', bibliotexs, name='bibliotexs'),
     path('my_bibliotexs', my_bibliotexs, name='my_bibliotexs'),
+    path('actioner', actioner, name='actioner'),
+
+
+    path('my_bibliotex_archives', my_bibliotex_archives, name='my_bibliotex_archives'),
+
+
     path('exercise_bibliotex_create/<int:idf>', create_bibliotex , name='create_bibliotex'),
     path('exercise_bibliotex_update/<int:id>', update_bibliotex, name='update_bibliotex'),
     path('exercise_bibliotex_delete/<int:id>', delete_bibliotex, name='delete_bibliotex'), 
     path('exercise_bibliotex_peuplate/<int:id>', exercise_bibliotex_peuplate, name='exercise_bibliotex_peuplate'),
     path('exercise_bibliotex_show/<int:id>', show_bibliotex, name='show_bibliotex'),
-    # path('exercise_bibliotex_archive/<int:id>', archive_bibliotex, name='archive_bibliotex'),
-    # path('exercise_bibliotex_unarchive/<int:id>', unarchive_bibliotex, name='unarchive_bibliotex'), 
+
     path('real_time_bibliotex/<int:id>', real_time_bibliotex, name='real_time_bibliotex'),  
     path('unset_exotex_in_bibliotex/<int:idr>', unset_exotex_in_bibliotex, name='unset_exotex_in_bibliotex'),  
 

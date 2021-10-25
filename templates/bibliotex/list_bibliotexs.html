@@ -18,13 +18,15 @@
 
   
 {% block page_title %}
-    <span class="texfont">T<sub>E</sub>X</span>  <img src="{% static 'img/angle-right.png' %}"/> Mes BiblioTex <img src="{% static 'img/angle-right.png' %}"/> 
+    <span class="texfont">T<sub>E</sub>X</span>  <img src="{% static 'img/angle-right.png' %}"/> Mes biblioTex <img src="{% static 'img/angle-right.png' %}"/> 
 {% endblock %}
 
 
 {% block page_menu_right %}
+
+ <li><a href="{% url 'my_bibliotex_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Archives ({{ nb_archive }})</a></li> 
  
-    <a href="{% url 'create_bibliotex' 0 %}"  class="btn btn-new-violet" > Créer une BiblioTex </a> 
+    <a href="{% url 'create_bibliotex' 0 %}"  class="btn btn-new-violet" > Créer une biblioTex </a> 
  
 {% endblock %}
 
@@ -34,7 +36,7 @@
 
 
  
-
+<form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'> 
         <div class="row">    
             <div class="col-sm-12 col-md-12">
                 {% csrf_token %}
@@ -127,20 +129,20 @@
         </div>
 
  
-
+        {% block archive %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces quizz')"> 
+                <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces biblioTex')"> 
                     <i class="fa fa-archive"> </i>   Archiver la sélection
                 </button>
-                <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces quizz')"> 
+                <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces biblioTex')"> 
                     <i class="fa fa-trash"> </i>   Supprimer la sélection
                 </button>
          
                 <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
             </div>
         </div>
-
+        {% endblock %}
 
 
 

@@ -1,0 +1,32 @@
+{% extends 'bibliotex/list_bibliotexs.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block page_menu_right %}
+
+ <li><a href="{% url 'my_bibliotexs' %}"  class="no_button"> Mes BiblioTex</a></li> 
+ 
+ 
+{% endblock %}
+
+
+
+
+
+{% block archive %}
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <button class="btn btn-default" name="action" value="unarchive" onclick="return TestArchive('ces quizz')"> 
+            <i class="fa fa-archive"> </i>   Désarchiver la sélection
+        </button>
+        <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces quizz')"> 
+            <i class="fa fa-trash"> </i>   Supprimer la sélection
+        </button> 
+        <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+    </div>
+</div>
+{% endblock %}

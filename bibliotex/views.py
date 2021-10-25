@@ -231,7 +231,7 @@ def my_bibliotexs(request):
     dataset = teacher.teacher_bibliotexs
 
 
-    bibliotexs = dataset.filter(folders=None)
+    bibliotexs = dataset.filter(is_archive=0,folders=None)
     bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
 
@@ -246,13 +246,50 @@ def my_bibliotexs(request):
         bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
         list_folders.append(bibtexs_folders)
 
-    groups = teacher.has_groups()
-
+    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    is_archive = False
-    nba = teacher.teacher_quizz.filter(  is_archive=1).count()
-    return render(request, 'bibliotex/list_bibliotexs.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups, 'is_archive' : is_archive, 'nba' : nba  })
+ 
+    nb_archive = teacher.teacher_bibliotexs.filter(  is_archive=1).count()
+    return render(request, 'bibliotex/list_bibliotexs.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups,   'nb_archive' : nb_archive  })
+
+
+
+def my_bibliotex_archives(request):
+
+    request.session["folder_id"] = None
+    request.session["group_id"] = None
+    user = request.user
+    teacher = user.teacher
+    datas = all_levels(user, 0)
+
+    dataset = teacher.teacher_bibliotexs
+
+
+    bibliotexs = dataset.filter(is_archive=1,folders=None)
+    bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
+
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+ 
+    list_folders = list()
+    for folder in bibliotexs_folders :
+        bibtexs_folders = dict()
+        bibtexs_folders["folder"] = Folder.objects.get(pk=folder)
+        teacher_bibliotexs = dataset.filter(is_archive=1 , folders=folder)
+        bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
+        list_folders.append(bibtexs_folders)
+
+    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
+ 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
+    return render(request, 'bibliotex/list_bibliotexs_archives.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups  })
+
+
+
+
 
 
 
@@ -365,6 +402,43 @@ def show_bibliotex(request, id):
 
     return render(request, 'bibliotex/show_bibliotex.html', context )
 
+
+
+
+def actioner(request):
+
+    teacher = request.user.teacher 
+    idbs = request.POST.getlist("selected_bibliotexs")
+    if  request.POST.get("action") == "deleter" :  
+        for idb in idbs :
+            bibliotex = Bibliotex.objects.get(id=idb) 
+            bibliotex.coteachers.clear()
+            bibliotex.folders.clear()
+            bibliotex.groups.clear()
+            bibliotex.parcours.clear()
+            bibliotex.exotexs.clear()
+            bibliotex.students.clear()
+            bibliotex.levels.clear()
+            bibliotex.subjects.clear() 
+            bibliotex.delete()
+
+    elif  request.POST.get("action") == "archiver" :  
+        for idb in idbs :
+            bibliotex = Bibliotex.objects.get(id=idb) 
+            bibliotex.is_archive = 1
+            bibliotex.is_favorite = 0
+            bibliotex.save()
+
+ 
+  
+    else : 
+        for idb in idbs :
+            bibliotex = Bibliotex.objects.get(id=idb) 
+            bibliotex.is_archive = 0
+            bibliotex.is_favorite = 0
+            bibliotex.save()
+     
+    return redirect('my_bibliotexs')
 
 
 
