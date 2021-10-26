@@ -1,7 +1,8 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load item_tags %}
-           
+
+    
 
 <div  class="box box-widget widget-user-2 folder_sorter"  data-parcours_id ="{{folder.id}}"  
       style="cursor: move;{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover; {% endif %}background-color:{{folder.color }};">
@@ -230,6 +231,7 @@
                         </a>
                     </div> 
                     <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="#"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_quizz_exists   %} style="color:{{ folder.color }}" {% endif %}>
                             <i class="fa fa-fw fa-trophy"></i> <span class="label_icon">Quizz</span> 
                         </span>
                         <a href="{% url 'create_quizz_folder' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
