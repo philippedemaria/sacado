@@ -38,19 +38,35 @@ class ParcoursForm(forms.ModelForm):
 		super(ParcoursForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 
+ 
+
 		if teacher:
-			groups        = teacher.groups.all()
+
 			if teacher.teacher_group.filter(group_folders=folder) : 
 				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level, subject = group.subject)
 			else :
 				shared_groups = teacher.teacher_group.all()
-			if folder :
-				groups    = folder.groups.all()
-			if group :
-				if teacher.groups.filter(level=group.level,group_folders=folder) :
-					groups    = teacher.groups.filter(level=group.level,group_folders=folder)
-				else :
-					groups    = teacher.groups.filter(level=group.level)
+			
+			if folder and group :
+				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)				
+				groups      = folder.groups.filter(level=folder.level,group_folders=folder)
+ 
+			elif folder :
+
+				all_folders = teacher.teacher_folders.filter(level = folder.level, subject = folder.subject,is_trash=0)				
+				groups      = folder.groups.filter(level=folder.level,group_folders=folder)
+
+			elif group :
+				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)		
+				groups      = teacher.groups.filter(level=group.level )
+
+			else :
+				all_folders = teacher.teacher_folders.all()				
+				groups      = teacher.groups.all()
+
+
+			print(all_folders)
+
 
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
@@ -58,7 +74,7 @@ class ParcoursForm(forms.ModelForm):
 			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
 			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
 			self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
-
+			self.fields['folders'] = forms.ModelMultipleChoiceField(queryset=all_folders.order_by("level","title"), widget=forms.CheckboxSelectMultiple,  required=False)
 
 	def clean(self):
 		"""

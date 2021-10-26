@@ -21,9 +21,8 @@ urlpatterns = [
     path('my_bibliotexs', my_bibliotexs, name='my_bibliotexs'),
     path('actioner', actioner, name='actioner'),
 
-
+ 
     path('my_bibliotex_archives', my_bibliotex_archives, name='my_bibliotex_archives'),
-
 
     path('exercise_bibliotex_create/<int:idf>', create_bibliotex , name='create_bibliotex'),
     path('exercise_bibliotex_update/<int:id>', update_bibliotex, name='update_bibliotex'),
@@ -55,6 +54,7 @@ urlpatterns = [
     path('ajax_my_bibliotexs', ajax_my_bibliotexs, name='ajax_my_bibliotexs'),
     path('ajax_set_exotex_in_bibliotex', ajax_set_exotex_in_bibliotex, name='ajax_set_exotex_in_bibliotex'),
 
+    path('ajax_search_bibliotex', ajax_search_bibliotex, name='ajax_search_bibliotex'), 
 
     path('ajax_results_exotex', ajax_results_exotex, name='ajax_results_exotex'),
     path('ajax_print_exotex', ajax_print_exotex, name='ajax_print_exotex'),

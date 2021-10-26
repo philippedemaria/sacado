@@ -80,7 +80,7 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
 
                                     }
 
-                    
+
 
                     groups = data["groups"] ; 
                     $('#grplist').empty("");
@@ -117,29 +117,29 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
         });
 
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        url_ = "../../../tool/ajax_charge_parcours_without_folder" ;
+        url_ = "../../../tool/ajax_charge_folders" ;
         $.ajax(
             {
                 type: "POST",
                 dataType: "json",
                 traditional: true,
                 data: {
-                    'groups_ids': valeurs,                       
+                    'group_ids': valeurs,                       
                     csrfmiddlewaretoken: csrf_token
                 },
                 url : url_,
                 success: function (data) {
 
-                    parcours = data["parcours"] ; 
-                    $('#pclist').empty("");
+                    folders = data["folders"] ; 
+                    $('#flist').empty("");
 
-                    if (parcours.length >0)
-                    { for (let i = 0; i < parcours.length ; i++) {
+                    if (folders.length >0)
+                    { for (let i = 0; i < folders.length ; i++) {
                                 
-                                let parcours_id = parcours[i][0]; 
-                                let parcours_name =  parcours[i][1] ; 
+                                let folders_id = folders[i][0]; 
+                                let folders_name =  folders[i][1] ; 
 
-                                $('#pclist').append('<label for="cb'+Number(parcours_id)+'"><input type="checkbox" id="cb'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
+                                $('#flist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
                             }
                     }
 
@@ -148,19 +148,18 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
         )
     });
 
-        // récupère l'url de l'image dans le form d'un parcours pour l'utiliser dans la base de données
+
+   // récupère l'url de l'image dans le form d'un parcours pour l'utiliser dans la base de données
         $('body').on('click', '.selector_image_from_ajax' , function () {
 
                 let url_image = $(this).data("url_image");
 
-                console.log(url_image) ;
                 $('#this_image_selected').val(url_image);
 
                 $('.selector_image_from_ajax').addClass('opacity_selector_img');  
                 $(this).removeClass('opacity_selector_img'); 
 
             });
- 
  
     });
 });

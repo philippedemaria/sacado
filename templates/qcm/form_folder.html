@@ -26,18 +26,17 @@
 
 {% block page_title %}
  
-    <span style="color:{{ group.color }}"><i class="fa fa-folder-open sacado_color_text"></i> </span> 
+   <i class="fa fa-folder-open sacado_color_text"></i> 
  
 
       {% include 'qcm/breadcrumb.html' %}
- 
-    <small style="color : #3b9d26">  
+  
     {% if folder %}
         Configuration du dossier
     {% else %}
          Nouveau dossier   
     {% endif %}
-    </small>  
+ 
 {% endblock %}
 
 
@@ -89,28 +88,27 @@
                       </div>
                 </div>
             </div> 
-            {% if not group %}  
-            <div class="row">          
-                <div class="col-sm-12 col-md-6" >
-                    <div class="form-group">
-                        <label> Enseignement :</label><br/>
-                        {{ form.subject |add_class:"form-control select2" }}
-                        {{ form.subject.errors }}
-                    </div>
-                </div>    
-                <div class="col-sm-12 col-md-6" >
-                    <div class="form-group">
-                        <label> Niveau :</label><br/>
-                        {{ form.level |add_class:"form-control select2" }}
-                        {{ form.level.errors }}
-                    </div>
+
+            {% if  group %}                          
+                {{ form.subject.as_hidden}}
+                {{ form.level.as_hidden  }}
+            {% else %}                
+                <div class="row">          
+                    <div class="col-sm-12 col-md-6" >
+                        <div class="form-group">
+                            <label> Enseignement :</label><br/>
+                            {{ form.subject |add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                        </div>
+                    </div>    
+                    <div class="col-sm-12 col-md-6" >
+                        <div class="form-group">
+                            <label> Niveau :</label><br/>
+                            {{ form.level |add_class:"form-control select2" }}
+                            {{ form.level.errors }}
+                        </div>
+                    </div> 
                 </div> 
-            </div> 
-            {% else %}
-
-                        {{ form.subject.as_hidden}}
-                        {{ form.level.as_hidden  }}
-
             {% endif %}
 
 
@@ -121,7 +119,7 @@
                     <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span> 
-                    {% if quizz %}
+                    {% if group or folder %}
                         {{ form.groups  }}
                         {{ form.groups.errors }}
                     {% else %}
@@ -132,20 +130,20 @@
                                 </div>
                             </div>
                         {% else %} 
-                            <div class="form-group">         
+                            <div class="form-group" id="grplist">         
                                 <label>Affecter à mes groupes :</label> {% if group %}
                                         <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                             <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
                                         </span> {% endif %}
-                                {{ form.groups  }}
-                                {{ form.groups.errors }}
+                                    {{ form.groups  }}
+                                    {{ form.groups.errors }}
                             </div>
                         {% endif %} 
                     {% endif %}
                 </div>  
-                {% if quizz %}
+                {% if group or folder %}
                 <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
-                    <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span> 
                         {{ form.parcours|add_class:"select_all_parcours" }}
@@ -153,7 +151,7 @@
                 </div>
                 {% else %}
                 <div class="col-sm-12 col-md-6">
-                    <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span> 
                     <div class="form-group" id="pclist">

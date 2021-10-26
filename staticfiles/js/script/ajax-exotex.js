@@ -3,11 +3,11 @@ define(['jquery', 'bootstrap'], function ($) {
         console.log("chargement JS ajax-exercise.js OK");
 
 
- 
+
         $('[type=checkbox]').prop('checked', false);            
 
         $('#id_is_publish').prop('checked', true);
-  
+        $('#id_is_share').prop('checked', true);  
         $("#publication_div").hide();
  
 

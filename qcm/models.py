@@ -864,7 +864,7 @@ class Folder(models.Model):
     teacher = models.ForeignKey(Teacher, related_name="teacher_folders", on_delete=models.CASCADE, default='', blank=True, editable=False)
     coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_folders",  verbose_name="Enseignant en co-animation")
 
-    groups = models.ManyToManyField(Group,  blank=True, null=True, related_name="group_folders" )
+    groups = models.ManyToManyField(Group,  blank=True, related_name="group_folders" )
 
     students = models.ManyToManyField(Student, blank=True, related_name='folders', editable=False)
     is_share = models.BooleanField(default=0, verbose_name="Mutualisé ?")
@@ -891,13 +891,7 @@ class Folder(models.Model):
 
 
     def __str__(self):
-        grp = ""
-        for g in self.groups.all():
-            grp += g.name+" - "
-        if grp == "" :
-            return "{}".format(self.title)
-        else :
-            return "{} > {}".format(grp, self.title)
+        return "{}".format(self.title)
 
  
 

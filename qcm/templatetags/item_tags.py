@@ -241,7 +241,7 @@ def get_percent_done(obj,parcours):
 
 
 @register.simple_tag  
-def get_is_selected(obj,parcours): 
+def get_is_selected(obj,parcours): # Utiliser aussi pour bibliotex avec parcours = bibliotex_id
     """
     retourne si un exercice est choisi dans un parcours.
     """

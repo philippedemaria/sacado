@@ -232,7 +232,7 @@ th.sorting, th.sorting_asc{
   font-weight: normal;
 }
 
-.table td{
+.table_list td{
   color: #998fa6 ; /* #AAA; */
 }
 
@@ -2209,12 +2209,12 @@ width:100%;
 }
 
 /* On mouse-over, add a grey background color */
-.container_checkbox:hover input ~ .checkmark, .container_checkbox:hover input ~  .check_exotex {
-  background-color: #ccc;
+.container_checkbox:hover input ~ .checkmark  {
+  background-color: #00a65a;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container_checkbox input:checked ~ .checkmark, .container_checkbox:checked input ~  .check_exotex  {
+.container_checkbox input:checked ~ .checkmark    {
   background-color: #00a65a;
 }
 
@@ -2226,12 +2226,12 @@ width:100%;
 }
 
 /* Show the checkmark when checked */
-.container_checkbox input:checked ~ .checkmark:after , .container_checkbox input:checked ~ .check_exotex:after {
+.container_checkbox input:checked ~ .checkmark:after  {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.container_checkbox .checkmark:after , .container_checkbox .check_exotex:after  {
+.container_checkbox .checkmark:after  {
   left: 8px;
   top: 5px;
   width: 7px;

@@ -3,16 +3,31 @@
 {% load static %}
 {% load item_tags %}
 
+<div class="col-sm-12 col-md-12">
+    <h1 class="thin"> 
+    	Légende :
+        <span style="font-variant:small-caps; font-size: 20px;margin-right: 5px;color:#5d4391" ><i class="fa fa-eye"></i>  Voir la biblioTex </span>
+        <span style="font-variant:small-caps; font-size: 20px;margin-right: 5px;color:#5d4391" > <i class="fa fa-clone"></i> Cloner la biblioTex </span>     	
+ 
+    </h1>
+</div>
+
+ 
 
 
+
+<div class="col-sm-12 col-md-12">
 {% for bibliotex in bibliotexs %}
 
     {% include 'bibliotex/bibliotex_tag.html' %}
 
-{% endfor %}
+{% empty %}
+    <div class="alert alert-danger"> Aucun résultat de votre recherche  </div> 
 
+{% endfor %} 
+</div>
 
-<script>
+<script type="text/javascript"> 
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 </script>
  

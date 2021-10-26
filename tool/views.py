@@ -612,6 +612,8 @@ def ajax_charge_folders(request):
     data = {} 
     group_ids = request.POST.getlist('group_ids', None)
 
+
+
     if len(group_ids) :
         fldrs = set()
         for group_id in group_ids :

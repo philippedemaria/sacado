@@ -23,9 +23,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-
-
-
         $('.select_all').on('change', function (event) {
 
             var valeurs = [];
@@ -86,7 +83,7 @@ define(['jquery', 'bootstrap'], function ($) {
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            url_ = "../ajax_chargethemes" ;
+            url_ = "ajax_chargethemes" ;
 
             $.ajax(
                 {

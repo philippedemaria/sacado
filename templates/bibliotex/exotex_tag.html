@@ -2,23 +2,27 @@
 {% load widget_tweaks %}
 {% load item_tags %}
            
- 
-<div class="exotex container_checkbox">
+{%  get_is_selected  exotex  bibliotex as  is_selected %} 
+<div class="exotex">
 
     <div>
-        <label>
+        <label class="container_checkbox">
 
-            <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex_id}}" class="selector_exotex" 
-                   id="selected_exotex{{ exotex.id }}"  data-statut="{% if exotex_is_selected %}True{% else  %}False{% endif  %}" {% if exotex_is_selected %}checked{% endif  %}/>
-            <span class="check_exotex"></span>
-            {{ exotex.title }} 
+            <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex.id}}" class="selector_exotex" name="exotexs"
+                   id="selected_exotex{{ exotex.id }}"  data-statut="{{ is_selected }}" {% if is_selected %}checked{% endif  %}/>
+            <span class="checkmark" ></span>
+
+            <span class="container_checkbox_title">{{ exotex.title }} </span>
+
+            <small class="pull-right">
+                {% for s in exotex.skills.all %}
+                    {{ s.name }}.
+                {% endfor %}
+            </small>
+
         </label> 
-        <small class="pull-right">
-            {% for s in exotex.skills.all %}
-                {{ s.name }}.
-            {% endfor %}
-        </small>
     </div>
+
     <div class="consigne fontsize12">
         {{ exotex.knowledge.name }} {% if exotex.knowledges.all|length > 0 %}<br/>{% endif %}
         {% for k in exotex.knowledges.all %}
@@ -27,5 +31,6 @@
     </div>
     {{ exotex.content }}
 
-
 </div>
+ 
+ 

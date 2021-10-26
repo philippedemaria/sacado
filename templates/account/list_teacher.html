@@ -65,7 +65,7 @@
 
                                     {% if request.user.is_superuser %}
                                         <a href="{% url 'delete_teacher' teacher.id %}" class="pull-right edit" onclick="return TestDelete('cet enseignant')"><i class="fa fa-trash"></i></a>
-                                        <a href="{% url 'init_password_teacher' teacher.id %}" class="pull-right edit" title="Ré initialise le mot de passe"><i class="fa fa-gavel"></i></a> 
+                                        <a href="{% url 'init_password_teacher' teacher.id %}" class="pull-right edit" title="Ré initialise le mot de passe avec envoi d'email"><i class="fa fa-gavel"></i></a> 
                                         <a href="{% url 'get_the_teacher_profile' teacher.id %}" class="pull-right edit" title="Prend le profil"><i class="fa fa-wrench"></i></a> 
 
                                     {% endif %}

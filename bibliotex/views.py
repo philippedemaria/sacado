@@ -216,7 +216,8 @@ def ajax_action_exotex(request, id):
 def bibliotexs(request):
  
     bibliotexs = Bibliotex.objects.all()
-    return render(request, 'bibliotex/list_bibliotexs.html', {'bibliotexs': bibliotexs,  })
+    teacher = request.user.teacher
+    return render(request, 'bibliotex/all_bibliotexs.html', {'bibliotexs': bibliotexs,'teacher': teacher,   })
 
 
  
@@ -289,10 +290,6 @@ def my_bibliotex_archives(request):
 
 
 
-
-
-
-
 def ajax_my_bibliotexs(request):
 
     level_id = request.POST.get("level_id")
@@ -308,9 +305,75 @@ def ajax_my_bibliotexs(request):
 
     return JsonResponse(data)
 
+
+
  
 
-@user_passes_test(user_is_creator)
+def ajax_search_bibliotex(request):
+
+    teacher = request.user.teacher
+    data = {}
+ 
+    level_id = request.POST.get('level_id',0)
+    subject_id = request.POST.get('subject_id',None)
+
+    teacher_id = get_teacher_id_by_subject_id(subject_id)
+
+    if request.user.is_superuser :
+        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
+    else :
+        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(exotexs = None ,teacher=teacher).order_by('level','ranking')
+
+    keywords = request.POST.get('keywords',None)
+
+    if int(level_id) > 0 :
+        level = Level.objects.get(pk=int(level_id))
+        theme_ids = request.POST.getlist('theme_id',[])
+
+        if len(theme_ids) > 0 :
+
+            if theme_ids[0] != '' :
+                themes_tab = []
+
+                for theme_id in theme_ids :
+                    themes_tab.append(theme_id) 
+
+                if keywords :
+                    bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 
+                                                        exotexs__knowledge__theme__in = themes_tab,  teacher__user__school = teacher.user.school,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                else :
+                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                            exotexs__knowledge__theme__in = themes_tab, levels =level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    
+            else :
+                if keywords :            
+                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exotexs__content__icontains = keywords),is_share = 1,  
+                                                            teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+
+                else :
+                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                            levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+
+        else :
+            if keywords:
+                bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exotexs__content__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,
+                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+            else :
+                bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+    else :
+        if keywords:
+            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1 ,  exotexs__content__icontains = keywords ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+        else :
+            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+
+    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
+ 
+    return JsonResponse(data)
+
+
+ 
+
 def create_bibliotex(request,idf=0):
 
 
@@ -358,8 +421,14 @@ def update_bibliotex(request, id):
 
     teacher = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)
+    folder_id = request.session.get("folder_id",None)
+    if folder_id :
+        folder = Folder.objects.get(pk = folder_id)
+    else :
+        folder = None
 
-    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = None)
+
+    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = folder )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -565,7 +634,7 @@ def ajax_level_exotex(request):
 
 
 
-    base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id=teacher.user.id), is_share = 1).exclude(bibliotexs=bibliotex) 
+    base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id=teacher.user.id)).exclude(bibliotexs=bibliotex) 
 
     if theme_ids :  
 
@@ -604,6 +673,7 @@ def ajax_level_exotex(request):
 
         else :
             exotexs = base
+
 
     data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
 
@@ -667,6 +737,7 @@ def ajax_set_exotex_in_bibliotex(request):
     knowledges  = exotex.knowledges.all()
 
     statut = request.POST.get("statut") 
+
     data = {}    
     stds     = bibliotex.students.all()
 

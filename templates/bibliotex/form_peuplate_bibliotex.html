@@ -10,15 +10,15 @@
  
 
     <script>
-        require(['script/ajax-bibliotex']);
+        require(['script/ajax-bibliotex-peuplate']);
     </script> 
 
 {% endblock %} 
 
 
 {% block page_title %}
-    <img src="{% static 'img/tex.png' %}" width="25px">  <img src="{% static 'img/angle-right.png' %}" width="25px"> 
-    {{ bibliotex }}
+    <img src="{% static 'img/tex.png' %}" width="25px">  <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
+    {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
     <small>Sélection des exercices </small>
 {% endblock %}
 
@@ -41,10 +41,9 @@
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %}
             <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
-            <div class="row">
+            <div class="row search_bar">
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        <label>Enseignements</label>
                         <select id="id_subject" name="subject" class="form-control select2">
                             {% for s in teacher.subjects.all %}
                                 <option value="{{s.id}}">{{ s.name }}</option>
@@ -57,7 +56,6 @@
 
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        <label>Niveaux des exercices</label>
                         <select id="id_level" name="level" class="form-control select2" >
                             <option value=" ">Choisir un niveau</option>
                             {% for l in levels %}
@@ -72,7 +70,6 @@
 
                 <div class="col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
-                        <label>Thèmes </label> <span style="font-size:12px"><em>choisir un niveau puis un ou plusieurs thèmes ci-dessous.</em></span>
                         <select id="id_theme" name="theme" class="form-control select2" multiple>
                         </select>
                     </div>
@@ -81,9 +78,8 @@
 
                 <div class="col-sm-9 col-md-3 col-lg-3">
                     <div class="form-group">
-                        <label>Compétences </label>
                         <select id="id_skill" name="skill" class="form-control select2">
-                                <option value="">---------------------</option>
+                                <option value="">Choisir une compétence</option>
                             {% for s in skills %}
                                 <option value="{{ s.id }}">{{ s.name }}</option>
                             {% endfor %}
@@ -93,22 +89,31 @@
 
                 <div class="col-sm-3 col-md-1 col-lg-1">
                     <div class="form-group">
-                        <label>Mot_clé </label>
-                        <input name="keyword" id="keyword" class="form-control" />
+                        <input name="keyword" id="keyword" class="form-control" placeholder="Mot clé" />
                     </div>
                 </div>
             </div> 
+
+
+
+
+
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div id="loader">
                     </div>
                     <div id="content_exercises" class="list_choice"> 
                         {% for relationtex in relationtexs %}
-                            {% include 'bibliotex/relationtex_tag.html' %}
+                            {% with exotex=relationtex.exotex  %}
+                            {% include 'bibliotex/exotex_tag.html' %}
+                            {% endwith %}
                         {% endfor %}
                     </div>
                 </div>
             </div> 
+
+
+
         </form>
     </div>
 </section>  

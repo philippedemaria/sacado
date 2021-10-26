@@ -12,7 +12,7 @@
     {% endif %}
 
     <script>
-        require(['script/ajax-parcours']);
+        require(['script/ajax-parcours-create']);
     </script> 
 
     {% block require_complement %}
@@ -75,45 +75,8 @@
                           <span class="input-group-addon"><i></i></span>
                       </div>
                 </div>
-
- 
-                <div class="col-sm-12  col-md-6">
-                    <div class="form-group">         
-                        <label>Affecter à mes groupes :</label> {% if group %}
-                                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
-                                </span> {% endif %}
-                        {{ form.groups|add_class:"select_all" }}
-                        {{ form.groups.errors }}
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-6">
-                    <label>Inclure dans un dossier</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                                </span> 
-                    <div class="form-group" id="cblist">
-                         <div class="alert alert-warning">
-                            <p style="font-size:12px">Choisir au moins un groupe.</p>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="col-sm-12  col-md-12">
-                    <div class="form-group">  
-                        <div class="alert alert-warning">
-                            <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.</p>
-                            <p style="font-size:12px"><i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le parcours créé.</p>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
-        </div>
-        <div class="col-sm-12 col-md-4">
+            <div class="row">
                 {% if group_id %}
                         {{ form.subject.as_hidden}}
                         {{ form.level.as_hidden  }}
@@ -136,9 +99,72 @@
                     </div>
                 </div> 
                 {% endif %}
-                <div class="col-sm-12 col-md-12">
-                    {% include 'qcm/insert_vignettes.html' %}
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
+                    <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                    </span> 
+                    {% if parcours or group %}
+                        {{ form.groups|add_class:"select_all"  }}
+                        {{ form.groups.errors }}
+                    {% else %}
+                        {% if teacher.nb_boolean_multi_subjects %}
+                            <div class="form-group" id="grplist">
+                                 <div class="alert alert-warning">
+                                    <p style="font-size:12px">Choisir au moins un enseignement et un niveau.</p>
+                                </div>
+                            </div>
+                        {% else %} 
+                            <div class="form-group">         
+                                <label>Affecter à mes groupes :</label> {% if group %}
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                            <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                        </span> {% endif %}
+                                {{ form.groups  }}
+                                {{ form.groups.errors }}
+                            </div>
+                        {% endif %} 
+                    {% endif %}
+                </div>  
+                {% if parcours or group  or folder %}
+                <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                    <label>Associer aux dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                    </span> 
+                    <div class="form-group" id="flist">
+                        {{ form.folders|add_class:"select_all_parcours" }}
+                        {{ form.folders.errors }} 
+                    </div>
                 </div>
+                {% else %}
+                <div class="col-sm-12 col-md-6">
+                    <label>Associer aux dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                    </span> 
+                    <div class="form-group" id="flist">
+                         <div class="alert alert-warning">
+                            <p style="font-size:12px">Choisir au moins un groupe.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-sm-12  col-md-12">
+                    <div class="form-group">  
+                        <div class="alert alert-warning">
+                            <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.</p>
+                            <p style="font-size:12px"><i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le parcours créé.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-12">
+                {% include 'qcm/insert_vignettes.html' %}
+            </div>
         </div>
         <div class="col-sm-12 col-md-4">                             
             <table class="table borderless">

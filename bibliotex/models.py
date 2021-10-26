@@ -61,7 +61,15 @@ class Exotex(models.Model):
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
 
- 
+
+
+    def is_selected(self,bibliotex):
+        test = False  
+        if self in bibliotex.exotexs.all() :
+            test = True
+        return test
+
+
 
 
 

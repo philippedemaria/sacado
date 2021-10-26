@@ -2022,7 +2022,6 @@ def all_attributions_for_this_nf(group_ids,nf) :
 ##########################################################################################################################
 def get_form(request, parcours, teacher ,  group_id, folder_id):
 
-
     if parcours :
         if folder_id and group_id :
             folder = Folder.objects.get(pk=folder_id)
@@ -2039,7 +2038,6 @@ def get_form(request, parcours, teacher ,  group_id, folder_id):
             form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None,   group = None   )
 
     else :
-
         if folder_id and group_id :
             folder = Folder.objects.get(pk=folder_id)
             group  = Group.objects.get(pk=group_id)
@@ -5086,16 +5084,17 @@ def ajax_charge_folders(request):
     data = {} 
     group_ids = request.POST.getlist('group_ids', None)
 
+ 
     if len(group_ids) :
-        grps = set()
+        flds = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
-            grps.update(group.group_folders.values_list("id","title").filter(is_trash=0))
+            flds.update(group.group_folders.values_list("id","title").filter(is_trash=0))
 
-        data['folders'] =  list( grps )
+        data['folders'] =  list( flds )
     else :
         data['folders'] =  []
-
+ 
     return JsonResponse(data)
 
  

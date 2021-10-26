@@ -9,139 +9,85 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
  
     <script>
-        require(['script/ajax-parcours']);
+        require(['script/ajax-bibliotex-search']);
     </script> 
 
 
 {% endblock %}
 
 {% block page_title %}
-
- 
-
-
-    <i class="fa fa-th"></i> {% include 'qcm/breadcrumb.html' %} <small>Parcours mutualisés</small>
-
-
-
+    <span class="texfont">T<sub>E</sub>X</span>  <img src="{% static 'img/angle-right.png' %}"/> BiblioTex mutualisées <img src="{% static 'img/angle-right.png' %}"/> 
 {% endblock %}
 
 
 {% block page_menu_right %}
-
-  <li> <a href="{% url 'index' %}"  class="btn btn-new" style="margin-right:5px" > Parcours par défaut</a></li>
-  {% if sacado_asso %}
-  <li> <a href="{% url 'all_parcourses' 0 %}" class="btn btn-new white" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
-  {% else %}
- <li> <a href="#" class="btn btn-new white no_sacado_asso" style="margin-right:5px;background-color: #007bff; color:#FFF!important; "> Parcours mutualisés</a></li>
-  {% endif %}
-  <li> <a href="{% url 'create_parcours' 0 %}"  class="btn btn-new" > Nouveau parcours</a> </li>  
+     <li> <a href="{% url 'my_bibliotexs' %}"   class="btn btn-new-violet"> Mes biblioTex</a> </li>  
 {% endblock %}
 
 
 
 {% block body  %}  
 <section class="content_main"> 
-    <form method="POST"> 
-    {% csrf_token %}
-    <div class="row alert search_bar" >
- 
-        <div class="col-sm-12 col-md-3 col-lg-3">
-            <div class="form-group">
-                <select id="id_subject" name="subject" class="form-control select2">
-                    {% for s in teacher.subjects.all %}
-                        <option value="{{s.id}}">{{ s.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-10 col-md-3 col-lg-2">
-            <div class="form-group">
-                <select id="level_id" name="level" class="form-control select2" >
-                    <option value=" ">Choisir un niveau</option>
-                    {% for l in teacher.levels.all %}
-                        <option value="{{l.id}}">{{ l.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-2 col-md-1 col-lg-1">
-            <div class="form-group" id="loading">
-            </div>
-        </div>
-
-        <div class="col-sm-10 col-md-3 col-lg-4">
-            <div class="form-group">
-                <select id="thm_id" name="theme" class="form-control select2" multiple>
-                    <option value=" ">Choisir un niveau puis un thème</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-
-
+    <form action="" method="POST" enctype='multipart/form-data'> 
+        {% csrf_token %}
+        <div class="row alert search_bar" >
      
-        {% if inside %}    
-                <table class="table table-bordered table-striped table-hover standard_tab_sort"  style="width:100%">
-                      <thead>
-                          <tr>
-                            <th style="width:290px">Titre</th>   
-                            <th>Thèmes  </th>                                        
-                            <th>Niveau</th> 
-                            <th  style="width:150px">Auteur</th> 
-                          </tr>
-                      </thead>
-                      <tbody id="parcours_details">
-                            {% for parcours in parcourses %}
-                            <tr> 
-                                <td>
-                                   <a href="{% url 'show_parcours_visual'  parcours.id %}" class="listing">{{ parcours.title }} 
-                                    <div><small><small>
-                                        [{{ parcours.exercises.count }} exercice{{ parcours.exercises.count|pluralize }}]
-                                        [{{ parcours.course.count }} cours]
-                                    </small> </small> </div>
-                                    </a>
-                                </td>
-                                <td style="font-size:10px">
-                                    {% for data in parcours.get_themes   %} 
-                                    <span class="open_details btn btn-default" style="margin:2px">{{ data.theme }} 
-                                        <div class="details_exos">
-                                                <span style="color:#444">{{ data.annoncement|cleanhtml|truncatechars:76  }}</span><br/>
-                                            {% if not forloop.last %} <br/>{% endif %}
-                                        </div>
-                                    </span>
-                                    {% endfor %}
-                                </td>
-                                <td> 
-                                    {% for e in parcours.exercises_only|dictsort:"level.name" %}
-                                        {% ifchanged e.level.name %} 
-                                            <small>{{ e.level.name }}</small> 
-                                        {% endifchanged %} 
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    {% if parcours.author.user.is_superuser %} SACADO {% else %}{{ parcours.author.user.get_full_name|truncatechars:20 }} {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr> 
-                                <td>
-                                   Vous n'avez pas créé de parcours personnalisés et utilisez les parcours prédéfinis.
-                                </td>
-                                <td></td><td></td><td></td>
-                            </tr>
-                            {% endfor %}
-                      </tbody>
-                </table>
-        {% else %} 
-
-            <div class="alert alert-danger">      
-                <i class="fa fa-warning"></i> Pour récupérer un parcours mutualisé, vous devez souscrire à la version établisssement.
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <div class="form-group">
+                    <select id="id_subject" name="subject" class="form-control select2">
+                        {% for s in teacher.subjects.all %}
+                            <option value="{{s.id}}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-10 col-md-3 col-lg-2">
+                <div class="form-group">
+                    <select id="id_level" name="level" class="form-control select2" >
+                        <option value=" ">Choisir un niveau</option>
+                        {% for l in teacher.levels.all %}
+                            <option value="{{l.id}}">{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-1 col-lg-1">
+                <div class="form-group" id="loading">
+                </div>
             </div>
 
+            <div class="col-sm-10 col-md-3 col-lg-4">
+                <div class="form-group">
+                    <select id="id_theme" name="theme" class="form-control select2" multiple>
+                        <option value=" ">Choisir un niveau puis un thème</option>
+                    </select>
+                </div>
+            </div>
 
-        {% endif %}  
+            <div class="col-sm-12 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" id="bibliotex_details">
+ 
+
+            <div class="col-sm-12 col-md-12">
+ 
+                <div style="height:50px"></div> 
+                Pour trouver des biblioTex mutualisées, vous devez :                <div style="height:20px"></div>
+                <ol>Sélectionner une matière</ol>
+                <ol>Sélectionner un niveau</ol>
+                <ol>Sélectionner un thème</ol> 
+                <ol>ou choisir un mot clé</ol>
+            </div>
+
+        </div>
+
+  
     </form>  
 </section>
 {% endblock  %}   
