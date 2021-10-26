@@ -29,11 +29,11 @@
 
 {% block body %}
 <form action="" method="POST" enctype='multipart/form-data'> 
-<section class="content_container">
-
+<section class="content_container"  id="bibliotex_sortable">
+<input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
 {% csrf_token %}
 {% for r in relationtexs %} 
-    <div class="row" style="margin-bottom:20px">
+    <div class="row relationtex_sorter" style="margin-bottom:20px" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         <div class="col-sm-1 col-md-1 col-lg-1" >  
  
             <li class="relative_div_exotex">  
@@ -55,7 +55,7 @@
         </div>   
         <div class="col-sm-11 col-md-11 col-lg-11" >    
             <div> 
-                <span class="exotex_show_exercice">Exercice {{ forloop.counter}}.</span> <label> {{ r.exotex.title }}</label>
+                <span class="exotex_show_exercice"><i class="fa fa-sort"></i> Exercice {{ forloop.counter}}.</span> <label> {{ r.exotex.title }}</label>
                     <small class="pull-right">
                         {% for s in r.exotex.skills.all %}
                             {{ s.name }}.
@@ -70,7 +70,6 @@
             </div>
             {{ r.exotex.content }}
         </div>  
-   
     </div>
 {% endfor %} 
 </form>

@@ -15,7 +15,7 @@
     </span>
 </td> 
 <td>
-    {{ bibliotex.title }}
+    <a href="{% url 'show_bibliotex' bibliotex.id %}" title="Voir la biblioTex" >{{ bibliotex.title }}</a>
     <br/> 
     {% with nbe=bibliotex.exotexs.count %}    
         {{ nbe }} exercice{{ nbe|pluralize }}

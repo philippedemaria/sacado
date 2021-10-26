@@ -65,9 +65,6 @@ class ParcoursForm(forms.ModelForm):
 				groups      = teacher.groups.all()
 
 
-			print(all_folders)
-
-
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
  

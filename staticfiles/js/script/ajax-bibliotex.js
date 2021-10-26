@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], function ($) {
+define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-bibiotex.js OK");
 
@@ -719,6 +719,51 @@ define(['jquery', 'bootstrap'], function ($) {
         )
     });
 
+        function sorter_exotexs($div_class , $exercise_class ) {
+
+                $($div_class).sortable({
+                    cursor: "move",
+                    swap: true,    
+                    animation: 150,
+                    distance: 10,
+                    revert: true,
+                    tolerance: "pointer" , 
+                    start: function( event, ui ) { 
+                           $(ui.item).css("box-shadow", "10px 5px 10px gray"); 
+                       },
+                    stop: function (event, ui) {
+
+                        let bibliotex = $("#bibliotex").val();
+                        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                        var relationtexs = [];
+ 
+
+                        $($exercise_class).each(function() {
+
+                            let relationtex_id = $(this).data("relationtex_id");
+                            relationtexs.push(relationtex_id);
+ 
+                        });
+
+ 
+                        $(ui.item).css("box-shadow", "0px 0px 0px transparent"); 
+
+                        console.log( 'relationtexs  ' + relationtexs +  '  bibliotex' + bibliotex )
+
+
+                        $.ajax({
+                                data:   { 'relationtexs': relationtexs ,  'bibliotex' : bibliotex , csrfmiddlewaretoken: csrf_token  } ,    
+                                type: "POST",
+                                dataType: "json",                
+                                traditional: true,
+                                url: "../ajax_sort_exotexs_in_bibliotex" 
+                            }); 
+                        }
+                    });
+                }
+
+    
+        sorter_exotexs('#bibliotex_sortable' , ".relationtex_sorter");
 
 });
 

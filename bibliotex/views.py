@@ -895,15 +895,38 @@ def ajax_publish_list_bibliotex(request):
 ############################################################################################################
 ############################################################################################################
 
+def ajax_sort_exotexs_in_bibliotex(request):
+
+    data = {}
+    bibliotex_id = request.POST.get('bibliotex_id', None)
+    relationtexs = request.POST.getlist('relationtexs', None)
+    i=0
+    for relationtex in relationtexs :
+        Relationtex.objects.filter(pk = relationtex ).update(ranking=i)
+        i+=1
+    return JsonResponse(data)
+
+
+
+
+
+############################################################################################################
+############################################################################################################
+#################  Résultats
+############################################################################################################
+############################################################################################################
+
 def ajax_results_exotex(request):
 
     data = {}
     relationtex_id = request.POST.get('relationtex_id', None)
     relationtex = Relationtex.objects.get(pk=relationtex_id)
     students = relationtex.bibliotex.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
-    std_r = relationtex.students.all()
+    std_r = relationtex.students.order_by("user__last_name")
     if std_r.count() :
-        students = std_b.intersection(std_r).order_by("user__last_name")
+        students = [ s for s in std_r if s in students]
+
+
 
     context = { 'students': students , 'bibliotex': relationtex.bibliotex , "exotex" : relationtex.exotex  }
     data["html"] = render_to_string('bibliotex/ajax_results_exercise.html', context )

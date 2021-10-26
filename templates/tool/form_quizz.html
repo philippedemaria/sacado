@@ -20,7 +20,11 @@
  
 
 {% block page_title %}
-    Outils péda. <img src="{% static 'img/angle-right.png' %}"/>  <small>Quizz</small>
+    <span class="sacado_color_text"><i class="fa fa-tasks"></i></span>
+    {% if group  %}<span style="color:{{ group.color }}"> {{ group.name }}</span>  <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
+    {% if folder %}<span style="color:{{ folder.color }}"> {{ folder.title }}</span> <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
+    Quizz
+
 {% endblock %}
 
 
@@ -75,78 +79,61 @@
                     <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
                         <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                        </span> 
-	                    {% if quizz %}
-                            {{ form.groups  }}
+                        </span>
+                        <div class="form-group" id="grplist">                          
+                        {% if quizz or group %} 
+                            {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
-	                    {% else %}
-		                	{% if teacher.nb_boolean_multi_subjects %}
-	 	                        <div class="form-group" id="grplist">
-		                             <div class="alert alert-warning">
-		                                <p style="font-size:12px">Choisir au moins un enseignement.</p>
-		                            </div>
-		                        </div>
-							{% else %} 
-		                        <div class="form-group">         
-		                            <label>Affecter à mes groupes :</label> {% if group %}
-		                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-		                                        <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
-		                                    </span> {% endif %}
-		                            {{ form.groups  }}
-		                            {{ form.groups.errors }}
-		                        </div>
-							{% endif %} 
-                    	{% endif %}
+                        {% elif teacher.nb_boolean_multi_subjects %}
+                            <div class="alert alert-warning">
+                                <p style="font-size:12px">Choisir au moins un enseignement.</p>
+                            </div>
+                        {% else %} 
+                            {{ form.groups|add_class:"select_all"   }}
+                            {{ form.groups.errors }}
+                        {% endif %}
+                        </div>
 	                </div>	
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">  
                             <div class="alert alert-warning">
                                 <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le quizz est partagé entre ces groupes.</p>
+                                <p style="font-size:12px"><img src="{% static 'img/conseil.png' %}" width="25px"/> Cocher, décocher pour affiner les choix.</p>
                             </div>
                         </div>
                     </div> 
                 </div>
                 <div class="row">
-                    {% if quizz %}
                     <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
-                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                        </span> 
-                            {{ form.folders|add_class:"select_all" }}
-                            {{ form.folders.errors }}
-                    </div>
-                    {% else %}
-                    <div class="col-sm-12 col-md-6">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                         <div class="form-group" id="cblist">
-                             <div class="alert alert-warning">
-                                <p style="font-size:12px">Choisir au moins un groupe.</p>
-                            </div>
+                            {% if quizz or folder %}
+                                {{ form.folders|add_class:"select_folders" }}
+                                {{ form.folders.errors }}
+                            {% else %}
+                                 <div class="alert alert-warning">
+                                    <p style="font-size:12px">Choisir au moins un groupe.</p>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% endif %}
-                    {% if quizz %}
                     <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
-                        <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                        </span> 
-                            {{ form.parcours|add_class:"select_all_parcours" }}
-                            {{ form.parcours.errors }} 
-                    </div>
-                    {% else %}
-                    <div class="col-sm-12 col-md-6">
-                        <label>Associer aux parcours proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                         <div class="form-group" id="pclist">
-                             <div class="alert alert-warning">
-                                <p style="font-size:12px">Choisir au moins un dossier.</p>
-                            </div>
+                            {% if quizz or folder  %}
+                                    {{ form.parcours|add_class:"select_all_parcours" }}
+                                    {{ form.parcours.errors }} 
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <p style="font-size:12px">Choisir au moins un dossier.</p>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% endif %}
                 </div>
             </div>
 
@@ -225,15 +212,6 @@
 				                    </td>
 				                </tr>
 				            {% endif %}
-                            <tr>
-                                <td>{{ form.is_archive.label_tag }}
-                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                        <div class="helper_tip_text" >Archive le fichier.</div>
-                                    </span>
-                                </td>
-                                <td>{{ form.is_archive |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                <td>{{ form.is_archive.errors }}</td>
-                            </tr>
                             <tr>
                                 <td>{{ form.stop.label_tag }} 
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>

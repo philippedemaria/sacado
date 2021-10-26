@@ -67,4 +67,8 @@ urlpatterns = [
     path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'), 
  
 
+
+    path('ajax_sort_exotexs_in_bibliotex', ajax_sort_exotexs_in_bibliotex, name='ajax_sort_exotexs_in_bibliotex'), 
+ 
+
  ]

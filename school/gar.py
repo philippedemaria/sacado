@@ -45,15 +45,15 @@ def create_abonnement_gar(today,school,accounting_id,user):
     timestamp = datetime.timestamp(now)
 
     return True 
+    #  A décommenter
 
-    # En atente de la clé pem
     # id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"+timestamp 
     # host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
     # directory = '/home/sacado/'
 
     # header  = "{ 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' }"
     # body      = web_abonnement_xml(abonnement,id_abonnement, True) 
-    # r         = requests.put(host, data=body, headers=header, cert=(directory + 'mon_fichier.pem', directory + 'votre.key'))
+    # r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PFPART-2021.pem', directory + 'sacado.key'))
 
     # if r.status_code == 201 or r.status_code==200 :
     #     return True 

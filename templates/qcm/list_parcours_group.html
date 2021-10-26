@@ -12,7 +12,12 @@
         require(['script/ajax-parcours']);
     </script> 
 
+<style>
+.extend_parcours .col-xs-4, .extend_parcours .col-sm-4, .extend_parcours .col-md-4, .extend_parcours .col-lg-4 {
+    padding-right: 0px!important;
+}
 
+</style>    
 {% endblock %}
 
  
@@ -27,12 +32,9 @@
     {% include 'group/submenu_group.html' %}
 
     {% if role %}
-        {% include 'qcm/submenu_creation_evaluation.html' %}
-
-        {% include 'qcm/submenu_creation_new_parcours.html' %}
- 
-        {% include 'qcm/submenu_creation_folder.html' %}
+        {% include 'qcm/submenu_creation.html' %}
     {% endif %}
+    
 {% endblock %}
 
 {% block css_files %}

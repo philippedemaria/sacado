@@ -340,8 +340,9 @@ define(['jquery','bootstrap'], function ($) {
 
 
         $(".subparcours_show_close").click(function(){
-            value =  $(this).attr("data-parcours_id"); 
-            $('#subparcours_show'+value).toggle(500);
+            value =  $(this).data("close"); 
+            name =  $(this).data("name"); 
+            $('#'+name+value).toggle(500);
         });
 
         $(".collapser").click(function(){
@@ -944,6 +945,24 @@ define(['jquery','bootstrap'], function ($) {
             let parcours_id = $(this).attr("data-parcours_id");
             $("#evaluations_in"+parcours_id).toggle(500);
         });
+
+
+        $(".click_quizz_show").on('click', function (event) {
+            let parcours_id = $(this).attr("data-parcours_id");
+            $("#quizz_in"+parcours_id).toggle(500);
+        });
+
+
+        $(".click_bibliotex_show").on('click', function (event) {
+            let parcours_id = $(this).attr("data-parcours_id");
+            $("#bibliotex_in"+parcours_id).toggle(500);
+        }); 
+        
+        $(".click_course_show").on('click', function (event) {
+            let parcours_id = $(this).attr("data-parcours_id");
+            $("#course_in"+parcours_id).toggle(500);
+        });
+
 
         // ====================================================================================================================
         // ====================================================================================================================

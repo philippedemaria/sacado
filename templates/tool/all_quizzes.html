@@ -20,7 +20,7 @@
         {% if parcours %}
             <a href="{% url 'show_parcours' 0 parcours.id %}" style="color:parcours.color" > {{ parcours.title }} </a><img src="{% static 'img/angle-right.png' %}"/> Les quizz mutualisés
         {% else %}
-            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Les quizz mutualisés</a>    
+             <i class="fa fa-tasks sacado_color_text"></i> Les quizz mutualisés 
         {% endif %}
 {% endblock %}
 

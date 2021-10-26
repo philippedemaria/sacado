@@ -18,7 +18,7 @@
             {%  for s in  students %}       
             <tr><td>
 
-                {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
+                {{ s.user.last_name|lower|capfirst  }} {{ s.user.first_name|lower|capfirst|truncatechars:6 }}
 
             </td></tr>
             {%  endfor %}

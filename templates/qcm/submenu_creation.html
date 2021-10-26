@@ -1,0 +1,114 @@
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau document <b class="caret"></b> </a>
+    
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+ 
+        
+        <li>{% if group %}  
+            <a href="{% url 'create_folder' group.id %}"> Créer un dossier 
+            </a>
+            {% else %}
+            <a href="{% url 'create_folder' 0 %}"> Créer un dossier 
+            </a>
+            {% endif %}            
+        </li>
+        <li>{% if sacado_asso %}
+        		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé</a> 
+        	{% else %}
+        		<a href="#"  class="no_sacado_asso" title="Ne peut être actif qu'à partir d'un groupe"> Récupérer un dossier mutualisé</a> 
+        	{% endif %} 
+        </li>
+ 
+
+
+
+		<li class="divider"></li>
+        {% if folder %}
+        <li> <a href="{% url 'create_parcours' folder.id %}"  > Créer un parcours</a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours</em></a> </li>
+        {% endif %}
+        <li>{% if sacado_asso %} 
+        		<a href="{% url 'all_parcourses' 0 %}" > Récupérer un parcours mutualisé  
+
+                {% if not group %} 
+                    <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >
+                                <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. Le parcours sera <br/>directement affecté à votre<br/> groupe.   
+                            </div>
+                    </span>
+                {% endif %} 
+                </a>
+
+        	{% else %}
+        		<a href="#"  class="no_sacado_asso" > Récupérer un parcours mutualisé</a> 
+        	{% endif %}
+        </li>
+
+
+
+		<li class="divider"></li>
+
+		{% if sacado_asso %}
+		    {% if folder %}
+		    <li> <a href="{% url 'create_evaluation' folder.id %}"  > Créer une évaluation </a> </li>
+		    {% else %}
+		    <li> <a href="{% url 'create_evaluation' 0 %}"  > Créer une évaluation </a> </li>
+		    {% endif %}
+		    <li> 
+		        <a href="{% url 'all_parcourses' 1 %}" > Récupérer une évaluation mutualisée
+		        {% if not group %} 
+		            <span class="helper_tip"> 
+		                    <i class="fa fa-question-circle"></i>
+		                    <div class="helper_tip_text" >
+		                        <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. L'évaluation sera <br/>directement affectée à votre<br/> groupe.   
+		                    </div>
+		            </span>
+		        {% endif %} 
+		        </a>
+		    </li>
+		{% else %}
+		    <li><a href="#"   class="no_sacado_asso" > Créer une évaluation</a> </li> 
+		    <li> <a href="#"  class="no_sacado_asso" > Récupérer une évaluation mutualisée</a>  </li>         
+		{% endif %}
+
+		<li class="divider"></li>
+
+
+        {% if folder %}
+        <li> <a href="{% url 'create_bibliotex' folder.id %}"  > Créer une biblioTex </a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_bibliotex' 0 %}"  > Créer une biblioTex </em></a> </li>
+        {% endif %}
+        <li>{% if sacado_asso %} 
+        		<a href="{% url 'bibliotexs'   %}" > Récupérer une biblioTex mutualisée  </a>
+        	{% else %}
+        		<a href="#"  class="no_sacado_asso" > Récupérer une biblioTex mutualisée </a> 
+        	{% endif %}
+        </li>
+
+		<li class="divider"></li>
+ 
+		{% if sacado_asso %} 
+ 
+        <li> <a href="{% url 'create_quizz' %}" > Créer un quizz</a> </li> 
+        <li> <a href="{% url 'all_quizzes' %}" > Récupérer un quizz mutualisé</a> </li>         
+        {% else %}
+
+        <li> <a href="#"  class="no_sacado_asso" > Créer un quizz</a> </li> 
+        <li> <a href="#"  class="no_sacado_asso"  > Récupérer un quizz mutualisé</a>   </li>      
+
+        {% endif %}
+
+ 
+    </ul>
+</li>
+
+
+ 
+
+
+
+ 

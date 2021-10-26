@@ -2041,14 +2041,14 @@ def get_form(request, parcours, teacher ,  group_id, folder_id):
         if folder_id and group_id :
             folder = Folder.objects.get(pk=folder_id)
             group  = Group.objects.get(pk=group_id)
-            form   = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = folder,   group = group , initial= {  'groups':  [group], 'subject': folder.subject , 'level': folder.level } )
+            form   = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = folder,   group = group , initial= {   'folders':  [folder],  'groups':  [group], 'subject': folder.subject , 'level': folder.level } )
         elif group_id :
             group = Group.objects.get(pk=group_id)
             level = group.level.name
             form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = None,   group = group , initial= { 'groups': [group],  'subject': group.subject , 'level': group.level } )
         elif folder_id :
             folder = Folder.objects.get(pk=folder_id)
-            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = folder,   group = None , initial= {  'subject': folder.subject , 'level': folder.level } )
+            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = folder,   group = None , initial= { 'folders':  [folder],  'subject': folder.subject , 'level': folder.level } )
         else :            
             form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = None,   group = None  )
 
@@ -2237,12 +2237,10 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
             nf.is_evaluation = is_eval
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
-            print(nf.vignette)
             nf.save()
             form.save_m2m()
 
             group_ids = request.POST.getlist("groups",[])
-            print(group_ids)
             group_students = set()
             for gid in group_ids :
                 group = Group.objects.get(pk = gid)
@@ -5692,14 +5690,11 @@ def audio_remediation(request):
     relationship = Relationship.objects.get(pk=idr) 
     form = RemediationForm(request.POST or None, request.FILES or None )
 
-    print(relationship)
-
     if form.is_valid():
         nf =  form.save(commit = False)
         nf.mediation = request.FILES.get("id_mediation")
         nf.relationship = relationship
         nf.audio = True
-        print(nf)
 
         nf.save()
     else:
@@ -5995,7 +5990,6 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 
     if request.method == "POST":
         if cForm.is_valid():
-            print( cForm.cleaned_data ,  cForm.cleaned_data['answer']  )
             w_f = cForm.save(commit=False)
             w_f.customexercise = customexercise
             w_f.parcours_id = idp

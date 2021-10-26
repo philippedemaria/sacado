@@ -396,10 +396,6 @@ def all_quizzes_archived(request):
 
 
 
-
-
-
- 
 def create_quizz(request):
     
     teacher = request.user.teacher 
@@ -443,7 +439,49 @@ def create_quizz(request):
 
 
  
-def update_quizz(request,id):
+def create_quizz_folder(request,idf):
+    
+    teacher = request.user.teacher
+    folder  = Folder.objects.get(pk=idf) 
+    group_id   = request.session.get("group_id",None)
+    group = Group.objects.get(pk=group_id )
+
+    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : folder.subject , 'folders' : [folder]   ,  'groups' : [group] }   )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.is_questions = 1
+        nf.save()
+        form.save_m2m()
+
+        levels = set()
+        for group_id in request.POST.getlist("groups"):
+            g = Group.objects.get(pk= group_id)
+            levels.update([g.level])
+        nf.levels.set(levels)
+        themes = set()
+        for parcours_id in request.POST.getlist("parcours"):
+            p = Parcours.objects.get(pk= parcours_id)
+            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
+            themes.update(thms)
+        nf.themes.set(themes)
+
+
+
+        return redirect('create_question' , nf.pk , 0 )
+    else:
+        print(form.errors)
+
+
+    context = {'form': form, 'teacher': teacher, 'group' : group , 'folder' : folder }
+
+    return render(request, 'tool/form_quizz.html', context)
+
+
+ 
+def update_quizz(request,id):    
     
     teacher = request.user.teacher 
     quizz = Quizz.objects.get(pk= id)

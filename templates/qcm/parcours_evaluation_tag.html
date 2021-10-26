@@ -116,14 +116,14 @@
                         {{ parcours.title|truncatechars:"22"}}
 
                         <span style="font-size:12px"> 
-                            {{ parcours.nb_exercises }} ex 
+                            {{ parcours.nb_exercises }} ex , {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
                         </span>
                     {% elif parcours.title|length > 14 %}
                         {{ parcours.title }}
 
                         <span style="font-size:12px"> 
                             {{ parcours.nb_exercises }} ex, 
-                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}<small>min</small>
+                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
                         </span>
                     {% else %}
                     {{ parcours.title}}
@@ -187,6 +187,15 @@
                             {{  parcours.nb_exercices_and_cours.nb_cours }} cours  | {{ parcours.nb_exercices_and_cours.nb_cours_published }} publié{{ parcours.nb_exercices_and_cours.nb_cours_published|pluralize }}{% if not parcours.nb_exercices_and_cours.cours_care %} 
                             <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}
                         </div>
+
+                        <div class="col-xs-6 col-md-6 col-lg-6"> 
+                            {{  parcours.nb_exercices_and_cours.nb_bibliotex }} biblioTex{{  parcours.nb_exercices_and_cours.nb_bibliotex|pluralize }} | {{ parcours.nb_exercices_and_cours.nb_bibliotex_published }} publié{{ parcours.nb_exercices_and_cours.nb_bibliotex_published|pluralize }} 
+                        </div>
+                        <div class="col-xs-6 col-md-6 col-lg-6"> 
+                            {{  parcours.nb_exercices_and_cours.nb_quizz }} quizz  | {{ parcours.nb_exercices_and_cours.nb_quizz_published }} publié{{ parcours.nb_exercices_and_cours.nb_quizz_published|pluralize }} 
+                        </div>
+
+
 
                 </div>
 

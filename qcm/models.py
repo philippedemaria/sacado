@@ -837,18 +837,36 @@ class Parcours(ModelWithCode):
  
         exercises = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
         courses   = self.course.all()
+        bibliotex = self.bibliotexs.all() 
+        quizz     = self.quizz.all()
 
-        nb_exercises_published = exercises.filter(is_publish = 1).count() 
+
+
+        nb_exercises_published = exercises.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
         nb_cours_published     = courses.filter(is_publish = 1).count() 
 
-        nb_exercises = exercises.count()
+        nb_exercises = exercises.count() + self.parcours_customexercises.count()
         nb_cours     = courses.count()
+
+
+        nb_bibliotex_published = bibliotex.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
+        nb_quizz_published     = quizz.filter(is_publish = 1).count() 
+
+        nb_bibliotex = bibliotex.count() + self.parcours_customexercises.count()
+        nb_quizz     = quizz.count()
 
  
         data["nb_exercises"]            = nb_exercises
         data["nb_cours"]                = nb_cours
         data["nb_exercises_published"]  = nb_exercises_published
         data["nb_cours_published"]      = nb_cours_published
+
+        data["nb_bibliotex"]            = nb_bibliotex
+        data["nb_quizz"]                = nb_quizz
+        data["nb_bibliotex_published"]  = nb_bibliotex_published
+        data["nb_quizz_published"]      = nb_quizz_published
+
+
 
         data["exercises_care"] = ( nb_exercises == nb_exercises_published)
         data["cours_care"]     = ( nb_cours == nb_cours_published )
@@ -1108,7 +1126,6 @@ class Folder(models.Model):
         if nb_evaluations   :
             data["is_evaluations_exists"] = True
         if self.students.exclude(user__username__contains= "_e-test") :
-            print( self.students.exclude(user__username__contains= "_e-test") )
             data["is_students"]        = True 
  
         test = False
@@ -1138,11 +1155,16 @@ class Folder(models.Model):
     def data_parcours_evaluations_from_group(self,group):
         data = {}
 
-        data["parcours_exists"] = False
-        data["evaluations_exists"] = False
-        data["is_students"] = False
+        data["parcours_exists"]          = False
+        data["evaluations_exists"]       = False
+        data["is_students"]              = False
         data["is_folder_courses_exists"] = False
-        data["is_folder_task_exists"] = False
+        data["is_folder_task_exists"]    = False
+        data["is_quizz_exists"]          = False
+        data["is_bibliotex_exists"]      = False
+        data["is_course_exists"]         = False
+
+
 
         group_students  = group.students.exclude(user__username__contains= "_e-test")
         folder_students = self.students.exclude(user__username__contains= "_e-test")
@@ -1158,6 +1180,19 @@ class Folder(models.Model):
         nb_parcours     = parcours.count()
         nb_evaluations  = evaluations.count()
 
+        quizzes     = self.quizz.all()  
+        bibliotexs  = self.bibliotexs.all() 
+
+        nb_quizz     = quizzes.count() 
+        nb_bibliotex = bibliotexs.count() 
+
+
+        for p in parcours :
+            if p.course.count():
+                data["is_course_exists"] = True
+                break
+
+
         data["parcours"]       = parcours 
         data["evaluations"]    = evaluations
         data["nb_parcours"]    = nb_parcours
@@ -1166,12 +1201,26 @@ class Folder(models.Model):
         data["nb_evaluations_published"] = nb_evaluations_published
 
 
+        data["quizzes"]      = quizzes 
+        data["bibliotexs"]   = bibliotexs
+        data["nb_quizzes"]   = nb_quizz
+        data["nb_bibliotex"] = nb_bibliotex
+
+
         if nb_parcours      :
             data["is_parcours_exists"]    = True
         if nb_evaluations   :
             data["is_evaluations_exists"] = True
         if len(all_students) > 0:
-            data["is_students"]        = True 
+            data["is_students"]           = True 
+
+
+        if nb_quizz      :
+            data["is_quizz_exists"]     = True
+        if nb_bibliotex   :
+            data["is_bibliotex_exists"] = True
+
+
  
         test = False
         for p in self.parcours.all() :
@@ -1501,8 +1550,6 @@ class Relationship(models.Model):
         return data 
 
 
-
-
 class Studentanswer(models.Model):
 
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='answers', editable=False)
@@ -1516,7 +1563,6 @@ class Studentanswer(models.Model):
 
     def __str__(self):        
         return "{}".format(self.exercise.knowledge.name)
-
 
 
 class Resultggbskill(models.Model): # Pour récupérer tous les scores des compétences d'une relationship

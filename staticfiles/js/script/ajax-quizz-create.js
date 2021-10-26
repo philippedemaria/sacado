@@ -5,7 +5,6 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
     console.log(" ajax-quizz-create chargé ");
 
 
-
     $('body').on('change', '#id_subject' , function (event) {
 
  

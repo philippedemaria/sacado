@@ -14,8 +14,17 @@ define(['jquery',  'bootstrap' ], function ($) {
             })();
         });
 
-        $('[type=checkbox]').prop('checked', false); 
+
         $('#id_is_publish').prop('checked', true); 
+        $('#id_is_numeric').prop('checked', false); 
+        $('#id_is_video').prop('checked', false); 
+        $('#id_is_archive').prop('checked', false); 
+        $('#id_is_mark').prop('checked', false); 
+        $('#id_is_random').prop('checked', false); 
+        $('#id_is_ranking').prop('checked', false); 
+        $('#id_is_shuffle').prop('checked', false); 
+        $('#id_is_back').prop('checked', false);
+        $('#id_is_result').prop('checked', false);
 
 
         $('.div_is_mark').hide() ; 
@@ -34,6 +43,8 @@ define(['jquery',  'bootstrap' ], function ($) {
             $('.div_time').toggle(300) ; 
         });
 
+
+ 
 
 
 
