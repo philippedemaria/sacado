@@ -179,15 +179,12 @@ def create_communication(request):
 			new_f.teacher = request.user
 			new_f.save()
 
-			try :
-				users = User.objects.filter(user_type=2)
-				rcv = []
-				for u in users :
-					if u.email :
-						rcv.append(u.email)
-				send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, rcv )
-			except :
-				pass
+
+			users = User.objects.filter(user_type=2)
+			rcv = []
+			for u in users :
+				if u.email :
+					send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, [u.email] )
 
 		else :
 			print(form.errors)
