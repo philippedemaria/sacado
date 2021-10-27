@@ -550,6 +550,55 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
+
+
+
+
+        // ====================================================================================================================
+        // ====================================================================================================================
+        // ==================================================   uncollapsed    ================================================ 
+        // ====================================================================================================================
+        // ====================================================================================================================
+        $('.listing').hide();
+        $(".un_collapsed").click(function(){
+
+
+            if ($(this).find('i').hasClass("fa-angle-down"))
+            {
+            $(this).parent().parent().parent().removeClass('documents_div'); 
+            $(this).parent().parent().parent().removeClass('documents_div_shadow'); 
+
+            $(this).find('i').addClass('fa-angle-up').removeClass('fa-angle-down');  
+            $('.documents_div').addClass('parcours_is_stop') 
+
+            $('.listing').show();
+
+            }
+            else
+            {
+            $(this).parent().parent().parent().addClass('documents_div');
+            $(this).parent().parent().parent().addClass('documents_div_shadow');
+            $(this).find('i').removeClass('fa-angle-up').addClass('fa-angle-down'); 
+            $('.documents_div').removeClass('parcours_is_stop')  
+            $('.listing').hide();          
+            }
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // ====================================================================================================================
         // ====================================================================================================================
         // =================================   Toggle sur la div des élèves d'un groupe ======================================= 

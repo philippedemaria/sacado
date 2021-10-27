@@ -50,42 +50,52 @@
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
 
-    {% for parcours_sort in list_parcours %}  
-    <div class="row"></div>
-    {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation" >Mes évaluations</h1>{% else %}<h1 class="thin" >Mes parcours </h1>{% endif %}  
-        <div id="subparcours_sortable">
-        {% for parcours in parcours_sort.list %}  
-              {% include 'qcm/parcours_evaluation_tag.html' %} 
-        {% endfor %}
-        </div>
-    {% empty %}
-        <div class="row"> 
-            <div class="col-sm-12 col-md-12">
-                <div class="alert alert-warning">
-                    Ce dossier ne contient encore aucun parcours.
+        {% for parcours_sort in list_parcours %}  
+            <div class="row documents_div {% if not forloop.first  %}documents_div_shadow{% endif %}">
+                <div class="col-sm-12 col-md-12">
+            {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation" >Mes évaluations <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> </h1>{% else %}<h1 class="thin" >Mes parcours <span class="un_collapsed"><i class="fa fa-angle-down"></i></span>  </h1>{% endif %}  
+                    <div id="subparcours_sortable" >
+                    {% for parcours in parcours_sort.list %}  
+                          {% include 'qcm/parcours_evaluation_tag.html' %} 
+                    {% endfor %}
+                    </div>
                 </div>
-            </div>
-        </div>
-    {% endfor %}
-    {% if quizzes %}
-    <div class="row"></div>
-    <h1 class="thin" id="evaluation" >Mes quizz </h1>
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">
-            {% for quizz in quizzes %}   
-                  {% include 'tool/quizz_tag.html' %} 
+            </div>                
+            {% empty %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="alert alert-warning">
+                        Ce dossier ne contient encore aucun parcours.
+                    </div>
+                </div>
+            </div>   
             {% endfor %}
+
+    {% if quizzes %}
+    <div class="row documents_div documents_div_shadow">
+        <h1 class="thin">Mes quizz <span class="un_collapsed"><i class="fa fa-angle-down"></i></span>  </h1>
+        <div class="row" > 
+            <div class="col-sm-12 col-md-12">
+                {% for quizz in quizzes %}   
+                      {% include 'tool/quizz_tag.html' %} 
+                {% endfor %}
+            </div>
         </div>
     </div>
     {% endif %}
+
+
     {% if bibliotexs %}
-    <div class="row"></div>
-    <h1 class="thin" id="evaluation" >Mes bilioTex </h1>
-    <div class="row"> 
+    <div class="row  documents_div documents_div_shadow">
         <div class="col-sm-12 col-md-12">
-            {% for bibliotex in bibliotexs %}   
-                  {% include 'bibliotex/bibliotex_tag.html' %} 
-            {% endfor %}
+            <h1 class="thin" id="biliotex" >Mes bilioTex <span class="un_collapsed"><i class="fa fa-angle-down"></i></span>  </h1>
+            <div class="row "> 
+                <div class="col-sm-12 col-md-12">
+                    {% for bibliotex in bibliotexs %}   
+                          {% include 'bibliotex/bibliotex_tag.html' %} 
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
     {% endif %}

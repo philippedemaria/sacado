@@ -8,7 +8,7 @@
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         {% if parcours.vignette  %}
-            <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" loading="lazy" />
+            <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" />
         {% endif  %}
 
         <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
@@ -99,7 +99,11 @@
         {% endif  %}
         <div class="box_title_vignette"> 
 
-            <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours' 0 parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
+            <a {% if parcours.is_evaluation %} href="{% url 'show_evaluation'  parcours.id  %}" 
+                {% elif folder %} href="{% url 'show_parcours' folder.id parcours.id  %}"
+                {% else %} href="{% url 'show_parcours' 0 parcours.id  %}"
+                {% endif %} style="color:{{ parcours.color|contrast_color }};">
+
 
                     {% if parcours.title|length > 26 %}
                         {{ parcours.title|truncatechars:"26"}}

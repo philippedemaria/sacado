@@ -139,9 +139,11 @@ def student_dashboard(request,group_id):
 
     student = Student.objects.get(user=request.user.id)
     #######Groupes de l'élève. 
-    # si plusieurs matières alors on envoie sur dashboard_group 
+    # si plusieurs matières alors on envoi =e sur dashboard_group 
     # si une seule matière alors  sur dashboard
     groups = student.students_to_group.all()
+
+    parcourses_on_fire = []
 
 
     if groups.count() > 1  :
@@ -153,6 +155,7 @@ def student_dashboard(request,group_id):
     timer = today.time()
 
     if int(group_id) > 0 :
+
         template =  "group/dashboard_group.html"  
         group = Group.objects.get(pk = group_id)
         request.session["group_id"] = group_id 
@@ -160,8 +163,6 @@ def student_dashboard(request,group_id):
         #folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0,is_trash=0).order_by("ranking")
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         
-        bases = student.students_to_parcours
-
         bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None, is_archive =0 , is_trash=0).distinct()
 
         parcourses = bases.filter(is_evaluation=0).order_by("ranking")
@@ -172,13 +173,15 @@ def student_dashboard(request,group_id):
     else :
         group = student.students_to_group.first()
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
-        group   = student.students_to_group.first()
 
         bases = student.students_to_parcours
         parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0).order_by("ranking")
         evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,is_trash=0).order_by("ranking")
         last_exercises_done = student.answers.order_by("-date")[:5]
    
+        parcourses_on_fire = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
+
+
     customexercises_set = set()
     nb_custom = 0
     for p in parcourses :
@@ -221,9 +224,12 @@ def student_dashboard(request,group_id):
     relationships_in_late = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
     relationships_in_tasks = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
 
+    print(parcourses_on_fire)
+
+
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses ,
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
-               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 
+               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
                'relationships_in_tasks': relationships_in_tasks , }
 
 

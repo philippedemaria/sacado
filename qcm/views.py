@@ -1517,6 +1517,8 @@ def list_parcours_group(request,id):
     clear_realtime(parcours_tab , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
 
+    print(group)
+
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
                  'parcourses': parcourses , 'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
@@ -1531,8 +1533,8 @@ def list_sub_parcours_group(request,idg,idf):
     folder  = Folder.objects.get(pk = idf) 
     group   = Group.objects.get(pk = idg) 
 
- 
-    role, group , group_id , access = get_complement(request, teacher, folder )
+
+    role, groupe , group_id , access = get_complement(request, teacher, folder )
     request.session["folder_id"] = folder.id
     request.session["group_id"] = group_id
  
@@ -1541,6 +1543,7 @@ def list_sub_parcours_group(request,idg,idf):
     bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  1800 )
+
 
     context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'role' : role , 'today' : today }
 

@@ -84,39 +84,42 @@ body{
  
     {% endif %}
 
-
-        <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
-        {% for rc in relationships_customexercises %}
-            {%  if rc.exercise.supportfile.is_title %}     
-                <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                    {% if rc.is_header_of_section  %}
-                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
-                            {% if  rc.exercise.supportfile.title %}  
-                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                            {% else %}
-                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                    {% else %}
-                        {% if  rc.exercise.supportfile.title %}  
-                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                        {% else %}
-                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                        {% endif %}
-                    {% endif %}
-                </h2>
-            {%  elif rc.exercise.supportfile.is_subtitle %}
-                <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
-                    {% if rc.is_header_of_section %}
-                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                    {% else %}
-                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
-                    {% endif %}
-                </h3>
-            {% else %}  
-                {% include 'qcm/details_all_cards.html' %}            
-            {% endif %}  
-        {% endfor %}
-
+        <div class="row documents_div">
+            <div class="col-sm-12 col-md-12">
+                <h1 class="thin">Les exercices  <span class="un_collapsed"><i class="fa fa-angle-down"></i></span></h1>
+                    <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+                    {% for rc in relationships_customexercises %}
+                        {%  if rc.exercise.supportfile.is_title %}     
+                            <h2 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                {% if rc.is_header_of_section  %}
+                                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                                        {% if  rc.exercise.supportfile.title %}  
+                                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                        {% else %}
+                                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                        {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                {% else %}
+                                    {% if  rc.exercise.supportfile.title %}  
+                                        {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                    {% else %}
+                                        {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                    {% endif %}
+                                {% endif %}
+                            </h2>
+                        {%  elif rc.exercise.supportfile.is_subtitle %}
+                            <h3 class="listing thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                {% if rc.is_header_of_section %}
+                                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                {% else %}
+                                    {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                                {% endif %}
+                            </h3>
+                        {% else %}  
+                            {% include 'qcm/details_all_cards.html' %}            
+                        {% endif %}  
+                    {% endfor %}
+            </div>
+        </div>  
      
      
 
@@ -138,10 +141,9 @@ body{
 
 {% if parcours.teacher == teacher %}
     {% if parcours.quizz.count > 0  %}
-        <div class="row">
+        <div class="row documents_div documents_div_shadow">
             <div class="col-sm-12 col-md-12">
-                <hr/>
-                <h1 class="thin">Les quizz associés  </h1>
+                <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span></h1>
                 {% for quizz in parcours.quizz.all %}
                     {% include 'tool/quizz_tag.html' %}
                 {% endfor %}
@@ -150,10 +152,9 @@ body{
     {% endif %} 
 
     {% if parcours.bibliotexs.count > 0  %}
-        <div class="row">
+        <div class="row documents_div documents_div_shadow">
             <div class="col-sm-12 col-md-12">
-                <hr/>
-                <h1 class="thin">Les biblioTex associées   </h1>
+                <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> </h1>
                 {% for bibliotex in parcours.bibliotexs.all %}
                     {% include 'bibliotex/bibliotex_tag.html' %}
                 {% endfor %}

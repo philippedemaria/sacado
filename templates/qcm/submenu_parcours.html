@@ -75,20 +75,7 @@
  
 
 {% if role  %}
-{% if parcours.is_folder  %}
- 
-        {% if group %}
-        <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_folder' parcours.id group.id  %}"  class="no_button"> Paramètres</a></li>
-        {% else %}
-        <li><a href="{% url 'index' %}" class="helper_tip no_button"><i class="fa fa-plus fa-fw fa-small"></i> 
-                <div class="helper_tip_text" >pour ajouter des parcours à ce dossier, sélectionner un groupe.</div>
-            </a>
-        </li>
-        {% endif %}
- 
- 
 
-{% else %}
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if 'parcours_show/' in request.path or 'parcours_update/' in request.path or 'parcours_peuplate/' in request.path or 'parcours_tasks_and_publishes/' in request.path  or 'parcours_individualise/' in request.path  or 'parcours_stat/' in request.path   %} active{% endif %}"> Paramètres <b class="caret"></b> </a>
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
@@ -114,7 +101,7 @@
 
         {% if parcours.is_evaluation %}
         <li {% if 'parcours_peuplate_evaluation/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}"><i class="fa fa-laptop fa-fw"></i> Sélectionner les exercices</a>   </li>
-        <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' ><i class="fa fa-window-restore fa-fw"></i>  Créer un quizz</a> </li> 
+        <li> <a href="{% url 'create_quizz'   %}"  ><i class="fa fa-window-restore fa-fw"></i>  Créer un quizz</a> </li> 
             {% if sacado_asso %}
             <li {% if 'parcours_new_exercice_evaluation/' in request.path %} class="active" {% endif %}>
                 <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" ><i class="fa fa-plus fa-fw"></i> Créer un exercice personnalisé</a> 
@@ -127,13 +114,13 @@
 
         {% else %}         
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="fa fa-cloud fa-fw"></i> Sélectionner les exercices</a>   </li>
-        <li> <a href="#" data-toggle='modal' data-target='#quizz_choice' ><i class="fa fa-window-restore fa-fw"></i>  Créer un quizz</a> </li> 
+        <li>  <a href="{% url 'create_quizz'    %}"  ><i class="fa fa-tasks fa-fw"></i>  Créer un quizz</a> </li> 
 
 
 
             {% if sacado_asso %}
 
-                <li {% if 'all_quizzes/' in request.path %} class="active" {% endif %}><a href="{% url 'all_quizzes' %}"><i class="fa fa-copy fa-fw"></i>  Récupérer un quizz</a>   </li>          
+                <li {% if 'all_quizzes/' in request.path %} class="active" {% endif %}><a href="{% url 'all_quizzes' %}"><i class="fa fa-copy fa-fw"></i>  Récupérer un quizz</a>   </li>     
                 <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
                     <a href="{% url 'parcours_create_custom_exercise' parcours.id  1 %}" ><i class="fa fa-plus fa-fw"></i> Créer un exercice personnalisé</a> 
                 </li> 
@@ -144,8 +131,25 @@
                 </li> 
             {% endif %}
 
+ 
+                <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
+                    {% if folder %}
+                    <a href="{% url 'create_bibliotex' folder.id %}" ><i class="fa fa-database fa-fw"></i> Créer une biblioTex</a>
+                    {% else %}
+                    <a href="{% url 'create_bibliotex' 0 %}" ><i class="fa fa-database fa-fw"></i> Créer une biblioTex</a>
+                    {% endif  %}
+                </li> 
+
+            {% if sacado_asso %}
+                <li><a href="{% url 'bibliotexs' %}"  title="Version établissement requise"><i class="fa fa-copy fa-fw"></i>  Récupérer une biblioTex</a>   </li> 
+            {% else %}
+                <li><a href="#"  class="no_sacado_asso" title="Version établissement requise"><i class="fa fa-copy fa-fw"></i>  Récupérer une biblioTex</a>   </li> 
+            {% endif %}
 
         {% endif %}
+
+
+
 
         <li><a href="#"  id="handler_order_exercises" ><i class="fa fa-sort fa-fw"></i> Organiser les exercices </a> </li>
 
@@ -158,6 +162,12 @@
 
         <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-indent fa-fw"></i> Gérer les sections</a></li>  
         {% endif %} 
+
+
+
+
+
+
 
 
         <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}>
@@ -191,7 +201,7 @@
 </li>
 {% endif %}
 
-{% endif %}
+ 
 
 
 

@@ -389,7 +389,7 @@ def create_bibliotex(request,idf=0):
         folder = Folder.objects.get(id=folder_id)
     else :
         folder = None
-    
+
     form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
 
     if form.is_valid():

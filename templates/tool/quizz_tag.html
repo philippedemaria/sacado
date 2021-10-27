@@ -32,8 +32,11 @@
     <div class="box-footer" style="position: relative; padding-top: 0px;">
  
         <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
-            <div class="col-xs-12 col-md-12 col-lg-12"> 
-                {{  quizz.nb_questions }} questions   
+            <div class="col-xs-6 col-md-6 col-lg-6"> 
+                {{  quizz.questions.count }} questions
+            </div>
+            <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
+                {{ quizz.duration|time_done}} 
             </div>
         </div>
 

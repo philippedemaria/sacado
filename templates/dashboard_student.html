@@ -2,6 +2,26 @@
  {% load static %}
 
     <a href="#" class="sub_menu_right pull-right whire" id="right_menu_open"><i class="fa fa-angle-double-left"></i> </a> 
+
+    {% if parcourses_on_fire %}
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12 alert alert-warning">
+            <h2 class="thin">En ce moment</h2>
+            {% for parcours in parcourses_on_fire %}
+                {% if parcours.is_evaluation %}
+                    {% with evaluation=parcours %}
+                        {% include 'qcm/evaluation_tag_student.html' %}
+                    {% endwith %}
+                {% else %}                
+                    {% include 'qcm/parcours_tag_student.html' %}                
+                {% endif %}
+            {% endfor  %}
+            <!-- ******************************************************************************************** -->
+        </div>
+ 
+    </div>
+    {% endif %}
+
     <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12">
             <h2 class="thin">Mes matières</h2>
