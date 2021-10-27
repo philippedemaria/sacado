@@ -208,8 +208,7 @@ def update_communication(request,id): # update
 					rcv = []
 					for u in users :
 						if u.email :
-							rcv.append(u.email)
-					send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, rcv )
+							send_mail(new_f.subject, cleanhtml(unescape_html(new_f.texte)), settings.DEFAULT_FROM_EMAIL, [u.email] )
 			except :
 				pass
 
