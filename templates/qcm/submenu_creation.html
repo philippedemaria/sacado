@@ -3,8 +3,10 @@
     
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
- 
-        
+
+        {% if 'parcours_group' in request.path %}
+
+
         <li>{% if group %}  
             <a href="{% url 'create_folder' group.id %}"> Créer un dossier 
             </a>
@@ -20,7 +22,7 @@
         	{% endif %} 
         </li>
  
-
+        {% endif %}
 
 
 		<li class="divider"></li>
