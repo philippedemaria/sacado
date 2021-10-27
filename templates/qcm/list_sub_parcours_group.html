@@ -67,6 +67,28 @@
             </div>
         </div>
     {% endfor %}
+    {% if quizzes %}
+    <div class="row"></div>
+    <h1 class="thin" id="evaluation" >Mes quizz </h1>
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+            {% for quizz in quizzes %}   
+                  {% include 'tool/quizz_tag.html' %} 
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% if bibliotexs %}
+    <div class="row"></div>
+    <h1 class="thin" id="evaluation" >Mes bilioTex </h1>
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+            {% for bibliotex in bibliotexs %}   
+                  {% include 'bibliotex/bibliotex_tag.html' %} 
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </form>
   
 </section>

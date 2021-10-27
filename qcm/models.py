@@ -359,7 +359,7 @@ class Exercise(models.Model):
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
-    color = models.CharField(max_length=255, default='#00819F', verbose_name="Couleur")
+    color = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
     author = models.ForeignKey(Teacher, related_name="author_parcours", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Auteur")
     teacher = models.ForeignKey(Teacher, related_name="teacher_parcours", on_delete=models.CASCADE, default='', blank=True, editable=False)
     coteachers = models.ManyToManyField(Teacher, blank=True,  related_name="coteacher_parcours",  verbose_name="Enseignant en co-animation")

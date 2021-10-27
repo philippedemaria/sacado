@@ -79,7 +79,8 @@ class Bibliotex(models.Model):
     author   = models.ForeignKey(Teacher, related_name="author_bibliotexs", on_delete=models.CASCADE, editable=False)
     teacher  = models.ForeignKey(Teacher,  related_name="teacher_bibliotexs", on_delete=models.CASCADE,  editable=False)
     coteachers = models.ManyToManyField(Teacher, related_name="coteachers_bibliotexs", editable=False)
-
+    color = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
+    
     date_created  = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
     vignette     = models.ImageField(upload_to=image_directory_path, verbose_name="Vignette d'accueil", default="",null=True, blank=True)

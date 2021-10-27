@@ -246,7 +246,8 @@ class Quizz(ModelWithCode):
     title         = models.CharField( max_length=255, verbose_name="Titre du quizz") 
     teacher       = models.ForeignKey(Teacher, related_name="teacher_quizz", blank=True, on_delete=models.CASCADE, editable=False ) 
     date_modified = models.DateTimeField(auto_now=True)
-
+    color = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
+    
     levels    = models.ManyToManyField(Level, related_name="quizz", blank=True)
     themes    = models.ManyToManyField(Theme, related_name="quizz", blank=True)
     subject   = models.ForeignKey(Subject, related_name="quizz", blank=True, null = True, on_delete=models.CASCADE)

@@ -49,11 +49,30 @@
             <div class="col-sm-12 col-md-7">
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
-                        <div class="form-group">
-				            {{ form.title.label_tag }}
-				            {{ form.title|add_class:"form-control" }}
-                            {{ form.title.errors }}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+
+                                <div class="form-group">
+        				            {{ form.title.label_tag }}
+        				            {{ form.title|add_class:"form-control" }}
+                                    {{ form.title.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                      {{ form.color.label_tag }}      
+                                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                    <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                                                </span>
+                                      <div id="color-picker-component" class="input-group colorpicker-component">
+                                          {{ form.color.as_hidden }}
+                                          <span class="input-group-addon"><i></i></span>
+                                      </div>
+                                </div>
+                            </div>
                         </div>
+
+
                         <div class="form-group">
 				            <label>Enseignement</label>
 				            {{ form.subject|add_class:"form-control select2" }}

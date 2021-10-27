@@ -1537,11 +1537,12 @@ def list_sub_parcours_group(request,idg,idf):
     request.session["group_id"] = group_id
  
     parcours_tab = folder.parcours.filter(is_archive=0 ,  is_trash=0).order_by("is_evaluation", "ranking")
-
+    quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
+    bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  1800 )
 
-    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder,   'role' : role , 'today' : today }
+    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'role' : role , 'today' : today }
 
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 

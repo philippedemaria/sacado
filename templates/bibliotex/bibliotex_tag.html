@@ -8,21 +8,7 @@
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
  
-        <div style="font-size:25px; margin-top:10px;color:#5d4391"> 
 
- 
-                    {% if bibliotex.title|length > 26 %}
-                    <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
-                        <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
-                    </span>
-                    {% elif bibliotex.title|length > 22 %}
-                        {{ bibliotex.title|truncatechars:"22"}}
-                    {% elif bibliotex.title|length > 14 %}
-                        {{ bibliotex.title|truncatechars:"14" }}
-                    {% else %}
-                        {{ bibliotex.title}}
-                    {% endif %}
-        </div>
 
         <div class="group_show  no_visu_on_load" id="group_show{{bibliotex.id }}"> 
             <label>Cette bibliotex est attribuée à</label>
@@ -36,6 +22,40 @@
             {% endfor %}
             <div style="clear:both"></div>
         </div>
+
+
+
+        <div class="group_show  no_visu_on_load" id="bibliotex_show{{bibliotex.id }}"> 
+             <div class="row"> 
+                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                    <b>Savoir faire ciblés</b>
+                </div> 
+            </div>
+
+     
+            {% for k in bibliotex.knowledges %}
+            <div class="row"> 
+                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                    {{ k.name }}
+                </div> 
+            </div>
+            {% endfor %}
+            <div class="row"> 
+                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                    <b>compétences ciblées</b>
+                </div> 
+            </div>
+            
+            <div class="row"> 
+                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                    {% for s in bibliotex.skills %}
+                        {{ s }}. 
+                    {% endfor %}
+                </div> 
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
 
 
         <span style="cursor:pointer" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show white" >
@@ -69,38 +89,21 @@
                 {% endif %}
             </div>
         </div>
- 
-
-         <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                savoir faire ciblés 
-            </div> 
-        </div>
-
- 
-        {% for k in bibliotex.knowledges %}
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                {{ k.name }}
-            </div> 
-        </div>
-        {% endfor %}
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                compétences ciblées 
-            </div> 
-        </div>
-        
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                {% for s in bibliotex.skills %}
-                    {{ s }}. 
-                {% endfor %}
-            </div> 
-        </div>
-        
 
 
+        <div class="box_title_vignette"> 
+            <a href="{% url 'show_bibliotex' bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};" >             
+                {% if bibliotex.title|length > 26 %}
+                <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
+                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                </span>
+                {% elif bibliotex.title|length > 22 %}
+                    {{ bibliotex.title|truncatechars:"22"}}
+                {% else %}
+                    {{ bibliotex.title}}
+                {% endif %}
+            </a>    
+        </div>
     </div>
 
     <!-- box-footer DES FONCTIONNALITES  -->
@@ -120,14 +123,16 @@
            <div class="col-lg-4 col-xs-4">
                 <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
             </div>
-           <div class="col-lg-4 col-xs-4">
-                <a href="{% url 'show_bibliotex' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-eye"></i> <span class="label_icon">Consulter</span></a> 
-            </div>
+
            <div class="col-lg-4 col-xs-4">
                 <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit"><i class="fa fa-fw fa-print"></i> 
                     <span class="label_icon">Imprimer</span>
                 </a>
             </div>
+            <div class="col-lg-4 col-xs-4">
+                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"><i class="fa fa-fw fa-folder-open"></i>  <span class="label_icon">Attribut</span>
+                </span>
+            </div> 
         </div>
 
         <div class="row extend"> 
@@ -160,7 +165,7 @@
             </div>
              
             <div class="col-lg-4 col-xs-4">
-                <span href="#" class="edit group_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-folder-open"></i>  <span class="label_icon">Attribut</span>
+                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compéten.</span>
                 </span>
             </div> 
         </div>

@@ -25,9 +25,9 @@
           </div>
           <span class="label_progress_bar" style="color:{{rc.parcours.color }}">{{ data.nb_done }}/{{ data.nb }}</span> 
           {% if rc.exercise.supportfile.calculator %}
-            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
+            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" loading="lazy" />
           {% else %}
-            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" />
+            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" loading="lazy" />
           {% endif  %}
     </div>   
     <!-- Fin Entete de la card  -->
@@ -355,7 +355,7 @@
               title="{% if rc.exercise.supportfile.title %}{{ rc.exercise.supportfile.title|cleanhtml|safe }}{% else %}{{ rc.exercise.supportfile.annoncement|cleanhtml|safe }}{% endif %}"
              data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" data-parcours_id="{{ parcours.id }}" data-custom=0 > 
 
-               <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours_order"  >   
+               <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours_order" loading="lazy" >   
           </a> 
 
            <!-- ######################################################################################################## 
@@ -374,7 +374,7 @@
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
                   {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
-                  <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" />
+                  <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" loading="lazy" />
                 </span>
             </a>
             {% endif %}
@@ -516,9 +516,9 @@
           </div>
           <span class="label_progress_bar" style="color:{{ parcours.color }}">{{ data.nb_done }}/{{ data.nb }}</span> 
           {% if rc.calculator %}
-            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
+            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" loading="lazy" />
           {% else %}
-            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" />
+            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" loading="lazy" />
           {% endif  %}
     </div>   
     <!-- Fin Entete de la card  -->
@@ -687,7 +687,7 @@
              data-num_exo="{{ nb_exo_only|index:forloop.counter0 }}" data-parcours_id="{{ parcours.id }}" data-custom=1>
              
                <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% elif rc.is_python %}  src="{% static 'img/python.jpg' %}" 
-                       {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} class="image_parcours_order"  >
+                       {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} class="image_parcours_order" loading="lazy"  >
             
           </a> 
         <!--  Barre d'outil de la customcard  -->
@@ -700,7 +700,7 @@
                   {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
                   <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}"
                        {% elif rc.is_python %}  src="{% static 'img/python.jpg' %}" 
-                       {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} width="500px" />
+                       {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} width="500px" loading="lazy" />
                 </span>
             </a>
             {% endif %}

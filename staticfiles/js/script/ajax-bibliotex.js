@@ -285,8 +285,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
  
-
-
     $('body').on('click', '.group_shower' , function (event) {
             let bibliotex_id = $(this).data("bibliotex_id");
             $("#group_show"+bibliotex_id).toggle(500);
@@ -294,7 +292,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
+    $('body').on('click', '.bibliotex_shower' , function (event) {
+            let bibliotex_id = $(this).data("bibliotex_id");
+            $("#bibliotex_show"+bibliotex_id).toggle(500);
 
+        });
+
+
+ 
 
 
     $('body').on('click', '.overlay_show' , function (event) {

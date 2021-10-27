@@ -137,71 +137,32 @@ body{
 
 
 {% if parcours.teacher == teacher %}
-
     {% if parcours.quizz.count > 0  %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
-
-
-            
                 <hr/>
-                <h1 class="thin">Les quizz associés <a href="#" data-toggle='modal' data-target='#quizz_choice' class="size18" ><i class="fa fa-window-restore fa-fw"></i>  Nouveau quizz</a> </h1>
-
-
-                {% for q in parcours.quizz.all %}
-                    <div class="card">
-
-                        <div style="position: absolute; padding: 10px;width:100%; height:80px; background-color: #FFF; opacity:0.85">
-                            <a href="{% url 'update_quizz' q.id  %}" target="_blank" style="font-weight: normal;">
-                                 {{ q }}  <i class="fa fa-cogs fa-xs pull-right edit" ></i>
-                            </a>
-                            <br/>
-                            <a href="{% url 'create_question' q.id 0  %}" class="pull-right edit" title="Modifier les paramètres">
-                                <i class="fa fa-edit  fa-xs  pull-right" title="Rajouter une question"></i>
-                            </a>     
-
-
-                            {% if group %}
-                                <div class="sanspuce historic_li"  style="border:1px solid {{parcours.color}}; border-radius:20px; width:100px;position: absolute; padding:3px; top:50px;left:10px">
-                                    <a href="{% if q.is_random %}{% url 'show_quizz_random_group'  q.id  group.id %}{% else %}{% url 'show_quizz_group'  q.id  group.id %}{% endif %}" 
-                                       style="color:{{group.color}};" 
-                                       class="quizz_action {% if q.is_random %} confirm_create_historic{% endif %}" target="_blank" >
-                                       <i class="fa fa-play fa-xs"></i>  Papier
-                                    </a>
-                                </div>
-                                {% if sacado_asso %}
-                                    {% if  q.is_video %}
-                                    <div class="sanspuce historic_li"  style="border:1px solid {{parcours.color}}; border-radius:20px; width:100px;position: absolute; padding:3px; top:80px;left:10px">
-                                        <a href="{% url 'play_quizz_teacher'  q.id  group.id  %}" target="_blank"  class="quizz_action" title="En version à tester"
-                                            style="color:{{group.color}};"><i class="fa fa-gamepad"></i> Numérique 
-                                        </a>  
-                                    </div>
-                                    {% elif  q.is_numeric %}
-                                    <div class="sanspuce historic_li"  style="border:1px solid {{parcours.color}}; border-radius:20px; width:100px;color:{{parcours.color}};position: absolute; padding:3px; top:80px;left:10px">
-                                        <a href="{% url 'create_quizz_code'  q.id  group.id  %}#this_quizz{{ q.id }}" target="_blank" class="quizz_action" title="Générer un quizz"
-                                            style="color:{{group.color}};"><i class="fa fa-desktop"></i> Numérique
-                                        </a>  
-                                    </div>
-                                    {% endif %}
-                                {% endif %}
-                            {% else %}
-                                <div class="sanspuce historic_li"  style="color:{{parcours.color}};  width:230px; position: absolute;  top:50px;left:10px">
-                                    Pour obtenir les liens directs, il faut passer par le tableau de bord et le groupe
-                                </div>
-                            {% endif %}
-                        </div> 
-                        {% if q.vignette %}
-                            <img src="{{ q.vignette.url }}" width="250px" height="164px"  />
-                        {% else %}
-                            <img src="{% static 'img/quizz_slide.png' %}" width="250px"   />
-                        {% endif %}
-                    </div>
+                <h1 class="thin">Les quizz associés  </h1>
+                {% for quizz in parcours.quizz.all %}
+                    {% include 'tool/quizz_tag.html' %}
                 {% endfor %}
-
-
             </div>
         </div>  
     {% endif %} 
+
+    {% if parcours.bibliotexs.count > 0  %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <hr/>
+                <h1 class="thin">Les biblioTex associées   </h1>
+                {% for bibliotex in parcours.bibliotexs.all %}
+                    {% include 'bibliotex/bibliotex_tag.html' %}
+                {% endfor %}
+            </div>
+        </div>  
+    {% endif %} 
+
+
+
 {% endif %} 
 
 

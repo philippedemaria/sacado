@@ -558,8 +558,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $(".group_show").hide();
         $(".group_shower").click(function(){
             value =  $(this).attr("data-group_id"); 
-            $('.group_show'+value).toggle(500);
+            $('#group_show'+value).toggle(500);
         });
+
+
+        $('body').on('click', '.bibliotex_shower' , function (event) {
+                let bibliotex_id = $(this).data("bibliotex_id");
+                $("#bibliotex_show"+bibliotex_id).toggle(500);
+
+            });
+
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné

@@ -8,7 +8,7 @@
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         {% if parcours.vignette  %}
-            <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" />
+            <img src="{% static 'img/rabat_parcours.png' %}" class="rabat_dossier" loading="lazy" />
         {% endif  %}
 
         <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
@@ -102,36 +102,18 @@
             <a {% if parcours.is_evaluation%} href="{% url 'show_evaluation'  parcours.id  %}" {% else %} href="{% url 'show_parcours' 0 parcours.id  %}"{% endif %} style="color:{{ parcours.color|contrast_color }};">
 
                     {% if parcours.title|length > 26 %}
-
-                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;">{{ parcours.title|truncatechars:"29" }}
-                        <div class="helper_tip_text_right" style="font-size:14px;color:{{ parcours.color }};">{{ parcours.title }}
-                            <label > 
-                                {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
-                                    {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}<small>min</small>
-                            </label>
-
-                        </div>
-                    </span>
-                    {% elif parcours.title|length > 22 %}
-                        {{ parcours.title|truncatechars:"22"}}
+                        {{ parcours.title|truncatechars:"26"}}
 
                         <span style="font-size:12px"> 
-                            {{ parcours.nb_exercises }} ex , {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
+                            {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
                         </span>
-                    {% elif parcours.title|length > 14 %}
-                        {{ parcours.title }}
-
-                        <span style="font-size:12px"> 
-                            {{ parcours.nb_exercises }} ex, 
-                                {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}
-                        </span>
+ 
                     {% else %}
-                    {{ parcours.title}}
+                        {{ parcours.title}}
 
-                    <span style="font-size:12px"> 
-                        {{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}, 
+                        <span style="font-size:12px"> 
                             {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}<small>min</small>
-                    </span>
+                        </span>
 
                     {% endif %}
 
