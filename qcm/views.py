@@ -1829,23 +1829,26 @@ def clone_folder(request, id ):
     # ajoute le group au parcours si group    
 
     group_id = request.session.get("group_id",None)
-    group = Group.objects.get(pk = group_id)
-    folder.groups.add(group)
-    students = group.students.all()
-    folder.students.set(students)
+    if group_id :
+        group = Group.objects.get(pk = group_id)
+        folder.groups.add(group)
+        students = group.students.all()
+        folder.students.set(students)
     for p in prcs :
         folder_id_tab.append(p.id) # liste des parcours du dossiers
         p.pk = None
         p.code = str(uuid.uuid4())[:8] 
         p.teacher = request.user.teacher
-        p.subject = group.subject
-        p.level = group.level
+        if group_id :
+            p.subject = group.subject
+            p.level = group.level
         p.is_publish = 0
         p.is_archive = 0
         p.is_share = 0
         p.is_favorite = 1
         p.save()
-        p.students.set(students)
+        if group_id :
+            p.students.set(students)
         new_folder_id_tab.append(p.id)
         folder.parcours.add(p)
 
@@ -1877,16 +1880,17 @@ def clone_folder(request, id ):
                 relationship.pk = None
                 relationship.parcours_id = new_folder_id_tab[i]
                 relationship.save()    
-                relationship.students.set(students)
+                if group_id :
+                    relationship.students.set(students)
             except :
                 pass
         i += 1
 
     messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
-
-    return redirect('list_parcours_group',  group_id)
-
-
+    if group_id :
+        return redirect('list_parcours_group',  group_id)
+    else :
+        return redirect('all_folders')
 
 
 @csrf_exempt
