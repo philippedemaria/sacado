@@ -617,7 +617,7 @@ def ajax_charge_groups(request):  # utilisé par form_quizz et form_folder aussi
     teacher = request.user.teacher
     data = {} 
     subject_id = request.POST.get('id_subject', None)
-    groups = teacher.groups.values_list("id","name").filter(subject_id =  subject_id)
+    groups = Group.objects.values_list("id","name").filter(Q(teacher=teacher)|Q(teachers=teacher),subject_id =  subject_id)
 
     data["groups"] = list(groups)
 
@@ -630,7 +630,7 @@ def ajax_charge_groups_level(request):  # utilisé par form_folder aussi
     data = {} 
     subject_id = request.POST.get('id_subject', None)
     level_id   = request.POST.get('id_level', None)
-    groups = teacher.groups.values_list("id","name").filter(subject_id =  subject_id, level_id =  level_id)
+    groups     = Group.objects.values_list("id","name").filter(Q(teacher=teacher)|Q(teachers=teacher),subject_id =  subject_id, level_id =  level_id)
 
     data["groups"] = list(groups)
 
