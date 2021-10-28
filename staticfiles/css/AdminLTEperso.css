@@ -274,9 +274,11 @@ border-radius:0px;
     height:255px;
     overflow : hidden;
     margin-top: 0px;  
-
+  position: relative; 
 }
  
+ 
+
 .documents_div_shadow{
   position: relative;  
 }

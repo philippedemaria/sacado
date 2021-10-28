@@ -607,24 +607,36 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('.listing').hide();
         $(".un_collapsed").click(function(){
 
-
+            let my_div = $(this).parent().parent().parent();
             if ($(this).find('i').hasClass("fa-angle-down"))
+
             {
-            $(this).parent().parent().parent().removeClass('documents_div'); 
-            $(this).parent().parent().parent().removeClass('documents_div_shadow'); 
 
-            $(this).find('i').addClass('fa-angle-up').removeClass('fa-angle-down');  
-            $('.documents_div').addClass('parcours_is_stop') 
+            my_div.removeClass('documents_div');
+            $('.documents_div').animate({height: "0%", }, 1200 ) ;
+            my_div.animate({height: "100%", }, 1200, function() {
+                                                                my_div.removeClass('documents_div_shadow');
+                                                                
+                                                                })  ;
 
+            $(this).find('i').addClass('fa-angle-up').removeClass('fa-angle-down' );  
+            $('.shadow_bottom').hide();
             $('.listing').show();
 
             }
             else
             {
-            $(this).parent().parent().parent().addClass('documents_div');
-            $(this).parent().parent().parent().addClass('documents_div_shadow');
+
+
+            my_div.addClass('documents_div');
+            $('.documents_div').animate({height: "255px", }, 1050, function() {
+                                                                                my_div.addClass('documents_div_shadow');
+                                                                                            $('.shadow_bottom').show(); 
+                                                                                 
+                                                                          })  ; 
+            
             $(this).find('i').removeClass('fa-angle-up').addClass('fa-angle-down'); 
-            $('.documents_div').removeClass('parcours_is_stop')  ;
+
             $('.listing').hide();          
             }
 
