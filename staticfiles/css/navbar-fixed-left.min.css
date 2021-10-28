@@ -100,7 +100,7 @@ body{padding-top:0;margin-left:100px}
 
 
 .notification-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 5px;
   width:  300px;
@@ -168,7 +168,7 @@ body{padding-top:0;margin-left:100px}
 
 
 .notification-container-right {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width:  700px;

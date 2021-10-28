@@ -2,14 +2,21 @@
 {% load item_tags %}
 {% load widget_tweaks %}
  
-
-
-
-<td style="padding-bottom: 0px;position: relative" >
-    {% if not is_archive %}
+ 
+ 
+<td>
+    {% if not quizz.is_archive %}
     <input type="checkbox" name="selected_quizz" value="{{ quizz.id}}"/> 
     {% endif  %}
-    {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="110px" style="position: absolute; bottom:0; right:0" />{% endif %}
+</td>
+<td>
+    {% if quizz.vignette %}
+        <img src="{{ quizz.vignette.url }}" width="60px" height="60px"  />
+    {% else %} 
+        <i class="fa fa-square fa-3x" style="color:{{ quizz.color }}"></i>
+    {% endif %}
+</td>
+<td>
     <a href="{% url 'update_quizz' quizz.id  %}"> 
         {{ quizz.title }}
     </a>

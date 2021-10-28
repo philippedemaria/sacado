@@ -589,15 +589,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-
+        $('.dataTables_wrapper').last().find('.col-sm-6').first().append("<h2 class='thin sacado_color_text'><i class='fa fa-th-list'></i> hors dossier </h2> ") ;
 
  
-
-        $('#DataTables_Table_0_wrapper').find('.col-sm-6').first().append("<h1 class='thin sacado_color_text'><i class='fa fa-folder-open'></i>   dans des dossiers </h1> ") ;
-        $('#DataTables_Table_1_wrapper').find('.col-sm-6').first().append("<h1 class='thin sacado_color_text'><i class='fa fa-th-list'></i>   hors dossier</h1> ") ;
- 
-
-
 
 
 

@@ -45,21 +45,33 @@
 
 <section class="content_list" id="principal_section"> 
 
- <form action="" methode="POST" >  
- 
+ <form action="" methode="POST" > 
+
+
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
 
         {% for parcours_sort in list_parcours %}  
-            <div class="row documents_div {% if not forloop.first  %}documents_div_shadow{% endif %}">
+            <div class="row documents_div documents_div_shadow">
                 <div class="col-sm-12 col-md-12">
-            {% if  parcours_sort.grouper %}<h1 class="thin" id="evaluation" >Mes évaluations <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> </h1>{% else %}<h1 class="thin" >Mes parcours <span class="un_collapsed"><i class="fa fa-angle-down"></i></span>  </h1>{% endif %}  
+                    {% if  parcours_sort.grouper %}
+                        <h1 class="thin" id="evaluation" >Mes évaluations 
+                            <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span> 
+                            <span class="fontLabel" >{{ parcours_sort.list|length }} évaluation{{ parcours_sort.list|length|pluralize }}</span>
+                        </h1>
+                    {% else %}
+                        <h1 class="thin" >Mes parcours 
+                            <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span>
+                            <span class="fontLabel" >{{ parcours_sort.list|length }} parcours</span>  
+                        </h1>
+                    {% endif %}  
                     <div id="subparcours_sortable" >
                     {% for parcours in parcours_sort.list %}  
                           {% include 'qcm/parcours_evaluation_tag.html' %} 
                     {% endfor %}
                     </div>
                 </div>
+                <div class="shadow_bottom"></div>
             </div>                
             {% empty %}
             <div class="row">
@@ -73,7 +85,7 @@
 
     {% if quizzes %}
     <div class="row documents_div documents_div_shadow">
-        <h1 class="thin">Mes quizz <span class="un_collapsed"><i class="fa fa-angle-down"></i></span>  </h1>
+        <h1 class="thin">Mes quizz <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ quizzes.count }} quizz </span>  </h1>
         <div class="row" > 
             <div class="col-sm-12 col-md-12">
                 {% for quizz in quizzes %}   
@@ -81,6 +93,7 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="shadow_bottom"></div>
     </div>
     {% endif %}
 
@@ -88,7 +101,7 @@
     {% if bibliotexs %}
     <div class="row  documents_div documents_div_shadow">
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" id="biliotex" >Mes bilioTex <span class="un_collapsed"><i class="fa fa-angle-down"></i></span>  </h1>
+            <h1 class="thin" id="biliotex" >Mes bilioTex <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ bibliotexs.count }} biblioTex</span>    </h1>
             <div class="row "> 
                 <div class="col-sm-12 col-md-12">
                     {% for bibliotex in bibliotexs %}   
@@ -97,6 +110,7 @@
                 </div>
             </div>
         </div>
+        <div class="shadow_bottom"></div>
     </div>
     {% endif %}
 </form>

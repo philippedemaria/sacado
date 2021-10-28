@@ -25,10 +25,6 @@
 
     {% include 'qcm/breadcrumb.html' %}
 
-
-<small >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</small> 
-
-
     {% if user.is_testeur or user.is_superuser %} 
         <a href="#" data-toggle='modal' data-target='#reporting'>
             <sup><i class="fa fa-comment fa-xs"></i></sup>
@@ -84,9 +80,9 @@ body{
  
     {% endif %}
 
-        <div class="row documents_div">
+        <div class="row documents_div documents_div_shadow">
             <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les exercices  <span class="un_collapsed"><i class="fa fa-angle-down"></i></span></h1>
+                <h1 class="thin">Les exercices  <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</span> </h1>
                     <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
                     {% for rc in relationships_customexercises %}
                         {%  if rc.exercise.supportfile.is_title %}     
@@ -119,6 +115,7 @@ body{
                         {% endif %}  
                     {% endfor %}
             </div>
+            <div class="shadow_bottom"></div>
         </div>  
      
      
@@ -141,24 +138,26 @@ body{
 
 {% if parcours.teacher == teacher %}
     {% if parcours.quizz.count > 0  %}
-        <div class="row documents_div documents_div_shadow">
+        <div class="row documents_div documents_div_shadow">           
             <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span></h1>
+                <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.quizz.count }} quizz</span></h1>
                 {% for quizz in parcours.quizz.all %}
                     {% include 'tool/quizz_tag.html' %}
                 {% endfor %}
-            </div>
+            </div> 
+            <div class="shadow_bottom"></div>
         </div>  
     {% endif %} 
 
     {% if parcours.bibliotexs.count > 0  %}
-        <div class="row documents_div documents_div_shadow">
+        <div class="row documents_div documents_div_shadow">            
             <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> </h1>
+                <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.bibliotexs.count }} biblioTex</span> </h1>
                 {% for bibliotex in parcours.bibliotexs.all %}
                     {% include 'bibliotex/bibliotex_tag.html' %}
                 {% endfor %}
             </div>
+            <div class="shadow_bottom"></div>
         </div>  
     {% endif %} 
 
@@ -171,7 +170,7 @@ body{
 
 
 
-<div class="row">
+<div class="row" style="margin-top:50px">
     <div class="col-sm-12 col-md-12">
         <div class="form-group">
             {% if sacado_asso %}

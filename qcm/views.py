@@ -392,19 +392,20 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     """
     parcours      =  teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0)
     parcourses_co = teacher.coteacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0 )
-
-    parcourses = parcours | parcours_co  
-    return parcourses
+    parcourses    = parcours | parcours_co 
+    prcs          = parcourses.order_by("subject","level")
+    return prcs
 
 
 def teacher_has_folders(teacher ,is_archive ):
     """ 
     Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
     """
-    folders    = teacher.teacher_folders.filter( is_archive=is_archive,is_trash=0) 
+    folders    = teacher.teacher_folders.filter( is_archive=is_archive,is_trash=0)
     folders_co = teacher.coteacher_folders.filter( is_archive=is_archive,is_trash=0 )
     fold       = folders | folders_co
-    return fold
+    folds      = fold.order_by("subject","level")
+    return folds
 
 
 
@@ -412,7 +413,7 @@ def teacher_has_own_parcourses_and_folder(teacher,is_evaluation,is_archive ):
     """
     Renvoie les parcours et les dossiers dont le prof est propriétaire
     """
-    parcourses =  teacher.teacher_parcours.filter( is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0 )
+    parcourses =  teacher.teacher_parcours.filter( is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0 ).order_by("subject","level")
 
     return parcourses
 
@@ -423,7 +424,7 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
     """
     sharing_groups = teacher.teacher_sharingteacher.all()
-    parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0))
+    parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0).order_by("subject","level"))
 
 
     for sg in sharing_groups :
@@ -7092,13 +7093,14 @@ def export_note(request,idg,idp):
 def list_courses(request):
 
     teacher = request.user.teacher
-    parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=0).order_by("subject", "level", "ranking")
+    parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=0).exclude(course=None).order_by("subject", "level", "title").distinct()
     parcours_courses = list()
     for parcours in parcours_dataset :
         this_courses = dict()
         this_courses["parcours"] = parcours
-        this_courses["courses"]  = parcours.course.all
+        this_courses["courses"]  = parcours.course.all()
         parcours_courses.append(this_courses)
+
 
     nb_archive = Course.objects.filter(  teacher=teacher ,  parcours__is_archive=1).count()
 

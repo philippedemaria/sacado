@@ -1,8 +1,7 @@
-{% extends 'qcm/list_parcours.html' %}
+{% extends 'dashboard.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% load item_tags %}
-
 
 
 {% block require %}
@@ -12,11 +11,14 @@
         require(['script/ajax-evaluations_inside_data']);
     </script> 
 {% endblock %}
- 
 
+ 
 {% block page_title %}
    <i class="fa fa-trophy sacado_color_text"></i>  Mes évaluations
 {% endblock %}
+
+
+
 
 {% block page_menu_right %}
 
@@ -28,17 +30,223 @@
 
 
 
-{% block modal_boxes  %} 
+
+{% block body  %} 
+
+<section class="content_list"  id ="accordion"> 
+{% include 'preloader.html' %}
+
+
+{% if nb_base > 0 %}
+<form action="{% url 'actioner_pef' %}" method="POST" enctype='multipart/form-data'>
+   
+
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-xs-6 col-md-3 ">
+            <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
+        </div>
+
+        <div class=" col-xs-6 col-md-9">
+            <div class="form-group">
+                <input type="search" id="accordion_search_bar" class="form-control" placeholder="Ecrire un mot comme 'numérique' proposera les dossiers le contenant.">
+            </div>
+        </div>
+    </div>
+
+    {% for folder in folders|dictsortreversed:"is_favorite" %}
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
+                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
+                        <h4 class="panel-title">
+                        <a role="button" 
+                         data-toggle="collapse" 
+                         data-parent="#accordion" 
+                         href="#collapse{{ forloop.counter }}" 
+                         aria-expanded="true" 
+                         aria-controls="collapse{{ forloop.counter }}">
+
+
+                         {% if folder.vignette %}
+                            <img src="{{ folder.vignette.url }}" width="50px" height="50px">
+                         {% else %}  
+                            <i class="fa fa-square" style="font-size: 2.4em; color:{{ folder.color }}"></i>
+                         {% endif %}  
+
+
+
+                         {{ folder.title }} <i class="fa fa-angle-down"></i>
+
+                         <span style="font-size: 2em; opacity: 0.1;font-weight: 800;position: absolute;left:60%" class="pull-right">{{ folder.subject }}  </span>
+
+                         <span style="font-size: 2em; opacity: 0.1;font-weight: 800" class="pull-right">{{ folder.level.name }} </span>
+
+
+
+
+                        </a>
+                        </h4>
+                    </div>
+                    <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
+                        <div class="panel-body">         
+                            <table class="table table-hovered standard_tab_10"  style="width:100%" >
+                                <thead> 
+                                    <tr> 
+                                        <th style="width:20px"></th>
+                                        <th style="width:50px">Favori 
+                                        </th>
+                                        <th style="width:50px; ">
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
+                                            </span>
+                                        </th>            
+                                        <th style="width:300px">Nom</th>
+                                        <th></th>
+                                        <th style="width:250px">Groupe </th>
+                                        <th>Mutualisation</th>
+                                        <th>CoAnim.</th>
+                                        <th style="width:150px">Publication 
+                                            <span class="helper_tip"> 
+                                            <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                                            </span>
+                                        </th>                    
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    {% for parcours in folder.parcours.all %}
+                                        {% if parcours.is_evaluation %}
+                                        <tr>
+                                            {% include 'qcm/list_parcours_folder_data.html' %}
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor  %}               
+                                 </tbody>
+                            </table>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-sm-12 col-md-12">
+             
+                                    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces évaluations')"> 
+                                        <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
+                                    </button>
+                   
+
+                                    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces évaluations')"> 
+                                        <i class="fa fa-trash"> </i>   Supprimer la sélection
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="row">    
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hovered table-striped borderless display_no_details100"  style="width:100%" >
+                <thead> 
+                    <tr> 
+                        <th style="width:30px"></th> 
+                        <th style="width:60px">Favori</th> 
+                        <th style="width:50px">
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un dossier <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un dossier </div>
+                            </span>    
+                        </th> 
+                        <th style="width:300px">Nom</th>
+                        <th></th>
+                        <th>Matière</th>
+                        <th>Niveau</th>
+                        <th style="width:300px">Groupe
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >Le profil élève d'un enseignant n'est pas pris en compte. </div>
+                            </span>
+
+                        </th>
+                        <th  style="width:150px;" >Mutualisation</th>
+                        <th>CoAnim.</th>
+                        <th style="width:160px">Publication 
+                            <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                            </span>
+                        </th>
+                    </tr> 
+                </thead>
+                <tbody> 
+                {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
+                    <tr >
+                       {% include 'qcm/list_parcours_data.html' %}
+                    </tr>
+                {% endfor  %} 
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" style="margin-top:50px">
+        <div class="col-sm-12 col-md-12">
+            {% block archive %}
+            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+                <i class="fa fa-archive"> </i>   Archiver la sélection
+            </button>
+            {% endblock  %} 
+
+            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+                <i class="fa fa-trash"> </i>   Supprimer la sélection
+            </button>
+        </div>
+    </div>
+</form>
+{% else %}
+
+
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Si un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscription via le lien <span style="color:#271942">https://sacado.xyz/group/{% if  group %}{{ group.code }}{% else %}code_du_groupe{% endif %}</span><br>
+                <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
+                </div>
+            </div>
+        </div>
+        
+        <div class="row"> 
+            <div class="col-sm-12 col-md-12">
+                <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
+                <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {% if  group %}{{ group.level }}{% else %}niveau_du_groupe{% endif %} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
+                <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
+
+                    {% if sacado_asso %}
+                        <a href="{% url 'all_parcourses' 0 %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                    {% else %}    
+                        <a href="#" class="no_sacado_asso"  ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
+                    {% endif %}
+
+
+                </p>
+
+
+                </ol>
+                <ol><i class="fa fa-hand-o-right"></i>  
+                    Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br/>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. 
+                        <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p>
+                </ol>
+            </div>
+        </div>
+{% endif  %}
+</section>
+
+
+
+ 
+
  
 {% endblock  %}   
 
-
-{% block list_of_evaluation %}
-    {% for parcours in folder.parcours.all %}  
-        {% if   parcours.is_evaluation %}
-        <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
-            {% include 'qcm/list_parcours_data.html' %}
-        </tr>
-        {% endif %}  
-    {% endfor  %}
-{% endblock  %}
+ 

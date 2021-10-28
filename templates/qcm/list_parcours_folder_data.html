@@ -53,24 +53,6 @@
             {% endif %}
  
     </td>
-
-
-    <td>
-        {% if parcours.subject %}{{ parcours.subject.shortname }}{% else %}<small class="alert-danger">RENSEIGNER LA MATIERE</small>{% endif %}
-    </td>
-    <td>
-        <small>
-            {% if parcours.level %}
-                {{ parcours.level }}
-            {% else %}
-                {% for l in  parcours.level_list  %}
-                    {{ l }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            {% endif %}
-        </small>
-    </td> 
-
-    
     <td style="position:relative">
         <span id="new_group_affected{{ parcours.id}}">
         {% for g in  parcours.groups.all  %}

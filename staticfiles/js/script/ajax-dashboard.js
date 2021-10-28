@@ -17,6 +17,51 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $("#help_from_tdb").toggle(300) ;
         });
 
+
+
+
+         // $('.collapse').not(':first').collapse();Collapse all but the first row on the page.
+
+        // This section makes the search work.
+        
+          var searchTerm, panelContainerId;
+          $('#accordion_search_bar').on('change keyup', function() {
+            searchTerm = $(this).val();
+            $('#accordion > .panel').each(function() {
+              panelContainerId = '#' + $(this).attr('id');
+
+              // Makes search to be case insensitive 
+              $.extend($.expr[':'], {
+                'contains': function(elem, i, match, array) {
+                  return (elem.textContent || elem.innerText || '').toLowerCase()
+                    .indexOf((match[3] || "").toLowerCase()) >= 0;
+                }
+              });
+
+              // END Makes search to be case insesitive
+
+              // Show and Hide Triggers
+              $(panelContainerId + ':not(:contains(' + searchTerm + '))').hide(); //Hide the rows that done contain the search query.
+              $(panelContainerId + ':contains(' + searchTerm + ')').show(); //Show the rows that do!
+
+            });
+          });
+  
+        // End Show and Hide Triggers
+
+        // END This section makes the search work.
+
+
+
+
+
+
+
+
+
+
+
+
         // ====================================================================================================================
         // ====================================================================================================================
         // =========================================   check username exist  ================================================== 
@@ -579,7 +624,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $(this).parent().parent().parent().addClass('documents_div');
             $(this).parent().parent().parent().addClass('documents_div_shadow');
             $(this).find('i').removeClass('fa-angle-up').addClass('fa-angle-down'); 
-            $('.documents_div').removeClass('parcours_is_stop')  
+            $('.documents_div').removeClass('parcours_is_stop')  ;
             $('.listing').hide();          
             }
 

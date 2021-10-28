@@ -1,6 +1,16 @@
 
 define(['jquery', 'datatables','datatables_bootstrap'], function ($) {
 
+
+
+$('.standard_tab_10').dataTable( {
+    "pageLength": 10,
+    "ordering": true,
+    "info":     true
+} );
+
+
+
 $('.standard_tab_1000').dataTable( {
     "pageLength": 1000,
     "ordering": false,

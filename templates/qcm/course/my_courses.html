@@ -37,61 +37,111 @@
 <section class="content_list"> 
 {% include 'preloader.html' %}
 
- 
 <form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
-            <table class="table table_list table-hovered borderless display_no_details100"  style="width:100%" >
-                <thead> 
-                    <tr> 
-                        <th style="width:20px;"></th>  
-                        <th style="width:300px;">Titre</th>
-                        <th style="width:80px;">Durée</th>
-                        <th>Matière</th>
-                        <th>Niveau</th>
-                        <th>Dossiers </th>
-                        <th style="width:180px;">Mutualisation</th>
-                        <th style="width:150px;">Publication 
-                            <span class="helper_tip"> 
-                            <i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
-                            </span>
-                        </th>                    
-                    </tr> 
-                </thead>
-                <tbody>
-                {% for parcours_course in parcours_courses %} 
-                    <tr style="{% if not parcours_course.parcours.is_publish %} border-left-color:#cb2131; border-left-style: 3px solid;{% endif  %}height:60px"  class="selected_tr"  id="tr{{ forloop.counter }}" >
-                        <td style="position:relative; text-align:center; 
-                                    background-image:url({% if parcours_course.parcours.vignette %}{{ parcours_course.parcours.vignette.url }}{% endif %});
-                                    background-repeat: no-repeat;
-                                    background-size: 50px 50px;"> 
-                        </td> 
-                        <td>
-                            <span class="accordion" data-target="{{ forloop.counter }}"  >{{ parcours_course.parcours.title }}  <i class="fa fa-chevron-down pull-right" id="pop{{ forloop.counter }}" ></i></span>
-                        </td>  
-                        <td>{{ parcours_course.parcours.duration_overall|int_minutes  }} min. 
-                        </td>
-                        <td>{{  parcours_course.parcours.subject.name  }}</td> 
-                        <td>{{  parcours_course.parcours.level.name  }}</td> 
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {% for course in parcours_course.courses %} 
-                        <tr  style="display:none"   class="collapsed subparcours{{ forloop.parentloop.counter }}"  >
-                            {% include 'qcm/course/course_data.html' %}
-                        </tr>
-                    {% endfor  %}
-                {% endfor  %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+            <div class="row">
+                <div class="col-xs-6 col-md-3 ">
+                    <h2 class="thin sacado_color_text"></i> rattachés aux parcours</h2>
+                </div>
+
+                <div class=" col-xs-6 col-md-9">
+                    <div class="form-group">
+                        <input type="search" id="accordion_search_bar" class="form-control" placeholder="Ecrire un mot comme 'numérique' proposera les dossiers le contenant.">
+                    </div>
+                </div>
+            </div>
+            {% for parcours_course in parcours_courses %} 
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
+                            <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
+                                <h4 class="panel-title">
+                                <a role="button" 
+                                 data-toggle="collapse" 
+                                 data-parent="#accordion" 
+                                 href="#collapse{{ forloop.counter }}" 
+                                 aria-expanded="true" 
+                                 aria-controls="collapse{{ forloop.counter }}">
+
+
+                                 {% if parcours_course.parcours.vignette %}
+                                    <img src="{{ parcours_course.parcours.vignette.url }}" width="50px" height="50px">
+                                 {% else %}  
+                                    <i class="fa fa-square" style="font-size: 2.4em; color:{{ parcours_course.parcours.color }}"></i>
+                                 {% endif %}  
+
+
+
+                                 {{ parcours_course.parcours.title }} <i class="fa fa-angle-down"></i>
+
+                                 <span style="font-size: 2em; opacity: 0.1;font-weight: 800;position: absolute;left:60%" class="pull-right">{{ parcours_course.parcours.subject.name }}  </span>
+
+                                 <span style="font-size: 2em; opacity: 0.1;font-weight: 800" class="pull-right">{{ parcours_course.parcours.level.name }} </span>
+
+
+
+
+                                </a>
+                                </h4>
+                            </div> 
+                            <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
+                                <div class="panel-body">         
+                                    <table class="table table-hovered standard_tab_10"  style="width:100%" >
+                                        <thead> 
+                                            <th></th>  
+                                            <th>Titre </th>  
+                                            <th>Durée </th>
+                                            <th>Dossier</th>
+                                            <th>Mutualisation</th>
+                                            <th>Publication</th>
+                                        </thead>
+                                        <tbody>
+                                            {% for course in parcours_course.courses %} 
+                                                <tr >
+                                                    {% include 'qcm/course/course_data.html' %}
+                                                </tr>
+                                            {% endfor  %}          
+                                         </tbody>
+                                    </table>
+                                    <div class="row" style="margin-top:10px">
+                                        <div class="col-sm-12 col-md-12">
+                     
+                                            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces évaluations')"> 
+                                                <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
+                                            </button>
+                           
+
+                                            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces évaluations')"> 
+                                                <i class="fa fa-trash"> </i>   Supprimer la sélection
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+ 
     <div class="row" style="margin-top:50px;padding-left: 15px;">
         <div class="col-sm-12 col-md-12 alert alert-warning">
-            <img src="{% static 'img/conseil.png' %}"/> Pour désarchiver un cours, il faut désarchiver le parcours auquel il est lié.
+            <img src="{% static 'img/conseil.png' %}"/> Pour désarchiver un cours, il suffit de désarchiver le parcours auquel il est lié.
         </div>
     </div>
 </form>
@@ -100,5 +150,7 @@
  
  
 {% endblock  %}   
+
+
 
  

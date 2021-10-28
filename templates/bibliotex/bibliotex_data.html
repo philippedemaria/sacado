@@ -31,9 +31,6 @@
         <a href="{% url 'update_bibliotex' bibliotex.id  %}"  > <i class="fa fa-edit  fa-xs"></i></a>
  
 </td>
-<td>
-    {% for l in bibliotex.levels.all %}{{ l.name }}{% empty %}<small class="alert-danger">RENSEIGNER LE NIVEAU</small>{% endfor %}
-</td> 
 <td style="position:relative">
     <span id="new_group_affected{{ bibliotex.id}}">
     {% for g in  bibliotex.groups.all  %}

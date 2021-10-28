@@ -26,12 +26,6 @@
  
                 <a href="{% url 'only_update_course' course.id   %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
     </td>
-    <td>
-         {{ course.parcours.subject.shortname }}  
-    </td>
-    <td>
-         {{  course.parcours.level.name }} 
-    </td> 
     <td >
         {% if course.parcours.folders  %}
             {% for f in  course.parcours.folders.all  %}
