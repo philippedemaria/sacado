@@ -347,7 +347,7 @@ def ajax_chargethemes_quizz(request):
         thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
         data['themes'] = list(thms)
  
-        quizzes = Quizz.objects.filter(Q(teacher_id = teacher_id)|Q(teacher_id__in = user_ids), subject_id = id_subject,  is_share = 1 ).exclude(teacher=teacher)
+        quizzes = Quizz.objects.filter(Q(teacher_id = teacher_id)|Q(teacher_id__in = user_ids), subject_id = id_subject,  is_share = 1 , levels = level ).exclude(teacher=teacher)
         quizz.update( quizzes )          
 
     data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })
