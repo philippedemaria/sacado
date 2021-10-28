@@ -181,6 +181,48 @@ hr.divider {
     box-shadow: 0px 10px 30px rgba(70, 17, 156, 0.7);
 }
 
+/* ------------------------------------------------------------------------------------------------------------*/
+/* --------------------------------------------------- Accordion de listes ------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------*/
+.panel-group_list {
+    margin-bottom: 10px;
+}
+
+.panel-group_list .panel {
+    margin-bottom: 0;
+    border-radius: 4px;
+}
+
+.panel-group_list .panel-default {
+    border-color: #d1cae0;
+}
+
+.panel-group_list .panel-default > .panel-heading {
+    color: #333;
+    background-color: #f1eef7;
+    border-color: #d1cae0;
+}
+
+.panel-group_list .panel-heading {
+    padding: 10px 5px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.panel-group_list .panel-title {
+    padding-bottom: 0px;
+    font-size: 24px;
+}
+
+ 
+
+
+/* ------------------------------------------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------*/
+
+
+
 
 
 .box-footer span{
@@ -232,14 +274,25 @@ border-radius:0px;
     height:255px;
     overflow : hidden;
     margin-top: 0px;  
+
 }
  
 .documents_div_shadow{
-    -webkit-box-shadow: 0px 4px 10px 0px rgba(93, 67, 145, 0.4) inset;
-    -moz-  box-shadow: 0px 4px 10px 0px  rgba(93, 67, 145, 0.4) inset;
-    box-shadow: 0px 4px 10px 0px  rgba(93, 67, 145, 0.4) inset;
+  position: relative;  
 }
 
+
+.documents_div_shadow .shadow_bottom{
+  position: absolute;
+  top:255px;
+  width:100%;
+  height:10px;
+  border-radius: 5px ;
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  border-top: solid 1px #CCC;
+}
 
 
 .un_collapsed{
@@ -254,7 +307,14 @@ border-radius:0px;
  
 .un_collapsed:hover{
   background-color: #5d4391;
+  transform: rotate(180deg);  
 }
+
+.fontLabel {
+  font-size: 18px ; 
+  color : #7e738c ;
+}
+
 
 
 
@@ -285,7 +345,7 @@ border : 0px!important;
 
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #f6f6f6;
+    background-color: #faf7fc;
 }
 
 .bg_white{
@@ -7328,7 +7388,7 @@ text-align: center;
   padding: 9px 9px;
   color:#FFF;
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.9;
   display: block;
 }
 
@@ -7344,7 +7404,7 @@ text-align: center;
   padding: 9px 9px;
   color:#FFF;
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.9;
   display: block;
 }
 
