@@ -270,6 +270,9 @@ border-radius:0px;
 
 
 
+
+
+
 .documents_div{
     height:255px;
     overflow : hidden;
@@ -317,6 +320,52 @@ border-radius:0px;
   color : #7e738c ;
 }
 
+
+.list_label {
+  font-size: 2em; 
+  opacity: 0.1;
+  font-weight: 800;
+  position: absolute;
+  right:20px;
+}
+
+.list_subject {
+  left:60%
+}
+
+
+ @media (max-width:1050px){
+
+  .list_label {
+    font-size: 2em; 
+    opacity: 0.1;
+    font-weight: 800;
+    position: absolute;
+    right:20px;
+  }
+
+  .list_subject {
+    left:50%
+  }
+
+}
+
+
+ @media (max-width:870px){
+
+  .list_label {
+    font-size: 2em; 
+    opacity: 0.1;
+    font-weight: 800;
+    position: absolute;
+    right:20px;
+  }
+
+  .list_subject {
+    display: none;
+  }
+
+}
 
 
 

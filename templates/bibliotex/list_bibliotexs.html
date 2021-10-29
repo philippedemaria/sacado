@@ -76,16 +76,13 @@
                                  {% else %}  
                                     <i class="fa fa-square" style="font-size: 2.4em; color:{{ list_folder.folder.color }}"></i>
                                  {% endif %}  
+ 
 
+                                {{ list_folder.folder.title }} <i class="fa fa-angle-down"></i>
 
+                                 <span class="list_label list_subject">{{ list_folder.folder.subject.shortname }}  </span>
 
-                                 {{ list_folder.folder.title }} <i class="fa fa-angle-down"></i>
-
-                                 <span style="font-size: 2em; opacity: 0.1;font-weight: 800;position: absolute;left:60%" class="pull-right">{{ list_folder.folder.subject }}  </span>
-
-                                 <span style="font-size: 2em; opacity: 0.1;font-weight: 800" class="pull-right">{{ list_folder.folder.level.name }} </span>
-
-
+                                 <span class="list_label">{{ list_folder.folder.level.name }} </span>
 
 
                                 </a>
