@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-cstomexercise.js OK");
+        console.log("chargement JS ajax-customexercise.js OK");
 
  
         // Enregistrer les commentaires
@@ -102,7 +102,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        var canvas    = document.getElementById("myCanvas");
+        var canvas    = document.getElementById("corrector");
         var ctx       = canvas.getContext('2d');
         canvas.width  = 800 ;
         canvas.height = 800;
