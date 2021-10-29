@@ -1518,8 +1518,6 @@ def list_parcours_group(request,id):
     clear_realtime(parcours_tab , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
 
-    print(group)
-
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
                  'parcourses': parcourses , 'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
@@ -4512,7 +4510,7 @@ def show_this_supportfile(request, id):
 
     if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
-        parcours = Parcours.objects.filter(teacher=teache,is_trash=0)
+        parcours = Parcours.objects.filter(teacher=teacher,is_trash=0)
     else :
         parcours = None
 
