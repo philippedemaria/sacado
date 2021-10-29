@@ -4067,7 +4067,7 @@ def real_time(request,id):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
-    students = parcours.students.order_by("user__last_name").exclude(student__user__username__contains="_e-test")
+    students = parcours.students.order_by("user__last_name").exclude(user__username__contains="_e-test")
     rcs      = rcs_for_realtime(parcours)
 
     return render(request, 'qcm/real_time.html', { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access })
