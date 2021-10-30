@@ -1196,7 +1196,18 @@ def printer(request,collection,output):
 
     if output=="pdf" :
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
-        return FileResponse(open("https://sacado.xyz/ressources/tex/tmp_tex/bibliotex"+document_id+'.pdf', 'rb'),  as_attachment=True, content_type='application/pdf')
+        #return FileResponse(open("https://sacado.xyz/ressources/tex/tmp_tex/bibliotex"+str(document_id)+'.pdf', 'rb'),  as_attachment=True, content_type='application/pdf')
+ 
+        with open('/var/www/sacado/ressources/tex/tmp_tex/bibliotex'+str(document_id)+'.pdf', 'r') as pdf:
+            response = HttpResponse(pdf.read(), mimetype='application/pdf')
+            response['Content-Disposition'] = 'inline;filename=this_file.pdf'
+            return response
+        pdf.closed
+
+
+
+
+
 
     elif output=="html" :
         result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
