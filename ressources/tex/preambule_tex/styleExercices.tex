@@ -1,0 +1,736 @@
+%%%%%%%%%%%%% Types d'exercices
+
+\newcommand{\AD}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Application directe}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Application directe}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+\newcommand{\TP}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4P]{\color{white}\textbf{ \thecptex}}; \quad  {\color{eduscol4P}\textbf{ Travail personnel}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4P]{\color{white}\textbf{ \thecptex}}; \quad  {\color{eduscol4P}\textbf{ Travail personnel}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+ 
+\newcommand{\Fl}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=2pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{ Question flash}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=2pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{ Question flash}} dans le cahier d'exercices
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\ExD}[1]{ % Exercice directement dans la page
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Exercice}}
+\ \\
+}
+
+
+
+\newcommand{\AVDM}[1]{ %  directemet dans la page
+\vspace{0.4cm}
+\stepcounter{cptavdm}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptavdm}}; \quad  {\color{purple}\textbf{A vous de manipuler}}
+\ \\
+}
+
+
+\newcommand{\act}[1]{ %  directemet dans la page
+\vspace{0.4cm}
+\stepcounter{cptavdm}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ Activité \thecptavdm}};  
+ 
+\ \\
+}
+
+% Ligne de commande
+\newcommand{\cmd}[1]{\fcolorbox{gray!40}{gray!10}{ \vspace{0.1cm} \texttt{ #1 }  \vspace{0.1cm}}}
+ 
+\newcommand{\Tab}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=gray]{\color{white}\textbf{ \thecptex}}; \quad  {\color{gray}\textbf{ Exercice Tableur}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=gray]{\color{white}\textbf{ \thecptex}}; \quad  {\color{gray}\textbf{ Exercice Tableur}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\Exo}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Exercice d'application}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Exercice d'application}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+\newcommand{\Alg}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=gray]{\color{white}\textbf{ \thecptex}}; \quad  {\color{gray}\textbf{ Algorithmique}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=gray]{\color{white}\textbf{ \thecptex}}; \quad  {\color{gray}\textbf{ Algorithmique}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\EPC}[3]{ % Exerice par compétence de niveau 1
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{#3}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=2pt,draw,fill=eduscol4P]{\color{white}\textbf{ \thecptex}}; \quad  {\color{eduscol4P} \textbf{En temps libre.} \textbf{ #3}} 
+\input{#2}
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+\newcommand{\EPCcor}[3]{ % Exerice par compétence de niveau 1
+\vspace{0.4cm}
+\tikz\node[rounded corners=2pt,draw,fill=eduscol4P]{\color{white}\textbf{ #1}}; \quad  {\color{eduscol4P} \textbf{En temps libre.} \textbf{ #3}} 
+\input{#2}
+} % fin de la procédure 
+ 
+
+
+
+\newcommand{\EPCB}[3]{ % Exerice par compétence de niveau 2
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu1]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu1}\textbf{#3}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu1]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu1}\textbf{ #3}} d'exercices
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+\newcommand{\EPCC}[3]{% % Exerice par compétence de niveau 3
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{ \thecptex}}; \quad  {\color{black}\textbf{#3}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{ \thecptex}}; \quad  {\color{black}\textbf{ #3}} d'exercices
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\EPCP}[3]{% % Exerice par compétence avec  Python
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}};  \tikz\node[rounded corners=2pt,draw,fill=yellow]{\color{bleu2}\textbf{Python}} ;\quad  {\color{bleu2} \textbf{#3}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{ \thecptex \quad  Python}}; \quad  {\color{black}\textbf{ #3}} d'exercices
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\EPCG}[3]{% % Exerice par compétence avec  Python
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \tikz\node[rounded corners=2pt,draw,fill=violet]{\color{white}\textbf{Geogebra}};\quad  {\color{violet} \textbf{#3}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=violet]{\color{white}\textbf{ \thecptex \quad Geogebra}}; \quad  {\color{violet}\textbf{ #3}} d'exercices
+}% fin condition2 fausse
+} % fin de la procédure
+
+\newcommand{\EPCN}[1]{ 
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{\thecptex}}; \quad  {\color{bleu2}\textbf{ #1}}
+}
+
+
+\newcommand{\EPCNM}[1]{ 
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=gray]{\color{white}\textbf{\thecptex}}; \quad  {\color{gray}\textbf{ #1}}
+}
+
+
+\newcommand{\EPCNA}[1]{ 
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{\thecptex}}; \quad  {\color{black}\textbf{ #1}}
+}
+
+\newcommand{\EPCNP}[1]{ 
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=yellow]{\color{bleu2}\textbf{\thecptex} Python}; \quad  {\color{bleu2}\textbf{ #1}}
+}
+
+\newcommand{\Auto}[1]{ 
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=gray]{\color{white}\textbf{\thecptex}}; \quad  {\color{gray}\textbf{ #1}}
+}
+
+
+
+\newenvironment{ExC}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu2!75!white,
+adjusted title= Exercice corrigé.  {#1}     ]}
+{%
+\end{tcolorbox}\par}
+
+
+
+\newcommand{\FlC}[3]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=2pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{ Question flash} #3}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=2pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{ Question flash} #3} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+
+\newcommand{\Dec}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Exercice de découverte}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{ Exercice de découverte}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\PO}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{ \thecptex}}; \quad  {\color{black}\textbf{ Défi}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{ \thecptex}}; \quad  {\color{black}\textbf{ Défi}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+\newcommand{\Exe}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Exercice \thecptex}}; 
+\\
+}
+
+\newcommand{\Dnb}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ Exercice vu au DNB \thecptex}}; 
+\\
+}
+
+\newcommand{\DnbDetails}[2]{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ Vu au DNB - #1 - Exercice #2  }}; 
+\\
+}
+
+
+
+
+
+\newcommand{\ExeN}[1]{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Exercice \thecptex}}; 
+\ifthenelse{#1 < 2} { \hfill{1 point}}{\hfill{#1 points}}
+\\
+}
+
+
+\newcommand{\ExeSC}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Exercice}}; 
+\\
+}
+
+
+\newcommand{\Defi}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=black]{\color{white}\textbf{ Approfondissement \thecptex}}; 
+\\
+}
+
+\newcommand{\MP}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Mini Projet possible}}; 
+\\
+}
+
+
+\newcommand{\BAC}[3]{ %Vu au Bac avec le lieu et l'année et dissociation élève ou prof
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ \thecptex}}; 
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ Vu au Bac. #2 }};
+
+\input{#3}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptex}}; 
+\quad  {\color{purple}\textbf{  Vu au baccalauréat #2}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\BACL}[1]{ %Vu au Bac avec le lieu et l'année
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Exercice \thecptex}} ;
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ Vu au Bac #1}}
+;
+\\
+}
+
+
+
+\newcommand{\BACS}{ %Vu au Bac sans le lieu et l'année
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Exercice \thecptex}} ;
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ Vu au Bac}}
+;
+\\
+}
+
+
+\newcommand{\ExP}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu4]{\color{white}\textbf{ Exercice \thecptex}}; 
+\\
+}
+\newcommand{\ExF}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu1]{\color{white}\textbf{ Exercice \thecptex}}; 
+\\
+}
+
+\newcommand{\PAPL}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ Exercice \thecptex}}; \quad  {\color{red}\textbf{ Pour aller plus loin }}
+\\
+}
+
+\newcommand{\Ast}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=yellow]{\color{red}\textbf{ Astuce }}; 
+\\
+}
+
+\newcommand{\Rec}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu3}\textbf{ Situation de recherche}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu3}\textbf{ Situation de recherche}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+\newcommand{\App}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu3}\textbf{ Approfondissement}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu3}\textbf{ Approfondissement}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\Scr}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=orange]{\color{white}\textbf{ \thecptex}}; \quad  {\color{orange}\textbf{  Activité Scratch}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=orange]{\color{white}\textbf{ \thecptex}}; \quad  {\color{orange}\textbf{  Activité Scratch}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\Pyt}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=yellow]{\color{blue}\textbf{ \thecptex}}; \quad  {\color{blue}\textbf{   Python}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=yellow]{\color{blue}\textbf{ \thecptex}}; \quad  {\color{blue}\textbf{   Python}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\Prep}[3]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{  Pour préparer le #2}}
+\input{#3}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{  Pour préparer le #2}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+\newcommand{\DNB}[3]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptex}}; \quad  {\color{purple}\textbf{  Vu au brevet #2}}
+\input{#3}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptex}}; \quad  {\color{purple}\textbf{  Vu au brevet #2}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\DNBS}[1]{ %DNB pour un séance sans input
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptex}}; \quad  {\color{purple}\textbf{  Vu au brevet #1}}
+}% fin condition2 vraie
+
+\newcommand{\DNBC}[4]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptex}}; \quad  {\color{purple}\textbf{  Vu au brevet #2 }#4}
+\input{#3}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=purple]{\color{white}\textbf{ \thecptex}}; \quad  {\color{purple}\textbf{  Vu au brevet #2} #4} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+
+
+\newcommand{\CR}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{ Compte rendu}}
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+\stepcounter{cptex}
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=red]{\color{white}\textbf{ \thecptex}}; \quad  {\color{red}\textbf{  Compte rendu}} En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\avenir}{
+\tikz\node[rounded corners=2pt,draw,fill=gray]{\color{white}   \textbf{ Parcours Avenir}};
+} % fin de la procédure
+\newcommand{\citoyen}{
+\tikz\node[rounded corners=2pt,draw,fill=bleu1]{\color{white}  \textbf{ Parcours Citoyen}};
+} % fin de la procédure
+\newcommand{\sante}{
+\tikz\node[rounded corners=2pt,draw,fill=green]{\color{white}   \textbf{ Parcours Santé}};
+} % fin de la procédure
+\newcommand{\PAEC}{
+\tikz\node[rounded corners=2pt,draw,fill=purple]{\color{white}   \textbf{ Parcours d'éducation artistique et culturel}};
+} % fin de la procédure
+
+
+
+
+
+\newcommand{\Parcours}[3]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=vert]{\color{white}\textbf{ \thecptex. Parcours #2}}; 
+\input{#3}
+}% fin condition2 vraie
+{%condition2 fausse
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=vert]{\color{white}\textbf{ \thecptex. Parcours #2}}; \quad En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\Neutre}[2]{
+\ifthenelse{\equal{#1}{1}}
+{%condition2 vraie
+\input{#2}
+}% fin condition2 vraie
+{%condition2 fausse
+En temps libre
+}% fin condition2 fausse
+} % fin de la procédure
+
+
+\newcommand{\EL}[1]{%
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=violet]{\color{white}\textbf{.. }; \quad  \href{#1}{\color{violet}\textbf{ En ligne}}
+}
+}
+
+%%%%%%%%%%%%% Exercice corrigé
+\newenvironment{cor}[2][]{%
+\vspace{0.4cm}
+\begin{bclogo}[couleur=gray!30, arrondi =0.15, noborder=true, couleurBarre=yellow, logo = \bcoutil ]{ 
+\normalsize{Elements de correction #1 #2}}}
+{%
+\end{bclogo}
+\par}
+
+\newcommand{\ROC}{
+\tikz\node[rounded corners=5pt,draw,fill=red]{\color{white}\textbf{ROC}}; \quad  {\color{red}\textbf{Restitution Organisée de Connaissance}}
+}
+
+
+\newcommand{\Rech}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ \thecptex}}; 
+\tikz\node[rounded corners=0pt,draw,fill=bleu3]{\color{white}\textbf{ Situation de recherche}}; 
+}
+
+
+\newcommand{\SR}{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ Situation de recherche \thecptex}}; 
+\\
+}
+
+
+%%%%%%%%%%%%% enonce
+\newenvironment{enonce}[2][]{%
+\begin{tcolorbox}[breakable, enhanced,widget, colback=white!10!white,boxrule=0pt,frame hidden,
+borderline west={2mm}{0mm}{#1}]
+\textbf{ {\color{#1} ÉNONCÉ }} #2}
+{%
+\end{tcolorbox}
+\par}
+%%%%%%%%%%%%% Preuve
+\newenvironment{cadre}[2][]{%
+\begin{tcolorbox}[breakable, enhanced,widget, colback=#1!10!white,boxrule=0pt,frame hidden,
+borderline west={2mm}{0mm}{#1}]
+ #2}
+{%
+\end{tcolorbox}
+\par}
+
+
+\newcommand{\ExeU}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4B!40]{\color{white}\textbf{ Exercice de niveau 1}}; 
+\\
+}
+
+\newcommand{\ExeD}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4B!60]{\color{white}\textbf{ Exercice de niveau 2}}; 
+\\
+}
+
+\newcommand{\ExeT}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4B!80]{\color{white}\textbf{ Exercice de niveau 3}}; 
+\\
+}
+
+\newcommand{\ExeQ}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4B]{\color{white}\textbf{ Exercice de niveau 4}}; 
+\\
+}
+
+\newcommand{\CompU}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4P!40]{\color{white}\textbf{ Exercice de niveau 1}}; 
+\\
+}
+
+\newcommand{\CompD}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4P!60]{\color{white}\textbf{ Exercice de niveau 2}}; 
+\\
+}
+
+\newcommand{\CompT}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4P!80]{\color{white}\textbf{ Exercice de niveau 3}}; 
+\\
+}
+
+\newcommand{\CompQ}{
+\vspace{0.4cm}
+\tikz\node[rounded corners=0pt,draw,fill=eduscol4P]{\color{white}\textbf{ Exercice de niveau 4}}; 
+\\
+}
+
+
+\newcommand{\ExeComp}[1]{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=bleu2]{\color{white}\textbf{ \thecptex}}; \quad  {\color{bleu2}\textbf{#1}}
+}% 
+
+
+
+%%%%%%%%%%%%% Enigme
+\newenvironment{Eni}[2][]{%
+\medskip \begin{tcolorbox}[widget,colback=white!15,colframe=eduscol4P!75!white,
+adjusted title= \stepcounter{cptdef} Énigme \thecptdef . {#1} \textit{#2}]}
+{%
+\end{tcolorbox}\par}
+
+
+\newcommand{\sacado}[1]{
+\vspace{0.4cm}
+\stepcounter{cptex}
+\tikz\node[rounded corners=0pt,draw,fill=vertS]{\color{white}\textbf{\thecptex . SACADO}}; \quad  {\color{vertS} Code exercice : \textbf{#1}}
+}%

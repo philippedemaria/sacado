@@ -1113,33 +1113,50 @@ def ajax_print_bibliotex(request):
 
     return JsonResponse(data)
 
- 
 
-def print_bibliotex(request ):
 
-    bibliotex_id = request.POST.get("print_bibliotex_id",None)  
+
+def printer(request,collection,output):
+    """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
+    soit en html (output="html") """
+    if collection : 
+       bibliotex_id = request.POST.get("print_bibliotex_id",None)  
+       bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
+       document_id = bibliotex_id
+       title = bibliotex.title
+    else :
+        relationtex_id = request.POST.get("print_exotex_id",None)  
+        relationtex    = Relationtex.objects.get(pk = relationtex_id) 
+        document_id = relationtex_id
+        title = relationtex.exotex.title
+
     skills       = request.POST.get("skills",None)  
     knowledges   = request.POST.get("knowledges",None)  
-    bibliotex    = Bibliotex.objects.get(pk = bibliotex_id) 
   
-         
-    elements = r"""\documentclass[12pt]{article}
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""preambule} 
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleCoursLycee} 
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleExercices} 
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""algobox}
-                        \begin{document}"""   
-    
-    elements += r"""\begin{titre}[Calculs numériques]
-                \TitreSansTemps{"""+ bibliotex.title +r"""} 
-                \end{titre}"""
+    entetes=open(settings.TEX_PREAMBULE_FILE,"r")
+
+    print(settings.TEX_PREAMBULE_FILE)
+
+    elements=entetes.read()
+
+    print(elements)
+
+    entetes.close()
+    elements +=r"\begin{document}"+"\n"         
+    # elements += r"""\begin{titre}[Calculs numériques]
+    #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
+    #             \end{titre}"""
 
 
+    elements += r"""\centerline{\bf """+ title +r""" }"""
+    elements += r""" \ \\ """
 
     today = datetime.now()
+    if collection : 
+        relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
+        i = 1
+    else: relationtexs=[relationtex]
 
-    relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
-    i = 1
     for relationtex in relationtexs :
         
         skills_display = ""
@@ -1151,7 +1168,7 @@ def print_bibliotex(request ):
             for s in sks :
                 skills_display +=  s.name+". "
 
-        elements = r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display+r"\\"
+        elements += r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display 
 
 
         if knowledges :  
@@ -1170,83 +1187,45 @@ def print_bibliotex(request ):
         else :
             ctnt =  relationtex.exotex.content
 
-        elements += ctnt+r"\\ \vspace{0.3cm}"
+        elements += ctnt
     
     elements +=  r"\end{document}" 
 
 
-    file = settings.DIR_TMP_TEX+"bibliotex"+str(bibliotex.id)
-     
-
+    file = settings.DIR_TMP_TEX+"bibliotex"+str(document_id)
+    
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
     f_tex.close()
 
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
 
-    return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
+    if output=="pdf" :
+        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+        print("---------->", file+'.pdf')
+        return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
+    elif output=="html" :
+        result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
+        fhtml=open(file+".tex","r")
+        out=""
+        recopie=False
+        for ligne in fhtml :
+            if ligne=="</body>\n" : recopie=False
+            if recopie : out+=ligne
+            if ligne==  "</head><body>\n" : recopie=True      
+        return out
+    else : 
+        print("format output non reconnu")
+        return 
 
 
 
+ 
+
+def print_bibliotex(request ):
+
+    printer(request,True,"pdf")
 
 
 def print_exotex(request):
-
-
-    relationtex_id = request.POST.get("print_exotex_id",None)  
-    skills         = request.POST.get("skills",None)  
-    knowledges     = request.POST.get("knowledges",None)  
-    relationtex    = Relationtex.objects.get(pk = relationtex_id) 
-
-    elements = r"""\documentclass[12pt]{article}
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""preambule} 
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleCoursLycee} 
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""styleExercices} 
-                        \input{"""+settings.DIR_PREAMBULE_TEX+r"""algobox}
-                        \begin{document}"""    
-
-
-
-    skills_display = ""
-    if skills :   
-        if relationtex.skills.count():
-            sks =  relationtex.skills.all()
-        else :
-            sks =  relationtex.exotex.skills.all()
-        for s in sks :
-            skills_display +=  s.name+". "
-
-    elements = r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display+r"\\"
-
-
-    if knowledges :  
-        k_display = relationtex.exotex.knowledge.name
-        elements += k_display
-
-        if relationtex.knowledges.count():
-            kws =  relationtex.knowledges.all()
-        else :
-            kws =  relationtex.exotex.knowledges.all()
-        for k in kws :
-            elements=+ k.name
-
-    if  relationtex.content :
-        ctnt =  relationtex.content
-    else :
-        ctnt =  relationtex.exotex.content
-
-    elements += ctnt+ r"\end{document}" 
-
-    file = settings.DIR_TMP_TEX+"exotex"+str(relationtex.id)
- 
-
-    f_tex = open(file+".tex","w")
-    f_tex.write(elements)
-    f_tex.close()
-
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ], capture_output=True, text=True)
-
-    return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
-
-
-
+    print("ici")
+    printer(request,False,"pdf")

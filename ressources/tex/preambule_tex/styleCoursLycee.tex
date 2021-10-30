@@ -1,0 +1,920 @@
+%% Théorème, Définition, Exemple, Remarque, .....
+\newcounter{cpttheo}
+\setcounter{cpttheo}{0}
+\newcounter{cptdef}
+\setcounter{cptdef}{0}
+\newcounter{cptmth}
+\setcounter{cptmth}{0}
+\newcounter{cpttitre}
+\setcounter{cpttitre}{0}
+\newcounter{cpttitrebis}
+\setcounter{cpttitrebis}{0}
+ % Exercices
+\newcounter{cptapp}
+\setcounter{cptapp}{0}
+\newcounter{cptex}
+\setcounter{cptex}{0}
+\newcounter{cptsr}
+\setcounter{cptsr}{0}
+\newcounter{cpti}
+\setcounter{cpti}{0}
+\newcounter{cptcor}
+\setcounter{cptcor}{0}
+\newcounter{cptcahier}
+\setcounter{cptcahier}{0}
+\newcounter{cptavdm}
+\setcounter{cptavdm}{0}
+\newcounter{cptpara}
+\setcounter{cptpara}{0}
+\newcounter{subcptpara}
+%%%%% Pour réinitialiser numéros des paragraphes après une nouvelle partie
+\makeatletter
+    \@addtoreset{paragraph}{part}
+\makeatother
+
+
+%%%% Titres et sections
+
+\newlength\chapnumb
+\setlength\chapnumb{3cm}
+
+
+%\titleformat{\part}[block] {
+%  \normalfont\sffamily\color{violet}}{}{0pt} {
+%    \parbox[t]{\chapnumb}{\fontsize{120}{110}\selectfont\ding{110}}
+%    \parbox[b]{\dimexpr\textwidth-\chapnumb\relax}{
+%        \raggedleft
+%        \hfill{{\color{bleu3}\fontsize{40}{30}\selectfont#1}}\\
+%        \rule{0.99\textwidth-\chapnumb\relax}{0.4pt}
+%  }
+%}
+ 
+\titleformat{name=\part,numberless}[block]
+{\normalfont\sffamily\color{bleu3}}{}{0pt}
+{\parbox[b]{\chapnumb}{%
+   \mbox{}}%
+  \parbox[b]{\dimexpr\textwidth-\chapnumb\relax}{%
+    \raggedleft%
+    \hfill{{\color{bleu3}\fontsize{40}{30}\selectfont#1}}\\
+    \rule{0.99\textwidth-\chapnumb\relax}{0.4pt}
+  }
+}
+
+
+ 
+\titleformat{\chapter}[block] {
+  \normalfont\sffamily\color{violet}}{}{0pt} {
+    \parbox[t]{\chapnumb}{ 
+      \fontsize{120}{110}\selectfont\thechapter}
+     \parbox[b]{\dimexpr\textwidth-\chapnumb\relax}{
+        \raggedleft
+        \hfill{{\color{bleu3}\huge#1}}\\  
+  \ifthenelse{\thechapter<10}{\rule{0.99\textwidth-\chapnumb\relax}{0.4pt}}{\rule{0.9\textwidth-\chapnumb\relax}{0.4pt}}
+        \setcounter{cpttitre}{0}
+        \setcounter{cptpara}{0}
+  }
+}
+% 
+%\titleformat{name=\chapter,numberless}[block]
+%{\normalfont\sffamily\color{bleu3}}{}{0pt}
+%{\parbox[b]{\chapnumb}{%
+%   \mbox{}}%
+%  \parbox[b]{\dimexpr\textwidth-\chapnumb\relax}{%
+%    \raggedleft%
+%    \hfill{{\color{bleu3}\huge#1}}\\
+%    \ifthenelse{\thechapter<10}{\rule{0.99\textwidth-\chapnumb\relax}{0.4pt}}{\rule{0.9\textwidth-\chapnumb\relax}{0.4pt}}
+%    \setcounter{cpttitre}{0}
+%  }
+%}
+
+% couleurs :   bleu3 - eduscol4P - black - eduscol4B   
+
+  \titleformat{\section}[hang]{\color{black} \normalfont\filright\Large}{}{0.4em}{#1}   
+  \titlespacing*{\section}{0.2pt}{0ex plus 0ex minus 0ex}{0.3em}
+    
+  \titleformat{\subsection}[hang]{\color{violet} \normalfont\filright\Large}{}{0 em}{#1}            
+  \titleformat{\subsubsection}[hang]{\color{violet}  \normalfont\filright\normalsize}{ }{0 em}{#1}
+  \titleformat{\paragraph}[hang]{\color{violet} \normalfont\filright\normalsize}{}{0 em}{#1}
+
+
+\newcommand{\paragraphe}[1]{\vspace{0.4cm} \color{eduscol4B}{\normalfont\filright\large{ \stepcounter{cptpara}  \thecptpara.  #1}}  \color{black} \vspace{0.2cm} 
+\setcounter{subcptpara}{1} } 
+
+%eduscol4P
+
+\newcommand{\subparagraphe}[1]{\vspace{0.4cm} \color{eduscol4B}{\normalfont\filright\normalsize{ %
+  
+  \thecptpara. \thesubcptpara.    #1 }}  \color{black} \vspace{0.2cm} 
+  \stepcounter{subcptpara}
+  } 
+
+
+%%%%%%%%%%%%%%%%%%%%%% Cycle 4
+\newcommand{\TitreSansTemps}[1]{\section*{#1} 
+\setcounter{cptpara}{0}
+}
+
+
+
+\newcommand{\Titre}[2]{\section*{#1 
+\ifthenelse{\equal{#2}{1}}   {\hfill{  \begin{small}
+   1 heure 
+   \end{small} } \addcontentsline{toc}{section}{#1} }%
+{% sinon
+\ifthenelse{\equal{#2}{0}}   {\hfill{  } \addcontentsline{toc}{section}{#1} }%
+{ 
+ {\hfill{ \begin{small}
+   #2 heures 
+   \end{small}} \addcontentsline{toc}{section}{#1} }%
+}%
+}%
+}%
+\setcounter{cptpara}{0} 
+}
+
+\newcommand{\Rituel}[2]{\section*{#1 
+\ifthenelse{\equal{#2}{1}}   {\hfill{  \begin{small}
+   #2 minute 
+   \end{small} } \addcontentsline{toc}{section}{#1} }%
+{% sinon
+\ifthenelse{\equal{#2}{0}}   {\hfill{  } \addcontentsline{toc}{section}{#1} }%
+{ 
+ {\hfill{ \begin{small}
+   #2 minutes 
+   \end{small}} \addcontentsline{toc}{section}{#1} }%
+}%
+}%
+}%
+\setcounter{cptpara}{0} 
+}
+
+%%%%%%%%%%%%%%%%%%%%%% Cycle 4
+\newcommand{\TitreDate}[2]{\section*{#1 
+\ifthenelse{\equal{#2}{1}}   {\hfill{  \begin{small}
+   1 heure 
+   \end{small} } \addcontentsline{toc}{section}{#1} }%
+{% sinon
+\ifthenelse{\equal{#2}{0}}   {\hfill{  } \addcontentsline{toc}{section}{#1} }%
+{ 
+ {\hfill{ \begin{small}
+   #2 
+   \end{small}} \addcontentsline{toc}{section}{#1} }%
+}%
+}%
+}%
+\setcounter{cpttitre}{1}
+\setcounter{cpttitrebis}{1}
+\setcounter{cptpara}{0}
+\setcounter{cptavdm}{1}
+}
+
+%%%%%%%%%%%%% Fiche AP
+\newenvironment{synthese}[3][]{%
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=110mm, yshift*=-3mm}, coltitle=violet, colback=violet!25!white, boxed title style={colback=white!100}, colframe=violet,title= \textbf{Synthèse #1 #2}. #3  ]}
+{%
+\end{tcolorbox}
+\par}
+ 
+
+%%%%%%%%%%%%% Séance
+\newenvironment{synthesecours}[2][]{%
+\newpage
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, sharpish corners, coltitle=eduscol4P, colback=eduscol4P!25!white, boxed title style={colback=white!100}, colframe=eduscol4P,title= Synthèse. \quad #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+%%%%%%%%%%%%% Séance
+\newenvironment{seance}[2][]{%
+\newpage
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\stepcounter{cpttitre}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, sharpish corners, coltitle=eduscol4P, colback=eduscol4P!25!white, boxed title style={colback=white!100}, colframe=eduscol4P,title= Séance \thecpttitre. \quad #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Fiche enseignant Séance
+\newenvironment{seanceprof}[2][]{%
+\newpage
+\setcounter{cptex}{0}
+\stepcounter{cpttitrebis}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=70mm, yshift*=-3mm}, sharpish corners, coltitle=eduscol4B, colback=eduscol4B!25!white, boxed title style={colback=white!100}, colframe=eduscol4B,title= Fiche enseignant - Séance \thecpttitrebis. \quad #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Fiche enseignant Séance
+\newenvironment{seanceTice}[2][]{%
+\newpage
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\stepcounter{cpttitrebis}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=70mm, yshift*=-3mm}, sharpish corners, coltitle=gray, colback=gray!25!white, boxed title style={colback=white!100}, colframe=gray,title= TICE \thecpttitrebis. \quad #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+%%%%%%%%%%%%% Fiche AP
+\newenvironment{ficheAP}[3][]{%
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=70mm, yshift*=-3mm}, coltitle=violet, colback=violet!25!white, boxed title style={colback=white!100}, colframe=violet,title= \textbf{AP - Fiche #1 #2}. #3  ]}
+{%
+\end{tcolorbox}
+\par}
+%%%%%%%%%%%%% Fiche Méthode
+\newenvironment{ficheMethode}[2][]{%
+\newpage
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, sharpish corners, coltitle=eduscol4P, colback=eduscol4P!25!white, boxed title style={colback=white!100}, colframe=eduscol4P,title= Fiche Méthode. \quad #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+%%%%%%%%%%%%% Séance
+\newenvironment{titreDTL}[2][]{%
+\newpage
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\stepcounter{cpttitre}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, sharpish corners, coltitle=eduscol4P, colback=olive!25!white, boxed title style={colback=white!100}, colframe=olive,title= En temps libre. \quad #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Titre avec numérotation individuelle
+\newenvironment{titreInd}[3][]{%
+\setcounter{cptex}{0}
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=110mm, yshift*=-3mm}, coltitle=violet, colback=violet!25!white, boxed title style={colback=white!100}, colframe=violet,title= \textbf{Fiche #1 #2}. #3  ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Titre DS
+\newenvironment{titreDS}[2][]{%
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, coltitle=bleu3, colback=bleu1!25!white, boxed title style={colback=white!100}, colframe=bleu3,title=Devoir surveillé #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Titre
+\newenvironment{titre}[2][]{%
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, coltitle=bleu3, colback=bleu1!25!white, boxed title style={colback=white!100}, colframe=bleu3,title=\stepcounter{cpttitre}   #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%%%%%%%%%% Titre
+\newenvironment{rituel}[2][]{%
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, coltitle=bleu3, colback=white!25!white, boxed title style={colback=white!100}, colframe=bleu3,title= \textbf{Rituel} #1. #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Titre TICE
+\newenvironment{titreTice}[2][]{%
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, coltitle=bleu3, colback=gray!25!white, boxed title style={colback=white!100}, colframe=gray,title=\stepcounter{cpttitre} \textbf{Fiche \thecpttitre}. #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Thème
+\newenvironment{titreTheme}[2][]{%
+\setcounter{cptex}{0}
+\setcounter{cptavdm}{0}
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=90mm, yshift*=-3mm}, coltitle=bleu3, colback=bleu1!25!white, boxed title style={colback=white!100}, colframe=bleu3,title=\stepcounter{cpttitre} \textbf{Thème \thecpttitre}. #1 #2 ]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Définitions
+\newenvironment{Def}[1][]{%
+\setcounter{cptex}{0}
+\medskip \begin{tcolorbox}[widget,colback=violet!15,colframe=violet!75!white,
+adjusted title= \stepcounter{cptdef} Définition \thecptdef . {#1} ]}
+{%
+\end{tcolorbox}\par}
+
+
+\newenvironment{DefT}[2][]{%
+\medskip \begin{tcolorbox}[widget,colback=violet!15,colframe=violet!75!white,
+adjusted title= \stepcounter{cptdef} Définition \thecptdef . {#1} \textit{#2}]}
+{%
+\end{tcolorbox}\par}
+
+
+\newenvironment{DefN}[1][]{%
+\setcounter{cptex}{0}
+\medskip \begin{tcolorbox}[widget,colback=violet!15,colframe=violet!75!white,
+adjusted title= \stepcounter{cptdef} Définition. {#1} ]}
+{%
+\end{tcolorbox}\par}
+
+
+%%%%%%%%%%%%% Proposition
+\newenvironment{Prop}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cptdef} Proposition \thecpttheo . {#1} ]}
+{%
+\end{tcolorbox}\par}
+
+%%%%%%%%%%%%% Propriétés
+\newenvironment{Pp}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Propriété \thecpttheo . {#1}]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{PpT}[2][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Propriété \thecpttheo . {#1} #2]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{Pps}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Propriétés \thecpttheo . {#1}]}
+{%
+\end{tcolorbox}\par}
+
+%%%%%%%%%%%%% Théorèmes
+\newenvironment{ThT}[2][]{% théorème avec titre
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Théorème \thecpttheo . {#1} #2]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{Th}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Théorème \thecpttheo . {#1}]}
+{%
+\end{tcolorbox}\par}
+
+
+\newenvironment{ThN}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Théorème. {#1}]}
+{%
+\end{tcolorbox}\par}
+%%%%%%%%%%%%% Règles
+\newenvironment{Reg}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu1!15,colframe=bleu1!75!black,
+adjusted title= \stepcounter{cpttheo} Règle \thecpttheo . {#1}]}
+{%
+\end{tcolorbox}\par}
+
+%%%%%%%%%%%%% REMARQUES
+\newenvironment{Rq}[1][]{%
+\begin{bclogo}[couleur=info!30, arrondi =0.15, noborder=true, couleurBarre=info, logo = \bcinfo ]{ 
+{\color{info}\normalsize{Remarque#1}}}}
+{%
+\end{bclogo}
+\par}
+
+\newenvironment{Rqs}[1][]{%
+\begin{bclogo}[couleur=info!30, arrondi =0.15, noborder=true, couleurBarre=info, logo = \bcinfo ]{ 
+{\color{info}\normalsize{Remarques#1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Démonstration
+\newenvironment{Dem}[1][]{%
+\begin{bclogo}[couleur=white!30, arrondi =0.15, noborder=true, couleurBarre=bleu1, logo = \bccrayon ]{ 
+\normalsize{Démonstration.#1}}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% Démonstration
+\newenvironment{Approfondissement}[1][]{%
+\begin{bclogo}[couleur=white!30, arrondi =0.15, noborder=true, couleurBarre=red, logo = \bcstop ]{ 
+{\color{red}\normalsize{Approfondissement #1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% EXEMPLES
+\newenvironment{Ex}[1][]{%
+\begin{bclogo}[couleur=white!30, arrondi =0.15, noborder=true, couleurBarre=yellow, logo = \bclampe ]{ 
+\normalsize{Exemple#1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Rappel
+\newenvironment{Rap}[1][]{%
+\begin{bclogo}[couleur=bleu1!30, arrondi =0.15, noborder=true, couleurBarre=bleu3, logo = \bcinfo ]{ 
+\normalsize{Rappel.#1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% COUPS DE POUCE
+\newenvironment{CdP}[1][]{%
+\begin{bclogo}[couleur=bleu1!30, arrondi =0.05, noborder=true, couleurBarre=info, logo = \bclampe ]{ 
+{\color{info}\normalsize{Coup de pouce#1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% CONTRE EXEMPLES
+\newenvironment{CE}[1][]{%
+\begin{bclogo}[couleur=red!30, arrondi =0.15, noborder=true, couleurBarre=red, logo = \bcattention ]{ 
+\normalsize{Contre exemple#1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Preuve
+\newenvironment{Pv}[1][]{%
+\begin{tcolorbox}[breakable, enhanced,widget, colback=bleu1!10!white,boxrule=0pt,frame hidden,
+borderline west={1mm}{0mm}{bleu1!75}]
+\textbf{Preuve#1 : }}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%%%%%%%%%% PreuveROC
+\newenvironment{PvR}[1][]{%
+\begin{tcolorbox}[breakable, enhanced,widget, colback=bleu1!10!white,boxrule=0pt,frame hidden,
+borderline west={1mm}{0mm}{bleu1!75}]
+\textbf{Preuve (ROC)#1 : }}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%%%%%%%%%% Compétences
+\newenvironment{Cps}[1][]{%
+\vspace{0.5cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=sapgreen!5!white, boxed title style={colback=sapgreen!100}, colframe=sapgreen!75!black,title=\textbf{Compétences associées#1}]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Compétences Collège
+\newenvironment{CpsCol}[1][]{%
+\vspace{0.5cm}
+\begin{tcolorbox}[breakable, enhanced,widget, colback=bleu1!25!white ,boxrule=0pt,frame hidden,
+borderline west={2mm}{0mm}{bleu3}]
+\textbf{#1}}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Compétences Collège
+\newenvironment{CC}[1][]{%
+\vspace{0.5cm}
+\begin{tcolorbox}[breakable, enhanced,widget, colback=purple!25!white ,boxrule=0pt,frame hidden,
+borderline west={2mm}{0mm}{purple}]
+\textbf{#1}}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%%%%%%%%%% paragraphe en sur épaisseur
+\newtcolorbox{Ptex}[1][]{enhanced,
+  before skip=2mm,after skip=3mm,
+  boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+  colback=yellow!50,
+  colframe=yellow!50!black,
+  sharp corners,rounded corners=southeast,arc is angular,arc=3mm,
+  underlay={%
+    \path[fill=tcbcol@back!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+    \path[draw=tcbcol@frame,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+    \path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+    },
+  drop fuzzy shadow,#1}
+
+
+
+\newtcolorbox{Ptint}[1][]{enhanced,
+  before skip=2mm,after skip=3mm,
+  boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+  colback=green!10,
+  colframe=blue!45,
+  sharp corners,rounded corners=southeast,arc is angular,arc=3mm,
+  underlay={%
+    \path[fill=tcbcol@back!50!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+    \path[draw=tcbcol@frame,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+    \path[fill=blue!40,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries ?} ([xshift=4mm]interior.north west);
+    },
+  drop fuzzy shadow,#1}
+
+\newtcbox{\maboite}[1][red]{on line, arc=7pt,colback=#1!10!white,colframe=#1!50!black, before upper={\rule[-3pt]{0pt}{15pt}},boxrule=1pt, boxsep=0pt,left=12pt,right=12pt,top=3pt,bottom=3pt}
+
+%%%%%%%%%%%%% Attendus
+\newenvironment{Ats}[1][]{%
+
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=sapgreen!5!white, boxed title style={colback=sapgreen!100}, colframe=sapgreen!75!black,title=\textbf{Attendus du chapitre#1}]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Méthode
+\newenvironment{Mt}[1][]{%
+
+\begin{bclogo}[couleur=bleu1!15, arrondi =0.15, noborder=true, couleurBarre=bleu3, logo = \bccrayon ]{ 
+\normalsize{{\color{bleu3}Méthode #1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Mise en oeuvre
+\newenvironment{MEO}[1][]{%
+
+\begin{bclogo}[couleur=bleu1!15, arrondi =0.15, noborder=true, couleurBarre=bleu3, logo = \bccrayon ]{ 
+\normalsize{{\color{bleu3}Mise en oeuvre #1}}}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% Etymologie
+\newenvironment{Ety}[1][]{%
+
+\begin{bclogo}[couleur=olive!30, arrondi =0.15, noborder=true, couleurBarre=olive, logo = \bcplume ]{ 
+\normalsize{{\color{olive}Étymologie#1}}}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% Notation
+\newenvironment{Nt}[1][]{%
+
+\begin{bclogo}[couleur=red!30, arrondi =0.15, noborder=true, couleurBarre=red, logo = \bccrayon ]{ 
+\normalsize{{\color{red}Notation#1}}}}
+{%
+\end{bclogo}
+\par}
+%%%%%%%%%%%%% Histoire
+\newenvironment{His}[1][]{%
+
+\begin{bclogo}[couleur=brown!30, arrondi =0.15, noborder=true, couleurBarre=brown, logo = \bcvaletcoeur ]{ 
+\normalsize{{\color{brown}Histoire des mathématiques#1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Attention
+\newenvironment{Att}[1][]{%
+
+\begin{bclogo}[couleur=red!30, arrondi =0.15, noborder=true, couleurBarre=red, logo = \bcattention ]{ 
+\normalsize{Attention#1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% A savoir
+\newenvironment{AS}[1][]{%
+
+\begin{bclogo}[couleur=red!30, arrondi =0.15, noborder=true, couleurBarre=red, logo = \bcattention ]{ 
+\normalsize{A Savoir #1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Conséquence
+\newenvironment{Cq}[1][]{%
+\textbf{Conséquence#1}}
+{%
+\par}
+
+%%%%%%%%%%%%% Vocabulaire
+\newenvironment{Voc}[1][]{%
+\setlength{\logowidth}{10pt}
+\begin{footnotesize}
+\begin{bclogo}[ noborder , couleur=white, logo =\bcbook]{#1}}
+{%
+\end{bclogo}
+\end{footnotesize}
+\par}
+
+
+%%%%%%%%%%%%% Méthode en vidéo
+\newcommand{\MtV}[2]{\vspace{0.4cm} \colorbox{bleu1!15}{\hspace{0.2 cm}\tikz\node[rounded corners=1pt,draw] {\color{red}$\blacktriangleright$}; \quad  \href{https://youtu.be/#1?rel=0}{\raisebox{0.8mm}{{\color{red}\textbf{Méthode en vidéo : #2}}}}}}
+
+
+%%%%%%%%%%%%% A voir (AV) : Lien externe + vidéo non Youtube
+\newcommand{\AV}[2]{\vspace{0.4cm} \colorbox{bleu1!15}{\hspace{0.2 cm}\tikz\node[rounded corners=1pt,draw] {\color{red}$\blacktriangleright$}; \quad  \href{https://youtu.be/#1?rel=0}{\raisebox{0.8mm}{{\color{red}\textbf{Méthode en vidéo : #2}}}}}}
+
+
+%%%%%%%%%%%%% A voir (AV) : Lien externe + vidéo non Youtube
+\newcommand{\LE}[2]{\vspace{0.4cm} \colorbox{bleu1!15}{\hspace{0.2 cm}\tikz\node[rounded corners=1pt,draw] {\color{red}$\blacktriangleright$}; \quad  \href{#1}{\raisebox{0.8mm}{{\color{red}\textbf{#2}}}}}}
+
+
+%%%%%%%%%%%%% PESP  : Pour en Savoir Plus
+\newcommand{\PESP}[1]{ \vspace{0.4cm}  \href{#1}{\raisebox{0.8mm}{{\color{brown}\textbf{>> Pour en savoir plus}}}}}
+
+
+
+
+\newenvironment{ISN}[1][]{%
+\vspace{0.4cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{gray!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=gray!5!white, boxed title style={colback=gray!100}, colframe=gray!75!black,title=\textbf{Informatique et sciences du numérique#1}]}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%%%%%%%%%% Video
+\newenvironment{Vid}[1][]{%
+\setlength{\logowidth}{12pt}
+\begin{bclogo}[ noborder , couleur=white,barre=none, logo =\bcoeil]{#1}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% Syntaxe
+\newenvironment{Syn}[1][]{%
+\begin{bclogo}[couleur=violet!15, arrondi =0.15, noborder=true, couleurBarre=violet!75, logo = \bcicosaedre ]{ 
+\normalsize{{\color{violet!75}Syntaxe#1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Logique
+\newenvironment{Log}[1][]{%
+\begin{bclogo}[couleur=bleu1!15, arrondi =0.15, noborder=true, couleurBarre=bleu3, logo = \bcloupe ]{ 
+\normalsize{{\color{bleu3}Logique#1}}}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% DTL 
+\newenvironment{DTL}[1][]{%    \stepcounter{cpttheo} Théorème \thecpttheo . {#1}
+\vspace{0.4cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{bleu3!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=bleu1!5!white, boxed title style={colback=bleu3!100}, colframe=bleu3!75!black, title=  \textbf{Devoir en temps libre}{ #1}]}
+{%
+\end{tcolorbox}
+\par}
+
+%%%%%%%%%%%%% Auto évaluation
+\newenvironment{autoeval}[1][]{%
+\vspace{0.4cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{black!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=sapgreen!5!white, boxed title style={colback=sapgreen!100}, colframe=sapgreen!75!black,title=\textbf{J'évalue mes compétences#1}]}
+{%
+\end{tcolorbox}
+\par}
+
+
+\newenvironment{autotest}[1][]{%
+\vspace{0.4cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{red!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=red!5!white, boxed title style={colback=red!100}, colframe=red!75!black,title=\textbf{Pour faire le point #1}]}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%% Pour réinitialiser numéros des chapitres après une nouvelle partie
+\makeatletter
+    \@addtoreset{section}{part}
+\makeatother
+
+%%%%%%%%%%%%% Situation à programmer
+\newenvironment{PC}[1][]{%
+\begin{bclogo}[couleur=white!30, arrondi =0.15, noborder=true, couleurBarre=gray, logo = \bcquestion ]{ 
+{\color{gray}\normalsize{Situation à programmer #1}}}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% Ecrire le code
+\newenvironment{Cod}[1][]{%
+\begin{bclogo}[couleur=white!30, arrondi =0.15, noborder=true, couleurBarre=gray, logo = \bcrosevents ]{ 
+\normalsize{Tester le code #1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Documentation
+\newenvironment{Doc}[1][]{%
+\medskip \begin{tcolorbox}[widget,colback=bleu2!15,colframe=bleu2!75!white,
+adjusted title=  Documentation  . {#1} ]}
+{%
+\end{tcolorbox}\par}
+
+
+%%%%%%%%%%%%% Problématiques
+\newenvironment{Pbm}[1][]{%
+\begin{bclogo}[couleur=bleu2!30, arrondi =0.15, noborder=true, couleurBarre=bleu3, logo = \bcinfo ]{ 
+{\color{bleu3}\normalsize{Problématique#1}}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Problématiques
+\newenvironment{Sit}[1][]{%
+\begin{bclogo}[couleur=bleu2!10, arrondi =0.15, noborder=true, couleurBarre=bleu3, logo = \bcquestion ]{ 
+{\color{bleu3}\normalsize{Situation d'étude#1}}}}
+{%
+\end{bclogo}
+\par}
+
+
+%%%%%%%%%%%%% Script
+\newenvironment{Script}[2][]{%     
+\vspace{0.4cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{bleu3!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=bleu1!5!white, boxed title style={colback=bleu3!100}, colframe=bleu3!75!black, title=  \textbf{#1}{ #2}]}
+{%
+\end{tcolorbox}
+\par}
+
+
+
+
+%%%%%%%% Entete
+\newcommand{\entete}[3]{
+%\noindent%
+\textbf{#1} \hfill \textit{\textbf{#2}}
+\vspace{-1em}
+\begin{center}
+\large{\textbf{\bsc{\fontfamily{cmr}\selectfont #3}}}
+\end{center}
+}
+
+%%%%%%%%%%%%% Miniprojet 
+\newenvironment{miniprojet}[1][]{%    \stepcounter{cpttheo} Théorème \thecpttheo . {#1}
+\vspace{0.4cm}
+\begin{tcolorbox}[enhanced, lifted shadow={0mm}{0mm}{0mm}{0mm}%
+{bleu3!60!white}, attach boxed title to top left={xshift=5mm, yshift*=-3mm}, coltitle=white, colback=bleu1!5!white, boxed title style={colback=bleu3!100}, colframe=bleu3!75!black, title=  \textbf{Mini projet à rendre.}{ #1}]}
+{%
+\end{tcolorbox}
+\par}
+
+
+%%%%%%%% Activité
+\newenvironment{Act}[1][]{%
+\begin{bclogo}[couleur=white!30, arrondi =0.15, noborder=true, barre=snake, couleurBarre=green, logo = \bcpanchant ]{ 
+\normalsize{Activité #1}}}
+{%
+\end{bclogo}
+\par}
+
+%%%%%%%%%%%%% Code sur console
+\newtcolorbox{Console}{colback=black,colframe=black}
+
+\newtcolorbox{Code}{colback=gray!20,colframe=gray!50}
+
+%%%%% Spécial calculatrice %%%%%
+\def\ecalc#1{{\textsf{\textbf{#1}}}}
+\def\cvar{\fbox{$X,T,\theta$}}
+\def\expos{\fbox{$\wedge$}}
+\def\flhaut{\fbox{$\widehat{~~~~~}$}}
+\def\flbas{\fbox{$~~~.~~$}}
+\def\flgau{\fbox{$\langle$}}
+\def\fldro{\fbox{$\rangle$}}
+
+\usepackage{setspace}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%       Encadrement des chapitres pris à part.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\newlength{\temp@boite}
+\newlength{\saveparindent}
+\setlength{\saveparindent}{\parindent}
+\def\breakboxparindent{\saveparindent}
+\def\encadrement#1{%
+  \def\bkvz@before@breakbox{\ifhmode\par\fi\vskip5pt\vskip\breakboxskip\relax}%
+  \fboxrule=0.4pt
+  \fboxsep=5pt
+  \def\bkvz@set@linewidth{\advance\linewidth -2\fboxrule
+                          \advance\linewidth -2\fboxsep}%
+  \def\bkvz@left{\color{black}\vrule \@width\fboxrule\hskip\fboxsep\color{black}}%
+  \def\bkvz@right{\color{black}\hskip\fboxsep\vrule \@width\fboxrule\color{black}}%
+  \def\bkvz@top{\hbox to \hsize{%
+      \color{black}%
+      \setlength{\temp@boite}{\fboxrule+0.5ex}%
+      \vrule\@width\fboxrule\@height \temp@boite %
+      \rule[0.5ex]{2em}{\fboxrule}%
+      {#1}%
+      \setlength{\temp@boite}{\textwidth-2em-\widthof{#1}-2\fboxrule}%
+      \rule[0.5ex]{\temp@boite}{\fboxrule}%
+      \setlength{\temp@boite}{\fboxrule+0.5ex}%
+      \vrule\@width\fboxrule\@height \temp@boite}}%
+  \def\bkvz@bottom{\color{black}\hrule\@height\fboxrule}%
+  \breakbox\vspace{0pt}}
+\def\endencadrement{\vspace{3pt}\endbreakbox}
+\makeatother
+
+
+
+
+\makeatletter
+\def\encadrementombre#1{%
+  \fboxsep=5pt
+  \fboxrule=0.4pt
+  \def\bkvz@before@breakbox{%
+    \ifhmode\par\fi\vskip5pt\vskip\breakboxskip\relax}%
+  \def\bkvz@set@linewidth{%
+    \advance\linewidth -2\fboxrule 
+    \setlength{\fboxsep}{5pt}\advance\linewidth -2\fboxsep
+  }%
+  \def\bk@line{\hbox to \linewidth{%
+      \ifbkcount\smash{\llap{\the\bk@lcnt\ }}\fi
+      \setlength{\fboxsep}{0pt}\colorbox{white!5}{%
+        \setlength{\fboxsep}{5pt}%
+        {\color{black}\vrule width \fboxrule}\hskip\fboxsep
+        \box\bk@bxa
+        \hskip\fboxsep{\color{black}\vrule width\fboxrule}%
+        }%
+      }}%
+  \def\bkvz@top{\hbox to \hsize{%
+      \setlength{\temp@boite}{\fboxrule+0.5ex}%
+      \color{white!5}\vrule\@width\textwidth\@height\temp@boite %
+      \hspace{-\textwidth}%
+      \color{black}%
+      \vrule\@width\fboxrule\@height \temp@boite %
+      \rule[0.5ex]{2em}{\fboxrule}%
+      {\fboxsep=2pt\colorbox{white}{#1}}%
+      \setlength{\temp@boite}{\textwidth-2em-\widthof{\fboxsep=2pt\colorbox{white}{#1}}-2\fboxrule}%
+      \rule[0.5ex]{\temp@boite}{\fboxrule}%
+      \setlength{\temp@boite}{\fboxrule+0.5ex}%
+      \vrule\@width\fboxrule\@height \temp@boite %
+}}%
+  \def\bkvz@bottom{{\color{black}\hrule\@height\fboxrule}}%
+  \color{black}\breakbox}%
+\def\endencadrementombre{\endbreakbox}
+\makeatother
+
+\makeatletter
+\def\encadrementombrevar#1{%
+  \fboxsep=5pt
+  \fboxrule=0.4pt
+  \def\bkvz@before@breakbox{%
+    \ifhmode\par\fi\vskip5pt\vskip\breakboxskip\relax}%
+  \def\bkvz@set@linewidth{%
+    \advance\linewidth -2\fboxrule 
+    \setlength{\fboxsep}{5pt}\advance\linewidth -2\fboxsep
+  }%
+  \def\bk@line{\hbox to \linewidth{%
+      \ifbkcount\smash{\llap{\the\bk@lcnt\ }}\fi
+      \setlength{\fboxsep}{0pt}\colorbox{white!5}{%
+        \setlength{\fboxsep}{5pt}%
+        {\color{black}\vrule width \fboxrule}\hskip\fboxsep
+        \box\bk@bxa
+        \hskip\fboxsep{\color{black}\vrule width\fboxrule}%
+        }%
+      }}%
+  \def\bkvz@top{\hbox to \hsize{%
+      \setlength{\temp@boite}{\fboxrule+0.5ex}%
+      \color{blue!5}\vrule\@width\textwidth\@height\temp@boite %
+      \hspace{-\textwidth}%
+      \color{black}%
+      \vrule\@width\fboxrule\@height \temp@boite %
+      \rule[0.5ex]{2em}{\fboxrule}%
+      {\fboxsep=2pt\fcolorbox{black}{white!5}{#1}}%
+      \setlength{\temp@boite}{\textwidth-2em-\widthof{\fboxsep=2pt\fcolorbox{black}{white!5}{#1}}-2\fboxrule}%
+      \rule[0.5ex]{\temp@boite}{\fboxrule}%
+      \setlength{\temp@boite}{\fboxrule+0.5ex}%
+      \vrule\@width\fboxrule\@height \temp@boite %
+}}%
+  \def\bkvz@bottom{{\color{black}\hrule\@height\fboxrule}}%
+  \color{black}\breakbox}%
+\def\endencadrementombrevar{\endbreakbox}
+\makeatother

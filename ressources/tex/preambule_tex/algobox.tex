@@ -1,0 +1,68 @@
+%FONTES POUR ALGO
+\DeclareFontFamily{T1}{lmtt}{} 
+\DeclareFontShape{T1}{lmtt}{m}{n}{<-> ec-lmtl10}{} 
+\DeclareFontShape{T1}{lmtt}{m}{\itdefault}{<-> ec-lmtlo10}{} 
+\DeclareFontShape{T1}{lmtt}{\bfdefault}{n}{<-> ec-lmtk10}{} 
+\DeclareFontShape{T1}{lmtt}{\bfdefault}{\itdefault}{<-> ec-lmtko10}{}
+\renewcommand{\ttdefault}{lmtt}
+% PACKAGES NECESSAIRES POUR GRAPHIQUE
+\usepackage{graphicx}
+% PACKAGES NECESSAIRES POUR ALGO
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%ALGO
+\definecolor{fond}{RGB}{255,255,255}
+\definecolor{sicolor}{RGB}{128,0,128}
+\definecolor{tantquecolor}{RGB}{221,111,6}
+\definecolor{pourcolor}{RGB}{187,136,0}
+\definecolor{bloccolor}{RGB}{128,0,0}
+\newenvironment{cadrecode}{%
+\def\FrameCommand{{\color{fond}\vrule width 5pt}\fcolorbox{fond}{white}}%
+\MakeFramed {\hsize \linewidth \advance\hsize-\width \FrameRestore}\begin{footnotesize}}%
+{\end{footnotesize}\endMakeFramed}
+\makeatletter
+\def\therule{\makebox[\algorithmicindent][l]{\hspace*{.5em}\color{fond} \vrule width 1pt height .75\baselineskip depth .25\baselineskip}}%
+\newtoks\therules
+\therules={}
+\def\appendto#1#2{\expandafter#1\expandafter{\the#1#2}}
+\def\gobblefirst#1{#1\expandafter\expandafter\expandafter{\expandafter\@gobble\the#1}}%
+\def\Ligne{\State\unskip\the\therules}% 
+\def\pushindent{\appendto\therules\therule}%
+\def\popindent{\gobblefirst\therules}%
+\def\printindent{\unskip\the\therules}%
+\def\printandpush{\printindent\pushindent}%
+\def\popandprint{\popindent\printindent}%
+\def\Variables{\Ligne \textcolor{bloccolor}{\textbf{VARIABLES}}}
+\def\Si#1{\Ligne \textcolor{sicolor}{\textbf{SI}} #1 \textcolor{sicolor}{\textbf{ALORS}}}%
+\def\Sinon{\Ligne \textcolor{sicolor}{\textbf{SINON}}}%
+\def\Pour#1#2#3{\Ligne \textcolor{pourcolor}{\textbf{POUR}} #1 \textcolor{pourcolor}{\textbf{ALLANT\_DE}} #2 \textcolor{pourcolor}{\textbf{A}} #3}%
+\def\Tantque#1{\Ligne \textcolor{tantquecolor}{\textbf{TANT\_QUE}} #1 \textcolor{tantquecolor}{\textbf{FAIRE}}}%
+\algdef{SE}[WHILE]{DebutTantQue}{FinTantQue}
+  {\pushindent \printindent  \textcolor{tantquecolor}{\textbf{DEBUT\_TANT\_QUE}}}
+  {\printindent \popindent  \textcolor{tantquecolor}{\textbf{FIN\_TANT\_QUE}}}%
+\algdef{SE}[FOR]{DebutPour}{FinPour}
+  {\pushindent \printindent \textcolor{pourcolor}{\textbf{DEBUT\_POUR}}}
+  {\printindent \popindent  \textcolor{pourcolor}{\textbf{FIN\_POUR}}}%
+\algdef{SE}[IF]{DebutSi}{FinSi}%
+  {\pushindent \printindent \textcolor{sicolor}{\textbf{DEBUT\_SI}}}
+  {\printindent \popindent \textcolor{sicolor}{\textbf{FIN\_SI}}}%
+\algdef{SE}[IF]{DebutSinon}{FinSinon}
+  {\pushindent \printindent \textcolor{sicolor}{\textbf{DEBUT\_SINON}}}
+  {\printindent \popindent \textcolor{sicolor}{\textbf{FIN\_SINON}}}%
+\algdef{SE}[PROCEDURE]{DebutAlgo}{FinAlgo}
+   {\printandpush \textcolor{bloccolor}{\textbf{DEBUT\_ALGORITHME}}}%
+   {\popandprint \textcolor{bloccolor}{\textbf{FIN\_ALGORITHME}}}%
+\makeatother
+\newenvironment{algobox}%
+{%
+\begin{ttfamily}
+\begin{algorithmic}[1]
+\begin{cadrecode}
+}
+{%
+\end{cadrecode}
+\end{algorithmic}
+\end{ttfamily}
+}
