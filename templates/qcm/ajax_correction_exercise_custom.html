@@ -20,7 +20,7 @@
     {% endblock %}
 
     <div id="corrector">                 
-        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute"></canvas> 
+        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;z-index:-1"></canvas> 
         {% if customexercise.is_collaborative %}
             <iframe src=" " height="700" width="100%"></iframe>
         {% elif customexercise.is_file and c_e.file %}
