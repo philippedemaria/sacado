@@ -14,7 +14,8 @@
 
 
 
-    <div id="corrector">
+    <div id="corrector">        
+        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;z-index:-1">
         {% if relationship.exercise.supportfile.is_file  and   w_a.file %}
             <iframe src="{{  w_a.file.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
