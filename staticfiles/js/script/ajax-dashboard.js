@@ -604,7 +604,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ==================================================   uncollapsed    ================================================ 
         // ====================================================================================================================
         // ====================================================================================================================
-        $('.listing').hide();
+        $('.listing_div').hide();
         $(".un_collapsed").click(function(){
 
             let my_div = $(this).parent().parent().parent();
@@ -621,7 +621,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             $(this).find('i').addClass('fa-angle-up').removeClass('fa-angle-down' );  
             $('.shadow_bottom').hide();
-            $('.listing').show();
+            $('.listing_div').show();
 
             }
             else
@@ -637,7 +637,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             
             $(this).find('i').removeClass('fa-angle-up').addClass('fa-angle-down'); 
 
-            $('.listing').hide();          
+            $('.listing_div').hide();          
             }
 
 

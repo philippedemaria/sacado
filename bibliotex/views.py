@@ -89,19 +89,24 @@ def affectation_students_folders_groups(nf,group_ids,folder_ids):
 
 
 
-def printer(request,collection,output):
+def printer(request, relationtex_id, collection,output):
     """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
     soit en html (output="html") """
-    if collection : 
-       bibliotex_id = request.POST.get("print_bibliotex_id",None)  
-       bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
-       document_id = bibliotex_id
-       title = bibliotex.title
+    if relationtex_id == 0 : # 0 pour la méthode POST
+        if collection : 
+           bibliotex_id = request.POST.get("print_bibliotex_id",None)  
+           bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
+           document_id = bibliotex_id
+           title = bibliotex.title
+        else :
+            relationtex_id = request.POST.get("print_exotex_id",None)  
+            relationtex    = Relationtex.objects.get(pk = relationtex_id) 
+            document_id = relationtex_id
+            title = relationtex.exotex.title
     else :
-        relationtex_id = request.POST.get("print_exotex_id",None)  
-        relationtex    = Relationtex.objects.get(pk = relationtex_id) 
-        document_id = relationtex_id
-        title = relationtex.exotex.title
+       relationtex   = Relationtex.objects.get(pk = relationtex_id) # pour insérer l'exo
+       document_id = relationtex.id
+       title = relationtex.title
 
     skills       = request.POST.get("skills",None)  
     knowledges   = request.POST.get("knowledges",None)  
@@ -160,7 +165,7 @@ def printer(request,collection,output):
     elements +=  r"\end{document}" 
 
 
-    file = settings.DIR_TMP_TEX+"bibliotex"+str(document_id)
+    file = settings.DIR_TMP_TEX+r"\bibliotex"+str(document_id)
     
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
@@ -179,7 +184,7 @@ def printer(request,collection,output):
         for ligne in fhtml :
             if ligne=="</body>\n" : recopie=False
             if recopie : out+=ligne
-            if ligne==  "</head><body>\n" : recopie=True      
+            if ligne==  "</head><body>\n" : recopie=True  
         return out
     else : 
         print("format output non reconnu")
@@ -225,7 +230,11 @@ def create_exotex_knowledge(request,idk):
         nf.author = teacher
         nf.teacher = teacher
         nf.save()
-        form.save_m2m()   
+
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+     
+        form.save_m2m() 
+
         messages.success(request, "L'exercice a été créé avec succès !")
         return redirect('admin_exotexs', knowledge.level.id)
     else:
@@ -249,7 +258,11 @@ def create_exotex(request):
         nf.teacher = teacher
         nf.is_share = 1
         nf.save()
-        form.save_m2m()     
+
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+
+        form.save_m2m()  
+
         messages.success(request, "L'exercice a été créé avec succès !")
         return redirect('admin_exotexs', nf.knowledge.level.id)
     else:
@@ -272,7 +285,10 @@ def update_exotex(request, id):
             nf.author = teacher
             nf.teacher = teacher
             nf.save()
-            form.save_m2m()   
+            form.save_m2m()  
+
+            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+
             messages.success(request, "L'exercice a été créé avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
         else:
@@ -558,8 +574,8 @@ def show_bibliotex(request, id):
 
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id).order_by("ranking")
- 
-    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs,   }
+
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'html_latex' : html_latex }
 
     return render(request, 'bibliotex/show_bibliotex.html', context )
 
@@ -1213,9 +1229,9 @@ def ajax_print_bibliotex(request):
 
 def print_bibliotex(request ):
 
-    return printer(request,True,"pdf")
+    return printer(request,0, True,"pdf")
 
 
 def print_exotex(request):
 
-    return printer(request,False,"pdf")
+    return printer(request,0, False,"pdf")

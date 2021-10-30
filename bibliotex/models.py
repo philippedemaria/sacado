@@ -32,6 +32,8 @@ class Exotex(models.Model):
     title = models.CharField(max_length=255,  verbose_name="Titre")
 
     content = models.TextField( verbose_name="Enoncé en LaTeX")
+    content_html = models.TextField(blank=True, editable=False)
+
     author = models.ForeignKey(Teacher, related_name="author_exotexs", on_delete=models.PROTECT, editable=False)
     #### pour validation si le qcm est noté
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
@@ -69,8 +71,7 @@ class Exotex(models.Model):
             test = True
         return test
 
-
-
+ 
 
 
 class Bibliotex(models.Model):

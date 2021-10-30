@@ -5,10 +5,15 @@
 {% load item_tags %}
 
 
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
+{% endblock %} 
+
+
+
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-
     <script>
         require(['script/ajax-bibliotex']);
     </script> 
@@ -21,9 +26,7 @@
 
 
 {% block page_menu_right %}
- 
  {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
-
 {% endblock %}
 
 
