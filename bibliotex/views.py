@@ -39,6 +39,7 @@ from account.decorators import user_can_create, user_is_superuser, user_is_creat
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats, timezone
+import io
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
 from reportlab.pdfgen import canvas
@@ -87,6 +88,103 @@ def affectation_students_folders_groups(nf,group_ids,folder_ids):
 
     return all_students
 
+
+
+def printer(request,collection,output):
+    """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
+    soit en html (output="html") """
+    if collection : 
+       bibliotex_id = request.POST.get("print_bibliotex_id",None)  
+       bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
+       document_id = bibliotex_id
+       title = bibliotex.title
+    else :
+        relationtex_id = request.POST.get("print_exotex_id",None)  
+        relationtex    = Relationtex.objects.get(pk = relationtex_id) 
+        document_id = relationtex_id
+        title = relationtex.exotex.title
+
+    skills       = request.POST.get("skills",None)  
+    knowledges   = request.POST.get("knowledges",None)  
+  
+    entetes=open(settings.TEX_PREAMBULE_FILE,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"         
+    # elements += r"""\begin{titre}[Calculs numériques]
+    #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
+    #             \end{titre}"""
+
+
+    elements += r"""\centerline{\bf """+ title +r""" }"""
+    elements += r""" \ \\ """
+
+    today = datetime.now()
+    if collection : 
+        relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
+        i = 1
+    else: relationtexs=[relationtex]
+
+    for relationtex in relationtexs :
+        
+        skills_display = ""
+        if skills :   
+            if relationtex.skills.count():
+                sks =  relationtex.skills.all()
+            else :
+                sks =  relationtex.exotex.skills.all()
+            for s in sks :
+                skills_display +=  s.name+". "
+
+        elements += r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display 
+
+
+        if knowledges :  
+            k_display = relationtex.exotex.knowledge.name
+            elements += k_display
+
+            if relationtex.knowledges.count():
+                kws =  relationtex.knowledges.all()
+            else :
+                kws =  relationtex.exotex.knowledges.all()
+            for k in kws :
+                elements=+ k.name
+
+        if  relationtex.content :
+            ctnt =  relationtex.content
+        else :
+            ctnt =  relationtex.exotex.content
+
+        elements += ctnt
+    
+    elements +=  r"\end{document}" 
+
+
+    file = settings.DIR_TMP_TEX+r"\bibliotex"+str(document_id)
+    
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+
+
+    if output=="pdf" :
+        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+        return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+
+    elif output=="html" :
+        result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
+        fhtml=open(file+".tex","r")
+        out=""
+        recopie=False
+        for ligne in fhtml :
+            if ligne=="</body>\n" : recopie=False
+            if recopie : out+=ligne
+            if ligne==  "</head><body>\n" : recopie=True      
+        return out
+    else : 
+        print("format output non reconnu")
+        return 
 
 
 #########################################################################################################################################
@@ -201,11 +299,6 @@ def delete_exotex(request, id):
 def ajax_action_exotex(request, id):
     pass
  
- 
-
-
-
-
 
 
 #########################################################################################################################################
@@ -1116,115 +1209,14 @@ def ajax_print_bibliotex(request):
 
 
 
-def printer(request,collection,output):
-    """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
-    soit en html (output="html") """
-    if collection : 
-       bibliotex_id = request.POST.get("print_bibliotex_id",None)  
-       bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
-       document_id = bibliotex_id
-       title = bibliotex.title
-    else :
-        relationtex_id = request.POST.get("print_exotex_id",None)  
-        relationtex    = Relationtex.objects.get(pk = relationtex_id) 
-        document_id = relationtex_id
-        title = relationtex.exotex.title
-
-    skills       = request.POST.get("skills",None)  
-    knowledges   = request.POST.get("knowledges",None)  
-  
-    entetes=open(settings.TEX_PREAMBULE_FILE,"r")
-    elements=entetes.read()
-    entetes.close()
-
-    elements +=r"\begin{document}"+"\n"         
-    # elements += r"""\begin{titre}[Calculs numériques]
-    #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
-    #             \end{titre}"""
-
-
-    elements += r"""\centerline{\bf """+ title +r""" }"""
-    elements += r""" \ \\ """
-
-    today = datetime.now()
-    if collection : 
-        relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
-        i = 1
-    else: relationtexs=[relationtex]
-
-    for relationtex in relationtexs :
-        
-        skills_display = ""
-        if skills :   
-            if relationtex.skills.count():
-                sks =  relationtex.skills.all()
-            else :
-                sks =  relationtex.exotex.skills.all()
-            for s in sks :
-                skills_display +=  s.name+". "
-
-        elements += r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display 
-
-
-        if knowledges :  
-            k_display = relationtex.exotex.knowledge.name
-            elements += k_display
-
-            if relationtex.knowledges.count():
-                kws =  relationtex.knowledges.all()
-            else :
-                kws =  relationtex.exotex.knowledges.all()
-            for k in kws :
-                elements=+ k.name
-
-        if  relationtex.content :
-            ctnt =  relationtex.content
-        else :
-            ctnt =  relationtex.exotex.content
-
-        elements += ctnt
-    
-    elements +=  r"\end{document}" 
-
-
-    file = settings.DIR_TMP_TEX+"bibliotex"+str(document_id)
-    
-    f_tex = open(file+".tex","w")
-    f_tex.write(elements)
-    f_tex.close()
-
-
-    if output=="pdf" :
-        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
-        print("======== result ========>", result)
-        print("======== file   ========>", open(file+'.pdf', 'rb') )
-
-        #FileResponse(open(file+'.pdf', 'rb'),  as_attachment=True, content_type='application/pdf')
-        FileResponse(open("https://sacado.xyz/ressources/tex/tmp_tex/bibliotex"+str(document_id)+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
-
-    elif output=="html" :
-        result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
-        fhtml=open(file+".tex","r")
-        out=""
-        recopie=False
-        for ligne in fhtml :
-            if ligne=="</body>\n" : recopie=False
-            if recopie : out+=ligne
-            if ligne==  "</head><body>\n" : recopie=True      
-        return out
-    else : 
-        print("format output non reconnu")
-        return 
-
-
 
  
 
 def print_bibliotex(request ):
 
-    printer(request,True,"pdf")
+    return printer(request,True,"pdf")
 
 
 def print_exotex(request):
-    print("ici")
-    printer(request,False,"pdf")
+
+    return printer(request,False,"pdf")
