@@ -14,7 +14,7 @@
 
 
 
-    <div id="corrector">
+    <canvas id="corrector">
         {% if relationship.exercise.supportfile.is_file  and   w_a.file %}
             <iframe src="{{  w_a.file.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
@@ -33,7 +33,7 @@
             {% include 'basthon/python_correction_editor.html' %}
         {% endif %}
 
-    </div>    
+    </canvas>    
 {% else %}
 
     <div class="alert alert-danger">  
