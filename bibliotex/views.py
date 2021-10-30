@@ -1201,7 +1201,8 @@ def printer(request,collection,output):
 
     if output=="pdf" :
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
-        print("---------->", file+'.pdf')
+        print("======== result ========>", result)
+        print("======== file   ========>", file+'.pdf')
         return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
     elif output=="html" :
         result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
