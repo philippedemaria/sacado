@@ -1136,7 +1136,7 @@ def printer(request,collection,output):
     entetes=open(settings.TEX_PREAMBULE_FILE,"r")
     elements=entetes.read()
     entetes.close()
-    
+
     elements +=r"\begin{document}"+"\n"         
     # elements += r"""\begin{titre}[Calculs numériques]
     #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
@@ -1196,9 +1196,12 @@ def printer(request,collection,output):
 
     if output=="pdf" :
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
-        print("======== result ========>", result)
-        print("======== file   ========>", file+'.pdf')
-        return FileResponse(open(file+'.pdf', 'rb'), content_type='application/pdf')
+        try :
+            return FileResponse(open("https://sacado.xyz/ressources/tex/tmp_tex/"+bibliotex+'.pdf', 'rb'),  as_attachment=True, content_type='application/pdf')
+        except :
+            file_out = "Erreur de fichier"
+            return JsonResponse(file_out)
+
     elif output=="html" :
         result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
         fhtml=open(file+".tex","r")

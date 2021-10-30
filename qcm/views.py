@@ -6768,7 +6768,7 @@ def export_results_after_evaluation(request):
         data_student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration)
  
 
-        logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+        #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
         logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
         logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
