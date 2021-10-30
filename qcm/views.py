@@ -1548,6 +1548,7 @@ def list_sub_parcours_group(request,idg,idf):
     quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
     bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
     accordion = get_accordion(quizzes, bibliotexs)
+
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  1800 )
 
@@ -2460,7 +2461,7 @@ def show_parcours(request, idf = 0, id=0):
  
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
- 
+    accordion = get_accordion(parcours.quizz, parcours.bibliotexs)
 
     skills = Skill.objects.all()
 
@@ -2473,7 +2474,7 @@ def show_parcours(request, idf = 0, id=0):
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user , 'form' : form , 
                   'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises,
-               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder   }
+               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion    }
 
     return render(request, 'qcm/show_parcours.html', context) 
 

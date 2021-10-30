@@ -6,6 +6,34 @@ register = template.Library()
 from sendmail.models import Communication
 import re
 
+
+@register.filter
+def no_iframe(arg):
+        '''HTML entity decode'''
+        arg = arg.replace('<iframe','___###___')
+        arg = arg.replace('</iframe>','___###___')
+        tab_arg = arg.split('___###___')
+        string = ""
+        for i in range(0,len(tab_arg),2) :
+            string += tab_arg[i]
+        return string.strip()
+
+
+
+@register.filter
+def no_image(arg):
+        '''HTML entity decode'''
+        arg = arg.replace('<img','___#image#___')
+        arg = arg.replace('/>','___#image#___')
+        tab_arg = arg.split('___#image#___')
+        string = ""
+        for i in range(0,len(tab_arg),2) :
+            string += tab_arg[i]
+        return string.strip()
+
+
+
+
 @register.filter
 def decode(arg):
         '''HTML entity decode'''

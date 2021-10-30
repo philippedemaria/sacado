@@ -80,9 +80,14 @@ body{
  
     {% endif %}
 
-        <div class="row documents_div documents_div_shadow">
+        <div class="row {% if accordion %}documents_div documents_div_shadow{% endif %}">
             <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les exercices  <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</span> </h1>
+                <h1 class="thin">Les exercices  
+                    {% if accordion %}
+                    <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> 
+                    <span class="fontLabel" >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</span> 
+                    {% endif %}
+                </h1>
                     <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
                     {% for rc in relationships_customexercises %}
                         {%  if rc.exercise.supportfile.is_title %}     
@@ -115,7 +120,7 @@ body{
                         {% endif %}  
                     {% endfor %}
             </div>
-            <div class="shadow_bottom"></div>
+            {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
         </div>  
      
      
@@ -137,6 +142,22 @@ body{
 
 
 {% if parcours.teacher == teacher %}
+
+
+    {% if parcours.course.count > 0  %}  
+        <div class="row documents_div documents_div_shadow">           
+            <div class="col-sm-12 col-md-12">
+                <h1 class="thin">Les cours   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.course.count }} cours</span></h1>
+                {% for course in parcours.course.all|dictsort:"ranking" %}
+                    {% include 'qcm/course/course_tag.html' %}
+                {% endfor %}
+            </div> 
+            <div class="shadow_bottom"></div>
+        </div>  
+    {% endif %} 
+
+
+
     {% if parcours.quizz.count > 0  %}
         <div class="row documents_div documents_div_shadow">           
             <div class="col-sm-12 col-md-12">
