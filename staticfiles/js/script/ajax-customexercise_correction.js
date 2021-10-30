@@ -109,9 +109,10 @@ define(['jquery', 'bootstrap'], function ($) {
         new_color = "#000000" ;
 
 
+        if (document.getElementById('this_answer') !== null )
+            { const value = JSON.parse(document.getElementById('this_answer').textContent); }
+        else { const value = "" ;}
 
-
-        const value = JSON.parse(document.getElementById('this_answer').textContent); 
 
         function draw_line(value) {
 
