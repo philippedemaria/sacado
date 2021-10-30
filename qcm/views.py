@@ -3066,11 +3066,6 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     details_c , score_custom , cen , score_total = "" , 0 , [] , 0
     total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
 
-
-
-
-
-
     for ce in customexercises :
         score_total += float(ce.mark)
         if ce.is_mark :
