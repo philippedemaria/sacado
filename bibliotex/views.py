@@ -160,7 +160,7 @@ def printer(request,collection,output):
     elements +=  r"\end{document}" 
 
 
-    file = settings.DIR_TMP_TEX+r"\bibliotex"+str(document_id)
+    file = settings.DIR_TMP_TEX+"bibliotex"+str(document_id)
     
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
