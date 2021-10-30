@@ -52,7 +52,7 @@
 
 
         {% for parcours_sort in list_parcours %}  
-            <div class="row {% if accordion and list_parcours|length > 1 %}  documents_div documents_div_shadow {% endif %}">
+            <div class="row {% if accordion or list_parcours|length > 1 %}  documents_div documents_div_shadow {% endif %}">
                 <div class="col-sm-12 col-md-12">
                     {% if  parcours_sort.grouper %}
                         <h1 class="thin" id="evaluation" >Mes évaluations 
@@ -61,7 +61,7 @@
                         </h1>
                     {% else %}
                         <h1 class="thin" >Mes parcours 
-                            {% if accordion and list_parcours|length > 1 %}   
+                            {% if accordion or list_parcours|length > 1 %}   
                                 <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span>
                                 <span class="fontLabel" >{{ parcours_sort.list|length }} parcours</span>  
                             {% endif %}
@@ -73,7 +73,7 @@
                     {% endfor %}
                     </div>
                 </div>
-                {% if accordion and list_parcours|length > 1 %}<div class="shadow_bottom"></div>{% endif %}
+                {% if accordion or list_parcours|length > 1 %}<div class="shadow_bottom"></div>{% endif %}
             </div>                
             {% empty %}
             <div class="row">
