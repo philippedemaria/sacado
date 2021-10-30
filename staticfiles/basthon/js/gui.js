@@ -50,7 +50,7 @@ var dynamicMPLResize = function (event) {
     }
 };
 
-Basthon.Goodies.showLoader("Chargement de Basthon...").then(
+Basthon.Goodies.showLoader("Chargement de Python...").then(
     function () {
         editor.init();
         shell.init();

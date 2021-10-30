@@ -141,7 +141,7 @@ body{
                                             <div class="helper_tip_text_center" ><img src="{{ s.exercise.supportfile.imagefile.url }}" width="350px"/></div>
                                         </span>
                                     {% endfor %}
-                                    <br/> 
+                                    <br/>  
                                     {% for s in stat.tab_custom  %} 
                                         <span class="helper_tip btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
                                                 {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
@@ -183,9 +183,9 @@ body{
                                         </span>
                                     </div>
                                     {% endif %}
-                                    {% if stat.score_custom  %} 
+                                    {% if stat.score_custom  %}  
                                     <div class="stat_mark_round stat_mark_round{{  stat.name.user.id }}">
-                                        <span class="helper_tip">{{ stat.score_custom  }}/{{ stat.score_total}} 
+                                        <span class="helper_tip"><small>{{ stat.score_custom  }}/{{ stat.score_total}} </small>
                                             <div class="helper_tip_text" >Score cumulé sur les exercices personnalisés/score total.</div>
                                         </span>
                                     </div>

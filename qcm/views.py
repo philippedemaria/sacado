@@ -3065,19 +3065,28 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 
     details_c , score_custom , cen , score_total = "" , 0 , [] , 0
     total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
+
+
+
+
+
+
     for ce in customexercises :
         score_total += float(ce.mark)
         if ce.is_mark :
             try:
-                cen = Customanswerbystudent.objects.get(customexercise = ce, student=s, parcours = parcours)
-                if cen.point :
-                    score_custom +=  float(cen.point)
+                cstm = ce.customexercise_custom_answer.get( student=s, parcours = parcours)
+                if cstm.point :
+                    score_custom +=  float(cstm.point)
+                cen.append(cstm)
             except :
                 pass
- 
+
+
+  
     student["score_custom"] = score_custom
-    student["tab_custom"] = cen
-    student["score_total"] = int(score_total)
+    student["tab_custom"]   = cen
+    student["score_total"]  = int(score_total)
 
     for skill in  skills:
 
@@ -3095,8 +3104,6 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 
     student["detail_knowledge"] = detail_knowledge 
 
-
- 
     return student
 
 
@@ -3134,6 +3141,7 @@ def stat_evaluation(request, id):
     for s in students :
         student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
         stats.append(student)
+
 
 
     context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
