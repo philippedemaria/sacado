@@ -1200,7 +1200,7 @@ def printer(request,collection,output):
         print("======== file   ========>", open(file+'.pdf', 'rb') )
 
         #FileResponse(open(file+'.pdf', 'rb'),  as_attachment=True, content_type='application/pdf')
-        FileResponse(open("https://sacado.xyz/ressources/tex/tmp_tex/bibliotex"+str(document_id)+".tex", 'rb'),  as_attachment=True, content_type='application/pdf')
+        FileResponse(open("https://sacado.xyz/ressources/tex/tmp_tex/bibliotex"+str(document_id)+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output=="html" :
         result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
