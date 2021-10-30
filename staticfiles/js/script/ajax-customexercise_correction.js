@@ -102,7 +102,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        var canvas    = document.getElementById("corrector");
+        var canvas    = document.getElementById("myCanvas");
         var ctx       = canvas.getContext('2d');
         canvas.width  = 800 ;
         canvas.height = 800;

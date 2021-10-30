@@ -19,7 +19,7 @@
     <!-- Caractéristique pour les AJAX pour la correction en ligne -->
     {% endblock %}
 
-    <canvas id="corrector"> 
+    <div id="corrector"> 
         {% if customexercise.is_collaborative %}
             <iframe src=" " height="700" width="100%"></iframe>
         {% elif customexercise.is_file and c_e.file %}
@@ -60,7 +60,7 @@
             {% include 'basthon/python_correction_editor.html' %}
         {% endif %}
 
-    </canvas>
+    </div>
 
                     
 {% else %}
