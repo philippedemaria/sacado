@@ -39,7 +39,6 @@ from account.decorators import user_can_create, user_is_superuser, user_is_creat
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats, timezone
-import io
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
 from reportlab.pdfgen import canvas
