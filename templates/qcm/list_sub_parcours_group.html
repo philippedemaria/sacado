@@ -52,7 +52,7 @@
 
 
         {% for parcours_sort in list_parcours %}  
-            <div class="row documents_div documents_div_shadow">
+            <div class="row {% if not parcours_sort.grouper and accordion %} documents_div documents_div_shadow{% endif %}">
                 <div class="col-sm-12 col-md-12">
                     {% if  parcours_sort.grouper %}
                         <h1 class="thin" id="evaluation" >Mes évaluations 
@@ -61,8 +61,10 @@
                         </h1>
                     {% else %}
                         <h1 class="thin" >Mes parcours 
-                            <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span>
-                            <span class="fontLabel" >{{ parcours_sort.list|length }} parcours</span>  
+                           {% if not parcours_sort.grouper and accordion %} 
+                                <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span> 
+                                <span class="fontLabel" >{{ parcours_sort.list|length }} parcours</span>  
+                            {% endif %}
                         </h1>
                     {% endif %}  
                     <div id="subparcours_sortable" >
@@ -71,7 +73,7 @@
                     {% endfor %}
                     </div>
                 </div>
-                <div class="shadow_bottom"></div>
+                 {% if not parcours_sort.grouper and accordion %} <div class="shadow_bottom"></div>{% endif %}
             </div>                
             {% empty %}
             <div class="row">
