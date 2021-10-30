@@ -19,7 +19,8 @@
     <!-- Caractéristique pour les AJAX pour la correction en ligne -->
     {% endblock %}
 
-    <div id="corrector"> 
+    <div id="corrector">                 
+        <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas> 
         {% if customexercise.is_collaborative %}
             <iframe src=" " height="700" width="100%"></iframe>
         {% elif customexercise.is_file and c_e.file %}
@@ -36,10 +37,11 @@
             {% endfor %}    
         {%  elif customexercise.is_text %} 
             {% if "CanvasStyle" in c_e.answer|truncatechars:12   %}
-                {{  c_e.answer|json_script:"this_answer" }}   
-                <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas> 
 
-                {{  c_e.answer|json_script:"this_answer" }} 
+                {{  c_e.answer|json_script:"this_answer" }}   
+
+
+             
 
        
             {% else %}
