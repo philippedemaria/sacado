@@ -1134,14 +1134,9 @@ def printer(request,collection,output):
     knowledges   = request.POST.get("knowledges",None)  
   
     entetes=open(settings.TEX_PREAMBULE_FILE,"r")
-
-    print(settings.TEX_PREAMBULE_FILE)
-
     elements=entetes.read()
-
-    print(elements)
-
     entetes.close()
+    
     elements +=r"\begin{document}"+"\n"         
     # elements += r"""\begin{titre}[Calculs numériques]
     #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
