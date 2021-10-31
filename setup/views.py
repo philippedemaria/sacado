@@ -231,7 +231,8 @@ def logout_view(request):
 def ressource_sacado(request): #Protection saml pour le GAR
 
     gars = []
-    for key, value in request.items():
+    print(request)
+    for key, value in request.headers["X-Gar"]  :
         gars.append((key,value))
 
     #dico_received = request.headers["X-Gar"]    
