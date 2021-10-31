@@ -14,7 +14,16 @@
 
 {% for gar in gars %}
 
-{{ gar }}
+{{ gar }} <br/>
+
+{% endfor   %}
+   <br/> <br/>
+ ===================================================================
+  <br/> <br/>
+
+{% for gar in gars %}
+
+{{ gar.key }} ,  {{ gar.value }} <br/>
 
 {% endfor   %}
    <br/> <br/>
