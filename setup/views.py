@@ -235,9 +235,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
-
+    listing = []
     dico_received = dict()
     for gar in gars :
+        listing.append(gar)
         dico_received[gar['key']] = gar['value']
 
  
@@ -299,7 +300,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = {  'dico_received' : dico_received , 'gars' : gars }
+    context = {  'dico_received' : dico_received , 'gars' : gars , 'data_xml' : data_xml }
     return render(request, 'setup/gar_test.html', context)
 
 
