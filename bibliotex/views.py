@@ -169,8 +169,15 @@ def printer(request, relationtex_id, collection,output):
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}" 
 
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    #file = settings.DIR_TMP_TEX+r"\\"+document
+    # pour le serveur Linux
     file = settings.DIR_TMP_TEX+"/"+document
-    
+    ################################################################# 
+    ################################################################# 
+
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
     f_tex.close()
@@ -181,20 +188,20 @@ def printer(request, relationtex_id, collection,output):
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output=="html" :
-        result = subprocess.run(["make4ht", "-u", "-f",  "html5", file+".tex" ])
-        fhtml=open(file+".tex","r")
-        out=""
+        result = subprocess.run(["make4ht", "-u", "-f",  "-d", settings.DIR_TMP_TEX  , file+".tex" ])
+        fhtml  = open(file+".tex","r")
+        out    = ""
         recopie=False
         for ligne in fhtml :
-            if ligne=="</body>\n" : recopie=False
+            if ligne  =="</body>\n" : recopie=False
             if recopie : out+=ligne
-            if ligne==  "</head><body>\n" : recopie=True  
+            if ligne  ==  "</head><body>\n" : recopie=True  
         return out
     else : 
         print("format output non reconnu")
         return 
 
-
+make4ht -u -c customcfg -d foo filename
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Exotex
