@@ -46,6 +46,8 @@ import time
 import os
 import fileinput 
 import random
+import json
+
 
 ##############   bibliothèques pour les impressions pdf    #########################
 import os
@@ -230,13 +232,11 @@ def logout_view(request):
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
-    gars = []
-    data_xml = request.headers["X-Gar"]
-    dataset = data_xml.split(",")
-
-    xml = type(data_xml)
  
-
+    data_xml = request.headers["X-Gar"]
+    gars = json.loads(data_xml)
+ 
+ 
     #dico_received = request.headers["X-Gar"]    
     # dico_received = [   {"key":"UAI","value":"0350896J"},
     #                     {"key":"IDO","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"},    
@@ -294,7 +294,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = {  'data_xml' : data_xml , 'dataset' : dataset , 'xml' : xml  }
+    context = {  'data_xml' : data_xml , 'gars' : gars }
     return render(request, 'setup/gar_test.html', context)
 
 
