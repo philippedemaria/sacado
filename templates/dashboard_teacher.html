@@ -17,7 +17,7 @@
                 <!-- small box -->
                 <div class="small-box" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">
                     <!-- modal qui affiche la liste des élèves -->
-                    <div class="group_show  group_show{{group.id }} no_visu_on_load"> 
+                    <div class="group_show   no_visu_on_load" id="group_show{{group.id }}"> 
                         <form action="" method="POST">
                         {% csrf_token %}
                         <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
@@ -58,7 +58,8 @@
                         {% endif %}
                     </div>
 
-
+                        
+ 
                     <div class="small-box-footer" >
                         <div class="row">                                      
                             <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;margin-top: 7px">
@@ -77,16 +78,12 @@
 
                             </div>
                         </div>
-
                         <div class="row">                                      
                             <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px">
                             
                                 Evaluation{{ data.nb_evaluation_favorite|pluralize }} favorite{{ data.nb_evaluation_favorite|pluralize }} <small> ({{ data.nb_evaluation_favorite }}) - {{  data.nb_evaluation }} passée{{ data.nb_evaluation|pluralize }}</small>
                             </div>
                         </div>
-
-
-
                         <div class="row">                                      
                             <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
                             
@@ -102,11 +99,12 @@
 
                             </div>
                         </div>
-
                         {% if data.nb_documents == 0 %}
                             <div class="row">                                      
                                 <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                    <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
+                                    <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i>
+                                        <span class="small_displayer"> Détails </span>
+                                    </a>    
                                 </div>
                                 <div class="col-lg-6 col-xs-6" style="padding-right:0px">
                                     <a  href="#"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="helper_tip small_displayer" style="color:{{ group.color|contrast_color }};"> {{ data.snt }} élève{{ data.snt|pluralize }}
@@ -133,6 +131,7 @@
                         {% endif  %}
                     </div>
                 </div>
+
         {% empty %}
 
             {% if nb_teacher_level == 0 %} 
