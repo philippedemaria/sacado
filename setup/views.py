@@ -233,6 +233,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     gars = []
     data_xml = request.headers["X-Gar"]
     dataset = data_xml.split(",")
+
+    xml = type(data_xml)
  
 
     #dico_received = request.headers["X-Gar"]    
@@ -292,7 +294,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = {  'data_xml' : data_xml , 'dataset' : dataset  }
+    context = {  'data_xml' : data_xml , 'dataset' : dataset , 'xml' : xml  }
     return render(request, 'setup/gar_test.html', context)
 
 
