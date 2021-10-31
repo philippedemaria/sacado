@@ -5,6 +5,10 @@
 {% load item_tags %}
 
 
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
+{% endblock %} 
+
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
@@ -12,8 +16,6 @@
     <script>
         require(['script/ajax-supportfile']);
     </script> 
-
-
 {% endblock %} 
 
   
@@ -76,7 +78,7 @@
                                                         {{ exotex.title|cleanhtml|capfirst }}  
                                                     </a>  
                                                     <div>
-                                                    {{ exotex.content|truncatewords:"40"}}
+                                                    {{ exotex.content_html|truncatewords:"40"}}
                                                     </div>
                                                 <span class="pull-right">
                                                     {% if exotex.calculator %}
