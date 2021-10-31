@@ -192,6 +192,7 @@ def printer(request, relationtex_id, collection,output):
         fhtml  = open(file+".html","r", encoding="iso-8859-1", errors='ignore')
         out    = ""
         recopie=False
+        i=0
         for ligne in fhtml :
             if "</body>" in ligne : recopie=False
             if recopie : out+=ligne
