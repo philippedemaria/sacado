@@ -292,7 +292,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = {  'dataset' : dataset  }
+    context = {  'data_xml' : data_xml , 'dataset' : dataset  }
     return render(request, 'setup/gar_test.html', context)
 
 
