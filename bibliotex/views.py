@@ -193,15 +193,16 @@ def printer(request, relationtex_id, collection,output):
         out    = ""
         recopie=False
         for ligne in fhtml :
-            if ligne  =="</body>\n" : recopie=False
+            if "</body>" in ligne : recopie=False
             if recopie : out+=ligne
-            if ligne  ==  ">" : recopie=True  
+            if i  ==  9 : recopie=True  
+            i+=1
         return out
     else : 
         print("format output non reconnu")
         return 
 
-
+ 
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Exotex
