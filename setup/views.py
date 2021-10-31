@@ -231,50 +231,67 @@ def logout_view(request):
 def ressource_sacado(request): #Protection saml pour le GAR
 
     gars = []
-    # for key, value in request.items():
-    #     gars.append((key,value))
+    for key, value in request.items():
+        gars.append((key,value))
 
     #dico_received = request.headers["X-Gar"]    
+    # dico_received = [   {"key":"UAI","value":"0350896J"},
+    #                     {"key":"IDO","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"},    
+    #                     {"key":"DIV_APP","value":"3 C GR 2||3C##3C"},
+    #                     {"key":"PRO","value":"National_ens"},
+    #                     {"key":"GRO","value":"3 A SCIENCES##3 A SCIENCES"},
+    #                     {"key":"DIV","value":"3 A SCIENCES##3 A SCIENCES"},
+    #                     {"key":"CIV","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"},
+    #                     {"key":"NOM","value":"National_ens"},
+    #                     {"key":"PRE","value":"0350896J"},
+    #                     {"key":"P_MEL","value":"0350896J"},
+    #                     {"key":"P_MAT","value":"0350896J"},
+    #                     {"key":"P_MS1","value":"0350896J"},
+    #                     {"key":"E_MS1","value":"0350896J"},
+    #                     ]
+    # uai        = dico_received["UAI"]
+    # school     = School.objects.get(code_acad = uai)
 
-    dico_received = [{"key":"DIV_APP","value":"3 C GR 2||3C##3C"},{"key":"PRO","value":"National_ens"},{"key":"UAI","value":"0350896J"},{"key":"GRO","value":"3 A SCIENCES##3 A SCIENCES"},{"key":"IDO","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"}]
+    # if 'ens' in dico_received["PRO"] :
+    #     user_type  = 2
+    # else :
+    #     user_type  = 0 
 
-    last_name  = dico_received["last_name"]
-    first_name = dico_received["first_name"]
-    user_type  = dico_received["profil"]
-    email      = dico_received["email"]
-    closure    = dico_received["closure"]
-    time_zone  = dico_received["time_zone"]
-    is_extra   = 0
-    is_manager = 0 
-    uai     = dico_received["UAI"]
-    cgu        = 1
-    is_testeur = 0
-    country    = school.country
-    is_board   = 0
+    # last_name  = dico_received["NOM"]
+    # first_name = dico_received["PRE"]
+    # email      = dico_received["P_MEL"]
+    # closure    = None
+    # time_zone  = "Europe/Paris"
+    # is_extra   = 0
+    # is_manager = 0 
+    # cgu        = 1
+    # is_testeur = 0
+    # country    = school.country
+    # is_board   = 0
 
-    username   = dico_received["username"]
-    password   = make_password("sacado_gar") # quel est le format du mot de passe ?
+    # username   = dico_received["IDO"]
+    # password   = make_password("sacado_gar") # quel est le format du mot de passe ?
 
-    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+    # if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
 
-        user, created = User.objects.get_or_create(username = username, school = school , user_type = user_type , defaults = { "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
-        if user_type == 1 and created :
-            level      = dico_received["level"]
-            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-        elif user_type == 2 and created :
-            levels      = dico_received["levels"]
-            subjects    = dico_received["subjects"] 
-            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : subjects , "levels" : levels  })        
+    #     user, created = User.objects.get_or_create(username = username,  defaults = {"school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+    #     if user_type == 0 and created :
+    #         level      = dico_received["E_MS1"]
+    #         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+    #     elif user_type == 2 and created :
+    #         levels      = dico_received["P_MS1"]
+    #         subjects    = [] 
+    #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : subjects , "levels" : levels  })        
 
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        request.session["user_id"] = request.user.id
+    #     user = authenticate(username=username, password=password)
+    #     login(request, user)
+    #     request.session["user_id"] = request.user.id
 
-        return redirect('dashboard')
-    else :
-        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+    #     return redirect('dashboard')
+    # else :
+    #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = { 'gars' : gars , 'test' : test }
+    context = { 'gars' : gars ,   }
     return render(request, 'setup/gar_test.html', context)
 
 
