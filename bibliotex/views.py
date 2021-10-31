@@ -189,13 +189,13 @@ def printer(request, relationtex_id, collection,output):
 
     elif output=="html" :
         result = subprocess.run(["make4ht", "-d", settings.DIR_TMP_TEX  , file+".tex" ,  "-u"])
-        fhtml  = open(file+".html","r", encoding="utf-8", errors='ignore')
+        fhtml  = open(file+".html","r", encoding="iso-8859-1", errors='ignore')
         out    = ""
         recopie=False
         for ligne in fhtml :
             if ligne  =="</body>\n" : recopie=False
             if recopie : out+=ligne
-            if ligne  ==  "</head><body>\n" : recopie=True  
+            if ligne  ==  ">" : recopie=True  
         return out
     else : 
         print("format output non reconnu")
