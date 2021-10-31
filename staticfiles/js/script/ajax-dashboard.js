@@ -613,8 +613,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             {
 
             my_div.removeClass('documents_div');
-            $('.documents_div').animate({height: "0%", }, 1200 ) ;
-            my_div.animate({height: "100%", }, 1200, function() {
+            $('.documents_div').animate({height: "0%", }, 750 ) ;
+            my_div.animate({height: "100%", }, 750, function() {
                                                                 my_div.removeClass('documents_div_shadow');
                                                                 
                                                                 })  ;
@@ -629,7 +629,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
             my_div.addClass('documents_div');
-            $('.documents_div').animate({height: "255px", }, 1050, function() {
+            $('.documents_div').animate({height: "255px", }, 750, function() {
                                                                                 my_div.addClass('documents_div_shadow');
                                                                                             $('.shadow_bottom').show(); 
                                                                                  
