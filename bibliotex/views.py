@@ -169,7 +169,7 @@ def printer(request, relationtex_id, collection,output):
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}" 
 
-    file = settings.DIR_TMP_TEX+r"\\"+document
+    file = settings.DIR_TMP_TEX+"/"+document
     
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
