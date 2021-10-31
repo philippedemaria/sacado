@@ -92,80 +92,84 @@ def affectation_students_folders_groups(nf,group_ids,folder_ids):
 def printer(request, relationtex_id, collection,output):
     """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
     soit en html (output="html") """
+
+    # ouverture du texte dans le fichier tex
+    entetes=open(settings.TEX_PREAMBULE_FILE,"r")
+    elements=entetes.read()
+    entetes.close()
+    elements +=r"\begin{document}"+"\n"   
+      
+    ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
            bibliotex_id = request.POST.get("print_bibliotex_id",None)  
            bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
-           document_id = bibliotex_id
-           title = bibliotex.title
+           document     = "bibliotex" + str(relationtex_id)
+           title        = bibliotex.title
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    = Relationtex.objects.get(pk = relationtex_id) 
-            document_id = relationtex_id
-            title = relationtex.exotex.title
-    else :
-       relationtex   = Relationtex.objects.get(pk = relationtex_id) # pour insérer l'exo
-       document_id = relationtex.id
-       title = relationtex.title
+            document       = "relationtex" + str(relationtex_id)
+            title          = relationtex.exotex.title
 
-    skills       = request.POST.get("skills",None)  
-    knowledges   = request.POST.get("knowledges",None)  
-  
-    entetes=open(settings.TEX_PREAMBULE_FILE,"r")
-    elements=entetes.read()
-    entetes.close()
-
-    elements +=r"\begin{document}"+"\n"         
-    # elements += r"""\begin{titre}[Calculs numériques]
-    #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
-    #             \end{titre}"""
+        skills       = request.POST.get("skills",None)  
+        knowledges   = request.POST.get("knowledges",None)  
+      
 
 
-    elements += r"""\centerline{\bf """+ title +r""" }"""
-    elements += r""" \ \\ """
+        # elements += r"""\begin{titre}[Calculs numériques]
+        #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
+        #             \end{titre}"""
 
-    today = datetime.now()
-    if collection : 
-        relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
-        i = 1
-    else: relationtexs=[relationtex]
+        elements += r"""\centerline{\bf """+ title +r""" }"""
+        elements += r""" \ \\ """
 
-    for relationtex in relationtexs :
+        today = datetime.now()
+        if collection : 
+            relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
+            i = 1
+        else: relationtexs=[relationtex]
+
+        for relationtex in relationtexs :
         
-        skills_display = ""
-        if skills :   
-            if relationtex.skills.count():
-                sks =  relationtex.skills.all()
-            else :
-                sks =  relationtex.exotex.skills.all()
-            for s in sks :
-                skills_display +=  s.name+". "
+            skills_display = ""
+            if skills :   
+                if relationtex.skills.count():
+                    sks =  relationtex.skills.all()
+                else :
+                    sks =  relationtex.exotex.skills.all()
+                for s in sks :
+                    skills_display +=  s.name+". "
 
-        elements += r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display 
+            elements += r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display 
 
 
-        if knowledges :  
-            k_display = relationtex.exotex.knowledge.name
-            elements += k_display
+            if knowledges :  
+                k_display = relationtex.exotex.knowledge.name
+                elements += k_display
 
-            if relationtex.knowledges.count():
-                kws =  relationtex.knowledges.all()
-            else :
-                kws =  relationtex.exotex.knowledges.all()
-            for k in kws :
-                elements=+ k.name
+                if relationtex.knowledges.count(): kws =  relationtex.knowledges.all()
+                else                             : kws =  relationtex.exotex.knowledges.all()
+                
+                for k in kws : elements=+ k.name
 
-        if  relationtex.content :
-            ctnt =  relationtex.content
-        else :
-            ctnt =  relationtex.exotex.content
+            if  relationtex.content : ctnt =  relationtex.content
+            else                    : ctnt =  relationtex.exotex.content
 
-        elements += ctnt
-    
+
+            elements += ctnt
+ 
+    else : #pour la création d'un exercise ou son update
+        exotex    = Exotex.objects.get(pk = relationtex_id) # pour insérer l'exo
+        exotex_id = exotex.id
+        document  = "exotex" + str(exotex_id)
+
+        elements += exotex.content
+
+    # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}" 
 
-
-    file = settings.DIR_TMP_TEX+r"\bibliotex"+str(document_id)
+    file = settings.DIR_TMP_TEX+r"\\"+document
     
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
