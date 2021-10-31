@@ -231,9 +231,9 @@ def logout_view(request):
 def ressource_sacado(request): #Protection saml pour le GAR
 
     gars = []
-    dataset = request.headers["X-Gar"]
-    for data in dataset  :
-        gars.append(data)
+    data_xml = request.headers["X-Gar"]
+    dataset = data_xml.split(",")
+ 
 
     #dico_received = request.headers["X-Gar"]    
     # dico_received = [   {"key":"UAI","value":"0350896J"},
@@ -292,7 +292,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
-    context = { 'gars' : gars , 'dataset' : dataset  }
+    context = {  'dataset' : dataset  }
     return render(request, 'setup/gar_test.html', context)
 
 
