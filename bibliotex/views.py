@@ -188,7 +188,7 @@ def printer(request, relationtex_id, collection,output):
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output=="html" :
-        result = subprocess.run(["make4ht", "-u", "-c",  "customcfg", "-d", settings.DIR_TMP_TEX  , file+".tex" ])
+        result = subprocess.run(["make4ht", "-u", "-f", "-d", settings.DIR_TMP_TEX  , file+".tex" ])
         fhtml  = open(file+".tex","r")
         out    = ""
         recopie=False
