@@ -235,10 +235,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
-    listing = []
     dico_received = dict()
     for gar in gars :
-        listing.append(gar)
         dico_received[gar['key']] = gar['value']
 
  
