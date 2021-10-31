@@ -78,7 +78,7 @@
                                                         {{ exotex.title|cleanhtml|capfirst }}  
                                                     </a>  
                                                     <div>
-                                                    {{ exotex.content_html|truncatewords:"40"}}
+                                                    {{ exotex.content_html|safe|truncatewords:"40"}}
                                                     </div>
                                                 <span class="pull-right">
                                                     {% if exotex.calculator %}
