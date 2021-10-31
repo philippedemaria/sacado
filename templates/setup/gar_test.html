@@ -6,14 +6,22 @@
 </head>
 
 <body>
-{{ request.headers }}
-{% for g in gars %}
+ 
+{% for g in dataset %}
 
 	{{ g }} <br/>
 
 {% endfor %}
 
+  <br/> <br/>
+ ===================================================================
+  <br/> <br/>
+  
+{% for g in gars %}
 
+	{{ g }} <br/>
+
+{% endfor %}
 
 </body>
 </html>
