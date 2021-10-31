@@ -575,7 +575,7 @@ def show_bibliotex(request, id):
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id).order_by("ranking")
 
-    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'html_latex' : html_latex }
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, }
 
     return render(request, 'bibliotex/show_bibliotex.html', context )
 
