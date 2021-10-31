@@ -189,7 +189,7 @@ def printer(request, relationtex_id, collection,output):
 
     elif output=="html" :
         result = subprocess.run(["make4ht", "-d", settings.DIR_TMP_TEX  , file+".tex" ])
-        fhtml  = open(file+".tex","r")
+        fhtml  = open(file+".html","r")
         out    = ""
         recopie=False
         for ligne in fhtml :
