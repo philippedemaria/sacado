@@ -612,9 +612,10 @@ def create_accounting(request,tp):
                     fa.school = nf.school
                     if nf.date_payment:
                         fa.active = 1
-                    if nf.is_gar: # appel de la fonction qui valide le Web Service
-                        create_abonnement_gar(today,school,nf.id,request.user)
                     fa.save()
+
+                    if fa.is_gar: # appel de la fonction qui valide le Web Service
+                        create_abonnement_gar(today,school,fa,request.user)                    
         else :
             print(form.errors)
         

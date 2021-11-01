@@ -4079,7 +4079,9 @@ def real_time(request,id):
     today = time_zone_user(request.user).now()
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
+    connected_student_ids =  Tracker.objects.values_list("user_id",flat = True).filter(parcours = parcours ).distinct()
 
+    print(connected_student_ids)
  
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')

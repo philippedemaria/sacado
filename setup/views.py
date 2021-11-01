@@ -232,71 +232,56 @@ def logout_view(request):
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
- 
+    # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
     dico_received = dict()
     for gar in gars :
         dico_received[gar['key']] = gar['value']
-
+    ##########################################################
+    
  
- 
-    #dico_received = request.headers["X-Gar"]    
-    # dico_received = [   {"key":"UAI","value":"0350896J"},
-    #                     {"key":"IDO","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"},    
-    #                     {"key":"DIV_APP","value":"3 C GR 2||3C##3C"},
-    #                     {"key":"PRO","value":"National_ens"},
-    #                     {"key":"GRO","value":"3 A SCIENCES##3 A SCIENCES"},
-    #                     {"key":"DIV","value":"3 A SCIENCES##3 A SCIENCES"},
-    #                     {"key":"CIV","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"},
-    #                     {"key":"NOM","value":"National_ens"},
-    #                     {"key":"PRE","value":"0350896J"},
-    #                     {"key":"P_MEL","value":"0350896J"},
-    #                     {"key":"P_MAT","value":"0350896J"},
-    #                     {"key":"P_MS1","value":"0350896J"},
-    #                     {"key":"E_MS1","value":"0350896J"},
-    #                     ]
-    # uai        = dico_received["UAI"]
-    # school     = School.objects.get(code_acad = uai)
+    uai        = dico_received["UAI"]
+    school     = School.objects.get(code_acad = uai)
 
-    # if 'ens' in dico_received["PRO"] :
-    #     user_type  = 2
-    # else :
-    #     user_type  = 0 
+    if 'ens' in dico_received["PRO"] :
+        user_type  = 2
+    else :
+        user_type  = 0 
 
-    # last_name  = dico_received["NOM"]
-    # first_name = dico_received["PRE"]
-    # email      = dico_received["P_MEL"]
-    # closure    = None
-    # time_zone  = "Europe/Paris"
-    # is_extra   = 0
-    # is_manager = 0 
-    # cgu        = 1
-    # is_testeur = 0
-    # country    = school.country
-    # is_board   = 0
+    last_name  = dico_received["NOM"]
+    first_name = dico_received["PRE"]
+    email      = dico_received["P_MEL"]
+    closure    = None
+    time_zone  = "Europe/Paris"
+    is_extra   = 0
+    is_manager = 0 
+    cgu        = 1
+    is_testeur = 0
+    country    = school.country
+    is_board   = 0
 
-    # username   = dico_received["IDO"]
-    # password   = make_password("sacado_gar") # quel est le format du mot de passe ?
+    username   = dico_received["IDO"]
+    password   = make_password("sacado_gar") # quel est le format du mot de passe ?
 
-    # if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
 
-    #     user, created = User.objects.get_or_create(username = username,  defaults = {"school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
-    #     if user_type == 0 and created :
-    #         level      = dico_received["E_MS1"]
-    #         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-    #     elif user_type == 2 and created :
-    #         levels      = dico_received["P_MS1"]
-    #         subjects    = [] 
-    #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : subjects , "levels" : levels  })        
+        user, created = User.objects.get_or_create(username = username,  defaults = {"school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        if user_type == 0 and created :
+            level      = dico_received["E_MS1"]
+            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+        elif user_type == 2 and created :
+            levels      = dico_received["P_MS1"]
+            subjects    = [] 
+            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : subjects , "levels" : levels  })        
 
-    #     user = authenticate(username=username, password=password)
-    #     login(request, user)
-    #     request.session["user_id"] = request.user.id
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        request.session["user_id"] = request.user.id
 
-    #     return redirect('dashboard')
-    # else :
-    #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+        return redirect('dashboard')
+    else :
+        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     
     context = {  'dico_received' : dico_received , 'gars' : gars , 'data_xml' : data_xml }
     return render(request, 'setup/gar_test.html', context)
@@ -360,6 +345,7 @@ def school_adhesion(request):
                     school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , 
                         code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'logo' : school_commit.logo , 'address' : school_commit.address ,'complement' : school_commit.complement , 'gar' : school_commit.gar }  )
 
+
                     if not created :
                         # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
                         School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , 
@@ -402,13 +388,16 @@ def school_adhesion(request):
                     observation = "Paiement en ligne"             
  
                     accounting_id = accounting_adhesion(school_exists, today , today, user, is_active , observation) # création de la facturation
+
                     ########################################################################################################################
                     #############  Abonnement
                     ########################################################################################################################
                     date_start, date_stop = date_abonnement(today)
 
                     abonnement, abo_created = Abonnement.objects.get_or_create(school = school_exists, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school_exists.gar , defaults={ 'user' : user, 'is_active' : 0}  )
-
+ 
+                    if school_exists.gar: # appel de la fonction qui valide le Web Service
+                        create_abonnement_gar(today,school_exists,abonnement,request.user)
                     ########################################################################################################################
                     #############  FIN  Abonnement
                     ########################################################################################################################
