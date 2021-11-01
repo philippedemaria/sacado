@@ -67,10 +67,3 @@ def create_abonnement_gar(today,school,abonnement ,user):
     else :
         return False 
  
-
-"""
-[{"key":"DIV_APP","value":"3 C GR 2||3C##3C"},
-{"key":"PRO","value":"National_ens"},
-{"key":"UAI","value":"0350896J"},{"key":"GRO","value":"3 A SCIENCES##3 A SCIENCES"},
-{"key":"IDO","value":"0d3b79c8bc03467f768c0d03d58acdd596e94d722d0bc761deb2ac2d46222c45152b7f82d76833623f86701072b63e350b390c3104cf21f86b7c890f335735bc"}]
-"""
