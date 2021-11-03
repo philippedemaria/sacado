@@ -264,9 +264,6 @@ class CourseForm(forms.ModelForm):
 		self.fields['relationships'] = forms.ModelMultipleChoiceField(queryset=relations, required=False )
 
 
-
-
-
 class CourseNPForm(forms.ModelForm):
 	class Meta:
 		model = Course

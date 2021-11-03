@@ -7259,7 +7259,12 @@ def update_course(request, idc, id  ):
 
     if request.method == "POST" :
         if course_form.is_valid():
-            course_form.save()
+            nf =  course_form.save(commit = False)
+            nf.parcours = parcours
+            nf.teacher = teacher
+            nf.author = teacher
+            nf.subject = parcours.subject
+            nf.level = parcours.level
             if request.user.user_type == 0 :
                 student = Student.objects.get(user = request.user )
                 course.students.add(student)
