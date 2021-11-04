@@ -172,10 +172,8 @@ def index(request):
         s_form = StudentForm()
         np_form = NewpasswordForm()
         levels = Level.objects.order_by("ranking")
-        try:
-            cookie = request.session.get("cookie")
-        except:
-            pass
+        cookie = request.session.get("cookie", None)
+
         try :
             holidaybook = Holidaybook.objects.get(pk=1)
             sacado_voyage = holidaybook.is_display
@@ -192,7 +190,6 @@ def index(request):
         #abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
         abonnements  = Abonnement.objects.filter(is_active = 1).order_by("school__country__name")
  
-
         today_start = datetime.date(datetime.now())
 
         communications = Communication.objects.filter(active= 1).order_by("-today")
@@ -275,20 +272,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
-        user = authenticate( username= username, password="sacado_gar")
+        user_authenticated = authenticate( username= username, password="sacado_gar")
 
-        if user is not None:
-            login(request, user  )
+        if user_authenticated is not None:
+            login(request, user_authenticated  )
             request.session["user_id"] = user.id
-            if user.is_authenticated :
-                trdddddddddd = "True"
-            else :
-                trdddddddddd = "False"
-            string =  "test : "+ trdddddddddd +"\n username : " +  user.username
-            messages.error(request, string )
 
         else : 
-            string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user.username
+            string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user_authenticated.username
             messages.error(request, string )
  
 
