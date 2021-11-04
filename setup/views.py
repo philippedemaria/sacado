@@ -261,12 +261,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
     country    = school.country
     is_board   = 0
 
-    username   = dico_received["IDO"]
+    gar_token   = dico_received["IDO"]
     password   = make_password("sacado_gar") # quel est le format du mot de passe ?
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
 
-        user, created = User.objects.get_or_create(username = username,  defaults = {"school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
+        username = get_username(request, last_name,first_name)
+
+        user, created = User.objects.get_or_create(gar_token = gar_token, username = username , defaults = { "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
@@ -276,12 +278,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None , "levels" : levels  })
             teacher.levels.set(levels)
 
-        user.set_password('sacado_gar')
-        user.save()
-
-        pass_word = password       
-        user_name = user.username
-        user_connected = authenticate( username=user_name, password=pass_word)
+ 
+        user_connected = authenticate( username=username, password=password)
         if user_connected is not None:
             login(request, user_connected,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user_connected.id
