@@ -261,14 +261,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
     country    = school.country
     is_board   = 0
 
-    gar_token   = dico_received["IDO"]
+    username   = dico_received["IDO"]
     password   = make_password("sacado_gar") # quel est le format du mot de passe ?
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+ 
 
-        username = get_username(request, last_name,first_name)
-
-        user, created = User.objects.get_or_create(gar_token = gar_token, defaults = { 'username' : username , "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
+        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
