@@ -276,12 +276,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None , "levels" : levels  })
             teacher.levels.set(levels)        
  
-        user = authenticate(username=username, password=password)
-        print("user ------------> ", user)
-        login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-        request.session["user_id"] = request.user.id
-        print("request.user.id  ------------> ",request.user.id)
-        return redirect('dashboard')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+            request.session["user_id"] = request.user.id
+            return redirect('dashboard')
+        else :
+            messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+            return redirect('index')
+
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     return redirect('index')
