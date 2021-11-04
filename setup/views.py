@@ -276,9 +276,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_authenticated is not None:
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user.id
-            storage = messages.get_messages(request)
-            storage.used = True
- 
         else : 
             messages.error(request,"Votre compte n'est pas connu par SACADO.")
 
