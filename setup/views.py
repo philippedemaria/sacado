@@ -281,9 +281,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user is not None:
             login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user.id
- 
+            messages.success(request,"Votre établissement est abonné à SACADO.")
         else : 
-            string =  "IDO : "+ dico_received["IDO"]+"\n username : "+user.username
+            string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user.username
             messages.error(request, string )
  
 
