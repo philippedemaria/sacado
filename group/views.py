@@ -1179,7 +1179,7 @@ def enroll(request, slug):
                 except :
                     pass 
                 user = authenticate(username=username, password=password)
-                login(request, user)
+                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 request.session["user_id"] = request.user.id
         else :
 
@@ -1189,7 +1189,7 @@ def enroll(request, slug):
             password = request.POST.get("this_password")
 
             user = authenticate(username=username, password=password)
-            login(request, user)
+            login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = request.user.id
             group.students.add(user.student)
             if user :
