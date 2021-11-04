@@ -268,7 +268,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         username = get_username(request, last_name,first_name)
 
-        user, created = User.objects.get_or_create(gar_token = gar_token, username = username , defaults = { "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
+        user, created = User.objects.get_or_create(gar_token = gar_token, defaults = { 'username' : username , "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
@@ -277,13 +277,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
  
-        user_connected = authenticate( username=username, password=password)
+        user_connected = authenticate( username=user.username, password=user.password)
         if user_connected is not None:
             login(request, user_connected,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user_connected.id
             return redirect('dashboard')
         else : 
-            string =  user.username+ " ----> " + user_connected 
+            string =  user.username 
             messages.error(request, string )
             return redirect('index')
 
