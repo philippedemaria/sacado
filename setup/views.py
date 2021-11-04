@@ -270,11 +270,12 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+            
         elif user_type == 2 and created :
             levels      = dico_received["P_MS1"]
-            subjects    = [] 
-            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : subjects , "levels" : levels  })        
-
+            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None , "levels" : levels  })
+            teacher.levels.set(levels)        
+ 
         user = authenticate(username=username, password=password)
         login(request, user)
         request.session["user_id"] = request.user.id
