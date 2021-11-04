@@ -81,11 +81,6 @@ def end_of_contract() :
 
 def index(request):
 
-    texte = request.user.id
-
-    if request.user.id == 84663 :
-        if request.user.is_authenticated :
-            texte = "coucou"
 
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
@@ -280,7 +275,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
         if user_authenticated is not None:
-            login(request, user_authenticated  )
+            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user.id
  
         else : 
