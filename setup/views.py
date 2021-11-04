@@ -228,7 +228,7 @@ def logout_view(request):
 
 
 def ressource_sacado(request): #Protection saml pour le GAR
-    messages.error(request, "toto"  )
+    print( "GAR ->>>>>> toto"  )
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
@@ -272,10 +272,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
-        texte = "coucou"
-        messages.error(request, texte  )
+ 
+ 
         user_authenticated = authenticate( username= username, password= "sacado_gar")
-
+        print( "GAR ->>>>>> user_authenticated" , user_authenticated )
         if user_authenticated is not None:
             login(request, user_authenticated  )
             request.session["user_id"] = user.id
