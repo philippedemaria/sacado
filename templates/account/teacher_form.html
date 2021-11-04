@@ -58,7 +58,7 @@
             <div class="row">
                 <div class="col-sm-10 col-md-4">
 
-                {% if 'pbkdf2_sha256$' not in request.user.password %}
+                {% if 'pbkdf2_sha256$' not in teacher.user.password %}
                     <div class="form-group">
                         {{ user_form.username.label_tag }}<br/>
                         <label>Connexion via le GAR</label>
@@ -153,7 +153,7 @@
 
                 <div class="col-sm-12 col-md-6">
                     <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                        <label>{{ user_form.time_zone.label_tag }}{% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}</label> 
+                        <label>{{ user_form.time_zone.label_tag }}{% if not teacher.time_zone %} <i class="fa fa-warning"></i> Renseigner{% endif %}</label> 
                         {{ user_form.time_zone  |add_class:"form-control select2" }}
                         {{ user_form.time_zone.errors }}
                     </div>
