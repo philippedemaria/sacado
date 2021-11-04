@@ -283,7 +283,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-    return redirect ("index")
+    return index(request)
     # context = { 'request' : request ,   'user_after' : user_after ,  'user_authenticated' : user_authenticated , 'gars' : gars , 'data_xml' : data_xml }
     # return render(request, 'setup/gar_test.html', context)
 
