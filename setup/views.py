@@ -81,7 +81,7 @@ def end_of_contract() :
 
 def index(request):
 
-    texte = "RIEN"
+    texte = request.user.id
 
     if request.user.id == 84663 :
         if request.user.is_authenticated :
