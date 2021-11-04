@@ -81,7 +81,7 @@ def end_of_contract() :
 
 def index(request):
 
-    texte = request
+    texte = request.user
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
   
