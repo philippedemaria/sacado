@@ -239,7 +239,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     for gar in gars :
         dico_received[gar['key']] = gar['value']
     ##########################################################
-    
+    today = datetime.now()
  
     uai        = dico_received["UAI"]
     school     = School.objects.get(code_acad = uai)
