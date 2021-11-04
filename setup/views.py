@@ -272,11 +272,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
-        user_authenticated = authenticate( username= username, password="sacado_gar")
+        user_authenticated = authenticate( username= username, password= "sacado_gar")
 
         if user_authenticated is not None:
             login(request, user_authenticated  )
             request.session["user_id"] = user.id
+            chn = "voici"
+            if user_authenticated.is_authenticated :
+                chn = "voilà"
+            messages.error(request, chn  )
 
         else : 
             string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user_authenticated.username
