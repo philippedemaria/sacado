@@ -281,9 +281,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
             login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = request.user.id
             return redirect('dashboard')
-        else :
-            string = username +"   et password =  "+ password
-            messages.error(request, string)
+        else : 
+            messages.error(request, username)
             return redirect('index')
 
     else :
