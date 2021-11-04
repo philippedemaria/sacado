@@ -266,7 +266,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
 
-        user, created = User.objects.get_or_create(username = username,  defaults = {"school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        user, created = User.objects.get_or_create(username = username,  defaults = {"school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None })
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
