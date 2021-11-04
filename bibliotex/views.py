@@ -167,7 +167,9 @@ def printer(request, relationtex_id, collection,output):
         elements += exotex.content
 
     # Fermeture du texte dans le fichier tex
-    elements +=  r"\end{document}" 
+    elements +=  r"\end{document}"
+
+    elements +=  settings.DIR_TMP_TEX     
 
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
