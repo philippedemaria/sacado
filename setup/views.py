@@ -274,15 +274,18 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             levels      = dico_received["P_MS1"]
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None , "levels" : levels  })
-            teacher.levels.set(levels)        
- 
-        user_connected = authenticate(request, username=username, password=password)
+            teacher.levels.set(levels)
+
+        pass_word = user.password       
+        user_name = user.username
+        user_connected = authenticate( username=user_name, password=pass_word)
         if user_connected is not None:
             login(request, user_connected,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user_connected.id
             return redirect('dashboard')
         else : 
-            messages.error(request, username)
+            string = user_name + " ----- " +pass_word
+            messages.error(request, string)
             return redirect('index')
 
     else :
