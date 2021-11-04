@@ -279,7 +279,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             request.session["user_id"] = user.id
  
         else : 
-            messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+            messages.error(request,"Votre compte n'est pas connu par SACADO.")
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
