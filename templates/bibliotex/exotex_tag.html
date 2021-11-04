@@ -29,7 +29,7 @@
             {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
         {% endfor %}
     </div>
-    {{ exotex.content }}
+    {{ exotex.content_html|safe }}
 
 </div>
  

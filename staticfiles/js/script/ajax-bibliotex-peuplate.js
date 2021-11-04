@@ -31,8 +31,6 @@ define(['jquery', 'bootstrap'], function ($) {
                         if (themes.length >0)
                         { for (let i = 0; i < themes.length; i++) {
                                     
-
-                                    console.log(themes[i]);
                                     let themes_id = themes[i][0];
                                     let themes_name =  themes[i][1]  ;
                                     let option = $("<option>", {
@@ -77,8 +75,9 @@ define(['jquery', 'bootstrap'], function ($) {
             let level_id = param0.val();
             let theme_id = param1.val();
             let bibliotex_id = $("#bibliotex_id").val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let subject_id = $("#id_subject").val();
 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             url= "../ajax_level_exotex" ; 
 
@@ -93,6 +92,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     data: {
                         'level_id': level_id,
                         'theme_id': theme_id,
+                        'subject_id': subject_id,
                         'bibliotex_id': bibliotex_id,
                         csrfmiddlewaretoken: csrf_token
                     },

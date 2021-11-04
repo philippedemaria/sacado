@@ -149,10 +149,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             let level_id = param0.val();
             let theme_id = param1.val();
+            let subject_id = $("#id_subject").val();
             let bibliotex_id = $("#bibliotex_id").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-
+            console.log(subject_id  ) ;
             url= "../ajax_level_exotex" ; 
 
 
@@ -166,6 +167,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     data: {
                         'level_id': level_id,
                         'theme_id': theme_id,
+                        'subject_id': subject_id,
                         'bibliotex_id': bibliotex_id,
                         csrfmiddlewaretoken: csrf_token
                     },

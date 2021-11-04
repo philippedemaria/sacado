@@ -5,11 +5,8 @@
 
 {% block require %}
  
-    {% if exotex %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-    {% else %}
+
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-    {% endif %}
 
     <script>
         require(['script/ajax-bibliotex']);
