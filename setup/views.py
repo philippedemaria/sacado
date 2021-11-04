@@ -275,7 +275,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
- 
         user = authenticate( username= username, password="sacado_gar")
 
         if user is not None:
