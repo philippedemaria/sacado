@@ -756,7 +756,6 @@ def ajax_level_exotex(request):
 
     base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id=teacher.user.id), theme__subject_id= subject_id).exclude(bibliotexs=bibliotex)
 
-    print( level_id ) 
 
     if theme_ids :  
 
