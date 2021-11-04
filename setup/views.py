@@ -284,8 +284,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 tr = "True"
             else :
                 tr = "False"
-            messages.success(request,  tr )
-
+ 
         else : 
             string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user.username
             messages.error(request, string )
