@@ -81,6 +81,12 @@ def end_of_contract() :
 
 def index(request):
 
+    texte = "RIEN"
+
+    if request.user.id == 84663 :
+        if request.user.is_authenticated :
+            texte = "coucou"
+
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
   
@@ -202,7 +208,7 @@ def index(request):
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
-        context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
+        context = {'texte': texte,  'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
                    'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
 
         return render(request, 'home.html', context)
@@ -271,25 +277,21 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
- 
- 
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
         if user_authenticated is not None:
             login(request, user_authenticated  )
             request.session["user_id"] = user.id
-            user_after = user_authenticated
-
+ 
         else : 
             string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user_authenticated.username
             messages.error(request, string )
- 
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-    # return redirect('index')
-    context = { 'request' : request ,   'user_after' : user_after ,  'user_authenticated' : user_authenticated , 'gars' : gars , 'data_xml' : data_xml }
-    return render(request, 'setup/gar_test.html', context)
+    return redirect('index')
+    # context = { 'request' : request ,   'user_after' : user_after ,  'user_authenticated' : user_authenticated , 'gars' : gars , 'data_xml' : data_xml }
+    # return render(request, 'setup/gar_test.html', context)
 
 
 
