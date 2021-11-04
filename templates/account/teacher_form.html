@@ -57,11 +57,22 @@
             {% if not 'admin' in request.path %} 
             <div class="row">
                 <div class="col-sm-10 col-md-4">
+
+                {% if 'pbkdf2_sha256$' not in request.user.password %}
+                    <div class="form-group">
+                        {{ user_form.username.label_tag }}<br/>
+                        <label>Connexion via le GAR</label>
+                    </div>
+                {% else %}
                     <div class="form-group">
                         {{ user_form.username.label_tag }}
                         {{ user_form.username |add_class:"form-control" }}
                         {{ user_form.username.errors }}
                     </div>
+                {% endif %}
+
+
+
                 </div>
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group">
