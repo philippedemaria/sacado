@@ -29,8 +29,15 @@
 
    <br/> <br/>
  ===================================================================
- 
- user_authenticated ---> {{ user_authenticated}} < -----
+ {% if  user_authenticated.is_authenticated %}
+
+ gagné {% else  %} perdu
+
+ {% endif  %}
+
+   <br/> <br/>
+ ===================================================================
+ user_authenticated ---> {{ user_authenticated }} < -----
 
 
 

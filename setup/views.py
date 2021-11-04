@@ -48,7 +48,6 @@ import fileinput
 import random
 import json
 
-import logging
 ##############   bibliothèques pour les impressions pdf    #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -65,7 +64,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT 
 ############## FIN bibliothèques pour les impressions pdf  #########################
-logger = logging.getLogger(__name__)
+
 
 def end_of_contract() :
 
@@ -229,7 +228,6 @@ def logout_view(request):
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
-    logger.debug( "GAR ->>>>>> toto"  )
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
