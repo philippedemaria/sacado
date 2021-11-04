@@ -282,7 +282,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             request.session["user_id"] = user_connected.id
             return redirect('dashboard')
         else : 
-            messages.error(request, username)
+            messages.error(request, user_connected)
             return redirect('index')
 
     else :
