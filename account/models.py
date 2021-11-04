@@ -92,7 +92,6 @@ class User(AbstractUser):
     is_testeur = models.BooleanField(default=0)
     country    = models.ForeignKey(Country, blank=True, null=True, related_name="countries", default=None, on_delete = models.SET_NULL)
     is_board   = models.BooleanField(default=0)
-    gar_token  = models.CharField(max_length=255, default='', blank=True, editable= False)
 
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
