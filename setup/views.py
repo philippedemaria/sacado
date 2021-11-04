@@ -277,7 +277,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             teacher.levels.set(levels)        
  
         user = authenticate(username=username, password=password)
-        login(request, user)
+        login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
         request.session["user_id"] = request.user.id
 
         return redirect('dashboard')
