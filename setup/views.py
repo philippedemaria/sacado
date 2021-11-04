@@ -228,7 +228,7 @@ def logout_view(request):
 
 
 def ressource_sacado(request): #Protection saml pour le GAR
-
+    messages.error(request, "toto"  )
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
