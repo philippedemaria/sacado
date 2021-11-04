@@ -276,7 +276,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None , "levels" : levels  })
             teacher.levels.set(levels)
 
-        pass_word = user.password       
+        user.set_password('sacado_gar')
+        user.save()
+
+        pass_word = password       
         user_name = user.username
         user_connected = authenticate( username=user_name, password=pass_word)
         if user_connected is not None:
@@ -284,7 +287,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             request.session["user_id"] = user_connected.id
             return redirect('dashboard')
         else : 
-            string = user_name + " " + pass_word 
+            string = user_name + " ----> " + user_connected 
             messages.error(request, string )
             return redirect('index')
 
