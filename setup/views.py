@@ -275,7 +275,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         elif user_type == 2 and created :
             levels      = dico_received["P_MS1"]
-            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None    })
+            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
             teacher.levels.set(levels)
 
  
