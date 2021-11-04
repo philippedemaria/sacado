@@ -1,8 +1,8 @@
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render,redirect
 from django.forms import formset_factory
-
-from django.contrib.auth import   logout
+ 
+from django.contrib.auth import   logout , login, authenticate
 from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
@@ -270,7 +270,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-            
+
         elif user_type == 2 and created :
             levels      = dico_received["P_MS1"]
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0 , "subjects" : None , "levels" : levels  })
