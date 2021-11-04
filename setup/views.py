@@ -281,10 +281,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
             login(request, user  )
             request.session["user_id"] = user.id
             if user.is_authenticated :
-                tr = "True"
+                trdddddddddd = "True"
             else :
-                tr = "False"
-            messages.success(request,  tr )
+                trdddddddddd = "False"
+            string =  "test : "+ trdddddddddd +"\n username : " +  user.username
+            messages.error(request, string )
 
         else : 
             string =  "IDO : "+ dico_received["IDO"]+"\n username : " +  user.username
