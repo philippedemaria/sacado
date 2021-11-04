@@ -66,9 +66,12 @@ class Exotex(models.Model):
 
 
     def is_selected(self,bibliotex):
-        test = False  
-        if self in bibliotex.exotexs.all() :
-            test = True
+        test = False
+        try : 
+            if self in bibliotex.exotexs.all() :
+                test = True
+        except:
+            pass
         return test
 
  
