@@ -81,7 +81,6 @@ def end_of_contract() :
 
 def index(request):
 
-    texte = request.user
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
   
@@ -203,7 +202,7 @@ def index(request):
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
-        context = { 'texte' : texte ,  'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
+        context = { 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
                    'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
 
         return render(request, 'home.html', context)
