@@ -176,10 +176,10 @@ def printer(request, relationtex_id, collection,output):
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+"/"+document
+    file = settings.DIR_TMP_TEX+document
     ################################################################# 
     ################################################################# 
-    elements +=  "    pdflatex     -interaction   nonstopmode    -output-directory " +settings.DIR_TMP_TEX +"   "+ file
+    elements +=  "    make4ht     -u   --output-dir    -output-directory " +settings.DIR_TMP_TEX +"   "+ file+".tex"
 
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
