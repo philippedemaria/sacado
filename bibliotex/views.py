@@ -207,12 +207,26 @@ def printer(request, relationtex_id, collection,output):
 
 
 def change_enumarate(chaine) :
- 
-    nchaine = chaine.replace( r"\begin{description}\item" , "<ul><li>")
+    nchaine = chaine.replace( r"\begin{enumerate}\item\begin{enumerate}" , "<ol><li><ol>")
+    nchaine = nchaine.replace( r"\end{enumerate}\item" , "</ol><li>")    
+    nchaine = nchaine.replace( r"\end{enumerate}\end{enumerate}" , "</ol></li></ol>")
+
+
+    nchaine = nchaine.replace( r"\begin{description}\item\begin{description}" , "<ul><li><ul>")
+    nchaine = nchaine.replace( r"\end{description}\item" , "</ul><li>")    
+    nchaine = nchaine.replace( r"\end{description}\end{description}" ,  "</ul></li></ul>")
+
+
+    nchaine = nchaine.replace( r"\begin{description}\item" , "<ul><li>")
     nchaine = nchaine.replace( r"\end{description}" ,  "</li></ul>")
     nchaine = nchaine.replace( r"\begin{enumerate}\item" , "<ol><li>")
     nchaine = nchaine.replace( r"\end{enumerate}" , "</li></ol>")
     nchaine = nchaine.replace( r"\item" ,  "</li><li>")
+    nchaine = nchaine.replace( r"\N" ,  r"\mathbb{N}").replace( r"\Q" ,  r"\mathbb{Q}").replace( r"\Z" ,  r"\mathbb{Z}").replace( r"\Q" ,  r"\mathbb{Q}").replace( r"\C" ,  r"\mathbb{C}").replace( r"\D" ,  r"\mathbb{D}")
+
+
+
+
     return nchaine
 #########################################################################################################################################
 #########################################################################################################################################
