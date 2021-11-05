@@ -12,6 +12,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           });
 
 
+        setTimeout(function(){ 
+           $(".messages").css('display', "none"); 
+        }, 3000);
+
+
+
+
+
+
 
         $('#show_help_from_tdb').on('click', function (event) {
             $("#help_from_tdb").toggle(300) ;
