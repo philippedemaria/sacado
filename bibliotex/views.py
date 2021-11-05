@@ -169,7 +169,7 @@ def printer(request, relationtex_id, collection,output):
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
 
-    elements +=  settings.DIR_TMP_TEX    
+
 
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
@@ -179,7 +179,7 @@ def printer(request, relationtex_id, collection,output):
     file = settings.DIR_TMP_TEX+document
     ################################################################# 
     ################################################################# 
-    elements +=  "    make4ht     -u   --output-dir    -output-directory " +settings.DIR_TMP_TEX +"   "+ file+".tex"
+
 
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
