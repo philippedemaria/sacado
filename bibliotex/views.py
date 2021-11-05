@@ -324,7 +324,7 @@ def update_exotex(request, id):
 
             #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
-            messages.success(request, "L'exercice a été créé avec succès !")
+            messages.success(request, "L'exercice a été modifié avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
         else:
             print(form.errors)
