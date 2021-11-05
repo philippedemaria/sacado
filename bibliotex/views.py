@@ -190,7 +190,7 @@ def printer(request, relationtex_id, collection,output):
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output=="html" :
-        result = subprocess.run(["make4ht" ,  "-u" , "--output-dir", settings.DIR_TMP_TEX  , file+".tex"])
+        result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , '"mathml"'] , cwd=settings.DIR_TMP_TEX )
         fhtml  = open(file+".html","r", errors='ignore')
         out    = ""
         recopie=False
@@ -205,27 +205,7 @@ def printer(request, relationtex_id, collection,output):
         print("format output non reconnu")
         return 
 
-def change_enumarate(chaine) :
-    nchaine = chaine.replace( r"\begin{enumerate}\item\begin{enumerate}" , "<ol><li><ol>")
-    nchaine = nchaine.replace( r"\end{enumerate}\item" , "</ol><li>")    
-    nchaine = nchaine.replace( r"\end{enumerate}\end{enumerate}" , "</ol></li></ol>")
-
-
-    nchaine = nchaine.replace( r"\begin{description}\item\begin{description}" , "<ul><li><ul>")
-    nchaine = nchaine.replace( r"\end{description}\end{description}" ,  "</ul></li></ul>")
-
-
-    nchaine = nchaine.replace( r"\begin{description}\item" , "<ul><li>")
-    nchaine = nchaine.replace( r"\end{description}" ,  "</li></ul>")
-    nchaine = nchaine.replace( r"\begin{enumerate}\item" , "<ol><li>")
-    nchaine = nchaine.replace( r"\end{enumerate}" , "</li></ol>")
-    nchaine = nchaine.replace( r"\item" ,  "</li><li>")
-    nchaine = nchaine.replace( r"\N" ,  r"\mathbb{N}").replace( r"\Q" ,  r"\mathbb{Q}").replace( r"\Z" ,  r"\mathbb{Z}").replace( r"\Q" ,  r"\mathbb{Q}").replace( r"\C" ,  r"\mathbb{C}").replace( r"\D" ,  r"\mathbb{D}")
-
-
-
-
-    return nchaine 
+ 
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Exotex
@@ -266,7 +246,7 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
      
         form.save_m2m() 
 
@@ -294,7 +274,7 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
-        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
         form.save_m2m()  
 
@@ -322,7 +302,7 @@ def update_exotex(request, id):
             nf.save()
             form.save_m2m()  
 
-            #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
             messages.success(request, "L'exercice a été modifié avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
