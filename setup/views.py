@@ -284,7 +284,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         
     if user_type == 2:
 
- 
         grps = teacher.groups.all() 
         shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
         sgps    = Group.objects.filter(pk__in=shared_grps_id)
