@@ -205,7 +205,6 @@ def printer(request, relationtex_id, collection,output):
         print("format output non reconnu")
         return 
 
-
 def change_enumarate(chaine) :
     nchaine = chaine.replace( r"\begin{enumerate}\item\begin{enumerate}" , "<ol><li><ol>")
     nchaine = nchaine.replace( r"\end{enumerate}\item" , "</ol><li>")    
@@ -213,7 +212,6 @@ def change_enumarate(chaine) :
 
 
     nchaine = nchaine.replace( r"\begin{description}\item\begin{description}" , "<ul><li><ul>")
-    nchaine = nchaine.replace( r"\end{description}\item" , "</ul><li>")    
     nchaine = nchaine.replace( r"\end{description}\end{description}" ,  "</ul></li></ul>")
 
 
@@ -227,7 +225,7 @@ def change_enumarate(chaine) :
 
 
 
-    return nchaine
+    return nchaine 
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Exotex
@@ -236,18 +234,10 @@ def change_enumarate(chaine) :
 
 def admin_exotexs(request,idl):
 
-
     if request.user.is_superuser or request.user.is_extra :  # admin and more
         teacher = request.user.teacher
         level = Level.objects.get(pk=idl)
         exos = Exotex.objects.all()
-
-        for exo in exos :
-
-            Exotex.objects.filter(pk= exo.id).update( content_html = change_enumarate( exo.content )   ) 
-
-
-
         waitings = level.waitings.filter(theme__subject__in= teacher.subjects.all()).order_by("theme__subject" , "theme")
 
     return render(request, 'bibliotex/list_exotexs.html', { 'waitings': waitings, 'teacher':teacher , 'level':level   })
@@ -276,7 +266,7 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = change_enumarate( nf.content )   )
+        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
      
         form.save_m2m() 
 
@@ -304,7 +294,7 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = change_enumarate( nf.content )   )
+        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
         form.save_m2m()  
 
@@ -321,7 +311,6 @@ def create_exotex(request):
  
 def update_exotex(request, id):
 
-
     exotex = Exotex.objects.get(id=id)
     teacher = request.user.teacher
     form = ExotexForm(request.POST or None, request.FILES or None, instance=exotex , teacher = teacher , knowledge = None )
@@ -333,7 +322,7 @@ def update_exotex(request, id):
             nf.save()
             form.save_m2m()  
 
-            Exotex.objects.filter(pk= nf.id).update( content_html = change_enumarate( nf.content )   )
+            #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
             messages.success(request, "L'exercice a été créé avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
