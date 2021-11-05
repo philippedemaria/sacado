@@ -284,14 +284,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
         
     if user_type == 2:
 
-        teacher = request.user.teacher
+ 
         grps = teacher.groups.all() 
         shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
         sgps    = Group.objects.filter(pk__in=shared_grps_id)
         groupes =  grps | sgps
         groups  = groupes.order_by("level__ranking") 
 
-        this_user = request.user
+        this_user =  user
         nb_teacher_level = teacher.levels.count()
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
 
@@ -314,7 +314,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         template, context = student_dashboard(request, 0)
 
     else :  ## parent
-        parent = Parent.objects.get(user=request.user)
+        parent = Parent.objects.get(user= user)
         students = parent.students.order_by("user__first_name")
         context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, }
         template = 'dashboard.html'
