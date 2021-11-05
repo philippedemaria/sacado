@@ -208,7 +208,7 @@ def printer(request, relationtex_id, collection,output):
 
 def change_enumarate(chaine) :
  
-    nchaine = nchaine.replace( r"\begin{description}\item" , "<ul><li>")
+    nchaine = chaine.replace( r"\begin{description}\item" , "<ul><li>")
     nchaine = nchaine.replace( r"\end{description}" ,  "</li></ul>")
     nchaine = nchaine.replace( r"\begin{enumerate}\item" , "<ol><li>")
     nchaine = nchaine.replace( r"\end{enumerate}" , "</li></ol>")
