@@ -70,7 +70,7 @@
 
 </head>
 <body>
-    
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -453,7 +453,7 @@
     </div>
     <hr>
 </div>
-
+{%  if request.user.is_teacher %} 
 <div class="notification-container dismiss" id="notification-documents">
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="text-align:center;">
@@ -516,9 +516,8 @@
         </div>
     </div>
     {% endcomment %}
-
 </div>
-
+{% endif %}
 <div class="notification-container dismiss" id="notification-tools">
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="text-align:center;">
