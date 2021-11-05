@@ -169,24 +169,20 @@ def printer(request, relationtex_id, collection,output):
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
 
-
+    elements +=  settings.DIR_TMP_TEX    
 
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+document
+    file = settings.DIR_TMP_TEX+"/"+document
     ################################################################# 
     ################################################################# 
-
 
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
     f_tex.close()
-
-
-
 
 
     if output=="pdf" :
@@ -250,8 +246,6 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-     
         form.save_m2m() 
 
         messages.success(request, "L'exercice a été créé avec succès !")
@@ -278,8 +272,6 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-
         form.save_m2m()  
 
         messages.success(request, "L'exercice a été créé avec succès !")
@@ -305,8 +297,6 @@ def update_exotex(request, id):
             nf.teacher = teacher
             nf.save()
             form.save_m2m()  
-
-            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
             messages.success(request, "L'exercice a été créé avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
