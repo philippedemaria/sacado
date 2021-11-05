@@ -223,10 +223,18 @@ def change_enumarate(chaine) :
 
 def admin_exotexs(request,idl):
 
+
     if request.user.is_superuser or request.user.is_extra :  # admin and more
         teacher = request.user.teacher
         level = Level.objects.get(pk=idl)
         exos = Exotex.objects.all()
+
+        for exo in exos :
+
+            Exotex.objects.filter(pk= exo.id).update( content_html = change_enumarate( exo.content )   ) 
+
+
+
         waitings = level.waitings.filter(theme__subject__in= teacher.subjects.all()).order_by("theme__subject" , "theme")
 
     return render(request, 'bibliotex/list_exotexs.html', { 'waitings': waitings, 'teacher':teacher , 'level':level   })
@@ -299,6 +307,7 @@ def create_exotex(request):
 
  
 def update_exotex(request, id):
+
 
     exotex = Exotex.objects.get(id=id)
     teacher = request.user.teacher
