@@ -43,9 +43,6 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
 
 
 
- 
-
-
 def create_abonnement_gar(today,school,abonnement ,user):
     """Création d'un abonnement dans la base de données"""
 
@@ -60,11 +57,11 @@ def create_abonnement_gar(today,school,abonnement ,user):
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
     body      = web_abonnement_xml(abonnement,id_abonnement, today) 
-    # r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PFPART-2021.pem', directory + 'sacado.key'))
+    r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PFPART-2021.pem', directory + 'sacado.key'))
 
-    # if r.status_code == 201 or r.status_code==200 :
-    #     return True 
-    # else :
-    #     return False 
+    if r.status_code == 201 or r.status_code==200 :
+        return True 
+    else :
+        return False 
  
-    return True
+    #return True
