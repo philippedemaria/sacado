@@ -71,7 +71,7 @@
                     {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
                 {% endfor %}
             </div>
-            {{ r.exotex.content_html }}
+            {{ r.exotex.content_html|safe }}
         </div>  
     </div>
 {% endfor %} 
