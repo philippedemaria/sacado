@@ -1,11 +1,12 @@
 $(document).ready(function () {
  
  
-        console.log("---- NEW test ajax-accueil.js ---") ;      
-        var message_ele = document.getElementById("container_messages");
+        console.log("---- NEW test ajax-accueil.js ---") ;  
+
+ 
 
         setTimeout(function(){ 
-           message_ele.style.display = "none"; 
+           $("#container_messages").css('display', "none"); 
         }, 3000);
 
         //$('[data-toggle="popover"]').popover();
