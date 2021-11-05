@@ -2,7 +2,11 @@ $(document).ready(function () {
  
  
         console.log("---- NEW test ajax-accueil.js ---") ;      
+        var message_ele = document.getElementById("container_messages");
 
+        setTimeout(function(){ 
+           message_ele.style.display = "none"; 
+        }, 3000);
 
         //$('[data-toggle="popover"]').popover();
         //$(".select2").select2({width: '100%'});
