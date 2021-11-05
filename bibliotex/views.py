@@ -205,7 +205,16 @@ def printer(request, relationtex_id, collection,output):
         print("format output non reconnu")
         return 
 
+
+def change_enumarate(chaine) :
+    nchaine = chaine.replace(" ","")
  
+    nchaine = nchaine.replace( r"\begin{description}\item" , "<ul><li>")
+    nchaine = nchaine.replace( r"\end{description}" ,  "</li></ul>")
+    nchaine = nchaine.replace( r"\begin{enumerate}\item" , "<ol><li>")
+    nchaine = nchaine.replace( r"\end{enumerate}" , "</li></ol>")
+    nchaine = nchaine.replace( r"\item" ,  "</li><li>")
+    return nchaine
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Exotex
@@ -246,6 +255,8 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
+        Exotex.objects.filter(pk= nf.id).update( content_html = change_enumarate( nf.content )   )
+     
         form.save_m2m() 
 
         messages.success(request, "L'exercice a été créé avec succès !")
@@ -272,6 +283,8 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
+        Exotex.objects.filter(pk= nf.id).update( content_html = change_enumarate( nf.content )   )
+
         form.save_m2m()  
 
         messages.success(request, "L'exercice a été créé avec succès !")
@@ -297,6 +310,8 @@ def update_exotex(request, id):
             nf.teacher = teacher
             nf.save()
             form.save_m2m()  
+
+            Exotex.objects.filter(pk= nf.id).update( content_html = change_enumarate( nf.content )   )
 
             messages.success(request, "L'exercice a été créé avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
