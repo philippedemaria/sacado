@@ -190,7 +190,7 @@ def printer(request, relationtex_id, collection,output):
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output=="html" :
-        result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , '"mathml"'] , cwd=settings.DIR_TMP_TEX )
+        result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
         fhtml  = open(file+".html","r", errors='ignore')
         out    = ""
         recopie=False
@@ -245,7 +245,7 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
      
         form.save_m2m() 
 
@@ -273,7 +273,7 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
         form.save_m2m()  
 
@@ -301,7 +301,7 @@ def update_exotex(request, id):
             nf.save()
             form.save_m2m()  
 
-            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
             messages.success(request, "L'exercice a été modifié avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
