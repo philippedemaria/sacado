@@ -232,7 +232,6 @@ def my_exotexs(request):
 
 
 
-
 @user_passes_test(user_is_creator)
 def create_exotex_knowledge(request,idk):
 
