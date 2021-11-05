@@ -227,7 +227,8 @@ def logout_view(request):
 
 
 def ressource_sacado(request): #Protection saml pour le GAR
-
+    
+    index_tdb = True
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
@@ -236,7 +237,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
         dico_received[gar['key']] = gar['value']
     ##########################################################
     today = datetime.now()
- 
+    timer = today.time()
+
     uai        = dico_received["UAI"]
     school     = School.objects.get(code_acad = uai)
 
@@ -271,26 +273,28 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
+
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
         if user_authenticated is not None:
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            request.session["user_id"] = user.id
+            request.session["user_id"] = user_authenticated.id
         else : 
             messages.error(request,"Votre compte n'est pas connu par SACADO.")
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
         
-    if user_type == 2:
+    if user_type == 2 and user_authenticated :
 
+        teacher = user_authenticated.teacher
         grps = teacher.groups.all() 
         shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
         sgps    = Group.objects.filter(pk__in=shared_grps_id)
         groupes =  grps | sgps
         groups  = groupes.order_by("level__ranking") 
 
-        this_user =  user
+        this_user =  user_authenticated
         nb_teacher_level = teacher.levels.count()
         relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
 
