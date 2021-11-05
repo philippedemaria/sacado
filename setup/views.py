@@ -227,8 +227,7 @@ def logout_view(request):
 
 
 def ressource_sacado(request): #Protection saml pour le GAR
-    
-    index_tdb = True
+
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
@@ -237,8 +236,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         dico_received[gar['key']] = gar['value']
     ##########################################################
     today = datetime.now()
-    timer = today.time()
-
+ 
     uai        = dico_received["UAI"]
     school     = School.objects.get(code_acad = uai)
 
@@ -273,56 +271,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
-
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
         if user_authenticated is not None:
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            request.session["user_id"] = user_authenticated.id
+            request.session["user_id"] = user.id
         else : 
             messages.error(request,"Votre compte n'est pas connu par SACADO.")
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-        
-    if user_type == 2 and user_authenticated :
-
-        teacher = user_authenticated.teacher
-        grps = teacher.groups.all() 
-        shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
-        sgps    = Group.objects.filter(pk__in=shared_grps_id)
-        groupes =  grps | sgps
-        groups  = groupes.order_by("level__ranking") 
-
-        this_user =  user_authenticated
-        nb_teacher_level = teacher.levels.count()
-        relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
-
-        teacher_parcours = teacher.teacher_parcours
-        parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation") ## Parcours / évaluation favoris non affecté
-        
-        #Menu_right
-        parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
-        communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
-        request.session["tdb"] = True
-        webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
-
-        template = 'dashboard.html'
-        context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
-                   'relationships': relationships, 'parcourses': parcourses, 'index_tdb' : index_tdb, 
-                   'communications': communications, 'parcours_tab': parcours_tab, 'webinaire': webinaire,
-                   }
-    
-    elif user_type == 0:  ## student
-        template, context = student_dashboard(request, 0)
-
-    else :  ## parent
-        parent = Parent.objects.get(user= user)
-        students = parent.students.order_by("user__first_name")
-        context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, }
-        template = 'dashboard.html'
-
-    return render(request, template , context)
+    return index(request)
     # context = { 'request' : request ,   'user_after' : user_after ,  'user_authenticated' : user_authenticated , 'gars' : gars , 'data_xml' : data_xml }
     # return render(request, 'setup/gar_test.html', context)
 
