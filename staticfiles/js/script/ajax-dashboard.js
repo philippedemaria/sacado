@@ -14,7 +14,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         setTimeout(function(){ 
            $(".messages").css('display', "none"); 
-        }, 3000);
+        }, 2000);
 
 
 
