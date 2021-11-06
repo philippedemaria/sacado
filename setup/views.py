@@ -32,7 +32,7 @@ from school.forms import  SchoolForm
 from school.gar import *
 from socle.models import Level, Subject
 from tool.models import Quizz, Question, Choice
-
+from bibliotex.models import Exotex
 from datetime import date, datetime , timedelta
 
 from itertools import chain
@@ -198,12 +198,15 @@ def index(request):
         
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
         exercise_nb = exercises.count() - 1
+
+
+        nb_exotex = Exotex.objects.count() 
  
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
         context = { 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                   'cookie': cookie, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
+                   'cookie': cookie, 'nb_exotex': nb_exotex, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
 
         return render(request, 'home.html', context)
 
