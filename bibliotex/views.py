@@ -97,8 +97,8 @@ def printer(request, relationtex_id, collection,output):
     entetes=open(settings.TEX_PREAMBULE_FILE,"r")
     elements=entetes.read()
     entetes.close()
-    elements +=r"\begin{document}"+"\n"   
-      
+
+
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
@@ -111,6 +111,12 @@ def printer(request, relationtex_id, collection,output):
             relationtex    = Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
+
+
+        elements +=r"\pagestyle{fancy}\lhead{{\Large \textbf{"+title+r"}}}\rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{"+bibliotex.teacher+r"}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
+        elements +=r"\begin{document}"+"\n"   
+
+
 
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
@@ -172,6 +178,9 @@ def printer(request, relationtex_id, collection,output):
             elements += ctnt
  
     else : #pour la création d'un exercise ou son update
+
+        elements +=r"\begin{document}"
+
         exotex    = Exotex.objects.get(pk = relationtex_id) # pour insérer l'exo
         exotex_id = exotex.id
         document  = "exotex" + str(exotex_id)
