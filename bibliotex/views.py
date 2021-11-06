@@ -113,7 +113,7 @@ def printer(request, relationtex_id, collection,output):
             title          = relationtex.exotex.title
 
 
-        elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{"+bibliotex.teacher.user.civilite+r". "+bibliotex.teacher.user.last_name+r"}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
+        elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{"+bibliotex.teacher.user.civilite+r" "+bibliotex.teacher.user.last_name+r"}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
         elements +=r"\begin{document}"+"\n"   
 
 
@@ -149,7 +149,7 @@ def printer(request, relationtex_id, collection,output):
                     skills_display = r"\hfill{"+skills_display+"}"
 
 
-            elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title + r".}    \hfill{" +skills_display+r"}"
+            elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title  +  relationtex.exotex.id + r".}    \hfill{" +skills_display+r"}"
             
 
 
@@ -159,11 +159,13 @@ def printer(request, relationtex_id, collection,output):
                 k_display = relationtex.exotex.knowledge.name
                 elements += r"\begin{small}\begin{list}{}\item \textit{" +  k_display+ r" } " 
 
+
                 if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
                 elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
+                else : kws = []
                 
                 for k in kws : 
-                    elements += r"\item \textit{" +  k.name + r" } " 
+                    elements += r"\item \textit{" +  k.id +  k.name + r" } " 
 
                 elements += r"\end{list}\end{small}\vspace{0,2cm}"
 
@@ -173,7 +175,7 @@ def printer(request, relationtex_id, collection,output):
 
 
             elements += ctnt
- 
+            elements += r"\vspace{0,4cm}"
     else : #pour la création d'un exercise ou son update
 
         elements +=r"\begin{document}"
