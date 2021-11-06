@@ -157,13 +157,13 @@ def printer(request, relationtex_id, collection,output):
 
             if knowledges_printer :  
                 k_display = relationtex.exotex.knowledge.name
-                elements += r"\begin{small}\begin{list}{}\item" +  k_display 
+                elements += r"\begin{small}\begin{list}{}\item \textit{" +  k_display+ r" } " 
 
                 if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
                 elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
                 
                 for k in kws : 
-                    elements += r"\item" +  k.name
+                    elements += r"\item \textit{" +  k.name + r" } " 
 
                 elements += r"\end{list}\end{small}\vspace{0,2cm}"
 
