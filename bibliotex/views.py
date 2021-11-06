@@ -149,7 +149,7 @@ def printer(request, relationtex_id, collection,output):
                     skills_display = r"\hfill{"+skills_display+"}"
 
 
-            elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title  +  str(relationtex.exotex.id) + r".}    \hfill{" +skills_display+r"}"
+            elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title  +  r".}    \hfill{" +skills_display+r"}"
             
 
 
@@ -165,7 +165,7 @@ def printer(request, relationtex_id, collection,output):
                 else : kws = []
                 
                 for k in kws : 
-                    elements += r"\item \textit{" +  str(k.id) +  k.name + r" } " 
+                    elements += r"\item \textit{" +  k.name + r" } " 
 
                 elements += r"\end{list}\end{small}\vspace{0,2cm}"
 
