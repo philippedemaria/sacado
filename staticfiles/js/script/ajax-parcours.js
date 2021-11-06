@@ -346,7 +346,7 @@ define(['jquery','bootstrap'], function ($) {
         });
 
         $(".collapser").click(function(){
-            value =  $(this).attr("data-group"); 
+            value =  $(this).data("group"); 
             $('.collapside'+value).toggle(500);
         });
         
@@ -355,24 +355,24 @@ define(['jquery','bootstrap'], function ($) {
         $('.div_results_custom').hide();
 
         $(".selector_div_result_custom").click(function(){
-            value =  $(this).attr("data-customexercise_id"); 
+            value =  $(this).data("customexercise_id"); 
             $('#div_results_custom'+value).toggle(500);
         });
 
         $(".div_results_custom_close").click(function(){
-            value =  $(this).attr("data-customexercise_id"); 
+            value =  $(this).data("customexercise_id"); 
             $('#div_results_custom'+value).toggle(500);
         });
 
 
 
         $(".selector_div_result").click(function(){
-            value =  $(this).attr("data-relation_id"); 
+            value =  $(this).data("relation_id");
             $('#div_results'+value).toggle(500);
         });
 
         $(".div_results_close").click(function(){
-            value =  $(this).attr("data-relation_id"); 
+            value =  $(this).data("relation_id"); 
             $('#div_results'+value).toggle(500);
         });
 

@@ -390,8 +390,8 @@
                     {% get_is_submit rc parcours student as submitter %}
                     {% get_all_results_custom rc student parcours as data %} 
                     <div class="card_freeze"  {% if score %} style="opacity:0.5" {% endif %}  >
-                        <!-- div de résultat -->
-                        {% if submitter %}
+                        <!-- div de résultat -->   
+                        {% if data.is_corrected %}
                             <div id="div_results_custom{{ rc.id }}" class="div_results" >
                                 {% if data %}
                                 <div class="row">

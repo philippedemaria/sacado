@@ -5479,7 +5479,7 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
         relationship_id =  int(request.POST.get("relationship_id"))   
         relationship = Relationship.objects.get(pk = relationship_id)
 
-        Writtenanswerbystudent.objects.filter(relationship  = relationship  , student  = student).update(is_corrected = True)
+        Writtenanswerbystudent.objects.filter(relationship  = relationship  , student  = student).update(is_corrected = 1)
 
         if tab_value[value] > -1 :
             if knowledge_id :
@@ -5500,9 +5500,9 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
                 if not created :
                     Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
                 
-                resultat, crtd = Writtenanswerbystudent.objects.get_or_create(relationship  = relationship  , student  = student , defaults = { "is_corrected" : True , })
+                resultat, crtd = Writtenanswerbystudent.objects.get_or_create(relationship  = relationship  , student  = student , defaults = { "is_corrected" : 1 , })
                 if not crtd :
-                    Writtenanswerbystudent.objects.filter(relationship  = relationship  , student  = student).update(is_corrected = True)
+                    Writtenanswerbystudent.objects.filter(relationship  = relationship  , student  = student).update(is_corrected = 1)
 
 
             if skill_id :
@@ -5533,7 +5533,7 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
         knowledge_id = request.POST.get("knowledge_id",None)       
         skill_id = request.POST.get("skill_id",None)
 
-        Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student).update(is_corrected = True)
+        Customanswerbystudent.objects.filter(parcours_id = parcours_id , customexercise_id = customexercise_id, student = student).update(is_corrected = 1)
 
         if tab_value[value] > -1 :
   
