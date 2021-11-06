@@ -3139,10 +3139,9 @@ def stat_evaluation(request, id):
         students = students_from_p_or_g(request,parcours) 
 
     for s in students :
+
         student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
         stats.append(student)
-
-
 
     context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
 

@@ -75,7 +75,7 @@ body{
                     </tr>
                     </thead>
                     <tbody>   
-                        {% for stat in stats|dictsort:"name.user.last_name"  %}
+                        {% for stat in stats %}
                             <tr class="no_padding">
                                 <td>
                                     <form  action="" method="POST">{% csrf_token %} 
