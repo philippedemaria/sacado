@@ -138,7 +138,11 @@ body{
                                         <span class="helper_tip white btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
                                                 {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
                                             {{ s.point }}
-                                            <div class="helper_tip_text_center" ><img src="{{ s.exercise.supportfile.imagefile.url }}" width="350px"/></div>
+                                            {% if s.exercise.supportfile.imagefile  %}
+                                            <div class="helper_tip_text_center" >
+                                                <img src="{{ s.exercise.supportfile.imagefile.url }}" width="350px"/>
+                                            </div>
+                                            {% enif %}
                                         </span>
                                     {% endfor %}
                                     <br/>  
