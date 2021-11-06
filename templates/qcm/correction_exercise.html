@@ -168,8 +168,11 @@
             {% else %} 
 
                 {% if custom %}  
-                    {% include 'qcm/ajax_detail_customexercise.html' %}                
-                {% endif %} 
+                    {% include 'qcm/ajax_detail_customexercise.html' %}
+
+                {% else %}
+                    {% include 'qcm/ajax_detail_exercise.html' %} 
+                {% endif %}               
 
 
             {% endif %}  

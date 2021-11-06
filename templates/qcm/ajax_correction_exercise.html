@@ -12,14 +12,14 @@
     <!-- Caractéristique pour les AJAX pour la correction en ligne -->
     {% endblock %} 
 
-
+ 
 
     <div id="corrector">        
-        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;z-index:-1">
-        {% if relationship.exercise.supportfile.is_file  and   w_a.file %}
-            <iframe src="{{  w_a.file.url }}" height="700" width="100%"></iframe>
-        {%  elif relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
+        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;z-index:-1"></canvas>
+        {% if relationship.exercise.supportfile.is_python or  relationship.exercise.supportfile.is_scratch %}
            <pre>{{ w_a.answer|safe }}</pre>
+        {% elif relationship.exercise.supportfile.is_file  and   w_a.file %}
+            <iframe src="{{  w_a.file.url }}" height="700" width="100%"></iframe>
         {%  elif relationship.exercise.supportfile.is_text %}
            {{ w_a.answer|safe }}
         {%  elif relationship.exercise.supportfile.is_image   and   w_a.imagefile  %}
@@ -33,6 +33,7 @@
         {% if relationship.exercise.supportfile.is_python %}
             {% include 'basthon/python_correction_editor.html' %}
         {% endif %}
+
 
     </div>    
 {% else %}

@@ -5455,9 +5455,6 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
     stage = get_stage(student.user) 
 
 
-
-
-
     tab_label = ["","text-danger","text-warning","text-success","text-primary"]
     tab_value = [-1, stage["low"]-1,stage["medium"]-1,stage["up"]-1,100]       
 

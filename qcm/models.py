@@ -1553,6 +1553,36 @@ class Relationship(models.Model):
 
         return data 
 
+    def all_results_custom(self,student,parcours): # résultats vue élève
+        data = {}
+
+        if self.relationship_written_answer.filter(student = student) :
+            c_image =  self.relationship_written_answer.filter(student = student).last()
+            canvas_img = c_image.imagefile
+        else :
+            canvas_img = None
+        data["canvas_img"] = canvas_img   
+
+        if self.relationship_written_answer.filter(student = student,is_corrected=1).exists() :
+            c = self.relationship_written_answer.filter(student = student,   is_corrected=1).last()
+            data["is_corrected"] = True            
+            data["comment"] = c.comment
+            data["audio"] =  c.audio
+            data["point"] = c.point
+            c_skills = student.results_s.last()
+            c_knowledges = student.results_k.last()
+            data["skills"] = c_skills
+            data["knowledges"] = c_knowledges
+        else :
+            data["is_corrected"] = False
+            data["comment"] = False           
+            data["skills"] = []
+            data["knowledges"] = []
+            data["point"] = False
+            data["audio"] = False
+        return data
+
+
 
 class Studentanswer(models.Model):
 

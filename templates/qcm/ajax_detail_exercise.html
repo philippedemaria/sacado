@@ -1,0 +1,98 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+<div class="content_list">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hover table-striped" style="width:100%; font-size: 14px">
+                <tbody>
+                    <tr> 
+                        <td style="width:150px">Noms et prénoms</td>
+
+                        {% if relationship.is_realtime %}
+                        <td> 
+                              
+                        </td> 
+                        {% endif %}
+
+
+
+                        {% if relationship.is_mark %}
+                        <td> 
+                            Note
+                        </td> 
+                        {% endif %}
+                        <td style="font-size: 10px;text-align:center">
+                            {{ relationship.exercise.knowledge.name }}
+                        </td>
+                        {% for skill in relationship.skills.all %}
+                            <td style="font-size: 10px;text-align:center">
+                                {{ skill }}
+                            </td>
+                        {% endfor %}
+            
+                            <td> 
+                                 Commentaire
+                            </td> 
+      
+                    </tr>
+
+
+                    {% for student  in relationship.students.all|dictsort:"user.last_name"  %}  
+                        {% get_all_results_custom relationship student parcours as data %}                   
+                        <tr> 
+                            <td>{{ student }}</td>
+
+                            {% if relationship.is_realtime %}
+                            <td>{% if data.canvas_img %} 
+                                    <img src="{{ data.canvas_img}}" height="150px" />
+                                {% endif %}
+                            </td> 
+                            {% endif %}
+
+
+                            {% if relationship.is_mark %}
+                            <td> 
+                                {% if data.point %}<b>{{ data.point }}</b>{% endif %}
+                            </td> 
+                            {% endif %}
+                            {% get_code_student_for_this relationship student as  kdata %}
+                            <td style="text-align:center">
+                                 {% if kdata == 4 %}<i class="fa fa-square text-primary"></i>
+                                 {% elif kdata == 3 %}<i class="fa fa-square text-success"></i>
+                                 {% elif kdata == 2 %}<i class="fa fa-square text-warning"></i>
+                                 {% elif kdata == 1 %}<i class="fa fa-square text-danger"></i>                         
+                                 {% endif %}
+                            </td>   
+                            {% for skill in relationship.skills.all %}
+                            {% get_skill_result  relationship skill student   as skdata %}
+                                <td style="text-align:center">
+                                     {% if skdata == 4 %}<i class="fa fa-square text-primary"></i>
+                                     {% elif skdata == 3 %}<i class="fa fa-square text-success"></i>
+                                     {% elif skdata == 2 %}<i class="fa fa-square text-warning"></i>
+                                     {% elif skdata == 1 %}<i class="fa fa-square text-danger"></i>                         
+                                     {% endif %}
+                                </td>
+                            {% endfor %}
+
+
+    
+                            <td> 
+                                {% if data.comment %}  {{ data.comment }} {% endif %}
+                            </td> 
+                   
+
+
+                        </tr>
+                    {% endfor %}
+ 
+                         
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+</div>
+ 
