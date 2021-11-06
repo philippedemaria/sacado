@@ -211,7 +211,11 @@ define(['jquery', 'bootstrap'], function ($) {
     });
 
 
- 
+    $('body').on('click', '.show_by_popup' , function (event) {
+            let exotex_id = $(this).data("exotex_id");
+            let value = $("#this_exotex"+exotex_id).html();
+            $(".modal-body").html(value) ; 
+        });
 
 
     $('body').on('click', '.group_shower' , function (event) {

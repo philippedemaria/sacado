@@ -29,7 +29,12 @@
             {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
         {% endfor %}
     </div>
+
+    <div id="this_exotex{{ exotex.id }}">
     {{ exotex.content_html|safe }}
+    </div>
+
+    <div data-toggle='modal' data-target='#show_exotex_by_pop' class="show_by_popup" data-exotex_id="{{ exotex.id }}" >Voir l'exercice</div>
 
 </div>
  
