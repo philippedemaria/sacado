@@ -112,8 +112,8 @@ def printer(request, relationtex_id, collection,output):
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
 
-        skills       = request.POST.get("skills",None)  
-        knowledges   = request.POST.get("knowledges",None)  
+        skills_printer     = request.POST.get("skills",None)  
+        knowledges_printer = request.POST.get("knowledges",None)  
       
 
 
@@ -121,8 +121,8 @@ def printer(request, relationtex_id, collection,output):
         #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
         #             \end{titre}"""
 
-        elements += r"""\centerline{\bf """+ title +r""" }"""
-        elements += r""" \ \\ """
+        elements += r"""\Large{\bf """+ title +r""" }}"""
+        elements += r""" \ \\ \hrule \vspace{0,4cm}"""
 
         today = datetime.now()
         if collection : 
@@ -130,28 +130,40 @@ def printer(request, relationtex_id, collection,output):
             i = 1
         else: relationtexs=[relationtex]
 
+        j = 1
         for relationtex in relationtexs :
         
             skills_display = ""
-            if skills :   
+            if skills_printer :   
                 if relationtex.skills.count():
                     sks =  relationtex.skills.all()
                 else :
                     sks =  relationtex.exotex.skills.all()
                 for s in sks :
                     skills_display +=  s.name+". "
-
-            elements += r"\textbf{Exercice. " +  relationtex.exotex.title + r".}    " +skills_display 
-
-
-            if knowledges :  
-                k_display = relationtex.exotex.knowledge.name
-                elements += k_display
-
-                if relationtex.knowledges.count(): kws =  relationtex.knowledges.all()
-                else                             : kws =  relationtex.exotex.knowledges.all()
                 
-                for k in kws : elements=+ k.name
+                if skills_display !="":
+                    skills_display = r"\hfill{"+skills_display+"}"
+
+
+            elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title + r".}    \hfill{" +skills_display+r"}"
+            
+
+
+            j+=1
+
+            if knowledges_printer :  
+                k_display = relationtex.exotex.knowledge.name
+                elements += r"\begin{small}\begin{list}{}\item" +  k_display 
+
+                if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
+                elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
+                
+                for k in kws : 
+                    elements += r"\item" +  k.name
+
+                elements += r"\end{list}\end{small}\vspace{0,2cm}"
+
 
             if  relationtex.content : ctnt =  relationtex.content
             else                    : ctnt =  relationtex.exotex.content
