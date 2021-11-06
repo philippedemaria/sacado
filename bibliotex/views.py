@@ -113,7 +113,7 @@ def printer(request, relationtex_id, collection,output):
             relationtex    = Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
-            elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
+            elements +=r"\pagestyle{fancy} \lhead{} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
 
 
         elements +=r"\begin{document}"+"\n"   
