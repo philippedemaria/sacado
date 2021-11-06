@@ -102,18 +102,20 @@ def printer(request, relationtex_id, collection,output):
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
-           bibliotex_id = request.POST.get("print_bibliotex_id",None)  
-           bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
-           document     = "bibliotex" + str(relationtex_id)
-           title        = bibliotex.title
+            bibliotex_id = request.POST.get("print_bibliotex_id",None)  
+            bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
+            document     = "bibliotex" + str(relationtex_id)
+            title        = bibliotex.title
+            elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{"+bibliotex.teacher.user.civilite+r" "+bibliotex.teacher.user.last_name+r"}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
+
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    = Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
+            elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
 
 
-        elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{"+bibliotex.teacher.user.civilite+r" "+bibliotex.teacher.user.last_name+r"}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
         elements +=r"\begin{document}"+"\n"   
 
 
