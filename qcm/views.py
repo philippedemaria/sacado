@@ -331,7 +331,7 @@ def students_from_p_or_g(request,parcours) :
     try :
         group_id = request.session["group_id"]
         group = Group.objects.get(id = group_id) 
-        students_group = group.students.all()
+        students_group = group.students.order_by("user__last_name")
         students_parcours = parcours.students.order_by("user__last_name")
         students = [student for student in students_parcours if student   in students_group] # Intersection des listes
     except :
