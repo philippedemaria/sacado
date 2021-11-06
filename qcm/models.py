@@ -516,9 +516,13 @@ class Parcours(ModelWithCode):
         data["nb"] = nb_exercise_done
         data["nb_total"] = nb_relationships + nb_customs
         try :
-            data["pc"] = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
+            maxi = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
+            if int(nb_exercise_done * 100/(nb_relationships+nb_customs)) > 100:
+                maxi = 100
+            data["pc"] = maxi
         except :
             data["pc"] = 0
+
         return data
 
 
