@@ -807,23 +807,7 @@ class Parcours(ModelWithCode):
 
         return submit
 
-    def is_pending_folder_correction(self):
-        """
-        Correction en attente deuis un folder de parcours
-        """
-        submit = False
-        for p in self.leaf_parcours.filter(is_publish=1) :
-            customexercises = Customexercise.objects.filter(parcourses  = p )
-            for customexercise in customexercises :
-                if customexercise.customexercise_custom_answer.exclude(is_corrected = 1).exists() :
-                    submit = True 
-                    break
 
-        if not submit :
-            if Writtenanswerbystudent.objects.filter(relationship__parcours__in = self.leaf_parcours.all() ).exclude(is_corrected = 1).exists() : 
-                submit = True 
-
-        return submit
 
  
 
@@ -1153,7 +1137,23 @@ class Folder(models.Model):
 
         return data
  
+    def is_pending_folder_correction(self):
+        """
+        Correction en attente deuis un folder de parcours
+        """
+        submit = False
+        for p in self.parcours.filter(is_publish=1) :
+            customexercises = Customexercise.objects.filter(parcourses  = p )
+            for customexercise in customexercises :
+                if customexercise.customexercise_custom_answer.exclude(is_corrected = 1).exists() :
+                    submit = True 
+                    break
+ 
+        if not submit :
+            if Writtenanswerbystudent.objects.filter(relationship__parcours__in = self.parcours.all(), is_corrected = 0).exists() : 
+                submit = True 
 
+        return submit
 
 
     def data_parcours_evaluations_from_group(self,group):
