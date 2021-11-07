@@ -464,6 +464,12 @@ li label{
 
 .list_choice{
   margin-top: 5px;
+  background-color: #FFF;
+  padding: 0px  0px 10px 10px;
+}
+
+.list_choice_bibliotex{
+  margin-top: 5px;
   background-color: #f1eef7;
   padding: 0px  0px 10px 10px;
 }
