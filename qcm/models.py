@@ -722,6 +722,7 @@ class Parcours(ModelWithCode):
         data["nb_cours"] = self.course.filter( is_publish =1 ).count()
         data["nb_quizz"] = self.quizz.filter( is_publish = 1 ).count()
         data["nb_exercise"] = nb_exo_in_parcours
+        data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
 
         try :
             stage =  student.user.school.aptitude.first()

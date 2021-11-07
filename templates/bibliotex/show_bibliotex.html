@@ -26,7 +26,13 @@
 
 
 {% block page_menu_right %}
- {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
+
+    {% if request.user.user_type == 2 %}
+        {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
+    {% else %}
+        {% include 'qcm/submenu_parcours_student.html' %}
+    {% endif %}
+
 {% endblock %}
 
 

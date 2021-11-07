@@ -39,22 +39,39 @@
     <!-- box-footer DES FONCTIONNALITES  -->
     <div class="box-footer" style="position: relative; padding-top: 2px;">
 
-        <div class="row extend_student" > 
-            <div class="col-xs-4 col-md-4 col-lg-4" align="center"> 
+        <div class="row extend_student"> 
+
+ 
+            <div class="col-xs-3 col-md-3 col-lg-3" align="center"> 
                 <a href="{% url 'show_course_student' 0 parcours.id %}"><div class="extend_student_body"><i class="fa fa-desktop"></i></div></a>
                 <div class="extend_student_nb">{{ data_min.nb_cours }}</div>                                
                 <div class="extend_student_title">Cours</div>                                
             </div>
-            <div class="col-xs-4 col-md-4 col-lg-4" align="center"> 
+ 
+
+            <div class="col-xs-3 col-md-3 col-lg-3" align="center"> 
                 <a href="{% url 'show_parcours_student' parcours.id   %}"><div class="extend_student_body"><i class="fa fa-laptop"></i></div></a> 
                 <div class="extend_student_nb">{{  data_min.nb_exercise }}</div>                                                                 
                 <div class="extend_student_title">Exercices</div>
             </div>
-            <div class="col-xs-4 col-md-4 col-lg-4" align="center">  
+
+
+
+
+            <div class="col-xs-3 col-md-3 col-lg-3" align="center">   
                 <a href="{% url 'list_parcours_quizz_student' parcours.id %}"><div class="extend_student_body"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></div></a>
                 <div class="extend_student_nb">{{ data_min.nb_quizz }}</div>                                                                
                 <div class="extend_student_title">Quizz</div>
-            </div>    
+            </div>  
+            <div class="col-xs-3 col-md-3 col-lg-3" align="center">  
+                <a href="{% url 'list_parcours_bibliotex_student' parcours.id %}"><div class="extend_student_body"><i class="fa fa-pencil-square"></i></div></a>
+                <div class="extend_student_nb">{{ data_min.nb_bibliotex }}</div>                                                                
+                <div class="extend_student_title">B-TEX</div>
+            </div>  
+
+
+
+
         </div>
     </div>
 </div>  

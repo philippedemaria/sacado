@@ -1,0 +1,129 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+<span  style="color:{{ parcours.color }}"><i class="fa fa-pencil-square"></i> 
+ 
+
+        {% include 'qcm/breadcrumb_student.html' %}   <span style="color:{{ parcours.color  }}"> <small class="thin">Les bibliotex</small></span>  
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+        
+    {% include 'qcm/submenu_parcours_student.html' %}
+
+  
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+
+
+{% block body  %}
+
+{% include 'preloader.html' %}
+
+<section class="content_list" id="principal_section"> 
+
+ 
+        {% if sacado_asso %}    
+            {% for bibliotex in bibliotexs %}
+     
+
+                <div  class="box box-widget widget-user-2"  
+                      style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{bibliotex.color }};">
+                    <div class="handler widget-user-header">
+                        <!-- Add signet to folder -->
+                        <div class="group_show  no_visu_on_load" id="bibliotex_show{{bibliotex.id }}"> 
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                                    <b>Savoir faire ciblés</b>
+                                </div> 
+                            </div>
+
+                            {% for k in bibliotex.knowledges %}
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                    {{ k.name }}
+                                </div> 
+                            </div>
+                            {% endfor %}
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                                    <b>compétences ciblées</b>
+                                </div> 
+                            </div>
+                            
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                    {% for s in bibliotex.skills %}
+                                        {{ s }}. 
+                                    {% endfor %}
+                                </div> 
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="box_title_vignette"> 
+                            <a href="{% url 'parcours_show_bibliotex_student' parcours.id bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};" >             
+                                {% if bibliotex.title|length > 26 %}
+                                <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
+                                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                                </span>
+                                {% elif bibliotex.title|length > 22 %}
+                                    {{ bibliotex.title|truncatechars:"22"}}
+                                {% else %}
+                                    {{ bibliotex.title}}
+                                {% endif %}
+                            </a>    
+                        </div>
+                    </div>
+                    <div class="box-footer" style="position: relative; padding-top:10px;">
+                        <div class="row"> 
+                           <div class="col-lg-7 col-xs-7">
+                                 {{ bibliotex.exotexs.count}} exercices   
+                            </div>
+                            <div class="col-lg-5 col-xs-5">
+                                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
+                                </span>
+                            </div> 
+                        </div>
+                    </div>
+                </div>    
+
+    
+
+
+
+            {% endfor %}
+
+        {% else %}
+            <div class="alert alert-danger">
+                <i class="fa fa-ban"></i> Version établissement nécessaire
+            </div>
+        {% endif %}
+
+  
+</section>
+
+ 
+
+{% endblock  %}   

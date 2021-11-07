@@ -19,6 +19,7 @@ from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise,
 from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
+from bibliotex.models import Bibliotex
 from django.http import JsonResponse 
 from django.core import serializers
 from django.template.loader import render_to_string
@@ -2586,6 +2587,29 @@ def list_parcours_quizz_student(request, idp):
 
 
 
+ 
+def list_parcours_bibliotex_student(request, idp):
+
+    parcours = Parcours.objects.get(id=idp)
+    user = request.user
+    today = time_zone_user(user)
+    bibliotexs = parcours.bibliotexs.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("-date_modified")
+
+    context = { 'bibliotexs': bibliotexs ,   'parcours': parcours , 'today' : today ,  }
+
+    return render(request, 'qcm/list_parcours_bibliotex_student.html', context)
+
+
+
+def parcours_show_bibliotex_student(request, idp,id):
+
+    parcours = Parcours.objects.get(id=idp)
+    bibliotex = Bibliotex.objects.get(id=id)
+    relationtexs = bibliotex.relationtexs.order_by("ranking")
+
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'parcours': parcours, }
+
+    return render(request, 'bibliotex/show_bibliotex.html', context )
 
 
 
