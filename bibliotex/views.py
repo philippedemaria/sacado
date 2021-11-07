@@ -149,12 +149,8 @@ def printer(request, relationtex_id, collection,output):
                 
                 if skills_display !="":
                     skills_display = r"\hfill{"+skills_display+"}"
-
-
             elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title  +  r".}    \hfill{" +skills_display+r"}"
             
-
-
             j+=1
 
             if knowledges_printer :  
@@ -175,9 +171,8 @@ def printer(request, relationtex_id, collection,output):
             if  relationtex.content : ctnt =  relationtex.content
             else                    : ctnt =  relationtex.exotex.content
 
-
             elements += ctnt
-            elements += r"\vspace{0,4cm}"
+            elements += r"\vspace{0,4cm}\\"
     else : #pour la création d'un exercise ou son update
 
         elements +=r"\begin{document}"
@@ -187,7 +182,7 @@ def printer(request, relationtex_id, collection,output):
         document  = "exotex" + str(exotex_id)
 
         elements += exotex.content
-
+        elements += r"\vspace{0,4cm}"
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
 
