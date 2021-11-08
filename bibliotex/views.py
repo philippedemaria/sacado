@@ -262,7 +262,7 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
      
         form.save_m2m() 
 
@@ -290,7 +290,7 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
         form.save_m2m()  
 
@@ -318,7 +318,7 @@ def update_exotex(request, id):
             nf.save()
             form.save_m2m()  
 
-            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
 
             messages.success(request, "L'exercice a été modifié avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
