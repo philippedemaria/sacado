@@ -176,8 +176,7 @@ def printer(request, relationtex_id, collection,output):
 
             elements += ctnt
             elements += r"\vspace{0,4cm}\\"
-    else : #pour la création d'un exercise ou son update
-
+    else : #pour la création d'un exercise ou son update*
         exotex    = Exotex.objects.get(pk = relationtex_id) # pour insérer l'exo
         exotex_id = exotex.id
         document  = "exotex" + str(exotex_id)
