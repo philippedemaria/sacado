@@ -123,7 +123,7 @@ def printer(request, relationtex_id, collection,output):
             title          = relationtex.exotex.title
  
 
-        elements +=r"\titrefiche{"+title+r"}"
+        elements +=r"\titreFiche{"+title+r"}"
 
 
         skills_printer     = request.POST.get("skills",None)  
@@ -150,7 +150,7 @@ def printer(request, relationtex_id, collection,output):
                     skills_display +=  s.name+". "
                 
 
-            elements += r"\exo \bf{" +  relationtex.exotex.title  +  r"}    \competence{" +skills_display+r"}"
+            elements += r"\exo {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
             
             j+=1
 
