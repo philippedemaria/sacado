@@ -115,15 +115,17 @@ def printer(request, relationtex_id, collection,output):
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
             document     = "bibliotex" + str(relationtex_id)
             title        = bibliotex.title
+            author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
+
 
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    = Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
- 
+            author         = "Équipe SACADO"
 
-        elements +=r"\titreFiche{"+title+r"}"
+        elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
 
 
         skills_printer     = request.POST.get("skills",None)  

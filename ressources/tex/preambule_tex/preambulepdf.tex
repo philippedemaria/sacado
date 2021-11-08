@@ -173,7 +173,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 \definecolor{bleusad}{HTML}{0056B3}
 \addtolength{\topmargin}{-3em}
-\newcommand{\titreFiche}[1]{\centerline{\Ovalbox{\parbox[t]{0.7\textwidth}{
+\newcommand{\titreFiche}[2]{\centerline{\Ovalbox{\parbox[t]{0.7\textwidth}{
 \vspace{-0.5em}\begin{center} \bf \large #1
 \end{center}
 \vspace{-0.5em}}}}
@@ -183,11 +183,10 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \fancypagestyle{Page1}{\fancyhead{}\renewcommand{\headrulewidth}{0pt}}
 \thispagestyle{Page1}
 \fancyhead[L]{#1}
-\fancyfoot[R]{P. \textsc{Demaria}}
+\fancyfoot[R]{\textsc{#2}}
 \renewcommand{\footrulewidth}{0.4pt}
 \pagestyle{fancy}
-%\renewcommand{\headrulewidth}{0.4pt}
-}
+}}
 
 \newcounter{cexo}
 \renewcommand{\thecexo}{\arabic{cexo}}
@@ -203,7 +202,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\competences}[1]{
   {\bf Compétences ciblées : }
   \begin{enumerate}
-    
+
     #1
   \end{enumerate}
 
