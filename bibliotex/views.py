@@ -164,7 +164,7 @@ def printer(request, relationtex_id, collection,output):
                 else : kws = []
                 
                 for k in kws : 
-                    elements += r"\item " +  k.name  
+                    elements += r" \item " +  k.name  
 
                 elements += r"}"
 
