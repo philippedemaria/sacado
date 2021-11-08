@@ -131,7 +131,7 @@ def printer(request, relationtex_id, collection,output):
 
         today = datetime.now()
         if collection : 
-            relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today))
+            relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today)).order_by("ranking")
             i = 1
         else: relationtexs=[relationtex]
 
