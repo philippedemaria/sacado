@@ -156,7 +156,7 @@ def printer(request, relationtex_id, collection,output):
 
             if knowledges_printer :  
                 k_display = relationtex.exotex.knowledge.name
-                elements += r"\savoirs{  \item" +  k_display 
+                elements += r"\savoirs{  \item " +  k_display 
 
 
                 if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
