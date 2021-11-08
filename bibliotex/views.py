@@ -94,10 +94,19 @@ def printer(request, relationtex_id, collection,output):
     soit en html (output="html") """
 
     # ouverture du texte dans le fichier tex
-    entetes=open(settings.TEX_PREAMBULE_FILE,"r")
+
+    if output=="pdf" :
+        preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    elif output=="html" :
+        preamb = settings.TEX_PREAMBULE_FILE
+
+
+    entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
 
+    elements +=r"\begin{document}"+"\n"   
 
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
@@ -106,28 +115,21 @@ def printer(request, relationtex_id, collection,output):
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
             document     = "bibliotex" + str(relationtex_id)
             title        = bibliotex.title
-            elements +=r"\pagestyle{fancy} \lhead{  \textbf{"+title+r"}} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{"+bibliotex.teacher.user.civilite+r" "+bibliotex.teacher.user.last_name+r"}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
 
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    = Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
-            elements +=r"\pagestyle{fancy} \lhead{} \rhead{}\lfoot{Propulsé par https://sacado.xyz}\rfoot{}\renewcommand{\headrulewidth}{0.4pt}\renewcommand{\footrulewidth}{0.4pt}"
+ 
 
-
-        elements +=r"\begin{document}"+"\n"   
-
+        elements +=r"\titrefiche{"+title+r"}"
 
 
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
       
-
-
-        # elements += r"""\begin{titre}[Calculs numériques]
-        #             \TitreSansTemps{"""+ bibliotex.title +r"""} 
-        #             \end{titre}"""
+ 
 
         today = datetime.now()
         if collection : 
@@ -147,15 +149,14 @@ def printer(request, relationtex_id, collection,output):
                 for s in sks :
                     skills_display +=  s.name+". "
                 
-                if skills_display !="":
-                    skills_display = r"\hfill{"+skills_display+"}"
-            elements += r"\textbf{Exercice "+str(j)+". " +  relationtex.exotex.title  +  r".}    \hfill{" +skills_display+r"}"
+
+            elements += r"\exo \bf{" +  relationtex.exotex.title  +  r"}    \competence{" +skills_display+r"}"
             
             j+=1
 
             if knowledges_printer :  
                 k_display = relationtex.exotex.knowledge.name
-                elements += r"\begin{small}\begin{list}{}\item \textit{" +  k_display+ r" } " 
+                elements += r"\savoirs{  \item" +  k_display 
 
 
                 if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
@@ -163,9 +164,9 @@ def printer(request, relationtex_id, collection,output):
                 else : kws = []
                 
                 for k in kws : 
-                    elements += r"\item \textit{" +  k.name + r" } " 
+                    elements += r"\item " +  k.name  
 
-                elements += r"\end{list}\end{small}\vspace{0,2cm}"
+                elements += r"}"
 
 
             if  relationtex.content : ctnt =  relationtex.content
