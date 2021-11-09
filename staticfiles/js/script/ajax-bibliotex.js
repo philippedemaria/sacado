@@ -285,6 +285,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         )
     });
 
+ 
+    $('body').on('click', '.action_print_tex' , function (event) {
+            let relationtex_id = $(this).data("relationtex_id");
+            let value = $("#tex_"+relationtex_id).html();
+            $("#print_tex_body").html(value);
+
+        });
 
  
     $('body').on('click', '.group_shower' , function (event) {

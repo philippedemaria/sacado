@@ -23,7 +23,7 @@
         </label> 
     </div>
 
-    <div class="consigne fontsize12">
+    <div class="exotex_knowledges fontsize12">
         {{ exotex.knowledge.name }} {% if exotex.knowledges.all|length > 0 %}<br/>{% endif %}
         {% for k in exotex.knowledges.all %}
             {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
@@ -33,9 +33,9 @@
     <div id="this_exotex{{ exotex.id }}">
     {{ exotex.content_html|safe }}
     </div>
-
+    {% comment %}
     <div data-toggle='modal' data-target='#show_exotex_by_pop' class="show_by_popup" data-exotex_id="{{ exotex.id }}" >Voir l'exercice</div>
-
+    {% endcomment %}
 </div>
  
  

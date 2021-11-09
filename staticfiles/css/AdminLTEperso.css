@@ -813,14 +813,15 @@ label {
     color : #666;
     padding: 15px;
     background-color: #FFF;
-    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
-    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
     position: relative;
     border: 1px solid #e6e2dd;
-    height : 250px;
+    height : 350px;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: 15px;
+    margin-left: 15px;
     overflow-y: auto;
     float:left;
     border-radius: 5px;
@@ -919,6 +920,31 @@ label {
   height:85vh;
   overflow-y: auto
 }
+
+ .exotex::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+.exotex::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.exotex::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+/* Handle on hover */
+.exotex::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+
+
+
 
 /******************************************** real_time_live  **************************************/
 
@@ -2377,12 +2403,12 @@ width:100%;
 
 /* On mouse-over, add a grey background color */
 .container_checkbox:hover input ~ .checkmark  {
-  background-color: #00a65a;
+  background-color: #5d4391;
 }
 
 /* When the checkbox is checked, add a blue background */
 .container_checkbox input:checked ~ .checkmark    {
-  background-color: #00a65a;
+  background-color: #5d4391;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */

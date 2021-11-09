@@ -52,6 +52,10 @@
             <li class="relative_div_exotex action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-print"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
             </li>
+            <li class="relative_div_exotex action_print_tex"   data-relationtex_id="{{ r.id }}">  
+                <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="25px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
+            </li>
+            {% comment %}
             <li class="relative_div_exotex action_exotex"  data-action="results" data-relationtex_id="{{ r.id }}"> 
                 <span data-toggle='modal' data-target='#results_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-trophy"></i> <span class="legend_exotex_parameter"> Résultats </span> </span> 
             </li>
@@ -59,9 +63,12 @@
                 <span data-toggle='modal' data-target='#individualise_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-users"></i> 
                 <span class="legend_exotex_parameter"> Individualiser  </span> </span>
             </li>
+            {% endcomment %}
+
             <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
                 <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-times"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
             </li>
+
         </div>  
         <div class="col-sm-11 col-md-11 col-lg-11" >         
         {% else %}
@@ -82,6 +89,7 @@
                 {% endfor %}
             </div>
             {{ r.exotex.content_html|safe }}
+            <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
         </div>  
     </div>
 {% endfor %} 
@@ -187,6 +195,21 @@
 
 
 
+<div class="modal fade" id="print_tex" tabindex="-1" role="dialog" aria-labelledby="print_tex">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">   Copier et coller le code source  
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 id="print_exotex_title">  </h2>  
+            </div>
+            <div class="modal-body" id="print_tex_body">
+ 
+            </div>
+        </div>
+    </div> 
+</div>
 
 {% endblock %}                        
  
