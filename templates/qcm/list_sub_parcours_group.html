@@ -87,12 +87,14 @@
 
     {% if quizzes %}
     <div class="row documents_div documents_div_shadow">
-        <h1 class="thin">Mes quizz <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ quizzes.count }} quizz </span>  </h1>
-        <div class="row" > 
-            <div class="col-sm-12 col-md-12">
-                {% for quizz in quizzes %}   
-                      {% include 'tool/quizz_tag.html' %} 
-                {% endfor %}
+        <div class="col-sm-12 col-md-12">
+            <h1 class="thin">Mes quizz <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ quizzes.count }} quizz </span>  </h1>
+            <div class="row" > 
+                <div class="col-sm-12 col-md-12">
+                    {% for quizz in quizzes %}   
+                          {% include 'tool/quizz_tag.html' %} 
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="shadow_bottom"></div>
