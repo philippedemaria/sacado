@@ -57,7 +57,7 @@
 
         {% if quizzes %} 
             <h2 class="thin">Mes quizz</h2>
-            {% if sacado_asso %} 
+
 
                 {% for q in quizzes %}
                     {% for gq in q.generate_quizz.all     %}
@@ -77,18 +77,14 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
-            {% else %}
-                <div class="alert alert-danger">
-                    <i class="fa fa-ban"></i> Version établissement nécessaire
-                </div>
-            {% endif %}
+
         {% endif %}
 
         {% if bibliotexs %} 
             <h2 class="thin">Mes bilioTex</h2>
      
 
-            {% if sacado_asso %}    
+
                 {% for bibliotex in bibliotexs %}
          
 
@@ -153,11 +149,7 @@
                     </div>    
                 {% endfor %}
 
-            {% else %}
-                <div class="alert alert-danger">
-                    <i class="fa fa-ban"></i> Version établissement nécessaire
-                </div>
-            {% endif %}
+
         {% endif %}
 
     </form>
