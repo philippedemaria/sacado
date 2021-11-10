@@ -456,6 +456,12 @@ li label{
   list-style: none;
 }
 
+#id_groups li, #id_parcours li ,  #id_folders li  {
+  list-style: none;
+  margin-left: 15px;
+}
+
+
 #id_groups li label,#id_parcours li label {
   font-weight: normal; 
 }
@@ -797,8 +803,8 @@ label {
     margin-left: 15px;
 }
 
- 
 
+ 
 .skill_knowledge_bibliotex_title{
    font-size : 18px;
    font-variant-caps: small-caps;

@@ -1572,7 +1572,11 @@ def list_sub_parcours_group_student(request,idg,idf):
     parcourses = bases.filter( is_evaluation=0).order_by("ranking")
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
 
-    context = {'parcourses': parcourses , 'evaluations': evaluations , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
+
+    quizzes = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_archive=0 ) 
+    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student )
+
+    context = {'parcourses': parcourses , 'evaluations': evaluations , 'bibliotexs': bibliotexs ,  'quizzes': quizzes ,   'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
 
     return render(request, 'qcm/list_sub_parcours_group_student.html', context )
 
