@@ -832,7 +832,11 @@ def create_quizz_code(request,id,idg):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz , gquizz , questions , save = get_date_play(id,idg,0)
-    return redirect("list_quizzes") 
+    if save :
+        return redirect("show_quizz_group", id , idg ) 
+    else :
+        messages.error("Un quizz est déjà généré.")
+        return redirect("list_quizzes") 
 
 
 ############################################################################################################

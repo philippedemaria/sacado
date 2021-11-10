@@ -63,7 +63,7 @@
                             <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="fa fa-fw fa-gamepad"></i> <span class="label_icon"> Numérique </span>
                             </a>  
                         {% elif  quizz.is_numeric %}
-                            <a href="{% url 'create_quizz_code'  quizz.id  group.id  %}#this_quizz{{ quizz.id }}" target="_blank" class="edit" title="Générer un quizz"><i class="fa fa-fw fa-desktop"></i> <span class="label_icon"> Numérique</span>
+                            <a href="{% url 'create_quizz_code'  quizz.id  group.id  %}#this_quizz{{ quizz.id }}" target="_blank" class="edit" title="Générer un quizz"><i class="fa fa-fw fa-desktop"></i> <span class="label_icon"> Générer</span>
                             </a> 
                         {% else %}
                             <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
