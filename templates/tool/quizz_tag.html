@@ -58,18 +58,24 @@
             </div>
             <div class="col-lg-4 col-xs-4">
                 {% if group %}
-                        <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
-                           class="edit" target="_blank" >
-                           <i class="fa fa-fw fa-play"></i>  <span class="label_icon"> Papier</span>
-                        </a>
                     {% if sacado_asso %}
                         {% if  quizz.is_video %}
                             <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="fa fa-fw fa-gamepad"></i> <span class="label_icon"> Numérique </span>
                             </a>  
                         {% elif  quizz.is_numeric %}
                             <a href="{% url 'create_quizz_code'  quizz.id  group.id  %}#this_quizz{{ quizz.id }}" target="_blank" class="edit" title="Générer un quizz"><i class="fa fa-fw fa-desktop"></i> <span class="label_icon"> Numérique</span>
-                            </a>  
+                            </a> 
+                        {% else %}
+                            <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
+                               class="edit" target="_blank" >
+                               <i class="fa fa-fw fa-play"></i>  <span class="label_icon"> Papier</span>
+                            </a>
                         {% endif %}
+                    {% else %}
+                        <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
+                           class="edit" target="_blank" >
+                           <i class="fa fa-fw fa-play"></i>  <span class="label_icon"> Papier</span>
+                        </a>  
                     {% endif %}
                 {% endif %}
             </div> 
