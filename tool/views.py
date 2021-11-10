@@ -835,7 +835,7 @@ def create_quizz_code(request,id,idg):
     if save :
         return redirect("show_quizz_group", id , idg ) 
     else :
-        messages.error("Un quizz est déjà généré.")
+        messages.error(request, "Un quizz est déjà généré.")
         return redirect("list_quizzes") 
 
 
