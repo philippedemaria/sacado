@@ -88,18 +88,11 @@ ul#id_skills li{
                                     {{ form.title.errors }}
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6">
+                            <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     {{ form.content.label_tag }}<br/>
                                     {{ form.content|attr:"cols:50"|attr:"rows:15"   }}
                                     {{ form.content.errors }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                                <div class="form-group">
-                                    {{ form.content_html.label_tag }}<br/>
-                                    {{ form.content_html }}
-                                    {{ form.content_html.errors }}
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-3">
@@ -175,18 +168,11 @@ ul#id_skills li{
                 <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
                     <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
                     <div id="enable_correction_div">
-                        <div class="col-sm-12 col-md-6">                        
+                        <div class="col-sm-12 col-md-12">                        
                             <div class="form-group"> 
                                 {{ form.correction.label_tag }}                        
                                 {{ form.correction|attr:"cols:80"|attr:"rows:15" }}
                                 {{ form.correction.errors }}
-                            </div>
-                        </div> 
-                        <div class="col-sm-12 col-md-6">                        
-                            <div class="form-group"> 
-                                {{ form.correction_html.label_tag }}                        
-                                {{ form.correction_html|attr:"cols:50"|attr:"rows:15" }}
-                                {{ form.correction_html.errors }}
                             </div>
                         </div> 
                     </div>

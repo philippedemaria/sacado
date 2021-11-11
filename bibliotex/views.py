@@ -98,7 +98,7 @@ def printer(request, relationtex_id, collection,output):
     if output=="pdf" :
         preamb = settings.TEX_PREAMBULE_PDF_FILE
 
-    elif output=="html" :
+    elif output=="html" or output=="html_cor" :
         preamb = settings.TEX_PREAMBULE_FILE
 
 
@@ -218,6 +218,20 @@ def printer(request, relationtex_id, collection,output):
             if i  ==  9 : recopie=True  
             i+=1
         return out
+
+    elif output=="html_cor" :
+        result = subprocess.run(["make4ht" ,  "-u" ,  file+"_cor.tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
+        fhtml  = open(file+"_cor.html","r", errors='ignore')
+        out    = ""
+        recopie=False
+        i=0
+        for ligne in fhtml :
+            if "</body>" in ligne : recopie=False
+            if recopie : out+=ligne
+            if i  ==  9 : recopie=True  
+            i+=1
+        return out
+
     else : 
         print("format output non reconnu")
         return 
@@ -262,8 +276,10 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-     
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        if nf.correction :
+            Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+
         form.save_m2m() 
 
         messages.success(request, "L'exercice a été créé avec succès !")
@@ -290,7 +306,9 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
 
-        #Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        if nf.correction :
+            Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
 
         form.save_m2m()  
 
@@ -319,6 +337,8 @@ def update_exotex(request, id):
             form.save_m2m()  
 
             Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            if nf.correction :  
+                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
 
             messages.success(request, "L'exercice a été modifié avec succès !")
             return redirect('admin_exotexs', exotex.knowledge.level.id)
