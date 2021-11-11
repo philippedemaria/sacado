@@ -224,7 +224,8 @@ def printer(request, relationtex_id, collection,output):
         for ligne in fhtml :
             if "</body>" in ligne : recopie=False
             if recopie : out+=ligne
-            if i  ==  9 : recopie=True  
+            if i  ==  9 : recopie=True
+            ligne.replace('src="','src="https://sacado.xyz/ressources/tex/tmp_tex/')
             i+=1
         return out
 
