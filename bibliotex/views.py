@@ -98,7 +98,7 @@ def printer(request, relationtex_id, collection,output):
     if output=="pdf" :
         preamb = settings.TEX_PREAMBULE_PDF_FILE
 
-    elif output=="html" or output=="html_cor" :
+    elif  "html" in output : :
         preamb = settings.TEX_PREAMBULE_FILE
 
 
@@ -170,9 +170,16 @@ def printer(request, relationtex_id, collection,output):
 
                 elements += r"}"
 
+            if "_cor" in  output :
+                if  relationtex.correction : ctnt =  relationtex.correction
+                else                       : ctnt =  relationtex.exotex.correction
+            else :
+                if  relationtex.content : ctnt =  relationtex.content
+                else                    : ctnt =  relationtex.exotex.content
 
-            if  relationtex.content : ctnt =  relationtex.content
-            else                    : ctnt =  relationtex.exotex.content
+
+
+
 
             elements += ctnt
             elements += r"\vspace{0,4cm}\\"
@@ -206,7 +213,7 @@ def printer(request, relationtex_id, collection,output):
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
-    elif output=="html" :
+    elif "html" in output :
         #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
         os.system("make4ht -u "+file+".tex mathml")
         fhtml  = open(file+".html","r", errors='ignore')
@@ -220,19 +227,6 @@ def printer(request, relationtex_id, collection,output):
             i+=1
         return out
 
-    elif output=="html_cor" :
-        #result = subprocess.run(["make4ht" ,  "-u" ,  file+"_cor.tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
-        os.system("make4ht -u "+file+"_cor.tex mathml")
-        fhtml  = open(file+"_cor.html","r", errors='ignore')
-        out    = ""
-        recopie=False
-        i=0
-        for ligne in fhtml :
-            if "</body>" in ligne : recopie=False
-            if recopie : out+=ligne
-            if i  ==  9 : recopie=True  
-            i+=1
-        return out
 
     else : 
         print("format output non reconnu")
