@@ -98,7 +98,7 @@ def printer(request, relationtex_id, collection,output):
     if output=="pdf" :
         preamb = settings.TEX_PREAMBULE_PDF_FILE
 
-    elif  "html" in output :
+    elif output == "html" or output == "html_cor" :
         preamb = settings.TEX_PREAMBULE_FILE
 
 
@@ -170,7 +170,7 @@ def printer(request, relationtex_id, collection,output):
 
                 elements += r"}"
 
-            if "_cor" in  output :
+            if output == "html" or output== "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
                 else                       : ctnt =  relationtex.exotex.correction
             else :
@@ -213,7 +213,7 @@ def printer(request, relationtex_id, collection,output):
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
-    elif "html" in output :
+    elif output == "html" or output== "html_cor" :
         #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
         os.system("make4ht -u "+file+".tex mathml")
         fhtml  = open(file+".html","r", errors='ignore')
