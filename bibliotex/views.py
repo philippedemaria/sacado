@@ -98,7 +98,7 @@ def printer(request, relationtex_id, collection,output):
     if output=="pdf" :
         preamb = settings.TEX_PREAMBULE_PDF_FILE
 
-    elif  "html" in output : :
+    elif  "html" in output :
         preamb = settings.TEX_PREAMBULE_FILE
 
 
