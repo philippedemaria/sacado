@@ -207,7 +207,8 @@ def printer(request, relationtex_id, collection,output):
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output=="html" :
-        result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
+        #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
+        os.system("make4ht -u "+file+".tex mathml")
         fhtml  = open(file+".html","r", errors='ignore')
         out    = ""
         recopie=False
@@ -220,7 +221,8 @@ def printer(request, relationtex_id, collection,output):
         return out
 
     elif output=="html_cor" :
-        result = subprocess.run(["make4ht" ,  "-u" ,  file+"_cor.tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
+        #result = subprocess.run(["make4ht" ,  "-u" ,  file+"_cor.tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
+        os.system("make4ht -u "+file+"_cor.tex mathml")
         fhtml  = open(file+"_cor.html","r", errors='ignore')
         out    = ""
         recopie=False
