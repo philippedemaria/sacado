@@ -182,7 +182,14 @@
         {% endif %}
  
                                 
-               
+        {% if folders_tab|length > 0 %}    
+            <div class="row"></div>
+            <h2 class="thin"> Mes dossiers non affectés</h2>
+            {% for folder in folders_tab %}  
+                {% include 'qcm/folder_tag.html' %}
+            {% endfor %}
+        {% endif %}
+
 
 
 
@@ -193,7 +200,7 @@
 
             {% for parcours_sort in list_parcours %}  
             <div class="row"></div>
-            <h2 class="thin">{% if parcours_sort.grouper %}Mes évaluations non affectées{% else %} Mes dossiers et parcours non affectés{% endif %}</h2>
+            <h2 class="thin">{% if parcours_sort.grouper %}Mes évaluations non affectées{% else %} Mes parcours non affectés{% endif %}</h2>
             <div class="row"></div><hr style="margin-top: 0px"/>             
                 {% for parcours in parcours_sort.list %}  
                     <div  class="box box-widget widget-user-2"  
