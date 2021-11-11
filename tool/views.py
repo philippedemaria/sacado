@@ -650,18 +650,18 @@ def ajax_charge_folders(request):
     data = {} 
     group_ids = request.POST.getlist('group_ids', None)
 
-
-
     if len(group_ids) :
         fldrs = set()
+        prcs  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
             fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
-
+            prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
         data['folders'] =  list( fldrs )
+        data['parcours'] =  list( prcs )
     else :
         data['folders'] =  []
-
+        data['parcours'] =  []
     return JsonResponse(data)
 
 

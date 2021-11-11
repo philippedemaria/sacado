@@ -819,24 +819,25 @@ def ajax_level_exotex(request):
     return JsonResponse(data)
 
 
+ 
+def ajax_charge_folders(request):  
 
-
-def ajax_charge_folders(request):
-
-    teacher = Teacher.objects.get(user= request.user)
+    teacher = request.user.teacher
     data = {} 
     group_ids = request.POST.getlist('group_ids', None)
 
     if len(group_ids) :
-        grps = set()
+        fldrs = set()
+        prcs  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
-            grps.update(group.group_folders.values_list("id","title").filter(is_trash=0))
-
-        data['folders'] =  list( grps )
+            fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
+            prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
+        data['folders'] =  list( fldrs )
+        data['parcours'] =  list( prcs )
     else :
         data['folders'] =  []
-
+        data['parcours'] =  []
     return JsonResponse(data)
 
 
