@@ -215,7 +215,8 @@ def printer(request, relationtex_id, collection,output):
 
     elif output == "html" or output== "html_cor" :
         #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
-        os.system("make4ht -u "+file+".tex mathml")
+        os.chdir(settings.DIR_TMP_TEX)
+        os.system("make4ht -u "+document+".tex mathml")
         fhtml  = open(file+".html","r", errors='ignore')
         out    = ""
         recopie=False
