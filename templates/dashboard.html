@@ -716,21 +716,12 @@
 
         {% for level in levels|dictsort:"ranking" %}
             <div class="row" style="font-size: 12px">
-                <div class="col-lg-3 col-xs-3">
+                <div class="col-lg-7 col-xs-7">
                     <small>{{ level.shortname }} </small> 
                 </div>           
-                <div class="col-lg-1 col-xs-1">
-                    <a href="{% url 'admin_supportfiles' level.id  %}" class="surline"><img src="{% static 'img/ggb.png' %}" width="15px"></a>  
-                </div>  
-                <div class="col-lg-1 col-xs-1">
+                <div class="col-lg-2 col-xs-2">
                     <a href="{% url 'admin_exotexs' level.id  %}" class="surline"><img src="{% static 'img/tex.png' %}" width="15px"></a>  
                 </div>  
-                <div class="col-lg-3 col-xs-3"> 
-                    <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
-                </div> 
-                <div class="col-lg-1 col-xs-1"> 
-                     <a href="{% url 'admin_qrandom'  level.id  %}">QA   </a> 
-                </div> 
             </div>
         {% endfor %} 
 
