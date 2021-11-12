@@ -224,8 +224,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         let subject_id = $("#id_subject").val();
         let theme_id = $("#id_theme").val();
         let skill_id = $(this).val();
-        let bibliotex_id = $("#bibliotex").val();
+        let bibliotex_id = $("#bibliotex_id").val();
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
 
         $.ajax(
             {

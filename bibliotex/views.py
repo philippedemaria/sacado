@@ -470,7 +470,7 @@ def ajax_search_bibliotex(request):
 
     teacher = request.user.teacher
     data = {}
- 
+
     level_id = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
 
@@ -785,6 +785,8 @@ def ajax_level_exotex(request):
     keyword      = request.POST.get("keyword",None)
     bibliotex_id = request.POST.get("bibliotex_id",None)
 
+    print(skill_id )
+
     bibliotex = Bibliotex.objects.get(pk=bibliotex_id)
     teacher = request.user.teacher 
     data = {}
@@ -792,14 +794,16 @@ def ajax_level_exotex(request):
 
     base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id=teacher.user.id), theme__subject_id= subject_id).exclude(bibliotexs=bibliotex)
 
-
     if theme_ids :  
-
+   
         if level_id and theme_ids[0] != "" and skill_id  : 
             skill = Skill.objects.get(pk=skill_id)
             exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids, skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
 
-     
+        elif level_id  and skill_id  : 
+            skill = Skill.objects.get(pk=skill_id)
+            exotexs = base.filter( level_id = level_id ,  skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
+
         elif level_id and theme_ids[0] != ""  : 
             exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids ).order_by("theme","knowledge__waiting","knowledge","ranking")
 
@@ -813,10 +817,10 @@ def ajax_level_exotex(request):
         else :
             exotexs = base
     else :
-
+ 
         if level_id and  skill_id  : 
             skill = Skill.objects.get(pk=skill_id)
-            exotexs = base.filter(level_id = level_id ,  skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            exotexs = base.filter(level_id = level_id ,  skills = skill ).order_by("theme","knowledge__waiting","knowledge","ranking")
 
         elif level_id and keyword  : 
             exotexs = base.filter( level_id = level_id ,  title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -911,19 +915,23 @@ def ajax_set_exotex_in_bibliotex(request):
 
 
     else:
+        try :
+            relationtex = Relationtex.objects.create(   bibliotex_id=bibliotex_id, exotex_id = exotex_id, ranking = 100,  
+                                                        teacher = request.user.teacher, calculator = exotex.calculator,  duration =exotex.duration , 
+                                                        is_python = exotex.is_python,is_scratch =exotex.is_scratch,is_print = 0,
+                                                        is_publish = 1,  correction=exotex.correction ,is_publish_cor = 0 )
+            relationtex.skills.set(skills)
+            relationtex.knowledges.set(knowledges)
+            relationtex.students.set(stds)
 
-        relationtex = Relationtex.objects.create(   bibliotex_id=bibliotex_id, exotex_id = exotex_id, ranking = 100,  
-                                                    teacher = request.user.teacher, calculator = exotex.calculator,  duration =exotex.duration , 
-                                                    is_python = exotex.is_python,is_scratch =exotex.is_scratch,is_print = 0,
-                                                    is_publish = 1,  correction=exotex.correction ,is_publish_cor = 0 )
-        relationtex.skills.set(skills)
-        relationtex.knowledges.set(knowledges)
-        relationtex.students.set(stds)
 
-
-        data["statut"]  = "True"
-        data["class"]   = "btn btn-success"
-        data["noclass"] = "btn btn-danger"
+            data["statut"]  = "True"
+            data["class"]   = "btn btn-success"
+            data["noclass"] = "btn btn-danger"
+        except :
+            data["statut"] = "False"
+            data["class"] = "btn btn-danger"
+            data["noclass"] = "btn btn-success"
 
 
     data["nb"] = bibliotex.exotexs.count()
