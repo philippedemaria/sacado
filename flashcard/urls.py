@@ -1,0 +1,32 @@
+from django.urls import path, re_path
+from .views import *
+
+urlpatterns = [
+
+    path('flashpacks', list_flashpacks, name='flashpacks'),
+    path('my_flashpacks', list_my_flashpacks, name='my_flashpacks'),
+    path('create/0', create_flashpack , name='create_flashpack'),
+    path('update/<int:id>', update_flashpack, name='update_flashpack'),
+    path('delete/<int:id>', delete_flashpack, name='delete_flashpack'),
+    path('show_flashpack/<int:id>', show_flashpack, name='show_flashpack'), 
+    path('clone_flashpack/<int:id_flashpack>', clone_flashpack, name='clone_flashpack'),
+ 
+    path('create_flashcard/new', create_flashcard, name='create_flashcard'),
+    path('update_flashcard/<int:id>', update_flashcard, name='update_flashcard'),
+    path('delete_flashcard/<int:id>', delete_flashcard, name='delete_flashcard'),
+    path('show_flashcard/<int:id>', show_flashcard, name='show_flashcard'), 
+    path('ajax_attribute_this_flashcard', ajax_attribute_this_flashcard, name='ajax_attribute_this_flashcard'),
+ 
+
+    path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
+    path('ajax_chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
+    path('ajax_charge_groups', ajax_charge_groups, name='ajax_charge_groups'),
+    path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
+    path('ajax_charge_parcours', ajax_charge_parcours, name='ajax_charge_parcours'),
+    path('ajax_charge_parcours_without_folder', ajax_charge_parcours_without_folder, name='ajax_charge_parcours_without_folder'),
+    path('ajax_charge_groups_level', ajax_charge_groups_level, name='ajax_charge_groups_level'),
+
+
+
+
+] 

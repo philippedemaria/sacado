@@ -8,11 +8,11 @@ from django.core.mail import send_mail
 from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Generate_quizz , Generate_qr , Answerplayer , Display_question ,  Videocopy
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm,QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
-from socle.models import Level, Waiting , Theme
+from socle.models import Level, Waiting , Theme , Knowledge
 from qcm.models import  Parcours, Exercise , Folder
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
-from socle.models import Knowledge, Waiting
+ 
 from qcm.views import  get_teacher_id_by_subject_id
 
 import uuid

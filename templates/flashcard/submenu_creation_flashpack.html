@@ -1,0 +1,9 @@
+    <li class="dropdown">
+
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new-violet"> Nouveau flashpack <b class="caret"></b> </a>
+
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            <li> <a href="{% url 'create_flashpack' %}" > Créer un flashpack</a> </li> 
+            <li> {% if sacado_asso %} <a href="{% url 'flashpacks' %}" > Récupérer un flashpack mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un flashpack mutualisé </a> {% endif %} </li>         
+        </ul>
+    </li>  

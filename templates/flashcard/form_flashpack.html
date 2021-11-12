@@ -1,0 +1,247 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-create']);
+    </script>  
+    {% if not quizz %}
+    <script>
+        require(['script/ajax-quizz-complement']);
+    </script> 
+    {% endif %}
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span class="sacado_color_text"><i class="fa fa-money"></i></span>
+    {% if group  %}<span style="color:{{ group.color }}"> {{ group.name }}</span>  <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
+    {% if folder %}<span style="color:{{ folder.color }}"> {{ folder.title }}</span> <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
+    Flashpack 
+
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+
+            <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right">Liste de mes flashpacks</a>  
+ 
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="#" method="POST"  enctype='multipart/form-data'>
+    	{% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-7">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+
+                                <div class="form-group">
+        				            {{ form.title.label_tag }}
+        				            {{ form.title|add_class:"form-control" }}
+                                    {{ form.title.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.color.label_tag }}      
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                                    </span>
+                                    <div id="color-picker-component" class="input-group colorpicker-component">
+                                        {{ form.color.as_hidden }}
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+				            <label>Enseignement</label>
+				            {{ form.subject|add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+				            {% if sacado_asso %}
+				            <div class="form-group"> 
+				                {{ form.vignette.label_tag }} <label><small>(Facultatif, l*h :300px*200px - 50Ko )</small></label>
+				                {{ form.vignette|add_class:"btn btn-default" }}
+				            </div>
+				            {% else %}
+				            <div class="alert alert-danger"> 
+				                Version établissement requise
+				            </div>
+				            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
+                        <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span>
+                        <div class="form-group" id="grplist">                          
+                        {% if quizz or group %} 
+                            {{ form.groups|add_class:"select_all"   }}
+                            {{ form.groups.errors }}
+                        {% elif teacher.nb_boolean_multi_subjects %}
+                            <div class="alert alert-warning">
+                                <p style="font-size:12px">Choisir au moins un enseignement.</p>
+                            </div>
+                        {% else %} 
+                            {{ form.groups|add_class:"select_all"   }}
+                            {{ form.groups.errors }}
+                        {% endif %}
+                        </div>
+	                </div>	
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">  
+                            <div class="alert alert-warning">
+                                <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le flashpack est partagé entre ces groupes.</p>
+                                <p style="font-size:12px"><img src="{% static 'img/conseil.png' %}" width="25px"/> Cocher, décocher pour affiner les choix.</p>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="form-group" id="cblist">
+                            {% if quizz or folder %}
+                                {{ form.folders|add_class:"select_folders" }}
+                                {{ form.folders.errors }}
+                            {% else %}
+                                 <div class="alert alert-warning">
+                                    <p style="font-size:12px">Choisir au moins un groupe.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                        <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="form-group" id="pclist">
+                            {% if quizz or folder  %}
+                                    {{ form.parcours|add_class:"select_all_parcours" }}
+                                    {{ form.parcours.errors }} 
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <p style="font-size:12px">Choisir au moins un dossier.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-5 setup_ggb">
+                <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                     <table class="table borderless">
+                            <tr>
+                                <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Visible par les élèves.</div>
+                                    </span></td>
+                                <td>{{ form.is_publish |attr:"data-toggle:toggle"|attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                <td>{{ form.is_publish.errors }}</td>
+                            </tr>
+                            <tr id="publication_div">
+                                <td><label>Date de publication :</label>  
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                </div>
+                                    </span>
+                                </td>
+                                <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                                <td></td>
+                            </tr>
+				            {% if sacado_asso %}
+				                <tr>
+				                    <td>{{ form.is_share.label_tag }} 
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+		                                    <div class="helper_tip_text">Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
+		                                </span> 
+				                    </td>
+				                    <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+				                </tr>
+
+				                <tr>
+				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Archiver vos quizz pour plus de clarté dans votre liste de quizz actifs.</div>
+				                                </span> 
+				                    </td>
+				                    <td> {{ form.is_archive|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+				                </tr>
+
+				            {% else %}
+
+				                <tr>
+				                    <td>{{ form.is_share.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
+				                                </span> 
+				                    </td>
+				                    <td> 
+				                        <div class="alert alert-danger"> 
+				                            Version établissement requise
+				                        </div>
+				                     </td>
+				                </tr>
+
+				                <tr>
+				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+				                                    <div class="helper_tip_text" >Archiver vos quizz pour plus de clarté dans votre liste de quizz actifs.</div>
+				                                </span> 
+				                    </td>
+				                    <td>             
+				                        <div class="alert alert-danger"> 
+				                            Version établissement requise
+				                        </div> 
+				                    </td>
+				                </tr>
+				            {% endif %}
+                            <tr>
+                                <td class="no_border">{{ form.interslide.label_tag }}
+                                </td>
+                                <td>{{ form.interslide|add_class:"form-control" }} </td>
+                            </tr>
+
+
+                    </table>
+            </div>
+        </div>
+	    <div class="row">
+	        <div class="col-sm-12 col-md-12"> 
+	            <div class="form-group">
+	                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+	            </div>
+	        </div>    
+	    </div>
+ 
+    </form>  
+</section>
+{% endblock %} 
+
+
+ 
+ 

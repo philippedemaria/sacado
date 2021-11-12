@@ -37,7 +37,7 @@ urlpatterns = [
                   path('tool/', include('tool.urls')),  
                   path('payment/', include('payment.urls')),
                   path('aefe/', include('aefe.urls')),
-
+                  path('flashcard/', include('flashcard.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
