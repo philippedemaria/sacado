@@ -30,6 +30,9 @@ define(['jquery', 'bootstrap'], function ($) {
  
 
 
+
+
+
         $('#submit_button_relation').on('click', function (event) {
 
           var grade = ggb_applet_container.getValue("grade");
@@ -50,7 +53,7 @@ define(['jquery', 'bootstrap'], function ($) {
             $('#numexo').val(numexo); 
             $('#score').val(score); 
 
-
+            
         }); 
 
 

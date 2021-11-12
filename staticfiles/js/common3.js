@@ -37,6 +37,7 @@ requirejs.config({
         fonctions: "script/fonctions",
         uploader: "lib/jquery.smartuploader",
         tex: "lib/tex_math_ml",
+        websocket: "lib/reconnecting-websocket",
 
     },
     shim: {
@@ -73,6 +74,9 @@ requirejs.config({
         "uploader": {
             deps: ['jquery',]
         },
+        "websocket": {
+            deps: ['jquery',]
+        },
         mathjax: {
             exports: "MathJax",
             init: function () {
@@ -94,5 +98,5 @@ requirejs.config({
 });
 
 require(['jquery', 'bootstrap', 'uploader', 'bootstrap_popover', 'bcPicker', 'mathjax',  'datatables', 'datatables_bootstrap',  'uploader', 'ckeditor_jquery',
-    'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'tex' ,
+    'ckeditor', 'ckeditor_init', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'tex' , 'websocket' , 
     'fonctions',   'config_datatable', 'multiselect', 'ui',]);

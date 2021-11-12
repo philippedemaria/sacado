@@ -198,13 +198,6 @@
                           </div>
                   {% endif   %}
 
-
-
-
-
-
-
-
               {% endif %}
 
  
@@ -291,6 +284,12 @@
           </div>
             
       </form>
+
+
+<input type="text" id="champ1" value="message">
+<button formaction="#" onclick="PostMessage()">envoyer un message</button>
+
+
     </div> 
     <div class="col-sm-2 col-md-1 col-lg-1">
 
@@ -413,13 +412,61 @@
               };
 
 
-        var applet = new GGBApplet('5.0', parameters,true);
-        // Geogebra applet creation
-        applet.inject('ggb_applet_container', 'preferHTML5');  
+ 
+          //----------------------------------------------------
+          //----------------------------------------------------
+          //              socket pour channel
+          console.log("on lance le real time");
+          var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+          var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
+          console.log("tentative connexion to " + ws_path);
+          window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+          socket.onopen = function () {
+             console.log("Connected to socket");
+             socket.send(JSON.stringify({
+                 "command":"student_join", 
+                 "parcours":"{{ relation.parcours.id }}",
+                 "user":"{{user.id}}"}));
+              console.log("commande student join envoyée");
+          };        
+            // Handle incoming messages
+          socket.onmessage = function (message) {
+             // Decode the JSON
+             console.log("Got websocket message " + message.data);
+             var data = JSON.parse(message.data);
+             // Handle errors
+             if (data.error) {
+               alert(data.error);
+               return;
+             }
+              console.log("message recu :"+data.message);
+              alert("du prof :"+data.message);
+          };
+
+          function PostMessage(){
+          console.log("entree dans PostMessage"); 
+          window.socket.send(JSON.stringify(
+            {"command":"student_message",
+            "message": document.getElementById("champ1").value}));
+            console.log("message envoyé");
+          };
+ 
  
 
+          //----------------------------------------------------
+          //----------------------------------------------------
+          //              fin de socket pour channel
+          //----------------------------------------------------
+          //----------------------------------------------------
 
-              function updateListener(objName) {  
+        // var applet = new GGBApplet('5.0', parameters,true);
+        // Geogebra applet creation
+        // applet.inject('ggb_applet_container', 'preferHTML5');  
+
+
+
+
+        function updateListener(objName) {  
 
                   var applet     =  ggbApplet; 
 
@@ -514,9 +561,6 @@
                       }
 
               }
-
-
-
 
     </script>
     <div style="height:40px;clear: both"></div>

@@ -1,10 +1,12 @@
 from django.urls import path
-from qcm.consumers import RealConsumer
+from qcm.consumers import TableauConsumer
 
 
 ws_urlpatterns = [
 
-	path('/qcm/<int:parcours_id>/', RealConsumer.as_asgi())
+	path('qcm/tableau/', TableauConsumer.as_asgi())
 	
 ]
+
+
 
