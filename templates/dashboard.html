@@ -505,7 +505,7 @@
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_bibliotexs' %}"><span class="texfont">T<sub>E</sub>X</span> BiblioTex (version Beta) </a>
+            <a href="{% url 'my_bibliotexs' %}"><span class="texfont">T<sub>E</sub>X</span> BiblioTex</a>
         </div>
     </div>
     <hr/>
@@ -713,16 +713,29 @@
         <hr class="divider">
 
 
-        {% for level in levels %}
+
+        {% for level in levels|dictsort:"ranking" %}
             <div class="row" style="font-size: 12px">
-                <div class="col-lg-7 col-xs-7">
-                    {{ level.shortname }} <a href="{% url 'admin_supportfiles' level.id  %}">Fichiers support</a>  
+                <div class="col-lg-3 col-xs-3">
+                    <small>{{ level.shortname }} </small> 
+                </div>           
+                <div class="col-lg-1 col-xs-1">
+                    <a href="{% url 'admin_supportfiles' level.id  %}" class="surline"><img src="{% static 'img/ggb.png' %}" width="15px"></a>  
                 </div>  
-                <div class="col-lg-5 col-xs-5"> 
-                        <img src="{% static 'img/ggb.png' %}" width="15px"> <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
-                </div>      
+                <div class="col-lg-1 col-xs-1">
+                    <a href="{% url 'admin_exotexs' level.id  %}" class="surline"><img src="{% static 'img/tex.png' %}" width="15px"></a>  
+                </div>  
+                <div class="col-lg-3 col-xs-3"> 
+                    <a href="{% url 'admin_associations'  level.id  %}">Exercices   </a> 
+                </div> 
+                <div class="col-lg-1 col-xs-1"> 
+                     <a href="{% url 'admin_qrandom'  level.id  %}">QA   </a> 
+                </div> 
             </div>
-        {% endfor %}    
+        {% endfor %} 
+
+
+
 </div>
 
 
