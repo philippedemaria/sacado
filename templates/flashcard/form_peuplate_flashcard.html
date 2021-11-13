@@ -10,16 +10,16 @@
  
 
     <script>
-        require(['script/ajax-bibliotex-peuplate']);
+        require(['script/ajax-flashpack']);
     </script> 
 
 {% endblock %} 
 
 
 {% block page_title %}
-    <img src="{% static 'img/tex.png' %}" width="25px">  <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
-    {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
-    <small>Ajouter des exercices </small>
+    <i class="fa fa-money"></i>   
+    {{ flashpack }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
+    <small>Ajouter des flashcards </small>
 {% endblock %}
 
 
@@ -27,7 +27,7 @@
 {% block page_menu_right %}
      
  
-    <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
+    <a href="{% url 'my_flashpacks' %}"  class="btn btn-new-violet" > Mes flashpacks </a> 
 
 {% endblock %}
 
@@ -40,7 +40,7 @@
     <div class="col-sm-12 col-md-12">
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %}
-            <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
+            <input id="flashpack_id" value="{{ flashpack.id }}" type="hidden"/>
             <div class="row search_bar">
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
@@ -78,10 +78,10 @@
 
                 <div class="col-sm-9 col-md-3 col-lg-3">
                     <div class="form-group">
-                        <select id="id_skill" name="skill" class="form-control select2">
-                                <option value="">Choisir une compétence</option>
-                            {% for s in skills %}
-                                <option value="{{ s.id }}">{{ s.name }}</option>
+                        <select id="id_waiting" name="waiting" class="form-control select2">
+                                <option value="">Choisir un attendu</option>
+                            {% for w in waitings %}
+                                <option value="{{ w.id }}">{{ w.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -103,10 +103,8 @@
                     <div id="loader">
                     </div>
                     <div id="content_exercises" class="list_choice_bibliotex"> 
-                        {% for relationtex in relationtexs %}
-                            {% with exotex=relationtex.exotex  %}
-                            {% include 'bibliotex/exotex_tag.html' %}
-                            {% endwith %}
+                        {% for flashcard in flashcards %}
+                            {% include 'flashcard/flashcard_tag.html' %}
                         {% endfor %}
 
                         <div style="clear: both;"> 

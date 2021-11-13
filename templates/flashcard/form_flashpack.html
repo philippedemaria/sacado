@@ -8,13 +8,9 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz-create']);
+        require(['script/ajax-flashpack']);
     </script>  
-    {% if not quizz %}
-    <script>
-        require(['script/ajax-quizz-complement']);
-    </script> 
-    {% endif %}
+ 
 {% endblock %}
 
  
@@ -31,7 +27,7 @@
 {% block page_menu_right %}
  
 
-            <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right">Liste de mes flashpacks</a>  
+            <a href="{% url 'my_flashpacks' %}" class="btn btn-new-violet pull-right">Liste de mes flashpacks</a>  
  
 {% endblock %}
 
@@ -71,11 +67,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-				            <label>Enseignement</label>
-				            {{ form.subject|add_class:"form-control select2" }}
-                            {{ form.subject.errors }}
-                        </div>
                     </div>
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
@@ -98,7 +89,7 @@
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
                         <div class="form-group" id="grplist">                          
-                        {% if quizz or group %} 
+                        {% if flashpack or group %} 
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
                         {% elif teacher.nb_boolean_multi_subjects %}
@@ -126,7 +117,7 @@
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                         <div class="form-group" id="cblist">
-                            {% if quizz or folder %}
+                            {% if flashpack or folder %}
                                 {{ form.folders|add_class:"select_folders" }}
                                 {{ form.folders.errors }}
                             {% else %}
@@ -141,7 +132,7 @@
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                         <div class="form-group" id="pclist">
-                            {% if quizz or folder  %}
+                            {% if flashpack or folder  %}
                                     {{ form.parcours|add_class:"select_all_parcours" }}
                                     {{ form.parcours.errors }} 
                             {% else %}
@@ -152,6 +143,18 @@
                         </div>
                     </div>
                 </div>
+
+                        <div class="row" id="id_themes_div">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label>Thèmes <em>utile pour organiser  et retrouver des flashcards  </em></label>
+                                    {{ form.themes|add_class:"form-control select2" }}
+                                    {{ form.themes.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+
             </div>
 
             <div class="col-sm-12 col-md-5 setup_ggb">
@@ -175,6 +178,16 @@
                                 <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
                                 <td></td>
                             </tr>
+                            <tr>
+                                <td>{{ form.is_favorite.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text">Visible depuis ses groupes.</div>
+                                    </span> 
+                                </td>
+                                <td> {{ form.is_favorite|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                            </tr>
+
+
 				            {% if sacado_asso %}
 				                <tr>
 				                    <td>{{ form.is_share.label_tag }} 

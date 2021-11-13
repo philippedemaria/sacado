@@ -948,8 +948,45 @@ label {
   border-radius: 10px;
 }
 
+/********************************************   flashcard    **************************************/
+.flashcard{
 
-
+    color : #666;
+    padding: 15px;
+    background-color: #FFF;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    height : 350px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 0px;
+    margin-left: 0px;
+    overflow-y: auto;
+    border-radius: 5px;
+    width: 100%; 
+    font-size:2em
+}
+.flashcard_helper{
+    color : #666;
+    padding: 15px;
+    background-color: #FFF;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    height : 200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 0px;
+    margin-left: 0px;
+    overflow-y: auto;
+    border-radius: 5px;
+    width: 100%; 
+    font-size:2em;
+    background-color: #f1eef7;
+}
 
 
 /******************************************** real_time_live  **************************************/

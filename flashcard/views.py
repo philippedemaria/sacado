@@ -13,9 +13,6 @@ from sacado.settings import MEDIA_ROOT
 from qcm.views import  get_teacher_id_by_subject_id
 from group.models import Group 
 from socle.models import Level, Waiting , Knowledge
-
-import uuid
-from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
@@ -26,33 +23,21 @@ import json
 import time
 ############### bibliothèques pour les impressions pdf  #########################
 import os
-from django.utils import formats, timezone
-from io import BytesIO, StringIO
-from django.http import  HttpResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, inch, landscape , letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak,Frame , PageTemplate
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.colors import yellow, red, black, white, blue
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.utils import ImageReader
-from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
-from html import escape
-cm = 2.54
+ 
 #################################################################################
 import re
 import pytz
 from datetime import datetime , timedelta
 from general_fonctions import *
-from qcm.views import tracker_execute_exercise
+ 
 
 
 
 
 
 def list_flashpacks(request):
- 
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     flashpacks = Flashpack.objects.all()
     return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'communications' : [] , })
 
@@ -60,9 +45,24 @@ def list_flashpacks(request):
  
 def list_my_flashpacks(request):
 
-	teacher = request.user.teacher
-	flashpacks = Flashpack.objects.filter(teacher = teacher)
-	return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'communications' : [] , })
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    teacher = request.user.teacher
+
+    dataset = teacher.flashpacks
+    flashpacks = dataset.filter(is_archive=0,folders=None)
+    flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
+
+    list_folders = list()
+    for folder in flashpacks_folders :
+        flash_folders = dict()
+        flash_folders["folder"] = Folder.objects.get(pk=folder)
+        teacher_flash_folders = dataset.filter(is_archive=0 , folders=folder)
+        flash_folders["flashpacks"] = teacher_flash_folders  
+        list_folders.append(flash_folders)
+
+    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
+ 
+    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups })
 
  
 
@@ -80,7 +80,7 @@ def create_flashpack(request):
         for l_id in request.POST.getlist("levels") :
             level = Level.objects.get(pk=l_id)
             level.flashpacks.add(nf)
-        messages.success(request, 'Le thème a été créé avec succès !')
+        messages.success(request, 'Le flashpack a été créé avec succès !')
         return redirect('my_flashpacks')
     else:
         print(form.errors)
@@ -94,15 +94,16 @@ def create_flashpack(request):
  
 def update_flashpack(request, id):
 
+    teacher = request.user.teacher
     flashpack = Flashpack.objects.get(id=id)
-    flashpack_form = FlashpackForm(request.POST or None, instance=flashpack )
+    flashpack_form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher   )
     if request.method == "POST" :
         if flashpack_form.is_valid():
             flashpack_form.save()
             for l_id in request.POST.getlist("levels") :
                 level = Level.objects.get(pk=l_id)
                 level.flashpacks.add(flashpack)
-            messages.success(request, 'Le thème a été modifié avec succès !')
+            messages.success(request, 'Le flashpack a été modifié avec succès !')
             return redirect('my_flashpacks')
         else:
             print(flashpack_form.errors)
@@ -131,12 +132,27 @@ def show_flashpack(request, id):
     return render(request, 'flashcard/show_flashpack.html', context )
 
 
+def flashpack_peuplate(request, id):
 
+    teacher   = request.user.teacher
+    flashpack = Flashpack.objects.get(id=id)
+    themes    = flashpack.themes.all()
+    waitings  = set()
+    for t in themes :
+    	waitings.update(t.waitings.all())
+
+    flashcards = flashpack.flashcards.all()
+
+    context   = { 'flashpack': flashpack, 'flashcards': flashcards , 'teacher': teacher , 'waitings': waitings   }
+
+    return render(request, 'flashcard/form_peuplate_flashcard.html', context )
+ 
 
 def clone_flashpack(request, id):
     flashpack = Flashpack.objects.get(id=id)
     context = {'flashpack': flashpack,   }
-    return render(request, 'flashcard/show_flashpack.html', context )   
+    return render(request, 'flashcard/show_flashpack.html', context )  
+
 
 ######################################################################################
 ######################################################################################
@@ -162,7 +178,7 @@ def create_flashcard(request):
         for l_id in request.POST.getlist("levels") :
             level = Level.objects.get(pk=l_id)
             level.flashcards.add(nf)
-        messages.success(request, 'Le thème a été créé avec succès !')
+        messages.success(request, 'La flashcard a été créée avec succès !')
         return redirect('flashcards')
     else:
         print(form.errors)
@@ -184,7 +200,7 @@ def update_flashcard(request, id):
             for l_id in request.POST.getlist("levels") :
                 level = Level.objects.get(pk=l_id)
                 level.flashcards.add(flashcard)
-            messages.success(request, 'Le thème a été modifié avec succès !')
+            messages.success(request, 'La flashcard a été modifiée avec succès !')
             return redirect('flashcards')
         else:
             print(flashcard_form.errors)
@@ -216,7 +232,72 @@ def show_flashcard(request, id):
 
 
 
+def ajax_level_flashcard(request):
 
+    data = {} 
+ 
+    theme_ids    = request.POST.getlist('theme_id', None)
+    level_id     = request.POST.get("level_id",None)
+    subject_id   = request.POST.get("subject_id",None)
+    waiting_id     = request.POST.get("waiting_id",None)
+    keyword      = request.POST.get("keyword",None)
+    flashpack_id = request.POST.get("flashpack_id",None)
+
+    flashpack = Flashpack.objects.get(pk=flashpack_id)
+    teacher = request.user.teacher 
+    data = {}
+
+
+    base = Flashcard.objects.filter(subject_id= subject_id).exclude(flashpacks=flashpack)
+
+    if theme_ids :  
+   
+        if level_id and theme_ids[0] != "" and waiting_id  : 
+            waiting = Waiting.objects.get(pk=waiting_id)
+            level   = Level.objects.get(pk=level_id)
+            flashcards = base.filter( levels = level , theme__in= theme_ids, waiting = waiting ).order_by("theme","waiting" )
+
+        elif level_id  and waiting_id  : 
+            waiting = Waiting.objects.get(pk=waiting_id)
+            level   = Level.objects.get(pk=level_id)
+            flashcards = base.filter( levels = level ,  waiting = waiting, ).order_by("theme","waiting" )
+
+        elif level_id and theme_ids[0] != ""  : 
+            level   = Level.objects.get(pk=level_id)
+            flashcards = base.filter( levels = level , theme__in= theme_ids ).order_by("theme","waiting" )
+
+
+        elif theme_ids[0] != ""    : 
+            flashcards = base.filter(  theme__in= theme_ids).order_by("theme","waiting" )
+
+     
+        elif keyword and theme_ids[0] != ""   : 
+            flashcards =  base.filter(Q(title__contains= keyword )|Q(question__contains= keyword ),  theme__in= theme_ids ).order_by("theme","waiting" )
+        else :
+            flashcards = base
+    else :
+ 
+        if level_id and  waiting_id  : 
+            waiting = Waiting.objects.get(pk=waiting_id)
+            level   = Level.objects.get(pk=level_id)
+            flashcards = base.filter(levels = level ,  waiting = waiting ).order_by("theme","waiting" )
+
+        elif level_id and keyword  : 
+            level   = Level.objects.get(pk=level_id)
+            flashcards = base.filter(Q(title__contains= keyword )|Q(question__contains= keyword ), levels = level  ).order_by("theme","waiting" )
+
+
+        elif keyword and waiting_id  : 
+            waiting = Waiting.objects.get(pk=waiting_id)
+            flashcards =  base.filter(Q(title__contains= keyword)|Q(question__contains= keyword),waiting = waiting ).order_by("theme","waiting" )
+
+        else :
+            flashcards = base
+
+
+    data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'flashpack_id': flashpack_id , 'flashcards': flashcards , "teacher" : teacher})
+
+    return JsonResponse(data)
 
 
 
@@ -225,6 +306,131 @@ def show_flashcard(request, id):
 #           AJAX 
 ######################################################################################
 ######################################################################################
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_sharer_parcours(request):  
+
+    parcours_id = request.POST.get("parcours_id")
+    statut = request.POST.get("statut")
+    is_folder = request.POST.get("is_folder")
+ 
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"]  = "false"
+        data["share"]   = "Privé"
+        data["style"]   = "#dd4b39"
+        data["class"]   = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"]   = "Privé"
+    else:
+        statut = 1
+        data["statut"]  = "true"
+        data["share"]   = "Mutualisé"
+        data["style"]   = "#00a65a"
+        data["class"]   = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"]   = "Mutualisé"
+
+    Flashpack.objects.filter(pk = int(parcours_id)).update(is_share = statut)
+ 
+    return JsonResponse(data) 
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_publish_list_flashpack(request):  
+
+    flashpack_id = request.POST.get("flashpack_id")
+    statut = request.POST.get("statut")
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"] = "false"
+        data["style"] = "#dd4b39"
+        data["class"] = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"] = "Non publié"
+    else:
+        statut = 1
+        data["statut"] = "true"
+        data["style"] = "#00a65a"
+        data["class"] = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"] = "Publié"
+ 
+    Flashpack.objects.filter(pk = int(flashpack_id)).update(is_publish = statut)
+
+    return JsonResponse(data) 
+
+
+
+
+def ajax_affectation_to_group(request):
+    group_id    = request.POST.get('group_id') 
+    status      = request.POST.get('status')
+    target_id   = request.POST.get('target_id')
+    checked     = request.POST.get('checked')
+
+    group       = Group.objects.get(pk=group_id)
+    data        = {}
+    html        = ""
+    change_link = "no"
+ 
+    flashpack   = Flashpack.objects.get(pk=target_id)
+    if checked == "false" :
+        flashpack.groups.remove(group)
+    else :
+        flashpack.groups.add(group)
+        groups = (group,)
+        attribute_all_documents_of_groups_to_all_new_students(groups)
+    for g in flashpack.groups.all():
+        html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
+    change_link = "change"
+
+    data['html']        = html
+    data['change_link'] = change_link
+    return JsonResponse(data)
+
+
+
+
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_is_favorite(request):  
+
+    target_id = int(request.POST.get("target_id",None))
+    statut = int(request.POST.get("statut"))
+    status = request.POST.get("status") 
+    data = {}
+ 
+    if statut :
+        Flashpack.objects.filter(pk = target_id).update(is_favorite = 0)
+        data["statut"] = "<i class='fa fa-star text-default' ></i>"
+        data["fav"] = 0
+    else :
+        Flashpack.objects.filter(pk = target_id).update(is_favorite = 1)  
+        data["statut"] = "<i class='fa fa-star   text-is_favorite' ></i>"
+        data["fav"] = 1     
+
+    return JsonResponse(data) 
+
+
+
+def  ajax_chargethemes(request):
+    level_id =  request.POST.get("id_level")
+    id_subject =  request.POST.get("id_subject")
+    teacher = request.user.teacher
+
+    teacher_id = get_teacher_id_by_subject_id(id_subject)
+
+    data = {}
+    level =  Level.objects.get(pk = level_id)
+
+    thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
+    data['themes'] = list(thms)
+    flashcards = Flashcard.objects.filter( levels = level  ).order_by('teacher').distinct()[:300]
+
+    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'flashcards' : flashcards , })
+
+    return JsonResponse(data)
 
 
 
@@ -319,16 +525,22 @@ def ajax_charge_folders(request):
     if len(group_ids) :
         fldrs = set()
         prcs  = set()
+        thms  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
             fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
             prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
-        data['folders'] =  list( fldrs )
+            thms.update(group.level.themes.values_list('id', 'name').filter(subject =group.subject))
+        data['folders']  =  list( fldrs )
         data['parcours'] =  list( prcs )
+        data['themes']   =  list( thms )
     else :
-        data['folders'] =  []
+        data['folders']  =  []
         data['parcours'] =  []
+        data['themes']   =  []
+
     return JsonResponse(data)
+
 
 
 def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder aussi
@@ -368,3 +580,4 @@ def ajax_charge_parcours_without_folder(request): # utilisé que par form_folder
         data['parcours'] =  []
 
     return JsonResponse(data)
+

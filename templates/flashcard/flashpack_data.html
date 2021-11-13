@@ -1,0 +1,86 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<td style="position:relative; text-align:center;"> 
+    <input type="checkbox" name="selected_flashpacks" value="{{ flashpack.id}}"/>
+</td>  
+<td  style="width:20px;" >
+    <span class="fa-stack selector_favorite" id="selector_favorite{{ flashpack.id }}" data-fav="{% if flashpack.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ flashpack.id }}" style="cursor:pointer"  data-status="flashpack">
+        
+        <span id="is_favorite_id{{ flashpack.id }}" title="Cliquer pour changer l'état">
+            <i class="fa {% if flashpack.is_favorite %}fa-star text-success{% else  %}fa-star text-default{% endif  %}"></i>
+        </span>
+    </span>
+</td> 
+<td>
+    <a href="{% url 'show_flashpack' flashpack.id %}" title="Voir la biblioTex" >{{ flashpack.title }}</a>
+    <br/> 
+    {% with nbf=flashpack.flashcards.count %}    
+        {{ nbf }} flashcard{{ nbf|pluralize }}
+    {% endwith  %}
+
+    <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Ajouter des exercices" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>
+
+
+
+</td>  
+<td  style="width:20px;">
+ 
+        <a href="{% url 'update_flashpack' flashpack.id  %}"  > <i class="fa fa-edit  fa-xs"></i></a>
+ 
+</td>
+<td style="position:relative">
+    <span id="new_group_affected{{ flashpack.id}}">
+    {% for g in  flashpack.groups.all  %}
+        <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+    {% endfor %}
+    </span>
+    <span class="select_div_group"  data-relationship_id="{{flashpack.id}}"   title="Ajouter des groupes" ><i class="fa fa-plus-circle helper_tip"></i></span> 
+    <!-- Ajout de groupes par Ajax --->
+    <div id="affectation{{ flashpack.id }}" class="card-skill no_visu_on_load"> 
+      <div class="row">
+            <div class="col-sm-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{flashpack.id}}"><i class="fa fa-times"></i></span>         
+                Affecter aux Groupes 
+            </div>
+       </div> 
+    <hr style="padding:0px; margin:10px 0px"/><br>
+        {% for g in groups %}  
+              <label style="font-size:12px">
+              <input type="checkbox" name="affectation" data-group_id="{{g.id}}" data-status="flashpack" value="{{flashpack.id}}" class="prcrs_selector" {% if g in flashpack.groups.all %} checked  {% endif %}  />
+              {{ g.name }} <span id="loader{{g.id}}"></span>
+              </label>{% if not forloop.last %}<br>{% endif %}
+        {% endfor %}
+    </div>
+</td>
+<td style="width:150px;" >
+    <div class="btn-group"  style="padding:0px;margin:0px;">
+        <a href="#" class="btn btn-default btn-publisher parcours_sharer"   id="parcours_sharer{{flashpack.id}}" 
+            data-parcours_id="{{flashpack.id}}" data-statut="{{flashpack.is_share }}">  
+            <i class="fa fa-circle-o-notch"></i>
+        </a><span class="legend-btn  legend-btn-{% if flashpack.is_share %}success{% else  %}danger{% endif  %} size13" id="parcours_sharer_statut{{flashpack.id}}"  >  
+          {% if flashpack.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
+        </span>
+    </div>
+</td>
+ 
+<td style="width:160px">
+    <div class="btn-group"  style="padding:0px;margin:0px;">
+        <a href="#" class="btn btn-default btn-publisher flashpack_publisher" id="flashpack_publisher{{flashpack.id}}" 
+            data-is_disabled="{% if flashpack.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+            data-flashpack_id="{{flashpack.id}}" data-statut="{{flashpack.is_publish }}">  
+            <i class="fa fa-circle-o-notch"></i>
+        </a><span class="legend-btn  legend-btn-{% if not flashpack.is_publish %}danger{% else  %}success{% endif  %} size13" id="flashpack_statut{{flashpack.id}}"  >  
+          {% if flashpack.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+        </span>
+    </div>
+
+    <span class="label_icon">
+        {% if flashpack.start %}
+            {{  flashpack.start|date:"d N Y H:i"  }}   
+            {% if flashpack.stop %}
+               - {{  flashpack.stop|date:"d N Y H:i"  }}     
+            {% endif %}                                
+        {% endif %}
+    </span>
+</td>

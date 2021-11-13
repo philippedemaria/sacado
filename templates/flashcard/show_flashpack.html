@@ -7,15 +7,14 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/quizz-slider']);
+        require(['script/ajax_show_flashpack']);
     </script> 
 {% endblock %}
 
 
 
 {% block page_title %}
-   <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> </a> Outils pédagogiques 
-   <img width="25px" src="{% static 'img/angle-right.png' %}"/> Quizz 
+    <i class="fa fa-money" style="color:{{ flashpack.color}}"></i>  Flashpack <img width="25px" src="{% static 'img/angle-right.png' %}"/>
  
 {% endblock %}
 
@@ -23,7 +22,7 @@
 {% block page_menu_right %}
 
     {% if request.user.user_type == 2 %}
-    <a href="{% url 'list_quizzes' %}" class="btn btn-new">Mes quizz</a>
+    <a href="{% url 'my_flashpacks' %}" class="btn btn-new">Mes flashpack</a>
     {% else %}
     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
     {% endif %}
@@ -36,215 +35,177 @@
 
 
 {% block body %}
- 
- 
-  <div class="row" align="center">  
-        <div class="col-sm-12 col-md-3" align="center"  >
-            <div id="start_quizz">
-                <button  class='btn btn-primary'><i class='fa fa-play'></i> Lecture automatique</button>
+<section class="content_main">
+    <div class="row">  
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-warning">
+                Une question vous est proposée. Répondez à cette question mentalement ou par écrit puis cliquez sur le bouton Réponse. Utilisez l'aide si besoin.
             </div>
         </div>
-        <div class="col-sm-12 col-md-6" align="center" >
-            {% for question in questions %}
-                <button id="question{{ forloop.counter }}" class="btn btn-default thisquestion"> Q{{ forloop.counter }} </button> 
-            {% endfor %}
+    </div>
+    <div class="row">  
+        <div class="col-sm-12 col-md-3" id="offset"></div>
+        <div class="col-sm-12 col-md-6" id="question">
+            <div class="exotex flashcard" style="font-size-adjust: {{ flashcard.size }}px">
+                {{ flashcard.content }}
+
+
+                {% if flashcard.imagefile and not flashcard.audio %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefile.url }}" /> 
+                    </div>
+                </div>
+                {% elif flashcard.audio and not flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ question.audio.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.audio and flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefile.url }}"   />
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audio.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.video  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                         {{ question.video|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>  
         </div>
+        <div class="col-sm-12 col-md-6 no_visu_on_load" id="answer">
+            <div class="exotex flashcard" >
+                {{ flashcard.answer }}
+
+
+                {% if flashcard.imagefileanswer and not flashcard.audioanswer %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefileanswer.url }}" /> 
+                    </div>
+                </div>
+                {% elif flashcard.audioanswer and not flashcard.imagefileanswer  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audioanswer.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.audio and flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefileaudioanswer.url }}"   />
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audioaudioanswer.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.videoaudioanswer  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                         {{ question.videoaudioanswer|safe }}
+                    </div>
+                </div>
+                {% endif %}
 
 
 
-        <div class="col-sm-12 col-md-3" align="center"  >
-            <button data-nav="prev" class="btn btn-default nav"><i class="fa fa-caret-left"></i> Précedent</button>  
-            <button data-nav="next" class="btn btn-default nav"><i class="fa fa-caret-right"></i> Suivant</button>
-            <button id="stop_quizz" class="btn btn-default"><i class="fa fa-compress"></i></button>
-            <button id="starter_quizz" class="btn btn-default"><i class="fa fa-expand"></i></button>
-        </div>
-  </div> 
-
-    <div class="wrapper_slider">
-  <!-- Wrapper for slides -->
-        <div class="slider">
-
-            <ul>
-                <li class="my_slide">
-                    <input type="hidden" value="3" id="introduction" /> 
-                    <div class="row consigne_diapo"  align="center">  
-                        <div class="col-sm-12 col-md-12">
-                            <h1 style="font-size:4em"> 
-                                {{ quizz.title}} 
-                            </h1>
-                            {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="700px"  />{% endif %}
-                        </div>
-                    </div> 
-                </li>
-
-                {% block body_quizz %}
-                    {% for question in questions %}
-                    <li class="my_slide">
-                        <input type="hidden" value="{{ quizz.interslide }}" id="inter_slide{{ forloop.counter }}" /> 
-                        <div class="row consigne_diapo"  align="center">  
-                            <div class="col-sm-12 col-md-12">
-                                <h1 style="font-size:4em" class="thin"><b>Question {{forloop.counter}}.</b><span class="instruction"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
-                                    {% if question.qtype == 1 %}
-                                        Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
-                                    {% elif question.qtype == 2 %}
-                                        Vous devez répondre en écrivant <br/><b>la bonne réponse</b>.
-                                    {% elif question.qtype == 3 %}
-                                         Vous devez choisir <br/><b>la ou les bonnes réponses</b><br/> parmi les 4 réponses proposées. 
-                                    {% else %}
-                                         Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
-                                    {% endif %}
-                                </h1>
-
-                                <div class="starter_in" style="font-size:2em"> Démarrage dans 
-                                    <span class="instruction counterdown" id="countdown{{ forloop.counter }}" > 
-                                        {{ quizz.interslide }}
-                                    </span> s
-                                </div>
- 
-
-                            </div>
-                        </div> 
-                    </li>
-                    <li class="my_slide">
-                        <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" />  
-                        <div class="row">  
-                            <div class="col-sm-2 col-md-2" align="left">
-                                <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
-                            </div>
-                            <div class="col-sm-8 col-md-8" align="center">
-                                    {% if question.qtype == 1 %}
-                                        <b>Vrai  ou  Faux ?</b>
-                                    {% elif question.qtype == 2 %}
-                                        <b>Ecrire la bonne réponse</b>.
-                                    {% elif question.qtype == 3 %}
-                                        <b> Choisir  la ou les bonnes réponses</b>. 
-                                    {% else %}
-                                        <b> Choisir la seule bonne réponse</b>. 
-                                    {% endif %}
-                            </div>
-                            <div class="col-sm-2 col-md-2" align="right">
-                                <div class="countdown instruction" id="counterdown{{ forloop.counter }}" > 
-                                    {{ question.duration }}
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12" align="center">
-                                <h1 style="font-size:{% if question.size %}{{ question.size }}{% else %}4em{% endif %}" class="thin"> {{ question.title }} </h1>
-                            </div>
-                        </div> 
- 
-                            {% if question.imagefile and not question.audio %}
-                            <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center">
-                                     <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" /> 
-                                </div>
-                            </div>
-                            {% elif question.audio and not question.imagefile  %}
-                            <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center"> 
-                                    <audio controls>
-                                        <source src="{{ question.audio.url }}" type="audio/mpeg">
-                                        <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
-                                    </audio>
-                                </div>
-                            </div>
-                            {% elif question.audio and question.imagefile  %}
-                            <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center">
-                                     <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
-                                </div>
-                            </div>
-                            <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center"> 
-                                    <audio controls>
-                                        <source src="{{ question.audio.url }}" type="audio/mpeg">
-                                        <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
-                                    </audio>
-                                </div>
-                            </div>
-                            {% elif question.video  %}
-                            <div class="row">  
-                                <div class="col-sm-12 col-md-12" align="center"> 
-                                     {{ question.video|safe }}
-                                </div>
-                            </div>
-                            {% endif %}
-                        <hr/> 
-
-
-                        {% if question.tool and quizz.is_numeric %}  
-                            <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
-                                <div class="col-sm-12 col-md-12" align="center">
-                                    <button class="btn btn-default" id="sqrt_tool">$\sqrt{x}$</button> 
-                                    <button class="btn btn-default" id="pow_tool">$x^{n}$</button> 
-                                </div> 
-                            </div> 
-                        {% endif %}
-
-
-                        {% if question.qtype == 1 %}   
-                   
-                                <div class="col-sm-12 col-md-6 {% if not question.theme %}bgcolorBlue white{% endif %}"  align="center" style="border-radius : 10px ">
-                                    <h1 style="font-size:3.5em" class="thin">VRAI </h1>  
-                                </div> 
-
-                                <div class="col-sm-12 col-md-6 {% if not question.theme %}bgcolorRed white{% endif %}"  align="center" style="border-radius : 10px ">
-                                    <h1 style="font-size:3.5em" class="thin">FAUX </h1>  
-                                </div> 
-                           
-                        {%  elif question.qtype > 2 %} 
-
-                                {% for choice in question.choices.all %}
-                                    {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
-                                    {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                                    <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
-                                        <div class="row" >
-                                            <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
-                                                <h1 style="font-size:2.5em">{{ choice_letter }} </h1>    
-                                            </div>
-
-                                            <div class="col-sm-10 col-md-11 {% if not question.theme %}{{ rowcolor }}{% endif %}" align="center" style="{% if not question.theme %}color:#FFF;{% endif %} font-size:{% if choice.answer|length > 50 %}1.2{% elif choice.answer|length > 17 %}1.7{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px">
-                                            {% if choice.imageanswer %}
-                                                <img src="{{ choice.imageanswer.url }}" height="90px" />
-                                            {% else %}
-                                                {{ choice.answer }}
-                                            {% endif %}                                                
-                                            </div>
-
-                                        </div>  
-                                    </div> 
-                                {% endfor %}
-                                {% resetcycle %}
-                                {% resetcycle %}
-
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                {% endblock %}
-
-
-                <li class="my_slide">
-                    <input type="hidden" value="3" id="final_question" /> 
-                    <div class="row consigne_diapo"  align="center">  
-                        <div class="col-sm-12 col-md-12">
-                            <h1 style="font-size:4em" class="thin">
-                                <br/><br/>
-                                <b> -- FIN -- </b>
-                                <br/><br/>
-                                Posez vos stylos
-                                <br/><br/>
-                            </h1>
-                        </div>
-                    </div> 
-                </li>
-
-
-
-
-
-            </ul>
+            </div>  
         </div>
     </div>
+ 
+    <div class="row"> 
+
+        <div class="col-sm-12 col-md-3" id="offsethelper"></div>
+        <div class="col-sm-12 col-md-6"  align="center" >
+            <br/>
+            <button class="btn btn-default" id="show_helper" style="width: 200px"> Aide </button>
+            <button class="btn btn-primary " id="show_answer" style="width: 200px"> Réponse </button>
+        </div>
+
+        <div class="col-sm-12 col-md-6 no_visu_on_load" align="center"  id="buttons"  >
+            <div class="alert alert-warning">
+                Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
+            </div>
+            <button class="btn btn-danger"><i class="fa fa-caret-right"></i> Ma réponse est fausse</button>
+            <button class="btn btn-warning"><i class="fa fa-caret-right"></i> Ma réponse est partiellement juste.</button>                        
+            <button class="btn btn-success"><i class="fa fa-caret-right"></i> Ma réponse est juste.</button>  
+        </div>
+    </div> 
+
+
+    <div class="row no_visu_on_load" id="helper">  
+        <div class="col-sm-12 col-md-6">
+            <div class="exotex flashcard_helper">
+                Aide : 
+                {% if flashcard.imagefilehelper and not flashcard.audiohelper %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefilehelper.url }}" /> 
+                    </div>
+                </div>
+                {% elif flashcard.audiohelper and not flashcard.imagefilehelper  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audiohelper.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.audio and flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefileaudiohelper.url }}"   />
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audioaudiohelper.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.videoaudiohelper  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                         {{ question.videoaudiohelper|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+            </div>  
+        </div>
+    </div>
+
+
+</section>
+ 
  
 {% endblock %} 

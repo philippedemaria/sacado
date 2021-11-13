@@ -33,17 +33,29 @@ class Flashcard(models.Model):
     """
     Modèle représentant un associé.
     """
-    title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Titre")
+    title         = models.TextField(max_length=255, default='', verbose_name="Titre")
 
-    question      = models.TextField(max_length=255, default='',  blank=True, verbose_name="Question écrite")
+    question      = models.TextField(max_length=255, default='',  verbose_name="Question écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
-    answer        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Réponse attendu")
+    answer        = models.CharField(max_length=255, default='',  verbose_name="Réponse attendu")
+    helper        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Aide proposée")
+
     size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
 
     imagefile  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
     audio      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
     video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
+
+
+    imagefileanswer  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
+    audioanswer      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
+    videoanswer      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
+
+    imagefilehelper  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
+    audiohelper      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
+    videohelper      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
+
 
     duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 
@@ -66,7 +78,9 @@ class Flashpack(models.Model):
     title         = models.CharField( max_length=255, verbose_name="Titre du flashpack") 
     teacher       = models.ForeignKey(Teacher, related_name="flashpacks", blank=True, on_delete=models.CASCADE, editable=False ) 
     date_modified = models.DateTimeField(auto_now=True)
-    color = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
+    color         = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
+
+    flashcards    = models.ManyToManyField(Flashcard, related_name="flashpacks", blank=True)
     
     levels    = models.ManyToManyField(Level, related_name="flashpacks", blank=True)
     themes    = models.ManyToManyField(Theme, related_name="flashpacks", blank=True)
@@ -74,8 +88,9 @@ class Flashpack(models.Model):
  
     vignette   = models.ImageField(upload_to=flashpack_directory_path, verbose_name="Vignette d'accueil", blank=True, null = True , default ="")
  
-    is_share   = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    is_share     = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
+    is_favorite  = models.BooleanField(default=1, verbose_name="Favori ?")
 
     interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
     
