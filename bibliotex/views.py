@@ -774,8 +774,6 @@ def  ajax_chargethemes(request):
 
 def ajax_level_exotex(request):
 
-
-    teacher = Teacher.objects.get(user= request.user)
     data = {} 
  
     theme_ids    = request.POST.getlist('theme_id', None)
@@ -784,8 +782,6 @@ def ajax_level_exotex(request):
     skill_id     = request.POST.get("skill_id",None)
     keyword      = request.POST.get("keyword",None)
     bibliotex_id = request.POST.get("bibliotex_id",None)
-
-    print(skill_id )
 
     bibliotex = Bibliotex.objects.get(pk=bibliotex_id)
     teacher = request.user.teacher 
