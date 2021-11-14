@@ -45,10 +45,11 @@
     <div class="row relationtex_sorter" style="margin-bottom:20px" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         {% if request.user.user_type == 2 %}
         <div class="col-sm-1 col-md-1 col-lg-1" >  
- 
+            {% if request.user.is_superuser %}
             <li class="relative_div_exotex">  
                 <a href="{% url 'update_exotex' r.exotex.id  %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-cogs"></i><span class="legend_exotex_parameter"> Configurer </span></a>
             </li>
+            {% endif %}
             <li class="relative_div_exotex action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-print"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
             </li>
