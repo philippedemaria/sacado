@@ -37,6 +37,25 @@
   
      
 <section class="content_main">
+    <div class="col-sm-12 col-md-12 alert alert-warning">
+        <div class="col-sm-2 col-md-2">
+            {{ flashpack.subject.name }}
+        </div>
+        <div class="col-sm-5 col-md-5">
+            {% for l in flashpack.levels.all %}{{ l.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
+        </div>
+        <div class="col-sm-5 col-md-5">
+            {% for t in flashpack.themes.all %}{{ t.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     <div class="col-sm-12 col-md-12">
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %}
