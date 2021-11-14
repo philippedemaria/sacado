@@ -1,0 +1,176 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+ 
+    <div class="row">  
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-warning">
+                Une question vous est proposée. Répondez à cette question mentalement ou par écrit puis cliquez sur le bouton Réponse. Utilisez l'aide si besoin.
+            </div>
+        </div>
+    </div>
+    <div class="row">  
+        <div class="col-sm-12 col-md-3" id="offset"></div>
+        <div class="col-sm-12 col-md-6" id="question">
+            <div class="exotex flashcard" style="font-size-adjust: {{ flashcard.size }}px">
+                {{ flashcard.question }}
+
+
+                {% if flashcard.imagefile and not flashcard.audio %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefile.url }}" /> 
+                    </div>
+                </div>
+                {% elif flashcard.audio and not flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ question.audio.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.audio and flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefile.url }}"   />
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audio.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.video  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                         {{ question.video|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>  
+        </div>
+        <div class="col-sm-12 col-md-6 no_visu_on_load" id="answer">
+            <div class="exotex flashcard" >
+                {{ flashcard.answer }}
+
+
+                {% if flashcard.imagefileanswer and not flashcard.audioanswer %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefileanswer.url }}" /> 
+                    </div>
+                </div>
+                {% elif flashcard.audioanswer and not flashcard.imagefileanswer  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audioanswer.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.audio and flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefileaudioanswer.url }}"   />
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audioaudioanswer.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.videoaudioanswer  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                         {{ question.videoaudioanswer|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+            </div>  
+        </div>
+    </div>
+     
+    <div class="row"> 
+
+        <div class="col-sm-12 col-md-3" id="offsethelper"></div>
+        <div class="col-sm-12 col-md-6"  align="center" >
+            <br/>
+            <button class="btn btn-default" id="show_helper" style="width: 200px"> Aide </button>
+            <button class="btn btn-primary " id="show_answer" style="width: 200px"> Réponse </button>
+        </div>
+
+        <div class="col-sm-12 col-md-6 no_visu_on_load" align="center"  id="buttons"  >
+            <div class="alert alert-warning">
+                Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
+            </div>
+            <button class="btn btn-danger"><i class="fa fa-caret-right"></i> Ma réponse est fausse</button>
+            <button class="btn btn-warning"><i class="fa fa-caret-right"></i> Ma réponse est partiellement juste.</button>                        
+            <button class="btn btn-success"><i class="fa fa-caret-right"></i> Ma réponse est juste.</button>  
+        </div>
+    </div> 
+
+
+    <div class="row no_visu_on_load" id="helper">  
+        <div class="col-sm-12 col-md-6">
+            <div class="exotex flashcard_helper">
+                Aide : 
+                {% if flashcard.imagefilehelper and not flashcard.audiohelper %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefilehelper.url }}" /> 
+                    </div>
+                </div>
+                {% elif flashcard.audiohelper and not flashcard.imagefilehelper  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audiohelper.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.audio and flashcard.imagefile  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center">
+                         <img src="{{ flashcard.imagefileaudiohelper.url }}"   />
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                        <audio controls>
+                            <source src="{{ flashcard.audioaudiohelper.url }}" type="audio/mpeg">
+                            <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                        </audio>
+                    </div>
+                </div>
+                {% elif flashcard.videoaudiohelper  %}
+                <div class="row">  
+                    <div class="col-sm-12 col-md-12" align="center"> 
+                         {{ question.videoaudiohelper|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+            </div>  
+        </div>
+    </div>
+
+ 
+ 
+ 

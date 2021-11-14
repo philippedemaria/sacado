@@ -66,10 +66,22 @@ def list_my_flashpacks(request):
 
  
 
-def create_flashpack(request):
+def create_flashpack(request, idf=0):
 
     teacher = request.user.teacher
-    form = FlashpackForm(request.POST or None ,request.FILES or None , teacher = teacher  )
+    folder_id = request.session.get("folder_id",idf)
+    group_id = request.session.get("group_id",None)
+    if group_id :
+        group = Group.objects.get(id=group_id)
+    else :
+        group = None
+
+    if folder_id :
+        folder = Folder.objects.get(id=folder_id)
+    else :
+        folder = None
+
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -77,11 +89,12 @@ def create_flashpack(request):
         nf.save()
         form.save_m2m()
 
-        for l_id in request.POST.getlist("levels") :
-            level = Level.objects.get(pk=l_id)
-            level.flashpacks.add(nf)
+        for group_id in request.POST.getlist("groups") :
+            group = Group.objects.get(pk = group_id)
+            nf.levels.add(group.level)
+
         messages.success(request, 'Le flashpack a été créé avec succès !')
-        return redirect('my_flashpacks')
+        return redirect('set_flashcards_to_flashpack' , nf.id)
     else:
         print(form.errors)
 
@@ -99,12 +112,12 @@ def update_flashpack(request, id):
     flashpack_form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher   )
     if request.method == "POST" :
         if flashpack_form.is_valid():
-            flashpack_form.save()
-            for l_id in request.POST.getlist("levels") :
-                level = Level.objects.get(pk=l_id)
-                level.flashpacks.add(flashpack)
+            nf = flashpack_form.save()
+            for group_id in request.POST.getlist("groups") :
+                group = Group.objects.get(pk = group_id)
+                nf.levels.add(group.level)
             messages.success(request, 'Le flashpack a été modifié avec succès !')
-            return redirect('my_flashpacks')
+            return redirect('set_flashcards_to_flashpack' , nf.id)
         else:
             print(flashpack_form.errors)
 
@@ -148,17 +161,67 @@ def flashpack_peuplate(request, id):
     return render(request, 'flashcard/form_peuplate_flashcard.html', context )
  
 
-def clone_flashpack(request, id):
+
+
+def set_flashcards_to_flashpack(request, id):
+
+    teacher   = request.user.teacher
     flashpack = Flashpack.objects.get(id=id)
-    context = {'flashpack': flashpack,   }
-    return render(request, 'flashcard/show_flashpack.html', context )  
+    form      = FlashcardForm(request.POST or None , flashpack = flashpack  )
+
+    if request.method == "POST" :
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.theme = flashpack.themes.first()
+            nf.subject = flashpack.subject
+            nf.save()
+            form.save_m2m()
+            nf.levels.set(flashpack.levels.all())
+            flashpack.flashcards.add(nf)
+
+            messages.success(request, 'La flashcard a été ajoutée avec succès !')
+            return redirect('set_flashcards_to_flashpack' ,  id)
+        else:
+            print(form.errors)
+
+    flashcards = flashpack.flashcards.all() 
+
+    context    = { 'flashpack': flashpack, 'flashcards': flashcards , 'teacher': teacher , 'form': form   }
+
+    return render(request, 'flashcard/set_flashcards_to_flashpack.html', context )
+ 
 
 
+
+
+def clone_flashpack(request, id):
+
+    flashpack = Flashpack.objects.get(id=id)
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+
+    flashpack.pk = None
+    flashpack.save()
+
+    return redirect('set_flashcards_to_flashpack' , id)
 ######################################################################################
 ######################################################################################
 #           Flashcard
 ######################################################################################
 ######################################################################################
+
+
+def clone_flashcard(request, idf, id):
+
+    flashpack = Flashpack.objects.get(id=idf)
+    flashcard = Flashcard.objects.get(id=id)
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+
+    flashcard.pk = None
+    flashcard.save()
+    flashpack.flashcards.add(flashcard)
+
+    return redirect('set_flashcards_to_flashpack' , idf)
+
 
 
 def list_flashcards(request):
@@ -171,7 +234,7 @@ def list_flashcards(request):
  
 def create_flashcard(request):
 
-    form = FlashcardForm(request.POST or None  )
+    form = FlashcardForm(request.POST or None  , flashpack = None )
 
     if form.is_valid():
         nf = form.save()
@@ -193,7 +256,7 @@ def create_flashcard(request):
 def update_flashcard(request, id):
 
     flashcard = Flashcard.objects.get(id=id)
-    flashcard_form = FlashcardForm(request.POST or None, instance=flashcard )
+    flashcard_form = FlashcardForm(request.POST or None, instance=flashcard , flashpack = None )
     if request.method == "POST" :
         if flashcard_form.is_valid():
             flashcard_form.save()
@@ -211,14 +274,16 @@ def update_flashcard(request, id):
 
 
  
-def delete_flashcard(request, id):
-    flashcard = Flashcard.objects.get(id=id)
-    levels = Level.objects.filter(flashcards=flashcard)
-    for l in levels :
-        l.flashcards.remove(flashcard)
-    flashcard.delete()
+def delete_flashcard(request, idf , id):
 
-    return redirect('flashcards')
+	flashpack = Flashpack.objects.get(id=idf)
+	flashcard = Flashcard.objects.get(id=id)
+
+	flashcard.delete()
+	if idf :
+		return redirect('set_flashcards_to_flashpack' , idf)
+	else :
+		return redirect('flashcards')
 
 
 
@@ -526,18 +591,25 @@ def ajax_charge_folders(request):
         fldrs = set()
         prcs  = set()
         thms  = set()
+        lvls  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
             fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
             prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
             thms.update(group.level.themes.values_list('id', 'name').filter(subject =group.subject))
+            lvls.update((group.level.id,))
         data['folders']  =  list( fldrs )
         data['parcours'] =  list( prcs )
         data['themes']   =  list( thms )
+        data['lvls']     =  list( lvls )
+        data['subject']  =  group.subject.id
+
     else :
         data['folders']  =  []
         data['parcours'] =  []
         data['themes']   =  []
+        data['lvls']     =  []
+        data['subject']  =  ""
 
     return JsonResponse(data)
 

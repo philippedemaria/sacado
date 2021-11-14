@@ -1,0 +1,144 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+<form action="#" method="POST" id="question_form"  enctype='multipart/form-data' > 
+{% csrf_token %}    
+    <input type="hidden" name="flashpack" id="id_flashpack" value="{{ flashpack.id }}" /> 
+    <input type="hidden" name="subject" id="id_subject" value="{{ flashpack.subject.id }}" /> 
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+                <label>Titre</label>
+                {{ form.title|add_class:"form-control"  }}
+                {{ form.title.errors }}
+        </div>
+        <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+                <label>Calculatrice ?</label><br/>
+                {{ form.calculator|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                {{ form.calculator.errors }}
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+                <label>Taille de police</label>
+                {{ form.size|add_class:"form-control select2" }} 
+                {{ form.size.errors }}
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+                <label>Durée (optionnel)</label>
+                {{ form.duration|add_class:"form-control" }} 
+                {{ form.duration.errors }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <label>Attendu (optionnel)</label>
+            {{ form.waiting|add_class:"form-control select2"}} 
+            {{ form.waiting.errors }} 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h2 class="thin">Question </h2>
+        </div>
+    </div>
+    <div class="row">  
+        <div class="col-sm-12 col-md-8">
+            <div class="exotex flashcard_helper">
+                {{ form.question|add_class:"formulaire" }}
+                {{ form.question.errors }}             
+            </div>  
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label>Fichier image ? (optionnel)</label>
+                {{ form.imagefile|add_class:"form-control btn btn-default" }} 
+                {{ form.imagefile.errors }}
+            </div>
+            <div class="form-group">
+                <label>Fichier audio ? (optionnel)</label>
+                {{ form.audio|add_class:"form-control btn btn-default" }} 
+                {{ form.audio.errors }}
+            </div>
+            <div class="form-group">
+                <label>Fichier vidéo ? (optionnel)</label>
+                {{ form.video|add_class:"form-control btn btn-default" }} 
+                {{ form.video.errors }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h2 class="thin">Réponse </h2>
+        </div>
+    </div>
+    <div class="row">  
+        <div class="col-sm-12 col-md-8">
+            <div class="exotex flashcard_helper">
+                {{ form.answer|add_class:"formulaire" }}
+                {{ form.answer.errors }}   
+            </div>  
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label>Fichier image ? (optionnel)</label>
+                {{ form.imagefileanswer|add_class:"form-control btn btn-default"}}
+                {{ form.imagefileanswer.errors }}
+            </div>
+            <div class="form-group">
+                <label>Fichier audio ? (optionnel)</label>
+                {{ form.audioanswer|add_class:"form-control btn btn-default"}}
+                {{ form.audioanswer.errors }}
+            </div>
+            <div class="form-group">
+                <label>Fichier vidéo ? (optionnel)</label>
+                {{ form.videoanswer|add_class:"form-control btn btn-default"}}
+                {{ form.videoanswer.errors }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h2 class="thin">Aide </h2>
+        </div>
+    </div>
+    <div class="row">  
+        <div class="col-sm-12 col-md-8">
+            <div class="exotex flashcard_helper" >
+                {{ form.helper|add_class:"formulaire" }}
+                {{ form.helper.errors }}   
+            </div>  
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label>Fichier image ? (optionnel)</label>
+                {{ form.imagefilehelper|add_class:"form-control btn btn-default"}} 
+                {{ form.imagefilehelper.errors }}
+            </div>
+            <div class="form-group">
+                <label>Fichier audio ? (optionnel)</label>
+                {{ form.audiohelper|add_class:"form-control btn btn-default"}} 
+                {{ form.audiohelper.errors }}
+            </div>
+            <div class="form-group">
+                <label>Fichier vidéo ? (optionnel)</label> 
+                {{ form.videohelper|add_class:"form-control btn btn-default"}} 
+                {{ form.videohelper.errors }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12"> 
+            <div class="form-group">
+                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+            </div>
+        </div>    
+    </div>
+</form>
+ 

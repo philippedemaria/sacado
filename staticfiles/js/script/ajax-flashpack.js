@@ -4,15 +4,45 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
   
  
-        $('#id_is_publish').prop('checked', true); 
-         
+        $('#id_is_publish').prop('checked', true);
         $('#id_is_archive').prop('checked', false); 
          
 
+            $('body').on('change', '#id_subject' , function (event) {
 
-        $('#id_themes_div').hide();
+         
+                let id_subject = $("#id_subject").val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                url_ = "../../../tool/ajax_charge_groups" ;
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        traditional: true,
+                        data: {
+                            'id_subject': id_subject,                       
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url : url_,
+                        success: function (data) {
 
+                            groups = data["groups"] ; 
+                            $('#grplist').empty("");
 
+                            if (groups.length >0)
+                            { for (let i = 0; i < groups.length ; i++) {
+                                        
+                                        let groups_id   = groups[i][0]; 
+                                        let groups_name =  groups[i][1] ; 
+
+                                        $('#grplist').append('<label for="cb'+Number(groups_id)+'"><input type="checkbox" id="cb'+Number(groups_id)+'" class="select_all" name="groups" value="'+Number(groups_id)+'" /> '+groups_name+'</label><br/>')
+                                    }
+                            }
+
+                        }
+                    }
+                )
+            });
 
 
 
@@ -86,6 +116,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                                     });
                             $('select[name=themes]').append(option);
                         }
+
+                        $("#id_subject").val(data.subject);
 
 
                     }

@@ -33,38 +33,37 @@ class Flashcard(models.Model):
     """
     Modèle représentant un associé.
     """
-    title         = models.TextField(max_length=255, default='', verbose_name="Titre")
+    title         = models.CharField(max_length=255, default='', verbose_name="Titre")
 
     question      = models.TextField(max_length=255, default='',  verbose_name="Question écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
-    answer        = models.CharField(max_length=255, default='',  verbose_name="Réponse attendu")
-    helper        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Aide proposée")
+    answer        = models.TextField(max_length=255, default='',  verbose_name="Réponse attendu")
+    helper        = models.TextField(max_length=255, null = True,   blank=True, verbose_name="Aide proposée")
 
     size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
 
-    imagefile  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
+    imagefile   = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
     audio      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
-    video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
-
+    video      = models.FileField( default='',  blank=True, verbose_name="Vidéo intégrée")
 
     imagefileanswer  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
     audioanswer      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
-    videoanswer      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
+    videoanswer      = models.FileField( default='',  blank=True, verbose_name="Vidéo intégrée")
 
     imagefilehelper  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
     audiohelper      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
-    videohelper      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
+    videohelper      = models.FileField( default='',  blank=True, verbose_name="Vidéo intégrée")
 
 
     duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 
     students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
 
-    waiting    = models.ManyToManyField(Waiting, related_name="flashcards", blank=True)
-    theme      = models.ManyToManyField(Theme, related_name="flashcards", blank=True)
-    levels     = models.ManyToManyField(Level, related_name="flashcards", blank=True)
-    subject    = models.ForeignKey(Subject, related_name="flashcards", blank=True, null = True, on_delete=models.CASCADE)
+    waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, on_delete=models.CASCADE, default="")
+    theme     = models.ForeignKey(Theme, related_name="flashcards", blank=True, on_delete=models.CASCADE, default="")
+    levels    = models.ManyToManyField(Level, related_name="flashcards", blank=True )
+    subject   = models.ForeignKey(Subject, related_name="flashcards", blank=True, null = True, on_delete=models.CASCADE, default="")
  
     def __str__(self):
         return self.title 

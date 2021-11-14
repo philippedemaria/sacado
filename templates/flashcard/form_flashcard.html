@@ -6,252 +6,45 @@
 
 
 {% block require %}
-    {% if question %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
-    <script>
-        require(['script/ajax-quizz-update']);
-        require(['script/ajax-quizz']);
-    </script> 
-    {% else %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
-    <script>
-        require(['script/ajax-quizz-complement']);
-        require(['script/ajax-quizz']);
-    </script> 
-    {% endif %}
-
-    <script>
-        require(['script/ajax-finder']);
-    </script> 
-
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
+ 
 
 {% endblock %}
  
 
 {% block page_title %}
-   Créateur de quizz 
-   {% if quizz %}
-   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_quizz' quizz.id %}"> <small>{{ quizz.title }}  ({{ quizz.duration|time_done }}) </small></a>
-   {% endif  %}
+   <i class="fa fa-money"></i> Flashcard 
+   {% if flashcard %}
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_flashcard' flashcard.id %}"> <small>{{ flashcard.title }} </small></a>
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
    <small> 
-     {{ title_type_of_question }} 
+        <a href="{% url 'show_flashcard' flashcard.id %}">Voir la flashcard</a> 
    </small>
+   {% endif  %}
+
+
+
 {% endblock %}
 
 
 {% block page_menu_right %}
-    <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>
-    <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
+    {% include 'flashcard/submenu_flashpack.html'  %}
 {% endblock %}
 
 
 
 {% block body %}
-<link rel="stylesheet" href="{% static 'css/uploader.css' %}">
 <section class="content_list"> 
     <div class="row">
-        <div class="col-sm-12 col-md-2">
-
-            {% if quizz.is_random  %}
-
-                <div class="form-group">
-                    <h3>{{ quizz.subject}}  </h3> 
-                </div>
-                 <div class="form-group">
-                    {% for l in quizz.levels.all %} <li class="sanspuce">{{ l.name }}</li> {% endfor %}   
-                </div>
-                 <div class="form-group">
-                    {% for t in quizz.themes.all %} <li class="sanspuce">{{ t.name }}</li> {% endfor %}   
-                </div>
-
-            {% else  %}
-
-            <form action="#" method="POST"  >
-                <div class="quizz_list_question">
-                    <ul id="questions_sortable_list">
-                        {% for question in questions %}
-                            {% include 'tool/list_of_question.html' %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            </form>
-
-            <div class="question_bank" >
-                {% if sacado_asso %}
-                <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-quizz_bank" >Banque de questions</a> 
-                {% else %}
-                <a href="#"   class="btn btn-quizz_bank no_sacado" title="Version Etablissement requise" >Banque de questions</a> 
-                {% endif %}                
-            </div>
-
-
-
-            {% endif %}
-
-
-
-        </div>
-
-        <div class="col-sm-12 col-md-10" >  
-            <form action="#" method="POST" id="question_form"  enctype='multipart/form-data' >
-            {% csrf_token %}    
-            <input type="hidden" name="quizz_id" id="quizz_id" value="{{ quizz.id }}" /> 
-            <input type="hidden" name="qtype" id="qtype" value="{{ qtype }}" /> 
-                <div id="body_question"> 
-                    {% block type_of_question %} 
-
-                            <div class="row" >
-                                <div class="col-sm-10 col-md-11" >  
-                                    {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"required"  }}
-                                </div>
-                                <div class="col-sm-2 col-md-1" > 
-                                        <label>Taille de police</label><br/>
-                                    {{ form.size|add_class:"form-control select2"  }}
-                                </div>
-                            </div>
-                            <div class="row margin40" >
-                                <div class="col-sm-6 col-md-2" align="center" >  
-                                    <div class="quizz_assets">
-                                        <label>Durée</label><br/>
-                                        {{ form.duration|add_class:"quizz_input quizz_input50" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"value:20" }}<label>s. </label>
-                                    </div>
-                                    <div class="quizz_assets">
-                                        <label>Point</label><br>
-                                        {{ form.point|add_class:"quizz_input"|attr:"min:200"|attr:"max:2000"|attr:"rows:1"|attr:"value:1000" }}  
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-2" align="center" > 
-                                    <div class="quizz_assets" id="check_calculator">
-                                       <label>Calculatrice</label><br>
-                                        {{ form.calculator  }} 
-                                    </div>
-                                    <div class="quizz_assets"  id="check_publish">
-                                        <label>Publication</label><br>
-                                        {{ form.is_publish  }} 
-                                    </div>
-                                </div>
-
-
-                                {% if sacado_asso %}
-                                <div class="col-sm-12 col-md-1" align="center" >
-                                    <div class="quizz_assets" style="height:110px">
-                                       <label>Support</label><br>
-                                       <label><a href="#" id="support_audio" >Audio</a></label><br/>
-                                       <label><a href="#" id="support_video" >Vidéo</a></label><br/>
-                                       <label><a href="#" id="support_image" >Image</a></label><br/>
-                                       <label><a href="#" id="support_audio_image" >Audio&Image</a></label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-7" align="center" > 
-                                    <div id="drop_zone_image" class="{% if question.imagefile %}allowed_display{% else %}not_allowed_display{% endif %}">
-                                        <div id="drop_zone" class="drop-zone">
-                                            {% if question.imagefile  %}
-                                                <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px (500ko)</p>
-                                                <img src="{{ question.imagefile.url }}" width="300px" />
-                                            {% else %} 
-                                                <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px (500ko)</div></p>
-                                            {% endif %}  
-                                            <div class="preview-container"></div>
-                                        </div>
-                                        {{ form.imagefile|attr:"multiple" }}
-                                    </div> 
-                                    <div id="video_div" class="{% if question.video %}allowed_display{% else %}not_allowed_display{% endif %}"></br></br>
-                                        {{ form.video|attr:"placeholder:Coller le code iframe de votre vidéo ici"|attr:"rows:5"  }}</br></br>
-                                    </div>
-                                    <div id="audio_div" class="{% if question.audio %}allowed_display{% else %}not_allowed_display{% endif %}">
-                                        <label style="font-size:20px">Choix d'un fichier audio</label></br></br>
-                                        {{ form.audio|add_class:"btn btn-default" }}
-                                    </div>
-                                </div> 
-
-                                {% else %}
-                                        <div class="col-sm-12 col-md-8" align="center">
-                                            <div class="alert alert-danger">
-                                                Pour inclure des images, des vidéos ou de l'audio, vous devez avoir la version établissement.
-                                            </div>  
-                                        </div>
-                                {% endif %}
-
-
-                            </div>
-                    {% endblock %}
-
-
-
-                    {% if qtype > 0 %}
-                    <div style="height:30px"></div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">                       
-                                {{ form.knowledge|add_class:"form-control select2 quizz_box"  }} 
-                            </div>                            
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">                       
-                                <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:default"|attr:"data-offstyle:primary"|attr:"data-on:Blanc"|attr:"data-off:Coloré"}}
-                                <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
-                            </div>                            
-                        </div>
-                    </div>
-                    {% endif %} 
-
-                    {% block type_of_choices %}
-                        {% if qtype > 0 %}
-                            <div class="row" > 
-                                <div class="col-sm-12 col-md-12">  
-                                        {{ form.answer|add_class:"quizz_box quizz_font40" |attr:"placeholder:Réponse.s attendue.s" |attr:"rows:1"  }}
-                                        <small><em>Si plusieurs réponses, le séparateur est ____ (4 tirets - underscore) sans espace entre les réponses. Exemple :</em> motA____motB____motC <em>sont trois réponses possibles.</em></small>
-                                </div>
-
-                            </div>
-                        {% endif %}  
-                    {% endblock %}
-
-
-
-                {% if qtype > 0 %}
-
-                <div class="row" style="margin-top: 20px;" >
-                    <div class="col-sm-12 col-md-12">
-                        <div class="form-group">                            
-                            <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
-                            <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
-                        </div>                            
-                    </div>
-                </div>
-                {% endif %}
-
-
-            </form>
-
+        <div class="col-sm-12 col-md-12" >  
+ 
+            {% include 'flashcard/form_flashcard_tag.html' %}
         </div>
     </div>
 </section>
 
-<div class="modal fade" id="question_choice" tabindex="-1" role="dialog" aria-labelledby="question_choice">
-    <div class="modal-dialog" role="document" style="width: 100%;">
-        <div class="modal-content" >
-            <div class="modal-header"  style="background-color: #F0F0F0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <div class="col-sm-12 col-md-4">
-                  <input name="search_question" id="search_question" placeholder="Recherche par mot clé"  class="form-control" />
-                </div>
-            </div>
-            <div class="modal-body" id='questions_finder'>
  
-                {% include 'tool/ajax_finder_question.html' %}
-            </div>
-        </div>
-    </div>
-</div> 
-
 {% endblock %} 
 
  

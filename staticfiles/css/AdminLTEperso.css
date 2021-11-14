@@ -985,10 +985,10 @@ label {
     border-radius: 5px;
     width: 100%; 
     font-size:2em;
-    background-color: #f1eef7;
+    /*background-color: #f1eef7;*/
 }
-
-
+ 
+ 
 /******************************************** real_time_live  **************************************/
 
 .no_live{
@@ -1269,7 +1269,8 @@ a.no_visual_link{
     align-items: center;
     border-radius: 5px;
     align-items: center;
-    line-height : 90px;
+    min-height: 90px;
+    max-height: 200px;
     border : 1px solid #F0F0F0 ;
 }
 
@@ -3125,9 +3126,9 @@ input.form-control {
 }
 
 .alert-success {
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
     position: absolute;
     z-index: 1000;
     width: 92%;
@@ -3635,36 +3636,39 @@ display:none;
  * Items styles 
  *********************************************************************************************************/
 .fail{
-border-color: #c39696;
-width:100%;
-height: 90px;
-padding: 6px 12px;
-font-size: 14px;
-line-height: 1.42857143;
-color: #c39696;
+    border-color: #c39696;
+    width:100%;
+    height: 90px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #c39696;
 }
 
 .success{
-border-color: #1bc074;
-width:100%;
-padding: 12px 12px;
-font-size: 18px;
-line-height: 1.42857143;
-color: #1bc074;
-background-color: #e1fce5;
-list-style: none;
-border-radius: 4px;
+    border-color: #c3e6cb;
+    width:100%;
+    padding: 12px 12px;
+    font-size: 18px;
+    line-height: 1.42857143;
+    color: #155724;
+    background-color: #d4edda;
+    list-style: none;
+    border-radius: 4px;
 }
 .error{
-border-color: #cb2131;
-width:100%;
-padding: 12px 12px;
-font-size: 18px;
-line-height: 1.42857143;
-color: #cb2131;
-background-color: #fad4d8;
-list-style: none;
-border-radius: 4px;
+    border-color: #f5c6cb;
+    width:100%;
+    padding: 12px 12px;
+    font-size: 18px;
+    line-height: 1.42857143;
+    color: #721c24;
+    background-color: #f8d7da;
+    list-style: none;
+    border-radius: 4px;
+}
+.formulaire{
+    border-color: #FFF;
 }
 
 a.timeliner{

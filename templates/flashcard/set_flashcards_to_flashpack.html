@@ -1,0 +1,73 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
+
+
+
+{% endblock %}
+ 
+
+{% block page_title %}
+   Créateur de flashpack 
+   {% if quizz %}
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_quizz' quizz.id %}"> <small>{{ flashpack.title }}  ({{ flashpack.duration|time_done }}) </small></a>
+   {% endif  %}
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+ 
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+
+    <a href="{% url 'show_flashpack' flashpack.id %}" target="_blank" class="btn btn-new-violet">Lancer le flashpack</a>
+    <a href="{% url 'my_flashpacks'  %}" target="_blank" class="btn btn-new-violet">Mes flashpacks</a>
+
+{% endblock %}
+
+
+
+{% block body %}
+<section class="content_list"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-2">
+
+  
+
+            <form action="#" method="POST"  >
+                <div class="quizz_list_question">
+                    <ul id="questions_sortable_list">
+                        {% for flashcard in flashcards %}
+                            {% include 'flashcard/list_of_flashcards.html' %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </form>
+
+            <div class="question_bank" >
+                {% if sacado_asso %}
+                <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-quizz_bank" >Banque de flashcards</a> 
+                {% else %}
+                <a href="#" class="btn btn-quizz_bank no_sacado" title="Version Etablissement requise" >Banque de flashcards</a> 
+                {% endif %}                
+            </div>
+ 
+
+
+
+        </div>
+
+        <div class="col-sm-12 col-md-10" >  
+            {% include 'flashcard/form_flashcard_tag.html' %}
+        </div>
+    </div>
+</section>
+{% endblock %} 

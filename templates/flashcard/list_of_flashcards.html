@@ -1,0 +1,32 @@
+{% load static %}
+
+{% csrf_token %}  
+{% if flashcard %}
+<li class="sorted_list">
+
+    	<input type="hidden" value="{{ flashcard.id }}" class="sorted_slide_id"     />
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12">
+                <label>{% if from_ajax %}{{ nbq }}{% else %}{{ forloop.counter }}{% endif %}. 
+
+                        {{ flashcard.title|truncatechars:"15"}}
+
+                </label>
+            </div>
+        </div>
+        <div class="row"> 
+            <div class="col-xs-2 col-md-2" class="delete_question_div"><hr style="border-color: transparent"/>
+
+                <a href="{% url 'update_flashcard' flashcard.id %}" class="delete_question"  ><i class="fa fa-edit"></i></a><br/><br/> 
+
+                <a href="{% url 'clone_flashcard' flashpack.id  flashcard.id %}" class="edit" title="Dupliquer"><i class="fa fa-copy"></i></a> <br/><br/>
+
+                <a href="{% url 'delete_flashcard' flashcard.id %}"  class="delete_question" onclick="return TestDelete('cette flashcard')"><i class="fa fa-trash"></i></a>
+            </div>
+            <div class="col-xs-10 col-md-30">
+                <img src="{% static 'img/my_diapo.png' %}" width="90%" />
+            </div>
+        </div>
+ 
+</li>
+{% endif %}

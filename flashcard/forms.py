@@ -2,7 +2,7 @@ import datetime
 from django import forms
 from .models import Flashcard , Flashpack
 from account.models import Student , Teacher
-from socle.models import Knowledge, Skill
+from socle.models import Waiting, Skill
 from group.models import Group
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from django.forms import MultiWidget, TextInput , CheckboxInput
@@ -13,7 +13,15 @@ from itertools import groupby
 from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
 
  
- 
+def validation_file(content):
+	if content :
+		content_type = content.content_type.split('/')[0]
+		if content_type in settings.CONTENT_TYPES:
+			if content._size > settings.MAX_UPLOAD_SIZE:
+				raise forms.ValidationError("Taille max : {}. Taille trop volumineuse {}".format(filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(content._size)))
+		else:
+			raise forms.ValidationError("Type de fichier non accepté")
+		return content
 
  
 
@@ -22,27 +30,20 @@ class FlashcardForm(forms.ModelForm):
 	class Meta:
 		model = Flashcard
 		fields = '__all__'
-		widgets = {
-            'is_correct' : CheckboxInput(),  
-        }
 
 
 	def __init__(self, *args, **kwargs):
 		flashpack = kwargs.pop('flashpack')
 		super(FlashcardForm, self).__init__(*args, **kwargs)
+		if flashpack : 
+			themes = flashpack.themes.all()
+			waitings = []
+			if  len(themes) > 0  :
+				waitings = Waiting.objects.filter(theme__in = themes )
+		else :
+			waitings = Waiting.objects.all()
 
-		levels = flashpack.levels.all()
-		themes = flashpack.themes.all()
-		subject = flashpack.subject
-		knowledges = []
-		if len(levels) > 0 and len(themes) > 0  :
-			knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels, theme__in=themes )
-		elif len(levels) > 0 :
-			knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels)
-		elif len(themes) > 0 :
-			knowledges = Knowledge.objects.filter(theme__subject = subject ,theme__in=themes)
-
-		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges, required=False)
+		self.fields['waiting'] = forms.ModelChoiceField(queryset=waitings, required=False)
 
 
 	def clean_content(self):
