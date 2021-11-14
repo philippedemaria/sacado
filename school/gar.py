@@ -51,17 +51,17 @@ def create_abonnement_gar(today,school,abonnement ,user):
 
  
 
-    # id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"+str(timestamp) 
-    # host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
-    # directory = '/home/sacado/'
+    id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"+str(timestamp) 
+    host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
+    directory = '/home/sacado/'
 
-    # header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
-    # body      = web_abonnement_xml(abonnement,id_abonnement, today) 
-    # r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PFPART-2021.pem', directory + 'sacado.key'))
+    header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+    body      = web_abonnement_xml(abonnement,id_abonnement, today) 
+    r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
-    # if r.status_code == 201 or r.status_code==200 :
-    #     return True 
-    # else :
-    #     return False 
+    if r.status_code == 201 or r.status_code==200 :
+        return True 
+    else :
+        return False 
  
-    return True
+    #return True
