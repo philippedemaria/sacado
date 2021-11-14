@@ -81,7 +81,7 @@ def create_flashpack(request, idf=0):
     else :
         folder = None
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
 
     if form.is_valid():
         nf = form.save(commit=False)
