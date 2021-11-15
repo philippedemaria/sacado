@@ -382,7 +382,7 @@ def my_bibliotexs(request):
 
     request.session["folder_id"] = None
     request.session["group_id"] = None
-    user = request.user.teacher
+    teacher = request.user.teacher
 
     dataset_user = teacher.teacher_bibliotexs
     dataset      = dataset_user.filter(is_archive=0)
@@ -415,7 +415,7 @@ def my_bibliotex_archives(request):
 
     request.session["folder_id"] = None
     request.session["group_id"] = None
-    user = request.user.teacher
+    teacher = request.user.teacher
  
     dataset = teacher.teacher_bibliotexs.filter(is_archive=1)
 

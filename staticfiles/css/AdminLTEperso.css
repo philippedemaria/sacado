@@ -994,16 +994,17 @@ label {
     -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
     position:relative;
-    border : 1px solid #e6e2dd; 
+    border : 10px solid #5d4391;
     height: 220px;
     width: 350px;
     background-color: #FFF;
     overflow: hidden ;
     position: relative;
+    border-radius: 5px;
   background-image: url('/static/img/flashcard.jpg')
 }
 .contenair_flashcard{
-    height: 200px;
+    height: 185px;
     padding: 15px;
     width : 350px;
 
@@ -1011,7 +1012,7 @@ label {
 
 .flashcard_div{
   position: absolute;
-  height : 200px;
+  height : 180px;
   width : 350px;
   padding: 15px;
   background-color: #f1eef7;  

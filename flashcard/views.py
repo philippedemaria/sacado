@@ -47,9 +47,9 @@ def list_my_flashpacks(request):
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     teacher = request.user.teacher
-
-    dataset = teacher.flashpacks
-    flashpacks = dataset.filter(is_archive=0,folders=None)
+    dataset_user = teacher.flashpacks
+    dataset      = dataset_user.filter(is_archive=0)
+    flashpacks = dataset.filter(folders=None)
     flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
     list_folders = list()
@@ -61,10 +61,41 @@ def list_my_flashpacks(request):
         list_folders.append(flash_folders)
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
-    nb_archive = teacher.flashpacks.filter(  is_archive=1).count()
-    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups , 'nba' : nb_archive  })
+    nb_archive = dataset_user.filter(is_archive=1).count()
+    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups , 'nba' : nb_archive , 'is_archive' : False })
 
  
+
+
+def my_flashpack_archives(request):
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["folder_id"] = None
+    request.session["group_id"] = None
+    teacher = request.user.teacher
+
+    dataset = teacher.flashpacks.filter(is_archive=1)
+    flashpacks = dataset.filter(folders=None)
+    flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
+
+    print(flashpacks_folders)
+
+    list_folders = list()
+    for folder in flashpacks_folders :
+        flash_folders = dict()
+        flash_folders["folder"] = Folder.objects.get(pk=folder)
+        teacher_flash_folders = dataset.filter(is_archive=1 , folders=folder)
+        flash_folders["flashpacks"] = teacher_flash_folders  
+        list_folders.append(flash_folders)
+
+    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
+ 
+    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups, 'is_archive' : True  })
+
+
+ 
+ 
+
 
 def create_flashpack(request, idf=0):
 
