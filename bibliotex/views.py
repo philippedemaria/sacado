@@ -382,14 +382,12 @@ def my_bibliotexs(request):
 
     request.session["folder_id"] = None
     request.session["group_id"] = None
-    user = request.user
-    teacher = user.teacher
-    datas = all_levels(user, 0)
+    user = request.user.teacher
 
-    dataset = teacher.teacher_bibliotexs
+    dataset_user = teacher.teacher_bibliotexs
+    dataset      = dataset_user.filter(is_archive=0)
 
-
-    bibliotexs = dataset.filter(is_archive=0,folders=None)
+    bibliotexs = dataset.filter(folders=None)
     bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
 
@@ -400,7 +398,7 @@ def my_bibliotexs(request):
     for folder in bibliotexs_folders :
         bibtexs_folders = dict()
         bibtexs_folders["folder"] = Folder.objects.get(pk=folder)
-        teacher_bibliotexs = dataset.filter(is_archive=0 , folders=folder)
+        teacher_bibliotexs = dataset.filter(folders=folder)
         bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
         list_folders.append(bibtexs_folders)
 
@@ -408,7 +406,7 @@ def my_bibliotexs(request):
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
-    nb_archive = teacher.teacher_bibliotexs.filter(  is_archive=1).count()
+    nb_archive = dataset_user.filter(  is_archive=1).count()
     return render(request, 'bibliotex/list_bibliotexs.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups,   'nb_archive' : nb_archive  })
 
 
@@ -417,14 +415,11 @@ def my_bibliotex_archives(request):
 
     request.session["folder_id"] = None
     request.session["group_id"] = None
-    user = request.user
-    teacher = user.teacher
-    datas = all_levels(user, 0)
+    user = request.user.teacher
+ 
+    dataset = teacher.teacher_bibliotexs.filter(is_archive=1)
 
-    dataset = teacher.teacher_bibliotexs
-
-
-    bibliotexs = dataset.filter(is_archive=1,folders=None)
+    bibliotexs = dataset.filter(folders=None)
     bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
 
@@ -435,7 +430,7 @@ def my_bibliotex_archives(request):
     for folder in bibliotexs_folders :
         bibtexs_folders = dict()
         bibtexs_folders["folder"] = Folder.objects.get(pk=folder)
-        teacher_bibliotexs = dataset.filter(is_archive=1 , folders=folder)
+        teacher_bibliotexs = dataset.filter(folders=folder)
         bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
         list_folders.append(bibtexs_folders)
 
