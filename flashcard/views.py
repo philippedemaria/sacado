@@ -61,8 +61,8 @@ def list_my_flashpacks(request):
         list_folders.append(flash_folders)
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
- 
-    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups })
+    nb_archive = teacher.flashpacks.filter(  is_archive=1).count()
+    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups , 'nba' : nb_archive  })
 
  
 
