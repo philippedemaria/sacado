@@ -14,7 +14,7 @@
 
 
 {% block page_title %}
-    <i class="fa fa-money" style="color:{{ flashpack.color}}"></i>  Flashpack <img width="25px" src="{% static 'img/angle-right.png' %}"/>
+    <i class="fa fa-money" style="color:{{ flashpack.color}}"></i>  {{ flashpack.title }} <img width="25px" src="{% static 'img/angle-right.png' %}"/>
  
 {% endblock %}
 
@@ -22,7 +22,7 @@
 {% block page_menu_right %}
 
     {% if request.user.user_type == 2 %}
-    <a href="{% url 'my_flashpacks' %}" class="btn btn-new">Mes flashpack</a>
+    <a href="{% url 'my_flashpacks' %}" class="btn btn-new-violet">Mes flashpack</a>
     {% else %}
     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
     {% endif %}
