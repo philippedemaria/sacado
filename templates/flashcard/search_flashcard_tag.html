@@ -5,15 +5,15 @@
 <div class="contenair_search_flashcard" id="contenair_search_flashcard{{ flashcard.id }}">
 
     <div id="answer{{ flashcard.id }}" class="flashcard_div no_visu_on_load">
-        {{ flashcard.answer }}
+        {{ flashcard.answer|safe }}
     </div>
     {% if flashcard.helper %}
     <div id="helper{{ flashcard.id }}" class="flashcard_div no_visu_on_load">
-        {{ flashcard.helper }}
+        {{ flashcard.helper|safe }}
     </div>
     {% endif %}
     <div class="contenair_flashcard">
-        {{ flashcard.question }}
+        {{ flashcard.question|safe }}
     </div>
 
     <div class="label_flashcard">

@@ -18,7 +18,7 @@
 
 {% block page_title %}
     <i class="fa fa-money"></i>   
-    {{ flashpack }} <span class="helper_tip"> 
+    <a href="{% url 'show_flashpack' flashpack.id %}" >{{ flashpack }} <span class="helper_tip"> 
                         <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text"> 
                             
@@ -29,7 +29,7 @@
                                     {% for t in flashpack.themes.all %}{{ t.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
                            
                         </div> 
-                    </span>
+                    </span></a>
 
 
     <img src="{% static 'img/angle-right.png' %}" width="25px"/> 

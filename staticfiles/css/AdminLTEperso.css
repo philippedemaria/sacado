@@ -1001,7 +1001,6 @@ label {
     overflow: hidden ;
     position: relative;
     border-radius: 5px;
-  background-image: url('/static/img/flashcard.jpg')
 }
 .contenair_flashcard{
     height: 185px;
