@@ -63,24 +63,17 @@
  
         <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
-                {{  flashpack.relationtex.nb_exotexs }} exercices dont {{ flashpack.relationtex.nb_exotexs_published }} publié{{ flashpack.relationtex.nb_exotexs_published|pluralize }} {% if    flashpack.relationtex.care %} 
-                <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}  
+                {{  flashpack.flashpacks.count }} flashcards   
             </div>
         </div>
 
         <div class="row extend"> 
-            <div class="col-lg-4 col-xs-4">
-                <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
+            <div class="col-lg-6 col-xs-6">
+                <a href="{% url 'show_flashpack' flashpack.id  %}" class="edit" target="_blank"  ><i class="fa fa-fw fa-play"></i> <span class="label_icon">lancer</span></a> 
             </div>
-            <div class="col-lg-4 col-xs-4">
-
-                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
+             <div class="col-lg-6 col-xs-6">
+                <a href="{% url 'clone_flashpack' flashpack.id  %}" class="edit" ><i class="fa fa-fw fa-clone"></i> <span class="label_icon">Récupérer</span>  </a> 
             </div>
-            <div class="col-lg-4 col-xs-4">
-             
-                <a  href="{% url 'exercise_flashpack_results' flashpack.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if flashpack.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
-            
-            </div> 
  
         </div>
 

@@ -83,7 +83,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             console.log(subject_id  ) ;
-            url= "ajax_search_flashcard" ; 
+            url= "ajax_search_flashpack" ; 
 
 
             if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
@@ -103,7 +103,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     url: url,
                     success: function (data) {
  
-                        $('#content_exercises').html("").html(data.html);
+                        $('#content_flashpack').html("").html(data.html);
                         $("#loader").html(""); 
                         
                         }
@@ -170,10 +170,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     'flashpack_id': flashpack_id,
                     csrfmiddlewaretoken: csrf_token
                 },
-                url : "ajax_search_flashcard" ,
+                url : "ajax_search_flashpack" ,
                 success: function (data) {
 
-                    $("#my_biblio").html(data.html) ;
+                    $("#content_flashpack").html(data.html) ;
 
                 }
             }
@@ -208,7 +208,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 url : "ajax_search_flashcard" ,
                 success: function (data) {
 
-                    $("#my_biblio").html(data.html) ;
+                    $("#content_flashpack").html(data.html) ;
 
                 }
             }
@@ -218,7 +218,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-    $('body').on('click', '.get_flashcard' , function (event) {
+    $('body').on('click', '.get_flashpack' , function (event) {
 
  
         let flashpack_id = $("#flashpack_id").val();

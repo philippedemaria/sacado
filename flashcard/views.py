@@ -12,7 +12,7 @@ from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from qcm.views import  get_teacher_id_by_subject_id
 from group.models import Group 
-from socle.models import Level, Waiting , Knowledge
+from socle.models import Level, Waiting , Knowledge , Theme
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
@@ -75,8 +75,6 @@ def my_flashpack_archives(request):
     dataset = teacher.flashpacks.filter(is_archive=1)
     flashpacks = dataset.filter(folders=None)
     flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
-
-    print(flashpacks_folders)
 
     list_folders = list()
     for folder in flashpacks_folders :
@@ -397,7 +395,7 @@ def ajax_level_flashcard(request):
     return JsonResponse(data)
 
 
-def ajax_search_flashcard(request):
+def ajax_search_flashpack(request):
 
     teacher = request.user.teacher
     data = {}
@@ -408,9 +406,9 @@ def ajax_search_flashcard(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if request.user.is_superuser :
-        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
+        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
     else :
-        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(exotexs = None ,teacher=teacher).order_by('level','ranking')
+        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(flashcards = None ,teacher=teacher).order_by('level','ranking')
 
     keywords = request.POST.get('keywords',None)
 
@@ -421,41 +419,45 @@ def ajax_search_flashcard(request):
         if len(theme_ids) > 0 :
 
             if theme_ids[0] != '' :
-                themes_tab = []
-
-                for theme_id in theme_ids :
-                    themes_tab.append(theme_id) 
-
+                flashpacks = set()
                 if keywords :
-                    bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 
-                                                        exotexs__knowledge__theme__in = themes_tab,  teacher__user__school = teacher.user.school,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    for theme_id in theme_ids :
+                        theme = Theme.objects.get(pk = theme_id)
+                        fs = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__school = teacher.user.school) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 
+                                                              teacher__user__school = teacher.user.school,  levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        flashpacks.update(fs)
+
                 else :
-                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                            exotexs__knowledge__theme__in = themes_tab, levels =level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    for theme_id in theme_ids :
+                        theme = Theme.objects.get(pk = theme_id)
+                        fs =  Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        flashpacks.update(fs)
+
                     
             else :
                 if keywords :            
-                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exotexs__content__icontains = keywords),is_share = 1,  
+                    flashpacks = Flashpack.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)    ,is_share = 1,  
                                                             teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
                 else :
-                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                    flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
                                                             levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
         else :
             if keywords:
-                bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exotexs__content__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,
+                flashpacks = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   ,teacher__user__school = teacher.user.school,is_share = 1,
                                                         levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
             else :
-                bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
                                                         levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
     else :
         if keywords:
-            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1 ,  exotexs__content__icontains = keywords ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+            flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
         else :
-            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+            flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+ 
 
-    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
+    data['html'] = render_to_string('flashcard/ajax_list_flashpacks.html', {'flashpacks' : flashpacks, 'teacher' : teacher ,  })
  
     return JsonResponse(data)
 

@@ -1,0 +1,23 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<div class="col-xs-12">
+	{% for flashpack in flashpacks %}
+	    {% include 'flashcard/get_flashpack_tag.html' %}
+	{% empty %}
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="alert alert-warning">Aucun résultat ne correspond à votre recherche.</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+
+<div style="clear: both;">
+<script>
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+ 
+

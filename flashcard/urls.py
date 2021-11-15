@@ -11,7 +11,7 @@ urlpatterns = [
     path('show_flashpack/<int:id>', show_flashpack, name='show_flashpack'), 
     path('clone_flashpack/<int:id>', clone_flashpack, name='clone_flashpack'),
     path('my_flashpack_archives', my_flashpack_archives, name='my_flashpack_archives'),
-    
+
     path('flashpack_peuplate/<int:id>', flashpack_peuplate, name='flashpack_peuplate'),
 
     path('set_flashcards_to_flashpack/<int:id>', set_flashcards_to_flashpack, name='set_flashcards_to_flashpack'),   
@@ -34,7 +34,7 @@ urlpatterns = [
     path('ajax_charge_parcours_without_folder', ajax_charge_parcours_without_folder, name='ajax_charge_parcours_without_folder'),
     path('ajax_charge_groups_level', ajax_charge_groups_level, name='ajax_charge_groups_level'),
 
-    path('ajax_search_flashcard', ajax_search_flashcard, name='ajax_search_flashcard'),   
+    path('ajax_search_flashpack', ajax_search_flashpack, name='ajax_search_flashpack'),   
 
     path('ajax_set_flashcard_in_flashpack', ajax_set_flashcard_in_flashpack, name='ajax_set_flashcard_in_flashpack'),  
 
