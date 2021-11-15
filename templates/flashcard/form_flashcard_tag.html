@@ -48,28 +48,9 @@
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-8">
-            <div class="exotex flashcard_helper">
+        <div class="col-sm-12 col-md-12">
                 {{ form.question|add_class:"formulaire" }}
                 {{ form.question.errors }}             
-            </div>  
-        </div>
-        <div class="col-sm-12 col-md-4">
-            <div class="form-group">
-                <label>Fichier image ? (optionnel)</label>
-                {{ form.imagefile|add_class:"form-control btn btn-default" }} 
-                {{ form.imagefile.errors }}
-            </div>
-            <div class="form-group">
-                <label>Fichier audio ? (optionnel)</label>
-                {{ form.audio|add_class:"form-control btn btn-default" }} 
-                {{ form.audio.errors }}
-            </div>
-            <div class="form-group">
-                <label>Fichier vidéo ? (optionnel)</label>
-                {{ form.video|add_class:"form-control btn btn-default" }} 
-                {{ form.video.errors }}
-            </div>
         </div>
     </div>
     <div class="row">
@@ -78,28 +59,9 @@
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-8">
-            <div class="exotex flashcard_helper">
-                {{ form.answer|add_class:"formulaire" }}
-                {{ form.answer.errors }}   
-            </div>  
-        </div>
-        <div class="col-sm-12 col-md-4">
-            <div class="form-group">
-                <label>Fichier image ? (optionnel)</label>
-                {{ form.imagefileanswer|add_class:"form-control btn btn-default"}}
-                {{ form.imagefileanswer.errors }}
-            </div>
-            <div class="form-group">
-                <label>Fichier audio ? (optionnel)</label>
-                {{ form.audioanswer|add_class:"form-control btn btn-default"}}
-                {{ form.audioanswer.errors }}
-            </div>
-            <div class="form-group">
-                <label>Fichier vidéo ? (optionnel)</label>
-                {{ form.videoanswer|add_class:"form-control btn btn-default"}}
-                {{ form.videoanswer.errors }}
-            </div>
+        <div class="col-sm-12 col-md-12">
+            {{ form.answer|add_class:"formulaire" }}
+            {{ form.answer.errors }}    
         </div>
     </div>
     <div class="row">
@@ -109,27 +71,8 @@
     </div>
     <div class="row">  
         <div class="col-sm-12 col-md-8">
-            <div class="exotex flashcard_helper" >
-                {{ form.helper|add_class:"formulaire" }}
-                {{ form.helper.errors }}   
-            </div>  
-        </div>
-        <div class="col-sm-12 col-md-4">
-            <div class="form-group">
-                <label>Fichier image ? (optionnel)</label>
-                {{ form.imagefilehelper|add_class:"form-control btn btn-default"}} 
-                {{ form.imagefilehelper.errors }}
-            </div>
-            <div class="form-group">
-                <label>Fichier audio ? (optionnel)</label>
-                {{ form.audiohelper|add_class:"form-control btn btn-default"}} 
-                {{ form.audiohelper.errors }}
-            </div>
-            <div class="form-group">
-                <label>Fichier vidéo ? (optionnel)</label> 
-                {{ form.videohelper|add_class:"form-control btn btn-default"}} 
-                {{ form.videohelper.errors }}
-            </div>
+            {{ form.helper|add_class:"formulaire" }}
+            {{ form.helper.errors }}   
         </div>
     </div>
     <div class="row">

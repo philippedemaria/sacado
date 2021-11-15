@@ -1,0 +1,38 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+<div class="contenair_search_flashcard" id="contenair_search_flashcard{{ flashcard.id }}">
+
+    <div id="answer{{ flashcard.id }}" class="flashcard_div no_visu_on_load">
+        {{ flashcard.answer }}
+    </div>
+    {% if flashcard.helper %}
+    <div id="helper{{ flashcard.id }}" class="flashcard_div no_visu_on_load">
+        {{ flashcard.helper }}
+    </div>
+    {% endif %}
+    <div class="contenair_flashcard">
+        {{ flashcard.question }}
+    </div>
+
+    <div class="label_flashcard">
+        <div data-statut="show_answer" data-flashcard_id="{{ flashcard.id }}" class="bottom_flashcard">
+            Réponse
+        </div>
+        {% if flashcard.helper %}
+        <div data-statut="show_helper" data-flashcard_id="{{ flashcard.id }}" class="bottom_flashcard">
+            Aide
+        </div>
+        {% endif %}
+        {% if get_flashcard %}
+        <div class="get_flashcard" data-statut="false" data-flashcard_id="{{ flashcard.id }}">
+            <i class="fa fa-plus-square"></i>
+        </div>
+        {% else %}
+        <div class="get_flashcard" data-statut="true" data-flashcard_id="{{ flashcard.id }}">
+            <i class="fa fa-minus-square"></i>
+        </div>
+        {% endif %}
+    </div>    
+</div>

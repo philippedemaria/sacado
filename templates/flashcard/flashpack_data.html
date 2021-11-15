@@ -21,17 +21,18 @@
     {% endwith  %}
 
     <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Ajouter des flashcards" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>
-
-
-
 </td>  
 <td  style="width:20px;">
  
         <a href="{% url 'update_flashpack' flashpack.id  %}"  > <i class="fa fa-edit  fa-xs"></i></a>
 
 
-        <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer des flashcards" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>
- 
+        <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer des flashcards" class="helper_tip" ><i class="fa fa-plus-square"></i></a>
+</td>
+<td style="position:relative">
+    {% for p in  flashpack.parcours.all  %}
+        <small>{{ p.title }} <small>({{ p.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+    {% endfor %}
 </td>
 <td style="position:relative">
     <span id="new_group_affected{{ flashpack.id}}">

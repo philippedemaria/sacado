@@ -340,12 +340,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-    $('body').on('change', '.selector_exotex' , function (event) {
+    $('body').on('click', '.get_flashcard' , function (event) {
 
  
         let flashpack_id = $("#flashpack_id").val();
-        let exotex_id = $(this).data("exotex_id");
-        let statut = $(this).data("statut");
+        let flashcard_id = $(this).data("flashcard_id");
+        let statut = $(this).data("statut");   
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
         $.ajax(
@@ -354,18 +354,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 dataType: "json",
                 traditional: true,
                 data: {
-                    'flashpack_id': flashpack_id, 
-                    'exotex_id'   : exotex_id,
+                    'flashpack_id' : flashpack_id, 
+                    'flashcard_id' : flashcard_id,
+                    'statut'       : statut,
                     csrfmiddlewaretoken: csrf_token
                 },
-                url : "../ajax_set_exotex_in_flashpack" ,
+                url : "../ajax_set_flashcard_in_flashpack" ,
                 success: function (data) {
 
-                    $("#selected_exotex"+exotex_id).addClass(data.class) ;
-                    $("#selected_exotex"+exotex_id).removeClass(data.noclass) ;
-                    $("#selected_exotex"+exotex_id).attr("data-statut",data.statut) ;
-
-
+                    $("#contenair_search_flashcard"+flashcard_id).remove() ;
+                    $("#nb_flashcards").html(data.nb);
                 }
             }
         )
@@ -373,38 +371,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-    $('body').on('click', '.action_exotex',   function (event) {
+    $('body').on('click', '.bottom_flashcard',   function (event) { 
 
-        let relationtex_id = $(this).data("relationtex_id");
-        let action = $(this).data("action");
-        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-        if (action == "print") { url = "../ajax_print_exotex" ; label ="print_exotex" ; }
-        else if (action == "results") { url = "../ajax_results_exotex" ; label ="results_exotex" ;  }
-        else if (action == "print_flashpack") { url = "../ajax_print_flashpack"  ; label ="print_flashpack" ; }
-        else if (action == "students") { url = "../ajax_individualise_exotex" ; label ="individualise_exotex" ;  }
-        else if (action == "print_flashpack_out") { url = "ajax_print_flashpack"  ; label ="print_flashpack" ; }
+        let flashcard_id = $(this).data("flashcard_id");
+        let statut = $(this).data("statut");
+
  
-
-        $("#"+label+"_id").val(relationtex_id) ;
-
-        $.ajax(
-            {
-                type: "POST",
-                dataType: "json",
-                traditional: true,
-                data: {
-                    'relationtex_id'   : relationtex_id,
-                    csrfmiddlewaretoken: csrf_token
-                },
-                url : url ,
-                success: function (data) {
-                    
-                    $("#"+label+"_title").html(data.title) ;
-                    $("#"+label+"_body").html(data.html) ;
-                }
-            }
-        )
+        if (statut == "show_answer") {  $("#answer"+flashcard_id).removeClass("no_visu_onload"); $("#answer"+flashcard_id).toggle(500);$("#helper"+flashcard_id).hide(500);  }
+        if (statut == "show_helper") {  $("#helper"+flashcard_id).removeClass("no_visu_onload"); $("#helper"+flashcard_id).toggle(500);$("#answer"+flashcard_id).hide(500);  }
+       
     });
 
 

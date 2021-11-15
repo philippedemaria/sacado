@@ -35,26 +35,13 @@ class Flashcard(models.Model):
     """
     title         = models.CharField(max_length=255, default='', verbose_name="Titre")
 
-    question      = models.TextField(max_length=255, default='',  verbose_name="Question écrite")
+    question      = RichTextUploadingField( default='',  verbose_name="Question écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
-    answer        = models.TextField(max_length=255, default='',  verbose_name="Réponse attendu")
-    helper        = models.TextField(max_length=255, null = True,   blank=True, verbose_name="Aide proposée")
+    answer        = RichTextUploadingField( default='',  verbose_name="Réponse attendu")
+    helper        = RichTextUploadingField( null = True,   blank=True, verbose_name="Aide proposée")
 
     size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
-
-    imagefile   = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
-    audio      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
-    video      = models.FileField( default='',  blank=True, verbose_name="Vidéo intégrée")
-
-    imagefileanswer  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
-    audioanswer      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
-    videoanswer      = models.FileField( default='',  blank=True, verbose_name="Vidéo intégrée")
-
-    imagefilehelper  = models.ImageField(upload_to=flashcard_directory_path, blank=True, verbose_name="Image", default="")
-    audiohelper      = models.FileField(upload_to=flashcard_directory_path, blank=True, verbose_name="Audio", default="")
-    videohelper      = models.FileField( default='',  blank=True, verbose_name="Vidéo intégrée")
-
 
     duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 

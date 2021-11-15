@@ -18,8 +18,22 @@
 
 {% block page_title %}
     <i class="fa fa-money"></i>   
-    {{ flashpack }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
-    <small>Ajouter des flashcards </small>
+    {{ flashpack }} <span class="helper_tip"> 
+                        <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text"> 
+                            
+                                    {{ flashpack.subject.name }}, 
+                         
+                                    {% for l in flashpack.levels.all %}{{ l.name }}{% if not forloop.last%}, {% endif %}{% endfor %},
+                           
+                                    {% for t in flashpack.themes.all %}{{ t.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
+                           
+                        </div> 
+                    </span>
+
+
+    <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
+    <small>Ajouter des flashcards <img src="{% static 'img/angle-right.png' %}" width="20px"/>  <small><span id="nb_flashcards">{{ flashpack.flashcards.count }}</span> flashcards</small></small>
 {% endblock %}
 
 
@@ -37,25 +51,7 @@
   
      
 <section class="content_main">
-    <div class="col-sm-12 col-md-12 alert alert-warning">
-        <div class="col-sm-2 col-md-2">
-            {{ flashpack.subject.name }}
-        </div>
-        <div class="col-sm-5 col-md-5">
-            {% for l in flashpack.levels.all %}{{ l.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
-        </div>
-        <div class="col-sm-5 col-md-5">
-            {% for t in flashpack.themes.all %}{{ t.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
-        </div>
-    </div>
-
-
-
-
-
-
-
-
+    <div class="row">
     <div class="col-sm-12 col-md-12">
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %}
@@ -123,9 +119,8 @@
                     </div>
                     <div id="content_exercises" class="list_choice_bibliotex"> 
                         {% for flashcard in flashcards %}
-                            {% include 'flashcard/flashcard_tag.html' %}
+                            {% include 'flashcard/search_flashcard_tag.html' %}
                         {% endfor %}
-
                         <div style="clear: both;"> 
                     </div>
                 </div>
@@ -135,6 +130,8 @@
 
         </form>
     </div>
+    </div>
+
 </section>  
 
 

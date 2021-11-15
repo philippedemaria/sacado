@@ -312,36 +312,35 @@ def ajax_level_flashcard(request):
     teacher = request.user.teacher 
     data = {}
 
-
     base = Flashcard.objects.filter(subject_id= subject_id).exclude(flashpacks=flashpack)
 
     if theme_ids :  
-   
-        if level_id and theme_ids[0] != "" and waiting_id  : 
+        if level_id and theme_ids[0] != "" and waiting_id and not keyword : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level , theme__in= theme_ids, waiting = waiting ).order_by("theme","waiting" )
 
-        elif level_id  and waiting_id  : 
+        elif level_id  and waiting_id and not keyword  : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level ,  waiting = waiting, ).order_by("theme","waiting" )
 
-        elif level_id and theme_ids[0] != ""  : 
+        elif level_id and theme_ids[0] != "" and not keyword  : 
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level , theme__in= theme_ids ).order_by("theme","waiting" )
 
-
-        elif theme_ids[0] != ""    : 
+        elif theme_ids[0] != ""  and not keyword   : 
             flashcards = base.filter(  theme__in= theme_ids).order_by("theme","waiting" )
 
      
         elif keyword and theme_ids[0] != ""   : 
             flashcards =  base.filter(Q(title__contains= keyword )|Q(question__contains= keyword ),  theme__in= theme_ids ).order_by("theme","waiting" )
+        
+        elif keyword : 
+            flashcards =  base.filter(Q(title__contains= keyword )|Q(question__contains= keyword )  ).order_by("theme","waiting" )
         else :
             flashcards = base
     else :
- 
         if level_id and  waiting_id  : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
@@ -351,7 +350,6 @@ def ajax_level_flashcard(request):
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter(Q(title__contains= keyword )|Q(question__contains= keyword ), levels = level  ).order_by("theme","waiting" )
 
-
         elif keyword and waiting_id  : 
             waiting = Waiting.objects.get(pk=waiting_id)
             flashcards =  base.filter(Q(title__contains= keyword)|Q(question__contains= keyword),waiting = waiting ).order_by("theme","waiting" )
@@ -359,8 +357,7 @@ def ajax_level_flashcard(request):
         else :
             flashcards = base
 
-
-    data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'flashpack_id': flashpack_id , 'flashcards': flashcards , "teacher" : teacher})
+    data['html'] = render_to_string('flashcard/ajax_list_flashcards.html', { 'flashpack_id': flashpack_id , 'flashcards': flashcards , "teacher" : teacher, "get_flashcard" : True})
 
     return JsonResponse(data)
 
@@ -371,6 +368,29 @@ def ajax_level_flashcard(request):
 #           AJAX 
 ######################################################################################
 ######################################################################################
+
+
+
+
+@csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
+def ajax_set_flashcard_in_flashpack(request):  
+
+    flashpack_id = request.POST.get("flashpack_id")
+    flashcard_id = request.POST.get("flashcard_id")
+    statut = request.POST.get("statut")
+    flashpack = Flashpack.objects.get(pk = flashpack_id)
+    flashcard = Flashcard.objects.get(pk = flashcard_id)
+    data = {}
+
+    if statut=="true" or statut == "True":
+        flashpack.flashcards.remove(flashcard)
+    else:
+        flashpack.flashcards.add(flashcard)
+
+    data["nb"] = flashpack.flashcards.count()
+    return JsonResponse(data)
+
+
 
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_sharer_parcours(request):  

@@ -46,7 +46,7 @@
                 <div class="quizz_list_question">
                     <ul id="questions_sortable_list">
                         {% for flashcard in flashcards %}
-                            {% include 'flashcard/list_of_flashcards.html' %}
+                            {% include 'flashcard/flashcard_for_search.html' %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -54,7 +54,7 @@
 
             <div class="question_bank" >
                 {% if sacado_asso %}
-                <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-quizz_bank" >Banque de flashcards</a> 
+                <a href="{% url 'flashpack_peuplate' flashpack.id %}"  class="btn btn-quizz_bank" >Banque de flashcards</a> 
                 {% else %}
                 <a href="#" class="btn btn-quizz_bank no_sacado" title="Version Etablissement requise" >Banque de flashcards</a> 
                 {% endif %}                

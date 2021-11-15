@@ -35,7 +35,7 @@ urlpatterns = [
 
     path('ajax_level_flashcard', ajax_level_flashcard, name='ajax_level_flashcard'),   
 
-
+    path('ajax_set_flashcard_in_flashpack', ajax_set_flashcard_in_flashpack, name='ajax_set_flashcard_in_flashpack'),  
 
 
 

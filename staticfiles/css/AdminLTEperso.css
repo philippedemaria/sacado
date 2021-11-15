@@ -476,7 +476,7 @@ li label{
 
 .list_choice_bibliotex{
   margin-top: 5px;
-  background-color: #f1eef7;
+  /*background-color: #f1eef7;*/
   padding: 0px  0px 10px 10px;
 }
 
@@ -987,8 +987,78 @@ label {
     font-size:2em;
     /*background-color: #f1eef7;*/
 }
- 
- 
+
+.contenair_search_flashcard{
+    float: left;
+    margin: 25px 25px 25px 0px ;
+    -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    position:relative;
+    border : 1px solid #e6e2dd; 
+    height: 220px;
+    width: 350px;
+    background-color: #FFF;
+    overflow: hidden ;
+    position: relative;
+  background-image: url('/static/img/flashcard.jpg')
+}
+.contenair_flashcard{
+    height: 200px;
+    padding: 15px;
+    width : 350px;
+
+}
+
+.flashcard_div{
+  position: absolute;
+  height : 200px;
+  width : 350px;
+  padding: 15px;
+  background-color: #f1eef7;  
+}
+
+
+
+.label_flashcard{ 
+    font-variant: small-caps;
+    font-size: 14px;
+    width:350px ;   
+    text-align: center;    
+    background-color: #5d4391;
+}
+
+.bottom_flashcard{
+    float :left ;
+    width: 135px;
+    background-color: #5d4391;
+    cursor: pointer;
+    color:#FFF;
+    padding-top: 1px ;
+    padding-bottom: 2px ;
+}
+
+.get_flashcard{
+    padding-top: 3px ;
+    padding-bottom: 2px ;
+    float :left ;
+    width:80px ;
+    cursor: pointer;
+    background-color: #5d4391;
+    color:#FFF;
+}
+
+.contenair_search_flashcard::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.contenair_search_flashcard::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.contenair_search_flashcard::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+} 
 /******************************************** real_time_live  **************************************/
 
 .no_live{
