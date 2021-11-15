@@ -34,11 +34,11 @@ urlpatterns = [
     path('ajax_charge_parcours_without_folder', ajax_charge_parcours_without_folder, name='ajax_charge_parcours_without_folder'),
     path('ajax_charge_groups_level', ajax_charge_groups_level, name='ajax_charge_groups_level'),
 
-    path('ajax_level_flashcard', ajax_level_flashcard, name='ajax_level_flashcard'),   
+    path('ajax_search_flashcard', ajax_search_flashcard, name='ajax_search_flashcard'),   
 
     path('ajax_set_flashcard_in_flashpack', ajax_set_flashcard_in_flashpack, name='ajax_set_flashcard_in_flashpack'),  
 
-
+    path('ajax_level_flashcard', ajax_level_flashcard, name='ajax_level_flashcard'),   
 
     path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'),
     path('ajax_publish_list_flashpack', ajax_publish_list_flashpack, name='ajax_publish_list_flashpack'),

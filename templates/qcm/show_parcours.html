@@ -184,6 +184,17 @@ body{
 
 
 
+    {% if parcours.flashpacks.count > 0  %}  
+        <div class="row documents_div documents_div_shadow">           
+            <div class="col-sm-12 col-md-12">
+                <h1 class="thin">Les flashpacks   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.flashpacks.count }} flashpacks</span></h1>
+                {% for flashpack in parcours.flashpacks.all  %}
+                    {% include 'flashcard/flashpack_tag.html' %}
+                {% endfor %}
+            </div> 
+            <div class="shadow_bottom"></div>
+        </div>  
+    {% endif %} 
 {% endif %} 
 
 

@@ -31,15 +31,13 @@ from datetime import datetime , timedelta
 from general_fonctions import *
  
 
-
-
-
+ 
 
 def list_flashpacks(request):
-
+    teacher = request.user.teacher
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     flashpacks = Flashpack.objects.all()
-    return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'communications' : [] , })
+    return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
 
 
  
@@ -148,7 +146,12 @@ def update_flashpack(request, id):
                 group = Group.objects.get(pk = group_id)
                 nf.levels.add(group.level)
             messages.success(request, 'Le flashpack a été modifié avec succès !')
-            return redirect('set_flashcards_to_flashpack' , nf.id)
+            if request.POST.get("exercices",None) :
+                return redirect('set_flashcards_to_flashpack' , nf.id)
+            else :
+                return redirect('my_flashpacks')
+
+
         else:
             print(flashpack_form.errors)
 
@@ -212,6 +215,7 @@ def set_flashcards_to_flashpack(request, id):
 
             messages.success(request, 'La flashcard a été ajoutée avec succès !')
             return redirect('set_flashcards_to_flashpack' ,  id)
+
         else:
             print(form.errors)
 
@@ -393,6 +397,68 @@ def ajax_level_flashcard(request):
     return JsonResponse(data)
 
 
+def ajax_search_flashcard(request):
+
+    teacher = request.user.teacher
+    data = {}
+
+    level_id = request.POST.get('level_id',0)
+    subject_id = request.POST.get('subject_id',None)
+
+    teacher_id = get_teacher_id_by_subject_id(subject_id)
+
+    if request.user.is_superuser :
+        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
+    else :
+        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(exotexs = None ,teacher=teacher).order_by('level','ranking')
+
+    keywords = request.POST.get('keywords',None)
+
+    if int(level_id) > 0 :
+        level = Level.objects.get(pk=int(level_id))
+        theme_ids = request.POST.getlist('theme_id',[])
+
+        if len(theme_ids) > 0 :
+
+            if theme_ids[0] != '' :
+                themes_tab = []
+
+                for theme_id in theme_ids :
+                    themes_tab.append(theme_id) 
+
+                if keywords :
+                    bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 
+                                                        exotexs__knowledge__theme__in = themes_tab,  teacher__user__school = teacher.user.school,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                else :
+                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                            exotexs__knowledge__theme__in = themes_tab, levels =level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    
+            else :
+                if keywords :            
+                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exotexs__content__icontains = keywords),is_share = 1,  
+                                                            teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+
+                else :
+                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                            levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+
+        else :
+            if keywords:
+                bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exotexs__content__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,
+                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+            else :
+                bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+    else :
+        if keywords:
+            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1 ,  exotexs__content__icontains = keywords ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+        else :
+            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+
+    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
+ 
+    return JsonResponse(data)
+
 
 ######################################################################################
 ######################################################################################
@@ -530,7 +596,7 @@ def ajax_is_favorite(request):
 
 
 
-def  ajax_chargethemes(request):
+def ajax_chargethemes(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
     teacher = request.user.teacher

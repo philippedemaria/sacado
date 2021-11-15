@@ -1,0 +1,93 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-flashpack-search']);
+    </script> 
+
+
+{% endblock %}
+
+{% block page_title %}
+    <i class="fa fa-money sacado_color_text"></i> Flashpacks mutualisés <img src="{% static 'img/angle-right.png' %}"/> 
+{% endblock %}
+
+
+{% block page_menu_right %}
+     <li> <a href="{% url 'my_flashpacks' %}"   class="btn btn-new-violet"> Mes flashpacks</a> </li>  
+{% endblock %}
+
+
+
+{% block body  %}  
+<section class="content_main"> 
+    <form action="" method="POST" enctype='multipart/form-data'> 
+        {% csrf_token %}
+        <div class="row alert search_bar" >
+     
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <div class="form-group">
+                    <select id="id_subject" name="subject" class="form-control select2">
+                        {% for s in teacher.subjects.all %}
+                            <option value="{{s.id}}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-10 col-md-3 col-lg-2">
+                <div class="form-group">
+                    <select id="id_level" name="level" class="form-control select2" >
+                        <option value=" ">Choisir un niveau</option>
+                        {% for l in teacher.levels.all %}
+                            <option value="{{l.id}}">{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-1 col-lg-1">
+                <div class="form-group" id="loading">
+                </div>
+            </div>
+
+            <div class="col-sm-10 col-md-3 col-lg-4">
+                <div class="form-group">
+                    <select id="id_theme" name="theme" class="form-control select2" multiple>
+                        <option value=" ">Choisir un niveau puis un thème</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" id="bibliotex_details">
+ 
+
+            <div class="col-sm-12 col-md-12">
+ 
+                <div style="height:50px"></div> 
+                Pour trouver des flashpack mutualisés, vous devez :                <div style="height:20px"></div>
+                <ol>Sélectionner une matière</ol>
+                <ol>Sélectionner un niveau</ol>
+                <ol>Sélectionner un thème</ol> 
+                <ol>ou choisir un mot clé</ol>
+            </div>
+
+        </div>
+
+  
+    </form>  
+</section>
+{% endblock  %}   

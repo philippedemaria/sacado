@@ -1,0 +1,100 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+           
+ 
+<div  class="box box-widget widget-user-2"  
+      style="cursor: move;{% if flashpack.vignette %}background-image: url('{{ flashpack.vignette.url }}'); background-size: cover; {% endif %}background-image: url('/static/img/flashpack.jpg');">
+    <div class="handler widget-user-header">
+        <!-- Add signet to folder -->
+ 
+
+ 
+
+
+ 
+
+
+
+        <span style="cursor:pointer" data-flashpack_id="{{flashpack.id }}" class="overlay_show white" >
+            <div id="disc{{flashpack.id }}" class="{% if not flashpack.is_publish %}
+                            disc_persistant
+                        {% else %}
+                            disc 
+                        {% endif %}" style="background-color:{% if flashpack.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                 <i class="fa fa-circle-o-notch"></i>
+            </div>
+        </span> 
+
+        <div class="overlay   no_visu_on_load" id="overlay_show{{flashpack.id }}"> 
+            <div class="overlay_expand">
+                <a href="#" data-flashpack_id="{{flashpack.id }}" class="overlay_show pull-right">
+                    <i class="fa fa-times"></i>
+                </a>
+                <div class="btn-group"  style="padding:0px;margin:0px;">
+                    <span style="cursor:pointer" class="btn btn-default btn-publisher publisher" id="publisher{{flashpack.id}}" 
+                            data-flashpack_id="{{flashpack.id}}" data-statut="{{flashpack.is_publish }}">  
+                        <i class="fa fa-circle-o-notch"></i>
+                    </span><span class="legend-btn legend-btn-{% if not flashpack.is_publish %}danger{% else  %}success{% endif  %} size15" id="flashpack_publisher{{flashpack.id}}" style="cursor:auto" >  
+                      {% if flashpack.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                    </span>
+                </div>
+                <br>
+                {% if flashpack.is_publish %}
+                <span class="text-success" id="accueil_text_color{{ flashpack.id }}">{% if flashpack.is_evaluation %}Cette évaluation{% else %}Cette flashpack{% endif %} <span id="accueil_visible{{flashpack.id }}">est</span> visible par vos élèves.</span>
+                {% else %}
+                <span class="text-danger" id="accueil_text_color{{ flashpack.id }}">{% if flashpack.is_evaluation %}Cette évaluation{% else %}Cette flashpack{% endif %} <span id="accueil_visible{{flashpack.id }}">n'est pas</span> visible par vos élèves.</span>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="box_title_vignette"> 
+            <a href="{% url 'show_flashpack' flashpack.id  %}"  style="color:{{ flashpack.color|contrast_color }};" >             
+                {% if flashpack.title|length > 26 %}
+                <span class="helper_tip" style=" font-size:16px;">{{ flashpack.title|truncatechars:"26" }}
+                    <div class="helper_tip_text_right" style="font-size:14px;">{{ flashpack.title }}</div>
+                </span>
+                {% elif flashpack.title|length > 22 %}
+                    {{ flashpack.title|truncatechars:"22"}}
+                {% else %}
+                    {{ flashpack.title}}
+                {% endif %}
+            </a>    
+        </div>
+    </div>
+
+    <!-- box-footer DES FONCTIONNALITES  -->
+
+
+
+    <div class="box-footer" style="position: relative; padding-top: 0px;">
+ 
+        <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
+            <div class="col-xs-12 col-md-12 col-lg-12"> 
+                {{  flashpack.relationtex.nb_exotexs }} exercices dont {{ flashpack.relationtex.nb_exotexs_published }} publié{{ flashpack.relationtex.nb_exotexs_published|pluralize }} {% if    flashpack.relationtex.care %} 
+                <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}  
+            </div>
+        </div>
+
+        <div class="row extend"> 
+            <div class="col-lg-4 col-xs-4">
+                <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
+            </div>
+            <div class="col-lg-4 col-xs-4">
+
+                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
+            </div>
+            <div class="col-lg-4 col-xs-4">
+             
+                <a  href="{% url 'exercise_flashpack_results' flashpack.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if flashpack.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+            
+            </div> 
+ 
+        </div>
+
+ 
+ 
+
+    </div>
+</div>    
