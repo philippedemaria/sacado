@@ -7,7 +7,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax_show_flashpack']);
+        require(['script/ajax-show_flashpack']);
     </script> 
 {% endblock %}
 
@@ -31,11 +31,81 @@
 
 
 
-
-
-
 {% block body %}
 <section class="content_main">
-    {% include 'flashcard/show_flashcard_tag.html' %}
+    <div class="wrapper_slider">
+  <!-- Wrapper for slides -->
+        <div class="slider">
+
+            <ul>
+                <li class="my_slide">
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:4em"> 
+                                {{ flashpack.title}} 
+                            </h1>
+                            <div style="text-align: left">
+                            <i class="fa fa-fw fa-database"></i> Vous devrez répondre aux {{ flashpack.flashcards.count }} cartes qui vont vous être présentées.<br/><br/>
+                            <i class="fa fa-fw fa-mortar-board"></i> Vous êtes seul juge de vos connaissances.<br/><br/>
+                            <i class="fa fa-fw fa-refresh"></i> Il vous appartient de jauger au mieux vos réponses pour avoir un retour le plus juste possible de vos acquis. <br/><br/>
+                            <i class="fa fa-fw fa-clock"></i> Le temps entre chaque question est chronométré pour vous donner une indication sur votre temps de réponse. <br/><br/><br/>
+                            </div>                            
+                            {% if flashpack.vignette %}<img src="{{ flashpack.vignette.url }}" width="350px"  />{% else %}<img src="{% static 'img/flashcard.jpg' %}" width="350px"  />{% endif %}
+
+                            <div style="text-align: right">
+                                <button data-nav="next" data-value="start" class="btn btn-primary nav"><i class="fa fa-fw fa-caret-right"></i> Démarrer</button>
+                            </div>   
+                        </div>
+                    </div> 
+                </li>
+ 
+                {% for flashcard in flashcards %}
+                <li class="my_slide">
+                    {% include 'flashcard/show_flashcard_tag.html' %}
+                </li>
+                {% endfor %}
+
+
+                <li class="my_slide">
+                    <input type="hidden" value="3" id="final_question" /> 
+                    <div class="row consigne_diapo"  align="center">  
+                        <div class="col-sm-12 col-md-12">
+                            <h1 style="font-size:4em" class="thin">
+                                <br/><br/>
+                                <b> -- FIN -- </b>
+                                <br/><br/>
+                                <br/><br/>
+                            </h1>
+                        </div>
+                    </div> 
+                </li>
+
+
+
+
+
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </section>
 {% endblock %} 

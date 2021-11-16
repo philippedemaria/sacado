@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
 
-from flashcard.models import Flashcard, Flashpack
+from flashcard.models import Flashcard, Flashpack , Answercard
 from flashcard.forms import FlashcardForm ,  FlashpackForm  
 from qcm.models import  Parcours, Exercise , Folder
 from account.decorators import  user_is_testeur
@@ -172,9 +172,14 @@ def delete_flashpack(request, id):
 
  
 def show_flashpack(request, id):
-    flashpack = Flashpack.objects.get(id=id)
-    context = {'flashpack': flashpack,   }
+
+    flashpack  = Flashpack.objects.get(id=id)
+
+    flashcards = list(flashpack.flashcards.all())
+
+    context = {'flashpack': flashpack, 'flashcards' : flashcards  }
     return render(request, 'flashcard/show_flashpack.html', context )
+
 
 
 def flashpack_peuplate(request, id):
@@ -241,8 +246,7 @@ def clone_flashpack(request, id):
 #           Flashcard
 ######################################################################################
 ######################################################################################
-
-
+ 
 def clone_flashcard(request, idf, id):
 
     flashpack = Flashpack.objects.get(id=idf)
@@ -467,6 +471,21 @@ def ajax_search_flashpack(request):
 #           AJAX 
 ######################################################################################
 ######################################################################################
+@csrf_exempt
+def ajax_store_score_flashcard(request):
+
+    flashpack_id = request.POST.get("flashpack_id")
+    flashcard_id = request.POST.get("flashcard_id") 
+    value        = request.POST.get("value") 
+
+    flashpack  = Flashpack.objects.get(id=flashpack_id)
+    flashcard  = Flashcard.objects.get(id=flashcard_id)
+    
+    if request.user.user_type == 0 :
+        Answercard.objects.create( flashpack = flashpack, flashcard = flashcard , weight = value , student = request.user.student )
+
+    data = {}
+    return JsonResponse(data)
 
 
 

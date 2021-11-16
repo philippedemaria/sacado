@@ -102,10 +102,11 @@ class Flashpack(models.Model):
 
 class Answercard(models.Model):
 
+    flashpack   = models.ForeignKey(Flashpack,  related_name="answercards",  on_delete=models.CASCADE, default='' ) 
     flashcard   = models.ForeignKey(Flashcard,  related_name="answercards",  on_delete=models.CASCADE ) 
     student     = models.ForeignKey(Student,  null=True, blank=True,   related_name='answercards', on_delete=models.CASCADE,  editable= False)
     weight      = models.PositiveIntegerField(default=0, editable= False)
-    is_correct  = models.BooleanField(default=0, editable=False) 
+ 
 
     def __str__(self):
         return self.student.user.last_name

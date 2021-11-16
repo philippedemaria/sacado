@@ -23,7 +23,7 @@ urlpatterns = [
     path('ajax_attribute_this_flashcard', ajax_attribute_this_flashcard, name='ajax_attribute_this_flashcard'),
     path('clone_flashcard/<int:idf>/<int:id>', clone_flashcard, name='clone_flashcard'),
 
-
+    path('ajax_store_score_flashcard', ajax_store_score_flashcard, name='ajax_store_score_flashcard'),
 
     path('ajax_chargethemes', ajax_chargethemes, name='ajax_chargethemes'),
     path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
@@ -45,5 +45,5 @@ urlpatterns = [
     path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'),
     path('ajax_is_favorite', ajax_is_favorite, name='ajax_is_favorite'),
 
-     
+
 ] 
