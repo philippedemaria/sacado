@@ -1573,7 +1573,7 @@ def list_sub_parcours_group_student(request,idg,idf):
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
 
 
-    quizzes = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_archive=0 , parcours=None) 
+    quizzes = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), groups = group , is_archive=0 , parcours=None) 
     bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , parcours=None)
 
     context = {'parcourses': parcourses , 'evaluations': evaluations , 'bibliotexs': bibliotexs ,  'quizzes': quizzes ,   'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
