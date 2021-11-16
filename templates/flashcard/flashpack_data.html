@@ -14,7 +14,7 @@
     </span>
 </td> 
 <td>
-    <a href="{% url 'show_flashpack' flashpack.id %}" title="Voir la biblioTex" >{{ flashpack.title }}</a>
+    <a href="{% url 'show_flashpack' flashpack.id %}" title="Voir le flashpack" >{{ flashpack.title }}</a>
     <br/> 
     {% with nbf=flashpack.flashcards.count %}    
         {{ nbf }} flashcard{{ nbf|pluralize }}
