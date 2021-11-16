@@ -28,7 +28,9 @@
         <div class="col-sm-12 col-md-3" id="offsethelper"></div>
         <div class="col-sm-12 col-md-6" align="center" id="data_buttons{{ flashcard.id }}"  >
             <br/>
+            {% if flashcard.helper   %}
             <button class="btn btn-default show_helper" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Aide </button>
+            {% endif %}
             <button class="btn btn-primary show_answer" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Réponse </button>
         </div>
 
