@@ -482,7 +482,12 @@ def ajax_store_score_flashcard(request):
     flashcard  = Flashcard.objects.get(id=flashcard_id)
     
     if request.user.user_type == 0 :
-        Answercard.objects.create( flashpack = flashpack, flashcard = flashcard , weight = value , student = request.user.student )
+        try :
+            answer = Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student ).last()
+            weight = answer.weight + (0.1-(5-value)*(0.08+(5-value)*0.02))
+        except :
+            weight = value
+        Answercard.objects.create( flashpack = flashpack, flashcard = flashcard , weight = weight , student = request.user.student )
 
     data = {}
     return JsonResponse(data)

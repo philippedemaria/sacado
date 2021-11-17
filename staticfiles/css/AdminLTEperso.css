@@ -399,6 +399,11 @@ border : 0px!important;
     background-color: #faf7fc;
 }
 
+.tr_edit {
+     color: #998fa6 ; /* #AAA; */
+     font-size: 16px;
+}
+
 .bg_white{
   background-color: white;
 }
@@ -2936,6 +2941,7 @@ a.surline:hover   {
   background-color: #cfbbd5;
 }
 
+ 
 .edit {
      color: #998fa6 ; /* #AAA; */
      font-size: 16px;

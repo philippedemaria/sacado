@@ -52,7 +52,11 @@ class FlashcardForm(forms.ModelForm):
 		audio_ = self.cleaned_data['audio']
 		validation_file(audio_) 
 		video_ = self.cleaned_data['video']
-		validation_file(video_) 
+		validation_file(video_)
+
+	def html(self) :
+		context = { "obj" :self ,}
+		return render_to_string("flashcard/form_flashcard_tag.html", context)
 
 
 

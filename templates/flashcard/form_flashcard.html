@@ -3,13 +3,8 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
-
-
 {% block require %}
- 
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
- 
-
 {% endblock %}
  
 
@@ -22,9 +17,6 @@
         <a href="{% url 'show_flashcard' flashcard.id %}">Voir la flashcard</a> 
    </small>
    {% endif  %}
-
-
-
 {% endblock %}
 
 
@@ -38,13 +30,10 @@
 <section class="content_list"> 
     <div class="row">
         <div class="col-sm-12 col-md-12" >  
- 
             {% include 'flashcard/form_flashcard_tag.html' %}
         </div>
     </div>
 </section>
-
- 
 {% endblock %} 
 
  
