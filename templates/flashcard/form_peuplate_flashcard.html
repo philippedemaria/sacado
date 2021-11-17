@@ -40,7 +40,7 @@
 
 {% block page_menu_right %}
      
- 
+    <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}"  class="btn btn-new-violet" > Nouvellle </a> 
     <a href="{% url 'my_flashpacks' %}"  class="btn btn-new-violet" > Mes flashpacks </a> 
 
 {% endblock %}
