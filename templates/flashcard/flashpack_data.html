@@ -17,7 +17,7 @@
     <a href="{% url 'show_flashpack' flashpack.id %}" title="Voir le flashpack" >{{ flashpack.title }}</a>
     <br/> 
     {% with nbf=flashpack.flashcards.count %}    
-        {{ nbf }} flashcard{{ nbf|pluralize }}
+        {{ nbf }} carte{{ nbf|pluralize }}
     {% endwith  %}
 
     <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Ajouter des flashcards" class="helper_tip" ><i class="fa fa-cloud"></i></a>
@@ -31,7 +31,7 @@
         {% else %}
             <span class="helper_tip"> 
                 <i class="fa fa-question-circle"></i> 
-                <div class="helper_tip_text" >Pour créer vos propres flaskcard, vous devez demander l'accès à l'équipe SACADO. </div>
+                <div class="helper_tip_text" >Pour créer vos propres cartes, vous devez demander l'accès à l'équipe SACADO. </div>
             </span>
         {% endif %}
 

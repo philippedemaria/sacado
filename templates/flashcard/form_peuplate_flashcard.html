@@ -40,7 +40,10 @@
 
 {% block page_menu_right %}
      
+    {% if request.user.is_extra or request.user.is_superuser %}
     <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}"  class="btn btn-new-violet" > Nouvelle carte</a> 
+    {% endif %}
+
     <a href="{% url 'my_flashpacks' %}"  class="btn btn-new-violet" > Mes flashpacks </a> 
 
 {% endblock %}
