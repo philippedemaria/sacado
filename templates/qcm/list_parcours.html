@@ -26,13 +26,8 @@
 
 
 {% block page_menu_right %}
-
-
- <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Archives ({{ nb_archive }})</a></li> 
- 
-        {% include 'qcm/submenu_creation_new_parcours.html' %}
-
-   
+    <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Archives ({{ nb_archive }})</a></li> 
+    {% include 'qcm/submenu_creation_new_parcours.html' %}
 {% endblock %}
 
 
@@ -46,10 +41,7 @@
 
 {% if nb_base > 0 %}
 <form action="{% url 'actioner_pef' %}" method="POST" enctype='multipart/form-data'>
-   
-
     {% csrf_token %}
-
             <div class="row">
                 <div class="col-xs-6 col-md-3 ">
                     <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
@@ -69,9 +61,11 @@
                         <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
                             <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
                                 <h4 class="panel-title">
-                                <a role="button" 
+                                <a role="button"  
+                                 class="actionner_accordion" 
                                  data-toggle="collapse" 
                                  data-parent="#accordion" 
+                                 data-loop ="{{ forloop.counter }}" 
                                  href="#collapse{{ forloop.counter }}" 
                                  aria-expanded="true" 
                                  aria-controls="collapse{{ forloop.counter }}">
@@ -85,7 +79,7 @@
 
 
 
-                                 {{ folder.title }} <i class="fa fa-angle-down"></i>
+                                 {{ folder.title }} <i class="fa fa-angle-down" id="collapser_angle{{ forloop.counter }}"></i>
                                  
                                  <span class="list_label list_subject">{{ folder.subject.shortname }}  </span>
 
@@ -124,28 +118,33 @@
                                             </tr> 
                                         </thead>
                                         <tbody>
-                                            {% for parcours in folder.parcours.all %}  
-                                                {% if not parcours.is_evaluation %}
-                                                    <tr>
-                                                           {% include 'qcm/list_parcours_folder_data.html' %}
+                                            {% for parcours in folder.parcours.all %}
 
-                                                    </tr>
-                                                {% endif %}  
-                                            {% endfor  %}               
+                                                {% block evaluations  %} 
+                                                    {% if not parcours.is_evaluation %}
+                                                        <tr>
+                                                            {% include 'qcm/list_parcours_folder_data.html' %}
+                                                        </tr>
+                                                    {% endif %}  
+                                                {% endblock  %}
+
+                                            {% endfor  %}
+
                                          </tbody>
                                     </table>
 
                                     <div class="row" style="margin-top:10px">
                                         <div class="col-sm-12 col-md-12">
-                     
-                                            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+                                            {% block inside_folder_actions %}
+                                            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/parcours')"> 
                                                 <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
                                             </button>
                            
 
-                                            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/fichiers')"> 
+                                            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/parcours')"> 
                                                 <i class="fa fa-trash"> </i>   Supprimer la sélection
                                             </button>
+                                            {% endblock  %}
                                         </div>
                                     </div>
 
@@ -204,12 +203,13 @@
                     </tr> 
                 </thead>
                 <tbody> 
+                {% block outside_folder %}
                 {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
                     <tr >
                        {% include 'qcm/list_parcours_data.html' %}
                     </tr>
                 {% endfor  %} 
-
+                {% endblock  %} 
                 </tbody>
             </table>
         </div>

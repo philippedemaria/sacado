@@ -60,7 +60,8 @@
                             <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
                                 <h4 class="panel-title">
                                 <a role="button" 
-                                 data-toggle="collapse" 
+                                 data-toggle="collapse" class="actionner_accordion" 
+                                 data-loop ="{{ forloop.counter }}"  
                                  data-parent="#accordion" 
                                  href="#collapse{{ forloop.counter }}" 
                                  aria-expanded="true" 
@@ -75,7 +76,7 @@
 
 
 
-                                 {{ parcours_course.parcours.title }} <i class="fa fa-angle-down"></i>
+                                 {{ parcours_course.parcours.title }} <i class="fa fa-angle-down"  id="collapser_angle{{ forloop.counter }}"></i>
 
                                  <span class="list_label list_subject">{{ parcours_course.parcours.subject.shortname }}  </span>
 

@@ -16,9 +16,54 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
            $(".messages").css('display', "none"); 
         }, 2000);
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        // ACTIONNER LA FLECHE DES ACCORDIONS
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        $('.actionner_accordion').on('click', function (event) {
+                let loop = $(this).data("loop") ; 
+                if  ($("#collapser_angle"+loop).hasClass("fa-angle-up"))
+                {
+                    AnimateRotate($("#collapser_angle"+loop) , 0);
+                    setTimeout( change_direction('bottom',loop) , 1000 ); 
+                }
+                else{
+                    AnimateRotate($("#collapser_angle"+loop) , 0) ;
+                    setTimeout( change_direction('top',loop) , 1000 );
+                }
+            });
 
+            function change_direction(sens,loop) {               
 
+                if (sens == 'top')
+                {
+                    $("#collapser_angle"+loop).addClass("fa-angle-up") ;    
+                    $("#collapser_angle"+loop).removeClass("fa-angle-down") ; 
+                }
+                else 
+                {
+                    $("#collapser_angle"+loop).removeClass("fa-angle-up") ; 
+                    $("#collapser_angle"+loop).addClass("fa-angle-down") ; 
+                }
+            }
 
+            function AnimateRotate($elem , angle) {
+                // we use a pseudo object for the animation
+                // (starts from `0` to `angle`), you can name it as you want
+                $({deg: 180}).animate({deg: angle}, {
+                    duration: 500,
+                    step: function(now) {
+                        // in the step-callback (that is fired each step of the animation),
+                        // you can use the `now` paramter which contains the current
+                        // animation-position (`0` up to `angle`)
+                        $elem.css({
+                            transform: 'rotate(' + now + 'deg)'
+                        });
+                    }
+                });
+            }
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

@@ -44,11 +44,12 @@
         <div class="col-md-12 col-xs-12">
             <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
-                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}" data-loop ="{{ forloop.counter }}" >
+                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}"   >
                         <h4 class="panel-title">
                         <a role="button" 
                          data-toggle="collapse" 
-                         data-parent="#accordion" 
+                         data-parent="#accordion" class="actionner_accordion" 
+                         data-loop ="{{ forloop.counter }}" 
                          href="#collapse{{ forloop.counter }}" 
                          aria-expanded="true" 
                          aria-controls="collapse{{ forloop.counter }}">
