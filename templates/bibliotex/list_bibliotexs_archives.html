@@ -17,9 +17,8 @@
 
 
 
-{% block archive %}
-<div class="row">
-    <div class="col-sm-12 col-md-12">
+{% block outside_folder_actions %}
+
         <button class="btn btn-default" name="action" value="unarchive" onclick="return TestArchive('ces quizz')"> 
             <i class="fa fa-archive"> </i>   Désarchiver la sélection
         </button>
@@ -27,6 +26,5 @@
             <i class="fa fa-trash"> </i>   Supprimer la sélection
         </button> 
         <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
-    </div>
-</div>
+
 {% endblock %}

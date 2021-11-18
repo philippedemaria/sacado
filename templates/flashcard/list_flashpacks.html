@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'list_modules.html' %}
 {% load static %}
 {% load item_tags %}
 {% load widget_tweaks %}
@@ -9,7 +9,6 @@
     <script>
         require(['script/ajax-flashpack']);
     </script> 
-
 {% endblock %}
 
 
@@ -31,168 +30,90 @@
             <a href="#"  class="no_sacado_asso" >{% if not is_archive %}<i class="fa fa-archive"></i>{% endif %} Mes flashpacks {% if not is_archive %}archivés{% endif %}</a> 
         {% endif %} 
     </li>
-    
     {% include 'flashcard/submenu_creation_flashpack.html' %}
-
 {% endblock %}
 
 
 
 
-{% block body %}
-<section class="content_main">
-
-    <form action="{% url 'quizz_actioner' %}" method="POST" enctype='multipart/form-data'>    
-
-    {% csrf_token %}
-
-    <div class="row">
-        <div class="col-xs-6 col-md-3 ">
-            <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
-        </div>
-
-        <div class=" col-xs-6 col-md-9">
-            <div class="form-group">
-                <input type="search" id="accordion_search_bar" class="form-control" placeholder="Ecrire un mot comme 'numérique' proposera les dossiers le contenant.">
-            </div>
-        </div>
-    </div>
- 
-    {% for list_folder   in list_folders %} 
-
-
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
-                <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
-                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
-                        <h4 class="panel-title">
-                        <a role="button" 
-                         data-toggle="collapse" 
-                         data-parent="#accordion" 
-                         href="#collapse{{ forloop.counter }}" 
-                         aria-expanded="true" 
-                         aria-controls="collapse{{ forloop.counter }}">
-
-
-                         {% if list_folder.folder.vignette %}
-                            <img src="{{ list_folder.folder.vignette.url }}" width="50px" height="50px">
-                         {% else %}  
-                            <i class="fa fa-square" style="font-size: 2.4em; color:{{ list_folder.folder.color }}"></i>
-                         {% endif %}  
+{% block inside_folder %}          
+    <table class="table table-hovered standard_tab_10"  style="width:100%" >
+        <thead> 
+            <tr> 
+                <th style="width:10px;text-align: center"></th>
+                <th style="width:10px;text-align: center"></th>
+                <th style="width:200px">Titre</th>
+                <th></th>
+                <th>Parcours</th>
+                <th style="width:200px">Groupes</th>
+                <th>  </th>
+                <th></th>
+            </tr> 
+        </thead>
+        <tbody>
+            {% for flashpack  in list_folder.flashpacks  %} 
+                <tr class="tr_edit">  
+                    {% include 'flashcard/flashpack_data.html' %}
+                </tr>
+            {% endfor %}              
+         </tbody>
+    </table>
+{% endblock %}
 
 
 
-                         {{ list_folder.folder.title }} <i class="fa fa-angle-down"></i>
+{% block inside_folder_actions %}
+    <div class="row" style="margin-top:10px">
+        <div class="col-sm-12 col-md-12">
 
-                         <span class="list_label list_subject">{{ list_folder.folder.subject.shortname }}  </span>
-
-                         <span class="list_label">{{ list_folder.folder.level.name }} </span>
-
- 
+            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces flashpacks')"> 
+                <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
+            </button>
 
 
-                        </a>
-                        </h4>
-                    </div> 
-                    <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
-                        <div class="panel-body">         
-                            <table class="table table-hovered standard_tab_10"  style="width:100%" >
-                                <thead> 
-                                    <tr> 
-                                        <th style="width:10px;text-align: center"></th>
-                                        <th style="width:10px;text-align: center"></th>
-                                        <th style="width:200px">Titre</th>
-                                        <th></th>
-                                        <th>Parcours</th>
-                                        <th style="width:200px">Groupes</th>
-                                        <th>  </th>
-                                        <th></th>
-                                    </tr> 
-                                </thead>
-                                <tbody>
-                                    {% for flashpack  in list_folder.flashpacks  %} 
-                                        <tr class="tr_edit">  
-                                            {% include 'flashcard/flashpack_data.html' %}
-                                        </tr>
-                                    {% endfor %}              
-                                 </tbody>
-                            </table>
-                            <div class="row" style="margin-top:10px">
-                                <div class="col-sm-12 col-md-12">
-             
-                                    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces flashpacks')"> 
-                                        <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
-                                    </button>
-                   
-
-                                    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces flashpacks')"> 
-                                        <i class="fa fa-trash"> </i>   Supprimer la sélection
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces flashpacks')"> 
+                <i class="fa fa-trash"> </i>   Supprimer la sélection
+            </button>
         </div>
     </div>
-    {% endfor %}
+{% endblock %}
 
  
 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table class="table table_list table-hover display_no_details100">
-                    <thead>
-                    <tr>
-                        <th style="width:30px;text-align: center"></th>
-                        <th style="width:30px;text-align: center"></th>
-                        <th>Titre</th>
-                        <th></th>
-                        <th>Parcours</th>
-                        <th style="width:200px">Groupes</th>
-                        <th>  </th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for flashpack in flashpacks %}            
-                            <tr>
-                                {% include 'flashcard/flashpack_data.html' %}
-                            </tr>
-                        {% endfor %} 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+{% block outside_folder %}   
+    <table class="table table_list table-hover display_no_details100">
+        <thead>
+        <tr>
+            <th style="width:30px;text-align: center"></th>
+            <th style="width:30px;text-align: center"></th>
+            <th>Titre</th>
+            <th></th>
+            <th>Parcours</th>
+            <th style="width:200px">Groupes</th>
+            <th>  </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for flashpack in flashpacks %}            
+                <tr>
+                    {% include 'flashcard/flashpack_data.html' %}
+                </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
+{% endblock %}
      
+     
+{% block outside_folder_actions %}
+    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces flashpacks')"> 
+        <i class="fa fa-archive"> </i>   Archiver la sélection
+    </button>
+    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces flashpacks')"> 
+        <i class="fa fa-trash"> </i>   Supprimer la sélection
+    </button>
 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces quizz')"> 
-                    <i class="fa fa-archive"> </i>   Archiver la sélection
-                </button>
-                <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces quizz')"> 
-                    <i class="fa fa-trash"> </i>   Supprimer la sélection
-                </button>
-         
-                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
-            </div>
-        </div>
-
-
-
-
-
-
-
-    </form>
-</section>
-
+    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+{% endblock %}
 
  
-
-{% endblock %}

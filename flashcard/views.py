@@ -241,6 +241,33 @@ def clone_flashpack(request, id):
     flashpack.save()
 
     return redirect('set_flashcards_to_flashpack' , id)
+
+
+
+def actioner(request):
+
+    teacher = request.user.teacher 
+    idbs = request.POST.getlist("selected_flashpacks")
+    if  request.POST.get("action") == "deleter" :  
+        for idb in idbs :
+            flashpack = Flashpack.objects.get(id=idb) 
+            flashpack.delete()
+
+    elif  request.POST.get("action") == "archiver" :  
+        for idb in idbs :
+            flashpack = Flashpack.objects.get(id=idb) 
+            flashpack.is_archive = 1
+            flashpack.is_favorite = 0
+            flashpack.save()
+ 
+    else : 
+        for idb in idbs :
+            flashpack = Flashpack.objects.get(id=idb) 
+            flashpack.is_archive = 0
+            flashpack.is_favorite = 0
+            flashpack.save()
+     
+    return redirect('my_flashpacks')    
 ######################################################################################
 ######################################################################################
 #           Flashcard
@@ -795,4 +822,5 @@ def ajax_charge_parcours_without_folder(request): # utilisé que par form_folder
         data['parcours'] =  []
 
     return JsonResponse(data)
+
 

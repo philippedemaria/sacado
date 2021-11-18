@@ -14,7 +14,7 @@
     </span>
 </td> 
 <td>
-    <a href="{% url 'show_flashpack' flashpack.id %}" title="Voir le flashpack" >{{ flashpack.title }}</a>
+    <a href="{% url 'show_flashpack' flashpack.id %}" title="Voir le flashpack" style="font-size: 22px" >{{ flashpack.title }}</a>
     <br/> 
     {% with nbf=flashpack.flashcards.count %}    
         {{ nbf }} carte{{ nbf|pluralize }}
@@ -24,7 +24,7 @@
 </td>  
 <td  style="width:20px;">
  
-        <a href="{% url 'update_flashpack' flashpack.id  %}"  > <i class="fa fa-edit  fa-xs"></i></a>
+        <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit"  > <i class="fa fa-edit  fa-xs"></i></a>
 
         {% if request.user.is_extra  or request.user.is_superuser  %}
         <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer des flashcards" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>

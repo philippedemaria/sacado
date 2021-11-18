@@ -13,9 +13,10 @@ urlpatterns = [
     path('my_flashpack_archives', my_flashpack_archives, name='my_flashpack_archives'),
 
     path('flashpack_peuplate/<int:id>', flashpack_peuplate, name='flashpack_peuplate'),
-
     path('set_flashcards_to_flashpack/<int:id>', set_flashcards_to_flashpack, name='set_flashcards_to_flashpack'),   
- 
+    
+    path('flashpack_actioner', actioner, name='actioner'),
+
     path('create_flashcard/new', create_flashcard, name='create_flashcard'),
     path('update_flashcard/<int:id>', update_flashcard, name='update_flashcard'),
     path('delete_flashcard/<int:id>', delete_flashcard, name='delete_flashcard'),

@@ -1,0 +1,145 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+
+
+{% block require %}
+{% endblock %}
+
+
+
+{% block page_title %}
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+
+{% block body %}
+<section class="content_main">
+    <form action="{% url 'actioner' %}" method="POST" enctype='multipart/form-data'>    
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-xs-6 col-md-3 ">
+            <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
+        </div>
+
+        <div class=" col-xs-6 col-md-9">
+            <div class="form-group">
+                <input type="search" id="accordion_search_bar" class="form-control" placeholder="Ecrire un mot comme 'numérique' proposera les dossiers le contenant.">
+            </div>
+        </div>
+    </div>
+ 
+    {% for list_folder   in list_folders %} 
+
+
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
+                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}" data-loop ="{{ forloop.counter }}" >
+                        <h4 class="panel-title">
+                        <a role="button" 
+                         data-toggle="collapse" 
+                         data-parent="#accordion" 
+                         href="#collapse{{ forloop.counter }}" 
+                         aria-expanded="true" 
+                         aria-controls="collapse{{ forloop.counter }}">
+
+
+                         {% if list_folder.folder.vignette %}
+                            <img src="{{ list_folder.folder.vignette.url }}" width="50px" height="50px">
+                         {% else %}  
+                            <i class="fa fa-square" style="font-size: 2.4em; color:{{ list_folder.folder.color }}"></i>
+                         {% endif %}  
+
+
+
+                         {{ list_folder.folder.title }} <i class="fa fa-angle-down" id="collapser_angle{{ forloop.counter }}"></i>
+
+                         <span class="list_label list_subject">{{ list_folder.folder.subject.shortname }}  </span>
+
+                         <span class="list_label">{{ list_folder.folder.level.name }} </span>
+
+                        </a>
+                        </h4>
+                    </div> 
+                    <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
+                        <div class="panel-body"> 
+                            {% block inside_folder %}        
+                            <table class="table table-hovered standard_tab_10"  style="width:100%" >
+                                <thead> 
+                                    <tr> 
+                                        <th style="width:10px;text-align: center"></th>
+                                        <th style="width:10px;text-align: center"></th>
+                                        <th style="width:200px">Titre</th>
+                                        <th></th>
+                                        <th>Parcours</th>
+                                        <th style="width:200px">Groupes</th>
+                                        <th>  </th>
+                                        <th></th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    {% for flashpack  in list_folder.flashpacks  %} 
+                                        <tr class="tr_edit">  
+                                            {% include 'flashcard/flashpack_data.html' %}
+                                        </tr>
+                                    {% endfor %}              
+                                 </tbody>
+                            </table>
+                            {% endblock %}  
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-sm-12 col-md-12">
+                                    {% block inside_folder_actions %}    
+                                    {% endblock %}  
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+ 
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% block outside_folder %}       
+                {% endblock %} 
+            </div>
+        </div>
+
+     
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% block outside_folder_actions %}    
+                {% endblock %}  
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </form>
+</section>
+{% endblock %}
+
+
+{% block modale %}
+
+{% endblock %}
