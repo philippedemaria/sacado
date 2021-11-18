@@ -8,18 +8,12 @@
     <input type="hidden" name="flashpack" id="id_flashpack" value="{{ flashpack.id }}" /> 
     <input type="hidden" name="subject" id="id_subject" value="{{ flashpack.subject.id }}" /> 
     <div class="row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-8">
                 <label>Titre</label>
                 {{ form.title|add_class:"form-control"  }}
                 {{ form.title.errors }}
         </div>
-        <div class="col-sm-12 col-md-2">
-            <div class="form-group">
-                <label>Durée (optionnel)</label>
-                {{ form.duration|add_class:"form-control" }} 
-                {{ form.duration.errors }}
-            </div>
-        </div>        
+       
         <div class="col-sm-12 col-md-4">
             <div class="form-group">
                 <label>Calculatrice ?</label><br/>

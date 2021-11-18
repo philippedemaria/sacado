@@ -45,7 +45,7 @@ class Flashcard(models.Model):
     sizea      = models.PositiveIntegerField(default=40, choices=POLICES,  verbose_name="Taille de police")
     sizeh      = models.PositiveIntegerField(default=40, choices=POLICES,  verbose_name="Taille de police")
 
-    duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
+    #duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 
     students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
 
