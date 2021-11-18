@@ -33,14 +33,14 @@
 
 
     <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
-    <small>Ajouter des flashcards <img src="{% static 'img/angle-right.png' %}" width="20px"/>  <small><span id="nb_flashcards">{{ flashpack.flashcards.count }}</span> flashcards</small></small>
+    <small>Ajouter des cartes <img src="{% static 'img/angle-right.png' %}" width="20px"/>  <small><span id="nb_flashcards">{{ flashpack.flashcards.count }}</span> cartes</small></small>
 {% endblock %}
 
 
 
 {% block page_menu_right %}
      
-    <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}"  class="btn btn-new-violet" > Nouvellle </a> 
+    <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}"  class="btn btn-new-violet" > Nouvelle carte</a> 
     <a href="{% url 'my_flashpacks' %}"  class="btn btn-new-violet" > Mes flashpacks </a> 
 
 {% endblock %}
