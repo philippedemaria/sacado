@@ -678,7 +678,7 @@ def renew_accounting(request,ids):
                     if nf.date_payment:
                         fa.active = 1
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        create_abonnement_gar(today,school,nf.id,request.user)
+                        create_abonnement_gar(today,school,nf,request.user)
                     fa.save()
         else :
             print(form.errors)
