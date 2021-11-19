@@ -349,7 +349,7 @@ def update_flashcard(request, id):
                 level = Level.objects.get(pk=l_id)
                 level.flashcards.add(flashcard)
             messages.success(request, 'La flashcard a été modifiée avec succès !')
-            return redirect('flashcards')
+            return redirect('my_flashpacks')
         else:
             print(flashcard_form.errors)
 
@@ -368,7 +368,7 @@ def delete_flashcard(request, idf , id):
 	if idf :
 		return redirect('set_flashcards_to_flashpack' , idf)
 	else :
-		return redirect('flashcards')
+		return redirect('my_flashpacks')
 
 
 
