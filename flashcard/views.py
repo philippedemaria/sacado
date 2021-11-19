@@ -244,6 +244,27 @@ def clone_flashpack(request, id):
 
 
 
+
+
+def flashpack_results(request, id):
+
+    flashpack = Flashpack.objects.get(id=id)
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+
+    flashpack.pk = None
+    flashpack.save()
+
+    return redirect('set_flashcards_to_flashpack' , id)
+
+
+
+
+
+
+
+
+
+
 def actioner(request):
 
     teacher = request.user.teacher 

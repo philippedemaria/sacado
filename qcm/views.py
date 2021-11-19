@@ -88,9 +88,9 @@ from general_fonctions import *
 
 #     return redirect('index' )
 
-def get_accordion(q,b):
+def get_accordion(q,b,f):
     accordion = True
-    nb_accordion = q.count() + b.count()
+    nb_accordion = q.count() + b.count() + f.count()
     if nb_accordion == 0:
         accordion = False
     return accordion
@@ -1548,7 +1548,8 @@ def list_sub_parcours_group(request,idg,idf):
     parcours_tab = folder.parcours.filter(is_archive=0 ,  is_trash=0).order_by("is_evaluation", "ranking")
     quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
     bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
-    accordion = get_accordion(quizzes, bibliotexs)
+    flashpacks   = folder.flashpacks.filter(Q(teacher=teacher),is_archive=0,parcours=None)
+    accordion    = get_accordion(quizzes, bibliotexs, flashpacks)
 
     ###efface le realtime de plus de 2 h
     clear_realtime(parcours_tab , today.now() ,  1800 )
@@ -2466,7 +2467,7 @@ def show_parcours(request, idf = 0, id=0):
  
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
-    accordion = get_accordion(parcours.quizz, parcours.bibliotexs)
+    accordion = get_accordion(parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
 
     skills = Skill.objects.all()
 
