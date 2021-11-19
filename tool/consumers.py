@@ -3,7 +3,7 @@ import json
 from time import sleep
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-from tool.models import Generate_quizz
+from tool.models import Quizz
 from channels.db import database_sync_to_async
  
 
@@ -35,7 +35,7 @@ class ToolConsumer(WebsocketConsumer):
 
 
  
-    m2m_changed.connect(get_new_player, sender=Generate_quizz.students)   
+    m2m_changed.connect(get_new_player, sender=Quizz.students)   
 
 
   

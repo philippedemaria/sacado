@@ -37,6 +37,13 @@ $('.standard_tab_sort').dataTable( {
     "info":     false
 } );
 
+ 
+$('.standard_tab_sort').dataTable( {
+    "order": [],
+    "pageLength": 50,
+    "info":     false
+} );
+
 $('.display_info').dataTable( {
     "order": [],
     "pageLength": 50,

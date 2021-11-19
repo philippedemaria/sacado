@@ -8,7 +8,7 @@
     {{ question.title|safe }}
     </div>
     <input type="hidden" id="question_id" name="question_id" value="{{ question.id }}" required />
-    <input type="hidden" id="gquizz_id" name="gquizz"  value="{{ gquizz_id }}" required />
+    <input type="hidden" id="quizz_id" name="quizz"  value="{{ quizz_id }}" required />
     <input type="hidden" id="timestamp" name="timestamp"  value="{{timestamp }}" required />
 
     {% if question.qtype == 1 %}

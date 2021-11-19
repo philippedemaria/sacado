@@ -166,5 +166,79 @@ define(['jquery',  'bootstrap' ], function ($) {
  
 
  
+
+
+        $('.this_detail').on('click', function (event) {
+
+            let question_id = $(this).data("question_id");
+            let quizz_id = $(this).data("quizz_id");
+            var groups = [];
+            $.each($("input[name='groups']:checked"), function() {
+                groups.push($(this).val());
+            });
+
+            if (groups.length == 0){alert("Vous devez cocher au moins un groupe"); return false;}
+
+ 
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'question_id': question_id,
+                        'quizz_id'   : quizz_id,
+                        'groups'     : groups,
+
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../ajax_show_detail_question",
+                    success: function (data) {
+
+                        if  ($("#collapser_angle"+question_id).hasClass("fa-angle-up"))
+                        {
+                            AnimateRotate( $("#collapser_angle"+question_id) , 0 );
+                            $("#collapser_angle"+question_id).removeClass("fa-angle-up");
+                        }
+                        else{
+                            AnimateRotate( $("#collapser_angle"+question_id) , 0) ;
+                            $("#collapser_angle"+question_id).addClass("fa-angle-up");
+                        }
+
+
+                        if (question_id > 0)
+                        { $("#detail_div"+question_id).html("").html(data.html).toggle(500); }
+                        else
+                        { $("#display_global_detail").html("").html(data.html).toggle(500); }
+                    }
+                }
+            )
+        });
+
+
+
+            function AnimateRotate($elem, angle) {
+                // we use a pseudo object for the animation
+                // (starts from `0` to `angle`), you can name it as you want
+                $elem.animate({deg: angle}, {
+                    duration: 500,
+                    step: function(now) {
+                        // in the step-callback (that is fired each step of the animation),
+                        // you can use the `now` paramter which contains the current
+                        // animation-position (`0` up to `angle`)
+                        $elem.css({
+                            transform: 'rotate(' + now + 'deg)'
+                        });
+                    }
+                });
+            }
+
+
+
+
+ 
     });
 });

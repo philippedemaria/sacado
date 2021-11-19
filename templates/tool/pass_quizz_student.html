@@ -11,7 +11,7 @@
 
 
 {% block page_title %}
-   <a href="{% url 'list_quizzes' %}" ><i class="fa fa-gamepad"></i> </a>  Quizz  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ gquizz.quizz.title }} <small> {{ gquizz.quizz.code }}</small>
+   <a href="{% url 'list_quizzes' %}" ><i class="fa fa-gamepad"></i> </a>  Quizz  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ quizz.title }} <small> {{ quizz.code }}</small>
  
 {% endblock %}
 
@@ -32,7 +32,7 @@
 {% block body %}
  
 <section class="content_main"> 
-<form action="{% url 'goto_quizz_student' gquizz.id %}" method="POST">
+<form action="{% url 'goto_quizz_student' quizz.id %}" method="POST">
 {% csrf_token %}
 <input type="hidden" name="quizz_nav"  value="{{ quizz_nav }}" />   
 <input type="hidden" name="start_time"  value="{{ stop_time }}" />   
@@ -41,7 +41,7 @@
     <div class="row consigne_diapo"  align="center">  
         <div class="col-sm-12 col-md-12">
  
-            {% if gquizz.quizz.vignette %}<img src="{{ gquizz.quizz.vignette.url }}" width="300px"  />{% endif %}
+            {% if gquizz.quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="300px"  />{% endif %}
         </div>
     </div>
     <div class="row" >  
@@ -49,10 +49,10 @@
             <h1 style="line-height: 80px;" > Consignes.</h1>
             <span style="font-size:1.2em; text-align: left;" >    
                 Durée : <b>{% if duration %} {{ duration|date:"i" }} min{% else %}Temps libre{% endif %}</b><br/>
-                Nombre de questions : <b>{{ gquizz.quizz.questions.count}}</b><br/>
+                Nombre de questions : <b>{{ quizz.questions.count}}</b><br/>
                 Vous devez répondre à chaque question.<br/> Le type de question est indiqué en haut de page.<br/>
                  
-                {% if gquizz.quizz.is_back %}
+                {% if quizz.is_back %}
                     A tout moment, Vous pouvez revenir à une question en arrière lorsque vous avancez dans le quizz. 
                 {% else %}
                     <span class="text-danger">Attention, vous ne pouvez pas revenir en arrière lorsque vous avancez dans le quizz.</span> 
@@ -97,7 +97,7 @@
     </div>
     {% endif %}
     <hr/> 
-    {% if question.tool and gquizz.quizz.is_numeric %}  
+    {% if question.tool and quizz.is_numeric %}  
         <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
             <div class="col-sm-12 col-md-12" align="center">
                 <button class="btn btn-default" id="sqrt_tool">$\sqrt{x}$</button> 
@@ -108,7 +108,7 @@
 
     
     {% if question.qtype == 1 %} 
-    {% get_ans_for_this_question question gquizz student as this_answer %}  
+    {% get_ans_for_this_question question quizz student as this_answer %}  
         <div class="row"> 
             <div class="col-sm-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
                 <label style="font-size:3.5em" class="thin">
@@ -121,7 +121,7 @@
             </div> 
         </div> 
     {% elif question.qtype == 2 %}
-        {% get_ans_for_this_question gquizz question student as this_answer %}
+        {% get_ans_for_this_question quizz question student as this_answer %}
         <div class="row"> 
             <div class="col-sm-12 col-md-12"  align="center" style="border-radius : 10px ">
                 <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer.answer }}" >
@@ -133,7 +133,7 @@
             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6" style="margin-bottom: 5px ; font-size:1.2em; border-radius : 10px;background-color: #f1eef7 ;">
                 <div class="row" >
-                    {% get_ans_for_this_question gquizz question student as this_answer %}
+                    {% get_ans_for_this_question quizz question student as this_answer %}
                     <div class="col-sm-12 col-md-12  col-lg-12 col-xl-6 {{ rowcolor }}"  
                          style="color:#5d4391;  padding: 5px; font-size : 1.5em">  
                          <input type="{% if question.qtype == 3 %}checkbox{% else %}radio{% endif %}" name="solution" value="{{ choice.id }}" {% if choice.id in this_answer.answer %}checked{% endif %}   class="answer_quizz"> 
@@ -152,8 +152,8 @@
 <div class="row" align="center" > 
     <div class="col-sm-6 col-md-9" align="center"  ></div>
     <div class="col-sm-6 col-md-3" align="center"  >
-        {% if gquizz.quizz.is_back and quizz_nav_prev > 0 %}
-            <a href="{% url 'goto_quizz_student' gquizz.id %}" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</a>
+        {% if quizz.is_back and quizz_nav_prev > 0 %}
+            <a href="{% url 'goto_quizz_student' quizz.id %}" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</a>
         {% endif %}  
     </div>
 </div> 

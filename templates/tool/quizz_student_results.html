@@ -6,7 +6,7 @@
     <thead> 
         <tr>
             <th>Question</th>
-            {% if gquizz.quizz.is_result %} 
+            {% if quizz.is_result %} 
             <th>Choix et solution</th>
             {% endif  %} 
             {% if score %} 
@@ -38,7 +38,7 @@
                         </div>
                     {% endif %}
                 </td>
-                {% if gquizz.quizz.is_result %} 
+                {% if quizz.is_result %} 
                 <td>
 
                     {% if question.qtype == 1 %}
@@ -66,11 +66,11 @@
                 {% endif %}
                 {% if score %} 
                 <td>
-                    {% get_real_ans_for_this_question  question  gquizz  student as dict_answer %}  
+                    {% get_real_ans_for_this_question  question  quizz  student as dict_answer %}  
 
                     {% if question.qtype < 3 %} 
                         {{ dict_answer.answer }} 
-                            {% if gquizz.quizz.is_result %}
+                            {% if quizz.is_result %}
                                 {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
                             {% endif %}
                     {% else %}
@@ -78,7 +78,7 @@
                             {{ a }}  
                             {% if not forloop.last %}<br/>{% endif %}
                         {% endfor %}
-                            {% if gquizz.quizz.is_result %}
+                            {% if quizz.is_result %}
                             <small> {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
                             {% endif %}
                     {% endif %}
@@ -90,7 +90,7 @@
 
     </tbody>
 </table>
-{% if gquizz.quizz.is_result %}
+{% if quizz.is_result %}
     <div class="row" align="center">
         <div class="col-sm-12 col-md-12" >     
             <h3 style="padding: 10px; background-color: #5d4391; color: #FFF;">{% if score %} Score : {{ score }} / {{ total }}{% else %}Réponses non enregistrées{% endif %}</h3>

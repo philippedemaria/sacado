@@ -11,7 +11,7 @@ urlpatterns = [
     path('delete/<int:id>', delete_tool, name='delete_tool'),
     path('show/<int:id>', show_tool, name='show_tool'), 
 
-    path('my_quizz/list', list_quizzes, name='list_quizzes'),
+    path('list', list_quizzes, name='list_quizzes'),
     path('create_quizz/new', create_quizz, name='create_quizz'),
     path('update_quizz/<int:id>', update_quizz, name='update_quizz'),
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
@@ -29,6 +29,10 @@ urlpatterns = [
 
     path('tools_to_exercise/<int:id>', tools_to_exercise, name='tools_to_exercise'), 
     path('ajax_attribute_this_tool_to_exercise', ajax_attribute_this_tool_to_exercise, name='ajax_attribute_this_tool_to_exercise'), 
+
+
+    path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'), 
+
 
 
 
@@ -140,6 +144,10 @@ urlpatterns = [
     path('ajax_find_question', ajax_find_question, name='ajax_find_question'),
     path('get_this_question/<int:id>/<int:idquizz>', get_this_question, name='get_this_question'),
 
+
+
+    path('ajax_show_detail_question', ajax_show_detail_question, name='ajax_show_detail_question'),
+ 
 
 
     ############## Videocopy

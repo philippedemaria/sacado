@@ -14,14 +14,14 @@ define(['jquery',  'bootstrap', ], function ($) {
 
         var ajaxFn = function () {
 
-            let gquizz_id = $("#gquizz_id").val() ;
+            let quizz_id = $("#quizz_id").val() ;
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
                 $.ajax({
                     type: "POST",
                     dataType: "json",
                     data: {
-                        'gquizz_id': gquizz_id,
+                        'quizz_id': quizz_id,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "ajax_display_question_to_student",

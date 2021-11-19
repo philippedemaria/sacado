@@ -504,10 +504,10 @@ class Student(ModelWithCode):
 
 
 
-    def score_quizz_random(self, g_quizz) :
+    def score_quizz_random(self, quizz) :
 
         data = {}
-        qrs = g_quizz.generate_qr.all() # toutes les questions
+        qrs = quizz.generate_qr.all() # toutes les questions
         score = self.questions_player.filter(  qrandom__in= qrs, is_correct = 1).count()
         nbre_total = self.questions_player.filter( qrandom__in= qrs).count()
         try :
@@ -519,20 +519,7 @@ class Student(ModelWithCode):
         return data
 
 
-    def score_quizz(self, g_quizz) :
-
-        data = {}
-        questions = g_quizz.quizz.questions.all() # toutes les questions
-        score = self.questions_player.filter(  question__in= questions, is_correct = 1).count()
-        nbre_total = self.questions_player.filter( question__in= questions).count()
-        try :
-            data["percent"]  = int(100 * score/nbre_total)
-            data["score"] = score
-        except :
-            data["percent"] = "A"
-            data["score"] = "A"
-        return data
-
+ 
 
     def documents_counter_by_student(self,group):
         """

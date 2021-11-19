@@ -12,8 +12,8 @@
 
 
 {% block page_title %}
-    <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ gquizz.quizz.title}} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
-    <small>{{ gquizz.quizz.code}}</small>
+    <a href="{% url 'list_quizzes' %}" ><i class="fa fa-cubes"></i> Résultats</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ quizz.title}} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+    <small>{{ quizz.code}}</small>
 {% endblock %}
 
 
@@ -26,65 +26,56 @@
 {% block body %} 
 <section class="content_main">
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <a id="display_init" class="btn btn-default"> Afficher/cacher les résultats par élève</a>
-        </div>
-    </div>
 
+    <form method="POST">{% csrf_token %}
     <div class="row">
-        <div class="col-sm-12 col-md-8">
-            {% for question in questions %}
-            <div class="row">    
-                <div class="card" style="padding:15px; width:90%">
+        <div class="col-sm-12 col-md-6">
 
-                {% get_success_percent question gquizz as percent_success %}
-                <h4 >Question {{ forloop.counter }}. <span class="pull-right">{{ percent_success }}</span> </h4>
-                {{ question.title|safe }}
-                </div> 
-                <div class="col-sm-12 col-md-12 no_display_init">
-                {% for student in gquizz.group.students.all|dictsort:"user.last_name" %}
-                    {% get_real_ans_for_this_question  question  gquizz  student as dict_answer %} 
-                    <span class="btn btn-{% if dict_answer.is_correct %}success{% else %}danger{% endif %}">{{ student.user }}
-                        <small>
-                        {% if question.qtype < 3 %} 
-                            {{ dict_answer.answer }} 
-                        {% else %}
-                            {% for a in dict_answer.answer %}
-                                {{ a }}  
-                                {% if not forloop.last %}<br/>{% endif %}
-                            {% endfor %}
-                        {% endif %}
-                        </small>
-                    </span>    
-                {% endfor %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12"> 
+                    {% for g in quizz.groups.all %}
+                        <span class="btn btn-default" style="background-color: {{ g.color}} ; color: {{ g.color|contrast_color }}">
+                            <label>
+                                <input type="checkbox" id="groups" name="groups" value="{{ g.id }}" /> 
+                                {{ g.name }} 
+                            </label>
+                        </span>
+                    {% endfor %}
                 </div>
             </div>
-            <hr/>
+
+            {% for question in questions %}
+            <div class="row">    
+                <div class="card" style="margin-left:15px;padding:10px; width:90%">
+
+                {% get_success_percent question quizz as percent_success %}
+                <h4 >Question {{ forloop.counter }}.  
+                    <a href="javascript:void(0);" data-question_id="{{ question.id }}" data-quizz_id="{{ quizz.id }}" class="this_detail fontsize12 btn btn-new-violet"> 
+                        détails 
+                        <i class="fa fa-angle-down" id="collapser_angle{{ question.id }}" ></i>
+                    </a>
+                    <span class="pull-right">{{ percent_success }}</span> 
+                </h4>
+                {{ question.title|safe }} 
+                </div> 
+                <div class="col-sm-12 col-md-12 no_visu_on_load" id="detail_div{{question.id}}">
+
+                </div>
+            </div>
             {% endfor %}
         </div>
-        <div class="col-sm-12 col-md-4 no_display_init">
-            <table  class="table table-bordered table-hover standard_tab_sort">
-                <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Score</th>
-                    <th> </th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for student in gquizz.group.students.all|dictsort:"user.last_name" %}
-                    {% get_score_quizz  student gquizz as data_global %}
-                        <tr>
-                            <td>{{ student.user }}</td>
-                            <td style="text-align: center;"><b>{{ data_global.score  }}</b> / {{ questions.count}}</td>
-                            <td style="text-align: center;">{{ data_global.percent  }}%</td>
-                        </tr>
-                    {% endfor %}
-            </table>
+        <div class="col-sm-12 col-md-6">
+          
+            <a href="javascript:void(0);"  data-quizz_id="{{ quizz.id }}" data-question_id="0" class="btn btn-new-violet this_detail" id="display_init"> Afficher les résultats par élève
+                <i class="fa fa-angle-down" id="collapser_angle0" style="transform: rotate(0deg);"></i>
+            </a>
 
+            <div id="display_global_detail" style="margin-top: 15px;">
+ 
+            </div>
         </div>
     </div>
+    </form>
 </section>
 {% endblock %}  
 

@@ -878,14 +878,7 @@ def get_score_quizz_random(obj, g_quizz):
     """
     return obj.score_quizz_random(g_quizz)  
 
-
-@register.simple_tag 
-def get_score_quizz(obj, g_quizz):
-    """
-    obj = student ,  renvoie par élève le score total au quizz et le niveau de knowledge
-    """
-    return obj.score_quizz(g_quizz)  
-
+ 
 
 @register.simple_tag 
 def get_historic_aefe(obj, parcours):
@@ -905,20 +898,20 @@ def get_nb_level_subject(obj, subject_id):
 
 
 @register.simple_tag 
-def is_can_gquizz_restart(obj, student):
+def is_can_quizz_restart(obj, student):
     """
     Détermine si un élève a déjà fini son quizz depuis la page tool/list_quizz_student.html
     """
-    return obj.restart_gquizz(student)
+    return obj.restart_quizz(student)
 
 
 
 @register.simple_tag 
-def get_success_percent(obj, gquizz):
+def get_success_percent(obj, quizz):
     """
     Détermine le pourcentage de bonne réponse à une question du gquizz
     """
-    return obj.success_percent(gquizz)
+    return obj.success_percent(quizz)
 
 
 

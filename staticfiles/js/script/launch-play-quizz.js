@@ -109,7 +109,7 @@ define(['jquery',  'bootstrap', ], function ($) {
         // envoie un signal pour généré la question sur l'interface élève
         var ajaxFn = function () {
 
-                let gquizz_id   = $("#gquizz_id").val();
+                let quizz_id   = $("#quizz_id").val();
                 let question_id = $("#question_id").val();
                 let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
 
@@ -120,7 +120,7 @@ define(['jquery',  'bootstrap', ], function ($) {
                         dataType: "json",
                         data:{
                                 'question_id': question_id,
-                                'gquizz_id'  : gquizz_id,
+                                'quizz_id'  : quizz_id,
                                 csrfmiddlewaretoken: csrf_token
                             },
                         url: "ajax_display_question_for_student",

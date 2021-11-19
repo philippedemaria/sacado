@@ -1,0 +1,55 @@
+{% load item_tags %}
+
+{% if question %}
+    {% for student in students  %}
+        {% get_real_ans_for_this_question  question  quizz  student.this as dict_answer %} 
+        <span class="btn btn-{% if not dict_answer.is_exist  %}default{% else %}{% if dict_answer.is_correct %}success{% else %}danger{% endif %}{% endif %}" style="text-align: left; width: 170px;">{{ student.this|truncatechars:15 }}              
+            
+            {% if dict_answer.is_exist  %}
+                <span class="badge">
+                    <small>
+                    {% if question.qtype < 3 %} 
+                        {{ dict_answer.answer }} 
+                    {% else %}
+                        {% for a in dict_answer.answer %}
+                            {{ a }}  
+                            {% if not forloop.last %} - {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </small>
+                </span>
+            {% endif %}
+        </span>    
+    {% endfor %}
+
+{% else %}
+
+<table class="table table-bordered table-hover standard_after_ajax_sort">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+            <tr>
+                <td>{{ student.this }}</td>
+ 
+                <td style="text-align: center;">{% if student.answer %}<b>{{ student.answer  }}</b>{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    
+$('.standard_after_ajax_sort').dataTable( {
+    "order": [],
+    "pageLength": 50,
+    "info":     false
+} );
+
+</script>
+
+{% endif %}

@@ -175,14 +175,14 @@ class Question(models.Model):
         retourne  la réponse de 'élève pour un quizz avec une question sous forme d'id.
         """
         try :
-            answerplayer = self.questions_player.filter( gquizz = q , student= student  ).last()
+            answerplayer = self.questions_player.filter( quizz = q , student= student  ).last()
             return answerplayer
         except :
             return ""
 
 
 
-    def real_ans_for_this_question (self,gquizz, student):
+    def real_ans_for_this_question (self,quizz, student):
         """
         retourne  la réponse de 'élève pour un quizz avec une question sous forme du choix proposé.
         """
@@ -190,7 +190,7 @@ class Question(models.Model):
         answer      = []
         is_correct  = 0 
         try : 
-            answerplayer = self.questions_player.filter( gquizz = gquizz , student= student  ).last()
+            answerplayer = Answerplayer.objects.filter(question = self,  quizz = quizz , student= student  ).last()
             if answerplayer.is_correct :
                 is_correct = 1
             if self.qtype == 1 : # VRAI - FAUX
@@ -208,15 +208,19 @@ class Question(models.Model):
                         answer.append(choice.imageanswer)
                     else :
                         answer.append(choice.answer)
+            this_answer["is_exist"] = True            
         except :
-            pass
+            is_correct = None
+            this_answer["is_exist"] = False
         this_answer["answer"]     = answer
         this_answer["is_correct"] =   is_correct  
         return this_answer
 
-    def success_percent (self,gquizz):
-        good_answerplayers = self.questions_player.filter( gquizz = gquizz,is_correct = 1 ).count()
-        answerplayers = self.questions_player.filter( gquizz = gquizz ).count()
+
+    def success_percent (self,quizz):
+        data_set = Answerplayer.objects.filter(question = self, quizz = quizz )
+        good_answerplayers = data_set.filter(is_correct = 1 ).count()
+        answerplayers = data_set.count()
         try : 
             percent = str(int(good_answerplayers/answerplayers)*100) +"%"
         except :
@@ -283,12 +287,14 @@ class Quizz(ModelWithCode):
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="quizz"  ) 
     folders      = models.ManyToManyField(Folder, blank=True, related_name="quizz"  ) 
     
+    students     = models.ManyToManyField(Student, blank=True,  related_name="quizz",   editable=False)
+
     def __str__(self):
         return self.title 
 
 
     def quizz_generated(self,group):
-        return self.generate_quizz.filter(group=group).order_by("-date_created")
+        return self.filter(group=group).order_by("-date_created")
 
     def duration(self):
         d = 0
@@ -297,50 +303,10 @@ class Quizz(ModelWithCode):
         return d
 
 
-def time_zone_user(user):
-    try :
-        if user.time_zone :
-            time_zome = user.time_zone
-            timezone.activate(pytz.timezone(time_zome))
-            today = timezone.localtime(timezone.now())
-        else:
-            today = timezone.now()
-    except :
-        today = timezone.now()
-
-    return today
-
-
-class Generate_quizz(ModelWithCode):
-    """
-    Modèle qui récupère le quizz à partir du modèle de quizz choisi.
-    """
-    quizz        = models.ForeignKey(Quizz,  related_name="generate_quizz",  on_delete=models.CASCADE, editable=False) 
-    group        = models.ForeignKey(Group,  null=True, blank=True, related_name='generate_quizz', on_delete=models.CASCADE, editable= False)
-    date_created = models.DateTimeField(auto_now=True)
-    is_game      = models.BooleanField(default=0, editable= False) 
-    students     = models.ManyToManyField(Student, blank=True,  related_name="gquizz",   editable=False)
-    
-    def __str__(self):
-        return self.quizz.title 
-
- 
-
-    def student_show(self):
-        ok = True
-        if self.quizz.stop :
-            today = time_zone_user(self.quizz.teacher.user)
-            if self.quizz.stop > today :
-                ok = False
-        return ok
-
-
-
-
     def ans_for_this_question (self,q, student):
         t = []
         try :
-            ans = Answerplayer.objects.get(gquizz = self , student= student , question = q)
+            ans = Answerplayer.objects.get(quizz = self , student= student , question = q)
             
             if q.qtype == 2 :
                 t = ans.answer
@@ -357,21 +323,28 @@ class Generate_quizz(ModelWithCode):
 
 
 
-    def restart_gquizz (self, student):
-
-        nb_ans = Answerplayer.objects.filter(gquizz = self , student= student).count()
-        nb_q   =  self.quizz.questions.count()
-        test   = True
-        if nb_ans >= nb_q :
-            test = False
-        return test
 
 
+def time_zone_user(user):
+    try :
+        if user.time_zone :
+            time_zome = user.time_zone
+            timezone.activate(pytz.timezone(time_zome))
+            today = timezone.localtime(timezone.now())
+        else:
+            today = timezone.now()
+    except :
+        today = timezone.now()
+
+    return today
+
+
+ 
 class Generate_qr(models.Model):
     """
     Modèle qui récupère les questions du quizz généré.
     """
-    gquizz       = models.ForeignKey(Generate_quizz,  related_name="generate_qr",  on_delete=models.CASCADE, editable=False) 
+    quizz       = models.ForeignKey(Quizz,  related_name="generate_qr",  default ="" ,  on_delete=models.CASCADE, editable=False) 
     qr_text      = models.TextField( editable=False) 
     qrandom      = models.ForeignKey(Qrandom, blank=True, null=True, related_name="generate_qr" ,  on_delete=models.CASCADE , editable=False)  
     ranking      = models.PositiveIntegerField(default = 1 , editable=False)    
@@ -384,7 +357,7 @@ class Generate_qr(models.Model):
     def is_correct_answer_quizz_random(self , student) :
 
         test = False
-        quizz_student_answers = self.questions_player.filter(student = student)
+        quizz_student_answers = Answerplayer.objects.filter(qrandom = self, quizz = quizz, student = student)
         if quizz_student_answers.count() == 0:
             test = "A"
         else :
@@ -397,7 +370,7 @@ class Generate_qr(models.Model):
 
 class Answerplayer(models.Model):
 
-    gquizz   = models.ForeignKey(Generate_quizz,  related_name="answerplayer",  on_delete=models.CASCADE ) 
+    quizz   = models.ForeignKey(Quizz,  related_name="answerplayer", default ="" ,  on_delete=models.CASCADE ) 
     student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
     question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
     qrandom  = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
@@ -469,12 +442,12 @@ class Display_question(models.Model):
     """
     ENvoie un signale pour déclencher  l'interface élève et la vue de la question.
     """
-    gquizz      = models.ForeignKey(Generate_quizz,  related_name="display_questions",  on_delete=models.CASCADE, editable=False) 
+    quizz       = models.ForeignKey(Quizz,  related_name="display_questions", default ="" ,   on_delete=models.CASCADE, editable=False) 
     question_id = models.PositiveIntegerField( default=0, ) 
     timestamp   = models.DateTimeField(auto_now=True)
     students    = models.ManyToManyField(Student,    blank=True,   related_name='display_questions' ,  editable= False)
     def __str__(self):
-        return self.gquizz.quizz.title 
+        return self.quizz.title 
 
 
 class Videocopy(models.Model):
