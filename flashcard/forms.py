@@ -64,7 +64,7 @@ class FlashpackForm(forms.ModelForm):
  
 	class Meta:
 		model = Flashpack
-		fields = '__all__'
+		exclude = ('flashcards',)
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')

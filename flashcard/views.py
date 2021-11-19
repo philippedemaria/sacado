@@ -136,10 +136,13 @@ def update_flashpack(request, id):
 
     teacher = request.user.teacher
     flashpack = Flashpack.objects.get(id=id)
-    flashpack_form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher   )
+    form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher   )
     if request.method == "POST" :
-        if flashpack_form.is_valid():
-            nf = flashpack_form.save()
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.teacher  = teacher
+            nf.save()
+            form.save_m2m()
             for group_id in request.POST.getlist("groups") :
                 group = Group.objects.get(pk = group_id)
                 nf.levels.add(group.level)
@@ -151,9 +154,9 @@ def update_flashpack(request, id):
 
 
         else:
-            print(flashpack_form.errors)
+            print(form.errors)
 
-    context = {'form': flashpack_form, 'communications' : [] , 'flashpack': flashpack,   }
+    context = {'form': form, 'communications' : [] , 'flashpack': flashpack,   }
 
     return render(request, 'flashcard/form_flashpack.html', context )
 
