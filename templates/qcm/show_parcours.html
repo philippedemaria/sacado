@@ -32,7 +32,7 @@
     {% endif %} 
 
     {% if nb_point_display %}
-        <small>{{ nb_point }} - {{ nb_time|time_done }}</small> 
+        <small>{{ nb_point }} - {{ nb_time|int_minutes }}</small> 
     {% endif %} 
 
 {% endblock %}
