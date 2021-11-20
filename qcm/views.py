@@ -2467,10 +2467,12 @@ def show_parcours(request, idf = 0, id=0):
  
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
-    nb_point = 0
+    nb_point , nb_time = 0 , 0
     nb_point_display = False
     for rc in relationships_customexercises :
-        try : nb_point += rc.mark
+        try : 
+            nb_point += rc.mark
+            nb_time += rc.duration
         except : pass
     if nb_point > 0 :
         nb_point = str(nb_point) + " points"
@@ -2491,7 +2493,7 @@ def show_parcours(request, idf = 0, id=0):
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user , 'form' : form , 
                   'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises,
-               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
+               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
 
     return render(request, 'qcm/show_parcours.html', context) 
 
