@@ -2491,7 +2491,7 @@ def show_parcours(request, idf = 0, id=0):
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user , 'form' : form , 
                   'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises,
-               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'somme' : somme,  'nb_point_display' : nb_point_display      }
+               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
 
     return render(request, 'qcm/show_parcours.html', context) 
 
