@@ -204,14 +204,15 @@
         {% if folder.folder_only_students_count.nb > 0 %}         
                 <div class="row dossier"> 
                         <div class="col-xs-4 col-md-4 col-lg-4 "> 
-                            Dans ce dossier <br/>
                             <span id="is_publish_label{{ folder.id }}">
                                 {% if folder.is_publish %}
                                     publié <i class="fa fa-circle text-success"></i> 
                                 {% else %}
                                     <span class="text-danger">non publié <i class="fa fa-circle"></i> 
                                 {% endif %}
-                            </span>
+                            </span><br/>
+                            {{  dataset.nb_flashpack }} flashpack{{ dataset.nb_flashpack|pluralize }}
+
                         </div>
                         <div class="col-xs-4 col-md-5 col-lg-5"> 
                             {{  dataset.nb_parcours }} parcours | {{ dataset.nb_parcours_published }} publié{{ dataset.nb_parcours_published|pluralize }}<br/>
@@ -239,19 +240,26 @@
                         </a>   
                     </div>
 
-
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="javascript:void()"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_flashpack_exists %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="fa fa-fw fa-money"></i> <span class="label_icon">F-pack</span> 
+                        </span><a href="{% url 'create_flashpack' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+                    </div> 
+                    {% comment %}
                     <div class="col-xs-4 col-md-4 col-lg-4">
                         <span  class="edit" style="cursor: default;{% if dataset.is_folder_task_exists %}color:{{ folder.color }}{% endif %};">
                             {% if dataset.is_folder_task_exists %}<i class="fa fa-fw fa-calendar-check"></i>{% else %}<i class="fa fa-fw fa-calendar"></i>{% endif %}
                              <span class="label_icon" style="cursor: default;">Tâches</span>
                         </span> 
                     </div>   
-
+                    {% endcomment %}
                 </div>
 
                 <div class="row extend_parcours">
                     <div class="col-xs-4 col-md-4 col-lg-4">
-                        <span href="#"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
+                        <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
                             <i class="fa fa-fw fa-trophy"></i> <span class="label_icon">Évaluat°</span> 
                         </span>
                         <a href="{% url 'create_evaluation' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter une évaluation à ce dossier">   
@@ -259,7 +267,7 @@
                         </a>
                     </div> 
                     <div class="col-xs-4 col-md-4 col-lg-4">
-                        <span href="#"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_quizz_exists   %} style="color:{{ folder.color }}" {% endif %}>
+                        <span href="javascript:void()"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_quizz_exists   %} style="color:{{ folder.color }}" {% endif %}>
                             <i class="fa fa-fw fa-trophy"></i> <span class="label_icon">Quizz</span> 
                         </span>
                         <a href="{% url 'create_quizz_folder' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
@@ -280,7 +288,7 @@
                 </div> 
                 <div class="row extend_parcours">
                     <div class="col-xs-4 col-md-4 col-lg-4">
-                        <span href="#"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_parcours_exists %} style="color:{{ folder.color }}" {% endif %}>
+                        <span href="javascript:void()"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_parcours_exists %} style="color:{{ folder.color }}" {% endif %}>
                             <i class="fa fa-fw fa-th"></i> <span class="label_icon">Parcours</span> 
                         </span><a href="{% url 'create_parcours' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un parcours à ce dossier">   
                              <i class="fa fa-plus-circle"></i> 
@@ -294,7 +302,7 @@
                         </a>
                     </div> 
                     <div class="col-xs-4 col-md-4 col-lg-4">
-                        <span href="#" class="edit group_shower" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
+                        <span href="javascript:void()" class="edit group_shower" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
                             <i class="fa fa-fw fa-users"></i> <span class="label_icon">Élèves</span>  
                         </span>
                     </div>                    

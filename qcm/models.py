@@ -1168,7 +1168,7 @@ class Folder(models.Model):
         data["is_quizz_exists"]          = False
         data["is_bibliotex_exists"]      = False
         data["is_course_exists"]         = False
-
+        data["is_flashpack_exists"]      = False
 
 
         group_students  = group.students.exclude(user__username__contains= "_e-test")
@@ -1186,10 +1186,12 @@ class Folder(models.Model):
         nb_evaluations  = evaluations.count()
 
         quizzes     = self.quizz.all()  
-        bibliotexs  = self.bibliotexs.all() 
+        bibliotexs  = self.bibliotexs.all()
+        flashpacks  = self.flashpacks.all()
 
         nb_quizz     = quizzes.count() 
-        nb_bibliotex = bibliotexs.count() 
+        nb_bibliotex = bibliotexs.count()
+        nb_flashpack = flashpacks.count() 
 
 
         for p in parcours :
@@ -1208,8 +1210,10 @@ class Folder(models.Model):
 
         data["quizzes"]      = quizzes 
         data["bibliotexs"]   = bibliotexs
+        data["flashpacks"]   = flashpacks
         data["nb_quizzes"]   = nb_quizz
         data["nb_bibliotex"] = nb_bibliotex
+        data["nb_flashpack"] = nb_flashpack
 
 
         if nb_parcours      :
@@ -1224,7 +1228,8 @@ class Folder(models.Model):
             data["is_quizz_exists"]     = True
         if nb_bibliotex   :
             data["is_bibliotex_exists"] = True
-
+        if nb_flashpack   :
+            data["is_flashpack_exists"] = True
 
  
         test = False
