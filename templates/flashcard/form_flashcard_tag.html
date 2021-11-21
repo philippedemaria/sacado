@@ -35,9 +35,12 @@
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-11">
+        <div class="col-sm-12 col-md-10">
                 {{ form.question }}
                 {{ form.question.errors }}             
+        </div>
+        <div class="col-sm-12 col-md-1">
+            <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_question_textarea_display"><i class="fa fa-eye"></i></a>   
         </div>
     </div>
     <div class="row">
@@ -46,9 +49,12 @@
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-11">
+        <div class="col-sm-12 col-md-10">
             {{ form.answer }}
             {{ form.answer.errors }}    
+        </div>
+        <div class="col-sm-12 col-md-1" >
+            <a href="#" data-toggle='modal' data-target='#textarea_display'   id="this_answer_textarea_display"><i class="fa fa-eye"></i></a>   
         </div>
     </div>
     <div class="row">
@@ -57,18 +63,39 @@
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-11">
+        <div class="col-sm-12 col-md-10">
             {{ form.helper }}
             {{ form.helper.errors }}   
+        </div>
+        <div class="col-sm-12 col-md-1">
+            <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_helper_textarea_display"><i class="fa fa-eye"></i></a>   
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-12"> 
             <div class="form-group">
                 <input value="Enregistrer" type="submit" class="btn btn-primary"/>
-                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                <a href="#"><input type="button" value="Annuler" class="btn btn-default "/></a>
             </div>
         </div>    
     </div>
 </form>
- 
+
+
+<div class="modal fade" id="textarea_display" tabindex="-1" role="dialog" aria-labelledby="textarea_display" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="width:630px;font-size: 16px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h3>Visualisation de <span id="type_of_textarea_display"></span> au format réel</h3>              
+            </div>
+            <div class="modal-body" >
+                <div class="exotex flashcard" id="body_of_textarea_display" style="width:600px;" >
+                </div> 
+                <div style="clear: both"></div>
+            </div>
+        </div>
+    </div>
+</div> 
