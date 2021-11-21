@@ -79,7 +79,7 @@ define(['jquery',  'bootstrap' ], function ($) {
         });
 
         $('body').on('click', '.show_helper',   function (event) { 
-            let flashcard_id = $(this).data("flashcard_id");
+            let flashcard_id = $(this).data("flashcard_id");   
               $("#helper"+flashcard_id).removeClass("no_visu_onload");  
               $("#helper"+flashcard_id).toggle(500);
         });
