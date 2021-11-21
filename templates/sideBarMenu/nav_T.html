@@ -106,9 +106,14 @@
 </li>
 
 
+<li class="dropdown {% if not request.session.tdb and '/aefe' in request.path %}active{% endif %}">
+    <a href="#"  data-toggle='modal' data-target='#nouveaute' class="main closer_notification">
+        <i class="fa fa-feed fa-2x"></i> 
+        <div class="captionmenu">Actu.</div>
+    </a>
+</li>
 
-
-
+ 
 
 {% if request.user.is_superuser or request.user.is_extra  %}
 
