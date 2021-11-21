@@ -143,18 +143,19 @@
                                     <tbody>
                                           {% for e in emails %}
                                           <tr> 
-                                            <td style="width:40%">
+                                              <td style="width:40%">
                                                 <a href="#" class="show_email"  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}">
                                                    {{ e.author.get_full_name }}
                                                </a> 
 
-                                             </td> 
+                                              </td> 
                                               <td  >
                                               {% if e.attachment %}
                                                   <small><a href="../uploads/sendmail/{{ e.attachment  }}" target="_blank" ><i class="fa fa-paperclip" ></i></a></small> 
                                               {% endif %}   
 
-                                              <a href="#" class="show_email"  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}"> {{ e.subject|truncatechars:30 }} </a> </td>  
+                                              <a href="#" class="show_email"  data-toggle='modal' data-target='#showEmail'  data-email_id="{{ e.id }}"> {{ e.subject|truncatechars:30 }} </a> 
+                                              </td>  
               
                                               <td style="width:10%"><small>{{ e.today|date:"d b. Y, H:i" }}</small></td>  
                                           </tr>
@@ -201,7 +202,7 @@
                                       </tr>
                                       {% endfor %}
                                 </tbody>
-                          </table>
+                              </table>
                           </form>
                           {% else %}
                             <div class="alert alert-danger">Aucun message</div>

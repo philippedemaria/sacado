@@ -161,8 +161,6 @@
         <div class="content_list" id="search_result">
         {% if request.user.is_authenticated %}
             {% if user.is_teacher %}
-
-                                   
                 {% get_com_is_reading user as boolean_reader %}
                 {% if not boolean_reader %}        
                     <div id="advises" class="advises">
@@ -277,35 +275,7 @@
     </div>
 </div>
 
-{%  if user.is_teacher %}
-    {%  if communications|length > 0  %}
-    <div class="modal fade" id="nouveaute" tabindex="-1" role="dialog" aria-labelledby="nouveaute" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h2 class="sacado" >Notre actu.</h2>
-                </div>
-                <div class="modal-body">
-                    {% for c in communications %}
-                        <h5> {{ c.subject }} <span class="pull-right">{{ c.today|date:"d N Y" }}</span></h5>
-                        {{ c.texte|safe }}
-                        <hr>
-                    {% endfor %}
-                    <div class="text-center">
-                        <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {%  endif  %}
-    {% if 'qcm/' in request.path and not 'qcm/show' in request.path and not 'create' in request.path and not 'update' in request.path %}
-        {% include 'qcm/order_list.html' %}
-    {%  endif  %}
-{%  endif  %}
+
 
 <div class="notification-container dismiss" id="notification-account">
     <div class="row">
@@ -724,9 +694,6 @@
 
 
 </div>
-
-
-
 {% endif %}
 
 
@@ -742,6 +709,39 @@
 
 {% block python_js %}
 {% endblock %}
+
+
+{%  if user.is_teacher %}
+    {%  if communications|length > 0  %}
+    <div class="modal fade" id="nouveaute" tabindex="-1" role="dialog" aria-labelledby="nouveaute" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h2 class="sacado" >Notre actu.</h2>
+                </div>
+                <div class="modal-body">
+                    {% for c in communications %}
+                        <h5> {{ c.subject }} <span class="pull-right">{{ c.today|date:"d N Y" }}</span></h5>
+                        {{ c.texte|safe }}
+                        <hr>
+                    {% endfor %}
+                    <div class="text-center">
+                        <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%  endif  %}
+    {% if 'qcm/' in request.path and not 'qcm/show' in request.path and not 'create' in request.path and not 'update' in request.path %}
+        {% include 'qcm/order_list.html' %}
+    {%  endif  %}
+{%  endif  %}
+
+
 
 
 </body>

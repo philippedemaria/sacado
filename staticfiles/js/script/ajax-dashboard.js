@@ -314,31 +314,31 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-        $('.closer_notification').mouseover(function(event) {
+        $('.closer_notification').click(function(event) {
             $('.dropdown').removeClass('active');
             $('.dropdown').parent().addClass('active');
             $('.notification-container').removeClass('selected').addClass('dismiss');
             $('#documents').find('.fa').removeClass("fa-folder-open").addClass("fa-folder");
                 $('#account').find('.fa').removeClass("fa-user-circle").addClass("fa-user");
-          event.preventDefault();
+
         });
 
 
-        $('#documents').mouseover(function(event) {
+        $('#documents').click(function(event) {
                 appear_panel('documents');
                 $('#documents').find('.fa').removeClass("fa-folder").addClass("fa-folder-open");
         });
 
 
-        $('#tools').mouseover(function(event) {
+        $('#tools').click(function(event) {
                 appear_panel('tools')
         });
 
-        $('#admin').mouseover(function(event) {
+        $('#admin').click(function(event) {
                 appear_panel('admin')
         });
 
-        $('#account').mouseover(function(event) {
+        $('#account').click(function(event) {
                 appear_panel('account');
                 $('#account').find('.fa').removeClass("fa-user").addClass("fa-user-circle");
         });
@@ -351,6 +351,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $('#'+target).parent().addClass('active');
             $('.notification-container').removeClass('selected').addClass('dismiss');
             $('#notification-'+target).removeClass('dismiss').addClass('selected').show();
+          }
+          else{
+            $('#notification-'+target).removeClass('selected').addClass('dismiss');
           }
           event.preventDefault();
         } 
