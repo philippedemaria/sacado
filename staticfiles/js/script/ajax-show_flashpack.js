@@ -20,7 +20,7 @@ define(['jquery',  'bootstrap' ], function ($) {
         }
 
 
-        $('body').on('click', '.nav',   function (event) {
+        $('body').on('click', '.navigation',   function (event) {
 
             let value        = $(this).data("value");
 
