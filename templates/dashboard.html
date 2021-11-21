@@ -120,38 +120,6 @@
                                             <i class="fa fa-bullhorn text-warning"></i> Invitation Webinaire</b> le {{ webinaire.date_time|date:"d-m-y à H:i"}} <i class="fa fa-hand-o-right"></i><a href="{% url 'webinaire_register'  %}" > Voir le menu</a>
                                         </div>
                                         {% endif %}
-
-
-
-                                        {% comment %}
-                                        {% get_com_is_reading user as boolean_reader %}
-                                        {% if not boolean_reader %}        
-                                            <div id="advises" class="advises">
-                                                <div class="row"> 
-                                                    <div class="col-xs-12 col-md-12 col-lg-12">
-                                                        <h1 class="sacado" >Notre actu.</h1>
-                                                        <form action="#" method="POST" style="display:inline">
-                                                        <a href="#" id="reader_new"   class="btn btn-danger" >
-                                                            J'ai lu l'actu. proposée
-                                                        </a>
-                                                        </form>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row" id ="principal_section"> 
-                                                    <div class="col-xs-12 col-md-12 col-lg-12">
-                                        
-                                                            {% for c in communications %}
-                                                                <h5> {{ c.subject }} <span class="pull-right">{{ c.today|date:"d N Y" }}</span></h5>
-                                                                {{ c.texte|safe }}
-                                                                <hr>
-                                                            {% endfor %}
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                        {% endif %}
-                                        {% endcomment %}
-                                        
                                     {% elif user.is_student %} 
                                         <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
                                             <i class="fa fa-play"></i> Sacado en vidéo
@@ -193,6 +161,34 @@
         <div class="content_list" id="search_result">
         {% if request.user.is_authenticated %}
             {% if user.is_teacher %}
+
+                                   
+                {% get_com_is_reading user as boolean_reader %}
+                {% if not boolean_reader %}        
+                    <div id="advises" class="advises">
+                        <div class="row"> 
+                            <div class="col-xs-11 col-md-11 col-lg-11" id ="principal_section">
+                                <form action="#" method="POST" > 
+                                    <h1 class="sacado" >Notre actu.</h1>
+
+                                        {% for c in communications %}
+                                            <h3> {{ c.today|date:"d N Y" }} : {{ c.subject }} </h3>
+                                            {{ c.texte|safe }}
+                                            <hr>
+                                        {% endfor %}
+
+                                    <a href="#" id="reader_new"   class="btn btn-danger" >
+                                        J'ai lu l'actu. proposée
+                                    </a>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div> 
+                {% endif %}
+
+
                 {% include 'dashboard_teacher.html' %}
             {% elif user.is_parent %}
                 {% include 'dashboard_parent.html' %}
