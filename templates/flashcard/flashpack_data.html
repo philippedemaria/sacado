@@ -21,23 +21,12 @@
     {% endwith  %}
 
     <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Ajouter des flashcards" class="helper_tip" ><i class="fa fa-cloud"></i></a>
-    <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Modifier les flashcards" class="helper_tip" ><i class="fa fa-edit"></i></a>
-
+    <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer/modifer des cartes" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>
 
 </td>  
 <td  style="width:20px;">
  
         <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit"  > <i class="fa fa-edit  fa-xs"></i></a>
-
-        {% if request.user.is_extra  or request.user.is_superuser  %}
-        <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer des flashcards" class="helper_tip" ><i class="fa fa-plus-circle"></i></a>
-        {% else %}
-            <span class="helper_tip"> 
-                <i class="fa fa-question-circle"></i> 
-                <div class="helper_tip_text" >Pour créer vos propres cartes, vous devez demander l'accès à l'équipe SACADO. </div>
-            </span>
-        {% endif %}
-
 </td>
 <td style="position:relative">
     {% for p in  flashpack.parcours.all  %}
