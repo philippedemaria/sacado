@@ -255,7 +255,7 @@ def admin_exotexs(request,idl):
  
 def my_exotexs(request):
 
-    relationtexs = Relationtex.objects.filter(author=request.user.teacher)
+    relationtexs = Relationtex.objects.filter(author__id=1)
     for r in relationtexs:
         r.pk=None
         r.save()
