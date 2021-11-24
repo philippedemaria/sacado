@@ -426,13 +426,13 @@ def my_bibliotexs(request):
 
  
 
-    relationtexs = Relationtex.objects.filter(teacher__id=1)
+    relationtexs = Relationtex.objects.filter(teacher = teacher)
     for r in relationtexs:
         r.pk=None
         r.save()
         Relationtex.objects.filter(pk=r.id).update(teacher__id=2480)
 
- 
+
     list_folders = list()
     for folder in bibliotexs_folders :
         bibtexs_folders = dict()
