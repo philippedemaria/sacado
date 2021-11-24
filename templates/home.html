@@ -53,9 +53,9 @@ Intro Section -
                               <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires.</div>
                           </span> 
                 {% if not sacado_voyage %}
-                <br/>
+                de <br/>
                 {% endif %}
-                      de  {% for s in subjects %}{{ s.shortname}}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        {% for s in subjects %}{{ s }}{% if not forloop.last %}, {% endif %}{% endfor %}
 
                       <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
                               <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique, Sciences et Vie de la Terre arrivent peu à peu.</div>

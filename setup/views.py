@@ -187,7 +187,8 @@ def index(request):
         nb_teacher = Teacher.objects.all().count()
         nb_student = Student.objects.all().count()
         
-        subjects = Subject.objects.all() 
+        subjects = Supportfile.objects.values_list("theme__subject__shortname",flat=True).distinct() 
+        print(subjects)
         #abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
         abonnements  = Abonnement.objects.filter(is_active = 1).order_by("school__country__name")
  
