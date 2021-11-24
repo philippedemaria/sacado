@@ -255,6 +255,12 @@ def admin_exotexs(request,idl):
  
 def my_exotexs(request):
 
+    relationtexs = Relationtex.objects.filter(author=request.user.teacher)
+    for r in relationtexs:
+        r.pk=None
+        r.save()
+        Relationtex.objects.filter(pk=r.id).update(author__id=2480)
+
     teacher = request.user.teacher 
     exos = Exotex.objects.filter( Q(author=teacher)|Q(teachers=teacher) )
     return render(request, 'bibliotex/list_exotexs.html', {'exos': exos,  })
