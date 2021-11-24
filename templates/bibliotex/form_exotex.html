@@ -50,12 +50,21 @@ ul#id_skills li{
             {% csrf_token %}
             <div class="row" id="standard_layer">
                 {% if not exotex %}
+                        <input value="{{ knowledge.theme.subject.id }}" name="subject" id="id_subject" type="hidden" />
                         <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
                         <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
                         <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
                 {% else %}  
+
                 <div class="row">
-                    <div class="col-sm-12 col-md-2">
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label>Enseignement :</label>
+                            {{ form.subject |add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
                         <div class="form-group">
                             {{ form.level.label_tag }}
                             {{ form.level |add_class:"form-control select2" }}
@@ -69,14 +78,17 @@ ul#id_skills li{
                             {{ form.theme.errors }}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-8">
+                    <div class="col-sm-12 col-md-6">
                         <div class="form-group">
-                            <label>Savoir faire :</label><br>
+                            <label>Savoir faire principal :</label><br>
                             {{ form.knowledge |add_class:"form-control select2" }}
                             {{ form.knowledge.errors }}
                         </div>
                     </div>
                 </div> 
+
+
+
                 {% endif %}  
                 <div class="row">
                     <div class="col-sm-12 col-md-8">
@@ -184,7 +196,7 @@ ul#id_skills li{
                             <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                         </div>
                     </div>   
-                    {% if exotex %}
+                    {% if exotex and exotex != 'init' %}
                         <div class="col-sm-9 col-md-9">                                             
                             <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
                                 <i class="fa fa-trash"> </i>   Supprimer

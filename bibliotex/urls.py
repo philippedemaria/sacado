@@ -15,7 +15,7 @@ urlpatterns = [
     path('create_exotex_knowledge/<int:idk>', create_exotex_knowledge , name='create_exotex_knowledge'),
     path('exercise_exotex_update/<int:id>', update_exotex, name='update_exotex'),
     path('exercise_exotex_delete/<int:id>', delete_exotex, name='delete_exotex'), 
- 
+    path('set_exotex_in_bibliotex/<int:id>', set_exotex_in_bibliotex , name='set_exotex_in_bibliotex'), 
 
     path('bibliotexs', bibliotexs, name='bibliotexs'),
     path('my_bibliotexs', my_bibliotexs, name='my_bibliotexs'),

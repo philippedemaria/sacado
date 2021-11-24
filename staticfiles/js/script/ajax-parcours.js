@@ -838,15 +838,14 @@ define(['jquery','bootstrap'], function ($) {
         });
 
 
-
         $('body').on('click', '.projection', function () {
 
             var content = $(this).html();
             var screen_size = $(window).width()  ;
- 
+            var label = '<label for="customRange3" class="form-label">Taille de police</label><input type="range" value="3" class="form-range" min="3" max="5.5" step="0.5" id="customRange" style="width:200px">' ; 
      
                 if (!$('#projection_div') ) {
-                        $("body").append('<div class="projection_div"  id="projection_div" ><span class="pull-right closer_projection_div"><i class="fa fa-times fa-2x"></i></span>'+content+'</div>');                
+                        $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem"><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+content+'</div>');                
                     }                  
          
 
@@ -855,6 +854,11 @@ define(['jquery','bootstrap'], function ($) {
                                     $('.projection_div').find("img").addClass("projection_img_live");
                                     }
 
+
+                $('body').on('change', "#customRange", function (e) {
+                    size  = $("#customRange").val() ; 
+                    $("#projection_div").attr("style","font-size:"+size+"rem");
+                });
 
 
 

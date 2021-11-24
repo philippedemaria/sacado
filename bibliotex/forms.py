@@ -14,16 +14,15 @@ class ExotexForm(forms.ModelForm):
 
 		super(ExotexForm, self).__init__(*args, **kwargs)
 		if teacher:
-
- 
-			levels = teacher.levels.all()
+			subjects = teacher.subjects.all()
+			levels   = teacher.levels.all()
 			if knowledge :
 				skills = knowledge.theme.subject.skill.all()
 				knowledges = Knowledge.objects.filter(level = knowledge.level )
 			else :
 				skills = Skill.objects.all()
 				knowledges = Knowledge.objects.all()
- 
+			self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
 			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
 			self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False) 

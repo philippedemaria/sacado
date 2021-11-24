@@ -291,6 +291,37 @@ def create_exotex_knowledge(request,idk):
 
 
 
+def set_exotex_in_bibliotex(request,id):
+
+    bibliotex = Bibliotex.objects.get(id=id)
+    teacher = request.user.teacher
+    form = ExotexForm(request.POST or None,request.FILES or None, teacher = teacher , knowledge = None )
+
+    if form.is_valid():
+        nf = form.save(commit = False) 
+        nf.author = teacher
+        nf.teacher = teacher
+        nf.is_share = 1
+        nf.save()
+
+        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+        if nf.correction :
+            Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+
+        bibliotex.exotexs.add(nf)
+
+        form.save_m2m()  
+
+        messages.success(request, "L'exercice a été créé avec succès !")
+        return redirect('my_bibliotexs')
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'exotex': "init"  }
+
+    return render(request, 'bibliotex/form_exotex.html', context)
+
+
  
 def create_exotex(request):
 
@@ -778,57 +809,51 @@ def ajax_level_exotex(request):
     keyword      = request.POST.get("keyword",None)
     bibliotex_id = request.POST.get("bibliotex_id",None)
 
-    bibliotex = Bibliotex.objects.get(pk=bibliotex_id)
-    teacher = request.user.teacher 
-    data = {}
+    if bibliotex_id :
+        bibliotex = Bibliotex.objects.get(pk=bibliotex_id)
+        teacher = request.user.teacher 
+        data = {}
+        data['knowledges']       =  None
+        data['knowledges_level'] =  None
+        base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id=teacher.user.id), theme__subject_id= subject_id).exclude(bibliotexs=bibliotex)
 
-
-    base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id=teacher.user.id), theme__subject_id= subject_id).exclude(bibliotexs=bibliotex)
-
-    if theme_ids :  
-   
-        if level_id and theme_ids[0] != "" and skill_id  : 
-            skill = Skill.objects.get(pk=skill_id)
-            exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids, skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
-
-        elif level_id  and skill_id  : 
-            skill = Skill.objects.get(pk=skill_id)
-            exotexs = base.filter( level_id = level_id ,  skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
-
-        elif level_id and theme_ids[0] != ""  : 
-            exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids ).order_by("theme","knowledge__waiting","knowledge","ranking")
-
-
-        elif theme_ids[0] != ""    : 
-            exotexs = base.filter(  theme_id__in= theme_ids).order_by("theme","knowledge__waiting","knowledge","ranking")
-
-     
-        elif keyword and theme_ids[0] != ""   : 
-            exotexs =  base.filter(theme_id__in= theme_ids,  title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+        if theme_ids :  
+       
+            if level_id and theme_ids[0] != "" and skill_id  : 
+                skill = Skill.objects.get(pk=skill_id)
+                exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids, skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            elif level_id  and skill_id  : 
+                skill = Skill.objects.get(pk=skill_id)
+                exotexs = base.filter( level_id = level_id ,  skills = skill, ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            elif level_id and theme_ids[0] != ""  : 
+                exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            elif theme_ids[0] != ""    : 
+                exotexs = base.filter(  theme_id__in= theme_ids).order_by("theme","knowledge__waiting","knowledge","ranking")
+            elif keyword and theme_ids[0] != ""   : 
+                exotexs =  base.filter(theme_id__in= theme_ids,  title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            else :
+                exotexs = base
         else :
-            exotexs = base
+     
+            if level_id and  skill_id  : 
+                skill = Skill.objects.get(pk=skill_id)
+                exotexs = base.filter(level_id = level_id ,  skills = skill ).order_by("theme","knowledge__waiting","knowledge","ranking")
+
+            elif level_id and keyword  : 
+                exotexs = base.filter( level_id = level_id ,  title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            elif keyword and skill_id  : 
+                skill = Skill.objects.get(pk=skill_id)
+                exotexs =  base.filter(skills = skill, title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            else :
+                exotexs = base
+        data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
+    
     else :
  
-        if level_id and  skill_id  : 
-            skill = Skill.objects.get(pk=skill_id)
-            exotexs = base.filter(level_id = level_id ,  skills = skill ).order_by("theme","knowledge__waiting","knowledge","ranking")
-
-        elif level_id and keyword  : 
-            exotexs = base.filter( level_id = level_id ,  title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
-
-
-        elif keyword and skill_id  : 
-            skill = Skill.objects.get(pk=skill_id)
-            exotexs =  base.filter(skills = skill, title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
-
- 
-
-        else :
-            exotexs = base
-
-
-    data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
-
+        knowledges = Knowledge.objects.values_list("id","name").filter(theme_id__in=theme_ids, level_id = level_id  ) 
+        knowledges_level = Knowledge.objects.values_list("id","name").filter(theme__subject__id = subject_id,  level_id = level_id  ) 
+        data['knowledges']       =  list( knowledges )
+        data['knowledges_level'] =  list( knowledges_level )
     return JsonResponse(data)
 
 

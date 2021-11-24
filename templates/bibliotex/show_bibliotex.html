@@ -56,6 +56,7 @@
             <li class="relative_div_exotex action_print_tex"   data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="25px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
             </li>
+
             {% comment %}
             <li class="relative_div_exotex action_exotex"  data-action="results" data-relationtex_id="{{ r.id }}"> 
                 <span data-toggle='modal' data-target='#results_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-trophy"></i> <span class="legend_exotex_parameter"> Résultats </span> </span> 
@@ -69,7 +70,9 @@
             <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
                 <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-times"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
             </li>
-
+            <li class="relative_div_exotex"> 
+                <span href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="fa fa-fw fa-expand"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></span>
+            </li>
         </div>  
         <div class="col-sm-11 col-md-11 col-lg-11" >         
         {% else %}
@@ -89,7 +92,10 @@
                     {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
                 {% endfor %}
             </div>
+            <div id="content{{ r.exotex.id }}">
             {{ r.exotex.content_html|safe }}
+            </div>
+
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
         </div>  
     </div>

@@ -385,23 +385,23 @@ def create_subject(request):
 
 
     teacher = Teacher.objects.get(user=request.user)
-    subject_form = SubjectForm(request.POST or None, instance=subject )
+    subject_form = SubjectForm(request.POST or None  )
     formSet = inlineformset_factory( Subject , Vignette , fields=('subject','imagefile','level') , extra=1)
  
     if request.method == "POST":
-        if form.is_valid():
-            nf = form.save()
+        if subject_form.is_valid():
+            nf = subject_form.save()
  
-            form_ds = formSet(request.POST or None,request.FILES or None, instance = nf)
-            for form_d in form_ds :
+            formSet = formSet(request.POST or None,request.FILES or None, instance = nf)
+            for form_d in formSet :
                 if form_d.is_valid():
                     form_d.save()
         else :
-            print(form.errors)
+            print(subject_form.errors)
         
         return redirect('subjects')
 
-    context = {'form': form, 'formSet': formSet,   }
+    context = {'form': subject_form, 'formSet': formSet,   }
 
     return render(request, 'socle/form_subject.html', context)
 

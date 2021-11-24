@@ -321,6 +321,29 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        $('body').on('click', '.expand_video', function () {
+
+            var exotex_id = $(this).data("exotex_id");  
+            var content = $("#content"+exotex_id).html();
+            var label = '<label for="customRange3" class="form-label">Taille de police</label><input type="range" value="3" class="form-range" min="3" max="5.5" step="0.5" id="customRange" style="width:200px">' ; 
+
+            $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem" ><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+label+'<hr/>'+content+'</div>'); 
+        });
+
+
+        $('body').on('click', ".closer_projection_div", function () {
+             $("#projection_div").remove();
+        });
+
+
+        $('body').on('change', "#customRange", function (e) {
+            size  = $("#customRange").val() ; 
+            $("#projection_div").attr("style","font-size:"+size+"rem");
+        });
+
+
+
+
     $('body').on('change', '.selector_exotex' , function (event) {
 
  

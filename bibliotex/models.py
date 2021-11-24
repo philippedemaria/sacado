@@ -45,6 +45,7 @@ class Exotex(models.Model):
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
 
     ###### Socle
+    subject = models.ForeignKey(Subject, default =1 , on_delete=models.PROTECT,  related_name='subject_exotexs', verbose_name="Enseignement associé")
     knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='knowledge_exotexs', verbose_name="Savoir faire associé")
     level = models.ForeignKey(Level, related_name="level_exotexs", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="theme_exotexs", on_delete=models.PROTECT, verbose_name="Thème")
