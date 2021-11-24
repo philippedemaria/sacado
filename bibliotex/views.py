@@ -255,12 +255,6 @@ def admin_exotexs(request,idl):
  
 def my_exotexs(request):
 
-    relationtexs = Relationtex.objects.filter(teacher__id=1)
-    for r in relationtexs:
-        r.pk=None
-        r.save()
-        Relationtex.objects.filter(pk=r.id).update(teacher__id=2480)
-
     teacher = request.user.teacher 
     exos = Exotex.objects.filter( Q(author=teacher)|Q(teachers=teacher) )
     return render(request, 'bibliotex/list_exotexs.html', {'exos': exos,  })
@@ -429,6 +423,14 @@ def my_bibliotexs(request):
 
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+ 
+
+    relationtexs = Relationtex.objects.filter(teacher__id=1)
+    for r in relationtexs:
+        r.pk=None
+        r.save()
+        Relationtex.objects.filter(pk=r.id).update(teacher__id=2480)
 
  
     list_folders = list()
