@@ -67,9 +67,47 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-        $('#show_help_from_tdb').on('click', function (event) {
-            $("#help_from_tdb").toggle(300) ;
+        $('.helper_div_text').on('click', function (event) {
+
+            let condition = $(this).data("helper_text") ;
+
+            if (condition == "flashpack") 
+            {
+                $("#helper_div_title").html("Les flashpack ");
+                value = $("#helper_flashpack_text").html();
+            }
+            else if (condition == "bibliotex") 
+            {
+                $("#helper_div_title").html("Les biblioTex");
+                value = $("#helper_bibliotex_text").html();
+            }
+            else if (condition == "quizz") 
+            {
+                $("#helper_div_title").html("Les quizz "); 
+                value = $("#helper_quizz_text").html();
+            }
+
+            $("#helper_div_in").html(value) ;
         });
+
+
+
+
+
+
+
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        //$('#show_help_from_tdb').on('click', function (event) {
+        //    $("#help_from_tdb").toggle(300) ;
+        //});
 
 
 

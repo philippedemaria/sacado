@@ -221,6 +221,24 @@
 
 
 
+<div class="modal fade" id="helper_div" tabindex="-1" role="dialog" aria-labelledby="helper_div">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h1 class="sacado">Aide : <span  id="helper_div_title"></span></h1>
+            </div>
+            <div class="modal-body" id="helper_div_in">
+ 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div class="modal fade" id="reset_exercice" tabindex="-1" role="dialog" aria-labelledby="reset_exercice">
     <div class="modal-dialog" role="document" style="width:70%">
         <div class="modal-content" >
@@ -448,8 +466,14 @@
             {% if sacado_asso %}
             <a href="{% url 'evaluations' %}"> <i class="fa fa-trophy" ></i> Evaluations</a>
             {% else %}
-            <a href="#" style="cursor:not-allowed" title="Version établissement requise."  > <i class="fa fa-trophy" ></i> Evaluations</a>
+            <a href="#" style="cursor:not-allowed" title="Version établissement requise."> <i class="fa fa-trophy" ></i> Evaluations</a>
             {% endif %}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'courses' %}"><i class="fa fa-desktop" ></i> Cours </a>
         </div>
     </div>
     <hr/>
@@ -460,34 +484,28 @@
             {% else %}
             <a href="#" class="no_sacado_asso" title="Version établissement requise."  ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Quizz</a>
             {% endif %}
-        </div>
-    </div>
-
- 
-
-    <hr/>
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'courses' %}"><i class="fa fa-desktop" ></i> Cours </a>
+            <a href="#" data-toggle='modal' data-helper_text='quizz' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
         </div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_bibliotexs' %}"><span class="texfont">T<sub>E</sub>X</span> BiblioTex</a>
+            <a href="{% url 'my_bibliotexs' %}"><span class="texfont">T<sub>E</sub>X</span> BiblioTex</a> 
+            <a href="#" data-toggle='modal' data-helper_text='bibliotex'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_flashpacks' %}"><i class="fa fa-money" ></i> Flashpack (version Beta) </a>
+            <a href="{% url 'my_flashpacks' %}"><i class="fa fa-money" ></i> Flashpack (version Beta) </a> 
+            <a href="#" data-toggle='modal' data-helper_text='flashpack'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
     {% comment %}
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'courses' %}"><i class="fa fa-copyright" ></i> Exercices personnalisés </a>
+            <a href="{% url 'courses' %}"><i class="fa fa-copyright" ></i> Exercices personnalisés </a> <a href="#" data-toggle='modal' data-target='#helper_div' class="pull-right edit"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
     {% endcomment %}
@@ -743,6 +761,73 @@
         {% include 'qcm/order_list.html' %}
     {%  endif  %}
 {%  endif  %}
+
+
+<div class="no_visu_on_load" id="helper_quizz_text">
+    
+    <div class="alert">
+        <img src="{% static 'img/quizz_help.png' %}" width="200px" class="pull-right"/>
+        <p>Les quizz supportent 4 types de questions : 
+             <ol>
+                <li>réponse rédigée </li>
+                <li>Vrai/Faux </li>
+                <li>question à choix simple </li>
+                <li>question à choix multiples </li>
+            </ol>   
+        </p>
+        <p>Ils se déclinent en 2 types - papier ou numérique :
+         <ol>
+            <li><b>Quizz papier </b>   : L'élève répond sur sa feuille aux questions proposées. Ce type de quizz peut être utilisé en rituel en début de chaque séance pour réactiver les notions, les procédures par vidéo projection en classe.</li>
+            <li><b>Quizz numérique</b> :
+                 <ol>
+                    <li><b>Vidéo projeté </b>: Les élèves répondent sur leur SmartPhone. Les réponses sont enregistrées en temps réel. Le quizz devient un jeu. (En développement) </li>
+                    <li><b>Individuel</b>    : Les élèves répondent sur un ordinateur. L'ordre des questions et des réponses peut être définie comme aléatoire. Les réponses sont enregistrées pour récupérations des résultats.  (En développement)</li>
+                </ol>   
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="no_visu_on_load" id="helper_flashpack_text">
+ 
+
+    <div class="alert">
+
+        <p>Un flashpack est un ensemble de flashcards (ou cartes mémoire). Vous pouvez créer vos propres flashcards ou récupérer des flashcards existantes.</p></div>
+    <div class="alert alert-warning">
+        <p>Avant de la mettre en ligne une flashcard, n'oubliez pas de vérifier la taille de la police de caratère du contenu et sa position dans la carte pour proposer des cartes réellement utilisables.</p>
+    </div> 
+</div>
+
+
+<div class="no_visu_on_load" id="helper_bibliotex_text">
+    <div class="alert">
+
+        <p>Une biblioTex est un ensemble d'exercices en $\LaTeX$.</p></div>
+    <div class="alert alert-warning"><p>Avant de commencer, vous devez bien connaitre le langage $\LaTeX$ et tester vos exercices <b>en local</b>. </p>
+        <p>Pour cela, télécharger le préamble .tex et l'installer sur votre ordinateur en local. <a href="https://sacado.xyz/ressources/tex/preambule_tex/preambule.tex" target="_blank"><i class="fa fa-save"></i></a></p>
+        <p>
+            <ol>
+                <li>Pour créer un exercice en $\LaTeX$, vous devez préalablement créer une biblioTex vide.</li>
+                <li>Lui ajouter des exercices.</li>
+                <li>Ecrire alors votre fichier source</li>
+                <li>Le compiler sur votre ordinateur.</li>
+                <li>Lorsque la compilation avec notre préambule SACADO fonctionne, vous pouvez le placer sur le serveur de SACADO.</li>
+            </ol>
+        </p>
+        <p><b>Pour les graphiques, seul le package TikZ fonctionne.</b></p>
+    </div> 
+</div>
+
+
+
+
+
+
+
+
+
 
 
 

@@ -824,8 +824,14 @@ def manage_stage(request):
 
 	
 	school = this_school_in_session(request)
-	stage = Stage.objects.get(school = school)
-	stage_form = StageForm(request.POST or None, instance = stage)
+	try :
+		stage = Stage.objects.get(school = school)
+		stage_form = StageForm(request.POST or None, instance = stage)
+		eca , ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+	except :
+		stage = None
+		stage_form = StageForm(request.POST or None )
+		eca , ac , dep = 25 ,  20 ,  15
 
 	teacher = Teacher.objects.get(user=request.user)
 	if not authorizing_access_school(teacher, school):
@@ -839,7 +845,7 @@ def manage_stage(request):
 			nf.school = school
 			nf.save()
 
-	eca , ac , dep = stage.medium - stage.low ,  stage.up - stage.medium ,  100 - stage.up
+
 
 	context =  {'stage_form': stage_form , 'stage': stage , 'eca': eca , 'ac': ac , 'dep': dep , 'communications' : [] , "school" : school  }  
 
