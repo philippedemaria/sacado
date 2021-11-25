@@ -11,8 +11,11 @@
     <script>
         require(['script/ajax-bibliotex']);
     </script> 
- 
-
+    {% if not bibliotex %}
+    <script>
+        require(['script/ajax-bibliotex-complement']);
+    </script> 
+    {% endif %}
 {% endblock %}
 
  
