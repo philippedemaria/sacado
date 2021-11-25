@@ -693,11 +693,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     if (folders.length >0)
                     { for (let i = 0; i < folders.length ; i++) {
                                 
-                                let folders_id = folders[i][0]; 
-                                let folders_name =  folders[i][1] ; 
+                            let folders_id = folders[i][0]; 
+                            let folders_name =  folders[i][1] ; 
 
-                                $('#cblist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" class="select_folders" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
-                            }
+                            $('#cblist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" class="select_folders" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
+                        }
                     }
 
 
@@ -708,11 +708,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     if (parcours.length >0)
                     { for (let i = 0; i < parcours.length ; i++) {
                                 
-                                let parcours_id = parcours[i][0]; 
-                                let parcours_name =  parcours[i][1] ; 
+                            let parcours_id = parcours[i][0]; 
+                            let parcours_name =  parcours[i][1] ; 
 
-                                $('#pclist').append('<label for="cb'+Number(parcours_id)+'"><input type="checkbox" id="cb'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
-                            }
+                            $('#pclist').append('<label for="cp'+Number(parcours_id)+'"><input type="checkbox" id="cp'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
+                        }
                     }
 
 
@@ -763,7 +763,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                                 let parcours_id = parcours[i][0]; 
                                 let parcours_name =  parcours[i][1] ; 
 
-                                $('#pclist').append('<label for="cb'+Number(parcours_id)+'"><input type="checkbox" id="cb'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
+                                $('#pclist').append('<label for="cp'+Number(parcours_id)+'"><input type="checkbox" id="cp'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
                             }
                     }
 
