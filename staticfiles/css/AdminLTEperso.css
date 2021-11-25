@@ -996,50 +996,49 @@ label {
 .contenair_search_flashcard{
     float: left;
     margin: 25px 25px 25px 0px ;
-    -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
-    box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .1););
     position:relative;
-    border : 10px solid #5d4391;
-    height: 220px;
-    width: 350px;
+    padding:20px;
+    border: 1px solid #e6e2dd;
+    height: 350px;
+    width: 47%;
     background-color: #FFF;
     overflow: hidden ;
     position: relative;
     border-radius: 5px;
-    background-image: url('/static/img/flashpack.jpg')
+    background-image: url('/static/img/flashpack.jpg');
+    background-size: cover; 
 }
 .contenair_flashcard{
-    height: 185px;
-    padding: 15px;
+    height : 260px;
     width : 350px;
 
 }
 
 .flashcard_div{
   position: absolute;
-  height : 180px;
-  width : 350px;
-  padding: 15px;
-  background-color: #f1eef7;  
+  height : 260px;
+  width : 100%;
+  background-color: #f1eef7; 
+  margin-right: 15px; 
 }
 
 
 
 .label_flashcard{ 
     font-variant: small-caps;
-    font-size: 14px;
-    width:350px ;   
+    font-size: 18px;
+    width : 100%;
     text-align: center;    
-    background-color: #5d4391;
-}
+  }
 
 .bottom_flashcard{
-    float :left ;
-    width: 135px;
     background-color: #5d4391;
     cursor: pointer;
     color:#FFF;
     padding-top: 1px ;
+    opacity: 0.9;
     padding-bottom: 2px ;
 }
 
@@ -1047,7 +1046,7 @@ label {
     padding-top: 3px ;
     padding-bottom: 2px ;
     float :left ;
-    width:80px ;
+    width: 33%;
     cursor: pointer;
     background-color: #5d4391;
     color:#FFF;

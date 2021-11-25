@@ -348,6 +348,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         let statut = $(this).data("statut");   
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+
+
         $.ajax(
             {
                 type: "POST",
@@ -362,8 +364,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 url : "../ajax_set_flashcard_in_flashpack" ,
                 success: function (data) {
 
-                    $("#contenair_search_flashcard"+flashcard_id).remove() ;
-                    $("#nb_flashcards").html(data.nb);
+
+                    $("#selected_flashcard"+flashcard_id).addClass(data.class) ;
+                    $("#selected_flashcard"+flashcard_id).removeClass(data.noclass) ;
+                    $("#selected_flashcard"+flashcard_id).attr("data-statut",data.statut) ;
+
                 }
             }
         )

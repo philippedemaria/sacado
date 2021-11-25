@@ -548,21 +548,46 @@ def ajax_store_score_flashcard(request):
 
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_set_flashcard_in_flashpack(request):  
-
+    
     flashpack_id = request.POST.get("flashpack_id")
-    flashcard_id = request.POST.get("flashcard_id")
-    statut = request.POST.get("statut")
+    flashcard_id = request.POST.get("flashcard_id") 
+    statut       = request.POST.get("statut") 
+ 
+ 
     flashpack = Flashpack.objects.get(pk = flashpack_id)
     flashcard = Flashcard.objects.get(pk = flashcard_id)
     data = {}
 
     if statut=="true" or statut == "True":
         flashpack.flashcards.remove(flashcard)
+        data["statut"]  = "False"
+        data["class"]   = "btn btn-danger"
+        data["noclass"] = "btn btn-success"
     else:
         flashpack.flashcards.add(flashcard)
+        data["statut"]  = "True"
+        data["class"]   = "btn btn-success"
+        data["noclass"] = "btn btn-danger"
 
     data["nb"] = flashpack.flashcards.count()
+ 
+
+
     return JsonResponse(data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

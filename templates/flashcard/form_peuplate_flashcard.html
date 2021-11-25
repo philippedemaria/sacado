@@ -18,7 +18,11 @@
 
 {% block page_title %}
     <i class="fa fa-money sacado_color_text"></i>   
-    <a href="{% url 'show_flashpack' flashpack.id %}" >{{ flashpack }} <span class="helper_tip"> 
+    <a href="{% url 'show_flashpack' flashpack.id %}" >{{ flashpack }} </a>
+
+
+    <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
+    <small>Ajouter des cartes <img src="{% static 'img/angle-right.png' %}" width="20px"/>  <small><span id="nb_flashcards">{{ flashpack.flashcards.count }}</span> cartes</small></small><span class="helper_tip"> 
                         <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text"> 
                             
@@ -29,11 +33,7 @@
                                     {% for t in flashpack.themes.all %}{{ t.name }}{% if not forloop.last%}, {% endif %}{% endfor %}
                            
                         </div> 
-                    </span></a>
-
-
-    <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
-    <small>Ajouter des cartes <img src="{% static 'img/angle-right.png' %}" width="20px"/>  <small><span id="nb_flashcards">{{ flashpack.flashcards.count }}</span> cartes</small></small>
+                    </span>
 {% endblock %}
 
 
