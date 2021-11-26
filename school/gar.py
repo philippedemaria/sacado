@@ -60,8 +60,7 @@ def create_abonnement_gar(today,school,abonnement ,user):
     r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
-        return True 
+        return True , "ok"
     else :
-        return False 
+        return False, r.status_code 
  
-    #return True
