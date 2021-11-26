@@ -7,16 +7,11 @@ import requests
 def date_abonnement(today):
     """Création d'un abonnement dans la base de données"""
     date_start = today.isoformat() # Année en cours
-    date_start = date_start.split("T")
-    date_start = date_start[0]
+
     if today < datetime( today.year,5,30) :
         date_stop  = datetime(today.year,7,14).isoformat() # Année en cours
     else :
         date_stop  = datetime(today.year+1,7,14).isoformat() # Année suivante
-
-    date_stop = date_stop.split("T")
-    date_stop = date_stop[0]
-
 
     return date_start, date_stop
 
@@ -68,7 +63,6 @@ def create_abonnement_gar(today,school,abonnement ,user):
     r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
-        return True , "ok"
+        return True , "ok" , "ok" , "ok" 
     else :
-        return False, r.status_code 
- 
+        return False, r.status_code , r.headers , r.content.decode('utf-8') 

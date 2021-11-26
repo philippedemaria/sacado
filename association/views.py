@@ -615,11 +615,11 @@ def create_accounting(request,tp):
                     fa.save()
 
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        test, raison = create_abonnement_gar( today , school , fa  , request.user )
+                        test, raison , header , decode  = create_abonnement_gar( today , school , fa  , request.user )
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
-                            messages.error(request,"Activation du GAR échouée : {}".format(raison))
+                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
 
         else :
@@ -684,11 +684,11 @@ def renew_accounting(request,ids):
                     if nf.date_payment:
                         fa.active = 1
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        test, raison = create_abonnement_gar( today , school , nf  , request.user )
+                        test, raison , header , decode  = create_abonnement_gar( today , school , nf  , request.user )
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
-                            messages.error(request,"Activation du GAR échouée : {}".format(raison))
+                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                     fa.save()
         else :
@@ -750,11 +750,11 @@ def update_accounting(request, id):
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        test, raison = create_abonnement_gar( today , nf.school , nf  , request.user )
+                        test, raison , header , decode  = create_abonnement_gar( today , school , nf  , request.user )
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
-                            messages.error(request,"Activation du GAR échouée : {}".format(raison))
+                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
                     fa.save()
                 else :
                     print(form_abo.errors)
