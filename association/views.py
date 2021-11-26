@@ -739,7 +739,7 @@ def update_accounting(request, id):
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        test = create_abonnement_gar( today , nf.school , nf.id , request.user )
+                        test = create_abonnement_gar( today , nf.school , nf  , request.user )
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
