@@ -761,10 +761,10 @@ def update_accounting(request, id):
 
 @user_passes_test(user_is_board)
 def delete_accounting(request, id):
-    pass
-    # accounting = Accounting.objects.get(id=id)
-    # accounting.delete()
-    # return redirect('list_accountings', accounting.tp)
+ 
+    accounting = Accounting.objects.get(id=id)
+    accounting.delete()
+    return redirect('list_accountings', accounting.tp)
     
 
 @user_passes_test(user_is_board)
