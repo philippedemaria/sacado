@@ -471,6 +471,63 @@ li label{
   font-weight: normal; 
 }
 
+
+#grplist::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+#grplist::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+#grplist::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+#grplist::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+#cblist::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+#cblist::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+#cblist::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+#cblist::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+#pclist::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+#pclist::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+#pclist::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+#pclist::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+
+
 /* Liste des puces par le form django */
 
 .list_choice{
@@ -3340,7 +3397,6 @@ table.table-bordered.dataTable {
 .shower_course{
   padding-right: 5px;
   padding-left: 5px;
-
 }
 
 /*--------------------------------------------------------------

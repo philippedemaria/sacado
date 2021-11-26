@@ -26,7 +26,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     #Webservice du GAR
 
     date_start, date_stop = date_abonnement(today)
- 
+
     body = "<idAbonnement>" + id_abonnement +"</idAbonnement>"
     body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
     body += "<idDistributeurCom>832020065_000000000000000</idDistributeurCom>"

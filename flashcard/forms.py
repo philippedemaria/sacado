@@ -36,10 +36,13 @@ class FlashcardForm(forms.ModelForm):
 		flashpack = kwargs.pop('flashpack')
 		super(FlashcardForm, self).__init__(*args, **kwargs)
 		if flashpack : 
-			themes = flashpack.themes.all()
-			waitings = []
-			if  len(themes) > 0  :
-				waitings = Waiting.objects.filter(theme__in = themes )
+			try :
+				themes = flashpack.themes.all()
+				waitings = []
+				if  len(themes) > 0  :
+					waitings = Waiting.objects.filter(theme__in = themes )
+			except :
+				waitings = Waiting.objects.all()
 		else :
 			waitings = Waiting.objects.all()
 
