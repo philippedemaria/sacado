@@ -45,6 +45,25 @@ ul#id_skills li{
 </style>
 
 <div class="content_main">
+    {% if 'set_exotex_in_bibliotex' in request.path %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-warning"><p>Avant de commencer, vous devez bien connaitre le langage $\LaTeX$ et tester vos exercices <b>en local</b>. </p>
+                <p>Pour cela, télécharger le préamble .tex et l'installer sur votre ordinateur en local. <a href="https://sacado.xyz/ressources/tex/preambule_tex/preambule.tex" target="_blank"><i class="fa fa-save"></i> Télécharger l epréambule.</a></p>
+                <p>
+                    <ol>
+                        <li>Pour créer un exercice en $\LaTeX$, vous devez préalablement créer une biblioTex vide.</li>
+                        <li>Lui ajouter des exercices.</li>
+                        <li>Ecrire alors votre fichier source</li>
+                        <li>Le compiler sur votre ordinateur.</li>
+                        <li>Lorsque la compilation avec notre préambule SACADO fonctionne, vous pouvez le placer sur le serveur de SACADO.</li>
+                    </ol>
+                </p>
+                <p><b>Pour les graphiques, seul le package TikZ fonctionne.</b></p>
+            </div> 
+        </div>
+    </div>
+    {% endif %}
     <div class="col-xs-12 col-md-12">
         <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
