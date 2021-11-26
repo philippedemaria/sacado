@@ -22,7 +22,9 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
 
     date_start, date_stop = date_abonnement(today)
 
-    body = "<idAbonnement>" + id_abonnement +"</idAbonnement>"
+    ds = date_stop.split("T")
+
+    body = "<idAbonnement>" + id_abonnement +str(ds[0])+"</idAbonnement>"
     body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
     body += "<idDistributeurCom>832020065_000000000000000</idDistributeurCom>"
     body += "<idRessource>ark:/46173/00001.p</idRessource>"
@@ -52,9 +54,7 @@ def create_abonnement_gar(today,school,abonnement ,user):
     now = datetime.now()
     timestamp = datetime.timestamp(now)
 
- 
-
-    id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"+str(timestamp) 
+    id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"
     host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
     directory = '/home/sacado/'
 
