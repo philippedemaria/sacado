@@ -201,13 +201,7 @@
               {% endif %}
 
  
-
-              {% comment %}
-                <div id="preload_div" style="position:absolute;top:100px;">
-                    <div id="preload"></div>
-                    Chargement...
-                </div>
-              {% endcomment %}
+ 
 
 
 
@@ -285,10 +279,10 @@
             
       </form>
 
-
+{% comment %}
 <input type="text" id="champ1" value="message">
 <button formaction="#" onclick="PostMessage()">envoyer un message</button>
-
+{% endcomment %}
 
     </div> 
     <div class="col-sm-2 col-md-1 col-lg-1">
@@ -338,10 +332,14 @@
         {% endif %}    
         {% endif %}  
 
-
-
-
+        {% if relation.parcours.teacher.is_contact %}
+          ee
+        {% endif %}
+{% include 'qcm/signal_exercise_peda.html' %}
         {% include 'qcm/signal_exercise.html' %}
+
+
+
     </div> 
 
 

@@ -1,19 +1,19 @@
 <div class="row">
     <div class="col-lg-12 col-xs-12"> 
       <div class="form-group"> 
-          <a href="#" id='error_set' class="pull-right btn btn-warning" >Signaler <span class="label_plus"> une erreur sur cet exercice</span> ? </a>
+          <a href="#" id='peda_set' class="pull-right btn btn-primary" >En parler <span class="label_plus"> avec mon professeur</span> ? </a>
       </div>
    </div>                     
 </div> 
 <div class="row">
     <div class="col-lg-12 col-xs-12"> 
-      <div class="form-group no_visu_on_load" id='form_error_set'> 
-          <form action="{% url 'exercise_error'  %}" method="POST">    {% csrf_token %}
+      <div class="form-group no_visu_on_load" id='form_peda_set'> 
+          <form action="{% url 'exercise_peda'  %}" method="POST">    {% csrf_token %}
               <div class="form-group">
-                  <textarea name="message" id="message"   class="form-control" rows="6" cols="40"  placeholder="Vous devez décrire le problème brièvement. Merci."></textarea>
+                  <textarea name="message_peda" id="message_peda" class="form-control" rows="6" cols="40" placeholder="Vous pouvez décrire votre difficulté dans la méthode, la compréhension."></textarea>
               </div>
-              <input type="hidden" name="exercise_id" value="{{ exercise.id }}">
-              <input type="hidden" name="parcours_id" value="{{ parcours.id }}">
+              <input type="hidden" name="exercise_id" value="{{ exercise.id }}"  >
+              <input type="hidden" name="parcours_id" value="{{ parcours.id }}"  >
               <div class="row">
                   <div class="col-lg-12 col-xs-12">   
                       <div class="form-group">
@@ -21,11 +21,11 @@
                       </div>
                   </div>
                   <div class="col-lg-12 col-xs-12">   
-                      <div id="loader">
+                      <div id="loader_peda">
                       </div>
                   </div>
                   <div class="col-lg-12 col-xs-12">   
-                      <div class="verif_sender">
+                      <div class="verif_sender_peda">
                       </div>
                   </div>  
               </div> 

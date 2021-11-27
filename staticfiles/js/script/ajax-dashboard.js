@@ -1215,9 +1215,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         // ==================================================================================================================  
         // ==================================================================================================================             
-        // ============================================   Date limite des tasks  ============================================ 
+        // ============================================       Signelements       ============================================ 
         // ================================================================================================================== 
-        // =================================================================================================================
+        // ==================================================================================================================
  
             $('#form_error_set').hide();  
             $('#error_set').click(function(event) {
@@ -1230,7 +1230,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
               
                 let message =  $("#message").val()  ;
-                let exercise_id =  $(this).attr("data-exercise_id");   
+                let exercise_id =  $(this).attr("data-exercise_id");  
+                let parcours_id =  $(this).attr("data-parcours_id"); 
                 let from =  $(this).attr("data-from");   
 
                 if (message == "") { alert("Vous devez décrire brièvement le problème.") ; return false ; }    
@@ -1244,6 +1245,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     data: {
                         'message': message,
                         'exercise_id': exercise_id,
+                        'parcours_id': parcours_id,
                         csrfmiddlewaretoken: csrf_token,                        
                     },
                     type: "POST",
@@ -1258,7 +1260,52 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             });
 
 
+ 
+            $('#form_peda_set').hide();  
+            $('#peda_set').click(function(event) {
+                     $('#form_peda_set').toggle(500);  
+                });
 
+
+            $('#sender_peda').on('click', function () {
+                 
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+              
+                let message =  $("#message_peda").val()  ;
+                let exercise_id =  $(this).attr("data-exercise_id"); 
+                let parcours_id =  $(this).attr("data-parcours_id"); 
+                let from =  $(this).attr("data-from");   
+
+                if (message == "") { alert("Décrire brièvement le problème pédagogique que vous rencontrez.") ; return false ; }    
+
+                if (from == "0") { url_to ="../../ajax/exercise_error_peda"} else  { url_to ="../ajax/exercise_error_peda" ; } 
+     
+                $("#loader_peda").html("<i class='fa fa-spinner fa-2x fa-pulse'></i>")  ;
+
+                $.ajax({
+                    url: url_to,
+                    data: {
+                        'message': message,
+                        'exercise_id': exercise_id,
+                        'parcours_id': parcours_id,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+
+                        $(".verif_sender_peda").addClass("verif_sender_sent");
+                        $(".verif_sender_peda").html(data.htmlg);
+                        $("#loader_peda").hide()  ;
+                    }
+                });
+            });
+
+        // ==================================================================================================================  
+        // ==================================================================================================================             
+        // ============================================   Date limite des tasks  ============================================ 
+        // ================================================================================================================== 
+        // =================================================================================================================
 
 
             $("#task_date").hide(500);

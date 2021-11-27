@@ -251,7 +251,8 @@ urlpatterns = [
  
     path('advises', advises, name='advises'),   
 
-    path('ajax/exercise_error', ajax_exercise_error, name='exercise_error'),
+    path('exercise_error', exercise_error, name='exercise_error'),
+    path('exercise_error_peda', exercise_peda, name='exercise_peda'),
     path('ajax_detail_parcours/', ajax_detail_parcours , name='ajax_detail_parcours'),
     path('add_exercice_in_a_parcours', add_exercice_in_a_parcours, name='add_exercice_in_a_parcours'),  
     path('show_remediation/<int:id>/', show_remediation, name='show_remediation'),       #from index   

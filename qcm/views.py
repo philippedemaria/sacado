@@ -3390,14 +3390,15 @@ def exercise_custom_show_shared(request):
         return redirect('index')   
  
 
-def ajax_exercise_error(request):
+def  exercise_error(request):
 
-    message = request.POST.get("message")  
+    message     = request.POST.get("message")  
     exercise_id = request.POST.get("exercise_id")
+    parcours_id = request.POST.get("parcours_id")
     exercise = Exercise.objects.get(id = int(exercise_id))
     if request.user :
         usr = request.user
-        email = ""
+        email = " "
         if usr.email :
             email = usr.email
         msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+", "+email+" :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
@@ -3411,10 +3412,31 @@ def ajax_exercise_error(request):
 
         sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
 
+    return redirect( 'show_parcours_student', parcours_id) 
 
-    data = {}
-    data["htmlg"]= "Envoi réussi, merci.<br/>Nous traitons votre demande."
-    return JsonResponse(data) 
+
+
+
+
+def  exercise_peda(request):
+
+    message = request.POST.get("message_peda")  
+    exercise_id = request.POST.get("exercise_id")
+    parcours_id = request.POST.get("parcours_id")
+    exercise = Exercise.objects.get(id = int(exercise_id))
+
+    parcours = Parcours.objects.get(pk=parcours_id)
+ 
+    usr = request.user
+    email = " "
+    if usr.email :
+        email = usr.email
+    msg = "Message envoyé par l'utilisateur #"+str(usr.id)+", "+usr.last_name+", "+email+" :\n\nExercice Id : "+str(exercise_id)+" décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" \n\n" + message   
+    sending_mail("Aide pédagogique SacAdo Exercice "+str(exercise_id),  msg  , settings.DEFAULT_FROM_EMAIL , [parcours.teacher.user.email])
+
+ 
+    return redirect(  'show_parcours_student', parcours_id)
+
 
 
 
