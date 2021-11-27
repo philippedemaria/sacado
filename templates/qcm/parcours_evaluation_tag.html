@@ -156,8 +156,6 @@
 
     <!-- box-footer DES FONCTIONNALITES  -->
 
-
-
     <div class="box-footer"  style="position: relative; padding-top: 0px;">
         {% if role or parcours.teacher == teacher %}
 
@@ -165,20 +163,20 @@
 
                 <div class="row dossier"   style="position: relative; margin-bottom: 10px;"> 
 
-                        <div class="col-xs-6 col-md-6 col-lg-6"> 
-                            {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }} | {{ parcours.nb_exercices_and_cours.nb_exercises_published }} publié{{ parcours.nb_exercices_and_cours.nb_exercises_published|pluralize }} {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
-                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
-                        </div>
-                        <div class="col-xs-6 col-md-6 col-lg-6"> 
-                            {{  parcours.nb_exercices_and_cours.nb_cours }} cours  | {{ parcours.nb_exercices_and_cours.nb_cours_published }} publié{{ parcours.nb_exercices_and_cours.nb_cours_published|pluralize }}{% if not parcours.nb_exercices_and_cours.cours_care %} 
+                        <div class="col-xs-4 col-md-4 col-lg-4"> 
+                            {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
                             <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}
                         </div>
-
-                        <div class="col-xs-6 col-md-6 col-lg-6"> 
-                            {{  parcours.nb_exercices_and_cours.nb_bibliotex }} biblioTex{{  parcours.nb_exercices_and_cours.nb_bibliotex|pluralize }} | {{ parcours.nb_exercices_and_cours.nb_bibliotex_published }} publié{{ parcours.nb_exercices_and_cours.nb_bibliotex_published|pluralize }} 
+                        <div class="col-xs-4 col-md-4 col-lg-4"> 
+                            {{  parcours.nb_exercices_and_cours.nb_cours }} cours  {% if not parcours.nb_exercices_and_cours.cours_care %} 
+                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
+                            {{  parcours.nb_exercices_and_cours.nb_quizz }} quizz   
                         </div>
-                        <div class="col-xs-6 col-md-6 col-lg-6"> 
-                            {{  parcours.nb_exercices_and_cours.nb_quizz }} quizz  | {{ parcours.nb_exercices_and_cours.nb_quizz_published }} publié{{ parcours.nb_exercices_and_cours.nb_quizz_published|pluralize }} 
+
+                        <div class="col-xs-4 col-md-4 col-lg-4"> 
+                            {{  parcours.nb_exercices_and_cours.nb_bibliotex }} biblioTex <br/>
+ 
+                            {{  parcours.nb_exercices_and_cours.nb_flashpack }} flashpack{{  parcours.nb_exercices_and_cours.nb_flashpack|pluralize }}   
                         </div>
 
 

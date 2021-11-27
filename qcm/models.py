@@ -824,11 +824,11 @@ class Parcours(ModelWithCode):
 
         data = {}
  
-        exercises = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
-        courses   = self.course.all()
-        bibliotex = self.bibliotexs.all() 
-        quizz     = self.quizz.all()
-
+        exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
+        courses    = self.course.all()
+        bibliotex  = self.bibliotexs.all() 
+        quizz      = self.quizz.all()
+        flashpacks = self.flashpacks.all()
 
 
         nb_exercises_published = exercises.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
@@ -844,7 +844,11 @@ class Parcours(ModelWithCode):
         nb_bibliotex = bibliotex.count() + self.parcours_customexercises.count()
         nb_quizz     = quizz.count()
 
- 
+        nb_flashpack           = flashpacks.count() 
+        nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
+
+
+
         data["nb_exercises"]            = nb_exercises
         data["nb_cours"]                = nb_cours
         data["nb_exercises_published"]  = nb_exercises_published
@@ -855,7 +859,8 @@ class Parcours(ModelWithCode):
         data["nb_bibliotex_published"]  = nb_bibliotex_published
         data["nb_quizz_published"]      = nb_quizz_published
 
-
+        data["nb_flashpack"]            = nb_flashpack
+        data["nb_flashpack_published"]  = nb_flashpack_published
 
         data["exercises_care"] = ( nb_exercises == nb_exercises_published)
         data["cours_care"]     = ( nb_cours == nb_cours_published )

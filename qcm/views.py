@@ -2296,14 +2296,11 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
 
     if parcours.teacher == teacher :
         role = True
+ 
 
-    context = {'form': form,   'idg': idg, 'teacher': teacher, 'group_id': idg ,  'group': group ,  'folder': folder ,  'is_folder' : False,   'role' : role , 'images' : images }
-    if is_eval :
-        context.update( {'evaluation': parcours })
-        return render(request, 'qcm/form_evaluation.html', context)
-    else :
-        context.update( {'parcours': parcours} )
-        return render(request, 'qcm/form_parcours.html', context) 
+    context = {'form': form,   'idg': idg, 'teacher': teacher, 'group_id': idg ,  'group': group ,  'folder': folder ,  'is_folder' : False,   'role' : role , 'images' : images ,  'parcours': parcours }
+ 
+    return render(request, 'qcm/form_parcours.html', context) 
 
 
 @parcours_exists

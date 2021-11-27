@@ -35,11 +35,11 @@
 
     {% include 'qcm/breadcrumb.html' %}
 
-    <small>  
+    <small>   
         {% if parcours %}
             Configuration 
         {% else %}
-             Nouvelle évaluation 
+            Nouvelle évaluation 
         {% endif %}
     </small> 
 
@@ -167,7 +167,7 @@
 
 {% block save_evaluation %}    
     <div class="col-sm-12 col-md-4">
-            {% if evaluation %}
+            {% if parcours %}
                 <a href="{% url 'clone_parcours' evaluation.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('cette évaluation')"> 
                     <i class="fa fa-clone"> </i>   Dupliquer
                 </a>
