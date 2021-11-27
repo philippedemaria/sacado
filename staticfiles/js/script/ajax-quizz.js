@@ -416,6 +416,164 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             }
         }
 
+
+
+        $("#this_question_display_overview").on('click', function (event) {
+
+            let type = $("#qtype").val(); 
+
+            let title      = $("#id_title").val();
+            let fontsize   = $("#id_size").val();
+            let calculator = $("#id_calculator").val();
+            let duration   = $("#id_duration").val();
+            let theme      = $("#id_theme").is(":checked"); // booleen
+            let audio      = $("#id_audio").val();  
+            let video      = $("#id_video").val(); 
+            let preview    = $("#drop_zone img")[0]; 
+            let imagefile  = $("#id_imagefile").val(); 
+
+            $("#overview_text").html(title);
+            $("#overview_text").css("font-size",fontsize);
+            $("#overview_duration").html(duration);
+
+            console.log("type",type) ; 
+            console.log("title",title) ; 
+            console.log("fontsize",fontsize) ; 
+            console.log("calculator",calculator) ; 
+            console.log("duration",duration) ; 
+            console.log("theme",theme) ; 
+            console.log("audio",audio) ; 
+            console.log("video",video) ; 
+            console.log("preview",preview) ; 
+            console.log("imagefile",imagefile) ; 
+
+            let qcm ;
+
+            if (type == 1 )
+            {
+                let true_false = "<div class='col-sm-12 col-md-6  bgcolorBlue white'  align='center' style='border-radius : 10px'><h1 style='font-size:3.5em' class='thin'>VRAI </h1></div><div class='col-sm-12 col-md-6  bgcolorRed white'  align='center' style='border-radius : 10px'><h1 style='font-size:3.5em' class='thin'>FAUX </h1></div>"
+                $("#overview_answers").html("").append(true_false);
+            }
+            else if (type > 2 )
+            {
+                let choice0 = $("#id_choices-0-answer").val();
+                let choice1 = $("#id_choices-1-answer").val();
+                let choice2 = $("#id_choices-2-answer").val();
+                let choice3 = $("#id_choices-3-answer").val();
+                if (theme) {  
+                    qcm = "<div class='col-sm-12 col-md-6'   style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice0)+"em' class='thin'>"+choice0 +" </h1></div><div class='col-sm-12 col-md-6'   style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice1)+"em' class='thin'>"+choice1 +" </h1></div>"
+                    qcm = qcm + "<div class='col-sm-12 col-md-6'  style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice2)+"em' class='thin'>"+choice2 +" </h1></div><div class='col-sm-12 col-md-6'  style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice3)+"em' class='thin'>"+choice3 +" </h1></div>"  
+                }
+                else{ console.log("no theme") ;
+                    qcm = "<div class='col-sm-12 col-md-6  bgcolorBlue white'  style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice0)+"em' class='thin'>"+choice0 +" </h1></div><div class='col-sm-12 col-md-6  bgcolorRed white' style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice1)+"em' class='thin'>"+choice1 +" </h1></div>"
+                    qcm = qcm + "<div class='col-sm-12 col-md-6  bgcolorOrange white'   style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice2)+"em' class='thin'>"+choice2 +" </h1></div><div class='col-sm-12 col-md-6  bgcolorGreen white' style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice3)+"em' class='thin'>"+choice3 +" </h1></div>"  
+                }
+
+                $("#overview_answers").html("").append(qcm);
+            }
+
+
+ 
+            if (audio)
+            {
+                let overview_audio = "<audio controls><source src='#' type='audio/mpeg'></audio>"
+                $("#overview_audio").html("").append(overview_audio);
+            }
+
+            if (video)
+            {
+                $("#overview_video").html("").append(video);
+            }
+            if (imagefile)
+            {
+                let size_img ;
+                if (type == 2 ){ size_img = 550+"px" ;  } else { size_img = 350+"px" ;  }  
+                overviewpreviewFile();  
+                $("#overview_imagefile").attr("width", size_img );
+            }
+            else 
+            {
+ 
+                if ( $("#drop_zone img")[0].currentSrc ) 
+                    {   
+                let size_img ;
+                if (type == 2 ){ size_img = 550+"px" ;  } else { size_img = 350+"px" ;  }  
+                        $("#overview_imagefile").attr("width", size_img ).attr("src", $("#drop_zone img")[0].currentSrc );
+                    }
+ 
+            }
+
+
+            let file0 = $("#preview0").attr('src') ;
+            let file1 = $("#preview1").attr('src') ;
+            let file2 = $("#preview2").attr('src') ;
+            let file3 = $("#preview3").attr('src') ;
+
+            if (file0)
+            {
+
+ 
+                if (theme) {  
+                    qcm = "<div class='col-sm-12 col-md-6'   style='border-radius : 10px'>"
+                    if(file0) { qcm = qcm +"<img src='"+file0+"' height='90px' id='id_choices-0' />"}
+                    qcm = qcm +"</div><div class='col-sm-12 col-md-6'   style='border-radius : 10px'>"
+                    if(file2) { qcm = qcm +"<img src='"+file2+"' height='90px' id='id_choices-1' />"}
+                    qcm = qcm +"</div><div class='col-sm-12 col-md-6'  style='border-radius : 10px'>"
+                    if(file1) { qcm = qcm + "<img src='"+file1+"' height='90px' id='id_choices-2' />"}
+                    qcm = qcm + "</div><div class='col-sm-12 col-md-6'  style='border-radius : 10px'>"
+                    if(file3) { qcm = qcm + "<img  src='"+file3+"' height='90px' id='id_choices-3' />"}
+                    qcm = qcm + "</div>"  
+                }
+                else{ 
+ 
+                    qcm = "<div class='col-sm-12 col-md-6 bgcolorRed white'   style='border-radius : 10px'>"
+                    if(file0) { qcm = qcm +"<img src='"+file0+"' height='90px' id='id_choices-0' />"}
+                    qcm = qcm +"</div><div class='col-sm-12 col-md-6 bgcolorBlue white'   style='border-radius : 10px'>"
+                    if(file2) { qcm = qcm +"<img src='"+file2+"' height='90px' id='id_choices-1' />"}
+                    qcm = qcm +"</div><div class='col-sm-12 col-md-6  bgcolorOrange white'  style='border-radius : 10px'>"
+                    if(file1) { qcm = qcm + "<img src='"+file1+"' height='90px' id='id_choices-2' />"}
+                    qcm = qcm + "</div><div class='col-sm-12 col-md-6 bgcolorGreen white'  style='border-radius : 10px'>"
+                    if(file3) { qcm = qcm + "<img  src='"+file3+"' height='90px' id='id_choices-3' />"}
+                    qcm = qcm + "</div>"
+
+
+                }
+                $("#overview_answers").html("").append(qcm);
+
+            }
+ 
+              
+
+
+        })
+
+        function overviewpreviewFile() {
+
+            const file = $('#id_imagefile')[0].files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#overview_imagefile").attr("src", image );
+                                            }) ;
+
+            if (file) { console.log(file) ;
+              reader.readAsDataURL(file);
+            }            
+
+          }
+
+        function asnwerfontsize(choice) {
+
+            let fs ;
+            if ( choice.length > 50) { fs = 1.2 ;}
+            else if ( choice.length > 17) { fs = 1.7 ;}
+            else if ( choice.length > 10) { fs = 2.5 ;}
+            else { fs = 3 ;}
+
+            return fs;
+        }
+
  
     });
 });

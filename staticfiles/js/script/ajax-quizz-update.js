@@ -5,59 +5,8 @@ define(['jquery',  'bootstrap' ], function ($) {
     console.log(" ajax-quizz-update chargé ");
  
     qtype = $("#qtype").val() ;
-
-    console.log(qtype);
-    // if (qtype == 0)
-    // {
-    //        var arr = [0,1];  
-    //         $.each(arr , function (index, value){
-
-    //         index = index.toString() ; 
-    
-    //         if ($("#id_choices-"+index+"-is_correct").is(":checked"))
-    //             {
-    //                 $("#noCheck"+index).hide() ;
-    //                 $("#check"+index).show() ;
-    //             }
-    //         else
-    //             {
-    //                 $("#noCheck"+index).show() ;
-    //                 $("#check"+index).hide() ;
-    //             }
-    //         });
-    // }
-    // else if (qtype > 2)
-    // {
-    //        var arr = [0,1,2,3];  
-    //         $.each(arr , function (index, value){
-
-    //         index  =  index.toString()
-
-    //         $("#id_choices-"+index+"-answer").css(value);
-
-
-    //         if ($("#id_choices-"+index+"-is_correct").is(":checked"))
-    //             {
-    //                 $("#noCheck"+index).hide() ;
-    //                 $("#check"+index).show() ;
-    //             }
-    //         else
-    //             {
-    //                 $("#noCheck"+index).show() ;
-    //                 $("#check"+index).hide() ;
-    //             }
-    //         });
-
-    //        var arra = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] ;  
-    //         $.each(arra , function (index, value){ console.log(value) ;
-
-    //             index  =  index.toString()
-    //             $("#answer"+index+"_div").addClass(value);
-
-    //         });
-
-    // }
-
+ 
+ 
 
 function is_cheched_update(nb){
                if ($("#id_choices-"+nb+"-is_correct").is(":checked"))
