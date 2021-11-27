@@ -99,7 +99,7 @@
     <td >
  
         <div class="btn-group"  style="padding:0px;margin:0px;">
-            <a href="#" class="btn btn-default btn-publisher parcours_sharer"  data-from="1" id="parcours_sharer{{parcours.id}}" 
+            <a href="javascript:void();" class="btn btn-default btn-publisher parcours_sharer"  data-from="1" id="parcours_sharer{{parcours.id}}" 
                 data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_share }}">  
                 <i class="fa fa-circle-o-notch"></i>
             </a><span class="legend-btn  legend-btn-{% if not parcours.is_share %}danger{% else  %}success{% endif  %} size13" id="parcours_sharer_statut{{parcours.id}}"  >  
@@ -122,7 +122,7 @@
     <td>
  
             <div class="btn-group"  style="padding:0px;margin:0px;">
-                <a href="#" class="btn btn-default btn-publisher publisher"  id="parcours_publisher{{parcours.id}}" 
+                <a href="javascript:void();" class="btn btn-default btn-publisher publisher"  id="parcours_publisher{{parcours.id}}" 
                     data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
                     data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                     <i class="fa fa-circle-o-notch"></i>
