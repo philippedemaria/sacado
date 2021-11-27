@@ -1,0 +1,140 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    <script>   
+        require(['script/ajax-dashboard']);
+        require(['script/full_csv']);
+    </script>
+{% endblock %}
+ 
+ 
+{% block page_title %}
+    
+
+   <i class="fa fa-money sacado_color_text"></i> 
+ 
+    {{ flashpack.title }}   <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small> Importation de flashcards en CSV </small>
+ 
+   
+
+{% endblock %}
+ 
+
+
+ 
+{% block page_menu_right %}
+ 
+    <a href="{% url 'my_flashpacks'  %}" target="_blank" class="btn btn-new-violet">Mes flashpacks</a>
+
+{% endblock %}
+
+
+
+
+{% block body %}
+ 
+ 
+ 
+<section class="content_main"> 
+
+
+    {% if key == 0 %}
+        <h1 class="thin">Classe de {{ group.name }}</h1>
+    {% endif %}
+
+
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+      </button>
+
+        Assurez vous que le fichier CSV est enregistré au format UTF-8.{% include 'help_utf.html' %}
+
+            <div >
+                5 colonnes sont demandés dans cet ordre :
+                <ol style="margin:10px">  
+                    <li>Titre de la flashcard</li>
+                    <li>Enoncé de la question</li>
+                    <li>Utilisation de la calculatrice : 0 si utilisation interdite ou 1 si utilisation requise</li>
+                    <li>Enoncé de la réponse</li>     
+                    <li>Enoncé de l'aide éventuelle</li>  
+                </ol> 
+
+                <pre style="font-size:20px">Titre de la flashcard;Enoncé de la question;0/1;Enoncé de la réponse;Enoncé de l'aide éventuelle</pre>
+
+                Les données doivent ressembler à cela dans votre fichier.<br>
+                <pre style="font-size:20px">Courbe de fonction;Comment se nomme la courbe de la fonction Carré ?;0;Une parabole;Cette courbe possède un sommet.<br/>Courbe de fonction;Comment se nomme la courbe de la fonction Inverse ?;0;Une hyperbole 
+                </pre>
+                On remarque que la question 2 n'a pas d'aide.
+            </div>
+    </div>
+    <form action="#" method="POST" enctype="multipart/form-data" > 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" >Fichier CSV : </label>
+                         <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
+                 
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
+                <div class="form-group">                    
+                    <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Téléverser </button>
+                    <a href="javascript:history.back()"  class="btn btn-default" > Annuler</a>
+                </div> 
+            </div>
+        </div>
+    </form>
+
+
+    
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1 class="thin">Les flashcards du flashpack {{ flashpack.title }} </h1>
+        </div>
+    </div>
+
+
+    <table class="table table-hovered standard_tab_10 borderless"  style="width:100%" >
+        <thead> 
+            <tr> 
+                <th style="width:200px">Titre</th>
+                <th style="width:200px">question</th>
+                <th> Calculatrice</th>
+                <th style="width:200px">Réponse</th>
+                <th>Aide</th>
+                <th></th>
+            </tr> 
+        </thead>
+        <tbody>
+            {% for fc in flashpack.flashcards.all %}
+                <tr class="tr_edit">  
+                    <td style="width:200px">{{ fc.title }}</td>
+                    <td style="width:200px">{{ fc.question }}</td>
+                    <td> <img src="{% if fc.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" width="25px"/></td>
+                    <td style="width:200px">{{ fc.answer }}</td>
+                    <td>{{ fc.helper }}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}              
+         </tbody>
+    </table>
+
+
+ 
+
+
+
+</section>
+
+
+{% endblock %}

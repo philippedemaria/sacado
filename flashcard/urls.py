@@ -16,6 +16,10 @@ urlpatterns = [
 
     path('flashpack_peuplate/<int:id>', flashpack_peuplate, name='flashpack_peuplate'),
     path('set_flashcards_to_flashpack/<int:id>', set_flashcards_to_flashpack, name='set_flashcards_to_flashpack'),   
+    path('import_flashcards_to_flashpack/<int:id>', import_flashcards_to_flashpack, name='import_flashcards_to_flashpack'),
+
+
+    
     
     path('flashpack_actioner', actioner, name='actioner'),
 

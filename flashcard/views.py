@@ -23,7 +23,7 @@ import json
 import time
 ############### bibliothèques pour les impressions pdf  #########################
 import os
- 
+import csv
 #################################################################################
 import re
 import pytz
@@ -233,6 +233,52 @@ def set_flashcards_to_flashpack(request, id):
  
 
 
+
+
+
+
+def import_flashcards_to_flashpack(request, id):
+
+    teacher   = request.user.teacher
+    flashpack = Flashpack.objects.get(id=id)
+ 
+    if request.method == "POST":
+        # try:
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, "Le fichier n'est pas format CSV")
+            return HttpResponseRedirect(reverse("import_flashcards_to_flashpack", args=[id]))
+        # if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
+            return HttpResponseRedirect(reverse("import_flashcards_to_flashpack", args=[id]))
+        try:
+            file_data = csv_file.read().decode("utf-8")
+        except UnicodeDecodeError:
+            messages.error(request, 'Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+            return HttpResponseRedirect(reverse("import_flashcards_to_flashpack", args=[id]))
+
+        lines = file_data.split("\r\n")
+        # loop over the lines and save them in db. If error , store as string and then display = []
+ 
+        for line in lines:
+ 
+            if ";" in line:
+                fields = line.split(";")
+            elif "," in line:
+                fields = line.split(",")
+
+            new_flashcard , is_new = Flashcard.objects.get_or_create(question = fields[1] , defaults = {'title' : fields[0]  , 'calculator' : fields[2], 'answer' : fields[3], 'helper' : fields[4], 'subject' : flashpack.subject, 'theme': flashpack.themes.first() , 'waiting' : None } )
+            if is_new : 
+                new_flashcard.levels.set(flashpack.levels.all()) 
+                flashpack.flashcards.add(new_flashcard)  
+ 
+        messages.success(request,"importation réussie.")
+
+
+    context = { 'flashpack': flashpack,  'teacher': teacher   }
+    return render(request, 'flashcard/import_flashcard_in_flashpack.html', context )  
+ 
 
 
 def clone_flashpack(request, id):

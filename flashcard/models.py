@@ -45,7 +45,7 @@ class Flashcard(models.Model):
 
     students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
 
-    waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, on_delete=models.CASCADE, default="")
+    waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, null=True, on_delete=models.CASCADE, default="")
     theme     = models.ForeignKey(Theme, related_name="flashcards", blank=True, on_delete=models.CASCADE, default="")
     levels    = models.ManyToManyField(Level, related_name="flashcards", blank=True )
     subject   = models.ForeignKey(Subject, related_name="flashcards", blank=True, null = True, on_delete=models.CASCADE, default="")
