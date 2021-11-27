@@ -332,10 +332,10 @@
         {% endif %}    
         {% endif %}  
 
-        {% if relation.parcours.teacher.is_contact %}
-          ee
+        {% if relation.parcours.teacher.is_mailing %}
+            {% include 'qcm/signal_exercise_peda.html' %}
         {% endif %}
-{% include 'qcm/signal_exercise_peda.html' %}
+
         {% include 'qcm/signal_exercise.html' %}
 
 
