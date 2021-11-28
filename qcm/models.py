@@ -837,7 +837,6 @@ class Parcours(ModelWithCode):
         nb_exercises = exercises.count() + self.parcours_customexercises.count()
         nb_cours     = courses.count()
 
-
         nb_bibliotex_published = bibliotex.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
         nb_quizz_published     = quizz.filter(is_publish = 1).count() 
 
@@ -850,20 +849,25 @@ class Parcours(ModelWithCode):
 
 
         data["nb_exercises"]            = nb_exercises
-        data["nb_cours"]                = nb_cours
         data["nb_exercises_published"]  = nb_exercises_published
-        data["nb_cours_published"]      = nb_cours_published
+        data["exercises_care"] = ( nb_exercises == nb_exercises_published)
 
-        data["nb_bibliotex"]            = nb_bibliotex
+        data["nb_cours"]                = nb_cours
+        data["nb_cours_published"]      = nb_cours_published
+        data["cours_care"]     = ( nb_cours == nb_cours_published )
+
         data["nb_quizz"]                = nb_quizz
-        data["nb_bibliotex_published"]  = nb_bibliotex_published
         data["nb_quizz_published"]      = nb_quizz_published
+        data["quizz_care"]     = ( nb_quizz == nb_quizz_published )        
 
         data["nb_flashpack"]            = nb_flashpack
         data["nb_flashpack_published"]  = nb_flashpack_published
+        data["flashpack_care"] = ( nb_flashpack == nb_flashpack_published)
 
-        data["exercises_care"] = ( nb_exercises == nb_exercises_published)
-        data["cours_care"]     = ( nb_cours == nb_cours_published )
+        data["nb_bibliotex"]            = nb_bibliotex        
+        data["nb_bibliotex_published"]  = nb_bibliotex_published
+        data["bibliotex_care"] = ( nb_bibliotex == nb_bibliotex_published)
+ 
 
         return data
 
@@ -1008,6 +1012,11 @@ class Folder(models.Model):
 
         data["nb_cours"] = nb_cours
         data["nb_quizz"] = nb_quizz
+
+        data["nb_flashpack"] = self.flashpacks.filter(is_publish=1, students=student).count()
+        data["nb_bibliotex"] = self.bibliotexs.filter(is_publish=1, students=student).count()
+
+
 
         try :
             stage =  student.user.school.aptitude.first()

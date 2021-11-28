@@ -23,7 +23,7 @@
  
 
 {% block page_title %}
-    <span class="sacado_color_text"><i class="fa fa-money"></i></span>
+    {% include 'flashcard/logo.html' %}
     {% if group  %}<span style="color:{{ group.color }}"> {{ group.name }}</span>  <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
     {% if folder %}<span style="color:{{ folder.color }}"> {{ folder.title }}</span> <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
     Flashpack 
@@ -214,7 +214,15 @@
 				                    </td>
 				                    <td> {{ form.is_archive|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
 				                </tr>
-
+                                <tr>
+                                    <td>{{ form.is_creative.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards. Attention la validation par l'enseignant est requise.</div>
+                                                </span> 
+                                    </td>
+                                    <td>             
+                                        {{ form.is_creative|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                                    </td>
+                                </tr>
 				            {% else %}
 
 				                <tr>
@@ -240,6 +248,17 @@
 				                        </div> 
 				                    </td>
 				                </tr>
+                                <tr>
+                                    <td>{{ form.is_creative.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards.</div>
+                                                </span> 
+                                    </td>
+                                    <td>             
+                                        <div class="alert alert-danger"> 
+                                            Version établissement requise
+                                        </div> 
+                                    </td>
+                                </tr>
 				            {% endif %}
                             <tr>
                                 <td class="no_border">{{ form.interslide.label_tag }}

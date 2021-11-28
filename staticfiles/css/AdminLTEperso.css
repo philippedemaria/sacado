@@ -220,9 +220,7 @@ hr.divider {
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/
-
-
-
+ 
 
 
 .box-footer span{
@@ -1121,6 +1119,26 @@ label {
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 } 
+
+.flashcard_validate  {
+  background-color: #ffb400;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size:12px;
+  padding: 5px;
+  position: absolute;
+  top:5px;
+  left:5px;
+  width:140px;
+  z-index: 999;    
+  -webkit-box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
+  box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
+  font-weight:600;
+}
+
+
+
+
 /******************************************** real_time_live  **************************************/
 
 .no_live{
@@ -1973,6 +1991,7 @@ li.my_slide{
   height:70px;  
   box-shadow: 0px 0px 10px rgba(70, 17, 156, 0.3);
   opacity:0.9;
+  z-index: 9999;
 }
 
 .mastering_badge{
@@ -2419,7 +2438,9 @@ text-align: right;
         color: #249a56!important;
     }
 
-
+    .text-validate {
+        color: #ffb400!important;
+    }
 
     .text-is_favorite {
         color:  #5d4391!important;
@@ -2482,7 +2503,9 @@ text-align: right;
     .btn-warning:hover > .label_plus{
       display: inline;
     }
-
+    .btn-new-violet:hover > .label_plus{
+      display: inline;
+    }
 }
 
 
@@ -3008,8 +3031,14 @@ a.surline:hover   {
      font-size: 16px;
 }
 .edit:hover {
-     color: #309ae4;
+     color: #5d4391 ;/*  #309ae4;*/
+     text-decoration: none;
 }
+
+ 
+
+
+
 .trash {
      color: #AAA;
 }
@@ -7652,8 +7681,17 @@ text-align: center;
   padding-bottom: 0px;
   font-weight: 800;
   z-index: 50;
-  width: 95%;
+  width:100%;
+  left: 0;
+  opacity:0.95;
 }
+
+
+.box_title_vignette_color{
+  top:145px;
+  padding: 5px;
+}
+
 
 
 .box_title_underlay_vignette{
@@ -7761,10 +7799,34 @@ text-align: center;
   background-color: #777;
 }
 
-
-
 .widget-user-header .overlay .overlay_expand{
   padding-bottom: 5px;
+}
+
+.height_max_box{
+  height:300px;
+}
+
+.parcours_tag_student{
+  position: absolute; 
+  padding: 18px;
+  font-size:30px;
+  font-weight: 100;
+  padding: 10px 20px 25px 20px;
+  top:160px;  
+  width:295px;
+  margin-left:2px;
+}
+
+.parcours_tag_student_submenu{
+    margin-top:20px;
+    font-size:18px;
+}
+
+.parcours_tag_student_fermeture{
+    font-size:12px;
+    margin-bottom: 40px;
+    cursor: pointer
 }
 
 .extend{
@@ -7777,8 +7839,17 @@ text-align: center;
 }
 
 
+
 .extend_student{
   padding-bottom: 5px;
+  background-color: white;
+  opacity: 0.95;
+  width:100%;
+}
+
+.parcours_tag_student_background{
+  background-color: white;
+  opacity: 0.94;
 }
 
 .super_extend{
@@ -7820,6 +7891,8 @@ text-align: center;
   color : #998fa6;
   font-weight: 800;
 }
+
+
 
 
 

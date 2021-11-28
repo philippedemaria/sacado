@@ -12,7 +12,7 @@
  
 
 {% block page_title %}
-   <i class="fa fa-money"></i> Flashcard 
+  {% include 'flashcard/logo.html' %} Flashcard 
    {% if flashcard %}
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_flashcard' flashcard.id %}"> <small>{{ flashcard.title }} </small></a>
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
@@ -24,7 +24,10 @@
 
 
 {% block page_menu_right %}
+  {% if requezst.user.is_teacher %}
     {% include 'flashcard/submenu_flashpack.html'  %}
+  {% endif %}
+
 {% endblock %}
 
 

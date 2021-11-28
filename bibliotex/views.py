@@ -234,7 +234,88 @@ def printer(request, relationtex_id, collection,output):
         print("format output non reconnu")
         return 
 
+
+
+
+def printer_bibliotex_by_student(bibliotex):
+    """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
+    soit en html (output="html") """
+
+    # ouverture du texte dans le fichier tex
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"   
+
+    ## Création du texte dans le fichier tex   
+
  
+    document     = "bibliotex" + str(blibliotex.id)
+    title        = bibliotex.title
+    author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
+
+    elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
+
+    today = datetime.now()
+ 
+    relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today)).order_by("ranking")
+ 
+
+    j = 1
+    for relationtex in relationtexs :
+    
+        skills_display = ""
+        if relationtex.skills.count():
+            sks =  relationtex.skills.all()
+        else :
+            sks =  relationtex.exotex.skills.all()
+        for s in sks :
+            skills_display +=  s.name+". "
+            
+
+        elements += r"\exo {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
+        
+        j+=1
+
+  
+        k_display = relationtex.exotex.knowledge.name
+        elements += r"\savoirs{  \item " +  k_display 
+
+
+        if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
+        elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
+        else : kws = []
+        
+        for k in kws : 
+            elements += r" \item " +  k.name  
+
+        elements += r"}"
+ 
+    # Fermeture du texte dans le fichier tex
+    elements +=  r"\end{document}"
+
+    elements +=  settings.DIR_TMP_TEX    
+
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    #file = settings.DIR_TMP_TEX+r"\\"+document
+    # pour le serveur Linux
+    file = settings.DIR_TMP_TEX+"/"+document
+    ################################################################# 
+    ################################################################# 
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+
+ 
+
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Exotex
@@ -1318,3 +1399,13 @@ def print_bibliotex(request ):
 def print_exotex(request):
 
     return printer(request,0, False,"pdf")
+
+
+
+def print_bibliotex_by_student(request,id):
+
+    data = {}
+    bibliotex = Bibliotex.objects.get(pk=id)
+    printer_bibliotex_by_student(bibliotex) 
+
+    return JsonResponse(data)

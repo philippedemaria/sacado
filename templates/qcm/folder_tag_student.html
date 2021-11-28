@@ -38,9 +38,7 @@
     <div class="box-footer" style="position: relative; padding-top: 0px;">
         <div class="row dossier" style="padding-top: 3px;padding-bottom: 3px;"> 
 
-                <div class="col-xs-4 col-md-4 col-lg-5"> 
-                   <b style="font-size: 12px">Dans ce dossier </b>
-                </div>
+
                 <div class="col-xs-4 col-md-4 col-lg-4"> 
                     {{  data_min.nb_parcours }} parcours  <br/>
                     {{  data_min.nb_evaluations }} évaluations 
@@ -49,12 +47,15 @@
                     {{  data_min.nb_cours }} cours  <br/>
                     {{  data_min.nb_quizz }} quizz  
                 </div>
-
+                <div class="col-xs-4 col-md-4 col-lg-4"> 
+                    {{  data_min.nb_bibliotex }} biblioTex  <br/>
+                    {{  data_min.nb_flashpack }} flashpack  
+                </div>
         </div>
         <div class="row extend_student"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
                 <div style="text-align: center;margin-bottom: 15px"><br/>
-                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}"  class="btn btn-new-violet" style="width:200px" >  
+                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}"  class="btn btn-new-violet" style="width:200px; background-color: {{ folder.color }}" >  
                         {%  if is_task_exists %}
                             <i class="fa fa-calendar-check" style="color:red"></i>
                         {% endif %} Accéder</a>

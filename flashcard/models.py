@@ -42,13 +42,15 @@ class Flashcard(models.Model):
     helper        = RichTextUploadingField( null = True,   blank=True, verbose_name="Aide proposée")
 
     #duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
-
+    is_validate  = models.BooleanField(default=1, verbose_name="Validée par l'enseignant ?")
     students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
 
     waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, null=True, on_delete=models.CASCADE, default="")
     theme     = models.ForeignKey(Theme, related_name="flashcards", blank=True, on_delete=models.CASCADE, default="")
     levels    = models.ManyToManyField(Level, related_name="flashcards", blank=True )
     subject   = models.ForeignKey(Subject, related_name="flashcards", blank=True, null = True, on_delete=models.CASCADE, default="")
+
+    authors   = models.ManyToManyField(User, blank=True, related_name="flashcards", editable=False)
  
     def __str__(self):
         return self.title 
@@ -75,17 +77,19 @@ class Flashpack(models.Model):
     is_share     = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
     is_favorite  = models.BooleanField(default=1, verbose_name="Favori ?")
-
-    interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
+ 
     
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")
 
+    is_creative  = models.BooleanField(default=0, verbose_name="Création par les élèves de flashCard ?")
+
     groups       = models.ManyToManyField(Group, blank=True, related_name="flashpacks" ) 
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="flashpacks"  ) 
     folders      = models.ManyToManyField(Folder, blank=True, related_name="flashpacks"  ) 
-    
+    students     = models.ManyToManyField(Student, blank=True, related_name="flashpacks", editable=False)
+
     def __str__(self):
         return self.title 
 
@@ -95,6 +99,14 @@ class Flashpack(models.Model):
         for q in self.questions.filter(is_publish=1) :
             d += q.duration + self.interslide
         return d
+
+    def flashcards_to_validate(self):
+        d = False
+        if self.flashcards.filter(is_validate=0).count() :
+            d = True
+        return d
+
+
 
 
 

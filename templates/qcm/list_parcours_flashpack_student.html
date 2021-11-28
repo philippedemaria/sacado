@@ -1,0 +1,128 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-parcours']);
+    </script> 
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+{% include 'flashcard/logo.html' %}
+ 
+
+        {% include 'qcm/breadcrumb_student.html' %}   <span style="color:{{ parcours.color  }}"> <small class="thin">Les flashpacks</small></span>  
+{% endblock %}
+
+{% block page_menu_right %}
+
+
+        
+    {% include 'qcm/submenu_parcours_student.html' %}
+
+  
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+
+
+{% block body  %}
+
+{% include 'preloader.html' %}
+
+<section class="content_list" id="principal_section"> 
+
+ 
+        {% if sacado_asso %}    
+            {% for flashpack in flashpacks %}
+     
+
+
+ 
+    
+
+
+                <div  class="box box-widget widget-user-2"  
+                      style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}');{% else %} background-image: url('{% static 'img/flash_accueil.png' %}');{% endif %} background-size: cover;">
+                    <div class="handler widget-user-header">
+                        <!-- Add signet to folder -->
+                        <div class="group_show  no_visu_on_load" id="bibliotex_show{{flashpack.id }}"> 
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                                    <b>Savoir faire ciblés</b>
+                                </div> 
+                            </div>
+
+                            {% for t in flashpack.themes.all %}
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                    {{ t.name }}
+                                </div> 
+                            </div>
+                            {% endfor %}
+     
+ 
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="box_title_vignette box_title_vignette_color" style="background-color : {{ flashpack.color}};"> 
+                            <a href="{% url 'parcours_show_bibliotex_student' parcours.id flashpack.id  %}"  style="color:{{ flashpack.color|contrast_color }};"  >             
+                                {% if flashpack.title|length > 40 %}
+                                <span class="helper_tip" style=" font-size:16px; color:white">{{ flashpack.title|truncatechars:"40" }}
+                                    <div class="helper_tip_text_right" style="font-size:14px;">{{ flashpack.title }}</div>
+                                </span>
+                                {% else %}
+                                    {{ flashpack.title}}
+                                {% endif %}
+                            </a>    
+                        </div>
+                    </div>
+                    <div class="box-footer" style="position: relative; padding-top:20px;opacity: 0.95">
+                        <div class="row"> 
+                           <div class="col-lg-6 col-xs-6">
+                                 {{ flashpack.flashcards.count}} flashcards   
+                            </div>                        
+                           {% if flashpack.is_creative %} 
+                           <div class="col-lg-6 col-xs-6" align="right">
+                                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" >
+                                    <span class="helper_tip text-validate" style=" font-size:20px; "> <i class="bi bi-cloud-plus"></i>
+                                        <div class="helper_tip_text_right" style="font-size:14px;">Proposer des flashcards</div>
+                                    </span>
+ 
+                                </a>   
+                            </div>  
+                             
+                            {% endif %}                  
+                        </div>
+                    </div>
+                </div>    
+
+    
+
+
+
+            {% endfor %}
+
+        {% else %}
+            <div class="alert alert-danger">
+                <i class="fa fa-ban"></i> Version établissement nécessaire
+            </div>
+        {% endif %}
+
+  
+</section>
+
+ 
+
+{% endblock  %}   

@@ -1,0 +1,87 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax_show_flashpack']);
+    </script> 
+{% endblock %}
+
+
+
+{% block page_title %}
+    {% include 'flashcard/logo.html' %}  Flashcard <img width="25px" src="{% static 'img/angle-right.png' %}"/>
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+    {% if request.user.user_type == 2 %}
+    <a href="{% url 'my_flashpacks' %}" class="btn btn-new-violet">Mes flashpack</a>
+    {% else %}
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+    {% endif %}
+
+{% endblock %}
+
+
+
+
+
+
+{% block body %}
+<section class="content_main">
+
+    <form action="{% url 'validate_flashcards_to_flashpack' flashpack.id  %}" method="POST">
+        {% csrf_token %}    
+
+        <table class="table table-hovered standard_tab_10 borderless"  style="width:100%" >
+            <thead> 
+                <tr>  
+                    <th style="width:10px">Validation</th>
+                    <th style="width:200px">Titre</th>
+                    <th style="width:200px">question</th>
+                    <th style="width:40px"> Calculatrice</th>
+                    <th style="width:200px">Réponse</th>
+                    <th>Aide</th>
+                    <th>Thèmes</th>
+                    <th>Contributeurs</th>
+                </tr> 
+            </thead>
+            <tbody>
+                {% for fc in  flashcards  %}
+                    <tr class="tr_edit"> 
+                        <td style="width:10px;" bgcolor="{% if fc.is_validate %}#1bc074{% else %}#ffb400{% endif %}"><input type="checkbox" value="{{ fc.id }}" name="id_flashcard" {% if fc.is_validate %} checked {% endif %} /></td>
+                        <td style="width:200px">{{ fc.title|safe }}</td>
+                        <td style="width:200px">{{ fc.question|safe  }}</td>
+                        <td> <img src="{% if fc.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" width="25px"/></td>
+                        <td style="width:200px">{{ fc.answer|safe  }}</td>
+                        <td>{{ fc.helper|safe  }}</td>                        
+                        <td style="width:200px">{% for t in fc.themes.all %}{{ t.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                        <td style="width:200px">{% for u in fc.authors.all %}{{ u }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                    </tr>
+                {% endfor %}              
+             </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12"> 
+                <div class="form-group">
+ 
+
+                    <input value="Valider les flashcards sélectionées" type="submit" class="btn btn-primary"/>
+
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                </div>
+            </div>    
+        </div>
+
+    </form>
+</section>
+ 
+ 
+{% endblock %} 

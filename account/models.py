@@ -526,16 +526,26 @@ class Student(ModelWithCode):
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
         today      = time_zone_user(self.user) 
-        bases      = self.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  folders=None,    is_archive=0, is_trash=0) 
+        bases      = self.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,    is_archive=0, is_trash=0) 
         nb_folders = self.folders.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  is_archive=0,  is_trash=0).count() 
         nb         = bases.filter( is_evaluation = 0).count() 
         nbe        = bases.filter( is_evaluation = 1).count() 
+
+        nbb        = self.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subjects = group.subject, levels = group.level ,   is_archive=0 ).count() 
+        nbc        = bases.exclude(course = None ).count() 
+        nbf        = self.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
+        nbq        = self.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
+
 
         data = {}
         data["nb_parcours"] = nb
         data["nb_evaluations"] = nbe 
         data["nb_folders"] = nb_folders 
-
+        data["nb_bibliotex"] = nbb
+        data["nb_cours"]     = nbc 
+        data["nb_flashpacks"] = nbf
+        data["nb_quizz"]     = nbq 
+        
         return data
 
 

@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 from flashcard.models import Flashcard, Flashpack , Answercard
-from flashcard.forms import FlashcardForm ,  FlashpackForm  
+from flashcard.forms import FlashcardForm ,  FlashpackForm 
 from qcm.models import  Parcours, Exercise , Folder
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
@@ -205,19 +205,33 @@ def flashpack_peuplate(request, id):
 
 def set_flashcards_to_flashpack(request, id):
 
-    teacher   = request.user.teacher
+ 
     flashpack = Flashpack.objects.get(id=id)
-    form      = FlashcardForm(request.POST or None , flashpack = flashpack  )
+
+    if not flashpack.is_creative :
+        messages.error(request,"Vous tentez d'ouvrir un flashpack illégalement. Vous êtes donc redirigé.")
+        return redirect('index')
+
+    form = FlashcardForm(request.POST or None , flashpack = flashpack  )
 
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit=False)
             nf.theme = flashpack.themes.first()
             nf.subject = flashpack.subject
+            if request.user.is_student :
+                nf.is_validate = 0
             nf.save()
             form.save_m2m()
             nf.levels.set(flashpack.levels.all())
+            nf.authors.add(request.user)
             flashpack.flashcards.add(nf)
+
+            if request.user.is_student :
+                if flashpack.teacher.notification :
+                    msg = "Une flashcard du flashpack "+ flashpack.title +" vient d'être créé/modifiée par " + request.user.first_name+ " " + request.user.last_name
+                    sending_mail("Avertissement flashcard " ,  msg  , settings.DEFAULT_FROM_EMAIL , [flashpack.teacher.user.email])
+
 
             messages.success(request, 'La flashcard a été ajoutée avec succès !')
             return redirect('set_flashcards_to_flashpack' ,  id)
@@ -227,14 +241,38 @@ def set_flashcards_to_flashpack(request, id):
 
     flashcards = flashpack.flashcards.all() 
 
-    context    = { 'flashpack': flashpack, 'flashcards': flashcards , 'teacher': teacher , 'form': form   }
+    context    = { 'flashpack': flashpack, 'flashcards': flashcards ,   'form': form   }
 
     return render(request, 'flashcard/set_flashcards_to_flashpack.html', context )
  
 
 
 
+def validate_flashcards_to_flashpack(request, id):
 
+    flashpack = Flashpack.objects.get(id=id)
+    flashcards = flashpack.flashcards.order_by("is_validate")
+
+
+    if request.method == "POST" :
+        id_flashcards = request.POST.getlist('id_flashcard')
+
+
+        for flashcard in flashpack.flashcards.all() :
+            flashcard.is_validate = 0
+            flashcard.save()
+
+        for id_flashcard in id_flashcards :
+            Flashcard.objects.filter(pk=id_flashcard).update(is_validate=1)
+         
+        messages.success(request, 'Validation réalisée avec succès !')
+        return redirect('validate_flashcards_to_flashpack' ,  id)
+
+    context    = { 'flashpack': flashpack, 'flashcards': flashcards ,  }
+
+    return render(request, 'flashcard/validate_flashcards_to_flashpack.html', context )
+
+ 
 
 
 def import_flashcards_to_flashpack(request, id):
@@ -270,8 +308,9 @@ def import_flashcards_to_flashpack(request, id):
 
             new_flashcard , is_new = Flashcard.objects.get_or_create(question = fields[1] , defaults = {'title' : fields[0]  , 'calculator' : fields[2], 'answer' : fields[3], 'helper' : fields[4], 'subject' : flashpack.subject, 'theme': flashpack.themes.first() , 'waiting' : None } )
             if is_new : 
-                new_flashcard.levels.set(flashpack.levels.all()) 
-                flashpack.flashcards.add(new_flashcard)  
+                new_flashcard.levels.set(flashpack.levels.all())  
+                flashpack.flashcards.add(new_flashcard) 
+                new_flashcard.authors.add(request.user)
  
         messages.success(request,"importation réussie.")
 

@@ -19,7 +19,7 @@
 
 
 {% block page_title %}
-<span  style="color:{{ parcours.color }}"> <i class="fa fa-desktop" ></i>
+<span  style="color:{{ parcours.color }}"> <i class="bi bi-explicit"></i> 
 
     {% include 'qcm/breadcrumb_student.html' %}
      
@@ -42,11 +42,8 @@
     {% include 'qcm/submenu_parcours_student.html' %}
 
 
-
-    {% if today %}
-     <font style="font-size:16px">{{ today|date:"d N Y, H:i" }}</font> <a href="{%  url 'profile' %}" style="font-size:11px" title="Régler le fuseau horaire"><i class="fa fa-clock"></i></a>
-    {% endif %}
-    {% endblock %}
+ 
+{% endblock %}
 
 
 {% block body %}

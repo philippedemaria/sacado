@@ -37,7 +37,10 @@ urlpatterns = [
 
 
     path('print_exotex', print_exotex, name='print_exotex'),      
-    path('print_bibliotex', print_bibliotex, name='print_bibliotex'),  
+    path('print_bibliotex', print_bibliotex, name='print_bibliotex'), 
+
+    path('print_bibliotex_by_student/<int:id>', print_bibliotex_by_student, name='print_bibliotex_by_student'), 
+     
 
     path('ajax_publish_bibliotex', ajax_publish_bibliotex, name='ajax_publish_bibliotex'),  
     path('ajax_publish_list_bibliotex', ajax_publish_list_bibliotex, name='ajax_publish_list_bibliotex'),  

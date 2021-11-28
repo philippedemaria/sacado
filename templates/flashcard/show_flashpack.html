@@ -14,7 +14,7 @@
 
 
 {% block page_title %}
-    <i class="fa fa-money" style="color:{{ flashpack.color}}"></i>  {{ flashpack.title }} <img width="25px" src="{% static 'img/angle-right.png' %}"/>
+       {% include 'flashcard/logo.html' %} {{ flashpack.title }} <img width="25px" src="{% static 'img/angle-right.png' %}"/>
  
 {% endblock %}
 

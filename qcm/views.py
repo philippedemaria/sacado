@@ -2630,6 +2630,25 @@ def parcours_show_bibliotex_student(request, idp,id):
 
 
 
+
+def list_parcours_flashpack_student(request, idp):
+
+    parcours = Parcours.objects.get(id=idp)
+    user = request.user
+    today = time_zone_user(user)
+    flashpacks = parcours.flashpacks.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)) 
+
+    print(flashpacks)
+
+    context = { 'flashpacks': flashpacks ,   'parcours': parcours  }
+
+    return render(request, 'qcm/list_parcours_flashpack_student.html', context)
+
+
+
+
+
+
 @parcours_exists
 def show_parcours_visual(request, id):
 

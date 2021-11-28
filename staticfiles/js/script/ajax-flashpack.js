@@ -2,11 +2,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-flashpack.js OK");
 
-  
+        $("#publication_div").hide();
  
-        $('#id_is_publish').prop('checked', true);
-        $('#id_is_archive').prop('checked', false); 
-         
+
+            makeDivAppear($("#id_is_publish"), $("#publication_div"));
+
+
+            function makeDivAppear($toggle, $item) {
+                    $toggle.change(function () {
+                         $item.toggle();
+                    });
+                }
+   
+ 
+
 
             $('body').on('change', '#id_subject' , function (event) {
 

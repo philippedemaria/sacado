@@ -8,12 +8,20 @@
     <input type="hidden" name="flashpack" id="id_flashpack" value="{{ flashpack.id }}" /> 
     <input type="hidden" name="subject" id="id_subject" value="{{ flashpack.subject.id }}" /> 
     <div class="row">
-        <div class="col-sm-12 col-md-8">
+        <div class="col-sm-12 col-md-4">
                 <label>Titre</label>
                 {{ form.title|add_class:"form-control"  }}
                 {{ form.title.errors }}
         </div>
-       
+        {% if request.user.is_teacher %}
+            {% if request.user.teacher != flashpack.teacher %}
+            <div class="col-sm-12 col-md-4">
+                    <label>Validation</label><br/>
+                    {{ form.is_validate|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.is_validate.errors }}
+            </div>
+            {% endif  %}
+        {% endif  %}
         <div class="col-sm-12 col-md-4">
             <div class="form-group">
                 <label>Calculatrice ?</label><br/>
@@ -36,8 +44,8 @@
     </div>
     <div class="row">  
         <div class="col-sm-12 col-md-10">
-                {{ form.question }}
-                {{ form.question.errors }}             
+            {{ form.question }}
+            {{ form.question.errors }}             
         </div>
         <div class="col-sm-12 col-md-1">
             <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_question_textarea_display"><i class="fa fa-eye"></i></a>   

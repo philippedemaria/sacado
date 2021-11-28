@@ -314,6 +314,8 @@ urlpatterns = [
 
     path('list_parcours_quizz_student/<int:idp>/', list_parcours_quizz_student, name='list_parcours_quizz_student'),
     path('list_parcours_bibliotex_student/<int:idp>/', list_parcours_bibliotex_student, name='list_parcours_bibliotex_student'),
+    path('list_parcours_flashpack_student/<int:idp>/', list_parcours_flashpack_student, name='list_parcours_flashpack_student'),
+
     path('parcours_show_bibliotex_student/<int:idp>/<int:id>', parcours_show_bibliotex_student, name='parcours_show_bibliotex_student'),
 
     # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.
