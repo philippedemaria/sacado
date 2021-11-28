@@ -3391,7 +3391,7 @@ def  exercise_error(request):
 
     message     = request.POST.get("message")  
     exercise_id = request.POST.get("exercise_id")
-    parcours_id = request.POST.get("parcours_id")
+    parcours_id = request.POST.get("parcours_id",None)
     exercise = Exercise.objects.get(id = int(exercise_id))
     if request.user :
         usr = request.user
@@ -3409,7 +3409,10 @@ def  exercise_error(request):
 
         sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
 
-    return redirect( 'show_parcours_student', parcours_id) 
+    if request.user.is_teacher :
+        return redirect( 'show_parcours', parcours_id) 
+    else :
+        return redirect( 'show_parcours_student', parcours_id) 
 
 
 
