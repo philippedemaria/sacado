@@ -480,7 +480,7 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             {% if sacado_asso %}
-            <a href="{% url 'list_quizzes' %}"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Quizz</a>
+            <a href="{% url 'list_quizzes' %}"><img src="{% static 'img/quizz_menu.jpg' %}" width="35px"> Quizz</a>
             {% else %}
             <a href="#" class="no_sacado_asso" title="Version établissement requise."  ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Quizz</a>
             {% endif %}
@@ -490,14 +490,14 @@
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_bibliotexs' %}"><span class="texfont">T<sub>E</sub>X</span> BiblioTex</a> 
+            <a href="{% url 'my_bibliotexs' %}"><img src="{% static 'img/bibliotex.png' %}" width="25px">  BiblioTex</a> 
             <a href="#" data-toggle='modal' data-helper_text='bibliotex'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_flashpacks' %}"><i class="fa fa-money" ></i> Flashpack (version Beta) </a> 
+            <a href="{% url 'my_flashpacks' %}"><img src="{% static 'img/flash_accueil.png' %}" width="25px"> Flashpack (version Beta) </a> 
             <a href="#" data-toggle='modal' data-helper_text='flashpack'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>

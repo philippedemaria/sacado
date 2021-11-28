@@ -27,7 +27,7 @@
     {% csrf_token %}
     <div class="row">
         <div class="col-xs-6 col-md-3 ">
-            <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
+            <h2 class="thin"><i class="bi bi-folder sacado_color_text"></i>  Dans les dossiers</h2>
         </div>
 
         <div class=" col-xs-6 col-md-9">
@@ -38,8 +38,6 @@
     </div>
  
     {% for list_folder   in list_folders %} 
-
-
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">

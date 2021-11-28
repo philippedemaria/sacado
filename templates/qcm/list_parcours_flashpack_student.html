@@ -47,13 +47,6 @@
  
         {% if sacado_asso %}    
             {% for flashpack in flashpacks %}
-     
-
-
- 
-    
-
-
                 <div  class="box box-widget widget-user-2"  
                       style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}');{% else %} background-image: url('{% static 'img/flash_accueil.png' %}');{% endif %} background-size: cover;">
                     <div class="handler widget-user-header">
@@ -91,7 +84,7 @@
                     <div class="box-footer" style="position: relative; padding-top:20px;opacity: 0.95">
                         <div class="row"> 
                            <div class="col-lg-6 col-xs-6">
-                                 {{ flashpack.flashcards.count}} flashcards   
+                                <a href="{% url 'show_flashpack' flashpack.id %}"><i class="bi bi-play"></i> {{ flashpack.flashcards.count}} flashcards</a>   
                             </div>                        
                            {% if flashpack.is_creative %} 
                            <div class="col-lg-6 col-xs-6" align="right">
@@ -107,11 +100,6 @@
                         </div>
                     </div>
                 </div>    
-
-    
-
-
-
             {% endfor %}
 
         {% else %}

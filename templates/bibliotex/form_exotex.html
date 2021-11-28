@@ -21,14 +21,14 @@
  
 
 {% block page_title %}
-<div id="new_style">
-    <img src="{% static 'img/tex.png' %}" width="25px"> Fichier Latex 
+ 
+    {% include 'bibliotex/logo.html' %} Fichier Latex 
     {% if knowledge  %}
     <small>         
         {{ knowledge.level.shortname }}, {{ knowledge.theme.name }},  {{ knowledge.name|truncatechars:"80" }}
     </small>  
     {% endif %} 
-</div>
+ 
 {% endblock %}
 
 

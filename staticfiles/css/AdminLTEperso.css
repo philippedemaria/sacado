@@ -2450,7 +2450,7 @@ text-align: right;
     a.listing{
       font-size:20px;
       font-weight: 200;
-      color:#0e7bb5;
+      color:#5d4391; /*#0e7bb5;*/
     }
     a.listing:hover,
     a.listing:active,
@@ -2461,7 +2461,7 @@ text-align: right;
 
     a.sublisting{
       font-size:18px;
-      color:#c2a829;
+      color: #5d4391 ; /*#c2a829;*/
     }
     a.sublisting:hover,
     a.sublisting:active,
@@ -4145,7 +4145,7 @@ h6,
 
 /* General Links */
 a {
-  color: #007EE2 ;
+  color: #5d4391 ; /*#007EE2;*/ 
   font-weight: 100;
 }
 a:hover,
@@ -4153,7 +4153,7 @@ a:active,
 a:focus {
   outline: none;
   text-decoration: underline;
-  color: #007EE2 ;
+  color: #5d4391 ;
 }
 /* Page Header */
 .page-header {

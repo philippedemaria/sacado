@@ -254,7 +254,7 @@ def printer_bibliotex_by_student(bibliotex):
     ## Création du texte dans le fichier tex   
 
  
-    document     = "bibliotex" + str(blibliotex.id)
+    document     = "bibliotex" + str(bibliotex.id)
     title        = bibliotex.title
     author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
 
@@ -1406,6 +1406,6 @@ def print_bibliotex_by_student(request,id):
 
     data = {}
     bibliotex = Bibliotex.objects.get(pk=id)
-    printer_bibliotex_by_student(bibliotex) 
+    return printer_bibliotex_by_student(bibliotex) 
 
-    return JsonResponse(data)
+ 

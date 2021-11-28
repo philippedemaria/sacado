@@ -624,7 +624,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-        $('.dataTables_wrapper').last().find('.col-sm-6').first().append("<h2 class='thin sacado_color_text'><i class='fa fa-th-list'></i> hors dossier </h2> ") ;
+        $('.dataTables_wrapper').last().find('.col-sm-6').first().append("<h2 class='thin sacado_color_text'><i class='bi bi-list-task'></i> hors dossier </h2> ") ;
 
  
 

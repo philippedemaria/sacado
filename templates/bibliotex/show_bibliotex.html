@@ -21,7 +21,7 @@
 
   
 {% block page_title %}
-    <img src="{% static 'img/tex.png' %}" width="25px"> {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/> 
+    {% include 'bibliotex/logo.html' %} {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/> 
 {% endblock %}
 
 

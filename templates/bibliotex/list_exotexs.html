@@ -20,7 +20,7 @@
 
   
 {% block page_title %}
-    <img src="{% static 'img/tex.png' %}" width="25px"> Les exercices en Tex <img src="{% static 'img/angle-right.png' %}"/> {{ level.name }}
+    {% include 'bibliotex/logo.html' %} Les exercices en Tex <img src="{% static 'img/angle-right.png' %}"/> {{ level.name }}
 {% endblock %}
 
 {% block page_menu_right %}
