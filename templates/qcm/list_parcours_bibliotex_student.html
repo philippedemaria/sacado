@@ -53,7 +53,7 @@
                       style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}');{% else %} background-image: url('{% static 'img/bibliotex.jpg' %}');{% endif %} background-size: cover;">
                     <div class="handler widget-user-header">
                         <!-- Add signet to folder -->
-                        <div class="group_show  no_visu_on_load" id="bibliotex_show{{bibliotex.id }}"> 
+                        <div class="group_show  no_visu_on_load scrolling_overflow" id="bibliotex_show{{bibliotex.id }}"> 
                             <div class="row"> 
                                 <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
                                     <b>Savoir faire ciblés</b>
@@ -111,7 +111,7 @@
                                 <a href="{% url 'print_bibliotex_by_student' bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-download"></i>  <span class="label_icon">Télécharger</span>  </a>
                             </div>
                             <div class="col-lg-6 col-xs-6">
-                                <a href="javascript:void();" class="edit bibliotex_shower" data-flashpack_id="{{flashpack.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
+                                <a href="javascript:void();" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
                                 </a>
                             </div> 
                         </div>

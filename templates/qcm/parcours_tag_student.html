@@ -30,7 +30,7 @@
         <div class="parcours_tag_student_submenu no_visu_on_load" >
             <div class="row extend_student "> 
                 <div class="col-xs-12">  
-                    <a href="{% url 'show_parcours_student' parcours.id   %}" class="edit"><i class="bi bi-explicit" ></i> {{  data_min.nb_exercise }} Exercices</a> 
+                    <a href="{% url 'show_parcours_student' parcours.id   %}" class="edit"><i class="bi bi-explicit" ></i> {{  data_min.nb_exercise }} exercices</a> 
                     <span class="pull-right" style="color:#39fa5a;" >{{ data.pc }}%</span>
 
                     <div style="width:{{ data.pc }}%; height:5px; background-color: #39fa5a;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:99;border-radius :0% 10% 10% 0%;"></div>
@@ -42,7 +42,7 @@
             </div>
             <div class="row extend_student"> 
                 <div class="col-xs-12">  
-                    <a href="{% url 'show_course_student' 0 parcours.id %}" class="edit"><i class="bi bi-file-earmark-font"></i> {{ data_min.nb_cours }} Cours</a>                          
+                    <a href="{% url 'show_course_student' 0 parcours.id %}" class="edit"><i class="bi bi-file-earmark-font"></i> {{ data_min.nb_cours }} cours</a>                          
                 </div>
             </div>
             <div class="row extend_student"> 

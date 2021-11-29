@@ -6475,6 +6475,27 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 10px;
 }
 
+
+.scrolling_overflow{
+height:170px;
+overflow: auto;
+}
+.scrolling_overflow::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.scrolling_overflow::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.scrolling_overflow::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+
+
 .selector_div_result{
   cursor: pointer;
   margin-left:10px;
@@ -7926,6 +7947,7 @@ a.crud{
   top:30px;
   font-weight: normal;
  }
+
 
 
 
