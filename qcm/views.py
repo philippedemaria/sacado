@@ -2638,9 +2638,7 @@ def list_parcours_flashpack_student(request, idp):
     today = time_zone_user(user)
     flashpacks = parcours.flashpacks.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)) 
 
-    print(flashpacks)
-
-    context = { 'flashpacks': flashpacks ,   'parcours': parcours  }
+    context = { 'flashpacks': flashpacks , 'parcours': parcours , 'parcours': parcours , 'student' : user.student ,  'today' : today  }
 
     return render(request, 'qcm/list_parcours_flashpack_student.html', context)
 

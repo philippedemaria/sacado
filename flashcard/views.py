@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
 
-from flashcard.models import Flashcard, Flashpack , Answercard
+from flashcard.models import Flashcard, Flashpack , Answercard , Madeflashpack
 from flashcard.forms import FlashcardForm ,  FlashpackForm 
 from qcm.models import  Parcours, Exercise , Folder
 from account.decorators import  user_is_testeur
@@ -334,21 +334,25 @@ def clone_flashpack(request, id):
 
 
 
-def flashpack_results(request, id):
+def flashpack_results(request, idf,idp=0):
 
-    flashpack = Flashpack.objects.get(id=id)
+    flashpack = Flashpack.objects.get(id=idf)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    
+    if request.user.is_student :
+        answercards = flashpack.answercards.filter(student = request.user.student)
+    elif request.user.is_teacher :
+        answercards = flashpack.answercards.all()
+    else : # TODO for parent
+        answercards = flashpack.answercards.filter(student = request.user.student) 
 
-    flashpack.pk = None
-    flashpack.save()
+    parcours = None
+    if idp :
+        parcours = Parcours.objects.get(pk=idp)
 
-    return redirect('set_flashcards_to_flashpack' , id)
+    context = { 'flashpack': flashpack,  'answercards': answercards ,'parcours' : parcours  }
 
-
-
-
-
-
+    return render(request, 'flashcard/flashpack_results.html', context )  
 
 
 
@@ -612,18 +616,22 @@ def ajax_store_score_flashcard(request):
 
     flashpack_id = request.POST.get("flashpack_id")
     flashcard_id = request.POST.get("flashcard_id") 
-    value        = request.POST.get("value") 
+    value        = int(request.POST.get("value") )
+
+
 
     flashpack  = Flashpack.objects.get(id=flashpack_id)
     flashcard  = Flashcard.objects.get(id=flashcard_id)
     
     if request.user.user_type == 0 :
-        try :
-            answer = Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student ).last()
-            weight = answer.weight + (0.1-(5-value)*(0.08+(5-value)*0.02))
-        except :
-            weight = value
-        Answercard.objects.create( flashpack = flashpack, flashcard = flashcard , weight = weight , student = request.user.student )
+
+        Madeflashpack.objects.get_or_create( flashpack = flashpack, student = request.user.student  )
+
+        answer = Answercard.objects.get( flashpack = flashpack, flashcard = flashcard , student = request.user.student )
+        answers_str = answer.answers +"-"+str(value)
+        weight = float(answer.weight) + (0.1-(5-value)*(0.08+(5-value)*0.02))
+        rappel = answer.date + timedelta(days = int(weight))
+        Answercard.objects.update_or_create( flashpack = flashpack, flashcard = flashcard , student = request.user.student , defaults = { 'weight' : weight , 'answers' : answers_str, 'rappel' : rappel } )
 
     data = {}
     return JsonResponse(data)

@@ -11,7 +11,7 @@ urlpatterns = [
     path('show_flashpack/<int:id>', show_flashpack, name='show_flashpack'), 
     path('clone_flashpack/<int:id>', clone_flashpack, name='clone_flashpack'),
     path('my_flashpack_archives', my_flashpack_archives, name='my_flashpack_archives'),
-    path('flashpack_results/<int:id>', flashpack_results, name='flashpack_results'),
+    path('flashpack_results/<int:idf>/<int:idp>', flashpack_results, name='flashpack_results'),
 
 
     path('flashpack_peuplate/<int:id>', flashpack_peuplate, name='flashpack_peuplate'),

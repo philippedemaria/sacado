@@ -6,6 +6,7 @@ from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
 from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise
 from group.forms import GroupForm , GroupTeacherForm
+from flashcard.models import Answercard
 from sendmail.models import Email
 from sendmail.forms import EmailForm
 from school.models import Stage
@@ -183,6 +184,12 @@ def student_dashboard(request,group_id):
         last_exercises_done = student.answers.order_by("-date")[:5]
    
         parcourses_on_fire = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
+
+
+    answercards = Answercard.objects.filter(rappel=today)
+    print(answercards)
+
+
 
 
     customexercises_set = set()

@@ -15,7 +15,6 @@
 
 {% block page_title %}
        {% include 'flashcard/logo.html' %} {{ flashpack.title }} <img width="25px" src="{% static 'img/angle-right.png' %}"/>
- 
 {% endblock %}
 
 
@@ -23,8 +22,6 @@
 
     {% if request.user.user_type == 2 %}
     <a href="{% url 'my_flashpacks' %}" class="btn btn-new-violet">Mes flashpack</a>
-    {% else %}
-    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
     {% endif %}
 
 {% endblock %}
@@ -50,7 +47,7 @@
                             <i class="fa fa-fw fa-refresh"></i> Il vous appartient de jauger au mieux vos réponses pour avoir un retour le plus juste possible de vos acquis. <br/><br/>
                             <i class="fa fa-fw fa-clock"></i> Le temps entre chaque question est chronométré pour vous donner une indication sur votre temps de réponse. <br/><br/><br/>
                             </div>                            
-                            {% if flashpack.vignette %}<img src="{{ flashpack.vignette.url }}" width="350px"  />{% else %}<img src="{% static 'img/flashcard.jpg' %}" width="350px"  />{% endif %}
+                            {% if flashpack.vignette %}<img src="{{ flashpack.vignette.url }}" width="350px"  />{% else %}<img src="{% static 'img/flash_accueil.png' %}" width="200px"  />{% endif %}
 
                             <div style="text-align: right">
                                 <button data-nav="next" data-value="start" class="btn btn-primary navigation"><i class="fa fa-fw fa-caret-right"></i> Démarrer</button>
@@ -76,6 +73,9 @@
                                 <b> -- FIN -- </b>
                                 <br/><br/>
                                 <br/><br/>
+                                {% if request.user.user_type == 0 %}
+                                <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="btn btn-default "/>Mes résultats</a>
+                                {% endif %}
                             </h1>
                         </div>
                     </div> 

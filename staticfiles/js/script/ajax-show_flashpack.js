@@ -1,7 +1,7 @@
 define(['jquery',  'bootstrap' ], function ($) {
     $(document).ready(function () {
 
-        console.log(" flashpack-slider chargé ");
+        console.log(" show_flashpack chargé ");
 
         var slideBox = $('.slider ul'),
             slideWidth = 1000 ,

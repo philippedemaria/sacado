@@ -84,7 +84,12 @@
                     <div class="box-footer" style="position: relative; padding-top:20px;opacity: 0.95">
                         <div class="row"> 
                            <div class="col-lg-6 col-xs-6">
-                                <a href="{% url 'show_flashpack' flashpack.id %}"><i class="bi bi-play"></i> {{ flashpack.flashcards.count}} flashcards</a>   
+                            {% get_flashpack_spaced_repetitions flashpack today student as spaced_repetitions %}
+                                {% if  spaced_repetitions %}
+                                <a href="{% url 'show_flashpack' flashpack.id %}"><i class="bi bi-play"></i> {{ flashpack.flashcards.count}} flashcards</a>
+                                {% else %}
+                                <a href="javascript:void();">{{ flashpack.flashcards.count}} flashcards</a>
+                                {% endif %}
                             </div>                        
                            {% if flashpack.is_creative %} 
                            <div class="col-lg-6 col-xs-6" align="right">
@@ -92,11 +97,17 @@
                                     <span class="helper_tip text-validate" style=" font-size:20px; "> <i class="bi bi-cloud-plus"></i>
                                         <div class="helper_tip_text_right" style="font-size:14px;">Proposer des flashcards</div>
                                     </span>
- 
                                 </a>   
                             </div>  
-                             
                             {% endif %}                  
+                        </div>
+                        <div class="row" style="padding-top:10px;"> 
+                           <div class="col-lg-6 col-xs-6" >
+                                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" class="edit" > <i class="bi bi-emoji-wink"></i> Apprendre </a>   
+                            </div>
+                            <div class="col-lg-6 col-xs-6">
+                                <a href="{% url 'flashpack_results' flashpack.id parcours.id %}" class="edit" ><i class="bi bi-trophy"></i> Mes résultats</a>
+                            </div>                        
                         </div>
                     </div>
                 </div>    

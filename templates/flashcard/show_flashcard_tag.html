@@ -39,9 +39,9 @@
                 Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
             </div>
             <form method="POST">{% csrf_token %}
-            <button data-nav="next" data-value="0" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-danger">Je ne connais pas la réponse</button>
-            <button data-nav="next" data-value="1" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-warning">Je connais partiellement la réponse.</button>                        
-            <button data-nav="next" data-value="3" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-success">Je connais la réponse.</button>  
+            <button data-nav="next" data-value="1" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-danger">Je ne connais pas la réponse</button>
+            <button data-nav="next" data-value="3" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-warning">Je connais partiellement la réponse.</button>                        
+            <button data-nav="next" data-value="5" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-success">Je connais la réponse.</button>  
             </form>        
         </div>
 

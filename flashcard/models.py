@@ -11,7 +11,7 @@ from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
 from time import strftime
-
+ 
 POLICES = (
         (16, '16'),
         (24, '24'), 
@@ -106,8 +106,21 @@ class Flashpack(models.Model):
             d = True
         return d
 
+    def spaced_repetitions(self,today,student):
+        d = True
+        if self.madeflashpack.filter(date=today,student=student).count() :
+            d = False
+        return d
 
 
+class Madeflashpack(models.Model):
+
+    flashpack   = models.ForeignKey(Flashpack,  related_name="madeflashpack",  on_delete=models.CASCADE, default='' ) 
+    student     = models.ForeignKey(Student,  null=True, blank=True,   related_name='madeflashpack', on_delete=models.CASCADE,  editable= False)
+    date        = models.DateField(auto_now=True )
+
+    def __str__(self):
+        return self.date
 
 
 class Answercard(models.Model):
@@ -116,7 +129,10 @@ class Answercard(models.Model):
     flashcard   = models.ForeignKey(Flashcard,  related_name="answercards",  on_delete=models.CASCADE ) 
     student     = models.ForeignKey(Student,  null=True, blank=True,   related_name='answercards', on_delete=models.CASCADE,  editable= False)
     weight      = models.FloatField(default=0, editable= False)
- 
+    date        = models.DateField(auto_now=True )
+    rappel      = models.DateField(auto_now=True , null=True, blank=True )
+    answers     = models.CharField(max_length=255, default='', editable= False)
+
 
     def __str__(self):
-        return self.student.user.last_name
+        return str(self.date)
