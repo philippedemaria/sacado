@@ -184,15 +184,6 @@ def show_flashpack(request, id):
     return render(request, 'flashcard/show_flashpack.html', context )
 
 
- 
-
-
-
-
-
-
-
-
 
 def flashpack_peuplate(request, id):
 
@@ -636,11 +627,17 @@ def ajax_store_score_flashcard(request):
 
         Madeflashpack.objects.get_or_create( flashpack = flashpack, student = request.user.student  )
 
-        answer = Answercard.objects.get( flashpack = flashpack, flashcard = flashcard , student = request.user.student )
-        answers_str = answer.answers +"-"+str(value)
-        weight = float(answer.weight) + (0.1-(5-value)*(0.08+(5-value)*0.02))
-        rappel = answer.date + timedelta(days = int(weight))
-        Answercard.objects.update_or_create( flashpack = flashpack, flashcard = flashcard , student = request.user.student , defaults = { 'weight' : weight , 'answers' : answers_str, 'rappel' : rappel } )
+        answer, created = Answercard.objects.get_or_create( flashpack = flashpack, flashcard = flashcard , student = request.user.student )
+        if value == 5 : weight = 4
+        elif value == 3 : weight = 2
+        elif value == 1 : weight = 1
+
+        if answer.answers != "" : answers_str = answer.answers +"-"+str(value)
+        else : answers_str =  str(value) 
+ 
+        rappel          = answer.date + timedelta(days = weight)
+        Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
+ 
 
     data = {}
     return JsonResponse(data)
