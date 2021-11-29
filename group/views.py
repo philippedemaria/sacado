@@ -186,8 +186,8 @@ def student_dashboard(request,group_id):
         parcourses_on_fire = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
 
 
-    answercards = Answercard.objects.filter(rappel=today)
-    print(answercards)
+    #answercards = Answercard.objects.filter(rappel=today)
+ 
 
 
 
@@ -233,9 +233,6 @@ def student_dashboard(request,group_id):
     
     relationships_in_late = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
     relationships_in_tasks = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
-
-    print(parcourses_on_fire)
-
 
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses ,
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
