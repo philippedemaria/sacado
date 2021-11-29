@@ -7850,6 +7850,7 @@ text-align: center;
 .parcours_tag_student_background{
   background-color: white;
   opacity: 0.94;
+  color:#555 !important;
 }
 
 .super_extend{
