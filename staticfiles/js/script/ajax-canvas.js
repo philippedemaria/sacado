@@ -116,18 +116,6 @@ define(['jquery', 'bootstrap' ], function ($) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         $("#saver").on("click", function(){    
    
             var canvas = document.getElementById("myCanvas");
