@@ -127,3 +127,8 @@ function delete_all_these_groups(f) {
 function ebepSelectedStudents(f) {
      if (!confirm('Vous souhaitez attribuer/retirer les outils inclusifs à '+f+' ?')) return false;
  }
+
+
+function launch_flashpack() {
+     if (!confirm('Vous souhaitez lancer ce flashpack ? Si vous cliquez OK vous devrez le terminer et ne pourrez plus vous tester ce jour. \nCommencez le test ?')) return false;
+ }

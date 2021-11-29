@@ -184,6 +184,15 @@ def show_flashpack(request, id):
     return render(request, 'flashcard/show_flashpack.html', context )
 
 
+ 
+
+
+
+
+
+
+
+
 
 def flashpack_peuplate(request, id):
 

@@ -19,8 +19,8 @@ urlpatterns = [
     path('import_flashcards_to_flashpack/<int:id>', import_flashcards_to_flashpack, name='import_flashcards_to_flashpack'),
     path('validate_flashcards_to_flashpack/<int:id>', validate_flashcards_to_flashpack, name='validate_flashcards_to_flashpack'),
 
-    
-    
+ 
+
     path('flashpack_actioner', actioner, name='actioner'),
 
     path('create_flashcard/new', create_flashcard, name='create_flashcard'),
