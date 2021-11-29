@@ -6478,7 +6478,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
 
 .scrolling_overflow{
 height:170px;
-overflow: auto;
+overflow-y: auto;
 }
 .scrolling_overflow::-webkit-scrollbar {
   width: 0px;
