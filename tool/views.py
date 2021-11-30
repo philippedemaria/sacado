@@ -1223,7 +1223,7 @@ def list_quizz_student(request):
     for g in student.students_to_group.all() : 
         teacher_user = g.teacher.user
         today = time_zone_user(teacher_user)
-        quizzes.update(g.generate_quizz.filter(Q(quizz__is_publish = 1)| Q(quizz__start__lte= today,quizz__start__gte= today)))
+        quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today)))
 
     context = { 'quizzes' : quizzes , }
     return render(request, 'tool/list_quizz_student.html', context)

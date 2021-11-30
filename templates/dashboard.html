@@ -112,16 +112,17 @@
                     <div class="row">
                         <div class="navbar-header">
                         {% block page_title %}
-                            <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span>     
+                                
                                 {% if request.user.is_authenticated %}
                                     {% if user.is_teacher %}
-
+                                        <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span> 
                                         {% if webinaire %}
                                         <div class="webinaire_index">
                                             <i class="fa fa-bullhorn text-warning"></i> Invitation Webinaire</b> le {{ webinaire.date_time|date:"d-m-y à H:i"}} <i class="fa fa-hand-o-right"></i><a href="{% url 'webinaire_register'  %}" > Voir le menu</a>
                                         </div>
                                         {% endif %}
-                                    {% elif user.is_student %} 
+                                    {% elif user.is_student %}                                        
+                                        <span style="color:#5d4391"><i class="bi bi-markdown icon_size" ></i> Matières  </span>  
                                         <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
                                             <i class="fa fa-play"></i> Sacado en vidéo
                                         </a>
@@ -480,7 +481,7 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             {% if sacado_asso %}
-            <a href="{% url 'list_quizzes' %}"><img src="{% static 'img/quizz_menu.jpg' %}" width="35px"> Quizz</a>
+            <a href="{% url 'list_quizzes' %}"><img src="{% static 'img/quizz_menu.jpg' %}" width="30px"> Quizz</a>
             {% else %}
             <a href="#" class="no_sacado_asso" title="Version établissement requise."  ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Quizz</a>
             {% endif %}

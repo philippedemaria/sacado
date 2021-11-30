@@ -105,14 +105,14 @@
     </a>
 </li>
 
-
+{%  if communications|length > 0  %}
 <li class="dropdown">
     <a href="#"  data-toggle='modal' data-target='#nouveaute' class="main closer_notification">
         <i class="bi bi-rss icon_size"></i> 
         <div class="captionmenu">Actu.</div>
     </a>
 </li>
-
+{% endif %}
  
 
 {% if request.user.is_superuser or request.user.is_extra  %}

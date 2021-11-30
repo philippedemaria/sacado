@@ -15,7 +15,7 @@
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> Les quizz</a> 
+        <a href="{% url 'index' %}" ><img src="{% static 'img/quizz_menu.jpg' %}" width="40px" /> Les quizz</a> 
 {% endblock %}
 
 {% block page_menu_right %}
@@ -41,7 +41,7 @@
                 </thead>
                 <tbody>
                     {% for quizz in quizzes %}
-                        {% is_can_gquizz_restart quizz student as restart_quizz %}
+
                         <tr style="font-size:20px">
                             <td> 
                                {{ quizz.subject.shortname }}
@@ -59,11 +59,11 @@
                                {% elif quizz.is_numeric and not quizz.is_video %}
                                     {{ quizz.title }} 
                                     
-                                    {% if  restart_quizz %}
+
                                         <a href="{% url 'goto_quizz_student' quizz.id  %}" class="btn btn-primary btn-xs">Démarrer</a>
-                                    {% else %}
+
                                         <a href="#" class="btn btn-default btn-xs show_my_quizz_result" data-toggle='modal'  data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Déjà renseigné</a>
-                                    {% endif %}
+
                                     <br/><small> Numérique sur terminal</small>
                                     
                                 {% else %}

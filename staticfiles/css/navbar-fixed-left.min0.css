@@ -2,41 +2,37 @@
 .navbarLeft {
     left:0px;
     width : 95px;
-    background-color: #FFF ;   /* #20123a*/
+    background-color: #5d4391  ;   /* #20123a*/
     text-align:center;
     z-index:1000;
     background-repeat:no-repeat;
     background-position:bottom;
-   box-shadow: 0px 0px 6px rgba(70, 17, 156, 0.5);
 }
 .navbarLeft-nav > li > a,.navbarLeft-nav > li > a.main  {
-    color :#9975e0 ; /*#f1eef7; */  
+    color : #f1eef7;   
     width : 95px;
     padding: 5px 5px;
     padding-top: 5px;
-    padding-bottom: 5px; 
-
- 
-
+    padding-bottom: 5px;
 }
 
 .navbarLeft-nav > li > a:hover  
    {
-    color: #5d4391  ;/*#5d4391 */
-    background-color: #FFF;	
+    color: #5d4391 ;
+    background-color: #f4f6f9;	
     width : 95px;
     border-radius: 0px;
 }
  
 .nav > li > a.main:hover, .nav > li > a.main:focus {
     text-decoration: none;
-    color: #ffb914 ; /*#5d4391;*/
+    color: #5d4391;
     background-color:  #FFF ;  
 }
 
 .nav > li > a:hover, .nav > li > a:focus {
     text-decoration: none;
-    color: #FFF;
+    color: #5d4391;
     background-color: transparent ;  
 }
 
@@ -83,7 +79,7 @@
 .navbarLeft-nav > .active > a:focus, 
 .navbarLeft-nav > .active > a:hover{
     color: #5d4391!important ;
-    background-color: #FFF  !important;	
+    background-color: #FFF!important;	
     border-radius: 0px;
 }
 
@@ -103,7 +99,7 @@ body{padding-top:0;margin-left:100px}
 }
 
 .captionmenu {
-    font-size: 0.7em;
+    font-size: 0.5em;
 }
 
 

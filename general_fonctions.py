@@ -80,7 +80,8 @@ def get_username_manuel(texte):
 
 
 def separate_values(request, line, is_group,simple) :
-             
+
+            
     if ";" in line:
         fields = line.split(";")
     elif "," in line:
@@ -103,7 +104,7 @@ def separate_values(request, line, is_group,simple) :
         level = None
         i ,j ,k , l =  0, 1 , 2 , 3
 
-    ln = cleanhtml(str(fields[i]).lower().capitalize()) #.replace(' ', '').replace('\ufeff', '')
+    ln = cleanhtml(str(fields[i]).lower().capitalize())
     fn = cleanhtml( str(fields[j]).lower().capitalize())
  
     if request.POST.get("manage_username") == "auto" :
@@ -130,7 +131,7 @@ def separate_values(request, line, is_group,simple) :
             email = ""
 
     password = make_password("sacado2020")
-            
+
     return ln, fn, username , password , email , group_name , level , is_username_changed
 
 

@@ -22,12 +22,20 @@
     </a>
 </li>
 
+
 <li class='dropdown'>
     <a href="{% url 'index' %}" class="main" >
-        <i class="fa fa-tachometer-alt fa-2x"></i> 
-        <div class="captionmenu">Tableau de bord</div>
+
+        <i class="bi bi-markdown icon_size"></i> 
+        <div class="captionmenu">Matières</div>
+
     </a>
 </li>
+
+
+
+
+
 
 <li  class="dropdown {% if 'exercise' in request.path %}
 active
@@ -61,7 +69,7 @@ active
 --> 
 <li  class="dropdown  {% if '/tool' in request.path %} active{% endif %}">
     <a href="{% url 'list_quizz_student' %}" class="main" >
-        <i class="bi bi-controller icon_size"></i> 
+        <i class="bi bi-aspect-ratio icon_size"></i> 
         <div class="captionmenu">Quizz</div>
     </a>
 </li>

@@ -987,40 +987,35 @@ def csv_full_group(request):
         # loop over the lines and save them in db. If error , store as string and then display
         group_history = []
         list_names = ""
+        simple = request.POST.get("simple",None)
+        i=0
+        teacher = Teacher.objects.get(user = request.user)
         for line in lines:
-            try :
-                simple = request.POST.get("simple",None)
-                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 0 , simple) # 0 donne la forme du CSV
-  
-                teacher = Teacher.objects.get(user = request.user)
+        	try :
+	            ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 0 , simple) # 0 donne la forme du CSV
 
-                if group_name not in group_history :
-                    group, created_group = Group.objects.get_or_create(name=group_name, teacher = teacher , defaults={'color': '#46119c','level_id': level  })
-                    if created_group :
-                    	group_history.append(group_name)
+	            if group_name not in group_history :
+	                group, created_group = Group.objects.get_or_create(name=group_name, teacher = teacher , defaults={ 'color': '#46119c' , 'level_id': level  })
+	                if created_group :
+	                	group_history.append(group_name)
 
+	            user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+	                                                       school= school, 
+	                                                       time_zone=request.user.time_zone, is_manager=0,
+	                                                       defaults={'username': username, 'password': password, 'cgu' : 1 , 'is_extra': 0})
 
-                user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                           school= school, 
-                                                           time_zone=request.user.time_zone, is_manager=0,
-                                                           defaults={'username': username, 'password': password, 'cgu' : 1 ,
-                                                                     'is_extra': 0})
- 
-                student, creator = Student.objects.get_or_create(user=user, level= group.level, task_post=1)
+	            student, creator = Student.objects.get_or_create(user=user, level= group.level, task_post=1)
 
-                if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
-                    group.students.add(student)
-                if is_username_changed :
-                    list_names += ln+" "+fn+" : "+username+"; "
-            except :
-                pass
+	            if creator : #Si l'élève n'est pas créé alors il existe dans des groupes. On l'efface de ses anciens groupes pour l'inscrire à nouveau !
+	                group.students.add(student)
+	            if is_username_changed :
+	                list_names += ln+" "+fn+" : "+username+"; "
+	        except :
+	        	pass
+
  
         if len(list_names) >  0 :
-            if key == User.TEACHER:
-                user_type = " enseignants "
-            else :
-                user_type = " élèves "
-            messages.error(request,"Les identifiants des "+user_type+" suivants ont été modifiés lors de la création "+list_names)
+            messages.error(request,"Les identifiants  suivants ont été modifiés lors de la création "+list_names)
  
         return redirect('admin_tdb')
     else:

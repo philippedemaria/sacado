@@ -105,6 +105,18 @@
         {% endif %}
 
  
+        <li class="divider"></li>
+ 
+        {% if sacado_asso %} 
+ 
+        <li> <a href="{% url 'create_flashpack' 0  %}" > Créer un flashpack</a> </li> 
+        <li> <a href="{% url 'flashpacks' %}" > Récupérer un flashpack mutualisé</a> </li>         
+        {% else %}
+
+        <li> <a href="#"  class="no_sacado_asso" > Créer un flashpack</a> </li> 
+        <li> <a href="#"  class="no_sacado_asso"  > Récupérer un flashpack mutualisé</a>   </li>      
+
+        {% endif %}
     </ul>
 </li>
 

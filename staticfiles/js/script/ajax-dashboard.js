@@ -356,15 +356,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $('.dropdown').removeClass('active');
             $('.dropdown').parent().addClass('active');
             $('.notification-container').removeClass('selected').addClass('dismiss');
-            $('#documents').find('.fa').removeClass("fa-folder-open").addClass("fa-folder");
-                $('#account').find('.fa').removeClass("fa-user-circle").addClass("fa-user");
+            $('#documents').find('.bi').removeClass("bi-folder2-open").addClass("bi-folder");
+            $('#account').find('.bi').removeClass("bi-person-square").addClass("bi-person-circle");
 
         });
 
 
         $('#documents').click(function(event) {
                 appear_panel('documents');
-                $('#documents').find('.fa').removeClass("fa-folder").addClass("fa-folder-open");
         });
 
 
@@ -378,7 +377,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         $('#account').click(function(event) {
                 appear_panel('account');
-                $('#account').find('.fa').removeClass("fa-user").addClass("fa-user-circle");
         });
 
 
@@ -389,9 +387,27 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $('#'+target).parent().addClass('active');
             $('.notification-container').removeClass('selected').addClass('dismiss');
             $('#notification-'+target).removeClass('dismiss').addClass('selected').show();
+
+            if (target == 'documents'){ 
+                $('#'+target).find('.bi').addClass("bi-folder2-open").removeClass("bi-folder");                
+            }
+            else if(target == 'account'){
+                $('#'+target).find('.bi').addClass("bi-person-square").removeClass("bi-person-circle");
+            }
+            else if(target == 'tools'){
+                $('#'+target).find('.bi').addClass("bi-webcam-fill").removeClass("bi-webcam");
+            }
+            else if(target == 'admin'){
+                $('#'+target).find('.bi').addClass("bi-cloud-fog2").removeClass("bi-cloud");
+            }
+
           }
           else{
             $('#notification-'+target).removeClass('selected').addClass('dismiss');
+            $('#documents').find('.bi').removeClass("bi-folder2-open").addClass("bi-folder");
+            $('#account').find('.bi').removeClass("bi-person-square").addClass("bi-person-circle");
+            $('#tools').find('.bi').removeClass("bi-webcam-fill").addClass("bi-webcam");
+            $('#admin').find('.bi').removeClass("bi-cloud-fog2").addClass("bi-cloud");
           }
           event.preventDefault();
         } 
@@ -404,6 +420,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           if ($('#notification-account').hasClass('selected')) {
             $('#notification-account').removeClass('selected').addClass('dismiss');
             $('#notification-tools').removeClass('selected').addClass('dismiss');
+            $('#documents').find('.bi').removeClass("bi-folder2-open").addClass("bi-folder");
+            $('#account').find('.bi').removeClass("bi-person-square").addClass("bi-person-circle");
+            $('#tools').find('.bi').removeClass("bi-webcam-fill").addClass("bi-webcam");
+            $('#admin').find('.bi').removeClass("bi-cloud-fog2").addClass("bi-cloud");
           }
           event.preventDefault();
         });
@@ -412,6 +432,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           if ($('#notification-documents').hasClass('selected')) {
             $('#notification-documents').removeClass('selected').addClass('dismiss');
             $('#notification-tools').removeClass('selected').addClass('dismiss');
+            $('#documents').find('.bi').removeClass("bi-folder2-open").addClass("bi-folder");
+            $('#account').find('.bi').removeClass("bi-person-square").addClass("bi-person-circle");
+            $('#tools').find('.bi').removeClass("bi-webcam-fill").addClass("bi-webcam");
+            $('#admin').find('.bi').removeClass("bi-cloud-fog2").addClass("bi-cloud");
           }
           event.preventDefault();
         });
@@ -423,6 +447,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
           if ($('#notification-tools').hasClass('selected')) {
             $('#notification-tools').removeClass('selected').addClass('dismiss');
             $('#notification-admin').removeClass('selected').addClass('dismiss');
+            $('#documents').find('.bi').removeClass("bi-folder2-open").addClass("bi-folder");
+            $('#account').find('.bi').removeClass("bi-person-square").addClass("bi-person-circle");
+            $('#tools').find('.bi').removeClass("bi-webcam-fill").addClass("bi-webcam");
+            $('#admin').find('.bi').removeClass("bi-cloud-fog2").addClass("bi-cloud");
           }
           event.preventDefault();
         });
