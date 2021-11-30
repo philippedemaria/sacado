@@ -30,7 +30,7 @@
 
 <li class="dropdown {% if '/account' in request.path and not 'admin' in    request.path %}active{% endif %}">
     <a href="#" class="main"  id="account">
-        <i class="fa fa-user fa-2x"></i>
+        <i class="bi bi-person-circle icon_size"></i>
         {% if not user.country  %}
             <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
             <div  style="position: absolute; bottom: 0px; right: 0; background: #ffb400;height:65px;padding-top:10px" > Renseignez votre profil </div>            
@@ -41,21 +41,21 @@
 
 <li class="dropdown {% if  request.session.tdb and 'parcours_group' in request.path %}active{% endif %}">
     <a href="{% url 'index' %}" class="main closer_notification" >
-        <i class="fa fa-tachometer-alt fa-2x"></i> 
-        <div class="captionmenu">Tableau de bord</div>
+        <i class="bi bi-people icon_size" ></i> 
+        <div class="captionmenu">Groupes</div>
     </a>
 </li>
 
 <li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path  %}active{% endif %}">
     <a href="#" class="main"  id="documents" style="cursor: grab;">
-        <i class="fa fa-folder fa-2x" aria-hidden="true"></i> 
+        <i class="bi bi-folder icon_size"></i> 
         <div class="captionmenu">Documents</div>
     </a>
 </li>
 
  <li  class="dropdown {% if not request.session.tdb and '/exercise' in request.path  %}active{% endif %}">
     <a href="{% url 'exercises' %}" class="main closer_notification" >
-        <i class="fa fa-laptop fa-2x" aria-hidden="true"></i> 
+        <i class="bi bi-explicit icon_size" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>
     </a>
 </li>
@@ -64,7 +64,7 @@
  
 <li class="dropdown {% if not request.session.tdb and '/tool' in request.path and not 'admin' in    request.path %}active{% endif %}">
     <a href="#" class="main"  id="tools">
-        <i class="fa fa-cubes fa-2x"></i> 
+        <i class="bi bi-webcam icon_size"></i> 
         <div class="captionmenu">Outils péda.</div>
     </a>
 </li>
@@ -108,7 +108,7 @@
 
 <li class="dropdown">
     <a href="#"  data-toggle='modal' data-target='#nouveaute' class="main closer_notification">
-        <i class="fa fa-feed fa-2x"></i> 
+        <i class="bi bi-rss icon_size"></i> 
         <div class="captionmenu">Actu.</div>
     </a>
 </li>
@@ -119,7 +119,7 @@
 
 <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path  or 'school' in request.path  %} active{% endif %}">
     <a href="#"   id="admin" class="main">
-        <i class="fa fa-cloud fa-2x"></i> 
+        <i class="bi bi-cloud icon_size"></i> 
         {% if not renew_propose %}
             <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
         {% endif  %}
@@ -132,7 +132,7 @@
 {% elif request.user.is_manager   %} <!-- manager dans un établissement -->
 <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
     <a href="{% url 'admin_tdb' %}" class="main" >
-        <i class="fa fa-cloud fa-2x"></i> 
+        <i class="bi bi-cloud icon_size"></i> 
         {% if not renew_propose %}
             <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
         {% endif  %}
@@ -144,7 +144,7 @@
 {% elif request.user.is_testeur   %} <!-- testeur des documents -->
 <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
     <a href="{% url 'admin_testeur' %}" class="main closer_notification" >
-        <i class="fa fa-cloud fa-2x"></i> 
+        <i class="bi bi-cloud icon_size"></i> 
         {% if not renew_propose %}
             <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
         {% endif  %}
@@ -152,18 +152,6 @@
     </a>
 </li>
 
-{%  elif request.user.is_manager %}
-<div class="row">
-    <div class="col-lg-12 col-xs-12">
-        <a href="{% url 'admin_tdb' %}" class="main" >
-            {% if not renew_propose %}
-                <i class="fa fa-info-circle text-warning" aria-hidden="true" ></i> 
-            {% endif  %}
-            Admin  
-        </a>
-    </div>
-</div> 
- 
 {% endif  %}
 
 

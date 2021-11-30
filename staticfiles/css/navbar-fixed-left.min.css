@@ -35,6 +35,10 @@
     color: #5d4391;
     background-color: transparent ;  
 }
+
+.icon_size{
+  font-size: 3.5rem;
+}
  
 .dropdown:hover .dropdown-menu {
     display: block;
