@@ -22,7 +22,7 @@
 
 
     {% if parcours %} 
-        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> </span>
+        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="bi bi-explicit"></i> </span>
         {% include 'qcm/breadcrumb.html' %}
         <small> Les {% if is_eval %}évaluations mutualisées{% else %}parcours mutualisés{% endif  %}   </small>
     {% else  %} 

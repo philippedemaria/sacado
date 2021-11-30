@@ -4,7 +4,9 @@
 {% load item_tags %}
  
 {% block page_title %}
-
+<span style="color:{{ parcours.color }}">  
+    <i class="bi bi-explicit"></i> 
+</span>
       {% if exercise.supportfile.title %}
         {{ exercise.supportfile.title|cleanhtml  }}
       {% else %}

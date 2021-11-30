@@ -12,7 +12,7 @@
 
 
 {% block page_title %}
-    <i class="fa fa-laptop"></i>  {% if parcours   %} {{ parcours.title }}{% else %} {{ student.level.name}} {% endif %}<img src="{% static 'img/angle-right.png' %}"/>  {{ nb_exercises  }} exercice{{ nb_exercises|pluralize }} pour s'entrainer  
+    <i class="bi bi-explicit"></i>  {% if parcours   %} {{ parcours.title }}{% else %} {{ student.level.name}} {% endif %}<img src="{% static 'img/angle-right.png' %}"/>  {{ nb_exercises  }} exercice{{ nb_exercises|pluralize }} pour s'entrainer  
 {% endblock %}
 
 {% block page_menu_right %}
