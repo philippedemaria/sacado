@@ -42,7 +42,9 @@
                                 {{ flashpack.title}} 
                             </h1>
                             <div style="text-align: left">
-                            <i class="fa fa-fw fa-database"></i> Vous devrez répondre aux {{ flashpack.flashcards.count }} carte{{ flashpack.flashcards.count|pluralize }} qui vont vous être présentées.<br/><br/>
+                            <i class="fa fa-fw fa-database"></i> Vous devrez répondre aux {% block nb_flashcard_student %}
+                                                                                            {{ flashpack.flashcards.count }} carte{{ flashpack.flashcards.count|pluralize }}
+                                                                                          {% endblock %} qui vont vous être présentées.<br/><br/>
                             <i class="fa fa-fw fa-mortar-board"></i> Vous êtes seul juge de vos connaissances.<br/><br/>
                             <i class="fa fa-fw fa-refresh"></i> Il vous appartient de jauger au mieux vos réponses pour avoir un retour le plus juste possible de vos acquis. <br/><br/>
                             <i class="fa fa-fw fa-clock"></i> Le temps entre chaque question est chronométré pour vous donner une indication sur votre temps de réponse. <br/><br/><br/>
@@ -56,13 +58,13 @@
                     </div> 
                 </li>
  
-
-                {% for flashcard in flashcards %}
-                <li class="my_slide">
-                    {% include 'flashcard/show_flashcard_tag.html' %}
-                </li>
-                {% endfor %}
-
+                {% block flashcard_student %}
+                    {% for flashcard in flashcards %}
+                    <li class="my_slide">
+                        {% include 'flashcard/show_flashcard_tag.html' %}
+                    </li>
+                    {% endfor %}
+                {% endblock %}
 
                 <li class="my_slide">
                     <input type="hidden" value="3" id="final_question" /> 
@@ -73,9 +75,8 @@
                                 <b> -- FIN -- </b>
                                 <br/><br/>
                                 <br/><br/>
-                                {% if request.user.user_type == 0 %}
-                                <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="btn btn-default "/>Mes résultats</a>
-                                {% endif %}
+                                {% block flashcard_student_results %}
+                                {% endblock %}
                             </h1>
                         </div>
                     </div> 

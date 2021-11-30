@@ -39,6 +39,7 @@
                 <th>Réponse</th>
                 <th>Aide</th>
                 <th>Dernière passation  </th>
+                <th>Prochaine passation  </th>
                 <th>Validité</th>
             </tr> 
         </thead>
@@ -49,7 +50,8 @@
                     <td >{{ answercard.flashcard.answer|safe }}</td>
                     <td >{{ answercard.flashcard.helper|safe }}</td>
                     <td>{{ answercard.date|date:"d N Y" }}  </td>
-                    <td >{{ answercard.answers|decrypt_results|safe }}</td>
+                    <td>{{ answercard.rappel|date:"d N Y" }}  </td>
+                    <td>{{ answercard.answers|decrypt_results|safe }}</td>
                 </tr>
             {% endfor %}              
          </tbody>

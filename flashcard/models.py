@@ -54,7 +54,6 @@ class Flashcard(models.Model):
  
     def __str__(self):
         return self.title 
- 
 
 
 class Flashpack(models.Model):
@@ -112,6 +111,18 @@ class Flashpack(models.Model):
             d = False
         return d
 
+
+    def today_cards(self,today,student) :
+        data = {}
+        if self.answercards.all() :
+            today_cards =  self.flashcards.filter(answercards__rappel=today)
+        else :
+            today_cards =  self.flashcards.all()
+        nb_today_cards = today_cards.count()
+        data["cards"]  = today_cards
+        data["count"] = nb_today_cards
+ 
+        return data
 
 class Madeflashpack(models.Model):
 

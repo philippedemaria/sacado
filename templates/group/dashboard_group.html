@@ -48,18 +48,25 @@
                         <input value="Envoyer" type="submit" class="btn btn-primary"/>
                     </form>
                     <hr/>
-
-
                 {% endfor %}
-            
-
             {% endif %}
+            <!-- *************************************** Flashcard ***************************************************** -->
+
+
+             <div class="row">
+                <div class="col-md-12 col-lg-12 col-xs-12">
+                {% for flashpack in flashpacks %}
+                    {%  include 'flashcard/flashpack_student_data_index.html'  %}
+                {% endfor %}                    
+                </div>
+            </div>
 
 
 
- 
+
+
             <!-- ******************************************************************************************** -->
- 
+
 
             {% for folder in folders %}
                 {% include 'qcm/folder_tag_student.html' %}

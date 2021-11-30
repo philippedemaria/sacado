@@ -1,0 +1,44 @@
+{% extends 'flashcard/show_flashpack.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+
+{% block flashcard_student %}
+
+    {% get_today_cards flashpack today student as today_cards %}
+    {% for flashcard in today_cards.cards %}
+    <li class="my_slide">
+        {% include 'flashcard/show_flashcard_tag.html' %}
+    </li>
+    {% endfor %}
+{% endblock %}
+
+
+
+
+{% block nb_flashcard_student %}
+
+    {% get_today_cards flashpack today student as today_cards %}
+  {{ today_cards.count}} flashcard{{ today_cards.count|pluralize }}
+{% endblock %}
+
+
+
+
+
+{% block flashcard_student_results %}
+    <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="btn btn-default "/>Mes résultats</a>
+{% endblock %}
+                          
+
+
+

@@ -4,7 +4,7 @@
            
  
 <div  class="box box-widget widget-user-2"  
-      style="cursor: move;{% if flashpack.vignette %}background-image: url('{{ flashpack.vignette.url }}'); background-size: cover; {% endif %}background-image: url('/static/img/flashpack.jpg');">
+      style="cursor: move;background-size: cover; {% if flashpack.vignette %}background-image: url('{{ flashpack.vignette.url }}'); {% else %}background-image: url('/static/img/flash_accueil.png');{% endif %}">
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         <span style="cursor:pointer" data-flashpack_id="{{flashpack.id }}" class="overlay_show white" >
@@ -40,7 +40,7 @@
         </div>
 
 
-        <div class="box_title_vignette"> 
+        <div class="box_title_vignette" style="background-color: {{ flashpack.color }};padding:5px"> 
             <a href="{% url 'show_flashpack' flashpack.id  %}"  style="color:{{ flashpack.color|contrast_color }};" >             
                 {% if flashpack.title|length > 26 %}
                 <span class="helper_tip" style=" font-size:16px;">{{ flashpack.title|truncatechars:"26" }}
@@ -61,24 +61,23 @@
 
     <div class="box-footer" style="position: relative; padding-top: 0px;">
  
-        <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
+        <div class="row dossier"  style="padding-top: 8px;padding-bottom: 5px;margin-bottom: 5px;"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
-                {{  flashpack.relationtex.nb_exotexs }} exercices dont {{ flashpack.relationtex.nb_exotexs_published }} publié{{ flashpack.relationtex.nb_exotexs_published|pluralize }} {% if    flashpack.relationtex.care %} 
-                <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}  
+                {{  flashpack.flashcards.count }} flashcards 
             </div>
         </div>
 
         <div class="row extend"> 
             <div class="col-lg-4 col-xs-4">
-                <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
+                <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit" ><i class="bi bi-gear"></i> <span class="label_icon">Config.</span>  </a> 
             </div>
             <div class="col-lg-4 col-xs-4">
 
-                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
+                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="bi bi-cloud"></i> <span class="label_icon">Select.</span></a> 
             </div>
             <div class="col-lg-4 col-xs-4">
              
-                <a  href="{% url 'flashpack_results' flashpack.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if flashpack.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+                <a  href="{% url 'flashpack_results' flashpack.id parcours.id %}" class="edit"><i class="bi bi-trophy"></i>  <span class="label_icon">{% if flashpack.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
             
             </div> 
  

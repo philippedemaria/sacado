@@ -176,12 +176,22 @@ def delete_flashpack(request, id):
  
 def show_flashpack(request, id):
 
+
     flashpack  = Flashpack.objects.get(id=id)
 
-    flashcards = list(flashpack.flashcards.all())
+    if request.user.is_student :
+        today = time_zone_user(request.user)
+        template = 'flashcard/show_flashpack_student.html'
+        context = {'flashpack': flashpack, 'today' : today }
+    else :
+        flashcards = list(flashpack.flashcards.all())
+        template = 'flashcard/show_flashpack.html'
+        context = {'flashpack': flashpack, 'flashcards' : flashcards  }
+    
 
-    context = {'flashpack': flashpack, 'flashcards' : flashcards  }
-    return render(request, 'flashcard/show_flashpack.html', context )
+
+
+    return render(request,template, context )
 
 
 
@@ -625,7 +635,11 @@ def ajax_store_score_flashcard(request):
     
     if request.user.user_type == 0 :
 
-        Madeflashpack.objects.get_or_create( flashpack = flashpack, student = request.user.student  )
+        mf, cr = Madeflashpack.objects.get_or_create( flashpack = flashpack, student = request.user.student  )
+        if not cr :
+            today = time_zone_user(request.user)
+            Madeflashpack.objects.filter( flashpack = flashpack, student = request.user.student  ).update(date = today )
+
 
         answer, created = Answercard.objects.get_or_create( flashpack = flashpack, flashcard = flashcard , student = request.user.student )
         if value == 5 : weight = 4
