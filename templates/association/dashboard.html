@@ -154,16 +154,20 @@
 <script>
 
 const months     = ['janvier','février','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','décembre'] ;
-var month_start  = {{ month_start }} ;
+var month_start  = {{ month_start }}-1 ;
 
 newList = [];
 
-for (let i=month_start;i<12;i++){
-    newList.push(months[i]);
-}
-for (let j=0;j<month_start;j++){
+for (let i=month_start;i<month_start+13;i++){
+
+    if (i>11) 
+        { j = i-12}
+    else
+        {j=i}
+
     newList.push(months[j]);
 }
+ 
 
 var xValues =  newList  ;
 var yValues = [ {{ string }} ];

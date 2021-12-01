@@ -213,13 +213,13 @@ def association_index(request):
     list_months  = months[month_start:12] + months[0:month_start]
 
     list_reals   = []
-    for i in range(month_start,12+month_start) :
+    for i in range(month_start,13+month_start) :
         list_reals.append(i)
-        print(i)
-    print(list_reals)
+
     year   = today_start.year -1
 
     string = ""
+    somme = 0
     run = 0
     for m in list_reals :        
         if m > 12 :
@@ -230,8 +230,11 @@ def association_index(request):
             sep = ","
         date_start   = datetime(year,m,1,0,0,0)
         date_stop    = datetime(year,m,days[m-1],23,59,59)
+
         n = Teacher.objects.filter(user__date_joined__lte=date_stop, user__date_joined__gte=date_start ).count()
         string += sep+str(n)
+        somme += n
+
         run += 1
  
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
