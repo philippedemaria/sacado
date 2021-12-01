@@ -12,7 +12,7 @@
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
         {% get_data_parcours_evaluations_from_group_folder folder group as dataset %} 
-        {% if folder.folder_only_students_count.nb > 0 %} 
+
                     
             <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
 
@@ -165,35 +165,7 @@
                 </a>
             </div>
 
-        {% else  %}
-            {% if folder.vignette %}                
-                <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
-                </div> 
-            {% endif  %}
-            
-            <div class="box_title_vignette"> 
-     
-                <a href="#" style="color:{{ folder.color|contrast_color }};">
-                    {% if folder.is_pending_folder_correction %}
-                    <i class="fa fa-cc text-warning pull-right" style="font-size:12px;color:{{ folder.color|contrast_color }};" title="Copies à corriger" ></i> 
-                    {% endif %}
-
-
-
-                        <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"25" }}
-                            <div class="helper_tip_text_right">{{ folder.title }}</div></span>
-     
-
-
-                    {% if folder.is_folder_real_time %}
-                        <sup class="white" title="En composition" style="font-size:12px" >
-                            <i class="fa fa-fw fa-clock"></i> 
-                        </sup>
-                    {% endif %}
-                </a>
-            </div>
-
-        {% endif  %}
+ 
 
     </div>
 
