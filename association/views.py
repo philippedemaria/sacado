@@ -226,7 +226,7 @@ def association_index(request):
             year = today_start.year
             m = m-12
         sep = ""
-        if run > 0 and run < 12 :
+        if run > 0 and run < 13 :
             sep = ","
         date_start   = datetime(year,m,1,0,0,0)
         date_stop    = datetime(year,m,days[m-1],23,59,59)
@@ -234,9 +234,9 @@ def association_index(request):
         n = Teacher.objects.filter(user__date_joined__lte=date_stop, user__date_joined__gte=date_start ).count()
         string += sep+str(n)
         somme += n
-
         run += 1
- 
+
+
     nb_answers   = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
     if Holidaybook.objects.all() :
         holidaybook  = Holidaybook.objects.values("is_display").get(pk=1)
