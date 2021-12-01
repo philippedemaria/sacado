@@ -1151,6 +1151,7 @@ class Folder(models.Model):
         data["is_folder_task_exists"] = tested
 
         return data
+
  
     def is_pending_folder_correction(self):
         """
@@ -1172,6 +1173,7 @@ class Folder(models.Model):
 
 
     def data_parcours_evaluations_from_group(self,group):
+
         data = {}
 
         data["parcours_exists"]          = False
