@@ -21,7 +21,12 @@
  
 
 {% block page_title %}
-   {% include 'bibliotex/logo.html' %}  <img src="{% static 'img/angle-right.png' %}" width="25px"/>  BiblioTex 
+   {% include 'bibliotex/logo.html' %}  <img src="{% static 'img/angle-right.png' %}" width="25px"/>  
+
+
+    {% include 'qcm/breadcrumb.html' %}
+ 
+
 
 
 {% endblock %}

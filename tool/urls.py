@@ -18,7 +18,7 @@ urlpatterns = [
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
 
     path('create_quizz_folder/<int:idf>', create_quizz_folder, name='create_quizz_folder'),
-
+    path('create_quizz_parcours/<int:idp>', create_quizz_parcours, name='create_quizz_parcours'),
 
     path('all_quizzes/search', all_quizzes, name='all_quizzes'), 
     path('ajax_shared_quizzes', ajax_shared_quizzes, name='ajax_shared_quizzes'), 

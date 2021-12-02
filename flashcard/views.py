@@ -161,6 +161,46 @@ def update_flashpack(request, id):
     return render(request, 'flashcard/form_flashpack.html', context )
 
 
+
+
+
+def create_flashpack_from_parcours(request, idp=0):
+
+    teacher = request.user.teacher
+    folder_id = request.session.get("folder_id",None)
+    group_id = request.session.get("group_id",None)
+    if group_id :group = Group.objects.get(id=group_id)
+    else : group = None
+    if folder_id : folder = Folder.objects.get(id=folder_id)
+    else : folder = None
+
+    parcours = Parcours.objects.get(id=idp)
+
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher  = teacher
+        nf.save()
+        form.save_m2m()
+
+        for group_id in request.POST.getlist("groups") :
+            group = Group.objects.get(pk = group_id)
+            nf.levels.add(group.level)
+
+        messages.success(request, 'Le flashpack a été créé avec succès !')
+        return redirect('set_flashcards_to_flashpack' , nf.id)
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'flashpack': None , 'parcours': parcours , 'group': group  , 'folder': folder  }
+
+    return render(request, 'flashcard/form_flashpack.html', context)
+
+
+
+
+
  
 def delete_flashpack(request, id):
     flashpack = Flashpack.objects.get(id=id)

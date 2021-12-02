@@ -39,15 +39,6 @@
 
 
 
- 
-
-
-
-
-
-
-
-
 {% block page_menu_right %}
 
     {% include 'qcm/submenu_parcours.html' %}
@@ -164,6 +155,9 @@ body{
                 {% for course in parcours.course.all|dictsort:"ranking" %}
                     {% include 'qcm/course/course_tag.html' %}
                 {% endfor %}
+                <a href="{% url 'create_course' 0 parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                    <div class="helper_tip_text" >Nouveau cours</div>
+                </a>
             </div> 
             <div class="shadow_bottom"></div>
         </div>  
@@ -177,7 +171,10 @@ body{
                 <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.quizz.count }} quizz</span></h1>
                 {% for quizz in parcours.quizz.all %}
                     {% include 'tool/quizz_tag.html' %}
-                {% endfor %}
+                {% endfor %} 
+                <a href="{% url 'create_quizz_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                    <div class="helper_tip_text" >Nouveau quizz</div>
+                </a>
             </div> 
             <div class="shadow_bottom"></div>
         </div>  
@@ -190,6 +187,9 @@ body{
                 {% for bibliotex in parcours.bibliotexs.all %}
                     {% include 'bibliotex/bibliotex_tag.html' %}
                 {% endfor %}
+                <a href="{% url 'create_bibliotex_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                    <div class="helper_tip_text" >Nouveau bibliotex</div>
+                </a>
             </div>
             <div class="shadow_bottom"></div>
         </div>  
@@ -203,7 +203,12 @@ body{
                 <h1 class="thin">Les flashpacks   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.flashpacks.count }} flashpacks</span></h1>
                 {% for flashpack in parcours.flashpacks.all  %}
                     {% include 'flashcard/flashpack_tag.html' %}
-                {% endfor %}
+                {% endfor %} 
+
+                <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                    <div class="helper_tip_text" >Nouveau flaspack</div>
+                </a>
+        </div>
             </div> 
             <div class="shadow_bottom"></div>
         </div>  

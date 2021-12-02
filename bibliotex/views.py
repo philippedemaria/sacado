@@ -15,7 +15,7 @@ from django.http import JsonResponse , FileResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
-from qcm.models import Folder
+from qcm.models import Folder , Parcours
 from qcm.views import get_teacher_id_by_subject_id, all_levels
 from group.models import Group , Sharing_group
 from socle.models import  Knowledge , Level , Skill , Waiting , Subject
@@ -712,6 +712,62 @@ def update_bibliotex(request, id):
     context = {'form': form, 'bibliotex': bibliotex,   }
 
     return render(request, 'bibliotex/form_bibliotex.html', context)
+
+
+
+
+
+
+def create_bibliotex_from_parcours(request,idp=0):
+
+
+    teacher = request.user.teacher
+    folder_id = request.session.get("folder_id",None)
+    group_id = request.session.get("group_id",None)
+    if group_id :group = Group.objects.get(id=group_id)
+    else : group = None
+    if folder_id : folder = Folder.objects.get(id=folder_id)
+    else : folder = None
+
+    parcours = Parcours.objects.get(id=idp)
+
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+
+    if form.is_valid():
+        nf = form.save(commit = False) 
+        nf.author = teacher
+        nf.teacher = teacher
+        nf.save()
+        form.save_m2m() 
+
+        group_ids = request.POST.getlist("groups",[])
+        folder_ids = request.POST.getlist("folders",[])
+        nf.groups.set(group_ids)
+        nf.folders.set(folder_ids)
+        all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
+
+        return redirect('exercise_bibliotex_peuplate', nf.id)
+
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'bibliotex': None, 'folder': folder, 'group': group, 'parcours': parcours  }
+
+    return render(request, 'bibliotex/form_bibliotex.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def delete_bibliotex(request, id):

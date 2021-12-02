@@ -30,6 +30,12 @@ urlpatterns = [
     path('exercise_bibliotex_peuplate/<int:id>', exercise_bibliotex_peuplate, name='exercise_bibliotex_peuplate'),
     path('exercise_bibliotex_show/<int:id>', show_bibliotex, name='show_bibliotex'),
 
+
+
+    path('create_bibliotex_from_parcours/<int:idp>', create_bibliotex_from_parcours , name='create_bibliotex_from_parcours'),
+
+
+
     path('real_time_bibliotex/<int:id>', real_time_bibliotex, name='real_time_bibliotex'),  
     path('unset_exotex_in_bibliotex/<int:idr>', unset_exotex_in_bibliotex, name='unset_exotex_in_bibliotex'),  
 

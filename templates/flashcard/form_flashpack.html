@@ -24,8 +24,7 @@
 
 {% block page_title %}
     {% include 'flashcard/logo.html' %}
-    {% if group  %}<span style="color:{{ group.color }}"> {{ group.name }}</span>  <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
-    {% if folder %}<span style="color:{{ folder.color }}"> {{ folder.title }}</span> <img src="{% static 'img/angle-right.png' %}"/>{% endif  %}
+    {% include 'qcm/breadcrumb.html' %}
     Flashpack 
 
 {% endblock %}
