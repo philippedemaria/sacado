@@ -83,16 +83,14 @@
  
         </div>
 
-        <div class="row extend"> 
+        <div class="row"> 
             <div class="col-lg-4 col-xs-4">
                 <a href="{% url 'flashpack_peuplate' flashpack.id  %}" class="edit" ><i class="bi bi-cloud-plus"></i> <span class="label_icon"> Select.</span>  </a> 
             </div>
             <div class="col-lg-4 col-xs-4">
-
                 <a href="{% url 'import_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="bi bi-cloud-upload"></i> <span class="label_icon"> Import.</span></a> 
             </div>
             <div class="col-lg-4 col-xs-4">
-             
                 {% if flashpack.flashcards_to_validate  %} 
                 <a href="{% url 'validate_flashcards_to_flashpack' flashpack.id %}" title="Valider des flashcards" class="edit text-validate" ><i class="bi bi-check-circle"></i><span class="label_icon"> Valider</span></a> 
                 {% endif  %}     
