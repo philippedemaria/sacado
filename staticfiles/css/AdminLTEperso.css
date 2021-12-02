@@ -4517,6 +4517,18 @@ font-weight: 600;
   list-style-type: none ;
   padding-top: 5px; 
 }
+.sans_puce_hover{
+  list-style-type: none ;
+  padding-top: 5px; 
+}
+.sans_puce_hover:hover{
+  list-style-type: none ;
+  padding-top: 5px; 
+  background-color : #f1eef7 ;
+}
+
+
+
 
 .full_width{
   width : 100%;

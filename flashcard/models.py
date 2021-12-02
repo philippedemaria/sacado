@@ -42,7 +42,8 @@ class Flashcard(models.Model):
     helper        = RichTextUploadingField( null = True,   blank=True, verbose_name="Aide proposée")
 
     #duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
-    is_validate  = models.BooleanField(default=1, verbose_name="Validée par l'enseignant ?")
+    is_validate  = models.BooleanField(default=1, verbose_name="Flashcard validée par l'enseignant ?")
+
     students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
 
     waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, null=True, on_delete=models.CASCADE, default="")

@@ -55,37 +55,62 @@
                     Parcours 
                 </h4> 
                 {% for p in dataset.parcours   %} 
-                    <li class="sans_puce" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}   </li> 
+                    <li class="sans_puce_hover" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }} 
+                        <a href="{% url 'show_parcours' folder.id p.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
+                        <a href="{% url 'update_parcours' p.id 0  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                    </li> 
                 {% endfor %}
             </div>
             <!-- Fenetre accessible par l'icone qui montre les evaluations  -->
             <div class="group_show no_visu_on_load" id="evaluations_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
                 <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="#" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="evaluations_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="evaluations_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
                     Evaluations 
                 </h4> 
                 {% for p in dataset.evaluations  %} 
-                    <li class="sans_puce" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}   </li> 
+                    <li class="sans_puce_hover" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}  
+                        <a href="{% url 'show_parcours' folder.id p.id %}" class="pull-right"><i class="bi bi-eye"></i></a> 
+                        <a href="{% url 'update_parcours' p.id 0 %}" class="pull-right"><i class="bi bi-pencil"></i></a>
+                    </li> 
+                {% endfor %}
+            </div>
+            <!-- Fenetre accessible par l'icone qui montre les flashpacks  -->
+            <div class="group_show no_visu_on_load" id="flashpacks_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
+                <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="flashpacks_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                    Flashpacks 
+                </h4> 
+                {% for f in dataset.flashpacks  %} 
+                    <li class="sans_puce_hover" {% if f.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ f.title }} 
+                        <a href="{% url 'show_flashpack' f.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
+                        <a href="{% url 'update_flashpack' f.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                    </li> 
                 {% endfor %}
             </div>
             <!-- Fenetre accessible par l'icone qui montre les quizz  -->
             <div class="group_show no_visu_on_load" id="quizz_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
                 <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="#" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="quizz_in"  style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="quizz_in"  style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
                     Quizz 
                 </h4> 
                 {% for q in dataset.quizzes  %} 
-                    <li class="sans_puce" {% if q.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ q.title }}   </li> 
+                    <li class="sans_puce_hover" {% if q.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ q.title }} 
+                        <a href="{% url 'show_quizz' q.id %}" class="pull-right"><i class="bi bi-eye"></i></a>  
+                        <a href="{% url 'update_quizz' q.id %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                    </li> 
                 {% endfor %}
             </div>
             <!-- Fenetre accessible par l'icone qui montre les bibliotex  -->
             <div class="group_show no_visu_on_load" id="bibliotex_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
                 <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="#" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="bibliotex_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="bibliotex_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
                     BiblioTex 
                 </h4> 
                 {% for b in dataset.bibliotexs  %} 
-                    <li class="sans_puce" {% if b.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ b.title }}   </li> 
+                    <li class="sans_puce_hover" {% if b.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ b.title }}
+                        <a href="{% url 'show_bibliotex' b.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
+                        <a href="{% url 'update_bibliotex' b.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                    </li> 
                 {% endfor %}
             </div>
 
@@ -93,7 +118,7 @@
 
             <div class="overlay  overlay_show{{folder.id }} no_visu_on_load" > 
                 <div class="overlay_expand">
-                    <a href="#" data-parcours_id="{{folder.id }}" class="overlay_show pull-right">
+                    <a href="javascript:void();" data-parcours_id="{{folder.id }}" class="overlay_show pull-right">
                         <i class="fa fa-times"></i>
                     </a>
       

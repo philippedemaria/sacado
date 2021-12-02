@@ -751,9 +751,6 @@ class Parcours(ModelWithCode):
 
         data["opacity"] = opacity
 
-
-        print(nb_done , nb_exo_in_parcours)
-
         if nb_done > nb_exo_in_parcours // 2 :
             data["size"] = "20px"
 
@@ -1233,6 +1230,7 @@ class Folder(models.Model):
         data["nb_flashpack"] = nb_flashpack
 
 
+
         if nb_parcours      :
             data["is_parcours_exists"]    = True
         if nb_evaluations   :
@@ -1248,6 +1246,16 @@ class Folder(models.Model):
         if nb_flashpack   :
             data["is_flashpack_exists"] = True
 
+        to_validate = False
+        flashpacks_to_validate = self.flashpacks.filter(is_creative = 1)
+        nb_flashcards_to_validate = 0
+        for ftv in flashpacks_to_validate:
+            nb_flashcards_to_validate += ftv.flashcards.filter(is_validate=0).count()
+            if nb_flashcards_to_validate > 0 :
+                to_validate = True
+                break
+ 
+        data["flashpack_to_validate"] = to_validate
  
         test = False
         for p in self.parcours.all() :
