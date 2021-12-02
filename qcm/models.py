@@ -939,18 +939,13 @@ class Folder(models.Model):
     def group_and_folder_only_students(self,group):
 
         data = {}
-        try :
-            group_students = group.students.all()
-            #print(group, group_students)
-            o_students = self.students.exclude(user__username__contains="_e-test")
-            #print(self , o_students)
-            only_students = [s for s in o_students if s in group_students]
-            data["only_students"]= only_students
-            data["nb"]= len(only_students)
-        except :
-            data["only_students"]= []
-            data["nb"]= 0
-
+        group_students = group.students.all()
+        #print(group, group_students)
+        o_students = self.students.exclude(user__username__contains="_e-test")
+        #print(self , o_students)
+        only_students = [s for s in o_students if s in group_students]
+        data["only_students"]= only_students
+        data["nb"]= len(only_students)
         return data 
 
     def is_coanimation(self) :
@@ -1191,98 +1186,92 @@ class Folder(models.Model):
         data["is_course_exists"]         = False
         data["is_flashpack_exists"]      = False
 
-        try :
-            group_students  = group.students.exclude(user__username__contains= "_e-test")
-            folder_students = self.students.exclude(user__username__contains= "_e-test")
-            all_students    = [s for s in folder_students if s in  group_students]
+
+        group_students  = group.students.exclude(user__username__contains= "_e-test")
+        folder_students = self.students.exclude(user__username__contains= "_e-test")
+        all_students    = [s for s in folder_students if s in  group_students]
 
 
-            parcours        = self.parcours.filter(is_evaluation=0, is_trash=0) 
-            evaluations     = self.parcours.filter(is_evaluation=1, is_trash=0)
+        parcours        = self.parcours.filter(is_evaluation=0, is_trash=0) 
+        evaluations     = self.parcours.filter(is_evaluation=1, is_trash=0)
 
-            nb_parcours_published    = parcours.filter(is_publish = 1).count() 
-            nb_evaluations_published = evaluations.filter(is_publish = 1).count() 
+        nb_parcours_published    = parcours.filter(is_publish = 1).count() 
+        nb_evaluations_published = evaluations.filter(is_publish = 1).count() 
 
-            nb_parcours     = parcours.count()
-            nb_evaluations  = evaluations.count()
+        nb_parcours     = parcours.count()
+        nb_evaluations  = evaluations.count()
 
-            quizzes     = self.quizz.all()  
-            bibliotexs  = self.bibliotexs.all()
-            flashpacks  = self.flashpacks.all()
+        quizzes     = self.quizz.all()  
+        bibliotexs  = self.bibliotexs.all()
+        flashpacks  = self.flashpacks.all()
 
-            nb_quizz     = quizzes.count() 
-            nb_bibliotex = bibliotexs.count()
-            nb_flashpack = flashpacks.count() 
-
-
-            for p in parcours :
-                if p.course.count():
-                    data["is_course_exists"] = True
-                    break
+        nb_quizz     = quizzes.count() 
+        nb_bibliotex = bibliotexs.count()
+        nb_flashpack = flashpacks.count() 
 
 
-            data["parcours"]       = parcours 
-            data["evaluations"]    = evaluations
-            data["nb_parcours"]    = nb_parcours
-            data["nb_evaluations"] = nb_evaluations
-            data["nb_parcours_published"]    = nb_parcours_published
-            data["nb_evaluations_published"] = nb_evaluations_published
+        for p in parcours :
+            if p.course.count():
+                data["is_course_exists"] = True
+                break
 
 
-            data["quizzes"]      = quizzes 
-            data["bibliotexs"]   = bibliotexs
-            data["flashpacks"]   = flashpacks
-            data["nb_quizzes"]   = nb_quizz
-            data["nb_bibliotex"] = nb_bibliotex
-            data["nb_flashpack"] = nb_flashpack
+        data["parcours"]       = parcours 
+        data["evaluations"]    = evaluations
+        data["nb_parcours"]    = nb_parcours
+        data["nb_evaluations"] = nb_evaluations
+        data["nb_parcours_published"]    = nb_parcours_published
+        data["nb_evaluations_published"] = nb_evaluations_published
 
 
-            if nb_parcours      :
-                data["is_parcours_exists"]    = True
-            if nb_evaluations   :
-                data["is_evaluations_exists"] = True
-            if len(all_students) > 0:
-                data["is_students"]           = True 
+        data["quizzes"]      = quizzes 
+        data["bibliotexs"]   = bibliotexs
+        data["flashpacks"]   = flashpacks
+        data["nb_quizzes"]   = nb_quizz
+        data["nb_bibliotex"] = nb_bibliotex
+        data["nb_flashpack"] = nb_flashpack
 
 
-            if nb_quizz      :
-                data["is_quizz_exists"]     = True
-            if nb_bibliotex   :
-                data["is_bibliotex_exists"] = True
-            if nb_flashpack   :
-                data["is_flashpack_exists"] = True
-
-     
-            test = False
-            for p in self.parcours.all() :
-                if p.course.count() > 0 :
-                    test = True
-                    break
-            data["is_folder_courses_exists"] = test
+        if nb_parcours      :
+            data["is_parcours_exists"]    = True
+        if nb_evaluations   :
+            data["is_evaluations_exists"] = True
+        if len(all_students) > 0:
+            data["is_students"]           = True 
 
 
-            data["parcours_care"]    = ( nb_parcours == nb_parcours_published)
-            data["evaluations_care"] =  ( nb_evaluations == nb_evaluations_published )
+        if nb_quizz      :
+            data["is_quizz_exists"]     = True
+        if nb_bibliotex   :
+            data["is_bibliotex_exists"] = True
+        if nb_flashpack   :
+            data["is_flashpack_exists"] = True
+
+ 
+        test = False
+        for p in self.parcours.all() :
+            if p.course.count() > 0 :
+                test = True
+                break
+        data["is_folder_courses_exists"] = test
+
+
+        data["parcours_care"]    = ( nb_parcours == nb_parcours_published)
+        data["evaluations_care"] =  ( nb_evaluations == nb_evaluations_published )
 
 
 
-            today = timezone.now()
-            tested = False
-            if Relationship.objects.filter(parcours__in= self.parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
+        today = timezone.now()
+        tested = False
+        if Relationship.objects.filter(parcours__in= self.parcours.filter(is_publish=1),date_limit__gte = today).count() > 0 :
+            tested = True
+        for p in self.parcours.filter(is_publish=1):
+            if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
                 tested = True
-            for p in self.parcours.filter(is_publish=1):
-                if Customexercise.objects.filter(parcourses= p ,date_limit__gte = today).count() > 0 :
-                    tested = True
-                    break
+                break
 
-            data["is_folder_task_exists"] = tested
-        except :
-            data["parcours"]       = 0 
-            data["evaluations"]    = 0
-            data["nb_parcours"]    = 0
-            data["nb_evaluations"] = 0
-            data["nb_parcours_published"]    = 0
-            data["nb_evaluations_published"] = 0
+        data["is_folder_task_exists"] = tested
+
         return data
  
 
