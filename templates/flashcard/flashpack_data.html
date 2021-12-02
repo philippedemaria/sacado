@@ -28,7 +28,7 @@
 </td>  
 <td  style="width:20px;">
  
-        <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit"  > <i class="bi bi-pencil"></i></a>
+        <a href="{% url 'update_flashpack' flashpack.id  %}" class="edit" title="Configurer/modifier le flashpack" > <i class="bi bi-pencil"></i></a>
 </td>
 <td style="position:relative;width:150px;">
     {% for p in  flashpack.parcours.all  %}
