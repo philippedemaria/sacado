@@ -20,7 +20,7 @@
         {{ nbf }} carte{{ nbf|pluralize }}
     {% endwith  %}
 
-    <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Ajouter des flashcards" class="edit" ><i class="bi bi-cloud-plus"></i></a>
+    <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Cloner des flashcards" class="edit" ><i class="bi bi-clouds"></i></a>
     <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer/modifer des cartes" class="edit" ><i class="bi bi-plus-square"></i></a>
     <a href="{% url 'import_flashcards_to_flashpack' flashpack.id %}" title="Importer des flashcards en CSV" class="edit" ><i class="bi bi-cloud-upload"></i></a>
 
