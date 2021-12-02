@@ -258,9 +258,12 @@ def set_flashcards_to_flashpack(request, id):
  
     flashpack = Flashpack.objects.get(id=id)
 
-    if not flashpack.is_creative or flashpack.teacher == request.user.teacher :
+    print(flashpack.teacher , request.user.teacher )
+
+    if not flashpack.is_creative and flashpack.teacher != request.user.teacher :
         messages.error(request,"Vous tentez d'ouvrir un flashpack illégalement. Vous êtes donc redirigé.")
         return redirect('index')
+
 
     form = FlashcardForm(request.POST or None , flashpack = flashpack  )
 
