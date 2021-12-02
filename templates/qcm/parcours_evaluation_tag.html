@@ -160,32 +160,28 @@
         {% if role or parcours.teacher == teacher %}
 
 
-
-                <div class="row dossier"   style="position: relative; margin-bottom: 10px;"> 
-
-                        <div class="col-xs-4 col-md-4 col-lg-4"> 
-                            {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
-                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}
-                        </div>
-                        <div class="col-xs-4 col-md-4 col-lg-4"> 
-                            {{  parcours.nb_exercices_and_cours.nb_cours }} cours  {% if not parcours.nb_exercices_and_cours.cours_care %} 
-                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
-                            {{  parcours.nb_exercices_and_cours.nb_quizz }} quizz   
-                        </div>
-
-                        <div class="col-xs-4 col-md-4 col-lg-4"> 
-                            {{  parcours.nb_exercices_and_cours.nb_bibliotex }} biblioTex <br/>
- 
-                            {{  parcours.nb_exercices_and_cours.nb_flashpack }} flashpack{{  parcours.nb_exercices_and_cours.nb_flashpack|pluralize }}   
-                        </div>
-
-
-
+            {% if not parcours.is_evaluation  %}
+            <div class="row dossier"   style="position: relative; margin-bottom: 10px;"> 
+                <div class="col-xs-4 col-md-4 col-lg-4"> 
+                    {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
+                    <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}
+                </div>
+                <div class="col-xs-4 col-md-4 col-lg-4"> 
+                    {{  parcours.nb_exercices_and_cours.nb_cours }} cours  {% if not parcours.nb_exercices_and_cours.cours_care %} 
+                    <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %} <br/>
+                    {{  parcours.nb_exercices_and_cours.nb_quizz }} quizz   
                 </div>
 
+                <div class="col-xs-4 col-md-4 col-lg-4"> 
+                    {{  parcours.nb_exercices_and_cours.nb_bibliotex }} biblioTex <br/>
+
+                    {{  parcours.nb_exercices_and_cours.nb_flashpack }} flashpack{{  parcours.nb_exercices_and_cours.nb_flashpack|pluralize }}   
+                </div>
+            </div>
+            {% endif  %}
 
 
-            <div class="row extend"> 
+            <div class="row extend" {% if parcours.is_evaluation  %} style="padding-top: 5px;" {% endif  %}> 
                 <div class="col-lg-4 col-xs-4">
                 {% if parcours.is_evaluation %}
                     <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
@@ -193,7 +189,6 @@
                     <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
                 {% endif  %}
                 </div> 
-
                 <div class="col-lg-4 col-xs-4">
                     {% if not parcours.is_evaluation %}
                         <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
@@ -202,7 +197,6 @@
                         </a>  
                     {% endif  %}
                 </div> 
-
                 <div class="col-lg-4 col-xs-4">
                 {% if not parcours.is_evaluation %}
  
@@ -210,17 +204,12 @@
                         {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
                          <span class="label_icon">Tâches</span>
                     </a> 
-
                 {% else  %}   
-
                     <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
                     </a> 
-    
                 {% endif  %}
                 </div> 
-
             </div>
-
             {% if not parcours.is_evaluation %}
             <div class="row extend">                              
                 <div class="col-lg-4 col-xs-4">

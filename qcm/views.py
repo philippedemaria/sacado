@@ -1537,13 +1537,15 @@ def list_sub_parcours_group(request,idg,idf):
 
     teacher = request.user.teacher
     today   = time_zone_user(teacher.user)
-    folder  = Folder.objects.get(pk = idf) 
-    group   = Group.objects.get(pk = idg) 
-
+    folder  = Folder.objects.get(pk = idf)
 
     role, groupe , group_id , access = get_complement(request, teacher, folder )
     request.session["folder_id"] = folder.id
     request.session["group_id"] = group_id
+    try :
+        group   = Group.objects.get(pk = idg)
+    except :
+        group = groupe
  
     parcours_tab = folder.parcours.filter(is_archive=0 ,  is_trash=0).order_by("is_evaluation", "ranking")
     quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)

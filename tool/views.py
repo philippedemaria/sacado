@@ -447,9 +447,13 @@ def create_quizz_folder(request,idf):
     teacher = request.user.teacher
     folder  = Folder.objects.get(pk=idf) 
     group_id   = request.session.get("group_id",None)
-    group = Group.objects.get(pk=group_id )
+    if group_id :
+        group = Group.objects.get(pk=group_id )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : folder.subject , 'folders' : [folder]   ,  'groups' : [group] }   )
+    else :
+        group = None
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : folder.subject , 'folders' : [folder]   }   )
 
-    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : folder.subject , 'folders' : [folder]   ,  'groups' : [group] }   )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
     if form.is_valid():

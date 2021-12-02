@@ -23,11 +23,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let loop = $(this).data("loop") ; 
                 if  ($("#collapser_angle"+loop).hasClass("fa-angle-up"))
                 {
- 
+                    AnimateRotate($("#collapser_angle"+loop) , 0);
                     setTimeout( change_direction('bottom',loop) , 1000 ); 
                 }
                 else{
- 
+                    AnimateRotate($("#collapser_angle"+loop) , 0) ;
                     setTimeout( change_direction('top',loop) , 1000 );
                 }
             });

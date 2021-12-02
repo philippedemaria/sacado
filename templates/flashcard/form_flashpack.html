@@ -49,7 +49,7 @@
     <form action="#" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-7">
+            <div class="col-sm-12 col-md-8">
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
                         <div class="row">
@@ -152,21 +152,17 @@
                         </div>
                     </div>
                 </div>
-
-                        <div class="row" id="id_themes_div">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <label>Thèmes <em>utile pour organiser  et retrouver des flashcards  </em></label>
-                                    {{ form.themes|add_class:"form-control select2" }}
-                                    {{ form.themes.errors }}
-                                </div>
-                            </div>
+                <div class="row" id="id_themes_div">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <label>Thèmes <em>utile pour organiser  et retrouver des flashcards  </em></label>
+                            {{ form.themes|add_class:"form-control select2" }}
+                            {{ form.themes.errors }}
                         </div>
-
-
+                    </div>
+                </div>
             </div>
-
-            <div class="col-sm-12 col-md-5 setup_ggb">
+            <div class="col-sm-12 col-md-4 setup_ggb">
                 <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
                      <table class="table borderless">
                             <tr>
