@@ -12,26 +12,23 @@
 
 
          {% if  student.user.school %}  
-            {% if  data_min.boolean %}
+            {% if  data_min.pc %}
             <div class="background_badge" >
             <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }};z-index:999999; "></i><br/><font style="font-size:12px;color:{{folder.color }};">{{ data_min.label }}</font>
             </div>
             {% endif  %}
         {% endif  %}
   
+
         {% if folder.vignette %}                
             <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
             </div> 
         {% endif  %}
         <div class="box_title_vignette"> 
  
- 
- 
+            <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px;font-weight: 100;cursor:help">{{ folder.title|truncatechars:"30" }}
+            <div class="helper_tip_text_right">{{ folder.title }}</div></span>
 
-                <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px;font-weight: 100;cursor:help">{{ folder.title|truncatechars:"30" }}
-                <div class="helper_tip_text_right">{{ folder.title }}</div></span>
- 
- 
         </div>
     </div>
     <!-- box-footer DES FONCTIONNALITES  -->

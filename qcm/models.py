@@ -498,34 +498,6 @@ class Parcours(ModelWithCode):
                 theme_tab.append(data)
         return theme_tab
 
- 
-
-    def is_percent(self,student):
-        ## Nombre de relationships dans le parcours => nbre  d'exercices
- 
-        nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
-        nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
-
-        ## Nombre de réponse avec exercice unique du parcours
-        nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
-        nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
-
- 
-        data = {}
-        nb_exercise_done = nb_studentanswers + nb_customanswerbystudent
-        data["nb"] = nb_exercise_done
-        data["nb_total"] = nb_relationships + nb_customs
-        try :
-            maxi = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
-            if int(nb_exercise_done * 100/(nb_relationships+nb_customs)) > 100:
-                maxi = 100
-            data["pc"] = maxi
-        except :
-            data["pc"] = 0
-
-        return data
-
-
 
     def nb_exercises(self):
         nb = self.parcours_relationship.filter(exercise__supportfile__is_title=0).count()
@@ -689,12 +661,41 @@ class Parcours(ModelWithCode):
         return som 
 
 
+ 
+
+    def is_percent(self,student):
+        ## Nombre de relationships dans le parcours => nbre  d'exercices
+ 
+        nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
+        nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
+
+        ## Nombre de réponse avec exercice unique du parcours
+        nb_studentanswers = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+        nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
+
+ 
+        data = {}
+        nb_exercise_done = nb_studentanswers + nb_customanswerbystudent
+        data["nb"] = nb_exercise_done
+        data["nb_total"] = nb_relationships + nb_customs
+        try :
+            maxi = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
+            if int(nb_exercise_done * 100/(nb_relationships+nb_customs)) > 100:
+                maxi = 100
+            data["pc"] = maxi
+
+        except :
+            data["pc"] = 0
+
+        return data
+
+
 
     def min_score(self,student):
         """
         min score d'un parcours par élève
         """
-        data = {}
+        data = self.is_percent(student)
         max_tab, max_tab_custom = [] , []
         nb_done = 0
 
@@ -723,6 +724,7 @@ class Parcours(ModelWithCode):
         data["nb_quizz"] = self.quizz.filter( is_publish = 1 ).count()
         data["nb_exercise"] = nb_exo_in_parcours
         data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
+        data["nb_flashpack"] = self.flashpacks.filter( is_publish =1, students = student ).count()
 
         try :
             stage =  student.user.school.aptitude.first()
@@ -750,6 +752,8 @@ class Parcours(ModelWithCode):
         data["opacity"] = opacity
 
 
+        print(nb_done , nb_exo_in_parcours)
+
         if nb_done > nb_exo_in_parcours // 2 :
             data["size"] = "20px"
 
@@ -760,7 +764,6 @@ class Parcours(ModelWithCode):
             else :
                 score = None
 
-            data["boolean"] = True
             if score :
                 if score > up :
                     data["colored"] = "darkgreen"
@@ -784,9 +787,7 @@ class Parcours(ModelWithCode):
                 data["label"] = "Explorateur"
                 if student.user.civilite =="Mme": 
                     data["label"] = "Exploratrice"
-        else :
-            data["boolean"] = False
-
+ 
         return data
 
  

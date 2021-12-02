@@ -39,8 +39,7 @@
 
 <section class="content_list" id="principal_section"> 
     <form action="" methode="POST" >  
-        {% for parcours in parcourses %}
-            {% get_percent parcours student as data %}  
+        {% for parcours in parcourses %} 
             {% get_min_score parcours student as data_min %}
             {% include 'qcm/parcours_tag_student.html' %}
         {% endfor  %}   
