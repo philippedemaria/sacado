@@ -46,7 +46,7 @@ class FlashcardForm(forms.ModelForm):
 		else :
 			waitings = Waiting.objects.all()
 
-		self.fields['waiting'] = forms.ModelChoiceField(queryset=waitings, required=False)
+		self.fields['waiting'] = forms.ModelChoiceField(queryset=waitings )
 
 
 	def clean_content(self):

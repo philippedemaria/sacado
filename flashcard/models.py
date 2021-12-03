@@ -69,7 +69,7 @@ class Flashpack(models.Model):
     flashcards    = models.ManyToManyField(Flashcard, related_name="flashpacks", blank=True)
     
     levels    = models.ManyToManyField(Level, related_name="flashpacks", blank=True)
-    themes    = models.ManyToManyField(Theme, related_name="flashpacks", blank=True)
+    themes    = models.ManyToManyField(Theme, related_name="flashpacks" )
     subject   = models.ForeignKey(Subject, related_name="flashpacks", blank=True, null = True, on_delete=models.CASCADE)
  
     vignette   = models.ImageField(upload_to=flashpack_directory_path, verbose_name="Vignette d'accueil", blank=True, null = True , default ="")

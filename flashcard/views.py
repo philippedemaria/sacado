@@ -258,8 +258,6 @@ def set_flashcards_to_flashpack(request, id):
  
     flashpack = Flashpack.objects.get(id=id)
 
-    print(flashpack.teacher , request.user.teacher )
-
     if not flashpack.is_creative and flashpack.teacher != request.user.teacher :
         messages.error(request,"Vous tentez d'ouvrir un flashpack illégalement. Vous êtes donc redirigé.")
         return redirect('index')
@@ -272,6 +270,7 @@ def set_flashcards_to_flashpack(request, id):
             nf = form.save(commit=False)
             nf.theme = flashpack.themes.first()
             nf.subject = flashpack.subject
+            nf.is_validate = 1
             if request.user.is_student :
                 nf.is_validate = 0
             nf.save()
@@ -494,7 +493,10 @@ def update_flashcard(request, id):
                 level = Level.objects.get(pk=l_id)
                 level.flashcards.add(flashcard)
             messages.success(request, 'La flashcard a été modifiée avec succès !')
-            return redirect('my_flashpacks')
+            if request.POST.get("validate"):
+                return redirect('validate_flashcards_to_flashpack',id)
+            else :
+                return redirect('my_flashpacks')
         else:
             print(flashcard_form.errors)
 

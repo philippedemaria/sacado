@@ -86,5 +86,10 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
+ 
+        $('.standard_tab_10').find("span").css("font-size","18px");   
+      
+
+
     });
 });

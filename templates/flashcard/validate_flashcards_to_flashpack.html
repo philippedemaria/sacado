@@ -7,14 +7,14 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax_show_flashpack']);
+        require(['script/ajax-show_flashpack']);
     </script> 
 {% endblock %}
 
 
 
 {% block page_title %}
-    {% include 'flashcard/logo.html' %}  Flashcard <img width="25px" src="{% static 'img/angle-right.png' %}"/>
+    {% include 'flashcard/logo.html' %}  Flashcard <img width="25px" src="{% static 'img/angle-right.png' %}"/> <small> Validation </small>
 {% endblock %}
 
 
@@ -42,10 +42,12 @@
         <table class="table table-hovered standard_tab_10 borderless"  style="width:100%" >
             <thead> 
                 <tr>  
-                    <th style="width:10px">Validation</th>
+                    <th style="width:10px">
+                        <span class="tool_tip"><i class="fa fa-question-circle"></i><div class="tool_tip_text" >Valider ou modifier la flashcard </div></span>
+                    </th>
                     <th style="width:200px">Titre</th>
-                    <th style="width:200px">question</th>
-                    <th style="width:40px"> Calculatrice</th>
+                    <th style="width:200px">Question</th>
+                    <th style="width:40px">  </th>
                     <th style="width:200px">Réponse</th>
                     <th>Aide</th>
                     <th>Thèmes</th>
@@ -55,7 +57,10 @@
             <tbody>
                 {% for fc in  flashcards  %}
                     <tr class="tr_edit"> 
-                        <td style="width:10px;" bgcolor="{% if fc.is_validate %}#1bc074{% else %}#ffb400{% endif %}"><input type="checkbox" value="{{ fc.id }}" name="id_flashcard" {% if fc.is_validate %} checked {% endif %} /></td>
+                        <td style="width:10px;" bgcolor="{% if fc.is_validate %}#1bc074{% else %}#ffb400{% endif %}">
+                            <input type="checkbox" value="{{ fc.id }}" name="id_flashcard" {% if fc.is_validate %} checked {% endif %} />
+                            <a href="{% url 'update_flashcard' fc.id %}" class="edit" /><i class="bi bi-pencil"></i></td>
+                        </td>
                         <td style="width:200px">{{ fc.title|safe }}</td>
                         <td style="width:200px">{{ fc.question|safe  }}</td>
                         <td> <img src="{% if fc.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" width="25px"/></td>
