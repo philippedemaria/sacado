@@ -511,7 +511,7 @@ def update_flashcard(request, id):
                 level.flashcards.add(flashcard)
             messages.success(request, 'La flashcard a été modifiée avec succès !')
             validate = request.POST.get("validate",None)
-            fp_id = request.SESSION.get("flashpack_id",None)
+            fp_id = request.session.get("flashpack_id",None)
             if validate :
                 if fp_id : return redirect('validate_flashcards_to_flashpack',fp_id)
                 else : return redirect('my_flashpacks')
