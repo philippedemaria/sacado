@@ -334,7 +334,7 @@ def validate_flashcards_to_flashpack(request, id):
             Flashcard.objects.filter(pk=id_flashcard).update(is_validate=1)
          
         messages.success(request, 'Validation réalisée avec succès !')
-        return redirect('validate_flashcards_to_flashpack' ,  id)
+        return redirect('validate_flashcards_to_flashpack', id )
 
     context    = { 'flashpack': flashpack, 'flashcards': flashcards , 'form' : form }
 
