@@ -85,10 +85,7 @@
                         <a href="{% url 'show_flashpack' f.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
                         <a href="{% url 'update_flashpack' f.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
 
-                        {% if f.flashcards_to_validate %}
-                         <a href="{% url 'validate_flashcards_to_flashpack' f.id %}" class="pull-right"><i class="fa fa-copyright text-validate"  title="Flashpack à corriger"></i></a> 
-                        {% endif %} 
-
+                  
                     </li> 
                 {% endfor %}
             </div>
