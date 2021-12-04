@@ -109,10 +109,11 @@ class Flashpack(models.Model):
         return d
 
     def flashcards_to_validate(self):
-        d = False
-        if self.flashcards.filter(is_creative=1, is_validate=0).count() :
-            d = True
-        return d
+        to_validate = False
+        if self.is_creative == 1 :
+            if self.flashcards.filter(is_validate=0).count() :
+                to_validate = True
+        return to_validate
  
 
     def today_cards(self,today,student) :

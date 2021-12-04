@@ -60,13 +60,15 @@
     <div class="row extend_parcours">
         <div class="col-xs-4 col-md-4 col-lg-4">
             <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_flashpack_exists %} style="color:{{ folder.color }}" {% endif %}>
-                <i class="bi bi-stack"></i> <span class="label_icon">F-pack</span> 
-            </span><a href="{% url 'create_flashpack' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
-                 <i class="fa fa-plus-circle"></i> 
+ 
                 {% if dataset.flashpack_to_validate %}
-                 <i class="fa fa-copyright text-validate"  title="Flashpack à corriger"></i>
-                {% endif %} 
-
+                 <i class="bi bi-layers text-validate"  title="Flashpack à corriger"></i>
+                {% else %}
+                <i class="bi bi-stack"></i>                  
+                {% endif %} <span class="label_icon">F-pack</span>
+            </span>
+            <a href="{% url 'create_flashpack' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
+                 <i class="fa fa-plus-circle"></i> 
             </a>
         </div> 
         <div class="col-xs-4 col-md-4 col-lg-4">
