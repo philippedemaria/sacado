@@ -507,7 +507,8 @@ def update_flashcard(request, id):
                 level.flashcards.add(flashcard)
             messages.success(request, 'La flashcard a été modifiée avec succès !')
             if request.POST.get("validate"):
-                return redirect('validate_flashcards_to_flashpack',id)
+                fp_id = request.POST.get("flashpack_id")
+                return redirect('validate_flashcards_to_flashpack',fp_id)
             else :
                 return redirect('my_flashpacks')
         else:
@@ -529,6 +530,15 @@ def delete_flashcard(request, idf , id):
 	else :
 		return redirect('my_flashpacks')
 
+
+def ajax_delete_flashcard(request):
+
+    flashcard_id = request.POST.get("flashcard_id")
+    flashcard = Flashcard.objects.get(id=flashcard_id)
+    flashcard.delete()
+    data = {}
+
+    return JsonResponse(data) 
 
 
 

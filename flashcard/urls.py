@@ -57,5 +57,6 @@ urlpatterns = [
  
     path('ajax_show_comments', ajax_show_comments, name='ajax_show_comments'),
 
+    path('ajax_delete_flashcard', ajax_delete_flashcard, name='ajax_delete_flashcard'),
 
 ] 

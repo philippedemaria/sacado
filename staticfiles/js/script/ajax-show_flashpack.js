@@ -150,5 +150,31 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
+
+
+        $('body').on('click', '.ajax_delete_flashcard',   function (event) { 
+ 
+                let flashcard_id = $(this).data("flashcard_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        traditional: true,
+                        data: {
+                            'flashcard_id': flashcard_id,                      
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url : '../ajax_delete_flashcard',
+                        success: function (data) {
+                            $('#tr_flashchard'+flashcard_id).remove( );
+                        }
+                    }
+                ) 
+
+        });
+
+
+
     });
 });

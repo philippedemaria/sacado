@@ -56,13 +56,13 @@
             </thead>
             <tbody>
                 {% for fc in  flashcards  %}
-                    <tr class="tr_edit" bgcolor="{% if fc.is_validate %}#eeffeb{% endif %}"> 
+                    <tr class="tr_edit" id="tr_flashchard{{ fc.id }}" bgcolor="{% if fc.is_validate %}#eeffeb{% endif %}"> 
                         <td style="width:10px;" >
                             <input type="checkbox" value="{{ fc.id }}" name="id_flashcard" {% if fc.is_validate %} checked {% endif %} />
                             <a href="{% url 'update_flashcard' fc.id %}" class="edit" title="Modifier la flashcard" /><i class="bi bi-pencil"></i>
                             <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_question_textarea_display"  data-flashcard_id="{{ fc.id }}" class="edit"  title="Voir la flashcard"><i class="bi bi-eye"></i></a>
 
-                            <a href="{% url 'delete_flashcard' flashpack.id  fc.id %}" class="edit"   title="Supprimer la flashcard" /><i class="bi bi-trash"></i>
+                            <a href="javascript:void();" class="edit ajax_delete_flashcard" data-flashcard_id="{{ fc.id }}"  title="Supprimer la flashcard" onclick="return TestDelete('cette flashcard')" /><i class="bi bi-trash"></i>
                             <a href="#" data-toggle='modal' data-target='#comment_flashcard' data-flashcard_id="{{ fc.id }}" class="edit this_comment_display"  title="Ajouter un commentaire pour la flashcard" ><i class="bi bi-bookmark-plus"></i></a>
                             {% if fc.is_commented %}
                             <a href="#" data-toggle='modal' data-target='#textarea_display' data-flashcard_id="{{ fc.id }}" class="edit this_show_comments"  title="Lire les commentaires" ><i class="bi bi-chat-left-quote"></i></a>
