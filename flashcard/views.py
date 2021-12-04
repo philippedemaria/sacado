@@ -315,6 +315,8 @@ def validate_flashcards_to_flashpack(request, id):
     flashpack = Flashpack.objects.get(id=id)
     flashcards = flashpack.flashcards.order_by("is_validate")
 
+    request.session["flashpack_id"]=flashpack.id
+
     teacher = request.user.teacher
     form = CommentflashcardForm(request.POST or None, initial ={ 'teacher' : teacher , 'flashpack' : flashpack } )
 
@@ -506,9 +508,11 @@ def update_flashcard(request, id):
                 level = Level.objects.get(pk=l_id)
                 level.flashcards.add(flashcard)
             messages.success(request, 'La flashcard a été modifiée avec succès !')
-            if request.POST.get("validate"):
-                fp_id = request.POST.get("flashpack")
-                return redirect('validate_flashcards_to_flashpack',fp_id)
+            validate = request.POST.get("validate",None)
+            fp_id = request.SESSION.get("flashpack_id",None)
+            if validate :
+                if fp_id : return redirect('validate_flashcards_to_flashpack',fp_id)
+                else : return redirect('my_flashpacks')
             else :
                 return redirect('my_flashpacks')
         else:
