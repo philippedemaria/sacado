@@ -51,10 +51,6 @@
                     <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
                 </a>
             {% endif  %}
-
-
-
-
             
         {% else %}
             <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
@@ -140,15 +136,11 @@
 
 
 
-      {% for remediation in relation.relationship_remediation.all %}
-
-          {% if remediation.consigne %}
+      {% for remediation in relation.is_consigne_remediation %}
           <audio controls>
               <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
               <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
           </audio>
-          {% endif %}
-
       {% endfor  %} 
 
 
@@ -287,9 +279,9 @@
     </div> 
     <div class="col-sm-2 col-md-1 col-lg-1">
 
-      {% if relation.relationship_remediation.all|length > 0 %}
+      {% if relation.is_not_consigne_remediation %}
       <h1 class="thin">Aides</h1>
-         {% for remediation in relation.relationship_remediation.all %}
+         {% for remediation in relation.is_not_consigne_remediation %}
               <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default full_width">
                   {% include 'qcm/remediation_choices.html' %}
               </a><br/><br/>

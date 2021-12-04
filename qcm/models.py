@@ -1284,7 +1284,6 @@ class Folder(models.Model):
         return data
  
 
-
 class Relationship(models.Model):
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
@@ -1612,6 +1611,13 @@ class Relationship(models.Model):
             data["point"] = False
             data["audio"] = False
         return data
+
+
+        def is_consigne_remediation():
+            return self.relationship_remediation.filter(consigne = 1)
+
+        def is_not_consigne_remediation():
+            return self.relationship_remediation.filter(consigne = 0)
 
 
 
@@ -1956,8 +1962,6 @@ class Customexercise(ModelWithCode):
         data["only_students"]= only_students
         data["nb"]= len(only_students)
         return data 
-
-
 
 
 
