@@ -26,7 +26,7 @@ urlpatterns = [
 
     path('create_flashcard/new', create_flashcard, name='create_flashcard'),
     path('update_flashcard/<int:id>', update_flashcard, name='update_flashcard'),
-    path('delete_flashcard/<int:id>', delete_flashcard, name='delete_flashcard'),
+    path('delete_flashcard/<int:idf>/<int:id>', delete_flashcard, name='delete_flashcard'),
     path('show_flashcard/<int:id>', show_flashcard, name='show_flashcard'), 
     path('ajax_attribute_this_flashcard', ajax_attribute_this_flashcard, name='ajax_attribute_this_flashcard'),
     path('clone_flashcard/<int:idf>/<int:id>', clone_flashcard, name='clone_flashcard'),

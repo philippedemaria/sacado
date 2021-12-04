@@ -521,7 +521,6 @@ def update_flashcard(request, id):
  
 def delete_flashcard(request, idf , id):
 
-	flashpack = Flashpack.objects.get(id=idf)
 	flashcard = Flashcard.objects.get(id=id)
 
 	flashcard.delete()
