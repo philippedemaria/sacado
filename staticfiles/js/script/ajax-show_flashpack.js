@@ -87,7 +87,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
  
-        $('.standard_tab_10').find("span").css("font-size","18px");   
+        $('.display_info').find("span").css("font-size","18px");   
       
 
         $('body').on('click', '#this_question_textarea_display',   function (event) { 
