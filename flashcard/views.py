@@ -234,7 +234,7 @@ def show_flashpack(request, id):
         template = 'flashcard/show_flashpack_student.html'
         context = {'flashpack': flashpack, 'today' : today }
     else :
-        flashcards = list(flashpack.flashcards.all())
+        flashcards =  flashpack.flashcards.filter(is_validate=1) 
         template = 'flashcard/show_flashpack.html'
         context = {'flashpack': flashpack, 'flashcards' : flashcards  }
     
