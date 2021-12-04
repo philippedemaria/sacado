@@ -26,7 +26,7 @@
             {% endif %}
             <button class="btn btn-primary show_answer" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Réponse </button>
         </div>
-        {% if not 'flashcard' in request.path %}
+
         <div class="col-sm-12 col-md-12 no_visu_on_load" align="center"  id="buttons{{ flashcard.id }}"  >
             <div class="alert">
                 Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
@@ -37,7 +37,7 @@
             <button data-nav="next" data-value="5" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-success">Je connais la réponse.</button>  
             </form>        
         </div>
-        {% endif %}
+
     </div> 
 
  
