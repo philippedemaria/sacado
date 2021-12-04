@@ -80,7 +80,7 @@
 
                                 {% if rc.exercise %}
                                 <td style="text-align:center" id="rc_{{ rc.parcours.id }}_{{ rc.exercise.id }}_tr_student_{{ student.user.id }}">
-                                    <i class="fa fa-circle text-default fa-xs"></i>
+                                    <canvas id="{{rc.exercise.id}}|{{student.user.id}}" width="80" height="12"></canvas>
                                 </td>
                                 {% else %}
                                 <td style="text-align:center" id="rc_{{ parcours.id }}_{{ rc.id }}_tr_student_{{ student.user.id }}" class="init">
@@ -98,7 +98,6 @@
 
  
 
- 
  <div
      style="width: 400px;
      border-style : solid;
