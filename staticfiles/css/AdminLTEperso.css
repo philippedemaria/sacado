@@ -3334,7 +3334,7 @@ input.form-control {
   padding-right:5px;
 }
 .fieldset_style{
- border:1px solid #CCC; padding:10px; border-radius:5px; background-color: #F7F7F7
+ border:1px solid #CCC; padding:10px; border-radius:5px; background-color: #F7F7F7;
 }
 
 .alert-success {
@@ -3344,6 +3344,7 @@ input.form-control {
     position: absolute;
     z-index: 1000;
     width: 92%;
+    border-radius:5px; 
 }
 
 
