@@ -68,7 +68,7 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
  
     
  
-
+          console.log("tentatives de connexion") ;
           // Correctly decide between ws:// and wss://
           var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
           var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
