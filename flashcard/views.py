@@ -195,11 +195,15 @@ def create_flashpack_from_parcours(request, idp=0):
         nf.teacher  = teacher
         nf.save()
         form.save_m2m()
-
+ 
+        group_students = set()
         for group_id in request.POST.getlist("groups") :
             group = Group.objects.get(pk = group_id)
             nf.levels.add(group.level)
+            group_students.update(group.students.all())
 
+        nf.students.set(group_students)
+        
         messages.success(request, 'Le flashpack a été créé avec succès !')
         return redirect('set_flashcards_to_flashpack' , nf.id)
     else:
