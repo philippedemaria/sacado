@@ -44,6 +44,7 @@ def list_flashpacks(request):
 def list_my_flashpacks(request):
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["flashpack_id"] = None 
     teacher = request.user.teacher
     dataset_user = teacher.flashpacks
     dataset      = dataset_user.filter(is_archive=0)
@@ -69,6 +70,7 @@ def my_flashpack_archives(request):
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["folder_id"] = None
+    request.session["flashpack_id"] = None 
     request.session["group_id"] = None
     teacher = request.user.teacher
 
