@@ -144,10 +144,12 @@
                                         {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
                                     </td>
                                     <td>
-                                        <a href="{% url 'ebep'  student.user.id  group.id  %}" class="helper_tip"   style="color:#007EE2;" onclick="return ebepSelectedStudents('cet élève')"  > 
-                                            <small>EBEP</small><div class="helper_tip_text">
+                                        <a href="{% url 'ebep'  student.user.id  group.id  %}" class="helper_tip" style="color:#007EE2;" onclick="return ebepSelectedStudents('cet élève')" > 
+                                            <small>EBEP</small>
+                                            <div class="helper_tip_text">
                                                 Elèves à Besoins Educatifs Particuliers
-                                            </div></a> 
+                                            </div>
+                                        </a> 
                                         <small>|</small> 
                                         <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
                                            voir le bilan  
