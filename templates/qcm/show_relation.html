@@ -392,12 +392,11 @@
 
                         ggbApplet = api ; 
 
-                    {% if parcours.is_evaluation and parcours.is_stop %}
-
-                        api.registerUpdateListener("updateListener");  
-
-                    {% endif %}
-
+                        {% if parcours.is_evaluation and parcours.is_stop %}
+                        api.registerUpdateListener("updateListener"); 
+                        {% else  %}
+                        api.registerUpdateListener("realtime"); 
+                        {% endif  %}
                   }
               };
 
@@ -405,44 +404,44 @@
         // Geogebra applet creation
         applet.inject('ggb_applet_container', 'preferHTML5');
  
+          
           //----------------------------------------------------
           //----------------------------------------------------
           //              socket pour channel
-          console.log("on lance le real time");
           var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
           var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
-          console.log("tentative connexion to " + ws_path);
           window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
           socket.onopen = function () {
-             console.log("Connected to socket");
              socket.send(JSON.stringify({
                  "command":"student_join", 
                  "parcours":"{{ relation.parcours.id }}",
+                 "exo":"{{ relation.id }}",
                  "user":"{{user.id}}"}));
-              console.log("commande student join envoyée");
+              //console.log("commande student join envoyée");
           };        
             // Handle incoming messages
           socket.onmessage = function (message) {
              // Decode the JSON
-             console.log("Got websocket message " + message.data);
+             //console.log("Got websocket message " + message.data);
              var data = JSON.parse(message.data);
              // Handle errors
              if (data.error) {
                alert(data.error);
                return;
              }
-              console.log("message recu :"+data.message);
-              alert("du prof :"+data.message);
+              //console.log("message recu :"+data.message);
+              
           };
 
           function PostMessage(){
-          console.log("entree dans PostMessage"); 
+          //console.log("entree dans PostMessage"); 
           window.socket.send(JSON.stringify(
             {"command":"student_message",
             "message": document.getElementById("champ1").value}));
-            console.log("message envoyé");
+            //console.log("message envoyé");
           };
- 
+
+    
  
 
           //----------------------------------------------------
@@ -450,22 +449,17 @@
           //              fin de socket pour channel
           //----------------------------------------------------
           //----------------------------------------------------
-
         function updateListener(objName) {  
 
                   var applet     =  ggbApplet; 
-
                   var grade      = applet.getValue("grade");
                   var numexo     = applet.getValue("numexo");
-
-                  var situation  = "{{ relation.situation }}" ; 
-
+                  var situation  = parseInt("{{ relation.situation }}") ; 
                   var start_time = "{{ start_time}}" ;
                   var relation_id= "{{ relation.id}}" ;
-
-
                   var p_available= "{{ parcours_available.nbleft}}" ;
                   var available  = "{{ available.nbleft}}" ;
+                  var ide = "{{ide}}" ;
 
                   if (p_available != "") 
                     {  
@@ -481,13 +475,31 @@
                     }
 
                   numexo = parseInt(numexo) ;
-                  score = grade/parseInt(situation) ;
+                  if (situation !=0) { score = grade/situation ;} else {score=-1;}
+ 
+                  if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
+                    {   
+                         window.socket.send(JSON.stringify(
+                         {"command":"ExoDebut", "ide"  : ide     
+                        }));
+                    }
+  
+                  if (applet.getValue("demarrer") && objName=="ok")
+                   {
+                    if (applet.getValue("ok")) {
+                          window.socket.send(JSON.stringify(
+                              {"command":"SituationFinie",
+                              "resultat": applet.getValue("test"),
+                              "ide"  : ide,
+                              "grade" : grade,
+                              "situation" : situation,
+                              "numexo" : numexo-1
+                          }));
+                        }
+                    };
 
-
-                  if (  applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ) 
+                  if ( applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ) 
                       {
-
-                          console.log( "===========  init de la bdd  ==============" );
                           // Modification du nombre de tentatives
                           nb_left = nb_attempt-1;
                           if ( nb_left < 0)
@@ -524,7 +536,7 @@
                             }
                         else 
                             { 
-                              dataset = {'numexo'     : numexo, 'start_time' : start_time , 'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax } 
+                              dataset = {'numexo'     : numexo, 'start_time' : start_time , 'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax   } 
                             }
 
                         $.ajax({
@@ -533,19 +545,61 @@
                                   type: "POST",
                                   dataType: "json",
                                   success: function (data) {
+                                    
                                           $('#is_storage').show();
                                           $('#is_storage').html(data.html);
-                                          setTimeout(function(){ $('#is_storage').hide() }, 4000);
 
-                                          if (situation == data.nb_situation)
-                                            { $('#submit_button_evaluation').show(); }
+                                          setTimeout(function(){ $('#is_storage').hide() }, 3000);
 
-                                          }
+                                          if (situation == data.numexo)
+                                            { 
+                                              $('#submit_button_evaluation').show(); }
+                                            }
                               });
 
                       }
 
-              }
+            }
+
+
+
+        function realtime(objName) {  
+
+                  var applet     =  ggbApplet; 
+                  var grade      = applet.getValue("grade");
+                  var numexo     = applet.getValue("numexo");
+                  var situation  = parseInt("{{ relation.situation }}") ; 
+                  var start_time = "{{ start_time}}" ;
+                  var relation_id= "{{ relation.id}}" ;
+                  var p_available= "{{ parcours_available.nbleft}}" ;
+                  var available  = "{{ available.nbleft}}" ;
+                  var ide = "{{ide}}" ;
+                  numexo = parseInt(numexo) ;
+
+                  if (situation !=0) { score = grade/situation ;} else {score=-1;}
+ 
+                  if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
+                    {   
+                         window.socket.send(JSON.stringify(
+                         {"command":"ExoDebut", "ide"  : ide     
+                        }));
+                    }
+  
+                  if (applet.getValue("demarrer") && objName=="ok")
+                   {
+                    if (applet.getValue("ok")) {
+                          window.socket.send(JSON.stringify(
+                              {"command":"SituationFinie",
+                              "resultat": applet.getValue("test"),
+                              "ide"  : ide,
+                              "grade" : grade,
+                              "situation" : situation,
+                              "numexo" : numexo-1
+                          }));
+                        }
+                    };
+            }
+
 
     </script>
     <div style="height:40px;clear: both"></div>

@@ -2638,7 +2638,7 @@ def list_parcours_flashpack_student(request, idp):
     parcours = Parcours.objects.get(id=idp)
     user = request.user
     today = time_zone_user(user)
-    flashpacks = parcours.flashpacks.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)) 
+    flashpacks = parcours.flashpacks.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today),students=user.student) 
 
     context = { 'flashpacks': flashpacks , 'parcours': parcours , 'parcours': parcours , 'student' : user.student ,  'today' : today  }
 
@@ -4966,10 +4966,10 @@ def store_the_score_relation_ajax(request):
             data = {}
             if init :
                 data["html"] = "<span class= 'verif_init_and_answer' >Exercice initialisé</span>"
-                data["nb_situation"] = -100
+                data["numexo"] = -100
             else :
                 data["html"] = "<span class= 'verif_init_and_answer' >Score enregistré</span>"
-                data["nb_situation"] = Studentanswer.objects.get(pk = this_studentanswer.id).numexo
+                data["numexo"] = this_studentanswer.numexo
             return JsonResponse(data)
         #####################################################################
 
