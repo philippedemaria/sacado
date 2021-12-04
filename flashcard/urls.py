@@ -20,7 +20,7 @@ urlpatterns = [
     path('import_flashcards_to_flashpack/<int:id>', import_flashcards_to_flashpack, name='import_flashcards_to_flashpack'),
     path('validate_flashcards_to_flashpack/<int:id>', validate_flashcards_to_flashpack, name='validate_flashcards_to_flashpack'),
 
- 
+
 
     path('flashpack_actioner', actioner, name='actioner'),
 
@@ -52,6 +52,10 @@ urlpatterns = [
     path('ajax_publish_list_flashpack', ajax_publish_list_flashpack, name='ajax_publish_list_flashpack'),
     path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'),
     path('ajax_is_favorite', ajax_is_favorite, name='ajax_is_favorite'),
+    path('ajax_preview_flashcard', ajax_preview_flashcard, name='ajax_preview_flashcard'),
+    path('ajax_comment_flashcard', ajax_comment_flashcard, name='ajax_comment_flashcard'),
+ 
+    path('ajax_show_comments', ajax_show_comments, name='ajax_show_comments'),
 
 
 ] 

@@ -536,16 +536,23 @@ class Student(ModelWithCode):
         nbf        = self.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
         nbq        = self.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
 
+        a_new_c    = self.student_custom_answer.values("parcours").filter(parcours__subject = group.subject ,is_reading=0).first()
+        if a_new_c :
+            a_new_cop = a_new_c 
+        else :
+            a_new_cop = False
+
+        
 
         data = {}
-        data["nb_parcours"] = nb
-        data["nb_evaluations"] = nbe 
-        data["nb_folders"] = nb_folders 
-        data["nb_bibliotex"] = nbb
-        data["nb_cours"]     = nbc 
-        data["nb_flashpacks"] = nbf
-        data["nb_quizz"]     = nbq 
-        
+        data["nb_parcours"]     = nb
+        data["nb_evaluations"]  = nbe 
+        data["nb_folders"]      = nb_folders 
+        data["nb_bibliotex"]    = nbb
+        data["nb_cours"]        = nbc 
+        data["nb_flashpacks"]   = nbf
+        data["nb_quizz"]        = nbq 
+        data["a_new_cop"]       = a_new_cop 
         return data
 
 

@@ -57,6 +57,14 @@ class Flashcard(models.Model):
         return self.title 
 
 
+    def is_commented(self):
+        t = False
+        if self.comments.count():
+            t = True
+        return t
+
+
+
 class Flashpack(models.Model):
     """
     Modèle représentant un ensemble de flashcard.
@@ -102,19 +110,18 @@ class Flashpack(models.Model):
 
     def flashcards_to_validate(self):
         d = False
-        if self.flashcards.filter(is_validate=0).count() :
+        if self.flashcards.filter(is_creative=1, is_validate=0).count() :
             d = True
         return d
+ 
 
-    def spaced_repetitions(self,today,student):
+    def today_cards(self,today,student) :
+
+        data = {}
         d = True
         if self.madeflashpack.filter(date=today,student=student).count() :
             d = False
-        return d
 
-
-    def today_cards(self,today,student) :
-        data = {}
         if self.answercards.all() :
             today_cards =  self.flashcards.filter(answercards__rappel=today)
         else :
@@ -122,8 +129,18 @@ class Flashpack(models.Model):
         nb_today_cards = today_cards.count()
         data["cards"]  = today_cards
         data["count"] = nb_today_cards
- 
+        data["made"] = d
         return data
+
+
+    def is_comments(self):
+        d = False
+        if self.comments.exclude(comment="").count() :
+            d = True
+        return d
+
+
+
 
 class Madeflashpack(models.Model):
 
@@ -148,3 +165,15 @@ class Answercard(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+
+
+class Commentflashcard(models.Model):
+
+    flashpack  = models.ForeignKey(Flashpack,  related_name="comments",  on_delete=models.CASCADE, default='' ) 
+    flashcard  = models.ForeignKey(Flashcard,  related_name="comments",  on_delete=models.CASCADE ) 
+    comment    = models.TextField(verbose_name="Commentaire")
+    date       = models.DateField(auto_now=True )
+
+    def __str__(self):
+        return str(self.flashcard)

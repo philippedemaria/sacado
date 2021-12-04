@@ -24,7 +24,7 @@
             <div style="clear:both"></div>
         </div>
         <div class="box_title_vignette box_title_vignette_color" style="background-color : {{ flashpack.color}};"> 
-            <a href="{% url 'show_flashpack' flashpack.id  %}"  style="color:{{ flashpack.color|contrast_color }};"  >             
+            <span class="thin" style="padding-left:5px;color:{{ flashpack.color|contrast_color }};"  >             
                 {% if flashpack.title|length > 40 %}
                 <span class="helper_tip" style=" font-size:16px; color:white">{{ flashpack.title|truncatechars:"40" }}
                     <div class="helper_tip_text_right" style="font-size:14px;">{{ flashpack.title }}</div>
@@ -32,22 +32,27 @@
                 {% else %}
                     {{ flashpack.title}}
                 {% endif %}
-            </a>    
+            </span>    
         </div>
     </div>
     <div class="box-footer" style="position: relative; padding-top:20px;opacity: 0.95">
         <div class="row"> 
-           <div class="col-lg-10 col-xs-10">
-                {% get_today_cards flashpack today student as today_cards %}
-                {{ today_cards.count}} flashcards
+           <div class="col-lg-7 col-xs-7">
+                {{ flashpack.flashcards.count}} flashcards
             </div>  
-           <div class="col-lg-2 col-xs-2" align="right">
+           <div class="col-lg-5 col-xs-5" align="right">
                 {% if flashpack.is_creative %} 
                 <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" >
-                    <span class="helper_tip text-validate" style=" font-size:20px; "> <i class="bi bi-cloud-plus"></i>
+                    <span class="helper_tip" style=" font-size:24px;"> 
+                        {% if flashpack.is_comments %} 
+                        <i class="bi bi-cloud-plus-fill text-validate"></i>
+                        <div class="helper_tip_text_right" style="font-size:14px;">Lire les commentaires des flashcards</div>
+                        {% else %}
+                        <i class="bi bi-cloud-plus  text-validate"></i>
                         <div class="helper_tip_text_right" style="font-size:14px;">Proposer des flashcards</div>
+                        {% endif %}
                     </span>
-                </a>   
+                </a>
                 {% endif %}                                
             </div>                                   
         </div>
@@ -63,11 +68,11 @@
         {% endblock %}
         <div class="row" style="padding-top:10px;"> 
            <div class="col-lg-12 col-xs-12">
-            {% get_flashpack_spaced_repetitions flashpack today student as spaced_repetitions %}
-                {% if spaced_repetitions %}
-                <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-play"></i> Tester mes connaissances</a>
+            {% get_today_cards flashpack today student as spaced_repetitions %}  
+                {% if not spaced_repetitions.made %}
+                <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-play"></i> Tester mes connaissances {{ spaced_repetitions.count }}</a>
                 {% else %}
-                <a href="javascript:void();" class="edit">Connaissances testées</a>
+                <a href="javascript:void();" class="edit">Aucune connaissence à tester ce jour</a>
                 {% endif %}
             </div>                        
         </div>

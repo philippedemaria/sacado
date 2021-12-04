@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Flashcard , Flashpack
+from .models import Flashcard , Flashpack , Commentflashcard
 from account.models import Student , Teacher
 from socle.models import Waiting, Skill
 from group.models import Group
@@ -92,4 +92,13 @@ class FlashpackForm(forms.ModelForm):
 		content = self.cleaned_data['imagefile']
 		validation_file(content) 
  
+
+
+
+class CommentflashcardForm(forms.ModelForm):
+
+	class Meta:
+		model = Commentflashcard
+		fields = ('comment',)
+
 

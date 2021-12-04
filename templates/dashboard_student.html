@@ -65,16 +65,19 @@
 
                                 {% with dataset.nb_evaluations as nbe %}   
                                     {{ nbe }} évaluation{{ nbe|pluralize }}
-                                {% endwith %}
+                                {% endwith %}<br/>
+                                
+                                {% if dataset.a_new_cop %}  
+                                    <a href="{% url 'show_parcours_student' dataset.a_new_cop.parcours %}" class="new_correction">Correction</a>
+                                {% endif %}
+
                             </div>
                             <div class="col-xs-4 col-md-4 col-lg-4"> 
                                 {{ dataset.nb_quizz }} quizz <br/>
-
- 
                                 {% with dataset.nb_flashpacks as nbf %}   
                                     {{ nbf }} flashpack{{ nbf|pluralize }}
-                                {% endwith %}
-                                </span>
+                                {% endwith %}<br/>
+   
                             </div>
                         </div>
 

@@ -16,15 +16,29 @@
         </div>
         <div class="row"> 
             <div class="col-xs-2 col-md-2" class="delete_question_div"><hr style="border-color: transparent"/>
+                {% if request.user.is_student %}
+                    {% if not flashcard.is_validate %}
+                    <div class="flashcard_validate"><a href="{% url 'update_flashcard' flashcard.id %}"> En attente de validation </a></div> 
+                
+                    <a href="{% url 'update_flashcard' flashcard.id %}" class="delete_question"  ><i class="fa fa-edit"></i></a><br/><br/> 
 
-                {% if not flashcard.is_validate %}
-                <div class="flashcard_validate">En attente de validation</div> 
+                    <a href="{% url 'clone_flashcard' flashpack.id  flashcard.id %}" class="edit" title="Dupliquer"><i class="fa fa-copy"></i></a> <br/><br/>
+
+                    <a href="{% url 'delete_flashcard' flashcard.id %}"  class="delete_question" onclick="return TestDelete('cette flashcard')"><i class="fa fa-trash"></i></a>
+                    {% else %}
+                    <div class="flashcard_is_validate"><a href="{% url 'show_flashcard' flashcard.id %}" class="white"> Flashcard validée </a></div> 
+                    {% endif %}
+                {% elif request.user.is_teacher %}
+                    {% if not flashcard.is_validate %}
+                    <div class="flashcard_validate"><a href="{% url 'update_flashcard' flashcard.id %}"> En attente de validation </a></div> 
+                    {% endif %}                    
+                    <a href="{% url 'update_flashcard' flashcard.id %}" class="delete_question"  ><i class="fa fa-edit"></i></a><br/><br/> 
+
+                    <a href="{% url 'clone_flashcard' flashpack.id  flashcard.id %}" class="edit" title="Dupliquer"><i class="fa fa-copy"></i></a> <br/><br/>
+
+                    <a href="{% url 'delete_flashcard' flashcard.id %}"  class="delete_question" onclick="return TestDelete('cette flashcard')"><i class="fa fa-trash"></i></a>
+
                 {% endif %}
-                <a href="{% url 'update_flashcard' flashcard.id %}" class="delete_question"  ><i class="fa fa-edit"></i></a><br/><br/> 
-
-                <a href="{% url 'clone_flashcard' flashpack.id  flashcard.id %}" class="edit" title="Dupliquer"><i class="fa fa-copy"></i></a> <br/><br/>
-
-                <a href="{% url 'delete_flashcard' flashcard.id %}"  class="delete_question" onclick="return TestDelete('cette flashcard')"><i class="fa fa-trash"></i></a>
             </div>
             <div class="col-xs-10 col-md-10">
                 <img src="{% static 'img/my_diapo.png' %}" width="90%" />

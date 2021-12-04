@@ -1,0 +1,19 @@
+
+
+
+<div class="exotex flashcard qflashcard" style="width:600px;" >
+    {{ flashcard.question|safe}}
+</div> 
+<div style="clear: both"></div>
+
+<div class="exotex flashcard aflashcard" id="a_of_textarea_display" style="width:600px;" >    {{ flashcard.answer|safe}}
+</div> 
+<div style="clear: both"></div>
+
+<div class="exotex flashcard hflashcard" id="h_of_textarea_display" style="width:600px;" >    {{ flashcard.helper|safe}}
+</div> 
+<div style="clear: both"></div>
+
+<script type="text/javascript">
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>  

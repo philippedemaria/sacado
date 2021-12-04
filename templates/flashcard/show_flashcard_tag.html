@@ -4,21 +4,14 @@
 
  
     <div class="row">  
-        <div class="col-sm-12 col-md-12">
-            <div class="alert alert-warning">
-                Une question vous est proposée. Répondez à cette question mentalement ou par écrit puis cliquez sur le bouton Réponse. Utilisez l'aide si besoin. Comparez alors votre réponse avec la réponse affichée. 
-            </div>
-        </div>
-    </div>
-    <div class="row">  
         <div class="col-sm-12 col-md-3" id="offset"></div>
-        <div class="col-sm-12 col-md-6" id="question">
-            <div class="exotex flashcard">
+        <div class="col-sm-12 col-md-6" id="question"  align="center">
+            <div class="exotex flashcard qflashcard">
                 {{ flashcard.question|safe }}
             </div>  
         </div>
-        <div class="col-sm-12 col-md-6 no_visu_on_load" id="answer{{ flashcard.id }}">
-            <div class="exotex flashcard" >
+        <div class="col-sm-12 col-md-6 no_visu_on_load" id="answer{{ flashcard.id }}" align="center">
+            <div class="exotex flashcard aflashcard" >
                 {{ flashcard.answer|safe }}
             </div>  
         </div>
@@ -33,9 +26,9 @@
             {% endif %}
             <button class="btn btn-primary show_answer" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Réponse </button>
         </div>
-
+        {% if not 'flashcard' in request.path %}
         <div class="col-sm-12 col-md-12 no_visu_on_load" align="center"  id="buttons{{ flashcard.id }}"  >
-            <div class="alert alert-warning">
+            <div class="alert">
                 Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
             </div>
             <form method="POST">{% csrf_token %}
@@ -44,7 +37,7 @@
             <button data-nav="next" data-value="5" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-success">Je connais la réponse.</button>  
             </form>        
         </div>
-
+        {% endif %}
     </div> 
 
  
@@ -52,8 +45,8 @@
         <div class="col-sm-12 col-md-3" align="right">
             <h1 class="thin">Aide : </h1>
         </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="exotex flashcard_helper">
+        <div class="col-sm-12 col-md-6"  align="center">
+            <div class="exotex flashcard_helper hflashcard">
                 {{ flashcard.helper|safe }}
             </div>  
         </div>

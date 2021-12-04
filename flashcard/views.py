@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 from flashcard.models import Flashcard, Flashpack , Answercard , Madeflashpack
-from flashcard.forms import FlashcardForm ,  FlashpackForm 
+from flashcard.forms import FlashcardForm ,  FlashpackForm , CommentflashcardForm
 from qcm.models import  Parcours, Exercise , Folder
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
@@ -116,9 +116,13 @@ def create_flashpack(request, idf=0):
         nf.save()
         form.save_m2m()
 
+        group_students = set()
         for group_id in request.POST.getlist("groups") :
             group = Group.objects.get(pk = group_id)
             nf.levels.add(group.level)
+            group_students.update(group.students.all())
+
+        nf.students.set(group_students)
 
         messages.success(request, 'Le flashpack a été créé avec succès !')
         return redirect('set_flashcards_to_flashpack' , nf.id)
@@ -143,9 +147,15 @@ def update_flashpack(request, id):
             nf.teacher  = teacher
             nf.save()
             form.save_m2m()
+
+            group_students = set()
             for group_id in request.POST.getlist("groups") :
                 group = Group.objects.get(pk = group_id)
                 nf.levels.add(group.level)
+                group_students.update(group.students.all())
+
+            nf.students.set(group_students)
+            
             messages.success(request, 'Le flashpack a été modifié avec succès !')
             if request.POST.get("exercices",None) :
                 return redirect('set_flashcards_to_flashpack' , nf.id)
@@ -305,6 +315,8 @@ def validate_flashcards_to_flashpack(request, id):
     flashpack = Flashpack.objects.get(id=id)
     flashcards = flashpack.flashcards.order_by("is_validate")
 
+    teacher = request.user.teacher
+    form = CommentflashcardForm(request.POST or None, initial ={ 'teacher' : teacher , 'flashpack' : flashpack } )
 
     if request.method == "POST" :
         id_flashcards = request.POST.getlist('id_flashcard')
@@ -320,7 +332,7 @@ def validate_flashcards_to_flashpack(request, id):
         messages.success(request, 'Validation réalisée avec succès !')
         return redirect('validate_flashcards_to_flashpack' ,  id)
 
-    context    = { 'flashpack': flashpack, 'flashcards': flashcards ,  }
+    context    = { 'flashpack': flashpack, 'flashcards': flashcards , 'form' : form }
 
     return render(request, 'flashcard/validate_flashcards_to_flashpack.html', context )
 
@@ -486,6 +498,7 @@ def update_flashcard(request, id):
 
     flashcard = Flashcard.objects.get(id=id)
     flashcard_form = FlashcardForm(request.POST or None, instance=flashcard , flashpack = None )
+
     if request.method == "POST" :
         if flashcard_form.is_valid():
             flashcard_form.save()
@@ -525,8 +538,6 @@ def show_flashcard(request, id):
     flashcard = Flashcard.objects.get(id=id)
     context = {'flashcard': flashcard,   }
     return render(request, 'flashcard/show_flashcard.html', context )
-
-
 
 
 def ajax_level_flashcard(request):
@@ -666,6 +677,50 @@ def ajax_search_flashpack(request):
 #           AJAX 
 ######################################################################################
 ######################################################################################
+
+@csrf_exempt
+def ajax_preview_flashcard(request):
+
+    flashcard_id = request.POST.get("flashcard_id") 
+    flashcard  = Flashcard.objects.get(id=flashcard_id)
+    data = {}
+    data['html'] = render_to_string('flashcard/ajax_preview_flashcard.html', {'flashcard' : flashcard,   })
+    return JsonResponse(data)
+
+
+
+def ajax_comment_flashcard(request):
+
+    id_flashpack = request.POST.get('flashpack')
+    id_flashcard = request.POST.get('flashcard')
+    flashpack = Flashpack.objects.get(pk = id_flashpack )
+    flashcard = Flashcard.objects.get(pk = id_flashcard )
+
+    form = CommentflashcardForm(request.POST or None)
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.flashpack = flashpack
+        nf.flashcard = flashcard
+        nf.save()
+    else :
+        print(form.errors)
+
+    return redirect( 'validate_flashcards_to_flashpack', id_flashpack )
+
+
+
+
+def ajax_show_comments(request):
+
+    flashcard_id = request.POST.get("flashcard_id") 
+    flashcard  = Flashcard.objects.get(id=flashcard_id)
+
+    data = {}
+    data['html'] = render_to_string('flashcard/ajax_show_comments.html', {'flashcard' : flashcard,   })
+    return JsonResponse(data)
+
+
+
 @csrf_exempt
 def ajax_store_score_flashcard(request):
 
@@ -732,19 +787,6 @@ def ajax_set_flashcard_in_flashpack(request):
 
 
     return JsonResponse(data)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

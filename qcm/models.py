@@ -1984,6 +1984,7 @@ class Customanswerbystudent(models.Model): # Commentaire et note pour les exerci
     point = models.CharField(default="", max_length=10, verbose_name="Note")
     is_corrected = models.BooleanField( default=0, editable=False ) 
     audio = models.FileField(upload_to=file_folder_path,verbose_name="Commentaire audio", blank=True, null= True,  default ="")
+    is_reading  = models.BooleanField( default=0, editable=False ) # si l'élève a lu le commentaire
 
     def __str__(self):        
         return "{}".format(self.customexercise)

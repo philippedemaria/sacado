@@ -970,11 +970,7 @@ def get_publish_parcours_inside_folder (obj,folders,student):
     return obj.publish_parcours_inside_folder(folders,student)  
 
 
-@register.simple_tag 
-def get_flashpack_spaced_repetitions (obj,today,student):
-    """Détermine si un parcours est publié et s'il est dans un dossier publié """
-    return obj.spaced_repetitions(today,student)  
-
+ 
 
 @register.simple_tag 
 def get_today_cards (obj,today,student):

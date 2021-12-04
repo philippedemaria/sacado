@@ -90,6 +90,65 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('.standard_tab_10').find("span").css("font-size","18px");   
       
 
+        $('body').on('click', '#this_question_textarea_display',   function (event) { 
+ 
+                let flashcard_id = $(this).data("flashcard_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        traditional: true,
+                        data: {
+                            'flashcard_id': flashcard_id,                      
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url : '../ajax_preview_flashcard',
+                        success: function (data) {
+                            $('#q_of_textarea_display').html(data.html);
+                            $("#title_textarea_display").html("Visualisation");
+                        }
+                    }
+                ) 
+
+        });
+
+
+        $('body').on('click', '.this_comment_display',   function (event) { 
+            let flashcard_id = $(this).data("flashcard_id");  
+            alert(flashcard_id ) 
+              $("#id_flashcard").val(flashcard_id); 
+        });
+
+
+
+
+
+        $('body').on('click', '.this_show_comments',   function (event) { 
+ 
+                let flashcard_id = $(this).data("flashcard_id");
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        traditional: true,
+                        data: {
+                            'flashcard_id': flashcard_id,                      
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url : '../ajax_show_comments',
+                        success: function (data) {
+                            $('#q_of_textarea_display').html(data.html);
+                            $("#title_textarea_display").html("Commentaires");
+ 
+                        }
+                    }
+                ) 
+
+        });
+
+
 
     });
 });
