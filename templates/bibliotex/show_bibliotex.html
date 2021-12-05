@@ -108,7 +108,7 @@
                 {% endfor %}
             </div>
             <div id="content{{ r.exotex.id }}">
-                {% if r.content %}
+                {% if r.content_html %}
                 {{ r.content_html|safe }}
                 {% else %}
                 {{ r.exotex.content_html|safe }}
