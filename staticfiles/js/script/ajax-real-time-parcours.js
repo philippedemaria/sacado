@@ -67,8 +67,7 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
           }
  
     
- 
-          console.log("tentatives de connexion") ;
+
           // Correctly decide between ws:// and wss://
           var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
           var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
@@ -82,7 +81,9 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
           };
 
 
- 
+         $("body").on('click', ".write_to_student", function (event) {
+                 $(this).parent().find(".this_student_rt").toggle() ;
+                 })
 
  
 
@@ -107,8 +108,9 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
                    $("#tr_student_"+data.from).find("td:first").addClass("live");
                    if (ligne.childNodes[1].innerHTML.search("<p><input")==-1)
                         {ligne.childNodes[1].innerHTML=ligne.childNodes[1].innerHTML+
+                   "<i class='bi bi-chat-dots write_to_student pull-right'></i>"+
                    "<p><input type=\"text\" id='champ"+data.from+"' data-from_id="+data.from+
-                   " placeholder='message privé' required class='this_student_rt' /></p>";
+                   " placeholder='message privé' required class='this_student_rt no_visu_on_load' /></p>";
                        }
                    //ligne[1].innerHTML=data.message;
                   }
