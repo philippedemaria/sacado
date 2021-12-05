@@ -44,7 +44,7 @@
  
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        Visualiser le message : <span id="app"></span>
+        <div class="this_chat_box" id="this_chat_box">Chat <i class="bi bi-arrow-bar-right"></i></div>
     </div>
 </div>
 
@@ -97,30 +97,11 @@
     </div> 
 
  
+    <div class="real_time_div"  id="real_time_div" >
+        <div class="real_time_div_chat" id="chat"> </div> <!--contenteditable="true" -->
+         <input type="text" onchange="PostMessageGeneral()" id="entreechat">
 
- <div
-     style="width: 400px;
-     border-style : solid;
-     min-height: 120px;
-     max-height: 300px;
-     _Height: 120px; // Compatible IE6, give high-internal element
-     overflow, open father tag
-     margin-left: auto;
-     margin-right: auto;
-     padding: 3px;
-     outline: 0; // Firefox browser's DIV will have a dotted box whenthe focus of the editable mode
-     border: 1px solid #a0b3d6;
-     font-size: 12px;
-     word-wrap: break-Word; // Allow long words or URL addresses to nextline
-     overflow-x: hidden;
-     overflow-y: auto;
-     _overflow-y: visible;"
-      id="chat" contenteditable="true" >Messages à destination de tous
-les élèves</div>
-     <br>
-     <input type="text" onchange="PostMessageGeneral()" id="entreechat">
-
- 
+    </div> 
 
 </section>
 

@@ -80,6 +80,21 @@
         {% endif %}
             <div> 
                 <span class="exotex_show_exercice"><i class="fa fa-sort"></i> Exercice {{ forloop.counter}}.</span> <label> {{ r.exotex.title }}</label>
+
+                    {% if r.calculator  %}
+                         <img src="{% static 'img/calculator.png' %}" width="25px" />
+                    {% else %}
+                         <img src="{% static 'img/no_calculator.png' %}" width="25px" />
+                    {% endif %}
+                    {% if r.is_python  %}
+                          <img src="{% static 'img/is_python.png' %}" width="25px" />
+                    {% endif %}
+                    {% if r.is_scratch  %}
+                          <img src="{% static 'img/is_scratch.png' %}" width="25px" />
+                    {% endif %}
+ 
+
+
                     <small class="pull-right">
                         {% for s in r.exotex.skills.all %}
                             {{ s.name }}.

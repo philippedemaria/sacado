@@ -25,6 +25,21 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
 
 
 
+        $("#real_time_div").on('mouseover',   function (event) {
+            $(this).animate({height: "100%", }, 750 ) ;
+        })
+
+
+        $("#this_chat_box").on('mouseover',   function (event) {
+            $("#real_time_div").animate({height: "100%", }, 750 ) ;
+        })
+
+        $("#real_time_div").on('mouseleave',   function (event) {
+            $(this).animate({height: "40px", }, 650 ) ;
+        })
+
+
+
         function PostMessage(id){  //id = destinataire du message
             socket.send(JSON.stringify(
                {"command":"teacher_message",
@@ -117,7 +132,7 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
                   else if (data.type=="message") {
                     console.log(data.from+" a envoyé un message");
                     var t=document.getElementById("chat");             
-                    t.innerHTML = t.innerHTML + "<p style='color:red'>"+ data.name+"</p><p style='text-align:right'>"+ data.message+"</p>";
+                    t.innerHTML = t.innerHTML + "<div class='this_chat_block'>@"+ data.name+"<br/>"+ data.message+"</div>";
                             
                     }// Deconnexion  
 
