@@ -20,7 +20,7 @@ from qcm.views import get_teacher_id_by_subject_id, all_levels
 from group.models import Group , Sharing_group
 from socle.models import  Knowledge , Level , Skill , Waiting , Subject
 from bibliotex.models import  Bibliotex , Exotex , Relationtex , Blacklistex
-from bibliotex.forms import  BibliotexForm , ExotexForm
+from bibliotex.forms import  BibliotexForm , ExotexForm , RelationtexForm
 from django.views.decorators.csrf import csrf_exempt
 from tool.consumers import *
 
@@ -475,6 +475,52 @@ def delete_exotex(request, id):
 def ajax_action_exotex(request, id):
     pass
  
+
+
+
+ 
+def update_relationtex(request, id):
+
+    relationtex = Relationtex.objects.get(id=id)
+    bibliotex_id = relationtex.bibliotex.id
+    if relationtex.content : content = relationtex.content
+    else : content = relationtex.exotex.content
+
+    if relationtex.correction : correction = relationtex.correction
+    else : correction = relationtex.exotex.correction
+
+    teacher = request.user.teacher
+    form = RelationtexForm(request.POST or None, request.FILES or None, instance = relationtex , teacher = teacher , initial = { 'content' : content , 'correction' : correction } )
+    if request.method == "POST" :
+        if form.is_valid():
+            nf = form.save(commit = False) 
+            nf.teacher = teacher
+            nf.save()
+            form.save_m2m()  
+
+            Relationtex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            if nf.correction :  
+                Relationtex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+
+            messages.success(request, "L'exercice a été modifié avec succès !")
+            return redirect('show_bibliotex', bibliotex_id )
+        else:
+            print(form.errors)
+
+    context = {'form': form,  'relationtex': relationtex,   }
+
+    return render(request, 'bibliotex/form_relationtex.html', context )
+
+
+def delete_relationtex(request, id):
+    relationtex  = Relationtex.objects.get(id=id)
+    bibliotex_id = relationtex.bibliotex.id
+ 
+    if request.user == relationtex.teacher.user :
+        relationtex.delete()
+
+    return redirect('show_bibliotex', bibliotex_id)
+
 
 
 #########################################################################################################################################

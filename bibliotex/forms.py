@@ -1,5 +1,5 @@
 from django import forms
-from .models import Exotex , Bibliotex 
+from .models import Exotex , Bibliotex , Relationtex 
 from socle.models import Knowledge , Skill
 
 
@@ -59,3 +59,30 @@ class BibliotexForm(forms.ModelForm):
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=True)
 		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset=all_folders, widget=forms.CheckboxSelectMultiple, required=False)
 		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=all_parcours, widget=forms.CheckboxSelectMultiple, required=False)
+
+
+
+ 
+
+
+
+class RelationtexForm(forms.ModelForm):
+	class Meta:
+		model = Relationtex 
+		fields = ('content','calculator','duration','skills','knowledges','is_python','is_scratch','start','stop','correction','is_publish_cor')
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+ 
+		super(RelationtexForm, self).__init__(*args, **kwargs)
+		if teacher:
+			subjects = teacher.subjects.all()
+			levels   = teacher.levels.all()
+ 
+			skills = Skill.objects.filter(subject__in=subjects)
+			knowledges = Knowledge.objects.filter(theme__subject__in=subjects,level__in=levels )   
+			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
+			self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False) 
+
+
+ 

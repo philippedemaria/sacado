@@ -30,7 +30,8 @@ urlpatterns = [
     path('exercise_bibliotex_peuplate/<int:id>', exercise_bibliotex_peuplate, name='exercise_bibliotex_peuplate'),
     path('exercise_bibliotex_show/<int:id>', show_bibliotex, name='show_bibliotex'),
 
-
+    path('update_relationtex/<int:id>', update_relationtex , name='update_relationtex'),
+    path('delete_relationtex/<int:id>', delete_relationtex , name='delete_relationtex'),
 
     path('create_bibliotex_from_parcours/<int:idp>', create_bibliotex_from_parcours , name='create_bibliotex_from_parcours'),
 
