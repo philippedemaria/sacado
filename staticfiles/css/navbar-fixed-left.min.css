@@ -328,7 +328,7 @@ position: absolute;
 
  
     .navbarLeft-nav > li > a , .navbarLeft-nav > li > a.main  {
-        color: #ffb914;
+        color: #9975e0;
         float: left;  
         clear: both;
         height :50px;
@@ -338,7 +338,7 @@ position: absolute;
 
     .nav > li > a.main:hover, .nav > li > a.main:focus,.nav > li > a:hover, .nav > li > a:focus  {
         text-decoration: none;
-        color: #5d4391;
+        color: #ffb914;
         background-color: transparent ;  
         font-size : 1.5em;
     }
