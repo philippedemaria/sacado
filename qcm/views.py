@@ -346,7 +346,10 @@ def get_complement(request, teacher, parcours_or_group):
         if group_id :
             group = Group.objects.get(pk = group_id)
         else :
-            group = None   
+            try :
+                group = parcours_or_group.groups.first()
+            except :
+                group = None 
 
         if Sharing_group.objects.filter(group_id= group_id , teacher = teacher).exists() :
             sh_group = Sharing_group.objects.get(group_id=group_id, teacher = teacher)
@@ -1505,6 +1508,8 @@ def list_parcours_group(request,id):
 
     role, group , group_id , access = get_complement(request, teacher, group)
 
+    group = Group.objects.get(pk = id) 
+
     if not authorizing_access(teacher,group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
@@ -2476,8 +2481,6 @@ def show_parcours(request, idf = 0, id=0):
     if nb_point > 0 :
         nb_point = str(nb_point) + " points"
         nb_point_display = True
-
-
 
     accordion = get_accordion(parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
 
@@ -6410,6 +6413,7 @@ def group_tasks(request,id):
                 parcourses_tab.append(p)
 
     role, group , group_id , access = get_complement(request, teacher, group)
+    group = Group.objects.get(pk = id)
 
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses_tab, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
     context = { 'relationships': relationships , 'group' : group , 'parcours' : None , 'communications' : [] , 'relationships' : [] , 'group_id' : group.id , 'role' : role , }
@@ -6435,7 +6439,8 @@ def group_tasks_all(request,id):
                 parcourses_tab.append(p)
 
     role, group , group_id , access = get_complement(request, teacher, group)
-
+    group = Group.objects.get(pk = id)
+    
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today),  parcours__in=parcourses_tab, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
     context = { 'relationships': relationships ,    'group' : group , 'parcours' : None , 'relationships' : [] , 'communications' : [] ,  'group_id' : group.id , 'role' : role ,  }
     
