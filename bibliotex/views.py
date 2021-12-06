@@ -120,7 +120,7 @@ def printer(request, relationtex_id, collection,output):
 
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
-            relationtex    = Relationtex.objects.get(pk = relationtex_id) 
+            relationtex    = Exotex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          = relationtex.exotex.title
             author         = "Équipe SACADO"
@@ -181,12 +181,19 @@ def printer(request, relationtex_id, collection,output):
             elements += ctnt
             elements += r"\vspace{0,4cm}\\"
     else : #pour la création d'un exercise ou son update*
-        relationtex = Relationtex.objects.get(pk = relationtex_id) # pour insérer l'exo
-        document    = "exotex" + str(relationtex_id)
+        try :
+            relationtex = Relationtex.objects.get(pk = relationtex_id) # pour insérer l'exo
+            document    = "exotex" + str(relationtex_id)
 
- 
-        if  relationtex.content : ctnt =  relationtex.content
-        else                    : ctnt =  relationtex.exotex.content
+            if  relationtex.content : ctnt =  relationtex.content
+            else                    : ctnt =  relationtex.exotex.content
+
+        except :
+            exotex    = Exotex.objects.get(pk = relationtex_id) # pour insérer l'exo
+            exotex_id = exotex.id
+            document  = "exotex" + str(exotex_id)
+            ctnt =  exotex.content
+
 
         elements += ctnt
         elements += r"\vspace{0,4cm}"
@@ -315,6 +322,7 @@ def printer_bibliotex_by_student(bibliotex):
     return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
  
+
 
 #########################################################################################################################################
 #########################################################################################################################################
