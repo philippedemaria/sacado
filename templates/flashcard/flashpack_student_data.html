@@ -70,7 +70,7 @@
             <div class="col-lg-12 col-xs-12">
                 {% get_today_cards flashpack today student as spaced_repetitions %}  
                 {% if spaced_repetitions.count %}
-                    <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-play"></i> Tester mes connaissances {{ spaced_repetitions.count }}</a>                    
+                    <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-play"></i> Tester mes connaissances <small>{{ spaced_repetitions.count }} flashcards </small></a>                    
                 {% else %}
                     <a href="javascript:void();" class="edit">Aucune connaissance à tester ce jour</a>
                 {% endif %}
