@@ -185,7 +185,7 @@ def student_dashboard(request,group_id):
    
         parcourses_on_fire = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
 
-    flashpacks = Flashpack.objects.filter(answercards__rappel=today).exclude(madeflashpack__date=today).distinct()
+    flashpacks = Flashpack.objects.filter(answercards__rappel=today,students=student).exclude(madeflashpack__date=today).distinct()
 
     customexercises_set = set()
     nb_custom = 0
