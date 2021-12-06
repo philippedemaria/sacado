@@ -73,11 +73,11 @@
             </div>
             <div class="col-lg-4 col-xs-4">
 
-                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="bi bi-cloud"></i> <span class="label_icon"> Création</span></a> 
+                <a href="{% url 'set_flashcards_to_flashpack' flashpack.id  %}" class="edit"  ><i class="bi bi-cloud"></i><span class="label_icon"> Création</span></a> 
             </div>
             <div class="col-lg-4 col-xs-4">
              
-                <a  href="{% url 'flashpack_results' flashpack.id parcours.id %}" class="edit"><i class="bi bi-trophy"></i>  <span class="label_icon">{% if flashpack.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+                <a  href="{% url 'flashpack_results' flashpack.id parcours.id %}" class="edit"><i class="bi bi-trophy"></i><span class="label_icon"> Résultats </span></a> 
             
             </div> 
  
