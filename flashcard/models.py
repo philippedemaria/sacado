@@ -119,18 +119,16 @@ class Flashpack(models.Model):
     def today_cards(self,today,student) :
 
         data = {}
-        d = True
-        if self.madeflashpack.filter(date=today,student=student).count() :
-            d = False
-
+ 
         if self.answercards.count() > 0 :
             today_cards =  self.flashcards.filter(is_validate=1 , answercards__rappel=today)
+
         else :
             today_cards =  self.flashcards.filter(is_validate=1)
+
         nb_today_cards = today_cards.count()
         data["cards"]  = today_cards
-        data["count"] = nb_today_cards
-        data["made"] = d
+        data["count"]  = nb_today_cards
         return data
 
 
