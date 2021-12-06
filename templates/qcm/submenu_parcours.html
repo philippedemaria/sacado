@@ -96,6 +96,11 @@
             {% endif %} 
         {% endif %} 
 
+        {% if sacado_asso %}
+            <li {% if 'show_course/' in request.path %} class="active" {% endif %}><a href="{% url 'show_course' 0 parcours.id   %}"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
+        {% else %} 
+            <li ><a href="#"  class="no_sacado_asso" title="Version établissement requise"><i class="fa fa-desktop fa-fw"></i> Voir les cours</a>   </li>
+        {% endif %}
 
         {% if not parcours.is_evaluation %}
         <li {% if 'parcours_tasks_and_publishes/' in request.path %} class="active" {% endif %}><a href="{% url 'parcours_tasks_and_publishes' parcours.id %}" ><i class="fa fa-indent fa-fw"></i> Gérer les sections</a></li>  
