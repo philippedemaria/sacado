@@ -23,9 +23,17 @@
     </td> 
     <td {% if parcours.is_folder %} style="padding-top:15px" {% endif %} >
         {% get_is_lock parcours today as is_lock %}
-        <a href="{% url 'show_parcours' 0 parcours.id %}" > {{ parcours.title }} 
+         {{ parcours.title }} 
             {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
-        </a>
+       
+
+
+        {% for f in  parcours.folders.all  %}
+
+            <a href="{% url 'show_parcours' folder.id parcours.id %}" ><i class="bi bi-box-arrow-up-right" style="font-size:10px"></i></a>
+
+        {% endfor %}
+
 
         <div style="font-size:14px;margin-top:-5px;">
  
