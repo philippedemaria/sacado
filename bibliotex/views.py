@@ -120,9 +120,9 @@ def printer(request, relationtex_id, collection,output):
 
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
-            relationtex    = Exotex.objects.get(pk = relationtex_id) 
+            relationtex    =  Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
-            title          = relationtex.exotex.title
+            title          =  relationtex.exotex.title
             author         = "Équipe SACADO"
 
         elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
@@ -181,18 +181,11 @@ def printer(request, relationtex_id, collection,output):
             elements += ctnt
             elements += r"\vspace{0,4cm}\\"
     else : #pour la création d'un exercise ou son update*
-        try :
-            relationtex = Relationtex.objects.get(pk = relationtex_id) # pour insérer l'exo
-            document    = "exotex" + str(relationtex_id)
 
-            if  relationtex.content : ctnt =  relationtex.content
-            else                    : ctnt =  relationtex.exotex.content
 
-        except :
-            exotex    = Exotex.objects.get(pk = relationtex_id) # pour insérer l'exo
-            exotex_id = exotex.id
-            document  = "exotex" + str(exotex_id)
-            ctnt =  exotex.content
+        if  relationtex.content : ctnt =  relationtex.content
+        else                    : ctnt =  relationtex.exotex.content
+
 
 
         elements += ctnt
