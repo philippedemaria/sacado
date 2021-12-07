@@ -18,17 +18,11 @@
         {% endif  %} 
     </div>
 
-
+    
     <!-- box-footer DES FONCTIONNALITES  -->
-
-
     <div class="parcours_tag_student" style="color:{{ parcours.color|contrast_color }}">  
-
         <div class="parcours_tag_student_fermeture no_visu_on_load" ><i class="fa fa-times"></i> Fermer </div>
-
         {{ parcours.title  }} <a href="javascript:void()" class="show_parcours_tag_student_submenu"><i class="bi bi-folder-symlink" style="color:{{ parcours.color|contrast_color }}"></i></a>
-
-
         <div class="parcours_tag_student_submenu no_visu_on_load" >
             <div class="row extend_student "> 
                 <div class="col-xs-12">  
@@ -63,7 +57,6 @@
                     <a href="{% url 'list_parcours_flashpack_student' parcours.id %}" class="edit"><i class="bi bi-stack" ></i>  {{ data_min.nb_flashpack }} flashpacks</a>
                 </div>  
             </div>
-           
         </div>
     </div>
 
