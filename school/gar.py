@@ -22,7 +22,10 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
 
     date_start, date_stop = date_abonnement(today)
 
-    body = "<idAbonnement>" + id_abonnement +"</idAbonnement>"
+
+    body = "<?xml version='1.0' encoding='UTF-8'?>"
+    body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
+    body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
     body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
     body += "<idDistributeurCom>832020065_000000000000000</idDistributeurCom>"
     body += "<idRessource>ark:/46173/00001.p</idRessource>"
