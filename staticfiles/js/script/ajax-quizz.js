@@ -420,6 +420,8 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
         $("#this_question_display_overview").on('click', function (event) {
 
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
             let type = $("#qtype").val(); 
 
             let title      = $("#id_title").val();
@@ -436,16 +438,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             $("#overview_text").css("font-size",fontsize);
             $("#overview_duration").html(duration);
 
-            console.log("type",type) ; 
-            console.log("title",title) ; 
-            console.log("fontsize",fontsize) ; 
-            console.log("calculator",calculator) ; 
-            console.log("duration",duration) ; 
-            console.log("theme",theme) ; 
-            console.log("audio",audio) ; 
-            console.log("video",video) ; 
-            console.log("preview",preview) ; 
-            console.log("imagefile",imagefile) ; 
 
             let qcm ;
 
