@@ -99,7 +99,7 @@
     {% elif  quizz.is_numeric %}
     <span class="sanspuce historic_li"  style="border:1px solid; border-radius:20px; width:70px;">
         <i class="fa fa-desktop"></i> Numérique
-        <a href="{% url 'show_quizz'  quizz.id  %}" class="quizz_action" title="voir ce quizz"  target="_blank" > 
+        <a href="{% url 'goto_quizz_numeric'  quizz.id  %}" class="quizz_action" title="voir ce quizz"  target="_blank" > 
         <i class="fa fa-play fa-xs"></i> <small>Lancer</small></a>  
         | <small><a href="{% url 'result_quizz'  quizz.id  %}" class="quizz_action" title="voir ce quizz"  ><i class="fa fa-trophy fa-xs"></i> Résultats</a></small>
         

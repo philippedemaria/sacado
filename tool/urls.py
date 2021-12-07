@@ -136,7 +136,10 @@ urlpatterns = [
 
     path('list_quizz_student', list_quizz_student, name='list_quizz_student'),
     
+    path('goto_quizz_numeric/<int:id>', goto_quizz_numeric, name='goto_quizz_numeric'),
     path('goto_quizz_student/<int:id>', goto_quizz_student, name='goto_quizz_student'),
+
+ 
 
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
 
