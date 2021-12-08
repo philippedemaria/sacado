@@ -1562,7 +1562,7 @@ def list_sub_parcours_group(request,idg,idf):
     clear_realtime(parcours_tab , today.now() ,  1800 )
 
 
-    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'role' : role , 'today' : today , 'accordion' : accordion  }
+    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,    'role' : role , 'today' : today , 'accordion' : accordion  }
 
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 

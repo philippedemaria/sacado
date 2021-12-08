@@ -117,6 +117,30 @@
         <div class="shadow_bottom"></div>
     </div>
     {% endif %}
+
+
+
+    {% if flashpacks %}
+    <div class="row  documents_div documents_div_shadow">
+        <div class="col-sm-12 col-md-12">
+            <h1 class="thin" id="biliotex" >Mes flashpack <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ flashpacks.count }} flashpack</span>    </h1>
+            <div class="row "> 
+                <div class="col-sm-12 col-md-12">
+                    {% for flashpack in flashpacks %}   
+                          {% include 'flashcard/get_flashpack_tag.html' %} 
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="shadow_bottom"></div>
+    </div>
+    {% endif %}
+
+
+
+
+
+
 </form>
   
 </section>

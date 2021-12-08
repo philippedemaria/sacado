@@ -91,7 +91,8 @@
         </div>
 
 
-        <div class="box_title_vignette"> 
+        <div class="box_title_vignette"  style="padding:4px; opacity:0.95;background-color:{{bibliotex.color }};color:{{ bibliotex.color|contrast_color }};font-weight: 100">
+            
             <a href="{% url 'show_bibliotex' bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};" >             
                 {% if bibliotex.title|length > 26 %}
                 <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
@@ -121,16 +122,16 @@
 
         <div class="row extend"> 
            <div class="col-lg-4 col-xs-4">
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>  </a> 
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="bi bi-gear"></i> <span class="label_icon">Config.</span>  </a> 
             </div>
 
            <div class="col-lg-4 col-xs-4">
-                <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit"><i class="fa fa-fw fa-print"></i> 
+                <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit"><i class="bi bi-printer"></i> 
                     <span class="label_icon">Imprimer</span>
                 </a>
             </div>
             <div class="col-lg-4 col-xs-4">
-                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"><i class="fa fa-fw fa-folder-open"></i>  <span class="label_icon">Attribut</span>
+                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"><i class="bi bi-folder"></i>  <span class="label_icon">Attribut</span>
                 </span>
             </div> 
         </div>
@@ -138,14 +139,14 @@
         <div class="row extend"> 
            <div class="col-lg-4 col-xs-4">
 
-                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Select.</span></a> 
+                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="bi bi-cloud"></i> <span class="label_icon">Select.</span></a> 
             </div>
            <div class="col-lg-4 col-xs-4">
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="fa fa-fw fa-clone"></i> <span class="label_icon">Dupliquer</span></a> 
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="bi bi-clouds"></i> <span class="label_icon">Dupliquer</span></a> 
             </div>
            <div class="col-lg-4 col-xs-4">
 
-                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit"  ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individ.</span></a> 
+                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit"  ><i class="bi bi-people"></i> <span class="label_icon">Individ.</span></a> 
             </div>
         </div>
 
@@ -154,18 +155,18 @@
             <div class="col-lg-4 col-xs-4">
 
                 <a href="{% url 'real_time' bibliotex.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" >
-                    <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
+                    <i class=" bi bi-clock-history"></i> <span class="label_icon">Temps réel.</span>
                 </a>
 
             </div>
             <div class="col-lg-4 col-xs-4">
              
-                <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if bibliotex.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+                <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}" class="edit"><i class="bi bi-trophy"></i>  <span class="label_icon"> Résultats   </span></a> 
             
             </div>
              
             <div class="col-lg-4 col-xs-4">
-                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compéten.</span>
+                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="bi bi-mortarboard"></i>  <span class="label_icon">Compéten.</span>
                 </span>
             </div> 
         </div>

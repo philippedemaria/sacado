@@ -4,21 +4,18 @@
            
  
 <div  class="box box-widget widget-user-2"  
-      style="cursor: move;{% if quizz.vignette %}background-image: url('{{ quizz.vignette.url }}'); background-size: cover; {% endif %}background-color:{{quizz.color }};">
+      style="cursor: move;background-image: url('{% if quizz.vignette %}{{ quizz.vignette.url }}{% else %}{% static 'img/quizz_menu.jpg' %}{% endif %}'); background-size: cover;">
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
  
-         <div class="box_title_vignette thin" style="color:{{ quizz.color|contrast_color }};font-weight: 100"> 
-             
- 
-                    {% if quizz.title|length > 30 %}
-                    <span class="helper_tip" style=" font-size:16px;">{{ quizz.title|truncatechars:"30" }}
-                        <div class="helper_tip_text_right" style="font-size:14px;">{{ quizz.title }}</div>
-                    </span>
-                    {% else %}
-                        {{ quizz.title}}
-                    {% endif %}
-      
+         <div class="box_title_vignette thin" style="padding:4px; opacity:0.95;background-color:{{quizz.color }};color:{{ quizz.color|contrast_color }};font-weight: 100">
+            {% if quizz.title|length > 30 %}
+            <span class="helper_tip" style=" font-size:16px;">{{ quizz.title|truncatechars:"30" }}
+                <div class="helper_tip_text_right" style="font-size:14px;">{{ quizz.title }}</div>
+            </span>
+            {% else %}
+                {{ quizz.title}}
+            {% endif %}
         </div>
         
 
@@ -33,7 +30,7 @@
  
         <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
             <div class="col-xs-6 col-md-6 col-lg-6"> 
-                {{  quizz.questions.count }} questions
+                {{  quizz.questions.count }} questions {% if  quizz.is_video %}sur smatphone{% elif  quizz.is_numeric %}sur tablette{% else %}sur papier{% endif %}
             </div>
             <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
                 {{ quizz.duration|time_done}} 
@@ -44,42 +41,59 @@
 
 
          <div class="row">  
-            <div class="col-lg-4 col-xs-4">
+            <div class="col-lg-6 col-xs-6">
 
                 <a href="{% url 'update_quizz' quizz.id %}" class="edit" >
-                    <i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>
+                    <i class="bi bi-gear"></i> <span class="label_icon">Configuration</span>
                 </a>
 
             </div>
-            <div class="col-lg-4 col-xs-4">
-             
-                <a href="{% url 'create_question' quizz.id 0 %}" class="edit" title="Rajouter une question"><i class="fa fa-fw fa-tasks"></i>  <span class="label_icon">Questions  </span></a> 
-            
-            </div>
-            <div class="col-lg-4 col-xs-4">
+            <div class="col-lg-6 col-xs-6">
                 {% if group %}
                     {% if sacado_asso %}
                         {% if  quizz.is_video %}
-                            <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="fa fa-fw fa-gamepad"></i> <span class="label_icon"> Numérique </span>
+                            <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="bi bi-controller"></i> <span class="label_icon"> Tablette </span>
                             </a>  
                         {% elif  quizz.is_numeric %}
-                            <a href="{% url 'create_quizz_code'  quizz.id  group.id  %}#this_quizz{{ quizz.id }}" target="_blank" class="edit" title="Générer un quizz"><i class="fa fa-fw fa-desktop"></i> <span class="label_icon"> Générer</span>
+                            <a href="{% url 'create_quizz_code'  quizz.id  group.id  %}#this_quizz{{ quizz.id }}" target="_blank" class="edit" title="Générer un quizz"><i class="bi bi-play"></i> <span class="label_icon"> Lire</span>
                             </a> 
                         {% else %}
                             <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
                                class="edit" target="_blank" >
-                               <i class="fa fa-fw fa-play"></i>  <span class="label_icon"> Papier</span>
+                               <i class="bi bi-aspect-ratio"></i>  <span class="label_icon"> Projeter</span>
                             </a>
                         {% endif %}
                     {% else %}
                         <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
                            class="edit" target="_blank" >
-                           <i class="fa fa-fw fa-play"></i>  <span class="label_icon"> Papier</span>
+                           <i class="bi bi-aspect-ratio"></i>  <span class="label_icon"> Projeter</span>
                         </a>  
                     {% endif %}
                 {% endif %}
             </div> 
         </div>
+
+         <div class="row">  
+ 
+            <div class="col-lg-6 col-xs-6">
+             
+                <a href="{% url 'create_question' quizz.id 0 %}" class="edit" title="Rajouter une question"><i class="bi bi-plus-circle-dotted"></i>  <span class="label_icon">Questions  </span></a> 
+            
+            </div>
+            <div class="col-lg-6 col-xs-6">
+                {% if sacado_asso %}
+                    {% if quizz.is_video or quizz.is_numeric %}
+                            <a href="{% url 'result_quizz'  quizz.id  %}"  class="edit" >
+                               <i class="bi bi-trophy"></i>  <span class="label_icon"> Résultats</span>
+                            </a>
+                    {% endif %}
+                {% endif %}
+            </div> 
+        </div>
+
+
+
+
 
     </div>
 </div>    
