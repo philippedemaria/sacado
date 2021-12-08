@@ -110,7 +110,7 @@ def create_flashpack(request, idf=0):
     else :
         folder = None
 
-    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -131,7 +131,7 @@ def create_flashpack(request, idf=0):
     else:
         print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'flashpack': None  }
+    context = {'form': form, 'communications' : [] , 'flashpack': None , 'folder': folder  , 'group': group   }
 
     return render(request, 'flashcard/form_flashpack.html', context)
 
@@ -142,7 +142,7 @@ def update_flashpack(request, id):
 
     teacher = request.user.teacher
     flashpack = Flashpack.objects.get(id=id)
-    form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher   )
+    form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher , group = group, folder = folder,    )
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit=False)
@@ -168,7 +168,7 @@ def update_flashpack(request, id):
         else:
             print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'flashpack': flashpack,   }
+    context = {'form': form, 'communications' : [] , 'flashpack': flashpack, 'folder': folder  , 'group': group }
 
     return render(request, 'flashcard/form_flashpack.html', context )
 
@@ -188,7 +188,7 @@ def create_flashpack_from_parcours(request, idp=0):
 
     parcours = Parcours.objects.get(id=idp)
 
-    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
 
     if form.is_valid():
         nf = form.save(commit=False)

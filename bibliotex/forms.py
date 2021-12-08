@@ -44,13 +44,13 @@ class BibliotexForm(forms.ModelForm):
  
 		
 
-		if group : all_folders = group.group_folders.exclude(is_archive=0,is_trash=0)
-		else : all_folders = teacher.teacher_folders.exclude(is_archive=0,is_trash=0) 
+		if group : all_folders = group.group_folders.filter(is_archive=0,is_trash=0)
+		else : all_folders = teacher.teacher_folders.filter(is_archive=0,is_trash=0) 
 
-		if folder : parcours = folder.parcours.exclude(is_archive=0,is_trash=0)
-		else : parcours =  teacher.teacher_parcours.exclude(is_archive=0,is_trash=0)
+		if folder : parcours = folder.parcours.filter(is_archive=0,is_trash=0)
+		else : parcours =  teacher.teacher_parcours.filter(is_archive=0,is_trash=0)
 
-		coteacher_parcours = teacher.coteacher_parcours.exclude(is_archive=0,is_trash=0) 
+		coteacher_parcours = teacher.coteacher_parcours.filter(is_archive=0,is_trash=0) 
 		all_parcours = parcours|coteacher_parcours
 
 		groups =  teacher.groups.all() 

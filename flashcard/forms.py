@@ -71,15 +71,28 @@ class FlashpackForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
+		folder  = kwargs.pop('folder')
+		group   = kwargs.pop('group')
+
 		super(FlashpackForm, self).__init__(*args, **kwargs)
-		parcours =  teacher.teacher_parcours.exclude(is_archive=1)
-		all_folders = teacher.teacher_folders.all() 
-		coteacher_parcours = teacher.coteacher_parcours.exclude(is_archive=1) 
+		
+
+		if group : all_folders = group.group_folders.filter(is_archive=0,is_trash=0)
+		else : all_folders = teacher.teacher_folders.filter(is_archive=0,is_trash=0) 
+		
+		
+
+		if folder : parcours = folder.parcours.filter(is_archive=0,is_trash=0)
+		else : parcours =  teacher.teacher_parcours.filter(is_archive=0,is_trash=0)
+
+		coteacher_parcours = teacher.coteacher_parcours.filter(is_archive=0,is_trash=0) 
 		all_parcours = parcours|coteacher_parcours
 
 		groups =  teacher.groups.all() 
 		teacher_groups = teacher.teacher_group.all() 
 		all_groups = groups|teacher_groups
+
+
 
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.all(), required=False)
 		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)

@@ -254,7 +254,7 @@ def all_quizzes(request):
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours }) 
 
-
+ 
 
 def ajax_shared_quizzes(request):
 
@@ -401,13 +401,23 @@ def all_quizzes_archived(request):
 
 def create_quizz(request):
     
-    teacher = request.user.teacher 
+    teacher = request.user.teacher
+    parcours  = Parcours.objects.get(pk=idp) 
+    group_id   = request.session.get("group_id",None)
+    folder_id  = request.session.get("folder_id",None)
+    if group_id : group = Group.objects.get(pk=group_id )
+    else : group = None
+
+    if folder_id : folder = Folder.objects.get(pk=folder_id )
+    else : folder = None
+
     if teacher.subjects.count() == 1 :
         subject = teacher.subjects.first()
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = {'subject': subject } )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
     else :
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher  )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
 
     if form.is_valid():
         nf = form.save(commit = False)
@@ -444,10 +454,10 @@ def create_quizz_folder(request,idf):
     group_id   = request.session.get("group_id",None)
     if group_id :
         group = Group.objects.get(pk=group_id )
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : folder.subject , 'folders' : [folder]   ,  'groups' : [group] }   )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : folder.subject , 'folders' : [folder]   ,  'groups' : [group] }   )
     else :
         group = None
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : folder.subject , 'folders' : [folder]   }   )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : folder.subject , 'folders' : [folder]   }   )
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
@@ -496,7 +506,7 @@ def create_quizz_parcours(request,idp):
     if folder_id : folder = Folder.objects.get(pk=folder_id )
     else : folder = None
 
-    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , initial = { 'subject' : parcours.subject , 'folders' : [folder] , 'parcours' : [parcours]   ,  'groups' : [group] }   )
+    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : parcours.subject , 'folders' : [folder] , 'parcours' : [parcours]   ,  'groups' : [group] }   )
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
@@ -531,18 +541,24 @@ def create_quizz_parcours(request,idp):
 
 
 
-
-
-
-
-
-
  
 def update_quizz(request,id):    
     
     teacher = request.user.teacher 
     quizz = Quizz.objects.get(pk= id)
-    form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher  )
+
+    teacher = request.user.teacher
+    parcours  = Parcours.objects.get(pk=idp) 
+    group_id   = request.session.get("group_id",None)
+    folder_id  = request.session.get("folder_id",None)
+    if group_id : group = Group.objects.get(pk=group_id )
+    else : group = None
+
+    if folder_id : folder = Folder.objects.get(pk=folder_id )
+    else : folder = None
+
+
+    form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher , group = group, folder = folder, )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     if form.is_valid():
         nf = form.save(commit = False)
