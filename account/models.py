@@ -15,6 +15,7 @@ from templated_email import send_templated_mail
 
 from django.conf import settings # récupération de variables globales du settings.py
 from general_fonctions import *
+from datetime import datetime 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -121,6 +122,19 @@ class User(AbstractUser):
         if self.school  :
             sacado_asso = True
         return sacado_asso
+
+    @property
+    def is_sacado_member(self):
+        is_sacado = False
+        today = datetime.now()
+        try :
+            abonnement = self.school.abonnement.last()
+            if today < abonnement.date_stop and abonnement.is_active :
+                is_sacado = True
+        except :
+            pass
+        return is_sacado 
+
 
     def my_groups(self):
         group_string = ""

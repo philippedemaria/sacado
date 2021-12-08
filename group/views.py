@@ -604,7 +604,7 @@ def delete_group(request, id):
     # Si le prof n'appartient pas à un établissement
     teacher = request.user.teacher
     authorizing_access_group(request,teacher,group )
-    if not teacher.user.school :
+    if not teacher.user.is_sacado_member :
         for student in group.students.all() :
             if not student.user.school :
                 if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 

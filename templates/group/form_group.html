@@ -246,7 +246,7 @@
                                                                        class="btn btn-default "/></a>
                         </div>
                 </div>
-                {% if not group.teacher.user.school or request.user.is_manager    %}
+                {% if not sacado_asso or request.user.is_manager or request.user.is_superuser    %}
 
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
