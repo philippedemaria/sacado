@@ -547,8 +547,7 @@ def update_quizz(request,id):
     teacher = request.user.teacher 
     quizz = Quizz.objects.get(pk= id)
 
-    teacher = request.user.teacher
-    parcours  = Parcours.objects.get(pk=idp) 
+    teacher = request.user.teacher 
     group_id   = request.session.get("group_id",None)
     folder_id  = request.session.get("folder_id",None)
     if group_id : group = Group.objects.get(pk=group_id )
