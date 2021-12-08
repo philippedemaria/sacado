@@ -138,7 +138,7 @@ define(['jquery',  'bootstrap' ], function ($) {
 
         $('.show_my_quizz_result').on('click', function (event) {
 
-            let gquizz = $(this).data("gquizz");
+            let quizz = $(this).data("quizz");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
             $.ajax(
@@ -147,7 +147,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                     dataType: "json",
                     traditional: true,
                     data: {
-                        'gquizz': gquizz,                      
+                        'quizz': quizz,                      
                         csrfmiddlewaretoken: csrf_token
                     },
                     url : "ajax_show_my_result",

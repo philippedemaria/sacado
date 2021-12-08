@@ -1101,19 +1101,19 @@ def ajax_quizz_show_result(request):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     all_results = request.POST.get("all",None)
     question_id = request.POST.get("question_id",None)
-    random = int(request.POST.get("random",0))
-    data = {}
+    random      = int(request.POST.get("random",0))
+    data        = {}
 
     if random == 0 :
-        answers = Answerplayer.objects.filter(question_id = question_id, is_correct = 1 ).order_by("-score")
+        answers    = Answerplayer.objects.filter(question_id = question_id, is_correct = 1 ).order_by("-score")
         no_answers = Answerplayer.objects.filter(question_id = question_id, is_correct = 0 ).order_by("-score")
     else :
-        answers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 1 ).order_by("id")
+        answers    = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 1 ).order_by("id")
         no_answers = Answerplayer.objects.filter(qrandom_id = question_id, is_correct = 0 ).order_by("-score")
 
     no_answers_display = True
     if all_results == "0" :
-        answers = answers[:3]
+        answers            = answers[:3]
         no_answers_display = False
  
 
@@ -1510,7 +1510,8 @@ def ajax_show_my_result(request):
 
     student   = request.user.student
     quizz_id  = request.POST.get("quizz")
-    quizz     = Quizz.objects.get(pk= gquizz_id)
+    print(quizz_id)
+    quizz     = Quizz.objects.get(pk= quizz_id)
 
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
 
