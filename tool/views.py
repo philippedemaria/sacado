@@ -847,24 +847,7 @@ def ajax_charge_parcours_without_folder(request): # utilisé que par form_folder
 
 
 
-
-
-
-
-
-
-
-def get_save_new_gquizz(quizz) :
-    """ permet un enregistrement d'un nouveau quizz généré toutes les hours = 1 """
-    
-    save = True
-    remainig_time = datetime.now() - timedelta(hours = 0.15) # 0.25 pour 1/4 d'heure , 0.5 pour 1/2 heure
-    if Generate_quizz.objects.filter(date_created__gt= remainig_time, quizz__teacher = quizz.teacher ).count() > 0 :
-        save = False
-    return save
-
-
-
+ 
 
 def get_qr(quizz_id,group_id,mode) :
 
@@ -915,34 +898,18 @@ def get_qr(quizz_id,group_id,mode) :
     return quizz ,  gquizz , qrandoms , save
 
 
-
-
-def get_date_play(quizz_id,group_id,mode) : # pour les questionnaires non randomisés
-
-    """ fonction qui génére un quizz à partir du modèle du quizz"""
-    
-    quizz = Quizz.objects.get(pk= quizz_id)
-    save = get_save_new_gquizz(quizz)
-    if save :
-        gquizz = Generate_quizz.objects.create(quizz_id = quizz_id ,  group_id = group_id ,is_game=mode)
-    else :
-        gquizz   = Generate_quizz.objects.filter(quizz_id = quizz_id ,  group_id = group_id ,is_game=mode).last()
-    questions = quizz.questions.order_by("ranking")
-    return quizz , gquizz , questions , save
-  
-
-
+ 
  
 def show_quizz_group(request,id,idg):
 
     """ show quizz d'un groupe classe """
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz , gquizz , questions , save = get_date_play(id,idg,0)
+    quizz = Quizz.objects.get(pk = id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     group = Group.objects.get(pk = idg)
 
-    context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
+    context = {  "quizz" : quizz , "questions" : questions , "group" : group }     
     return render(request, 'tool/show_quizz.html', context) 
 
 
@@ -958,10 +925,10 @@ def show_quizz_parcours_student(request,id,idp):
         return redirect("show_parcours_student", id)
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz , gquizz , questions , save = get_date_play(id,group.id,0)
+    quizz = Quizz.objects.get(pk = id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
  
-    context = {  "quizz" : quizz , "questions" : questions , "group" : group , "save" : save }     
+    context = {  "quizz" : quizz , "questions" : questions , "group" : group  }     
     return render(request, 'tool/show_quizz.html', context) 
 
 
@@ -973,12 +940,10 @@ def create_quizz_code(request,id,idg):
     """ show quizz d'un groupe classe """
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz , gquizz , questions , save = get_date_play(id,idg,0)
-    if save :
-        return redirect("show_quizz_group", id , idg ) 
-    else :
-        messages.error(request, "Un quizz est déjà généré.")
-        return redirect("list_quizzes") 
+    quizz = Quizz.objects.get(pk = id)
+
+    return redirect("show_quizz_group", id , idg ) 
+
 
 
 ############################################################################################################

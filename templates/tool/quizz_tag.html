@@ -55,7 +55,7 @@
                             <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="bi bi-controller"></i> <span class="label_icon"> Tablette </span>
                             </a>  
                         {% elif  quizz.is_numeric %}
-                            <a href="{% url 'create_quizz_code'  quizz.id  group.id  %}#this_quizz{{ quizz.id }}" target="_blank" class="edit" title="Générer un quizz"><i class="bi bi-play"></i> <span class="label_icon"> Lire</span>
+                            <a href="{% url 'goto_quizz_numeric'  quizz.id   %}" target="_blank" class="edit" title="Lire un quizz"><i class="bi bi-play"></i> <span class="label_icon"> Lire</span>
                             </a> 
                         {% else %}
                             <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
