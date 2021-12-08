@@ -38,29 +38,28 @@ class BibliotexForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		folder  = kwargs.pop('folder')
+		group   = kwargs.pop('group')
 		super(BibliotexForm, self).__init__(*args, **kwargs)
 		levels = teacher.levels.all()     
-		if teacher and folder : 
-			groups        = teacher.groups.filter(level = folder.level , subject = folder.subject)
-			shared_groups = teacher.teacher_group.filter(level = folder.level , subject = folder.subject)
-			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers","level")
-			all_folders   = teacher.teacher_folders.filter(level = folder.level , subject = folder.subject , is_trash = 0 )
-			all_parcours  = teacher.teacher_parcours.filter(level = folder.level , subject = folder.subject, is_trash = 0)
+ 
+		
 
-		elif teacher :
-			groups        = teacher.groups.all()
-			shared_groups = teacher.teacher_group.all()
-			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers","level")
-			all_folders   = teacher.teacher_folders.filter(is_trash = 0)
-			all_parcours  = teacher.teacher_parcours.filter(is_trash = 0)
+		if group : all_folders = group.group_folders.exclude(is_archive=0,is_trash=0)
+		else : all_folders = teacher.teacher_folders.exclude(is_archive=0,is_trash=0) 
 
-		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=True)
-		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset=all_folders, widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=all_parcours, widget=forms.CheckboxSelectMultiple, required=False)
+		if folder : parcours = folder.parcours.exclude(is_archive=0,is_trash=0)
+		else : parcours =  teacher.teacher_parcours.exclude(is_archive=0,is_trash=0)
 
+		coteacher_parcours = teacher.coteacher_parcours.exclude(is_archive=0,is_trash=0) 
+		all_parcours = parcours|coteacher_parcours
 
+		groups =  teacher.groups.all() 
+		teacher_groups = teacher.teacher_group.all() 
+		all_groups = groups|teacher_groups
+
+		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=True)
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
+		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset = all_folders.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
 
  
 

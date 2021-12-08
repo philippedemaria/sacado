@@ -699,7 +699,7 @@ def create_bibliotex(request,idf=0):
     else :
         folder = None
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder, group = group,  initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -737,7 +737,7 @@ def update_bibliotex(request, id):
         folder = None
 
 
-    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = folder )
+    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = folder, group = group,  )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -779,7 +779,7 @@ def create_bibliotex_from_parcours(request,idp=0):
 
     parcours = Parcours.objects.get(id=idp)
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder,  group = group, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
 
     if form.is_valid():
         nf = form.save(commit = False) 
