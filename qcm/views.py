@@ -2491,7 +2491,7 @@ def show_parcours(request, idf = 0, id=0):
  
     form_reporting = DocumentReportForm(request.POST or None )
 
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : user , 'form' : form , 
                   'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises,
