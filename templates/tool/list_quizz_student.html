@@ -18,11 +18,10 @@
         <a href="{% url 'index' %}" ><img src="{% static 'img/quizz_menu.jpg' %}" width="40px" /> Les quizz</a> 
 {% endblock %}
 
+
+
 {% block page_menu_right %}
-
-
 {% endblock %}
-
 
 
 
@@ -41,56 +40,55 @@
                 </thead>
                 <tbody>
                     {% for quizz in quizzes %}
+                    <tr style="font-size:20px">
+                        <td> 
+                           {{ quizz.subject.shortname }}
+                        </td>
+                        <td> 
+                           {{ quizz.code }}
+                        </td>
+                        <td  style="position: relative;height:90px">
+                           {% if  quizz.quizz.is_video %}
+                                {{ quizz.quizz.title }} 
 
-                        <tr style="font-size:20px">
-                            <td> 
-                               {{ quizz.subject.shortname }}
-                            </td>
-                            <td> 
-                               {{ quizz.code }}
-                            </td>
-                            <td  style="position: relative;height:90px">
-                               {% if  quizz.quizz.is_video %}
-                                    {{ quizz.quizz.title }} 
-
-                                    <a href="{% url 'play_quizz_student'  %}" class="btn btn-primary btn-xs">Lancer</a><br/><small> Jeu vidéo projeté</small> 
+                                <a href="{% url 'play_quizz_student'  %}" class="btn btn-primary btn-xs">Lancer</a><br/><small> Jeu vidéo projeté</small> 
 
 
-                               {% elif quizz.is_numeric and not quizz.is_video %}
-                                    {{ quizz.title }} 
-                                    
-
-                                        <a href="{% url 'goto_quizz_student' quizz.id  %}" class="btn btn-primary btn-xs">Démarrer</a>
-
-                                        <a href="#" class="btn btn-default btn-xs show_my_quizz_result" data-toggle='modal'  data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Déjà renseigné</a>
-
-                                    <br/><small> Numérique sur terminal</small>
-                                    
-                                {% else %}
-                                    <a href="{% url 'show_quizz' quizz.id  %}"> {{ quizz.title }}</a><br/><small> Réponse sur papier</small>  
-                                {% endif %} 
-
-                                 <small>| 
-                                    {% if quizz.is_random %}
-                                        {{ quizz.nb_slide }}
-                                    {% else %}
-                                        {{ quizz.questions.all|length }}
-                                    {% endif  %} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</small>
+                           {% elif quizz.is_numeric and not quizz.is_video %}
+                                {{ quizz.title }} 
                                 
-                                {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="110px" style="position: absolute; bottom:5px; right:5px;" />{% endif %}
- 
-                                
-                                <br/> <small>{{ quizz.duration|time_done }}</small>
-                            </td>
-                            <td>
-                                {% if quizz.is_result and not restart_gquizz %}
-                                    <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Lire</a></small>
-                                {% else %}
-                                    <small  class="text-danger">Votre enseignant n'a pas encore<br/> publié les réponses</small>
-                                {% endif %}
 
-                            </td>
-                        </tr>
+                                    <a href="{% url 'goto_quizz_student' quizz.id  %}" class="btn btn-primary btn-xs">Démarrer</a>
+
+                                    <a href="#" class="btn btn-default btn-xs show_my_quizz_result" data-toggle='modal'  data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Déjà renseigné</a>
+
+                                <br/><small> Numérique sur terminal</small>
+                                
+                            {% else %}
+                                <a href="{% url 'show_quizz' quizz.id  %}"> {{ quizz.title }}</a><br/><small> Réponse sur papier</small>  
+                            {% endif %} 
+
+                             <small>| 
+                                {% if quizz.is_random %}
+                                    {{ quizz.nb_slide }}
+                                {% else %}
+                                    {{ quizz.questions.all|length }}
+                                {% endif  %} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</small>
+                            
+                            {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="110px" style="position: absolute; bottom:5px; right:5px;" />{% endif %}
+
+                            
+                            <br/> <small>{{ quizz.duration|time_done }}</small>
+                        </td>
+                        <td>
+                            {% if quizz.is_result and not restart_gquizz %}
+                                <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Lire</a></small>
+                            {% else %}
+                                <small  class="text-danger">Votre enseignant n'a pas encore<br/> publié les réponses</small>
+                            {% endif %}
+
+                        </td>
+                    </tr>
                     {% endfor %} 
                 </tbody>
             </table>

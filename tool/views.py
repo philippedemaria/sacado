@@ -1510,7 +1510,7 @@ def ajax_show_my_result(request):
 
     student   = request.user.student
     quizz_id  = request.POST.get("quizz")
-    print(quizz_id)
+
     quizz     = Quizz.objects.get(pk= quizz_id)
 
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
