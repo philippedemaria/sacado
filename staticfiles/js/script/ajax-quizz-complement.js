@@ -132,10 +132,6 @@ define(['jquery',  'bootstrap' ], function ($) {
         });
 
 
-
-
-
-
         $('.show_my_quizz_result').on('click', function (event) {
 
             let quizz = $(this).data("quizz");
@@ -210,9 +206,15 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
                         if (question_id > 0)
-                        { $("#detail_div"+question_id).html("").html(data.html).toggle(500); }
+                        { 
+                            $("#detail_div"+question_id).html("").html(data.html).toggle(500);
+                            $("#percent_done"+question_id).html("").html(data.percent_done);
+                         }
                         else
-                        { $("#display_global_detail").html("").html(data.html).toggle(500); }
+                        { 
+                            $("#display_global_detail").html("").html(data.html).toggle(500); 
+
+                        }
                     }
                 }
             )

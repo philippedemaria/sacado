@@ -48,13 +48,13 @@
             <div class="row">    
                 <div class="card" style="margin-left:15px;padding:10px; width:90%">
 
-                {% get_success_percent question quizz as percent_success %}
+ 
                 <h4 >Question {{ forloop.counter }}.  
                     <a href="javascript:void(0);" data-question_id="{{ question.id }}" data-quizz_id="{{ quizz.id }}" class="this_detail fontsize12 btn btn-new-violet"> 
                         détails 
                         <i class="fa fa-angle-down" id="collapser_angle{{ question.id }}" ></i>
                     </a>
-                    <span class="pull-right">{{ percent_success }}</span> 
+                    <span class="pull-right" id="percent_done{{ question.id }}"></span> 
                 </h4>
                 {{ question.title|safe }} 
                 </div> 

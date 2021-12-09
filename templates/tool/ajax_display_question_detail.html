@@ -1,10 +1,12 @@
 {% load item_tags %}
 
 {% if question %}
+    <div class="pull-right" style="font-size:100px;opacity: 0.5">{{ percent }}</div>
+
     {% for student in students  %}
         {% get_real_ans_for_this_question  question  quizz  student.this as dict_answer %} 
-        <span class="btn btn-{% if not dict_answer.is_exist  %}default{% else %}{% if dict_answer.is_correct %}success{% else %}danger{% endif %}{% endif %}" style="text-align: left; width: 170px;">{{ student.this|truncatechars:15 }}              
-            
+        <span class="btn btn-{% if not dict_answer.is_exist  %}default{% else %}{% if dict_answer.is_correct %}success{% else %}danger{% endif %}{% endif %}" style="text-align: left; width: 170px;">
+            {{ student.this|truncatechars:15 }}              
             {% if dict_answer.is_exist  %}
                 <span class="badge">
                     <small>

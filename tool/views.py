@@ -673,20 +673,37 @@ def delete_historic_quizz(request,id):
  
 
 def ajax_show_detail_question(request):
-    question_id = request.POST.get("question_id");
-    quizz_id    = request.POST.get("quizz_id");
-    group_ids   = request.POST.getlist("groups");
+    question_id = request.POST.get("question_id",None) 
+    quizz_id    = request.POST.get("quizz_id",None) 
+    group_ids   = request.POST.getlist("groups",None) 
     data = {}
 
     students = list()
     student_set  = set()
+
+    quizz = Quizz.objects.get(pk = quizz_id)    
+    percent = "Non traité"
+    percent_done = "0"
+    if question_id :
+        question = Question.objects.get(pk=question_id)
+        data_set = Answerplayer.objects.filter(question = question, quizz = quizz )
+        good_answerplayers = data_set.filter(is_correct = 1 ).count()
+        answerplayers = data_set.count()
+        try : 
+            percent = str(int((good_answerplayers*100)/answerplayers)) +"%"
+        except :
+            percent = "Non traité"
 
     for group_id in group_ids :
         group = Group.objects.get(pk = group_id)
         stds = group.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
         student_set.update(stds)
 
-    quizz = Quizz.objects.get(pk = quizz_id)
+    if len(student_set) :
+        percent_done = str(int((data_set.count()*100)/len(student_set))) +"%"
+
+
+
     for student in student_set :
         student_dico = dict()
         student_dico["this"] = student
@@ -702,9 +719,15 @@ def ajax_show_detail_question(request):
             except: student_dico["answer"] = None
         students.append(student_dico)
 
-    context = { "students" : students , "question" : question , "quizz" : quizz ,   }
+    print(percent)
+    print(percent_done)
 
-    data['html'] = render_to_string( 'tool/ajax_display_question_detail.html' , context)
+    context = { "students" : students , "question" : question , "quizz" : quizz , 'percent' : percent  }
+
+
+    data['percent_done'] = percent_done
+    data['html']    = render_to_string( 'tool/ajax_display_question_detail.html' , context)
+
     return JsonResponse(data)  
 
 
