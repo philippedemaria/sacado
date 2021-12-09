@@ -180,6 +180,7 @@ class Relationtex(models.Model):
 
     is_python = models.BooleanField(default=0, verbose_name="Python ?")
     is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
+    is_tableur = models.BooleanField(default=0, verbose_name="Tableur ?")
     is_print = models.BooleanField(default=0, verbose_name="Imprimé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
