@@ -181,7 +181,12 @@ def printer(request, relationtex_id, collection,output):
             elements += ctnt
             elements += r"\vspace{0,4cm}\\"
     else : #pour la création d'un exercise ou son update*
-
+    
+        relationtex_id = request.POST.get("print_exotex_id",None)  
+        relationtex    =  Relationtex.objects.get(pk = relationtex_id) 
+        document       = "relationtex" + str(relationtex_id)
+        title          =  relationtex.exotex.title
+        author         = "Équipe SACADO"
 
         if  relationtex.content : ctnt =  relationtex.content
         else                    : ctnt =  relationtex.exotex.content
