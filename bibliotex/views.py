@@ -1133,7 +1133,7 @@ def ajax_set_exotex_in_bibliotex(request):
         try :
             relationtex = Relationtex.objects.create(   bibliotex_id=bibliotex_id, exotex_id = exotex_id, ranking = 100,  
                                                         teacher = request.user.teacher, calculator = exotex.calculator,  duration =exotex.duration , 
-                                                        is_python = exotex.is_python,is_scratch =exotex.is_scratch,is_print = 0,
+                                                        is_python = exotex.is_python,is_scratch =exotex.is_scratch,is_tableur =exotex.is_tableur,is_print = 0,
                                                         is_publish = 1,  correction=exotex.correction ,is_publish_cor = 0 )
             relationtex.skills.set(skills)
             relationtex.knowledges.set(knowledges)
