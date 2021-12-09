@@ -14,6 +14,22 @@
 
             <span class="container_checkbox_title">{{ exotex.title }} </span>
 
+                    {% if exotex.calculator  %}
+                         <img src="{% static 'img/calculator.png' %}" width="25px" />
+                    {% else %}
+                         <img src="{% static 'img/no_calculator.png' %}" width="25px" />
+                    {% endif %}
+                    {% if exotex.is_python  %}
+                          <img src="{% static 'img/is_python.png' %}" width="25px" />
+                    {% endif %}
+                    {% if exotex.is_scratch  %}
+                          <img src="{% static 'img/is_scratch.png' %}" width="25px" />
+                    {% endif %}
+                    {% if exotex.is_tableur  %}
+                          <img src="{% static 'img/is_tableur.png' %}" width="25px" />
+                    {% endif %}
+            
+
             <small class="pull-right">
                 {% for s in exotex.skills.all %}
                     {{ s.name }}.
