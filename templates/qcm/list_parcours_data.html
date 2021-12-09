@@ -30,6 +30,9 @@
         {% for g in  parcours.folders.all  %}
 
             <a href="{% url 'show_parcours' f.id parcours.id %}" ><i class="bi bi-box-arrow-up-right" style="font-size:10px"></i></a>
+        {% empty %}
+
+            <a href="{% url 'show_parcours' 0 parcours.id %}" ><i class="bi bi-box-arrow-up-right" style="font-size:10px"></i></a>
 
         {% endfor %}
 
