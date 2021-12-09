@@ -186,7 +186,7 @@ def printer(request, relationtex_id, collection,output):
         try :
             exotex  = Relationtex.objects.get(pk = relationtex_id)
             ctnt =  relationtex.exotex.content    
-        pass :
+        except :
             exotex         = Exotex.objects.get(pk = relationtex_id)
             ctnt =  relationtex.content 
 

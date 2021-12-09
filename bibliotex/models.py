@@ -55,6 +55,7 @@ class Exotex(models.Model):
     is_share = models.BooleanField(default=1, verbose_name="Mutualisé ?")
     is_python = models.BooleanField(default=0, verbose_name="Python ?")
     is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
+    is_tableur = models.BooleanField(default=0, verbose_name="Tableur ?")
     is_corrected = models.BooleanField(default=0, verbose_name="Correction ?")
 
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
