@@ -402,7 +402,6 @@ def all_quizzes_archived(request):
 def create_quizz(request):
     
     teacher = request.user.teacher
-    parcours  = Parcours.objects.get(pk=idp) 
     group_id   = request.session.get("group_id",None)
     folder_id  = request.session.get("folder_id",None)
     if group_id : group = Group.objects.get(pk=group_id )
