@@ -5,7 +5,9 @@
  
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-
+    <script>
+        require(['script/ajax-show_flashpack']);
+    </script> 
 {% endblock %}
 
 
@@ -32,7 +34,7 @@
 
 <section class="content_list" >
 
-    <table class="table table-hovered standard_tab_sort"  style="width:100%" >
+    <table class="table table-hovered display_info"  style="width:100%" >
         <thead> 
             <tr> 
                 <th>Question</th>

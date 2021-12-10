@@ -116,7 +116,6 @@ define(['jquery',  'bootstrap' ], function ($) {
 
         $('body').on('click', '.this_comment_display',   function (event) { 
             let flashcard_id = $(this).data("flashcard_id");  
-            alert(flashcard_id ) 
               $("#id_flashcard").val(flashcard_id); 
         });
 
