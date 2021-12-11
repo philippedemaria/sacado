@@ -81,12 +81,16 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
             ctx.stroke();
           }
  
-    
+         $("body").on('click', ".write_to_student", function (event) {
+                 $(this).parent().find(".this_student_rt").toggle() ;
+                 })    
 
           // Correctly decide between ws:// and wss://
           var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+          console.log("test de connexion : " + ws_scheme );
           var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
           window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+
           socket.onopen = function () {
               console.log("Connected to socket");
               socket.send(JSON.stringify({
@@ -96,14 +100,8 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
           };
 
 
-         $("body").on('click', ".write_to_student", function (event) {
-                 $(this).parent().find(".this_student_rt").toggle() ;
-                 })
-
- 
-
                     // Handle incoming messages
-            socket.onmessage = function (message) {
+          socket.onmessage = function (message) {
                  // Decode the JSON
                  var data = JSON.parse(message.data);
                  // Handle errors
