@@ -159,10 +159,7 @@ def update_flashpack(request, id):
             nf.students.set(group_students)
             
             messages.success(request, 'Le flashpack a été modifié avec succès !')
-            if request.POST.get("exercices",None) :
-                return redirect('set_flashcards_to_flashpack' , nf.id)
-            else :
-                return redirect('my_flashpacks')
+            return redirect('set_flashcards_to_flashpack' , nf.id)
 
 
         else:
