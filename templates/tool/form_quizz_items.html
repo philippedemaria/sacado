@@ -52,12 +52,12 @@
                     </td>
                     <td> {{ form.is_publish|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
-                <tr class="div_time">
+                <tr class="publication_div">
                     <td>{{ form.start.label_tag }}    
                     </td>
                     <td> {{ form.start |add_class:"form-control datetimepicker" }}  </td>
                 </tr>
-                <tr class="div_time">
+                <tr class="publication_div">
                     <td>{{ form.stop.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                     <div class="helper_tip_text" >Le quizz ne peut plus être traité mais reste visible. Dépublié pour fermer intégralement l'accès. </div>
                                 </span> 
@@ -212,12 +212,20 @@
 
 
     <div class="row">
-        <div class="col-sm-12 col-md-12"> 
+        <div class="col-sm-6 col-md-6"> 
             <div class="form-group">
                 <input value="Enregistrer" type="submit" class="btn btn-primary"/>
                 <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
             </div>
-        </div>    
+        </div> 
+        {% if quizz %}
+            <div class="col-sm-6 col-md-6">                                             
+                <a href="{% url 'delete_quizz' quizz.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette quizz')" > 
+                    <i class="fa fa-trash"> </i>   Supprimer
+                </a>
+            </div>
+        {% endif %}
+
     </div>
 
  

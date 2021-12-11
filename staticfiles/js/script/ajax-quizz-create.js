@@ -5,6 +5,26 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
     console.log(" ajax-quizz-create chargé ");
 
 
+
+        $("#publication_div").hide();
+ 
+
+            makeDivAppear($("#id_is_publish"), $("#publication_div"));
+
+
+            function makeDivAppear($toggle, $item) {
+                    $toggle.change(function () {
+                         $item.toggle();
+                    });
+                }
+ 
+
+
+
+
+    
+
+
     $('body').on('change', '#id_subject' , function (event) {
 
  
