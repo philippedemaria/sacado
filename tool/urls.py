@@ -140,7 +140,6 @@ urlpatterns = [
     path('goto_quizz_student/<int:id>', goto_quizz_student, name='goto_quizz_student'),
 
  
-
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
 
 

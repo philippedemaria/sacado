@@ -6,10 +6,11 @@
 
 {% block require %}
  
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
  
     <script>
         require(['script/ajax-parcours']);
+        require(['script/ajax-quizz-result_from_list']);
     </script> 
 
 
@@ -52,23 +53,28 @@
                     <img src="{% static 'img/quizz.jpg' %}" width="250px" border=0  />
                 {% endif %}
 
-                <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' q.id  %}" target="_blank"{% else %} href="{% url 'show_quizz_student' q.id  %}" {% endif %}  style="font-weight: normal"> 
+                
                     <div style="padding: 10px;width:100%; height:75px; position:absolute;bottom: 0px">
-                        {{ q.title|truncatechars:28 }} <small>
-                        <span class="pull-right" style="bottom:40px; right:15px; position:absolute;font-size: 30px">
+
+                        <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' q.id  %}" target="_blank"{% else %} href="{% url 'show_quizz_student' q.id  %}" {% endif %}  style="font-weight: normal">
+
+                        {{ q.title|truncatechars:28 }} 
+                        </a>
+
+                        <small>
+                        <a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-quizz="{{ q.id }}" class="pull-right" style="bottom:40px; right:15px; position:absolute;font-size: 30px">
                             {% if  q.is_video %}
                                 <i class="bi bi-trophy" title="Résultats" style="font-size: 20px"></i>
                             {% elif  q.is_numeric %}
                                 <i class="bi bi-trophy" title="Résultats" style="font-size: 20px"></i>
                             {% endif %}
-                        </span>
-
+                        </a>
+ 
 
 
                             <br/>
                         <i class="fa fa-barcode fa-xs"></i> {{ q.code }} 
                         <span class="pull-right" style="bottom:10px; right:10px; position:absolute;font-size: 30px">
-                              
                             {% if  q.is_video %}
                                <i class="bi bi-controller" title="Jeu SacadoQuizz"></i>
                             {% elif  q.is_numeric %}
@@ -81,7 +87,7 @@
                         {{ q.questions.count }} diapos</small> 
                     </div> 
                     
-                </a>
+                
             </div>
         </div>
     {% endfor %}
@@ -89,6 +95,21 @@
 
  
 
+<div class="modal fade" id="my_quizz_results" tabindex="-1" role="dialog" aria-labelledby="my_quizz_results">
+    <div class="modal-dialog modal-maxsize" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">        
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 class='thin' >Résultats</h2>    
+            </div>
+            <div class="modal-body" id="my_result">
+      
+            </div>
+        </div>
+    </div> 
+</div>
 {% endblock  %}   
 
  
