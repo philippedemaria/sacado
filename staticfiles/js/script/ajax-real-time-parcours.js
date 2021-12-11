@@ -89,6 +89,7 @@ define(['jquery',  'bootstrap', 'websocket' ], function ($) {
           var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
           console.log("test de connexion : " + ws_scheme );
           var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
+          console.log("test de connexion : " + ws_path );
           window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
 
           socket.onopen = function () {
