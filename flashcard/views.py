@@ -844,18 +844,18 @@ def ajax_publish_list_flashpack(request):
     data = {}
     if statut=="true" or statut == "True":
         statut = 0
-        data["statut"] = "false"
-        data["style"] = "#dd4b39"
-        data["class"] = "legend-btn-danger"
+        data["statut"]  = "false"
+        data["style"]   = "#dd4b39"
+        data["class"]   = "legend-btn-danger"
         data["noclass"] = "legend-btn-success"
-        data["label"] = "Non publié"
+        data["label"]   = "Non publié"
     else:
         statut = 1
-        data["statut"] = "true"
-        data["style"] = "#00a65a"
-        data["class"] = "legend-btn-success"
+        data["statut"]  = "true"
+        data["style"]   = "#00a65a"
+        data["class"]   = "legend-btn-success"
         data["noclass"] = "legend-btn-danger"
-        data["label"] = "Publié"
+        data["label"]   = "Publié"
  
     Flashpack.objects.filter(pk = int(flashpack_id)).update(is_publish = statut)
 

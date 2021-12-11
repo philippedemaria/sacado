@@ -300,12 +300,27 @@
             </div>
         </div>
 	    <div class="row">
-	        <div class="col-sm-12 col-md-12"> 
+
+	        <div class="col-sm-8 col-md-8"> 
 	            <div class="form-group">
 	                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
 	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
 	            </div>
-	        </div>    
+	        </div> 
+            <div class="col-sm-4 col-md-4"> 
+            {% if quizz %}
+                
+ 
+                <a href="{% url 'delete_quizz' quizz.id %}" class="btn btn-danger"  onclick="return TestDelete('ce quizz')"> 
+                    <i class="fa fa-trash"> </i>   Supprimer
+                </a>
+    
+            {% endif %}  
+            </div> 
+
+
+
+
 	    </div>
  
     </form>  

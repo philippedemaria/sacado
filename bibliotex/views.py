@@ -736,8 +736,14 @@ def update_bibliotex(request, id):
     teacher = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)
     folder_id = request.session.get("folder_id",None)
+    group_id = request.session.get("group_id",None)
+    if group_id :
+        group = Group.objects.get(id=group_id)
+    else :
+        group = None
+
     if folder_id :
-        folder = Folder.objects.get(pk = folder_id)
+        folder = Folder.objects.get(id=folder_id)
     else :
         folder = None
 

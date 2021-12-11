@@ -34,6 +34,14 @@
 
 <section class="content_list" >
 
+    <table class="table table-hovered"  style="width:100%" >
+    {% for s in group.students.all %}
+
+
+    {% endfor %}
+    </table>
+
+
     <table class="table table-hovered display_info"  style="width:100%" >
         <thead> 
             <tr> 
@@ -58,8 +66,48 @@
             {% endfor %}              
          </tbody>
     </table>
-</section>
 
+
+
+
+
+
+
+
+
+
+
+    {% comment %}
+    <table class="table table-hovered display_info"  style="width:100%" >
+        <thead> 
+            <tr> 
+                <th>Question</th>
+                <th>Réponse</th>
+                <th>Aide</th>
+                <th>Dernière passation  </th>
+                <th>Prochaine passation  </th>
+                <th>Validité</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {% for answercard in answercards  %} 
+                <tr class="tr_edit"> 
+                    <td >{{ answercard.flashcard.question|safe }}</td>
+                    <td >{{ answercard.flashcard.answer|safe }}</td>
+                    <td >{{ answercard.flashcard.helper|safe }}</td>
+                    <td>{{ answercard.date|date:"d N Y" }}  </td>
+                    <td>{{ answercard.rappel|date:"d N Y" }}  </td>
+                    <td>{{ answercard.answers|decrypt_results|safe }}</td>
+                </tr>
+            {% endfor %}              
+         </tbody>
+    </table>
+    {% endcomment %}
+
+
+
+
+</section>
 {% endblock %}
 
 
