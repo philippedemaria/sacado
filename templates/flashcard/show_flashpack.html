@@ -42,18 +42,20 @@
                                 {{ flashpack.title}} 
                             </h1>
                             <div style="text-align: left">
+                            {% block revision %}
                             <i class="fa fa-fw fa-database"></i> Vous devrez répondre aux {% block nb_flashcard_student %}
                                                                                             {{ flashpack.flashcards.count }} carte{{ flashpack.flashcards.count|pluralize }}
                                                                                           {% endblock %} qui vont vous être présentées.<br/><br/>
                             <i class="fa fa-fw fa-mortar-board"></i> Vous êtes seul juge de vos connaissances.<br/><br/>
                             <i class="fa fa-fw fa-refresh"></i> Il vous appartient de jauger au mieux vos réponses pour avoir un retour le plus juste possible de vos acquis. <br/><br/>
-                            <i class="fa fa-fw fa-clock"></i> Le temps entre chaque question est chronométré pour vous donner une indication sur votre temps de réponse. <br/><br/><br/>
-                            </div>                            
+                            {% endblock %}
+                            </div>                           
                             {% if flashpack.vignette %}<img src="{{ flashpack.vignette.url }}" width="350px"  />{% else %}<img src="{% static 'img/flash_accueil.png' %}" width="200px"  />{% endif %}
 
                             <div style="text-align: right">
                                 <button data-nav="next" data-value="start" class="btn btn-primary navigation"><i class="fa fa-fw fa-caret-right"></i> Démarrer</button>
-                            </div>   
+                            </div>
+
                         </div>
                     </div> 
                 </li>
@@ -73,7 +75,6 @@
                             <h1 style="font-size:4em" class="thin">
                                 <br/><br/>
                                 <b> -- FIN -- </b>
-                                <br/><br/>
                                 <br/><br/>
                                 {% block flashcard_student_results %}
                                 {% endblock %}

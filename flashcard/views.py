@@ -155,7 +155,7 @@ def update_flashpack(request, id):
         folder = None
 
     flashpack = Flashpack.objects.get(id=id)
-    
+
     form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher , group = group, folder = folder,    )
     if request.method == "POST" :
         if form.is_valid():
@@ -254,11 +254,20 @@ def show_flashpack(request, id):
         flashcards =  flashpack.flashcards.filter(is_validate=1) 
         template = 'flashcard/show_flashpack.html'
         context = {'flashpack': flashpack, 'flashcards' : flashcards  }
-    
-
-
 
     return render(request,template, context )
+
+
+def revise_flashpack(request, id):
+
+
+    flashpack  = Flashpack.objects.get(id=id)
+    flashcards =  flashpack.flashcards.filter(is_validate=1) 
+    template = 'flashcard/revise_flashpack.html'
+    context = {'flashpack': flashpack, 'flashcards' : flashcards  }
+
+    return render(request,template, context )
+
 
 
 
@@ -797,7 +806,8 @@ def ajax_store_score_flashcard(request):
         else : answers_str =  str(value) 
  
         rappel          = answer.date + timedelta(days = weight)
-        Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
+        if value :
+            Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
  
 
     data = {}

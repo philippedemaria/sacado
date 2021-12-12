@@ -72,7 +72,7 @@
                 {% if spaced_repetitions.count %}
                     <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-play"></i> Tester mes connaissances <small>{{ spaced_repetitions.count }} <i class="bi bi-stack"></i> </small></a>                    
                 {% else %}
-                    <a href="javascript:void();" class="edit">Aucune connaissance à tester ce jour</a>
+                    <a href="{% url 'revise_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-bootstrap-reboot"></i> Revoir les flashcards </a> 
                 {% endif %}
             </div>                        
         </div>

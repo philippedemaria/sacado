@@ -36,7 +36,11 @@
 
 
 {% block flashcard_student_results %}
-    <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="btn btn-default "/>Mes résultats</a>
+    <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="btn btn-new-violet"/>Mes résultats</a>
+
+    <br/><br/>
+
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
 {% endblock %}
                           
 

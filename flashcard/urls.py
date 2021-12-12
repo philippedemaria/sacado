@@ -9,6 +9,7 @@ urlpatterns = [
     path('update/<int:id>', update_flashpack, name='update_flashpack'),
     path('delete/<int:id>', delete_flashpack, name='delete_flashpack'),
     path('show_flashpack/<int:id>', show_flashpack, name='show_flashpack'), 
+    path('revise_flashpack/<int:id>', revise_flashpack, name='revise_flashpack'), 
     path('clone_flashpack/<int:id>', clone_flashpack, name='clone_flashpack'),
     path('my_flashpack_archives', my_flashpack_archives, name='my_flashpack_archives'),
     path('flashpack_results/<int:idf>/<int:idp>', flashpack_results, name='flashpack_results'),

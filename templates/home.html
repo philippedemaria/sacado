@@ -115,8 +115,8 @@ Intro Section -
                     <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
                     <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
 
-                    <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  <span style="color:#333"> Flashcards</span>
-
+                    <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  
+                    <a href="#" data-toggle='modal'   data-target='#flashpack_modal'  style="color:#333">Flashcards <i class="fa fa-question-circle"></i></a> 
                 </div>
             </div>
             <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
@@ -744,5 +744,26 @@ Intro Section -
     </div> 
 </div>
  
+<div class="modal fade" id="flashpack_modal" tabindex="-1" role="dialog" aria-labelledby="flashpack_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+              <div class="alert">
 
+                  <p>Un flashpack est un ensemble de flashcards (ou cartes mémoire). </p>
+                  <p>Depuis plusieurs décennies, les neuros scientifiques, pédagogues, psychologues, informaticiens cherchent à déterminer une méthode efficace pour apprendre. Stanislas Dehaene batit une thèse sur ses <a href="http://parisinnovationreview.com/article/les-quatre-piliers-de-lapprentissage-stanislas-dehaene" target="_blank">4 piliers de l'apprentissage</a> :
+                  <ol>
+                      <li>L'attention</li>
+                      <li>L'engagement actif</li>
+                      <li>Le retour d’information</li>
+                      <li>La consolidation</li>
+                  </ol> 
+                  </p>
+                  <p>De son coté, <a href="https://supermemo.guru/wiki/Piotr_Wozniak" target="_blank">Piotr Wozniak</a> code dès 1985 un algorithme d'apprentissage par répétitions espacées, le <a href="https://www.supermemo.com/en/articles/history" target="_blank">SUPERMEMO</a>. Aujourd'hui cette base algorihtmique est lagement utilisée, amendée, recalculée et de nombreuses applications utilisent ce procédé.</p>
+                  <p>SACADO se lance dans les répétitions espacées selon un algorihtme simplifié de SUPERMEMO. Il est possible de choisir un algorithme sur une période donnée. Chaque enseignant crée ses flashpacks à partir de flashcards existantes ou crée ses propres flashcards. SACADO prévient l'élève des dates de répétitions ou laisse à l'élève le choix de s'entrainer à souhait.</p>
+
+                  <p>Convaincue de l'étude des neuro-sciences, l'équipe SACADO place les flashpacks dans son application pour permettre à chaque élève de s'engager dans son apprentissage encore un peu plus efficacement.</p>
+              </div> 
+        </div>
+    </div> 
+</div>
 {% endblock %}
