@@ -76,16 +76,13 @@ class Flashcard(models.Model):
                 if a == 1 : color = "danger"
                 elif a == 2 : color = "validate"
                 elif a == 4 : color = "success"
-            string += "<i class='bi bi-app text-"+color+"'></i> "
-                 
-                 
-            data["answers"] =  answer.answers
-
+            string += "<i class='bi bi-app text-"+color+"'></i> "    
+            data["answers"] =  string
         except : 
             data["rappel"] =  None
             data["answers"]  =  None
-        return answer
 
+        return data
 
 
 class Flashpack(models.Model):
