@@ -234,7 +234,7 @@ def student_dashboard(request,group_id):
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
                'relationships_in_tasks': relationships_in_tasks , }
 
-
+ 
     return template, context
 
 
