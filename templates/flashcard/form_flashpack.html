@@ -207,9 +207,10 @@
 				                    <td> {{ form.is_archive|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
 				                </tr>
                                 <tr>
-                                    <td>{{ form.is_creative.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                    <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards. Attention la validation par l'enseignant est requise.</div>
+                                    <td><label>Création de flashcard par les élèves <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards. Validation obligatoire de l'enseignant.</div>
                                                 </span> 
+                                            </label>
                                     </td>
                                     <td>             
                                         {{ form.is_creative|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
@@ -241,9 +242,10 @@
 				                    </td>
 				                </tr>
                                 <tr>
-                                    <td>{{ form.is_creative.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                    <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards.</div>
+                                    <td><label>Création de flashcard par les élèves <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards. Validation obligatoire de l'enseignant.</div>
                                                 </span> 
+                                            </label>
                                     </td>
                                     <td>             
                                         <div class="alert alert-danger"> 
@@ -252,12 +254,15 @@
                                     </td>
                                 </tr>
 				            {% endif %}
-                            <tr>
-                                <td class="no_border">{{ form.interslide.label_tag }}
-                                </td>
-                                <td>{{ form.interslide|add_class:"form-control" }} </td>
-                            </tr>
-
+                                <tr>
+                                    <td>{{ form.stop.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Date de fin d'utilisation du flashpack.</div>
+                                                </span> 
+                                    </td>
+                                    <td>             
+                                        {{ form.stop|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                                    </td>
+                                </tr>
 
                     </table>
             </div>

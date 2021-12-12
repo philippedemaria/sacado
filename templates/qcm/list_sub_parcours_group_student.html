@@ -39,6 +39,7 @@
 
 <section class="content_list" id="principal_section"> 
     <form action="" methode="POST" >  
+        <h2 class='thin'>Mes parcours</h2>
         {% for parcours in parcourses %} 
             {% get_min_score parcours student as data_min %}
             {% include 'qcm/parcours_tag_student.html' %}
@@ -53,112 +54,7 @@
             {% endfor %}
         {% endif %}
          
-        {% if quizzes %}        
-        <div class="row"></div>  
-            <h2 class="thin">Mes quizz</h2>
-
-                {% for q in quizzes %}
-                        {% if q.vignette %}
-                        <div class="col-xs-6 col-md-4 col-lg-3"> 
-                            <div class="card" style="float:none; height:225px;width:250px">
-                                <img src="{{ q.vignette.url }}" width="250px" height="150px" border=0 />
-                                <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' q.id  %}" target="_blank"{% else %} href="{% url 'show_quizz_student' q.id  %}" {% endif %}  style="font-weight: normal;"> 
-                                    <div style="padding: 10px;width:100%; height:75px">
-                                        {{ q.title|truncatechars:28 }} <small><br/><i class="fa fa-barcode fa-xs"></i> {{ q.code }} <br/> {{ q.questions.count }} diapos</small> 
-                                    </div> 
-                                    
-                                </a>
-                            </div>
-                        </div>
-                        {% else %}
-                        <div class="col-xs-6 col-md-4 col-lg-3" > 
-                            <div class="card" style="float:none; height:250px;width:250px;position: relative;">
-                                <img src="{% static 'img/quizz.jpg' %}" width="250px" border=0  />
-                                <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' q.id  %}" target="_blank"{% else %} href="{% url 'show_quizz_student' q.id  %}" {% endif %}  style="font-weight: normal"> 
-                                    <div style="padding: 10px;width:100%; height:75px; position:absolute;bottom: 0px">
-                                        {{ q.title|truncatechars:28 }} <small><br/><i class="fa fa-barcode fa-xs"></i> {{ q.code }} <br/> {{ q.questions.count }} diapos</small> 
-                                    </div> 
-                                    
-                                </a>
-                            </div>
-                        </div>
-                        {% endif %}
-                {% endfor %}
-        {% endif %}
-
-
-
-        {% if bibliotexs %} 
-            <div class="row"></div> 
-            <h2 class="thin">Mes bilioTex</h2>
-     
-
-
-                {% for bibliotex in bibliotexs %}
-         
-
-                    <div  class="box box-widget widget-user-2"  
-                          style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{bibliotex.color }};">
-                        <div class="handler widget-user-header">
-                            <!-- Add signet to folder -->
-                            <div class="group_show  no_visu_on_load" id="bibliotex_show{{bibliotex.id }}"> 
-                                <div class="row"> 
-                                    <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                                        <b>Savoir faire ciblés</b>
-                                    </div> 
-                                </div>
-
-                                {% for k in bibliotex.knowledges %}
-                                <div class="row"> 
-                                    <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                                        {{ k.name }}
-                                    </div> 
-                                </div>
-                                {% endfor %}
-                                <div class="row"> 
-                                    <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                                        <b>compétences ciblées</b>
-                                    </div> 
-                                </div>
-                                
-                                <div class="row"> 
-                                    <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                                        {% for s in bibliotex.skills %}
-                                            {{ s }}. 
-                                        {% endfor %}
-                                    </div> 
-                                </div>
-                                <div style="clear:both"></div>
-                            </div>
-                            <div class="box_title_vignette"> 
-                                <a href="{% url 'parcours_show_bibliotex_student' parcours.id bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};" >             
-                                    {% if bibliotex.title|length > 26 %}
-                                    <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
-                                        <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
-                                    </span>
-                                    {% elif bibliotex.title|length > 22 %}
-                                        {{ bibliotex.title|truncatechars:"22"}}
-                                    {% else %}
-                                        {{ bibliotex.title}}
-                                    {% endif %}
-                                </a>    
-                            </div>
-                        </div>
-                        <div class="box-footer" style="position: relative; padding-top:10px;">
-                            <div class="row"> 
-                               <div class="col-lg-7 col-xs-7">
-                                     {{ bibliotex.exotexs.count}} exercices   
-                                </div>
-                                <div class="col-lg-5 col-xs-5">
-                                    <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
-                                    </span>
-                                </div> 
-                            </div>
-                        </div>
-                    </div>    
-                {% endfor %}
-        {% endif %}
-
+ 
     </form>
 
 </section>

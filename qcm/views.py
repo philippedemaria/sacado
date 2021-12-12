@@ -1579,12 +1579,9 @@ def list_sub_parcours_group_student(request,idg,idf):
 
     parcourses = bases.filter( is_evaluation=0).order_by("ranking")
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
+ 
 
-
-    quizzes = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), groups = group , is_archive=0 , parcours=None) 
-    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , parcours=None)
-
-    context = {'parcourses': parcourses , 'evaluations': evaluations , 'bibliotexs': bibliotexs ,  'quizzes': quizzes ,   'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
+    context = {'parcourses': parcourses , 'evaluations': evaluations , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
 
     return render(request, 'qcm/list_sub_parcours_group_student.html', context )
 
@@ -2641,7 +2638,7 @@ def list_parcours_flashpack_student(request, idp):
     parcours = Parcours.objects.get(id=idp)
     user = request.user
     today = time_zone_user(user)
-    flashpacks = parcours.flashpacks.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today),students=user.student) 
+    flashpacks = parcours.flashpacks.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)|Q(stop__gte=today),students=user.student) 
 
     context = { 'flashpacks': flashpacks , 'parcours': parcours , 'parcours': parcours , 'student' : user.student ,  'today' : today  }
 

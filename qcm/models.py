@@ -720,11 +720,14 @@ class Parcours(ModelWithCode):
 
         nb_exo_in_parcours = exercises_ggb.count() + custom_exercises.count() 
  
+
+        today = timezone.now()
+
         data["nb_cours"] = self.course.filter( is_publish =1 ).count()
         data["nb_quizz"] = self.quizz.filter( is_publish = 1 ).count()
         data["nb_exercise"] = nb_exo_in_parcours
         data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
-        data["nb_flashpack"] = self.flashpacks.filter( is_publish =1, students = student ).count()
+        data["nb_flashpack"] = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) ,  is_publish =1, students = student ).count()
 
         try :
             stage =  student.user.school.aptitude.first()
@@ -821,12 +824,13 @@ class Parcours(ModelWithCode):
     def nb_exercices_and_cours(self):
 
         data = {}
- 
+        today = timezone.now()
+        
         exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
         courses    = self.course.all()
         bibliotex  = self.bibliotexs.all() 
         quizz      = self.quizz.all()
-        flashpacks = self.flashpacks.all()
+        flashpacks = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) )
 
 
         nb_exercises_published = exercises.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()

@@ -109,9 +109,11 @@ class Flashpack(models.Model):
     
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
-    stop  = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")
+    stop  = models.DateTimeField(null=True, blank=True, verbose_name="Date de fin")
 
-    is_creative  = models.BooleanField(default=0, verbose_name="Création par les élèves de flashCard ?")
+    is_creative  = models.BooleanField(default=0, verbose_name="Création de flashCard par les élèves ?")
+
+
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="flashpacks" ) 
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="flashpacks"  ) 
