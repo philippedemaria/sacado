@@ -193,8 +193,8 @@
                         <td>{{ form.is_favorite.errors }}</td>
                     </tr>
                     <tr>
-                        <td>{{ form.is_active.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Accessible directement depuis le tableau de bord des élèves même si le parcours est dans un dossier.</div>
+                        <td><label>En ce moment </label> <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Les élèves voient le parcours directement depuis leur tableau de bord même si le parcours est dans un dossier.</div>
                             </span></td>
                         <td>{{ form.is_active |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_active.errors }}</td>
