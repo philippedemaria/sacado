@@ -1,0 +1,56 @@
+{% extends 'flashcard/flashpack_results.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+
+{% block page_title %}
+    {% include 'flashcard/logo.html' %}   {% include 'qcm/breadcrumb_student.html' %}
+
+    {% if parcours %}
+        <a href="{% url 'list_parcours_flashpack_student' parcours.id %}" style="{{ flashpack.color }}">{{ flashpack.title }}</a>
+    {% else %}
+        <a href="{% url 'list_parcours_flashpack_student' 0 %}" style="{{ flashpack.color }}">{{ flashpack.title }}</a>
+    {% endif %}
+
+
+
+    <img src="{% static 'img/angle-right.png' %}"/>
+    <small>Résultats</small>
+{% endblock %}
+
+
+{% block require %}
+ 
+{% endblock %}
+ 
+    {% block main %}
+    <table class="table table-hovered display_info"  style="width:100%" >
+        <thead> 
+            <tr> 
+                <th>Question</th>
+                <th>Réponse</th>
+                <th>Aide</th>
+                <th>Dernière passation  </th>
+                <th>Prochaine passation  </th>
+                <th>Validité</th>
+            </tr> 
+        </thead>
+        <tbody>
+            {% for answercard in answercards  %} 
+                <tr class="tr_edit"> 
+                    <td >{{ answercard.flashcard.question|safe }}</td>
+                    <td >{{ answercard.flashcard.answer|safe }}</td>
+                    <td >{{ answercard.flashcard.helper|safe }}</td>
+                    <td>{{ answercard.date|date:"d N Y" }}  </td>
+                    <td>{{ answercard.rappel|date:"d N Y" }}  </td>
+                    <td>{{ answercard.answers|decrypt_results|safe }}</td>
+                </tr>
+            {% endfor %}              
+         </tbody>
+    </table>
+    {% endblock %}
+
+ 
+ 
+ 

@@ -6,14 +6,15 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-show_flashpack']);
-    </script> 
+        require(['script/ajax-flashpack_result']);
+    </script>
+ 
 {% endblock %}
 
 
 
 {% block page_title %}
-    {% include 'flashcard/logo.html' %}   {% include 'qcm/breadcrumb_student.html' %}
+    {% include 'flashcard/logo.html' %}   {% include 'qcm/breadcrumb.html' %}
 
     {% if parcours %}
         <a href="{% url 'list_parcours_flashpack_student' parcours.id %}" style="{{ flashpack.color }}">{{ flashpack.title }}</a>
@@ -34,75 +35,32 @@
 
 <section class="content_list" >
 
-    <table class="table table-hovered"  style="width:100%" >
-    {% for s in group.students.all %}
 
-
-    {% endfor %}
-    </table>
-
-
-    <table class="table table-hovered display_info"  style="width:100%" >
-        <thead> 
-            <tr> 
-                <th>Question</th>
-                <th>Réponse</th>
-                <th>Aide</th>
-                <th>Dernière passation  </th>
-                <th>Prochaine passation  </th>
-                <th>Validité</th>
-            </tr> 
-        </thead>
-        <tbody>
-            {% for answercard in answercards  %} 
-                <tr class="tr_edit"> 
-                    <td >{{ answercard.flashcard.question|safe }}</td>
-                    <td >{{ answercard.flashcard.answer|safe }}</td>
-                    <td >{{ answercard.flashcard.helper|safe }}</td>
-                    <td>{{ answercard.date|date:"d N Y" }}  </td>
-                    <td>{{ answercard.rappel|date:"d N Y" }}  </td>
-                    <td>{{ answercard.answers|decrypt_results|safe }}</td>
-                </tr>
-            {% endfor %}              
-         </tbody>
-    </table>
-
-
-
-
-
-
-
-
-
-
-
-    {% comment %}
-    <table class="table table-hovered display_info"  style="width:100%" >
-        <thead> 
-            <tr> 
-                <th>Question</th>
-                <th>Réponse</th>
-                <th>Aide</th>
-                <th>Dernière passation  </th>
-                <th>Prochaine passation  </th>
-                <th>Validité</th>
-            </tr> 
-        </thead>
-        <tbody>
-            {% for answercard in answercards  %} 
-                <tr class="tr_edit"> 
-                    <td >{{ answercard.flashcard.question|safe }}</td>
-                    <td >{{ answercard.flashcard.answer|safe }}</td>
-                    <td >{{ answercard.flashcard.helper|safe }}</td>
-                    <td>{{ answercard.date|date:"d N Y" }}  </td>
-                    <td>{{ answercard.rappel|date:"d N Y" }}  </td>
-                    <td>{{ answercard.answers|decrypt_results|safe }}</td>
-                </tr>
-            {% endfor %}              
-         </tbody>
-    </table>
-    {% endcomment %}
+    {% block main %}
+    <div class="row"> 
+        <form action="#" method="POST">     
+            {% csrf_token %}
+            <div class="col-lg-2 col-xs-12">
+                <table class="table table-hovered"  style="width:100%" >
+                    <thead> 
+                        <tr style="background-color: #EFEFEF">
+                            <th>Noms et prénoms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students  %} 
+                            <tr> 
+                                <td><a href="javascript:void();" data-student_id="{{ student.user.id}}" data-flashpack_id="{{ flashpack.id}}" class="select_student" >{{ student }}</a></td>
+                            </tr>
+                        {% endfor %}              
+                     </tbody>
+                </table>
+            </div>
+            <div class="col-lg-10 col-xs-12" id="result_div">
+            </div>
+        </form>
+    </div>
+    {% endblock %}
 
 
 

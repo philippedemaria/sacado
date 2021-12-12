@@ -1,0 +1,30 @@
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+
+{% for flashcard in flashpack.flashcards.all %}
+<div class="row"> 
+
+    <div class="col-sm-12 col-md-6" id="question"  align="center">
+        <div class="exotex flashcard qflashcard">
+            {{ flashcard.question|safe }}
+        </div>  
+    </div>
+
+    <div class="col-sm-12 col-md-6">
+        {% get_result_by_student flashcard flashpack student as result %}
+        {% if result.rappel %}
+            Prochaine répétition : {{ result.rappel|date:"d N Y" }}<br/>
+            Connaissances : {{ result.answers }}
+        {% else %}
+            <div class="alert alert-danger">
+                Aucune tentative réalisée
+            </div>
+        {% endif %}
+    </div>
+ 
+</div>
+{% endfor %} 
+ 

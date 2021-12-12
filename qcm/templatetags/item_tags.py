@@ -977,3 +977,10 @@ def get_today_cards (obj,today,student):
     """Détermine si un parcours est publié et s'il est dans un dossier publié """
     return obj.today_cards(today,student)  
 
+
+ 
+
+@register.simple_tag 
+def get_result_by_student (obj,flashpack,student):
+    """Détermine si un parcours est publié et s'il est dans un dossier publié """
+    return obj.is_result_by_student(flashpack,student)  

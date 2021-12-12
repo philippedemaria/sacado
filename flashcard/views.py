@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from flashcard.models import Flashcard, Flashpack , Answercard , Madeflashpack
 from flashcard.forms import FlashcardForm ,  FlashpackForm , CommentflashcardForm
 from qcm.models import  Parcours, Exercise , Folder
+from account.models import Student
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from qcm.views import  get_teacher_id_by_subject_id
@@ -141,7 +142,20 @@ def create_flashpack(request, idf=0):
 def update_flashpack(request, id):
 
     teacher = request.user.teacher
+    folder_id = request.session.get("folder_id",None)
+    group_id = request.session.get("group_id",None)
+    if group_id :
+        group = Group.objects.get(id=group_id)
+    else :
+        group = None
+
+    if folder_id :
+        folder = Folder.objects.get(id=folder_id)
+    else :
+        folder = None
+
     flashpack = Flashpack.objects.get(id=id)
+    
     form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher , group = group, folder = folder,    )
     if request.method == "POST" :
         if form.is_valid():
@@ -406,24 +420,41 @@ def clone_flashpack(request, id):
 def flashpack_results(request, idf,idp=0):
 
     flashpack = Flashpack.objects.get(id=idf)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    
-    if request.user.is_student :
-        answercards = flashpack.answercards.filter(student = request.user.student)
-    elif request.user.is_teacher :
-        answercards = flashpack.answercards.all()
-    else : # TODO for parent
-        answercards = flashpack.answercards.filter(student = request.user.student) 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
     parcours = None
     if idp :
-        parcours = Parcours.objects.get(pk=idp)
+        parcours = Parcours.objects.get(pk=idp)    
 
-    context = { 'flashpack': flashpack,  'answercards': answercards ,'parcours' : parcours  }
+    if request.user.is_teacher :
+        answercards = flashpack.answercards.all()
+        students = flashpack.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+        template = 'flashcard/flashpack_results.html'
+        context = { 'flashpack': flashpack,  'answercards': answercards ,'parcours' : parcours , 'students' : students }
+    else :
+        answercards = flashpack.answercards.filter(student = request.user.student) 
+        template = 'flashcard/flashpack_results_student.html'
+        context = { 'flashpack': flashpack,  'answercards': answercards ,'parcours' : parcours   }
 
-    return render(request, 'flashcard/flashpack_results.html', context )  
+
+    return render(request, template , context )  
 
 
+
+
+
+def ajax_results_flashpack(request):
+
+    flashpack_id = request.POST.get("flashpack_id")
+    flashpack    = Flashpack.objects.get(pk=flashpack_id)
+    student_id   = request.POST.get("student_id")
+    student      = Student.objects.get(pk=student_id)
+    data = {}
+
+
+    data['html'] = render_to_string('flashcard/ajax_results_flashpack.html', { 'flashpack': flashpack , 'student': student ,  } )
+
+    return JsonResponse(data)
 
 
 def actioner(request):

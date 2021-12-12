@@ -20,6 +20,7 @@ urlpatterns = [
     path('import_flashcards_to_flashpack/<int:id>', import_flashcards_to_flashpack, name='import_flashcards_to_flashpack'),
     path('validate_flashcards_to_flashpack/<int:id>', validate_flashcards_to_flashpack, name='validate_flashcards_to_flashpack'),
 
+    path('ajax_results_flashpack', ajax_results_flashpack , name='ajax_results_flashpack'),
 
 
     path('flashpack_actioner', actioner, name='actioner'),

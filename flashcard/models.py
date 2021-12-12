@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from ckeditor_uploader.fields import RichTextUploadingField
 from group.models import Group
 from socle.models import *
@@ -12,6 +12,7 @@ from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
 from time import strftime
  
+
 POLICES = (
         (16, '16'),
         (24, '24'), 
@@ -62,6 +63,28 @@ class Flashcard(models.Model):
         if self.comments.count():
             t = True
         return t
+
+
+    def is_result_by_student( self , flashpack , student ) :
+        data = {}
+        try :
+            answer = self.answercards.get( flashpack=flashpack , student=student)
+            data["rappel"] =  answer.rappel
+            tabs = answer.answers.strip("-")
+            string = ""
+            for a in tabs :
+                if a == 1 : color = "danger"
+                elif a == 2 : color = "validate"
+                elif a == 4 : color = "success"
+            string += "<i class='bi bi-app text-"+color+"'></i> "
+                 
+                 
+            data["answers"] =  answer.answers
+
+        except : 
+            data["rappel"] =  None
+            data["answers"]  =  None
+        return answer
 
 
 
