@@ -5,8 +5,8 @@
 
     {% if parcourses_on_fire %}
     <div class="row">
-        <div class="col-md-12 col-lg-12 col-xs-12 alert alert-warning">
-            <h2 class="thin">En ce moment</h2>
+        <div class="col-md-12 col-lg-12 col-xs-12 in_this_time_container ">
+            <div class="in_this_time">En ce moment</div>
             {% for parcours in parcourses_on_fire %}
                 {% if parcours.is_evaluation %}
                     {% with evaluation=parcours %}
@@ -40,6 +40,12 @@
                             <div class="box_title_underlay_vignette" style="background-color:{{ group.color }};">
                             </div> 
                         {% endif  %}
+                        <div class="group_div_student">
+                            {{ group.level.shortname_full|safe }} 
+                        </div>
+
+
+
                         <div style="font-size:30px;color:{{ group.color|contrast_color }};font-weight: 100;position: absolute;bottom: 0px;left:12px"> 
                             {% if group.subject.name|length > 30 %}
                                 {{ group.subject.shortname }}
@@ -100,7 +106,7 @@
                                 {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name }}
                             </div>
                             <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
-                                {{ group.level.name }}  
+                                {{ group.name }}  
                             </div>
                         </div>
                     </div>

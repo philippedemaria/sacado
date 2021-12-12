@@ -25,7 +25,6 @@ def level_name(level):
         my_level = str(level)+"ère"
     elif level == 'Mater' :
         my_level = str(level)+"nelle"
-
     else :
         my_level = level 
     return my_level
@@ -164,6 +163,29 @@ class Level(models.Model):
     def nb_level_subject(self, subject_id):
         nb = self.exercises.select_related("theme").filter(supportfile__is_title=0, theme__subject_id =  subject_id).count()
         return nb
+
+    def shortname_full(self):
+        level = self.shortname
+        if level == "T" :
+            my_level = level+"<sup>erm</sup>"
+        elif level == '6' :
+            my_level = str(level)+"<sup>ème</sup>"
+        elif level == '5' :
+            my_level = str(level)+"<sup>ème</sup>"
+        elif level == '4' :
+            my_level = str(level)+"<sup>ème</sup>"
+        elif level == '3' :
+            my_level = str(level)+"<sup>ème</sup>"
+        elif level == '2' :
+            my_level = str(level)+"<sup>nde</sup>"
+        elif level == '1' :
+            my_level = str(level)+"<sup>ère</sup>"
+        elif level == 'Mater' :
+            my_level = "M<sup>nelle</sup>"
+        else :
+            my_level = level 
+        return my_level
+ 
 
 
 
