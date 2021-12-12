@@ -164,7 +164,7 @@ class Question(models.Model):
     students   = models.ManyToManyField(Student, blank=True, through="Answerplayer", related_name="questions",   editable=False)
 
     size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
-    theme      = models.BooleanField(default=0, verbose_name="Thème ?")
+    theme      = models.BooleanField(default=1, verbose_name="Thème ?")
 
     def __str__(self):
         return self.title

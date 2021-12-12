@@ -1558,7 +1558,8 @@ a.no_visual_link{
 
 .quizz_box {
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     text-align: center;
     border: none;
     color: #666;
@@ -1576,6 +1577,23 @@ a.no_visual_link{
     max-height: 200px;
     border : 1px solid #F0F0F0 ;
 }
+
+.quizz_box::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
+}
+.quizz_box::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.quizz_box::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+
+
 
 .presentation_box{
     width: 100%;

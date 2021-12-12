@@ -194,7 +194,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">                       
-                                <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:default"|attr:"data-offstyle:primary"|attr:"data-on:Blanc"|attr:"data-off:Coloré"}}
+                                <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Coloré"|attr:"data-off:Blanc"}}
                                 <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
                             </div>                            
                         </div>
@@ -208,7 +208,6 @@
                                         {{ form.answer|add_class:"quizz_box quizz_font40" |attr:"placeholder:Réponse.s attendue.s" |attr:"rows:1"  }}
                                         <small><em>Si plusieurs réponses, le séparateur est ____ (4 tirets - underscore) sans espace entre les réponses. Exemple :</em> motA____motB____motC <em>sont trois réponses possibles.</em></small>
                                 </div>
-
                             </div>
                         {% endif %}  
                     {% endblock %}

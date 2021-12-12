@@ -147,7 +147,7 @@
                     </td>
                     <td>{{ form.interslide|add_class:"form-control" }} </td>
                 </tr>
-            {% if quizz.is_numeric or not quizz %}
+                {% if quizz.is_numeric or not quizz %}
                 <tr class="div_is_mark div_is_ranking">
                     <td class="no_border">{{ form.is_ranking.label_tag }} </td>
                     <td>{{ form.is_ranking|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
@@ -162,7 +162,7 @@
                                 </span> </td>
                     <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                 </tr>
-            {% endif %}
+                {% endif %}
                 <tr> 
                     <td class="no_border">{{ form.is_result.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                     <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
