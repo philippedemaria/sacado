@@ -246,23 +246,15 @@
 
 			                <tr>
 			                    <td class="no_border">{{ form.is_numeric.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-			                                    <div class="helper_tip_text" >Papier si réponse sur feuille, Numérique si réponse avec smartphone, tablette, ordinateur ou mode jeu.</div>
+			                                    <div class="helper_tip_text" >Papier si réponse sur feuille, Numérique si réponse avec smartphone, tablette, ordinateur.</div>
 			                                </span> 
 			                    </td>
 			                    <td>{{ form.is_numeric|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}
 			                    </td>
 
 			                </tr>                                
-			                <tr class="div_is_mark">
-			                    <td class="no_border">{{ form.is_mark.label_tag }} </td>
-			                    <td>{{ form.is_mark|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-			                </tr>
-			                <tr class="div_is_mark">
-			                    <td class="no_border">{{ form.is_video.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-			                                    <div class="helper_tip_text" >Projection : utilisation projetée en classe avec réponse sur son smartphone. <br/>Individuelle : chaque élève travaille sur poste.</div>
-			                                </span> </td>
-			                    <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Projection"|attr:"data-off:Individuelle"|attr:"data-width:130" }}  </td>
-			                </tr>
+ 
+		 
 
 			 
 
@@ -271,6 +263,16 @@
 			                    </td>
 			                    <td>{{ form.interslide|add_class:"form-control" }} </td>
 			                </tr>
+
+                            <tr class="div_is_mark div_is_ranking">
+                                <td class="no_border">{{ form.is_result.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
+                                            </span> 
+                                </td>
+                                <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                            </tr>
+
+
 			            {% if quizz.is_numeric or not quizz %}
 			                <tr class="div_is_mark div_is_ranking">
 			                    <td class="no_border">{{ form.is_ranking.label_tag }} </td>
@@ -287,13 +289,7 @@
 			                    <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
 			                </tr>
 			            {% endif %}
-			                <tr> 
-			                    <td class="no_border">{{ form.is_result.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-			                                    <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
-			                                </span> 
-			                    </td>
-			                    <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-			                </tr>
+
 
 
                     </table>
