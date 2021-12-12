@@ -982,5 +982,13 @@ def get_today_cards (obj,today,student):
 
 @register.simple_tag 
 def get_result_by_student (obj,flashpack,student):
-    """Détermine si un parcours est publié et s'il est dans un dossier publié """
+    """Détermine si une flashcard a été répondu par un student et pour un flashpack donné """
     return obj.is_result_by_student(flashpack,student)  
+
+
+ 
+
+@register.simple_tag 
+def get_flashpack_by_student (obj, student):
+    """Détermine si un flashpack  est traité par un élève """
+    return obj.is_result_by_student( student)  

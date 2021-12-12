@@ -70,18 +70,18 @@ class Flashcard(models.Model):
         try :
             answer = self.answercards.get( flashpack=flashpack , student=student)
             data["rappel"] =  answer.rappel
-            tabs = answer.answers.strip("-")
-            string = ""
-            for a in tabs :
-                if a == 1 : color = "danger"
-                elif a == 2 : color = "validate"
-                elif a == 4 : color = "success"
-            string += "<i class='bi bi-app text-"+color+"'></i> "    
+            string, cpt = "" , 0
+            for a in answer.answers :
+                if a == '1' : color = "danger"
+                elif a == '2' : color = "validate"
+                elif a == '4' : color = "success"
+                if a != "-" :
+                    string += "<i class='bi bi-square-fill text-"+color+"'></i> "
+                    cpt += int(a)
+            data["first"] =  answer.rappel - timedelta(days = cpt)
             data["answers"] =  string
-        except : 
-            data["rappel"] =  None
-            data["answers"]  =  None
-
+        except :
+            data["rappel"] = None
         return data
 
 
@@ -159,6 +159,9 @@ class Flashpack(models.Model):
         return d
 
 
+    def is_result_by_student( self ,   student ) :
+        nb_answer = self.answercards.filter( student=student).count()
+        return nb_answer
 
 
 class Madeflashpack(models.Model):

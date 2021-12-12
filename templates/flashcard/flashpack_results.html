@@ -49,8 +49,15 @@
                     </thead>
                     <tbody>
                         {% for student in students  %} 
+                            {% get_flashpack_by_student flashpack  student  as result %}
                             <tr> 
-                                <td><a href="javascript:void();" data-student_id="{{ student.user.id}}" data-flashpack_id="{{ flashpack.id}}" class="select_student" >{{ student }}</a></td>
+                                <td>
+                                    {% if result %}
+                                    <a href="javascript:void();" data-student_id="{{ student.user.id}}" data-flashpack_id="{{ flashpack.id}}" class="select_student normal" >  {{ student }} </a>
+                                    {% else %}
+                                    <span style="color:#CCC">{{ student }}</span>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}              
                      </tbody>
