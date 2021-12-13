@@ -556,7 +556,6 @@ class Student(ModelWithCode):
         else :
             a_new_cop = False
 
-        
 
         data = {}
         data["nb_parcours"]     = nb

@@ -146,9 +146,10 @@ def student_dashboard(request,group_id):
 
     parcourses_on_fire = []
 
-
+    student_index = False
     if groups.count() > 1  :
         template = "dashboard.html" 
+        student_index = True
     else :
         template =  "group/dashboard_group.html"  
 
@@ -232,7 +233,7 @@ def student_dashboard(request,group_id):
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
-               'relationships_in_tasks': relationships_in_tasks , }
+               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index}
 
  
     return template, context

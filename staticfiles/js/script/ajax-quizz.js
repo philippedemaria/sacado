@@ -476,6 +476,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             {
                 $("#overview_video").html("").append(video);
             }
+
             if (imagefile)
             {
                 let size_img ;
@@ -486,10 +487,10 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             else 
             {
  
-                if ( $("#drop_zone img")[0].currentSrc ) 
+                if ( $("#drop_zone img")[0] ) 
                     {   
-                let size_img ;
-                if (type == 2 ){ size_img = 550+"px" ;  } else { size_img = 350+"px" ;  }  
+                        let size_img ;
+                        if (type == 2 ){ size_img = 550+"px" ;  } else { size_img = 350+"px" ;  }  
                         $("#overview_imagefile").attr("width", size_img ).attr("src", $("#drop_zone img")[0].currentSrc );
                     }
  

@@ -32,6 +32,7 @@ requirejs.config({
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         bootstrapjs: "bootstrap",
+        multislider: "lib/multislider",
  
     },
     shim: {
@@ -80,7 +81,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap' ]);
+require(['jquery', 'bootstrap' , 'multislider' ]);
 
 // suppression de admin dans le chargement  : 'admin', 'multiselect', 'ui',
 //    'ckeditor', 'ckeditor_init', 'ckeditor_jquery', 'config_toggle', 'slimscroll', 'chart'

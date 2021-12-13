@@ -398,6 +398,38 @@ def all_quizzes_archived(request):
     return render(request, 'tool/list_quizzes.html', {   'list_folders': list_folders , 'quizzes': quizzes ,  'teacher': teacher, 'is_archive' : is_archive })
 
 
+def attribute_student(nf, group_ids, parcours_ids):
+
+    students_g = set()
+    students_p = set()
+    levels     = set()
+    themes     = set()  
+
+    for group_id in group_ids:
+        g = Group.objects.get(pk= int(group_id))
+        levels.update([g.level])
+        students_g.update(g.students.values_list("user__id", flat=True))
+    nf.levels.set(levels)
+    cpt = 0
+
+    for parcours_id in parcours_ids:
+        cpt += 1
+        p = Parcours.objects.get(pk= int(parcours_id))
+        thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
+        themes.update(thms)
+        students_p.update(p.students.values_list("user__id", flat=True))
+    nf.themes.set(themes)
+
+    if cpt == 0 :
+        nf.students.set(  students_g   ) 
+    else :
+        print( students_p )
+        nf.students.set(  students_p )  
+
+    return
+
+
+
 
 def create_quizz(request):
     
@@ -424,18 +456,8 @@ def create_quizz(request):
         nf.is_questions = 1
         nf.save()
         form.save_m2m()
+        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
 
-        levels = set()
-        for group_id in request.POST.getlist("groups"):
-            g = Group.objects.get(pk= group_id)
-            levels.update([g.level])
-        nf.levels.set(levels)
-        themes = set()
-        for parcours_id in request.POST.getlist("parcours"):
-            p = Parcours.objects.get(pk= parcours_id)
-            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
-            themes.update(thms)
-        nf.themes.set(themes)
         return redirect('create_question' , nf.pk , 0 )
     else:
         print(form.errors)
@@ -467,17 +489,7 @@ def create_quizz_folder(request,idf):
         nf.save()
         form.save_m2m()
 
-        levels = set()
-        for group_id in request.POST.getlist("groups"):
-            g = Group.objects.get(pk= group_id)
-            levels.update([g.level])
-        nf.levels.set(levels)
-        themes = set()
-        for parcours_id in request.POST.getlist("parcours"):
-            p = Parcours.objects.get(pk= parcours_id)
-            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
-            themes.update(thms)
-        nf.themes.set(themes)
+        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
 
         return redirect('create_question' , nf.pk , 0 )
     else:
@@ -516,17 +528,7 @@ def create_quizz_parcours(request,idp):
         nf.save()
         form.save_m2m()
 
-        levels = set()
-        for group_id in request.POST.getlist("groups"):
-            g = Group.objects.get(pk= group_id)
-            levels.update([g.level])
-        nf.levels.set(levels)
-        themes = set()
-        for parcours_id in request.POST.getlist("parcours"):
-            p = Parcours.objects.get(pk= parcours_id)
-            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
-            themes.update(thms)
-        nf.themes.set(themes)
+        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
 
         return redirect('create_question' , nf.pk , 0 )
     else:
@@ -564,20 +566,9 @@ def update_quizz(request,id):
         nf.is_questions = 1
         nf.save()
         form.save_m2m()
-
  
-        levels = set()
-        for group_id in request.POST.getlist("groups"):
-            g = Group.objects.get(pk= group_id)
-            print(g)
-            levels.update([g.level])
-        nf.levels.set(levels)
-        themes = set()
-        for parcours_id in request.POST.getlist("parcours"):
-            p = Parcours.objects.get(pk= parcours_id)
-            thms = p.parcours_relationship.values_list("exercise__theme", flat=True) 
-            themes.update(thms)
-        nf.themes.set(themes)
+        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
+
 
         parcours_id = request.session.get("parcours_id")
         if parcours_id :

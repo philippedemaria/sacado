@@ -1027,9 +1027,12 @@ label {
 
 .in_this_time_container{
   padding: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   background-image: url('/static/img/fond_chat.png');
   background-color: #f1eef7;
+  height : 380px;
+  width:3000px;
+  overflow-x: auto;
 }
 
 
@@ -1046,7 +1049,29 @@ label {
   border-radius: 0px 5px 5px 0px;
 }
 
+#mixedSlider{
+    position:relative;
+}
+.MS-controls{
+  position:absolute;
+  top:0px;
+  right:0px;
+  height : 380px;
+  width:80px;
+  opacity:0.9;
+  background-color:#f1eef7;
+  color: #5d4391;
+  z-index: 100000;
+  -webkit-box-shadow: -3px 0px 5px rgba(79, 73, 66, .3);
+  box-shadow: -3px 0px 5px rgba(79, 73, 66, .3);
+}
 
+.MS-right{
+  position:absolute;
+  top:160px;
+  left: 5px;
+  font-size:60px;
+}
 
 
 /********************************************   flashcard    **************************************/

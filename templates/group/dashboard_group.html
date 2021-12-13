@@ -10,6 +10,7 @@
         require(['script/ajax-dashboard']);
         require(['script/ajax-group']);
         require(['script/ajax-parcours-student']);
+        require(['script/ajax-dashboard_student']);
     </script>
 {% endblock %}
 
@@ -28,7 +29,44 @@
 {% block body %}
  
 <section class="content_main"> 
+    {% comment %}
      <a href="#" class="sub_menu_right pull-right whire" id="right_menu_open"><i class="fa fa-angle-double-left"></i> </a> 
+    {% endcomment %}
+
+
+    {% if parcourses_on_fire %}
+    <div class="row" id="mixedSlider">
+        <div class="col-md-12 col-lg-12 col-xs-12 in_this_time_container MS-content"> 
+            <div class="in_this_time">En ce moment </div>
+
+            {% for parcours in parcourses_on_fire %}
+                <div class="item">
+                {% if parcours.is_evaluation %}
+                    {% with evaluation=parcours %}
+                        {% include 'qcm/evaluation_tag_student.html' %}
+                    {% endwith %}
+                {% else %}                
+                    {% include 'qcm/parcours_tag_student_index.html' %}                
+                {% endif %}
+                </div>
+            {% endfor  %}
+            <!-- ******************************************************************************************** -->
+        </div>        
+        <div class="MS-controls">
+            <button class="MS-left no_visu_on_load"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            <a href="#" class="MS-right"><i class="bi bi-arrow-right-circle"  ></i></a>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
     <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12">
             {% if responses|length > 0 %}
