@@ -44,7 +44,7 @@
     {% endif %}
     {% if quizz.is_share %}
         <div class="text-success">
-            mutualisé 
+             <small>mutualisé</small>  
        </div>
     {% else %} 
         <div class="text-danger">
@@ -52,6 +52,8 @@
         </div>
     {% endif %}
     {{ quizz.duration|time_done }}
+    <i class="bi bi-upc"></i>
+    <small>{{ quizz.code }}</small>
 </td>
 <td> 
     <a href="{% url 'update_quizz' quizz.id  %}"> 
