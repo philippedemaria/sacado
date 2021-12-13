@@ -193,6 +193,15 @@ def printer(request, relationtex_id, collection,output):
         title          =  exotex.title
         author         = "Équipe SACADO"
 
+
+        if output== "html_cor" :
+            if  relationtex.correction : ctnt =  relationtex.correction
+            else                       : ctnt =  relationtex.exotex.correction
+        else :
+            if  relationtex.content : ctnt =  relationtex.content
+            else                    : ctnt =  relationtex.exotex.content
+
+
         elements += ctnt
         elements += r"\vspace{0,4cm}"
     # Fermeture du texte dans le fichier tex
