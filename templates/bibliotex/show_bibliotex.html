@@ -98,6 +98,14 @@
 
                     <i class="bi bi-clock-history"></i> {{ r.duration }} min.</label>
 
+
+                    {% if r.correction  %}
+                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                    {% endif %}
+
+ 
+
+
                     <small class="pull-right">
                         {% for s in r.exotex.skills.all %}
                             {{ s.name }}.
@@ -116,6 +124,15 @@
                 {% else %}
                 {{ r.exotex.content_html|safe }}
                 {% endif %}
+            </div>
+            <div class="no_visu_on_load" id="correction{{ r.id }}"> 
+                <div class="exotex_correction"> 
+                    {% if r.correction_html %}
+                        {{ r.correction_html|safe }} 
+                    {% else %}
+                        {{ r.exotex.correction_html|safe }} 
+                    {% endif %}
+                </div>
             </div>
 
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>

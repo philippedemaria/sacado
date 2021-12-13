@@ -916,13 +916,22 @@ label {
 }
 
 
+.exotex_correction{
+  font-size : 16px;
+  background-color: #e6e2dd;
+  border-radius: 0px 0px 5px 5px;
+  padding: 5px;
+  margin: 5px;
+  -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+  box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
+}
+
 
 .consigne{
   font-size:16px;
   border-left : 5px solid #5d4391 ;
   padding: 10px;
   margin-bottom: 10px ;
-
 }
 
 .fontsize12{

@@ -321,6 +321,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+
+    $('body').on('click', '.select_correction' , function (event) {
+            let r_id = $(this).data("r_id");
+            $("#correction"+r_id).toggle(500);
+
+        });
+
+
+
+
+
+
+
+
         $('body').on('click', '.expand_video', function () {
 
             var exotex_id = $(this).data("exotex_id");  
@@ -591,42 +605,34 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        $('.collapsed').hide() ;
+        collapser = 0 ;
+        $('.accordion').on('click', function (event) {
 
+            let target = $(this).attr("data-target");
 
+            $(".subbibliotex"+target).toggle(500);
 
+            if (collapser %2 == 0) 
+                { 
+                    $("#pop"+target).removeClass('fa-chevron-down').addClass('fa-chevron-up');
 
-            $('.collapsed').hide() ;
-            collapser = 0 ;
-            $('.accordion').on('click', function (event) {
+                    $(".selected_tr").addClass('no_visu_on_load');
+                    $("#tr"+target).removeClass('no_visu_on_load').addClass('bg_violet');
+                } 
+            else 
+                {
+                    $("#pop"+target).removeClass('fa-chevron-up').addClass('fa-chevron-down');
 
-                let target = $(this).attr("data-target");
+                    $(".selected_tr").removeClass('no_visu_on_load');
+                    $("#tr"+target).removeClass('bg_violet');
 
-                $(".subbibliotex"+target).toggle(500);
-
-                if (collapser %2 == 0) 
-                    { 
-                        $("#pop"+target).removeClass('fa-chevron-down').addClass('fa-chevron-up');
-
-                        $(".selected_tr").addClass('no_visu_on_load');
-                        $("#tr"+target).removeClass('no_visu_on_load').addClass('bg_violet');
-                    } 
-                else 
-                    {
-                        $("#pop"+target).removeClass('fa-chevron-up').addClass('fa-chevron-down');
-
-                        $(".selected_tr").removeClass('no_visu_on_load');
-                        $("#tr"+target).removeClass('bg_violet');
-
-                    }
-                collapser++;                     
-             }) ;
-
-
+                }
+            collapser++;                     
+         }) ;
 
 
         $('.dataTables_wrapper').last().find('.col-sm-6').first().append("<h2 class='thin sacado_color_text'><i class='bi bi-list-task'></i> hors dossier </h2> ") ;
-
- 
 
 
 
