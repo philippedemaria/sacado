@@ -99,7 +99,7 @@
                     <i class="bi bi-clock-history"></i> {{ r.duration }} min.</label>
 
 
-                    {% if r.correction  %}
+                    {% if r.correction  or r.exotex.correction  %}
                         <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
                     {% endif %}
 
