@@ -184,23 +184,25 @@ def printer(request, relationtex_id, collection,output):
 
         try :
             relationtex  = Relationtex.objects.get(pk = relationtex_id)
-            ctnt =  relationtex.exotex.content    
+             
+            if output== "html_cor" :
+                if  relationtex.correction : ctnt =  relationtex.correction
+                else                       : ctnt =  relationtex.exotex.correction
+            else :
+                ctnt =  relationtex.exotex.content 
+ 
         except :
             exotex         = Exotex.objects.get(pk = relationtex_id)
-            ctnt =  exotex.content 
+            if output== "html_cor" :
+                ctnt =  exotex.correction
+            else : 
+                ctnt =  exotex.content
+
+
 
         document       = "relationtex" + str(relationtex_id)
         title          =  exotex.title
         author         = "Équipe SACADO"
-
-
-        if output== "html_cor" :
-            if  relationtex.correction : ctnt =  relationtex.correction
-            else                       : ctnt =  relationtex.exotex.correction
-        else :
-            if  relationtex.content : ctnt =  relationtex.content
-            else                    : ctnt =  relationtex.exotex.content
-
 
         elements += ctnt
         elements += r"\vspace{0,4cm}"
