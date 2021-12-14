@@ -1413,24 +1413,27 @@ def goto_quizz_student(request,id):
 
     student = request.user.student
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz = Quizz.objects.get(pk= id)
 
-    #Génération des questions
-    question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
-    quizz_id    = request.session.get("quizz_id",None) 
-    if not quizz_id :
+
+    try :
+        quizz = Quizz.objects.get(pk= id)
+
+        #Génération des questions
+        question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
         quizz_id                    = quizz.id
-        request.session["quizz_id"] = quizz_id
 
         if quizz.is_ranking :
             random.shuffle(question_ids)
         
+        request.session["quizz_id"] = quizz_id
         request.session["question_ids"] = question_ids
 
 
-    else :
+    except :
         quizz_id     = request.session.get("quizz_id")
         question_ids = request.session.get("question_ids")
+
+
     #Génération des réponses 
     is_shuffle = False
     if quizz.is_shuffle :

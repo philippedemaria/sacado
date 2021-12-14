@@ -88,14 +88,10 @@
         <div class="col-sm-12 col-md-12"align="center">
             <h1 style="font-size:2.5em"  >  {{ question.title }}  </h1>
         </div>
-    </div>
-    {% if question.imagefile %}
-    <div class="row">  
-        <div class="col-sm-12 col-md-12"align="center">
-             <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
-        </div>
-    </div>
-    {% endif %}
+
+ 
+    {% include 'tool/kind_of_question.html' %}
+    </div>    
     <hr/> 
     {% if question.tool and quizz.is_numeric %}  
         <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
@@ -171,15 +167,18 @@
             <h1 style="font-size:4em" class="thin">
                 <br/><br/>
                 <b> -- FIN -- </b>
-                <br/><br/>
-                {% if gquizz.is_result %}
-                    Vos résultats seront accessibles dès le verrouillage du quizz, à partir du {{ quizz.stop|date:"d N Y à H:i"}}
+                <br/><br/>  
+            </h1>
+                {% if quizz.is_result %}
+                    <span  style="font-size:2em" >Vos résultats seront accessibles dès le verrouillage du quizz{% if quizz.date %}, à partir du {{ quizz.stop|date:"d N Y à H:i"}}.{% else %}.{% endif %}</span>
                 {% endif  %}
                 <br/><br/>
-            </h1>
+          
 
             <a href="{% url 'list_quizz_student' %}" class="btn btn-default">Retour vers mes quizz</a>
 
+            <br/><br/>
+            <a href="javascript:window.close();" class="btn btn-default"><i class="fa fa-times"></i> Fermer le quizz</a>
         </div>
     </div> 
 
