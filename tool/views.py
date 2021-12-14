@@ -663,7 +663,7 @@ def delete_historic_quizz(request,id):
  
 
 def ajax_show_detail_question(request):
-    question_id = request.POST.get("question_id",None) 
+    question_id = request.POST.get("question_id",0) 
     quizz_id    = request.POST.get("quizz_id",None) 
     group_ids   = request.POST.getlist("groups",None) 
     data = {}
@@ -674,7 +674,8 @@ def ajax_show_detail_question(request):
     quizz = Quizz.objects.get(pk = quizz_id)    
     percent = "Non traité"
     percent_done = "0"
-    if question_id :
+
+    if int(question_id) > 0 :
         question = Question.objects.get(pk=question_id)
         data_set = Answerplayer.objects.filter(question = question, quizz = quizz )
         good_answerplayers = data_set.filter(is_correct = 1 ).count()
@@ -689,8 +690,10 @@ def ajax_show_detail_question(request):
         stds = group.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
         student_set.update(stds)
 
-    if len(student_set) :
+    try :
         percent_done = str(int((data_set.count()*100)/len(student_set))) +"%"
+    except :
+        percent_done = "0%"
 
 
 
@@ -708,9 +711,7 @@ def ajax_show_detail_question(request):
                 student_dico["answer"] = answer
             except: student_dico["answer"] = None
         students.append(student_dico)
-
-    print(percent)
-    print(percent_done)
+ 
 
     context = { "students" : students , "question" : question , "quizz" : quizz , 'percent' : percent  }
 
