@@ -251,7 +251,7 @@ def all_quizzes(request):
         parcours = None
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None, folder = None)
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours }) 
 
  
@@ -264,7 +264,7 @@ def ajax_shared_quizzes(request):
 
     quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids ).exclude(teacher = teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher)
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None, folder = None )
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
 
 
