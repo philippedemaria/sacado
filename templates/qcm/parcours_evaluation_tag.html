@@ -183,16 +183,16 @@
             <div class="row extend" {% if parcours.is_evaluation  %} style="padding-top: 5px;" {% endif  %}> 
                 <div class="col-lg-4 col-xs-4">
                 {% if parcours.is_evaluation %}
-                    <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                    <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
                 {% else  %}
-                    <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span> </a>
+                    <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
                 {% endif  %}
                 </div> 
                 <div class="col-lg-4 col-xs-4">
                     {% if not parcours.is_evaluation %}
-                        <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-desktop"></i> <span class="label_icon">Cours </span> </a>
+                        <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa  fa-desktop"></i> <span class="label_icon">Cours </span> </a>
                     {% else  %}                 
-                        <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %}><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Exercices </span>
+                        <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %}><i class="bi bi-cloud"></i> <span class="label_icon">Exercices </span>
                         </a>  
                     {% endif  %}
                 </div> 
@@ -200,11 +200,11 @@
                 {% if not parcours.is_evaluation %}
  
                     <a  href="{% url 'detail_task_parcours' parcours.id 0 0 %}"   class="edit" {% if parcours.is_task_exists %} style="color:{{ parcours.color }}" {% endif %}>
-                        {% if not parcours.is_task_exists %}<i class="fa fa-fw fa-calendar"></i>{% else %}<i class="fa fa-fw fa-calendar-check"></i>{% endif %}
+                        {% if not parcours.is_task_exists %}<i class="bi bi-calendar"></i>{% else %}<i class="bi bi-calendar-check"></i>{% endif %}
                          <span class="label_icon">Tâches</span>
                     </a> 
                 {% else  %}   
-                    <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                    <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-user"></i> <span class="label_icon">Individual.</span>
                     </a> 
                 {% endif  %}
                 </div> 
@@ -212,15 +212,15 @@
             {% if not parcours.is_evaluation %}
             <div class="row extend">                              
                 <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-cloud"></i> <span class="label_icon">Exercices</span>
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-explicit"></i> <span class="label_icon">Exercices</span>
                     </a>  
                 </div>  
                 <div class="col-lg-4 col-xs-4">
-                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="bi bi-mortarboard"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
                     </a>   
                 </div>
                 <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-user"></i> <span class="label_icon">Individual.</span>
+                    <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-person-video"></i> <span class="label_icon">Individual.</span>
                     </a> 
                 </div>
             </div>
@@ -229,18 +229,18 @@
                 <div class="col-lg-4 col-xs-4">
 
                     <a href="{% url 'real_time' parcours.id %}" class="edit {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if parcours.is_real_time %} style="color:{{ parcours.color }}" {% endif %} >
-                        <i class="fa fa-fw fa-clock"></i><span class="label_icon">Temps réel.</span>
+                        <i class="bi bi-clock-history"></i> <span class="label_icon">Temps réel.</span>
                     </a>
 
                 </div>
                 <div class="col-lg-4 col-xs-4">
                  
-                    <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon">{% if parcours.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
+                    <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="bi bi-bar-chart-line"></i>  <span class="label_icon">{% if parcours.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
                 
                 </div>
                  
                 <div class="col-lg-4 col-xs-4">
-                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-people"></i>  <span class="label_icon">Elèves</span>
                     </span>
                 </div> 
             </div>
@@ -248,7 +248,7 @@
             <div class="row extend">    
                 <div class="col-lg-6 col-xs-6">                                 
                 {% if parcours.is_evaluation %}   
-                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="bi bi-mortarboard"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
                     </a>   
                 {% else %}
                     <a  href="{% url 'stat_evaluation' parcours.id  %}" class="edit"><i class="fa fa-fw fa-bar-chart"></i>  <span class="label_icon"> Résultats </span>
@@ -256,7 +256,7 @@
                 {% endif %} 
                 </div>                     
                 <div class="col-lg-6 col-xs-6">
-                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa fa-fw fa-users"></i>  <span class="label_icon">Elèves</span>
+                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-people"></i>  <span class="label_icon">Elèves</span>
                     </span>
                 </div> 
             </div>
