@@ -7265,7 +7265,7 @@ def only_update_course(request,idc):
         else:
             print(form.errors)
 
-    context = {  'form': form , 'teacher': teacher, 'course': None ,   }
+    context = {  'form': form , 'teacher': teacher, 'course': course , 'parcours': course.parcours ,    }
 
     return render(request, 'qcm/course/form_np_course.html', context)
 
@@ -7366,15 +7366,19 @@ def delete_course(request, idc , id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
 
-    parcours = Parcours.objects.get(pk =  id)
-    teacher = Teacher.objects.get(user= request.user)
+    try :
+        teacher = Teacher.objects.get(user= request.user)
+        course = Course.objects.get( id = idc )
+        parcours  = Parcours.objects.get( id = id )
+        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+            return redirect('index')
+        course.delete()
 
-    course = Course.objects.get(id=idc)
-
-    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
-        return redirect('index')
-
-    course.delete()
+    except :
+        teacher = Teacher.objects.get(user= request.user)
+        course = Course.objects.get(id=idc)
+        if course.teacher == teacher or teacher.user.is_superuser :
+            course.delete()
     try :
         return redirect('list_parcours_group' , request.session.get("group_id"))
     except :
