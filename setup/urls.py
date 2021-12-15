@@ -30,6 +30,8 @@ urlpatterns = [
 
     path('sacado', ressource_sacado , name='ressource_sacado'),
 
+    path('rgpd', rgpd, name='rgpd'), 
+    path('gar_rgpd', gar_rgpd, name='gar_rgpd'), 
     ############################################################################################
     #######  SACADO Cahier de vacances payant
     ############################################################################################
@@ -51,8 +53,6 @@ urlpatterns = [
 
     path('ajax_get_subject/', ajax_get_subject, name='ajax_get_subject'),#gère les div des subjects sur la page d'accuril des exercices.
 
-
-
     ############################################################################################
     #######  WEBINAIRE
     ############################################################################################
@@ -64,6 +64,7 @@ urlpatterns = [
     path('webinaire_registrar/<int:id>/<int:key>/', webinaire_registrar, name='webinaire_registrar'), 
 
     path('webinaire_show/<int:id>/', webinaire_show, name='webinaire_show'), 
+
 ]
 
 

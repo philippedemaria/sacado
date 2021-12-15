@@ -1317,3 +1317,13 @@ def webinaire_delete(request, id):
         return redirect('webinaires')
     else :
         return redirect('index') 
+
+
+
+def rgpd(request):
+    context = {  }
+    return render(request, 'setup/rgpd.html', context)  
+
+def gar_rgpd(request):
+    context = {  }
+    return render(request, 'setup/rgpd_gar.html', context)   
