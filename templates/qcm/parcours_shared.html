@@ -22,23 +22,7 @@
         </div>
     </div>
     <div class="box_shared_footer">
-        <div class="row box_shared_label"> 
-            <div class="col-lg-12 col-xs-12" style="font-variant:small-caps; font-size: 16px">
-                <b>{{ parcours.subject.name }}</b>
 
-                    {% if parcours.course.all|length > 0 %}
-                    <a href="{% url 'clone_parcours' parcours.id 1 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le parcours et ses cours associés" > <i class="fa fa-folder"></i> </a>
-                    {% endif %}
-                    <a href="{% url 'clone_parcours' parcours.id 0 %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le parcours"  > <i class="fa fa-clone"></i> </a>                      
-                    <a href="{% url 'show_parcours_visual'  parcours.id  %}" style="font-variant:small-caps; font-size: 12px" class="pull-right edit"  title="Voir le parcours"  ><i class="fa fa-eye"></i></a>
-
-
-
-
-
-
-            </div> 
-        </div>
         <div class="row box_shared_label"> 
             <div class="col-lg-12 col-xs-12">
                 {% for data in parcours.get_themes   %} 
@@ -46,6 +30,21 @@
                 {% endfor %}
             </div> 
         </div>
+        <div class="row box_shared_label" align="center"> 
+            <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'show_parcours_visual'  parcours.id  %}" class="edit"  title="Voir le parcours"  ><i class="bi bi-eye" style="font-size: 22px"></i>  </a>
+            </div> 
+            <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'clone_parcours' parcours.id 0 %}" class="edit" title="Récupérer le parcours"  > <i class="bi bi-clouds" style="font-size: 22px"></i> </a>  
+            </div> 
+            <div class="col-lg-4 col-xs-4" >
+                    {% if parcours.course.all|length > 0 %}
+                    <a href="{% url 'clone_parcours' parcours.id 1 %}"  class="edit" title="Récupérer le parcours et ses cours associés" > <i class="bi bi-folder" style="font-size: 22px"></i> </a>
+                    {% endif %}
+            </div> 
+        </div>
+
+
         <div class="row box_shared_label_last"> 
             <div class="col-lg-4 col-xs-4">
                 {% if parcours.nb_exercises < 100 %}
@@ -63,3 +62,5 @@
         </div>
     </div>
 </div>     
+
+
