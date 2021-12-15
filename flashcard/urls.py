@@ -14,6 +14,7 @@ urlpatterns = [
     path('my_flashpack_archives', my_flashpack_archives, name='my_flashpack_archives'),
     path('flashpack_results/<int:idf>/<int:idp>', flashpack_results, name='flashpack_results'),
 
+
     path('create_flashpack_from_parcours/<int:idp>', create_flashpack_from_parcours , name='create_flashpack_from_parcours'),
 
     path('flashpack_peuplate/<int:id>', flashpack_peuplate, name='flashpack_peuplate'),

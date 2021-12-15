@@ -402,6 +402,18 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
                 for course in courses:
                     course.students.add(*students)
 
+                bibliotexs = parcours.bibliotexs.all()
+                for bibliotex in bibliotexs:
+                    bibliotex.students.add(*students)
+
+                flashpacks = parcours.flashpacks.all()
+                for flashpack in flashpacks:
+                    flashpack.students.add(*students)
+
+                quizz = parcours.quizz.all()
+                for quiz in quizz:
+                    quiz.students.add(*students)
+
         # Assigne les parcours et leurs contenus 
         for parcours in group.group_parcours.filter(folders=None):
             parcours.students.add(*students)
@@ -417,6 +429,21 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
             courses = parcours.course.all()
             for course in courses:
                 course.students.add(*students)
+
+
+            bibliotexs = parcours.bibliotexs.all()
+            for bibliotex in bibliotexs:
+                bibliotex.students.add(*students)
+
+            flashpacks = parcours.flashpacks.all()
+            for flashpack in flashpacks:
+                flashpack.students.add(*students)
+
+            quizz = parcours.quizz.all()
+            for quiz in quizz:
+                quiz.students.add(*students)
+
+
     test = True
  
     return test

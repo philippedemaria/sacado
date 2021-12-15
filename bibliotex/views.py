@@ -785,7 +785,7 @@ def update_bibliotex(request, id):
 
 
 
-
+ 
 
 
 def create_bibliotex_from_parcours(request,idp=0):

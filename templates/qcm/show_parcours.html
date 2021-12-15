@@ -123,6 +123,19 @@ body{
                             {% include 'qcm/details_all_cards.html' %}            
                         {% endif %}  
                     {% endfor %}
+
+         
+                    
+                        <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                            <div class="helper_tip_text" >Sélectionner des exercices.</div>
+                        </a>
+               
+        
+
+
+
+
+
             </div>
             {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
         </div>  

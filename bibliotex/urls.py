@@ -34,6 +34,7 @@ urlpatterns = [
     path('delete_relationtex/<int:id>', delete_relationtex , name='delete_relationtex'),
 
     path('create_bibliotex_from_parcours/<int:idp>', create_bibliotex_from_parcours , name='create_bibliotex_from_parcours'),
+ 
 
 
 

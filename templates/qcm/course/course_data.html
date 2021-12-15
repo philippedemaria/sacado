@@ -3,16 +3,12 @@
 {% load item_tags %}
 
 
-    <td style="text-align:center; padding-bottom: 0px;"> 
- 
-    </td>  
+  
     <td {% if course.is_folder %} style="padding-top:15px" {% endif %} >
 
         <a href="{% url 'show_course' 0 course.id %}" > {{ course.title }} </a>
 
         <div style="font-size:14px;margin-top:-5px;">
- 
-
             <small>{{  course.duration|int_minutes  }}min. </small>
         </div>
         <div style="font-size:14px;margin-top:-5px;">
@@ -24,15 +20,9 @@
     <td>
  
  
-                <a href="{% url 'only_update_course' course.id   %}"> <i class="fa fa-edit fa-xs" aria-hidden="true"></i></a> 
+                <a href="{% url 'only_update_course' course.id   %}"> <i class="bi bi-pencil"></i></a> 
     </td>
-    <td >
-        {% if course.parcours.folders  %}
-            {% for f in  course.parcours.folders.all  %}
-                <small>{{ f.title }} <small> {% if not forloop.last %}, {% endif %}</small>
-            {% endfor %}
-        {% endif %}
-    </td>
+ 
     <td>
         <div class="btn-group"  style="padding:0px;margin:0px;">
             <a href="#" class="btn btn-default btn-publisher course_sharer"  id="course_sharer{{course.id}}" 
