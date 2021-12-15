@@ -3,7 +3,7 @@
 {% load item_tags %}
 <div id="small_loader"></div>
 {% for question in all_questions %}
-    <div class="card" style="width:300px;height:300px;margin:15px">
+    <div class="card" style="width:300px;height:300px;margin:15px;overflow: hidden;padding: 10px;">
         <div class="card_title">
             {% if question.calculator  %}                            
             <img src="{% static 'img/calculator.png' %}" width ="20px" class="pull-right" />  
@@ -21,7 +21,7 @@
             {% endif %}
             <a href="{% url 'get_this_question'  question.id quizz_id  %}"  style="font-size: 12px">Récupérer cette question</a> 
             <br/>
-            <div style="font-size: 30px;">{{ question }}</div>                        
+            <div>{{ question|safe }}</div>                        
         </div>
 
         <div class="card_body">
