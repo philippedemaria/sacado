@@ -7445,23 +7445,25 @@ def ajax_parcours_get_course(request):
         sacado_asso = True
 
     course_id =  request.POST.get("course_id",0)
-    if course_id > 0 : 
+    if int(course_id) > 0 : 
         course = Course.objects.get(pk=course_id)
     else:
         course = None
 
 
-    parcours_id =  request.POST.get("parcours_id",None)
-    if parcours_id :
+    parcours_id =  request.POST.get("parcours_id",0)
+
+    if int(parcours_id) :
         parcours = Parcours.objects.get(pk = parcours_id)
     else :
         parcours = None
 
-
-    role, group , group_id , access = get_complement(request, teacher, parcours)
-    request.session["parcours_id"] = parcours.id
-    request.session["group_id"] = group_id
-
+    try :
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        request.session["parcours_id"] = parcours.id
+        request.session["group_id"] = group_id
+    except :
+        group = None
 
     parcourses =  teacher.teacher_parcours.order_by("level")    
 
