@@ -210,7 +210,7 @@
                 </div> 
             </div>
 
-            
+            {% if not parcours.is_evaluation %}
             <div class="row extend">    
                 <div class="col-xs-4 col-md-4 col-lg-4">
                     <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if parcours.flashpacks.count %} style="color:{{ parcours.color }}" {% endif %}>
@@ -241,7 +241,7 @@
             </div>
 
 
-            {% if not parcours.is_evaluation %}
+         
             <div class="row extend">                              
                 <div class="col-lg-4 col-xs-4">
                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-explicit"></i> <span class="label_icon">Exercices</span>

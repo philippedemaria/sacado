@@ -6,7 +6,7 @@
 {% block require %}
  
 
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
 
     <script>
         require(['script/ajax-parcours']);
@@ -70,7 +70,7 @@ body{
 
 
 <form action="" methode="POST">      
-    <section class="content_list content_list_add exercise_sortable" id="miseEnAttenteDashboard">
+    <section class="content_list content_list_add">
      
      
     {% if parcours.stop %}
@@ -85,7 +85,7 @@ body{
     {% endif %}
 
         <div class="row {% if accordion %}documents_div documents_div_shadow{% endif %}">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-12 col-md-12"  id="exercise_sorter">
                 <h1 class="thin">Les exercices  
                     {% if accordion %}
                     <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> 
@@ -130,12 +130,6 @@ body{
                             <div class="helper_tip_text" >Sélectionner des exercices.</div>
                         </a>
                
-        
-
-
-
-
-
             </div>
             {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
         </div>  

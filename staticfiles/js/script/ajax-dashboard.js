@@ -1040,7 +1040,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }
 
     
-        sorter_exercises('.exercise_sortable' , ".div_exercise_id");
+        sorter_exercises('#exercise_sorter' , ".div_exercise_id");
         sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
 
 
