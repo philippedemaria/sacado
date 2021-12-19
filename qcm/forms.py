@@ -38,8 +38,6 @@ class ParcoursForm(forms.ModelForm):
 		super(ParcoursForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 
- 
-
 		if teacher:
 
 			if teacher.teacher_group.filter(group_folders=folder) : 

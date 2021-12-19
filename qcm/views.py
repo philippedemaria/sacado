@@ -231,9 +231,11 @@ def get_seconde_to_math_comp(request):
                 relationship.students.add(student)
             except :
                 pass
-
-        for prcr in all_new_parcours_folders :
-            prcr.leaf_parcours.set(all_new_parcours_leaves)
+        try :
+            for prcr in all_new_parcours_folders :
+                prcr.set(all_new_parcours_leaves)
+        except :
+            pass
 
     School.objects.filter(pk = request.user.school.id).update(get_seconde_to_comp=1)
 
@@ -265,7 +267,7 @@ def set_groups(nf,gps) :
 def clear_realtime(parcours_tab , today,  timer ):
     """  efface le realtime de plus de timer secondes sur un ensemble de parcours parcours_tab """
     today_delta = today.now() - timedelta(seconds = timer)
-    Tracker.objects.filter(Q(parcours__in = parcours_tab)|Q(parcours__leaf_parcours__in = parcours_tab), date_created__lte= today_delta).delete()
+    Tracker.objects.filter(parcours__in = parcours_tab, date_created__lte= today_delta).delete()
 
 ##################################################################################################################################
 ##################################################################################################################################
@@ -2090,9 +2092,17 @@ def affectation_students_to_contents_parcours_or_evaluation(parcours_ids,all_stu
         for course in courses:
             course.students.set(all_students)
 
+        flashpacks = parcours.flashpacks.all()
+        for flashpack in flashpacks:
+            flashpack.students.set(all_students)
 
+        bibliotexs = parcours.bibliotexs.all()
+        for bibliotex in bibliotexs:
+            bibliotex.students.set(all_students)
 
-
+        quizz = parcours.quizz.all()
+        for quiz in quizz:
+            quiz.students.set(all_students)
 
 def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
@@ -2234,6 +2244,7 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
         folder = Folder.objects.get(pk=folder_id)
     else :
         folder = None
+
     form = get_form(request, parcours, teacher, group_id, folder_id)
     ##############################################################################################
     ##############################################################################################
@@ -2261,6 +2272,11 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
 
             affectation_students_to_contents_parcours_or_evaluation( [nf.id] , group_students )
             nf.students.set(group_students)
+            try :
+                folder_ids = request.POST.getlist("folders",[]) 
+                nf.folders.set(folder_ids)
+            except :
+                pass
 
             #Gestion de la coanimation
             change_coanimation_teachers(nf, parcours , group_ids , teacher)
@@ -2568,7 +2584,7 @@ def show_folder_student(request, id):
     today = time_zone_user(user)
     stage = get_stage(user)
 
-    parcourses = parcours.leaf_parcours.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("ranking")
+    parcourses = folder.parcours.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("ranking")
     nb_parcourses = parcourses.count()
     context = {'parcourses': parcourses , 'nb_parcourses': nb_parcourses ,   'parcours': parcours ,   'stage' : stage , 'today' : today ,  }
 
@@ -2777,14 +2793,10 @@ def result_parcours_theme(request, id, idt, is_folder):
 
 
     if  is_folder == 1 :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(),exercise__in=exercises, exercise__supportfile__is_title=0).order_by("ranking")
+        relationships = Relationship.objects.filter(parcours = parcours ,exercise__in=exercises, exercise__supportfile__is_title=0).order_by("ranking")
 
-        custom_set = set()
-        for p in parcours.leaf_parcours.all():
-            cstm = p.parcours_customexercises.all() 
-            custom_set.update(set(cstm))
-        customexercises = list(custom_set)
-
+        customexercises = parcours.parcours_customexercises.all() 
+ 
     else :
         relationships = Relationship.objects.filter(parcours= parcours,exercise__in=exercises, exercise__supportfile__is_title=0 ).order_by("ranking")
         customexercises = parcours.parcours_customexercises.all() 
@@ -2814,13 +2826,8 @@ def get_items_from_parcours(parcours, is_folder) :
     Permet de déterminer les compétences dans l'ordre d'apparition du BO dans un parcours
     """
     if is_folder :
-        relationships = Relationship.objects.filter(parcours__in=parcours.leaf_parcours.all(), exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
-
-        custom_set = set()
-        for p in parcours.leaf_parcours.all():
-            cstm = p.parcours_customexercises.all() 
-            custom_set.update(set(cstm))
-        customexercises = list(custom_set)
+        relationships = Relationship.objects.filter(parcours =parcours , exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
+        customexercises = parcours.parcours_customexercises.all() 
 
     else :
         relationships = Relationship.objects.filter(parcours= parcours, exercise__supportfile__is_title=0).prefetch_related('exercise__supportfile').order_by("ranking")
@@ -3333,7 +3340,7 @@ def clone_parcours(request, id, course_on ):
         except :
             pass
 
-    messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
+    messages.success(request, "Duplication réalisée avec succès. Bonne utilisation. Vous pouvez placer le parcours dans le dossier en cliquant sur la config. du parcours")
 
 
     if group_id :

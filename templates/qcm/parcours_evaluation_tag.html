@@ -129,7 +129,7 @@
                         <div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible aux élèves de soumettre des exercices.</div>
                     </span>
                 {% elif parcours.is_pending_correction %}
-                    <i class="fa fa-cc text-warning pull-right" style="font-size:12px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
+                    <i class="fa fa-cc text-warning pull-right" style="font-size:16px;color:{{ parcours.color|contrast_color }};" title="Copies à corriger" ></i> 
                 {% endif %}
 
                     {% if parcours.is_real_time %}
