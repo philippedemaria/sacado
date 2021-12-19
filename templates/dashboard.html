@@ -310,6 +310,20 @@
         </div>
     </div>
     <hr>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" style="text-align:center;">
+                   
+                Version
+                {% if sacado_asso %}
+                    établissement
+                {% else %}
+                    enseignant
+                {% endif  %}
+ 
+        </div>
+    </div> 
+    <hr>
+
     {% if not user.country and user.user_type == 2  %} 
    
     <div class="row">

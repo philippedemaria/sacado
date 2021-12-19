@@ -53,13 +53,14 @@
     </a>
 </li>
 
+{% comment %}
  <li  class="dropdown {% if not request.session.tdb and '/exercise' in request.path  %}active{% endif %}">
     <a href="{% url 'exercises' %}" class="main closer_notification" >
         <i class="bi bi-explicit icon_size" aria-hidden="true"></i> 
         <div class="captionmenu">Exercices</div>
     </a>
 </li>
-
+{% endcomment %}
  
  
 <li class="dropdown {% if not request.session.tdb and '/tool' in request.path and not 'admin' in    request.path %}active{% endif %}">
