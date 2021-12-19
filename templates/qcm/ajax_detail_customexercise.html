@@ -39,7 +39,7 @@
                     </tr>
 
 
-                    {% for student  in customexercise.students.all|dictsort:"user.last_name"  %}  
+                    {% for student  in customexercise.just_students   %}  
                         {% get_all_results_custom customexercise student parcours as data %}                   
                         <tr> 
                             <td>{{ student }}</td>

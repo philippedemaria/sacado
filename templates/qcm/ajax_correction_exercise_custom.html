@@ -4,7 +4,6 @@
  
 
 <div class="col-sm-12 col-md-8">
- 
 {% if c_e %}
  
     {% block annotate %} 
@@ -18,6 +17,31 @@
 
     <!-- Caractéristique pour les AJAX pour la correction en ligne -->
     {% endblock %}
+
+
+    {% if customexercise.is_autocorrection %}
+        <div id="show_result_criterions">
+            <a href="#" style="font-size:12px;" id="label_result_criterions">Cacher ces critères</a>
+        </div>
+        <div id="div_result_criterions">
+            <table class='table' style="font-size:12px; text-align: center">
+                    <tr>
+                        <td style="text-align: left">Critères de réussite</td><td style="background-color: #F7F7F7;">NE</td><td style="background-color: #ffeceb;">Insuf </td><td style="background-color: #fff6eb;">Fragile</td><td style="background-color: #f0ffeb;">B M </td><td style="background-color: #e0feff;">TBM</td>
+                    </tr>
+                    {% for c in customexercise.criterions.all %}
+                    {% get_criterion_results c customexercise parcours student as result %}
+                    <tr>
+                        <td style="text-align: left">{{ c.label }}</td>
+                        <td style="background-color: #F7F7F7;">{% if result == 0 %}<i class="bi bi-circle-fill"></i>{% endif %}</td>
+                        <td style="background-color: #ffeceb;">{% if result == 1 %}<i class="bi bi-circle-fill"></i>{% endif %}</td>
+                        <td style="background-color: #fff6eb;">{% if result == 2 %}<i class="bi bi-circle-fill"></i>{% endif %}</td>
+                        <td style="background-color: #f0ffeb;">{% if result == 3 %}<i class="bi bi-circle-fill"></i>{% endif %}</td>
+                        <td style="background-color: #e0feff;">{% if result == 4 %}<i class="bi bi-circle-fill"></i>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+            </table>
+        </div>
+    {% endif %}
 
     <div id="corrector">                 
         <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;z-index:-1"></canvas> 

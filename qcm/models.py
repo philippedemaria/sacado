@@ -1695,6 +1695,10 @@ class Criterion(models.Model):
     def __str__(self):       
         return "{}".format(self.label)
 
+    def results( self , customexercise, parcours , student):
+        autoposition = self.autopositions.filter(customexercise = customexercise, parcours = parcours, student = student).last()
+        return autoposition.position
+
 
 class Customexercise(ModelWithCode):
 

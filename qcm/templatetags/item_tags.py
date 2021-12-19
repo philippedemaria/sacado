@@ -992,3 +992,10 @@ def get_result_by_student (obj,flashpack,student):
 def get_flashpack_by_student (obj, student):
     """Détermine si un flashpack  est traité par un élève """
     return obj.is_result_by_student( student)  
+
+
+@register.simple_tag 
+def get_criterion_results (obj, customexercise, parcours , student):
+    """Détermine si un flashpack  est traité par un élève """
+    return obj.results( customexercise, parcours , student) 
+ 

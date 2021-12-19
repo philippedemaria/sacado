@@ -3,6 +3,19 @@ define(['jquery', 'bootstrap'], function ($) {
         console.log("chargement JS ajax-customexercise.js OK");
 
  
+ 
+
+        var show_toggle = 0;
+
+        $("#show_result_criterions").on('click', function (event) {
+
+            $("#div_result_criterions").toggle();
+            if (show_toggle%2==1){ $("#label_result_criterions").html("Cacher les critères") } else { $("#label_result_criterions").html("Afficher les critères") }
+
+            show_toggle++ ;
+        })
+
+
         // Enregistrer les commentaires
         $('.save_comment').on('click', function (event) {
             let comment = $("#comment").val();
@@ -104,7 +117,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         var canvas    = document.getElementById("myCanvas");
         var ctx       = canvas.getContext('2d');
-        canvas.width  = 800 ;
+        canvas.width  = "100%" ;
         canvas.height = 800;
         new_color = "#000000" ;
 
