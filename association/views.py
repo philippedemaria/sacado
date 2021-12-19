@@ -1028,7 +1028,7 @@ def print_accounting(request, id ):
     #########################################################################################
     ### Bas de page
     #########################################################################################
-    nb_inches = 4.6 - offset
+    nb_inches = 4.4 - offset
     elements.append(Spacer(0,nb_inches*inch)) 
     asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
     elements.append(asso)
@@ -1036,14 +1036,15 @@ def print_accounting(request, id ):
     elements.append(asso2)
     asso3 = Paragraph( "siren : W832020065 - Préfecture du Var"  , bas_de_page )
     elements.append(asso3)
-    asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères"  , bas_de_page )
+    asso30 = Paragraph( "siret : 903345569 00011"  , bas_de_page )
+    elements.append(asso30)
+    asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
     elements.append(asso4)
 
     doc.build(elements)
 
     return response
-
-
+ 
 
 
 
