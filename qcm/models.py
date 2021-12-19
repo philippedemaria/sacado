@@ -543,12 +543,7 @@ class Parcours(ModelWithCode):
         return name
 
     def group_list(self):
-        if self.is_folder :
-            Group = apps.get_model("group.Group")
-            group_ids = self.students.values_list('students_to_group', flat=True)
-            groups = Group.objects.filter(teacher=self.teacher, pk__in=group_ids)
-        else :
-            groups = self.groups.all()
+        groups = self.groups.all()
         return groups
 
     def shared_group_list(self):
