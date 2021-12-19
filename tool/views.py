@@ -355,6 +355,63 @@ def ajax_chargethemes_quizz(request):
     return JsonResponse(data)
 
 
+def print_quizz(request,idq):
+    """TODO """
+
+    # ouverture du texte dans le fichier tex
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"   
+
+    ## Création du texte dans le fichier tex   
+ 
+    quizz    =  Quizz.objects.get(pk = idq) 
+    document =  "quizz" + str(idq)
+    title    =  quizz.title
+    author   = "Équipe SACADO"
+
+    elements +=r"\titreFiche{"+title+r"}{"+quizz.teacher+r"}"
+
+    for q in quizz.questions.all() :
+        ctnt =  q.title
+
+    document       = "relationtex" + str(relationtex_id)
+    title          =  exotex.title
+    author         = "Équipe SACADO"
+
+    elements += ctnt
+    elements += r"\vspace{0,4cm}"
+    # Fermeture du texte dans le fichier tex
+    elements +=  r"\end{document}"
+
+    elements +=  settings.DIR_TMP_TEX    
+
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    #file = settings.DIR_TMP_TEX+r"\\"+document
+    # pour le serveur Linux
+    file = settings.DIR_TMP_TEX+"/"+document
+    ################################################################# 
+    ################################################################# 
+
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+
+
+    if output=="pdf" :
+        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+        return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+    else : 
+        print("format output non reconnu")
+        return 
+
+
 def list_quizzes(request):
 
     request.session["parcours_id"] = False
