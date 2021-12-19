@@ -2041,14 +2041,14 @@ def get_form(request, parcours, teacher ,  group_id, folder_id):
         if folder_id and group_id :
             folder = Folder.objects.get(pk=folder_id)
             group  = Group.objects.get(pk=group_id)
-            form   = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group  )
+            form   = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group  , initial= {   'folders':  [folder],  'groups':  [group], 'subject': folder.subject , 'level': folder.level }  )
         elif group_id :
             group = Group.objects.get(pk=group_id)
             level = group.level.name
-            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None,   group = group )
+            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None,   group = group , initial= { 'groups': [group],  'subject': group.subject , 'level': group.level } )
         elif folder_id :
             folder = Folder.objects.get(pk=folder_id)
-            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = None )
+            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = None  , initial= { 'folders':  [folder],  'subject': folder.subject , 'level': folder.level }  )
         else :
             form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None,   group = None   )
 
@@ -2240,11 +2240,12 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
     ############################################################################################## 
     ######## On regarde s'il existe un dossier ou un groupe et on assigne le formulaire  #########
     folder_id = request.session.get("folder_id",None)
+
     if folder_id :
         folder = Folder.objects.get(pk=folder_id)
     else :
         folder = None
-
+ 
     form = get_form(request, parcours, teacher, group_id, folder_id)
     ##############################################################################################
     ##############################################################################################
