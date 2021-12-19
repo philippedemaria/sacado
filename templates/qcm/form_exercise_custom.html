@@ -23,7 +23,7 @@
  
 
 {% block page_title %}
- <span style="color:{{ parcours.color }}"><i class="bi bi-explicit"></i> </span>
+ <span style="color:{{ parcours.color }}"><i class="bi bi-explicit-fill"></i> </span>
 
     {% include 'qcm/breadcrumb.html' %}
 
@@ -149,11 +149,45 @@ ul#id_skills li{
                             {{ form.imagefile.errors }}
                             <font style="font-size:12px;color:#c70000">Largeur : 750px - hauteur : 550px.</font>
                         </div>
-
                         {% endif %}
+
+
+                        {% if request.user.is_creator or request.user.is_superuser  %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+                                   Auto positionnement ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Après la remise du travail, les critères d'autocorrection sont proposés aux élèves pour un auto-positionnement face à leir production</div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.is_autocorrection |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_autocorrection.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row no_visu_on_load" id="positionnement">
+                            <div class="col-sm-12 col-md-12 div_positionnement">
+                                    {{ form.criterions }}
+                            </div>
+
+                            <div class="col-sm-12 col-md-12">
+                                <a href="#" data-toggle='modal' data-target='#more_criterion'  ><small>Ajouter un critère</small></a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+
+
+
+
                     </div>
                     <div class="col-sm-12 col-md-3">
-                        <h4 class="thin"><i class="fa fa-cog"></i> Configuration</h4><hr/>
+                        <h4 class="thin"><i class="bi bi-gear"></i> Configuration</h4><hr/>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
@@ -234,6 +268,7 @@ ul#id_skills li{
                         </div>
                         <div id="config_render">
                             <h4 class="thin"><i class="fa fa-paperclip"></i> Type de remise</h4><hr/>
+                            {% comment %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
@@ -289,6 +324,7 @@ ul#id_skills li{
                                 </div>
                             </div>
                             {% endif %}
+                            {% endcomment %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
@@ -355,12 +391,6 @@ ul#id_skills li{
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
                     </div>
 
 
@@ -392,4 +422,64 @@ ul#id_skills li{
         </form>
     </div>
 </div>
+
+
+
+    
+<div class="modal fade" id="more_criterion" tabindex="-1" role="dialog" aria-labelledby="more_criterion">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                 
+                <h2>Ajouter un critère</h2>              
+            </div>
+            <div class="modal-body">
+                <form action="#" method="POST" enctype='multipart/form-data' id="my_form_criterion">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label>Critère :</label><br>
+                                {{ form_c.label }}
+                                {{ form_c.label.errors }}
+
+                            </div>
+                        </div>
+                    </div>                                
+                    {{ form_c.subject }}
+                    {{ form_c.level }}
+ 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label>Savoir faire associé</label><br/>
+                                {{ form_c.knowledge|add_class:"form-control select2" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label>Compétences associées</label><br/>
+                                {{ form_c.skill|add_class:"form-control select2" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <a href="#"  class="btn btn-primary" data-dismiss="modal" id="click_more_criterion_button" />Ajouter</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+ 
+
 {% endblock %}

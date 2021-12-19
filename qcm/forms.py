@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Folder, Parcours, Blacklist, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom
+from .models import Folder, Parcours, Blacklist, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom, Criterion
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -359,12 +359,14 @@ class CustomexerciseForm (forms.ModelForm):
 		knowledges = Knowledge.objects.filter(theme__subject = parcours_subject, level  = parcours.level)
 		parcourses = teacher.author_parcours.exclude(pk=parcours.id)
 		students = parcours.students.order_by("user__last_name")
+		criterions = Criterion.objects.filter( subject = parcours_subject , level = parcours.level )
 
 		self.fields['skills'] = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
 		self.fields['parcourses'] = forms.ModelMultipleChoiceField(queryset=parcourses,  required=False )  
-		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
- 
+		self.fields['students']   = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
+		self.fields['criterions'] = forms.ModelMultipleChoiceField(queryset=criterions, widget=forms.CheckboxSelectMultiple,  required=False ) 
+  
 
 class CustomexerciseNPForm (forms.ModelForm):
 
@@ -420,3 +422,38 @@ class DocumentReportForm (forms.ModelForm):
 		model = DocumentReport
 		fields = '__all__'
 		exclude = ("done",)
+
+
+
+class CriterionForm (forms.ModelForm):
+
+	class Meta:
+		model = Criterion
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		parcours = kwargs.pop('parcours')
+		teacher = kwargs.pop('teacher')
+		parcours_subject = parcours.subject 
+		super().__init__(*args, **kwargs)
+
+		self.fields['label'] = forms.CharField(widget=forms.Textarea(attrs={
+		"placeholder": "Description du critère",
+		"rows": 6,
+		"cols": 50
+		}))
+
+
+		self.fields['subject'].initial = parcours.subject
+		self.fields['subject'].widget = forms.HiddenInput()
+		self.fields['level'].initial = parcours.level
+		self.fields['level'].widget = forms.HiddenInput()
+
+		skills = Skill.objects.filter(subject = parcours_subject)
+		knowledges = Knowledge.objects.filter(theme__subject =  parcours_subject , level  = parcours.level)
+
+		self.fields['skill'] = forms.ModelChoiceField(queryset=skills,    required=False )
+		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges,  required=False ) 
+ 
+
+

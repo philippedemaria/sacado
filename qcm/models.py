@@ -1686,6 +1686,16 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
 ############################################################ Exercice customisé ###########################################################
 ########################################################################################################################################### 
 ########################################################################################################################################### 
+class Criterion(models.Model):
+    label     = models.TextField( verbose_name="Critère") 
+    subject   = models.ForeignKey(Subject, related_name="criterions", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Enseignement")
+    level     = models.ForeignKey(Level, related_name="criterions", default="", blank=True, null=True, on_delete=models.CASCADE, verbose_name="Niveau")
+    knowledge = models.ForeignKey(Knowledge, related_name="criterions", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Thème")
+    skill     = models.ForeignKey(Skill, related_name="criterions", default="", on_delete=models.CASCADE, blank=True, null=True, verbose_name="Compétences")
+    def __str__(self):       
+        return "{}".format(self.label)
+
+
 class Customexercise(ModelWithCode):
 
     instruction = RichTextUploadingField( verbose_name="Consigne*") 
@@ -1718,6 +1728,10 @@ class Customexercise(ModelWithCode):
     is_text = models.BooleanField(default=0, verbose_name="Texte ?")
     is_mark = models.BooleanField(default=0, verbose_name="Notation ?")
     is_collaborative = models.BooleanField(default=0, verbose_name="Collaboratif ?")
+
+    is_autocorrection = models.BooleanField(default=0, verbose_name="Autocorrection ?")
+    criterions = models.ManyToManyField(Criterion, blank=True, related_name='customexercises' )    
+
     mark = models.PositiveIntegerField(default=0, verbose_name="Sur ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
@@ -1890,8 +1904,9 @@ class Customexercise(ModelWithCode):
             canvas_img = c_image.imagecanvas
         else :
             canvas_img = None
-        data["canvas_img"] = canvas_img   
+        data["canvas_img"] = canvas_img  
 
+        data["positionnement"] = False
         if Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student,is_corrected=1).exists() :
             c = Customanswerbystudent.objects.get(customexercise = self, parcours = parcours, student = student,is_corrected=1)
             data["is_corrected"] = True            
@@ -1909,6 +1924,9 @@ class Customexercise(ModelWithCode):
             data["knowledges"] = []
             data["point"] = False
             data["audio"] = False
+ 
+        if self.is_autocorrection and Customanswerbystudent.objects.filter(customexercise = self, parcours = parcours, student = student ).exists():
+                data["positionnement"] = True
         return data
 
 
@@ -1966,6 +1984,24 @@ class Customexercise(ModelWithCode):
         data["only_students"]= only_students
         data["nb"]= len(only_students)
         return data 
+
+
+
+
+class Autoposition(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
+
+    customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE,   related_name='autopositions', editable=False)
+    parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE,   related_name='autopositions', editable=False)    
+    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='autopositions', editable=False)
+    date = models.DateTimeField(auto_now_add=True)
+    criterion = models.ForeignKey(Criterion,  on_delete=models.CASCADE, blank=True,  related_name='autopositions', editable=False)
+    position = models.PositiveIntegerField( default=0, ) 
+
+
+    def __str__(self):        
+        return "{} {} {}".format(self.customexercise, self.criterion , self.position)
+
+
 
 
 

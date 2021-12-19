@@ -32,7 +32,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         });
 
-
+ 
 
 });
 

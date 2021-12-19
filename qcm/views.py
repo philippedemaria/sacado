@@ -15,8 +15,8 @@ from sendmail.forms import  EmailForm
 from group.forms import GroupForm 
 from group.models import Group , Sharing_group
 from school.models import Stage, School
-from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker
-from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm
+from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker , Criterion , Autoposition
+from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from bibliotex.models import Bibliotex
@@ -595,22 +595,7 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
 
 def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0) :
     """ trace l'utilisateur. Utile pour le real time """
- 
-
-    if track_untrack : # Si True alors on garde la trace
-        Tracker.objects.create(user =  user, parcours_id = idp ,  exercise_id =  ide,  is_custom =  custom )
-        parcours = Parcours.objects.get(pk=idp)
-
-        #send_exercise_student_to_teacher(parcours.teacher.id, ide, user.id)
-        #tracker, created = Tracker.objects.get_or_create(user =  user, defaults={  'parcours_id' : idp , 'exercise_id' : ide, 'is_custom' : custom})
-        # if not created :
-        #     Tracker.objects.filter(user =  user).update(  parcours_id = idp )
-        #     Tracker.objects.filter(user =  user).update( exercise_id= ide)
-        #     Tracker.objects.filter(user =  user).update( is_custom= custom)
-    else :
-        trackers = Tracker.objects.filter(user =  user)
-        for tracker in trackers :    
-            tracker.delete()
+    pass
 
 
 
@@ -4167,8 +4152,6 @@ def real_time(request,id):
     role, group , group_id , access = get_complement(request, teacher, parcours)
     connected_student_ids =  Tracker.objects.values_list("user_id",flat = True).filter(parcours = parcours ).distinct()
 
-    print(connected_student_ids)
- 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
@@ -5891,6 +5874,34 @@ def ajax_remove_my_appreciation(request):
 #####################################################################################################################################
 #####################################################################################################################################
 
+
+def create_aaaaaaaaccounting(request,tp):
+ 
+    form     = AccountingForm(request.POST or None )
+    form_abo = AbonnementForm(request.POST or None )
+    formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
+    form_ds  = formSet(request.POST or None)
+    today    = datetime.now()
+
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.save()
+            form_ds = formSet(request.POST or None, instance = nf)
+            for form_d in form_ds :
+                if form_d.is_valid():
+                    form_d.save()
+
+
+            if nf.is_abonnement :
+                if form_abo.is_valid():
+
+                    if nf.date_payment:
+                        fa.active = 1
+                    fa.save()
+
+
+
  
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
@@ -5903,7 +5914,7 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
         return redirect('index')
 
     ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
-
+    form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
 
     if request.method == "POST" :
         if ceForm.is_valid() :
@@ -5919,7 +5930,7 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
             print(ceForm.errors)
         return redirect('show_parcours', 0 , parcours.id  )
  
-    context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : False }
+    context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
 
     return render(request, 'qcm/form_exercise_custom.html', context)
 
@@ -5939,6 +5950,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
             return redirect('index')
 
         ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
+        form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours)
 
         if request.method == "POST" :
             if ceForm.is_valid() :
@@ -5952,7 +5964,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
                 print(ceForm.errors)
             return redirect('exercises' )
      
-        context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom ,'parcours': None, }
+        context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : custom ,'parcours': None, }
 
     else :
  
@@ -5981,7 +5993,46 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
     return render(request, 'qcm/form_exercise_custom.html', context)
 
 
+def ajax_add_criterion(request):
+    data      = {}
+    level     = request.POST.get("level")
+    subject   = request.POST.get("subject")
+    knowledge = request.POST.get("knowledge")
+    skill     = request.POST.get("skill")
+    label     = request.POST.get("label")
+
+    Criterion.objects.create(label=label, subject_id=subject,  level_id=level ,  knowledge_id=knowledge ,  skill_id=skill  )
  
+    if  knowledge and skill :
+        data["criterions"] = list(Criterion.objects.values_list('id','label').filter(Q( knowledge_id=knowledge)| Q(skill_id=skill ) ,  subject_id=subject,  level_id=level ))
+    elif  knowledge  :
+        data["criterions"] = list(Criterion.objects.values_list('id','label').filter(knowledge_id=knowledge,  subject_id=subject,  level_id=level ))
+    elif  skill  :
+        data["criterions"] = list(Criterion.objects.values_list('id','label').filter(skill_id=skill,  subject_id=subject,  level_id=level ))
+    else :
+        data["criterions"] = list(Criterion.objects.values_list('id','label').filter(  subject_id=subject,  level_id=level ))
+
+    return JsonResponse(data)  
+
+
+
+
+def ajax_auto_evaluation(request):
+    data      = {}
+    customexercise_id     = request.POST.get("customexercise_id")
+    parcours_id   = request.POST.get("parcours_id")
+    student_id = request.POST.get("student_id")
+    criterion_id    = request.POST.get("criterion_id")
+    position     = request.POST.get("position")
+
+    print(customexercise_id , parcours_id , student_id , criterion_id , position)
+
+    auto , created = Autoposition.objects.get_or_create( customexercise_id=customexercise_id, parcours_id=parcours_id,  student_id=student_id ,  criterion_id=criterion_id , defaults={  'position' : position }  )
+
+    return JsonResponse(data)  
+
+
+
 
   
 def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exercice non autocorrigé dans un parcours

@@ -1,4 +1,4 @@
-define(['jquery',  'bootstrap', 'websocket' ], function ($) {
+define(['jquery',  'bootstrap' ], function ($) {
     $(document).ready(function () {
  
         console.log(" ajax-real-time-parcours chargé "); 

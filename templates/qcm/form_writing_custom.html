@@ -36,7 +36,9 @@
 {% block body %}
 <section class="content_main"> 
     <div class="row">
+
         <div class="col-sm-12 col-md-12 col-lg-8">
+
             {% if customexercise.customexercise_remediation.all|length > 0 %}
             <span class="pull-right">
                 <label>Aides : </label>
@@ -61,11 +63,6 @@
             <br/>
             {% endif  %}
 
-
-
-
-
-
             {% for remediation in customexercise.customexercise_remediation.all %}
                 {% if remediation.consigne %}
                 <audio controls>
@@ -86,11 +83,13 @@
                  <li>
                     Copier le numéro de votre script <img src="{% static 'img/scratch_number.png' %}" height="20px" /> et le coller dans le champ prévu ci-dessous.
                 </li>
+            </ol>
             {% endif %} 
             <hr> 
             <!-- ======================================================================= -->   
             <!-- ================== Zone d'enregistrement ===============================--> 
-            <!-- ======================================================================= -->      
+            <!-- ======================================================================= --> 
+
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% if customexercise.is_image  %} 
@@ -206,7 +205,7 @@
                         <canvas id="myCanvas" style="border:1px solid #000"></canvas>
                     </div>
                     {% if c_e %}
-                    {{  c_e.answer|json_script:"this_answer" }} 
+                        {{  c_e.answer|json_script:"this_answer" }} 
                     {% endif %}
                     <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas>                
                 {% endif %}
@@ -228,27 +227,28 @@
                                 {% get_is_lock parcours today as is_lock %}                            
                                 {% get_is_lock customexercise today as is_block %}
                                 {% if not is_lock and not customexercise.is_collaborative %} 
-                                    {% if not data.is_corrected and not is_block  %}
+                                    {% if not data.is_corrected and not is_block and not  data.positionnement %}
                                         <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+                                        <input type="hidden" value="{{ parcours.id }}"        name="parcours_id"       id="parcours_id" />  
+                                        <input type="hidden" value="{{ customexercise.id }}"  name="customexercise_id" id="customexercise_id" />  
+                                        <input type="button" value="Annuler" onclick="javascript:history.back()"  class="btn btn-default "/>                                          
                                     {% endif  %}
                                 {% endif  %}
                                 <hr/>
-                            {% endif  %}
-
-                            
-                            <input type="hidden" value="{{ parcours.id }}"        name="parcours_id"       id="parcours_id" />  
-                            <input type="hidden" value="{{ customexercise.id }}"  name="customexercise_id" id="customexercise_id" />  
-                            <input type="button" value="Annuler" onclick="javascript:history.back()"  class="btn btn-default "/>                                       
+                            {% endif %} 
+                                     
                         </div>
                     </div>
                 </div>
+
             </form> 
+                    
             <!-- ======================================================================= -->   
             <!-- ============================ Fin de Zone ===============================--> 
             <!-- ======================================================================= -->    
-
-
         </div>  
+
+
         <div class="col-sm-12 col-lg-4">
 
             {% if customexercise.skills.all|length > 0 %}              
@@ -268,20 +268,61 @@
             <hr>
             {% endif %}
             {% if customexercise.knowledges.all|length > 0 %}                
-            <label>Savoir faire évalués :</label>
-            {% for knowledge in customexercise.knowledges.all %}
-                {% get_custom_score knowledge customexercise student parcours as custom_score %}
-                <li class="sans_puce">{{knowledge}}
-                         {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
-                         {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
-                         {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
-                         {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
-                         {% endif %}
-                </li>
-            {% endfor %}
+                <label>Savoir faire évalués :</label>
+                {% for knowledge in customexercise.knowledges.all %}
+                    {% get_custom_score knowledge customexercise student parcours as custom_score %}
+                    <li class="sans_puce">{{knowledge}}
+                             {% if custom_score == 4 %}<i class="fa fa-square text-primary"></i>
+                             {% elif custom_score == 3 %}<i class="fa fa-square text-success"></i>
+                             {% elif custom_score == 2 %}<i class="fa fa-square text-warning"></i>
+                             {% elif custom_score == 1 %}<i class="fa fa-square text-danger"></i>                         
+                             {% endif %}
+                    </li>
+                {% endfor %}
             {% endif %}
         </div>
-    </div>        
+    </div>
+
+
+
+    {% if data.positionnement  %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <form action="" method="POST" enctype='multipart/form-data'>                  
+                <table class='table'>
+                    <tr>
+                        <td>Critères de réussite</td><td>NE</td><td>Insuffisant</td><td>Fragile</td><td>Bonne Maitrise</td><td>Très bonne maitrise</td>
+                    </tr>
+                    {% for c in customexercise.criterions.all %}
+                    <tr>
+                        <td>{{ c.label }} <span id="auto_eval{{ c.id }}"></span></td>
+                        <td>
+                            <input  type="radio"  data-customexercise_id="{{customexercise.id}}" data-criterion_id="{{c.id}}"
+                                    data-parcours_id="{{  parcours.id }}" name="criterion{{ c.id }}" value="0" data-student_id="{{student.user.id}}" class="auto_evaluate" />                               
+                        </td>
+                        <td>
+                            <input  type="radio" data-customexercise_id="{{customexercise.id}}"  data-criterion_id="{{c.id}}" 
+                                    data-parcours_id="{{  parcours.id }}" name="criterion{{ c.id }}" value="1" data-student_id="{{student.user.id}}" class="auto_evaluate" />                               
+                        </td>
+                        <td>
+                            <input  type="radio"   data-customexercise_id="{{customexercise.id}}"  data-criterion_id="{{c.id}}" 
+                                    data-parcours_id="{{  parcours.id }}" name="criterion{{ c.id }}" value="2" data-student_id="{{student.user.id}}" class="auto_evaluate" />
+                        </td>
+                        <td>
+                            <input type="radio"   data-customexercise_id="{{customexercise.id}}"  data-criterion_id="{{c.id}}"
+                                   data-parcours_id="{{  parcours.id }}"  name="criterion{{ c.id }}" value="3" data-student_id="{{student.user.id}}" class="auto_evaluate" />
+                        </td>
+                        <td>
+                            <input type="radio"  data-customexercise_id="{{customexercise.id}}"  data-criterion_id="{{c.id}}"  
+                                   data-parcours_id="{{  parcours.id }}" name="criterion{{ c.id }}" value="4"  data-student_id="{{student.user.id}}" class="auto_evaluate" />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </form> 
+        </div>
+    </div>
+    {% endif  %}        
 </section>
 
 

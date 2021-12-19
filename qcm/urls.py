@@ -387,4 +387,9 @@ urlpatterns = [
     ######################################################################################################################################################
 
     path('get_seconde_to_math_comp', get_seconde_to_math_comp, name='get_seconde_to_math_comp'),  # id est l'id du groupe auquel le parcours est associé
+
+
+    path('ajax_add_criterion', ajax_add_criterion, name='ajax_add_criterion'),
+    path('ajax_auto_evaluation', ajax_auto_evaluation, name='ajax_auto_evaluation'), 
+
  ]

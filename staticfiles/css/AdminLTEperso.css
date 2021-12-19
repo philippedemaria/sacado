@@ -465,7 +465,7 @@ li label{
   padding : 0px ;
 }
 
-#id_students li, #id_exercises li , #id_courses li, #id_themes li, #id_groups li, #id_parcours li ,  #id_folders li  {
+#id_students li, #id_exercises li , #id_courses li, #id_themes li, #id_groups li, #id_parcours li ,  #id_folders li , #id_criterions li {
   list-style: none;
 }
 
@@ -474,6 +474,11 @@ li label{
   margin-left: 15px;
 }
 
+#id_criterions  {
+  list-style: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
 
 #id_groups li label,#id_parcours li label {
   font-weight: normal; 
@@ -534,6 +539,32 @@ li label{
   border-radius: 10px;
 }
 
+
+#div_positionnement{
+  height:300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+
+#div_positionnement::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+#div_positionnement::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+#div_positionnement::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+#div_positionnement::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
 
 
 /* Liste des puces par le form django */

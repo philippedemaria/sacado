@@ -96,20 +96,20 @@ define(['jquery', 'bootstrap'], function ($) {
             $("#collaborative_div").hide();
             makeDivAppear($("#id_is_text"), $("#collaborative_div"));
             makeDivAppear($("#id_is_mark"), $("#on_mark"));
+            makeDivAppear($("#id_is_autocorrection"), $("#positionnement"));
+
             function makeDivAppear($toggle, $item) {
                     $toggle.change(function () {
                         if ($toggle.is(":checked")) {
                             $item.show(500);
-                            $itm.hide(500);
 
                         } else {
                             $item.hide(500);
-                            $itm.show(500);
                             }
                     });
                 }
 
-
+ 
 
         // Gère les notes.
         if ($("#id_is_mark").is(":checked"))
@@ -382,6 +382,100 @@ define(['jquery', 'bootstrap'], function ($) {
          });
 
       
+
+
+        // Supprimer une image réponse depuis la vue élève.
+        $('body').on('click', '#click_more_criterion_button' , function () {
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            let label=$("#id_label").val() ;
+            let skill= $("#id_skill").val() ;
+            let knowledge = $("#id_knowledge").val() ;
+            let subject = $("#id_subject").val() ;
+            let level = $("#id_level").val() ;
+
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'label': label,
+                        'skill': skill,
+                        'knowledge': knowledge,
+                        'subject': subject,
+                        'level' : level,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_add_criterion",
+                    success: function (data) {
+ 
+ 
+
+                        criterions = data["criterions"] ; 
+                        $('#id_criterions').empty("");
+
+                        for (let i = 0; i < criterions.length ; i++) {
+                                    
+                                let criterions_id = criterions[i][0]; 
+                                let criterions_name =  criterions[i][1] ; 
+ 
+                                $('#id_criterions').append('<label for="id_criterions_'+Number(criterions_id)+'"><input type="checkbox" id="id_criterions_'+Number(criterions_id)+'" name="criterions" value="'+Number(criterions_id)+'" /> '+criterions_name+'</label><br/>')
+                            }
+
+                    }
+ 
+                }
+            )
+         });
+
+
+        // Supprimer une image réponse depuis la vue élève.
+        $('body').on('click', '.auto_evaluate' , function () {
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let customexercise_id= $(this).data("customexercise_id") ;
+            let criterion_id     = $(this).data("criterion_id") ;
+            let parcours_id      = $(this).data("parcours_id") ;
+            let student_id       = $(this).data("student_id") ;
+            let position         = $(this).val() ;
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'customexercise_id': customexercise_id,
+                        'criterion_id': criterion_id,
+                        'parcours_id': parcours_id,
+                        'student_id': student_id,
+                        'position'  : position , 
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_auto_evaluation",
+                    success: function (data) {
+ 
+                        $("#auto_eval"+criterion_id).html("<i class='fa fa-check text-success'></i>") ;
+
+                    }
+ 
+                }
+            )
+         });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
