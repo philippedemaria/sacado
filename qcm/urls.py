@@ -96,7 +96,7 @@ urlpatterns = [
 
     path('redo_evaluation', redo_evaluation, name='redo_evaluation'), 
 
-
+    path('getter_parcours_exercice_custom', ajax_getter_parcours_exercice_custom, name='ajax_getter_parcours_exercice_custom'),
 
     path('parcours_get_exercise_custom', ajax_parcours_get_exercise_custom, name='ajax_parcours_get_exercise_custom'),
     path('parcours_clone_exercise_custom', parcours_clone_exercise_custom, name='parcours_clone_exercise_custom'),
@@ -204,6 +204,8 @@ urlpatterns = [
     
     ############################################################################################################  
     path('exercise_custom_show_shared', exercise_custom_show_shared, name='exercise_custom_show_shared'),  
+    path('customexercise_shared_inside_parcours/<int:idp>', customexercise_shared_inside_parcours, name='customexercise_shared_inside_parcours'),  
+
 
     #################################### Mastering #############################################################
 

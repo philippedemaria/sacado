@@ -3403,6 +3403,35 @@ def exercise_custom_show_shared(request):
         return redirect('index')   
  
 
+def customexercise_shared_inside_parcours(request,idp):
+    parcours = Parcours.objects.get(pk=idp)
+    user = request.user
+    if user.is_teacher:  # teacher
+        teacher = Teacher.objects.get(user=user) 
+        customexercises = Customexercise.objects.filter(is_share = 1).exclude(parcourses = parcours)
+        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': parcours,   })
+    else :
+        return redirect('index')   
+ 
+ 
+ 
+def ajax_getter_parcours_exercice_custom(request):
+
+    teacher        = request.user.teacher 
+    exercise_id    = int(request.POST.get("exercise_id"))
+    customexercise = Customexercise.objects.get(pk=exercise_id)
+    parcours_id    = int(request.POST.get("parcours_id"))
+    parcours       = Parcours.objects.get(pk=parcours_id)
+
+    data = {}
+    customexercise.parcourses.add(parcours)
+ 
+    return JsonResponse(data)
+ 
+
+
+
+
 def  exercise_error(request):
 
     message     = request.POST.get("message")  

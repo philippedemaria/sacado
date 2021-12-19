@@ -113,15 +113,21 @@
             {% endif %}
 
         {% else %}         
-        <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="bi bi-explicit"></i> Sélectionner les exercices</a>   </li>
+        <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="bi bi-explicit"></i> Sélectionner les exercices GGB</a>   </li>
             {% if sacado_asso %}   
                 <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
                     <a href="{% url 'parcours_create_custom_exercise' parcours.id  1 %}" ><i class="bi bi-explicit-fill"></i> Créer un exercice personnalisé</a> 
+                </li> 
+                <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
+                    <a href="{% url 'customexercise_shared_inside_parcours' parcours.id   %}" ><i class="bi bi-cloud-download-fill"></i> Récupérer un exercice personnalisé</a> 
                 </li> 
             {% else %}
                 <li>
                     <a href="#" class="no_sacado_asso" title="Version établissement requise"><i class="bi bi-explicit-fill"></i> Créer un exercice personnalisé</a> 
                 </li> 
+
+
+
             {% endif %}
         {% endif %}
 

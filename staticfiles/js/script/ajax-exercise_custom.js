@@ -2,7 +2,29 @@ define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-exercise_custom.js OK");
 
+        $('.getter_parcours_exercice_custom').on('click', function (event) {
+            let parcours_id = $(this).data("parcours_id");
+            let exercise_id = $(this).data("exercise_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'parcours_id': parcours_id,
+                        'exercise_id': exercise_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../getter_parcours_exercice_custom",
+                    success: function (data) {
+
+                        $('#tr_custom'+exercise_id).remove();
+
+                    }
+                }
+            )
+         });
         // Affiche dans la modal le modèle pour récupérer un exercice custom
         $('.getter_exercice_custom').on('click', function (event) {
 
