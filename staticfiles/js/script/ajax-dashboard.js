@@ -1294,6 +1294,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                      $('#form_peda_set').toggle(500);  
                 });
 
+ 
+            $('#form_peda_set_live').hide();  
+            $('#peda_set_live').click(function(event) {
+                     $('#form_peda_set_live').toggle(500);  
+                });
+
+
+
+
 
             $('#sender_peda').on('click', function () {
                  

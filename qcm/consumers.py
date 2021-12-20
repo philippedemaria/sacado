@@ -3,9 +3,8 @@ from channels.generic.websocket import WebsocketConsumer , AsyncJsonWebsocketCon
 import json
 from channels.db import database_sync_to_async
 
-def printc(*a) :
-    pass
-#printc=print
+printc=print
+
 class TableauConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
@@ -36,7 +35,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, close_code):
         printc(self.scope['user'], " se deconnecte")
         # Leave room group
-        self.channel_layer.group_discard(self.channel_name)
+        self.channel_layer.group_discard(self.ugroupe,self.channel_name)
 
     async def receive_json(self,content) :
         command=content.get("command",None)
@@ -84,15 +83,15 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
             printc("évènement student_message déclenché au groupe-singleton")
         if command=="ExoDebut" :
            await self.channel_layer.group_send("perso"+self.ugroupe,
-                {'type' : "ExoDebut",
-                 'from' : self.scope['user'].id, #expéditeur id
+			    {'type' : "ExoDebut",
+			     'from' : self.scope['user'].id, #expéditeur id
                 'name'  : self.scope['user'].username,
                 'ide' : content.get("ide"),  #identifiant d'exo
                 })
         if command=="SituationFinie" :
            await self.channel_layer.group_send("perso"+self.ugroupe,
-                {'type' : "SituationFinie",
-                 'from' : self.scope['user'].id, #expéditeur id
+			    {'type' : "SituationFinie",
+			     'from' : self.scope['user'].id, #expéditeur id
                 'name'  : self.scope['user'].username,
                 'resultat' : content.get("resultat"),
                 'ide' : content.get("ide"),  #identifiant d'exo
@@ -125,7 +124,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                {'type' : "teacher.message.general",
                 'message' : message})
             printc("evenement declenché pour tout le groupe")
-                        
+						
 
     async def student_message(self,data) : #message envoyé par l'élève au prof
         printc("entree dans la fonction student_message")
@@ -159,7 +158,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
             printc("self n'est pas le destinataire du message, rien à faire")
 
     async def teacher_message_general(self,data) : #message envoyé par le prof à tous les eleves
-          printc("entree dans teacher message general")
+          printc("entree dans teacher message general, message="+data['message'])
           await self.send_json({'type':'message','from': "prof", "name": "moi", "message" : str(data['message'])})
 
 

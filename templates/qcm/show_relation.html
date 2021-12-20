@@ -16,7 +16,7 @@
 
 
 {% block require %}
-  <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script>  
+  <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>  
   <script>
      require(['script/ajax-score']);
   </script>  
@@ -34,7 +34,7 @@
         </div>
         {% endif  %} 
 
-        <div class="calculator_img double_bottom_padding">
+        <div class="situation double_bottom_padding">
         {% if relation.exercise.supportfile.calculator %}
  
  
@@ -57,12 +57,12 @@
         {% endif  %} 
         </div>
 
-        <div class="barcode">
+        <div class="situation">
             <a href="#" id="open_draft"><img src="{% static 'img/draft.png' %}"  class="img_size_square_75"  /></a> </br>
         </div>
 
 
-        <div class="horloge">
+        <div class="situation">
             {% if relation.duration == 5 %}
               <img src="{% static 'img/horloge5.png' %}"   class="img_size_square_75" />
             {% elif relation.duration == 10 %}
@@ -117,7 +117,7 @@
                 {% endwith %}
             {% else  %} 
                 <div class="available_infinite" id="attempt" style="font-weight:800" > 
-                   $ \infty $ 
+                   &infin;  
                 </div>
                 <p>Tentatives restantes</p>
             {% endif  %} 
@@ -324,13 +324,14 @@
         {% endif %}    
         {% endif %}  
 
+
+
+        {% include 'qcm/signal_exercise.html' %}
         {% if relation.parcours.teacher.is_mailing %}
             {% include 'qcm/signal_exercise_peda.html' %}
         {% endif %}
-
-        {% include 'qcm/signal_exercise.html' %}
-
-
+        {% include 'qcm/signal_exercise_peda_live.html' %}
+ 
 
     </div> 
 
