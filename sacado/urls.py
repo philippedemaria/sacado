@@ -21,13 +21,14 @@ from django.conf.urls.static import static
 from setup.views import index
 
 urlpatterns = [
+                  path('admin/', admin.site.urls, name= 'admin'),
                   path('', include('setup.urls')),
                   path('account/', include('account.urls')),
                   path('group/', include('group.urls')),
                   path('socle/', include('socle.urls')),
                   path('qcm/', include('qcm.urls')),
                   path('sendmail/', include('sendmail.urls')),
-                  path('ckeditor/', include('ckeditor_uploader.urls'), name= 'admin'),
+                  path('ckeditor/', include('ckeditor_uploader.urls')),
                   path('schedule/', include('schedule.urls')),
                   path('school/', include('school.urls')),
                   path('oauth/', include('social_django.urls')),
