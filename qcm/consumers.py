@@ -48,9 +48,6 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                self.ugroupe=ugroupe
                
                printc("nom du layer de tout le groupe : '{}'".format(ugroupe))
-               printc("on envoie l'info connexion du prof aux eleves connectés")
-               await self.channel_layer.group_send("ugroupe",{type:"connexion.prof"})
-               printc("fait")
                await self.channel_layer.group_add(ugroupe,self.channel_name)
                printc("ajout du groupe ok")
                printc("creation du groupe de contenant que le prof")
@@ -83,8 +80,6 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 'from' : self.scope['user'].id, #expéditeur id
                 'name'  : self.scope['user'].username,
                 'message' : message})
-            printc("on renvoie aussi le message à l'élève...")
-            await self.send_json({"type":"message","from":"moi","message":message})  
             printc("évènement student_message déclenché au groupe-singleton")
         if command=="ExoDebut" :
            await self.channel_layer.group_send("perso"+self.ugroupe,
@@ -121,7 +116,6 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 'to' : content.get('to',None),   #le destinataire à été envoyé par le client-prof
                 'message' : message})
             printc("évènement déclenché au seul eleve destinataire")
-
         if command=="teacher_message_general" :
             print("message general du prof")
             message=content.get("message",None)
@@ -167,13 +161,6 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
           printc("entree dans teacher message general, message="+data['message'])
           await self.send_json({'type':'message','from': "prof", "name": "moi", "message" : str(data['message'])})
 
-    async def connexion_prof(self,data):
-            printc("entree dans la fonction connexion prof")
-            printc("data=",data)
-            printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
-            if self.role==0 :
-                printc("destinataire : "+self.scope["user"].id)
-                await self.send_json({'type' : 'connexion_prof'})
 
     async def connexion_eleve(self,data):
             printc("entree dans la fonction connexion eleve")
