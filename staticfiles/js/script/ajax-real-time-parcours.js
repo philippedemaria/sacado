@@ -1,7 +1,7 @@
 define(['jquery',  'bootstrap' ], function ($) {
     $(document).ready(function () {
  
-        console.log(" ajax-real-time-parcours chargé "); 
+        console.log(" ajax-real-time-parcours charg!é! "); 
  
 
         $(".imagefile").on('mouseover', function (event) {
@@ -114,7 +114,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                  if (data.type=="autojoin")
                  // connexion du prof
                   {
-                      console.log("connexion du prof ok");
+                      console.log("connexion du prof ok; groupe="+data.salle);
                   }
                  else if (data.type=="connexion")
                   { //console.log("connexion d'un eleve");
