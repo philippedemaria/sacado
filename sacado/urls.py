@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 from setup.views import index
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
                   path('', include('setup.urls')),
                   path('account/', include('account.urls')),
                   path('group/', include('group.urls')),
