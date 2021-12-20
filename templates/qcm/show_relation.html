@@ -2,292 +2,222 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load item_tags %}
- 
 {% block page_title %}
- <a href="{% url 'show_parcours_student' relation.parcours.id %}" style="color:{{ parcours.color }}">
-  <i class="fa fa-desktop"></i> {{ relation.parcours }}
-  </a> <img src="{% static 'img/angle-right.png' %}"/> 
-  <small> {{ relation.exercise.knowledge.name }}</small>
+<a href="{% url 'show_parcours_student' relation.parcours.id %}" style="color:{{ parcours.color }}">
+<i class="fa fa-desktop"></i> {{ relation.parcours }}
+</a> <img src="{% static 'img/angle-right.png' %}"/> 
+<small> {{ relation.exercise.knowledge.name }}</small>
 {% endblock %}
-
 {% block page_menu_right %}
- 
 {% endblock %}
-
-
 {% block require %}
-  <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>  
+<script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>  
   <script>
-     require(['script/ajax-score']);
+  require(['script/ajax-score']);
   </script>  
 {% endblock %} 
-
 {% block body  %}  
 <section class="content_main content_main_exercise">
-    {% get_available relation student  as available %}                                    <!-- Si le nombre de tentative est dépassée ou pas : même code que get_parcours_available mais pour une relationship -->
-    {% get_parcours_available parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas : même code que get_available pour une parcours -->
-    <div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
-        {% if student.ebep %}
-        <div class="calculator_img"  class="calculator_img double_bottom_padding">
-              <a href="#" id="use_tools" ><img src="{% static 'img/situation.png' %}"  class="img_size_square_75" /></a>            
-              <p>Outils</p>
+{% get_available relation student  as available %}                                    <!-- Si le nombre de tentative est dépassée ou pas : même code que get_parcours_available mais pour une relationship -->
+{% get_parcours_available parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas : même code que get_available pour une parcours -->
+<div class="col-sm-0 col-md-1 col-lg-1 full_screen_size">
+  {% if student.ebep %}
+  <div class="calculator_img"  class="calculator_img double_bottom_padding">
+  <a href="#" id="use_tools" ><img src="{% static 'img/situation.png' %}"  class="img_size_square_75" /></a>            
+  <p>Outils</p>
+  </div>
+{% endif  %} 
+<div class="situation double_bottom_padding">
+{% if relation.exercise.supportfile.calculator %}
+{% if exercise.level < 7  %}
+  <a href="#" data-toggle='modal' data-target='#calculator'>
+  <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
+  </a>
+{% elif exercise.level == 14  %}
+    <a href="#" data-toggle='modal' data-target='#calculator'>
+    <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
+    </a>
+{% else  %}
+   <a href="{% url 'simulator' %}"  target='_blank'>
+   <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
+   </a>
+{% endif  %}
+{% else %}
+   <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
+{% endif  %} 
+</div>
+
+ <div class="situation">
+  <a href="#" id="open_draft"><img src="{% static 'img/draft.png' %}"  class="img_size_square_75"  /></a> </br>
+ </div>
+ <div class="situation">
+     {% if relation.duration == 5 %}
+     <img src="{% static 'img/horloge5.png' %}"   class="img_size_square_75" />
+     {% elif relation.duration == 10 %}
+     <img src="{% static 'img/horloge10.png' %}"   class="img_size_square_75" />
+     {% elif relation.duration == 15 %}
+     <img src="{% static 'img/horloge15.png' %}"   class="img_size_square_75" />
+     {% elif relation.duration == 20 %}
+     <img src="{% static 'img/horloge20.png' %}"   class="img_size_square_75"  />
+     {% elif relation.duration == 25 %}
+     <img src="{% static 'img/horloge25.png' %}"   class="img_size_square_75"  />
+    {% elif relation.duration == 30 %}
+     <img src="{% static 'img/horloge30.png' %}"   class="img_size_square_75" />
+     {% elif relation.duration == 35 %}
+     <img src="{% static 'img/horloge35.png' %}"    class="img_size_square_75" />
+     {% elif relation.duration == 40 %}
+     <img src="{% static 'img/horloge40.png' %}"   class="img_size_square_75"/>
+     {% elif relation.duration == 45 %}
+     <img src="{% static 'img/horloge45.png' %}"    class="img_size_square_75" />
+     {% elif relation.duration == 50 %}
+     <img src="{% static 'img/horloge50.png' %}"   class="img_size_square_75" />
+     {% elif relation.duration == 55 %}
+     <img src="{% static 'img/horloge55.png' %}"   class="img_size_square_75" />
+     {% elif relation.duration == 60 %}
+     <img src="{% static 'img/horloge60.png' %}"   class="img_size_square_75" />
+   {% else %}
+     <img src="{% static 'img/horloge15.png' %}"   class="img_size_square_75" />
+   {% endif  %} 
+  <p> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
+  </div>
+  <div class="situation">
+  <i class="fa fa-refresh fa-5x"  style="color : #5d4391"></i>
+  <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
+  </div>
+  <div class="situation" > 
+  {% if  parcours.maxexo > -1 %}
+    {% with nb_attempt=parcours_available.nbleft  %}
+       <div class="available" id="attempt" style="font-weight:800" >
+         {{ nb_attempt }} 
+       </div>
+   <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
+    {% endwith %}
+  {% else %}
+ {% if  relation.maxexo > -1 %}
+ {% with nb_attempt=available.nbleft  %}
+ <div class="available" id="attempt" style="font-weight:800" >
+ {{ nb_attempt }}   
+ </div>
+  <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
+   {% endwith %}
+   {% else  %} 
+    <div class="available_infinite" id="attempt" style="font-weight:800" > &infin;  
+  </div>
+ <p>Tentatives restantes</p>
+ {% endif  %} 
+ {% endif %}
+ </div>
+  <div class="barcode">
+      <i class="fa fa-barcode fa-4x"></i>
+     <p>{{ relation.exercise.supportfile.code }}</p>
+  </div>
+</div>  
+ <div class="col-sm-10 col-md-8 col-lg-8">
+  {% for remediation in relation.is_consigne_remediation %}
+    <audio controls>
+     <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+     <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+     </audio>
+  {% endfor  %} 
+  <form action="{% url 'store_the_score_relation_ajax'  %}" method="POST" enctype='multipart/form-data'>   
+   {% csrf_token %}  
+   <div class='justify-content-center'  style="position:relative">
+   {% if parcours.is_evaluation %}
+     {% if parcours_available.is_ok   %}
+       {% if available.is_ok %} 
+    <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
+    <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
+    <br/>Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.<br/>
+   {% if parcours.is_stop %}
+   <h3>Finir l'exercice avant d'en sortir.</h3>
+  <p></p>
+  <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris, enlever ce bandeau.</a>  
+  {% else %}
+  <br/>
+ <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
+ <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+ {% endif %}
+ </div>
+  {% else   %}
+    <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
+     </div>
+    <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
+        <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+   </div>
+  {% endif   %}
+ {% else   %}
+   <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
+   </div>
+   <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
+   <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+   </div>
+  {% endif   %}
+ {% endif %}
+   <div class='justify-content-center' >
+     <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;"
+          Mode plein <br> écran <br>
+         <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
         </div>
-        {% endif  %} 
-
-        <div class="situation double_bottom_padding">
-        {% if relation.exercise.supportfile.calculator %}
- 
- 
-            {% if exercise.level < 7  %}
-                <a href="#" data-toggle='modal' data-target='#calculator'>
-                    <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
-                </a>
-            {% elif exercise.level == 14  %}
-                <a href="#" data-toggle='modal' data-target='#calculator'>
-                    <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
-                </a>
-            {% else  %}
-                <a href="{% url 'simulator' %}"  target='_blank'>
-                    <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
-                </a>
-            {% endif  %}
-            
-        {% else %}
-            <img src="{% static 'img/no_calculator.png' %}"    class="img_size_square_75" />
-        {% endif  %} 
-        </div>
-
-        <div class="situation">
-            <a href="#" id="open_draft"><img src="{% static 'img/draft.png' %}"  class="img_size_square_75"  /></a> </br>
-        </div>
-
-
-        <div class="situation">
-            {% if relation.duration == 5 %}
-              <img src="{% static 'img/horloge5.png' %}"   class="img_size_square_75" />
-            {% elif relation.duration == 10 %}
-              <img src="{% static 'img/horloge10.png' %}"   class="img_size_square_75" />
-            {% elif relation.duration == 15 %}
-              <img src="{% static 'img/horloge15.png' %}"   class="img_size_square_75" />
-            {% elif relation.duration == 20 %}
-              <img src="{% static 'img/horloge20.png' %}"   class="img_size_square_75"  />
-            {% elif relation.duration == 25 %}
-              <img src="{% static 'img/horloge25.png' %}"   class="img_size_square_75"  />
-            {% elif relation.duration == 30 %}
-              <img src="{% static 'img/horloge30.png' %}"   class="img_size_square_75" />
-            {% elif relation.duration == 35 %}
-              <img src="{% static 'img/horloge35.png' %}"    class="img_size_square_75" />
-            {% elif relation.duration == 40 %}
-              <img src="{% static 'img/horloge40.png' %}"   class="img_size_square_75"/>
-            {% elif relation.duration == 45 %}
-              <img src="{% static 'img/horloge45.png' %}"    class="img_size_square_75" />
-            {% elif relation.duration == 50 %}
-              <img src="{% static 'img/horloge50.png' %}"   class="img_size_square_75" />
-            {% elif relation.duration == 55 %}
-              <img src="{% static 'img/horloge55.png' %}"   class="img_size_square_75" />
-            {% elif relation.duration == 60 %}
-              <img src="{% static 'img/horloge60.png' %}"   class="img_size_square_75" />
-            {% else %}
-              <img src="{% static 'img/horloge15.png' %}"   class="img_size_square_75" />
-            {% endif  %} 
-            <p> {{ relation.duration }} minute{{ relation.duration|pluralize }}</p>
-        </div>
-        <div class="situation">
-             <i class="fa fa-refresh fa-5x"  style="color : #5d4391"></i>
-            <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
-        </div>
-        <div class="situation" > 
-        {% if  parcours.maxexo > -1 %}
-
-            {% with nb_attempt=parcours_available.nbleft  %}
-
-                <div class="available" id="attempt" style="font-weight:800" >
-                      {{ nb_attempt }} 
-                </div>
-                <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
-            {% endwith %}
-
-        {% else %}
-            {% if  relation.maxexo > -1 %}
-                {% with nb_attempt=available.nbleft  %}
-                  <div class="available" id="attempt" style="font-weight:800" >
-                     {{ nb_attempt }}   
-                  </div>
-                  <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
-                {% endwith %}
-            {% else  %} 
-                <div class="available_infinite" id="attempt" style="font-weight:800" > 
-                   &infin;  
-                </div>
-                <p>Tentatives restantes</p>
-            {% endif  %} 
-        {% endif %}
+      </div class = 'col-auto' id='ggb_applet_container' ></div>
+      </div>
+  </div>
+   <hr/>
+  <div class="row">
+  <div class="form-group">  
+     {% if user.user_type == 0 %}
+       {% get_is_lock parcours today as is_lock %} 
+       {% get_is_locker relation student as is_locker %} 
+          {% if is_lock %}
+             {% if is_locker %}
+               <div class="alert alert-danger" >
+                 <b>Cet exercice est verrouillé. Vous ne pouvez plus soumettre le résultat.</b>
+               </div>
+             {% else %} 
+              {% include 'qcm/is_evaluation.html' %}
+             {% endif %}
+             {% else %}  
+             {% if available.is_ok %} 
+               {% include 'qcm/is_evaluation.html' %}
+             {% else %}
+               <div class="alert alert-danger" >
+                 <b>Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+               </div>
+             {% endif %}
+          {% endif %}
+        {% endif %}  
+                     <!-- Retour aux exercices du parcours -->
+       {% if parcours.is_evaluation %}
+             {% if  parcours.is_exit %}
+            <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
+             {% endif %}
+       {% else %}
+        <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
+       {% endif %}
+              <!-- ligne d'enregistrement -->
+              <input id="relation" name="relation_id"  type="hidden" value="{{ relation.id }}"/>
+              <input id="start_time" name="start_time"  type="hidden" value="{{ start_time }}"/>
+              <input id="numexo" name="numexo" type="hidden"  />
+              <input id="score" name="score" type="hidden"  />
+              <input id="situation" name="situation"  type="hidden" value="{{ relation.situation }}"/> 
+              <!-- fin ligne d'enregistrement -->
+              <!-- Pour e ws -->
+              <input id="parcours_id" name="parcours_id"  type="hidden" value="{{ relation.parcours.id }}"/>
+         </div>
+       </div>   
+ </form>
 
 
-        </div>
-
-        <div class="barcode">
-            <i class="fa fa-barcode fa-4x"></i>
-            <p>{{ relation.exercise.supportfile.code }}</p>
-        </div>
-
-    </div>  
-    <div class="col-sm-10 col-md-8 col-lg-8">
-
-
-
-      {% for remediation in relation.is_consigne_remediation %}
-          <audio controls>
-              <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
-              <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
-          </audio>
-      {% endfor  %} 
-
-
-      <form action="{% url 'store_the_score_relation_ajax'  %}" method="POST" enctype='multipart/form-data'>   
-        {% csrf_token %}  
-
-
-          <div class='justify-content-center'  style="position:relative">
-              {% if parcours.is_evaluation %}
-
-
-                  {% if parcours_available.is_ok   %}
-
-
-                      {% if available.is_ok %} 
-                          <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
-                              <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
-                              <br/>Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.<br/>
-                                {% if parcours.is_stop %}
-     
-                                  <h3>Finir l'exercice avant d'en sortir.</h3>
-     
-                                  <p></p>
-                                  <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J'ai compris, enlever ce bandeau.</a>  
-                                {% else %}
-                                  <br/>
-                                  <small><em>Cliquez sur la croix pour faire disparaitre ce bandeau  </em></small><i class="fas fa-long-arrow-alt-right"></i> 
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                {% endif %}
-                          </div>
-
-                      {% else   %}
-                          <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
-                          </div>
-
-                              <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
-                                  <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
-                              </div>
-                      {% endif   %}
-
-                  {% else   %}
-                      <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" >
-                      </div>
-
-                          <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
-                              <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
-                          </div>
-                  {% endif   %}
-
-              {% endif %}
-
- 
- 
-
-
-
-
-              <div class='justify-content-center' >
-                  <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
-                      Mode plein <br> écran <br>
-                      <img src="{% static 'img/flechebleue.png' %}" style="position:absolute; right:30px;"/>            
-                  </div>
-                
-                  <div class = 'col-auto' id='ggb_applet_container' ></div>
-              </div>
-          </div>
-          <hr/>
-          <div class="row">
-                  <div class="form-group">  
-                    {% if user.user_type == 0 %}
-
-                        {% get_is_lock parcours today as is_lock %} 
-                        {% get_is_locker relation student as is_locker %} 
-
-                        {% if is_lock %}
-                        
-                            {% if is_locker %}
-                              <div class="alert alert-danger" >
-                                <b>Cet exercice est verrouillé. Vous ne pouvez plus soumettre le résultat.</b>
-                              </div>
-
-                            {% else %} 
-
-                                {% include 'qcm/is_evaluation.html' %}
-
-
-                            {% endif %}
-
-                        {% else %}  
-
- 
-                            {% if available.is_ok %} 
-
-                                {% include 'qcm/is_evaluation.html' %}
-
-                            {% else %}
-                              <div class="alert alert-danger" >
-                                <b>Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
-                              </div>
-                            {% endif %}
-
-
-                        {% endif %}
-                    {% endif %}  
-
-                      <!-- Retour aux exercices du parcours -->
-                    {% if parcours.is_evaluation %}
-                        {% if  parcours.is_exit %}
-                          <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
-                        {% endif %}
-                    {% else %}
-                      <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
-                    {% endif %}
-
-
-                      <!-- ligne d'enregistrement -->
-                      <input id="relation" name="relation_id"  type="hidden" value="{{ relation.id }}"/>
-                      <input id="start_time" name="start_time"  type="hidden" value="{{ start_time }}"/>
-                      <input id="numexo" name="numexo" type="hidden"  />
-                      <input id="score" name="score" type="hidden"  />
-                      <input id="situation" name="situation"  type="hidden" value="{{ relation.situation }}"/> 
-                      <!-- fin ligne d'enregistrement -->
-                      <!-- Pour e ws -->
-                      <input id="parcours_id" name="parcours_id"  type="hidden" value="{{ relation.parcours.id }}"/>
-
-                  </div>
-          </div>
-            
-      </form>
-
-{% comment %}
-<input type="text" id="champ1" value="message">
-<button formaction="#" onclick="PostMessage()">envoyer un message</button>
-{% endcomment %}
-
-    </div> 
-    <div class="col-sm-2 col-md-1 col-lg-1">
-
-      {% if relation.is_not_consigne_remediation %}
-      <h1 class="thin">Aides</h1>
-         {% for remediation in relation.is_not_consigne_remediation %}
-              <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default full_width">
-                  {% include 'qcm/remediation_choices.html' %}
-              </a><br/><br/>
-          {% endfor  %} 
-      {% endif  %}
-    </div>
+</div> 
+<div class="col-sm-2 col-md-1 col-lg-1">
+  {% if relation.is_not_consigne_remediation %}
+     <h1 class="thin">Aides</h1>
+     {% for remediation in relation.is_not_consigne_remediation %}
+   <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default full_width">
+     {% include 'qcm/remediation_choices.html' %}
+     </a><br/><br/>
+     {% endfor  %} 
+     {% endif  %}
+   </div>
     <div class="col-sm-12 col-md-2 col-lg-2">
         {% if not relation.parcours.is_evaluation %}
         {% if relation.relationships_courses.all|length > 0 %}      
@@ -296,47 +226,39 @@
               {% for course in relation.relationships_courses.all %}
                   <li class="{% if forloop.first %}active{% endif %} menu_course">
                       <a href="#" data-toggle='modal' data-target='#menu_course{{ forloop.counter }}'  data-relation_id='{{ relation.id }}' class="header_shower"> {{ course.title }}</a> 
-                      <div class="modal fade" id="menu_course{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="menu_course{{ forloop.counter }}">
-                          <div class="modal-dialog" role="document"  style="width:95%;color:#000">
-                              <div class="modal-content" style="padding-top :0px;">
-                                  <div class="modal-header">
-                                      <h3>{{ course.title }}
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
-                                      </button> 
-                                      </h3>
-                                  </div>
-                                  <div class="modal-body">
-                                      <div class="row">
-                                          <div class="col-lg-12 col-xs-12">   
-                                              {{ course.annoncement|safe }}
-                                          </div>   
-                                      </div> 
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </li>
-              {% endfor %}
+                  <div class="modal fade" id="menu_course{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="menu_course{{ forloop.counter }}">
+                  <div class="modal-dialog" role="document"  style="width:95%;color:#000">
+                  <div class="modal-content" style="padding-top :0px;">
+                  <div class="modal-header">
+                    <h3>{{ course.title }}
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                       </button> 
+                    </h3>
+                   </div>
+                   <div class="modal-body">
+                   <div class="row">
+                   <div class="col-lg-12 col-xs-12">   
+                  {{ course.annoncement|safe }}
+                  </div>   
+                 </div> 
+               </div>
+            </div>
+          </div>
+         </div>
+       </li>
+           {% endfor %}
+      </ul>
+     <hr/>
+    {% endif %}    
+   {% endif %}  
 
-          </ul>
-          <hr/>
-        {% endif %}    
-        {% endif %}  
-
-
-
-        {% include 'qcm/signal_exercise.html' %}
-        {% if relation.parcours.teacher.is_mailing %}
-            {% include 'qcm/signal_exercise_peda.html' %}
-        {% endif %}
-        {% include 'qcm/signal_exercise_peda_live.html' %}
- 
-
-    </div> 
-
-
-      {% if student.ebep %}
+ {% include 'qcm/signal_exercise.html' %}
+ {% if relation.parcours.teacher.is_mailing %}
+     {% include 'qcm/signal_exercise_peda.html' %}
+   {% endif %}
+ {% include 'qcm/signal_exercise_peda_live.html' %} 
+ {% if student.ebep %}
           <div  id="ebep_div">
               {% for tool in relation.exercise.tools.all %}          
               <div class="row">
@@ -348,13 +270,11 @@
           </div>
       {% endif %} 
 
-
    <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
                   <!-- Additional Javascript for Geogebra exercises -->
-    <!--      <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> -->
+          <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script> 
     <script type="text/javascript">
           // parameters of the geogebra app
-
         var width               = "{{ exercise.supportfile.width }}" ;
         var height              = "{{ exercise.supportfile.height }}" ; 
         var showToolBar         = "{{ exercise.supportfile.toolBar|lower }}" ;
@@ -363,9 +283,6 @@
         var showResetIcon       = "{{ exercise.supportfile.resetIcon|lower }}" ; 
         var enableShiftDragZoom = "{{ exercise.supportfile.dragZoom|lower }}" ;
         var filename            = "{{ exercise.supportfile.ggbfile.url }}" ;
-
-
-
         var parameters = {
               "appname":"classic",
               "id":"ggb_applet_container",
@@ -390,67 +307,68 @@
                "appletOnLoad" :  function(api) { 
                         var situation = "{{ relation.situation }}" ;
                         api.setValue("situation", situation );
-
                         ggbApplet = api ; 
-
                         {% if parcours.is_evaluation and parcours.is_stop %}
                         api.registerUpdateListener("updateListener"); 
                         {% else  %}
                         api.registerUpdateListener("realtime"); 
                         {% endif  %}
                   }
-              };
+        };
 
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
-        applet.inject('ggb_applet_container', 'preferHTML5');
- 
-          
-          //----------------------------------------------------
-          //----------------------------------------------------
-          //              socket pour channel
-          var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-          var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
-          window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
-          socket.onopen = function () {
-             socket.send(JSON.stringify({
-                 "command":"student_join", 
-                 "parcours":"{{ relation.parcours.id }}",
-                 "exo":"{{ relation.id }}",
-                 "user":"{{user.id}}"}));
-              //console.log("commande student join envoyée");
-          };        
-            // Handle incoming messages
-          socket.onmessage = function (message) {
-             // Decode the JSON
-             //console.log("Got websocket message " + message.data);
-             var data = JSON.parse(message.data);
-             // Handle errors
-             if (data.error) {
-               alert(data.error);
-               return;
-             }
-              //console.log("message recu :"+data.message);
-              
-          };
+        applet.inject('ggb_applet_container', 'preferHTML5');  
 
-          function PostMessage(){
-          //console.log("entree dans PostMessage"); 
-          window.socket.send(JSON.stringify(
-            {"command":"student_message",
-            "message": document.getElementById("champ1").value}));
-            //console.log("message envoyé");
-          };
+       //----------------------------------------------------
+       //----------------------------------------------------
+      //              socket pour channel
+     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+     var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
+     window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+     socket.onopen = function () {
+        socket.send(JSON.stringify({
+            "command":"student_join", 
+            "parcours":"{{ relation.parcours.id }}",
+            "exo":"{{ relation.id }}",
+            "user":"{{user.id}}"}));
+            //console.log("commande student join envoyée");
+            };        
+           // Handle incoming messages
+     socket.onmessage = function (message) {
+       var data = JSON.parse(message.data);
+       if (data.error) {alert(data.error);
+       return;
+     }
+	 if (data.type=='message'){
+	     console.log("message recu : ", data.message);
+	   var t=document.getElementById("chat");
+           t.innerHTML = t.innerHTML + "<div class='this_chat_block'>@ "+data.from+"<br/>"+ data.message+"</div>";
+       } 
+     }  
+   function PostMessage(text){
+   console.log("entree dans PostMessage"); 
+   window.socket.send(JSON.stringify(
+      {"command":"student_message",
+       "message": text}
+   ));
+       console.log("message envoyé :"+text);
+   };
 
-    
- 
+   chat=document.getElementById("entreechat");
+      chat.addEventListener("change",function () {
+	  console.log("message à envoyer :"+chat.value);
+	  PostMessage(chat.value);
+	  chat.value="";}
+     );
+  
 
-          //----------------------------------------------------
+              //----------------------------------------------------
           //----------------------------------------------------
           //              fin de socket pour channel
           //----------------------------------------------------
           //----------------------------------------------------
-        function updateListener(objName) {  
+  function updateListener(objName) {  
 
                   var applet     =  ggbApplet; 
                   var grade      = applet.getValue("grade");
@@ -461,30 +379,20 @@
                   var p_available= "{{ parcours_available.nbleft}}" ;
                   var available  = "{{ available.nbleft}}" ;
                   var ide = "{{ide}}" ;
-
                   if (p_available != "") 
-                    {  
-                      var nb_attempt = parseInt(p_available) ; 
-                    }
+                    { var nb_attempt = parseInt(p_available) ;}
                   else if ( available != "") 
-                    { 
-                      var nb_attempt = parseInt(available) ; 
-                    }
+                    {var nb_attempt = parseInt(available) ;}
                   else 
-                    {   
-                      var nb_attempt = 0 ; 
-                    }
-
+                    {var nb_attempt = 0 ;}
                   numexo = parseInt(numexo) ;
                   if (situation !=0) { score = grade/situation ;} else {score=-1;}
- 
                   if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
                     {   
                          window.socket.send(JSON.stringify(
                          {"command":"ExoDebut", "ide"  : ide     
                         }));
                     }
-  
                   if (applet.getValue("demarrer") && objName=="ok")
                    {
                     if (applet.getValue("ok")) {
@@ -498,7 +406,6 @@
                           }));
                         }
                     };
-
                   if ( applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ) 
                       {
                           // Modification du nombre de tentatives
@@ -511,86 +418,63 @@
                           // ========= AJAX ================
                           use_ajax( 1 , start_time, score, relation_id, "ok" , true )
                       }
-
-
                   if (  applet.getValue("demarrer") && numexo > situation && objName == "numexo"   ) 
                         {
                             use_ajax( numexo, start_time, score, relation_id, "ok" , false )
                         }
-
- 
-
                   if ( applet.getValue("fini")  ==  1 ) 
                       {
                           alert("Vous êtes en évaluation. L'exercice est fini. Passer à l'exercice suivant.") ;
                           applet.setValue("fini", 0) ; 
                       }
 
-
-
-
-                  function use_ajax( numexo, start_time, score, relation_id, is_ajax , init ){
-
-                        if (init) 
-                            { 
-                              dataset = {'numexo'     : numexo, 'start_time' : start_time , 'score': score,  'relation_id': relation_id,  'is_ajax'    : is_ajax, 'init'       : init } 
-                            }
-                        else 
-                            { 
-                              dataset = {'numexo'     : numexo, 'start_time' : start_time , 'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax   } 
-                            }
-
-                        $.ajax({
-                                  url: '../../store_the_score_relation_ajax/',
-                                  data: dataset ,
-                                  type: "POST",
-                                  dataType: "json",
-                                  success: function (data) {
-                                    
-                                          $('#is_storage').show();
-                                          $('#is_storage').html(data.html);
-
-                                          setTimeout(function(){ $('#is_storage').hide() }, 3000);
-
-                                          if (situation == data.numexo)
-                                            { 
-                                              $('#submit_button_evaluation').show(); }
-                                            }
-                              });
-
-                      }
-
-            }
-
-
-
-        function realtime(objName) {  
-
-                  var applet     =  ggbApplet; 
-                  var grade      = applet.getValue("grade");
-                  var numexo     = applet.getValue("numexo");
-                  var situation  = parseInt("{{ relation.situation }}") ; 
-                  var start_time = "{{ start_time}}" ;
-                  var relation_id= "{{ relation.id}}" ;
-                  var p_available= "{{ parcours_available.nbleft}}" ;
-                  var available  = "{{ available.nbleft}}" ;
-                  var ide = "{{ide}}" ;
-                  numexo = parseInt(numexo) ;
-
-                  if (situation !=0) { score = grade/situation ;} else {score=-1;}
- 
-                  if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
-                    {   
-                         window.socket.send(JSON.stringify(
-                         {"command":"ExoDebut", "ide"  : ide     
-                        }));
-                    }
-  
-                  if (applet.getValue("demarrer") && objName=="ok")
-                   {
-                    if (applet.getValue("ok")) {
-                          window.socket.send(JSON.stringify(
-                              {"command":"SituationFinie",
+          function use_ajax( numexo, start_time, score, relation_id, is_ajax , init ){
+            if (init) 
+              {dataset = {'numexo': numexo, 'start_time' : start_time ,
+			  'score': score,  'relation_id': relation_id,
+			  'is_ajax': is_ajax, 'init' : init } 
+                         }
+            else 
+              {dataset = {'numexo'     : numexo, 'start_time' : start_time ,
+			  'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax   }
+	      }
+           $.ajax({
+              url: '../../store_the_score_relation_ajax/',
+              data: dataset ,
+              type: "POST",
+              dataType: "json",
+              success: function (data) {
+                 $('#is_storage').show();
+                 $('#is_storage').html(data.html);
+                 setTimeout(function(){ $('#is_storage').hide() }, 3000);
+                if (situation == data.numexo)
+                { 
+                  $('#submit_button_evaluation').show(); }
+           }
+        });
+     }
+   }
+    function realtime(objName) {  
+        var applet     =  ggbApplet; 
+        var grade      = applet.getValue("grade");
+        var numexo     = applet.getValue("numexo");
+        var situation  = parseInt("{{ relation.situation }}") ; 
+        var start_time = "{{ start_time}}" ;
+        var relation_id= "{{ relation.id}}" ;
+        var p_available= "{{ parcours_available.nbleft}}" ;
+        var available  = "{{ available.nbleft}}" ;
+        var ide = "{{ide}}" ;
+        numexo = parseInt(numexo) ;
+        if (situation !=0) { score = grade/situation ;} else {score=-1;}
+          if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
+            {   
+             window.socket.send(JSON.stringify(
+                 {"command":"ExoDebut", "ide"  : ide}));}
+             if (applet.getValue("demarrer") && objName=="ok")
+                  {
+                   if (applet.getValue("ok")) {
+                       window.socket.send(JSON.stringify(
+                         {"command":"SituationFinie",
                               "resultat": applet.getValue("test"),
                               "ide"  : ide,
                               "grade" : grade,
@@ -601,16 +485,11 @@
                     };
             }
 
-
     </script>
     <div style="height:40px;clear: both"></div>
-
-
- 
      <div class="checkbox_no_display" id="draft" >
           <div class="col-sm-0 col-md-1 col-lg-1"></div>
           <div class="col-sm-12 col-md-11 col-lg-11">
-
                 <div style="left:800px;  position:absolute; z-index:1000;"><a href="#" id="close_draft"><i class="fa fa-times"></i></a></div>            
                 {% if sacado_asso  %}
                       <iframe scrolling="no" title="Brouillon" src="https://www.geogebra.org/material/iframe/id/dwdmv846/width/750/height/550/border/888888/sfsb/false/smb/false/stb/true/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="750px" height="550px" style="border:0px;"> </iframe>
@@ -618,11 +497,9 @@
                    <div class="alert alert-danger">Pour utiliser la fonctionnalité Brouillon, votre établissement doit posséder la version Etablissement</div> 
                 {% endif  %}
 
-
-          </div>
-
+         </div>
       </div>
- 
+
 <div class="modal fade" id="calculator" tabindex="-1" role="dialog" aria-labelledby="calculator">
     <div class="modal-dialog modal-maxsize" role="document">
         <div class="modal-content" >
@@ -646,18 +523,16 @@
         </div>
     </div> 
 </div>
- 
-
-
-                  
-
-
 
 </section>
 
-
 {% endblock  %}   
 
- 
+
 
  
+
+
+
+ 
+
