@@ -125,9 +125,11 @@ body{
                     {% endfor %}
 
          
-                    
-                        <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                        <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="bi bi-cloud-plus-fill btn-create-group" ></i> 
                             <div class="helper_tip_text" >Sélectionner des exercices.</div>
+                        </a>
+                        <a href="{% url 'parcours_create_custom_exercise' parcours.id 1 %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                            <div class="helper_tip_text" >Nouvel exercice personnalisé</div>
                         </a>
                
             </div>
