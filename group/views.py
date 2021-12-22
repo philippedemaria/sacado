@@ -4,7 +4,7 @@ from account.models import Student, Teacher, User, Resultknowledge, Resultlastsk
 from account.forms import UserForm
 from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
-from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker
 from group.forms import GroupForm , GroupTeacherForm
 from flashcard.models import Flashpack
 from sendmail.models import Email
@@ -155,6 +155,11 @@ def student_dashboard(request,group_id):
 
     today = time_zone_user(request.user)        
     timer = today.time()
+
+
+    trackers= Tracker.objects.filter( user = request.user)
+    for tracker in trackers:
+        tracker.delete()
 
     if int(group_id) > 0 :
 

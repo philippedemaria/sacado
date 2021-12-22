@@ -30,31 +30,38 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                printc("c'est un enseignant")
                printc("nom du channel prof :",self.channel_name)
                printc("Le prof a ouvert la page RT du parcours, c'est ",self.scope['user'])
+               self.connected_students=dict()
+               self.role=2
 
 
     async def disconnect(self, close_code):
-        printc(self.scope['user'], " se deconnecte")
-        # Leave room group
-        self.channel_layer.group_discard(self.ugroupe,self.channel_name)
-
+        printc(self.scope['user'], "se deconnecte")
+        if self.role==0  :  #c'est un eleve qui se deconnecte
+           await self.channel_layer.group_send("perso"+self.ugroupe,\
+              {'type':"deconnexion.eleve", 'user' : self.scope["user"]})
+           await self.channel_layer.group_discard(self.ugroupe,self.channel_name)
+        elif self.role==2 :
+           printc("c'est un prof, ",self.ugroupe)
+           await self.channel_layer.group_send(self.ugroupe,{'type':"deconnexion.prof", 'user':self.scope['user']})
+           await self.channel_layer.group_discard(self.ugroupe,self.channel_name)
     async def receive_json(self,content) :
         command=content.get("command",None)
         printc("commande recue :", command)
         if command=="teacher_join" :
-               self.connected_students=dict()
-               self.role=2
+               #self.connected_students=dict()
+               #self.role=2
                us=self.scope["user"].id 
                ugroupe="Salle"+str(content.get("parcours"))
                self.ugroupe=ugroupe
-               
                printc("nom du layer de tout le groupe : '{}'".format(ugroupe))
+               await self.channel_layer.group_add("perso"+ugroupe, self.channel_name)
                printc("on envoie l'info connexion du prof aux eleves connectés")
-               await self.channel_layer.group_send("ugroupe",{type:"connexion.prof"})
+               await self.channel_layer.group_send(ugroupe,{"type":"connexion.prof"})
                printc("fait")
                await self.channel_layer.group_add(ugroupe,self.channel_name)
                printc("ajout du groupe ok")
-               printc("creation du groupe de contenant que le prof")
-               await self.channel_layer.group_add("perso"+ugroupe, self.channel_name)
+               printc("creation du groupe ne contenant que le prof")
+
                await self.send_json({"type": "autojoin","salle": ugroupe})
                printc("renvoie de ok au prof : ok")
         if command=="student_join" :
@@ -87,6 +94,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({"type":"message","from":"moi","message":message})  
             printc("évènement student_message déclenché au groupe-singleton")
         if command=="ExoDebut" :
+           printc("commande exodebut recue de la part de ",self.scope['user'].id)
            await self.channel_layer.group_send("perso"+self.ugroupe,
 			    {'type' : "ExoDebut",
 			     'from' : self.scope['user'].id, #expéditeur id
@@ -172,9 +180,22 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
             printc("data=",data)
             printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
             if self.role==0 :
-                printc("destinataire : "+self.scope["user"].id)
-                await self.send_json({'type' : 'connexion_prof'})
-
+                printc("destinataire : ",self.scope["user"].id)
+                await self.send_json({'type' : 'connexionProf'})
+                #chaque eleve renvoie une connexion au prof
+                await self.channel_layer.group_send("perso"+self.ugroupe, 
+                {'type' : "connexion.eleve",
+                 'user' : self.scope["user"],
+                 'channel' : self.channel_name})
+     
+    async def deconnexion_prof(self,data):
+            printc("entree dans la fonction deconnexion prof")
+            printc("data=",data)
+            printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
+            if self.role==0 :
+                printc("destinataire : ",self.scope["user"].id)
+                await self.send_json({'type' : 'deconnexionProf', 'from' : data["user"].id})
+                printc("deconnexion prof ok")
     async def connexion_eleve(self,data):
             printc("entree dans la fonction connexion eleve")
             printc("data=",data)
@@ -186,3 +207,14 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 await self.send_json({'type' : 'connexion' , 'from' : data["user"].id })
 
 
+    async def deconnexion_eleve(self,data):
+            printc("entree dans la fonction deconnexion eleve")
+            printc("data=",data)
+            printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
+            if self.role==2 :
+                printc("destinataire : le prof")
+                if data['user'].id in self.connected_students :
+                    self.connected_students.pop(data['user'].id)
+                printc("connected_students : ", self.connected_students)
+                await self.send_json({'type' : 'deconnexion' , 'from' : data["user"].id })
+                printc("deconnexion eleve ok")

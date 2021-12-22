@@ -597,11 +597,17 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
 
 def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0) :
     """ trace l'utilisateur. Utile pour le real time """
-    pass
+    if track_untrack :
+        Tracker.objects.get_or_create( user = user , parcours_id = idp , exercise_id = ide , is_custom= custom)
+    else :
+        try :
+            tracker, created = Tracker.objects.get_or_create( user= user , parcours_id = idp , exercise_id = ide , is_custom= custom)
+            tracker.delete()
+        except :
+            pass
 
 
-
-
+ 
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -2556,7 +2562,7 @@ def show_parcours_student(request, id):
     today = time_zone_user(user)
     stage = get_stage(user)
 
-    #tracker_execute_exercise(True ,  user , id , None , 0)
+    tracker_execute_exercise(True ,  user , id , None , 0)
 
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
     nb_exercises = len(relationships_customexercises)

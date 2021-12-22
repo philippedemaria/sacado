@@ -168,20 +168,20 @@
             <div class="box_title_vignette"> 
      
                 <a href="{% url 'list_sub_parcours_group' group.id folder.id  %}" style="color:{{ folder.color|contrast_color }};">
-                    {% if folder.is_pending_folder_correction %}
-                    <i class="fa fa-cc text-warning" style="font-size:16px;color:{{ folder.color|contrast_color }}; " title="Copies à corriger" ></i> 
-                    {% endif %}
+
 
 
 
                         <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"25" }}
                             <div class="helper_tip_text_right">{{ folder.title }}</div></span>
      
-
+                    {% if folder.is_pending_folder_correction %}
+                    <i class="fa fa-cc text-warning" style="font-size:16px;color:{{ folder.color|contrast_color }}; " title="Copies à corriger" ></i> 
+                    {% endif %}
 
                     {% if folder.is_folder_real_time %}
-                        <sup class="white" title="En composition" style="font-size:12px" >
-                            <i class="fa fa-fw fa-clock"></i> 
+                        <sup class="white" title="En composition" style="font-size:14px" >
+                            <i class="bi bi-clock-history"></i> 
                         </sup>
                     {% endif %}
                 </a>

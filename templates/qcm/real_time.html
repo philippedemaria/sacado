@@ -69,30 +69,31 @@
                     {% endfor %}
                 </tr>
                 </thead>
-                <tbody>
-                    {% for student in  students %}
+      <tbody>
+      {% for student in  students %}
+           <tr class="init" id="tr_student_{{ student.user.id }}">
+              <td style="min-width:250px;" id="student_is_live_{{ student.user.id }}">{{ student |truncatechars:"30" }}     
+              </td>
+         {% for rc in rcs %}
+             {% if rc.exercise %}
+              <td style="text-align:center" id="rc_{{ rc.parcours.id }}_{{ rc.exercise.id }}_tr_student_{{ student.user.id }}">
+                 <canvas id="{{rc.exercise.id}}|{{student.user.id}}" width="80" height="12">
+		 </canvas>
+              </td>
+              {% else %}
+              <td style="text-align:center" id="rc_{{ parcours.id }}_{{ rc.id }}_tr_student_{{ student.user.id }}" class="init">
+                 <canvas id="{{rc.id}}|{{student.user.id}}" width="80" height="12">
+		 </canvas>
 
-                        <tr class="init" id="tr_student_{{ student.user.id }}">
-                            <td style="min-width:250px;" id="student_is_live_{{ student.user.id }}"  >
-                                {{ student |truncatechars:"30" }}     
-                            </td>
-                            {% for rc in rcs %}
-
-                                {% if rc.exercise %}
-                                <td style="text-align:center" id="rc_{{ rc.parcours.id }}_{{ rc.exercise.id }}_tr_student_{{ student.user.id }}">
-                                    <canvas id="{{rc.exercise.id}}|{{student.user.id}}" width="80" height="12"></canvas>
+              <span class="is_tr_display"><i class="fa fa-circle text-default fa-xs "></i></span>
+              <a href="{% url 'correction_exercise' rc.id parcours.id student.user.id  %}" class = "init_link no_visual_link" ><i class='fa fa-eye text-success'></i></a>
                                 </td>
-                                {% else %}
-                                <td style="text-align:center" id="rc_{{ parcours.id }}_{{ rc.id }}_tr_student_{{ student.user.id }}" class="init">
-                                    <span class="is_tr_display"><i class="fa fa-circle text-default fa-xs "></i></span>
-                                    <a href="{% url 'correction_exercise' rc.id parcours.id student.user.id  %}" class = "init_link no_visual_link" ><i class='fa fa-eye text-success'></i></a>
-                                </td>
-                                {% endif  %}
-                            {% endfor %}   
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+               {% endif  %}
+          {% endfor %}   
+        </tr>
+      {% endfor %}
+     </tbody>
+   </table>
         </div>
     </div> 
 

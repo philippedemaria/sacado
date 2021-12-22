@@ -800,10 +800,6 @@ class Parcours(ModelWithCode):
         return submit
 
 
-
- 
-
-
     def is_real_time(self):
         test = False
         if self.tracker.count() > 0 :

@@ -14,7 +14,6 @@
  
 {% endblock %}
 
-
 {% block require %}
   <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>  
   <script>
@@ -147,14 +146,9 @@
       <form action="{% url 'store_the_score_relation_ajax'  %}" method="POST" enctype='multipart/form-data'>   
         {% csrf_token %}  
 
-
           <div class='justify-content-center'  style="position:relative">
               {% if parcours.is_evaluation %}
-
-
-                  {% if parcours_available.is_ok   %}
-
-
+                 {% if parcours_available.is_ok   %}
                       {% if available.is_ok %} 
                           <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
                               <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
@@ -191,11 +185,6 @@
                   {% endif   %}
 
               {% endif %}
-
- 
- 
-
-
 
 
               <div class='justify-content-center' >
@@ -270,11 +259,6 @@
           </div>
             
       </form>
-
-{% comment %}
-<input type="text" id="champ1" value="message">
-<button formaction="#" onclick="PostMessage()">envoyer un message</button>
-{% endcomment %}
 
     </div> 
     <div class="col-sm-2 col-md-1 col-lg-1">
@@ -418,7 +402,6 @@
             "parcours":"{{ relation.parcours.id }}",
             "exo":"{{ relation.id }}",
             "user":"{{user.id}}"}));
-            //console.log("commande student join envoyée");
             };        
            // Handle incoming messages
      socket.onmessage = function (message) {
@@ -429,9 +412,23 @@
    if (data.type=='message'){
        console.log("message recu : ", data.message);
      var t=document.getElementById("chat");
-           t.innerHTML = t.innerHTML + "<div class='this_chat_block'>@ "+data.from+"<br/>"+ data.message+"</div>";
-       } 
-     }  
+           t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+data.from+"<br/>"+ data.message+"</div>";
+   }; 
+     
+      if (data.type=='connexionProf'){
+	  console.log("connexion prof");
+	  $('#peda_set_live').removeClass("pull-right btn btn-default");
+ 	  $('#peda_set_live').addClass("pull-right btn btn-danger");
+	  $('#form_peda_set_live').removeClass("hidden");
+	  
+      };
+      if (data.type=="deconnexionProf")
+	 {console.log("deconnexion prof");
+	$('#peda_set_live').removeClass("pull-right btn btn-danger");  
+	  $('#peda_set_live').addClass("pull-right btn btn-default");
+	  $('#form_peda_set_live').addClass("hidden");
+      };
+     }
    function PostMessage(text){
    console.log("entree dans PostMessage"); 
    window.socket.send(JSON.stringify(
@@ -447,9 +444,12 @@
     PostMessage(chat.value);
     chat.value="";}
      );
-  
-
-              //----------------------------------------------------
+      window.onbeforeunload=function(){
+	  console.log("deconnexion");
+	  window.socket.close();
+      };
+      
+          //----------------------------------------------------
           //----------------------------------------------------
           //              fin de socket pour channel
           //----------------------------------------------------
@@ -474,7 +474,7 @@
                   numexo = parseInt(numexo) ;
                   if (situation !=0) { score = grade/situation ;} else {score=-1;}
                   if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
-                    {   
+                       { console.log("debut exo");
                          window.socket.send(JSON.stringify(
                          {"command":"ExoDebut", "ide"  : ide     
                         }));
@@ -482,7 +482,8 @@
                   if (applet.getValue("demarrer") && objName=="ok")
                    {
                     if (applet.getValue("ok")) {
-                          window.socket.send(JSON.stringify(
+                        console.log("situationFinie");
+                        window.socket.send(JSON.stringify(
                               {"command":"SituationFinie",
                               "resultat": applet.getValue("test"),
                               "ide"  : ide,
@@ -553,13 +554,15 @@
         numexo = parseInt(numexo) ;
         if (situation !=0) { score = grade/situation ;} else {score=-1;}
           if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
-            {   
+            {   console.log("exodebut_realtime");
              window.socket.send(JSON.stringify(
-                 {"command":"ExoDebut", "ide"  : ide}));}
+                 {
+		  "command":"ExoDebut", "ide"  : ide}));}
              if (applet.getValue("demarrer") && objName=="ok")
                   {
                    if (applet.getValue("ok")) {
-                       window.socket.send(JSON.stringify(
+		       console.log("SituationFinieRT");
+		       window.socket.send(JSON.stringify(
                          {"command":"SituationFinie",
                               "resultat": applet.getValue("test"),
                               "ide"  : ide,
@@ -573,25 +576,17 @@
 
     </script>
     <div style="height:40px;clear: both"></div>
-
-
- 
      <div class="checkbox_no_display" id="draft" >
           <div class="col-sm-0 col-md-1 col-lg-1"></div>
           <div class="col-sm-12 col-md-11 col-lg-11">
-
                 <div style="left:800px;  position:absolute; z-index:1000;"><a href="#" id="close_draft"><i class="fa fa-times"></i></a></div>            
                 {% if sacado_asso  %}
                       <iframe scrolling="no" title="Brouillon" src="https://www.geogebra.org/material/iframe/id/dwdmv846/width/750/height/550/border/888888/sfsb/false/smb/false/stb/true/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="750px" height="550px" style="border:0px;"> </iframe>
                 {% else  %}
-                   <div class="alert alert-danger">Pour utiliser la fonctionnalité Brouillon, votre établissement doit posséder la version Etablissement</div> 
+                   <div class="alert alert-danger">Pour utiliser la fonctionnalité Brouillon, votre établissement doit posséder la version Établissement</div> 
                 {% endif  %}
-
-
           </div>
-
       </div>
- 
 <div class="modal fade" id="calculator" tabindex="-1" role="dialog" aria-labelledby="calculator">
     <div class="modal-dialog modal-maxsize" role="document">
         <div class="modal-content" >
@@ -615,13 +610,6 @@
         </div>
     </div> 
 </div>
- 
-
-
-                  
-
-
-
 </section>
 
 
