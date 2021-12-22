@@ -1,12 +1,12 @@
 <div class="row">
-    <div class="col-lg-12 col-xs-12"> 
+    <div class="col-lg-12 col-md-12 col-xs-12"> 
       <div class="form-group"> 
-          <a href="#" id='error_set' class="pull-right btn btn-warning" >Signaler <span class="label_plus"> une erreur sur cet exercice</span> ? </a>
+          <a href="#" id='error_set' class="pull-right btn btn-sacado min_width" >Signaler <span class="label_plus"> une erreur sur cet exercice</span> ? </a>
       </div>
    </div>                     
 </div> 
 <div class="row">
-    <div class="col-lg-12 col-xs-12"> 
+    <div class="col-lg-12 col-md-12 col-xs-12"> 
       <div class="form-group no_visu_on_load" id='form_error_set'> 
           <form action="{% url 'exercise_error'  %}" method="POST">    {% csrf_token %}
               <div class="form-group">
@@ -15,16 +15,16 @@
               <input type="hidden" name="exercise_id" value="{{ exercise.id }}">
               <input type="hidden" name="parcours_id" value="{{ parcours.id }}">
               <div class="row">
-                  <div class="col-lg-12 col-xs-12">   
+                  <div class="col-lg-12 col-md-12 col-xs-12">   
                       <div class="form-group">
                           <button type="submit" class="pull-right btn btn-primary">Envoyer</a>
                       </div>
                   </div>
-                  <div class="col-lg-12 col-xs-12">   
+                  <div class="col-lg-12 col-md-12 col-xs-12">   
                       <div id="loader">
                       </div>
                   </div>
-                  <div class="col-lg-12 col-xs-12">   
+                  <div class="col-lg-12 col-md-12 col-xs-12">   
                       <div class="verif_sender">
                       </div>
                   </div>  

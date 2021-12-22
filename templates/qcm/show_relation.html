@@ -272,7 +272,7 @@
           {% endfor  %} 
       {% endif  %}
     </div>
-    <div class="col-sm-12 col-md-2 col-lg-2">
+    <div class="col-sm-12 col-md-12 col-lg-2">
         {% if not relation.parcours.is_evaluation %}
         {% if relation.relationships_courses.all|length > 0 %}      
           <h4 style="color:{{ relation.parcours.color }}">Le cours </h4>

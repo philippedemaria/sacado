@@ -2734,7 +2734,7 @@ text-align: right;
 
 }
 
- @media (max-width:1000px){
+@media (max-width:1000px){
 
     .help{
       width: 100%;
@@ -2816,6 +2816,10 @@ text-align: right;
       color:#c2a829;
     }
 
+    .min_width{
+      min-width: 100px;
+    }
+
     .label_plus{
       display: none;
       transition: all 2s linear;  
@@ -2829,6 +2833,12 @@ text-align: right;
       display: inline;
     }
 
+    .btn-sacado:hover > .label_plus{
+      display: inline;
+    }
+    .btn-danger:hover > .label_plus{
+      display: inline;
+    }
     .btn-subsacado:hover > .label_plus{
       display: inline;
     }
@@ -7432,6 +7442,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   border: 1px solid #998fa6!important;
   margin-right: 5px;
 }
+
 .btn-new-violet:hover, .btn-new-violet:hover > a , 
 .btn-new-violet:active, .btn-new-violet:active > a ,
 .btn-new-violet.hover,  .btn-new-violet.hover > a   {
@@ -7441,8 +7452,19 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 
+.btn-sacado {
+  color : #5d4391!important;
+  border-radius: 5px; /*radius des boutons*/
+  border: 1px solid #5d4391!important;
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+}
 
-
+.btn-sacado:hover,
+.btn-sacado:active,
+.btn-sacado.hover {
+  background-color: #5d4391!important;/*   #dd4b39!important;*/
+  color: #f1eef7!important;
+}
 
 
 

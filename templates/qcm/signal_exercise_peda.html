@@ -1,12 +1,12 @@
 <div class="row">
-    <div class="col-lg-12 col-xs-12"> 
+    <div class="col-lg-12 col-md-12 col-xs-12"> 
       <div class="form-group"> 
-          <a href="#" id='peda_set' class="pull-right btn btn-primary" >En parler <span class="label_plus"> avec mon professeur</span> ? </a>
+          <a href="#" id='peda_set' class="pull-right btn btn-sacado min_width" >En parler <span class="label_plus"> avec mon professeur</span> ? </a>
       </div>
    </div>                     
 </div> 
 <div class="row">
-    <div class="col-lg-12 col-xs-12"> 
+    <div class="col-lg-12 col-md-12 col-xs-12"> 
       <div class="form-group no_visu_on_load" id='form_peda_set'> 
           <form action="{% url 'exercise_peda'  %}" method="POST">    {% csrf_token %}
               <div class="form-group">
@@ -15,16 +15,16 @@
               <input type="hidden" name="exercise_id" value="{{ exercise.id }}"  >
               <input type="hidden" name="parcours_id" value="{{ parcours.id }}"  >
               <div class="row">
-                  <div class="col-lg-12 col-xs-12">   
+                  <div class="col-lg-12 col-md-12 col-xs-12">   
                       <div class="form-group">
                           <button type="submit" class="pull-right btn btn-primary">Envoyer</a>
                       </div>
                   </div>
-                  <div class="col-lg-12 col-xs-12">   
+                  <div class="col-lg-12 col-md-12 col-xs-12">   
                       <div id="loader_peda">
                       </div>
                   </div>
-                  <div class="col-lg-12 col-xs-12">   
+                  <div class="col-lg-12 col-md-12 col-xs-12">   
                       <div class="verif_sender_peda">
                       </div>
                   </div>  
