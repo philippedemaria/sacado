@@ -15,6 +15,9 @@ requirejs.config({
         ckeditor: "../ckeditor/ckeditor/ckeditor",
         toggle: ["lib/bootstrap-toggle.min"],
         
+        ckeditor_init: "../ckeditor/ckeditor-init",
+        ckeditor_jquery: "../ckeditor/ckeditor/adapters/jquery", 
+
         colorpicker: "lib/bootstrap-colorpicker.min",
         bcPicker: "lib/bcPicker", 
 

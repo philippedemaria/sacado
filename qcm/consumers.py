@@ -3,7 +3,8 @@ from channels.generic.websocket import WebsocketConsumer , AsyncJsonWebsocketCon
 import json
 from channels.db import database_sync_to_async
 
-printc=print
+def printc(*a) :
+    pass
 
 class TableauConsumer(AsyncJsonWebsocketConsumer):
 
@@ -38,7 +39,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
         printc(self.scope['user'], "se deconnecte")
         if self.role==0  :  #c'est un eleve qui se deconnecte
            await self.channel_layer.group_send("perso"+self.ugroupe,\
-              {'type':"deconnexion.eleve", 'user' : self.scope["user"]})
+            {'type':"deconnexion.eleve", 'user' : self.scope["user"]})
            await self.channel_layer.group_discard(self.ugroupe,self.channel_name)
         elif self.role==2 :
            printc("c'est un prof, ",self.ugroupe)
@@ -67,19 +68,21 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
         if command=="student_join" :
             printc("l'élève a ouvert un exo")
             printc("parcours : ", content.get("parcours"))
-            printc("exo",content.get("exo",None))
+            printc("id exo : ",content.get("ide",None))
             us=self.scope["user"].id
             self.role=0 
             printc("id de l'élève :",us) 
             ugroupe="Salle"+str(content.get("parcours"))
             self.ugroupe=ugroupe
+            self.ide=content.get("ide",None)
             printc("champ user recu ",content.get("user"))
             printc("il est ajouté au layer de tout le groupe, qui se nomme '{}'".format(ugroupe))
             await self.channel_layer.group_add(ugroupe,self.channel_name)
             await self.channel_layer.group_send("perso"+ugroupe, 
                 {'type' : "connexion.eleve",
                  'user' : self.scope["user"],
-                 'channel' : self.channel_name})
+                 'channel' : self.channel_name,
+                  'ide' : self.ide })
             printc("envoi ok")
         if command=="student_message"  :
             message=content.get("message",None)
@@ -180,13 +183,14 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
             printc("data=",data)
             printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
             if self.role==0 :
-                printc("destinataire : ",self.scope["user"].id)
+                printc("destinataire : ",self.scope["user"].id, "exo :", self.ide)
                 await self.send_json({'type' : 'connexionProf'})
                 #chaque eleve renvoie une connexion au prof
                 await self.channel_layer.group_send("perso"+self.ugroupe, 
                 {'type' : "connexion.eleve",
                  'user' : self.scope["user"],
-                 'channel' : self.channel_name})
+                 'channel' : self.channel_name,
+                 'ide':self.ide})
      
     async def deconnexion_prof(self,data):
             printc("entree dans la fonction deconnexion prof")
@@ -204,7 +208,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 printc("destinataire : le prof")
                 self.connected_students[data['user'].id]=(data['channel'],data['user'])
                 printc("connected_students : ", self.connected_students)
-                await self.send_json({'type' : 'connexion' , 'from' : data["user"].id })
+                await self.send_json({'type' : 'connexion' , 'from' : data["user"].id, 'ide':data['ide'] })
 
 
     async def deconnexion_eleve(self,data):
@@ -216,5 +220,5 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 if data['user'].id in self.connected_students :
                     self.connected_students.pop(data['user'].id)
                 printc("connected_students : ", self.connected_students)
-                await self.send_json({'type' : 'deconnexion' , 'from' : data["user"].id })
+                await self.send_json({'type' : 'deconnexion' , 'from' : data["user"].id})
                 printc("deconnexion eleve ok")

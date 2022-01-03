@@ -1,9 +1,6 @@
 define(['jquery',  'bootstrap' ], function ($) {
     $(document).ready(function () {
- 
-        console.log(" ajax-real-time-parcours charg!é! "); 
- 
-
+        console.log(" ajax-real-time-parcours chargé.. "); 
         $(".imagefile").on('mouseover', function (event) {
                  $(this).parent().find(".th_real_time_label").addClass("th_real_time_label_hover") ;
                  })
@@ -11,34 +8,21 @@ define(['jquery',  'bootstrap' ], function ($) {
         $(".imagefile").on('mouseout', function (event) {
                  $(this).parent().find(".th_real_time_label").removeClass("th_real_time_label_hover") ;
                  })
-
- 
         let parcours_id = $("#parcours_id").val();
-
-
         $("body").on('change', ".this_student_rt", function (event) {
-
             from_id = $(this).data("from_id") ; 
             PostMessage(from_id) ;
         })
 
-
-
-
         $("#real_time_div").on('mouseover',   function (event) {
             $(this).animate({height: "100%", }, 750 ) ;
         })
-
-
         $("#this_chat_box").on('mouseover',   function (event) {
             $("#real_time_div").animate({height: "100%", }, 750 ) ;
         })
-
         $("#real_time_div").on('mouseleave',   function (event) {
             $(this).animate({height: "40px", }, 650 ) ;
         })
-
-
 
         function PostMessage(id){  //id = destinataire du message
             socket.send(JSON.stringify(
@@ -48,15 +32,11 @@ define(['jquery',  'bootstrap' ], function ($) {
                  document.getElementById("champ"+id).value = ""; 
             };
 
-
-
         $("body").on('change', "#entreechat", function (event) {
-
             socket.send(JSON.stringify(
                 {"command":"teacher_message_general",
                  "message": $("#entreechat").val() }));
                  document.getElementById("entreechat").value = "";          
-             
         }) ;
 
 
@@ -70,7 +50,6 @@ define(['jquery',  'bootstrap' ], function ($) {
           }
           
         function barrePrecis(canvas,a,ok,t){  //affichage d'un seul rectangle
-                                     
             var largeur=80;
             var hauteur=12;
             //console.log("situation terminee "+ok+","+a+","+t);
@@ -100,25 +79,20 @@ define(['jquery',  'bootstrap' ], function ($) {
               "students":"{% for student in  students %}{{student.user.id}}|{% endfor %}"}));
           };
 
-
                     // Handle incoming messages
           socket.onmessage = function (message) {
                  // Decode the JSON
                  var data = JSON.parse(message.data);
                  // Handle errors
-                 if (data.error) {
-                   return;
-                   }
-
-
+                 if (data.error) {return;}
                  if (data.type=="autojoin")
                  // connexion du prof
                   {
-                      console.log("connexion du prof ok; groupe="+data.salle);
+                      console.log("connexion du prof ok");
                   }
                  else if (data.type=="connexion")
-                  { //console.log("connexion d'un eleve");
-                   ligne=document.getElementById("tr_student_"+data.from)
+              {   console.log("connexion de l'eleve ",data.from," sur l'exo :", data.ide);
+                      ligne=document.getElementById("tr_student_"+data.from);
                    $("#tr_student_"+data.from).find("td:first").addClass("live");
                    if (ligne.childNodes[1].innerHTML.search("<p><input")==-1)
                         {ligne.childNodes[1].innerHTML=ligne.childNodes[1].innerHTML+
@@ -126,38 +100,43 @@ define(['jquery',  'bootstrap' ], function ($) {
                    "<p><input type=\"text\" id='champ"+data.from+"' data-from_id="+data.from+
                    " placeholder='message privé' required class='this_student_rt no_visu_on_load' /></p>";
                        }
-                   //ligne[1].innerHTML=data.message;
+                  var canvas=document.getElementById(data.ide+"|"+data.from);
+		      barreVierge(canvas);
                   }
+	          else if (data.type=="deconnexion")
+	           {ligne=document.getElementById("tr_student_"+data.from);
+	            $("#tr_student_"+data.from).find("td:first").removeClass("live");
+                    a=ligne.childNodes[1].innerHTML.split("<i class");
+	            ligne.childNodes[1].innerHTML=a[0];
+		   }
+
                   else if (data.type=="message") {
                     console.log(data.from+" a envoyé un message");
                     var t=document.getElementById("chat");             
-                    t.innerHTML = t.innerHTML + "<div class='this_chat_block'>@"+ data.name+"<br/>"+ data.message+"</div>";
+                    t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+ data.name+"<br/>"+ data.message+"</div>";
                             
-                    }// Deconnexion  
+                  }
 
-                  else if (data.type=="déconnexion") {
-                       //console.log(data.from+" s'est déconnecté");
-                    ligne=document.getElementById("tr_student_"+data.from);
-                    //console.log("type table : "+ligne.nodeName);
-                    ligne.childNodes[1].innerHTML=data.name;
-                      }
                   else if (data.type=="ExoDebut") {
-                        //console.log(data.from+" a initié l'exo " +data.ide);
-                        var canvas=document.getElementById(data.ide+"|"+data.from);
-                        barreVierge(canvas);
+                      console.log(data.from+" a initié l'exo " +data.ide);
+                      var canvas=document.getElementById(data.ide+"|"+data.from);
+	              barreVierge(canvas);
                       }
                   else if (data.type=="SituationFinie"){
                       //console.log(data.from+" a termine une situation" +data.numexo);
                       var canvas=document.getElementById(data.ide+"|"+data.from)
                       barrePrecis(canvas,data.numexo,data.resultat,data.situation);
                     }
-              }
-
-
+          }
+	//   fermeture du socket en cas de changement de page
+	window.onbeforeunload=function(){
+	    console.log("fermeture socket");
+	    socket.close();
+	};
         // Helpful debugging
-
-            socket.onclose = function () {
-                        console.log("Disconnected from chat socket");
+	 
+         socket.onclose = function () {
+         console.log("Disconnected from chat socket");
                     };
  
 

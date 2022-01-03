@@ -396,11 +396,12 @@
      var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
      var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
      window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
-     socket.onopen = function () {
+      socket.onopen = function () {
+	  console.log("exo:{{ exercise.id }}");
         socket.send(JSON.stringify({
             "command":"student_join", 
             "parcours":"{{ relation.parcours.id }}",
-            "exo":"{{ relation.id }}",
+            "ide":"{{ exercise.id }}",
             "user":"{{user.id}}"}));
             };        
            // Handle incoming messages
@@ -476,7 +477,7 @@
                   if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
                        { console.log("debut exo");
                          window.socket.send(JSON.stringify(
-                         {"command":"ExoDebut", "ide"  : ide     
+                             {"command":"ExoDebut", "ide"  : {{ exercise.id }}     
                         }));
                     }
                   if (applet.getValue("demarrer") && objName=="ok")
@@ -486,7 +487,7 @@
                         window.socket.send(JSON.stringify(
                               {"command":"SituationFinie",
                               "resultat": applet.getValue("test"),
-                              "ide"  : ide,
+                               "ide"  : {{ exercise.id }},
                               "grade" : grade,
                               "situation" : situation,
                               "numexo" : numexo-1
@@ -554,10 +555,10 @@
         numexo = parseInt(numexo) ;
         if (situation !=0) { score = grade/situation ;} else {score=-1;}
           if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
-            {   console.log("exodebut_realtime");
+        {   console.log("exodebut_realtime ", {{ exercise.id }});
              window.socket.send(JSON.stringify(
                  {
-		  "command":"ExoDebut", "ide"  : ide}));}
+		     "command":"ExoDebut", "ide"  : {{ exercise.id }} }));}
              if (applet.getValue("demarrer") && objName=="ok")
                   {
                    if (applet.getValue("ok")) {
@@ -565,7 +566,7 @@
 		       window.socket.send(JSON.stringify(
                          {"command":"SituationFinie",
                               "resultat": applet.getValue("test"),
-                              "ide"  : ide,
+                              "ide"  : {{ exercise.id }},
                               "grade" : grade,
                               "situation" : situation,
                               "numexo" : numexo-1

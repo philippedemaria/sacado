@@ -55,12 +55,6 @@ requirejs.config({
         "slimscroll": {
             deps: ['jquery']
         },
-        "ckeditor_jquery": {
-            deps: ['jquery', 'ckeditor']
-        },
-        "ckeditor_init": {
-            deps: ['jquery', 'ckeditor']
-        },
         "admin": {
             deps: ['jquery']
         },
