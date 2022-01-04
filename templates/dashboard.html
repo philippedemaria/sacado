@@ -772,7 +772,7 @@
    require(['script/ajax-dashboard']);
 </script>  
  
-{%  if user.is_student and student_index %}
+{%  if request.user.is_student and student_index %}
 <script>
    require(['script/ajax-dashboard_student']);
 </script>  
