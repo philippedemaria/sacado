@@ -15,11 +15,6 @@ define(['jquery',  'bootstrap' ], function ($) {
         })
 
  
-        $("#this_chat_box").on('mouseover',   function (event) {
-            $("#real_time_div").animate({height: "100%", }, 750 ) ;
-        })
-
-
 
 
         var is_open = 0 ;
