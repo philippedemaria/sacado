@@ -14,15 +14,24 @@ define(['jquery',  'bootstrap' ], function ($) {
             PostMessage(from_id) ;
         })
 
-        $("#real_time_div").on('mouseover',   function (event) {
-            $(this).animate({height: "100%", }, 750 ) ;
-        })
+ 
         $("#this_chat_box").on('mouseover',   function (event) {
             $("#real_time_div").animate({height: "100%", }, 750 ) ;
         })
-        $("#real_time_div").on('mouseleave',   function (event) {
-            $(this).animate({height: "40px", }, 650 ) ;
+
+
+
+
+        var is_open = 0 ;
+        $("#this_chat_box").on('click',   function (event) {
+            if (is_open%2==0)
+              { $("#real_time_div").animate({height: "100%", }, 750 ) ;}
+            else
+              { $("#real_time_div").animate({height: "40px", }, 650 ) ;}
+            is_open++;
         })
+
+
 
         function PostMessage(id){  //id = destinataire du message
             socket.send(JSON.stringify(
