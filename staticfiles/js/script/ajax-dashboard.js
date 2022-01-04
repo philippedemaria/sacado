@@ -105,9 +105,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-        //$('#show_help_from_tdb').on('click', function (event) {
-        //    $("#help_from_tdb").toggle(300) ;
-        //});
+        $('#show_help_from_tdb').on('click', function (event) {
+            $("#help_from_tdb").toggle(300) ;
+        });
 
 
 
