@@ -529,7 +529,7 @@
                       Consigne {% if rc.text_cor or  rc.video_cor or  rc.file_cor %}+ correction 
                                   <small><i class="fa fa-{% if rc.is_publish_cor %}eye{% else %}eye-slash{% endif %}"></i></small>
                                {% endif %}
-                <div class="helper_tip_text_right">{{rc.instruction|insert_tags:45|safe}} </div> 
+                <div class="helper_tip_text_right">{{rc.instruction|truncatechars_html:45}} </div> 
               </span>
           </div>
 
