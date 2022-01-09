@@ -103,20 +103,33 @@ Intro Section -
                 </div>
 
                 <div class="row" style="margin-top:0px">
- 
                     <img src="{% static 'img/real_time.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/>  Suivis en<br/>   temps réel 
-                    <img src="{% static 'img/python_logo.png' %}" height="50px" width="50px" style="margin-left: 15px; margin-right: 10px; vertical-align: baseline"/>  Interface <br/> Python  
+                    <a href="#" data-toggle='modal' data-target='#rt_modal'>                          
+                          <i class="fa fa-question-circle"></i>
+                    </a> 
+
+                          <img src="{% static 'img/python_logo.png' %}" height="50px" width="50px" style="margin-left: 15px; margin-right: 10px; vertical-align: baseline"/>  Interface <br/> Python
+                    <a href="#" data-toggle='modal' data-target='#python_modal'>                          
+                            <i class="fa fa-question-circle"></i>
+                    </a> 
                     <img src="{% static 'img/pronote.png' %}" height="50px" width="50px" style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/> Export CSV <br/>des résultats  
 
                 </div>
                 <div class="row" style="margin-top:30px">
  
                     <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#1bc074">Tout proche. </span>
-                    <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
-                    <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
 
-                    <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  
-                    <a href="#" data-toggle='modal'   data-target='#flashpack_modal'  style="color:#333">Flashcards <i class="fa fa-question-circle"></i></a> 
+
+
+                    <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
+                    
+                    <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
+                  <a href="#" data-toggle='modal'   data-target='#bibliotex_modal' >
+                    <i class="fa fa-question-circle"></i>
+                  </a> 
+                  <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  
+                    Flashpacks <br/>et flashcards  <a href="#" data-toggle='modal'   data-target='#flashpack_modal'  ><i class="fa fa-question-circle"></i>
+                  </a> 
                 </div>
             </div>
             <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
@@ -726,7 +739,7 @@ Intro Section -
     </div> 
 </div>
 <div class="modal fade" id="helpus" tabindex="-1" role="dialog" aria-labelledby="helpus">
-    <div class="modal-dialog modal-maxsize" role="document">
+    <div class="modal-dialog modal-maxsize" role="document" >
         <div class="modal-content" >
             <div class="modal-header">
                 <h2  class='sacado'  >Aider <span class="sacado">SACADO</span></h2>              
@@ -742,13 +755,67 @@ Intro Section -
     </div> 
 </div>
  
-<div class="modal fade" id="flashpack_modal" tabindex="-1" role="dialog" aria-labelledby="flashpack_modal">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="rt_modal" tabindex="-1" role="dialog" aria-labelledby="rt_modal">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
         <div class="modal-content" >
-              <div class="alert">
+            <div class="modal-header">
+                <h2  class='sacado'  >Temps réel</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+                <p>Sacado intègre une interface de temps réel, pour la version Etablissement.</p>
+                <p>Lorsque vous proposez un parcours à vos élèves, vous avez un aperçu sur les exercices qui sont en train d'être effectués, avec les bonnes réponses et les mauvaises réponse en temps réel. Sur la vue de temps réel, les exercices réussis apparaissent en vert et en rouge les exerices ratés de la série en cours. 
+                </p>
+                <p>Un chat privé, pour discuter avec un élève en particulier, ou un chat général pour envoyer un message à toute la classe est actif pour un suivi personnalisé durant les séances de travail.</p>
+
+                <img src="{% static 'img/rt_template.jpg' %}" width="600px" />
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+<div class="modal fade" id="python_modal" tabindex="-1" role="dialog" aria-labelledby="python_modal">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >interface Python</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+              <div class="modal-body">
+
+                  <p>Sacado intègre une interface Python. </p>
+                  <p>Pour une utilisation en classe, sacado propose de nombreux outils vidéo-projetables parmi lesquels Sacado dispose d'une interface Python avec une partie pour écrire le code et la console. </p>
+                  <img src="{% static 'img/py_template.jpg' %}" width="700px" style="margin: 20px" />
+                  <p>Lors de la création d'exercices personnalisés en version Etablissement, Sacado donnne accès à cette interface Python. Lors d'évaluation ou d'exercices, les productions élèves sont récupérées pour une correction en ligne avec une interface ergonomique et efficace.</p>
+                  <img src="{% static 'img/py_template_cor.jpg' %}" width="700px" style="margin: 20px"  />
+              </div> 
+        </div>
+    </div> 
+</div>
+
+
+<div class="modal fade" id="flashpack_modal" tabindex="-1" role="dialog" aria-labelledby="flashpack_modal">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Flashpack et flashcards</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+              <div class="modal-body">
 
                   <p>Un flashpack est un ensemble de flashcards (ou cartes mémoire). </p>
-                  <p>Depuis plusieurs décennies, les neuros scientifiques, pédagogues, psychologues, informaticiens cherchent à déterminer une méthode efficace pour apprendre. Stanislas Dehaene batit une thèse sur ses <a href="http://parisinnovationreview.com/article/les-quatre-piliers-de-lapprentissage-stanislas-dehaene" target="_blank">4 piliers de l'apprentissage</a> :
+                  <p>Depuis plusieurs décennies, les neuroscientifiques, pédagogues, psychologues, informaticiens cherchent à déterminer une méthode efficace pour apprendre. Stanislas Dehaene bâtit une thèse sur ses <a href="http://parisinnovationreview.com/article/les-quatre-piliers-de-lapprentissage-stanislas-dehaene" target="_blank">4 piliers de l'apprentissage</a> :
                   <ol>
                       <li>L'attention</li>
                       <li>L'engagement actif</li>
@@ -756,17 +823,43 @@ Intro Section -
                       <li>La consolidation</li>
                   </ol> 
                   </p>
-                  <p>De son coté, <a href="https://supermemo.guru/wiki/Piotr_Wozniak" target="_blank">Piotr Wozniak</a> code dès 1985 un algorithme d'apprentissage par répétitions espacées, le <a href="https://www.supermemo.com/en/articles/history" target="_blank">SUPERMEMO</a>. Aujourd'hui cette base algorithmique est lagement utilisée, amendée, recalculée et de nombreuses applications utilisent ce procédé.</p>
-                  <p>SACADO se lance dans les répétitions espacées selon un algorihtme simplifié de SUPERMEMO. Chaque enseigant peut alors choisir l'algorithme sur une période donnée. Il crée ses flashpacks à partir de flashcards existantes ou crée ses propres flashcards ou demandent à ses élèves de construire leurs cartes mémoires.  
+                  <p>De son coté, <a href="https://supermemo.guru/wiki/Piotr_Wozniak" target="_blank">Piotr Wozniak</a> code dès 1985 un algorithme d'apprentissage par répétitions espacées, le <a href="https://www.supermemo.com/en/articles/history" target="_blank">SUPERMEMO</a>. Aujourd'hui cette base algorithmique est largement utilisée, amendée, recalculée et de nombreuses applications utilisent ce procédé.</p>
+                  <p>SACADO se lance dans les répétitions espacées selon un algorithme simplifié de SUPERMEMO. Chaque enseignant peut alors choisir l'algorithme sur une période donnée. Il crée ses flashpacks à partir de flashcards existantes ou crée ses propres flashcards ou demandent à ses élèves de construire leurs cartes mémoires.  
   
                     <ol>Deux modes d'utilisation des flashpacks : 
                         <li>Répétitions espacées : SACADO prévient l'élève des dates de répétitions dès que l'élève se connecte à son espace.</li>
                         <li>Autonomie :  L'élève s'entraine à souhait sur son flashpack et à date échéance, son score est enregistré.</li>
                     </ol> 
                   </p>
-                  <p>Convaincue de l'étude des neuro-sciences, l'équipe SACADO place les flashpacks dans son application pour permettre à chaque élève de s'engager dans son apprentissage encore un peu plus efficacement.</p>
+                  <p>Convaincue de l'étude des neurosciences, l'équipe SACADO place les flashpacks dans son application pour permettre à chaque élève de s'engager dans son apprentissage encore un peu plus efficacement.</p>
+                  <img src="{% static 'img/flashpack_template.jpg' %}" width="700px" />
               </div> 
         </div>
     </div> 
 </div>
+
+
+
+<div class="modal fade" id="bibliotex_modal" tabindex="-1" role="dialog" aria-labelledby="bibliotex_modal">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >BiblioTex</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+              <div class="modal-body">
+
+                  <p>Une biblioTex est un ensemble d'exercices en <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/>. </p>
+                  <p>Vous choisissez vos exerices toujours avec le même principe cher à SACADO. Aucun exercice n'est construit au hasard, chaque exercice est adossé à un ou plusieurs savoir faire et compétences. Ainsi, l'enseignant et ses élèves savent exactement l'utilité de l'exercice et les capacités travaillées. </p>
+                  <p>Il est possible d'exporter le code source directement. Si vous connaissez <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/>, vous pouvez modifier le contenu de l'exercice avec votre éditeur favori.</p>
+                  <p>Vous pouvez bien sûr organiser vos BiblioTex comme vous le souhaitez en modifiant directement l'ordre des exercices, les projeter au tableau durant vos cours, les associer à vos parcours, les distribuer à vos groupes et les imprimer au format pdf.</p>
+                  <img src="{% static 'img/bibliotex_template.jpg' %}" width="700px" />
+              </div> 
+        </div>
+    </div> 
+</div>
+
 {% endblock %}
