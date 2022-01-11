@@ -404,7 +404,7 @@ class Knowledge(models.Model):
 
 
     def supportfile_counter(self):
-        return self.supportfiles.count()
+        return self.supportfiles.exclude(is_title=1).count()
 
     def exotexs_counter(self) :
         return self.knowledge_exotexs.count()
