@@ -1535,12 +1535,18 @@ class Relationship(models.Model):
         data = {}
         is_ok = True
         nbs = Studentanswer.objects.filter(parcours=self.parcours , exercise= self.exercise,student = student ).count()
- 
-        nbleft = self.maxexo - nbs
+        
+        try : 
+            nbleft = self.maxexo - nbs
+        except :
+            nbleft == self.maxexo 
+
         if nbleft == 0  :
             is_ok = False
         if self.maxexo == -1   :
-            is_ok = True 
+            is_ok = True
+
+
                        
         data["is_ok"] = is_ok
         data["nbleft"] = nbleft
