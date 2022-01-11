@@ -30,7 +30,9 @@
     {% if request.user.user_type == 2 %}
         {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
     {% else %}
-        {% include 'qcm/submenu_parcours_student.html' %}
+        {% if parcours %}
+            {% include 'qcm/submenu_parcours_student.html' %}
+        {% endif %}
     {% endif %}
 
 {% endblock %}
