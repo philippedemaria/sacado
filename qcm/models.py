@@ -447,10 +447,14 @@ class Parcours(ModelWithCode):
         data = {}
         is_ok = True
         nbs = Studentanswer.objects.filter(parcours=self , exercise= exercise,student = student ).count()
-        nbleft = self.maxexo - nbs
+
+        try : 
+            nbleft = self.maxexo - nbs
+        except :
+            nbleft = self.maxexo 
+
         if nbleft == 0  :
             is_ok = False
-
         if self.maxexo == -1   :
             is_ok = True
 
