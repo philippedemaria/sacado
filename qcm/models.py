@@ -1539,7 +1539,7 @@ class Relationship(models.Model):
         try : 
             nbleft = self.maxexo - nbs
         except :
-            nbleft == self.maxexo 
+            nbleft = self.maxexo 
 
         if nbleft == 0  :
             is_ok = False
