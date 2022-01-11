@@ -66,14 +66,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
     });
 
 
-
-
-
-
-
-
-
-        $('input[name=waitings]').on('click', function (event) {
+    $('input[name=waitings]').on('click', function (event) {
 
             let waitings = $(this).val();
             let id_subject = $("#id_subject").val();
@@ -114,17 +107,11 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
                     }
                 }
             )
-        });
+    });
 
 
-
-
-
-
-
-
-        // Fonction de sélection du Vrai faux
-        function checked_vf(){ 
+    // Fonction de sélection du Vrai faux
+    function checked_vf(){ 
             if( $("#check1").hasClass("checked")  )  
                 {   
                     // Gestion du check

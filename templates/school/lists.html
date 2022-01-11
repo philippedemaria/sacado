@@ -36,7 +36,8 @@
                   <tr>
                     <th width="100px">Pays</th>                  
                     <th>Nom</th> 
-                    <th>Ville</th>   
+                    <th>Ville</th>  
+                    <th>Token</th>  
                     <th>Nombre d'utilisateurs</th>                                                         
                   </tr>
               </thead>
@@ -55,7 +56,9 @@
                       <td>
                           {{ school.town }}
                       </td>
-
+                      <td>
+                          {{ school.code_acad}}_{{ school.id }}
+                      </td>
                       <td>
                           {%  with school.student_and_teacher as data %}
                             {{ school.users.count }} <small>({{ data.nbt }} enseignant{{ data.nbt|pluralize }} - {{ data.nbs }} élève{{ data.nbs|pluralize }})</small>
