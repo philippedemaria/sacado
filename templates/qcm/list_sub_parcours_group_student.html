@@ -53,7 +53,149 @@
                 {% include 'qcm/evaluation_tag_student.html' %}
             {% endfor %}
         {% endif %}
+
+
+        {%  if quizzes %}
+        <div class="row"></div> 
+        <h2 class='thin'>Mes quizz</h2>
+            {%  for q in  quizzes %}  
+                <div class="col-xs-6 col-md-4 col-lg-3" > 
+                    <div class="card" style="float:none; height:250px;width:250px;position: relative;">
+                        {% if q.vignette %}
+                            <img src="{{ q.vignette.url }}" width="250px" height="150px" border=0 />
+                        {% else %}
+                            <img src="{% static 'img/quizz.jpg' %}" width="250px" border=0  />
+                        {% endif %}
+
+                        
+                            <div style="padding: 10px;width:100%; height:75px; position:absolute;bottom: 0px">
+
+                                <a {% if q.is_numeric and not q.is_video %} href="{% url 'goto_quizz_student' q.id  %}" target="_blank"{% else %} href="{% url 'show_quizz_student' q.id  %}" {% endif %}  style="font-weight: normal">
+
+                                {{ q.title|truncatechars:28 }} 
+                                </a>
+
+                                <small>
+                                <a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-quizz="{{ q.id }}" class="pull-right" style="bottom:40px; right:15px; position:absolute;font-size: 30px">
+                                    {% if  q.is_video %}
+                                        <i class="bi bi-trophy" title="Résultats" style="font-size: 20px"></i>
+                                    {% elif  q.is_numeric %}
+                                        <i class="bi bi-trophy" title="Résultats" style="font-size: 20px"></i>
+                                    {% endif %}
+                                </a>
          
+
+
+                                    <br/>
+                                <i class="fa fa-barcode fa-xs"></i> {{ q.code }} 
+                                <span class="pull-right" style="bottom:10px; right:10px; position:absolute;font-size: 30px">
+                                    {% if  q.is_video %}
+                                       <i class="bi bi-controller" title="Jeu SacadoQuizz"></i>
+                                    {% elif  q.is_numeric %}
+                                        <i class="bi bi-play" title="Quizz numérique"></i>
+                                    {% else %}
+                                        <i class="bi bi-aspect-ratio" title="Projection pour papier"></i>
+                                    {% endif %}
+                                </span>
+                                <br/> 
+                                {{ q.questions.count }} diapos</small> 
+                            </div> 
+                            
+                        
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %} 
+
+
+        {%  if flashpacks %}
+        <div class="row"></div> 
+        <h2 class='thin'>Mes flashpack</h2>
+            {%  for flashpack in  flashpacks %} 
+                {% include 'flashcard/flashpack_student_data.html' %} 
+            {% endfor %}
+        {% endif %} 
+
+
+
+        {%  if bibliotexs %}
+        <div class="row"></div> 
+        <h2 class='thin'>Mes BiblioTex</h2>
+            {%  for bibliotex in  bibliotexs %} 
+                <div  class="box box-widget widget-user-2"  
+                      style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}');{% else %} background-image: url('{% static 'img/bibliotex.jpg' %}');{% endif %} background-size: cover;">
+                    <div class="handler widget-user-header">
+                        <!-- Add signet to folder -->
+                        <div class="group_show  no_visu_on_load scrolling_overflow" id="bibliotex_show{{bibliotex.id }}"> 
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                                    <b>Savoir faire ciblés</b>
+                                </div> 
+                            </div>
+
+                            {% for k in bibliotex.knowledges %}
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                    {{ k.name }}
+                                </div> 
+                            </div>
+                            {% endfor %}
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                                    <b>compétences ciblées</b>
+                                </div> 
+                            </div>
+                            
+                            <div class="row"> 
+                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                    {% for s in bibliotex.skills %}
+                                        {{ s }}. 
+                                    {% endfor %}
+                                </div> 
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="box_title_vignette box_title_vignette_color" style="background-color : {{ bibliotex.color}};"> 
+                            <a href="{% url 'parcours_show_bibliotex_student' parcours.id bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};"  >             
+                                {% if bibliotex.title|length > 40 %}
+                                <span class="helper_tip" style=" font-size:16px; color:white">{{ bibliotex.title|truncatechars:"40" }}
+                                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                                </span>
+                                {% else %}
+                                    {{ bibliotex.title}}
+                                {% endif %}
+                            </a>    
+                        </div>
+
+
+
+                    </div>
+                    <div class="box-footer" style="position: relative; padding-top:10px;">
+                        <div class="row"> 
+                           <div class="col-lg-7 col-xs-7">
+                                 {{ bibliotex.exotexs.count}} exercices   
+                            </div>
+                            <div class="col-lg-5 col-xs-5">
+ 
+                            </div> 
+                        </div>
+                        <div class="row"> 
+                           <div class="col-lg-6 col-xs-6">
+                                <a href="{% url 'print_bibliotex_by_student' bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-download"></i>  <span class="label_icon">Télécharger</span>  </a>
+                            </div>
+                            <div class="col-lg-6 col-xs-6">
+                                <a href="javascript:void();" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
+                                </a>
+                            </div> 
+                        </div>
+                    </div>
+                </div> 
+            {% endfor %}
+        {% endif %} 
+
+
+
+
  
     </form>
 
