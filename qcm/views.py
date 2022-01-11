@@ -2636,7 +2636,11 @@ def list_parcours_bibliotex_student(request, idp):
 
 def parcours_show_bibliotex_student(request, idp,id):
 
-    parcours = Parcours.objects.get(id=idp)
+    try :
+        parcours = Parcours.objects.get(id=idp)
+    except : 
+        parcours = None
+
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = bibliotex.relationtexs.order_by("ranking")
 

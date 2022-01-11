@@ -230,7 +230,7 @@
                             <div style="clear:both"></div>
                         </div>
                         <div class="box_title_vignette box_title_vignette_color" style="background-color : {{ bibliotex.color}};"> 
-                            <a href="#"  style="color:{{ bibliotex.color|contrast_color }};"  >             
+                            <a href="{% url 'parcours_show_bibliotex_student' 0 bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};"  >             
                                 {% if bibliotex.title|length > 40 %}
                                 <span class="helper_tip" style=" font-size:16px; color:white">{{ bibliotex.title|truncatechars:"40" }}
                                     <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
