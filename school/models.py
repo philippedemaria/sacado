@@ -91,8 +91,8 @@ class School(models.Model):
             today = datetime.now()
             limit = datetime(today.year,6,30)
             f = rate.amount
-            if today < limit :
-                f = rate.discount
+            #if today < limit :
+            #    f = rate.discount
         except :
             f = "Nous contacter"
         return f
