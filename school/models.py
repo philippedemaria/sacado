@@ -94,7 +94,7 @@ class School(models.Model):
             #if today < limit :
             #    f = rate.discount
         except :
-            f = "Nous contacter"
+            f = 350
         return f
 
 
