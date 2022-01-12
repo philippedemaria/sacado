@@ -669,8 +669,24 @@ def show_group(request, id ):
     img = qrcode.make('https://sacado.xyz/group/'+group.code , image_factory=factory, box_size=40)
     stream = BytesIO()
     img.save(stream)
- 
     show_qr = stream.getvalue().decode()
+
+
+    if request.method == "POST" :
+        select_these_students = request.POST.getlist("select_these_students")
+
+        for student_id in select_these_students :
+            student = get_object_or_404(Student, user_id=student_id)
+            results = Resultknowledge.objects.filter(student=student)
+            for r in results :
+                r.delete()
+            res = Resultexercise.objects.filter(student=student)
+            for re in res :
+                re.delete()
+            ress = Studentanswer.objects.filter(student=student)
+            for rs in ress :
+                rs.delete()
+            student.user.delete()
 
     studentprofiles = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     students = group.students.exclude( user__username__contains= "_e-test").order_by("user__last_name")

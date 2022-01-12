@@ -325,46 +325,45 @@
     </form>
 </div> 
 
+<div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
 
-    <div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
- 
-            {% if user.user_type == 2 %}
-                <div class="modal-content help" >
- 
-                    <div class="helpdiv_help_title_page"  style="left:500px;">
-                        titre de page
+        {% if user.user_type == 2 %}
+            <div class="modal-content help" >
+
+                <div class="helpdiv_help_title_page"  style="left:500px;">
+                    titre de page
+                </div>
+                <div class="helpdiv_help_groupe"   style="top:130px;left:160px;width:500px">
+                     Nom du groupe obligatoire <span style="margin-left:50px">Niveau obligatoire</span>
+                     <br><br><br><br> <span style="margin-left:150px;text-align: right">Suivi parent : cocher oui si vous voulez que les</span>
+                    <br> <span style="margin-left:150px;text-align: right">parents de vos élèves accèdent à leurs résultats</span>
+                    <br> <span style="margin-left:150px;text-align: right">Ils devront s'inscrire et se lier à leur enfants.</span>
+                    
+                </div>
+
+
+                <div class="helpdiv_help_acces"  style="top:45px;right:50px; padding:10px">
+                   Nouveau parcours lié à ce groupe <img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
+                </div>
+
+
+
+                <div class="helpdiv_help_list_group">
+                    <div class="help_list_group">
+                        {% if group %}    <img src="{% static 'img/fleche_up_left.png' %}" width="40px" style="vertical-align:bottom" />Lien à donner aux élèves {% endif %}  
+                        <br><br>Liste des élèves. <br>Modification directe par réécriture dans les champs des noms, prénomns, courriels, identifiants. 
+                        <br><i class="fa fa-trash"></i> Supprimer un élève 
+                        <br><i class="fa fa-refresh"></i> Ré-initialiser son mot de passe : sacado2020  
                     </div>
-                    <div class="helpdiv_help_groupe"   style="top:130px;left:160px;width:500px">
-                         Nom du groupe obligatoire <span style="margin-left:50px">Niveau obligatoire</span>
-                         <br><br><br><br> <span style="margin-left:150px;text-align: right">Suivi parent : cocher oui si vous voulez que les</span>
-                        <br> <span style="margin-left:150px;text-align: right">parents de vos élèves accèdent à leurs résultats</span>
-                        <br> <span style="margin-left:150px;text-align: right">Ils devront s'inscrire et se lier à leur enfants.</span>
-                        
-                    </div>
-
-
-                    <div class="helpdiv_help_acces"  style="top:45px;right:50px; padding:10px">
-                       Nouveau parcours lié à ce groupe <img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
-                    </div>
-
-
-
-                    <div class="helpdiv_help_list_group">
-                        <div class="help_list_group">
-                            {% if group %}    <img src="{% static 'img/fleche_up_left.png' %}" width="40px" style="vertical-align:bottom" />Lien à donner aux élèves {% endif %}  
-                            <br><br>Liste des élèves. <br>Modification directe par réécriture dans les champs des noms, prénomns, courriels, identifiants. 
-                            <br><i class="fa fa-trash"></i> Supprimer un élève 
-                            <br><i class="fa fa-refresh"></i> Ré-initialiser son mot de passe : sacado2020  
-                        </div>
-                         <br> <br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="40px" style="vertical-align:middle;"/>
-
-                    </div>
-       
-
+                     <br> <br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="40px" style="vertical-align:middle;"/>
 
                 </div>
-            {% endif %}
-        </div>
-    </div>    
+   
+
+
+            </div>
+        {% endif %}
+    </div>
+</div>    
 {% endblock %}
