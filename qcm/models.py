@@ -859,9 +859,11 @@ class Parcours(ModelWithCode):
         data["nb_bibliotex"]            = nb_bibliotex        
         data["nb_bibliotex_published"]  = nb_bibliotex_published
         data["bibliotex_care"] = ( nb_bibliotex == nb_bibliotex_published)
- 
 
         return data
+
+
+
 
  
 class Folder(models.Model):
@@ -1093,6 +1095,13 @@ class Folder(models.Model):
 
     def nb_parcours_is_publish(self):
         return self.parcours.filter(is_evaluation=0, is_publish=1, is_trash=0).count()
+
+
+    def parcours_is_not_archived(self):
+        return self.parcours.filter(is_archive=0) 
+
+    def parcours_is_archived(self):
+        return self.parcours.filter(is_archive=1)  
 
 
     def data_parcours_evaluations(self):

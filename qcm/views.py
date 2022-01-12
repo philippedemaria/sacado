@@ -8713,6 +8713,7 @@ def actioner_pef(request):
     teacher = request.user.teacher 
     idps = request.POST.getlist("selected_parcours")
     idfs = request.POST.getlist("selected_folders")
+
     if  request.POST.get("action") == "deleter" :  
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
@@ -8771,14 +8772,17 @@ def actioner_pef(request):
             folder.delete()
 
  
-    elif request.POST.get("action") == "archiver" :   
+    elif request.POST.get("action") == "archiver" :  
+
+        print(idps) 
+        print(idfs)
 
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
             parcours.is_archive = 1
             parcours.is_favorite = 0
             parcours.save()
-
+            print(parcours) 
 
         for idf in idfs :
             folder = Folder.objects.get(id=idf) 
@@ -8791,8 +8795,11 @@ def actioner_pef(request):
                 p.is_favorite = 0
                 p.save()
  
-    else : 
-  
+    else :
+
+        print("la",idps) 
+        print("la",idfs)
+
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
             parcours.is_archive = 0

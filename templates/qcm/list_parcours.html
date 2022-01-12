@@ -121,7 +121,7 @@
                                             {% for parcours in folder.parcours.all %}
 
                                                 {% block evaluations  %} 
-                                                    {% if not parcours.is_evaluation %}
+                                                    {% if not parcours.is_evaluation and not parcours.is_archive %}
                                                         <tr>
                                                             {% include 'qcm/list_parcours_folder_data.html' %}
                                                         </tr>

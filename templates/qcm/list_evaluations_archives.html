@@ -20,12 +20,18 @@
 {% endblock %}
 
 
-
+{% block evaluations  %} 
+    {% if parcours.is_evaluation and parcours.is_archive %}
+        <tr>
+            {% include 'qcm/list_parcours_folder_data.html' %}
+        </tr>
+    {% endif %}  
+{% endblock  %}
 
 
 {% block archive %}
  
-            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
+            <button class="btn btn-default" name="action" value="desarchiver" onclick="return TestArchive('ces dossiers/fichiers')"> 
                 <i class="bi bi-archive"> </i>   Desarchiver la sélection
             </button>
  

@@ -29,15 +29,15 @@
 {% endblock %}
 
 
-
-
+ 
 {% block evaluations  %} 
-    {% if parcours.is_evaluation %}
+    {% if parcours.is_evaluation and not parcours.is_archive %}
         <tr>
             {% include 'qcm/list_parcours_folder_data.html' %}
         </tr>
     {% endif %}  
 {% endblock  %}
+
 
 
 
