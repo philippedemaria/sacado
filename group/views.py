@@ -1253,7 +1253,6 @@ def print_statistiques(request, group_id, student_id):
         for know in knows :
             if not know.theme in themes :
                 themes.append(know.theme)
-
     else :
         student = Student.objects.get(pk = student_id)
         students = [student]
@@ -1471,7 +1470,6 @@ def print_statistiques(request, group_id, student_id):
 
         bgc = 0        
         for theme  in themes :
-
             waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
             th_tab.append([theme.name,  " " ])
             bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
@@ -1502,7 +1500,6 @@ def print_statistiques(request, group_id, student_id):
 
         loop  = 0
         for theme  in themes :
-
             ##########################################################################
             #### Gestion des knowledges par thème
             ##########################################################################
@@ -1528,9 +1525,9 @@ def print_statistiques(request, group_id, student_id):
                     #### Affichage des résultats par knowledge
                     ##########################################################################                    
                     try :      
-                        knowledgeResult = student.results_k.values("point",flat= True).get(knowledge_id  = knowledge_id)
+                        knowledgeResult = student.results_k.get(knowledge_id  = knowledge_id)
                         knowledgeResult_nb = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id = knowledge_id ).count()          
-                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult['point'],teacher) , knowledgeResult_nb )          )
+                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult.point,teacher) , knowledgeResult_nb )          )
                     except : 
                         knowledge_tab.append(      ( name ,   "N.E"  , 0  )        )
                 
@@ -1546,7 +1543,6 @@ def print_statistiques(request, group_id, student_id):
                            ]))
 
                 elements.append(knowledge_tab_tab)
-
 
         elements.append(PageBreak())
 
