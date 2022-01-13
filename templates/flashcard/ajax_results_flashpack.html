@@ -14,12 +14,12 @@
     </div>
 
     <div class="col-sm-12 col-md-6" style="margin-top: 15px">
-        {% get_result_by_student flashcard flashpack student as result %}
-        {% if result.rappel %}
+        {% get_result_by_student flashcard flashpack student as result %} 
+        {% if result %}
             <div class="alert alert-warning">
-            Premièr essai : {{ result.first|date:"d N Y" }}<br/><br/>
-            Prochaine répétition : {{ result.rappel|date:"d N Y" }}<br/><br/>
-            Connaissances : {{ result.answers|safe }} 
+                Premiere tentative : {{ result.first|date:"d N Y" }}<br/><br/>
+                Prochaine répétition : {{ result.rappel|date:"d N Y" }}<br/><br/>
+                Connaissances : {{ result.answers|safe }} 
             </div>
         {% else %}
             <div class="alert alert-danger">

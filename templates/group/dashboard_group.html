@@ -90,32 +90,41 @@
             {% endif %}
             <!-- *************************************** Flashcard ***************************************************** -->
 
+ 
 
-             <div class="row">
-                <div class="col-md-12 col-lg-12 col-xs-12">
-                {% for flashpack in flashpacks %}
-                    {%  include 'flashcard/flashpack_student_data_index.html'  %}
-                {% endfor %}                    
+
+            {% if flashpacks %}
+            <div class="row" id="mixedSlider">
+                <div class="col-md-12 col-lg-12 col-xs-12 in_this_time_container MS-content" style="height:320px"> 
+                    <div class="in_this_time">Flashpacks à réviser </div>
+
+                        {% for flashpack in flashpacks %}
+                            {%  include 'flashcard/flashpack_student_data_index.html'  %}
+                        {% endfor %}   
+                    <!-- ******************************************************************************************** -->
+                </div>        
+                <div class="MS-controls">
+                    <button class="MS-left no_visu_on_load"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+                    <a href="#" class="MS-right"><i class="bi bi-arrow-right-circle"  ></i></a>
                 </div>
             </div>
-
-
+            {% endif %}
 
 
 
             <!-- ******************************************************************************************** -->
 
-
-            {% for folder in folders %}
-                {% include 'qcm/folder_tag_student.html' %}
-            {% endfor  %}  
-
-
+            {%  if folders %}
+            <div class="row"></div> 
+                {% for folder in folders %}
+                    {% include 'qcm/folder_tag_student.html' %}
+                {% endfor  %} 
+            {% endif %}  
 
             <!-- *************************************** Parcours ******************************************* -->
             {%  if parcourses %}
             <div class="row"></div> 
-                <h2 class='thin'>Mes parcours</h2>
+                <h2 class='thin'>Parcours</h2>
                 {% for parcours in parcourses %}
                         {% get_percent parcours student as data %}  
                         {% get_min_score parcours student as data_min %}
@@ -128,7 +137,7 @@
             <!-- ************************************* Evaluations ****************************************** -->
             {%  if evaluations %}
             <div class="row"></div> 
-            <h2 class='thin'>Mes évaluations</h2>
+            <h2 class='thin'>Evaluations</h2>
                 {%  for evaluation in  evaluations %} 
                     {% get_percent evaluation student as data %}  
                     {% get_min_score evaluation student as data_min %} 
@@ -141,7 +150,7 @@
                <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="row"></div>
             <hr>
-            <h2 class="thin">Mes tâches en cours</h2>
+            <h2 class="thin">Tâches en cours</h2>
                  {% for relation in relationships_in_tasks %}
                         <div class="card_freeze">
                             <div class="card-body student">
@@ -243,7 +252,7 @@
 
 
 
- <div class="menu_right_div" id="right_menu">
+<div class="menu_right_div" id="right_menu">
  
     <div class="col-xs-12 col-md-12 col-lg-12"> 
         {% include 'right_menu_student.html' %}

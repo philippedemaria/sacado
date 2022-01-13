@@ -73,16 +73,26 @@ class Flashcard(models.Model):
             string, cpt = "" , 0
             for a in answer.answers :
                 if a == '1' : color = "danger"
-                elif a == '2' : color = "validate"
-                elif a == '4' : color = "success"
+                elif a == '3' : color = "validate"
+                elif a == '5' : color = "success"
+                else : color = None
                 if a != "-" :
                     string += "<i class='bi bi-square-fill text-"+color+"'></i> "
                     cpt += int(a)
             data["first"] =  answer.rappel - timedelta(days = cpt)
             data["answers"] =  string
         except :
-            data["rappel"] = None
+            pass
+
         return data
+
+
+    def to_display_results(self):
+        today = timezone.now()
+        t = False
+        if self.answercards.filter(rappel__gte=today) :
+            t = True
+        return t
 
 
 class Flashpack(models.Model):

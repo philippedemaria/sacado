@@ -38,7 +38,19 @@
         {% else %}
         <small>{{ p.title }} <small>({{ p.just_students.count }})</small>
         {% endif  %}
-        <a  href="{% url 'flashpack_results' flashpack.id p.id %}" class="edit"><i class="bi bi-trophy" class="edit" ></i></a> 
+
+
+        
+        <a  href="{% url 'flashpack_results' flashpack.id p.id %}" class="edit">
+            {% if flashpack.to_display_results  %}
+                <i class="fa fa-trophy" class="edit" ></i>
+            {% else %}
+                <i class="bi bi-trophy" class="edit" ></i>
+            {% endif  %}
+        </a> 
+
+
+
         </li>         
     {% endfor %}
 </td>
