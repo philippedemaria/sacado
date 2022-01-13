@@ -3,7 +3,7 @@ define(['jquery', 'bootstrap', 'multislider' ], function ($) {
         console.log("chargement JS ajax-dashboard_student.js OK");
  
 
- 
+        $('body').css("overflow-x","hidden");
  
             var numItems = $('#mixedSlider .item').length ;
             var numItems_width = numItems * 350 ;
@@ -23,10 +23,6 @@ define(['jquery', 'bootstrap', 'multislider' ], function ($) {
                 });
 
             }
-
- 
-
-
 
     });        
 });
