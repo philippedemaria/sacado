@@ -28,7 +28,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
     body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
     body += "<idDistributeurCom>832020065_000000000000000</idDistributeurCom>"
-    body += "<idRessource>ark:/49591/GARcnf#832020065#1633883308775</idRessource>" #/46173/00001.p
+    body += "<idRessource>ark:/46173/00001.p</idRessource>" #/46173/00001.p
     body += "<typeIdRessource>ark</typeIdRessource>"
     body += "<libelleRessource>SACADO</libelleRessource>"
     body += "<debutValidite>"+date_start+"</debutValidite>"
