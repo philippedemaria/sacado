@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    {% load static %}
+    {% load widget_tweaks %}
+    <link rel="stylesheet" href="{% static 'basthon/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'basthon/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/AdminLTEperso.css' %}"> 
+</head>
+<body>
+    <div id="container">
+        <div id="left-div">
+          <div id="editor" style="height:300px"></div>
+          <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">
+            <a id="run" class=" btn-new-violet" title="Exécuter le script"  style="padding:5px;cursor:pointer">
+              <i class="fas fa-cogs fa-xs"></i>
+              Tester votre script
+            </a>
+            <a id="download" class="btn" title="Télécharger le script"  style="display:none;">
+              <i class="fas fa-download fa-fw btn-logo"></i>
+            </a>
+            <a id="hide-editor" class="btn" title="Afficher seulement la console" style="display: none;">
+              <i class="fas fa-eye-slash fa-fw btn-logo"></i>
+            </a>
+          </div>
+      </div>
+      <div id="right-div">
+          <textarea id="shell" autocomplete="off" spellcheck="false"  style="height:300px"></textarea>
+          <div style="padding: 1vw 0px 0px 0px; display: none; float: left;">
+            <a id="raz" class="btn" title="Redémarrer Python"  style="display:none">
+              <i class="fas fa-broom fa-fw btn-logo"></i>
+            </a>
+            <a id="btn_shell" class="btn" title="Afficher la console"  style="display:none">
+              <i class="fas fa-terminal fa-fw btn-logo"></i>
+            </a>
+            <a id="btn_graph_view" class="btn" title="Afficher la vue graphique"  style="display:none">
+              <i class="fas fa-image fa-fw btn-logo"></i>
+            </a>
+            <a id="darklight" class="btn" title="Changer le thème (sombre/lumineux)"  style="display:none">
+              <i class="fas fa-adjust fa-fw btn-logo"></i>
+            </a>
+          </div>
+
+
+        </div>   
+    </div>
+
+    <script src="{% static 'basthon/js/basthon-kernel/basthon.js' %}"></script>
+    <script src="{% static 'basthon/js/basthon-kernel/basthon_goodies.js' %}"></script>
+    <script src="{% static 'basthon/ace/ace.js' %}"></script>
+    <script src="{% static 'basthon/ace/ext-language_tools.js' %}"></script>
+
+    <script src="{% static 'basthon/js/editor.js' %}"></script>
+    <script src="{% static 'basthon/js/editor.js' %}"></script>
+    <script src="{% static 'basthon/js/shell.js' %}"></script>
+    <script src="{% static 'basthon/js/gui.js' %}"></script>
+</body>
+</html>
+
+

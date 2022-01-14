@@ -14,8 +14,6 @@ urlpatterns = [
     path('admin_tdb', admin_tdb, name='admin_tdb'),  
     path('tutos_video_sacado', tutos_video_sacado, name='tutos_video_sacado'),
 
-
-
     path('gestion_files', gestion_files, name='gestion_files'),
 
     path('school_adhesion', school_adhesion, name='school_adhesion'),
@@ -27,7 +25,14 @@ urlpatterns = [
 
     path('iban_asking/<int:school_id>/<int:user_id>', iban_asking, name='iban_asking'),  
 
+    ############################################################################################
+    #######  Interface Python
+    ############################################################################################
+    path('python', python, name='python'),
 
+    ############################################################################################
+    #######  GAR
+    ############################################################################################
     path('sacado', ressource_sacado , name='ressource_sacado'),
 
     path('rgpd', rgpd, name='rgpd'), 
