@@ -24,7 +24,7 @@
 
     <div class="parcours_tag_student" style="color:{{ parcours.color|contrast_color }}">  
         <div class="parcours_tag_student_fermeture no_visu_on_load" ><i class="fa fa-times"></i> Fermer </div>
-        <a href="{% url 'show_parcours_student' parcours.id   %}">{{ parcours.title  }} <i class="bi bi-box-arrow-right" style="color:{{ parcours.color|contrast_color }}"></i></a><br/> 
+        <a href="{% url 'show_parcours_student' parcours.id   %}" style="color:{{ parcours.color|contrast_color }}">{{ parcours.title  }} <i class="bi bi-box-arrow-right"></i></a><br/> 
         <div style="font-size:16px">
             {{  data_min.nb_exercise }} exercices 
             <span class="pull-right" style="font-size:30px;color:#39fa5a;" >{{ data_min.pc }}%</span>
