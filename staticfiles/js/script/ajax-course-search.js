@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-course.js OK");
+        console.log("chargement JS ajax-course_search.js OK");
 
  
 
@@ -102,8 +102,8 @@ define(['jquery', 'bootstrap'], function ($) {
 
         function ajax_choice(param0, param1){
 
-            if ( param0.val() > 0 ) {var level_id = param0.val() ; console.log(level_id) ;  } else {var level_id = 0 ; console.log(level_id) ; }  
-            if ( param1.val() > 0  ) {var theme_id = param1.val() ; console.log(theme_id) ; } else {var theme_id = [] ; console.log(theme_id) ; }  
+            if ( param0.val() > 0 ) {var level_id = param0.val() ;  } else {var level_id = 0 ;  }  
+            if ( param1.val() > 0  ) {var theme_id = param1.val() ;  } else {var theme_id = [] ;  }  
  
 
             let id_subject = $("#id_subject").val();
@@ -112,9 +112,7 @@ define(['jquery', 'bootstrap'], function ($) {
  
             $("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
             
-             let search_list = $("#search_list").val();
-
-             console.log(search_list) ; 
+            let search_list = $("#search_list").val();
 
             if ( search_list == "yes" ) {
                 url = "../ajax_course_custom_show_shared" ;
@@ -158,7 +156,33 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        // Affiche dans la modal le modèle pour récupérer un exercice custom
+        $('body').on('click', '.getter_course' , function (event) {
 
+            let course_id = $(this).attr("data-course_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let parcours_id = $(this).attr("data-parcours_id");
+            let checkbox_value = "";
+            let all_parcours = $(this).attr("data-all_parcours"); 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'course_id': course_id,
+                        'parcours_id': parcours_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../parcours_get_course",
+                    success: function (data) {
+
+                        $('#get_course_result').html(data.html);
+
+                    }
+                }
+            )
+         });
 
 
 

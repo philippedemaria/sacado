@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-course.js OK");
+        console.log("chargement JS ajax-course_this_parcours.js OK");
  
 
         // Affiche dans la modal le modèle pour récupérer un exercice custom

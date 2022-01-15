@@ -54,7 +54,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'parcours_id': parcours_id,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "parcours_get_course",
+                    url: "../parcours_get_course",
                     success: function (data) {
 
                         $('#get_course_result').html(data.html);
