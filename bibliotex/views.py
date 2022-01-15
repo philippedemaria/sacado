@@ -1016,7 +1016,10 @@ def ajax_level_exotex(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if bibliotex_id :
+
+ 
         bibliotex = Bibliotex.objects.get(pk=bibliotex_id)
+ 
         teacher = request.user.teacher 
         data = {}
         data['knowledges']       =  None
@@ -1025,7 +1028,6 @@ def ajax_level_exotex(request):
         base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id = teacher.user.id)|Q(author__user_id=teacher_id), theme__subject_id = subject_id).exclude(bibliotexs=bibliotex)
  
         if theme_ids : 
-       
             if level_id and theme_ids[0] != "" and skill_id  : 
                 skill = Skill.objects.get(pk=skill_id)
                 exotexs = base.filter( level_id = level_id , theme_id__in= theme_ids, skills = skill ).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -1041,7 +1043,12 @@ def ajax_level_exotex(request):
                 exotexs = base.filter(  theme_id__in = theme_ids).order_by("theme","knowledge__waiting","knowledge","ranking")
 
             elif keyword and theme_ids[0] != ""   : 
-                exotexs = base.filter(theme_id__in = theme_ids,  title__contains = keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+                exotexs = base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword), theme_id__in = theme_ids).order_by("theme","knowledge__waiting","knowledge","ranking")
+
+            elif keyword   : 
+                print(keyword)
+                exotexs = base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword) ).order_by("theme","knowledge__waiting","knowledge","ranking")
+                print(exotexs)
 
             elif level_id   : 
                 exotexs = base.filter(  level_id= level_id ).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -1050,22 +1057,20 @@ def ajax_level_exotex(request):
                 exotexs = base
 
         else :
-     
             if level_id and  skill_id  : 
                 skill = Skill.objects.get(pk=skill_id)
-                exotexs = base.filter(level_id = level_id ,  skills = skill ).order_by("theme","knowledge__waiting","knowledge","ranking")
+                exotexs = base.filter(level_id= level_id ,  skills = skill ).order_by("theme","knowledge__waiting","knowledge","ranking")
 
             elif level_id and keyword  : 
-                exotexs = base.filter( level_id = level_id ,  title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+                exotexs = base.filter( Q(title__icontains=keyword)| Q(content_html__icontains=keyword),level_id= level_id  ).order_by("theme","knowledge__waiting","knowledge","ranking")
             elif keyword and skill_id  : 
                 skill = Skill.objects.get(pk=skill_id)
-                exotexs =  base.filter(skills = skill, title__contains= keyword ).order_by("theme","knowledge__waiting","knowledge","ranking")
+                exotexs =  base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword), skills= skill  ).order_by("theme","knowledge__waiting","knowledge","ranking")
             else :
                 exotexs = base
         data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
     
     else :
- 
         knowledges = Knowledge.objects.values_list("id","name").filter(theme_id__in=theme_ids, level_id = level_id  ) 
         knowledges_level = Knowledge.objects.values_list("id","name").filter(theme__subject__id = subject_id,  level_id = level_id  ) 
         data['knowledges']       =  list( knowledges )

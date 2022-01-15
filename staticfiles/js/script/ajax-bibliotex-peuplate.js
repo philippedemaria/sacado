@@ -107,11 +107,6 @@ define(['jquery', 'bootstrap'], function ($) {
             )
         }
 
-
-
-
-
-
         $('.click_this_level').on('click', function (event) {
 
             let level_id = $(this).data("level_id");
@@ -136,11 +131,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     }
                 }
             )
-
-
         });
-
-
 
 
     $('#id_skill').on('change', function (event) {
@@ -178,14 +169,14 @@ define(['jquery', 'bootstrap'], function ($) {
 
     $('#keyword').on('keyup', function (event) {
 
-        let level_id = $("id_level").val();
-        let subject_id = $("id_subject").val();
+        let level_id = $("#id_level").val();
+        let subject_id = $("#id_subject").val();
         let skill_id =  $("#id_skill").val();
         let keyword = $(this).val();
         let theme_id = $("#id_theme").val();
         let bibliotex_id = $("#bibliotex_id").val();
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
+        
         $.ajax(
             {
                 type: "POST",

@@ -4,15 +4,10 @@
 {% load item_tags %}
 
 {% block require %}
- 
- 
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
- 
-
     <script>
         require(['script/ajax-bibliotex-peuplate']);
     </script> 
-
 {% endblock %} 
 
 
@@ -25,10 +20,7 @@
 
 
 {% block page_menu_right %}
-     
- 
     <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
-
 {% endblock %}
 
 
