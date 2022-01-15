@@ -247,6 +247,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         success: function (data) {
 
                             $('#title_parcours'+parcours_id).html(data.success);
+                            alert("Cours cloné avec succès") ;
                         }
                     }
                 )
