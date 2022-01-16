@@ -46,10 +46,7 @@ define(['jquery', 'bootstrap'], function ($) {
                 if (code == "") { alert("Vous devez renseigner le code d'un support."); return false; }                
                 if (!confirm("Vous souhaitez modifier l'association avec ce support "+code+" ?")) return false; 
            
-
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-            console.log(exercise_id+"----"+action+"----"+code);
 
             $.ajax(
                 {
@@ -74,7 +71,15 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        // Place l'id de l'exo dans la pop up d'enregistrement audio pour les exercices
+        $('.audio_exercise').on('click', function (event) {
 
+            let exercise_id = $(this).data("exercise_id");
+
+            $("#id_exercise").val(exercise_id) ;
+
+
+        });
 
 
 

@@ -306,8 +306,10 @@ urlpatterns = [
     path('ajax/remediation_viewer', ajax_remediation_viewer , name='ajax_remediation_viewer'),
     path('json_create_remediation/<int:idr>/<int:idp>/<int:typ>', json_create_remediation, name='json_create_remediation'),  # création via la modal sans rechargement de la page
     path('json_delete_remediation/<int:id>/<int:idp>/<int:typ>', json_delete_remediation, name='json_delete_remediation'),   # suppression via la modal sans rechargement de la page    
-    path('audio_remediation', audio_remediation, name='audio_remediation'),   # suppression via la modal sans rechargement de la page 
+    path('audio_remediation', audio_remediation, name='audio_remediation'),   
 
+
+    path('audio_exercise', audio_exercise, name='audio_exercise'),  #Audio pour les EBEP  
 
     path('ajax/constraint_create', ajax_create_constraint, name='ajax_create_constraint'),
     path('ajax/constraint_delete', ajax_delete_constraint, name='ajax_delete_constraint'), 

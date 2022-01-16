@@ -133,7 +133,14 @@
     </div>  
     <div class="col-sm-10 col-md-8 col-lg-8">
 
-
+      {% if exercise.audiofile %}
+        <div id="audio_open">
+            <audio controls>
+                <source src="{{ relation.exercise.audiofile.url }}" type="audio/mpeg">
+                <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+            </audio>
+        </div>
+      {% endif %}
 
       {% for remediation in relation.is_consigne_remediation %}
           <audio controls>

@@ -765,6 +765,34 @@ label {
   box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
 }
 
+.exercise_buttons{
+    width : 90px;
+}
+
+.button_caption{
+    font-size: 14px;
+}
+
+@media (max-width:1150px){ /* Pour une largeur de max 750 -> Convient pour les smart phones */
+
+    .exercise_buttons{
+        width : 90px;
+        float: left;
+    }
+
+    .button_caption{
+        font-size: 14px;
+    }
+
+}
+
+
+
+
+
+
+
+
 .videocopy{
     float : left;
     width : 300px;
@@ -2283,9 +2311,6 @@ li.my_slide{
     .size25em, .size2em, .size15em {
       font-size : 1em;
     }
-     
- 
- 
 }
 
  

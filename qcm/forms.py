@@ -157,6 +157,15 @@ class FolderForm(forms.ModelForm):
 			pass
 
 
+class AudioForm(forms.ModelForm):
+	class Meta:
+		model = Exercise
+		fields = ('audiofile',)
+
+	def clean_content(self):
+		audiofile = self.cleaned_data['audiofile']
+		validation_file(audiofile)
+
 
 
 

@@ -16,7 +16,7 @@ from group.forms import GroupForm
 from group.models import Group , Sharing_group
 from school.models import Stage, School
 from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker , Criterion , Autoposition
-from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm
+from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  AudioForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from bibliotex.models import Bibliotex
@@ -4297,6 +4297,23 @@ def get_values_canvas(request):
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 
+
+@csrf_exempt  
+def audio_exercise(request):
+
+    data = {}
+    ide =  int(request.POST.get("id_exercise"))
+    exercise = Exercise.objects.get(pk=ide) 
+    form = AudioForm(request.POST or None, request.FILES or None , instance=exercise )
+
+    if form.is_valid():
+        print(request.FILES.get("id_audiofile"))
+        nf =  form.save(commit = False)
+        nf.audiofile = request.FILES.get("id_audiofile")
+        nf.save()
+    else:
+        print(form.errors)
+    return JsonResponse(data)  
 
 
 def all_levels(user, status):

@@ -35,23 +35,19 @@
 
 
 {% block body  %}  
-<div class="pull-right">
-    {% with  exercise.level.image   as level_image %}
-       <img src="{% static level_image %}"  />
-    {% endwith %}
-</div>
-
-
 <section class="content_main">
  
-     <div class="col-sm-0 col-md-1 col-lg-1">
-        {% if exercise.supportfile.calculator %}
-          <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
-        {% else %}
-          <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
-        {% endif  %} 
-        <br>
-        <br>
+     <div class="col-sm-1 col-md-1 col-lg-1" align="center">
+
+        <div class="exercise_buttons">
+          {% if exercise.supportfile.calculator %}
+                <img src="{% static 'img/calculator.png' %}"  with="80px"  height="80px" />
+          {% else %}
+                <img src="{% static 'img/no_calculator.png' %}"  with="80px"  height="80px"  />
+          {% endif  %} 
+        </div>
+
+        <div class="exercise_buttons">
         {% if exercise.supportfile.duration == 5 %}
           <img src="{% static 'img/horloge5.png' %}" with="80px"  height="80px"  />
         {% elif exercise.supportfile.duration == 10 %}
@@ -79,18 +75,38 @@
         {% else %}
           <img src="{% static 'img/horloge15.png' %}" with="80px"  height="80px"  />
         {% endif  %} 
-        <p> {{ exercise.supportfile.duration }} minute{{ exercise.supportfile.duration|pluralize }}</p>
+         <div class="button_caption">{{ exercise.supportfile.duration }} minute{{ exercise.supportfile.duration|pluralize }}</div>
+        </div>
 
+        <div class="exercise_buttons">
+            <img src="{% static 'img/situation.png' %}" with="75px"  height="75px"  />
+            <div class="button_caption">{{ exercise.supportfile.situation }} situation{{ exercise.supportfile.situation|pluralize }}</div>
+        </div>
 
-          <img src="{% static 'img/situation.png' %}" with="75px"  height="75px"  />
-
-
-        <p style="font-size:14px;">{{ exercise.supportfile.situation }} situation{{ exercise.supportfile.situation|pluralize }}</p>
-        <i class="fa fa-barcode fa-4x"></i><p>{{ exercise.supportfile.code }}</p>
+        <div class="exercise_buttons">
+            <i class="fa fa-barcode fa-4x"></i>
+            <div class="button_caption">{{ exercise.supportfile.code }}</div>
+        </div>
 
     </div>  
-    <div class="col-sm-12 col-md-11 col-lg-8">
+    <div class="col-sm-11 col-md-11 col-lg-8">
  
+          {% if exercise.audiofile %}
+            <div id="audio_open">
+                <audio controls>
+                    <source src="{{ exercise.audiofile.url }}" type="audio/mpeg">
+                    <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                </audio>
+            </div>
+          {% endif %}
+
+          {% for remediation in exercise.remediations %}
+              <audio controls>
+                  <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+                  <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+              </audio>
+          {% endfor  %}
+
           {% comment %}
             <div id="preload_div">
                 <div id="preload"></div>
@@ -105,7 +121,14 @@
     </div> 
 
     <div class="col-sm-12 col-md-12 col-lg-3">
-        <div style="height:30px"></div>
+        <div class="pull-right">
+            {% with  exercise.level.image   as level_image %}
+               <img src="{% static level_image %}"  />
+            {% endwith %}
+            <div style="height:50px"></div>            
+        </div>
+
+
           {% include 'qcm/signal_exercise.html' %}
     </div>  
 

@@ -54,6 +54,12 @@ def file_directory_to_student(instance, filename):
     return "files/{}/{}".format(instance.customanswerbystudent.student.user.id, filename)
 
 
+def audio_directory_path(instance,filename):
+    return "audio/{}/{}".format(instance.id,filename)
+
+
+
+
 def convert_time(duree) :
     try :
         d = int(duree)
@@ -157,14 +163,14 @@ class Supportfile(models.Model):
 
 
 class Exercise(models.Model):
-    level = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
-    theme = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
-    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='exercises',
+    level       = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
+    theme       = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
+    knowledge   = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='exercises',
                                   verbose_name="Savoir faire associé - Titre")
     supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises",
                                     on_delete=models.PROTECT, verbose_name="Fichier Géogebra")
-    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-
+    ranking     = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    audiofile   = models.FileField(upload_to=audio_directory_path, verbose_name="Fichier Audio", blank=True, default="" )
 
 
     def __str__(self):
@@ -354,6 +360,13 @@ class Exercise(models.Model):
         if self.tools.count() > 0 :
             ok = True
         return ok
+
+
+    def remediations():
+        remediations = Remediation.objects.filter(relationship__exercise=self)
+        return remediations
+
+
 
 
 class Parcours(ModelWithCode):
@@ -1622,11 +1635,11 @@ class Relationship(models.Model):
         return data
 
 
-        def is_consigne_remediation():
-            return self.relationship_remediation.filter(consigne = 1)
+    def is_consigne_remediation():
+        return self.relationship_remediation.filter(consigne = 1)
 
-        def is_not_consigne_remediation():
-            return self.relationship_remediation.filter(consigne = 0)
+    def is_not_consigne_remediation():
+        return self.relationship_remediation.filter(consigne = 0)
 
 
 

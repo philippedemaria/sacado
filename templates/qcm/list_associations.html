@@ -111,6 +111,14 @@
                                                     class="btn btn-{% if exercise.ebep %}warning{% else %}default{% endif %}" style="position: absolute;right:60px;top:100px" >
                                                     Outils EBEP
                                                 </a> 
+
+                                                <a  href="#" data-toggle='modal' data-exercise_id ="{{ exercise.id }}" 
+                                                    data-target='#audio_exercise' class="btn btn-{% if exercise.audiofile %}warning{% else %}default{% endif %} audio_exercise"   
+                                                     style="position: absolute;right:180px;top:103px">
+                                                    <i class="bi bi-mic"></i>
+                                                </a>
+
+
                                             <div id="error_str{{ exercise.id }}" style="color:red"></div>                                        
                                         </td> 
                                     </tr>
@@ -146,6 +154,47 @@
 </div>
 
 
+<div class="modal fade" id="audio_exercise" tabindex="-1" role="dialog" aria-labelledby="audio_exercise">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>  <h4>Audio - Max 2.5MB</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row"> 
+                    <div class="col-sm-12 col-md-12">
+                        <form enctype="multipart/form-data" action="" method="post">                    
+                            <div class="col-sm-12 col-md-12">       
+                                <div class="form-group">
+                                    <div id="controls">
+                                        <button type="button" id="recordButton" class="btn btn-danger"><i class="fa fa-microphone"></i></button>
+                                        <button type="button" id="pauseButton" disabled  class="btn btn-default"><i class="fa fa-pause"></i> </button>
+                                        <button type="button" id="stopButton" disabled  class="btn btn-default"><i class="fa fa-stop"></i></button>
+                                    </div>
+                                    <div id="formats"></div>
+                                    <label><small>Vous pouvez vous enregistrer plusieurs fois pour déterminer la meilleure prise.</small></label>
+                                    <ol id="recordingsList"></ol>
+                                    <!-- inserting these scripts at the end to be able to use all the elements in the DOM  -->
+                                    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+                                    <script src="{% static 'js/script/audio_exercise.js' %}"></script>
+                                </div>
+                            </div>
+ 
+                            <input name="id_exercise" id="id_exercise" type="hidden" />                               
+                        </form>  
+                    </div>
+                </div>
+            </div>
 
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                        Fermer
+                </a> 
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
