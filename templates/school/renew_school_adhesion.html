@@ -53,7 +53,10 @@
             <div class="row">                    
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
+                        <a href="javascript:history.back()" class="btn btn-danger" onclick="return TestDelete('cette adhésion')" >Retour</a>
+                        {% comment %}
                         <a href="{% url 'delete_renewal_school_adhesion' %}" class="btn btn-danger" onclick="return TestDelete('cette adhésion')" >Annuler cette demande</a>
+                        {% endcomment %}
                     </div> 
                 </div>  
             </div> 
