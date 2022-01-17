@@ -666,10 +666,13 @@ def renew_school_adhesion(request):
 	request.session["inscription_school_id"] = None
 
 	today = datetime.now()
-	if today < datetime(today.year,7,1) :
-		somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
-	else :
-		somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
+	try :
+		if today < datetime(today.year,7,1) :
+			somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
+		else :
+			somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
+	except :
+		somme = 350
 
 	user = request.user
 
