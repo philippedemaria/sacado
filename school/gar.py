@@ -19,7 +19,6 @@ def date_abonnement(today):
 
 def web_abonnement_xml(abonnement,id_abonnement , today):
     #Webservice du GAR
-
     date_start, date_stop = date_abonnement(today)
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
@@ -54,7 +53,7 @@ def create_abonnement_gar(today,school,abonnement ,user):
     timestamp = datetime.timestamp(now)
     salt = str(timestamp).split(".") 
 
-    id_abonnement = "ABO_SACADO_" + str(abonnement.school.code_acad)+"_"+salt[0]
+    id_abonnement = "SACADO_" + str(abonnement.school.code_acad)+"_"+salt[0]
     host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
     directory = '/home/sacado/'
 
