@@ -268,7 +268,6 @@ ul#id_skills li{
                         </div>
                         <div id="config_render">
                             <h4 class="thin"><i class="fa fa-paperclip"></i> Type de remise</h4><hr/>
-                            {% comment %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
@@ -284,6 +283,7 @@ ul#id_skills li{
                                     </div>
                                 </div>
                             </div>
+                            {% comment %}
                             <div class="row" {% if not customexercise %} id="collaborative_div" {% endif %}>
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
@@ -303,6 +303,7 @@ ul#id_skills li{
                                     </div>
                                 </div>
                             </div>
+
                             {% if teacher.user.is_superuser %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
@@ -324,7 +325,7 @@ ul#id_skills li{
                                 </div>
                             </div>
                             {% endif %}
-                            {% endcomment %}
+                            {% endcomment %} 
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">

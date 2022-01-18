@@ -44,17 +44,16 @@
         {% if not rc.exercise.supportfile.is_ggbfile %}
           <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{rc.id}}">   
               <span class="helper_tip btn btn-default">Consigne
-                <div class="helper_tip_text_right"> {% if rc.instruction %}    {{rc.instruction|safe}}    {% else %}      {{ rc.exercise.supportfile.annoncement|safe }}  {% endif %}</div> 
+                <div class="helper_tip_text_right"> {% if rc.instruction %}    {{rc.instruction|safe|truncatechars_html:45}}    {% else %}      {{ rc.exercise.supportfile.annoncement|safe }}  {% endif %}</div> 
               </span>
           </div>
         {% endif %}
  
-          {% if group %}
+        {% if group %}
           {% get_students_from_group_and_rc rc group as data_rc %}
           {% get_only_students  parcours group as  only_real_student %}
           <!-- Exercice dissocié  -->  
-          <div  style="position: absolute; left : 0px; top:80px;" title="Cet exercice est indiviualisé à certains élèves. Cliquez sur l'icone dans la barre d'outil pour modifier." id="individialise_id_student{{  rc.exercise.id }}" 
-                {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
+          <div  style="position: absolute; left : 0px; top:80px;" title="Cet exercice est indiviualisé à certains élèves. Cliquez sur l'icone dans la barre d'outil pour modifier." id="individialise_id_student{{  rc.exercise.id }}"  {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <span class="btn btn-warning" style="cursor:auto">
               <i class="fa fa-users"></i><span id="nb_indiv_id_student{{  rc.exercise.id }}"> {{ data_rc.nb }} </span>  
             </span>
@@ -231,7 +230,7 @@
                     {% else %}
                     <div class="col-sm-6 col-md-6">
                         <label  style="font-size: 12px;">Nouvelle consigne </label><br>
-                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" data-custom=0    data-type ="2"  class="details_relation form-control">{% if rc.instruction %}{{ rc.instruction  }}{% endif %}</textarea>
+                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" data-custom=0    data-type ="2"  class="details_relation form-control">{% if rc.instruction %}{{ rc.instruction|safe|truncatechars_html:45  }}{% endif %}</textarea>
                     </div>
                     {% endif %}
                 </div> 
@@ -529,7 +528,7 @@
                       Consigne {% if rc.text_cor or  rc.video_cor or  rc.file_cor %}+ correction 
                                   <small><i class="fa fa-{% if rc.is_publish_cor %}eye{% else %}eye-slash{% endif %}"></i></small>
                                {% endif %}
-                <div class="helper_tip_text_right">{{rc.instruction|truncatechars_html:45}} </div> 
+                <div class="helper_tip_text_right">{{rc.instruction|safe|truncatechars_html:45}} </div> 
               </span>
           </div>
 

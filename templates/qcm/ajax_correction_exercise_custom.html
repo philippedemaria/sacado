@@ -44,7 +44,7 @@
     {% endif %}
 
     <div id="corrector">                 
-        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;z-index:-1"></canvas> 
+        <canvas id="myCanvas" style="border:1px solid #f8f8f8;position: absolute;width:100%;height:100%;z-index: -1"></canvas> 
         {% if customexercise.is_collaborative %}
             <iframe src=" " height="700" width="100%"></iframe>
         {% elif customexercise.is_file and c_e.file %}
@@ -61,14 +61,8 @@
             {% endfor %}    
         {%  elif customexercise.is_text %} 
             {% if "CanvasStyle" in c_e.answer|truncatechars:12   %}
-
                 {{  c_e.answer|json_script:"this_answer" }}   
-
-
-             
-
-       
-            {% else %}
+            {% else %} 
                 {{ c_e.answer|safe }}
             {% endif %}
         {%  elif customexercise.is_image    %} 
@@ -85,7 +79,7 @@
         {% if customexercise.is_python %}
             {% include 'basthon/python_correction_editor.html' %}
         {% endif %}
-
+        
     </div>
 
                     

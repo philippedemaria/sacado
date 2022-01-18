@@ -434,6 +434,14 @@ class Parcours(ModelWithCode):
             contains = True
         return contains
 
+ 
+    def contains_exo_perso(self):
+        contains = False
+        if self.parcours_customexercises.count() > 0 :
+            contains = True
+        return contains
+
+
     def contains_student(self):
         contains = False
         if self.students.count() > 0 :

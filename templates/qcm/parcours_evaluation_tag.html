@@ -247,10 +247,12 @@
                     <a href="{% url 'peuplate_parcours' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-explicit"></i> <span class="label_icon">Exercices</span>
                     </a>  
                 </div>  
+
                 <div class="col-lg-4 col-xs-4">
-                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="bi bi-mortarboard"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
-                    </a>   
-                </div>
+                    <a href="{% url 'parcours_create_custom_exercise' parcours.id 1  %}" class="edit" {% if parcours.contains_exo_perso %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-explicit-fill"></i> <span class="label_icon">Exos Persos</span>
+                    </a>  
+                </div>  
+
                 <div class="col-lg-4 col-xs-4">
                     <a href="{% url 'individualise_parcours' parcours.id  %}" class="edit" {% if parcours.is_individualized %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-person-video"></i> <span class="label_icon">Individual.</span>
                     </a> 
@@ -265,16 +267,22 @@
                     </a>
 
                 </div>
+
+                 
+                <div class="col-lg-4 col-xs-4">
+                    <a  href="{% url 'result_parcours' parcours.id 0 %}" class="edit" target="_blank"><i class="bi bi-mortarboard"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                    </a>   
+                </div>
+
+
                 <div class="col-lg-4 col-xs-4">
                  
                     <a  href="{% url 'stat_evaluation' parcours.id %}" class="edit"><i class="bi bi-bar-chart-line"></i>  <span class="label_icon">{% if parcours.is_evaluation %} Résultats{% else %}Stats{% endif %}  </span></a> 
-                
-                </div>
-                 
-                <div class="col-lg-4 col-xs-4">
-                    <span href="#" class="edit group_shower" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-people"></i>  <span class="label_icon">Elèves</span>
+                    <span href="#" class="edit group_shower pull-right" data-parcours_id="{{parcours.id }}" {% if parcours.just_students.count > 0 %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-people"></i>   
                     </span>
-                </div> 
+                </div>
+
+
             </div>
         {% else %}
             <div class="row extend">    

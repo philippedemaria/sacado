@@ -6213,7 +6213,6 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             w_f = cForm.save(commit=False)
             w_f.customexercise = customexercise
             w_f.parcours_id = idp
-            w_f.answer =  escape_chevron(cForm.cleaned_data['answer'])
             w_f.student = student
             w_f.is_corrected = 0
             w_f.save()

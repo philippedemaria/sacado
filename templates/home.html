@@ -46,8 +46,6 @@ Intro Section -
                 <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
                 {% endif %}
                 <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
- 
-
                     <span class="exo">{{ nb_exercise }}</span> 
                       exercice{{  nb_exercise|pluralize }}<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
                               <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires.</div>
@@ -55,7 +53,7 @@ Intro Section -
                 {% if not sacado_voyage %}
                 de <br/>
                 {% endif %}
-                        {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                    {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}
 
                       <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
                               <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique, Sciences et Vie de la Terre arrivent peu à peu.</div>
@@ -117,12 +115,13 @@ Intro Section -
                 </div>
                 <div class="row" style="margin-top:30px">
  
-                    <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#1bc074">Tout proche. </span>
-
-
+                    <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> 
+                    Correction <br/> en ligne
+                    
+                    <a href="#" data-toggle='modal'   data-target='#correction_modal'  ><i class="fa fa-question-circle"></i></a> 
 
                     <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
-                    
+            
                     <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
                   <a href="#" data-toggle='modal'   data-target='#bibliotex_modal' >
                     <i class="fa fa-question-circle"></i>
@@ -861,5 +860,29 @@ Intro Section -
         </div>
     </div> 
 </div>
+
+
+
+<div class="modal fade" id="correction_modal" tabindex="-1" role="dialog" aria-labelledby="correction_modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class='thin'  >Interface de correction </h1>
+            </div>
+            <div class="modal-body">
+ 
+                <img src="{% static 'img/correction_interface.jpg' %}" width="700px" />
+
+            </div>
+            <div class="modal-footer">    
+                <div class="col-lg-6 col-xs-6">   
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button> 
+                </div>             
+            </div> 
+        </div>
+    </div>
+</div>
+
+
 
 {% endblock %}
