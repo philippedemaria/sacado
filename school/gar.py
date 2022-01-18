@@ -33,7 +33,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
-    body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
+    body += "<nbLicenceEnseignant>500</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
     body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
     body += "<nbLicenceAutrePersonnel>50</nbLicenceProfDoc>"
@@ -44,7 +44,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "</abonnement>"
     return body
 
- 
+
 
 def create_abonnement_gar(today,school,abonnement ,user):
     """Création d'un abonnement dans la base de données"""
