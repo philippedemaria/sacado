@@ -710,7 +710,7 @@ def renew_school_adhesion(request):
 def delete_renewal_school_adhesion(request):
 
     school = request.user.school
-	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+    school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
     accounting = Accounting.objects.filter(school=school,is_active = 0).last() 
     accounting.delete()
