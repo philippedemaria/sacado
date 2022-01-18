@@ -680,18 +680,21 @@ def renew_school_adhesion(request):
 		accounting    = Accounting.objects.filter(school = school , is_abonnement =  1, is_active = 0 ).last()
 		accounting_id = accounting.id
 		abonnement    = accounting.abonnement
+		cause         = "renouvellement"
+		administration= ""
 	else :
 		accounting_id           = accounting_adhesion(school, today , None , user, False , "Renouvellement" )
 		accounting              = Accounting.objects.get(pk = accounting_id) 
 		date_start, date_stop   = date_abonnement(today)
-		abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
-
+		#abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
+		cause         = "résiliation"
+		administration= ". Nous traitons votre demande."
 
 	subject = "Adhésion SACADO - demande d'IBAN"
 	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
 	send_mail(subject,
-	          "Bonjour,  :\n\n Vous avez formulé une demande de renouvellement d'adhésion \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+	          "Bonjour,  :\n\n Vous avez formulé une demande de "+cause+" d'adhésion"+administration+" \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 	          settings.DEFAULT_FROM_EMAIL ,
 	          [user.email, "sacado.asso@gmail.com"])
 
@@ -709,8 +712,16 @@ def renew_school_adhesion(request):
 def delete_renewal_school_adhesion(request):
 
     school = request.user.school
+	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+
     accounting = Accounting.objects.filter(school=school,is_active = 0).last() 
     accounting.delete()
+	send_mail("Résisiliation d'adhésion",
+	          "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'adhésion   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+	          settings.DEFAULT_FROM_EMAIL ,
+	          [request.user.email, "sacado.asso@gmail.com"])
+
+
     messages.error(request,"Demande de renouvellement d'adhésion annulée")
     return redirect('admin_tdb')
 
