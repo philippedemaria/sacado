@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap'], function ($) {
             if (!$('#id_is_ggbfile').is(":checked")){
 
                 if (!$('#id_is_realtime').is(":checked") && !$('#id_is_python').is(":checked") && !$('#id_is_scratch').is(":checked") && !$('#id_is_file').is(":checked") && !$('#id_is_image').is(":checked") && !$('#id_is_text').is(":checked"))
-                { alert("vous devez sélectionner une type de remise d'exercice") ; return false ; } 
+                { alert("vous devez sélectionner un type de remise d'exercice") ; return false ; } 
             } 
             else
             {
