@@ -21,8 +21,6 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     #Webservice du GAR
 
     date_start, date_stop = date_abonnement(today)
-
-
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
@@ -34,16 +32,17 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<debutValidite>"+date_start+"</debutValidite>"
     body += "<finValidite>"+date_stop+"</finValidite>"
     body += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
-    body += "<categorieAffectation>TRANSFERABLE</categorieAffectation>"
-    body += "<typeAffectation>ETABL</typeAffectation>"
+    body += "<categorieAffectation>transferable</categorieAffectation>"
+    body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
     body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+    body += "<nbLicenceAutrePersonnel>50</nbLicenceProfDoc>"
     body += "<publicCible>ENSEIGNANT</publicCible>"
     body += "<publicCible>ELEVE</publicCible>"
     body += "<publicCible>DOCUMENTALISTE</publicCible>"
+    body += "<publicCible>AUTRE PERSONNEL</publicCible>"
     body += "</abonnement>"
-
     return body
 
  
