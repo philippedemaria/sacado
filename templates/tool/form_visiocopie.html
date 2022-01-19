@@ -27,7 +27,7 @@
   var interface=document.getElementById("myDiv");
   var canvas=document.getElementById("myCanvas");
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  var ws_path = ws_scheme + '://' + window.location.host + "/tool/visiocast";
+  var ws_path = ws_scheme + '://' + window.location.host + "/tool/visiocast/";
   console.log("tentative connexion to " + ws_path);
   window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
   socket.onopen = function () {
