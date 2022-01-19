@@ -33,16 +33,19 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
-    body += "<nbLicenceEnseignant>500</nbLicenceEnseignant>"
+    body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
     body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
-    body += "<nbLicenceAutrePersonnel>50</nbLicenceProfDoc>"
+    body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
     body += "<publicCible>ENSEIGNANT</publicCible>"
     body += "<publicCible>ELEVE</publicCible>"
     body += "<publicCible>DOCUMENTALISTE</publicCible>"
     body += "<publicCible>AUTRE PERSONNEL</publicCible>"
     body += "</abonnement>"
     return body
+
+  
+
 
 
 
