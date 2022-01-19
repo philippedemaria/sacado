@@ -24,7 +24,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
     body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
-    body += "<idDistributeurCom>832020065_000000000000000</idDistributeurCom>"
+    body += "<idDistributeurCom>832020065_0000000000000000</idDistributeurCom>"
     body += "<idRessource>ark:/46173/00001.p</idRessource>" #/46173/00001.p
     body += "<typeIdRessource>ark</typeIdRessource>"
     body += "<libelleRessource>SACADO</libelleRessource>"
