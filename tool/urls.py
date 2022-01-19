@@ -153,11 +153,15 @@ urlpatterns = [
     path('ajax_show_detail_question', ajax_show_detail_question, name='ajax_show_detail_question'),
  
 
+ 
 
-    ############## Videocopy
-    path('list_videocopy', list_videocopy, name='list_videocopy'),
-    path('create_videocopy/new', create_videocopy, name='create_videocopy'),   
-    path('delete_videocopy/<int:id>', delete_videocopy, name='delete_videocopy'),
+
+    ############## Visiocopie
+    path('list_visiocopie', list_visiocopie, name='list_visiocopie'),
+    path('cv<int:code>', create_visiocopie, name='create_visiocopie'),   
+    path('cv', create_visiocopie, name='create_visiocopie_vierge'),   
+    
+    path('delete_visiocopie/<int:id>', delete_visiocopie, name='delete_visiocopie'),
 
 
 

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+	<title>Capture d'images</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+	<!-- jquery    cropzee.js  
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="{% static 'js/lib/cropzee.js' %}" defer></script>
+  -->
+ 
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/AdminLTEperso.css' %}"> 
+</head>
+<body>
+	<script>
+
+  console.log("on lance le real time");
+  code=window.location.pathname.slice(-4);
+  console.log(code);
+  
+  
+  var interface=document.getElementById("myDiv");
+  var canvas=document.getElementById("myCanvas");
+  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  var ws_path = ws_scheme + '://' + window.location.host + "/tool/visiocast";
+  console.log("tentative connexion to " + ws_path);
+  window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+  socket.onopen = function () {
+      console.log("Connected to socket");
+      socket.send(JSON.stringify({"command":"joinExpediteur", "code":code} )); 
+      };        
+            // Handle incoming messages
+  socket.onmessage = function (message) {
+	  
+      var data = JSON.parse(message.data);
+      console.log("recu :"+data.command);
+      if (data.error) {alert(data.error);return;}
+      if (data.command=="connexion"){}
+  }
+function PostMessage(data){
+          //console.log("entree dans PostMessage"); 
+      window.socket.send(JSON.stringify(data));
+             console.log("message envoyé");
+          };
+function b64(str) {
+  var enc = new TextEncoder(); // always utf-8
+  b=str;
+  a=""
+  for (i=0;i<=50;i++)
+	    {a=a+b[i].toString(16)+" ";}
+  console.log(a);
+}        
+function caster(evt)
+   {
+    evt.stopPropagation();
+    evt.preventDefault();
+    // FileList object.
+    var files = evt.target.files;
+    var file = files[0];
+    var fileReader = new FileReader();
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onloadstart = function(progressEvent) {
+        resetLog();
+    }
+
+    fileReader.onload = function(progressEvent) {
+        var stringData = fileReader.result;
+    }
+
+    fileReader.onloadend = function(progressEvent) {
+        // FileReader.EMPTY, FileReader.LOADING, FileReader.DONE
+        console.log("readyState = " + fileReader.readyState);
+        if (fileReader.readyState==2)
+           {
+			       var Imgb64 = btoa(String.fromCharCode.apply(null, new Uint8Array(fileReader.result)));
+ 
+            PostMessage({"command":"cast","Imgb64":Imgb64,"name":file.name,
+			           "fileType":file.type, "size":file.size});
+
+
+              var largIm = 400 ;
+              var hautIm = 640 ; 
+              var t=document.getElementById("image"); // la div ou est affiché l'image
+       
+              canvas=document.createElement("canvas");
+              canvas.width=largIm;
+              canvas.height=hautIm;
+              ctx=canvas.getContext("2d");
+ 
+
+              image=document.createElement("img");
+              if ( file.type=="image/png") {
+                    image.src="data:image/png;base64,"+ Imgb64;}
+              if (file.type=="image/jpeg") {
+                    image.src="data:image/jpeg;base64,"+ Imgb64;}
+
+
+                image.onload=function(){
+                    ratio=Math.max(image.width/largIm, image.height/hautIm)
+                    
+                    image.height=image.height/ratio;
+                    image.width=image.width/ratio;
+                    dx=(largIm-image.width)/2;
+                    dy=(hautIm-image.height)/2;
+                    console.log(dx,dy,image.width,image.height);
+                    ctx.drawImage(image,dx,dy,image.width,image.height);
+                      // t.appendChild(image); // on met les images les unes après les autres...
+                    t.replaceChild(image,t.childNodes[0]);
+		            }
+          }
+      }
+
+    fileReader.onerror = function(progressEvent) {
+        appendLog("onerror!");
+        appendLog("Has Error!");
+    }
+
+ 
+}
+
+function resetLog() {
+    document.getElementById('log-div').innerHTML = "";
+}
+
+function appendLog(msg) {
+    document.getElementById('log-div').innerHTML += "<br>" + msg;
+}
+
+ 
+	
+	</script>
+
+    <div class="col-sm-12 col-md-12" align="center"> 
+             <div class="row" style="margin:10px">
+                <div class="col-sm-12 col-md-12"> 
+
+                	<h1 class="thin">Capture par smartphone</h1>
+
+                </div>
+            </div>
+
+
+        <form action="{% url 'create_visiocopie' code %}{{ code }}" method="POST"  enctype='multipart/form-data'>
+            {% csrf_token %}
+
+          <div class="row" style="margin:10px">
+            <div class="col-sm-12 col-md-12"> 
+			  <input type="file" name="image" accept="image/*" 
+			  class="btn btn-default" id="id_image" onchange="caster(event)">
+              <output id="log-div"></output>
+
+			</div>
+            </div>
+
+            <div class="row" style="margin:10px">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group" id="image">
+						 	             
+                    </div>
+                </div>
+            </div>
+            {% comment %}
+          	<div class="row">
+                  <div class="col-sm-12 col-md-12"> 
+                          <div class="form-group">
+                              <input value="envoyer à l'écran" class="btn btn-primary" 
+                              {% if not sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}>
+                          </div>
+                  </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12"> 
+                    <div class="form-group">
+                        <input value="Télécharger dans la bibliothèque" type="submit" class="btn btn-primary"  {% if not sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}/>
+                    </div>
+                </div>
+            </div>
+            <div class="row"  style="margin:10px">
+                <div class="col-sm-12 col-md-12"> 
+                    <div class="form-group">
+                        <a href="{% url 'list_visiocopie' %}" class="btn btn-default">Annuler, retour à ma bibliothèque</a>
+                    </div>
+                </div>
+            </div>
+            {% endcomment %}
+        </form>
+
+    </div>
+
+
+
+</body>
+</html>

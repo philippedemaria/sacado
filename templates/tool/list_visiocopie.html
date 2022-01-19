@@ -1,0 +1,180 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-videocopy']);
+    </script> 
+    <script src="{% static 'js/lib/qrcode.min.js' %}"></script>     
+{% endblock %}
+
+{% block page_title %}
+    <a href="{% url 'index' %}" ><i class="bi bi-webcam"></i> VisioCopies</a>
+{% endblock %}
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+
+
+{% block body %}
+<section class="content_main">
+	 <div class="row">
+	   <div align="center" class="col-sm-9 col-md-9">
+      <div>
+		   <a class="btn btn-default" onclick="avance(-1)"><</a><span id="numero"> 0/0 </span>
+	       <a class="btn btn-default" onclick="avance(1)">></a>
+	    </div>
+	   <div id="image"></div>
+	 </div>
+     <div align="center" id="capt" class="col-sm-3 col-md-3 mx-auto">
+    		<a id="lienCapt" href="#"  class="btn btn-new">Cliquer pour ouvrir<br>la page de capture</a><br><br>
+    		<a id="qrcode" href="#"></a>
+     </div>    
+  </div> 
+<!--	 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+        {% for v in videocopies %}
+            {% if v.image %}
+            <div class="videocopy">
+                <a href="#" data-toggle='modal' data-target='#video_projection' class="this_photo" data-img="{{ v.image.url }}" > 
+                    <img src="{{ v.image.url }}" width="244px" height="244px"  />
+                </a>  
+                <div class="videocopy_date">{{ v.timestamp|date:"d m Y à H:i" }} 
+                    <a href="{% url 'delete_visiocopie' v.id %}" class="pull-right edit" style="padding: 5px" onclick="return TestDelete('cette photo')"><i class="fa fa-trash fa-xs"></i>
+                    </a>
+                </div>  
+              </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+       
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+        </div>
+    </div>
+-->
+</section>
+ 
+<!--
+<div class="modal fade" id="video_projection" tabindex="-1" role="dialog" aria-labelledby="video_projection">
+    <div class="modal-dialog" role="document" style="width: 100%;margin:0px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body" align="center">
+                <img id="this_photo" width="1000px" />
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<script>
+  
+  var tabImage=new Array(); // tableau des images
+  var imageVue=-1   // l'image actuellement affichée	
+  var t=document.getElementById("image"); // la div ou est affiché l'image
+  var nu=document.getElementById("numero"); // la div ou est affiché 2/2 etc...
+  var largIm=700;   // dimensions du canvas qui reçoit l'image
+  var hautIm=1120;
+  var avance = function(n) {
+	  if (tabImage.length!=0  && imageVue+n>=0 && imageVue+n<tabImage.length)
+	    {imageVue=imageVue+n;
+	     t.replaceChild(tabImage[imageVue],t.childNodes[0]);
+	     nu.childNodes[0].textContent=" "+(imageVue+1)+"/"+tabImage.length;
+	 }
+	  }
+	     
+  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  var ws_path = ws_scheme + '://' + window.location.host + "/tool/visiocast";
+  console.log("tentative connexion to " + ws_path);
+  window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+  socket.onopen = function () {
+      console.log("Connected to socket");
+      socket.send(JSON.stringify({"command":"joinDestinataire"} )); 
+      };        
+            // Handle incoming messages
+  socket.onmessage = function (message) {
+	  var lien=document.getElementById("lienCapt");
+      var data = JSON.parse(message.data);
+      console.log("recu :"+data.command);
+      if (data.error) {alert(data.error);return;}
+      if (data.command=="joinDestinataire"){
+		  code=data.code;
+		  console.log("connexion avec le consumer ok, code=",code);
+		  lien.href="{% url 'create_visiocopie_vierge' %}"+code;
+		  qrcode=document.getElementById("qrcode")
+		  new QRCode(qrcode, {text:lien.href, width:180,height:180,
+			                  correctLevel:QRCode.CorrectLevel.L,
+			                  colorDark : "#0000FF"
+			                  });
+		  qrcode.href=lien.href;
+		  lien.innerHTML="cliquez ou flashez ce qrcode<br>"+lien.href;
+	  }
+	  if (data.command=="joinExpediteur"){
+		  console.log("connexion avec l 'expediteur, code=",code);
+		  lien.className="btn btn-danger";
+	  }
+	  if (data.command=="tousDeco"){
+		  console.log("deconnexion de tous les expediteurs, code=",code);
+		  lien.className="btn btn-new pull-right";
+	  }
+      if (data.command=="cast"){
+		  
+		  console.log("image recue, type : ", data.fileType);
+		  if (tabImage.length==0) {
+ 
+		    canvas=document.createElement("canvas");
+		    canvas.width=largIm;
+		    canvas.height=hautIm;
+		    ctx=canvas.getContext("2d");
+		   }
+		  image=document.createElement("img");
+		  if (data.fileType=="image/png") {
+		        image.src="data:image/png;base64,"+data.Imgb64;}
+		  if (data.fileType=="image/jpeg") {
+		        image.src="data:image/jpeg;base64,"+data.Imgb64;}
+		   
+          //ratio=Math.max(image.width/largIm, image.height/hautIm);
+          console.log(image.width,largIm);
+          //image.height=image.height/ratio;
+          //image.width=image.width/ratio;
+          image.onload=function(){
+			  ratio=Math.max(image.width/largIm, image.height/hautIm)
+			  
+			  image.height=image.height/ratio;
+			  image.width=image.width/ratio;
+			  dx=(largIm-image.width)/2;
+			  dy=(hautIm-image.height)/2;
+			  console.log(dx,dy,image.width,image.height);
+			  ctx.drawImage(image,dx,dy,image.width,image.height);
+		      tabImage.push(image);
+		      imageVue=tabImage.length-1;
+		        // t.appendChild(image); // on met les images les unes après les autres...
+		        if (t.children.length>=1) {t.replaceChild(image,t.childNodes[0]);}
+		        else { t.appendChild(image);}
+		        nu.textContent=" "+tabImage.length+"/"+tabImage.length;
+		 }
+	  }
+  }
+  
+function PostMessage(data){
+          //console.log("entree dans PostMessage"); 
+      window.socket.send(JSON.stringify(data));
+             console.log("message envoyé");
+}
+</script>
+
+{% endblock %}

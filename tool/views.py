@@ -2467,13 +2467,13 @@ def show_qrandom_admin(request,id):
 
 #####################################################################################################################################
 #####################################################################################################################################
-####    Videocopy
+####    Visiocopie
 #####################################################################################################################################
 #####################################################################################################################################
 
  
  
-def list_videocopy(request):
+def list_visiocopie(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     teacher = request.user.teacher
@@ -2493,16 +2493,16 @@ def list_videocopy(request):
             nf.teacher = request.user.teacher
             nf.save()
 
-            return redirect('list_videocopy')
+            return redirect('list_visiocopie')
         else:
             print(form.errors)
 
 
-    return render(request, 'tool/list_videocopy.html', {'form': form , 'videocopies' : videocopies })
+    return render(request, 'tool/list_visiocopie.html', {'form': form , 'videocopies' : videocopies })
 
 
 
-def create_videocopy(request):
+def create_visiocopie(request,code):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     form = VideocopyForm(request.POST or None, request.FILES or None,   )
@@ -2513,17 +2513,17 @@ def create_videocopy(request):
             nf.teacher = request.user.teacher
             nf.save()
 
-            return redirect('list_videocopy')
+            return redirect('list_visiocopie')
         else:
             print(form.errors)
 
-    context = {'form': form, }
+    context = {'form': form, 'code':code}
 
-    return render(request, 'tool/form_videocopy.html', context)
+    return render(request, 'tool/form_visiocopie.html', context)
 
  
 
-def delete_videocopy(request, id):
+def delete_visiocopie(request, id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     videocopy = Videocopy.objects.get(id=id)
@@ -2534,7 +2534,7 @@ def delete_videocopy(request, id):
         messages.error(request,"Vous ne pouvez pas supprimer cette image.")
         return redirect("index")
 
-    return redirect('list_videocopy')
+    return redirect('list_visiocopie')
     
 
  
