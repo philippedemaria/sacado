@@ -9,33 +9,37 @@ def ran() :
 		
 
 
-#def printc(*a) :
-#	pass
-printc=print
+def printc(*a) :
+    pass
+
+#printc=print
 class VisioConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         """
         Called when the websocket is handshaking as part of initial connection.
         """
         printc("Tentative de connection")
-        printc("user=",self.scope["user"])
-        if self.scope["user"].is_anonymous :
-            printc("utilisateur anonyme")
-            await self.close()
-        else :    
-            await self.accept()
-            printc("L'utilisateur est loggé, on poursuit...")
-            
+        #printc("user=",self.scope["user"])
+        #if self.scope["user"].is_anonymous :
+        #    printc("utilisateur anonyme")
+        #    await self.close()
+        #else :    
+        await self.accept()
+        printc("L'utilisateur est loggé, on poursuit...")
+        if 'user' in self.scope :
+            printc("utilisateur : ",self.scope['user'])
     async def disconnect(self, close_code):
         printc(self.scope['user'], " se deconnecte")
         # Leave room group
+        
         if "nconn" in self.scope :
            printc("le destinataire se deconnecte")
         else :
-            printc("une fenetre expediteur se ferme", self.scope['code'])
-            await self.channel_layer.group_send("groupe"+self.scope["code"],{"type":"deconnexion"})
-			
-        self.channel_layer.group_discard(self.channel_name)    
+            if "code" in self.scope :    
+              printc("une fenetre expediteur se ferme", self.scope['code'])
+              await self.channel_layer.group_send("groupe"+self.scope["code"],{"type":"deconnexion"})
+              await self.channel_layer.group_discard("groupe"+self.scope["code"],self.channel_name)    
+
     async def receive_json(self,content) :
         command=content.get("command",None)
         printc("commande recue ",command)
@@ -65,7 +69,7 @@ class VisioConsumer(AsyncJsonWebsocketConsumer):
                  "fileType" : content.get("fileType")
                  })  		
             printc("envoie au channel ok")
-            printc(content.get("Imgb64"))
+            #printc(content.get("Imgb64"))
     #------------  fonctions de tratiement des évènements---------------------
     
     async def joinExpediteur(self,data):
