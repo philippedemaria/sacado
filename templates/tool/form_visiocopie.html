@@ -57,8 +57,15 @@ function caster(evt)
         // FileReader.EMPTY, FileReader.LOADING, FileReader.DONE
     
         if (fileReader.readyState==2)
-        {var Imgb64 = btoa(String.fromCharCode.apply(null, new Uint8Array(fileReader.result)));
-             PostMessage({"command":"cast","Imgb64":Imgb64,"name":file.name,
+        {l=fileReader.result.byteLength;
+	imgb64="";
+	tranche=3*100000;  //la taille en octets doit etre un multiple de 3
+	for (i=0;i+tranche<=l;i=i+tranche)
+	 {imgb64=imgb64+btoa(String.fromCharCode.apply(null,new Uint8Array(fileReader.result.slice(i,i+t
+ranche))));
+	 }
+	imgb64=imgb64+btoa(String.fromCharCode.apply(null,new Uint8Array(fileReader.result.slice(i))));
+        PostMessage({"command":"cast","Imgb64":Imgb64,"name":file.name,
 			           "fileType":file.type, "size":file.size});
          var largIm = 400 ;
          var hautIm = 640 ; 
