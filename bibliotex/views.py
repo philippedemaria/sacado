@@ -183,7 +183,8 @@ def printer(request, relationtex_id, collection,output):
     else : #pour la création d'un exercise ou son update*
 
         try :
-            relationtex  = Relationtex.objects.get(pk = relationtex_id)
+            relationtex = Relationtex.objects.get(pk = relationtex_id)
+            title       =  relationtex.exotex.title
              
             if output== "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
@@ -193,6 +194,7 @@ def printer(request, relationtex_id, collection,output):
  
         except :
             exotex         = Exotex.objects.get(pk = relationtex_id)
+            title          =  exotex.title
             if output== "html_cor" :
                 ctnt =  exotex.correction
             else : 
@@ -201,7 +203,6 @@ def printer(request, relationtex_id, collection,output):
 
 
         document       = "relationtex" + str(relationtex_id)
-        title          =  exotex.title
         author         = "Équipe SACADO"
 
         elements += ctnt
