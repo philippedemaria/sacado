@@ -13,6 +13,7 @@ from itertools import groupby
 from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
 
 
+
 def validation_file(content):
 	if content :
 		content_type = content.content_type.split('/')[0]
@@ -33,7 +34,6 @@ class ToolForm(forms.ModelForm):
 
  
 
- 
 
 class QuestionForm(forms.ModelForm):
 
@@ -59,7 +59,6 @@ class QuestionForm(forms.ModelForm):
 			knowledges = Knowledge.objects.filter(theme__subject = subject ,level__in=levels)
 		elif len(themes) > 0 :
 			knowledges = Knowledge.objects.filter(theme__subject = subject ,theme__in=themes)
-
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges, required=False)
 
 

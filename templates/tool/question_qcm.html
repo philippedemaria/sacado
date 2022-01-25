@@ -10,16 +10,16 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
     <script>
         require(['script/ajax-quizz-update']);
-        require(['script/ajax-quizz']);
     </script> 
     {% else %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
         require(['script/ajax-quizz-complement']);
-        require(['script/ajax-quizz']);
-    </script> 
+    </script>
     {% endif %}
- 
+    <script>
+        require(['script/ajax-quizz']);
+    </script>  
 {% endblock %}
 
 
@@ -74,4 +74,3 @@
 
 {% endblock %}                                                         
 
-                            

@@ -152,6 +152,10 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
         $("#id_is_publish").prop("checked", true); 
 
 
+
+
+
+
         $('body').on('click', '#checking_zone0' , function (event) {  
             checked_and_checked(0) ;
         });

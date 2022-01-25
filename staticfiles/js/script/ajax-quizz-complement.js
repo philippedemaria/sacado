@@ -43,7 +43,12 @@ define(['jquery',  'bootstrap' ], function ($) {
             $('.div_time').toggle(300) ; 
         });
 
+        $("#id_choices-0-is_correct").prop("checked", false); 
+        $("#id_choices-1-is_correct").prop("checked", false); 
+        $("#id_choices-2-is_correct").prop("checked", false); 
+        $("#id_choices-3-is_correct").prop("checked", false); 
 
+        $('#id_is_correct').prop('checked', false);
  
 
 
