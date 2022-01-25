@@ -27,7 +27,7 @@
 
 {% block type_of_question %}
         <div class="row">
-            <div class="col-sm-12 col-md-4" align="center"> 
+            <div class="col-sm-12 col-md-6" align="center"> 
                 <a href="{% url 'create_question' quizz.id 1 %}" class="selector_question" >
                     <div class="quizz_card">
                         <h1>Vrai / Faux</h1>
@@ -36,7 +36,7 @@
                     </div>
                 </a>
             </div>    
-            <div class="col-sm-12 col-md-4" align="center">
+            <div class="col-sm-12 col-md-6" align="center">
                 <a href="{% url 'create_question' quizz.id 2 %}" class="selector_question">
                     <div class="quizz_card">
                         <h1>Réponse rédigée</h1>
@@ -44,18 +44,9 @@
                     </div>
                 </a>
             </div> 
-            <div class="col-sm-12 col-md-4" align="center"> 
-                <a href="{% url 'create_question' quizz.id 1 %}" class="selector_question" >
-                    <div class="quizz_card"  style="background-color: #CCC">
-                        <h1>Légender une image</h1>
-                        <i class="bi bi-card-image icon_size"></i><br/>A venir                
- 
-                    </div>
-                </a>
-            </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-4" align="center"> 
+            <div class="col-sm-12 col-md-6" align="center"> 
                 <a href="{% url 'create_question' quizz.id 3 %}" class="selector_question">
                     <div class="quizz_card">
                         <h1>QCM</h1>
@@ -66,7 +57,7 @@
                     </div>
                 </a>
             </div>    
-            <div class="col-sm-12 col-md-4" align="center"> 
+            <div class="col-sm-12 col-md-6" align="center"> 
                 <a href="{% url 'create_question' quizz.id 4 %}" class="selector_question">
                     <div class="quizz_card">
                         <h1>QCS</h1>
@@ -77,13 +68,5 @@
                     </div>
                 </a>
             </div>  
-            <div class="col-sm-12 col-md-4" align="center"> 
-                <a href="{% url 'create_question' quizz.id 4 %}" class="selector_question">
-                    <div class="quizz_card" style="background-color: #CCC">
-                        <h1>Association</h1>
-                        <i class="bi bi-box-arrow-in-right icon_size"></i><br/>A venir
-                    </div>
-                </a>
-            </div> 
         </div>
 {% endblock %}
