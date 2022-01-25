@@ -1204,6 +1204,9 @@ def enroll(request, slug):
                 user = authenticate(username=username, password=password)
                 login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 request.session["user_id"] = request.user.id
+            else :
+                messages.error(request, "Inscription abandonnée !")
+                return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })    
         else :
 
             username = request.POST.get("this_username")
