@@ -930,7 +930,10 @@ def check_response_from_mail(request):
 def close_my_account(request):
     if request.method == 'POST':
         user = request.user
-        user.delete()
+        try :
+            user.delete()
+        except :
+            message.error("Vous avez crée des sections dans vos parcours qui bloquent votre désincription. Avant de supprimer votre compte, supprimez ces sections.")
         return redirect('index')
     else:
         user = request.user
