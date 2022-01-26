@@ -933,7 +933,7 @@ def close_my_account(request):
         try :
             user.delete()
         except :
-            messages.error("Vous avez crée des sections dans vos parcours qui bloquent votre désincription. Avant de supprimer votre compte, supprimez ces sections.")
+            messages.error(request,"Vous avez crée des sections dans vos parcours qui bloquent votre désincription. Avant de supprimer votre compte, supprimez ces sections.")
         return redirect('index')
     else:
         user = request.user
