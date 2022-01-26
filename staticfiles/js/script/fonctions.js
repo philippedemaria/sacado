@@ -44,6 +44,9 @@ function testPassword(f1, f2) {
     
 }
 
+function clone(f1,f2) {
+    if (!confirm('Vous souhaitez cloner '+f1+' '+f2+'? '+f1+' va se placer dans votre liste hors dossier. Confirmer')) return false;
+}
 
 function deleteAllStudents() {
     if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? \nToutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
