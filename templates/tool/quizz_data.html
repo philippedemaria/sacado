@@ -56,10 +56,13 @@
     <small>{{ quizz.code }}</small>
 </td>
 <td> 
-    <a href="{% url 'update_quizz' quizz.id  %}" title="Modifer le quizz"> 
+    <a href="{% url 'update_quizz' quizz.id  %}" title="Modifier le quizz"> 
         <i class="bi bi-pencil"></i>
     </a>
-
+    <br/><br/>
+    <a href="{% url 'clone_quizz' quizz.id  %}" title="Cloner le quizz" onclick="return clone('le quizz' , {{ quizz.title }} )"> 
+        <i class="bi bi-clouds"></i>
+    </a>
     {% comment %}
     <a href="{% url 'print_quizz'  quizz.id   %}" title="Imprimer le quizz"><i class="bi bi-printer"></i> </a>
     {% endcomment %}
