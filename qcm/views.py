@@ -319,7 +319,7 @@ def sending_to_teachers(teacher , level,subject,topic) : # envoie d'une notifica
         for u in users :
             if u.teacher.exercise_post :
                 if u.email : 
-                    msg = "Un "+ str(topic) + " vient d'être publié sur SacAdo sur le niveau "+str(level.name)+" en "+str(subject.name)
+                    msg =  str(topic) + " vient d'être publié sur SacAdo sur le niveau "+str(level.name)+" en "+str(subject.name)+"\n\nSi vous ne souhaitez plus recevoir ces notifications, décochez dans votre profil cette option (notification 2)."
                     sending_mail(str(topic) +" SacAdo",  msg , settings.DEFAULT_FROM_EMAIL , u.email)
     except :
         pass
@@ -2114,6 +2114,8 @@ def affectation_students_to_contents_parcours_or_evaluation(parcours_ids,all_stu
         for quiz in quizz:
             quiz.students.set(all_students)
 
+
+
 def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher         = request.user.teacher
@@ -2149,9 +2151,9 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
         nf.is_evaluation = is_eval
         if nf.is_share :
             if is_eval :
-                texte = "Nouvelle évaluation"
+                texte = "Une nouvelle évaluation"
             else :
-                texte = "Nouveau parcours"
+                texte = "Un nouveau parcours"
             sending_to_teachers(teacher , nf.level , nf.subject,texte)
 
         if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
@@ -4563,7 +4565,7 @@ def create_supportfile(request):
             if is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             try :   
-                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Nouvel exercice")
+                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Un nouvel exercice")
             except:
                 pass      
             nf.save()
@@ -4600,7 +4602,7 @@ def create_supportfile_knowledge(request,id):
             if is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             try :
-                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Nouvel exercice")   
+                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Un nouvel exercice")   
             except :
                 pass 
             nf.save()
@@ -4751,9 +4753,6 @@ def create_exercise(request, supportfile_id):
     return render(request, 'qcm/form_exercise.html', context)
 
 
-
-
-
 @user_passes_test(user_is_creator)
 def ajax_load_modal(request):
     """ crée la modale pour changer les savoir faire"""
@@ -4786,8 +4785,6 @@ def change_knowledge(request):
     return redirect( 'admin_associations', exercise.level.id)
 
 
-
-
 @csrf_exempt
 def ajax_sort_exercise_from_admin(request):
     """ tri des exercices""" 
@@ -4805,9 +4802,6 @@ def ajax_sort_exercise_from_admin(request):
 
     data = {}
     return JsonResponse(data)
-
-
-
 
 
 
@@ -4834,8 +4828,6 @@ def show_exercise(request, id):
         url = "qcm/show_teacher_writing.html"  
 
     return render(request, url , context)
-
-
 
 
 
@@ -4885,7 +4877,6 @@ def show_this_exercise(request, id):
 
 def execute_exercise(request, idp,ide):
 
-
     if not request.user.is_authenticated :
         return redirect("index")
         
@@ -4903,7 +4894,6 @@ def execute_exercise(request, idp,ide):
     timer = today.time()
 
     tracker_execute_exercise(True, request.user , idp , ide , 0)
-
 
     context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
@@ -4924,8 +4914,6 @@ def store_the_score_relation_ajax(request):
 
     numexo = int(request.POST.get("numexo"))-1    
     relation_id = int(request.POST.get("relation_id"))
-
-
     relation = Relationship.objects.get(pk = relation_id)
     data = {}
  
@@ -4935,7 +4923,6 @@ def store_the_score_relation_ajax(request):
         score = round(float(request.POST.get("score")),2)*100
         if score > 100 :
             score = 100
-
         ##########################################################
         ########################### Storage student answer
         ##########################################################
