@@ -268,6 +268,18 @@ def attribute_all_documents_to_students(parcourses, students ):
             for course in courses:
                 course.students.set(students)
 
+            bibliotexs = p.bibliotexs.all()
+            for b in bibliotexs:
+                b.students.set(students)
+
+            flashpacks = p.flashpacks.all()
+            for f in flashpacks:
+                f.students.set(students)
+
+            quizz = p.quizz.all()
+            for q in quizz:
+                q.students.set(students)
+
         test = True
     except :
         test = False
