@@ -234,7 +234,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     url: url,
                     success: function (data) {
  
-                        $('#content_exercises').html("").html(data.html);
+                        $('#content_cards').html("").html(data.html);
                         $("#loader").html(""); 
                         
                         }
@@ -253,6 +253,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let subject_id = $(this).data("subject_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
+
             $.ajax(
                 {
                     type: "POST",
@@ -266,7 +268,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     url : "ajax_my_flashpacks" ,
                     success: function (data) {
 
-                        $("#my_biblio").html(data.html) ;
+ 
+                        $('#content_cards').html("").html(data.html);
+                        $("#loader").html(""); 
 
                     }
                 }
@@ -287,6 +291,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         let flashpack_id = $("#flashpack_id").val();
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
+        if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
 
         $.ajax(
             {
@@ -304,7 +309,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 url : "../ajax_level_flashcard" ,
                 success: function (data) {
 
-                    $("#my_biblio").html(data.html) ;
+                    $("#content_cards").html(data.html) ;
+                    $("#loader").html(""); 
 
                 }
             }
@@ -321,7 +327,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         let theme_id = $("#id_theme").val();
         let flashpack_id = $("#flashpack_id").val();
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
+        
+        if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
         $.ajax(
             {
                 type: "POST",
@@ -339,7 +346,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 url : "../ajax_level_flashcard" ,
                 success: function (data) {
 
-                    $("#my_biblio").html(data.html) ;
+                    $("#content_cards").html(data.html) ;
+                    $("#loader").html(""); 
 
                 }
             }

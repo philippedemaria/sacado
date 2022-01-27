@@ -999,3 +999,11 @@ def get_criterion_results (obj, customexercise, parcours , student):
     """Détermine si un flashpack  est traité par un élève """
     return obj.results( customexercise, parcours , student) 
  
+
+@register.simple_tag 
+def include_in_flashpack (obj, flashpack):
+    """Détermine si un flashpack  est traité par un élève """
+    return obj.in_flashpack( flashpack ) 
+ 
+
+

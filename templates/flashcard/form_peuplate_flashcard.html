@@ -120,8 +120,9 @@
                 <div class="col-sm-12 col-md-12">
                     <div id="loader">
                     </div>
-                    <div id="content_exercises" class="list_choice_bibliotex"> 
-                        {% for flashcard in flashcards %}
+                    <div id="content_cards" class="list_choice_bibliotex"> 
+                        {% for flashcard in flashcards %}   
+                            {% include_in_flashpack flashcard flashpack as is_selected %}
                             {% include 'flashcard/search_flashcard_tag.html' %}
                         {% endfor %}
                         <div style="clear: both;"> 

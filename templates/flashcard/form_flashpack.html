@@ -263,7 +263,15 @@
                                         {{ form.stop|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
                                     </td>
                                 </tr>
-
+                                <tr>
+                                    <td>{{ form.is_global.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Flashpack annuel ou par parcours(par défaut).</div>
+                                                </span> 
+                                    </td>
+                                    <td>             
+                                        {{ form.is_global|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                                    </td>
+                                </tr>
                     </table>
             </div>
         </div>

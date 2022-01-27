@@ -44,7 +44,7 @@ class Flashcard(models.Model):
 
     #duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
     is_validate  = models.BooleanField(default=1, verbose_name="Flashcard validée par l'enseignant ?")
-
+    is_publish    = models.BooleanField(default=1, verbose_name="Publié ?")
     students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
 
     waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, null=True, on_delete=models.CASCADE, default="")
@@ -95,6 +95,15 @@ class Flashcard(models.Model):
         return t
 
 
+
+    def in_flashpack(self,flashpack):
+        t = False
+        if self in flashpack.flashcards.all() :
+            t = True
+        return t 
+
+
+
 class Flashpack(models.Model):
     """
     Modèle représentant un ensemble de flashcard.
@@ -123,7 +132,7 @@ class Flashpack(models.Model):
 
     is_creative  = models.BooleanField(default=0, verbose_name="Création de flashCard par les élèves ?")
 
-
+    is_global    = models.BooleanField(default=0, verbose_name="Flashpack annuel ?")
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="flashpacks" ) 
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="flashpacks"  ) 

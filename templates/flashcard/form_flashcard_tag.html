@@ -15,18 +15,25 @@
         </div>
         {% if request.user.is_teacher %}
             {% if request.user.teacher != flashpack.teacher %}
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-3">
                     <label>Validation</label><br/>
                     {{ form.is_validate|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                     {{ form.is_validate.errors }}
             </div>
             {% endif  %}
         {% endif  %}
-        <div class="col-sm-12 col-md-4">
+        <div class="col-sm-12 col-md-2">
             <div class="form-group">
                 <label>Calculatrice ?</label><br/>
                 {{ form.calculator|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                 {{ form.calculator.errors }}
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-2">
+            <div class="form-group">
+                <label>Publiée ?</label><br/>
+                {{ form.is_publish|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                {{ form.is_publish.errors }}
             </div>
         </div>
     </div>

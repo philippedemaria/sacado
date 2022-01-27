@@ -607,6 +607,12 @@ def ajax_level_flashcard(request):
     keyword      = request.POST.get("keyword",None)
     flashpack_id = request.POST.get("flashpack_id",None)
 
+    print("level_id", level_id) 
+    print("waiting_id",waiting_id)
+
+    print("flashpack_id",flashpack_id)
+
+
     flashpack = Flashpack.objects.get(pk=flashpack_id)
     teacher = request.user.teacher 
     data = {}
@@ -614,38 +620,40 @@ def ajax_level_flashcard(request):
     base = Flashcard.objects.filter(subject_id= subject_id).exclude(flashpacks=flashpack)
 
     if theme_ids :  
-        if level_id and theme_ids[0] != "" and waiting_id and not keyword : 
+
+        if level_id != " " and theme_ids[0] != "" and waiting_id and not keyword : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level , theme__in= theme_ids, waiting = waiting ).order_by("theme","waiting" )
 
-        elif level_id  and waiting_id and not keyword  : 
+        elif level_id != " "  and waiting_id and not keyword  : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level ,  waiting = waiting, ).order_by("theme","waiting" )
 
-        elif level_id and theme_ids[0] != "" and not keyword  : 
+        elif level_id != " " and theme_ids[0] != "" and not keyword  : 
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level , theme__in= theme_ids ).order_by("theme","waiting" )
 
         elif theme_ids[0] != ""  and not keyword   : 
             flashcards = base.filter(  theme__in= theme_ids).order_by("theme","waiting" )
 
-     
         elif keyword and theme_ids[0] != ""   : 
             flashcards =  base.filter(Q(title__contains= keyword )|Q(question__contains= keyword ),  theme__in= theme_ids ).order_by("theme","waiting" )
-        
+
         elif keyword : 
             flashcards =  base.filter(Q(title__contains= keyword )|Q(question__contains= keyword )  ).order_by("theme","waiting" )
+
         else :
             flashcards = base
+
     else :
-        if level_id and  waiting_id  : 
+        if level_id != " " and  waiting_id  : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter(levels = level ,  waiting = waiting ).order_by("theme","waiting" )
 
-        elif level_id and keyword  : 
+        elif level_id != " " and keyword  : 
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter(Q(title__contains= keyword )|Q(question__contains= keyword ), levels = level  ).order_by("theme","waiting" )
 
