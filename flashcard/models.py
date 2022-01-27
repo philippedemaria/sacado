@@ -98,8 +98,11 @@ class Flashcard(models.Model):
 
     def in_flashpack(self,flashpack):
         t = False
-        if self in flashpack.flashcards.all() :
-            t = True
+        try :
+            if self in flashpack.flashcards.all() :
+                t = True
+        except :
+            pass
         return t 
 
 

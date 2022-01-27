@@ -320,14 +320,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
     $('#keyword').on('keyup', function (event) {
 
-        let level_id = $("id_level").val();
-        let subject_id = $("id_subject").val();
+        let level_id = $("#id_level").val();
+        let subject_id = $("#id_subject").val();
         let waiting_id =  $("#waiting_id").val();
         let keyword = $(this).val();
         let theme_id = $("#id_theme").val();
         let flashpack_id = $("#flashpack_id").val();
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        
+
         if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
         $.ajax(
             {

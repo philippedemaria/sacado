@@ -621,17 +621,17 @@ def ajax_level_flashcard(request):
 
     if theme_ids :  
 
-        if level_id != " " and theme_ids[0] != "" and waiting_id and not keyword : 
+        if (level_id != " " or level_id) and theme_ids[0] != "" and waiting_id and not keyword : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level , theme__in= theme_ids, waiting = waiting ).order_by("theme","waiting" )
 
-        elif level_id != " "  and waiting_id and not keyword  : 
+        elif (level_id != " " or level_id)  and waiting_id and not keyword  : 
             waiting = Waiting.objects.get(pk=waiting_id)
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level ,  waiting = waiting, ).order_by("theme","waiting" )
 
-        elif level_id != " " and theme_ids[0] != "" and not keyword  : 
+        elif (level_id != " " or level_id) and theme_ids[0] != "" and not keyword  : 
             level   = Level.objects.get(pk=level_id)
             flashcards = base.filter( levels = level , theme__in= theme_ids ).order_by("theme","waiting" )
 
