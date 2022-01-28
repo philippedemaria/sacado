@@ -8,7 +8,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#id_is_publish').prop('checked', true);
         $('#id_is_archive').prop('checked', false); 
         $('#id_is_creative').prop('checked', false); 
-        
+        $('#id_is_global').prop('checked', false); 
 });
 
 });
