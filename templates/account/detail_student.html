@@ -111,8 +111,16 @@
             <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
                 <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
                 <li class="divider"></li>
-                {% for thm in themes %}
-                     <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm.name }}</a></li>
+
+                {% regroup themes by subject as subjects %}
+                {% for s in subjects   %}
+                    <li style="background: {{ s.grouper.color }}; color: {{ s.grouper.color|contrast_color }}; padding:5px ; font-size: 16px;" >
+                         {{ s.grouper }}
+                    </li>
+
+                    {% for thm in s.list %}
+                         <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm.name }}</a></li>
+                    {% endfor %}
                 {% endfor %}
             </ul>
         </li>

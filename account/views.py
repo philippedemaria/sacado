@@ -763,7 +763,6 @@ def detail_student_all_views(request, id):
 
 
     studentanswers = student.answers.all()
-    themes = student.level.themes.all()
     today = time_zone_user(user)
     parcourses_tab, parcourses_set = [] , set()
     exercise_tab = []
@@ -832,7 +831,10 @@ def detail_student_all_views(request, id):
         teacher = Teacher.objects.get(user=request.user)
         group = student.students_to_group.filter( Q(teacher=teacher)| Q(teachers=teacher)).last()
         groups =  student.students_to_group.filter(Q(teacher=teacher)| Q(teachers=teacher))
-        for g in groups :
+
+        themes = set()
+        for g in groups :            
+            themes.update(student.level.themes.filter(subject=g.subject)) 
             sts = g.students.all().order_by("user__last_name")
             for s in sts :
                 students.append(s)
@@ -849,6 +851,10 @@ def detail_student_all_views(request, id):
     else:
         group = Group.objects.filter(students=student).last()
         groups = student.students_to_group.all()
+        themes = set()
+        for g in groups :
+            themes.update(student.level.themes.filter(subject=g.subject)) 
+
 
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
                    'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
