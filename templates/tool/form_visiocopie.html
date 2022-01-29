@@ -9,11 +9,13 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	
 	<!-- jquery    cropzee.js  
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.m
+in.js"></script>
 	<script src="{% static 'js/lib/cropzee.js' %}" defer></script>
   -->
  
-    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootst
+rap.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/AdminLTEperso.css' %}"> 
 </head>
 <body>
@@ -34,6 +36,7 @@
       if (data.command=="connexion"){}
   }
 function PostMessage(data){
+	console.log("entree dans postmessage");
       window.socket.send(JSON.stringify(data));
      };
  
@@ -46,7 +49,7 @@ function caster(evt)
     var files = evt.target.files;
     var file = files[0];
     var fileReader = new FileReader();
-    fileReader.readAsArrayBuffer(file);
+    fileReader.readAsDataURL(file);
     fileReader.onloadstart = function(progressEvent) {}
 
     fileReader.onload = function(progressEvent) {
@@ -57,41 +60,43 @@ function caster(evt)
         // FileReader.EMPTY, FileReader.LOADING, FileReader.DONE
     
         if (fileReader.readyState==2)
-        {l=fileReader.result.byteLength;
-	imgb64="";
-	tranche=3*100000;  //la taille en octets doit etre un multiple de 3
-	for (i=0;i+tranche<=l;i=i+tranche)
-	 {imgb64=imgb64+btoa(String.fromCharCode.apply(null,new Uint8Array(fileReader.result.slice(i,i+t
-ranche))));
-	 }
-	imgb64=imgb64+btoa(String.fromCharCode.apply(null,new Uint8Array(fileReader.result.slice(i))));
-        PostMessage({"command":"cast","Imgb64":Imgb64,"name":file.name,
-			           "fileType":file.type, "size":file.size});
-         var largIm = 400 ;
-         var hautIm = 640 ; 
+        {console.log(fileReader.result, file.type);
+         var largIm = 600 ;
+         var hautIm = 900 ; 
          var t=document.getElementById("image");
          canvas=document.createElement("canvas");
-          canvas.width=largIm;
-          canvas.height=hautIm;
-          ctx=canvas.getContext("2d");
-          image=document.createElement("img");
-          if ( file.type=="image/png") {
-            image.src="data:image/png;base64,"+ Imgb64;}
-          if (file.type=="image/jpeg") {
-            image.src="data:image/jpeg;base64,"+ Imgb64;}
-          image.onload=function(){
-              ratio=Math.max(image.width/largIm, image.height/hautIm)
-              image.height=image.height/ratio;
-              image.width=image.width/ratio;
-              dx=(largIm-image.width)/2;
-              dy=(hautIm-image.height)/2;
-              ctx.drawImage(image,dx,dy,image.width,image.height);
-              t.replaceChild(image,t.childNodes[0]);
-	  }
-	}
-    }  
+         canvas.width=largIm;
+         canvas.height=hautIm;
+         ctx=canvas.getContext("2d");
+         image=document.createElement("img");
+         image.src=progressEvent.target.result;}
+         image.onload=function(){
+			//mise en place de l'image chargée dans le canvas
+            ratio=Math.max(image.width/largIm, image.height/hautIm);
+            winit=image.width;hinit=image.height; //les dimensions d'origine de l'image
+            image.height=image.height/ratio;
+            image.width=image.width/ratio;
+            dx=(largIm-image.width)/2;
+            dy=(hautIm-image.height)/2;
+            ctx.drawImage(image,dx,0,image.width,image.height);
+            t.replaceChild(image,t.childNodes[0]);
+            //envoie de l'image initiale ou l'image du canvas au serveur
+            if (image.width*image.height<winit*hinit){  // l'image initiale est trop grosse, on prend celle
+                            // du canvas
+                console.log("image du canvas");            
+                var imgb64 = canvas.toDataURL("image/png");
+                PostMessage({"command":"cast","Imgb64":imgb64,"name":file.name,
+			             "fileType":"image/png"});
+			    }
+			    else   // on envoie l'image initiale, qui est plus petite
+			      {console.log("image d'origine");
+				   PostMessage({"command":"cast","Imgb64":fileReader.result,"name":file.name,
+			             "fileType":file.type});
+               }
+	    }  // image.onload
+     }
    fileReader.onerror = function(progressEvent) {}
- }
+}
 </script>
 
     <div class="col-sm-12 col-md-12" align="center"> 
@@ -102,13 +107,15 @@ ranche))));
             </div>
 
 
-        <form action="{% url 'create_visiocopie' code %}{{ code }}" method="POST"  enctype='multipart/form-data'>
+        <form action="{% url 'create_visiocopie' code %}{{ code }}" method="POST
+"  enctype='multipart/form-data'>
             {% csrf_token %}
 
           <div class="row" style="margin:10px">
             <div class="col-sm-12 col-md-12"> 
 			  <input type="file" name="image" accept="image/*" 
-			  class="btn btn-default" id="id_image" onchange="caster(event)">
+			  class="btn btn-default" id="id_image" onchange="caster
+(event)">
 	   </div>
             </div>
 
@@ -123,8 +130,10 @@ ranche))));
           	<div class="row">
                   <div class="col-sm-12 col-md-12"> 
                           <div class="form-group">
-                              <input value="envoyer à l'écran" class="btn btn-primary" 
-                              {% if not sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}>
+                              <input value="envoyer à l'écran" class="btn btn-pr
+imary" 
+                              {% if not sacado_asso %}  disabled  title='La vers
+ion établissement est requise.' {% endif %}>
                           </div>
                   </div>
             </div>
@@ -132,14 +141,17 @@ ranche))));
             <div class="row">
                 <div class="col-sm-12 col-md-12"> 
                     <div class="form-group">
-                        <input value="Télécharger dans la bibliothèque" type="submit" class="btn btn-primary"  {% if not sacado_asso %}  disabled  title='La version établissement est requise.' {% endif %}/>
+                        <input value="Télécharger dans la bibliothèque" type="su
+bmit" class="btn btn-primary"  {% if not sacado_asso %}  disabled  title='La ver
+sion établissement est requise.' {% endif %}/>
                     </div>
                 </div>
             </div>
             <div class="row"  style="margin:10px">
                 <div class="col-sm-12 col-md-12"> 
                     <div class="form-group">
-                        <a href="{% url 'list_visiocopie' %}" class="btn btn-default">Annuler, retour à ma bibliothèque</a>
+                        <a href="{% url 'list_visiocopie' %}" class="btn btn-def
+ault">Annuler, retour à ma bibliothèque</a>
                     </div>
                 </div>
             </div>
@@ -150,3 +162,4 @@ ranche))));
 
 </body>
 </html>
+

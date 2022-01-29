@@ -33,7 +33,8 @@
 	   <div id="image"></div>
 	 </div>
      <div align="center" id="capt" class="col-sm-3 col-md-3 mx-auto">
-    		<a id="lienCapt" href="#"  class="btn btn-new">Cliquer pour ouvrir<br>la page de capture</a><br><br>
+    		<a id="lienCapt" href="#"  class="btn btn-new">Cliquer pour ouvrir<br>la page de capture
+</a><br><br>
     		<a id="qrcode" href="#"></a>
      </div>    
   </div> 
@@ -83,6 +84,7 @@
 		 lien.className="btn btn-new pull-right";
 	  }
      if (data.command=="cast"){
+		 console.log("cast", data.Imgb64.length);
         if (tabImage.length==0) {
 	    canvas=document.createElement("canvas");
 	    canvas.width=largIm;
@@ -90,17 +92,14 @@
 	    ctx=canvas.getContext("2d");
 	}
 	 image=document.createElement("img");
-	 if (data.fileType=="image/png") {
-	     image.src="data:image/png;base64,"+data.Imgb64;}
-	 if (data.fileType=="image/jpeg") {
-	     image.src="data:image/jpeg;base64,"+data.Imgb64;}
+	     image.src=data.Imgb64;
 	 image.onload=function(){
 	     ratio=Math.max(image.width/largIm, image.height/hautIm)
 	     image.height=image.height/ratio;
 	     image.width=image.width/ratio;
 	     dx=(largIm-image.width)/2;
 	     dy=(hautIm-image.height)/2;
-	     ctx.drawImage(image,dx,dy,image.width,image.height);
+	     ctx.drawImage(image,dx,0,image.width,image.height);
 	     tabImage.push(image);
 	     imageVue=tabImage.length-1;
 	     if (t.children.length>=1) {t.replaceChild(image,t.childNodes[0]);}
