@@ -215,8 +215,6 @@ $(document).ready(function () {
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let code_student =  $(this).val()  ;
 
-                console.log(code_student) ;
-
                 $.ajax({
                     url: '../account/ajax/control_code_student/',
                     data: {

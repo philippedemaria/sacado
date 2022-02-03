@@ -6,6 +6,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
  
 
             makeDivAppear($("#id_is_publish"), $("#publication_div"));
+            makeDivAppear($("#id_is_global"), $("#save_with_cards"));
+
+ 
+            $("#id_is_global").change(function () {
+
+                        $("#save_without_cards").toggleClass('btn-primary').toggleClass('btn-default');
+                    });
 
 
             function makeDivAppear($toggle, $item) {

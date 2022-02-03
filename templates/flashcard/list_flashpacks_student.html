@@ -1,0 +1,45 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+
+    <script>
+        require(['script/ajax-flashpack']);
+    </script> 
+
+{% endblock %} 
+
+
+{% block page_title %}
+    {% include 'flashcard/logo.html' %}  
+    Flashpack annuels
+
+ 
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+     
+ 
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12"> 
+                {% for flashpack in flashpacks %}
+                    {%  include 'flashcard/flashpack_student_data_index.html'  %}
+                {% endfor %}   
+            <!-- ******************************************************************************************** -->
+        </div>        
+    </div>
+</section>
+{% endblock %}

@@ -7,10 +7,9 @@
 
 <div class="row">
     <div class="col-md-12 col-lg-12 col-xs-12">
- 
-  
-        {%  for student in  students %} 
-            <div  class="box box-widget widget-user-2" style="background-color: #00819F"> 
+        {%  for student in students %} 
+            <div  class="box box-widget widget-user-2" 
+                  style="background-color: #00819F"  > 
                   <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="handler widget-user-header">
                     <div class="box_title_vignette"> 
@@ -26,64 +25,63 @@
                         <div class="col-lg-6 col-xs-6">
                             <a  href="{% url 'my_child_tasks' student.user.id %}"  {% if not student.is_task_exists %}class="edit"{% endif %}  >
                                 {% if not student.is_task_exists %}<i class="fa fa-calendar"></i>{% else %}<i class="fa fa-calendar-check"></i>{% endif %}
-                                 <span class="label_icon">Tâches</span>
+                                <span class="label_icon">Tâches</span>
                             </a>  
                         </div>
                     </div>
                 </div>
             </div>  
         {% endfor %}
- 
     </div>
 </div>
 
 
-        <div class="row" id="parcours_div">  
-            <hr>  
-            <div class="col-md-12 col-sm-12">
-                <table class="table" style="background-color:#FFF; width:100%">
-                    {% regroup last_exercises_done by exercise as responses_list %}
-                    <thead>
-                        <tr style="background-color:#f4f6f9"> 
-                        <td><span  style="font-weight:100;font-size:20px ">Derniers exercices </span> </td>
-                        <td>Thème</td>
-                        <td></td>
-                        <td></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for r in responses_list %}
-                        <tr>
-                            <td> 
-                                <a href="{% url 'show_this_exercise'  r.grouper.id   %}" >  
-                                    <img src="{{ r.grouper.supportfile.imagefile.url }}" class="imagefile">
-                                </a>
-                            </td>
-                            <td style="width:75%"><a href="{% url 'show_this_exercise' r.grouper.id %}">{{ r.grouper }}</a></td>
-                            <td>{{ r.grouper.theme.name }}</td>
-                            <td style="width:10%">
-                                {% for s in r.list  %}
-                                    <div  class="markdown pull-right
-                                        {% if s.point < 30 %}
-                                         red 
-                                        {% elif s.point < 60 %}
-                                        orange
-                                        {% elif s.point < 80 %}
-                                        green
-                                        {% else %}
-                                        darkgreen
-                                        {% endif %}">
-                                        {{ s.point }}%
-                                    </div> 
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
- 
+<div class="row" >  
+    <hr>  
+    <div class="col-md-12 col-sm-12">
+        <table class="table" style="background-color:#FFF; width:100%">
+            {% regroup last_exercises_done by exercise as responses_list %}
+            <thead>
+                <tr style="background-color:#f4f6f9"> 
+                <td><span  style="font-weight:100;font-size:20px ">Derniers exercices </span> </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for r in responses_list %}
+                <tr>
+                    <td> 
+                        <a href="{% url 'show_this_exercise'  r.grouper.id   %}" >  
+                            <img src="{{ r.grouper.supportfile.imagefile.url }}" class="imagefile">
+                        </a>
+                    </td>
+                    <td style="width:75%"><a href="{% url 'show_this_exercise' r.grouper.id %}">{{ r.grouper }}</a></td>
+                    <td>{{ r.grouper.theme.name }}</td>
+                    <td style="width:10%">
+                        {% for s in r.list  %}
+                            <div  class="markdown pull-right
+                                {% if s.point < 30 %}
+                                 red 
+                                {% elif s.point < 60 %}
+                                orange
+                                {% elif s.point < 80 %}
+                                green
+                                {% else %}
+                                darkgreen
+                                {% endif %}">
+                                {{ s.point }}%
+                            </div> 
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 </section> 
 
 

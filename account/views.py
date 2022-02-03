@@ -1500,11 +1500,11 @@ def ajax_control_code_student(request):
             data['test'] = True
 
         else:
-            data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
+            data['html'] = "<br><i class='fa fa-times text-danger'></i> Code inconnu."
             data['test'] = False
 
     except:
-        data['html'] = "<br><i class='fa fa-times text-danger'></i> Identifiant déjà utilisé."
+        data['html'] = "<br><i class='fa fa-times text-danger'></i> Code inconnu."
         data['test'] = False
 
     return JsonResponse(data)
@@ -1667,3 +1667,23 @@ def init_password_teacher(request, id ):
 
 
     return redirect('list_teacher') 
+
+
+
+
+
+def aggregate_child(request):
+
+    child_code = request.POST.get('child')
+    parent     = request.user.parent
+
+    try :
+        child_user = User.object.get(code=child_code)
+        parent.students.add(child_user)
+    except :
+        messages.error(request,"Echec de la paire. Le code de l'enfant est inconnu.")
+
+ 
+    return redirect('index') 
+
+

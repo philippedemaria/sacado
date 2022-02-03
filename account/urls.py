@@ -88,10 +88,8 @@ urlpatterns = [
     path('response_from_mail/<int:user_id>', response_from_mail, name='response_from_mail'),
     path('check_response_from_mail', check_response_from_mail, name='check_response_from_mail'),
 
-
-
     path('switch_teacher_student/<int:idg>', switch_teacher_student, name='switch_teacher_student'),
     path('switch_student_teacher', switch_student_teacher, name='switch_student_teacher'),
 
-
+    path('aggregate_child', aggregate_child, name='aggregate_child'),
 ]

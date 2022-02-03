@@ -45,9 +45,12 @@ class FlashcardForm(forms.ModelForm):
 				waitings = Waiting.objects.all()
 		else :
 			waitings = Waiting.objects.all()
+		try :
+			self.fields['waiting'] = forms.ModelChoiceField(queryset=waitings )
 
-		self.fields['waiting'] = forms.ModelChoiceField(queryset=waitings )
-
+		except :
+			pass
+		self.fields['waiting'].required = False
 
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']

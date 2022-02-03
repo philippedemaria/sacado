@@ -73,4 +73,9 @@ active
         <div class="captionmenu">Quizz</div>
     </a>
 </li>
- 
+<li  class="dropdown  {% if '/flashpack' in request.path %} active{% endif %}">
+    <a href="{% url 'flashpacks' %}" class="main" >
+        <i class="bi bi-layers icon_size"></i> 
+        <div class="captionmenu">Flashpack</div>
+    </a>
+</li> 

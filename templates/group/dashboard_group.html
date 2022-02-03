@@ -88,27 +88,6 @@
                     <hr/>
                 {% endfor %}
             {% endif %}
-            <!-- *************************************** Flashcard ***************************************************** -->
-
- 
-
-
-            {% if flashpacks %}
-            <div class="row" id="mixedSlider">
-                <div class="col-md-12 col-lg-12 col-xs-12 in_this_time_container MS-content" style="height:320px"> 
-                    <div class="in_this_time">Flashpacks à réviser </div>
-
-                        {% for flashpack in flashpacks %}
-                            {%  include 'flashcard/flashpack_student_data_index.html'  %}
-                        {% endfor %}   
-                    <!-- ******************************************************************************************** -->
-                </div>        
-                <div class="MS-controls">
-                    <button class="MS-left no_visu_on_load"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
-                    <a href="#" class="MS-right"><i class="bi bi-arrow-right-circle"  ></i></a>
-                </div>
-            </div>
-            {% endif %}
 
 
 

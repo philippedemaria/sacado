@@ -7,86 +7,115 @@
 {% csrf_token %}    
     <input type="hidden" name="flashpack" id="id_flashpack" value="{{ flashpack.id }}" /> 
     <input type="hidden" name="subject" id="id_subject" value="{{ flashpack.subject.id }}" /> 
+
     <div class="row">
-        <div class="col-sm-12 col-md-4">
-                <label>Titre</label>
-                {{ form.title|add_class:"form-control"  }}
-                {{ form.title.errors }}
+        <div class="col-sm-12 col-md-6">
+            <h2 class="thin">Question proposée <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_question_textarea_display"><i class="bi bi-eye" title="Voir en taille réelle"></i> </a>  </h2>
         </div>
-        {% if request.user.is_teacher %}
-            {% if request.user.teacher != flashpack.teacher %}
-            <div class="col-sm-12 col-md-3">
-                    <label>Validation</label><br/>
-                    {{ form.is_validate|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                    {{ form.is_validate.errors }}
-            </div>
-            {% endif  %}
-        {% endif  %}
-        <div class="col-sm-12 col-md-2">
-            <div class="form-group">
-                <label>Calculatrice ?</label><br/>
-                {{ form.calculator|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                {{ form.calculator.errors }}
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-2">
-            <div class="form-group">
-                <label>Publiée ?</label><br/>
-                {{ form.is_publish|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                {{ form.is_publish.errors }}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <label>Attendu</label>
-            {{ form.waiting|add_class:"form-control select2"}} 
-            {{ form.waiting.errors }} 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-8 col-md-6">
-            <h2 class="thin">Question proposée</h2>
+        <div class="col-sm-12 col-md-6">
+            <h2 class="thin">Configuration</h2>   
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-10">
+        <div class="col-sm-12 col-md-6">
             {{ form.question }}
             {{ form.question.errors }}             
         </div>
-        <div class="col-sm-12 col-md-1">
-            <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_question_textarea_display"><i class="bi bi-eye"></i> Voir en taille réelle</a>   
+        <div class="col-sm-12 col-md-6">
+            {% comment %}
+            <div class="row  form-group" id="display_more_details">
+                <div class="col-sm-12">
+                     <i class="bi bi-plus-circle-dotted"></i> Plus d'options
+                </div>
+            </div>
+            {% endcomment %}
+            <div class="row display_more_details form-group">
+                <div class="col-sm-12">
+                    <label>Titre  <em>(optionnel)</em></label><br/>
+                    {{ form.title|add_class:"form-control"  }}
+                    {{ form.title.errors }}
+                </div>
+            </div>
+            <div class="row display_more_details  form-group">
+                <div class="col-sm-12 col-md-12">
+                    <label>Attendu <em>(optionnel)</em></label><br/>
+                    {{ form.waiting|add_class:"form-control select2"}} 
+                    {{ form.waiting.errors }} 
+                </div>
+            </div>
+
+            {% if request.user.is_teacher %}
+                {% if request.user.teacher != flashpack.teacher %}
+            <div class="row form-group">
+                <div class="col-sm-7">
+                    <label>Validation</label>
+                </div>
+                <div class="col-sm-5">
+                    {{ form.is_validate|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.is_validate.errors }}
+                </div>
+            </div>
+                {% endif  %}
+            {% endif  %}
+            <div class="row form-group">
+                <div class="col-sm-7">
+                    <label>Calculatrice ?  <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Nécessite la calculatrice.</div>
+                        </span> 
+                    </label>
+                </div>
+                <div class="col-sm-5">
+                    {{ form.calculator|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.calculator.errors }}
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-7">
+                    <label>Publiée ?<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Visible dans le flashpack.</div>
+                        </span> 
+
+
+                    </label>
+                </div>
+                <div class="col-sm-5">
+                    {{ form.is_publish|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.is_publish.errors }}
+                </div>
+            </div> 
+            <div class="row form-group">
+                <div class="col-sm-7">
+                    <label>Incluse dans un flashpack annuel ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >S'inclut automatiquement dans un flashpack annuel par défaut lorsque l'option du flashpack est activée.</div>
+                        </span> 
+                    </label>
+                </div>
+                <div class="col-sm-5">
+                    {{ form.is_globalset|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    {{ form.is_globalset.errors }}
+                </div>
+            </div> 
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-8 col-md-6">
-            <h2 class="thin">Réponse attendue</h2>
+        <div class="col-sm-12 col-md-6">
+            <h2 class="thin">Réponse proposée <a href="#" data-toggle='modal' data-target='#textarea_display'   id="this_answer_textarea_display"><i class="bi bi-eye" title="Voir en taille réelle"></i>  </a> </h2>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <h2 class="thin">Aide <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_helper_textarea_display"><i class="bi bi-eye" title="Voir en taille réelle"></i></a> </h2>   
         </div>
     </div>
     <div class="row">  
-        <div class="col-sm-12 col-md-10">
+        <div class="col-sm-12 col-md-6">
             {{ form.answer }}
-            {{ form.answer.errors }}    
+            {{ form.answer.errors }}             
         </div>
-        <div class="col-sm-12 col-md-1" >
-            <a href="#" data-toggle='modal' data-target='#textarea_display'   id="this_answer_textarea_display"><i class="bi bi-eye"></i> Voir en taille réelle</a>   
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 col-md-6">
-            <h2 class="thin">Aide </h2>
-        </div>
-    </div>
-    <div class="row">  
-        <div class="col-sm-12 col-md-10">
+        <div class="col-sm-12 col-md-6">
             {{ form.helper }}
-            {{ form.helper.errors }}   
-        </div>
-        <div class="col-sm-12 col-md-1">
-            <a href="#" data-toggle='modal' data-target='#textarea_display' id="this_helper_textarea_display"><i class="bi bi-eye"></i> Voir en taille réelle</a>   
+            {{ form.helper.errors }}    
         </div>
     </div>
-    <div class="row">
+    <div class="row"  style="margin-top:30px;">
         <div class="col-sm-12 col-md-12"> 
             <div class="form-group">
                 <input value="Enregistrer" type="submit" class="btn btn-primary"/>

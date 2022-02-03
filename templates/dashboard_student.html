@@ -31,9 +31,6 @@
     </div>
     {% endif %}
 
-
-
-
     <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12">
              <!-- ******************************************************************************************** -->
@@ -52,9 +49,6 @@
                         <div class="group_div_student">
                             {{ group.level.shortname_full|safe }} 
                         </div>
-
-
-
                         <div style="font-size:30px;color:{{ group.color|contrast_color }};font-weight: 100;position: absolute;bottom: 0px;left:12px"> 
                             {% if group.subject.name|length > 30 %}
                                 {{ group.subject.shortname }}

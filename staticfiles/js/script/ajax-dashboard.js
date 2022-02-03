@@ -30,7 +30,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }
             });
 
-            function change_direction(sens,loop) {               
+        function change_direction(sens,loop) {               
 
                 if (sens == 'top')
                 {
@@ -44,7 +44,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }
             }
 
-            function AnimateRotate($elem , angle) {
+        function AnimateRotate($elem , angle) {
                 // we use a pseudo object for the animation
                 // (starts from `0` to `angle`), you can name it as you want
                 $({deg: 180}).animate({deg: angle}, {
@@ -62,8 +62,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         $('.helper_div_text').on('click', function (event) {
 
@@ -88,30 +86,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $("#helper_div_in").html(value) ;
         });
 
-
-
-
-
-
-
-
-
-
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         $('#show_help_from_tdb').on('click', function (event) {
             $("#help_from_tdb").toggle(300) ;
         });
 
-
-
-
-         // $('.collapse').not(':first').collapse();Collapse all but the first row on the page.
-
+        // $('.collapse').not(':first').collapse();Collapse all but the first row on the page.
         // This section makes the search work.
         
           var searchTerm, panelContainerId;
@@ -143,15 +126,27 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        $('#id_child').on('keyup', function () {
 
+                 
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let code_student =  $(this).val()  ;
 
-
-
-
-
-
-
-
+                $.ajax({
+                    url: 'account/ajax/control_code_student/',
+                    data: {
+                        'code_student': code_student,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+ 
+                        $("#verif_child").html(data["html"]);
+  
+                    }
+                });
+            });
         // ====================================================================================================================
         // ====================================================================================================================
         // =========================================   check username exist  ================================================== 

@@ -11,7 +11,6 @@ from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
 from time import strftime
- 
 
 POLICES = (
         (16, '16'),
@@ -34,7 +33,7 @@ class Flashcard(models.Model):
     """
     Modèle représentant un associé.
     """
-    title         = models.CharField(max_length=255, default='', verbose_name="Titre")
+    title         = models.CharField(max_length=255, default='', blank=True,  verbose_name="Titre")
 
     question      = RichTextUploadingField( default='',  verbose_name="Question écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
@@ -42,13 +41,14 @@ class Flashcard(models.Model):
     answer        = RichTextUploadingField( default='',  verbose_name="Réponse attendu")
     helper        = RichTextUploadingField( null = True,   blank=True, verbose_name="Aide proposée")
 
-    #duration   = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
     is_validate  = models.BooleanField(default=1, verbose_name="Flashcard validée par l'enseignant ?")
-    is_publish    = models.BooleanField(default=1, verbose_name="Publié ?")
-    students   = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
+    is_publish   = models.BooleanField(default=1, verbose_name="Publié ?")
+    students     = models.ManyToManyField(Student, blank=True, through="Answercard", related_name="flashcards", editable=False)
+
+    is_globalset = models.BooleanField(default=1, verbose_name="Contenue dans le flashpack annuel ?")
 
     waiting   = models.ForeignKey(Waiting, related_name="flashcards", blank=True, null=True, on_delete=models.CASCADE, default="")
-    theme     = models.ForeignKey(Theme, related_name="flashcards", blank=True, on_delete=models.CASCADE, default="")
+    theme     = models.ForeignKey(Theme, related_name="flashcards", blank=True,  null=True,  on_delete=models.CASCADE, default="")
     levels    = models.ManyToManyField(Level, related_name="flashcards", blank=True )
     subject   = models.ForeignKey(Subject, related_name="flashcards", blank=True, null = True, on_delete=models.CASCADE, default="")
 
@@ -119,7 +119,7 @@ class Flashpack(models.Model):
     flashcards    = models.ManyToManyField(Flashcard, related_name="flashpacks", blank=True)
     
     levels    = models.ManyToManyField(Level, related_name="flashpacks", blank=True)
-    themes    = models.ManyToManyField(Theme, related_name="flashpacks" )
+    themes    = models.ManyToManyField(Theme, related_name="flashpacks", blank=True)
     subject   = models.ForeignKey(Subject, related_name="flashpacks", blank=True, null = True, on_delete=models.CASCADE)
  
     vignette   = models.ImageField(upload_to=flashpack_directory_path, verbose_name="Vignette d'accueil", blank=True, null = True , default ="")
@@ -127,9 +127,8 @@ class Flashpack(models.Model):
     is_share     = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
     is_favorite  = models.BooleanField(default=1, verbose_name="Favori ?")
- 
+    is_publish   = models.BooleanField(default=1, verbose_name="Publié ?")
     
-    is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Date de fin")
 
@@ -163,7 +162,6 @@ class Flashpack(models.Model):
     def today_cards(self,today,student) :
 
         data = {}
- 
         if self.answercards.count() > 0 :
             today_cards =  self.flashcards.filter(is_validate=1 , answercards__rappel=today)
 

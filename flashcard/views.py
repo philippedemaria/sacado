@@ -35,21 +35,36 @@ from general_fonctions import *
  
 
 def list_flashpacks(request):
-    teacher = request.user.teacher
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    flashpacks = Flashpack.objects.all()
-    return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
+
+    if request.user.is_teacher :
+        teacher = request.user.teacher
+        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+        flashpacks = Flashpack.objects.all()
+        return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
+    else :
+        student = request.user.student
+        today = time_zone_user(request.user)
+        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+        flashpacks = Flashpack.objects.filter(is_global=1)
+        return render(request, 'flashcard/list_flashpacks_student.html', {'flashpacks': flashpacks, 'student' : student , 'today' : today })
+
+
+
+
+
+
+
 
 
  
 def list_my_flashpacks(request):
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"]          = False # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["flashpack_id"] = None 
-    teacher = request.user.teacher
-    dataset_user = teacher.flashpacks
-    dataset      = dataset_user.filter(is_archive=0)
-    flashpacks = dataset.filter(folders=None)
+    teacher            = request.user.teacher
+    dataset_user       = teacher.flashpacks
+    dataset            = dataset_user.filter(is_archive=0)
+    flashpacks         = dataset.filter(folders=None)
     flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
     list_folders = list()
@@ -60,7 +75,21 @@ def list_my_flashpacks(request):
         flash_folders["flashpacks"] = teacher_flash_folders  
         list_folders.append(flash_folders)
 
-    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
+    ########################################################################
+    # insere les cartes d'un flashpack de parcours dans les flashpack annuel
+    ########################################################################
+    dataset_include_cards  = dataset_user.filter(is_global=1)
+    dataset_parcourses     = dataset_user.filter(is_global=0)
+    for dataset_include_card in dataset_include_cards :
+        cards = set()
+        for flashpack in dataset_parcourses :
+            cards.update(flashpack.flashcards.filter( is_globalset = 1 ))
+        dataset_include_card.flashcards.set(cards)
+    ########################################################################
+    ########################################################################
+    ########################################################################
+
+    groups     = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
     nb_archive = dataset_user.filter(is_archive=1).count()
     return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups , 'nba' : nb_archive , 'is_archive' : False })
 
@@ -124,15 +153,18 @@ def create_flashpack(request, idf=0):
             group = Group.objects.get(pk = group_id)
             nf.levels.add(group.level)
             group_students.update(group.students.all())
-
         nf.students.set(group_students)
 
-        messages.success(request, 'Le flashpack a été créé avec succès !')
-        return redirect('set_flashcards_to_flashpack' , nf.id)
+        if nf.is_global :
+            messages.success(request, 'Le flashpack annuel est créé avec succès !')
+            return redirect('my_flashpacks')
+        else :
+            messages.success(request, 'Le flashpack est créé avec succès !')
+            return redirect('set_flashcards_to_flashpack' , nf.id)
     else:
         print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'flashpack': None , 'folder': folder  , 'group': group   }
+    context = {'form': form, 'communications' : [] , 'flashpack': None , 'parcours': None ,  'folder': folder  , 'group': group   }
 
     return render(request, 'flashcard/form_flashpack.html', context)
 
@@ -179,7 +211,7 @@ def update_flashpack(request, id):
         else:
             print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'flashpack': flashpack, 'folder': folder  , 'group': group }
+    context = {'form': form, 'communications' : [] , 'flashpack': flashpack, 'parcours': None ,  'folder': folder  , 'group': group }
 
     return render(request, 'flashcard/form_flashpack.html', context )
 
@@ -293,6 +325,7 @@ def set_flashcards_to_flashpack(request, id):
 
  
     flashpack = Flashpack.objects.get(id=id)
+    request.session["flashpack_id"] = id
 
     if not flashpack.is_creative and flashpack.teacher != request.user.teacher :
         messages.error(request,"Vous tentez d'ouvrir un flashpack illégalement. Vous êtes donc redirigé.")
@@ -445,7 +478,6 @@ def flashpack_results(request, idf,idp=0):
         template = 'flashcard/flashpack_results_student.html'
         context = { 'flashpack': flashpack,  'answercards': answercards ,'parcours' : parcours   }
 
-
     return render(request, template , context )  
 
 
@@ -554,7 +586,7 @@ def update_flashcard(request, id):
             validate = request.POST.get("validate",None)
             fp_id = request.session.get("flashpack_id",None)
             if validate :
-                if fp_id : return redirect('validate_flashcards_to_flashpack',fp_id)
+                if fp_id : return redirect('set_flashcards_to_flashpack',fp_id)
                 else : return redirect('my_flashpacks')
             else :
                 return redirect('my_flashpacks')
@@ -606,12 +638,6 @@ def ajax_level_flashcard(request):
     waiting_id     = request.POST.get("waiting_id",None)
     keyword      = request.POST.get("keyword",None)
     flashpack_id = request.POST.get("flashpack_id",None)
-
-    print("level_id", level_id) 
-    print("waiting_id",waiting_id)
-
-    print("flashpack_id",flashpack_id)
-
 
     flashpack = Flashpack.objects.get(pk=flashpack_id)
     teacher = request.user.teacher 
@@ -996,10 +1022,6 @@ def ajax_attribute_this_flashcard(request):
     data['waitings'] = list(waitings)
  
     return JsonResponse(data)
-
-
-
-
 
 
 @csrf_exempt 

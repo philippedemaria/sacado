@@ -25,7 +25,7 @@
 {% block page_title %}
     {% include 'flashcard/logo.html' %}
     {% include 'qcm/breadcrumb.html' %}
-    Flashpack 
+    {% if flashpack %} {{ flashpack }}  {% else %} Nouveau flashpack   {% endif %} 
 
 {% endblock %}
 
@@ -44,6 +44,27 @@
 <section class="content_main"> 
     <form action="#" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
+        {% if not parcours %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-warning">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                            {{ form.is_global.label_tag }}<br/><span style="font-size: 10px">Un flashpack annuel ne peut pas être intégré dans un dossier, ni dans un parcours. Il est accessible depuis <a href="{% url 'my_flashpacks' %}" style="border-bottom: dotted 1px">la liste des flashpacks</a>.</span>          
+                        </div>
+                        <div class="col-sm-3 col-md-2">
+                            {{ form.is_global|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                        </div>
+                        <div class="col-sm-7 col-md-6"  style="font-size: 14px">
+                            Un flashpack annuel suit un algorithme de répétitions espacées sur l'année entière avec une insertion de cartes selon le choix (configuration). Un flashpack par parcours (par défaut) ne suit pas d'algorithme. 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
         <div class="row">
             <div class="col-sm-12 col-md-8">
                 <div class="row">
@@ -116,7 +137,8 @@
                         </div>
                     </div> 
                 </div>
-                <div class="row">
+                {% if not flashpack.is_global %}
+                <div class="row"  id="folders_is_global">
                     <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
@@ -132,7 +154,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                    <div class="col-sm-12 col-md-6" style="margin-top:10px;overflow-y: auto;height: 230px;">
                         <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -148,7 +170,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="themes_is_global">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                             <label>Thèmes <em>utile pour organiser  et retrouver des flashcards  </em></label>
@@ -157,6 +179,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
             <div class="col-sm-12 col-md-4 setup_ggb">
                 <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
@@ -201,12 +224,12 @@
 
 				                <tr>
 				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-				                                    <div class="helper_tip_text" >Archiver vos quizz pour plus de clarté dans votre liste de quizz actifs.</div>
+				                                    <div class="helper_tip_text" >Archiver vos flashpacks pour plus de clarté dans votre liste de flashpacks actifs.</div>
 				                                </span> 
 				                    </td>
 				                    <td> {{ form.is_archive|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
 				                </tr>
-                                <tr>
+                                <tr id="creative_is_global">
                                     <td><label>Création de flashcard par les élèves <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                                     <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards. Validation obligatoire de l'enseignant.</div>
                                                 </span> 
@@ -241,7 +264,7 @@
 				                        </div> 
 				                    </td>
 				                </tr>
-                                <tr>
+                                <tr id="creative_is_global">
                                     <td><label>Création de flashcard par les élèves <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                                     <div class="helper_tip_text" >Permettre aux élèves de créer leur propres flashcards. Validation obligatoire de l'enseignant.</div>
                                                 </span> 
@@ -254,22 +277,13 @@
                                     </td>
                                 </tr>
 				            {% endif %}
-                                <tr>
+                                <tr id="stop_is_global">
                                     <td>{{ form.stop.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                                     <div class="helper_tip_text" >Date de fin d'utilisation du flashpack.</div>
                                                 </span> 
                                     </td>
                                     <td>             
-                                        {{ form.stop|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.is_global.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                    <div class="helper_tip_text" >Flashpack annuel ou par parcours(par défaut).</div>
-                                                </span> 
-                                    </td>
-                                    <td>             
-                                        {{ form.is_global|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                                        {{ form.stop|add_class:"form-control datetimepicker"}}
                                     </td>
                                 </tr>
                     </table>
@@ -278,9 +292,9 @@
 	    <div class="row">
 	        <div class="col-sm-8 col-md-8"> 
 	            <div class="form-group">
-                    <input name="exercices" value="Enregistrer et créer les flashcards" type="submit" class="btn btn-primary"/>
+                    <input name="exercices" value="Enregistrer et créer les flashcards" type="submit" class="btn btn-primary" id="save_with_cards" />
 
-                    <input value="Enregistrer" type="submit" class="btn btn-default"/>
+                    <input value="Enregistrer" type="submit" class="btn btn-default"  id="save_without_cards" />
 
 	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
 	            </div>
