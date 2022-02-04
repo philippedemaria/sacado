@@ -9,6 +9,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#id_is_creative').prop('checked', false); 
         $('#id_is_global').prop('checked', false);
 
+
+
+
+        
+
         $('#id_is_global').on('change', function (event) {
  
     		if ($('#id_is_global').is(":checked")) { 

@@ -134,6 +134,7 @@ class Flashpack(models.Model):
 
     is_creative  = models.BooleanField(default=0, verbose_name="Création de flashCard par les élèves ?")
 
+    is_inclusion = models.BooleanField(default=0, verbose_name="Inclusion automatique des cartes ?")
     is_global    = models.BooleanField(default=0, verbose_name="Flashpack annuel ?")
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="flashpacks" ) 

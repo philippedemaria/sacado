@@ -3,11 +3,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         console.log("chargement JS ajax-flashpack.js OK");
 
         $("#publication_div").hide();
- 
+        $("#set_is_inclusion").hide();
 
             makeDivAppear($("#id_is_publish"), $("#publication_div"));
             makeDivAppear($("#id_is_global"), $("#save_with_cards"));
-
+            makeDivAppear($("#id_is_global"), $("#set_is_inclusion"));
  
             $("#id_is_global").change(function () {
 
