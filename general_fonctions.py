@@ -16,6 +16,16 @@ from django.core.mail import send_mail
 from django.apps import apps
 import uuid
 
+
+def delete_session_key(request,key):
+    # supprime la clé key d'une session
+    if request.session.has_key(key) :
+        del request.session[key]  
+
+
+
+
+
 def get_strong_username(request ,ln, fn):
     """
     retourne un username plus compliqué

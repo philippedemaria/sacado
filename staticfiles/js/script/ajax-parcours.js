@@ -1085,8 +1085,7 @@ define(['jquery','bootstrap'], function ($) {
                     slideBox.animate({
                         'left' : pxValue
                     }) ;
-
-                    console.log(currentSlideInput+" "+slideWidthInput+" "+slideQuantity) ; 
+ 
 
                 }
  

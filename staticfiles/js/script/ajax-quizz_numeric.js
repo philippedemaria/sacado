@@ -2,14 +2,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
     $(document).ready(function () {
 
 
-    console.log(" ajax-quizz chargé ");
-
-
-
-    $('.confirm_create_historic').on('click', function (event) {
-        if (!confirm('En créant cette présentation, vous allez créer son historique accessible ci-contre après la présentation')) return false;
-    }) ; 
-
+    console.log(" ajax-quizz-numeric chargé ");
 
 
     $("#loading").hide(500); 
@@ -110,120 +103,15 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
     });
 
 
-    // Fonction de sélection du Vrai faux
-    function checked_vf(){ 
-            if( $("#check1").hasClass("checked")  )  
-                {   
-                    // Gestion du check
-                    $('#check1').removeClass("checked");
-                    $('#check2').addClass("checked");
-                    // affiche du fa
-                    $('#check1').css("display","none");
-                    $('#noCheck1').css("display","block");
-                    $('#check2').css("display","block");
-                    $('#noCheck2').css("display","none");
-                    $("#id_is_correct").prop("checked", false); 
-                } 
-            else 
-                {   
-                    // Gestion du check
-                    $('#check1').addClass("checked");
-                    $('#check2').removeClass("checked");
-                    // affiche du fa
-                    $('#check2').css("display","none");
-                    $('#noCheck2').css("display","block");
-                    $('#check1').css("display","block");
-                    $('#noCheck1').css("display","none");
-                    $("#id_is_correct").prop("checked", true); 
-                }             
-        }
-
-        $('body').on('click', '#vf_zone1' , function (event) {  
-            checked_vf() ;
-        }); 
-        $('body').on('click', '#vf_zone2' , function (event) {  
-            checked_vf() ;
-        }); 
-
  
 
 
         $("#id_calculator").prop("checked", false);   
         $("#id_is_publish").prop("checked", true); 
 
-
-        $('body').on('click', '#checking_zone0' , function (event) {  
-            checked_and_checked(0) ;
-        });
-        $('body').on('click', '#checking_zone1' , function (event) {  
-            checked_and_checked(1) ;
-        });
-        $('body').on('click', '#checking_zone2' , function (event) {  
-            checked_and_checked(2) ;
-        });
-        $('body').on('click', '#checking_zone3' , function (event) {  
-            checked_and_checked(3) ;
-        });
-
-
-        function checked_and_checked(nb){ 
-                qtype = $("#qtype").val() ;
-
-                if( $("#check"+nb).hasClass("checked")  )  
-                    {   
-                        $('#check'+nb).removeClass("checked");
-                        $('#check'+nb).css("display","none");
-                        $('#noCheck'+nb).css("display","block");
-                        $("#id_choices-"+nb+"-is_correct").prop("checked", false);                         
-
-                    } 
-                else 
-                    {   
-                        $('#check'+nb).addClass("checked");
-                        $('#check'+nb).css("display","block");
-                        $('#noCheck'+nb).css("display","none");
-                        $("#id_choices-"+nb+"-is_correct").prop("checked", true);                     
-                    }
  
-                if (qtype==4 && $(".checked").length > 1 ) { 
-                    alert("Vous avez choisi un QCS dans lequel une seule réponse est autorisée. Optez pour le QCM alors.") ; 
-                    $('#check'+nb).removeClass("checked");
-                    $('#check'+nb).css("display","none");
-                    $('#noCheck'+nb).css("display","block");
-                    $("#id_choices-"+nb+"-is_correct").prop("checked", false);                         
-                    return false;
-                }
-            }
  
 
-        // Sélectionne la couleur de fond lorsque la réponse est écrite
-        function change_bg_and_select( nb, classe ){
-
-            $('body').on('keyup', "#id_choices-"+nb+"-answer" , function (event) {   
-                
-                    var comment =  $("#id_choices-"+nb+"-answer").val()  ;
-
-                if (  comment.length > 0   )
-                { 
-                  $("#answer"+nb+"_div").addClass(classe) ; 
-                  $("#id_choices-"+nb+"-answer").css("color","white") ;
-                }
-                else
-                {
-                   $("#answer"+nb+"_div").removeClass(classe) ; 
-                  $("#id_choices-"+nb+"-answer").css("color","#666") ;
-                }
-             });
-        }
-
- 
-
-           var arr = [ "bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"];  
-            $.each(arr , function (index, value){  
-                change_bg_and_select( index,  value );
-            });
-
- 
        // Trie des diapositives
         $('#questions_sortable_list').sortable({
             start: function( event, ui ) { 
@@ -261,75 +149,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
           });
 
 
-        // Chargement d'une image dans la réponse possible.
-        $('body').on('change', '#id_choices-0-imageanswer' , function (event) {  
-            previewFile(0,"bgcolorRed") ;
-         });
 
-        $('body').on('change', '#id_choices-1-imageanswer' , function (event) {   
-            previewFile(1,"bgcolorBlue") ;
-         });
- 
-        $('body').on('change', '#id_choices-2-imageanswer' , function (event) {   
-            previewFile(2,"bgcolorOrange") ;
-         });
- 
-        $('body').on('change', '#id_choices-3-imageanswer' , function (event) {   
-            previewFile(3,"bgcolorGreen") ;
-         });      
-
- 
-        function previewFile(nb,classe) {
-
-            const preview = $('#preview'+nb);
-            const file = $('#id_choices-'+nb+'-imageanswer')[0].files[0];
-            const reader = new FileReader();
-
-
-            $("#preview"+nb).val("") ;  
-            $("#answer"+nb+"_div").addClass(classe) ;
-            $("#id_choices-"+nb+"-answer").addClass("preview") ;
-            $("#preview"+nb).removeClass("preview") ; 
-            $("#delete_img"+nb).removeClass("preview") ; 
-
-            reader.addEventListener("load", function (e) {
-                                                var image = e.target.result ; 
-                                                $("#preview"+nb).attr("src", image );
-                                            }) ;
-
-            if (file) { console.log(file) ;
-              reader.readAsDataURL(file);
-            }            
-
-          }
- 
-         
-        // Chargement d'une image dans la réponse possible.
-        $('body').on('click', '#delete_img0' , function (event) {  
-            noPreviewFile(0,"bgcolorRed") ;
-         });
-
-        $('body').on('click', '#delete_img1' , function (event) {   
-            noPreviewFile(1,"bgcolorBlue") ;
-         });
- 
-        $('body').on('click', '#delete_img2' , function (event) {   
-            noPreviewFile(2,"bgcolorOrange") ;
-         });
- 
-        $('body').on('click', '#delete_img3' , function (event) {   
-            noPreviewFile(3,"bgcolorGreen") ;
-         }); 
-
-
-        function noPreviewFile(nb,classe) {
-
-                $("#preview"+nb).attr("src", "" );
-                $("#answer"+nb+"_div").removeClass(classe) ;
-                $("#id_choices-"+nb+"-answer").removeClass("preview") ;
-                $("#preview"+nb).addClass("preview") ; 
-                $("#delete_img"+nb).addClass("preview") ;      
-          }
 
  
 
@@ -405,17 +225,15 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
 
 
-        $("#this_question_display_overview").on('click', function (event) {
+        $("#this_question_display_overview").on('click', function (event) {  
 
             MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
             let type = $("#qtype").val(); 
-
             let title      = $("#id_title").val();
             let fontsize   = $("#id_size").val();
             let calculator = $("#id_calculator").val();
             let duration   = $("#id_duration").val();
-            let theme      = $("#id_theme").is(":checked"); // booleen
             let audio      = $("#id_audio").val();  
             let video      = $("#id_video").val(); 
             let preview    = $("#drop_zone img")[0]; 
@@ -435,18 +253,14 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             }
             else if (type > 2 )
             {
-                let choice0 = $("#id_choices-0-answer").val();
-                let choice1 = $("#id_choices-1-answer").val();
-                let choice2 = $("#id_choices-2-answer").val();
-                let choice3 = $("#id_choices-3-answer").val();
-                if (theme) {  
-                    qcm = "<div class='col-sm-12 col-md-6'   style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice0)+"em' class='thin'>"+choice0 +" </h1></div><div class='col-sm-12 col-md-6'   style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice1)+"em' class='thin'>"+choice1 +" </h1></div>"
-                    qcm = qcm + "<div class='col-sm-12 col-md-6'  style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice2)+"em' class='thin'>"+choice2 +" </h1></div><div class='col-sm-12 col-md-6'  style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice3)+"em' class='thin'>"+choice3 +" </h1></div>"  
-                }
-                else{ console.log("no theme") ;
-                    qcm = "<div class='col-sm-12 col-md-6  bgcolorBlue white'  style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice0)+"em' class='thin'>"+choice0 +" </h1></div><div class='col-sm-12 col-md-6  bgcolorRed white' style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice1)+"em' class='thin'>"+choice1 +" </h1></div>"
-                    qcm = qcm + "<div class='col-sm-12 col-md-6  bgcolorOrange white'   style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice2)+"em' class='thin'>"+choice2 +" </h1></div><div class='col-sm-12 col-md-6  bgcolorGreen white' style='border-radius : 10px'><h1 style='font-size:"+asnwerfontsize(choice3)+"em' class='thin'>"+choice3 +" </h1></div>"  
-                }
+                qcm = "" ;
+                var i = 1;
+                $.each($(".quizz_answer"), function(index, value) {
+                  choice = $( this ).val();
+                  if (i%2==1) { var colorback = "#f1eef7" ; } else { var colorback = "#FFF" ; }
+                  qcm = qcm + "<div class='col-sm-12 col-md-12' style='font-size:30px;border-radius : 10px;background-color:"+colorback+";margin:10px 0px; padding:10px;'>"+i +". "+choice +"</div>";
+                  i++;
+                });
 
                 $("#overview_answers").html("").append(qcm);
             }
@@ -521,10 +335,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
                 $("#overview_answers").html("").append(qcm);
 
             }
- 
-              
-
-
         })
 
         function overviewpreviewFile() {
@@ -567,10 +377,127 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
 
 
+        // Chargement d'une image dans la réponse possible.
+        $('body').on('click', '.checker' , function (event) {  
+
+            var global_div = $(this).parent().parent().parent();
+ 
+            if ($(this).is(":checked")) { global_div.addClass("border_green");  }
+            else { global_div.removeClass("border_green");  }
+ 
+
+         });
 
 
 
 
+
+ 
+        function previewFile(nb) {
+
+            const file = $('#id_choices-'+nb+'-imageanswer')[0].files[0];
+            const reader = new FileReader();
+
+ 
+
+            $("#preview"+nb).val("") ;  
+            $("#file-image"+nb).addClass("preview") ;
+            $("#preview"+nb).removeClass("preview") ; 
+            $("#id_choices"+nb+"-imageanswer").addClass("preview") ; 
+            $("#imager"+nb).prepend("<a href='#' data-id='"+nb+"' class='deleter_img'><i class='bi bi-trash'></i></a>");
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#preview"+nb).attr("src", image );
+                                            }) ;
+
+            if (file) { console.log(file) ;
+              reader.readAsDataURL(file);
+            }            
+
+          }
+
+
+
+        function noPreviewFile(nb) {  
+            $("#id_choices-"+nb+"-imageanswer").attr("src", "" );
+            $("#preview"+nb).val("") ;  
+            $("#file-image"+nb).removeClass("preview") ;
+            $("#preview"+nb).addClass("preview") ; 
+            $("#id_choices"+nb+"-imageanswer").removeClass("preview") ;
+          }
+
+
+
+
+        $('body').on('change', '.choose_imageanswer' , function (event) {
+            var suffix = this.id.match(/\d+/); 
+            previewFile(suffix) ;
+         });  
+
+
+
+        $('body').on('click', '.deleter_img' , function (event) {
+
+                var suffix = $(this).data("id"); 
+                noPreviewFile(suffix) ;
+                $(this).remove(); 
+            });  
+
+
+        $('#click_button').on('click',  function (event) { 
+
+                if( !$('.checker').is(':checked') ){
+                    alert(" Cocher au moins une réponse "); return false ;
+                }  
+
+            });
+
+
+
+
+        $(document).on('click', '.add_more', function (event) {
+
+
+                var total_form = $('#id_choices-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ;
+
+                var thisClone = $('#rowToClone');
+                rowToClone = thisClone.html() ;
+
+                $('#formsetZone').append(rowToClone);
+
+                $('#duplicate').attr("id","duplicate"+totalForms) 
+                $('#cloningZone').attr("id","cloningZone"+totalForms) 
+                $('#imager').attr("id","imager"+totalForms) 
+                $('#file-image').attr("id","file-image"+totalForms) 
+
+                $("#choices-"+totalForms+"-is_correct").prop("checked", false); 
+                $("#duplicate"+totalForms+" input").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+ 
+                $("#duplicate"+totalForms+" textarea").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+ 
+
+                $('#spanner').attr("id","spanner"+totalForms) ;
+                $('#preview').attr("id","preview"+totalForms) ;
+                total_form.val(totalForms+1);
+            });
+
+
+
+        $(document).on('click', '.remove_more', function () {
+            var total_form = $('#id_choices-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
+
+            $('#duplicate'+totalForms).remove();
+            total_form.val(totalForms)
+        });
 
  
     });

@@ -10,21 +10,18 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
     <script>
         require(['script/ajax-quizz-update']);
-        require(['script/ajax-quizz']);
     </script> 
     {% else %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
         require(['script/ajax-quizz-complement']);
-        require(['script/ajax-quizz']);
     </script> 
     {% endif %}
 
     <script>
+        require(['script/ajax-quizz']);
         require(['script/ajax-finder']);
     </script> 
-
-
 {% endblock %}
  
 
@@ -41,8 +38,13 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>
+
+    {% if quizz.is_numeric %}
+    <a href="{% url 'goto_quizz_numeric' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
+    {% else  %}
     <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
+    {% endif %}
+    <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>    
 {% endblock %}
 
 
@@ -67,7 +69,7 @@
 
             {% else  %}
 
-            <form action="#" method="POST"  >
+            <form action="#" method="POST" >
                 <div class="quizz_list_question">
                     <ul id="questions_sortable_list">
                         {% for question in questions %}
@@ -103,7 +105,7 @@
 
                             <div class="row" >
                                 <div class="col-sm-10 col-md-11" >  
-                                    {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"required"  }}
+                                    {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:3"|attr:"required"  }}
                                 </div>
                                 <div class="col-sm-2 col-md-1" > 
                                         <label>Taille de police</label><br/>
@@ -111,7 +113,7 @@
  
                                 </div>
                             </div>
-                            <div class="row margin40" >
+                            <div class="row " >
                                 <div class="col-sm-6 col-md-2" align="center" >  
                                     <div class="quizz_assets">
                                         <label>Durée</label><br/>
@@ -157,11 +159,11 @@
                                         </div>
                                         {{ form.imagefile|attr:"multiple" }}
                                     </div> 
-                                    <div id="video_div" class="{% if question.video %}allowed_display{% else %}not_allowed_display{% endif %}"></br></br>
-                                        {{ form.video|attr:"placeholder:Coller le code iframe de votre vidéo ici"|attr:"rows:5"  }}</br></br>
+                                    <div id="video_div" class="{% if question.video %}allowed_display{% else %}not_allowed_display{% endif %}"><br/><br/>
+                                        {{ form.video|attr:"placeholder:Coller le code iframe de votre vidéo ici"|attr:"rows:5"  }}<br/><br/>
                                     </div>
                                     <div id="audio_div" class="{% if question.audio %}allowed_display{% else %}not_allowed_display{% endif %}">
-                                        <label style="font-size:20px">Choix d'un fichier audio</label></br></br>
+                                        <label style="font-size:20px">Choix d'un fichier audio</label><br/><br/>
                                         {{ form.audio|add_class:"btn btn-default" }}
                                     </div>
                                 </div> 
@@ -181,6 +183,10 @@
 
 
                     {% if qtype > 0 %}
+
+
+                    {% block details %}
+
                     <div style="height:30px"></div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
@@ -199,6 +205,9 @@
                             </div>                            
                         </div>
                     </div>
+
+                    {% endblock %}
+
                     {% endif %} 
 
                     {% block type_of_choices %}
@@ -212,22 +221,23 @@
                         {% endif %}  
                     {% endblock %}
 
+                    {% block add_more %} 
+                    {% endblock %}  
 
+                    {% if qtype > 0 %}
 
-                {% if qtype > 0 %}
-
-                <div class="row" style="margin-top: 20px;" >
-                    <div class="col-sm-12 col-md-12">
-                        <div class="form-group"> 
-                            <span data-toggle="modal" data-target="#overview" class="btn btn-info btn-lg"  id="this_question_display_overview" /> <i class="fa fa-eye"></i> Aperçu de la question</span>
-                            <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
-                            <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
- 
-                        </div>                            
+                    <div class="row" style="margin-top: 20px;" >
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"> 
+                                <span data-toggle="modal" data-target="#overview" class="btn btn-info btn-lg"  id="this_question_display_overview" > <i class="fa fa-eye"></i> Aperçu de la question</span>
+                                <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
+                                <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
+     
+                            </div>                            
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-
 
             </form>
 

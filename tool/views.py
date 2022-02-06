@@ -419,6 +419,7 @@ def list_quizzes(request):
     quizzes = teacher.teacher_quizz.filter(is_archive=0 , folders=None) # non inclus dans un dossier
     folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=0).exclude(folders=None).distinct().order_by("levels","folders")#  inclus dans un dossier
  
+    delete_session_key(request, "quizz_id")
     list_folders = list()
     for folder in folders :
         quizzes_folders = dict()
@@ -1323,7 +1324,7 @@ def list_quizz_student(request):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     student = request.user.student
     tracker_execute_exercise(False, request.user)
-    
+    delete_session_key(request, "quizz_id")
     quizzes = set()
     for g in student.students_to_group.all() : 
         teacher_user = g.teacher.user
@@ -1468,10 +1469,8 @@ def goto_quizz_numeric(request,id):
 
 def goto_quizz_student(request,id):
     """ participation à un quizz sur poste"""
-
     student = request.user.student
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-
 
     try :
         quizz = Quizz.objects.get(pk= id)
@@ -1667,7 +1666,11 @@ def create_question(request,idq,qtype):
     all_questions = Question.objects.filter(is_publish=1)
     
     if qtype > 2 :
-        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=4)
+        if quizz.is_numeric :
+            extra = 2
+        else :
+            extra = 4
+        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=extra)
         form_ans = formSet(request.POST or None,  request.FILES or None)
     if request.method == "POST"  :
         if form.is_valid():
@@ -1714,7 +1717,10 @@ def create_question(request,idq,qtype):
     elif qtype == 3 or qtype == 4  :
  
         context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
-        template = 'tool/question_qcm.html'
+        if quizz.is_numeric :
+            template = 'tool/question_qcm_numeric.html'
+        else :
+            template = 'tool/question_qcm.html'
 
 
     return render(request, template , context)
@@ -1736,7 +1742,7 @@ def update_question(request,id,idq,qtype):
         parcours = None
 
     if qtype > 2 :
-        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct') , extra=0)
+        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
 
     if request.method == "POST"  :  
@@ -1776,8 +1782,10 @@ def update_question(request,id,idq,qtype):
     elif qtype == 3 or qtype == 4  :
  
         context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
-        template = 'tool/question_qcm.html' 
-
+        if quizz.is_numeric :
+            template = 'tool/question_qcm_numeric.html'
+        else :
+            template = 'tool/question_qcm.html'
 
     return render(request, template , context)
 

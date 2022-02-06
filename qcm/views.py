@@ -1462,11 +1462,9 @@ def list_evaluations(request):
  
     groups = teacher.has_groups()
 
-    if request.session.has_key("group_id"):
-        del request.session["group_id"]
-    if request.session.has_key("folder_id"):
-        del request.session["folder_id"]
-
+    delete_session_key(request, "group_id") 
+    delete_session_key(request, "folder_id") 
+ 
     return render(request, 'qcm/list_evaluations.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
                     'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
@@ -1479,10 +1477,7 @@ def list_evaluations_archives(request):
     parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive 
     nb_base = len( parcourses )  
     today = time_zone_user(teacher.user)
-    try :
-        del request.session["group_id"]
-    except:
-        pass  
+    delete_session_key(request, "group_id")
 
     return render(request, 'qcm/list_evaluations_archives.html', { 'parcourses' : parcourses, 'parcours' : None , 'teacher' : teacher , 'communications' : [] ,  'today' : today ,  'nb_base' : nb_base   })
 
@@ -1541,6 +1536,8 @@ def list_sub_parcours_group(request,idg,idf):
     role, groupe , group_id , access = get_complement(request, teacher, folder )
     request.session["folder_id"] = folder.id
     request.session["group_id"] = group_id
+    delete_session_key(request, "quizz_id")
+
     try :
         group   = Group.objects.get(pk = idg)
     except :
@@ -1569,6 +1566,7 @@ def list_sub_parcours_group_student(request,idg,idf):
     folder  = Folder.objects.get(pk = idf) 
     group   = Group.objects.get(pk = idg)
     request.session["folder_id"] = folder.id 
+    delete_session_key(request, "quizz_id")
 
     bases = folder.parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , is_trash=0).order_by("is_evaluation", "ranking") 
 
@@ -2476,6 +2474,7 @@ def show_parcours(request, idf = 0, id=0):
     teacher = Teacher.objects.get(user=user)
 
     today = time_zone_user(user)
+    delete_session_key(request, "quizz_id")
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
