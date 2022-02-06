@@ -99,7 +99,17 @@ p{
   opacity: 0.3;
 }
 
+.checkbox_ajax{
+  background-color: #f1eef7;
+  min-height: 25px;
+  padding:5px;
+}
 
+.checkbox_ajax_{
+  background-color: #FFF;
+  min-height: 25px;
+  padding:5px;
+}
 
 
 
@@ -1838,6 +1848,27 @@ a.no_visual_link{
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);   
 }
 
+
+
+.quizz_box_answer_left {
+    text-align: left;
+}
+
+.border_green{
+  border : solid 2px #1bc074 ;
+}
+
+.deleter_img{
+  z-index : 999;
+  position: absolute;
+  height:90px;
+  color:red;
+
+}
+
+
+
+
 .quizz_line_answer { 
     margin-bottom: 20px; 
 }
@@ -2075,10 +2106,19 @@ a.selector_question:hover {
     padding-top: 20px;
 }
 
+
+
+
 .answer_margin20{
     margin-top: 35px;
     display: none;
 }
+
+.answer_margin10{
+    margin-top: 15px;
+    display: none;
+}
+
  
 .quizz_line_answer:hover .answer_margin20{
     display: block;
