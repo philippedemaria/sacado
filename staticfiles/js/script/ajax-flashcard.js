@@ -29,6 +29,7 @@ define(['jquery', 'bootstrap'], function ($) {
                 { name: 'insert', items: [ 'Image', ] }, 
                 { name: 'styles', items: [ 'FontSize' ] },
                 { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',] },
+                { name: 'others', groups: [ 'mode' ], items: [ 'Source'] },
             ]
 
             } );
@@ -45,6 +46,7 @@ define(['jquery', 'bootstrap'], function ($) {
                 { name: 'insert', items: [ 'Image', ] }, 
                 { name: 'styles', items: [ 'FontSize' ] },
                 { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',] },
+                { name: 'others', groups: [ 'mode' ], items: [ 'Source'] },
             ]
 
             } );
@@ -60,7 +62,7 @@ define(['jquery', 'bootstrap'], function ($) {
                 { name: 'insert', items: [ 'Image', ] }, 
                 { name: 'styles', items: [ 'FontSize' ] },
                 { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',] },  
-
+                { name: 'others', groups: [ 'mode' ], items: [ 'Source'] },
             ]
 
             } );
@@ -90,6 +92,7 @@ define(['jquery', 'bootstrap'], function ($) {
             $('#body_of_textarea_display').html(value);
             $('#body_of_textarea_display').addClass("hflashcard").removeClass("qflashcard").removeClass("aflashcard");
             MathJax.Hub.Queue(['Typeset',MathJax.Hub,'body_of_textarea_display']); 
+
         });
 
 

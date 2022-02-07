@@ -48,7 +48,7 @@ import json
  
 
 def get_active_year():
-    """ renvoie d'un tuple sous forme 2021-2022  et d'un entier 2021 """
+    """ renvoi d'un tuple sous forme 2021-2022  et d'un entier 2021 """
     try :
         active_year = Activeyear.objects.get(pk=1)
         int_year = active_year.year
