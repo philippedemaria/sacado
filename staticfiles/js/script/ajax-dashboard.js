@@ -180,7 +180,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $("#id_email").on('blur', function () {
             let email = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            console.log(email);
+
             $.ajax({
                 url: '/account/ajax/userinfomail/',
                 data: {
@@ -300,7 +300,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
   
                 let school_id = $(this).attr("data-school_id");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                console.log(school_id) ;
+
                 $.ajax(
                     {
                         type: "POST",
@@ -1005,9 +1005,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             valeurs = valeurs + div_exercise_id +"-";
                             customizes = customizes + cstm +"-";
                         });
-
-                        console.log(valeurs) ;
-                        console.log(customizes) ;
+ 
 
                         $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
 

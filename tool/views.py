@@ -1474,17 +1474,14 @@ def goto_quizz_student(request,id):
 
     try :
         quizz = Quizz.objects.get(pk= id)
-
         #Génération des questions
         question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
-        quizz_id                    = quizz.id
-
+        quizz_id     = quizz.id
         if quizz.is_ranking :
             random.shuffle(question_ids)
         
-        request.session["quizz_id"] = quizz_id
+        request.session["quizz_id"]     = quizz_id
         request.session["question_ids"] = question_ids
-
 
     except :
         quizz_id     = request.session.get("quizz_id")
@@ -1538,17 +1535,14 @@ def goto_quizz_student(request,id):
         end_of_quizz = True
         question = None
 
-    elif quizz_nav > -1 : 
+    elif quizz_nav > -1 :
         question_id = question_ids[quizz_nav]
         question = Question.objects.get(pk = question_id)
-
     else :
         question = None
 
-
     quizz_nav += 1
     quizz_nav_prev = quizz_nav - 1
-
 
     context = {  "quizz" : quizz , "question" : question , 'duration' : duration , "quizz_nav" : quizz_nav, "quizz_nav_prev" : quizz_nav_prev ,"end_of_quizz" : end_of_quizz ,"stop_time" : stop_time , 'student' : student  }
 
@@ -1556,6 +1550,17 @@ def goto_quizz_student(request,id):
 
 
 
+
+def ajax_show_retroaction(request):
+
+    question_id = request.POST.get("question_id")
+    print(question_id)
+    question = Question.objects.get(pk=question_id)
+    data = {}
+    choices = question.choices.values_list('id', 'retroaction')
+    data['choices'] = list(choices)
+    print(choices)
+    return JsonResponse(data)
 
 
 def ajax_show_my_result(request):

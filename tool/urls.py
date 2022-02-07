@@ -152,7 +152,7 @@ urlpatterns = [
 
     path('ajax_show_detail_question', ajax_show_detail_question, name='ajax_show_detail_question'),
  
-
+    path('ajax_show_retroaction', ajax_show_retroaction, name='ajax_show_retroaction'),
  
 
 
