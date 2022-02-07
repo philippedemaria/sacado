@@ -76,32 +76,36 @@ ul#id_skills li{
                 {% else %}  
 
                 <div class="row">
-                    <div class="col-sm-6 col-md-2">
+                    <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label>Enseignement :</label>
                             {{ form.subject |add_class:"form-control select2" }}
                             {{ form.subject.errors }}
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-md-2">
                         <div class="form-group">
-                            {{ form.level.label_tag }}
+                            <label>Niveau :</label>
                             {{ form.level |add_class:"form-control select2" }}
                             {{ form.level.errors }}
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             {{ form.theme.label_tag }}
                             {{ form.theme |add_class:"form-control select2" }}
                             {{ form.theme.errors }}
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
                         <div class="form-group">
-                            <label>Savoir faire principal :</label><br>
-                            {{ form.knowledge |add_class:"form-control select2" }}
-                            {{ form.knowledge.errors }}
+                            <label>Compétences ciblées :</label><br>
+                            {{ form.skills|add_class:"form-control select2" }}
+                            {{ form.skills.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.title.label_tag }} 
+                            {{ form.title |add_class:"form-control"  }}
+                            {{ form.title.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-8">
+                        <div class="form-group" id="knowledge_list">
+
                         </div>
                     </div>
                 </div> 
@@ -114,30 +118,9 @@ ul#id_skills li{
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    {{ form.title.label_tag }} <small><em>A privilégier</em></small>
-                                    {{ form.title |add_class:"form-control"  }}
-                                    {{ form.title.errors }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group">
                                     {{ form.content.label_tag }}<br/>
                                     {{ form.content|add_class:"form-control"|attr:"rows:15"   }}
                                     {{ form.content.errors }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                                <div class="form-group">
-                                    Compétences ciblées<br>
-                                    {{ form.skills|add_class:"form-control select2" }}
-                                    {{ form.skills.errors }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-9">
-                                <div class="form-group">
-                                    Autres savoir faire ciblés<br>
-                                    {{ form.knowledges|add_class:"form-control select2" }}
-                                    {{ form.knowledges.errors }}
                                 </div>
                             </div>
                         </div>

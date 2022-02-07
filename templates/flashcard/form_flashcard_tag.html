@@ -120,7 +120,7 @@
             <div class="form-group">
                 <input value="Enregistrer" type="submit" class="btn btn-primary"/>
                 {% if flashcard %}<input value="Valider" type="submit" name="validate" class="btn btn-info"/>{% endif %}
-                <a href="javascript:void();"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
             </div>
         </div>    
     </div>
@@ -144,3 +144,9 @@
         </div>
     </div>
 </div> 
+<script type="text/javascript">
+   function updateMathContent(s) {
+       var math = MathJax.Hub.getAllJax("mathdiv")[0];
+       MathJax.Hub.Queue(["textarea_display", math, s]);
+   }
+</script>

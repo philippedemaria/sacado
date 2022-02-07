@@ -28,6 +28,7 @@ define(['jquery', 'bootstrap'], function ($) {
             [  
                 { name: 'insert', items: [ 'Image', ] }, 
                 { name: 'styles', items: [ 'FontSize' ] },
+                { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',] },
             ]
 
             } );
@@ -43,6 +44,7 @@ define(['jquery', 'bootstrap'], function ($) {
             [  
                 { name: 'insert', items: [ 'Image', ] }, 
                 { name: 'styles', items: [ 'FontSize' ] },
+                { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',] },
             ]
 
             } );
@@ -57,24 +59,28 @@ define(['jquery', 'bootstrap'], function ($) {
             [  
                 { name: 'insert', items: [ 'Image', ] }, 
                 { name: 'styles', items: [ 'FontSize' ] },
+                { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',] },  
+
             ]
 
             } );
 
 
         $("#this_question_textarea_display").click(function(){ 
-            var value = CKEDITOR.instances['id_question'].getData();
+            var value = CKEDITOR.instances['id_question'].getData(); 
             $('#type_of_textarea_display').html("la question");
             $('#body_of_textarea_display').html(value);
             $('#body_of_textarea_display').addClass("qflashcard").removeClass("hflashcard").removeClass("aflashcard");
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub,'body_of_textarea_display']); 
         });
 
 
-        $("#this_answer_textarea_display").click(function(){ 
+        $("#this_answer_textarea_display").click(function(){             
             var value = CKEDITOR.instances['id_answer'].getData();
             $('#type_of_textarea_display').html("la réponse");
             $('#body_of_textarea_display').html(value);
             $('#body_of_textarea_display').addClass("aflashcard").removeClass("hflashcard").removeClass("qflashcard");
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub,'body_of_textarea_display']); 
         });
 
         
@@ -83,10 +89,11 @@ define(['jquery', 'bootstrap'], function ($) {
             $('#type_of_textarea_display').html("l'aide");
             $('#body_of_textarea_display').html(value);
             $('#body_of_textarea_display').addClass("hflashcard").removeClass("qflashcard").removeClass("aflashcard");
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub,'body_of_textarea_display']); 
         });
 
 
- 
+
 
 });
 

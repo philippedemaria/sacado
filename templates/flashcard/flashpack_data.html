@@ -24,7 +24,7 @@
         <span class="automatic_insertion">Insertion automatique de cartes</span>
     {% else %}
         <a href="{% url 'flashpack_peuplate' flashpack.id %}" title="Récupérer des flashcards" class="edit" ><i class="bi bi-clouds"></i></a>
-        <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer/modifier des cartes" class="edit" ><i class="bi bi-stack"></i></a>
+        <a href="{% url 'set_flashcards_to_flashpack' flashpack.id %}" title="Créer/modifier des cartes" class="edit" ><i class="bi bi-plus-circle"></i></a>
         <a href="{% url 'import_flashcards_to_flashpack' flashpack.id %}" title="Importer des flashcards en CSV" class="edit" ><i class="bi bi-cloud-upload"></i></a>   
     {% endif %}
  

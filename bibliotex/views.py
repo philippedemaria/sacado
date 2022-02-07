@@ -401,6 +401,13 @@ def set_exotex_in_bibliotex(request,id):
         nf.author = teacher
         nf.teacher = teacher
         nf.is_share = 1
+        knowledges = request.POST.getlist("knowledge")
+        nf.knowledge = Knowledge.objects.get(pk = knowledges[0])
+        try :
+            nf.knowledges.set(knowledges[1::])
+        except :
+            pass
+
         nf.save()
 
         Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )

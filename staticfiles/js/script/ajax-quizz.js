@@ -5,7 +5,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
     console.log(" ajax-quizz chargé ");
 
 
-
     $('.confirm_create_historic').on('click', function (event) {
         if (!confirm('En créant cette présentation, vous allez créer son historique accessible ci-contre après la présentation')) return false;
     }) ; 
@@ -87,22 +86,14 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
                     success: function (data) {
 
                         knowledges = data["knowledges"];
- 
- 
-
                         for (let i = 0; i < knowledges.length; i++) {
                                 
-                                console.log(knowledges[i]);
                                 let knowledges_id = knowledges[i][0];
                                 
                                 $('hidden_knowledges').hide(500);
                                 $('knowledge'+knowledges_id).show(500);
                             }
                       
-                  
-
- 
-
                         $("#loading").hide(500); 
                     }
                 }
@@ -201,9 +192,9 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
             $('body').on('keyup', "#id_choices-"+nb+"-answer" , function (event) {   
                 
-                    var comment =  $("#id_choices-"+nb+"-answer").val()  ;
+                var comment =  $("#id_choices-"+nb+"-answer").val()  ;
 
-                if (  comment.length > 0   )
+                if ( comment.length > 0 )
                 { 
                   $("#answer"+nb+"_div").addClass(classe) ; 
                   $("#id_choices-"+nb+"-answer").css("color","white") ;
@@ -407,8 +398,6 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
         $("#this_question_display_overview").on('click', function (event) {
 
-            MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-
             let type = $("#qtype").val(); 
 
             let title      = $("#id_title").val();
@@ -424,7 +413,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             $("#overview_text").html(title);
             $("#overview_text").css("font-size",fontsize);
             $("#overview_duration").html(duration);
-
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub,'overview_text']);
 
             let qcm ;
 
@@ -432,6 +421,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             {
                 let true_false = "<div class='col-sm-12 col-md-6  bgcolorBlue white'  align='center' style='border-radius : 10px'><h1 style='font-size:3.5em' class='thin'>VRAI </h1></div><div class='col-sm-12 col-md-6  bgcolorRed white'  align='center' style='border-radius : 10px'><h1 style='font-size:3.5em' class='thin'>FAUX </h1></div>"
                 $("#overview_answers").html("").append(true_false);
+
             }
             else if (type > 2 )
             {
@@ -449,6 +439,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
                 }
 
                 $("#overview_answers").html("").append(qcm);
+                MathJax.Hub.Queue(['Typeset',MathJax.Hub,'overview_answers']);
             }
 
 
@@ -462,6 +453,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
             if (video)
             {
                 $("#overview_video").html("").append(video);
+                MathJax.Hub.Queue(['Typeset',MathJax.Hub,'overview_video']); 
             }
 
             if (imagefile)
@@ -515,17 +507,18 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
                     qcm = qcm + "</div><div class='col-sm-12 col-md-6 bgcolorGreen white'  style='border-radius : 10px'>"
                     if(file3) { qcm = qcm + "<img  src='"+file3+"' height='90px' id='id_choices-3' />"}
                     qcm = qcm + "</div>"
-
-
                 }
-                $("#overview_answers").html("").append(qcm);
+
 
             }
  
-              
-
-
+ 
+            
         })
+
+
+
+
 
         function overviewpreviewFile() {
 

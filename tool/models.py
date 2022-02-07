@@ -180,6 +180,12 @@ class Question(models.Model):
         except :
             return ""
 
+    def has_choices_with_retroaction(self) :
+        test = False
+        if self.choices.exclude(retroaction="").count():
+            test = True
+        return test
+
 
 
     def real_ans_for_this_question (self,quizz, student):
@@ -237,6 +243,8 @@ class Choice(models.Model):
 
     imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse écrite")
+    retroaction = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Rétroaction")
+
     is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
     question    = models.ForeignKey(Question, related_name="choices", blank=True, null = True,  on_delete=models.CASCADE)
     def __str__(self):
@@ -250,7 +258,7 @@ class Quizz(ModelWithCode):
     title         = models.CharField( max_length=255, verbose_name="Titre du quizz") 
     teacher       = models.ForeignKey(Teacher, related_name="teacher_quizz", blank=True, on_delete=models.CASCADE, editable=False ) 
     date_modified = models.DateTimeField(auto_now=True)
-    color = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
+    color         = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
     
     levels    = models.ManyToManyField(Level, related_name="quizz", blank=True)
     themes    = models.ManyToManyField(Theme, related_name="quizz", blank=True)
@@ -262,13 +270,12 @@ class Quizz(ModelWithCode):
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
     is_questions = models.BooleanField(default=0, editable=False )  # presentation ou questionnaire
-    is_numeric   = models.BooleanField(default=0, verbose_name="Type de réponse" )    # réponse sur papier ou sur smartphone
+    is_numeric   = models.BooleanField(default=0, verbose_name="Type de passation" )    # réponse sur papier ou sur smartphone
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
     is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
     nb_slide     = models.PositiveIntegerField(default=0, editable=False)  # Nombre de diapositive si le quizz est randomisé
     is_video     = models.BooleanField(default=0, verbose_name="Type de passation")  # Vidéo projection
-
 
     is_back      = models.BooleanField(default=0, verbose_name="Retour arrière ?")  
     is_ranking   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des questions ?")  

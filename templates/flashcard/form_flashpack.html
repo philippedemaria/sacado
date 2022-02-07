@@ -286,6 +286,12 @@
                                         {{ form.stop|add_class:"form-control datetimepicker"}}
                                     </td>
                                 </tr>
+                                <tr id="set_is_inclusion">
+                                    <td>{{ form.is_inclusion.label_tag }}</td>
+                                    <td>             
+                                        {{ form.is_inclusion|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
+                                    </td>
+                                </tr>
                     </table>
             </div>
         </div>
