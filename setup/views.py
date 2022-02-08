@@ -252,7 +252,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     last_name  = dico_received["NOM"]
     first_name = dico_received["PRE"]
-    email      = dico_received["P_MEL"]
+    if dico_received.has_key("P_MEL") : email  = dico_received["P_MEL"]
+    else : email  = ""
     closure    = None
     time_zone  = "Europe/Paris"
     is_extra   = 0
@@ -267,8 +268,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
  
-
-        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : None ,  "country" : school.country , })
+        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : school.country , })
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
