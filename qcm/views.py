@@ -7487,6 +7487,8 @@ def delete_course(request, idc , id  ):
         course = Course.objects.get(id=idc)
         if course.teacher == teacher or teacher.user.is_superuser :
             course.delete()
+    if id > 0 :
+        return redirect('show_course', 0, id)
     try :
         return redirect('list_parcours_group' , request.session.get("group_id"))
     except :
