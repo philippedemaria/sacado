@@ -250,9 +250,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         user_type  = 0 
 
-    last_name  = dico_received["NOM"]
+    last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"]
-    if dico_received.has_key("P_MEL") : email  = dico_received["P_MEL"]
+    if "P_MEL" in dico_received.keys() : email  = dico_received["P_MEL"]
     else : email  = ""
     closure    = None
     time_zone  = "Europe/Paris"
