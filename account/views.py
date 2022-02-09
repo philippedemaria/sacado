@@ -27,14 +27,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.contrib.auth import   logout
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
-from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword 
+from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword , Avatar
 from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
 from sendmail.forms import EmailForm
-from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm
+from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm , AvatarForm , AvatarUserForm
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
@@ -194,6 +194,83 @@ def myaccount(request):
         context = {'student': student, }
 
         return render(request, 'account/student_account.html', context)
+
+
+
+
+
+
+
+########################################            AVATAR                   #########################################
+
+#@user_is_parcours_teacher
+def create_avatar(request, id ):
+ 
+    if not request.user.is_superuser : 
+        return redirect('index')
+
+    form = AvatarForm(request.POST or None ,  request.FILES or None, )
+    if form.is_valid():
+        form.save()
+        return redirect('list_avatars')
+    else:
+        print(form.errors)
+
+    context = {'form': form }
+
+    return render(request, 'account/avatar_admin_form.html', context)
+
+
+
+ 
+
+def delete_avatar(request,id  ):
+    if not request.user.is_superuser : 
+        return redirect('index')
+
+    avatar = Avatar.objects.get(pk=id)
+    avatar.delete()
+    return redirect('list_avatars') 
+
+
+
+def list_avatars(request) :
+    
+    if not request.user.is_superuser : 
+        return redirect('index')
+    
+    avatars = Avatar.objects.all()
+    
+    context = {  'avatars': avatars,   }
+    return render(request, 'account/list_avatars.html', context)
+
+ 
+
+
+def avatar(request) :
+
+    user = User.objects.get(pk = request.user.id )
+    avatar_form = AvatarUserForm(request.POST or None, request.FILES or None, instance = user  ) 
+
+
+    if request.method == 'POST':
+        if avatar_form.is_valid():
+            user.avatar = request.POST.get("avatar")
+            user.save()
+            return redirect('profile')
+        else:
+            messages.error(request, user_form.errors)
+
+    if request.user.user_type == 0 : adult = 0
+    else : adult = 1
+
+    avatars = Avatar.objects.filter(adult=adult)
+
+    context = {'avatar_form': avatar_form, 'avatars' : avatars}
+    return render(request, 'account/avatar_form.html', context)
+
+
+
 
 #####################################
 

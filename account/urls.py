@@ -37,7 +37,13 @@ urlpatterns = [
 
     path('list_teacher', list_teacher, name='list_teacher'),
 
-    path('close_my_account/', close_my_account, name='close_my_account'),
+    path('close_my_account', close_my_account, name='close_my_account'),
+
+    path('avatar', avatar, name='avatar'),
+    path('create_avatar/<int:id>', create_avatar, name='create_avatar'),
+    path('delete_avatar/<int:id>', delete_avatar, name='delete_avatar'),
+    path('list_avatars', list_avatars, name='list_avatars'),
+
 
     path('updatepassword', updatepassword, name='updatepassword'),
 

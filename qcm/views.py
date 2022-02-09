@@ -7473,7 +7473,6 @@ def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
-
     try :
         teacher = Teacher.objects.get(user= request.user)
         course = Course.objects.get( id = idc )

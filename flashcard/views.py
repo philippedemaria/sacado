@@ -583,7 +583,6 @@ def update_flashcard(request, id):
                 level = Level.objects.get(pk=l_id)
                 level.flashcards.add(flashcard)
             messages.success(request, 'La flashcard a été modifiée avec succès !')
-            validate = request.POST.get("validate",None)
             fp_id = request.session.get("flashpack_id",None)
 
             if fp_id : return redirect('set_flashcards_to_flashpack',fp_id)
