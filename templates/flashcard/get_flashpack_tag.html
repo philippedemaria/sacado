@@ -38,9 +38,7 @@
                 {% endif %}
             </div>
         </div>
-
-
-        <div class="box_title_vignette"> 
+        <div class="box_title_vignette" style="background-color: {{ flashpack.color }};padding:5px"> 
             <a href="{% url 'show_flashpack' flashpack.id  %}"  style="color:{{ flashpack.color|contrast_color }};" >             
                 {% if flashpack.title|length > 26 %}
                 <span class="helper_tip" style=" font-size:16px;">{{ flashpack.title|truncatechars:"26" }}
