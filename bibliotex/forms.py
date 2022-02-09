@@ -7,7 +7,6 @@ class ExotexForm(forms.ModelForm):
 	class Meta:
 		model = Exotex 
 		fields = '__all__'
-		exclude = ("knowledges", )
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
@@ -18,23 +17,22 @@ class ExotexForm(forms.ModelForm):
 			subjects = teacher.subjects.all()
 			levels   = teacher.levels.all()
 			if knowledge :
-				skills = knowledge.theme.subject.skill.all()
+				skills     = knowledge.theme.subject.skill.all()
 				knowledges = Knowledge.objects.filter(level = knowledge.level )
 			else :
-				skills = Skill.objects.all()
+				skills     = Skill.objects.all()
 				knowledges = Knowledge.objects.all()
 			self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
 			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
- 
-
+			self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True)  
+			self.fields['knowledges'].required = False 
 
 
 class BibliotexForm(forms.ModelForm):
 	class Meta:
 		model = Bibliotex 
 		fields = '__all__'
-
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')

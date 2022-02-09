@@ -93,11 +93,6 @@ ul#id_skills li{
                             {{ form.theme.errors }}
                         </div>
                         <div class="form-group">
-                            <label>Compétences ciblées :</label><br>
-                            {{ form.skills|add_class:"form-control select2" }}
-                            {{ form.skills.errors }}
-                        </div>
-                        <div class="form-group">
                             {{ form.title.label_tag }} 
                             {{ form.title |add_class:"form-control"  }}
                             {{ form.title.errors }}
@@ -114,7 +109,7 @@ ul#id_skills li{
 
                 {% endif %}  
                 <div class="row">
-                    <div class="col-sm-12 col-md-8">
+                    <div class="col-sm-12 col-md-7">
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
@@ -124,11 +119,42 @@ ul#id_skills li{
                                 </div>
                             </div>
                         </div>
+ 
+                        <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
+                            <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
+                            <div id="enable_correction_div">
+                                <div class="col-sm-12 col-md-12">                        
+                                    <div class="form-group"> 
+                                        {{ form.correction.label_tag }}                        
+                                        {{ form.correction|add_class:"form-control"|attr:"rows:15" }}
+                                        {{ form.correction.errors }}
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:15px" >
+                            <div class="col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
+                                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                                </div>
+                            </div>   
+                            {% if exotex and exotex != 'init' %}
+                                <div class="col-sm-9 col-md-9">                                             
+                                    <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
+                                        <i class="fa fa-trash"> </i>   Supprimer
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+
+
+
                     </div>
  
-                    <div class="col-sm-12 col-md-4 setup_ggb">
+                    <div class="col-sm-12 col-md-5 setup_ggb">
                         <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
-                             <table class="table borderless">
+                        <table class="table borderless">
  
                                     <tr id="publication_div">
                                         <td><label>Date de publication :</label>  
@@ -139,18 +165,15 @@ ul#id_skills li{
                                             </span>
                                         </td>
                                         <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
-                                        <td></td>
                                     </tr>
 
                                     <tr>     
                                         <td>{{ form.duration.label_tag }} </td>
-                                        <td>{{ form.duration |add_class:"form-control" }}</td>
-                                        <td>{{ form.duration.errors }}</td>
+                                        <td>{{ form.duration |add_class:"form-control" }}{{ form.duration.errors }}</td>
                                     </tr> 
                                     <tr>     
                                         <td>{{ form.calculator.label_tag }} </td>
-                                        <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}</td>
-                                        <td>{{ form.calculator.errors }}</td>
+                                        <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}{{ form.calculator.errors }}</td>
                                     </tr> 
 
                                     <tr>
@@ -159,59 +182,49 @@ ul#id_skills li{
                                                 <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
                                             </span>
                                         </td>
-                                        <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                        <td>{{ form.is_share.errors }}</td>
+                                        <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_share.errors }}</td>
                                     </tr>
  
                    
                                     <tr>
                                         <td>{{ form.is_python.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                                 <div class="helper_tip_text" >contient du Python.</div></td>
-                                        <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                        <td>{{ form.is_python.errors }}</td>
+                                        <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_python.errors }}</td>
                                     </tr> 
                                     <tr>
                                         <td>{{ form.is_scratch.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                                 <div class="helper_tip_text" >contient du Scratch.</div></td>
-                                        <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                        <td>{{ form.is_scratch.errors }}</td>
+                                        <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_scratch.errors }}</td>
                                     </tr> 
                                     <tr>
                                         <td>{{ form.is_tableur.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                                 <div class="helper_tip_text" >nécessite un tableur.</div></td>
-                                        <td>{{ form.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                        <td>{{ form.is_tableur.errors }}</td>
+                                        <td>{{ form.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                        {{ form.is_tableur.errors }}</td>
                                     </tr> 
-                            </table>
-                    </div>
-                </div>
-                <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
-                    <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
-                    <div id="enable_correction_div">
+                        </table>
+                        <h4 class="thin"><i class="fa fa-cog"></i> Savoir faire et compétences </h4><hr/>
+
+
+
                         <div class="col-sm-12 col-md-12">                        
                             <div class="form-group"> 
-                                {{ form.correction.label_tag }}                        
-                                {{ form.correction|add_class:"form-control"|attr:"rows:15" }}
-                                {{ form.correction.errors }}
+                                <label>Compétences ciblées </label>                        
+                                {{ form.skills|add_class:"form-control select2" }}
+                                {{ form.skills.errors }}
                             </div>
-                        </div> 
+                        </div>
+
+                        <div class="col-sm-12 col-md-12">                        
+                            <div class="form-group"> 
+                                <label>Autres savoir faire  </label>                        
+                                {{ form.knowledges|add_class:"form-control select2" }}
+                                {{ form.knowledges.errors }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top:15px" >
-                    <div class="col-sm-3 col-md-3">
-                        <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
-                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
-                        </div>
-                    </div>   
-                    {% if exotex and exotex != 'init' %}
-                        <div class="col-sm-9 col-md-9">                                             
-                            <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
-                                <i class="fa fa-trash"> </i>   Supprimer
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
+
 
             </div>
         </form>
