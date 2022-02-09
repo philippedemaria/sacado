@@ -41,7 +41,11 @@
                 {% endif %}
             </div>
             <div class="col-xs-10 col-md-10">
-                <img src="{% static 'img/my_diapo.png' %}" width="90%" />
+                <div class="menu_flashcard">
+                    <a href="{% url 'update_flashcard' flashcard.id %}">
+                        {{ flashcard.question|safe}}
+                    </a>
+                </div>
             </div>
         </div>
  

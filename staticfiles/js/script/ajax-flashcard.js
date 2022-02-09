@@ -96,7 +96,7 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
-
+        $(".menu_flashcard").find("span").attr("style","");
 
 });
 

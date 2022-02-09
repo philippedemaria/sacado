@@ -1241,7 +1241,6 @@ label {
 }
 
 
-
 .contenair_search_flashcard{
     float: left;
     margin: 25px 25px 25px 0px ;
@@ -1272,7 +1271,11 @@ label {
   margin-right: 15px; 
 }
 
-
+.menu_flashcard{ 
+    padding:10px; 
+    background-color: #FFF; 
+    font-size: 7px;  
+  }
 
 .label_flashcard{ 
     font-variant: small-caps;
