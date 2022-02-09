@@ -2494,8 +2494,6 @@ def show_parcours(request, idf = 0, id=0):
         nb_point = str(nb_point) + " points"
         nb_point_display = True
 
-    
-
     accordion = get_accordion(parcours.course, parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
 
     skills = Skill.objects.all()
