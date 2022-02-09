@@ -49,10 +49,11 @@ ul#id_skills li{
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-warning"><p><b>Avant de commencer</b>. Vous devez bien connaitre le langage $\LaTeX$ et tester vos exercices en local. </p>
-                <p>Pour cela, télécharger le préamble .tex et l'installer sur votre ordinateur en local. <a href="https://sacado.xyz/ressources/tex/preambule_tex/preambule.tex" target="_blank"><i class="fa fa-save"></i> Télécharger le préambule.</a></p>
+                <p>Pour cela, <a href="https://sacado.xyz/ressources/tex/preambule_tex/preambule.tex" target="_blank" style="border-bottom:1px dashed" >télécharger le préamble .tex <i class="fa fa-save"></i> </a>et l'installer sur votre ordinateur en local.
+                </p>
                 <p>
                     <ol>
-                        <li>Ecrire votre fichier source</li>
+                        <li>Ecrire votre fichier source.</li>
                         <li>Le compiler sur votre ordinateur.</li>
                         <li>Lorsque la compilation avec notre préambule SACADO fonctionne, vous pouvez écrire l'énoncé de votre exercice.</li>
                     </ol>
@@ -93,14 +94,14 @@ ul#id_skills li{
                             {{ form.theme.errors }}
                         </div>
                         <div class="form-group">
-                            {{ form.title.label_tag }} 
+                            {{ form.title.label_tag }} <small>Optionnel</small> 
                             {{ form.title |add_class:"form-control"  }}
                             {{ form.title.errors }}
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group" id="knowledge_list">
-
+                            <div class="alert alert-warning">Choisir le sujet, le niveau et le thème pour afficher les savoir faire ciblés.</div>
                         </div>
                     </div>
                 </div> 
@@ -121,11 +122,10 @@ ul#id_skills li{
                         </div>
  
                         <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
-                            <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
+                            <label><a href="#"  id="enable_correction">Ajouter un corrigé en LaTeX</a> <small>Optionnel</small>    </label>
                             <div id="enable_correction_div">
                                 <div class="col-sm-12 col-md-12">                        
-                                    <div class="form-group"> 
-                                        {{ form.correction.label_tag }}                        
+                                    <div class="form-group">                      
                                         {{ form.correction|add_class:"form-control"|attr:"rows:15" }}
                                         {{ form.correction.errors }}
                                     </div>
@@ -217,7 +217,7 @@ ul#id_skills li{
 
                         <div class="col-sm-12 col-md-12">                        
                             <div class="form-group"> 
-                                <label>Autres savoir faire  </label>                        
+                                <label>Autres savoir faire  </label> :<small> Optionnel</small>                   
                                 {{ form.knowledges|add_class:"form-control select2" }}
                                 {{ form.knowledges.errors }}
                             </div>
