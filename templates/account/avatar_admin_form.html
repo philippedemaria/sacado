@@ -1,0 +1,80 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block require %}
+    {% if idg %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3.js' %}"></script> 
+    {% else %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-index.js' %}"></script> 
+    {% endif %}
+
+    <script>
+       require(['script/ajax-dashboard']);
+    </script> 
+{% endblock %}
+
+{% block page_title %}
+    <i class="fa fa-user"></i> Nouvel avatar
+{% endblock %}
+ 
+{% block page_menu_right %}
+    <a href="{% url 'list_avatars' %}">
+        liste des avatars
+    </a>
+{% endblock %}
+
+
+{% block body %}
+    
+<section class="content_main">
+    <form action="" method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+   
+ 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>{{ form.image.label_tag }}</label>
+                    {{ form.image |add_class:"btn btn-default" }}
+                    {{ form.image.errors }}
+                </div>
+            </div>
+        </div>     
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>Accès selon le niveau de réussite de l'élève</label>
+                    {{ form.level |add_class:"form-control" }}
+                    {{ form.level.errors }}
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>Positionnement</label>
+                    {{ form.adult |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Adulte"|attr:"data-off:Elève" }}
+                    {{ form.adult.errors }}
+                </div>
+            </div>
+        </div>   
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                    <a href="javascript:history.back()">
+                        <input type="button" value="Annuler"
+                               class="btn btn-default" />
+                    </a>
+                </div>   
+            </div>
+        </div>
+    </form>
+</section>
+ 
+ 
+{% endblock %}
+
+ 

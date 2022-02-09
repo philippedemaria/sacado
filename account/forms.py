@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Teacher, User, Student, Parent , Response , Newpassword
+from .models import Teacher, User, Student, Parent , Response , Newpassword , Avatar
 
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
@@ -24,7 +24,17 @@ class UserForm(UserCreationForm):
             raise ValidationError("Ce nom d'utilisateur est déjà utilisé. Merci d'en choisir un autre.", code='invalid')
         return username
 
- 
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = '__all__'
+
+
+class AvatarUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('avatar',)
 
 
 class StudentForm(forms.ModelForm):
@@ -53,7 +63,7 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'is_extra', 'password','school','cgu','schools','is_testeur']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'user_type', 'is_extra', 'password','school','cgu','schools','is_testeur','avatar']
 
 
 
@@ -61,14 +71,14 @@ class ManagerForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'username',   'user_type', 'password','cgu']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined', 'username',   'user_type', 'password','cgu','avatar']
 
 
 class ManagerUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'user_type', 'password','cgu']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'user_type', 'password','cgu','avatar']
 
 
 class NewUserTForm(forms.ModelForm):
@@ -76,7 +86,7 @@ class NewUserTForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'username', 'is_extra','user_type','time_zone', 'password']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',  'username', 'is_extra','user_type','time_zone', 'password','avatar']
 
 
   
@@ -85,7 +95,7 @@ class NewUserSForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',   'username', 'user_type', 'is_manager',  'is_extra',  'time_zone', 'password' ,'cgu','schools']
+        exclude = ['user_permissions', 'groups', 'is_staff', 'is_active', 'is_superuser', 'last_login', 'date_joined',   'username', 'user_type', 'is_manager',  'is_extra',  'time_zone', 'password' ,'cgu','schools','avatar']
 
 
 

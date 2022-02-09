@@ -28,16 +28,41 @@
 
 
 
+
+
 <li class="dropdown {% if '/account' in request.path and not 'admin' in    request.path %}active{% endif %}">
     <a href="#" class="main"  id="account">
-        <i class="bi bi-person-circle icon_size"></i>
-        {% if not user.country  %}
-            <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
-            <div  style="position: absolute; bottom: 0px; right: 0; background: #ffb400;height:65px;padding-top:10px" > Renseignez votre profil </div>            
-        {% endif %}  
-        <div class="captionmenu">Compte</div>
+        {% comment %} 
+        {% if request.user.avatar and sacado_asso  %}
+
+            <img src="{{ request.user.avatar  }}" class="avatar" />
+            <div class="captionmenu">{{ request.user.first_name }}</div>
+
+        {% else %} 
+            <i class="bi bi-person-circle icon_size"></i>
+            {% if not user.country  %}
+                <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
+                <div  style="position: absolute; bottom: 0px; right: 0; background: #ffb400;height:65px;padding-top:10px" > Renseignez votre profil </div>            
+            {% endif %}  
+            <div class="captionmenu">Compte</div>
+        {% endif %} 
+
+        {% endcomment %} 
+        
+            <i class="bi bi-person-circle icon_size"></i>
+            {% if not user.country  %}
+                <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
+                <div  style="position: absolute; bottom: 0px; right: 0; background: #ffb400;height:65px;padding-top:10px" > Renseignez votre profil </div>            
+            {% endif %}  
+            <div class="captionmenu">Compte</div>
     </a>
 </li>
+
+
+
+
+
+
 
 <li class="dropdown {% if  request.session.tdb and 'parcours_group' in request.path %}active{% endif %}">
     <a href="{% url 'index' %}" class="main closer_notification" >

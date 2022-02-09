@@ -28,53 +28,71 @@
     <form action="" method="POST">
         {% csrf_token %}
         <div class="row">
+            <div class="col-sm-12 col-md-8">
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label>{{ user_form.username.label_tag }}</label>
+                            {{ user_form.username |add_class:"form-control" }}
+                            {{ user_form.username.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-2">
+                        <div class="form-group">
+                            <label>{{ user_form.civilite.label_tag }}</label>
+                            {{ user_form.civilite  |add_class:"form-control select2" }}
+                            {{ user_form.civilite.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5">
+                        <div class="form-group">
+                            <label>{{ user_form.last_name.label_tag }}</label>
+                            {{ user_form.last_name  |add_class:"form-control" }}
+                            {{ user_form.last_name.errors }}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-5">
+                        <div class="form-group">
+                            <label>{{ user_form.first_name.label_tag }}</label>
+                            {{ user_form.first_name  |add_class:"form-control" }}
+                            {{ user_form.first_name.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>{{ user_form.email.label_tag }}</label>
+                            {{ user_form.email  |add_class:"form-control" }}
+                            {{ user_form.email.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label>{{ user_form.time_zone.label_tag }}</label>
+                            {{ user_form.time_zone  |add_class:"form-control select2" }}
+                            {{ user_form.time_zone.errors }}
+                        </div>
+                    </div>
+                </div>   
+            </div>
             <div class="col-sm-12 col-md-4">
-                <div class="form-group">
-                    <label>{{ user_form.username.label_tag }}</label>
-                    {{ user_form.username |add_class:"form-control" }}
-                    {{ user_form.username.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-2">
-                <div class="form-group">
-                    <label>{{ user_form.civilite.label_tag }}</label>
-                    {{ user_form.civilite  |add_class:"form-control select2" }}
-                    {{ user_form.civilite.errors }}
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-5">
-                <div class="form-group">
-                    <label>{{ user_form.last_name.label_tag }}</label>
-                    {{ user_form.last_name  |add_class:"form-control" }}
-                    {{ user_form.last_name.errors }}
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-5">
-                <div class="form-group">
-                    <label>{{ user_form.first_name.label_tag }}</label>
-                    {{ user_form.first_name  |add_class:"form-control" }}
-                    {{ user_form.first_name.errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    <label>{{ user_form.email.label_tag }}</label>
-                    {{ user_form.email  |add_class:"form-control" }}
-                    {{ user_form.email.errors }}
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    <label>{{ user_form.time_zone.label_tag }}</label>
-                    {{ user_form.time_zone  |add_class:"form-control select2" }}
-                    {{ user_form.time_zone.errors }}
-                </div>
+                {% if sacado_asso %}
+                <a href="{% url 'avatar' %}">Choisir mon avatar</a><br/>
+                {% else  %}
+                <a href="#">Choisir mon avatar</a><br/>
+                {% endif  %}
+                {% if user_form.avatar  %}  
+                     <img src="{{ user.avatar  }}" class="avatar" />
+                {% endif %}
             </div>
         </div>   
+
+
+
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <div class="form-group">

@@ -56,59 +56,76 @@
 
             {% if not 'admin' in request.path %} 
             <div class="row">
-                <div class="col-sm-10 col-md-4">
 
-                {% if teacher.user.username|length > 50 %}
-                    <div class="form-group">
-                        {{ user_form.username.label_tag }}<br/>
-                        <label>Connexion via le GAR</label>
+                <div class="col-sm-12 col-md-6">
+                    <div class="row">
+                        <div class="col-sm-10 col-md-8">
+                        {% if teacher.user.username|length > 50 %}
+                            <div class="form-group">
+                                {{ user_form.username.label_tag }}<br/>
+                                <label>Connexion via le GAR</label>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                {{ user_form.username.label_tag }}
+                                {{ user_form.username |add_class:"form-control" }}
+                                {{ user_form.username.errors }}
+                            </div>
+                        {% endif %}
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <div id="ajaxresult"></div>
+                            </div>
+                        </div>
                     </div>
-                {% else %}
-                    <div class="form-group">
-                        {{ user_form.username.label_tag }}
-                        {{ user_form.username |add_class:"form-control" }}
-                        {{ user_form.username.errors }}
-                    </div>
-                {% endif %}
-
-
-
+                    <div class="row">
+                        <div class="col-sm-4 col-md-2">
+                            <div class="form-group">
+                                {{ user_form.civilite.label_tag }}
+                                {{ user_form.civilite  |add_class:"form-control select2" }}
+                                {{ user_form.civilite.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-md-10">
+                            <div class="form-group">
+                                {{ user_form.last_name.label_tag }}
+                                {{ user_form.last_name  |add_class:"form-control" }}
+                                {{ user_form.last_name.errors }}
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="form-group">
+                                {{ user_form.first_name.label_tag }}
+                                {{ user_form.first_name  |add_class:"form-control" }}
+                                {{ user_form.first_name.errors }}
+                            </div>
+                        </div>
+                    </div>    
                 </div>
-                <div class="col-sm-2 col-md-2">
-                    <div class="form-group">
-                        <div id="ajaxresult"></div>
-                    </div>
-                </div>
-                <div class="col-sm-12  col-md-6">
+                <div class="col-sm-12  col-md-3">
                     <div class="form-group {% if not teacher.user.country  %} alert alert-danger{% endif %}"> 
                         <label>Pays :  {% if not teacher.user.country  %} A renseigner{% endif %}</label>
                         {{ user_form.country |add_class:"form-control select2" }}
                         {{ user_form.country.errors }}
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-2">
-                    <div class="form-group">
-                        {{ user_form.civilite.label_tag }}
-                        {{ user_form.civilite  |add_class:"form-control select2" }}
-                        {{ user_form.civilite.errors }}
+
+                    <div class="form-group"> 
+                        {% if sacado_asso %}
+                        <a href="{% url 'avatar' %}">Choisir mon avatar</a><br/>
+                        {% else  %}
+                        <a href="#">Choisir mon avatar</a><br/>
+                        {% endif  %}
+                        {% if user_form.avatar != "" %}  
+                            <img src="{{ user.avatar  }}" class="avatar" />
+                        {% else %}
+                            <i class="bi bi-person-circle" style="font-size: 50px"></i>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-5">
-                    <div class="form-group">
-                        {{ user_form.last_name.label_tag }}
-                        {{ user_form.last_name  |add_class:"form-control" }}
-                        {{ user_form.last_name.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-5">
-                    <div class="form-group">
-                        {{ user_form.first_name.label_tag }}
-                        {{ user_form.first_name  |add_class:"form-control" }}
-                        {{ user_form.first_name.errors }}
-                    </div>
-                </div>
+
             </div>
             {% else %}
             <div class="row">

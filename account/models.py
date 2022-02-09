@@ -23,6 +23,9 @@ from datetime import datetime
 def file_directory_path(instance, filename):
     return "factures/{}/{}".format(instance.user.id, filename)
 
+def avatar_directory_path(instance,filename):
+    return "avatar/{}".format(filename)    
+
 
 def generate_code():
     '''
@@ -43,6 +46,26 @@ class ModelWithCode(models.Model):
 
     class Meta:
         abstract = True
+
+
+
+
+class Avatar(models.Model):
+
+    LEVELS = (
+        (50, "moins de 50%"),
+        (70, "moins de 70%"),
+        (85, "moins de 85%"),
+    )
+    image = models.ImageField(upload_to=avatar_directory_path,verbose_name="avatar")
+    level = models.PositiveSmallIntegerField(choices=LEVELS)
+    adult = models.BooleanField(default=1)
+
+    def __str__(self):
+        image = self.image
+        return "{}".format(image )
+
+
 
 
 class User(AbstractUser):
@@ -93,6 +116,7 @@ class User(AbstractUser):
     is_testeur = models.BooleanField(default=0)
     country    = models.ForeignKey(Country, blank=True, null=True, related_name="countries", default=None, on_delete = models.SET_NULL)
     is_board   = models.BooleanField(default=0)
+    avatar     = models.ImageField(upload_to=avatar_directory_path,verbose_name="avatar", blank=True, null= True, default ="" )
 
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
@@ -739,3 +763,6 @@ class Newpassword(ModelWithCode):
     def __str__(self):
         email = self.email
         return "{}".format(email )
+
+
+
