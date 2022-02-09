@@ -50,7 +50,7 @@ class Exotex(models.Model):
     level = models.ForeignKey(Level, related_name="level_exotexs", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="theme_exotexs", on_delete=models.PROTECT, verbose_name="Thème")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_exotexs', verbose_name="Compétences ciblées")
-    knowledges = models.ManyToManyField(Knowledge, blank=True,  default="", null=True,   related_name='other_knowledge_exotexs', verbose_name="Savoir faire associés complémentaires")
+    knowledges = models.ManyToManyField(Knowledge, blank=True,  default="",  related_name='other_knowledge_exotexs', verbose_name="Savoir faire associés complémentaires")
 
     is_share = models.BooleanField(default=1, verbose_name="Mutualisé ?")
     is_python = models.BooleanField(default=0, verbose_name="Python ?")
