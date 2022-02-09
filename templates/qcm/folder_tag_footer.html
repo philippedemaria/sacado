@@ -62,7 +62,7 @@
             <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_flashpack_exists %} style="color:{{ folder.color }}" {% endif %}>
  
                 {% if dataset.flashpack_to_validate %}
-                 <i class="bi bi-exclamation-diamond-fill"  title="Flashpack à corriger"></i>
+                 <i class="bi bi-exclamation-diamond-fill text-validate"  title="Flashpack à corriger"></i>
                 {% else %}
                 <i class="bi bi-stack"></i>                  
                 {% endif %} <span class="label_icon">F-pack</span>
