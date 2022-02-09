@@ -118,7 +118,7 @@
                         {% else  %}
                         <a href="#">Choisir mon avatar</a><br/>
                         {% endif  %}
-                        {% if user_form.avatar != "" %}  
+                        {% if user.avatar != "" %}  
                             <img src="{{ user.avatar  }}" class="avatar" />
                         {% else %}
                             <i class="bi bi-person-circle" style="font-size: 50px"></i>
