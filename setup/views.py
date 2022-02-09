@@ -252,8 +252,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"]
+
     if "P_MEL" in dico_received.keys() : email  = dico_received["P_MEL"]
     else : email  = ""
+
     closure    = None
     time_zone  = "Europe/Paris"
     is_extra   = 0
@@ -264,11 +266,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
     is_board   = 0
 
     username   = dico_received["IDO"]
-    password   = make_password("sacado_gar") # quel est le format du mot de passe ?
+    password   = make_password("sacado_gar") 
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
  
-        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : school.country , })
+        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
         if user_type == 0 and created :
             level      = dico_received["E_MS1"]
             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
@@ -287,8 +289,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     return index(request)
-    # context = { 'request' : request ,   'user_after' : user_after ,  'user_authenticated' : user_authenticated , 'gars' : gars , 'data_xml' : data_xml }
-    # return render(request, 'setup/gar_test.html', context)
+
 
 
 
