@@ -75,7 +75,7 @@
                     {% if not flashpack.is_global %}
                         <a href="{% url 'revise_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-bootstrap-reboot"></i> Revoir les flashcards </a> 
                     {% else %}
-                        <span class="automatic_insertion">Flashpack testé aujourd'hui</span>
+                        <span class="automatic_insertion">Pas de flashcard aujourd'hui</span>
                         <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="edit pull-right" ><i class="bi bi-trophy"></i> Résultats</a>
                     {% endif %}
                 {% endif %}

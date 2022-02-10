@@ -30,7 +30,7 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
-
+        $(".tr_edit").find("span").attr("style","");
 
 
 });

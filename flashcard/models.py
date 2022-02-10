@@ -6,6 +6,7 @@ from socle.models import *
 from account.models import Student, Teacher, ModelWithCode , User
 from qcm.models import Parcours , Exercise , Folder
  
+from django.db.models import Max
 from django.utils import   timezone
 from django.db.models import Q
 from random import uniform , randint
@@ -163,15 +164,37 @@ class Flashpack(models.Model):
     def today_cards(self,today,student) :
 
         data = {}
-        if self.answercards.count() > 0 :
-            today_cards =  self.flashcards.filter(is_validate=1 , answercards__rappel=today)
+        if self.is_global :
+
+            cards     = self.flashcards.filter(is_validate=1 , answercards__rappel=today)
+            nbe_cards = cards.count()
+            if cards.count() :
+                nb_cards = 10 - nbe_cards
+                if nb_cards < 10 :
+                    new_c = self.flashcards.filter(is_validate=1).exclude(pk__in=cards)[:nb_cards]
+                today_cards =  cards|new_c
+            elif cards.count() == 0: 
+                fcards = self.flashcards.filter(is_validate=1,answercards__rappel__gte=today)
+                nbc = fcards.count()
+                if nbc :               
+                    nb_cards = 10 - nbc
+                    today_cards =  fcards
+                    if nb_cards < 10 :
+                        new_c = self.flashcards.filter(is_validate=1).exclude(pk__in=cards)[:nb_cards]
+                    today_cards.update(fcards)
+                else :               
+                    nb_cards = 10
+                    today_cards =  self.flashcards.filter(is_validate=1).exclude(pk__in=cards)[:10]
+
+
+ 
+            data["cards"]  = today_cards
+            data["count"]  = nb_cards
 
         else :
-            today_cards =  self.flashcards.filter(is_validate=1)
+            data["cards"]  = 0
+            data["count"]  = 0
 
-        nb_today_cards = today_cards.count()
-        data["cards"]  = today_cards
-        data["count"]  = nb_today_cards
         return data
 
 

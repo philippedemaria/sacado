@@ -46,13 +46,16 @@ def decrypt_results(arg):
     tab = arg.split("-")
     string = ""
     for r in tab :
-        if int(r) == 1 :
+        if r == '' :
+            score = None
+        elif int(r) == 1 :
             score = "danger"
         elif int(r) == 3 :
             score = "validate"
         elif int(r) == 5 :
             score = "success"
-        string += "<i class='fa fa-square fa-xs text-"+score+"'></i>"
+        if score  :
+            string += "<i class='fa fa-square fa-xs text-"+score+"'></i>"
         
     return string
 

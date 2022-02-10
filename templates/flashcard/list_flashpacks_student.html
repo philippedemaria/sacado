@@ -18,7 +18,7 @@
 
 {% block page_title %}
     {% include 'flashcard/logo.html' %}  
-    Flashpack annuels
+    Mes flashpacks
 
  
 {% endblock %}
@@ -33,6 +33,12 @@
 
 {% block body %}
 <section class="content_main"> 
+    {% if flashpacks %}
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12"> 
+           <h2 class="thin">Flashpack sur l'année</h2>
+        </div>        
+    </div>
     <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12"> 
                 {% for flashpack in flashpacks %}
@@ -41,5 +47,21 @@
             <!-- ******************************************************************************************** -->
         </div>        
     </div>
+    {% endif %}
+    {% if fpacks %}
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12"> 
+           <h2 class="thin">Flashpack par parcours</h2>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12"> 
+                {% for flashpack in fpacks %}
+                    {%  include 'flashcard/flashpack_student_data_index.html'  %}
+                {% endfor %}   
+            <!-- ******************************************************************************************** -->
+        </div>        
+    </div>
+    {% endif %}
 </section>
 {% endblock %}

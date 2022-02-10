@@ -39,14 +39,16 @@ def list_flashpacks(request):
     if request.user.is_teacher :
         teacher = request.user.teacher
         request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-        flashpacks = Flashpack.objects.all()
+        flashpacks = Flashpack.objects.filter(teacher__user = request.user)
         return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
     else :
         student = request.user.student
         today = time_zone_user(request.user)
         request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-        flashpacks = Flashpack.objects.filter(is_global=1)
-        return render(request, 'flashcard/list_flashpacks_student.html', {'flashpacks': flashpacks, 'student' : student , 'today' : today })
+        fpacks_base = Flashpack.objects.filter(students=student)
+        fpacks = fpacks_base.exclude(is_global=1)
+        flashpacks = fpacks_base.filter(is_global=1)
+        return render(request, 'flashcard/list_flashpacks_student.html', {'flashpacks': flashpacks, 'fpacks': fpacks, 'student' : student , 'today' : today })
 
 
 
@@ -465,7 +467,7 @@ def flashpack_results(request, idf,idp=0):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
     parcours = None
-    if idp :
+    if idp > 0 :
         parcours = Parcours.objects.get(pk=idp)    
 
     if request.user.is_teacher :
@@ -806,6 +808,17 @@ def ajax_show_comments(request):
     data = {}
     data['html'] = render_to_string('flashcard/ajax_show_comments.html', {'flashcard' : flashcard,   })
     return JsonResponse(data)
+ 
+
+
+    def inter_days_repetition(n,inter_days,ef):
+        if n == 1 :
+            return 8-(ef-1.3)/(2.5-1.3)*3
+        elif n == 2 :
+            return 13+(ef-1.3)/(2.5-1.3)*8
+        else :
+            return inter_days*(ef-0.1)
+ 
 
 
 
@@ -816,31 +829,49 @@ def ajax_store_score_flashcard(request):
     flashcard_id = request.POST.get("flashcard_id") 
     value        = int(request.POST.get("value") )
 
-
-
     flashpack  = Flashpack.objects.get(id=flashpack_id)
     flashcard  = Flashcard.objects.get(id=flashcard_id)
     
     if request.user.user_type == 0 :
 
         mf, cr = Madeflashpack.objects.get_or_create( flashpack = flashpack, student = request.user.student  )
+        
         if not cr :
             today = time_zone_user(request.user)
             Madeflashpack.objects.filter( flashpack = flashpack, student = request.user.student  ).update(date = today )
 
-
         answer, created = Answercard.objects.get_or_create( flashpack = flashpack, flashcard = flashcard , student = request.user.student )
-        if value == 5 : weight = 4
-        elif value == 3 : weight = 2
-        elif value == 1 : weight = 1
 
+        if flashpack.is_global :# flashpack annuel 
+            try :
+                inter_days = answer.rappel - answer.date 
+            except :
+                inter_days = 0
+
+
+            if not created :
+                weight = answer.weight
+            else :
+                weight = 2.5
+
+            weight += (0.1-(5-value)*(0.08+(5-value)*0.02))
+
+            length_ans = answers_str.split("-").count()
+            this_inter_days = inter_days_repetition(length_ans,inter_days,weight)
+ 
+        else : 
+            this_inter_days = 100000 #si le flashpack n'est pas annuel alors il n'y a pas de répétitions espacées
+
+
+ 
         if answer.answers != "" : answers_str = answer.answers +"-"+str(value)
         else : answers_str =  str(value) 
- 
-        rappel          = answer.date + timedelta(days = weight)
+
+
+        rappel = answer.date + timedelta(days = this_inter_days )
         if value :
-            Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
- 
+            # Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
+            print(rappel)
 
     data = {}
     return JsonResponse(data)
