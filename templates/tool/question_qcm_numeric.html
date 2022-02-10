@@ -58,7 +58,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12" >
-                        <a href="#" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
+                        <a href="javascript:void()" class="automatic_insertion"   id="feed_back"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                         <div id="div_feed_back{{ forloop.counter0 }}" class="checkbox_no_display">
                         {{ form_ans.empty_form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
                         </div>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12" >
-                        <a href="javascript:void();" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
+                        <a href="javascript:void()" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                         <div id="div_feed_back{{ forloop.counter0 }}" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
                         {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
                         </div>

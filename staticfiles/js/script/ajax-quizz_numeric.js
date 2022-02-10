@@ -470,7 +470,9 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
                 $('#cloningZone').attr("id","cloningZone"+totalForms) 
                 $('#imager').attr("id","imager"+totalForms) 
                 $('#file-image').attr("id","file-image"+totalForms) 
-
+                $('#feed_back').attr("id","feed_back"+totalForms)          
+                $('#div_feed_back').attr("id","div_feed_back"+totalForms)     
+                
                 $("#choices-"+totalForms+"-is_correct").prop("checked", false); 
                 $("#duplicate"+totalForms+" input").each(function(){ 
                     $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));

@@ -17,9 +17,9 @@
     {% endif %}
 </td>
 <td>
-    <a href="{% url 'show_quizz' quizz.id  %}" > 
-        {{ quizz.title }}
-    </a>
+ 
+    {{ quizz.title }}
+ 
     {% if quizz.is_random %}
     <br/>
         <span class="helper_tip"  style="line-height: 30px"> <i class="fa fa-random" style="font-size:12px"></i> 
@@ -102,25 +102,28 @@
 
     {% if  quizz.is_video %}
     <span class="sanspuce historic_li"  style="border:1px solid; border-radius:20px; width:70px;">
-        <i class="fa fa-gamepad"></i> Numérique
+        <i class="fa fa-gamepad"></i> | 
         <a href="{% url 'play_quizz_teacher'  quizz.id  %}" target="_blank"  class="quizz_action" title="En version à tester" > 
-            <i class="fa fa-play fa-xs"></i> <small>Lancer</small>
+            <i class="fa fa-play"></i> <small>Lancer</small>
         </a>  
     </span>
     {% elif  quizz.is_numeric %}
     <span class="sanspuce historic_li"  style="border:1px solid; border-radius:20px; width:70px;">
-        <i class="fa fa-desktop"></i> Numérique
+        <i class="fa fa-desktop"></i>  | 
         <a href="{% url 'goto_quizz_numeric'  quizz.id  %}" class="quizz_action" title="voir ce quizz"  target="_blank" > 
-        <i class="fa fa-play fa-xs"></i> <small>Lancer</small></a>  
+        <i class="fa fa-play  fa-xs"></i> <small>Lancer</small></a>  
+
+        | <a href="{% url 'show_quizz' quizz.id  %}" > <i class="fa fa-edit fa-xs"></i><small> Papier</small></a>
+
         | <small><a href="{% url 'result_quizz'  quizz.id  %}" class="quizz_action" title="voir ce quizz"  ><i class="fa fa-trophy fa-xs"></i> Résultats</a></small>
         
     </span>
     {% else %}
     <span  class="sanspuce historic_li"  style="border:1px solid ; border-radius:20px; width:70px;margin-right: 10px;">
-        <i class="fa fa-edit fa-xs"></i> Papier
+        <i class="bi bi-webcam" style="font-size:16px"></i> | 
         <a href="{% url 'show_quizz'  quizz.id %}" 
            class="quizz_action {% if quizz.is_random %} confirm_create_historic{% endif %}" target="_blank" >
-           <i class="fa fa-play fa-xs"></i>  <small>Projeter</small>
+             <i class="fa fa-edit fa-xs"></i> <small>Projeter</small>
         </a>
 
     </span>
