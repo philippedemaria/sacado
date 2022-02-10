@@ -12,6 +12,7 @@ from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
 from time import strftime
+from itertools import chain
 
 POLICES = (
         (16, '16'),
@@ -168,11 +169,13 @@ class Flashpack(models.Model):
 
             cards     = self.flashcards.filter(is_validate=1 , answercards__rappel=today)
             nbe_cards = cards.count()
-            if cards.count() :
+            if cards.count() > 0 :
                 nb_cards = 10 - nbe_cards
                 if nb_cards < 10 :
                     new_c = self.flashcards.filter(is_validate=1).exclude(pk__in=cards)[:nb_cards]
-                today_cards =  cards|new_c
+                    today_cards = list(chain(cards, new_c))
+                else:  
+                    today_cards = cards
             elif cards.count() == 0: 
                 fcards = self.flashcards.filter(is_validate=1,answercards__rappel__gte=today)
                 nbc = fcards.count()
