@@ -154,6 +154,7 @@
         {% csrf_token %}  
 
           <div class='justify-content-center'  style="position:relative">
+              {% comment %}
               {% if parcours.is_evaluation %}
                  {% if parcours_available.is_ok   %}
                       {% if available.is_ok %} 
@@ -189,10 +190,10 @@
                           <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
                               <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
                           </div>
-                  {% endif   %}
+                  {% endif %}
 
               {% endif %}
-
+              {% endcomment %}
 
               <div class='justify-content-center' >
                   <div style="position:absolute;bottom:80px;font-size: 12px;width:50px;color:#0d72ac;left:780px;">
