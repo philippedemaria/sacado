@@ -25,7 +25,9 @@
                 <th>Réponse</th>
                 <th>Aide</th>
                 <th>Dernière passation  </th>
+                {% if flashpack.is_global %}
                 <th>Prochaine passation  </th>
+                {% endif %}
                 <th>Validité</th>
             </tr> 
         </thead>
@@ -36,7 +38,9 @@
                     <td>{{ answercard.flashcard.answer|safe }}</td>
                     <td>{{ answercard.flashcard.helper|safe }}</td>
                     <td>{{ answercard.date|date:"d N Y" }}  </td>
+                    {% if flashpack.is_global %}
                     <td>{{ answercard.rappel|date:"d N Y" }}  </td>
+                    {% endif %}
                     <td>{{ answercard.answers|decrypt_results|safe }}</td>
                 </tr>
             {% endfor %}              

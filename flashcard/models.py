@@ -181,22 +181,20 @@ class Flashpack(models.Model):
                 nbc = fcards.count()
                 if nbc :               
                     nb_cards = 10 - nbc
-                    today_cards =  fcards
                     if nb_cards < 10 :
                         new_c = self.flashcards.filter(is_validate=1).exclude(pk__in=cards)[:nb_cards]
-                    today_cards.update(fcards)
+                    today_cards = list(chain(cards, fcards))
                 else :               
                     nb_cards = 10
                     today_cards =  self.flashcards.filter(is_validate=1).exclude(pk__in=cards)[:10]
 
-
- 
             data["cards"]  = today_cards
             data["count"]  = nb_cards
 
         else :
-            data["cards"]  = 0
-            data["count"]  = 0
+            cards = self.flashcards.filter(is_validate=1)
+            data["cards"]  = cards
+            data["count"]  = cards.count()
 
         return data
 

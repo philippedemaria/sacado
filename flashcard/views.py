@@ -297,7 +297,7 @@ def revise_flashpack(request, id):
 
     flashpack  = Flashpack.objects.get(id=id)
     flashcards =  flashpack.flashcards.filter(is_validate=1) 
-    template = 'flashcard/revise_flashpack.html'
+    template = 'flashcard/show_flashpack_student.html'
     context = {'flashpack': flashpack, 'flashcards' : flashcards  }
 
     return render(request,template, context )
@@ -811,13 +811,13 @@ def ajax_show_comments(request):
  
 
 
-    def inter_days_repetition(n,inter_days,ef):
-        if n == 1 :
-            return 8-(ef-1.3)/(2.5-1.3)*3
-        elif n == 2 :
-            return 13+(ef-1.3)/(2.5-1.3)*8
-        else :
-            return inter_days*(ef-0.1)
+def inter_days_repetition(n,inter_days,ef):
+    if n == 1 :
+        return int(8-(ef-1.3)/(2.5-1.3)*3)
+    elif n == 2 :
+        return int(13+(ef-1.3)/(2.5-1.3)*8)
+    else :
+        return int(inter_days*(ef-0.1))
  
 
 
@@ -841,37 +841,32 @@ def ajax_store_score_flashcard(request):
             Madeflashpack.objects.filter( flashpack = flashpack, student = request.user.student  ).update(date = today )
 
         answer, created = Answercard.objects.get_or_create( flashpack = flashpack, flashcard = flashcard , student = request.user.student )
+        if answer.answers != "" : answers_str = answer.answers +"-"+str(value)
+        else : answers_str =  str(value) 
+
+        if not created :
+            weight = answer.weight
+        else :
+            weight = 2.5
+        weight += (0.1-(5-value)*(0.08+(5-value)*0.02))
 
         if flashpack.is_global :# flashpack annuel 
             try :
-                inter_days = answer.rappel - answer.date 
+                inter_days = (answer.rappel - answer.date).days 
             except :
                 inter_days = 0
-
-
-            if not created :
-                weight = answer.weight
-            else :
-                weight = 2.5
-
-            weight += (0.1-(5-value)*(0.08+(5-value)*0.02))
-
-            length_ans = answers_str.split("-").count()
+            length_ans = len( answers_str.split("-") )
             this_inter_days = inter_days_repetition(length_ans,inter_days,weight)
  
         else : 
             this_inter_days = 100000 #si le flashpack n'est pas annuel alors il n'y a pas de répétitions espacées
 
-
- 
-        if answer.answers != "" : answers_str = answer.answers +"-"+str(value)
-        else : answers_str =  str(value) 
-
-
+        print(this_inter_days)
         rappel = answer.date + timedelta(days = this_inter_days )
         if value :
-            # Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
             print(rappel)
+            Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
+
 
     data = {}
     return JsonResponse(data)

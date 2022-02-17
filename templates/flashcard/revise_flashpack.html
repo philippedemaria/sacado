@@ -41,7 +41,6 @@
                 </div>  
             </div>
         </div>
-         
         <div class="row"> 
             <div class="col-sm-12 col-md-3" id="offsethelper"></div>
             <div class="col-sm-12 col-md-6" align="center" id="data_buttons{{ flashcard.id }}"  >
@@ -51,7 +50,6 @@
                 {% endif %}
                 <button class="btn btn-primary show_answer" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Réponse </button>
             </div>
-
             <div class="col-sm-12 col-md-12 no_visu_on_load" align="center"  id="buttons{{ flashcard.id }}"  >
                 <div class="alert">
                     Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
@@ -60,10 +58,7 @@
                 <button data-nav="next" data-value="0" data-flashcard_id="{{ flashcard.id }}" data-flashpack_id="{{ flashpack.id }}" class="navigation btn btn-primary">Flashcard suivante</button>
                 </form>        
             </div>
-
         </div> 
-
-     
         <div class="row no_visu_on_load" id="helper{{ flashcard.id }}"> 
             <div class="col-sm-12 col-md-3" align="right">
                 <h1 class="thin">Aide : </h1>
