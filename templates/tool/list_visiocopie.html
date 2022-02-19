@@ -24,15 +24,29 @@
 
 {% block body %}
 <section class="content_main">
-	 <div class="row">
+	 <div class="row row-cols-2">
 	   <div align="center" class="col-sm-9 col-md-9">
       <div>
 		   <a class="btn btn-default" onclick="avance(-1)"><</a><span id="numero"> 0/0 </span>
 	       <a class="btn btn-default" onclick="avance(1)">></a>
-	    </div>
-	   <div id="image"></div>
+	   </div>
+	   <div class="row row-cols-2">
+	   <div id="controles"  class="col-sm-1 col-md-1" style="">
+           <i class='fa fa-circle fa-xs' onclick="size(1)"></i><br><br>
+           <i class='fa fa-circle fa-sm' onclick="size(2)"></i><br><br>
+           <i class='fa fa-circle fa-lg' onclick="size(3)"></i><br><br>
+           <i class='fa fa-circle fa-sm' onclick="couleur('blue')" style="color: blue"></i><br> <br> 
+           <i class='fa fa-circle fa-sm' onclick="couleur('red')"style="color: red"></i><br> <br> 
+           <i class='fa fa-circle fa-sm' onclick="couleur('green')"style="color: green"></i><br> <br> 
+           <i class='fa fa-circle fa-sm' onclick="couleur('black')"></i><br><br>
+           <i class='far fa-circle fa-sm' onclick="gomme()"></i><br><br>
+           <i class='fas fa-rotate-right' onclick="rotate(90)"></i><br><br>
+           <i class='fas fa-rotate-left' onclick="rotate(-90)"></i>
+	   </div>
+	   <div class="col-sm-11 col-md-11" id="image"></div>
 	 </div>
-     <div align="center" id="capt" class="col-sm-3 col-md-3 mx-auto">
+	 </div>
+     <div align="center" id="capt" class="col-sm-3 col-md-3">
     		<a id="lienCapt" href="#"  class="btn btn-new">Cliquer pour ouvrir<br>la page de capture
 </a><br><br>
     		<a id="qrcode" href="#"></a>
@@ -41,26 +55,64 @@
 </section>
 <script>
   
-  var tabImage=new Array(); // tableau des images
-  var imageVue=-1   // l'image actuellement affichée	
-  var t=document.getElementById("image"); // la div ou est affiché l'image
-  var nu=document.getElementById("numero"); // la div ou est affiché 2/2 etc...
-  var largIm=700;   // dimensions du canvas qui reçoit l'image
-  var hautIm=1120;
+  tabImage=new Array(); // tableau des images
+  tabRot=new Array();      // pour chaque image, sa rotation.
+  tabRatio=new Array();   // pour chaque image, l'échelle (taille vue/taille initiale)
+  imageVue=-1;   // l'image actuellement affichée	
+  t=document.getElementById("image"); // la div ou est affiché l'image
+  nu=document.getElementById("numero"); // la div ou est affiché 2/2 etc...
+  largIm=800;   // dimensions maximale du canvas qui reçoit l'image
+  hautIm=1300;
+
+// fonctions associées au différents boutons
+
+  // navigation dans les images
   var avance = function(n) {
 	  if (tabImage.length!=0  && imageVue+n>=0 && imageVue+n<tabImage.length)
 	    {imageVue=imageVue+n;
+		 ratio=tabRatio[imageVue];
+		 rot=tabRot[imageVue]
 	     t.replaceChild(tabImage[imageVue],t.childNodes[0]);
+	     ctx=tabImage[imageVue].getContext("2d");
 	     nu.childNodes[0].textContent=" "+(imageVue+1)+"/"+tabImage.length;
+	     rect=tabImage[imageVue].getBoundingClientRect();
+	     
 	 }
 	  }
-	     
+  function gomme(){
+	   ctx.globalCompositeOperation = "destination-out";
+       ctx.strokeStyle = "rgba(0,0,0,1.0)";}	  
+  function couleur(c){ctx.stroke(); ctx.strokeStyle=c;}
+  function size(s){ctx.lineWidth=2*s;}
+  function rotate(a){
+	  console.log("rotation");
+	  image=tabImage[imageVue];
+	  rot=tabRot[imageVue]=(360+tabRot[imageVue]+a) % 360;
+	  console.log(tabRot[imageVue]);
+	  transform="rotate("+rot+"deg)";
+	  if (rot==90 || rot==270) {
+		  ratio=t.clientWidth/image.height;
+	      dy=(image.width*ratio-image.height)/2;
+          transform="translate(0px,"+dy+"px) scale("+ratio+","+ratio+") "+transform;}
+      else {ratio=1}
+	  console.log(transform);
+	  tabRatio[imageVue]=ratio;
+	  image.style.transform=transform;
+	  rect=image.getBoundingClientRect();   
+	}
+  function chgtCoord(x,y,r){
+	   if (rot==0)	return [(x-r.left)/ratio,(y-r.top)/ratio]
+	   else if (rot==90) return [(y-r.top)/ratio,(r.right-x)/ratio]
+	   else if (rot==180) return [(r.right-x)/ratio,(r.bottom-y)/ratio]
+	   else if (rot==270) return [(r.bottom-y)/ratio,(x-r.left)/ratio]
+   }
   var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   var ws_path = ws_scheme + '://' + window.location.host + "/tool/visiocast/";
   window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
   socket.onopen = function () {
       socket.send(JSON.stringify({"command":"joinDestinataire"} )); 
       };        
+
             // Handle incoming messages
   socket.onmessage = function (message) {
 	  var lien=document.getElementById("lienCapt");
@@ -82,31 +134,54 @@
 	  }
 	  if (data.command=="tousDeco"){
 		 lien.className="btn btn-new pull-right";
-	  }
-     if (data.command=="cast"){
-		 console.log("cast", data.Imgb64.length);
+	  }     
+	  if (data.command=="cast"){  // une image est envoyee
         if (tabImage.length==0) {
+		   document.getElementById("controles").style.display="initial";
+	       }
+	    // creation du canvas qui va contenir l'image
 	    canvas=document.createElement("canvas");
-	    canvas.width=largIm;
-	    canvas.height=hautIm;
-	    ctx=canvas.getContext("2d");
+	    down=false;
+	    canvas.onmousedown=function(e){
+			down=true;
+			ctx.beginPath()
+			nc=chgtCoord(e.clientX,e.clientY, this.getBoundingClientRect());
+			ctx.moveTo(nc[0],nc[1]);
+			};
+		canvas.onmouseup=function(){down=false};
+		canvas.onleave=function(){down=false};
+		canvas.onmouseout=function(){down=false};
+        canvas.onmousemove=function(e){
+			if (down){
+				nc=chgtCoord(e.clientX,e.clientY,this.getBoundingClientRect());
+				ctx.lineTo(nc[0],nc[1]);
+				ctx.stroke()
+			}
+		}
+	 
+	 
+	  // creation de l'image
+	   image=document.createElement("img");
+	   image.src=data.Imgb64;
+	   image.onload=function(){  //l'image est completement chargée, on l'insere
+	      canvas.width=t.clientWidth;
+		  canvas.height=image.height*canvas.width/image.width;
+		  ctx=canvas.getContext("2d");
+		  ctx.drawImage(image,0,0,canvas.width,canvas.height);
+		  // initialisation des différentes variables globales 
+		  ctx.lineWidth=2;
+		  tabImage.push(canvas);
+		  tabRot.push(0);  //rotation initiale : 0d degre
+		  rot=0;ratio=1.0; // rotation et facteur d'agrandissement
+		  tabRatio.push(1);
+		  imageVue=tabImage.length-1;
+		  // insertion du canvas dans la div
+		  if (t.children.length>=1) {t.replaceChild(canvas,t.childNodes[0]);}
+		  else { t.appendChild(canvas);}
+		  nu.textContent=" "+tabImage.length+"/"+tabImage.length;
+		  rect=canvas.getBoundingClientRect();
+	   }
 	}
-	 image=document.createElement("img");
-	     image.src=data.Imgb64;
-	 image.onload=function(){
-	     ratio=Math.max(image.width/largIm, image.height/hautIm)
-	     image.height=image.height/ratio;
-	     image.width=image.width/ratio;
-	     dx=(largIm-image.width)/2;
-	     dy=(hautIm-image.height)/2;
-	     ctx.drawImage(image,dx,0,image.width,image.height);
-	     tabImage.push(image);
-	     imageVue=tabImage.length-1;
-	     if (t.children.length>=1) {t.replaceChild(image,t.childNodes[0]);}
-		        else { t.appendChild(image);}
-	     nu.textContent=" "+tabImage.length+"/"+tabImage.length;
-	 }
-     }
   }
  
 </script>
