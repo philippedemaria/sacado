@@ -33,15 +33,15 @@ urlpatterns = [
                   path('oauth/', include('social_django.urls')),
                   path('basthon/', include('basthon.urls')),    
                   path('association/', include('association.urls')),
-                  path('bibliotex/', include('bibliotex.urls')),
+
                   path('tool/', include('tool.urls')),  
                   path('payment/', include('payment.urls')),
                   path('aefe/', include('aefe.urls')),
-                  path('flashcard/', include('flashcard.urls')),
-    
+				  path('admin/', admin.site.urls),
+                  path('CF/', include('ServeurCF.urls')),
+                  path("QF/", include("QuesFlash.urls"))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
+       
 # handler404 = myapp_views.handler404
 # handler500 = myapp_views.handler500
 
