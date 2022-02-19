@@ -6171,8 +6171,10 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     parcours = Parcours.objects.get(pk = idp)
     today = time_zone_user(user)
 
-
-    tracker_execute_exercise(True , user , idp  , id , 1)  
+    try :
+        tracker_execute_exercise(True , user , idp  , id , 1) 
+    except :
+        pass
 
 
     if customexercise.is_realtime :
