@@ -6161,79 +6161,79 @@ def write_exercise(request,id): # Coté élève
 
 
 
-
-
 def write_custom_exercise(request,id,idp): # Coté élève - exercice non autocorrigé
  
-    user = request.user
-    student = user.student
-    customexercise = Customexercise.objects.get(pk = id)
-    parcours = Parcours.objects.get(pk = idp)
-    today = time_zone_user(user)
+    if request.user.is_authenticated :
+        user = request.user
+        student = user.student
+        customexercise = Customexercise.objects.get(pk = id)
+        parcours = Parcours.objects.get(pk = idp)
+        today = time_zone_user(user)
 
-    try :
-        tracker_execute_exercise(True , user , idp  , id , 1) 
-    except :
-        pass
+        try :
+            tracker_execute_exercise(True , user , idp  , id , 1) 
+        except :
+            pass
 
 
-    if customexercise.is_realtime :
-        on_air = True
+        if customexercise.is_realtime :
+            on_air = True
+        else :
+            on_air = False   
+     
+
+        if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
+            c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
+            cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
+            images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
+
+        else :
+            cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
+            c_e = False
+            images = False
+
+        if customexercise.is_image :
+            form_ans = inlineformset_factory( Customanswerbystudent , Customanswerimage , fields=('image',) , extra=1)
+        else :
+            form_ans = None
+
+
+        if request.method == "POST":
+            if cForm.is_valid():
+                w_f = cForm.save(commit=False)
+                w_f.customexercise = customexercise
+                w_f.parcours_id = idp
+                w_f.student = student
+                w_f.is_corrected = 0
+                w_f.save()
+
+                if customexercise.is_image :
+                    form_images = form_ans(request.POST or None,  request.FILES or None, instance = w_f)
+                    for form_image in form_images :
+                        if form_image.is_valid():
+                            form_image.save()
+
+                ### Envoi de mail à l'enseignant
+                msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+
+                if customexercise.teacher.notification :
+                    sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [customexercise.teacher.user.email] )
+                    pass
+
+                return redirect('show_parcours_student' , idp )
+
+        context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today , 'on_air' : on_air}
+
+        if customexercise.is_python :
+            url = "basthon/index_custom.html" 
+        else :
+            pad_student = str(student.user.id)+"_"+str(idp)+"_"+str(customexercise.id)
+            context.update(pad_student=pad_student)
+            url = "qcm/form_writing_custom.html" 
+
+        return render(request, url , context)
     else :
-        on_air = False   
- 
-
-    if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
-        c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
-        images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
-
-    else :
-        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
-        c_e = False
-        images = False
-
-    if customexercise.is_image :
-        form_ans = inlineformset_factory( Customanswerbystudent , Customanswerimage , fields=('image',) , extra=1)
-    else :
-        form_ans = None
-
-
-    if request.method == "POST":
-        if cForm.is_valid():
-            w_f = cForm.save(commit=False)
-            w_f.customexercise = customexercise
-            w_f.parcours_id = idp
-            w_f.student = student
-            w_f.is_corrected = 0
-            w_f.save()
-
-            if customexercise.is_image :
-                form_images = form_ans(request.POST or None,  request.FILES or None, instance = w_f)
-                for form_image in form_images :
-                    if form_image.is_valid():
-                        form_image.save()
-
-            ### Envoi de mail à l'enseignant
-            msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
-
-            if customexercise.teacher.notification :
-                sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [customexercise.teacher.user.email] )
-                pass
-
-            return redirect('show_parcours_student' , idp )
-
-    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today , 'on_air' : on_air}
-
-    if customexercise.is_python :
-        url = "basthon/index_custom.html" 
-    else :
-        pad_student = str(student.user.id)+"_"+str(idp)+"_"+str(customexercise.id)
-        context.update(pad_student=pad_student)
-        url = "qcm/form_writing_custom.html" 
-
-    return render(request, url , context)
-
+        return redirect("index")
 
 
 
