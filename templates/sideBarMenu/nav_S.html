@@ -17,28 +17,18 @@
 
 <li class="dropdown {% if '/myaccount' in request.path %}active{% endif %}">
     <a href="#" class="main" id="account">
+    {% if request.user.avatar and sacado_asso  %}
+
+        <img src="{{ request.user.avatar  }}" class="avatar" />
+        <div class="captionmenu">{{ request.user.first_name }}</div>
+ 
+    {% else %} 
+ 
         <i class="bi bi-person-circle icon_size"></i> 
         <div class="captionmenu">Compte</div>
-    </a>
 
-
-        {% comment %} 
-        {% if request.user.avatar and sacado_asso  %}
-
-            <img src="{{ request.user.avatar  }}" class="avatar" />
-            <div class="captionmenu">{{ request.user.first_name }}</div>
-
-        {% else %} 
-            <a href="#" class="main" id="account">
-                <i class="bi bi-person-circle icon_size"></i> 
-                <div class="captionmenu">Compte</div>
-            </a>
-        {% endif %} 
-
-        {% endcomment %} 
-
-
-    
+    {% endif %} 
+    </a>    
 </li>
 
 

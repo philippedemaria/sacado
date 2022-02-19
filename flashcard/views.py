@@ -861,10 +861,8 @@ def ajax_store_score_flashcard(request):
         else : 
             this_inter_days = 100000 #si le flashpack n'est pas annuel alors il n'y a pas de répétitions espacées
 
-        print(this_inter_days)
         rappel = answer.date + timedelta(days = this_inter_days )
         if value :
-            print(rappel)
             Answercard.objects.filter( flashpack = flashpack, flashcard = flashcard , student = request.user.student).update(  weight = weight ,  answers =  answers_str, rappel = rappel   )
 
 
