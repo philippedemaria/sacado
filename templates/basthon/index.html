@@ -189,7 +189,6 @@
 
 
 
-
 {% block python_js %}
 
 <script>
@@ -232,12 +231,12 @@ function control_script_RT() {
        if (data.error) {alert(data.error);
        return;
      }
-   if (data.type=='message'){
-     console.log("message recu : ", data.message);
+   if (data.type=='messageProf'){
+     console.log("message recu : ", data.payload);
      var t=document.getElementById("chat");
      if (t!=null){      
      t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+
-         data.from+"<br/>"+ data.message+"</div>";
+         data.from+"<br/>"+ data.payload+"</div>";
      }
      }; 
    if (data.type=='requestProd'){
@@ -246,6 +245,8 @@ function control_script_RT() {
      if (prod!="") {
        socket.send(JSON.stringify({
          "command":"sendProd",
+         "ide":"{{ customexercise.id }}",
+               "typexo":"python",
                "payload": prod}));
      } 
    }
@@ -293,3 +294,5 @@ function control_script_RT() {
     <script src="{% static 'basthon/js/shell.js' %}"></script>
     <script src="{% static 'basthon/js/gui.js' %}"></script>
 {% endblock %}
+
+    
