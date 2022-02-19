@@ -3,15 +3,14 @@ from channels.generic.websocket import WebsocketConsumer , AsyncJsonWebsocketCon
 import json
 from channels.db import database_sync_to_async
 
-def printc(*a) :
-    pass
+
+printc=print
+#def printc(*a) :
+#    pass
 
 class TableauConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
-        """
-        Called when the websocket is handshaking as part of initial connection.
-        """
         printc("Tentative de connection, user=",self.scope["user"])
         if self.scope["user"].is_anonymous:
             printc("utilisateur anonyme, on le deconnecte")
@@ -19,14 +18,12 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
         else :    
             await self.accept()
             printc("L'utilisateur est loggé, on poursuit...")
-            
-         # Store which rooms the user has joined on this connection
             user=self.scope["user"]
             printc("type utilisateur :", user.user_type)
             if user.is_student :
                printc("c'est un élève")
                printc("nom de son channel :",self.channel_name)
-
+               self.role=0
             if user.is_teacher :
                printc("c'est un enseignant")
                printc("nom du channel prof :",self.channel_name)
@@ -39,146 +36,105 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
         printc(self.scope['user'], "se deconnecte")
         if self.role==0  :  #c'est un eleve qui se deconnecte
            await self.channel_layer.group_send("perso"+self.ugroupe,\
-            {'type':"deconnexion.eleve", 'user' : self.scope["user"]})
+            {'type':"deconnexionEleve", 'user' : self.scope["user"], "ide":self.ide,"typexo":self.typexo})
            await self.channel_layer.group_discard(self.ugroupe,self.channel_name)
         elif self.role==2 :
            printc("c'est un prof, ",self.ugroupe)
-           await self.channel_layer.group_send(self.ugroupe,{'type':"deconnexion.prof", 'user':self.scope['user']})
+           await self.channel_layer.group_send(self.ugroupe,{'type':"deconnexionProf", 'user':self.scope['user']})
            await self.channel_layer.group_discard(self.ugroupe,self.channel_name)
+
     async def receive_json(self,content) :
         command=content.get("command",None)
-        printc("commande recue :", command)
-        if command=="teacher_join" :
-               #self.connected_students=dict()
-               #self.role=2
-               us=self.scope["user"].id 
+        dest=content.get("dest","")
+        if self.role==0 and dest=="" :
+            dest="p"
+        printc("commande recue :", command, dest)
+
+		# traitement de toutes les requetes spéciales, qui modifie les consumers        
+        if 'c' in dest :  #le message s'adresse aussi au consumer... 
+            if command=="connexionProf" :
                ugroupe="Salle"+str(content.get("parcours"))
                self.ugroupe=ugroupe
                printc("nom du layer de tout le groupe : '{}'".format(ugroupe))
-               await self.channel_layer.group_add("perso"+ugroupe, self.channel_name)
                printc("on envoie l'info connexion du prof aux eleves connectés")
-               await self.channel_layer.group_send(ugroupe,{"type":"connexion.prof"})
-               printc("fait")
                await self.channel_layer.group_add(ugroupe,self.channel_name)
                printc("ajout du groupe ok")
                printc("creation du groupe ne contenant que le prof")
-
-               await self.send_json({"type": "autojoin","salle": ugroupe})
-               printc("renvoie de ok au prof : ok")
-        if command=="student_join" :
-            printc("l'élève a ouvert un exo")
-            printc("parcours : ", content.get("parcours"))
-            printc("id exo : ",content.get("ide",None))
-            us=self.scope["user"].id
-            self.role=0 
-            printc("id de l'élève :",us) 
-            ugroupe="Salle"+str(content.get("parcours"))
-            self.ugroupe=ugroupe
-            self.ide=content.get("ide",None)
-            printc("champ user recu ",content.get("user"))
-            printc("il est ajouté au layer de tout le groupe, qui se nomme '{}'".format(ugroupe))
-            await self.channel_layer.group_add(ugroupe,self.channel_name)
-            await self.channel_layer.group_send("perso"+ugroupe, 
-                {'type' : "connexion.eleve",
-                 'user' : self.scope["user"],
-                 'channel' : self.channel_name,
-                  'ide' : self.ide })
-            printc("envoi ok")
-        if command=="student_message"  :
-            message=content.get("message",None)
-            printc("on va déclencher l'évènement message eleve au groupe '{}'".format("perso"+self.ugroupe))
-            printc("message : '{}'".format(message))
-            await self.channel_layer.group_send("perso"+self.ugroupe,
-               {'type' : "student.message",
-                'from' : self.scope['user'].id, #expéditeur id
-                'name'  : self.scope['user'].username,
-                'message' : message})
-            printc("on renvoie aussi le message à l'élève...")
-            await self.send_json({"type":"message","from":"moi","message":message})  
-            printc("évènement student_message déclenché au groupe-singleton")
-        if command=="ExoDebut" :
-           printc("commande exodebut recue de la part de ",self.scope['user'].id)
-           await self.channel_layer.group_send("perso"+self.ugroupe,
-			    {'type' : "ExoDebut",
-			     'from' : self.scope['user'].id, #expéditeur id
-                'name'  : self.scope['user'].username,
-                'ide' : content.get("ide"),  #identifiant d'exo
-                })
-        if command=="SituationFinie" :
-           await self.channel_layer.group_send("perso"+self.ugroupe,
-			    {'type' : "SituationFinie",
-			     'from' : self.scope['user'].id, #expéditeur id
-                'name'  : self.scope['user'].username,
-                'resultat' : content.get("resultat"),
-                'ide' : content.get("ide"),  #identifiant d'exo
-                "grade" : content.get("grade"),
-                "situation" : content.get("situation"),
-                "numexo"    : content.get("numexo")
-                
-               })
-        if command=="teacher_message" :
-            printc("command teacher_message recue" ,content)
-            message=content.get("message",None)
-            to=content.get('to')
+               await self.channel_layer.group_add("perso"+ugroupe, self.channel_name)
+               await self.channel_layer.group_send(ugroupe,{'type':"connexionProf"})
+                  
+            elif command=="connexionEleve" :
+               ugroupe="Salle"+str(content.get("parcours"))
+               self.ugroupe=ugroupe
+               self.ide=content.get("ide",None)
+               self.typexo=content.get("typexo",None)
+               await self.channel_layer.group_add(ugroupe,self.channel_name)
+               await self.channel_layer.group_send("perso"+ugroupe, 
+                   {'type' : "connexionEleve",
+                    'user' : self.scope["user"],
+                    'ide'  : self.ide,
+                    'typexo' : self.typexo,
+                    'channel' : self.channel_name})                   
+        
+        # messages standard, le consumer et channel ne font que transférer.       
+        
+        if ('e' in dest) and (self.role==2) : # du prof à un eleve particulier, 
+            to=content.get("to",None)
             try :
                 chan_to=self.connected_students[int(to)][0]
-                
+                printc("channel de l'élève trouvé")
+                await self.channel_layer.send(chan_to,
+                   {'type': "profVersEleve",
+                    'command':command,
+                    'to'  : to,   #le destinataire à été envoyé par le client-prof
+                    'ide' : content.get("ide",None),  #a priori inutile
+                    'payload' : content.get("payload",None)
+                    })
             except : 
                 printc("eleve non trouvé ", self.connected_students)
-                chan_to="toto"
-            printc("message : '{}', to : {} channel : {}".format(message,to,chan_to))
-            await self.channel_layer.send(chan_to,
-               {'type' : "teacher.message",
-                'to' : content.get('to',None),   #le destinataire à été envoyé par le client-prof
-                'message' : message})
-            printc("évènement déclenché au seul eleve destinataire")
-
-        if command=="teacher_message_general" :
-            print("message general du prof")
-            message=content.get("message",None)
-            print("message ", message)
+                
+        if ('a' in dest) and (self.role==2) : # du prof à tous les eleves, 
+            payload=content.get("payload",None)
+            print("message general du prof", payload)
+            print("message ", payload)
             await self.channel_layer.group_send(self.ugroupe,
-               {'type' : "teacher.message.general",
-                'message' : message})
+               {'type' : "profVersTous",
+                'command' : command,
+                'payload' : payload})
             printc("evenement declenché pour tout le groupe")
-						
+        if 'p' in dest :     # d'un eleve au prof
+            await self.channel_layer.group_send("perso"+self.ugroupe,
+                {'type':'eleveVersProf',
+			     'command':command,
+			     'from' : self.scope['user'].id,
+			     'name' : self.scope['user'].username,
+			     'ide'  : self.ide,
+			     'typexo': self.typexo,
+			     'payload': content.get("payload",None)
+			     })
+ 
+    #----------- fonctions déclenchées par channel
 
-    async def student_message(self,data) : #message envoyé par l'élève au prof
-        printc("entree dans la fonction student_message")
-        printc('user : ', self.scope['user'], self.role)
-        if self.role==2 :   #c'est le prof qui reçoit, il faut donc lui envoyer
-            printc("Envoyé par l'élève {}".format(data["from"]))
-            printc("message :", data['message'])
-            await self.send_json({'type':'message','from': str(data["from"]),"message" : str(data['message']) , 'name' : data["name"]  })
-    
-    
-    async def ExoDebut(self,data) :  #l'eleve commence un exo, le consumer du prof averti le client du prof
-        #printc("entree ExoDebut")
-        if self.role==2 :
-            await self.send_json(data)
-    async def SituationFinie(self,data) :  #l'eleve a termine une situation, le consumer du prof averti le client du prof
-        #printc("entree dans SituationFinie")
-        if self.role==2 :
-            await self.send_json(data)
+    async def eleveVersProf(self,data):
+        data['type']=data['command']
+        printc("envoi standard",data)
+        await self.send_json(data)
 
-    async def teacher_message(self,data) : #message envoyé par le prof à un eleve
-        printc("entree dans la fonction teacher_message")
-        printc('user : ', self.scope['user'], self.scope['user'].id,self.role)
-        printc("self", self.scope['user'].id, "de type", type(self.scope['user'].id))
-        printc("destinataire", data['to'],type(data['to']))
-        if  self.scope['user'].id == data['to'] : #on est dans l'instance de l'élève destinataire
-            printc("Envoyé à l'élève {}".format(data["to"]))
-            printc("message :", data['message'])
-            await self.send_json({'type':'message','to': data["to"],"message" : data['message']})
-            printc("ok")
-        else :
-            printc("self n'est pas le destinataire du message, rien à faire")
+    async def profVersEleve(self,data):
+          printc("entree dans profVersEleve, consumer de ",self.scope['user'])
+          printc("data :",data)
+          data['type']=data['command']
+          data['from']=data.get("from","prof")
+          await self.send_json(data)
+          printc("ok")
 
-    async def teacher_message_general(self,data) : #message envoyé par le prof à tous les eleves
-          printc("entree dans teacher message general, message="+data['message'])
-          await self.send_json({'type':'message','from': "prof", "name": "moi", "message" : str(data['message'])})
+    async def profVersTous(self,data) : #message envoyé par le prof à tous les eleves
+          printc("entree profVersTous, data=",data)
+          data['from']=data.get("from","prof")
+          data['type']=data['command']
+          await self.send_json(data)
 
-    async def connexion_prof(self,data):
+    async def connexionProf(self,data):
             printc("entree dans la fonction connexion prof")
             printc("data=",data)
             printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
@@ -187,12 +143,13 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 await self.send_json({'type' : 'connexionProf'})
                 #chaque eleve renvoie une connexion au prof
                 await self.channel_layer.group_send("perso"+self.ugroupe, 
-                {'type' : "connexion.eleve",
+                {'type' : "connexionEleve",
                  'user' : self.scope["user"],
                  'channel' : self.channel_name,
-                 'ide':self.ide})
-     
-    async def deconnexion_prof(self,data):
+                 'ide':self.ide,
+                 'typexo': self.typexo})
+
+    async def deconnexionProf(self,data):
             printc("entree dans la fonction deconnexion prof")
             printc("data=",data)
             printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
@@ -200,7 +157,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 printc("destinataire : ",self.scope["user"].id)
                 await self.send_json({'type' : 'deconnexionProf', 'from' : data["user"].id})
                 printc("deconnexion prof ok")
-    async def connexion_eleve(self,data):
+    async def connexionEleve(self,data):
             printc("entree dans la fonction connexion eleve")
             printc("data=",data)
             printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
@@ -208,10 +165,8 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 printc("destinataire : le prof")
                 self.connected_students[data['user'].id]=(data['channel'],data['user'])
                 printc("connected_students : ", self.connected_students)
-                await self.send_json({'type' : 'connexion' , 'from' : data["user"].id, 'ide':data['ide'] })
-
-
-    async def deconnexion_eleve(self,data):
+                await self.send_json({'type' : 'connexionEleve' , 'from' : data["user"].id, 'ide':data['ide'] , "typexo":data["typexo"] })
+    async def deconnexionEleve(self,data):
             printc("entree dans la fonction deconnexion eleve")
             printc("data=",data)
             printc("destinataire {} (role : {})".format(self.scope['user'], self.role))
@@ -220,5 +175,10 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 if data['user'].id in self.connected_students :
                     self.connected_students.pop(data['user'].id)
                 printc("connected_students : ", self.connected_students)
-                await self.send_json({'type' : 'deconnexion' , 'from' : data["user"].id})
+                await self.send_json({
+                  'type' : 'deconnexionEleve' , 
+                  'from' : data["user"].id, 
+                   "ide":data['ide'],
+                   "typexo":data['typexo']
+                  })
                 printc("deconnexion eleve ok")

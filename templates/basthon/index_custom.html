@@ -106,7 +106,7 @@
       {% if   'write' in request.path or 'show_custom' in request.path %}
        <div style="clear:both ; margin-top: 20px"> 
 
-        <button {% if is_lock %}disabled{% endif %} type="submit" name="submit_code" id="submit_code" class="btn btn-primary" onclick="return control_script()" >Envoyer le script</button>                      
+        <button {% if is_lock %}disabled{% endif %} type="submit" name="submit_code" id="submit_code" class="btn btn-primary" onclick="return control_script_RT()" >Envoyer le script</button>                      
 
         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
@@ -192,7 +192,99 @@
 <script>
    require(['mathjax4']);
 </script>  
+<script>
+function control_script_RT() {
+    document.getElementsByName('answer')[0].value = editor.getValue();
+    var script = document.getElementsByName('answer')[0].value;
+    if (!confirm('Vous envoyez le script suivant :\n\n'+ script+'\n Confirmer ? ' )) return false;
+    socket.send(JSON.stringify({
+		    "command":"sendExercise",
+		    "parcours":"{{ parcours.id }}",
+            "ide":"{{ customexercise.id }}",
+            "user":"{{user.id}}",
+            "typexo":"python",
+            "payload":editor.getValue()
+            }));
+     };        
 
+
+
+
+     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+     var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
+     window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+     socket.onopen = function () {
+	 console.log("exo:{{ customexercise.id }}");
+     socket.send(JSON.stringify({
+            "command":"connexionEleve",
+            "dest":"c", 
+            "parcours":"{{ parcours.id }}",
+            "ide":"{{ customexercise.id }}",
+            "user":"{{user.id}}",
+            "typexo":"python"}));
+            };        
+           // Handle incoming messages
+ socket.onmessage = function (message) {
+       var data = JSON.parse(message.data);
+       if (data.error) {alert(data.error);
+       return;
+     }
+   if (data.type=='message'){
+     console.log("message recu : ", data.message);
+     var t=document.getElementById("chat");
+     if (t!=null){      
+		 t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+
+		     data.from+"<br/>"+ data.message+"</div>";
+		 }
+     }; 
+   if (data.type=='requestProd'){
+	   //console.log("le prof demande",editor.getValue());
+	   prod=editor.getValue();
+	   if (prod!="") {
+		   socket.send(JSON.stringify({
+			   "command":"sendProd",
+               "payload": prod}));
+	   } 
+   }
+   if (data.type=='connexionProf'){
+	  console.log("connexion prof");
+	  //$('#peda_set_live').removeClass("pull-right btn btn-default");
+ 	  //$('#peda_set_live').addClass("pull-right btn btn-danger");
+	  //$('#form_peda_set_live').removeClass("hidden");
+   };
+   if (data.type=='deconnexionProf'){
+	   console.log("deconnexion prof");
+	   $('#peda_set_live').removeClass("pull-right btn btn-danger");  
+	   $('#peda_set_live').addClass("pull-right btn btn-default");
+	   $('#form_peda_set_live').addClass("hidden");
+   };
+  } // fin traitement messages entrants
+   
+   
+   function PostMessage(text){
+       console.log("entree dans PostMessage"); 
+       window.socket.send(JSON.stringify({
+		  "command":"messageEleve",
+          "payload": text}
+       ));
+       console.log("message envoyé :"+text);
+   };
+
+   chat=document.getElementById("entreechat");
+   if (chat!=null){   
+	   chat.addEventListener("change",function () {
+	       console.log("message à envoyer :"+chat.value);
+		   PostMessage(chat.value);
+		   chat.value="";
+	   });
+   }
+   window.onbeforeunload=function(){
+	  console.log("deconnexion");
+	  window.socket.close();
+   };
+      
+
+</script>
 
      <script src="{% static 'basthon/js/editor.js' %}"></script>
     <script src="{% static 'basthon/js/shell.js' %}"></script>

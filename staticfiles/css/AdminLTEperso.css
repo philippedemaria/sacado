@@ -1399,7 +1399,6 @@ label {
 
 
 .th_real_time_label{
-
   position: absolute;
   left:20px;
   top:30px; 
@@ -1407,6 +1406,15 @@ label {
   width: 140px;
   font-weight: 100
   } 
+
+
+.th_real_time_label_custom{
+  font-size:10px;
+  font-weight: 100
+  } 
+
+
+
 
 .th_real_time_label_hover{
 

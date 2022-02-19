@@ -8,7 +8,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
         require(['script/ajax-exercise']);
-        require(['script/ajax-exercise-canvas']);
+        //require(['script/ajax-exercise-canvas']);
     </script> 
     
 {% endblock %}
@@ -174,7 +174,7 @@
                         <a href="#" class="btn btn-primary">Clique ici pour rejoindre ton pad collaboratif {{ pad_student}}</a>
                     {% else %}
                         <div class="form-group {% if customexercise.is_text and customexercise.is_realtime  %}not_allowed_display{% endif %}" id="text_zone_div">
-                            <label>Zone pour écrire</label><br>
+                            <label>Zone pour écrire.</label><br>
                             {{ form.answer }}
                             {{ form.answer.errors }} <br>
                         </div>
@@ -228,7 +228,7 @@
                                 {% get_is_lock customexercise today as is_block %}
                                 {% if not is_lock and not customexercise.is_collaborative %} 
                                     {% if not data.is_corrected and not is_block and not  data.positionnement %}
-                                        <input value="Soumettre votre exercice" type="submit" class="btn btn-primary"/>
+                                        <input value="Soumettre votre exercice" type="submit" class="btn btn-primary" onclick="sendExercise()"/>
                                         <input type="hidden" value="{{ parcours.id }}"        name="parcours_id"       id="parcours_id" />  
                                         <input type="hidden" value="{{ customexercise.id }}"  name="customexercise_id" id="customexercise_id" />  
                                         <input type="button" value="Annuler" onclick="javascript:history.back()"  class="btn btn-default "/>                                          
@@ -376,5 +376,98 @@
     </div>
 </div>
 
+
+<script>
+function sendExercise(){
+	prod=document.getElementById("cke_1_contents").childNodes[1].contentDocument.body.innerHTML;
+	console.log("on envoie au prof : ",prod);
+    socket.send(JSON.stringify({
+		"command":"sendExercise",
+		"dest":"p",
+		"payload": prod}));
+   } 
+   
+	
+     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+     var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
+     window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+     socket.onopen = function () {
+	     console.log("exo:{{ customexercise.id }}");
+         socket.send(JSON.stringify({
+            "command":"connexionEleve", 
+            "dest":"c",         
+            "parcours":"{{ parcours.id }}",
+            "ide":"{{ customexercise.id }}",
+            "user":"{{user.id}}",
+            "typexo":"tapu"}));
+     };
+		        
+           // Handle incoming messages
+ socket.onmessage = function (message) {
+        var data = JSON.parse(message.data);
+        console.log("commande recue, type=",data.type);
+        if (data.error) {alert(data.error);return;}
+   if (data.type=='messageProf' || data.type=='messageProfGeneral'){
+       console.log("message recu : ", data.payload);
+     var t=document.getElementById("chat");
+     if (t!=null) {
+	     t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+
+			  data.from+"<br/>"+ data.payload+"</div>";
+     }
+   }; 
+   if (data.type=='requestProd'){
+	   console.log("requestProd");
+	   prod=document.getElementById("cke_1_contents").childNodes[1].contentDocument.body.innerHTML;
+	   console.log("le prof demande",prod);
+	   if (prod!="") {
+		   socket.send(JSON.stringify({
+			   "command":"sendProd",
+			   "dest":"p",
+			   "payload": prod}));
+	   } 
+   }
+   if (data.type=='connexionProf'){
+	  console.log("connexion prof");
+	  //$('#peda_set_live').removeClass("pull-right btn btn-default");
+ 	  //$('#peda_set_live').addClass("pull-right btn btn-danger");
+	  //$('#form_peda_set_live').removeClass("hidden");
+	  
+      };
+      if (data.type=='deconnexionProf'){
+		  console.log("deconnexion prof");
+	      $('#peda_set_live').removeClass("pull-right btn btn-danger");  
+	      $('#peda_set_live').addClass("pull-right btn btn-default");
+	      $('#form_peda_set_live').addClass("hidden");
+      };
+   }
+   function PostMessage(text){
+   console.log("entree dans PostMessage"); 
+   window.socket.send(JSON.stringify(
+      {"command":"messageEleve",
+	   "dest":"p",
+       "payload": text}
+   ));
+   console.log("message envoyé :"+text);
+   };
+
+   chat=document.getElementById("entreechat");
+   if (chat!=null) {
+	    chat.addEventListener("change",function () {
+        console.log("message à envoyer :"+chat.value);
+        PostMessage(chat.value);
+        chat.value="";
+	})
+   };
+   window.onbeforeunload=function(){
+	  console.log("deconnexion");
+	  window.socket.close();
+  };
+   
+
+</script>
+
 {% endblock %} 
+
+
+
  
