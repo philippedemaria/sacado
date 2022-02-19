@@ -243,6 +243,8 @@ function control_script_RT() {
 	   if (prod!="") {
 		   socket.send(JSON.stringify({
 			   "command":"sendProd",
+			   "ide":"{{ customexercise.id }}",
+               "typexo":"python",
                "payload": prod}));
 	   } 
    }

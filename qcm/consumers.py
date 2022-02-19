@@ -83,6 +83,7 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
             try :
                 chan_to=self.connected_students[int(to)][0]
                 printc("channel de l'élève trouvé")
+                printc("content : ",content)
                 await self.channel_layer.send(chan_to,
                    {'type': "profVersEleve",
                     'command':command,
@@ -103,16 +104,18 @@ class TableauConsumer(AsyncJsonWebsocketConsumer):
                 'payload' : payload})
             printc("evenement declenché pour tout le groupe")
         if 'p' in dest :     # d'un eleve au prof
+            printc("destination prof", content)
+            printc(self.ide,self.typexo,self.scope['user'].username)
             await self.channel_layer.group_send("perso"+self.ugroupe,
                 {'type':'eleveVersProf',
 			     'command':command,
 			     'from' : self.scope['user'].id,
 			     'name' : self.scope['user'].username,
-			     'ide'  : self.ide,
-			     'typexo': self.typexo,
+			     'ide'  : content.get("ide",self.ide),
+			     'typexo': content.get("typexo",self.typexo),
 			     'payload': content.get("payload",None)
 			     })
- 
+            printc("ok")
     #----------- fonctions déclenchées par channel
 
     async def eleveVersProf(self,data):

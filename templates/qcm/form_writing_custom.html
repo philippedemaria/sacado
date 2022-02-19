@@ -174,8 +174,7 @@
                         <a href="#" class="btn btn-primary">Clique ici pour rejoindre ton pad collaboratif {{ pad_student}}</a>
                     {% else %}
                         <div class="form-group {% if customexercise.is_text and customexercise.is_realtime  %}not_allowed_display{% endif %}" id="text_zone_div">
-                            <label>Zone pour écrire.</label><br>
-                            {{ form.answer }}
+                            {{ form.answer|add_class:"form-control" }}
                             {{ form.answer.errors }} <br>
                         </div>
                     {% endif %}
@@ -384,6 +383,8 @@ function sendExercise(){
     socket.send(JSON.stringify({
 		"command":"sendExercise",
 		"dest":"p",
+	    "ide":"{{ customexercise.id }}",
+        "typexo":"tapu",
 		"payload": prod}));
    } 
    
@@ -423,6 +424,8 @@ function sendExercise(){
 		   socket.send(JSON.stringify({
 			   "command":"sendProd",
 			   "dest":"p",
+			   "ide":"{{ customexercise.id }}",
+               "typexo":"tapu",
 			   "payload": prod}));
 	   } 
    }
