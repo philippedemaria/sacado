@@ -11,8 +11,6 @@ env
 .idea
 sacado/settings_prod
 sacado/settings.py
-sacado/routing.py
-sacado/asgi.py
 
 static/
 

@@ -19,8 +19,8 @@ from datetime import datetime
 
 
 def is_sacado_asso(this_user, today):
-    is_sacado = True
-    is_active = True
+    is_sacado = False
+    is_active = False
 
     try :
         abonnement = this_user.school.abonnement.last()

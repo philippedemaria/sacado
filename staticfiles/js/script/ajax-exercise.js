@@ -3,6 +3,35 @@ define(['jquery', 'bootstrap'], function ($) {
         console.log("chargement JS ajax-exercise.js OK");
 
  
+        CKEDITOR.replace( 'id_answer', {               
+            toolbarCanCollapse : false,                  
+            allowedContent: true,   
+            enterMode: CKEDITOR.ENTER_BR, 
+            toolbar:    
+            [   
+                { name: 'clipboard', groups: [ 'undo' ], items: [ 'Undo', 'Redo' ] },
+                { name: 'paragraph', groups: [ 'list', 'align' ], items: [ 'NumberedList', 'BulletedList','-','JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },        
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                { name: 'insert', items: [ 'Image',] },
+                { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                { name: 'tools', items: [ 'Maximize' ] },
+            ]
+
+            } );
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
         $('select[name=level]').on('change', function (event) {

@@ -229,12 +229,12 @@ function control_script_RT() {
        if (data.error) {alert(data.error);
        return;
      }
-   if (data.type=='messageProf'){
-     console.log("message recu : ", data.payload);
+   if (data.type=='message'){
+     console.log("message recu : ", data.message);
      var t=document.getElementById("chat");
      if (t!=null){      
 		 t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+
-		     data.from+"<br/>"+ data.payload+"</div>";
+		     data.from+"<br/>"+ data.message+"</div>";
 		 }
      }; 
    if (data.type=='requestProd'){
