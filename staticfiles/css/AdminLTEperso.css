@@ -1540,7 +1540,7 @@ a.no_visual_link{
   max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden ;
-
+  z-index: 9;
 }
 
 .real_time_div_live::-webkit-scrollbar {

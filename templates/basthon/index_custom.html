@@ -56,7 +56,7 @@
           <div class="col-xs-12 col-md-4" >           
               {% if customexercise.customexercise_remediation.all|length > 0 %} 
                   <div class="row">         
-                   <label>Aides : </label>
+                   <label>Aides :</label>
                     {% for remediation in customexercise.customexercise_remediation.all %}
                         <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="1" data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
                             {% include 'qcm/remediation_choices.html' %}
@@ -75,7 +75,7 @@
           </div>   
 
  
-          <div class="col-xs-12 col-md-1" >     
+          <div class="col-xs-12 col-md-1" >    
           {% if c_e %}
               <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn btn-primary btn-xs">
                   Mon code  
@@ -143,7 +143,7 @@
 
     </div>
 </form>
-
+          {% include 'qcm/signal_exercise_peda_live.html' %}
 
  
 
