@@ -2550,36 +2550,39 @@ def ordering_number_for_student(parcours,student):
 
 def show_parcours_student(request, id):
 
-    folder = None
-    folder_id = request.session.get('folder_id', None)
-    if folder_id :
-        folder = Folder.objects.get(id=folder_id)
+    if request.user.is_authenticated :
+        folder = None
+        folder_id = request.session.get('folder_id', None)
+        if folder_id :
+            folder = Folder.objects.get(id=folder_id)
 
-    parcours = Parcours.objects.get(id=id)
+        parcours = Parcours.objects.get(id=id)
 
-    if parcours.stop :
-        lock_all_exercises_for_this_student(parcours,request.user.student)
+        if parcours.stop :
+            lock_all_exercises_for_this_student(parcours,request.user.student)
 
-    user = request.user
-    student = user.student
-    today = time_zone_user(user)
-    stage = get_stage(user)
+        user = request.user
+        student = user.student
+        today = time_zone_user(user)
+        stage = get_stage(user)
 
-    tracker_execute_exercise(True ,  user , id , None , 0)
+        tracker_execute_exercise(True ,  user , id , None , 0)
 
-    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
-    nb_exercises = len(relationships_customexercises)
+        relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
+        nb_exercises = len(relationships_customexercises)
 
-    nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
-    nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
+        nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
+        nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
 
 
 
-    context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
-                'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
-                'today': today ,    }
+        context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
+                    'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
+                    'today': today ,    }
 
-    return render(request, 'qcm/show_parcours_student.html', context)
+        return render(request, 'qcm/show_parcours_student.html', context)
+    else :
+        return redirect('index') 
 
 
 
