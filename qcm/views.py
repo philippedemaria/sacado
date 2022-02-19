@@ -6161,8 +6161,6 @@ def write_exercise(request,id): # Coté élève
 
 
 
-
-
 def write_custom_exercise(request,id,idp): # Coté élève - exercice non autocorrigé
  
     if request.user.is_authenticated :
@@ -6234,9 +6232,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
             url = "qcm/form_writing_custom.html" 
 
         return render(request, url , context)
-
     else :
-
         return redirect("index")
 
 
