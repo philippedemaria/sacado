@@ -4889,8 +4889,10 @@ def execute_exercise(request, idp,ide):
     student = request.user.student
     today = time_zone_user(request.user)
     timer = today.time()
-
-    tracker_execute_exercise(True, request.user , idp , ide , 0)
+    try :
+        tracker_execute_exercise(True, request.user , idp , ide , 0)
+    except :
+        pass
 
     context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
     return render(request, 'qcm/show_relation.html', context)
