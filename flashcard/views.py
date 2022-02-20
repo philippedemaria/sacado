@@ -706,9 +706,11 @@ def ajax_search_flashpack(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if request.user.is_superuser :
-        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
+        #flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
+        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(is_share = 1).order_by('level','ranking')
     else :
-        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(flashcards = None ,teacher=teacher).order_by('level','ranking')
+        #flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(flashcards = None ,teacher=teacher).order_by('level','ranking')
+        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(is_share = 1).exclude(flashcards = None ,teacher=teacher).order_by('level','ranking')
 
     keywords = request.POST.get('keywords',None)
 
@@ -723,39 +725,45 @@ def ajax_search_flashpack(request):
                 if keywords :
                     for theme_id in theme_ids :
                         theme = Theme.objects.get(pk = theme_id)
-                        fs = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__school = teacher.user.school) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 
-                                                              teacher__user__school = teacher.user.school,  levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        #fs = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__school = teacher.user.school) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, teacher__user__school = teacher.user.school,  levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        fs = Flashpack.objects.filter(is_share = 1,   levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+
                         flashpacks.update(fs)
 
                 else :
                     for theme_id in theme_ids :
                         theme = Theme.objects.get(pk = theme_id)
-                        fs =  Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        #fs =  Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        fs =  Flashpack.objects.filter(is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
                         flashpacks.update(fs)
 
                     
             else :
                 if keywords :            
-                    flashpacks = Flashpack.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)    ,is_share = 1,  
-                                                            teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    #flashpacks = Flashpack.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)    ,is_share = 1,  teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    flashpacks = Flashpack.objects.filter(is_share = 1,  teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
                 else :
-                    flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                            levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
         else :
             if keywords:
-                flashpacks = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   ,teacher__user__school = teacher.user.school,is_share = 1,
-                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                #flashpacks = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   ,teacher__user__school = teacher.user.school,is_share = 1,levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                flashpacks = Flashpack.objects.filter(  is_share = 1,levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+            
             else :
-                flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+    
     else :
         if keywords:
-            flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+            #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+            flashpacks = Flashpack.objects.filter(is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+        
         else :
-            flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
- 
+            #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+            flashpacks = Flashpack.objects.filter(is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
 
     data['html'] = render_to_string('flashcard/ajax_list_flashpacks.html', {'flashpacks' : flashpacks, 'teacher' : teacher ,  })
  
