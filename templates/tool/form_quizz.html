@@ -253,6 +253,32 @@
                                     {% endfor %}</td>
                             </tr>
 
+                            <tr>
+                                <td class="no_border">{{ form.is_result.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
+                                    </span> 
+                                </td>
+                                <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                            </tr>
+
+
+
+
+                            <tr id="is_result_final">
+                                <td class="no_border">{{ form.is_result_final.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
+                                    </span> 
+                                </td>
+                                <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
+                            </tr>
+
+
+
+
+
+
 			                <tr>
 			                    <td class="no_border">{{ form.is_numeric.label_tag }}  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
 			                                    <div class="helper_tip_text" >Vidéoprojection si réponse sur feuille papier, Numérique si réponse avec smartphone, tablette, ordinateur.</div>
@@ -272,14 +298,7 @@
 			                    <td>{{ form.interslide|add_class:"form-control" }}</td>
 			                </tr>
 
-                            <tr class="div_is_mark div_is_ranking">
-                                <td class="no_border">{{ form.is_result.label_tag }} 
-                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                        <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
-                                    </span> 
-                                </td>
-                                <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                            </tr>
+
 			                <tr class="div_is_mark div_is_ranking">
 			                    <td class="no_border">{{ form.is_ranking.label_tag }} </td>
 			                    <td>{{ form.is_ranking|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>

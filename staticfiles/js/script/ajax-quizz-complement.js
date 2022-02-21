@@ -31,10 +31,18 @@ define(['jquery',  'bootstrap' ], function ($) {
         $(".div_is_ranking").hide(); 
         $(".div_time").hide(); 
         $('.div_interslide').hide() ; 
+        $('#is_result_final').hide() ; 
 
         $('#id_is_numeric').on('change', function (event) {
             $('.div_is_mark').toggle(300) ; 
         });
+        $('#id_is_result').on('change', function (event) {
+            $('#is_result_final').toggle(300) ; 
+        });
+
+
+
+
         $('#id_is_video').on('change', function (event) {
             $('.div_is_ranking').toggle(300) ;
             $('.div_interslide').toggle(300) ; 

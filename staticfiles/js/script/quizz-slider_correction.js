@@ -1,7 +1,7 @@
 define(['jquery',  'bootstrap' ], function ($) {
     $(document).ready(function () {
 
-        console.log(" quizz-slider chargé ");
+        console.log(" quizz-slider_correction chargé ");
 
         var slideBox = $('.slider ul'),
             slideWidth = 1000 ,
@@ -101,6 +101,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                         $(".starter_in").show();
                         this_slide = parseInt( (currentSlide-1)/2) ; 
                         these_slide = 1+parseInt( (currentSlide-1)/2) ; 
+
                         if ( starter_play%2 === 0 ) {
                             $("#start_quizz").html("").html("<button  class='btn btn-danger'><i class='fa fa-stop'></i> Arrêter</button>") ;
                             if( $("#stoper_quizz") ) { $("#stoper_quizz").attr("id","#counterdown"+this_slide); }
@@ -111,8 +112,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                         {  
                             $("#start_quizz").html("").html("<button  class='btn btn-default'><i class='fa fa-play'></i> Démarrer</button>") ;
                             $("#counterdown"+this_slide).attr("id","stoper_quizz");
-                            $("#countdown"+these_slide).attr("id","stoper_introduction");                            
-                            starter_play=0 ;
+                            $("#countdown"+these_slide).attr("id","stoper_introduction");
                         }
 
                         starter_play++ ;
@@ -169,23 +169,27 @@ define(['jquery',  'bootstrap' ], function ($) {
                             else  // Lecture des diapo des questions
                             {
 
+                                if (this_slide === 0 ) {this_slide++;}
 
-                                this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les diapos ou de la diapo
+                                //this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les diapos ou de la diapo
 
-                                if ( step%2 === 0 ) 
+                                if ( step%3 === 0 ) 
                                     {
                                         this_slide++;
                                         duree = $("#inter_slide"+this_slide).val() * 1000 ;
-                                        timer("countdown" , this_slide , duree  )
-
+                                        timer("countdown" , this_slide , duree );
                                     }
-                                    else   
+                                else if ( step%3 === 1 )  
                                     {   
                                         duree = $("#duration"+this_slide).val() * 1000 ;
                                         timer("counterdown" , this_slide , duree  )
-
                                     }
-                           
+
+                                else
+                                    { 
+                                        duree = $("#answer_choice"+this_slide).val() * 1000 ;
+                                        timer("counterdown_cor" , this_slide , duree  );  
+                                    }
 
                                  // Couleurs des boutons déjà des questions déjà travaillées
                                 currentQuestion++ ; 
