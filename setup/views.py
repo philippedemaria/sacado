@@ -261,7 +261,7 @@ def logout_view(request):
         pass
 
     try :
-        is_gar_check = reques.session.get("is_gar_check",None)
+        is_gar_check = request.session.get("is_gar_check",None)
         deconnexion_gar()
     except :
         pass
@@ -295,15 +295,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
     first_name = dico_received["PRE"]
 
     email = str(today.timestamp()) + "@sacado.xyz"
+    user_type  = 0 
 
     if "P_MEL" in dico_received.keys() : 
         get_email  = dico_received["P_MEL"]
-        user_type  = 0 
         if get_email :
             email = dico_received["P_MEL"]
             user_type  = 2
-
-
 
     closure    = None
     time_zone  = "Europe/Paris"
@@ -316,6 +314,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     username   = dico_received["IDO"]
     password   = make_password("sacado_gar")
+
+
+    print(dico_received)
 
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
 
