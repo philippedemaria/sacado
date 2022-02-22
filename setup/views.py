@@ -300,7 +300,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     first_name = dico_received["PRE"]
 
     if "P_MEL" in dico_received.keys() : email  = dico_received["P_MEL"]
-    else : email  = ""
+    else : email = today.timestamp() + "@sacado.xyz"
 
     closure    = None
     time_zone  = "Europe/Paris"
@@ -339,31 +339,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     return index(request)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
