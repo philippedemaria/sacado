@@ -291,12 +291,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     uai        = dico_received["UAI"]
     school     = School.objects.get(code_acad = uai)
 
-    if 'ens' in dico_received["PRO"] :
-        user_type  = 2
-    else :
-        user_type  = 0 
-
-
     last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"]
 
@@ -304,8 +298,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     if "P_MEL" in dico_received.keys() : 
         get_email  = dico_received["P_MEL"]
+        user_type  = 0 
         if get_email :
             email = dico_received["P_MEL"]
+            user_type  = 2
 
 
 
