@@ -300,7 +300,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"]
 
-    email = today.timestamp() + "@sacado.xyz"
+    email = str(today.timestamp()) + "@sacado.xyz"
 
     if "P_MEL" in dico_received.keys() : 
         get_email  = dico_received["P_MEL"]
