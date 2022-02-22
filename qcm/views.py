@@ -732,11 +732,14 @@ def ajax_populate(request):
     else:
         statut = 1
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
-            relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, maxexo = parcours.maxexo ,
-                                                                            situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
-            relation.skills.set(exercise.supportfile.skills.all())
-            students = parcours.students.all()
-            relation.students.set(students)
+            try :
+                relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, maxexo = parcours.maxexo ,
+                                                                                situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
+                relation.skills.set(exercise.supportfile.skills.all())
+                students = parcours.students.all()
+                relation.students.set(students)
+            except :
+                pass
             data["statut"] = "True"
             data["class"] = "btn btn-success"
             data["noclass"] = "btn btn-danger"
