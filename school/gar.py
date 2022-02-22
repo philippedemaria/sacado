@@ -67,4 +67,8 @@ def create_abonnement_gar(today,school,abonnement ,user):
     if r.status_code == 201 or r.status_code==200 :
         return True , "ok" , "ok" , "ok" 
     else :
-        return False, r.status_code , r.headers , r.content.decode('utf-8') 
+        return False, r.status_code , r.headers , r.content.decode('utf-8')
+
+
+
+
