@@ -301,6 +301,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     if "P_MEL" in dico_received.keys() : email  = dico_received["P_MEL"]
     else : email = today.timestamp() + "@sacado.xyz"
+    print(email)
 
     closure    = None
     time_zone  = "Europe/Paris"
