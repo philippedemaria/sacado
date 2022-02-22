@@ -296,12 +296,18 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         user_type  = 0 
 
+
     last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"]
 
-    if "P_MEL" in dico_received.keys() : email  = dico_received["P_MEL"]
-    else : email = today.timestamp() + "@sacado.xyz"
-    print(email)
+    email = today.timestamp() + "@sacado.xyz"
+
+    if "P_MEL" in dico_received.keys() : 
+        get_email  = dico_received["P_MEL"]
+        if get_email :
+            email = dico_received["P_MEL"]
+
+
 
     closure    = None
     time_zone  = "Europe/Paris"
@@ -314,8 +320,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     username   = dico_received["IDO"]
     password   = make_password("sacado_gar")
-
-    print(dico_received)
 
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
 
