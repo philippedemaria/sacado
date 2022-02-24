@@ -285,6 +285,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
     username   = dico_received["IDO"]
     password   = make_password("sacado_gar")
 
+    groups     = dico_received["GRO"]
+
+    print(groups)
+
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
