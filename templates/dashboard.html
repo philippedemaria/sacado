@@ -358,9 +358,12 @@
             <a href="{% url 'updatepassword' %}">Changer mon mot de passe</a>
         </div>
     </div>
-    {%  if request.user.is_teacher %} 
+    {%  if request.user.is_teacher %}
 
-        {%  if not request.user.is_manager   %} <!-- manager dans un établissement -->
+
+ 
+
+        {%  if not request.user.is_manager and not is_gar_check %} <!-- manager dans un établissement -->
         <hr/>
         <div class="row">
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
