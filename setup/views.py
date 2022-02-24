@@ -311,7 +311,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 g_tab = group.split("##")
                 name = g_tab[0]
                 teacher = Teacher.objects.get(user = user)
-                Group.objects.get_or_create(name = name , teacher = teacher , level = level , school = school , defaults = { "lock" : 1 })
+                Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = { "lock" : 1 })
 
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
