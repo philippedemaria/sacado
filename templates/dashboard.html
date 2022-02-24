@@ -378,6 +378,7 @@
         <hr/>
         {% endif %}
     {% elif request.user.is_student %}
+        {% if not is_gar_check %}    
         <div class="row">
             <div class="col-lg-12 col-xs-12" style=" padding-top: 5px;">
                 <a href="#" id="aggregate_groupe">
@@ -403,7 +404,7 @@
                 </div>
             </form>
         </div>
-        {% if not is_gar_check %}
+
         <div class="row">
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
                 <a href="{% url 'close_my_account' %}">Clôturer mon compte</a>
