@@ -598,7 +598,10 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
 def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0) :
     """ trace l'utilisateur. Utile pour le real time """
     if track_untrack :
-        Tracker.objects.get_or_create( user = user , parcours_id = idp , exercise_id = ide , is_custom= custom)
+        try :
+            Tracker.objects.get_or_create( user = user , parcours_id = idp , exercise_id = ide , is_custom= custom)
+        except :
+            pass
     else :
         try :
             tracker, created = Tracker.objects.get_or_create( user= user , parcours_id = idp , exercise_id = ide , is_custom= custom)
