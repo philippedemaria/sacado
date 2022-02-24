@@ -287,8 +287,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     groups     = dico_received["GRO"]
 
-    print(groups)
-
+    print("dico_received =========> ", dico_received)
+    print("groups =========> ", groups)
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
