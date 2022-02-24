@@ -4,14 +4,27 @@
     <a href="#" class="righter" id="mobile_version_button_closer">
         <i class="fa fa-times closer_tab"></i>
     </a>
-
     
+    {% if is_gar_check %}
+    <a href="#"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
+        <div class="captionmenu sacado_menu">
+         SACADO
+        </div>
+    </a>
+    {% else %}
     <a href="{% url 'logout' %}"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
 
         <div class="captionmenu sacado_menu">
          SACADO
         </div>
     </a>
+    {% endif %}
+
+
+
+
+
+
 
 </li>
 

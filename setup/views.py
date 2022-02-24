@@ -212,46 +212,7 @@ def index(request):
 
         return render(request, 'home.html', context)
 
-
-
-
-
-def deconnexion_gar(id_school):
-
-    today = datetime.now()
-    datetime  = today.isoformat()
-
-    body = "<?xml version='1.0' encoding='UTF-8'?>"
-    body += "<soap11:Envelope xmlns:soap11='http://schemas.xmlsoap.org/soap/envelope/'>"
-    body += "<soap11:Body>"
-    body += "<saml2p:LogoutRequest Version='2.0' IssueInstant="+datetime+" ID='"+id_school+"' Destination='url de destination (non utilisé dans le contexte SOAP)' xmlns:saml2p='urn:oasis:names:tc:SAML:2.0:protocol'>"
-    body += "<saml2:Issuer xmlns:saml2='urn:oasis:names:tc:SAML:2.0:assertion'>Issuer GAR</saml2:Issuer>"
-    body += "<ds:Signature xmlns:ds='http://www.w3.org/2000/09/xmldsig#''>"
-    body += "<ds:SignedInfo>"
-    body += "<ds:CanonicalizationMethod Algorithm='http://www.w3.org/2001/10/xml-exc-c14n#'/>"
-    body += "<ds:SignatureMethod Algorithm='http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'/>"
-    body += "<ds:Reference URI='#"+id_school+"'>" # format de l'id : _-6921761874666457460
-    body += "<ds:Transforms>"
-    body += "<ds:Transform Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature'/>"
-    body += "<ds:Transform Algorithm='http://www.w3.org/2001/10/xml-exc-c14n#'/>"
-    body += "</ds:Transforms>"
-    body += "<ds:DigestMethod Algorithm='http://www.w3.org/2001/04/xmlenc#sha512'/>"
-    body += "<ds:DigestValue>hash permettant de valider l'intégrité de la requête</ds:DigestValue>"
-    body += "</ds:Reference>"
-    body += "</ds:SignedInfo>"
-    body += "<ds:SignatureValue>signature de la requête</ds:SignatureValue>"
-    body += "<ds:KeyInfo>"
-    body += "<ds:X509Data>"
-    body += "<ds:X509Certificate>certificat public permettant de vérifier la signature des requête</ds:X509Certificate>"
-    body += "</ds:X509Data>"
-    body += "</ds:KeyInfo>"
-    body += "</ds:Signature>"
-    body += "<saml2:NameID xmlns:saml2='urn:oasis:names:tc:SAML:2.0:assertion' Format='urn:oasis:names:tc:SAML:1.1:nameid-format:transient'>AAdzZWNyZXQxLme6PfSJdDvFOBMYvsSi6qbKH8vzNOGtubom1wModhtYwbU6qq0AkIEYXmVEsBNt1rPyZIF/YHOpx+fL</saml2:NameID>"
-    body += "<saml2p:SessionIndex>session identifier fournit par la ressource lors de l'authentification (optionnel)</saml2p:SessionIndex>"
-    body += "</saml2p:LogoutRequest>"
-    body += "</soap11:Body>"
-    body += "</soap11:Envelope>"
-
+ 
 
 def logout_view(request):
     try:
@@ -262,7 +223,7 @@ def logout_view(request):
 
     try :
         is_gar_check = request.session.get("is_gar_check",None)
-        deconnexion_gar()
+        # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
     except :
         pass
 
@@ -276,6 +237,13 @@ def logout_view(request):
     return render(request, 'home.html', context)
 
 
+
+
+def SingleLogoutGar(request):
+    logout(request)
+    return
+
+  
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
@@ -295,13 +263,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
     first_name = dico_received["PRE"]
 
     email = str(today.timestamp()) + "@sacado.xyz"
-    user_type  = 0 
+ 
 
-    if "P_MEL" in dico_received.keys() : 
-        get_email  = dico_received["P_MEL"]
-        if get_email :
+    if 'ens' in dico_received["PRO"] :
+        user_type  = 2
+        if "P_MEL" in dico_received.keys() : 
             email = dico_received["P_MEL"]
-            user_type  = 2
+    else :
+        user_type  = 0 
+
 
     closure    = None
     time_zone  = "Europe/Paris"
@@ -315,10 +285,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
     username   = dico_received["IDO"]
     password   = make_password("sacado_gar")
 
-
-    print(dico_received)
-
+    ###########################################################################################
+    ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
+    ###########################################################################################
+    ###########################################################################################
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
  

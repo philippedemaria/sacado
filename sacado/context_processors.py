@@ -40,6 +40,12 @@ def is_sacado_asso(this_user, today):
 def menu(request):
 
     if request.user.is_authenticated:
+
+        try :
+            is_gar_check = request.session.get("is_gar_check",None)
+        except :
+            is_gar_check = None
+
         sacado_asso = False
         if request.user.time_zone:
             time_zome = request.user.time_zone
@@ -77,7 +83,7 @@ def menu(request):
                     renew_hidden = True
                     request.session["renewal"] = renew_hidden
  
-            return {'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+            return { 'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             
@@ -99,6 +105,7 @@ def menu(request):
                 group = None
 
             return {
+                'is_gar_check' : is_gar_check,
                 'student': student,
                 'sacado_asso' : sacado_asso , 
                 'group' : group ,
@@ -117,7 +124,8 @@ def menu(request):
                 'last_exercises_done': last_exercises_done,
                 'sacado_asso' : sacado_asso , 
                  'sacado_asso' : False , 
-                 'index_tdb' : False , 
+                 'index_tdb' : False ,
+                 'is_gar_check' : None,
             }
 
 
