@@ -289,6 +289,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     print("dico_received =========> ", dico_received)
     print("groups =========> ", groups)
+
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
@@ -304,6 +305,12 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         elif user_type == 2 and created :
             teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+        
+        if user_type == 2 :
+            for group in groups :
+                g_tab = group.split("##")
+                name = g_tab[0]
+                Group.objects.get_or_create(name = name , teacher = teacher , level = level , school = school , defaults = { "lock" : 1 })
 
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
