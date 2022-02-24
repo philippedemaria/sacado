@@ -1,10 +1,8 @@
 {% load static %}
 <li  class='dropdown'>
-
     <a href="#" class="righter" id="mobile_version_button_closer">
         <i class="fa fa-times closer_tab"></i>
     </a>
-    
     {% if is_gar_check %}
     <a href="#"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
         <div class="captionmenu sacado_menu">
@@ -13,42 +11,23 @@
     </a>
     {% else %}
     <a href="{% url 'logout' %}"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
-
         <div class="captionmenu sacado_menu">
          SACADO
         </div>
     </a>
     {% endif %}
-
-
-
-
-
-
-
 </li>
-
 <li class="dropdown {% if '/myaccount' in request.path %}active{% endif %}">
     <a href="#" class="main" id="account">
     {% if request.user.avatar and sacado_asso  %}
-
         <img src="{{ request.user.avatar  }}" class="avatar" />
         <div class="captionmenu">{{ request.user.first_name }}</div>
- 
     {% else %} 
- 
         <i class="bi bi-person-circle icon_size"></i> 
         <div class="captionmenu">Compte</div>
-
     {% endif %} 
     </a>    
 </li>
-
-
-
-
-
-
 <li class='dropdown'>
     <a href="{% url 'index' %}" class="main" >
 
@@ -57,12 +36,6 @@
 
     </a>
 </li>
-
-
-
-
-
-
 <li  class="dropdown {% if 'exercise' in request.path %}
 active
 {% endif %} 
@@ -72,9 +45,7 @@ active
         <div class="captionmenu">Suivis</div>
     </a>
 </li>
-
- 
- <!-- 
+<!-- 
 <li  class='dropdown {% if 'exercise' in request.path %}
 active
 {% endif %} 
