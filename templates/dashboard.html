@@ -345,23 +345,23 @@
     </div>
 
     {% endif %}
-    {% comment avatar %} 
+ 
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
             <a href="{% url 'avatar' %}">Changer mon avatar</a>
         </div>
     </div>
-    {% endcomment %} 
+ 
 
+    {% if not is_gar_check %}
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
             <a href="{% url 'updatepassword' %}">Changer mon mot de passe</a>
         </div>
     </div>
+    {% endif %}
+
     {%  if request.user.is_teacher %}
-
-
- 
 
         {%  if not request.user.is_manager and not is_gar_check %} <!-- manager dans un établissement -->
         <hr/>
