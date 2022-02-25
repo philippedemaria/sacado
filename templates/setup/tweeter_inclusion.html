@@ -11,7 +11,15 @@
                         <img src="{% static 'img/sacadoLogo.png' %}"/>
                     </div>
                     <div class="col-sm-11 col-md-11">
-                        <h5 class="thin"><b>Sacado.</b> {{ t.title|truncatechars:40 }}</h5>
+                        <h5 class="thin"><b>Sacado.</b> 
+                            {% if request.user.is_superuser %}
+
+                                <a href="{% url 'tweeter_update' t.id  %}">{{ t.title|truncatechars:40 }}</a>
+                            {% else %}
+                                {{ t.title|truncatechars:40 }}
+                            {% endif %}
+
+                        </h5>
                         {{ t.texte|safe }}
                     </div>
                 </div>
