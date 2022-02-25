@@ -309,10 +309,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_type == 2 :
             for group in groups :
                 g_tab = group.split("##")
-                name = g_tab[0]
+                print("####################")
+                print(group)
+                print(g_tab)
+                #name = g_tab[0]
                 teacher = Teacher.objects.get(user = user)
-                level   =  Level.objects.get(pk = 10)
-                Group.objects.get_or_create(name = name , teacher = teacher ,  level = level ,  school = school , defaults = { "lock" : 1 })
+                #level   =  Level.objects.get(pk = 10)
+                #Group.objects.get_or_create(name = name , teacher = teacher ,  level = level ,  school = school , defaults = { "lock" : 1 })
 
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
