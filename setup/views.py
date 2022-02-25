@@ -1370,8 +1370,23 @@ def webinaire_delete(request, id):
 
 def rgpd(request):
     context = {  }
-    return render(request, 'setup/rgpd.html', context)  
+    return render(request, 'setup/rgpd_gar.html', context)  
 
 def gar_rgpd(request):
     context = {  }
-    return render(request, 'setup/rgpd_gar.html', context)   
+    return render(request, 'setup/rgpd_gar.html', context)  
+
+
+def cgu(request):
+    context = {  }
+    return render(request, 'setup/cgu.html', context)  
+
+
+def cgv(request):
+    context = {  }
+    return render(request, 'setup/cgv.html', context)  
+
+
+def mentions(request):
+    context = {  }
+    return render(request, 'setup/mentions.html', context)  

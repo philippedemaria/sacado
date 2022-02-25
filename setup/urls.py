@@ -39,6 +39,9 @@ urlpatterns = [
 
     path('rgpd', rgpd, name='rgpd'), 
     path('gar_rgpd', gar_rgpd, name='gar_rgpd'), 
+    path('cgv', cgv, name='cgv'), 
+    path('cgu', cgu, name='cgu'), 
+    path('mentions', mentions, name='mentions'),    
     ############################################################################################
     #######  SACADO Cahier de vacances payant
     ############################################################################################
