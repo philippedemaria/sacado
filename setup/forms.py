@@ -1,6 +1,6 @@
 from django import forms
 from socle.models import Skill, Waiting, Knowledge  
-from .models import Formule , Webinaire 
+from .models import Formule , Webinaire , Tweeter
 
 class SkillForm(forms.ModelForm):
 
@@ -40,3 +40,9 @@ class WebinaireForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('users',)
 
+
+class TweeterForm(forms.ModelForm):
+
+    class Meta:
+        model = Tweeter 
+        fields = '__all__'

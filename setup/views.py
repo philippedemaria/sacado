@@ -25,8 +25,8 @@ from group.models import Group, Sharing_group
 from group.views import student_dashboard
 from qcm.models import Folder , Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from sendmail.models import Communication
-from setup.forms import WebinaireForm
-from setup.models import Formule , Webinaire
+from setup.forms import WebinaireForm , TweeterForm
+from setup.models import Formule , Webinaire , Tweeter
 from school.models import Stage , School
 from school.forms import  SchoolForm
 from school.gar import *
@@ -1390,3 +1390,67 @@ def cgv(request):
 def mentions(request):
     context = {  }
     return render(request, 'setup/mentions.html', context)  
+
+
+
+
+def tweeters(request):
+    if request.user.is_superuser :
+        tweeters = Tweeter.objects.all().order_by("-date_created")
+        return render(request, 'setup/tweeters.html', {'tweeters': tweeters })
+    else :
+        return redirect('index') 
+
+
+def tweeters_public(request):
+    tweeters = Tweeter.objects.all().order_by("-date_created")
+    return render(request, 'setup/tweeters_public.html', {'tweeters': tweeters })
+ 
+
+
+def tweeter_create(request):
+
+    if request.user.is_superuser :
+        form = TweeterForm(request.POST or None  )
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Le tweet a été créé avec succès !')
+            return redirect('tweeters')
+        else:
+            print(form.errors)
+        context = {'form': form, 'tweeter': None  }
+
+        return render(request, 'setup/form_tweeter.html', context)
+    else :
+        return redirect('index') 
+
+
+
+def tweeter_update(request, id):
+
+    if request.user.is_superuser :
+        tweeter = Tweeter.objects.get(id=id)
+        form = TweeterForm(request.POST or None,  instance=tweeter )
+        if request.method == "POST" :
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Le tweet a été modifié avec succès !')
+                return redirect('tweeters')
+            else:
+                print(form.errors)
+
+        context = {'form': form,  'tweeter': tweeter,   }
+
+        return render(request, 'setup/form_tweeter.html', context )
+    else :
+        return redirect('index')  
+
+
+def tweeter_delete(request, id):
+    if request.user.is_superuser :
+        tweeter = Tweeter.objects.get(id=id)
+        tweeter.delete()
+
+        return redirect('tweeters')
+    else :
+        return redirect('index') 

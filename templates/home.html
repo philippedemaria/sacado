@@ -506,9 +506,10 @@ Intro Section -
                     <h4> <a href="{% url 'rgpd' %}"  style="color:#535074" >RGPD</a> - <a href="{% url 'cgu' %}"  style="color:#535074" >CGU</a> - <a href="{% url 'cgv' %}"  style="color:#535074" >CGV</a> </h4>
 
                     <h4> <a href="{% url 'mentions' %}"  style="color:#535074" >Mentions Légales</a> </h4>
- 
-                    <h4>Contact</h4>
+                    
                     <p>
+                    <h4>Contacts</h4>
+                  
                       Audrey Ledoux - France <br>                       
                       Bruno Serres - Nicaragua <br>
                       Nicolas Villemain - Canada <br>                       
@@ -597,7 +598,7 @@ Intro Section -
                 <a href="https://www.lws.fr/"  style="color:#535074" target="_blank"><img src="{% static 'img/lws_gris.png' %}"></a>
             </div>
             <div class="col-sm-4" align="center">
-                <a href="#" target="_blank" style="margin-right:40px"><img src="{% static 'img/twitter.png' %}" ></a>
+                <a href="{% url 'tweeters_public' %}" target="_blank" style="margin-right:40px"><img src="{% static 'img/twitter.png' %}" ></a>
             </div>
 
         </div>

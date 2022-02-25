@@ -74,7 +74,14 @@ urlpatterns = [
     path('webinaire_registrar/<int:id>/<int:key>/', webinaire_registrar, name='webinaire_registrar'), 
 
     path('webinaire_show/<int:id>/', webinaire_show, name='webinaire_show'), 
-
+    ############################################################################################
+    #######  Tweeter
+    ############################################################################################
+    path('tweeters', tweeters, name='tweeters'), 
+    path('tweeter_create/0', tweeter_create, name='tweeter_create'),
+    path('tweeter_update/<int:id>', tweeter_update, name='tweeter_update'),
+    path('tweeter_delete/<int:id>', tweeter_delete, name='tweeter_delete'), 
+    path('tweeters_public', tweeters_public, name='tweeters_public'), 
 ]
 
 
