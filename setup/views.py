@@ -250,7 +250,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
-    print("groups =========> ", gars)
     dico_received = dict()
     for gar in gars :
         dico_received[gar['key']] = gar['value']
@@ -287,9 +286,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
 
     groups     = dico_received["GRO"]
-
-    print("dico_received =========> ", dico_received)
-    print("groups today =========> ", groups)
 
     ###########################################################################################
     ###########################################################################################
