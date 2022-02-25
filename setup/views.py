@@ -239,7 +239,8 @@ def logout_view(request):
 
 
 
-def SingleLogoutGar(request):
+def singleLogoutGar(request):
+    print("fontion view de logout recherche de name ID")
     logout(request)
     return
 
@@ -305,9 +306,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_type == 2 :
             for group in groups :
                 g_tab = group.split("##")
-                print("####################")
-                print(group)
-                print(g_tab)
                 #name = g_tab[0]
                 teacher = Teacher.objects.get(user = user)
                 #level   =  Level.objects.get(pk = 10)
