@@ -240,7 +240,7 @@ hr.divider {
   border-radius: 10px;
 }
 
-.tweeter img{
+.tweeter > img{
   max-width:450px;
 }
 
