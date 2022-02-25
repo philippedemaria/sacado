@@ -453,6 +453,7 @@ table.table-bordered.dataTable {
   padding: 15px;
   height: 300px;
   overflow-y: auto;
+  margin-bottom: 15px;
 }
 
 
