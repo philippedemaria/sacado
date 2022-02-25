@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from account.models import User, Teacher, Student
 from qcm.models import Studentanswer, Relationship
+from setup.models import Tweeter
 from group.models import Group
 from sendmail.models import Email, Communication, Discussion ,  Message
 from sendmail.forms import EmailForm, CommunicationForm , DiscussionForm  ,  MessageForm
@@ -51,9 +52,10 @@ def list_emails(request):
 
         discussions = Discussion.objects.all().order_by("-date_created")
         nb_discussions = discussions.count()
+        tweeters = Tweeter.objects.all().order_by("-date_created")
         return render(request,
                       'sendmail/list.html',
-                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
+                      {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
                        'discussions' : discussions, 'nb_discussions': nb_discussions ,  'studentanswers': studentanswers, 'tasks': tasks})
 
     elif user.is_student:
@@ -72,10 +74,10 @@ def list_emails(request):
         sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
         emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
         form = EmailForm(request.POST or None, request.FILES or None)
-
+        tweeters = Tweeter.objects.all().order_by("-date_created")
         return render(request,
                       'sendmail/list.html',
-                      {'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today, 'communications': [], 'student' : student , 
+                      {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today, 'communications': [], 'student' : student , 
                        'studentanswers': [], 'tasks': []})
     else:
         raise PermissionDenied

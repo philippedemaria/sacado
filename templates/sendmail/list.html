@@ -75,7 +75,7 @@
                     <hr>
                 {% endcomment %}
 
-                    {% if request.user.user_type == 2 %}
+
                      
                       <li>Notifications </li> 
                       <li  class="active">
@@ -115,7 +115,12 @@
                             <span class="pull-right"> ({{ nb_discussions }})</span> 
                         </a>  
                       </li>
-                    {% endif  %}
+                      <hr>
+                      <li><a href="#" class="nav-link" data-target-id="tweets">Tweets  </a> </li> 
+
+
+
+
                 </ul>
                 </form> 
             </div>
@@ -278,7 +283,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="admin-content" id="student" > 
                     <div class="row">
                         <form  action="" method="POST">
@@ -301,12 +305,7 @@
                         <div class="col-sm-12 col-md-12" id="result_student">
                         </div>
                     </div>
-
-
                 </div>
-
-
-
                 <div class="admin-content" id="task" > 
                     <div class="row"> 
                       <div class="col-sm-12 col-md-12">
@@ -384,7 +383,11 @@
                         </div>  
                     </div>
                 </div>
-
+                <div class="admin-content" id="tweets" >
+                    <div class="row">
+                     {% include 'setup/tweeter_inclusion.html' %}
+                    </div>
+                </div>
             </div>
         </div>
  

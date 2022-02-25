@@ -9,21 +9,7 @@
 {% block body %} 
 <section class="content_main"> 
     <div class="row">
-      {% for t in tweeters %}
-        <div class="col-sm-12 col-md-6">
-            <div class="tweeter">
-                <div class="row">
-                    <div class="col-sm-1 col-md-1">
-                        <img src="{% static 'img/sacadoLogo.png' %}"/>
-                    </div>
-                    <div class="col-sm-11 col-md-11">
-                        <h5 class="thin"><b>Sacado.</b> {{ t.title|truncatechars:40 }}<span style="color:gray;font-size:12px" class="pull-right">{{ t.date_created|date:"d/m/Y" }}</span></h5>
-                        {{ t.texte|safe }}
-                    </div>
-                </div>
-            </div>
-        </div>
-      {% endfor %}
+        {% include 'setup/tweeter_inclusion.html' %}
     </div>
 </section>
 {% endblock  %} 
