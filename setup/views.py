@@ -258,7 +258,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     uai        = dico_received["UAI"]
     school     = School.objects.get(code_acad = uai)
-
     last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"]
 
