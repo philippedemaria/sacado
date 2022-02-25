@@ -242,7 +242,7 @@ def logout_view(request):
 def singleLogoutGar(request):
     print("fontion view de logout recherche de name ID")
     logout(request)
-    return
+
 
   
 
