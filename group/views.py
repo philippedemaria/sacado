@@ -1658,7 +1658,7 @@ def print_ids(request, id):
         dataset.append(liste)
 
     if len(students)%2==1 :
-        msg = "\n\n{} {}un accès à l'interface SACADO,".format(students[len(students)-1].user.first_name.capitalize() , students[len(students)-1].user.last_name.capitalize())
+        msg = "\n\n{} {} un accès à l'interface SACADO,".format(students[len(students)-1].user.first_name.capitalize() , students[len(students)-1].user.last_name.capitalize())
         msg += "\nsite d'entrainement personnalisé "
         msg += "\nauto-corrigé,vous a été fourni."
         msg += "\nVous pouvez vous connecter sur"
@@ -1709,7 +1709,7 @@ def print_list_ids(request, id):
         )
 
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "SACADO \nListes de identifiants par élève" ]]
+    logo_tab = [[logo, "SACADO \nListes des identifiants par élève" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
     logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
     elements.append(logo_tab_tab)
