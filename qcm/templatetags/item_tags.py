@@ -410,9 +410,12 @@ def cleanhtml(arg):
     """
     nettoie le code html
     """
-    cleantext = re.sub('<.*?>', '', arg)
-    cleantext = re.sub('\n', '', cleantext)
-    cleantext = html.unescape(cleantext)
+    try :
+        cleantext = re.sub('<.*?>', '', arg)
+        cleantext = re.sub('\n', '', cleantext)
+        cleantext = html.unescape(cleantext)
+    except : 
+        cleantext = arg
     return cleantext
 
 
