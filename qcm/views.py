@@ -4346,38 +4346,40 @@ def all_levels(user, status):
 def list_exercises(request):
     
     user = request.user
-    if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user)
-        datas = all_levels(user, 0)
-        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-        customexercises = teacher.teacher_customexercises.all()
-        return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
-    
-    elif user.is_student: # student
-        student = Student.objects.get(user=user)
-        parcourses = student.students_to_parcours.all()
+    if user.is_authenticated :
+        if user.is_teacher:  # teacher
+            teacher = Teacher.objects.get(user=user)
+            datas = all_levels(user, 0)
+            request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+            customexercises = teacher.teacher_customexercises.all()
+            return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+        
+        elif user.is_student: # student
+            student = Student.objects.get(user=user)
+            parcourses = student.students_to_parcours.all()
 
-        nb_exercises = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).count()
-        relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
+            nb_exercises = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).count()
+            relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
 
-        return render(request, 'qcm/student_list_exercises.html',
-                      {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
+            return render(request, 'qcm/student_list_exercises.html',
+                          {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
 
-    else: # non utilisé
-        parent = Parent.objects.get(user=user)
-        students = parent.students.all()
-        parcourses = []
-        for student in students :
-            for parcours in student.students_to_parcours.all() :
-                if parcours not in parcourses :
-                    parcourses.append(parcours)  
+        else: # non utilisé
+            parent = Parent.objects.get(user=user)
+            students = parent.students.all()
+            parcourses = []
+            for student in students :
+                for parcours in student.students_to_parcours.all() :
+                    if parcours not in parcourses :
+                        parcourses.append(parcours)  
 
-        nb_exercises = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).count()
-        relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
+            nb_exercises = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).count()
+            relationships = Relationship.objects.filter(parcours__in=parcourses,is_publish=1,exercise__supportfile__is_title=0).order_by("exercise__theme")
 
-        return render(request, 'qcm/student_list_exercises.html',
-                      {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
-
+            return render(request, 'qcm/student_list_exercises.html',
+                          {'relationships': relationships, 'nb_exercises': nb_exercises ,     })
+        
+    return redirect('index')
 
 
 

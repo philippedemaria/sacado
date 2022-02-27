@@ -36,20 +36,22 @@ from general_fonctions import *
 
 def list_flashpacks(request):
 
-    if request.user.is_teacher :
-        teacher = request.user.teacher
-        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-        flashpacks = Flashpack.objects.filter(teacher__user = request.user)
-        return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
+    if request.user.is_authenticated :
+        if request.user.is_teacher :
+            teacher = request.user.teacher
+            request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+            flashpacks = Flashpack.objects.filter(teacher__user = request.user)
+            return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
+        else :
+            student = request.user.student
+            today = time_zone_user(request.user)
+            request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+            fpacks_base = Flashpack.objects.filter(students=student)
+            fpacks = fpacks_base.exclude(is_global=1)
+            flashpacks = fpacks_base.filter(is_global=1)
+            return render(request, 'flashcard/list_flashpacks_student.html', {'flashpacks': flashpacks, 'fpacks': fpacks, 'student' : student , 'today' : today })
     else :
-        student = request.user.student
-        today = time_zone_user(request.user)
-        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-        fpacks_base = Flashpack.objects.filter(students=student)
-        fpacks = fpacks_base.exclude(is_global=1)
-        flashpacks = fpacks_base.filter(is_global=1)
-        return render(request, 'flashcard/list_flashpacks_student.html', {'flashpacks': flashpacks, 'fpacks': fpacks, 'student' : student , 'today' : today })
-
+        return redirect('index')
 
 
 
@@ -277,19 +279,20 @@ def delete_flashpack(request, id):
  
 def show_flashpack(request, id):
 
+    if request.user.is_authenticated:
+        flashpack  = Flashpack.objects.get(id=id)
+        if request.user.is_student :
+            today = time_zone_user(request.user)
+            template = 'flashcard/show_flashpack_student.html'
+            context = {'flashpack': flashpack, 'today' : today }
+        else :
+            flashcards =  flashpack.flashcards.filter(is_validate=1) 
+            template = 'flashcard/show_flashpack.html'
+            context = {'flashpack': flashpack, 'flashcards' : flashcards  }
 
-    flashpack  = Flashpack.objects.get(id=id)
-
-    if request.user.is_student :
-        today = time_zone_user(request.user)
-        template = 'flashcard/show_flashpack_student.html'
-        context = {'flashpack': flashpack, 'today' : today }
+        return render(request,template, context )
     else :
-        flashcards =  flashpack.flashcards.filter(is_validate=1) 
-        template = 'flashcard/show_flashpack.html'
-        context = {'flashpack': flashpack, 'flashcards' : flashcards  }
-
-    return render(request,template, context )
+        return redirect('index')
 
 
 def revise_flashpack(request, id):

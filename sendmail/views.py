@@ -27,60 +27,62 @@ from qcm.views import tracker_execute_exercise
 
 def list_emails(request):
  
-    user = request.user
-    users = []
+	user = request.user
+	users = []
+	if request.user.is_authenticated :
+		if user.is_teacher:
+			today = time_zone_user(request.user)
+			teacher = user.teacher
+			groups =  teacher.groups.order_by("level__ranking") 
+			shared_groups = teacher.teacher_group.order_by("level__ranking") 
+			groups = groups | shared_groups
 
-    if user.is_teacher:
-        today = time_zone_user(request.user)
-        teacher = user.teacher
-        groups =  teacher.groups.order_by("level__ranking") 
-        shared_groups = teacher.teacher_group.order_by("level__ranking") 
-        groups = groups | shared_groups
-            
-        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+			request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
-        group_students = set()
-        for group in groups:
-            group_students.update(group.students.all())
- 
+			group_students = set()
+			for group in groups:
+				group_students.update(group.students.all())
 
-        studentanswers = Studentanswer.objects.filter(student__user__in =  group_students).order_by("-date")[:100]
-        tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
-        sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
-        emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
-        form = EmailForm(request.POST or None, request.FILES or None)
 
-        discussions = Discussion.objects.all().order_by("-date_created")
-        nb_discussions = discussions.count()
-        tweeters = Tweeter.objects.all().order_by("-date_created")
-        return render(request,
-                      'sendmail/list.html',
-                      {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
-                       'discussions' : discussions, 'nb_discussions': nb_discussions ,  'studentanswers': studentanswers, 'tasks': tasks})
+			studentanswers = Studentanswer.objects.filter(student__user__in =  group_students).order_by("-date")[:100]
+			tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
+			sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
+			emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+			form = EmailForm(request.POST or None, request.FILES or None)
 
-    elif user.is_student:
+			discussions = Discussion.objects.all().order_by("-date_created")
+			nb_discussions = discussions.count()
+			tweeters = Tweeter.objects.all().order_by("-date_created")
+			return render(request,
+			          'sendmail/list.html',
+			          {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
+			           'discussions' : discussions, 'nb_discussions': nb_discussions ,  'studentanswers': studentanswers, 'tasks': tasks})
 
-        tracker_execute_exercise(False, user)
-        student = Student.objects.get(user=user)
-        groups = student.students_to_group.all()
-        today = time_zone_user(request.user)
-        for group in groups:
-            for student in group.students.order_by("user__last_name"):
-                if student.user.email :
-                    users.append(student.user)
-            if group.teacher.is_mailing :
-            	users.append(group.teacher.user)
+		elif user.is_student:
 
-        sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
-        emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
-        form = EmailForm(request.POST or None, request.FILES or None)
-        tweeters = Tweeter.objects.all().order_by("-date_created")
-        return render(request,
-                      'sendmail/list.html',
-                      {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today, 'communications': [], 'student' : student , 
-                       'studentanswers': [], 'tasks': []})
-    else:
-        raise PermissionDenied
+			tracker_execute_exercise(False, user)
+			student = Student.objects.get(user=user)
+			groups = student.students_to_group.all()
+			today = time_zone_user(request.user)
+			for group in groups:
+				for student in group.students.order_by("user__last_name"):
+				    if student.user.email :
+				        users.append(student.user)
+				if group.teacher.is_mailing :
+					users.append(group.teacher.user)
+
+			sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
+			emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+			form = EmailForm(request.POST or None, request.FILES or None)
+			tweeters = Tweeter.objects.all().order_by("-date_created")
+			return render(request,
+			          'sendmail/list.html',
+			          {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups, 'today': today, 'communications': [], 'student' : student , 
+			           'studentanswers': [], 'tasks': []})
+		else:
+			raise PermissionDenied
+	else:
+		return redirect('index')
 
 
 @user_is_active
