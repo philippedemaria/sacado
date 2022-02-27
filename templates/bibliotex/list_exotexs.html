@@ -75,7 +75,7 @@
                                             <td> 
                                                     <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
                                                     <a href="{% url 'update_exotex'  exotex.id   %}" class="listing" style="font-size: 18px">
-                                                        {{ exotex.title|cleanhtml|capfirst }}  
+                                                        {{ exotex.title|cleanhtml|capfirst }} <i class="bi bi-pen"></i>  
                                                     </a> 
                                                     {% if  exotex.correction  %}
                                                         <i class="fa fa-copyright" title="correction"></i> 
