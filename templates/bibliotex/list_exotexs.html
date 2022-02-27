@@ -74,14 +74,14 @@
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td> 
                                                     <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
-                                                    <a href="{% url 'update_exotex'  exotex.id   %}" class="listing" style="font-size: 18px">
-                                                        {{ exotex.title|cleanhtml|capfirst }} <i class="bi bi-pen"></i>  
-                                                    </a> 
+
                                                     {% if  exotex.correction  %}
                                                         <i class="fa fa-copyright" title="correction"></i> 
                                                     {% endif %}
 
-
+                                                    <a href="{% url 'update_exotex'  exotex.id   %}" class="listing" style="font-size: 18px">
+                                                        {% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Modifier l'exercice  {% endif %}  <i class="bi bi-pen"></i>
+                                                    </a> 
 
                                                     <div>
                                                     {{ exotex.content_html|safe}}

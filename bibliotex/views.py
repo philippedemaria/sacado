@@ -462,7 +462,7 @@ def update_exotex(request, id):
 
     exotex = Exotex.objects.get(id=id)
     teacher = request.user.teacher
-    form = ExotexForm(request.POST or None, request.FILES or None, instance=exotex , teacher = teacher , knowledge = None )
+    form = ExotexForm(request.POST or None, request.FILES or None, instance=exotex , teacher = teacher , knowledge = exotex.knowledge )
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit = False) 
@@ -480,7 +480,7 @@ def update_exotex(request, id):
         else:
             print(form.errors)
 
-    context = {'form': form,  'exotex': exotex,   }
+    context = {'form': form,  'exotex': exotex, 'knowledge': exotex.knowledge ,   }
 
     return render(request, 'bibliotex/form_exotex.html', context )
 
