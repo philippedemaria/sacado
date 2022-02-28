@@ -37,7 +37,9 @@ define(['jquery',  'bootstrap' ], function ($) {
             $('.div_is_mark').toggle(300) ; 
         });
         $('#id_is_result').on('change', function (event) {
-            $('#is_result_final').toggle(300) ; 
+            if( $('#id_is_result').is("checked")   )
+            { $('#is_result_final').toggle(300) ;  } 
+
         });
 
 
