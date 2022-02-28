@@ -515,6 +515,7 @@ def create_quizz(request):
         nf = form.save(commit = False)
         nf.teacher = teacher
         nf.is_questions = 1
+        print(nf.is_result, nf.is_archive)
         nf.save()
         form.save_m2m()
         attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
