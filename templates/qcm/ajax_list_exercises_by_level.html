@@ -33,7 +33,7 @@
                                                        <i class="fa fa-caret-right"></i> {{ knowledge.grouper.name|capfirst }} <b><small> {{  knowledge.grouper.exercises|counting }} exercice{{  knowledge.grouper.exercises|counting|pluralize }} </small></b>
                                                     </td>
                                                 </tr>
-                                                {% for exercise in knowledge.list  %}
+                                                {% for exercise in knowledge.list|dictsort:"ranking"   %}
                                                     <tr class="opener_e openedk{{ knowledge.grouper.id }}">
                                                         <td>
                                                             <div class="pull-right" >
