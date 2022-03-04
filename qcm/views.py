@@ -775,7 +775,7 @@ def peuplate_parcours(request,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
 
-    form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher , folder = None ,   group = None)
+    form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher , folder = None ,   group = group)
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
