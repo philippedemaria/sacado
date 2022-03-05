@@ -9,7 +9,7 @@
 	<input type="hidden" value="{{ question.id }}" class="sorted_question_id"   />
     <div class="row"> 
         <div class="col-xs-12 col-md-12">
-            <label>{% if from_ajax %}{{ nbq }}{% else %}{{ forloop.counter }}{% endif %}. {{ question.title|truncatechars:"15"}} {% if question %}{% if not question.is_publish %} <i class="fa fa-eye-slash"></i> {% endif %}{% endif %}</label>
+            <label>{% if from_ajax %}{{ nbq }}{% else %}{{ forloop.counter }}{% endif %}. {{ question.title|truncatechars:"20"}} {% if question %}{% if not question.is_publish %} <i class="fa fa-eye-slash"></i> {% endif %}{% endif %}</label>
         </div>
     </div>
     <div class="row"> 
@@ -21,7 +21,7 @@
             <a href="{% url 'remove_question' question.id quizz.id %}"  class="delete_question" onclick="return TestDelete('cette question')" title="Supprimer"> <i class="fa fa-trash"></i></a>
 
         </div>
-        <div class="col-xs-10 col-md-30">
+        <div class="col-xs-10 col-md-10">
             {% if question.qtype == 1 %}
                 <img src="{% static 'img/quizz_vf.png' %}" width="90%" />
             {% elif question.qtype == 2 %}
