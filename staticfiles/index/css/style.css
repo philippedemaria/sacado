@@ -1880,9 +1880,7 @@ table.table-bordered.dataTable {
     -ms-flex-pack: end;
     justify-content: flex-end;
   }
-}
 
-@media (min-width: 992px) {
   #intro .intro-info {
     padding-top: 80px;
   }
@@ -1892,7 +1890,7 @@ table.table-bordered.dataTable {
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 450px) {
   #topbar {
     display: none;
   }
