@@ -616,29 +616,29 @@ def sender_mail(request,form):
 def logged_user_has_permission_to_this_student(user_reader, student) :
 
     test = False
+    if request.user.is_authenticated : 
+        if user_reader.is_teacher :
+            groups = Group.objects.filter(teacher__user = user_reader) # tous le groupes du prof
+            for group in groups :
+                if student in group.students.all() :
+                    test = True
+                    break
 
-    if user_reader.is_teacher :
-        groups = Group.objects.filter(teacher__user = user_reader) # tous le groupes du prof
-        for group in groups :
-            if student in group.students.all() :
+            sgroups = Sharing_group.objects.filter(teacher__user = user_reader) # tous le groupes partagés du prof
+     
+            for sgroup in sgroups :
+                if student in sgroup.group.students.all() :
+                    test = True
+                    break
+
+        elif user_reader.is_parent : 
+            parent = Parent.objects.get(user = user_reader)
+            if student in parent.students.all():
                 test = True
-                break
 
-        sgroups = Sharing_group.objects.filter(teacher__user = user_reader) # tous le groupes partagés du prof
- 
-        for sgroup in sgroups :
-            if student in sgroup.group.students.all() :
-                test = True
-                break
-
-    elif user_reader.is_parent : 
-        parent = Parent.objects.get(user = user_reader)
-        if student in parent.students.all():
-            test = True
-
-    else : 
-        if user_reader == student.user :
-            test = True
+        else : 
+            if user_reader == student.user :
+                test = True    
     return test
 
  
@@ -1443,74 +1443,79 @@ def delete_parent(request, id):
 
 
 def my_profile(request):
-    user = request.user
-    is_manager = user.is_manager
-    is_extra   = user.is_extra
-    is_testeur = user.is_testeur
-    today = time_zone_user(user)
-    if user.is_superuser :
-        user_form = ManagerUpdateForm(request.POST or None, request.FILES or None, instance=user)        
-    else :
-        user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
 
-    new = False
-    if request.user.is_teacher:
-        teacher = Teacher.objects.get(user=user)
+    if request.user.is_authenticated : 
+        user = request.user
+        is_manager = user.is_manager
+        is_extra   = user.is_extra
+        is_testeur = user.is_testeur
+        today = time_zone_user(user)
+        if user.is_superuser :
+            user_form = ManagerUpdateForm(request.POST or None, request.FILES or None, instance=user)        
+        else :
+            user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=user)
 
-        teacher_form = TeacherForm(request.POST or None, request.FILES or None, instance=teacher)
-        if request.method == "POST":
-            if all((user_form.is_valid(), teacher_form.is_valid())):
-                teacher       = teacher_form.save(commit=False)
-                teacher.user  = user
-                teacher.save()
-                teacher_form.save_m2m()
-                uf            = user_form.save(commit=False) 
-                uf.is_manager = is_manager
-                uf.is_extra   = is_extra
-                uf.is_testeur = is_testeur
-                uf.save()
-                messages.success(request, 'Votre profil a été changé avec succès !')
-                if teacher.groups.count() == 0:
-                    return redirect('index')
-                else:
+        new = False
+
+        if request.user.is_teacher:
+            teacher = Teacher.objects.get(user=user)
+
+            teacher_form = TeacherForm(request.POST or None, request.FILES or None, instance=teacher)
+            if request.method == "POST":
+                if all((user_form.is_valid(), teacher_form.is_valid())):
+                    teacher       = teacher_form.save(commit=False)
+                    teacher.user  = user
+                    teacher.save()
+                    teacher_form.save_m2m()
+                    uf            = user_form.save(commit=False) 
+                    uf.is_manager = is_manager
+                    uf.is_extra   = is_extra
+                    uf.is_testeur = is_testeur
+                    uf.save()
+                    messages.success(request, 'Votre profil a été changé avec succès !')
+                    if teacher.groups.count() == 0:
+                        return redirect('index')
+                    else:
+                        return redirect('profile')
+
+            return render(request, 'account/teacher_form.html', 
+                          {'teacher_form': teacher_form, 'user_form': user_form,'new' : new , 'communications': [] ,  'teacher': teacher, 'today' : today})
+
+        elif request.user.is_student:
+
+            student = Student.objects.get(user=user)
+            form = StudentForm(request.POST or None, request.FILES or None, instance=student)
+            if request.method == "POST":
+                if all((user_form.is_valid(), form.is_valid())):
+                    user_form.save()
+                    student_f = form.save(commit=False)
+                    student_f.user = user
+                    student_f.save()
+                    messages.success(request, 'Votre profil a été changé avec succès !')
                     return redirect('profile')
 
-        return render(request, 'account/teacher_form.html', 
-                      {'teacher_form': teacher_form, 'user_form': user_form,'new' : new , 'communications': [] ,  'teacher': teacher, 'today' : today})
+                else:
+                    print(form.errors)
+            return render(request, 'account/student_form.html',
+                          {'form': form, 'user_form': user_form, 'communications' : [],  'student': student, 'idg' : None , 'today' : today })
 
-    elif request.user.is_student:
+        else:
+            parent = Parent.objects.get(user=user)
+            form = ParentForm(request.POST or None, request.FILES or None, instance=parent)
+            if request.method == "POST":
+                if all((user_form.is_valid(), form.is_valid())):
+                    user_form.save()
+                    parent_f = form.save(commit=False)
+                    parent_f.user = user
+                    parent_f.save()
+                    messages.success(request, 'Votre profil a été changé avec succès !')
+                    return redirect('profile')
 
-        student = Student.objects.get(user=user)
-        form = StudentForm(request.POST or None, request.FILES or None, instance=student)
-        if request.method == "POST":
-            if all((user_form.is_valid(), form.is_valid())):
-                user_form.save()
-                student_f = form.save(commit=False)
-                student_f.user = user
-                student_f.save()
-                messages.success(request, 'Votre profil a été changé avec succès !')
-                return redirect('profile')
-
-            else:
-                print(form.errors)
-        return render(request, 'account/student_form.html',
-                      {'form': form, 'user_form': user_form, 'communications' : [],  'student': student, 'idg' : None , 'today' : today })
-
-    else:
-        parent = Parent.objects.get(user=user)
-        form = ParentForm(request.POST or None, request.FILES or None, instance=parent)
-        if request.method == "POST":
-            if all((user_form.is_valid(), form.is_valid())):
-                user_form.save()
-                parent_f = form.save(commit=False)
-                parent_f.user = user
-                parent_f.save()
-                messages.success(request, 'Votre profil a été changé avec succès !')
-                return redirect('profile')
-
-            else:
-                print(form.errors)
-        return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
+                else:
+                    print(form.errors)
+            return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
+    else :
+        redirect("index")
 
 
 @csrf_exempt

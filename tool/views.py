@@ -1324,18 +1324,21 @@ def store_student_answer(request):
 def list_quizz_student(request):
     """ Lancer le play quizz élève """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-    student = request.user.student
-    tracker_execute_exercise(False, request.user)
-    delete_session_key(request, "quizz_id")
-    quizzes = set()
-    for g in student.students_to_group.all() : 
-        teacher_user = g.teacher.user
-        today = time_zone_user(teacher_user)
-        quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today)))
+    if request.user.is_authenticated :
+        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+        student = request.user.student
+        tracker_execute_exercise(False, request.user)
+        delete_session_key(request, "quizz_id")
+        quizzes = set()
+        for g in student.students_to_group.all() : 
+            teacher_user = g.teacher.user
+            today = time_zone_user(teacher_user)
+            quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today)))
 
-    context = { 'quizzes' : quizzes , }
-    return render(request, 'tool/list_quizz_student.html', context)
+        context = { 'quizzes' : quizzes , }
+        return render(request, 'tool/list_quizz_student.html', context)
+    else :
+        return redirect("index")
 
 
 
