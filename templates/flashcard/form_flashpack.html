@@ -210,17 +210,17 @@
                                 </td>
                                 <td> {{ form.is_favorite|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                             </tr>
-
+                            <tr>
+                                <td>{{ form.is_share.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text">Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
+                                    </span> 
+                                </td>
+                                <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                            </tr>
 
 				            {% if sacado_asso %}
-				                <tr>
-				                    <td>{{ form.is_share.label_tag }} 
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-		                                    <div class="helper_tip_text">Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
-		                                </span> 
-				                    </td>
-				                    <td> {{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-				                </tr>
+
 
 				                <tr>
 				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
@@ -241,17 +241,6 @@
                                 </tr>
 				            {% else %}
 
-				                <tr>
-				                    <td>{{ form.is_share.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-				                                    <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
-				                                </span> 
-				                    </td>
-				                    <td> 
-				                        <div class="alert alert-danger"> 
-				                            Version établissement requise
-				                        </div>
-				                     </td>
-				                </tr>
 
 				                <tr>
 				                    <td>{{ form.is_archive.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
