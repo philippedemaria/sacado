@@ -10,7 +10,7 @@
         {% if parcours %}
             <a href="{% url 'show_parcours' 0 parcours.id %}" style="color:parcours.color" > {{ parcours.title }} </a><img src="{% static 'img/angle-right.png' %}"/> 
             {% if quizz %}
-                <a href="{% url 'update_quizz' quizz.id %}"> Quizz </a>
+                <a href="{% url 'update_quizz' quizz.id %}" title="Modifier le quizz"> Quizz </a>
             {% else %}
                 Quizz
             {% endif %}
