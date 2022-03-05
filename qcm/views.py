@@ -3474,9 +3474,9 @@ def  exercise_error(request):
         response = "\n\n Pour voir l'exercice en question, utiliser ce lien en remplaçant le - par un slash :   sacado.xyz-qcm-show_this_exercise-"+str(exercise_id)+"-"
 
     sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
-
+ 
     if request.user.is_teacher :
-        messages.success(request, "Le signalement est envoyé à l'équipe SACADO !")
+        
         return redirect( 'show_this_exercise', exercise_id) 
     else :
         return redirect( 'show_parcours_student', parcours_id) 
