@@ -16,7 +16,16 @@
             {% endif %}
             <small>({{ quizz.duration|time_done }})</small> <img src="{% static 'img/angle-right.png' %}"/> Question
         {% else %}
-            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  Les quizz <small>({{ quizz.duration|time_done }})</small><img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
+            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  
+
+            {% if quizz %}
+                <a href="{% url 'update_quizz' quizz.id %}" title="Modifier le quizz"> {{ quizz }} </a>
+            {% else %}
+                Les quizz
+            {% endif %}
+
+
+             <small>({{ quizz.duration|time_done }})</small><img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
         {% endif %}
         
 
