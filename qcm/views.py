@@ -3477,7 +3477,8 @@ def  exercise_error(request):
         sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
 
     if request.user.is_teacher :
-        return redirect( 'show_parcours', parcours_id) 
+        messages.success(request, "Le signalement est envoyé à l'équipe SACADO !")
+        return redirect( 'show_this_exercise', exercise_id) 
     else :
         return redirect( 'show_parcours_student', parcours_id) 
 
