@@ -237,6 +237,8 @@ class Exercise(models.Model):
 
         return details
 
+
+
     def last_score_and_time(self, parcours, student_id):
         student = Student.objects.get(pk=student_id)
         scores_times = {}

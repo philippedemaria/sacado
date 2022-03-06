@@ -4936,9 +4936,21 @@ def store_the_score_relation_ajax(request):
         ##########################################################
         ########################### Storage student answer
         ##########################################################
-        this_studentanswer, new_studentanswer =  Studentanswer.objects.get_or_create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, defaults = { "numexo" : numexo,  "point" : score, "secondes" : timer }   )
-        if not new_studentanswer : 
-            Studentanswer.objects.filter(pk = this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
+        # try :
+        #     this_studentanswer, new_studentanswer =  Studentanswer.objects.get_or_create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, defaults = { "numexo" : numexo,  "point" : score, "secondes" : timer }   )
+        #     if not new_studentanswer : 
+        #         Studentanswer.objects.filter(pk = this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
+        # except :
+        #     multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student).last()
+        #     multi_studentanswer.update( numexo   = numexo, point    = score , secondes = timer )
+        multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student)
+        if multi_studentanswer.count() > 0 :
+            multi_a = multi_studentanswer.last()
+            multi_studentanswer.filter(pk=multi_a.id).update( numexo   = numexo, point    = score , secondes = timer )
+        else :
+            Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
+
+
         ##########################################################
 
         result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
