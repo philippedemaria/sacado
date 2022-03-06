@@ -616,7 +616,7 @@ def sender_mail(request,form):
 def logged_user_has_permission_to_this_student(user_reader, student) :
 
     test = False
-    if request.user.is_authenticated : 
+    if user_reader.is_authenticated : 
         if user_reader.is_teacher :
             groups = Group.objects.filter(teacher__user = user_reader) # tous le groupes du prof
             for group in groups :
