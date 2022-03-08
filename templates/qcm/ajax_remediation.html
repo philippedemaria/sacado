@@ -108,11 +108,13 @@
 		        <label>Fichier <input type="checkbox" id="is_file" class="selector_format"  /></label>
 		    </div>
 		</div>
+		{% if cookie_rgpd_accepted %}
 		<div class="col-sm-6 col-md-3">
 		    <div class="form-group">
 		        <label>Vidéo <input type="checkbox" id="is_video" class="selector_format"  /></label>
 		    </div>
 		</div>
+		{% endif %}
 	</div> 
 
 

@@ -510,6 +510,23 @@ $(document).ready(function () {
 
 
 
+        $("#accept_rgpd").on('click', function () {
+                let date = new Date(Date.now()+86400000*180);
+                date = date.toUTCString();
+                document.cookie = "cookie_rgpd_accepted=True;path=/;   expires="+date;
+                console.log(document.cookie) ;
+                $("#display_rgpd").remove();
+            }); 
+
+
+        $("#no_accept_rgpd").on('click', function () {
+                let date = new Date(Date.now()+86400000*180);
+                date = date.toUTCString();
+                document.cookie = "cookie_rgpd_accepted=False;path=/;   expires="+date;
+                $("#display_rgpd").remove();
+
+            });
+ 
 
 
 

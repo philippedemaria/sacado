@@ -6680,6 +6680,12 @@ def ajax_remediation(request):
 
     parcours_id =  request.POST.get("parcours_id",None) 
 
+    cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
+    cookie_rgpd_accepted =  cookie_rgpd_accepted  == "True" 
+
+    print(cookie_rgpd_accepted)
+
+
     if parcours_id :
         parcours_id =  int(request.POST.get("parcours_id"))
         customexercise_id =  int(request.POST.get("customexercise_id"))
@@ -6690,7 +6696,7 @@ def ajax_remediation(request):
 
         remediations = Remediationcustom.objects.filter(customexercise = customexercise)
 
-        context = {'form': form,  'customexercise' : customexercise ,  'remediations' : remediations , 'relationship' : None , 'parcours_id' : parcours_id   } 
+        context = {'form': form,  'customexercise' : customexercise ,  'remediations' : remediations , 'relationship' : None , 'parcours_id' : parcours_id ,'cookie_rgpd_accepted' : cookie_rgpd_accepted  } 
 
     else :
         relationship_id =  int(request.POST.get("relationship_id"))
@@ -6701,7 +6707,7 @@ def ajax_remediation(request):
 
         remediations = Remediation.objects.filter(relationship = relationship)
 
-        context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations, 'customexercise' : None , 'parcours_id' : relationship.parcours.id   } 
+        context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations, 'customexercise' : None , 'parcours_id' : relationship.parcours.id ,'cookie_rgpd_accepted' : cookie_rgpd_accepted   } 
     
     html = render_to_string('qcm/ajax_remediation.html',context)
     data['html'] = html       
@@ -6803,9 +6809,13 @@ def ajax_remediation_viewer(request): # student_view
     else :
         remediation = Remediationcustom.objects.get( id = remediation_id)    
 
+    cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
+    cookie_rgpd_accepted =  cookie_rgpd_accepted  == "True" 
+
+    print(cookie_rgpd_accepted)
 
     data = {}
-    context = { 'remediation' : remediation ,   } 
+    context = { 'remediation' : remediation ,  "cookie_rgpd_accepted" : cookie_rgpd_accepted } 
     html = render_to_string('qcm/ajax_remediation_viewer.html',context)
     data['html'] = html       
 

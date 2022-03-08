@@ -163,17 +163,16 @@ def index(request):
             template = 'dashboard.html'
 
         return render(request, template , context)
-
-
+    
     else:  ## Anonymous
-
+        #########
+        ###################
         form = AuthenticationForm()
         u_form = UserForm()
         t_form = TeacherForm()
         s_form = StudentForm()
         np_form = NewpasswordForm()
         levels = Level.objects.order_by("ranking")
-        cookie = request.session.get("cookie", None)
 
         try :
             holidaybook = Holidaybook.objects.get(pk=1)
@@ -201,18 +200,39 @@ def index(request):
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
         exercise_nb = exercises.count() - 1
 
-
         nb_exotex = Exotex.objects.count() 
  
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
 
-        context = { 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                   'cookie': cookie, 'nb_exotex': nb_exotex, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
 
-        return render(request, 'home.html', context)
+        cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
+
+        cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
+
+        context = { 'cookie_rgpd_accepted' : cookie_rgpd_accepted , 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
+                    'nb_exotex': nb_exotex, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
+
+        response = render(request, 'home.html', context)
+        return response
+ 
 
  
+# def ajax_reponse_to_rgpd(request) :
+
+#     data     = {}
+#     context  = {}
+#     response = render(request, 'home.html', context)
+#     if request.POST.get("response") == "yes" :
+#         date = datetime.now()+timedelta(days=180)
+#     else :
+#         date = datetime.now()+timedelta(days=181)
+    
+#     response.set_cookie('bandeau_rgpd', date )
+#     return JsonResponse(data)
+
+ 
+
 
 def logout_view(request):
     try:
