@@ -64,7 +64,7 @@ class ParcoursForm(forms.ModelForm):
 
 
 			these_groups  = groups|shared_groups
-			all_groups    = these_groups.order_by("teachers")
+			all_groups    = these_groups.order_by("teachers").distinct()
 
 			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
 			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
