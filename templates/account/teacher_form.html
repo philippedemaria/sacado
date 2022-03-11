@@ -360,7 +360,7 @@
             <div class="row" style="margin-top:20px">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
-                        <input value="Enregistrer" type="submit" id="submitter" class="btn btn-primary"/>
+                        <input value="Enregistrer" type="submit" {% if teacher.user.username|length < 50 %} id="submitter" {%endif %} class="btn btn-primary"/>
                             {% if request.user.is_superuser %}
                                 <input value="Enregistrer et retour à toute la liste des enseignants" type="submit" name="listing" class="btn btn-info"/>
                             {% endif  %} 
