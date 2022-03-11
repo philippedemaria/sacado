@@ -175,8 +175,18 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <label>{{ user_form.email.label_tag }}</label>
-                        {{ user_form.email  |add_class:"form-control" }}
-                        {{ user_form.email.errors }}
+ 
+                        {% if teacher.user.username|length > 50 %}
+                            {{ user_form.email.label_tag }}
+                            {{ user_form.email  |add_class:"form-control"|attr:"readonly" }}
+                            {{ user_form.email.errors }}
+                        {% else %}
+                            {{ user_form.email.label_tag }}
+                            {{ user_form.email |add_class:"form-control" }}
+                            {{ user_form.email.errors }}
+                        {% endif %}
+
+
                     </div>
                 </div>
 
