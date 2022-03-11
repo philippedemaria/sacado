@@ -288,11 +288,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
         user_type  = 2
         if "P_MEL" in dico_received.keys() : 
             email = dico_received["P_MEL"]
+            if not email :
+                email = str(today.timestamp()) + "@sacado.xyz"
     else :
         user_type  = 0 
 
     print(email)
-    
+
     closure    = None
     time_zone  = "Europe/Paris"
     is_extra   = 0
