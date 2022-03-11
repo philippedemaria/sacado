@@ -317,7 +317,7 @@
             {% if user.user_type == 2 %}         
                 Version
                 {% if sacado_asso %}
-                    établissement
+                    établissement <br/>{{ user.school.name }}
                 {% else %}
                     enseignant
                 {% endif  %}
