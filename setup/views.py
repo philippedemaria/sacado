@@ -261,6 +261,7 @@ def logout_view(request):
 
 def singleLogoutGar(request):
     print("fontion view de logout recherche de name ID")
+    print(request)
     logout(request)
 
 
@@ -292,8 +293,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 email = str(today.timestamp()) + "@sacado.xyz"
     else :
         user_type  = 0 
-
-    print(email)
 
     closure    = None
     time_zone  = "Europe/Paris"
