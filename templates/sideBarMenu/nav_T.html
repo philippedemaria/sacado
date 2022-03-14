@@ -123,14 +123,14 @@
 </li>
   
 
-{% comment %}
+ 
 <li class="dropdown {% if not request.session.tdb and '/aefe' in request.path %}active{% endif %}">
     <a href="{% url 'aefe' %}" class="main closer_notification">
         <i class="bi bi-hdd-rack icon_size"></i> 
         <div class="captionmenu">aefe</div>
     </a>
 </li>
-{% endcomment %}
+ 
 
 {%  if communications|length > 0  %}
 <li class="dropdown">
