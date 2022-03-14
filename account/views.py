@@ -27,14 +27,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.contrib.auth import   logout
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
-from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword , Avatar
+from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword , Avatar , Background
 from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
 from socle.models import Level
 from socle.models import Theme
 from sendmail.forms import EmailForm
-from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm , AvatarForm , AvatarUserForm
+from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm , AvatarForm , AvatarUserForm, BackgroundForm , BackgroundUserForm
 from templated_email import send_templated_mail
 from general_fonctions import *
 from school.views import this_school_in_session
@@ -273,7 +273,73 @@ def avatar(request) :
 
 
 #####################################
+########################################            BACKGROUND                   #########################################
 
+#@user_is_parcours_teacher
+def create_background(request, id ):
+ 
+    if not request.user.is_superuser : 
+        return redirect('index')
+
+    form = BackgroundForm(request.POST or None ,  request.FILES or None, )
+    if form.is_valid():
+        form.save()
+        return redirect('list_backgrounds')
+    else:
+        print(form.errors)
+
+    context = {'form': form }
+
+    return render(request, 'account/background_admin_form.html', context)
+
+
+def delete_background(request,id  ):
+    if not request.user.is_superuser : 
+        return redirect('index')
+
+    background = Background.objects.get(pk=id)
+    background.delete()
+    return redirect('list_backgrounds') 
+
+
+
+def list_backgrounds(request) :
+    
+    if not request.user.is_superuser : 
+        return redirect('index')
+    
+    backgrounds = Background.objects.all()
+    
+    context = {  'backgrounds': backgrounds,   }
+    return render(request, 'account/list_backgrounds.html', context)
+
+ 
+
+
+def background(request) :
+
+    user = User.objects.get(pk = request.user.id )
+    background_form = BackgroundUserForm(request.POST or None, request.FILES or None, instance = user  ) 
+
+
+    if request.method == 'POST':
+        if background_form.is_valid():
+            user.background = request.POST.get("background")
+            print(request.POST.get("background"))
+            user.save()
+            return redirect('index')
+        else:
+            messages.error(request, user_form.errors)
+
+    backgrounds = Background.objects.all()
+
+    context = {'background_form': background_form, 'backgrounds' : backgrounds}
+    return render(request, 'account/background_form.html', context)
+
+
+
+
+#####################################
 
  
 def send_to_teachers(request):

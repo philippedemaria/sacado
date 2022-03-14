@@ -1,0 +1,72 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);    
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+
+
+ 
+ 
+{% block page_title %}
+    <i class='fa fa-users'></i> Liste des fonds d'écran
+{% endblock %}
+ 
+
+
+ 
+{% block page_menu_right %}
+     
+    
+    <a href="{% url 'create_avatar' 0 %}">
+        Créer un avatar
+    </a>
+
+{% endblock %}
+
+
+
+
+{% block body %}
+ 
+ 
+ 
+    <section class="content_main"> 
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered table-hover standard_tab_sort">
+                    <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for background in backgrounds %}
+                            <tr>
+                                <td style="min-width:250px">
+                                    <img src="{{ background.image.url }}" width='70px' />
+                                </td>
+ 
+                                <td style="font-size: 14px; min-width:400px">
+                                    <a href="{% url 'delete_background' background.id %}"  onclick="return TestDelete('ce fond')"> 
+                                        <i class="fa fa-trash"> </i>   
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

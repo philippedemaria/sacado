@@ -45,6 +45,12 @@ urlpatterns = [
     path('list_avatars', list_avatars, name='list_avatars'),
 
 
+    path('background', background, name='background'),
+    path('create_background/<int:id>', create_background, name='create_background'),
+    path('delete_background/<int:id>', delete_background, name='delete_background'),
+    path('list_backgrounds', list_backgrounds, name='list_backgrounds'),
+
+
     path('updatepassword', updatepassword, name='updatepassword'),
 
     path('register_student', register_student, name='register_student'),

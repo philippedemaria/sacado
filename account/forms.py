@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Teacher, User, Student, Parent , Response , Newpassword , Avatar
+from .models import Teacher, User, Student, Parent , Response , Newpassword , Avatar , Background
 
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
@@ -35,6 +35,21 @@ class AvatarUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('avatar',)
+
+
+
+class BackgroundForm(forms.ModelForm):
+    class Meta:
+        model = Background
+        fields = '__all__'
+
+
+class BackgroundUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('background',)
+
+
 
 
 class StudentForm(forms.ModelForm):

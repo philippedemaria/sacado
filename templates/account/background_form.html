@@ -3,50 +3,48 @@
 {% load static %}
 
 {% block require %}
- 
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
- 
-
     <script>
-       require(['script/ajax-avatar']);
+       require(['script/ajax-background']);
     </script> 
 {% endblock %}
 
+
+
 {% block page_title %}
-    <i class="fa fa-user"></i> Mon fond d'écran
+    <i class="fa fa-user"></i> Personnaliser mon thème
 {% endblock %}
  
+
+
 {% block page_menu_right %}
 {% endblock %}
 
 
+
 {% block body %}
-    
 <section class="content_main">
     <form action="" method="POST">
         {% csrf_token %}
-   
-
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                {% for avatar in avatars %}
-                    <a href="javascript:void()" class="choicer_avatar" data-url="{{ avatar.image.url }}"> <img src="{{ avatar.image.url }}" class="list_avatar" width="70px" /></a>
+                {% for background in backgrounds %}
+                    <a href="javascript:void()" class="choicer_background" data-url="{{ background.image.url }}"> <img src="{{ background.image.url }}" class="list_background" width="300px" /></a>
                 {% endfor %}
             </div>
         </div>  
-
-        {% if request.user.can_get_avatar %}
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                    <label>{{ avatar_form.avatar.label_tag }}</label>
-                    {{ avatar_form.avatar |add_class:"btn btn-default" }}
-                    {{ avatar_form.avatar.errors }}
+        {% if request.user.can_get_background %}
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label>{{ background_form.background.label_tag }}</label>
+                        {{ background_form.background |add_class:"btn btn-default" }}
+                        {{ background_form.background.errors }}
+                    </div>
                 </div>
-            </div>
-        </div>  
+            </div>  
         {% else %}
-                <input type="hidden" name="avatar" id="id_avatar"  >
+            <input type="hidden" name="background" id="id_background"  >
         {% endif %}
              
         <div class="row">

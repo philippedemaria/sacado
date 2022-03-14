@@ -47,6 +47,20 @@ p{
   background-image: url('/static/img/fond_search.png')
 }
 
+.bg_image{
+  padding-top:0px;
+  margin-top: 0px!important;
+  margin-right: 0px!important;
+}
+
+
+h1, .h1, h2, .h2, h3, .h3 {
+    padding-top: 10px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+
 
 .bg_violet{
   background-color: #f1eef7 ;
@@ -1170,8 +1184,8 @@ label {
 .in_this_time_container{
   padding: 15px;
   margin-bottom: 20px;
-  background-image: url('/static/img/fond_chat.png');
-  background-color: #f1eef7;
+  /*background-image: url('/static/img/fond_chat.png');
+  background-color: #f1eef7;*/
   height : 380px;
   width:3000px;
   overflow-x: auto;
