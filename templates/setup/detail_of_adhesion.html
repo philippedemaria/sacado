@@ -142,7 +142,7 @@
                         <div class="form-group">
                             <label>Niveau favori :</label>
                             <select name="level" class="form-control select2">
-                                {% for l in levels %}
+                                {% for l in levels|dictsort:"ranking" %}
                                     <option value="{{ l.id }}">{{ l.name }}</option>
                                 {% endfor %}
                             </select>
