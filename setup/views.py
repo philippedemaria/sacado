@@ -261,7 +261,10 @@ def logout_view(request):
 
 def singleLogoutGar(request):
     print("fontion view de logout recherche de name ID")
-    print(request)
+    try :
+        print(request.headers)
+    except :
+        print(request)
     logout(request)
 
 
@@ -307,7 +310,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
 
     groups     = dico_received["GRO"]
-
+    civilite   = dico_received["CIV"]
+    level      = dico_received["E_MS1"]
+    print(dico_received) # A supprimer.
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR

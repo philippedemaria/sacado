@@ -733,7 +733,8 @@ class Resultlastskill(models.Model): # Pour récupérer la moyenne des 10 dernie
 
     class Meta:
         unique_together = ['student', 'skill']
- 
+
+
 class Parent(models.Model):
     """
     Modèle représentant un parent.

@@ -969,6 +969,14 @@ def detail_student_all_views(request, id):
     except StatisticsError:
         std['median'] = 0
 
+    months = []
+    names  = ["janvier","février","mars","avril","mai","juin","juillet","aout","septembre","octobre","novembre","décembre"]
+    for i in range(1,13):
+        this_month = {}
+        this_month["rg"] = i
+        this_month["name"] = names[i-1]
+        months.append(this_month)
+
     if request.user.is_teacher:
         students = []
         teacher = Teacher.objects.get(user=request.user)
@@ -987,7 +995,7 @@ def detail_student_all_views(request, id):
         if group :
             nav = navigation(group, id)
             context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'students' : students ,  'group' : group , 'communications' : [], 'today' : today , 'form' : form ,  'groups' : groups ,
-                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher }
+                   'student': student, 'parcours': None, 'sprev_id': nav[0], 'snext_id': nav[1] , 'teacher' : teacher,'months':months }
         else :
             messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")
             return redirect("index")
@@ -1000,7 +1008,7 @@ def detail_student_all_views(request, id):
 
 
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
-                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None}
+                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months }
 
 
     return render(request, 'account/detail_student_all_views.html', context)

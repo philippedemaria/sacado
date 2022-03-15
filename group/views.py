@@ -46,7 +46,7 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
-from datetime import datetime 
+from datetime import datetime, date 
 from general_fonctions import *
 import qrcode
 import qrcode.image.svg
@@ -1552,6 +1552,348 @@ def print_statistiques(request, group_id, student_id):
     doc.build(elements)
 
     return response
+
+
+
+
+
+
+
+
+def print_monthly_statistiques(request, month_id, group_id,student_id):
+
+
+    themes, subjects = [], []
+    group = Group.objects.get(pk = group_id)
+
+    if request.user.is_teacher :
+        teacher = Teacher.objects.get(user=request.user)
+        authorizing_access_group(request,teacher,group ) 
+    elif request.user.is_parent :
+        student = Student.objects.get(pk = student_id)
+        print(request.user.parent.students.all())
+        if not student in request.user.parent.students.all() :
+            return redirect('index')
+
+
+
+
+    student = Student.objects.get(pk = student_id)
+    students = [student]
+    title_of_report = student.user.last_name+"_"+student.user.first_name+"_"+str(timezone.now().date())
+
+    knows = knowledges_of_a_student(student)
+    for know in knows :
+        if not know.theme in themes :
+            themes.append(know.theme)
+
+    subject = group.subject
+
+    elements = []        
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="'+str(title_of_report)+'.pdf"'
+
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+
+    title = ParagraphStyle('title', 
+                            fontSize=20, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+
+    subtitle = ParagraphStyle('title', 
+                            fontSize=16, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+ 
+    normal = ParagraphStyle(name='Normal',fontSize=12,)    
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+
+
+    for student in students :
+        #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+        logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+        logo_tab = [[logo, "SACADO \nBilan des acquisitions" ]]
+        logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+        logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+        elements.append(logo_tab_tab)
+        elements.append(Spacer(0, 0.1*inch))
+
+        if timezone.now().month < 9 :
+            scolar_year = str(timezone.now().year-1)+"-"+str(timezone.now().year)
+            this_year = timezone.now().year
+        else :
+            scolar_year = str(timezone.now().year)+"-"+str(timezone.now().year+1)
+            this_year = timezone.now().year+1
+
+        if this_year%4 == 0:
+            feb_day = 29
+        else :
+            feb_day = 28
+
+        months = [31,feb_day ,31,30,31,30,31,31,30,31,30,31]
+        date_start = date(this_year,month_id,1)
+        date_stop = date(this_year,month_id,months[month_id-1])
+
+        studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
+
+        print(studentanswers)
+
+        studentanswer_ids = studentanswers.values_list("id",flat=True).distinct() 
+        nb_exo = studentanswer_ids.count() # Nombre d'exercices traités
+        info = studentanswers.aggregate( duration =  Sum("secondes"), score =  Sum("point"), avg =  Avg("point"))
+        scores = studentanswers.values_list("point",flat=True).order_by("point")
+ 
+        score , duration , average_score = 0  , 0 , 0
+        if info["score"]:
+            score = info["score"]
+        if info["duration"]:
+            duration = info["duration"]
+        if info["avg"]:
+            average_score = int(info["avg"])
+
+        try :
+            if len(studentanswers)>1 :
+                if len(scores)%2 == 0 :
+                    med = (scores[(len(scores)-1)//2]+scores[(len(scores)-1)//2+1])/2 ### len(scores)-1 , ce -1 est causé par le rang 0 du tableau
+                else:
+                    med = scores[(len(scores)-1)//2+1]
+                median = int(med)
+            else :
+                median = int(score)
+        except :
+            median = 0
+
+        # Vérifie que le parcours par défaut est donné
+        nb_k_p , nb_p = 0 , 0 
+        parcourses = student_parcours_studied(student)
+
+        knowledges , knowledge_ids  = [] ,  []
+
+        knowledge_ids = Relationship.objects.values_list("exercise__knowledge_id", flat=True).filter(parcours__in = parcourses,exercise__theme__in= themes , exercise__level = student.level).distinct()
+        nb_k_p += knowledge_ids.count()
+        
+        exercise_ids  = Relationship.objects.values_list("exercise_id", flat=True).filter(parcours__in = parcourses,exercise__theme__in= themes , exercise__level = student.level).distinct()
+        nb_p += exercise_ids.count()
+
+        knows_ids = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id__in = knowledge_ids, exercise_id__in= exercise_ids).filter(date__lte = date_stop , date__gte= date_start)
+        nb_k = knows_ids.count()
+
+        # Les taux
+        try :
+            p_k = int(nb_k/nb_k_p * 100 )
+            if p_k > 100 :
+                p_k = 100
+        except :
+            p_k = 0
+        try :
+            p_e = int(nb_exo/nb_p * 100)
+            if p_e > 100 :
+                p_e = 100
+        except :
+            p_e = 0
+
+        relationships = Relationship.objects.filter(parcours__in = parcourses).exclude(date_limit=None)
+        done, late, no_done = 0 , 0 , 0 
+        for relationship in relationships :
+
+            ontime = student.answers.filter(exercise = relationship.exercise )
+            nb_ontime = ontime.count()
+            nb = ontime.filter(date__lte= relationship.date_limit ).count()
+            if nb_ontime == 0 :
+                no_done += 1
+            elif nb > 0 :
+                done += 1
+            else :
+                late += 1 
+        t_r = no_done + done + late
+ 
+        ##########################################################################
+        #### Gestion de l'autonomie
+        ##########################################################################
+        if nb_exo > nb_p :
+            nbr = nb_exo - nb_p
+            complt = " dont "+str(nbr)+" en autonomie"
+        else :
+            complt = ""
+        if nb_k > nb_k_p :
+            nbrk = nb_k - nb_k_p
+            complement = " dont "+str(nbrk)+" en autonomie" 
+        else :
+            complement = ""
+
+ 
+        ##########################################################################
+        #### Gestion des labels à afficher
+        ##########################################################################
+        labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Mois :"+str(month_id)+"/"+str(this_year),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%, score médian : "+str(median)+"%" , \
+                 "Exercices SACADO proposés : " +str(nb_p) , "dont "+str(nb_exo)+" étudiés "+complt+", soit un taux d'étude de "+str(p_e)+"%",  \
+                 "Tâches demandées : "+str(t_r),  "Remises en temps : "+str(done)+",  remises en retard : "+str(late)+", non remises : "+str(no_done),\
+                 "Bilan des compétences ",]
+
+        spacers , titles,subtitles = [1,3,5,7] ,[0],[4,6,8]
+
+        i = 0
+        for label in labels :
+            if i in spacers : 
+                height = 0.25
+            else :
+                height = 0.1
+            if i in titles : 
+                style = title
+                height = 0.15
+            elif i in subtitles :
+                style = subtitle
+                height = 0.1
+            else :
+                style = normal
+            paragraph = Paragraph( label , style )
+            elements.append(paragraph)
+            elements.append(Spacer(0, height*inch))
+            i+=1   
+
+        ##########################################################################
+        #### Gestion des compétences
+        ##########################################################################
+        sk_tab = []
+        skills = Skill.objects.filter(subject= subject)
+        for skill  in skills :
+            try :
+                resultlastskill  = skill.student_resultskill.get(student = student)
+                sk_tab.append([skill.name, code_couleur(resultlastskill.point,teacher) ])
+            except :
+                sk_tab.append([skill.name,  "N.E"  ])
+
+
+        try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
+            skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
+            skill_tab.setStyle(TableStyle([
+                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                       ]))
+        except : 
+            skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
+
+        elements.append(skill_tab)
+        ##########################################################################
+        #### Gestion des themes
+        ##########################################################################
+        elements.append(Spacer(0, 0.25*inch))
+        paragraph = Paragraph( "Bilan des attendus" , title )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.15*inch))
+
+        th_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
+
+        bgc = 0        
+        for theme  in themes :
+            waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
+            th_tab.append([theme.name,  " " ])
+            bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
+
+            for waiting in waiting_set :
+                bgc += 1
+
+                resultwaitings = student.results_e.filter(exercise__knowledge__waiting__name = waiting.name )
+
+                som_ws = 0
+                for result in resultwaitings :
+                    som_ws += result.point
+                try :
+                    avg_ws = int(som_ws / len(resultwaitings))
+                    th_tab.append([waiting.name,  code_couleur(avg_ws,teacher) ])
+                except :
+                    th_tab.append([waiting.name,  "N.E" ])
+                
+            bgc += 1
+
+        try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
+            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
+            theme_tab.setStyle(TableStyle(bgc_tab))
+        except : 
+            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
+
+        elements.append(theme_tab)
+
+        loop  = 0
+        for theme  in themes :
+            ##########################################################################
+            #### Gestion des knowledges par thème
+            ##########################################################################
+            if len(knowledge_ids) > 0 :
+
+                if loop%2 == 0 :
+                    elements.append(PageBreak()) # Ouvre une nouvelle page - 2 thèmes
+                loop +=1
+                # Append le thème 
+                paragraph = Paragraph( theme.name , title )  
+                elements.append(paragraph)
+                elements.append(Spacer(0, 0.2*inch)) 
+                knowledge_tab = [['Savoir faire','Score','Nombre de \n fois étudié',]]
+                #######
+
+
+                for knowledge_id in knowledge_ids :
+                    # Savoir faire
+                    name_k = Knowledge.objects.get(pk = knowledge_id).name
+                    name   = split_paragraph(name_k,80)
+
+                    ##########################################################################
+                    #### Affichage des résultats par knowledge
+                    ##########################################################################                    
+                    try :      
+                        knowledgeResult = student.results_k.get(knowledge_id  = knowledge_id)
+                        knowledgeResult_nb = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id = knowledge_id ).count()          
+                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult.point,teacher) , knowledgeResult_nb )          )
+                    except : 
+                        knowledge_tab.append(      ( name ,   "N.E"  , 0  )        )
+                
+                ##########################################################################
+                # Bordure du savoir faire
+                ##########################################################################
+
+                knowledge_tab_tab = Table(knowledge_tab, hAlign='LEFT', colWidths=[6*inch,0.5*inch,0.8*inch])
+                knowledge_tab_tab.setStyle(TableStyle([
+                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+                           ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                            ('BACKGROUND', (0,0), (-1,0), colors.Color(0,0.5,0.62))
+                           ]))
+
+                elements.append(knowledge_tab_tab)
+
+        elements.append(PageBreak())
+
+    doc.build(elements)
+
+    return response
+
+
+
+
+
+
+
+
+
+
 
 
 
