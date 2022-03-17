@@ -1217,10 +1217,10 @@ def enroll(request, slug):
             print(username,password)
 
             user = authenticate(username=username, password=password)
-            login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-            request.session["user_id"] = request.user.id
-            group.students.add(user.student)
-            if user :
+            if user.is_authenticated :
+                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+                request.session["user_id"] = request.user.id
+                group.students.add(user.student)
                 messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")  
                 groups = [group]
                 test = attribute_all_documents_of_groups_to_a_new_student(groups, user.student)             
