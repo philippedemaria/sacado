@@ -83,7 +83,11 @@ urlpatterns = [
     path('tweeter_create/0', tweeter_create, name='tweeter_create'),
     path('tweeter_update/<int:id>', tweeter_update, name='tweeter_update'),
     path('tweeter_delete/<int:id>', tweeter_delete, name='tweeter_delete'), 
-    path('tweeters_public', tweeters_public, name='tweeters_public'), 
+    path('tweeters_public', tweeters_public, name='tweeters_public'),
+
+
+
+    path('<slug:adresse>', all_routes , name='all_routes'), 
 ]
 
 
