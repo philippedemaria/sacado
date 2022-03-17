@@ -257,6 +257,13 @@ def logout_view(request):
     return render(request, 'home.html', context)
 
 
+def saml_sso(request) :
+    print("fonction view de saml_sso recherche de name ID")
+    try :
+        print(request.POST)
+    except :
+        print(request)
+
 
 def singleLogoutGar(request):
     print("fonction view de logout recherche de name ID")
@@ -343,7 +350,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-    return index(request)
+    return redirect("index")
 
 
 
