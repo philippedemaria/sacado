@@ -4988,9 +4988,14 @@ def store_the_score_relation_ajax(request):
             if not creat :
                 Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
             
-            result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
-            if not creater :
-                Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).update(point = sco_avg) 
+            if Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation) < 2 :
+                result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
+                if not creater :
+                    Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).update(point = sco_avg)
+            else :
+                result = Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).last()
+                result.point = sco_avg 
+                result.save()
 
 
         try :
