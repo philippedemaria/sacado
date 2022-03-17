@@ -257,12 +257,7 @@ def logout_view(request):
     return render(request, 'home.html', context)
 
 
-def saml_sso(request) :
-    print("fonction view de saml_sso recherche de name ID")
-    try :
-        print(request.POST)
-    except :
-        print(request)
+ 
 
 
 def singleLogoutGar(request):
