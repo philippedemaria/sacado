@@ -308,7 +308,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     groups     = dico_received["GRO"]
     civilite   = dico_received["CIV"]
-    level      = dico_received["E_MS1"]
+    level      = dico_received["E_MS4"]
     print(dico_received) # A supprimer.
     ###########################################################################################
     ###########################################################################################
