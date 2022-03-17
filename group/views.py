@@ -1213,9 +1213,7 @@ def enroll(request, slug):
             group_id = request.POST.get("group_id")
             group = get_object_or_404(Group, pk=group_id)
             password = request.POST.get("this_password")
-
-            print(username,password)
-
+            
             user = authenticate(username=username, password=password)
             if user.is_authenticated :
                 login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
