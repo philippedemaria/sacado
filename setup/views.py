@@ -267,8 +267,6 @@ def singleLogoutGar(request):
     logout(request)
 
 
-  
-
 def ressource_sacado(request): #Protection saml pour le GAR
 
     # création du dictionnaire qui avec les données du GAR  
