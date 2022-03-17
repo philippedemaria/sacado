@@ -4948,8 +4948,10 @@ def store_the_score_relation_ajax(request):
             multi_a = multi_studentanswer.last()
             multi_studentanswer.filter(pk=multi_a.id).update( numexo   = numexo, point    = score , secondes = timer )
         else :
-            Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
-
+            try :
+                Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
+            except :
+                pass
 
         ##########################################################
 
