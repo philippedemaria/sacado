@@ -260,9 +260,9 @@ def logout_view(request):
 
 
 def singleLogoutGar(request):
-    print("fontion view de logout recherche de name ID")
+    print("fonction view de logout recherche de name ID")
     try :
-        print(request.headers)
+        print(request.POST)
     except :
         print(request)
     logout(request)
@@ -693,6 +693,13 @@ def python(request):
 ########  Inscription élève isolé
 ###############################################################################################################################################################################
 ###############################################################################################################################################################################
+
+
+def academy(request):
+    context = {}
+    return render(request, 'academy_index.html', context)
+
+
 
 def inscription(request):
     context = {}
