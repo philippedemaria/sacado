@@ -4945,11 +4945,11 @@ def store_the_score_relation_ajax(request):
         #     multi_studentanswer.update( numexo   = numexo, point    = score , secondes = timer )
         multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student)
         if multi_studentanswer.count() > 0 :
-            multi_a = multi_studentanswer.last()
-            multi_studentanswer.filter(pk=multi_a.id).update( numexo   = numexo, point    = score , secondes = timer )
+            this_studentanswer = multi_studentanswer.last()
+            multi_studentanswer.filter(pk=this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
         else :
             try :
-                Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
+                this_studentanswer = Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
             except :
                 pass
 
