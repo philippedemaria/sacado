@@ -47,12 +47,13 @@
             <a class="navbar-brand sacado" href="{% url 'index' %}#intro"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO<img src="{% static 'img/approche_gar.png' %}" /></a>
         </div>
         <nav class="main-nav float-right d-none d-lg-block">
-            <ul>
+            <ul>{% comment %}
+                <li><a href="{% url 'academy' %}">Académie</a></li> 
+                 {% endcomment %}              
                 <li><a href="#exercises">Exercices</a></li>
                 <li><a href="#teachers">Enseignants</a></li>
                 <li><a href="#students">Élèves</a></li>
                 <li><a href="#parents">Parents</a></li>
-                <li><a href="#about">À propos</a></li>
                 <li><a href="#footer">Contact</a></li>          
             </ul>
         </nav><!-- .main-nav -->

@@ -44,8 +44,9 @@ urlpatterns = [
     path('cgu', cgu, name='cgu'), 
     path('mentions', mentions, name='mentions'),    
     ############################################################################################
-    #######  SACADO Cahier de vacances payant
+    #######  SACADO Académie
     ############################################################################################
+    path('academy', academy, name='academy'), 
     path('student_to_association', student_to_association, name='student_to_association'),     
     path('choice_menu/<slug:name>', choice_menu, name='choice_menu'), 
     path('details_of_adhesion', details_of_adhesion, name='details_of_adhesion'), 

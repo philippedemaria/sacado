@@ -1,0 +1,162 @@
+{% extends 'academy.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block body %}
+
+
+
+<!--==========================
+Intro Section -
+============================-->
+<section id="intro" class="clearfix">
+    <div class="container h-100">
+
+        <div class="col-xs-12" >
+          <a href="#" data-toggle='modal' data-target='#sacadopopup'  class="btn btn-index"> <span class="sacado">SACADO </span><br>Version<br>Établissement <small>RGPD compatible</small></a>
+
+        </div>
+ 
+
+        <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
+            <div class="col-xs-12 col-md-12 col-lg-6">
+
+                {% if sacado_voyage %}
+                <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
+                {% endif %}
+                <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
+                    <span class="exo">{{ nb_exercise }}</span> 
+                      exercice{{  nb_exercise|pluralize }}<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
+                              <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires.</div>
+                          </span> 
+                {% if not sacado_voyage %}
+                de <br/>
+                {% endif %}
+                    {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}
+
+                      <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
+                              <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique, Sciences et Vie de la Terre arrivent peu à peu.</div>
+                          </span>
+                {% if not sacado_voyage %}
+                <br/>
+                {% endif %}
+
+                       interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }} de<br>  la Maternelle à la Terminale.
+
+                </div>
+       
+
+
+
+                <div class="row" style="margin-top: 40px; margin-bottom: 20px">
+                    <div class="col-xs-12 col-md-12 col-lg-6">
+                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
+                            Se connecter
+                        </a>
+                    </div>
+                    <div class="col-xs-12 col-md-12 col-lg-6">
+                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
+                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
+                                                   style="margin-left: 5px; vertical-align: baseline"/>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div style="margin: 0px 0px 30px 0px;">
+                    <img src="{% static 'img/edge.png' %}" width="35px"/>
+                    <img src="{% static 'img/chrome.png' %}" width="35px"/>
+                    <img src="{% static 'img/safari.png' %}" width="35px"/>
+                    <i class="fa fa-apple"></i>
+                    <a href="https://java.com/fr/download/help/mac_install.xml"
+                       target="_blank" >
+                        <small>Pour safari, installer Java si nécessaire.</small>
+                    </a>
+                    <img src="{% static 'img/firefox.png' %}" width="35px"/>
+                        <small>Soucis possibles</small>
+                </div>
+
+                <div class="row" style="margin-top:0px">
+                    <img src="{% static 'img/real_time.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/>  Suivis en<br/>   temps réel 
+                    <a href="#" data-toggle='modal' data-target='#rt_modal'>                          
+                          <i class="fa fa-question-circle"></i>
+                    </a> 
+
+                          <img src="{% static 'img/python_logo.png' %}" height="50px" width="50px" style="margin-left: 15px; margin-right: 10px; vertical-align: baseline"/>  Interface <br/> Python
+                    <a href="#" data-toggle='modal' data-target='#python_modal'>                          
+                            <i class="fa fa-question-circle"></i>
+                    </a> 
+                    <img src="{% static 'img/pronote.png' %}" height="50px" width="50px" style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/> Export CSV <br/>des résultats  
+
+                </div>
+                <div class="row" style="margin-top:30px">
+ 
+                    <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> 
+                    Correction <br/> en ligne
+                    
+                    <a href="#" data-toggle='modal' data-target='#correction_modal'><i class="fa fa-question-circle"></i></a> 
+
+                    <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
+            
+                    <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
+                  <a href="#" data-toggle='modal'   data-target='#bibliotex_modal' >
+                    <i class="fa fa-question-circle"></i>
+                  </a> 
+                  <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  
+                    Flashpacks <br/>et flashcards  <a href="#" data-toggle='modal'   data-target='#flashpack_modal'  ><i class="fa fa-question-circle"></i>
+                  </a> 
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
+                <small style="margin-left:150px">Cliquez sur l'écran pour tester l'exercice en cours.</small>
+                <div style="position: relative;text-align:center">
+                    <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
+                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400"
+                             style="position: absolute; top :40px; left:133px;z-index:-1"/>
+
+                        {% if exercise.id|divisibleby:"3" %}
+                        <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999"/>
+                        {% elif exercise.id|divisibleby:"4" %}
+                        <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999"/>
+                        {% else %}
+                        <img src="{% static 'img/ordi_portable.png' %}" height="490" style="  z-index: 999"/>
+                        {% endif %}
+
+                    </a>
+                </div>
+            </div> 
+        </div>
+
+        <div class="row" style="margin-bottom: 40px">
+            <div class="col-xs-12 col-md-4 col-lg-4" >
+                <div class="row counters">
+                    <div class="col-lg-6 col-6 text-center">
+                        <span data-toggle="counter-up">{{ nb_teacher }}</span>
+                        <p>Enseignants</p>
+                    </div>
+                    <div class="col-lg-6 col-6 text-center">
+                        <span data-toggle="counter-up">{{ nb_student }}</span>
+                        <p>Elèves</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 col-lg-8">
+
+                  <small style="margin-left:150px">Les établissements qui font confiance à <span class="">SACADO</span></small>
+
+                          {% include 'schools_slider.html'  %}
+
+            </div>
+        </div>
+    </div>
+</section><!-- #intro -->
+
+  
+
+
+{% endblock %}

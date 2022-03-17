@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,900">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pinyon+Script">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap">
-    <link href="{% static 'index/css/style_layout.css' %}" rel="stylesheet">
+    <link href="{% static 'index/css/style_academy.css' %}" rel="stylesheet">
 
 
 
@@ -48,24 +48,17 @@
     <header id="header">
         <div class="container">
             <div class="logo float-left">
-                <a class="navbar-brand sacado" href="{% url 'index' %}#intro"><img src="{% static 'img/sacadoA1.png' %}"/>
-                    SACADO </a>
+                <a class="navbar-brand sacado" href="#"><img src="{% static 'img/sacadoA1.png' %}"/>
+                    ACADÉMIE </a>
             </div>
             <nav class="main-nav float-right d-none d-lg-block">
                 <ul>
-                    <li><a href="{% url 'academy' %}">Académie</a></li>
-                    <li><a href="{% url 'index' %}#exercises">Exercices</a></li>
-                    <li><a href="{% url 'index' %}#teachers">Enseignants</a></li>
-                    <li><a href="{% url 'index' %}#students">Élèves</a></li>
-                    <li><a href="{% url 'index' %}#parents">Parents</a></li>
-                    <li><a href="{% url 'index' %}#footer">Contact</a></li>
+                    <li><a href="{% url 'index' %}">Sacado</a></li>
                 </ul>
             </nav><!-- .main-nav -->
         </div>
     </header><!-- #header -->
     <div class="main_body">
-        {% block page_menu_right %}
-        {% endblock %}
         {% block body %}
         {% endblock %}
     </div>
@@ -80,7 +73,7 @@
             </div>
             <div class="modal-body">
                 <form action="{%  url 'login' %}" method="POST"  >
-                        {% csrf_token %} 
+                    {% csrf_token %} 
                     <div class="row">
                         <div class="col-lg-12 col-xs-12">
                             <div class="form-group">
