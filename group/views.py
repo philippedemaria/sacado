@@ -1214,6 +1214,8 @@ def enroll(request, slug):
             group = get_object_or_404(Group, pk=group_id)
             password = request.POST.get("this_password")
 
+            print(username,password)
+
             user = authenticate(username=username, password=password)
             login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = request.user.id
