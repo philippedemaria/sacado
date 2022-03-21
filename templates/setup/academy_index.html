@@ -7,156 +7,251 @@
 
 
 {% block body %}
-
-
-
 <!--==========================
 Intro Section -
 ============================-->
-<section id="intro" class="clearfix">
-    <div class="container h-100">
 
-        <div class="col-xs-12" >
-          <a href="#" data-toggle='modal' data-target='#sacadopopup'  class="btn btn-index"> <span class="sacado">SACADO </span><br>Version<br>Établissement <small>RGPD compatible</small></a>
-
-        </div>
- 
-
-        <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
-            <div class="col-xs-12 col-md-12 col-lg-6">
-
-                {% if sacado_voyage %}
-                <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
-                {% endif %}
-                <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
-                    <span class="exo">{{ nb_exercise }}</span> 
-                      exercice{{  nb_exercise|pluralize }}<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
-                              <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires.</div>
-                          </span> 
-                {% if not sacado_voyage %}
-                de <br/>
-                {% endif %}
-                    {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}
-
-                      <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
-                              <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique, Sciences et Vie de la Terre arrivent peu à peu.</div>
-                          </span>
-                {% if not sacado_voyage %}
-                <br/>
-                {% endif %}
-
-                       interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }} de<br>  la Maternelle à la Terminale.
-
-                </div>
-       
-
-
-
-                <div class="row" style="margin-top: 40px; margin-bottom: 20px">
-                    <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
-                            Se connecter
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
-                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
-                                                   style="margin-left: 5px; vertical-align: baseline"/>
-                        </a>
-                    </div>
-                </div>
-
-
-
-                <div style="margin: 0px 0px 30px 0px;">
-                    <img src="{% static 'img/edge.png' %}" width="35px"/>
-                    <img src="{% static 'img/chrome.png' %}" width="35px"/>
-                    <img src="{% static 'img/safari.png' %}" width="35px"/>
-                    <i class="fa fa-apple"></i>
-                    <a href="https://java.com/fr/download/help/mac_install.xml"
-                       target="_blank" >
-                        <small>Pour safari, installer Java si nécessaire.</small>
-                    </a>
-                    <img src="{% static 'img/firefox.png' %}" width="35px"/>
-                        <small>Soucis possibles</small>
-                </div>
-
-                <div class="row" style="margin-top:0px">
-                    <img src="{% static 'img/real_time.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/>  Suivis en<br/>   temps réel 
-                    <a href="#" data-toggle='modal' data-target='#rt_modal'>                          
-                          <i class="fa fa-question-circle"></i>
-                    </a> 
-
-                          <img src="{% static 'img/python_logo.png' %}" height="50px" width="50px" style="margin-left: 15px; margin-right: 10px; vertical-align: baseline"/>  Interface <br/> Python
-                    <a href="#" data-toggle='modal' data-target='#python_modal'>                          
-                            <i class="fa fa-question-circle"></i>
-                    </a> 
-                    <img src="{% static 'img/pronote.png' %}" height="50px" width="50px" style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/> Export CSV <br/>des résultats  
-
-                </div>
-                <div class="row" style="margin-top:30px">
- 
-                    <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> 
-                    Correction <br/> en ligne
-                    
-                    <a href="#" data-toggle='modal' data-target='#correction_modal'><i class="fa fa-question-circle"></i></a> 
-
-                    <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
-            
-                    <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
-                  <a href="#" data-toggle='modal'   data-target='#bibliotex_modal' >
-                    <i class="fa fa-question-circle"></i>
-                  </a> 
-                  <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  
-                    Flashpacks <br/>et flashcards  <a href="#" data-toggle='modal'   data-target='#flashpack_modal'  ><i class="fa fa-question-circle"></i>
-                  </a> 
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
-                <small style="margin-left:150px">Cliquez sur l'écran pour tester l'exercice en cours.</small>
-                <div style="position: relative;text-align:center">
-                    <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400"
-                             style="position: absolute; top :40px; left:133px;z-index:-1"/>
-
-                        {% if exercise.id|divisibleby:"3" %}
-                        <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999"/>
-                        {% elif exercise.id|divisibleby:"4" %}
-                        <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999"/>
-                        {% else %}
-                        <img src="{% static 'img/ordi_portable.png' %}" height="490" style="  z-index: 999"/>
-                        {% endif %}
-
-                    </a>
-                </div>
-            </div> 
-        </div>
-
-        <div class="row" style="margin-bottom: 40px">
-            <div class="col-xs-12 col-md-4 col-lg-4" >
-                <div class="row counters">
-                    <div class="col-lg-6 col-6 text-center">
-                        <span data-toggle="counter-up">{{ nb_teacher }}</span>
-                        <p>Enseignants</p>
-                    </div>
-                    <div class="col-lg-6 col-6 text-center">
-                        <span data-toggle="counter-up">{{ nb_student }}</span>
-                        <p>Elèves</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-8 col-lg-8">
-
-                  <small style="margin-left:150px">Les établissements qui font confiance à <span class="">SACADO</span></small>
-
-                          {% include 'schools_slider.html'  %}
-
-            </div>
+<section class="inside_page">
+    <div class="row">
+        <div class="col-xs-12 col-md-12 titre_texte_accueil" align="center" >
+            Vous avez des problèmes de maths ?
         </div>
     </div>
-</section><!-- #intro -->
+    <div class="row">
+        <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
+            L'académie SACADO, vous en propose encore d'autres...<br/>{{ nb_exercises }} problèmes à variables dynamiques aléatoires. <br/>
+            L'académie SACADO vous aide à les surmonter et vous explique leur solution. Des enseignants de l'Education Nationale vous soutiennent et vous encouragent pour une progression à votre rythme conformément aux attentes institutionnelles de la Maternelle à la Terminale.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
+            "The only way to learn mathematics is to do mathematics." 
 
-  
+            <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >"La seule façon d'apprendre les mathématiques et de faire des maths". </div>
+                                </span>
+
+                                Paul Halmos
+        </div>
+    </div>
 
 
+    <div class="row">
+        <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
+            <a href="#exercise" class="btn-test outline_orange"> Testez les exercices </a>
+        </div>
+    </div>
+
+</section>
 {% endblock %}
+
+
+
+{% block description %}
+<section class="container description">
+    <div class="row">
+        <div class="col-xs-12 col-md-12" align="center" >
+            <h1 class="thin">L'académie <span class="sacado">SACADO</span></h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12" align="center" >
+            Après plusieurs années à peaufiner nos cours, partager nos ressources, nous avons construit des outils utilisés par des centaines d'enseignants, des milliers d'élèves avec des retours positifs et des progrès reconnus. Nous avons décidé d'ouvrir l'académie SACADO pour que les élèves en difficulté puissent à leur rythme retravailler les exercices issus des compétences du 
+            <span class="helper_tip"> B.O.E.N <i class="fa fa-question-circle"></i>  
+                <div class="helper_tip_text" >Bulletin Officiel de l'Education Nationale = Les programmes </div>
+            </span>, en autonomie ou avec un accompagnement des enseignants de l'académie.
+        </div>    
+    </div>
+</section>
+
+<section class="container exercices">
+    <div class="row  align-items-center">
+        <div class="col-xs-12 col-md-6 exercises_label" align="center">
+            <h3 class="color_sacado thin">Des exercices à variables didactiques aléatoires et correction immédiate</h3>
+            <img src="{% static 'img/academy_index_mater.png' %}"/>    
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <b> Des variables dynamiques aléatoire. </b>Chaque fois qu'un enfant lance un exercice, ses valeurs changent. L'élève peut le travailler autant de fois qu'il le souhaite pour apprendre, réviser la méthode. <br/>
+            <b> Une correction immédiate.</b> le retour d'information rapide et direct, amène l'élève à confronter sa prédiction et son résultat. L'élève est face à ses acquis/doutes et se lance sur des pistes de résolution sans crainte du jugement. Un pas vers la confiance en soi. <a href="http://parisinnovationreview.com/article/les-quatre-piliers-de-lapprentissage-stanislas-dehaene" target="_blank"> Les quatre piliers de l'apprentissage par Stanislas Dehaene</a> 
+        </div>
+    </div>
+</section>
+
+<section class="container tests"  id="exercise">
+    <div class="row">
+        <div class="col-xs-12 col-md-12" align="center" >
+            <h1 class="thin label_title">Click 'n' Test</h1>
+        </div>
+    </div>
+
+    <!--maternelle -->
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-8">
+            <h2 class="color_sacado font_sacado thin">MATERNELLE</h2>
+                <a href="{% url 'exercises_level'  14  %}" >
+                    <div class="imagebox">
+                        <div> Petite Section</div>
+                        <img src="../../static/img/levels/level14_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level'  14  %}">
+                    <div class="imagebox">
+                        <div> Moyenne Section</div>
+                        <img src="../../static/img/levels/level14_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 5  %}" >
+                    <div class="imagebox">
+                        <div > Grande Section</div>
+                        <img src="../../static/img/levels/level5_1.png" width="200" />
+                    </div>
+                </a>
+        </div>
+        <div class="col-xs-12 col-md-4 label_exercise_mater">
+            <li class="sanspuce color_sacado">Découvrir les nombres</li>
+            <li class="sanspuce color_sacado">Explorer des formes</li>
+            <li class="sanspuce color_sacado">Explorer des grandeurs</li>
+            <li class="sanspuce color_sacado">Explorer des suites organisées</li>
+        </div>
+    </div>
+ 
+    <!--élémentaire -->
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-4 label_exercise">
+        
+            <li class="sanspuce color_sacado">Nombres et Calculs</li>
+            <li class="sanspuce color_sacado">Espace et Géométrie</li>
+            <li class="sanspuce color_sacado">Grandeurs et Mesures</li>
+            <li class="sanspuce color_sacado">Problèmes</li>
+        </div>
+        <div class="col-xs-12 col-md-8 hspace" > 
+            <h2 class="color_sacado font_sacado thin">ÉLÉMENTAIRE</h2>
+                <a href="{% url 'exercises_level'  1  %}">
+                    <div class="imagebox">
+                        <div> Cours préparatoire</div>
+                        <img src="../../static/img/levels/level1_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 2  %}">
+                    <div class="imagebox">
+                        <div> Cours élémentaire 1</div>
+                        <img src="../../static/img/levels/level2_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 3  %}">
+                    <div class="imagebox">
+                        <div > Cours élémentaire 2</div>
+                        <img src="../../static/img/levels/level3_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 4  %}" style="padding-left:100px">
+                    <div class="imagebox">
+                        <div> Cours Moyen 1</div>
+                        <img src="../../static/img/levels/level4_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 5  %}" >
+                    <div class="imagebox">
+                        <div > Cours Moyen 2</div>
+                        <img src="../../static/img/levels/level5_1.png" width="200" />
+                    </div>
+                </a>
+        </div>
+    </div>
+
+    <!--collège -->
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-6">
+                <h2 class="color_sacado font_sacado thin">COLLÈGE</h2>
+                <a href="{% url 'exercises_level'  6  %}" >
+                    <div class="imagebox">
+                        <div> Sixième</div>
+                        <img src="../../static/img/levels/level6_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level'  7  %}" >
+                    <div class="imagebox">
+                        <div> Cinquième</div>
+                        <img src="../../static/img/levels/level7_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 8  %}" >
+                    <div class="imagebox">
+                        <div> Quatrième</div>
+                        <img src="../../static/img/levels/level8_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 9  %}" >
+                    <div class="imagebox">
+                        <div> Troisième</div>
+                        <img src="../../static/img/levels/level9_1.png" width="200" />
+                    </div>
+                </a>
+        </div>
+        <div class="col-xs-12 col-md-4 label_exercise">
+            <li class="sanspuce color_sacado">Nombres et Calculs</li>
+            <li class="sanspuce color_sacado">Organisation et Gestion de données</li>
+            <li class="sanspuce color_sacado">Espace et Géométrie</li>
+            <li class="sanspuce color_sacado">Grandeurs et Mesures</li>
+        </div>
+    </div>
+
+    <!-- lycée -->
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-4 label_exercise_mater" style="padding-top:20px;" >
+            <li class="sanspuce color_sacado">Algèbre et analyse, fonctions</li>
+            <li class="sanspuce color_sacado">Algorithmique et programmation</li>
+            <li class="sanspuce color_sacado">Géométrie</li>
+            <li class="sanspuce color_sacado">Probabilités et statistiques</li>
+            <li class="sanspuce color_sacado">Combinatoire et dénombrement</li>
+            <li class="sanspuce color_sacado">Maths expertes : Graphes et Matrices</li>
+            <li class="sanspuce color_sacado">Maths expertes : Arithmétique</li>
+        </div>
+        <div class="col-xs-12 col-md-8 hspace">
+                <h2 class="color_sacado font_sacado thin">LYCÉE</h2>
+                <a href="{% url 'exercises_level'  10  %}" >
+                    <div class="imagebox">
+                        <div > Seconde</div>
+                        <img src="../../static/img/levels/level10_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 11  %}" >
+                    <div class="imagebox">
+                        <div> Première</div>
+                        <img src="../../static/img/levels/level11_1.png" width="200" />
+                    </div>
+                </a>
+                <a href="{% url 'exercises_level' 12  %}" >
+                    <div class="imagebox">
+                        <div > Terminale</div>
+                        <img src="../../static/img/levels/level12_1.png" width="200" />
+                    </div>
+                </a>
+ 
+        </div>
+    </div>
+</section>
+
+
+<section class="container suivis vspace">
+    <div class="row">
+        <div class="col-xs-12 col-md-12" align="center">
+            <h1 class="thin label_title">Parents</h1>
+        </div>
+    </div>
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-12">
+            <b>Sacado Académie</b> : l’accompagnement scolaire<br/>
+            Le suivi de vos enfants exercices par exercices, par compétences et savoir faire. Un bilan mensuel éditable au format .pdf pour valider les attendus.
+        </div>
+    </div>
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-12" align="center">
+            <img src="../../static/img/bilans.png" />
+        </div>
+    </div>
+</section>
+
+
+{% endblock %} 

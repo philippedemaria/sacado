@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'academy.html' %}
 
 {% load widget_tweaks %}
 {% load static %}
@@ -10,10 +10,24 @@
 <section id="pricing">
     <div class="full_container">
 
+        <div class="alert alert-danger">Les tarifs indiqués ne sont pas comptabilisés dans l'adhésion qui reste gratuite jusqu'au 30 juin 2022. Vous pouvez par contre simuler les tarifs pour l'année 2022-2023.</div>
+
+
         <div class="row">
             <div class="col-sm-12 col-md-12" align="center" style="margin-bottom: 20px">
-                    <img src="{% if name == "Autonomie" %}{% static 'img/menu_autonomie.png' %}{% else %}{% static 'img/menu_accompagnement.png' %}{% endif %}" width="60px">
-                    Menu <span class="sub_header"> {{ name }}</span> <span class="pull-right"><small> <a href="{% url 'student_to_association'  %}" class="violet"><i class="fa fa-random"></i> Changer de menu</a></small> </span>
+                <img src="{% if name == "Autonomie" %}{% static 'img/menu_autonomie.png' %}{% else %}{% static 'img/menu_accompagnement.png' %}{% endif %}" width="60px">
+                Menu <span class="sub_header"> {{ name }}</span> 
+                <span class="pull-right">
+
+
+                    {% comment %}
+                    <small> 
+                        <a href="{% url 'student_to_association'  %}" class="violet"><i class="fa fa-random"></i> Changer de menu</a>
+                    </small> 
+                    {% endcomment %}
+
+
+                </span>
             </div>
         </div>
         <div class="row"><input type="hidden" name="menu" value="{{  name }}" />

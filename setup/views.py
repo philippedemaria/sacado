@@ -696,8 +696,15 @@ def python(request):
 
 
 def academy(request):
-    context = {}
-    return render(request, 'academy_index.html', context)
+
+    nb_exercises = Supportfile.objects.filter(theme__subject_id=1,is_title=0).count()
+
+    form = AuthenticationForm()
+    np_form = NewpasswordForm()
+
+    levels = Level.objects.order_by("ranking")
+    context = { 'nb_exercises' : nb_exercises , 'form' : form , 'np_form' : np_form , 'levels' : levels  }
+    return render(request, 'setup/academy_index.html', context)
 
 
 
@@ -763,8 +770,8 @@ def details_of_adhesion(request) :
 def commit_adhesion(request) :
 
     data_post = request.POST
-    nb_child = int(request.POST.get("nb_child"))   
-    menu_id = int(request.POST.get("menu_id"))    
+    nb_child = int(data_post.get("nb_child"))   
+    menu_id = int(data_post.get("menu_id"))    
     data_posted = {"total_price" : data_post.get('total_price'), "month_price" : data_post.get('month_price'), "nb_month" : data_post.get('nb_month'), "date_end" : data_post.get('date_end'), "menu_id" : menu_id , "nb_child" : nb_child }
  
     levels = request.POST.getlist("level")
@@ -804,7 +811,7 @@ def commit_adhesion(request) :
         ############################################################
     else:
         print("formset.errors : ", formset.errors)
-
+        return redirect('details_of_adhesion')
 
 
     context = {'formule' : formule ,  'data_post' : data_posted , 'parents' : parents  , 'students' : students  }

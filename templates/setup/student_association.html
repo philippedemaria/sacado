@@ -1,8 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'academy.html' %}
 
 {% load widget_tweaks %}
 {% load static %}
 
+
+
+ 
 
 
 
@@ -17,11 +20,11 @@
         <div class="row" align="center">
 
 
-            <div class="col-sm-6 col-md-6" align="center">
+            <div class="col-sm-12 col-md-12" align="center">
                 <div class="card" >
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-sm-4 col-md-3">
+                            <div class="col-sm-3 col-md-2">
                                 <img src="{% static 'img/menu_autonomie.png' %}" width="60px">
                             </div>
                             <div class="col-sm-8 col-md-9">
@@ -44,7 +47,7 @@
             </div>
 
 
-
+            {% comment %}
             <div class="col-sm-6 col-md-6" align="center">
                 <div class="card" >             
                     <div class="card-header">              
@@ -71,7 +74,7 @@
 
                 </div>
             </div>
-  
+            {% endcomment %}
         </div>
     </div>
 </section> 
@@ -84,12 +87,25 @@
                 <h2 class="thin">Foire aux Questions</h2>
             </div>
         </div>
-
         <div id="accordion">
- 
-            <div   id="headingOne">
+            <div id="headingOne0">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseOne0" aria-expanded="false" aria-controls="collapseOne0">
+                  Pourquoi l'académie SACADO est-elle gratuite jusqu'au 30 Juin 2022 ? et après ?
+                </button>
+              </h5>
+            </div>
+            <div id="collapseOne0" class="collapse" aria-labelledby="headingOne0" data-parent="#accordion">
+              <div class="card-body">
+                 L'académie SACADO est totalement gratuite jusqu'au 30 Juin 2022 pour permettre à chacun de tester l'interface et la qualité des supports numériques.<br/> Après, durant l'été, il sera possible de travailler sur des parcorus numériques de vacances, et durant l'année, souscrire un abonnement annuel, trimestriel ou mensuel. 
+              </div>
+            </div>
+          <hr/>
+
+
+            <div id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                   Que comprend l'adhésion ?
                 </button>
               </h5>
@@ -103,7 +119,7 @@
  
             <div  id="headingTwo">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="headingTwo">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="headingTwo">
                   L'élève peut-il accéder à tous les niveaux ?
                 </button>
               </h5>
@@ -117,7 +133,7 @@
  
             <div  id="headingThree">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                   L'abonnement peut-il être partagé entre plusieurs élèves ?
                 </button>
               </h5>
@@ -130,7 +146,7 @@
           <hr/>
           <div  id="headingFour">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                   Quels sont les moyens de paiement acceptés sur sacado.xyz ?
                 </button>
               </h5>
@@ -143,7 +159,7 @@
           <hr/>
             <div  id="headingFive">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                   Le paiement est-il sécurisé ?
                 </button>
               </h5>
@@ -156,7 +172,7 @@
           <hr/>
             <div  id="headingSix">
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                   Comment arrêter mon abonnement ?
                 </button>
               </h5>
@@ -170,7 +186,6 @@
     </div>
 </section> 
 
- 
-<section id="footer_asso">    
-</section>
+<div style="height:30px"></div>
+  
 {% endblock %}
