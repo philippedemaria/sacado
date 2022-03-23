@@ -1921,10 +1921,15 @@ table.table-bordered.dataTable {
   height: 225px;
 }
 
-.label_title{
-  color: white;
-  padding-top:30px;
-  width:250px;
-  height:100px;
-  background-image: url('/static/img/post-it.png');
+
+.label_exercise_lycee{
+  padding-top: 40px!important;
+  padding-left: 45px;
+  background-image: url('/static/img/exercise_label3.png');
+  background-size: cover; 
+  height: 300px;
+}
+
+.line_through {
+  text-decoration: line-through;
 }

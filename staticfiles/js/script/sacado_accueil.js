@@ -1,0 +1,538 @@
+$(document).ready(function () {
+ 
+ 
+        console.log("---- NEW test ajax-accueil.js ---") ;  
+
+ 
+
+        setTimeout(function(){ 
+           $("#container_messages").css('display', "none"); 
+        }, 3000);
+
+        //$('[data-toggle="popover"]').popover();
+        //$(".select2").select2({width: '100%'});
+
+        $('#teacher_form .sendit').prop('disabled', true);
+ 
+        $("#teacher_form #id_username").on('blur', function () {
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(username);
+            $.ajax({
+                url: '/account/ajax/userinfo/',
+                data: {
+                    'username': username,
+                    'csrf_token' : csrf_token ,
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $(".ajaxresult").html(data["html"]);
+
+                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                }
+            });
+        });
+
+        $("#teacher_form #id_email").on('blur', function () {
+            let email = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(email);
+            $.ajax({
+                url: '/account/ajax/userinfomail/',
+                data: {
+                    'email': email,
+                    'csrf_token' : csrf_token ,
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $(".ajaxresultmail").html(data["html"]);
+
+                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                }
+            });
+        });
+
+
+
+        somme = 0
+        $('#teacher_form .id_first_name').on('blur', function () {
+
+                let lastname = $("#teacher_form .id_last_name").val().toLowerCase();
+                let firstname = $("#teacher_form .id_first_name").val().toLowerCase();
+ 
+                $("#teacher_form .username").val(lastname+firstname.charAt(0)) ;
+                $("#teacher_form .email").val(firstname+"."+lastname+"@") ;
+
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let username = lastname +  firstname  ;
+    
+                $.ajax({
+                    url: '../account/ajax/userinfo/',
+                    data: {
+                        'username': username,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+
+                        $(".ajaxresult").html(data["html"]);
+                        if (data["test"]) { $('#teacher_form .sendit').prop('disabled', false) } else { somme = somme + 1 }
+                        if (somme > 1 ) { $('#teacher_form .sendit').prop('disabled', true); }  
+                    }
+                });
+            });
+
+ 
+        $('#student_form .sendit').prop('disabled', true);
+        sommeS = 2
+
+        $("#student_form #id_username").on('keyup', function () {
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(username);
+            $.ajax({
+                url: '/account/ajax/userinfo/',
+                type: "POST",
+                data: {
+                    'username': username,
+                    csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#student_form .ajaxresult").html(data["html"]);
+                    sommeS = sommeS - 1;
+                } 
+            });
+        });
+
+        $("#student_form #id_group").on('keyup', function () {
+            let groupe_code = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(groupe_code);
+            $.ajax({
+                url: '/account/ajax/courseinfo/',
+                type: "POST",
+                data: {
+                    'groupe_code': groupe_code,
+                    csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#student_form  .verif_course").html(data["htmlg"]);
+                    sommeS = sommeS - 1;
+                }
+            });
+        });
+
+        $('#student_form .id_first_name').on('blur', function () {
+
+                let lastname = $("#student_form .id_last_name").val().toLowerCase();
+                let firstname = $("#student_form .id_first_name").val().toLowerCase();
+ 
+                $("#student_form .username").val(lastname+firstname) ;
+
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+              
+                let username = lastname +  firstname  ;
+    
+                $.ajax({
+                    url: '../account/ajax/userinfo/',
+                    data: {
+                        'username': username,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+ 
+                        $(".ajaxresult").html(data["html"]);
+                        if (data["test"]) {  sommeS = sommeS - 1 }  
+                        if (sommeS < 1) {$('#student_form .sendit').prop('disabled', false);   } else {$('#student_form .sendit').prop('disabled', true);   }  
+                    }
+                });
+            });
+
+
+        $('.is_child_exist').prop('disabled', true);
+
+        sommeP = 2 ;
+        $("#parent_form #id_username").on('blur', function () {
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            console.log(username);
+            $.ajax({
+                url: '/account/ajax/userinfo/',
+                type: "POST",
+                data: {
+                    'username': username,
+                    csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#parent_form .ajaxresult").html(data["html"]);
+                }
+            });
+        });
+
+
+        $('#parent_form .id_first_name').on('blur', function () {
+
+                let lastname = $("#parent_form #id_last_name").val().toLowerCase();
+                let firstname = $("#parent_form #id_first_name").val().toLowerCase();
+ 
+                $("#parent_form #id_username").val(lastname+firstname) ;
+                $("#parent_form #id_email").val(firstname+"."+lastname+"@") ;
+
+
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+              
+                let username = lastname +  firstname  ;
+    
+                $.ajax({
+                    url: '../account/ajax/userinfo/',
+                    data: {
+                        'username': username,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+ 
+                        $("#parent_form .ajaxresult").html(data["html"]);
+                        if (data["test"]) {  sommeP = sommeP - 1 }  
+                        if (sommeP < 1) {$('#parent_form .is_child_exist').prop('disabled', false);   } else {$('#parent_form .is_child_exist').prop('disabled', true);   }  
+                    }
+                });
+            });
+
+
+        $('#code_student').on('keyup', function () {
+
+                 
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let code_student =  $(this).val()  ;
+
+                $.ajax({
+                    url: '../account/ajax/control_code_student/',
+                    data: {
+                        'code_student': code_student,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+ 
+                        $("#parent_form .verif_course").html(data["html"]);
+                       
+                        if (data["test"]  ) {  sommeP = sommeP - 1 ; }  
+                        if (sommeP < 1 ) { $('#parent_form .is_child_exist').prop('disabled', false);   }  else { $('#parent_form .is_child_exist').prop('disabled', true);   }  
+                    }
+                });
+            });
+
+
+        $("#join_alone").hide();
+        $("#parcours_div").hide();
+        $('#level_selected').toggle(500); 
+
+
+        $("#choose_alone").click(function(){
+
+                $('#level_choose').toggle(500);
+                $('#level_selected').toggle(500); 
+                $('#join_alone').toggle(500);
+                $('#join_group').toggle(500); 
+                $('#id_group').toggle(500); 
+
+                if ($(this).is(":checked") && (sommeS == 1)) {    
+     
+                $('#send_alone').prop('disabled', false);
+                } 
+                else{
+                $('#send_alone').prop('disabled', true);
+                }
+            });
+
+
+        $("#send_alone").click(function(){
+
+
+            level_selector = $('#level_selector').val(); 
+            
+            if (level_selector == "") {
+                alert('Vous devez sélectionner au moins un niveau');
+                return false;
+            }
+            });
+
+
+        // Gestion des formulaires de l'adhésion
+        $('.family').hide() ;
+        $('.one').show() ;
+
+        calculate_rate('#zero_child', '.one',"Moi-même",0);
+        calculate_rate('#one_child', '.one',"1 enfant",1);
+        calculate_rate('#two_children', '.two',"2 enfants",2);
+        calculate_rate('#three_children', '.three',"3 enfants",3);
+        calculate_rate('#four_children', '.four',"4 enfants",4);
+        calculate_rate('#more_children', '.more',"5 enfants",5) ;
+
+
+        function calculate_rate($target, $number,$n,$nb){
+
+
+            $($target).click(function(){
+
+                // Récupérartion des montants
+                data_value = $(this).attr("data_value");
+                data_menus = $(this).attr("data_menus");
+                var menu_id_tab = data_menus.split(",");
+                $.each(menu_id_tab, function (index, value) {
+                    $("#total_price"+value).val(  $("#total_price_"+data_value+value).text()    ) ; 
+                    $("#month_price"+value).val(  $("#payment_"+data_value+value).text()    ) ; 
+                    }); 
+
+                // Afficahge des montants
+                $('.family_selected').removeAttr("checked");
+                $(this).children().attr("checked", "checked");
+                $('.nb_child').val($nb);
+                $('.child').html("").html($n); 
+                $(".family_selected").addClass("btn-violet_border").removeClass("btn-violet");                
+                $(this).addClass("btn-violet").removeClass("btn-violet_border");
+                $('.family').hide() ;
+                $($number).show() ;
+            });
+
+        }
+
+ 
+
+
+        $('#add_parent').on('click', function (event) { 
+
+            nb_parent = $('#id_form-TOTAL_FORMS').val();
+ 
+            var object = $('#formsetZone').html(); 
+
+            $("#formsetZone input").each(function(){ 
+                $(this).attr('id',$(this).attr('id').replace('__prefix__',nb_parent));
+                $(this).attr('name',$(this).attr('name').replace('__prefix__',nb_parent));
+            });
+
+            $("#pasteZone").html(object) ;
+            $("#add_parent").hide(500);
+ 
+        });
+
+
+        $(document).on('click', '.delete_button', function () {
+            $("#pasteZone").html("") ; 
+            $("#add_parent").show(500);
+        });
+
+        if ($('#id_form-0-cgu')) { $('#id_form-0-cgu').prop('checked', false); } 
+        if ($('#id_cgu')) { $('#id_cgu').prop('checked', false); }
+
+
+ 
+
+ 
+        $("#fonctions").hide();
+        $('#show_fonctions').on('click', function (event) { 
+              $('#fonctions').toggle(500); 
+        });
+
+        $('#close_tab').on('click', function (event) { 
+              $('#fonctions').toggle(500); 
+        });
+
+
+        $('#close_form').on('click', function (event) { 
+              $('#renew_form_school').toggle(500); 
+        });
+
+        $('#id_nbstudents').on('change', function () {
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                let nbr_students = $("#id_nbstudents").val() ;
+                $.ajax({
+                    url: 'ajax_get_price',
+                    data: {
+                        'nbr_students': nbr_students,
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+ 
+                        $("#somme").val(data["price"]);
+ 
+                    }
+                });
+            });
+
+
+        $("#id_form-0-username").on('change', function () {
+            let username = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax({
+                url: '/account/ajax/userinfo/',
+                type: "POST",
+                data: {
+                    'username': username,
+                    csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#id_form-0-username .ajaxresult").html(data["html"]);
+                } 
+            });
+        }); 
+
+
+ 
+        $('#on_line').on('click', function (event) { 
+              $('.this_card').addClass("show_div_for_payment"); 
+              $('#show_on_line').removeClass("show_div_for_payment"); 
+        });
+
+ 
+        $('#virement_bancaire').on('click', function (event) { 
+              $('.this_card').addClass("show_div_for_payment"); 
+              $('#show_virement_bancaire').removeClass("show_div_for_payment"); 
+
+        });
+
+ 
+        $('#envoi_postal').on('click', function (event) { 
+              $('.this_card').addClass("show_div_for_payment"); 
+              $('#show_envoi_postal').removeClass("show_div_for_payment"); 
+        });
+
+        $("#id_gar").prop("checked",false);
+
+
+
+
+
+
+        $('.opener_k').hide() ;
+        $('.opener_e').hide() ;
+ 
+
+        $('.opener').on('click' ,function () { 
+            $('.opener_k').hide() ;
+
+            if( $(this).hasClass("out") )
+            {
+                $(".opener ~ .opened"+this.id).show();
+                $(this).removeClass("out").addClass("in");
+                $(this).find('.fa').removeClass('fa-caret-right').addClass('fa-caret-down'); 
+            }
+            else 
+            {
+                $(".opener ~ .opened"+this.id).hide();  
+                $(this).removeClass("in").addClass("out");
+                $(this).find('.fa').removeClass('fa-caret-down').addClass('fa-caret-right');     
+            }
+ 
+        });
+
+
+
+        $('.opener_k').on('click' ,function () { 
+            $('.opener_e').hide() ;
+
+            if( $(this).hasClass("out") )
+                {
+                $(".opener_k ~ .openedk"+this.id).show();
+                $(this).removeClass("out").addClass("in");
+                $(this).find('.fa').removeClass('fa-caret-right').addClass('fa-caret-down');
+                }
+            else 
+            {
+                $(".opener_k ~ .openedk"+this.id).hide();  
+                $(this).removeClass("in").addClass("out");
+                $(this).find('.fa').removeClass('fa-caret-down').addClass('fa-caret-right');            
+            }
+ 
+        });
+
+
+
+
+
+
+
+        $(".subject_div").on('click', function () {
+
+            let subject_id = $(this).attr("data-subject_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $(".subject_div").removeClass("active_subject_div");
+            $(this).addClass("active_subject_div"); 
+
+
+            $.ajax({
+                
+                url: '/ajax_get_subject/',
+                type: "POST",
+                data: {
+                    'subject_id': subject_id,
+                     csrfmiddlewaretoken: csrf_token,    
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#sacado_subject").html(data["html"]);
+
+                } 
+
+            });
+        }); 
+
+
+
+
+
+      $(".regular").slick({
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            autoplay: false,
+            autoplaySpeed: 2000,        
+            dots: false,
+            infinite: true,
+ 
+      });
+
+
+
+
+        $("#accept_rgpd").on('click', function () {
+                let date = new Date(Date.now()+86400000*180);
+                date = date.toUTCString();
+                document.cookie = "cookie_rgpd_accepted=True;path=/;   expires="+date;
+                console.log(document.cookie) ;
+                $("#display_rgpd").remove();
+            }); 
+
+
+        $("#no_accept_rgpd").on('click', function () {
+                let date = new Date(Date.now()+86400000*180);
+                date = date.toUTCString();
+                document.cookie = "cookie_rgpd_accepted=False;path=/;   expires="+date;
+                $("#display_rgpd").remove();
+
+            });
+ 
+
+
+
+
+
+
+});
+
+ 

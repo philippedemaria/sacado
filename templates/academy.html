@@ -10,23 +10,18 @@
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />   
 
 
-    <title>{% block title %}SacAdo{% endblock %}</title>
+    <title>{% block title %}SacAdo Académie{% endblock %}</title>
     {% load bootstrap3 %}
     {% bootstrap_messages %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"/> 
+    <link href="{% static 'index/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"> 
 
     {% block python_no_other_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'plugins/select2/select2.css' %}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
-    <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
-    <link rel="stylesheet" href="{% static 'plugins/colorpicker/bootstrap-colorpicker.min.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
     {% endblock %}
-
-    <link rel="stylesheet" href="{% static 'index/css/style_academy.css' %}">
 
 
     {% block python_css %}
@@ -36,14 +31,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pinyon+Script">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap">
 
-    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}"/>
-
     <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
 
- 
-    <link href="{% static 'index/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <link href="{% static 'index/lib/animate/animate.min.css' %}" rel="stylesheet"> 
-
+    <link rel="stylesheet" href="{% static 'index/css/style_academy.css' %}">
 
 </head>
 
@@ -61,7 +52,6 @@
 
                     <li><a href="#" data-toggle='modal' data-target='#connexion' class="btn-inscription">Connexion</a></li>
                     <li><a href="{% url 'student_to_association' %}" class="btn-inscription bg_orange">Inscription</a></li>
-                    <li><a href="{% url 'index' %}">Sacado</a></li>
                 </ul>
             </nav><!-- .main-nav -->
         </div>
@@ -176,29 +166,24 @@
 </div>
 {% endblock %}
 
-{% block python_js %}
-    <script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script>
+<script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
+<script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
+<script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
+<script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script> 
+<script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script> 
+<script src="{% static 'index/lib/wow/wow.min.js' %}"></script>   
+<script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>   
+<script src="{% static 'index/js/main.js' %}"></script> 
+
+{% block general_js %}
+<script src="{% static 'js/script/sacado_accueil.js' %}"></script> 
+<script src="{% static 'js/lib/select2.min.js' %}"></script>      
+<script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
+<script src="{% static 'js/lib/bootstrap-toggle.min.js' %}"></script> 
+<script src="{% static 'index/slick/slick.js' %}"></script>
 {% endblock %}
-
  
-    <script src="{% static 'index/lib/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'index/lib/jquery/jquery-migrate.min.js' %}"></script>
-    <script src="{% static 'index/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
-    <script src="{% static 'index/lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'index/lib/mobile-nav/mobile-nav.js' %}"></script> 
-    <script src="{% static 'index/lib/waypoints/waypoints.min.js' %}"></script> 
-    <script src="{% static 'index/lib/wow/wow.min.js' %}"></script>   
-    <script src="{% static 'index/lib/counterup/counterup.min.js' %}"></script>   
-    <script src="{% static 'index/js/main.js' %}"></script> 
-
-    {% block general_js %}
-    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script>
-    <script src="{% static 'js/script/accueil.js' %}"></script> 
-    <script src="{% static 'js/lib/select2.min.js' %}"></script>      
-    <script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
-    <script src="{% static 'js/lib/bootstrap-toggle.min.js' %}"></script> 
-    {% endblock %}
 
 
     </body>

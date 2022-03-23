@@ -92,12 +92,12 @@
 
                         <div class="card-body">
                             <div class="currency">
-                                <span class="family zero" id="total_price_zero{{ formule.id }}">{{ formule.data.total1 }}</span>
-                                <span class="family one" id="total_price_one{{ formule.id }}">{{ formule.data.total1 }}</span>
-                                <span class="family two" id="total_price_two{{ formule.id }}">{{ formule.data.total2 }}</span>
-                                <span class="family three" id="total_price_three{{ formule.id }}">{{ formule.data.total3 }}</span>
-                                <span class="family four" id="total_price_four{{ formule.id }}">{{ formule.data.total4 }}</span>
-                                <span class="family more" id="total_price_more{{ formule.id }}">{{ formule.data.total5 }}</span>€ 
+                                <span class="family zero line_through" id="total_price_zero{{ formule.id }}">{{ formule.data.total1 }}</span>
+                                <span class="family one line_through" id="total_price_one{{ formule.id }}">{{ formule.data.total1 }}</span>
+                                <span class="family two line_through" id="total_price_two{{ formule.id }}">{{ formule.data.total2 }}</span>
+                                <span class="family three line_through" id="total_price_three{{ formule.id }}">{{ formule.data.total3 }}</span>
+                                <span class="family four line_through" id="total_price_four{{ formule.id }}">{{ formule.data.total4 }}</span>
+                                <span class="family more line_through" id="total_price_more{{ formule.id }}">{{ formule.data.total5 }}</span>€ 
 
 
                             </div>
@@ -106,12 +106,12 @@
                             </div>
                             <input type="submit" name="sending{{ formule.id }}" class="btn-asso" value="Choisir ce menu" />                            <br/>
 
-                            <small>Facturé en un seul paiement.<br/> Soit <span class="family zero" id="payment_zero{{ formule.id }}">{{ formule.data.price1 }}</span>
-                                                                          <span class="family one" id="payment_one{{ formule.id }}">{{ formule.data.price1 }}</span>
-                                                                          <span class="family two"  id="payment_two{{ formule.id }}">{{ formule.data.price2 }}</span>
-                                                                          <span class="family three"  id="payment_three{{ formule.id }}">{{ formule.data.price3 }}</span>
-                                                                          <span class="family four"  id="payment_four{{ formule.id }}">{{ formule.data.price4 }}</span>
-                                                                          <span class="family more"  id="payment_more{{ formule.id }}">{{ formule.data.price5 }}</span>
+                            <small>Facturé en un seul paiement.<br/> Soit <span class="family zero line_through" id="payment_zero{{ formule.id }}">{{ formule.data.price1 }}</span>
+                                                                          <span class="family one line_through" id="payment_one{{ formule.id }}">{{ formule.data.price1 }}</span>
+                                                                          <span class="family two line_through"  id="payment_two{{ formule.id }}">{{ formule.data.price2 }}</span>
+                                                                          <span class="family three line_through"  id="payment_three{{ formule.id }}">{{ formule.data.price3 }}</span>
+                                                                          <span class="family four line_through"  id="payment_four{{ formule.id }}">{{ formule.data.price4 }}</span>
+                                                                          <span class="family more line_through"  id="payment_more{{ formule.id }}">{{ formule.data.price5 }}</span>
 
                                                                         € x {{ formule.data.left_month }} mois.
                             </small>

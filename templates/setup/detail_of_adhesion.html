@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'academy.html' %}
 
 {% load widget_tweaks %}
 {% load static %}
@@ -13,7 +13,7 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-sm-12 col-md-10">
+            <div class="col-sm-12 col-md-12">
                 <h4 class="title_page">  L'adhésion {{ formule.adhesion }} 
                     <span class="sub_header">{{ formule.name }}</span> 
                     pour 
@@ -23,12 +23,16 @@
                     <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} retient votre 
                     {% endif %}
 
-                    attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} x {{ data_post.month_price }}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
+                    attention pour un total de <span class="line_through">{{ data_post.total_price }}</span> €, <small class="title_page"> soit {{ data_post.nb_month }} x <span class="line_through">{{ data_post.month_price }}</span>€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
             </div>
+
+    {% comment %}
             <div class="col-sm-12 col-md-2">
                 <a href="{% url 'student_to_association'  %}" class="violet small_action"><i class="fa fa-random"></i> Changer de menu</a><br/>
                 <a  href="javascript:history.back()" class="violet small_action"><i class="fa fa-times"></i>  Modifer mes choix</a> 
             </div>
+    {% endcomment %}
+
         </div> 
         <hr/>
         <form action="{% url 'commit_adhesion' %}" method="POST" enctype='multipart/form-data'>
@@ -204,6 +208,11 @@
     </div>
 </section> 
 
-<section id="footer_asso">    
+<section id="footer_asso">  
+    <div class="row" style="padding-top:30px">
+        <div class="col-sm-12" align="center">
+            <a href="{% url 'academy' %}">SACADO Académie</a> 
+        </div>
+    </div>
 </section>
 {% endblock %}
