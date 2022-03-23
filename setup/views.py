@@ -388,7 +388,10 @@ def send_message(request):
     else :
         messages.error(request,"Oubli de token.")
 
-    return redirect("index")
+    if 'academy' in request.path :
+        return redirect("academy")
+    else :
+        return redirect("index")
 
 
 

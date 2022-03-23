@@ -29,10 +29,11 @@
 .vspace{
   margin-top:40px;
 }
+
 @media (min-width:750px){
-.hspace{
-  padding-left:100px;
-}
+  .hspace{
+    padding-left:80px;
+  }
 }
 
 .sanspuce{
@@ -1932,4 +1933,22 @@ table.table-bordered.dataTable {
 
 .line_through {
   text-decoration: line-through;
+}
+
+@media (max-width: 775px) {
+
+    .label_exercise{
+      display: none;
+    }
+
+
+    .label_exercise_mater{
+      display: none;
+    }
+
+
+    .label_exercise_lycee{
+      display: none;
+    }
+
 }
