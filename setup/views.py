@@ -1132,7 +1132,12 @@ def list_exercises_academy(request , id):
 
     level = Level.objects.get(pk=id)    
     exercises = Exercise.objects.filter(level=level,supportfile__is_title=0,theme__subject_id=1).order_by("theme","knowledge__waiting","knowledge","ranking")
-    return render(request, 'setup/list_exercises_academy.html', {'exercises': exercises, 'level':level  })
+
+    pk_ids = [7195,1762,1651,1427,984,2489,2035,4842,8087,5802,1120,3891,3233]
+
+    exercise = Exercise.objects.get(pk=pk_ids[id])
+
+    return render(request, 'setup/list_exercises_academy.html', {'exercises': exercises, 'level':level, 'exercise':exercise  })
 
 
 
