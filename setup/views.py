@@ -1125,6 +1125,27 @@ def csrf_failure(request, reason=""):
     ctx = {'message': 'some custom messages'}
     return render(request,"csrf_failure.html", ctx) 
 
+
+
+
+def list_exercises_academy(request , id):
+
+    level = Level.objects.get(pk=id)    
+    exercises = Exercise.objects.filter(level=level,supportfile__is_title=0,theme__subject_id=1).order_by("theme","knowledge__waiting","knowledge","ranking")
+    return render(request, 'setup/list_exercises_academy.html', {'exercises': exercises, 'level':level  })
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##################################################################################################################
 ##################################################################################################################
 ##############################################  AJAX  ############################################################

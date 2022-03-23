@@ -54,7 +54,12 @@ urlpatterns = [
     path('save_adhesion', save_adhesion, name='save_adhesion'), 
     path('adhesions', adhesions, name='adhesions'), 
     path('delete_adhesion', delete_adhesion, name='delete_adhesion'), 
-    path('ajax_remboursement', ajax_remboursement, name='ajax_remboursement'), 
+    path('ajax_remboursement', ajax_remboursement, name='ajax_remboursement'),
+
+
+    path('list_exercises_academy/<int:id>', list_exercises_academy, name='academy_level'),
+
+
     ############################################################################################
     #######  SACADO Cahier de vacances 
     ############################################################################################

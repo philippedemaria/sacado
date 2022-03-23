@@ -1,6 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600,700,300italic,400italic,600italic);
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Grandstander&display=swap');
 /********************************************* bleu :  #005e74 ************************************/
 /********************************************* violet hover :  #5d4391 ************************************/
 /********************************************* violet light :  #f1eef7 ************************************/
@@ -25,6 +26,9 @@
   color: #5d4391;
 }
 
+.grandstander{
+  font-family: "Grandstander", sans-serif;
+}
 
 .vspace{
   margin-top:40px;
@@ -1952,3 +1956,5 @@ table.table-bordered.dataTable {
     }
 
 }
+
+font-family: 'Annie Use Your Telescope', cursive
