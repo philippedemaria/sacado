@@ -47,6 +47,8 @@
                 <a class="navbar-brand sacado" href="{% url 'academy' %}"><img src="{% static 'img/sacadoA1.png' %}"/>
                    SACADO ACADÉMIE </a>
             </div>
+
+            {% if 'academy' in request.path %}
             <nav class="main-nav float-right d-none d-lg-block">
                 <ul>
 
@@ -54,6 +56,8 @@
                     <li><a href="{% url 'student_to_association' %}" class="btn-inscription bg_orange">Inscription</a></li>
                 </ul>
             </nav><!-- .main-nav -->
+            {% endif %}
+
         </div>
     </header><!-- #header -->
     <div class="main_body">
@@ -177,7 +181,7 @@
 <script src="{% static 'index/js/main.js' %}"></script> 
 
 {% block general_js %}
-<script src="{% static 'js/script/sacado_accueil.js' %}"></script> 
+<script src="{% static 'js/script/academy_accueil.js' %}"></script> 
 <script src="{% static 'js/lib/select2.min.js' %}"></script>      
 <script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
 <script src="{% static 'js/lib/bootstrap-toggle.min.js' %}"></script> 

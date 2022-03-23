@@ -156,16 +156,12 @@
                             <input name="level" value="" type="hidden" />
                         {% endif %}
                         <div class="row"> 
-                            <div class="col-sm-10 col-md-10">
+                            <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    {{ form.username.label_tag }}
+                                    <label>Choisir un identifiant :</label>
                                     {{ form.username |add_class:"form-control username"|attr:"required" }}
+                                    <span id="ajaxresult{{ forloop.counter0 }}" class="ajaxresult"></span>
                                     {{ form.username.errors }}
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <span class="ajaxresult pull-right"></span>
                                 </div>
                             </div>  
                         </div>       
@@ -201,7 +197,7 @@
             </div>
             <div class="row" style="margin-top:30px">
                 <div class="col-sm-12 col-md-6 col-lg-6">
-                    <input type="submit" value="Valider et voir le récapitulatif" class="btn-asso" />
+                    <input type="submit" value="Valider et voir le récapitulatif" class="btn-asso" id="sendit" />
                 </div>
             </div>
         </form>

@@ -12,9 +12,9 @@ $(document).ready(function () {
         //$('[data-toggle="popover"]').popover();
         //$(".select2").select2({width: '100%'});
 
-        $('#teacher_form .sendit').prop('disabled', true);
+        $('#sendit').prop('disabled', true);
  
-        $("#teacher_form #id_username").on('blur', function () {
+        $("#id_form-0-username").on('change', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             console.log(username);
@@ -27,14 +27,14 @@ $(document).ready(function () {
                 type: "POST",
                 dataType: "json",
                 success: function (data) {
-                    $(".ajaxresult").html(data["html"]);
+                    $("#ajaxresult0").html(data["html"]);
 
-                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                    if(data["test"]) { $("#sendit").prop("disabled", false ) ;} else { $("#sendit").prop("disabled", true ) ;}
                 }
             });
         });
 
-        $("#teacher_form #id_email").on('blur', function () {
+        $("#id_form-0-email").on('blur', function () {
             let email = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             console.log(email);
@@ -49,7 +49,7 @@ $(document).ready(function () {
                 success: function (data) {
                     $(".ajaxresultmail").html(data["html"]);
 
-                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                    if(data["test"]) { $("#sendit").prop("disabled", false ) ;} else { $("#sendit").prop("disabled", true ) ;}
                 }
             });
         });

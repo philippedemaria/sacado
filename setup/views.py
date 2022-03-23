@@ -388,7 +388,7 @@ def send_message(request):
     else :
         messages.error(request,"Oubli de token.")
 
-    if 'academy' in request.path :
+    if request.POST["info_academy"] == "yes" :
         return redirect("academy")
     else :
         return redirect("index")
@@ -974,26 +974,27 @@ def save_adhesion(request) :
 
         last_name, first_name, username , password , email , level =  s["last_name"]  , s["first_name"] , s["username"] , s["password"] , s["email"] , s["level"]  
         level = Level.objects.get(name = level)    
-        user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email ,  "school_id" : 50 , "closure" : date_end_dateformat })
         student,created_s = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
 
-        group = Group.objects.get(level = level, teacher_id = 2480)
+        group = Group.objects.filter(level = level, school_id = 50).last()
         group.students.add(student)
 
 
-        parcourses = Parcours.objects.filter(level = level, teacher_id = 2480,is_trash=0) # 2480 est SacAdoProf
+        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
         test = attribute_all_documents_to_student(parcourses, student)
 
-        students_in.append(student) # pour associer les enfants aux parents
+        if created_s : 
+            students_in.append(student) # pour associer les enfants aux parents 
+               
+    for p in parents_of_adhesion :
 
         if nb_child == 0 : # enfant émancipé ou majeur
             Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted,code), "date_end" : date_end_dateformat,  "children" : nb_child, "duration" : nb_month })
 
 
-    for p in parents_of_adhesion :
-
         last_name, first_name, username , password , email =  p["last_name"]  , p["first_name"] , p["username"] , p["password"] , p["email"] 
-        user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : date_end_dateformat })
+        user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email ,  "school_id" : 50 ,  "closure" : date_end_dateformat })
         parent,create = Parent.objects.update_or_create(user = user, defaults = { "task_post" : 1 })
         
         for si in students_in :
@@ -1001,15 +1002,15 @@ def save_adhesion(request) :
 
         adh, cr = Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted,code), "date_end" : date_end_dateformat,  "children" : nb_child, "duration" : nb_month })
 
-    ##################################################################################################################
-    # Envoi du courriel
-    ##################################################################################################################
-    nbc = ""
-    if nb_child > 1 :
-        nbc = "s"
+        ##################################################################################################################
+        # Envoi du courriel
+        ##################################################################################################################
+        nbc = ""
+        if nb_child > 1 :
+            nbc = "s"
 
-    for p in parents_of_adhesion :
-        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+". \n"
+
+        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" à l'académie SACADO avec le menu "+formule.name+". \n"
         msg += "votre référence d'adhésion est "+code+".\n\n"
         msg += "Votre adhésion est effective jusqu'au "+data_posted.get("date_end") +"\n"
         msg += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
@@ -1017,7 +1018,7 @@ def save_adhesion(request) :
         for s in students_of_adhesion :
             msg += "- "+s["first_name"]+" "+s["last_name"]+", identifiants de connexion : id "+s["username"]+" / mot de passe "+s["password_no_crypted"]+" \n"
 
-        msg += "\n\n Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz"
+        msg += "\n\n Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
 
         msg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
 
@@ -1028,10 +1029,10 @@ def save_adhesion(request) :
         srcv = []        
         if s["email"] : 
             srcv.append(s["email"])
-            smsg = "Bonjour "+s["first_name"]+" "+s["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+". \n"
+            smsg = "Bonjour "+s["first_name"]+" "+s["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule.adhesion +" à l'académie SACADO avec le menu "+formule.name+". \n"
             smsg += "votre référence d'adhésion est "+code+".\n\n"
             smsg += "Votre identifiant est "+s["username"]+" et votre mot de passe est "+s["password_no_crypted"]+"\n\n"
-            smsg += "Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz"
+            smsg += "Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy"
             smsg += "L'équipe SACADO vous remercie de votre confiance.\n\n"
 
             send_mail("Inscription SACADO", smsg, settings.DEFAULT_FROM_EMAIL, srcv)
@@ -1048,7 +1049,9 @@ def save_adhesion(request) :
         i+=1
     for s in students_of_adhesion :
         if s["email"] :
-            adr = ", adresse de courriel : "+s["email"] 
+            adr = ", adresse de courriel : "+s["email"]
+        else :
+            adr = "" 
         sacado_msg += "Enfant "+str(j)+" : "+s["first_name"]+" "+s["last_name"]+" Niveau :" +s["level"]+adr+"\n\n"         
         j+=1
 

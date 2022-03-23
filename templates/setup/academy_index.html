@@ -243,14 +243,28 @@ Intro Section -
     <div class="row vspace">
         <div class="col-xs-12 col-md-12 color_sacado">
             <b>Sacado Académie</b> : l’accompagnement scolaire<br/>
-            Le suivi de vos enfants, exercices par exercices, par compétences et savoir faire. Un bilan mensuel éditable au format .pdf pour valider les attendus.
+            Sacado Académie propose un suivi détaillé par enfant, exercices par exercices, par compétences et savoir faire. Un bilan mensuel est éditable au format .pdf pour vérifer la validation des attendus. Vous recevez sur votre boite au lettres (email) un compte rendu hebdomadaire.
         </div>
     </div>
+
     <div class="row vspace">
         <div class="col-xs-12 col-md-12" align="center">
             <img src="../../static/img/bilans.png" />
         </div>
     </div>
+
+
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-6" align="center">
+            <img src="../../static/img/radar.png" />
+        </div>
+ 
+        <div class="col-xs-12 col-md-6" align="center">
+            <img src="../../static/img/diag_barres.png" />
+        </div>
+    </div>
+
+
 </section>
 
 
@@ -331,25 +345,21 @@ Intro Section -
 
                     <br><br>Les exercices sont accessibles sur téléphones, tablettes et ordinateurs.
 
-                    <br><br>Nos Professeurs (du primaire à la prépa) sont toujours en fonction et connaissent la réalité du terrain.  </p>
+                    <br><br>Nos Professeurs (du primaire à la prépa) sont toujours en poste et connaissent la réalité du terrain.  </p>
                   </div>
                 </div>
 
                 <div class="col-sm-12 col-md-6">
- 
-
-          
-                    <h4 class="color_sacado">Contacts</h4>
-                        <b class="color_sacado">Maternelle et élémentaire </b><br/>
-                        Sandrine Rébéna<br/><br>             
-                        <b class="color_sacado">Collège - Lycée</b><br>
-                        Audrey Ledoux  <br>
-                        Bruno Serres   <br>
-                        Nicolas Villemain  <br> 
-                        Philippe Demaria<br/> <br>
-                        <b class="color_sacado">Classe Prépa</b><br>
-                        Stéphan Ceroi    
-          
+                    <h3 class="color_sacado">Contacts</h3>
+                    <b class="color_sacado">Maternelle et élémentaire </b><br/>
+                    Sandrine Rébéna<br/><br>             
+                    <b class="color_sacado">Collège - Lycée</b><br>
+                    Audrey Ledoux  <br>
+                    Bruno Serres   <br>
+                    Nicolas Villemain  <br> 
+                    Philippe Demaria<br/> <br>
+                    <b class="color_sacado">Classe Prépa</b><br>
+                    Stéphan Ceroi    
                 </div>
             </div>
 
@@ -359,15 +369,15 @@ Intro Section -
 
             <div class="form">
 
-              <h4 class="color_sacado">Envoyez un message</h4>
-              <p>Vous souhaitez obtenir des infos, utiliser SACADO dans votre établissement, laisser un message. Utiliser cet espace.</p>
+              <h3 class="color_sacado">Envoyez un message</h3>
+              <p>Vous souhaitez obtenir des infos sur l'académie SACADO, laissez-nous un message. Réponse rapide.</p>
               <form action="{% url 'send_message' %}" method="post" >
                   {% csrf_token %}
                 <div class="form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Nom" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required />
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Votre nom" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required />
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Email" data-rule="email" data-msg="Please enter a valid email" required />
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Votre email" data-rule="email" data-msg="Please enter a valid email" required />
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" name="subject" id="subject" placeholder="Objet" data-rule="minlen:4" data-msg="Au moins 8 caractères" required />
@@ -378,10 +388,10 @@ Intro Section -
 
                 <div class="form-group">
                   <img src="{% static 'img/som_token.png' %}" />
-                  <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme"  />
+                  <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme" required />
                 </div>
 
-                <div class="text-center"><button type="submit" class="btn-inscription">Envoyer</button></div>
+                <div class="text-center"><button type="submit" name="info_academy" value="yes" class="btn-inscription">Envoyer</button></div>
               </form>
             </div>
 
