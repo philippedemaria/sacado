@@ -361,7 +361,7 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
         liste_score_w.forEach( (item) =>{ 
             item_int = parseInt(item);
             if (!isNaN(item_int))
-                {liste_score_w_n.push(item_int/10);}
+                {liste_score_w_n.push(item_int);}
         });
 
 
