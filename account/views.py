@@ -1015,7 +1015,7 @@ def detail_student_all_views(request, id):
             for waiting in group.waitings() :
                 if i == len(group.waitings()) :
                     sep = ""
-                waitingsRadar += waiting.name[:30]+sep
+                waitingsRadar += waiting.name[:40]+sep
                 score = 0
                 if student.result_waitings(waiting) : score = student.result_waitings(waiting)
                 scoreswRadar += str(score)+sep
