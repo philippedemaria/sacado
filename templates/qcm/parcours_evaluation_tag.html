@@ -12,14 +12,12 @@
         {% endif  %}
 
         <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
- 
                 {% csrf_token %}
                 <a  href="#principal_section" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
                     data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
                     {% get_parcours_group_students_count parcours group as parcours_group_students %}
                     <span class="label label-default"> {{ parcours_group_students.nb }}<i class="fa fa-users"></i></span>
                 </a> 
-    
             <font style="font-size:11px; color:#AAA">
                 {% for s in parcours_group_students.students|dictsort:"user.last_name"  %}
                 <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
@@ -162,8 +160,15 @@
             {% if not parcours.is_evaluation  %}
             <div class="row dossier"   style="position: relative; margin-bottom: 10px;"> 
                 <div class="col-xs-4 col-md-4 col-lg-4"> 
-                    {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
-                    <i class="fa fa-circle text-danger" style="font-size:8px"></i>{% endif %}
+                    {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   
+                    {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
+                        <i class="fa fa-circle text-danger" style="font-size:8px"></i>
+                    {% endif %}
+
+                    {% if parcours.is_active %}<br/> 
+                        <span style="color:red">En ce moment</span>
+                    {% endif %}
+
                 </div>
                 <div class="col-xs-4 col-md-4 col-lg-4"> 
                     {{  parcours.nb_exercices_and_cours.nb_cours }} cours  {% if not parcours.nb_exercices_and_cours.cours_care %} 
