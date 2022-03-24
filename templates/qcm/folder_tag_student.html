@@ -37,22 +37,35 @@
 
 
                 <div class="col-xs-4 col-md-4 col-lg-4"> 
-                    {{  data_min.nb_parcours }} parcours  <br/>
+                    {{  data_min.nb_parcours }} parcours  
+                    {% if data_min.nb_evaluations %}
+                    <br/>
                     {{  data_min.nb_evaluations }} évaluations 
+                    {% endif %}
+
                 </div>
                 <div class="col-xs-4 col-md-4 col-lg-3">
-                    {{  data_min.nb_cours }} cours  <br/>
-                    {{  data_min.nb_quizz }} quizz  
+                    {{  data_min.nb_cours }} cours  
+                    {% if data_min.nb_quizz %}
+                    <br/>
+                    {{  data_min.nb_quizz }} quizz 
+                    {% endif %}
                 </div>
+
                 <div class="col-xs-4 col-md-4 col-lg-4"> 
-                    {{  data_min.nb_bibliotex }} biblioTex  <br/>
-                    {{  data_min.nb_flashpack }} flashpack  
+                    {% if data_min.nb_bibliotex %}
+                    {{  data_min.nb_bibliotex }} biblioTex 
+                    {% endif %}
+                    {% if data_min.nb_flashpack %}
+                    <br/>
+                    {{  data_min.nb_flashpack }} flashpack
+                    {% endif %}
                 </div>
         </div>
         <div class="row extend_student" style="margin-left: 5px"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
                 <div style="text-align: center;margin-bottom: 15px"><br/>
-                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}"  class="btn btn-new-violet" style="width:200px; background-color: {{ folder.color }}" >  
+                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}"  class="btn btn-new-violet" style="width:200px; background-color: {{ folder.color }}; color:{{ folder.color|contrast_color }}" >  
                         {%  if is_task_exists %}
                             <i class="fa fa-calendar-check" style="color:red"></i>
                         {% endif %} Accéder</a>
