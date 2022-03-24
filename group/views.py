@@ -1631,7 +1631,7 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
     for student in students :
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
         logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-        logo_tab = [[logo, "SACADO \nBilan des acquisitions" ]]
+        logo_tab = [[logo, "SACADO Académie\nBilan des acquisitions" ]]
         logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
         logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
         elements.append(logo_tab_tab)
@@ -1654,8 +1654,6 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         date_stop = date(this_year,month_id,months[month_id-1])
 
         studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
-
-        print(studentanswers)
 
         studentanswer_ids = studentanswers.values_list("id",flat=True).distinct() 
         nb_exo = studentanswer_ids.count() # Nombre d'exercices traités
@@ -1745,11 +1743,9 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         #### Gestion des labels à afficher
         ##########################################################################
         labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Mois :"+str(month_id)+"/"+str(this_year),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%, score médian : "+str(median)+"%" , \
-                 "Exercices SACADO proposés : " +str(nb_p) , "dont "+str(nb_exo)+" étudiés "+complt+", soit un taux d'étude de "+str(p_e)+"%",  \
-                 "Tâches demandées : "+str(t_r),  "Remises en temps : "+str(done)+",  remises en retard : "+str(late)+", non remises : "+str(no_done),\
-                 "Bilan des compétences ",]
+                 "Exercices SACADO proposés : " +str(nb_p) , "dont "+str(nb_exo)+" étudiés "+complt+", soit un taux d'étude de "+str(p_e)+"%", "Bilan des compétences "]
 
-        spacers , titles,subtitles = [1,3,5,7] ,[0],[4,6,8]
+        spacers , titles,subtitles = [1,3,5] ,[0],[6]
 
         i = 0
         for label in labels :

@@ -31,7 +31,7 @@ requirejs.config({
         config_toggle: "script/config-toggle",
         config_datatable: "script/config-datatable", 
         config_colorpicker: "script/config-colorpicker",       
-        chart:["https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min","lib/chart.min"],   
+        chart:["lib/chart.min"],   
         popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
@@ -93,7 +93,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'bootstrap',  'uploader', 'uploader', 'bootstrap_popover',   'bcPicker', 'ckeditor_jquery', 'ckeditor', 'ckeditor_init', 'mathjax',  'datatables', 'datatables_bootstrap', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
+require(['jquery', 'bootstrap',  'uploader', 'uploader', 'bootstrap_popover',  'chart' ,  'bcPicker', 'ckeditor_jquery', 'ckeditor', 'ckeditor_init', 'mathjax',  'datatables', 'datatables_bootstrap', 'config_select2', 'config_datepicker', 'config_toggle',  'config_colorpicker', 'fonctions_jquery', 'fonctions',   'config_datatable', 'multiselect', 'ui',]);
 
 // suppression de admin dans le chargement  : 'admin', 
-//  ,'slimscroll', 'chart'
+//  ,'slimscroll'

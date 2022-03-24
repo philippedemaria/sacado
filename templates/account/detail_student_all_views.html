@@ -9,22 +9,12 @@
     <script>
         require(['script/ajax-group']);
     </script>
-
- 
-
 {% endblock %}
 
- 
-
-
-
-
- 
-                 
+            
 
 {% block datae %} 
 <style>
-
 .table  > tr {
     min-width:70%
 }
@@ -74,7 +64,8 @@
                     <td> 
                         Durée totale  <span class="pull-right">{{ std.duration|time_done  }}</span> 
                     </td>
-                </tr>  
+                </tr> 
+                {% if not request.user.is_in_academy %} 
                 <tr>
                     <td>
                         Tâches à rendre <span class="pull-right">{{ std.nb  }}</span>
@@ -88,7 +79,8 @@
                     <td> 
                         Tâches remises en retard <span class="pull-right">{% if std.late  > 0 %} <span class="label label-warning">{{ std.late  }}</span>{% else %}{{ std.late }}{% endif %}</span> 
                     </td>
-                </tr>    
+                </tr> 
+                {% endif %}   
             </tbody>
         </table>
     </div>
@@ -100,6 +92,43 @@
         <a href="#groups{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilans de {{ group.subject.name }}</a>
         <div id="groups{{ forloop.counter }}" class="collapse bilan_details">
         {% endif %}
+
+            {% if request.user.is_in_academy %}
+
+            <div class="row bilan_div">
+ 
+                <div class="col-sm-12 col-md-7" align="center">
+                    <h3>Suivi des attendus</h3>
+                    <input id="scoreswRadar" value="{{scoreswRadar}}" type="hidden" /> 
+                    <input id="waitingsRadar" value="{{waitingsRadar}}" type="hidden" /> 
+                    <canvas id="marksChart" width="600" height="300"></canvas>
+                </div>
+                <div class="col-sm-12 col-md-5" align="center">
+                    <h3>Derniers résultats {{ datebar }}</h3>
+                    <input id="scoresbarSet" value="{{ score_str }}" type="hidden" />
+                    <input id="datebarSet" value="{{ datebar }}" type="hidden" />
+                    <canvas id="barChart" width="600" height="400"></canvas>
+                </div> 
+              
+            </div> 
+
+
+            <!-- bilan des parents par mois -->
+            <div class="row bilan_div">
+                <div class="col-sm-12 col-md-12">
+                    <span class='thin' style="font-size:20px">Bilans mensuels</span><hr/>
+                    <div class="row">
+                    {% for month in months %}  
+                        <div class="col-sm-4 col-md-2">
+                            <a href="{% url 'print_monthly_statistiques' month.rg group.id student.user.id %}"> <img src="{% static 'img/pdf.png' %}" width="15px" /> {{ month.name }}</a>
+                        </div>
+                    {% endfor %}  
+                    </div>
+                </div>
+            </div> 
+            {% endif %}
+
+
             <div class="row bilan_div">
                 <div class="col-sm-12 col-md-12">
                     <a href="#skills{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des compétences</a>
@@ -257,21 +286,7 @@
                 </div>
             </div>
 
-            {% if request.user.is_superuser %}
-            <!-- bilan des parents par mois -->
-            <div class="row bilan_div">
-                <div class="col-sm-12 col-md-12">
-                    <span class='thin' style="font-size:20px">Bilans mensuels</span><hr/>
-                    <div class="row">
-                    {% for month in months %}  
-                        <div class="col-sm-4 col-md-2">
-                            <a href="{% url 'print_monthly_statistiques' month.rg group.id student.user.id %}"> <img src="{% static 'img/pdf.png' %}" width="15px" /> {{ month.name }}</a>
-                        </div>
-                    {% endfor %}  
-                    </div>
-                </div>
-            </div> 
-            {% endif %}
+
 
 
 

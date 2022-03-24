@@ -4,12 +4,13 @@
 #################################
 import html
 import random
+import json
 import re
 from django.conf import settings # récupération de variables globales du settings.py
 from statistics import median, StatisticsError
 import csv
 import pytz
-from datetime import datetime 
+from datetime import datetime , timedelta
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import update_session_auth_hash
@@ -891,7 +892,6 @@ def detail_student_parcours(request, id,idp):
 
     return render(request, 'account/detail_student_parcours.html', context)
 
-
 #@user_can_read_details
 def detail_student_all_views(request, id):
 
@@ -1007,8 +1007,36 @@ def detail_student_all_views(request, id):
             themes.update(student.level.themes.filter(subject=g.subject)) 
 
 
+        scoreswRadar  = ""
+        waitingsRadar = ""
+        i = 1
+        if request.user.school_id == 50 and request.user.is_in_academy  :
+            sep = "-"
+            for waiting in group.waitings() :
+                if i == len(group.waitings()) :
+                    sep = ""
+                waitingsRadar += waiting.name+sep
+                score = 0
+                if student.result_waitings(waiting) : score = student.result_waitings(waiting)
+                scoreswRadar += str(score)+sep
+                i+=1
+            
+
+
+            today   = time_zone_user(request.user) 
+            date_start = today - timedelta(days=7)
+            aptitude = request.user.school.aptitude.last()
+            student_answers = Studentanswer.objects.filter( student__user = request.user , date__gte = date_start  )
+            st0 = student_answers.filter(point__lt= aptitude.low).count()
+            st1 = student_answers.filter(point__lt= aptitude.medium).count()
+            st2 = student_answers.filter(point__lt= aptitude.up).count()
+            st3 = student_answers.filter(point__gte= aptitude.up).count()
+            score_str = str(st0)+"-"+str(st1)+"-"+str(st2) +"-"+str(st3)
+
+            datebar = "du "+str(date_start.strftime("%d/%m/%Y"))+" au "+str(today.strftime("%d/%m/%Y"))
+
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
-                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months }
+                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar  }
 
 
     return render(request, 'account/detail_student_all_views.html', context)

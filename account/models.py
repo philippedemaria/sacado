@@ -191,6 +191,25 @@ class User(AbstractUser):
         return group_string
 
 
+    @property
+    def is_in_academy(self):
+        is_sacado = False
+        today = time_zone_user(self) 
+
+        if self.school_id == 50 :
+            if self.is_parent  :
+                adhesion = self.adhesions.last()
+                if today > adhesion.date_start and  today < adhesion.date_end :
+                    is_sacado = True
+                    
+            elif self.is_student :
+                parent   = self.student.students_parent.first()
+                adhesion = parent.adhesions.last()
+                if today > adhesion.date_start and  today < adhesion.date_end   :
+                    is_sacado = True 
+
+        return is_sacado 
+
 
 
 class Adhesion(models.Model):
@@ -607,7 +626,6 @@ class Student(ModelWithCode):
         return data
 
 
- 
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
@@ -700,9 +718,6 @@ class Teacher(models.Model):
             nb = True
         return nb
         
-
-
-
 
 class Resultknowledge(models.Model):
     student = models.ForeignKey(Student, related_name="results_k", default="", on_delete=models.CASCADE, editable=False)
