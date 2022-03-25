@@ -1009,6 +1009,9 @@ def detail_student_all_views(request, id):
 
         scoreswRadar  = ""
         waitingsRadar = ""
+        score_str     = 0
+        datebar       = ""
+
         i = 1
         if request.user.school_id == 50 and request.user.is_in_academy  :
             sep = "-"
