@@ -373,13 +373,21 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
 
-        Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-        if nf.correction :
-            Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+        save_html = True
+        try :
+            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            if nf.correction :
+                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+        except :
+            save_html = False
 
-        form.save_m2m() 
+        form.save_m2m()
 
-        messages.success(request, "L'exercice a été créé avec succès !")
+        if save_html :
+            messages.success(request, "L'exercice a été créé avec succès !")
+        else :
+            messages.errors(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
+
         return redirect('admin_exotexs', knowledge.level.id)
     else:
         print(form.errors)
