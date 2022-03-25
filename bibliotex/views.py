@@ -386,7 +386,7 @@ def create_exotex_knowledge(request,idk):
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
         else :
-            messages.errors(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
+            messages.error(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
 
         return redirect('admin_exotexs', knowledge.level.id)
     else:
@@ -431,7 +431,7 @@ def set_exotex_in_bibliotex(request,id):
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
         else :
-            messages.errors(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
+            messages.error(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
 
 
         return redirect('my_bibliotexs')
@@ -469,8 +469,8 @@ def create_exotex(request):
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
         else :
-            messages.errors(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
-            
+            messages.error(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
+
         return redirect('admin_exotexs', nf.knowledge.level.id)
     else:
         print(form.errors)
@@ -506,7 +506,7 @@ def update_exotex(request, id):
             if save_html :
                 messages.success(request, "L'exercice a été créé avec succès !")
             else :
-                messages.errors(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
+                messages.error(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
             
             return redirect('admin_exotexs', exotex.knowledge.level.id)
         else:
