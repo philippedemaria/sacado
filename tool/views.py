@@ -1381,7 +1381,7 @@ def store_quizz_solution( quizz_id,student,q_id, solutions,t):
         i +=1
  
     timer = int(t)
-    answ, create_ans = Answerplayer.objects.get_or_create(quizz_id = quizz_id , student=student,question = question, qrandom_id = None, defaults={ "answer"  : answer , "score"  : score ,"timer"  : timer , "is_correct" : is_correct} )
+    answ, create_ans = Answerplayer.objects.get_or_create(quizz_id  = quizz_id , student=student,question = question, qrandom_id = None, defaults={ "answer"  : answer , "score"  : score ,"timer"  : timer , "is_correct" : is_correct} )
     if not create_ans :
         Answerplayer.objects.filter(quizz_id = quizz_id , student=student,question = question, qrandom_id = None).update( answer = answer )
         Answerplayer.objects.filter(quizz_id = quizz_id , student=student,question = question, qrandom_id = None).update( score = score )
@@ -1399,7 +1399,7 @@ def goto_quizz_numeric(request,id):
 
     #Génération des questions
     question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
-    quizz_id    = request.session.get("quizz_id",None) 
+    quizz_id     = request.session.get("quizz_id",None) 
     if not quizz_id :
         quizz_id                    = quizz.id
         request.session["quizz_id"] = quizz_id
@@ -1408,11 +1408,10 @@ def goto_quizz_numeric(request,id):
             random.shuffle(question_ids)
         
         request.session["question_ids"] = question_ids
-
-
     else :
         quizz_id     = request.session.get("quizz_id")
         question_ids = request.session.get("question_ids")
+
     #Génération des réponses 
     is_shuffle = False
     if quizz.is_shuffle :
@@ -1470,29 +1469,27 @@ def goto_quizz_numeric(request,id):
 
 
 
-
-
-
 def goto_quizz_student(request,id):
     """ participation à un quizz sur poste"""
     student = request.user.student
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk= id)
 
-    try :
-        quizz = Quizz.objects.get(pk= id)
-        #Génération des questions
-        question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
-        quizz_id     = quizz.id
+    #Génération des questions
+    question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
+    quizz_id     = request.session.get("quizz_id",None) 
+
+    if not quizz_id :
+        quizz_id                    = quizz.id
+        request.session["quizz_id"] = quizz_id
+
         if quizz.is_ranking :
             random.shuffle(question_ids)
         
-        request.session["quizz_id"]     = quizz_id
         request.session["question_ids"] = question_ids
-
-    except :
+    else :
         quizz_id     = request.session.get("quizz_id")
         question_ids = request.session.get("question_ids")
-
 
     #Génération des réponses 
     is_shuffle = False

@@ -377,7 +377,7 @@ class Generate_qr(models.Model):
 
 class Answerplayer(models.Model):
 
-    quizz   = models.ForeignKey(Quizz,  related_name="answerplayer", default ="" ,  on_delete=models.CASCADE ) 
+    quizz    = models.ForeignKey(Quizz,  related_name="answerplayer", default ="" ,  on_delete=models.CASCADE ) 
     student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
     question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
     qrandom  = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
