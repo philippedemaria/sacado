@@ -1448,6 +1448,7 @@ def goto_quizz_numeric(request,id):
     if quizz_nav == len(question_ids) :
         end_of_quizz = True
         question = None
+        request.POST["quizz_id"] = None 
 
     elif quizz_nav > -1 : 
         question_id = question_ids[quizz_nav]
