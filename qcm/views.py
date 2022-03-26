@@ -74,27 +74,25 @@ from general_fonctions import *
 def find_no_skill(request):
 
     skills   = Skill.objects.filter(subject_id=1)
-    supports = Supportfile.objects.filter(skills=None, is_title=0)
+    supports = Supportfile.objects.filter(skills=None, is_title=0)[:10]
     context  = {'supports': supports,  'skills': skills,  }
 
     return render(request, 'qcm/find_no_skill.html', context )
+
+
 
 def get_skill_to_support(request) :
-    no_skills = request.POST["no_skill"]
-
+    no_skills = request.POST.getlist("no_skills")
+ 
     for ns in no_skills :
-
-        tab = ns.split("-")
+        tab = ns.split("==")
+ 
         support = Supportfile.objects.get(pk=tab[0])
+ 
         skill   = Skill.objects.get(pk=tab[1])
         support.skills.add(skill)
-
-
-
-    skills   = Skill.objects.filter(subject_id=1)
-    supports = Supportfile.objects.filter(skills=None, is_title=0)
-    context  = {'supports': supports,  'skills': skills,  }
-    return render(request, 'qcm/find_no_skill.html', context )
+ 
+    return redirect("find_no_skill")
 
 # def remove_parcours_folder(request):
 
