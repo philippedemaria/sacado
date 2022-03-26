@@ -1327,10 +1327,10 @@ def register_by_csv(request, key, idg=0):
             messages.error(request, 'Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
             return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
 
-        lines = file_data.split("\r\n")
+        #lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display = []
         list_names = ""
-        for line in lines:
+        for line in file_data :
             try : 
             # loop over the lines and save them in db. If error , store as string and then display
                 simple = request.POST.get("simple",None)
