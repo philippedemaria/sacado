@@ -1414,7 +1414,6 @@ def register_users_by_csv(request,key):
    
 
         file_data = csv_file.readlines()
-
         #lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display = []
         list_names = ""
