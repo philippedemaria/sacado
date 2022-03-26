@@ -74,7 +74,7 @@ from general_fonctions import *
 def find_no_skill(request):
 
     skills   = Skill.objects.filter(subject_id=1)
-    supports = Supportfile.objects.filter(skills=None, is_title=0)[:10]
+    supports = Supportfile.objects.filter(skills=None, is_title=0) 
     context  = {'supports': supports,  'skills': skills,  }
 
     return render(request, 'qcm/find_no_skill.html', context )
