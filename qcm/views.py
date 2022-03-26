@@ -71,9 +71,31 @@ from general_fonctions import *
 # Duplication des folder
 #################################################################
  
+def find_no_skill(request):
 
- 
- 
+    skills   = Skill.objects.filter(subject_id=1)
+    supports = Supportfile.objects.filter(skills=None, is_title=0)
+    context  = {'supports': supports,  'skills': skills,  }
+
+    return render(request, 'qcm/find_no_skill.html', context )
+
+def get_skill_to_support(request) :
+    no_skills = request.POST["no_skill"]
+    print(no_skills)
+    # for ns in no_skills :
+    #     try :
+    #         tab = ns.split("-")
+    #         support = Supportfile.objects.get(pk=tab[0])
+    #         skill   = Skill.objects.get(pk=tab[1])
+    #         support.skills.add(skill)
+    #     except :
+    #         pass 
+
+
+    skills   = Skill.objects.filter(subject_id=1)
+    supports = Supportfile.objects.filter(skills=None, is_title=0)
+    context  = {'supports': supports,  'skills': skills,  }
+    return render(request, 'qcm/find_no_skill.html', context )
 
 # def remove_parcours_folder(request):
 

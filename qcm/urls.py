@@ -8,6 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
 
+    path('find_no_skill', find_no_skill, name='find_no_skill'),
+    path('get_skill_to_support', get_skill_to_support, name='get_skill_to_support'),
+
+
     path('folders', list_folders, name='folders'),
     path('folders_archives', list_folders_archives, name='folders_archives'),
     #path('remove_parcours_folder', remove_parcours_folder, name='remove_parcours_folder'),

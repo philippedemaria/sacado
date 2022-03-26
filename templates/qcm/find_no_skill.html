@@ -1,0 +1,107 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+ 
+
+    <script>
+        require(['script/ajax-folders-create']);
+    </script> 
+
+    {% block require_complement %}
+        {% if not folder %}
+            <script>
+                require(['script/ajax-parcours-complement']);
+            </script> 
+        {% endif %}
+    {% endblock %} 
+
+{% endblock %} 
+
+
+{% block page_title %}
+ 
+   <i class="bi bi-folder sacado_color_text"></i> find no skill
+ 
+
+ 
+{% endblock %}
+
+
+{% block page_menu_right %}
+{% endblock %}
+
+ 
+
+
+{% block body %}  
+<section class="content_main">
+
+
+
+    <form action="{% url 'get_skill_to_support'  %}" method="POST" enctype='multipart/form-data'> 
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+            {% csrf_token %}
+                <table class="table table-hovered"  style="width:100%" >
+                    <thead> 
+                        <tr> 
+                            <th style="width:20px">Support</th>
+                             
+                            <th style="width:150px"> {{ supports.count }}
+
+                            </th>                    
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        {% for support in supports %}
+                            <tr>
+                                <td>
+                                    {% if support.imagefile %} 
+                                        <img src="{{ support.imagefile.url }}" width="600px">
+                                    {% else %} 
+                                        <img src="{% static 'img/missing_img.png' %}" class="imagefile">
+                                    {% endif  %} 
+
+                                    {{ support }}
+                                </td>
+                                <td>
+                                    {% for skill in skills %}
+                                        <li class="sanspuce"><label><input name="no_skill" type="checkbox" value="{{ support.id }}-{{ skill.id }}" /> {{ skill }}</label></li>
+                                    {% endfor  %}
+                                </td>
+                            </tr>
+                        {% endfor  %}
+                     </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <input value="Enregistrer" type="submit" class="btn btn-default"  />
+            </div>
+        </div>
+
+
+ 
+    </form> 
+
+</section>   
+
+
+
+
+
+{% endblock %}
+
+
+      
+ 
+ 
