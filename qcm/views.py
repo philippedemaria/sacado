@@ -81,15 +81,14 @@ def find_no_skill(request):
 
 def get_skill_to_support(request) :
     no_skills = request.POST["no_skill"]
-    print(no_skills)
-    # for ns in no_skills :
-    #     try :
-    #         tab = ns.split("-")
-    #         support = Supportfile.objects.get(pk=tab[0])
-    #         skill   = Skill.objects.get(pk=tab[1])
-    #         support.skills.add(skill)
-    #     except :
-    #         pass 
+
+    for ns in no_skills :
+
+        tab = ns.split("-")
+        support = Supportfile.objects.get(pk=tab[0])
+        skill   = Skill.objects.get(pk=tab[1])
+        support.skills.add(skill)
+
 
 
     skills   = Skill.objects.filter(subject_id=1)
