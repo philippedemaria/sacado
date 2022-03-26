@@ -1142,12 +1142,82 @@ def list_exercises_academy(request , id):
 
 
 
+def envoie_rapport(fichiers,destinataires):
+    """envoie les rapports à une seule famille.
+    Fichiers contient une liste de noms de fichiers pdf à envoyer
+    destinataires : une liste de chaines contenant les destinataires"""
+    #------------
+    if destinataires==[] :
+        return "aucun destinataire"
+    
+    msg=MIMEMultipart()
+    msg['From'] = settings.DEFAULT_FROM_EMAIL
+    msg['To'] = destinataires[0]
+    for i in range(1,len(destinataires)):
+        msg['to']+=","+destinataires[i]
+        
+    liste_eleves=[]  #liste des eleves dont on joint les rapports
+
+    for fichier in fichiers :
+        try :
+            pdf=open(fichier,'rb')
+            fpdf = MIMEBase('application','octet-stream')
+            fpdf.set_payload(pdf.read())
+            pdf.close()
+            encoders.encode_base64(fpdf)
+            fpdf.add_header('content-disposition', 'attachment; filename ='+ fichier)
+            msg.attach(fpdf)
+            liste_eleves.append("eleve"+fichier)
+        except :
+            print("""fonction envoie_pdf de setup : 
+le fichier {} qui doit être envoyé à {} est introuvable""".format(fichier,msg['To']))
+    npdf=len(liste_eleves)  #nombre de fichiers à envoyer
+    if npdf==0 :
+        print("""fonction envoie_pdf de setup : 
+aucun fichier pdf à envoyer""")
+        return "aucun fichier pdf à envoyer"
+
+    # preparation du joli texte du corps du message
+    eleves=liste_eleves[0]
+    if npdf==1 :
+        pluriel=""
+    else :
+        pluriel="s"
+        for i in range(1,npdf-1) :
+            eleves+=", "+liste_eleves[i]
+        eleves+=" et "+liste_eleves[-1]
+    #-------------------------------
+    msg['Subject'] = "Rapport{} d'activité de ".format(pluriel)+eleves
+    
+    msg.attach(MIMEText("""Bonjour,
+veuillez trouver en pièce jointe le{} rapport{} d'activité{} de {}.
+
+Très cordialement,
+
+L'équipe Sacado Académie""".format(pluriel,pluriel,pluriel,eleves),'plain'))
+
+    server = smtplib.SMTP(settings.EMAIL_HOST,settings.EMAIL_PORT)
+    server.set_debuglevel(False) # show communication with the server
+    try:
+       server.ehlo()
+       if server.has_extn('STARTTLS'):
+          server.starttls()
+          server.ehlo() 
+       server.login(settings.DEFAULT_FROM_EMAIL, settings.EMAIL_HOST_PASSWORD)
+       server.sendmail(settings.DEFAULT_FROM_EMAIL, destinataires,msg.as_string() )
+    finally:
+        server.quit()
+    return "mails envoyés avec succès"
 
 
 
-
-
-
+    
+def send_reports(request) :
+    """envoie tous les rapports à toutes les familles"""
+    fichiers=["toto1.pdf","toto2.pdf", "toto1.pdf"]
+    destinataires=["stephan.ceroi@mailo.com","stephan.ceroi@gmail.com"]
+    r=envoie_rapport(fichiers, destinataires)
+    return HttpResponse(r)
 
 
 

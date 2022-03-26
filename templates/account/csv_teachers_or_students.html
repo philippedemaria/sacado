@@ -73,16 +73,16 @@
 
         <h3 class="thin">Gestion des identifiants</h3>        
         <ul>
-            <li><label>Laisser SACADO attribuer des identifiants <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
-            <li><label> Gérer manuellement les identifiants <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label> <small>Vous devez alors impérativement renseigner les identifiants dans le fichier csv.</small></li>
+            <li class="sanspuce"><label><input type="radio" id="show_without_username" name="manage_username" value="auto" /> Laisser SACADO attribuer des identifiants </label> </li> 
+            <li class="sanspuce"><label><input type="radio" id="show_with_username" name="manage_username" value="hand" /> Gérer manuellement les identifiants </label> <small>Vous devez alors impérativement renseigner les identifiants dans le fichier csv.</small></li>
         </ul>      
 
 
         <div id="without_username">
             <p>Vous avez choisi la gestion automatisée des identifiants par SACADO. </p>
             <p>Quel niveau de complexité souhaitez-vous pour ces identifiants élèves ? 
-                <label><input type="radio" name="simple" value=0 /> Facile</label>
-                <label><input type="radio" name="simple" value=1 /> Complexe</label>
+                <li class="sanspuce"><label><input type="radio" name="simple" value=0 /> Facile <em>nom.initiale_du_prenom</em></label></li>
+                <li class="sanspuce"><label><input type="radio" name="simple" value=1 /> Complexe <em>nom.initiale_du_prenom_code de 4 chiffres</em></label></li>
             </p>
             <ul style="margin:10px"> 3 champs sont demandés :
                 <li>Nom</li>

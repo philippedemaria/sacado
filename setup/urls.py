@@ -91,7 +91,7 @@ urlpatterns = [
     path('tweeters_public', tweeters_public, name='tweeters_public'),
 
 
-
+    path('scheduledTasks/send_reports/', send_reports ,name='send_reports'), 
     path('<slug:adresse>', all_routes , name='all_routes'), 
 ]
 
