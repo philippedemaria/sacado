@@ -1411,15 +1411,19 @@ def register_users_by_csv(request,key):
         if csv_file.multiple_chunks():
             messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
             return HttpResponseRedirect(reverse("register_teacher_csv"))
-        try:
-            file_data = csv_file.read().decode("utf-8")
-        except UnicodeDecodeError:
-            return HttpResponse('Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
- 
-        lines = file_data.split("\r\n")
+   
+
+        file_data = csv_file.readlines()
+
+        #lines = file_data.split("\r\n")
+        # loop over the lines and save them in db. If error , store as string and then display = []
         list_names = ""
-        # loop over the lines and save them in db. If error , store as string and then display
-        for line in lines:
+        for line in file_data :
+            try:
+                line = line.decode("utf-8")
+            except UnicodeDecodeError:
+                messages.error(request, 'Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+                return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
             try : 
                 simple = request.POST.get("simple",None)
                 ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 1 , simple) # 2 donne la forme du CSV
