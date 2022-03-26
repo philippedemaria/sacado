@@ -43,7 +43,7 @@
                 <div class="card">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <h4 class="title_page violet"><b> Parent</b> <span class="delete_button pull-right small_action">Supprimer ce parent</span> </h4> 
+                            <h4 class="title_page violet"><b> Parent</b> (ou payeur) <span class="delete_button pull-right small_action">Supprimer ce parent</span> </h4> 
                          </div>
                     </div>
                     <div class="row">
@@ -120,7 +120,7 @@
                             {% if no_parent %}
                             <b>Mes coordonnées</b> 
                             {% else %}
-                            <b>{% if forloop.first %}Parent <span id="add_parent" class="pull-right small_action">Ajouter un parent</span>{% else  %}Enfant{% endif %}</b>
+                            <b>{% if forloop.first %}Parent (ou payeur) <span id="add_parent" class="pull-right small_action">Ajouter un parent</span>{% else  %}Enfant{% endif %}</b>
                             {% endif %}
                         </h4>
                         <div class="form-group">
