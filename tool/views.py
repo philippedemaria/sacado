@@ -772,7 +772,8 @@ def ajax_show_detail_question(request):
                 student_dico["answer"] = answer
             except: student_dico["answer"] = None
         students.append(student_dico)
- 
+    
+    students.sort(key = lambda d : d["this"].user.last_name  )
 
     context = { "students" : students , "question" : question , "quizz" : quizz , 'percent' : percent  }
 
