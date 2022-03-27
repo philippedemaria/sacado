@@ -1586,26 +1586,31 @@ def list_sub_parcours_group(request,idg,idf):
 
 def list_sub_parcours_group_student(request,idg,idf):
 
-    student = request.user.student
-    today   = time_zone_user(request.user)
-    folder  = Folder.objects.get(pk = idf) 
-    group   = Group.objects.get(pk = idg)
-    request.session["folder_id"] = folder.id 
-    delete_session_key(request, "quizz_id")
+    rq_user = request.user
+    if rq_user.is_authenticated :
+        student = rq_user.student
+        today   = time_zone_user(rq_user)
+        folder  = Folder.objects.get(pk = idf) 
+        group   = Group.objects.get(pk = idg)
+        request.session["folder_id"] = folder.id 
+        delete_session_key(request, "quizz_id")
 
-    bases = folder.parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , is_trash=0).order_by("is_evaluation", "ranking") 
+        bases = folder.parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , is_trash=0).order_by("is_evaluation", "ranking") 
 
-    parcourses = bases.filter( is_evaluation=0).order_by("ranking")
-    evaluations = bases.filter( is_evaluation=1).order_by("ranking")
+        parcourses = bases.filter( is_evaluation=0).order_by("ranking")
+        evaluations = bases.filter( is_evaluation=1).order_by("ranking")
 
-    quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  ) 
-    flashpacks = folder.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  )  
-    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 ) 
+        quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  ) 
+        flashpacks = folder.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  )  
+        bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 ) 
 
 
-    context = {'parcourses': parcourses , 'evaluations': evaluations , 'quizzes': quizzes , 'flashpacks': flashpacks , 'bibliotexs': bibliotexs , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
+        context = {'parcourses': parcourses , 'evaluations': evaluations , 'quizzes': quizzes , 'flashpacks': flashpacks , 'bibliotexs': bibliotexs , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
 
-    return render(request, 'qcm/list_sub_parcours_group_student.html', context )
+        return render(request, 'qcm/list_sub_parcours_group_student.html', context )
+    
+    else :
+        return redirect("index")
 
 
 ############################################################################################################################################
