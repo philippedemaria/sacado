@@ -1,0 +1,96 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    {% if historic %}
+         Historique des adhésions
+    {% else %}
+         Adhésions en cours 
+    {% endif  %}
+{% endblock %}
+
+{% block page_menu_right %}
+        <a href="{% url 'academy_index'  %}" class="btn btn-sacado pull-right">Tableau de bord</a> 
+    {% if historic %}
+        <a href="{% url 'details_adhesion' level.id %}" class="btn btn-new pull-right"> Adhésion en cours</a>     
+    {% else %}
+        <a href="{% url 'historic_adhesions' level.id %}" class="btn btn-new pull-right"> Historique</a> 
+    {% endif  %}
+
+
+
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Code</td>
+                        <td>Parents</td>
+                        <td>Elèves </td>
+                        <td>Facture</td>
+                        <td>Date de valeur</td>
+                        <td>Montant</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for adhesion  in adhesions %}
+                            <tr>
+                                <td >
+                                    {{ adhesion.chrono }} 
+                                </td>
+                                <td style="width:150px">
+                                     {{ adhesion.user }}
+                                </td>
+                                <td>
+                                    {% for s in adhesion.students.all  %} 
+                                       <li class="sanspuce">    {{s}}   </li>
+                                    {% endfor %}  
+                                </td>
+                                <td>
+                                    <a href="{{ adhesion.file.url }}" target="blank"><img src="{% static 'img/pdf.png' %}"  width="30px" /></a>
+                                </td>
+                                <td>
+                                     {{ adhesion.date_start|date:"d m Y" }} au {{ adhesion.date_end|date:"d m Y" }}
+                                </td>
+                                <td>
+                                     {{ adhesion.amount }}€
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+ 
+
+ 
+
+
+{% endblock %}

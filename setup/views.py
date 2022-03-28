@@ -970,6 +970,7 @@ def save_adhesion(request) :
     ##################################################################################################################
     students_in = []
     code = str(uuid.uuid4())[:8]
+    chrono = create_chrono(Adhesion,"F")
     for s in students_of_adhesion :
 
         last_name, first_name, username , password , email , level =  s["last_name"]  , s["first_name"] , s["username"] , s["password"] , s["email"] , s["level"]  
@@ -996,7 +997,7 @@ def save_adhesion(request) :
         user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email ,  "school_id" : 50 ,  "closure" : date_end_dateformat })
         parent,create = Parent.objects.update_or_create(user = user, defaults = { "task_post" : 1 })
 
-        adh, cr = Adhesion.objects.update_or_create(user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted,code), "date_end" : date_end_dateformat,  "children" : nb_child, "duration" : nb_month })
+        adh, cr = Adhesion.objects.update_or_create(chrono = chrono , user = user, amount = total_price , menu = menu_id, defaults = { "file"  : creation_facture(user,data_posted,code), "date_end" : date_end_dateformat,  "children" : nb_child, "duration" : nb_month })
         
         for si in students_in :
             adh.levels.add(si.level)

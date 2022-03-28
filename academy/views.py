@@ -62,6 +62,40 @@ def academy_index(request):
 
 
 
+def details_adhesion(request,level_id):
+
+	rq_user = request.user 
+
+	if rq_user.is_board :
+		today = time_zone_user(rq_user)
+		level = Level.objects.get(pk=level_id)
+		adhesions = Adhesion.objects.filter(levels=level,date_start__lte=today ,date_end__gte=today )
+
+		context = { 'adhesions' : adhesions ,  'level' : level,   'historic' : False }
+
+ 
+		return render(request, "academy/adhesions.html" , context)
+
+	else:
+		return redirect("index")
+
+
+
+def historic_adhesions(request,level_id):
+
+	rq_user = request.user 
+	level = Level.objects.get(pk=level_id)
+	if rq_user.is_board :
+		adhesions = Adhesion.objects.filter(levels=level)
+
+		context = { 'adhesions' : adhesions ,  'level' : level ,  'historic' : True   }
+
+ 
+		return render(request, "academy/adhesions.html" , context)
+
+	else:
+		return redirect("index")
+
 
 def exemple_json(request):
     data = {}

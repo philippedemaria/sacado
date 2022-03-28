@@ -610,7 +610,7 @@ class Student(ModelWithCode):
 
 class Adhesion(models.Model):
     """docstring for Facture"""
-    code       = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
+    chrono     = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
     user       = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
     file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
     date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
