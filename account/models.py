@@ -214,28 +214,6 @@ class User(AbstractUser):
 
 
 
-class Adhesion(models.Model):
-    """docstring for Facture"""
-    code       = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
-    user       = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
-    file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
-    date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
-    date_end   = models.DateTimeField( verbose_name="Date de fin", editable= False)
-    amount     = models.CharField(max_length=10,  verbose_name="Montant", editable= False)
-    menu       = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
-    children   = models.PositiveIntegerField( default=1,  verbose_name="Nb enfant", editable= False)
-    duration   = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)    
-
-    def __str__(self):
-        return "{} {}".format(self.user, self.file)
-
-    def formule(self):
-        Formule = apps.get_model('setup', 'Formule')
-        return Formule.objects.get(pk = int(self.menu))
-
-
-    def children_associated(self):
-        return self.user.parent.students.all()
 
 
 class Student(ModelWithCode):
@@ -626,6 +604,34 @@ class Student(ModelWithCode):
         data["nb_quizz"]        = nbq 
         data["a_new_cop"]       = a_new_cop 
         return data
+
+
+
+
+class Adhesion(models.Model):
+    """docstring for Facture"""
+    code       = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
+    user       = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
+    file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
+    date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
+    date_end   = models.DateTimeField( verbose_name="Date de fin", editable= False)
+    amount     = models.CharField(max_length=10,  verbose_name="Montant", editable= False)
+    menu       = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
+    children   = models.PositiveIntegerField( default=1,  verbose_name="Nb enfant", editable= False)
+    duration   = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)
+    levels     = models.ManyToManyField(Level, related_name="adhesions", blank=True, editable= False)
+    students   = models.ManyToManyField(Student, related_name="adhesions", blank=True, editable= False)
+
+    def __str__(self):
+        return "{} {}".format(self.user, self.file)
+
+    def formule(self):
+        Formule = apps.get_model('setup', 'Formule')
+        return Formule.objects.get(pk = int(self.menu))
+
+
+    def children_associated(self):
+        return self.user.parent.students.all()
 
 
 class Teacher(models.Model):

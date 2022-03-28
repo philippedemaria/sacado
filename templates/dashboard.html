@@ -715,10 +715,16 @@
  
     {%  if request.user.is_board %}
     <hr class="divider">
-    <p class="thin">L'asso SACADO </p>
+    <p class="thin">SACADO </p>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'association_index' %}">Tableau de bord </a>
+            <a href="{% url 'association_index' %}">L'association </a>
+        </div>
+    </div>
+    <hr class="divider">    
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'academy_index' %}">L'académie </a>
         </div>
     </div>
     {% endif %}

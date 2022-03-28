@@ -1,0 +1,60 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>   
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %} 
+
+
+{% block page_title %}
+    <i class="fa fa-cloud"></i> Tableau de bord sacado académie</a>
+{% endblock %} 
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+ 
+
+    {% if request.user.is_board %}
+        <div class="row">
+        {% for level in levels %}
+
+            <div class="col-lg-3 col-md-4 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-purple">
+                    <div class="inner" style="border-bottom: solid 1px #f1eef7">
+                        <span style="font-size: 30px">{{ level.name }} </span>
+                    </div>
+                    <div class="inner">
+                        <span style="font-size: 20px">Adhésions : {{ level.details.nba }} </span>
+                    </div>
+                    <div class="inner">
+                        <span style="font-size: 20px">Solde : {{ level.details.solde }}€</span>
+                    </div>
+                    <a href="{% url 'details_adhesion' level.id %}" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i> Détails </a>                    
+                </div>
+            </div>
+
+                        
+
+        {% endfor %}
+        </div>
+    {% endif %} 
+
+ 
+
+
+</section> 
+{% endblock %}

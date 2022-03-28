@@ -1,13 +1,13 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 from django.apps import apps
-from django.db.models import Avg
+from django.db.models import Avg , Sum
 from datetime import datetime
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from general_fonctions import *
 
- 
+
 def level_name(level):
     if level == "T" :
         my_level = level+"erm"
@@ -186,6 +186,24 @@ class Level(models.Model):
             my_level = level 
         return my_level
  
+
+    def details(self):
+        data      = {}
+        today     = datetime.now()
+        Adhesion  = apps.get_model('account', 'Adhesion')
+        adhesions = Adhesion.objects.filter(user__school_id=50 , date_start__lte= today , date_end__gte= today, levels=self ) 
+        adheses   = adhesions.aggregate(total_amount=Sum('amount')) 
+
+        data["nba"] = adhesions.count()
+
+        if not adheses["total_amount"] :
+            solde = 0
+        else :
+            solde = adheses["total_amount"]
+        
+        data["solde"] = solde
+
+        return data
 
 
 
