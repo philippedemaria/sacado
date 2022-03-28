@@ -9,6 +9,13 @@
     <script>
         require(['script/ajax-group']);
     </script>
+    
+    {% if not request.user.is_in_academy %}
+    <script>
+        require(['script/charts-academy']);
+    </script>
+    {% endif %}
+
 {% endblock %}
 
             
