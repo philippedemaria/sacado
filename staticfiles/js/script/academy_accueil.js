@@ -374,23 +374,44 @@ $(document).ready(function () {
             });
 
 
-        $("#id_form-0-username").on('change', function () {
-            let username = $(this).val();
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
-            $.ajax({
-                url: '/account/ajax/userinfo/',
-                type: "POST",
-                data: {
-                    'username': username,
-                    csrfmiddlewaretoken: csrf_token,    
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $("#id_form-0-username .ajaxresult").html(data["html"]);
-                } 
+        var len = $(".username").length - 1;
+
+        for (i=0;i<len;i++)
+        {
+
+
+        }
+
+
+
+            $(".username").on('change', function () {
+                let username_id = $(this).attr("id");
+
+                tab = username_id.split("-");
+                determination( tab[1] )
+
             });
-        }); 
+
+
+        function determination(i) {
+                let username = $("#id_form-"+i+"-username").val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+     
+                $.ajax({
+                    url: '/account/ajax/userinfo/',
+                    type: "POST",
+                    data: {
+                        'username': username,
+                        csrfmiddlewaretoken: csrf_token,    
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#ajaxresult"+i).html(data["html"]);
+                    } 
+                });
+            }
+
+
 
 
  

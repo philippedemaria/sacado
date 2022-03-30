@@ -1,0 +1,74 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    {% if historic %}
+         Historique des adhésions
+    {% else %}
+         Adhésions en cours 
+    {% endif  %}
+{% endblock %}
+
+{% block page_menu_right %}
+
+        <a href="{% url 'autotests' %}" class="btn btn-new pull-right"> Mes auto tests</a> 
+
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <form action="" method="POST" enctype="multipart/data">
+                    <div class="row">  
+                        <div class="col-xs-12">  
+                            <div class="form-group"> 
+                                Vous souhaitez créer un auto-test sur les derniers exercices Sacado que vous avez travaillé ? <br/>
+                                Renseignez une date à partir de laquelle, Sacado va sélectionner <b>5 exercices</b> et vous proposer un fichier en pdf que vous pourrez télécharger. 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">  
+                        <div class="col-xs-2"> 
+                            <div class="form-group">
+                                {{ form.dateback.label_tag}} 
+                                {{ form.dateback|attr:"type:date"|add_class:"form-control"}}
+                            </div>  
+                        </div> 
+                    </div>
+                    <div class="row">  
+                        <div class="col-xs-12"> 
+                            <div class="form-group">
+                                <input value="Créer l'auto-test" type="submit"  class="btn btn-primary"  /> <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+                            </div>  
+                        </div> 
+                    </div>
+                </form>
+            </div>        
+        </div>
+ 
+    </section>
+ 
+
+ 
+
+
+{% endblock %}

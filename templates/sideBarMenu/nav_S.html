@@ -80,3 +80,16 @@ active
         <div class="captionmenu">Flashpack</div>
     </a>
 </li> 
+
+
+{% if not request.user.is_in_academy %}   
+<li  class="dropdown  {% if '/academy' in request.path %} active{% endif %}">
+    <a href="{% url 'autotests' %}" class="main" >
+        <i class="bi bi-question-circle icon_size"></i> 
+        <div class="captionmenu">Auto-test</div>
+    </a>
+</li> 
+
+ 
+
+{% endif %}  

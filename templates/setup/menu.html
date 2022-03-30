@@ -33,7 +33,7 @@
         <div class="row"><input type="hidden" name="menu" value="{{  name }}" />
             <div class="col-sm-12 col-md-12" align="center">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-violet_border family_selected" id="one_child" data_value="one"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
+                    <label class="btn btn-violet_border family_selected active" id="one_child" data_value="one"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
                         <input type="radio" name="children" id="one_child_radio" value="1" checked   >  1 enfant*
                     </label>
                     <label class="btn btn-violet_border family_selected" id="two_children" data_value="two" data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">

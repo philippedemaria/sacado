@@ -1,8 +1,9 @@
 {% extends 'academy.html' %}
-
 {% load widget_tweaks %}
 {% load static %}
 {% load item_tags %}
+
+
 
 
 
@@ -37,7 +38,6 @@
         <hr/>
         <form action="{% url 'commit_adhesion' %}" method="POST" enctype='multipart/form-data'>
             {% csrf_token %} 
-
             {{ userFormset.management_form }}
             <div id="formsetZone"  style="display:none"> 
                 <div class="card">
@@ -107,7 +107,7 @@
             </div>  
 
             <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
-            <input type="hidden" name="month_price" i value="{{ data_post.month_price  }}"  />                
+            <input type="hidden" name="month_price" value="{{ data_post.month_price  }}"  />                
             <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
             <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
             <input type="hidden" name="menu_id" value="{{ formule.id}}" />

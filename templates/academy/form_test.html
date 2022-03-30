@@ -1,0 +1,74 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    {% if historic %}
+         Historique des adhésions
+    {% else %}
+         Adhésions en cours 
+    {% endif  %}
+{% endblock %}
+
+{% block page_menu_right %}
+        <a href="{% url 'academy_index'  %}" class="btn btn-sacado pull-right">Tableau de bord</a> 
+    {% if historic %}
+        <a href="{% url 'details_adhesion' level.id %}" class="btn btn-new pull-right"> Adhésion en cours</a>     
+    {% else %}
+        <a href="{% url 'historic_adhesions' level.id %}" class="btn btn-new pull-right"> Historique</a> 
+    {% endif  %}
+
+
+
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+
+                <form action="" method="POST" enctype="multipart/data">
+                    <div class="col-xs-10">  
+                        <input type="date" class="form-control" />     
+                    </div>  
+                    <div class="col-xs-2">  
+                        <input type="date" class="form-control" /> 
+                    </div> 
+
+
+
+
+
+                    
+                </form>
+            </div>
+                       
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+ 
+
+ 
+
+
+{% endblock %}

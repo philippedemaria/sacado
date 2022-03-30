@@ -1,0 +1,77 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-accueil.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    Auto tests
+{% endblock %}
+
+{% block page_menu_right %}
+
+        <a href="{% url 'create_autotest'  %}" class="btn btn-sacado pull-right">Nouvel auto test</a> 
+ 
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <td>Pdf </td>
+                        <td>Date</td>
+                        <td>Savoir faire testés</td>
+                        <td>Fait ?</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for autotest  in autotests %}
+                            <tr>
+                                <td>
+                                    <a href="{{ autotest.file.url }}" target="blank"><img src="{% static 'img/pdf.png' %}"  width="30px" /></a>
+                                </td>
+                                <td >
+                                    {{ autotest.date|date:"d m Y"  }} 
+                                </td>
+                                <td>
+                                    {% for k in autotest.knowledges.all  %} 
+                                       <li class="sanspuce">    {{k}}   </li>
+                                    {% endfor %}  
+                                </td>
+                                <td>
+                                    {% if autotest.is_done %}<i class="bi bi-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">     
+                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+            </div>
+        </div>
+    </section>
+ 
+
+ 
+
+
+{% endblock %}

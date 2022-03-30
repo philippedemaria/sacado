@@ -10,7 +10,11 @@ from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
 from django.http import JsonResponse 
 from account.models import  Adhesion
+from academy.models import  Autotest 
+from academy.forms import  AutotestForm
 from socle.models import  Level
+from qcm.models import  Studentanswer
+from bibliotex.models import  Exotex
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -95,6 +99,79 @@ def historic_adhesions(request,level_id):
 
 	else:
 		return redirect("index")
+
+
+
+def autotests(request) :
+
+	student   = request.user.student 
+	autotests = Autotest.objects.filter(student=student )
+	context   = { 'autotests' : autotests }
+
+	return render(request, "academy/auto_tests.html" , context)
+
+
+
+
+def create_autotest(request) :
+
+	student  = request.user.student 
+	form     = AutotestForm(request.POST or None, request.FILES or None )
+
+	if request.method == "POST" :
+		if form.is_valid():
+		    form.save()
+	 
+	context   = { 'form' : form }
+	return render(request, "academy/form_autotest.html" , context)
+
+
+
+
+
+def delete_autotest(request,test_id) :
+
+	student   = request.user.student 
+	autotests = Autotest.objects.filter(student=student )
+	context   = { 'autotests' : autotests }
+
+	return render(request, "academy/auto_tests.html" , context)
+
+
+
+
+def create_evaluation_tex(request,nb):
+
+	date = request.POST.get("date")
+
+	student        = request.user.student 
+	studentanswers = Studentanswer.objects.filter(student=student, date__get=date )
+
+	knowledges , exotexs_exam = [] , []
+
+	for studentanswer in studentanswers :
+		if studentanswer.exercise.knowledge not in knowledges :
+			knowledges.append(studentanswer.exercise.knowledge)
+
+	exotexs = list( Exotex.objects.filter(knowledge__in=knowledges) )
+
+
+	for i in range (5) :
+		ind = random.randint(0,len(exotexs)-1)
+		exotexs_exam.append(exotexs[ind])
+		exotexs.remove(exotexs[ind])
+
+
+	context = { 'exotexs_exam' : exotexs_exam }
+
+	return render(request, "academy/adhesions.html" , context)
+
+
+
+
+
+
+
 
 
 def exemple_json(request):
