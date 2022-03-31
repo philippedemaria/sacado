@@ -82,7 +82,7 @@ active
 </li> 
 
 
-{% if not request.user.is_in_academy %}   
+{% if request.user.is_in_academy %}   
 <li  class="dropdown  {% if '/academy' in request.path %} active{% endif %}">
     <a href="{% url 'autotests' %}" class="main" >
         <i class="bi bi-question-circle icon_size"></i> 
