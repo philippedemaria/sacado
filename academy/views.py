@@ -49,6 +49,89 @@ from general_fonctions import *
 
 
 
+def printer_bibliotex_by_student(exotexs):
+    """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
+    soit en html (output="html") """
+
+    # ouverture du texte dans le fichier tex
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"   
+
+    ## Création du texte dans le fichier tex   
+
+ 
+ 
+
+    elements +=r"\titreFiche{Auto test"+r"}{SACADO"+r"}"
+
+    today = datetime.now()
+ 
+     
+ 
+
+    j = 1
+    for exotex in exotexs :
+    
+        skills_display = ""
+        if exotex.skills.count():
+            sks =  exotex.skills.all()
+        else :
+            sks =  exotex.exotex.skills.all()
+        for s in sks :
+            skills_display +=  s.name+". "
+            
+
+        elements += r"\exo {\bf " +   exotex.title  +  r" }    \competence{" +skills_display+r"}"
+        
+        j+=1
+
+  
+        k_display =  exotex.knowledge.name
+        elements += r"\savoirs{  \item " +  k_display 
+
+
+        if exotex.knowledges.count() : kws =  exotex.knowledges.all()
+        else : kws = []
+        
+        for k in kws : 
+            elements += r" \item " +  k.name  
+
+        elements += r"}"
+ 
+    # Fermeture du texte dans le fichier tex
+    elements +=  r"\end{document}"
+
+    elements +=  settings.DIR_TMP_TEX    
+
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    #file = settings.DIR_TMP_TEX+r"\\"+document
+    # pour le serveur Linux
+    file = settings.DIR_TMP_TEX+"/"+document
+    ################################################################# 
+    ################################################################# 
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+
+ 
+
+
+
+
+
+
+
+
 def academy_index(request):
 
 	rq_user = request.user 
@@ -118,10 +201,31 @@ def create_autotest(request) :
 	student  = request.user.student 
 	form     = AutotestForm(request.POST or None, request.FILES or None )
 
+	
 	if request.method == "POST" :
 		if form.is_valid():
-		    form.save()
-	 
+			date = request.POST.get("date")
+
+			studentanswers = Studentanswer.objects.filter(student=student, date__gte=date )
+
+			knowledges , exotexs_exam = [] , []
+
+			for studentanswer in studentanswers :
+				if studentanswer.exercise.knowledge not in knowledges :
+					knowledges.append(studentanswer.exercise.knowledge)
+
+			exotexs = list( Exotex.objects.filter(knowledge__in=knowledges) )
+
+			for i in range (5) :
+				ind = random.randint(0,len(exotexs)-1)
+				exotexs_exam.append(exotexs[ind])
+				exotexs.remove(exotexs[ind])
+ 
+
+			nf = form.save(commit=False)
+			nf.file = printer_bibliotex_by_student(exotexs)
+			nf.save()
+
 	context   = { 'form' : form }
 	return render(request, "academy/form_autotest.html" , context)
 
@@ -136,39 +240,6 @@ def delete_autotest(request,test_id) :
 	context   = { 'autotests' : autotests }
 
 	return render(request, "academy/auto_tests.html" , context)
-
-
-
-
-def create_evaluation_tex(request,nb):
-
-	date = request.POST.get("date")
-
-	student        = request.user.student 
-	studentanswers = Studentanswer.objects.filter(student=student, date__get=date )
-
-	knowledges , exotexs_exam = [] , []
-
-	for studentanswer in studentanswers :
-		if studentanswer.exercise.knowledge not in knowledges :
-			knowledges.append(studentanswer.exercise.knowledge)
-
-	exotexs = list( Exotex.objects.filter(knowledge__in=knowledges) )
-
-
-	for i in range (5) :
-		ind = random.randint(0,len(exotexs)-1)
-		exotexs_exam.append(exotexs[ind])
-		exotexs.remove(exotexs[ind])
-
-
-	context = { 'exotexs_exam' : exotexs_exam }
-
-	return render(request, "academy/adhesions.html" , context)
-
-
-
-
 
 
 
