@@ -49,6 +49,11 @@ from general_fonctions import *
 
 
 
+
+
+
+
+
 def printer_bibliotex_by_student(exotexs):
     """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
     soit en html (output="html") """
@@ -201,7 +206,7 @@ def create_autotest(request) :
 	student  = request.user.student 
 	form     = AutotestForm(request.POST or None, request.FILES or None )
 
-	
+
 	if request.method == "POST" :
 		if form.is_valid():
 			date = request.POST.get("date")
