@@ -68,7 +68,7 @@ from general_fonctions import *
 
 def fill_the_skills(request):
     nb_relations = Relationship.objects.filter(skills=None).count()
-    relations = Relationship.objects.filter(skills=None)[:10000]
+    relations = Relationship.objects.filter(skills=None)[:5000]
     for r in relations:
         r.skills.set( r.exercise.supportfile.skills.all() )
     return redirect("index")
