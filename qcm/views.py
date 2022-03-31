@@ -62,15 +62,21 @@ import pytz
 import csv
 import html
 from general_fonctions import *
-
+ 
 
 
 
 def fill_the_skills(request):
-    nb_relations = Relationship.objects.filter(skills=None).count()
-    relations = Relationship.objects.filter(skills=None)[:1000]
-    for r in relations:
-        r.skills.set( r.exercise.supportfile.skills.all() )
+    ok = True
+    while ok :
+        relations = Relationship.objects.filter(skills=None)[:1000]
+        for r in relations:
+            r.skills.set( r.exercise.supportfile.skills.all() )
+        time.sleep(120)
+        if Relationship.objects.filter(skills=None).count() < 1000 :
+            ok = False
+
+
     return redirect("index")
 
 #################################################################
