@@ -67,14 +67,11 @@ from general_fonctions import *
 
 
 def fill_the_skills(request):
-    ok = True
-    while ok :
-        relations = Relationship.objects.filter(skills=None)[:1000]
-        for r in relations:
-            r.skills.set( r.exercise.supportfile.skills.all() )
-        time.sleep(120)
-        if Relationship.objects.filter(skills=None).count() < 1000 :
-            ok = False
+ 
+    relations = Relationship.objects.filter(skills=None)[:1000]
+    for r in relations:
+        r.skills.set( r.exercise.supportfile.skills.all() )
+   
 
 
     return redirect("index")
