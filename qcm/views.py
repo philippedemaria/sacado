@@ -65,16 +65,15 @@ from general_fonctions import *
  
 
 
-
 def fill_the_skills(request):
- 
-    relations = Relationship.objects.filter(skills=None)[:1000]
+
+    rs = Relationship.objects.filter(skills=None)
+    nb = rs.count() 
+    relations = rs[:1000]
     for r in relations:
         r.skills.set( r.exercise.supportfile.skills.all() )
-   
-
-
-    return redirect("index")
+    context = { 'nb' : nb , }
+    return render(request, 'qcm/fill_the_skills_page.html', context )
 
 #################################################################
 # Duplication des folder

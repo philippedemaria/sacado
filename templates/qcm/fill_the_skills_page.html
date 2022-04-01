@@ -1,0 +1,68 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+ 
+
+    <script>
+        require(['script/ajax-folders-create']);
+    </script> 
+
+    {% block require_complement %}
+        {% if not folder %}
+            <script>
+                require(['script/ajax-parcours-complement']);
+            </script> 
+        {% endif %}
+    {% endblock %} 
+
+{% endblock %} 
+
+
+{% block page_title %}
+ 
+   <i class="bi bi-folder sacado_color_text"></i> fill the skills
+ 
+
+ 
+{% endblock %}
+
+
+{% block page_menu_right %}
+{% endblock %}
+
+ 
+
+
+{% block body %}  
+<section class="content_main">
+
+
+ 
+
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <a href="{% url 'fill_the_skills' %}" class="btn btn-primary">Compléter </a>
+            </div>
+        </div>
+
+
+ 
+
+</section>   
+
+
+
+
+
+{% endblock %}
+
+
+      
+ 
+ 
