@@ -1,7 +1,9 @@
 {% if question.imagefile and not question.audio %}
 <div class="row">  
     <div class="col-sm-12 col-md-12" align="center">
-         <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" /> 
+         <img src="{{ question.imagefile.url }}" 
+            {% if question.height  %}height="{{ question.height }}px" {% else %}   height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" {% endif %} 
+            {% if question.width  %} width="{{ question.width }}px" {% endif %} /> 
     </div>
 </div>
 {% elif question.audio and not question.imagefile  %}
@@ -16,7 +18,9 @@
 {% elif question.audio and question.imagefile  %}
 <div class="row">  
     <div class="col-sm-12 col-md-12" align="center">
-         <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
+         <img src="{{ question.imagefile.url }}"             
+            {% if question.height  %}height="{{ question.height }}px" {% else %}   height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" {% endif %} 
+            {% if question.width  %} width="{{ question.width }}px" {% endif %} />
     </div>
 </div>
 <div class="row">  
