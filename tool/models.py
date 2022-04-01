@@ -151,6 +151,9 @@ class Question(models.Model):
     audio      = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
     video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
 
+    width         = models.PositiveIntegerField( verbose_name="Largeur",  blank=True, null = True )
+    height         = models.PositiveIntegerField(verbose_name="Hauteur", blank=True, null = True )
+
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     is_radio   = models.BooleanField(default=0, verbose_name="Type de réponse ?")
 

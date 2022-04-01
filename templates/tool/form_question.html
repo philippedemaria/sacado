@@ -134,7 +134,7 @@
                                         {{ form.is_publish  }} 
                                     </div>
                                 </div>
-
+ 
 
                                 {% if sacado_asso %}
                                 <div class="col-sm-12 col-md-1" align="center" >
@@ -151,14 +151,30 @@
                                         <div id="drop_zone" class="drop-zone">
                                             {% if question.imagefile  %}
                                                 <p  style="font-size:18px">Remplacer votre image ici. MAX : 700px par 600px (500ko)</p>
-                                                <img src="{{ question.imagefile.url }}" width="300px" />
+                                                <img src="{{ question.imagefile.url }}" {% if question.width %}width="{{ question.width }}px"{% else %}width="300px"{% endif %} />
                                             {% else %} 
                                                 <p class="title">Déposer votre image ici <div style="font-size:20px">MAX : 700px par 600px (500ko)</div></p>
                                             {% endif %}  
                                             <div class="preview-container"></div>
-                                        </div>
+                                        
                                         {{ form.imagefile|attr:"multiple" }}
-                                    </div> 
+                                        </div>
+
+                                        <div class="row">  
+  
+                                            <div class="col-sm-6 col-md-6" align="center" > 
+                                                <label>Largeur <em>(optionnel)</em> :</label>
+                                                {{ form.width }} px
+                                            </div>
+                                            <div class="col-sm-6 col-md-6" align="center" > 
+                                                <label>Hauteur <em>(optionnel)</em> :</label>
+                                                {{ form.height }} px
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
                                     <div id="video_div" class="{% if question.video %}allowed_display{% else %}not_allowed_display{% endif %}"><br/><br/>
                                         {{ form.video|attr:"placeholder:Coller le code iframe de votre vidéo ici"|attr:"rows:5"  }}<br/><br/>
                                     </div>
