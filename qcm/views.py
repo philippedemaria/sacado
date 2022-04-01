@@ -67,13 +67,12 @@ from general_fonctions import *
 
 def fill_the_skills(request):
 
-    rs = Relationship.objects.filter(skills=None)
+    rs = Relationship.objects.filter(skills=None,parcours__teacher_id=2480)
     nb = rs.count() 
     relations = rs[:100]
     for r in relations:
-        print(r)
         rse = r.exercise.supportfile.skills.all()
-        print(rse)
+        print(r.id, r.exercise.supportfile.id , rse)
         r.skills.set( rse )
     context = { 'nb' : nb , 'relations' : relations  }
     return render(request, 'qcm/fill_the_skills_page.html', context )
