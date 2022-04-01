@@ -45,23 +45,16 @@
 
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                {{ nb }}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 col-xs-12">
-                <a href="{% url 'fill_the_skills' %}" class="btn btn-primary">Compléter </a>
+                {{ nb }} relations dans les parcours
             </div>
         </div>
         <hr/>
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                {% for r in  relations %}
-                    <li class="sanspuce">{{ r.id }}</li> 
-                {% endfor %}
+                <a href="{% url 'fill_the_skills' %}" class="btn btn-primary">Compléter </a>
             </div>
         </div>
+
  
 
 </section>   

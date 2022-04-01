@@ -71,7 +71,6 @@ def fill_the_skills(request):
     relations = rs[:1000]
     for r in relations:
         rse = r.exercise.supportfile.skills.all()
-        print(r.id, r.exercise.supportfile.id , rse)
         r.skills.set( rse )
     context = { 'nb' : nb ,   }
     return render(request, 'qcm/fill_the_skills_page.html', context )
