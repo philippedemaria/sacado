@@ -71,7 +71,10 @@ def fill_the_skills(request):
     nb = rs.count() 
     relations = rs[:100]
     for r in relations:
-        r.skills.set( r.exercise.supportfile.skills.all() )
+        print(r)
+        rse = r.exercise.supportfile.skills.all()
+        print(rse)
+        r.skills.set( rse )
     context = { 'nb' : nb , 'relations' : relations  }
     return render(request, 'qcm/fill_the_skills_page.html', context )
 
@@ -82,7 +85,7 @@ def fill_the_skills(request):
 def find_no_skill(request):
 
     skills   = Skill.objects.filter(subject_id=1)
-    supports = Supportfile.objects.filter(skills=None, is_title=0) 
+    supports = Supportfile.objects.filter(skills=None, is_title=0)
     context  = {'supports': supports,  'skills': skills,  }
 
     return render(request, 'qcm/find_no_skill.html', context )
