@@ -66,7 +66,7 @@ from general_fonctions import *
 
 def fill_the_skills(request):
 
-    rs = Relationship.objects.filter(skills=None,parcours__teacher_id=2480,exercise__supportfile__is_title=0)
+    rs = Relationship.objects.filter(skills=None,exercise__supportfile__is_title=0)
     nb = rs.count() 
     relations = rs[:1000]
     for r in relations:
