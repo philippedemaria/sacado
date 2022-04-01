@@ -68,12 +68,12 @@ def fill_the_skills(request):
 
     rs = Relationship.objects.filter(skills=None,parcours__teacher_id=2480,exercise__supportfile__is_title=0)
     nb = rs.count() 
-    relations = rs[:100]
+    relations = rs[:1000]
     for r in relations:
         rse = r.exercise.supportfile.skills.all()
         print(r.id, r.exercise.supportfile.id , rse)
         r.skills.set( rse )
-    context = { 'nb' : nb , 'relations' : relations  }
+    context = { 'nb' : nb ,   }
     return render(request, 'qcm/fill_the_skills_page.html', context )
 
 #################################################################
