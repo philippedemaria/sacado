@@ -700,7 +700,7 @@ def python(request):
 
 def academy(request):
 
-    nb_exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 ).count() - 1
+    nb_exercises = Exercise.objects.filter(supportfile__is_title=0 ).count()
 
     form = AuthenticationForm()
     np_form = NewpasswordForm()
