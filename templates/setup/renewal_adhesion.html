@@ -58,7 +58,7 @@
             <div class="col-sm-12 col-md-6">
 
                 <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
-                <input type="hidden" name="month_price" i value="{{ data_post.month_price  }}"  />                
+                <input type="hidden" name="month_price" value="{{ data_post.month_price  }}"  />                
                 <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
                 <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
                 <input type="hidden" name="menu_id" value="{{ formule.id}}" />
@@ -83,11 +83,18 @@
                         </div>
                     </div>
                 {% endfor %}
+
+
+                {% comment %}
                 {% if data_post.nb_child != adhesion.user.parent.students.all.count %}
                 <div class="renewal_bottom">
-                     <div class="alert alert-danger">Votre choix d'adhésion concerne {{ data_post.nb_child }} enfant{{ data_post.nb_child|pluralize }}. Vous ne pourrez pas sélectionner tous vos enfants.</div>
+                    <div class="alert alert-warning">
+                        Votre choix d'adhésion concerne {{ data_post.nb_child }} enfant{{ data_post.nb_child|pluralize }}. Vous ne pourrez pas sélectionner tous vos enfants.
+                    </div>
                 </div>
                 {% endif %}
+                {% endcomment %}
+
                 <div class="renewal_bottom">
                     <a href="#" class="btn btn-primary validate_renewal" >Valider et payer</a>
                     <a href="javascript:history.back()" class="btn btn-default">Annuler</a>
@@ -101,6 +108,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12" id="show_confirm_renewal">
+                        Sélectionner vos enfants et leur niveau associé
                     </div>
                 </div>
             </div>

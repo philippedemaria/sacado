@@ -35,7 +35,7 @@
     {% endcomment %}
 
         </div> 
-        <hr/>
+        <hr/> 
         <form action="{% url 'commit_adhesion' %}" method="POST" enctype='multipart/form-data'>
             {% csrf_token %} 
             {{ userFormset.management_form }}
