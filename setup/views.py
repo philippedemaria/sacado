@@ -700,7 +700,7 @@ def python(request):
 
 def academy(request):
 
-    nb_exercises = Supportfile.objects.filter(theme__subject_id=1,is_title=0).count()
+    nb_exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 ).count() - 1
 
     form = AuthenticationForm()
     np_form = NewpasswordForm()
@@ -760,8 +760,6 @@ def details_of_adhesion(request) :
     if request.user.is_in_academy :
 
         adhesion = Adhesion.objects.filter(user = request.user).last()
-        
-        print(request.user.adhesions.all())
         context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True }
         return render(request, 'setup/renewal_adhesion.html', context)   
 
