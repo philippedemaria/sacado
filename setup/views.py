@@ -757,9 +757,11 @@ def details_of_adhesion(request) :
     formule = Formule.objects.get(pk = int(menu_id))
 
 
-    if request.user.is_authenticated :
+    if request.user.is_in_academy :
 
         adhesion = Adhesion.objects.filter(user = request.user).last()
+        
+        print(request.user.adhesions.all())
         context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True }
         return render(request, 'setup/renewal_adhesion.html', context)   
 

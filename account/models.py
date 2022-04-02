@@ -174,6 +174,22 @@ class User(AbstractUser):
         return is_sacado 
 
 
+ 
+    def permit_access(self, model ):
+        is_sacado = False
+        today = datetime.now()
+        try :
+            abonnement = self.school.abonnement.last()
+            if (today < abonnement.date_stop and abonnement.is_active) or model.author.user == self :
+                is_sacado = True
+        except :
+            if model.author.user == self :
+                is_sacado = True
+        return is_sacado 
+
+
+
+
     def my_groups(self):
         group_string = ""
         try :
@@ -198,10 +214,12 @@ class User(AbstractUser):
 
         if self.school_id == 50 :
             if self.is_parent  :
-                adhesion = self.adhesions.last()
-                if today > adhesion.date_start and  today < adhesion.date_end :
-                    is_sacado = True
-                    
+                try :
+                    adhesion = self.adhesions.last()
+                    if today > adhesion.date_start and  today < adhesion.date_end :
+                        is_sacado = True
+                except :
+                    is_sacado = False
             elif self.is_student :  
                 try :
                     parent   = self.student.students_parent.first()

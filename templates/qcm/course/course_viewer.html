@@ -27,19 +27,35 @@
         </div>
         <div class="col-md-8 col-xs-12 col-lg-9">
         {% for course in courses %}
-            <div class="admin-content"  id="course{{forloop.counter0}}">
-                <h1 class="thin">  {{ course.title }}  
-                    {% if is_teacher %}
-                        {% if course.author == teacher %}
-                            <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>
-                        {% else  %}
-                            <a href="{% url 'delete_course' course.id  parcours.id %}" style="font-size: 12px" class="pull-right"  onclick="return TestDelete('ce cours')">Supprimer ce cours</a>
-                        {% endif  %}
-                    {% endif %}
-                </h1>
-                <hr>
-                {{ course.annoncement|decode|safe }} 
-            </div>
+
+                {% get_permit_access  request.user    course    as     get_access %}
+                {% if get_access %}
+                <div class="admin-content"  id="course{{forloop.counter0}}">
+                    <h1 class="thin">  {{ course.title }}  
+                        {% if is_teacher %}
+                            {% if course.author == teacher %}
+                                <a href="{% url 'update_course' course.id parcours.id %}" style="font-size: 12px" class="pull-right">Modifier ce cours</a>
+                            {% else  %}
+                                <a href="{% url 'delete_course' course.id  parcours.id %}" style="font-size: 12px" class="pull-right"  onclick="return TestDelete('ce cours')">Supprimer ce cours</a>
+                            {% endif  %}
+                        {% endif %}
+                    </h1>
+                    <hr>
+
+                {% get_permit_access  request.user    course    as     get_access %}
+                {% if get_access %} 
+                 
+  
+                    {{ course.annoncement|decode|safe }} 
+                {% else %} 
+                    <div class="alert alert-danger">
+                        Vous avez téléchargé ce cours mais vous n'avez pas la version établissement. Le cours n'est donc plus utilisable. <a href="{% url 'admin_tdb' %}">Abonnez votre établissement à Sacado.</a>
+                    </div>
+                {% endif %}                     
+                </div>
+
+
+
         {% endfor %}
         </div>  
          

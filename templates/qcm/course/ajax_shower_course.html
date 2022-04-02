@@ -2,11 +2,16 @@
 {% load item_tags %}
 
  
+{% get_permit_access  request.user    course    as     get_access %}
+{% if get_access %} 
+  {{ course.annoncement|safe }} 
 
-{{ course.annoncement|safe }} 
+{% else %} 
+    <div class="alert alert-danger">
+        Vous avez téléchargé ce cours mais vous n'avez pas la version établissement. Le cours n'est donc plus utilisable. <a href="{% url 'admin_tdb' %}">Abonnez votre établissement à Sacado.</a>
+    </div>
+{% endif %}  
 
- 
- 
 <script type="text/javascript">
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 

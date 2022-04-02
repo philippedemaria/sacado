@@ -37,23 +37,22 @@
 {% block body %}    
 
 <section class="content_main">  
-
-
-
-    <div class="row">
- 
-        {% if   course  %}
-            <div class="col-md-12 col-xs-12 col-lg-12" id="this_course_viewer">
-               {{ course.annoncement|decode|safe }} 
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-lg-12" >
+                {% get_permit_access  teacher.user    course    as     get_access %}
+                {% if get_access %}
+                    {% if   course  %}
+                        {{ course.annoncement|decode|safe }} 
+                    {% else %} 
+                        <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
+                    {% endif %} 
+                {% else %} 
+                    <div class="alert alert-danger">
+                        Vous avez téléchargé ce cours mais vous n'avez pas la version établissement. Le cours n'est donc plus utilisable. <a href="{% url 'admin_tdb' %}">Abonnez votre établissement à Sacado.</a>
+                    </div>
+                {% endif %} 
             </div>
-        {% else %} 
-            <div class="col-md-8 col-xs-12 col-lg-9">
-                <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
-            </div>
-        {% endif %} 
-    </div>
- 
- 
+        </div>
 <a href="javascript:history.back()"><input type="button" value="Retour aux cours"
                                                                        class="btn btn-default "/></a>
 

@@ -1013,3 +1013,8 @@ def include_in_flashpack (obj, flashpack):
  
 
 
+
+@register.simple_tag 
+def get_permit_access (obj, model):
+    """ Vérifie l'accès pour un modèle cloné """
+    return obj.permit_access( model ) 

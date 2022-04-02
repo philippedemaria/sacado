@@ -50,23 +50,29 @@
             <form action="" method="POST"> 
             {% csrf_token %}
             <ul class="nav nav-pills nav-stacked admin-menu" id="course_sortable">
+
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
-                    <li class="{% if forloop.first %}active{% endif %} menu_course">
-                        <a href="#" {% if sacado_asso %} class="course_viewer"  {% elif course.author_id == request.user_id %} class="course_viewer" {% else %} title="Version établissement requise"  {% endif  %} data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
+                    {% get_permit_access  teacher.user    course    as     get_access %}
+                    {% if get_access %}
+                        {% if   course  %}
+                        <li class="{% if forloop.first %}active{% endif %} menu_course">
+                            <a href="#" {% if sacado_asso %} class="course_viewer"  {% elif course.author_id == request.user_id %} class="course_viewer" {% else %} title="Version établissement requise"  {% endif  %} data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
 
-                            <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" ></i>
-                             {{ course.title }}   
-                             {% if not sacado_asso and course.author_id != request.user.teacher_id %}
-                                <i class="fa fa-times text-danger"></i>
-                             {% endif  %}
+                                <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" ></i>
+                                 {{ course.title }}   
+                                 {% if not sacado_asso and course.author_id != request.user.teacher_id %}
+                                    <i class="fa fa-times text-danger"></i>
+                                 {% endif  %}
 
-                            {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
+                                {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 
-                            <img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/>
-                        </a>
-                        <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
-                    </li>
+                                <img src="{% static 'img/order_handler_white.png' %}" class="pull-right"/>
+                            </a>
+                            <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
+                        </li>
+                        {% endif %} 
+                    {% endif %} 
                 {% endfor %}
             </ul>        
             </form>
@@ -100,7 +106,20 @@
                     </a>
                 </h1>
                 <hr>
-                <div>{{ course.annoncement|decode|safe }} </div>
+
+                {% get_permit_access  teacher.user    course    as     get_access %}
+                {% if get_access %}
+                    {% if   course  %}
+                        {{ course.annoncement|decode|safe }} 
+                    {% else %} 
+                        <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
+                    {% endif %} 
+                {% else %} 
+                    <div class="alert alert-danger">
+                        Vous avez téléchargé ce cours mais vous n'avez pas la version établissement. Le cours n'est donc plus utilisable. <a href="{% url 'admin_tdb' %}">Abonnez votre établissement à Sacado.</a>
+                    </div>
+                {% endif %} 
+
             </div>
         {% else %} 
             <div class="col-md-8 col-xs-12 col-lg-9">
