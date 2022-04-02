@@ -197,6 +197,9 @@ urlpatterns = [
     path('parcours_update_course/<int:idc>/<int:id>', update_course, name='update_course'),
     path('parcours_delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
+    path('show_one_course/<int:idc>', show_one_course, name='show_one_course'),
+
+
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
     path('parcours_show_courses_from_folder/<int:idf>/0', show_courses_from_folder, name='show_courses_from_folder'),  
     path('parcours_only_create_course/0', only_create_course, name='only_create_course'), 

@@ -6,7 +6,7 @@
   
     <td {% if course.is_folder %} style="padding-top:15px" {% endif %} >
 
-        <a href="{% url 'show_course' 0 course.id %}" > {{ course.title }} </a>
+        <a href="{% url 'show_one_course'  course.id %}" > {{ course.title }} </a>
 
         <div style="font-size:14px;margin-top:-5px;">
             <small>{{  course.duration|int_minutes  }}min. </small>

@@ -7597,6 +7597,18 @@ def show_course(request, idc , id ) :
 
  
 
+#@user_is_parcours_teacher
+def show_one_course(request, idc  ) :
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+ 
+    teacher = Teacher.objects.get(user= request.user)
+    course = Course.objects.get(pk=idc) 
+
+    context = {  'course': course, 'teacher': teacher   }
+    return render(request, 'qcm/course/show_one_course.html', context)
+
 
 
 #@user_is_parcours_teacher
