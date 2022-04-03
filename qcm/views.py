@@ -1179,16 +1179,15 @@ def ajax_individualise(request):
             exercise = Exercise.objects.get(pk = exercise_id)
             relationship = Relationship.objects.get(parcours=parcours,exercise=exercise) 
             if student_id == 0 :  
+
                 if statut=="true" or statut == "True" :
                     somme = 0
-                    try :
-                        for s in parcours.students.all() :
-                            if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
-                                relationship.students.remove(s)
-                                somme +=1
-                            Blacklist.objects.get_or_create(customexercise=customexercise, student = student ,relationship = None   )
-                    except :
-                        pass
+                    for s in parcours.students.all() :
+                        if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
+                            relationship.students.remove(s)
+                            somme +=1
+                        Blacklist.objects.get_or_create(relationship=relationship, student = s ,customexercise = None   )
+
                     data["statut"] = "False"
                     data["class"] = "btn btn-default"
                     data["noclass"] = "btn btn-success"
