@@ -177,7 +177,7 @@ class User(AbstractUser):
  
     def permit_access(self, model ):
         is_sacado = False
-        today = datetime.now()
+        today = time_zone_user(self)
         try :
             abonnement = self.school.abonnement.last()
             if (today < abonnement.date_stop and abonnement.is_active) or model.author.user == self :
