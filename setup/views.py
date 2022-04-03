@@ -1044,7 +1044,7 @@ def save_adhesion(request) :
     sacado_rcv = ["philippe.demaria83@gmail.com","brunoserres33@gmail.com","sacado.asso@gmail.com"]
 
     sacado_msg = "Une adhésion "+formule.adhesion +" SACADO avec le menu "+formule.name+" vient d'être souscrite pour "+str(nb_child)+" enfant"+nbc+" \n\n"
-    sacado_msg += "Le montant de l'adhésion est : "+total_price+"€ soit "+nb_month+ " x "+month_price+"€\n\n"
+    sacado_msg += "L'adhésion est gratuite jusqu'au 30 juin 2022." # "Le montant de l'adhésion est : "+total_price+"€ soit "+nb_month+ " x "+month_price+"€\n\n"
     sacado_msg += "La date de fin de l'adhésion est : "+date_end+"\n\n"
     i,j = 1,1
     for p in parents_of_adhesion :
