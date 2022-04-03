@@ -3951,6 +3951,10 @@ table.table-bordered.dataTable {
     border : 1px solid #e6e2dd;
 }
 
+.card_adhesion{
+  padding:30px;
+}
+
 
 .card_freeze{
   float: left;

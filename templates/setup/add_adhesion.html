@@ -1,0 +1,157 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+     <script>
+        require(['script/ajax-adhesion']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    
+    <i class='fa fa-audio-description'></i> Renouvellement d'une adhésion
+
+{% endblock %}
+
+
+ 
+{% block page_menu_right %}
+
+{% endblock %}
+
+
+ 
+     
+{% block body %}     
+<section class="content_main"> 
+ 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h2 class="thin">Ajouter un enfant <small>(Si vous souhaitez ajouter plusieurs enfants, il faut faire cette manipulation plusieurs fois)</small></h2>
+        </div>
+    </form>
+
+
+    <div class="row">
+        <form action="" method="POST">{% csrf_token %}
+            <div class="col-sm-12 col-md-6">
+                <div class="card card_adhesion">
+                    <div class="form-group">
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name |add_class:"form-control id_last_name"|attr:"required" }}
+                        {{ form.last_name.errors }}
+                    </div>     
+                    <div class="form-group">
+                        {{ form.first_name.label_tag }}
+                        {{ form.first_name |add_class:"form-control id_first_name"|attr:"required" }}
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label_tag }} 
+                        {{ form.email |add_class:"form-control email"}}
+                        {{ form.email.errors }}
+                    </div>
+                    {% if not forloop.first %}
+                    <div class="form-group">
+                        <label>Niveau favori :</label>
+                        <select name="level" id="id_level" class="form-control select2">
+                            {% for l in levels|dictsort:"ranking" %}
+                                <option value="{{ l.id }}">{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small>Le niveau favori est le niveau accessible depuis le tableau de bord.</small>
+                    </div>
+                    {% else %}
+                        <input name="level" value="" type="hidden" />
+                    {% endif %}
+                    <div class="row"> 
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label>Choisir un identifiant :</label>
+                                {{ form.username |add_class:"form-control username"|attr:"required" }}
+                                <span id="ajaxresult0" class="ajaxresult"></span>
+                                {{ form.username.errors }}
+                            </div>
+                        </div>  
+                    </div>       
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                {{ form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
+                                {{ form.password1 |add_class:"form-control"|attr:"required" }}
+                                {{ form.password1.errors }}
+                            </div>
+                        </div>  
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                {{ form.password2.label_tag }}
+                                {{ form.password2 |add_class:"form-control"|attr:"required" }}
+                                {{ form.password2.errors }}
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+      <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+            </div> 
+               
+
+            <div class="col-sm-12 col-md-6">
+                <div class="card card_adhesion not_allowed_display" id="div_display">
+                    <div class="form-group not_allowed_display" id="div_last_name">
+                        <label>Nom : </label><span id="verif_last_name"></span>
+                    </div>     
+                    <div class="form-group not_allowed_display" id="div_first_name">
+                        <label>Prénom : </label><span id="verif_first_name"></span>
+                    </div>
+                    <div class="form-group not_allowed_display" id="div_email">
+                        <label>Email : </label><span id="verif_email"></span>
+                    </div>
+                    
+                    <div class="form-group not_allowed_display" id="div_level">
+                        <label>Niveau favori : </label><span id="verif_level"></span>
+                    </div>
+ 
+                    <div class="form-group not_allowed_display" id="div_username">
+                        <label>Choisir un identifiant : </label><span id="verif_username"></span>
+                    </div>
+ 
+ 
+                </div>
+
+                <div class="row not_allowed_display" id="id_save">
+                    <div class="col-sm-12 col-md-12">
+     
+                        <button type="submit" class="btn btn-primary">Inscription gratuite jusqu'au 30 juin 2022 </button>   
+     
+                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                    </div>
+                </div> 
+
+            </div> 
+
+
+
+
+
+
+
+
+        </form>    
+    </div>
+
+ 
+</section>            
+{% endblock %}

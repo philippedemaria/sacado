@@ -21,12 +21,16 @@
 
 {% block page_title %}  
     
-    <i class='fa fa-leaf'></i> Renouvellement d'une adhésion
+    <i class='fa fa-audio-description'></i> Renouvellement d'une adhésion
 
 {% endblock %}
 
 
  
+{% block page_menu_right %}
+    <a href="{% url 'student_to_association' %}" class="btn btn-new pull-right"> Nouvelle adhésion</a>    
+
+{% endblock %}
 
 
  
@@ -47,10 +51,12 @@
 
                 attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} x {{ data_post.month_price }}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
         </div>
+        {% comment %}
         <div class="col-sm-12 col-md-2">
             <a href="{% url 'student_to_association'  %}" class="small_action"><i class="fa fa-random"></i> Changer de menu</a><br/>
             <a  href="javascript:history.back()" class="small_action"><i class="fa fa-times"></i>  Modifer mes choix</a> 
         </div>
+        {% endcomment %}
     </div> 
     <hr/> 
     <div class="row">
@@ -59,10 +65,10 @@
 
                 <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
                 <input type="hidden" name="month_price" value="{{ data_post.month_price  }}"  />                
-                <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
-                <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
-                <input type="hidden" name="menu_id" value="{{ formule.id}}" />
-                <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" id="nb_child"  />
+                <input type="hidden" name="nb_month"    value="{{ data_post.nb_month }}"  />
+                <input type="hidden" name="date_end"    value='{{ data_post.date_end  }}'  />
+                <input type="hidden" name="menu_id"     value="{{ formule.id}}" />
+                <input type="hidden" name="nb_child"    value="{{ data_post.nb_child }}" id="nb_child"  />
 
                 je suis 
 
@@ -114,6 +120,9 @@
             </div>
         </form>    
     </div>
+
+ 
+
  
 </section>            
 {% endblock %}

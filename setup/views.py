@@ -760,7 +760,7 @@ def details_of_adhesion(request) :
     if request.user.is_in_academy :
 
         adhesion = Adhesion.objects.filter(user = request.user).last()
-        context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True }
+        context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True,   }
         return render(request, 'setup/renewal_adhesion.html', context)   
 
     else : 
@@ -768,6 +768,27 @@ def details_of_adhesion(request) :
         userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
         context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, "renewal" : False }
         return render(request, 'setup/detail_of_adhesion.html', context)   
+
+
+
+def add_adhesion(request) :
+
+    form =  UserForm(request.POST or None)
+    formule = Formule.objects.get(pk = 1)
+    levels = Level.objects.order_by("ranking")
+
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()
+            parent = request.user.parent
+            parent.students.add(form)
+ 
+    context = {  "renewal" : True, "form" : form, "formule" : formule  ,   'levels' : levels , }
+    return render(request, 'setup/add_adhesion.html', context)   
+ 
+        
+
+
 
 
 def commit_adhesion(request) :
@@ -1069,9 +1090,9 @@ def save_adhesion(request) :
 
 
 
-def adhesions(request):
+def adhesions_academy(request):
     """ liste des adhésions """
-    adhesions = Adhesion.objects.filter(user = request.user ) 
+    adhesions =  request.user.adhesions.all()
     today = time_zone_user(request.user)
     last_week = today + timedelta(days = 7)
     context = { "adhesions" : adhesions,  "last_week" : last_week    }

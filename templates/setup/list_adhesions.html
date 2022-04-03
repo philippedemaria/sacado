@@ -15,12 +15,12 @@
 
 
 {% block page_title %}
-    <i class='fa fa-leaf'></i> Mes adhésions 
+    <i class='fa fa-audio-description'></i> Mes adhésions 
 {% endblock %}
 
-{% block page_menu_right %}
-    <a href="#" class="btn btn-new pull-right"> Nouvelle adhésion</a>    
 
+{% block page_menu_right %}
+    <a href="{% url 'add_adhesion' %}" class="btn btn-new pull-right"> Nouvelle adhésion</a>    
 {% endblock %}
 
 
@@ -41,10 +41,7 @@
                             <th>Date de souscription</th>
                             <th>Fin d'engagement</th>
                             <th>Montant</th>
-                            <th>
-                                Actions
-                            </th>
-
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>

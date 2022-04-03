@@ -84,8 +84,71 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+            $("#id_username").on('change', function () {
+ 
+                let username = $("#id_username").val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+     
+                $.ajax({
+                    url: '/account/ajax/userinfo/',
+                    type: "POST",
+                    data: {
+                        'username': username,
+                        csrfmiddlewaretoken: csrf_token,    
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#ajaxresult"+i).html(data["html"]);
+
+                         $("#div_username").show();
+                         $("#verif_username").html( $("#id_username").val() );
+
+                         $("#id_save").show();
 
 
+                    } 
+                }); 
+
+            });
+
+ 
+
+     
+
+
+
+            $("#id_last_name").on('change', function () {
+                    $("#div_display").show() 
+                 $("#div_last_name").show();
+                 $("#verif_last_name").html( $("#id_last_name").val() );
+
+            });
+
+
+            $("#id_first_name").on('change', function () {
+                    $("#div_display").show() 
+                 $("#div_first_name").show();
+                 $("#verif_first_name").html( $("#id_first_name").val() );
+
+            });
+ 
+
+
+            $("#id_level").on('change', function () {
+                    $("#div_display").show() 
+                 $("#div_level").show();
+                 $("#verif_level").html( $('option[value="'+$("#id_level").val()+'"]')   );
+
+            });
+
+
+            $("#id_email").on('change', function () {
+                    $("#div_display").show() 
+                 $("#div_email").show();
+                 $("#verif_email").html( $("#id_email").val() );
+
+            });
+ 
 
 
 
