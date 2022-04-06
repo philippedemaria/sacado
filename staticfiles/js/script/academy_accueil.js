@@ -1,7 +1,7 @@
 $(document).ready(function () {
  
  
-        console.log("---- NEW test ajax-accueil.js ---") ;  
+        console.log("---- NEW test accueil_accueil.js ---") ;  
 
  
 
@@ -550,6 +550,41 @@ $(document).ready(function () {
  
 
 
+        
+
+
+        $( "#photo_background1" ).hover(function() {
+            surcouche("#photo_background_texte1") ;
+        });
+
+        $( "#photo_background2" ).hover(function() {
+            surcouche("#photo_background_texte2") ;
+        });
+
+        $( "#photo_background3" ).hover(function() {
+            surcouche("#photo_background_texte3") ;
+        });
+
+        $( "#photo_background4" ).hover(function() {
+            surcouche("#photo_background_texte4") ;
+        });
+
+        $( "#photo_background5" ).hover(function() {
+            surcouche("#photo_background_texte5") ;
+        });
+
+        $( "#photo_background6" ).hover(function() {
+            surcouche("#photo_background_texte6") ;
+        });
+
+
+        function surcouche(over) {
+
+              $( over ).animate({
+                height: "toggle"
+              }, 1000 );
+
+            }
 
 
 

@@ -62,4 +62,11 @@ urlpatterns = [
 
     path('ajax_delete_flashcard', ajax_delete_flashcard, name='ajax_delete_flashcard'),
 
+
+    path('create_flashpack_academy/<int:id>', create_flashpack_academy, name='create_flashpack_academy'),
+    path('update_flashpack_academy/<int:id>', update_flashpack_academy, name='update_flashpack_academy'),
+    path('delete_flashpack_academy/<int:id>', delete_flashpack_academy, name='delete_flashpack_academy'),
+
+
+
 ] 

@@ -14,21 +14,52 @@
 
 {% block flashcard_student %}
 
-    {% get_today_cards flashpack today student as today_cards %}
-    {% for flashcard in today_cards.cards %}
-    <li class="my_slide">
-        {% include 'flashcard/show_flashcard_tag.html' %}
-    </li>
-    {% endfor %}
+
+
+
+    {% if not request.user.is_in_academy %}
+
+        {% get_today_cards flashpack today student as today_cards %}
+        {% for flashcard in today_cards.cards %}
+        <li class="my_slide">
+            {% include 'flashcard/show_flashcard_tag.html' %}
+        </li>
+        {% endfor %}
+
+    {% else %}
+
+
+        {% for flashcard in flashpack.flashcards.all %}
+        <li class="my_slide">
+            {% include 'flashcard/show_flashcard_tag.html' %}
+        </li>
+        {% endfor %}
+
+    {% endif %}
+
+
+
 {% endblock %}
+
+
 
 
 
 
 {% block nb_flashcard_student %}
 
-    {% get_today_cards flashpack today student as today_cards %}
-  {{ today_cards.count}} flashcard{{ today_cards.count|pluralize }}
+
+    {% if not request.user.is_in_academy %}
+
+        {% get_today_cards flashpack today student as today_cards %}
+        {{ today_cards.count}} flashcard{{ today_cards.count|pluralize }}
+
+    {% else %}
+
+        {{ flashpack.flashcards.count}} flashcard{{ flashpack.flashcards.count|pluralize }}
+    {% endif %}
+
+
 {% endblock %}
 
 

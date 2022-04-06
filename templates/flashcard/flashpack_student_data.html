@@ -36,7 +36,17 @@
         </div>
     </div>
     <div class="box-footer" style="position: relative; padding-top:20px;opacity: 0.95">
-        <div class="row"> 
+        {% if request.user.is_in_academy %} 
+        <div class="row">
+           <div class="col-lg-6 col-xs-6" >
+                <a href="{% url 'update_flashpack_academy' flashpack.id %}" class="edit" > <i class="bi bi-pencil"></i> Modifier </a>   
+            </div>  
+           <div class="col-lg-6 col-xs-6" >
+                <a href="{% url 'delete_flashpack_academy' flashpack.id %}" class="edit" > <i class="bi bi-trash"></i> Supprimer </a>   
+            </div>                      
+        </div>
+        {% endif %}
+        <div class="row"  style="padding-top:10px;"> 
            <div class="col-lg-7 col-xs-7">
                 {{ flashpack.flashcards.count}} flashcards
             </div>  

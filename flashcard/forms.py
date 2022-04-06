@@ -110,6 +110,25 @@ class FlashpackForm(forms.ModelForm):
  
 
 
+class FlashpackAcademyForm(forms.ModelForm):
+
+
+	class Meta:
+		model = Flashpack
+		exclude = ('flashcards',)
+ 
+
+ 
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content) 
+
+
+
+
+
+
 
 class CommentflashcardForm(forms.ModelForm):
 

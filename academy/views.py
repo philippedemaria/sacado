@@ -52,8 +52,6 @@ from general_fonctions import *
 
 
 
-
-
 def printer_bibliotex_by_student(exotexs):
     """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
     soit en html (output="html") """

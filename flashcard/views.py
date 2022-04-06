@@ -6,9 +6,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 from flashcard.models import Flashcard, Flashpack , Answercard , Madeflashpack
-from flashcard.forms import FlashcardForm ,  FlashpackForm , CommentflashcardForm
+from flashcard.forms import FlashcardForm ,  FlashpackForm , CommentflashcardForm , FlashpackAcademyForm
 from qcm.models import  Parcours, Exercise , Folder
-from account.models import Student
+from account.models import Student , Teacher
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from qcm.views import  get_teacher_id_by_subject_id
@@ -126,9 +126,6 @@ def my_flashpack_archives(request):
     return render(request, 'flashcard/list_flashpacks.html', {'flashpacks': flashpacks, 'list_folders' : list_folders , 'groups' : groups, 'is_archive' : True  })
 
 
- 
- 
-
 
 def create_flashpack(request, idf=0):
 
@@ -174,8 +171,6 @@ def create_flashpack(request, idf=0):
     return render(request, 'flashcard/form_flashpack.html', context)
 
 
-
- 
 def update_flashpack(request, id):
 
     teacher = request.user.teacher
@@ -221,9 +216,6 @@ def update_flashpack(request, id):
     return render(request, 'flashcard/form_flashpack.html', context )
 
 
-
-
-
 def create_flashpack_from_parcours(request, idp=0):
 
     teacher = request.user.teacher
@@ -262,10 +254,6 @@ def create_flashpack_from_parcours(request, idp=0):
     return render(request, 'flashcard/form_flashpack.html', context)
 
 
-
-
-
- 
 def delete_flashpack(request, id):
     flashpack = Flashpack.objects.get(id=id)
     levels = Level.objects.filter(flashpacks=flashpack)
@@ -274,6 +262,63 @@ def delete_flashpack(request, id):
     flashpack.delete()
 
     return redirect('my_flashpacks')
+
+
+def create_flashpack_academy(request, id):
+
+    form = FlashpackAcademyForm(request.POST or None,request.FILES or None )
+    teacher = Teacher.objects.get(user_id=2480)
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher     = teacher
+        nf.is_creative = True
+        nf.subject_id  = 1
+        nf.save()
+        form.save_m2m()
+
+        nf.students.add(request.user.student)
+
+
+        messages.success(request, 'Le flashpack est créé avec succès !')
+        return redirect('flashpacks' )
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'flashpack': None  }
+
+    return render(request, 'flashcard/form_flashpack_academy.html', context)
+
+
+
+ 
+def update_flashpack_academy(request, id):
+
+    flashpack = Flashpack.objects.get(pk=id)
+    form = FlashpackAcademyForm(request.POST or None,request.FILES or None, instance = flashpack )
+    teacher = Teacher.objects.get(user_id=2480)
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher     = teacher
+        nf.is_creative = True
+        nf.subject_id  = 1
+        nf.save()
+        form.save_m2m()
+        nf.students.add(request.user.student)
+        messages.success(request, 'Le flashpack est modifié avec succès !')
+        return redirect('flashpacks' )
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'flashpack': None  }
+
+    return render(request, 'flashcard/form_flashpack_academy.html', context)
+
+
+def delete_flashpack_academy(request, id):
+    flashpack = Flashpack.objects.get(id=id)
+    flashpack.delete()
+
+    return redirect('flashpacks')
 
 
 

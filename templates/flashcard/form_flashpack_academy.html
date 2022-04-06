@@ -1,0 +1,113 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
+    <script>
+        require(['script/ajax-flashpack']);
+    </script>  
+    {% if not flashpack %}
+    <script>
+        require(['script/ajax-flashpack-create']);
+    </script>  
+    {% endif %}
+
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    {% include 'flashcard/logo.html' %}
+    {% include 'qcm/breadcrumb.html' %}
+    {% if flashpack %} {{ flashpack }}  {% else %} Nouveau flashpack   {% endif %} 
+
+{% endblock %}
+
+
+{% block page_menu_right %}
+    <a href="{% url 'flashpacks' %}" class="btn btn-new-violet pull-right">Liste de mes flashpacks</a>  
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12"> 
+                <div class="alert alert-warning"> 
+                    Un flaspack est un ensemble de flashcards (ou cartes à mémoriser). Il faut d'abord créer le flashpack pour y insérer les flashcards souhaitées.<br/> <b>Sacado Académie</b> te conseille de créer autant de flashpacks que tu as de cours.
+                </div>
+            </div>
+        </div>
+
+
+
+    <form action="#" method="POST"  enctype='multipart/form-data'>
+    	{% csrf_token %}
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <div class="form-group">
+        				            {{ form.title.label_tag }}
+        				            {{ form.title|add_class:"form-control" }}
+                                    {{ form.title.errors }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="form-group">
+                                    {{ form.color.label_tag }}      
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                                    </span>
+                                    <div id="color-picker-component" class="input-group colorpicker-component">
+                                        {{ form.color.as_hidden }}
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
+	    <div class="row">
+	        <div class="col-sm-8 col-md-8"> 
+	            <div class="form-group">
+                    <input name="exercices" value="Enregistrer et créer les flashcards" type="submit" class="btn btn-primary" id="save_with_cards" />
+
+                    <input value="Enregistrer" type="submit" class="btn btn-default"  id="save_without_cards" />
+
+	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+	            </div>
+	        </div>
+
+            {% if flashpack %}
+                <div class="col-sm-4 col-md-4">                                             
+                    <a href="{% url 'delete_flashpack' flashpack.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette biblioTex')" > 
+                        <i class="fa fa-trash"> </i>   Supprimer
+                    </a>
+                </div>
+            {% endif %}
+
+
+	    </div>
+ 
+    </form>  
+</section>
+{% endblock %} 
+
+
+ 
+ 

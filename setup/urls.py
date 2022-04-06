@@ -7,7 +7,6 @@ urlpatterns = [
     re_path(r'^$', index, name='index'),
     re_path('get_cookie', get_cookie , name='get_cookie'),
 
-
     re_path('send_message', send_message, name='send_message'),
 
     path('ajax/change_color_account', ajax_changecoloraccount , name='ajax_changecoloraccount'), 
@@ -59,6 +58,7 @@ urlpatterns = [
 
     path('list_exercises_academy/<int:id>', list_exercises_academy, name='academy_level'),
 
+    path('logout_academy', logout_academy , name='logout_academy'), 
 
     ############################################################################################
     #######  SACADO Cahier de vacances 

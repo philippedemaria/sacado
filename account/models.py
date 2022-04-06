@@ -164,7 +164,7 @@ class User(AbstractUser):
     @property
     def is_sacado_member(self):
         is_sacado = False
-        today = datetime.now()
+        today = time_zone_user(self)
         try :
             abonnement = self.school.abonnement.last()
             if today < abonnement.date_stop and abonnement.is_active :
@@ -220,14 +220,15 @@ class User(AbstractUser):
                         is_sacado = True
                 except :
                     is_sacado = False
-            elif self.is_student :  
+            elif self.is_student : 
                 try :
                     parent   = self.student.students_parent.first()
-                    adhesion = parent.adhesions.last()      
+                    adhesion = parent.user.adhesions.last() 
                     if today > adhesion.date_start and  today < adhesion.date_end   :
                         is_sacado = True
                 except :
                     is_sacado = False
+
         return is_sacado 
 
 

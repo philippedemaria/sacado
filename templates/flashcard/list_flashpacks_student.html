@@ -26,8 +26,13 @@
 
 
 {% block page_menu_right %}
-     
- 
+
+
+    {% if request.user.is_in_academy %}
+        <a href="{% url 'create_flashpack_academy' 0 %}" class="btn btn-new-violet">Créer un flashpack</a>
+    {% endif %}
+
+
 {% endblock %}
 
 
@@ -49,11 +54,14 @@
     </div>
     {% endif %}
     {% if fpacks %}
+
+    {% if not request.user.is_in_academy %}
     <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12"> 
            <h2 class="thin">Flashpack par parcours</h2>
         </div>        
     </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12"> 
                 {% for flashpack in fpacks %}

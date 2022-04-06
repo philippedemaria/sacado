@@ -53,7 +53,7 @@ def menu(request):
             today = timezone.localtime(timezone.now())
         else:
             today = timezone.now()
- 
+
         if request.user.is_teacher:
             teacher = request.user.teacher
             #nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()

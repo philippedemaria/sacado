@@ -6,7 +6,10 @@
 
 {% block page_title %}
     {% include 'flashcard/logo.html' %}   {% include 'qcm/breadcrumb_student.html' %}
-    {% if parcours %}
+
+    {% if request.user.is_in_academy %}
+        <a href="{% url 'flashpacks' %}" style="{{ flashpack.color }}">{{ flashpack.title }}</a>
+    {% elif parcours %}
         <a href="{% url 'list_parcours_flashpack_student' parcours.id %}" style="{{ flashpack.color }}">{{ flashpack.title }}</a>
     {% else %}
         <a href="{% url 'list_parcours_flashpack_student' 0 %}" style="{{ flashpack.color }}">{{ flashpack.title }}</a>
