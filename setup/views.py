@@ -264,13 +264,6 @@ def logout_academy(request):
 
 
 
-
-
-def all_routes(request,adresse):
-    print(request.path)
-    print(adresse)
-
-
 def singleLogoutGar(request):
     print("fonction view de logout recherche de name ID")
     try :
@@ -1166,7 +1159,7 @@ def list_exercises_academy(request , id):
     level = Level.objects.get(pk=id)    
     exercises = Exercise.objects.filter(level=level,supportfile__is_title=0,theme__subject_id=1).order_by("theme","knowledge__waiting","knowledge","ranking")
 
-    pk_ids = [0,1762,1651,4945,984,2489,2035,4842,8087,5802,1120,3891,3233,0,6107]
+    pk_ids = [0,6111,1651,1427,984,2489,2035,4842,8087,5802,1120,3891,3233,0,6107]
 
     exercise = Exercise.objects.get(pk=pk_ids[id])
 
