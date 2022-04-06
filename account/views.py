@@ -1025,7 +1025,6 @@ def detail_student_all_views(request, id):
                 i+=1
             
 
-
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
             aptitude = request.user.school.aptitude.last()

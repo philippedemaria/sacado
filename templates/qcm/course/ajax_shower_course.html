@@ -2,7 +2,7 @@
 {% load item_tags %}
 
  
-{% get_permit_access  request.user    course    as     get_access %}
+{% get_permit_access  user    course    as     get_access %}
 {% if get_access %} 
   {{ course.annoncement|safe }} 
 

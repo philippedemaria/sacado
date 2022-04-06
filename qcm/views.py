@@ -7952,14 +7952,6 @@ def ajax_course_custom_for_this_parcours(request):
 
 
 
-
-
-
-
-
-
-
-
 @student_can_show_this_course
 def show_course_student(request, idc , id ):
     """
@@ -8025,9 +8017,10 @@ def ajax_this_course_viewer(request):
     data = {}
     data['title'] = course.title
 
- 
-    if request.user.user_type == 2 :
+    user_rq = request.user 
+    if user_rq.user_type == 2 :
         teacher = request.user.teacher
+
         url = 'qcm/course/ajax_shower_course_teacher.html'
     else :
         teacher = None
@@ -8035,7 +8028,7 @@ def ajax_this_course_viewer(request):
 
 
 
-    context = {  'course': course , 'parcours': parcours , 'teacher' : teacher   }
+    context = {  'course': course , 'parcours': parcours , 'teacher' : teacher  , 'user' : user_rq  }
  
  
     html = render_to_string(url, context )
