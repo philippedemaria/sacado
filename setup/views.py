@@ -277,7 +277,11 @@ def singleLogoutGar(request):
     for gar in gars :
         dico_received[gar['key']] = gar['value']
     username   = dico_received["IDO"]
+    print(" ======================= singleLogoutGar =================================== ")
+    print(dico_received)
+    print(" ========================================================== ")
     print(username)
+    print(" ========================================================== ")
     logout(request)
 
 
