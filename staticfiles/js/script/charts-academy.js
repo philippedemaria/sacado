@@ -14,11 +14,53 @@ $(document).ready(function () {
         var waitingsRadar      = document.getElementById("waitingsRadar").value;
 
         var liste_score_w_n = [] ; 
+        var colors = [  "rgb(245,127,241,0.6)", 
+                        "rgb(175,142,252,0.6)", 
+                        "rgb(252,127,150,0.6)", 
+                        "rgb(142,215,252,0.6)", 
+                        "rgb(142,252,171,0.6)", 
+                        "rgb(215,252,142,0.6)", 
+                        "rgb(252,243,142,0.6)", 
+                        "rgb(252,191,142,0.6)", 
+
+                        "rgb(92,70,143,0.6)", 
+                        "rgb(143,90,70,0.6)",
+                        "rgb(70,143,90,0.6)", 
+                        "rgb(90,143,70,0.6)",
+                        "rgb(143,70,90,0.6)",
+                        "rgb(70,90,143,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)",
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)",
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)", 
+                        "rgb(245,127,197,0.6)",
+        ]
+
+
+        var liste_colors = [] ; 
+
         liste_score_w = scoreswRadar.split("-");
-        liste_score_w.forEach( (item) =>{ 
+
+        liste_score_w.forEach( (item,index) =>{ 
             item_int = parseInt(item);
             if (!isNaN(item_int))
-                {liste_score_w_n.push(item_int);}
+                {
+                    liste_score_w_n.push(item_int);
+                    liste_colors.push(colors[index]);
+                }
         });
 
 
@@ -26,15 +68,23 @@ $(document).ready(function () {
             labels: waitingsRadar.split("-") ,
             datasets: [{
                 label : "Attendus",
-                backgroundColor: "rgb(245,127,197,0.6)",
+                backgroundColor: liste_colors,
                 data:  liste_score_w_n,
             }]
         };
 
         var radarChart = new Chart(marksCanvas, {
-          type: 'radar',
-          data: marksData
-        });
+                              type: 'polarArea',
+                              data: marksData,
+                              options: {
+                                responsive: true,
+                                plugins: {
+                                  legend: {
+                                    display: false,
+                                  },
+                                }
+                              },
+                            } );
 
 
 
@@ -76,7 +126,15 @@ $(document).ready(function () {
 
         var radarChart = new Chart(barChart, {
           type: 'bar',
-          data: marksDatas
+          data: marksDatas,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            }
+          },
         });
 
         // *************************************************************

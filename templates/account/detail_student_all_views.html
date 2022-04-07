@@ -103,18 +103,19 @@
             {% if request.user.is_in_academy %}
 
             <div class="row bilan_div">
+                <div class="col-sm-12 col-md-5" align="center">
+                    <h3>Derniers résultats {{ datebar }}</h3>
+                    <input id="scoresbarSet" value="{{ score_str }}" type="hidden" />
+                    <input id="datebarSet" value="{{ datebar }}" type="hidden" />
+                    <canvas id="barChart" width="600" height="400"></canvas>
+                </div>                 
                 <div class="col-sm-12 col-md-7" align="center">
                     <h3>Suivi des attendus</h3>
                     <input id="scoreswRadar" value="{{scoreswRadar}}" type="hidden" /> 
                     <input id="waitingsRadar" value="{{waitingsRadar}}" type="hidden" /> 
                     <canvas id="marksChart" width="600" height="400"></canvas>
                 </div>
-                <div class="col-sm-12 col-md-5" align="center">
-                    <h3>Derniers résultats {{ datebar }}</h3>
-                    <input id="scoresbarSet" value="{{ score_str }}" type="hidden" />
-                    <input id="datebarSet" value="{{ datebar }}" type="hidden" />
-                    <canvas id="barChart" width="600" height="400"></canvas>
-                </div> 
+
             </div> 
 
 

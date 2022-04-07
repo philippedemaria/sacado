@@ -269,11 +269,15 @@ def logout_academy(request):
 
 
 def singleLogoutGar(request):
-    print("fonction view de logout recherche de name ID")
-    try :
-        print(request.POST)
-    except :
-        print(request)
+
+    # création du dictionnaire qui avec les données du GAR  
+    data_xml = request.headers["X-Gar"]
+    gars = json.loads(data_xml)
+    dico_received = dict()
+    for gar in gars :
+        dico_received[gar['key']] = gar['value']
+    username   = dico_received["IDO"]
+    print(username)
     logout(request)
 
 

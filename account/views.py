@@ -999,7 +999,8 @@ def detail_student_all_views(request, id):
         else :
             messages.error(request, "Erreur...L'élève "+str(student.user.first_name)+" "+str(student.user.last_name)+" n'est pas associé à un groupe.")
             return redirect("index")
-    else:
+ 
+    else :
         group = Group.objects.filter(students=student).last()
         groups = student.students_to_group.all()
         themes = set()
@@ -1018,17 +1019,20 @@ def detail_student_all_views(request, id):
             for waiting in group.waitings() :
                 if i == len(group.waitings()) :
                     sep = ""
-                waitingsRadar += waiting.name[:40]+sep
+                waitingsRadar += waiting.name+sep
                 score = 0
                 if student.result_waitings(waiting) : score = student.result_waitings(waiting)
                 scoreswRadar += str(score)+sep
                 i+=1
+
+            print(scoreswRadar)
             
 
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
             aptitude = request.user.school.aptitude.last()
-            student_answers = Studentanswer.objects.filter( student__user = request.user , date__gte = date_start  )
+            print(student)
+            student_answers = Studentanswer.objects.filter( student  = student , date__gte = date_start  )
             st0 = student_answers.filter(point__lt= aptitude.low).count()
             st1 = student_answers.filter(point__lt= aptitude.medium).count()
             st2 = student_answers.filter(point__lt= aptitude.up).count()
