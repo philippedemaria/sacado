@@ -367,9 +367,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
 
 
-
-
-
 def send_message(request):
     ''' traitement du formulaire de contact de la page d'accueil et du paiement de l'adhésion par virement bancaire '''
     name = request.POST.get("name")
@@ -774,19 +771,22 @@ def details_of_adhesion(request) :
 
     formule = Formule.objects.get(pk = int(menu_id))
 
+    try :
+        if request.user.is_in_academy :
 
-    if request.user.is_in_academy :
+            adhesion = Adhesion.objects.filter(user = request.user).last()
+            context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True,   }
+            return render(request, 'setup/renewal_adhesion.html', context)   
 
-        adhesion = Adhesion.objects.filter(user = request.user).last()
-        context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True,   }
-        return render(request, 'setup/renewal_adhesion.html', context)   
+        else : 
 
-    else : 
-
+            userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
+            context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, "renewal" : False }
+            return render(request, 'setup/detail_of_adhesion.html', context)   
+    except :
         userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
         context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, "renewal" : False }
         return render(request, 'setup/detail_of_adhesion.html', context)   
-
 
 
 def add_adhesion(request) :

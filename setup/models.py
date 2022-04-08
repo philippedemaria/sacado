@@ -110,6 +110,7 @@ class Formule(models.Model):
 
 		data["total5"] = round( left_month * adh5 ,2)
 		data["price5"] = round(adh5,2)	
+		
 		return data
 
 TIMES = (
