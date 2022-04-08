@@ -717,7 +717,8 @@ def python(request):
 def academy(request):
 
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0 ).count()
-    nb_students  = User.objects.filter(user_type=0 ).count()
+    nb_students  = Student.objects.count()
+ 
 
     form = AuthenticationForm()
     np_form = NewpasswordForm()

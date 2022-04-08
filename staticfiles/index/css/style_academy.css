@@ -93,9 +93,6 @@ a.sublisting:focus{
     width: 100%;
 }
 
-.bg_clock{
-    background-image: url('/static/img/tableau_academy_accueil.jpg');
-}
 
 .inside_page{
   width: 1170px;
