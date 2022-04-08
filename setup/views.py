@@ -717,12 +717,13 @@ def python(request):
 def academy(request):
 
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0 ).count()
+    nb_students  = User.objects.filter(user_type=0 ).count()
 
     form = AuthenticationForm()
     np_form = NewpasswordForm()
 
     levels = Level.objects.order_by("ranking")
-    context = { 'nb_exercises' : nb_exercises , 'form' : form , 'np_form' : np_form , 'levels' : levels  }
+    context = { 'nb_exercises' : nb_exercises , 'form' : form , 'np_form' : np_form , 'levels' : levels , 'nb_students' : nb_students  }
     return render(request, 'setup/academy_index.html', context)
 
 

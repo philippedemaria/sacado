@@ -1,0 +1,87 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+   
+{% endblock %}
+
+ 
+
+{% block page_title %}
+      Synthèse des parcours
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+
+
+
+    
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+
+
+{% block body  %}
+
+{% include 'preloader.html' %}
+
+<section class="content_list" id="principal_section"> 
+
+
+    
+  
+    <div class="row "> 
+        <div class="col-sm-12 col-md-12">
+                <form action="" methode="POST" id="parcours_sortable"> 
+                {% for parcours in parcourses  %}  
+                    <a  href="{% url 'show_parcours_student'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
+                    <div  class="box_academy box-widget widget-user-2 opacity" 
+                          style="{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};">
+                        <div class="handler widget-user-header_academy">
+ 
+                            <div class="box_title_vignette_academy"> 
+                                {% if parcours.title|length > 20 %}
+                                    {{ parcours.title|truncatechars:"20"}}
+                                {% else %}
+                                    {{ parcours.title}}
+                                {% endif %}
+                            </div>
+                            <div style="width:100% ;position: absolute; bottom:5px;">
+                                <span style="float;left; width:30%;"> 
+                                    {{ parcours.nb_exercices_and_cours.nb_cours }} <small>cours </small>
+                                </span>
+                                <span style="float;left; width:20%;"> 
+                                    {{ parcours.nb_exercices_and_cours.nb_exercises }} <small>exos </small>
+                                </span>
+
+                                <span style="float;left; width:30%;"> 
+                                    
+                                </span>
+                            </div>
+                        </div>
+ 
+
+                    </div>  
+                    </a> 
+                {% endfor %}
+                </form>
+        </div>
+    </div>
+  
+    
+     
+</section>
+
+
+
+
+ 
+
+{% endblock  %}   

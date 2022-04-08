@@ -88,67 +88,79 @@
 
 {% block page_menu_right %}
 
-    {% if request.user.user_type == 0 %}
-        <li><a href="{% url 'detail_student_all_views' user.id %}"  class="no_button"  style="font-size:18px;"> Mon suivi</a></li>
-    {% elif request.user.user_type == 1 %}
 
-        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan</a></li>
-    {% else %}
-        {% if group %}
-        {% include 'group/submenu_group.html'  %}
-        {% else %}
-        <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan élève</a></li>
+    {% if request.user.is_in_academy %}
+
+        {% if request.user.is_student %}
+
+        <li><a href="{% url 'synthese_parcours' user.id %}"  class="btn btn-new-violet"> Synthèse des parcours</a></li>
         {% endif %}
+        
+    {% else %}
+
+
+        {% if request.user.user_type == 0 %}
+            <li><a href="{% url 'detail_student_all_views' user.id %}"  class="no_button"  style="font-size:18px;"> Mon suivi</a></li>
+        {% elif request.user.user_type == 1 %}
+
+            <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan</a></li>
+        {% else %}
+            {% if group %}
+            {% include 'group/submenu_group.html'  %}
+            {% else %}
+            <li><a href="{% url 'detail_student_all_views' student.user.id  %}"  class="no_button"  style="font-size:18px;{% if 'detail_student_all_views' in request.path %}color:#007EE2{% endif %}"> Bilan élève</a></li>
+            {% endif %}
+        {% endif %}
+
+
+
+        {% if request.user.user_type < 2 %}
+            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
+                <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+                    <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
+                    <li class="divider"></li>
+
+                    {% regroup themes by subject as subjects %}
+                    {% for s in subjects   %}
+                        <li style="background: {{ s.grouper.color }}; color: {{ s.grouper.color|contrast_color }}; padding:5px ; font-size: 16px;" >
+                             {{ s.grouper }}
+                        </li>
+
+                        {% for thm in s.list %}
+                             <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm.name }}</a></li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </li>
+
+
+            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
+                <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+                    {% regroup parcourses by subject as subjects %}
+
+                    {% for s in subjects   %}  
+                        <li style="background: {{ s.grouper.color }}; color: {{ s.grouper.color|contrast_color }}; padding:5px ; font-size: 16px;" >
+                             {{ s.grouper }}
+                        </li>
+      
+                        {% for prcrs in s.list  %}  
+                            <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}> 
+                                {% get_publish_parcours_inside_folder prcrs prcrs.folders.all  student as publish_filter %}  
+                                <a {% if publish_filter %}href="#"  style="color:#BBB;cursor:not-allowed" {% else %} href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% endif %} >
+                                    <i class="fa fa-caret-right"></i> {{ prcrs.title }}    
+                                </a>
+
+                            </li> 
+                        {% endfor %}
+     
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
+
+
     {% endif %}
 
-
-
-
-
-
-    {% if request.user.user_type < 2 %}
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_theme' in request.path %}color:#007EE2{% endif %}"> Suivi par thème </a>
-            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                <li {% if 'detail_student/' in request.path %} class="active" {% endif %} ><a href="{% url 'detail_student'  student.user.id  %}" > Général</a></li>
-                <li class="divider"></li>
-
-                {% regroup themes by subject as subjects %}
-                {% for s in subjects   %}
-                    <li style="background: {{ s.grouper.color }}; color: {{ s.grouper.color|contrast_color }}; padding:5px ; font-size: 16px;" >
-                         {{ s.grouper }}
-                    </li>
-
-                    {% for thm in s.list %}
-                         <li {% if 'detail_student_theme/' in request.path and thm.id == theme.id %}  class="active" {% endif %}><a href="{% url 'detail_student_theme'  student.user.id  thm.id  %}" > {{ thm.name }}</a></li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </li>
-
-
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"  style="font-size:18px;{% if 'detail_student_parcours' in request.path %}color:#007EE2{% endif %}"> Suivi par Parcours </a>
-            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                {% regroup parcourses by subject as subjects %}
-
-                {% for s in subjects   %}  
-                    <li style="background: {{ s.grouper.color }}; color: {{ s.grouper.color|contrast_color }}; padding:5px ; font-size: 16px;" >
-                         {{ s.grouper }}
-                    </li>
-  
-                    {% for prcrs in s.list  %}  
-                        <li {% if 'detail_student_parcours/' in request.path and prcrs.id == parcours.id %}  class="active" {% endif %}> 
-                            {% get_publish_parcours_inside_folder prcrs prcrs.folders.all  student as publish_filter %}  
-                            <a {% if publish_filter %}href="#"  style="color:#BBB;cursor:not-allowed" {% else %} href="{% url 'detail_student_parcours'  student.user.id  prcrs.id  %}" {% endif %} >
-                                <i class="fa fa-caret-right"></i> {{ prcrs.title }}    
-                            </a>
-
-                        </li> 
-                    {% endfor %}
- 
-                {% endfor %}
-            </ul>
-        </li>
-    {% endif %}
 
 
 {% endblock %}

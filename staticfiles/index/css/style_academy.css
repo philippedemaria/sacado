@@ -93,6 +93,10 @@ a.sublisting:focus{
     width: 100%;
 }
 
+.bg_clock{
+    background-image: url('/static/img/tableau_academy_accueil.jpg');
+}
+
 .inside_page{
   width: 1170px;
   margin-right: auto;
@@ -101,8 +105,8 @@ a.sublisting:focus{
 
 .titre_texte_accueil{
   color: white;
-  font-size : 60px;
-  margin: 50px;
+  font-size : 40px;
+  margin: 35px;
 }
 
 .texte_accueil{

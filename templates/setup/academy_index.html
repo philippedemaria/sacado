@@ -12,17 +12,30 @@ Intro Section -
 ============================-->
 
 <section class="inside_page">
+
+
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12 texte_accueil grandstander" align="center" >
+            {{ nb_students }} élèves utilisent déjà SacAdo, pourquoi pas votre enfant ?
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xs-12 col-md-12 titre_texte_accueil" align="center" >
-            Vous avez des problèmes de maths ?
+            SACADO Académie, la version SacAdo pour les familles.
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
-            SACADO Académie vous en propose encore d'autres...<br/>{{ nb_exercises }} problèmes à variables dynamiques aléatoires. <br/>
-            SACADO Académie vous aide à les surmonter et vous explique leur solution. Des enseignants de l’Éducation Nationale vous soutiennent et vous encouragent pour une progression à votre rythme conformément aux attentes institutionnelles de la Maternelle à la Terminale.  
+            De la maternelle à la terminale, SACADO Académie propose des parcours adaptés à chaque enfant avec des cours interactifs conformes aux programmes scoalire de l’Éducation Nationale. <br/><br/>
+            Votre enfant progresse à son rythme, chaque exercice est corrigé immédiatement, la solution est expliquée. Des enseignants de l’Éducation Nationale le soutiennent et l'encouragent au cours de son avancée dans ses parcours.  
         </div>
     </div>
+
+
+
+
     <div class="row">
         <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
             "The only way to learn mathematics is to do mathematics." 
@@ -36,9 +49,11 @@ Intro Section -
     </div>
 
 
+
+
     <div class="row">
         <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
-            <a href="#exercise" class="btn-test outline_orange"> Testez les exercices </a>
+            <a href="#exercise" class="btn-test grandstander outline_orange"> Testez les exercices </a>
         </div>
     </div>
 
@@ -60,119 +75,54 @@ Intro Section -
         <div class="col-xs-12 col-md-6">
             <img src="{% static 'img/students.png' %}"/> 
         </div>
-        <div class="col-xs-12 col-md-6" >
+        <div class="col-xs-12 col-md-6"  align="center">
+            <img src="../../static/img/horloge20.png" width="60px" />
+            <br/> <br/> 
+            <h2 class="color_sacado grandstander">  Un peu de maths tous les jours</h2>
+            <li class="sanspuce grandstander"><h4><b>20 minutes/jour</b> x 6 jours = 120 minutes</h4> </li>
+            <li class="sanspuce grandstander"><h4>= 2 h d'entraînement efficace par semaine</h4></li>
 
 
-            <img src="{% static 'img/tableau_academy_accueil.jpg' %}"/> 
-            {% comment %}
-            Après plusieurs années à peaufiner nos cours, partager nos ressources, nous avons construit des outils utilisés par des centaines d'enseignants, des milliers d'élèves avec des retours positifs et des progrès reconnus. Nous avons décidé d'ouvrir l'académie SACADO pour que les élèves puissent à leur rythme retravailler les exercices issus des compétences du 
-            Ministère de l'Éducation Nationale, en autonomie ou accompagné par des enseignants titulaires de l'Éducation Nationale.
-            {% endcomment %}
 
+ 
         </div>    
     </div>
 </section>
 
 
-
-<section class="container exercices">
-
-
-    <div class="row">
+<section class="container suivis vspace">
+     <div class="row">
         <div class="col-xs-12 col-md-12" align="center" >
-            <h1 class="thin grandstander">Tu te sens plutôt ....</h1>
+            <h1 class="thin grandstander">... L'espace parent ...</h1>
         </div>
     </div>
-
-    <div class="row  align-items-center">
-
-
-        <div class="col-xs-6 col-md-4" align="center">
-            <div class="photo_background" id="photo_background2">
-                <img src="{% static 'img/academy_index6.jpg' %}"  class="photo_background"  />
-                <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en fragilité </div>
-
-                <div class="photo_background_texte"  id="photo_background_texte2"><small><b>Et tu veux</b></small> <br/> Retrouver les bonnes méthodes </div>
-            </div>
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-6 ">            
+            <h3 class="thin color_sacado">Suivi des progrès de chaque enfant</h3>
+            SacAdo Académie propose un suivi détaillé par enfant, exercices par exercices, par compétences et savoir faire des textes officiels de l'Éducation Nationale.
+            <li class="sanspuce">+ Vous recevez des <b>rapports d'activités</b> par mail bi-mensuellement.</li>
+            <li class="sanspuce">+ Vous pouvez consulter les actvités réalisées par votre enfant ainsi que sa <b>progression par rapport au contenu du programme de l'Éducation Nationale</b> française.</li>
+            <li class="sanspuce">+ Vous pouvez controler le <b>temps d'utiliser</b>.</li>
+        </div>
+        <div class="col-xs-12 col-md-6" align="center">
+            <img src="../../static/img/radar.png" />
         </div>        
-
-        <div class="col-xs-6 col-md-4" align="center">
-            <div class="photo_background" id="photo_background1">
-                <img src="{% static 'img/academy_index5.jpg' %}" class="photo_background"  /> 
-                <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en décrochage </div>
-                <div class="photo_background_texte"  id="photo_background_texte1"><small><b>Et tu veux</b></small> <br/> Revenir sur le chemin de la réussite</div>
-            </div>  
-        </div>
-
-        <div class="col-xs-6 col-md-4" align="center">
-            <div class="photo_background" id="photo_background3">
-                <img src="{% static 'img/academy_index2.jpg' %}" class="photo_background"   /> 
-                <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en stress </div>
-                <div class="photo_background_texte"  id="photo_background_texte3"><small><b>Et tu veux</b></small> <br/> Redonner confiance en tes capacités </div>
-            </div>
-        </div>
-
     </div>
-
-    <div class="row  align-items-center" style="margin-top: 20px">
-
-        <div class="col-xs-6 col-md-4" align="center">
-            <div class="photo_background" id="photo_background5">
-                <img src="{% static 'img/academy_index3.jpg' %}" class="photo_background"  /> 
-                <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en plein essor </div>
-                <div class="photo_background_texte"  id="photo_background_texte5"><small><b>Et tu veux</b></small> <br/> Performer pour atteindre l'élite </div>
-            </div>
+    <div class="row vspace">
+        <div class="col-xs-12 col-md-12" align="center">
+            <img src="../../static/img/bilans.png" />
         </div>
-
-
-        <div class="col-xs-6 col-md-4" align="center">
-            <div class="photo_background" id="photo_background4">
-                <img src="{% static 'img/academy_index1.jpg' %}" class="photo_background"   />  
-                <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en I.E.Famille </div>
-                <div class="photo_background_texte"  id="photo_background_texte4"><small><b>Et tu veux</b></small> <br/> Maitriser le socle des compétences </div>
-            </div> 
-        </div>
-        <div class="col-xs-6 col-md-4" align="center">
-            <div class="photo_background" id="photo_background6">
-                <img src="{% static 'img/academy_index4.jpg' %}" class="photo_background"  /> 
-                <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en élite </div>
-                <div class="photo_background_texte"  id="photo_background_texte6"><small><b>Et tu veux</b></small> <br/> Dynamiser tes pratiques </div>
-            </div>
-        </div> 
-
     </div>
+ 
+
 </section>
-
-{% comment %}
-<section class="container exercices">
-    <div class="row  align-items-center">
-        <div class="col-xs-12 col-md-6 exercises_label" align="center">
-            <h3 class="color_sacado thin">Des exercices à variables didactiques aléatoires et correction immédiate</h3>
-            <img src="{% static 'img/academy_index_mater.png' %}"/>    
-        </div>
-        <div class="col-xs-12 col-md-6">
-            <b> Des variables dynamiques aléatoires. </b>Chaque fois qu'un enfant lance un exercice, ses valeurs changent. L'élève peut le travailler autant de fois qu'il le souhaite pour apprendre, réviser la méthode. <br/>
-            <b> Une correction immédiate.</b> Le retour d'information rapide et direct, amène l'élève à confronter sa prédiction et son résultat. L'élève est face à ses acquis/doutes et se lance sur des pistes de résolution sans crainte du jugement. Un pas vers la confiance en soi.  
-        </div>
-    </div>
-</section>
-{% endcomment %}
-
-
-
 
 
 
 <section class="container tests"  id="exercise">
     <div class="row">
         <div class="col-xs-12 col-md-12" align="center" >
-            <h1 class="thin grandstander">... Teste quelques exercices ...</h1>
+            <h1 class="thin grandstander">... Testez quelques exercices ...</h1>
         </div>
     </div>
 
@@ -324,80 +274,119 @@ Intro Section -
     </div>
 </section>
 
+<section class="container exercices">
+    <div class="row">
+        <div class="col-xs-12 col-md-12" align="center" >
+            <h1 class="thin grandstander">Votre enfant est plutôt ....</h1>
+        </div>
+    </div>
 
-<section class="container suivis vspace">
-    <div class="row">
-        <div class="col-xs-12 col-md-12" align="center">
-            <h1 class="thin grandstander">... Ton suivi ...</h1>
+    <div class="row  align-items-center">
+        <div class="col-xs-6 col-md-4" align="center">
+            <div class="photo_background" id="photo_background2">
+                <img src="{% static 'img/academy_index6.jpg' %}"  class="photo_background"  />
+                <div class="photo_background_titre"></div>                 
+                <div class="photo_titre">en fragilité </div>
+
+                <div class="photo_background_texte"  id="photo_background_texte2"><small><b>Et tu veux</b></small> <br/> Retrouver les bonnes méthodes </div>
+            </div>
+        </div>        
+
+        <div class="col-xs-6 col-md-4" align="center">
+            <div class="photo_background" id="photo_background1">
+                <img src="{% static 'img/academy_index5.jpg' %}" class="photo_background"  /> 
+                <div class="photo_background_titre"></div>                 
+                <div class="photo_titre">en décrochage </div>
+                <div class="photo_background_texte"  id="photo_background_texte1"><small><b>Et tu veux</b></small> <br/> Revenir sur le chemin de la réussite</div>
+            </div>  
         </div>
+
+        <div class="col-xs-6 col-md-4" align="center">
+            <div class="photo_background" id="photo_background3">
+                <img src="{% static 'img/academy_index2.jpg' %}" class="photo_background"   /> 
+                <div class="photo_background_titre"></div>                 
+                <div class="photo_titre">en stress </div>
+                <div class="photo_background_texte"  id="photo_background_texte3"><small><b>Et tu veux</b></small> <br/> Reprendre confiance en ses capacités </div>
+            </div>
+        </div>
+
     </div>
-    <div class="row vspace">
-        <div class="col-xs-12 col-md-12" align="center">
-            <img src="../../static/img/bilans.png" />
+
+    <div class="row  align-items-center" style="margin-top: 20px">
+
+        <div class="col-xs-6 col-md-4" align="center">
+            <div class="photo_background" id="photo_background5">
+                <img src="{% static 'img/academy_index3.jpg' %}" class="photo_background"  /> 
+                <div class="photo_background_titre"></div>                 
+                <div class="photo_titre">en plein essor </div>
+                <div class="photo_background_texte"  id="photo_background_texte5"><small><b>Et tu veux</b></small> <br/> Performer pour atteindre l'élite </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-md-12" align="center">
-            <h1 class="thin grandstander">... L'espace Parent </h1>
+
+
+        <div class="col-xs-6 col-md-4" align="center">
+            <div class="photo_background" id="photo_background4">
+                <img src="{% static 'img/academy_index1.jpg' %}" class="photo_background"   />  
+                <div class="photo_background_titre"></div>                 
+                <div class="photo_titre">en I.E.Famille </div>
+                <div class="photo_background_texte"  id="photo_background_texte4"><small><b>Et tu veux</b></small> <br/> Maitriser le socle des compétences </div>
+            </div> 
         </div>
-    </div>
-    <div class="row vspace">
-        <div class="col-xs-12 col-md-12 color_sacado">
-            <b>Sacado Académie</b> propose un suivi détaillé par enfant, exercices par exercices, par compétences et savoir faire des textes officiels de l'Éducation Nationale. Un bilan mensuel est éditable au format .pdf pour vérifier la validation des attendus. Vous recevez sur votre boite mail un compte rendu bi-mensuel.
-        </div>
-    </div>
-    <div class="row vspace">
-        <div class="col-xs-12 col-md-6" align="center">
-            <img src="../../static/img/radar.png" />
-        </div>
-        <div class="col-xs-12 col-md-6" align="center">
-            <img src="../../static/img/diag_barres.png" />
-        </div>
+        <div class="col-xs-6 col-md-4" align="center">
+            <div class="photo_background" id="photo_background6">
+                <img src="{% static 'img/academy_index4.jpg' %}" class="photo_background"  /> 
+                <div class="photo_background_titre"></div>                 
+                <div class="photo_titre">en élite </div>
+                <div class="photo_background_texte"  id="photo_background_texte6"><small><b>Et tu veux</b></small> <br/> Dynamiser ses pratiques </div>
+            </div>
+        </div> 
     </div>
 </section>
 
-    <section class="container lesplus vspace">
-      <div class="container">
-        <h2 class="thin color_sacado">Progressivités et Programmes <img src="{% static 'img/logo-france.jpg' %}" width="150px" class="img-fluid"/></h2>
-        <div class="row">
-
-            <div class="col-lg-4 col-md-4">
-                <h4 clas="grandstander">Primaire</h4>
-                <li class="sanspuce"><a href="https://eduscol.education.fr/document/20062/download" target="_blank"> Maternelle - Programme </a></li>
 
 
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
+<section class="container lesplus vspace">
+  <div class="container">
+    <h2 class="thin color_sacado">Progressivités et Programmes <img src="{% static 'img/logo-france.jpg' %}" width="150px" class="img-fluid"/></h2>
+    <div class="row">
 
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"> CE1 - Repère de progressivité</a></li>
+        <div class="col-lg-4 col-md-4">
+            <h4 clas="grandstander">Primaire</h4>
+            <li class="sanspuce"><a href="https://eduscol.education.fr/document/20062/download" target="_blank"> Maternelle - Programme </a></li>
 
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"> CE2 - Repère de progressivité</a></li>
+
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank"> CP - Repère de progressivité</a></li>
+
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank"> CE1 - Repère de progressivité</a></li>
+
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank"> CE2 - Repère de progressivité</a></li>
 
 
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank">CM1 - Repère de progressivité</a></li>
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank">CM1 - Repère de progressivité</a></li>
 
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank">CM2 - Repère de progressivité</a></li>
-            </div>
-            <div class="col-lg-4 col-md-4">
-                <h4 clas="grandstander">Collège</h4>
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank">6<sup>ème</sup> - Repère de progressivité</a> </li>
-
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank">5<sup>ème</sup> - Repère de progressivité</a> </li>
-
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank">4<sup>ème</sup> - Repère de progressivité </a></li>
-
-                <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank">3<sup>ème</sup> - Repère de progressivité </a></li>
-            </div>
-            <div class="col-lg-4 col-md-4">
-                <h4 clas="grandstander">Lycée</h4>
-                <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank">2<sup>nde</sup> - Programme </a></li>
-
-                <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank">1<sup>ère</sup> - Programme </a></li>
-
-                <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank">T<sup>ale</sup> - Programme </a> </li>
-            </div>
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank">CM2 - Repère de progressivité</a></li>
         </div>
-      </div>
-    </section>
+        <div class="col-lg-4 col-md-4">
+            <h4 clas="grandstander">Collège</h4>
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank">6<sup>ème</sup> - Repère de progressivité</a> </li>
+
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank">5<sup>ème</sup> - Repère de progressivité</a> </li>
+
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank">4<sup>ème</sup> - Repère de progressivité </a></li>
+
+            <li class="sanspuce"><a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank">3<sup>ème</sup> - Repère de progressivité </a></li>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <h4 clas="grandstander">Lycée</h4>
+            <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/95/7/spe631_annexe_1062957.pdf" target="_blank">2<sup>nde</sup> - Programme </a></li>
+
+            <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SP1-MEN-22-1-2019/16/8/spe632_annexe_1063168.pdf" target="_blank">1<sup>ère</sup> - Programme </a></li>
+
+            <li class="sanspuce"><a href="https://cache.media.education.gouv.fr/file/SPE8_MENJ_25_7_2019/90/7/spe246_annexe_1158907.pdf" target="_blank">T<sup>ale</sup> - Programme </a> </li>
+        </div>
+    </div>
+  </div>
+</section>
 
 <section class="container lesplus vspace">
     <div class="row vspace">
@@ -455,8 +444,7 @@ Intro Section -
  
      
         </div>
-    </div>
-    
+    </div> 
 </section>
 
 <footer id="footer" class="section-bg wow fadeIn">

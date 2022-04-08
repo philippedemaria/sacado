@@ -256,4 +256,17 @@ def exemple_json(request):
     return JsonResponse(data)  
 
 
+
+
+
+
+def synthese_parcours(request,user_id) :
+
+	student   = request.user.student 
+	parcourses = student.students_to_parcours.filter(is_evaluation=0, is_publish=1,is_trash=0).order_by("ranking").distinct()
+	context   = { 'parcourses' : parcourses }
+
+	return render(request, "academy/synthese_parcours.html" , context)
+
+
  

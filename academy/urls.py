@@ -12,6 +12,13 @@ urlpatterns = [
     path('create_autotest', create_autotest , name='create_autotest'),
     path('delete_autotest/<int:test_id>', delete_autotest , name='delete_autotest'),
 
+
+    path('synthese_parcours/<int:user_id>', synthese_parcours , name='synthese_parcours'),
+
+
+
+
+
 ]
 
 
