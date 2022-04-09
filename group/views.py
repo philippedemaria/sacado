@@ -28,6 +28,7 @@ from django.db.models import Q
 from django.db.models import Avg, Count, Min, Sum
 ############### bibliothèques pour les impressions pdf  #########################
 import os
+from reportlab.platypus.flowables import Flowable
 from django.utils import formats, timezone
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
@@ -37,9 +38,10 @@ from reportlab.lib.pagesizes import A4, inch, landscape , letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak,Frame , PageTemplate
 from reportlab.platypus.tables import Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.colors import yellow, red, black, white, blue
+from reportlab.lib.colors import yellow, red, black, white, blue , Color
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
+from reportlab.graphics.shapes import *
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from html import escape
 cm = 2.54
@@ -1233,13 +1235,13 @@ def enroll(request, slug):
     return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 
 
+def radar(L):
 
-def radar(c,L):
     """dessine le radar d'une liste de couples (intitulé, note/100)
     'c' est un canvas, L la liste
     valeur de retour : le canvas modifié"""
     from reportlab.lib.units import cm
-        
+    
     haut=15*cm   #hauteur et largeur du rectangle encadrant
     larg=18*cm
     rayon=6*cm   #rayon du radar
@@ -1248,61 +1250,51 @@ def radar(c,L):
     angle=1.5707   #angle de départ : pi/2 (verticale)
     deno=100  #note sur ?
     tick=10   #graduation tous les ?
-    
-    c.setFillColorRGB(0.95,0.95,0.95)
-    c.rect(0,0,larg,haut, fill=1)
-    if n<=2 :
-        c.drawCentredString(larg/2,haut/2,"pas assez de notes pour le graphique")
-        return
-    
-    c.setFont("Times-Roman", 14)
-    c.setStrokeColorRGB(0,0,0)
-    c.setFillColorRGB(0,0,0)
+    cfond=Color(0.95,0.95,0.95) #couleur du fond
+    cgrille=Color(0.8,0.8,0.8)  #couleur de la grille
+    cligne=Color(1,0,0)         #couleur des la ligne des données
+
+    #-------------------------------------------------
+    d=Drawing(larg,haut)
+    d.add(Rect(0,0,larg,haut,fillColor=cfond))
+    if n<=2 :  
+        d.add(String(larg/2,haut/2,"pas assez de notes pour le graphique", textAnchor="middle"))
+        return d
     
     for i in range(n) :
         a=angle+i*dangle
         # ----------- le nom des matieres
-        c.setLineWidth(1)
-        c.setStrokeColorRGB(0,0,0)
-        c.setFillColorRGB(0,0,0)
         
         if 0.78 <(a % 6.28) <2.35 : 
-            c.drawCentredString(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]))
+            d.add(String(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]), textAnchor="middle"))
         elif 2.35 <= (a % 6.28) <3.92 : 
-            c.drawRightString(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]))
+            d.add(String(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]), textAnchor="end"))
         elif  3.92<=a % 6.28<5.5 :
-            c.drawCentredString(larg/2+(rayon+0.6*cm)*cos(a),haut/2+(rayon+0.6*cm)*sin(a), str(L[i][0]))
+            d.add(String(larg/2+(rayon+0.6*cm)*cos(a),haut/2+(rayon+0.6*cm)*sin(a), str(L[i][0]), textAnchor="middle"))
         else :
-            c.drawString(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0])) 
+            d.add(String(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0])))
 
         #-------------------- la grille du radar
-        c.line(larg/2,haut/2,larg/2+rayon*cos(a),haut/2+rayon*sin(a))
+        d.add(Line(larg/2,haut/2,larg/2+rayon*cos(a),haut/2+rayon*sin(a), strokeColor=cgrille))
         
-        c.setFillColorRGB(0.8, 0.8, 0.8)
-        c.setStrokeColorRGB(0.8, 0.8, 0.8)
         for j in range(1,int(deno/tick)+1):
             r=rayon*j*tick/deno
-            c.line(larg/2+r*cos(angle+i*dangle),haut/2+r*sin(angle+i*dangle),\
-                   larg/2+r*cos(angle+(i+1)*dangle),haut/2+r*sin(angle+(i+1)*dangle))
+            d.add(Line(larg/2+r*cos(angle+i*dangle),haut/2+r*sin(angle+i*dangle),\
+                       larg/2+r*cos(angle+(i+1)*dangle),haut/2+r*sin(angle+(i+1)*dangle),\
+                       strokeColor=cgrille ))
 
         #--------------------- la ligne des données  
         r1=L[i-1][1]
         r2=L[i % n][1]
-        c.setLineWidth(3)
-        c.setStrokeColorRGB(1,0,0)
-        c.setFillColorRGB(1,0,0)
-        c.line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle))
+        d.add(Line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle), strokeColor=cligne, strokeWidth=2))
 
     #------------------------ graduations
     
-    c.setStrokeColorRGB(0,0,0)
-    c.setFillColorRGB(0,0,0)
     for i in range(1,int(deno/tick)+1):
         r=rayon*(i-0.3)*tick/deno
-        c.drawString(larg/2+r*cos(angle),haut/2+r*sin(angle),str(i*tick))     
+        d.add(String(larg/2+r*cos(angle),haut/2+r*sin(angle),str(i*tick)))     
+    return d
 
-
- 
 
 
 
@@ -1630,12 +1622,12 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
     themes, subjects = [], []
     group = Group.objects.get(pk = group_id)
 
+
     if request.user.is_teacher :
         teacher = Teacher.objects.get(user=request.user)
         authorizing_access_group(request,teacher,group ) 
     elif request.user.is_parent :
         student = Student.objects.get(pk = student_id)
-        print(request.user.parent.students.all())
         if not student in request.user.parent.students.all() :
             return redirect('index')
 
@@ -1940,7 +1932,8 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
 
         elements.append(PageBreak())
 
-        #radar(doc,w_tab)
+        d = radar(w_tab)
+        elements.append(d)
 
     doc.build(elements)
 
