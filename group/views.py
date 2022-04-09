@@ -41,7 +41,10 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import yellow, red, black, white, blue , Color
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
-from reportlab.graphics.shapes import *
+from reportlab.graphics.shapes import Drawing,Rect,String,Line
+from textwrap import TextWrapper
+from reportlab.graphics.charts.textlabels import Label
+
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from html import escape
 cm = 2.54
@@ -1237,9 +1240,9 @@ def enroll(request, slug):
 
 def radar(L):
 
-    """dessine le radar d'une liste de couples (intitulé, note/100)
-    'c' est un canvas, L la liste
-    valeur de retour : le canvas modifié"""
+    """dessine le radar d'une liste de listes [intitulé, note/100]
+    valeur de retour : une "shape" de type Drawing
+    """
     from reportlab.lib.units import cm
     
     haut=15*cm   #hauteur et largeur du rectangle encadrant
@@ -1253,6 +1256,8 @@ def radar(L):
     cfond=Color(0.95,0.95,0.95) #couleur du fond
     cgrille=Color(0.8,0.8,0.8)  #couleur de la grille
     cligne=Color(1,0,0)         #couleur des la ligne des données
+    w=TextWrapper(width=20)     #les intitules auront au plus 20 caractères
+                                #de large, on les decoupe sur plusieurs lignes
 
     #-------------------------------------------------
     d=Drawing(larg,haut)
@@ -1263,20 +1268,21 @@ def radar(L):
     
     for i in range(n) :
         a=angle+i*dangle
-        # ----------- le nom des matieres
-        
+        # ----------- placement des intitulés
+        intitule=Label()
+        intitule.setOrigin(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a))
         if 0.78 <(a % 6.28) <2.35 : 
-            d.add(String(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]), textAnchor="middle"))
+            intitule.boxAnchor="s"
         elif 2.35 <= (a % 6.28) <3.92 : 
-            d.add(String(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]), textAnchor="end"))
+            intitule.boxAnchor="e"
         elif  3.92<=a % 6.28<5.5 :
-            d.add(String(larg/2+(rayon+0.6*cm)*cos(a),haut/2+(rayon+0.6*cm)*sin(a), str(L[i][0]), textAnchor="middle"))
+            intitule.boxAnchor="n"
         else :
-            d.add(String(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0])))
-
+            intitule.boxAnchor="w"
+        intitule.setText(w.fill(L[i][0]))
+        d.add(intitule)
         #-------------------- la grille du radar
         d.add(Line(larg/2,haut/2,larg/2+rayon*cos(a),haut/2+rayon*sin(a), strokeColor=cgrille))
-        
         for j in range(1,int(deno/tick)+1):
             r=rayon*j*tick/deno
             d.add(Line(larg/2+r*cos(angle+i*dangle),haut/2+r*sin(angle+i*dangle),\
@@ -1286,7 +1292,8 @@ def radar(L):
         #--------------------- la ligne des données  
         r1=L[i-1][1]
         r2=L[i % n][1]
-        d.add(Line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle), strokeColor=cligne, strokeWidth=2))
+        d.add(Line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle),\
+                   strokeColor=cligne, strokeWidth=2))
 
     #------------------------ graduations
     
