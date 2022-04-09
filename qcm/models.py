@@ -700,9 +700,10 @@ class Parcours(ModelWithCode):
             if int(nb_exercise_done * 100/(nb_relationships+nb_customs)) > 100:
                 maxi = 100
             data["pc"] = maxi
-
+            data["opac"] = 0.3 + 0.7*maxi/100
         except :
             data["pc"] = 0
+            data["opac"] = 1
 
         return data
 
@@ -860,7 +861,6 @@ class Parcours(ModelWithCode):
 
         nb_flashpack           = flashpacks.count() 
         nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
-
 
 
         data["nb_exercises"]            = nb_exercises

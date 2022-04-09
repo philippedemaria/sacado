@@ -51,8 +51,7 @@ from general_fonctions import *
 import qrcode
 import qrcode.image.svg
 from io import BytesIO
-
-
+from math import sin,cos
 
 
 
@@ -1234,7 +1233,78 @@ def enroll(request, slug):
     return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })
 
 
+
+def radar(c,L):
+    """dessine le radar d'une liste de couples (intitulé, note/100)
+    'c' est un canvas, L la liste
+    valeur de retour : le canvas modifié"""
+    from reportlab.lib.units import cm
+        
+    haut=15*cm   #hauteur et largeur du rectangle encadrant
+    larg=18*cm
+    rayon=6*cm   #rayon du radar
+    n=len(L)
+    dangle=6.2832/n  #angle d'un secteur angulaire
+    angle=1.5707   #angle de départ : pi/2 (verticale)
+    deno=100  #note sur ?
+    tick=10   #graduation tous les ?
+    
+    c.setFillColorRGB(0.95,0.95,0.95)
+    c.rect(0,0,larg,haut, fill=1)
+    if n<=2 :
+        c.drawCentredString(larg/2,haut/2,"pas assez de notes pour le graphique")
+        return
+    
+    c.setFont("Times-Roman", 14)
+    c.setStrokeColorRGB(0,0,0)
+    c.setFillColorRGB(0,0,0)
+    
+    for i in range(n) :
+        a=angle+i*dangle
+        # ----------- le nom des matieres
+        c.setLineWidth(1)
+        c.setStrokeColorRGB(0,0,0)
+        c.setFillColorRGB(0,0,0)
+        
+        if 0.78 <(a % 6.28) <2.35 : 
+            c.drawCentredString(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]))
+        elif 2.35 <= (a % 6.28) <3.92 : 
+            c.drawRightString(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0]))
+        elif  3.92<=a % 6.28<5.5 :
+            c.drawCentredString(larg/2+(rayon+0.6*cm)*cos(a),haut/2+(rayon+0.6*cm)*sin(a), str(L[i][0]))
+        else :
+            c.drawString(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a), str(L[i][0])) 
+
+        #-------------------- la grille du radar
+        c.line(larg/2,haut/2,larg/2+rayon*cos(a),haut/2+rayon*sin(a))
+        
+        c.setFillColorRGB(0.8, 0.8, 0.8)
+        c.setStrokeColorRGB(0.8, 0.8, 0.8)
+        for j in range(1,int(deno/tick)+1):
+            r=rayon*j*tick/deno
+            c.line(larg/2+r*cos(angle+i*dangle),haut/2+r*sin(angle+i*dangle),\
+                   larg/2+r*cos(angle+(i+1)*dangle),haut/2+r*sin(angle+(i+1)*dangle))
+
+        #--------------------- la ligne des données  
+        r1=L[i-1][1]
+        r2=L[i % n][1]
+        c.setLineWidth(3)
+        c.setStrokeColorRGB(1,0,0)
+        c.setFillColorRGB(1,0,0)
+        c.line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle))
+
+    #------------------------ graduations
+    
+    c.setStrokeColorRGB(0,0,0)
+    c.setFillColorRGB(0,0,0)
+    for i in range(1,int(deno/tick)+1):
+        r=rayon*(i-0.3)*tick/deno
+        c.drawString(larg/2+r*cos(angle),haut/2+r*sin(angle),str(i*tick))     
+
+
  
+
+
 
 def print_statistiques(request, group_id, student_id):
 
@@ -1555,13 +1625,7 @@ def print_statistiques(request, group_id, student_id):
 
 
 
-
-
-
-
-
 def print_monthly_statistiques(request, month_id, group_id,student_id):
-
 
     themes, subjects = [], []
     group = Group.objects.get(pk = group_id)
@@ -1574,8 +1638,6 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         print(request.user.parent.students.all())
         if not student in request.user.parent.students.all() :
             return redirect('index')
-
-
 
 
     student = Student.objects.get(pk = student_id)
@@ -1601,24 +1663,20 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
                                         bottomMargin=0.3*inch     )
 
     sample_style_sheet = getSampleStyleSheet()
-
     sacado = ParagraphStyle('sacado', 
                             fontSize=20, 
                             leading=26,
                             borderPadding = 0,
                             alignment= TA_CENTER,
                             )
-
     title = ParagraphStyle('title', 
                             fontSize=20, 
                             textColor=colors.HexColor("#00819f"),
                             )
-
     subtitle = ParagraphStyle('title', 
                             fontSize=16, 
                             textColor=colors.HexColor("#00819f"),
                             )
- 
     normal = ParagraphStyle(name='Normal',fontSize=12,)    
     style_cell = TableStyle(
             [
@@ -1798,12 +1856,15 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         elements.append(Spacer(0, 0.15*inch))
 
         th_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
+        w_tab = [] 
+        bgc = 0  
 
-        bgc = 0        
         for theme  in themes :
             waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
             th_tab.append([theme.name,  " " ])
             bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
+
+ 
 
             for waiting in waiting_set :
                 bgc += 1
@@ -1813,6 +1874,8 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
                 som_ws = 0
                 for result in resultwaitings :
                     som_ws += result.point
+
+                w_tab.append([waiting.name, som_ws ])
                 try :
                     avg_ws = int(som_ws / len(resultwaitings))
                     th_tab.append([waiting.name,  code_couleur(avg_ws,teacher) ])
@@ -1876,6 +1939,8 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
                 elements.append(knowledge_tab_tab)
 
         elements.append(PageBreak())
+
+        #radar(doc,w_tab)
 
     doc.build(elements)
 

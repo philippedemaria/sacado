@@ -40,6 +40,13 @@ def decode(arg):
 
 
 
+
+@register.filter
+def keep_point(arg):
+    '''garde le point au lieu de la virgule'''
+    return str(arg).replace(",",".")
+
+
 @register.filter
 def decrypt_results(arg):
     '''Pour les flashcards'''

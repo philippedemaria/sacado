@@ -11,17 +11,16 @@
  
 
 {% block page_title %}
-      Synthèse des parcours
+    Synthèse des parcours
 {% endblock %}
 
 
 
 {% block page_menu_right %}
-
-
-
-    
+    <li><a href="{% url 'detail_student_all_views' user.id %}"  class="btn btn-new-violet"> Bilans et suivis</a></li> 
 {% endblock %}
+
+
 
 {% block css_files %}
 {% endblock %}
@@ -40,10 +39,11 @@
     <div class="row "> 
         <div class="col-sm-12 col-md-12">
                 <form action="" methode="POST" id="parcours_sortable"> 
-                {% for parcours in parcourses  %}  
+                {% for parcours in parcourses  %}
+                {% get_percent parcours student as isp %}   
                     <a  href="{% url 'show_parcours_student'  parcours.id  %}" style="color:{{ parcours.color|contrast_color }};">
-                    <div  class="box_academy box-widget widget-user-2 opacity" 
-                          style="{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};">
+                    <div  class="box_academy box-widget widget-user-2" 
+                          style="{% if parcours.vignette %}background-image: url('{{ parcours.vignette.url }}'); background-size: cover; {% endif %}background-color:{{parcours.color }};opacity:{{ isp.opac|keep_point  }};">
                         <div class="handler widget-user-header_academy">
  
                             <div class="box_title_vignette_academy"> 
@@ -53,16 +53,16 @@
                                     {{ parcours.title}}
                                 {% endif %}
                             </div>
-                            <div style="width:100% ;position: absolute; bottom:5px;">
-                                <span style="float;left; width:30%;"> 
+                            <div style="width:100% ;position: absolute; bottom:5px; padding-left:7px;">
+                                <span style="float;left; width:40%"> 
                                     {{ parcours.nb_exercices_and_cours.nb_cours }} <small>cours </small>
                                 </span>
-                                <span style="float;left; width:20%;"> 
+                                <span style="float;left; width:20%"> 
                                     {{ parcours.nb_exercices_and_cours.nb_exercises }} <small>exos </small>
                                 </span>
-
-                                <span style="float;left; width:30%;"> 
+                                <span style="float:right; width:30%;">
                                     
+                                    <span style="position: absolute; bottom:-5px; padding-right:0px;font-size:30px">{{ isp.pc  }}%</span>
                                 </span>
                             </div>
                         </div>

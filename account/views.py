@@ -1013,6 +1013,8 @@ def detail_student_all_views(request, id):
         score_str     = 0
         datebar       = ""
 
+        ###################
+        #### Suivi si academie
         i = 1
         if request.user.school_id == 50 and request.user.is_in_academy  :
             sep = "-"
@@ -1028,7 +1030,7 @@ def detail_student_all_views(request, id):
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
             aptitude = request.user.school.aptitude.last()
-            print(student)
+ 
             student_answers = Studentanswer.objects.filter( student  = student , date__gte = date_start  )
             st0 = student_answers.filter(point__lt= aptitude.low).count()
             st1 = student_answers.filter(point__lt= aptitude.medium).count()

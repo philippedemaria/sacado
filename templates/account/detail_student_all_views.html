@@ -102,12 +102,19 @@
 
             {% if request.user.is_in_academy %}
 
+ 
+            <!-- bilan des parents par mois -->
             <div class="row bilan_div">
                 <div class="col-sm-12 col-md-5" align="center">
-                    <h3>Derniers résultats {{ datebar }}</h3>
-                    <input id="scoresbarSet" value="{{ score_str }}" type="hidden" />
-                    <input id="datebarSet" value="{{ datebar }}" type="hidden" />
-                    <canvas id="barChart" width="600" height="400"></canvas>
+                    <h3>Semaine {{ datebar }}</h3>
+
+                    {% if datebar %}
+                        <input id="scoresbarSet" value="{{ score_str }}" type="hidden" />
+                        <input id="datebarSet" value="{{ datebar }}" type="hidden" />
+                        <canvas id="barChart" width="600" height="400"></canvas>
+                    {% else %}
+                        <div clas="alert alert-danger">Aucun exercice travaillé durant cette semaine</div>
+                    {% endif %}
                 </div>                 
                 <div class="col-sm-12 col-md-7" align="center">
                     <h3>Suivi des attendus</h3>
