@@ -38,20 +38,19 @@
                 <a href="{% url 'update_course' course.id  parcours.id %}" class="edit">
                     <i class="fa fa-fw fa-cogs"></i> <span class="label_icon">Config.</span>
                 </a>
-                {% else %}
+                {% endif %}
+            </div>
+            <div class="col-lg-4 col-xs-4">
                 <a href="{% url 'show_course' course.id parcours.id %}" class="edit">
                     <i class="fa fa-fw fa-play"></i> <span class="label_icon">Lecture</span>
                 </a>
-                {% endif %}
-            </div>
+            </div> 
             <div class="col-lg-4 col-xs-4">
                 <span  class="edit" >
                     <i class="fa fa-fw fa-clock"></i> <span class="label_icon">{{ course.duration }} min.</span>
                 </span>
             </div>
-            <div class="col-lg-4 col-xs-4">
- 
-            </div> 
+
         </div>
 
     </div>
