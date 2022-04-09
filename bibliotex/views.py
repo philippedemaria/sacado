@@ -255,8 +255,7 @@ def printer(request, relationtex_id, collection,output):
 
 
 def printer_bibliotex_by_student(bibliotex):
-    """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
-    soit en html (output="html") """
+    """affiche un exo ou une collection d'exercices, en pdf (output="pdf") """
 
     # ouverture du texte dans le fichier tex
 
@@ -311,6 +310,19 @@ def printer_bibliotex_by_student(bibliotex):
             elements += r" \item " +  k.name  
 
         elements += r"}"
+
+ 
+ 
+        if  relationtex.content : ctnt =  relationtex.content
+        else                    : ctnt =  relationtex.exotex.content
+
+        elements += r"\vspace{0,2cm}\\"
+        elements += ctnt
+        elements += r"\vspace{0,4cm}\\"
+
+
+
+
  
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
