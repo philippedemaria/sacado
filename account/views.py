@@ -1025,13 +1025,13 @@ def detail_student_all_views(request, id):
                 if i == len(group.waitings()) :
                     sep = ""
                 waitingsRadar += waiting.name[:80]+sep
-                score = 0
+                score , total_score = 0 , 0 
                 if student.result_waitings(waiting) : 
                     score = student.result_waitings(waiting)
-                    if score > 0 :
-                        score_bool = True
+                    total_score += score
                 scoreswRadar += str(score)+sep
                 i+=1
+            if total_score > 0 : score_bool = True
 
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
