@@ -892,6 +892,8 @@ def detail_student_parcours(request, id,idp):
 
     return render(request, 'account/detail_student_parcours.html', context)
 
+
+
 #@user_can_read_details
 def detail_student_all_views(request, id):
 
@@ -1016,14 +1018,18 @@ def detail_student_all_views(request, id):
         ###################
         #### Suivi si academie
         i = 1
+        score_bool = False # Permet de ne pas afficher la grille de semaine si aucun exercice n'est fait durant cette semaine.
         if request.user.school_id == 50 and request.user.is_in_academy  :
             sep = "-"
             for waiting in group.waitings() :
                 if i == len(group.waitings()) :
                     sep = ""
-                waitingsRadar += waiting.name+sep
+                waitingsRadar += waiting.name[:80]+sep
                 score = 0
-                if student.result_waitings(waiting) : score = student.result_waitings(waiting)
+                if student.result_waitings(waiting) : 
+                    score = student.result_waitings(waiting)
+                    if score > 0 :
+                        score_bool = True
                 scoreswRadar += str(score)+sep
                 i+=1
 
@@ -1041,7 +1047,7 @@ def detail_student_all_views(request, id):
             datebar = "du "+str(date_start.strftime("%d/%m/%Y"))+" au "+str(today.strftime("%d/%m/%Y"))
 
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
-                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar  }
+                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar , 'score_bool' : score_bool  }
 
 
     return render(request, 'account/detail_student_all_views.html', context)

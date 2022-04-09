@@ -108,7 +108,7 @@
                 <div class="col-sm-12 col-md-5" align="center">
                     <h3>Semaine {{ datebar }}</h3>
 
-                    {% if datebar %}
+                    {% if score_bool %}
                         <input id="scoresbarSet" value="{{ score_str }}" type="hidden" />
                         <input id="datebarSet" value="{{ datebar }}" type="hidden" />
                         <canvas id="barChart" width="600" height="400"></canvas>
@@ -117,19 +117,15 @@
                     {% endif %}
                 </div>                 
                 <div class="col-sm-12 col-md-7" align="center">
-                    <h3>Suivi des attendus</h3>
+                    <h3>Suivi annuel des attendus</h3>
                     <input id="scoreswRadar" value="{{scoreswRadar}}" type="hidden" /> 
                     <input id="waitingsRadar" value="{{waitingsRadar}}" type="hidden" /> 
                     <canvas id="marksChart" width="600" height="400"></canvas>
                 </div>
 
-            </div> 
-
-
-            <!-- bilan des parents par mois -->
-            <div class="row bilan_div">
+                <hr/>
                 <div class="col-sm-12 col-md-12">
-                    <span class='thin' style="font-size:20px">Bilans bi-mensuels</span><hr/>
+                    <span class='thin' style="font-size:20px;margin-bottom: 20px;">Bilans bi-mensuels</span><hr/>
                     <div class="row">
                     {% for month in months %}  
                         <div class="col-sm-4 col-md-2">
