@@ -4173,20 +4173,13 @@ table.table-bordered.dataTable {
 .image_parcours:hover{
   width:500px;
 }
-
+*/
 
 .marker{
-  background-color: #F0F0F0;
-  border:solid 1px #ccc;
-  font-size: 12px;
-  padding: 8px 7px;
-  border-radius: 20px;
-  width: 35px;
-  margin: 1px;
-  text-align: center; 
-  height:35px;
+  background-color: #f2df0b;
+  padding: 2px ;
 }
-*/
+
 
 .parcours_div{
   overflow-y: auto;
