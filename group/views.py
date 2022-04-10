@@ -41,10 +41,10 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import yellow, red, black, white, blue , Color
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
+
 from reportlab.graphics.shapes import Drawing,Rect,String,Line
 from textwrap import TextWrapper
 from reportlab.graphics.charts.textlabels import Label
-
 from reportlab.lib.enums import TA_JUSTIFY,TA_LEFT,TA_CENTER,TA_RIGHT
 from html import escape
 cm = 2.54
