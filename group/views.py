@@ -1310,12 +1310,9 @@ def print_statistiques(request, group_id, student_id):
 
     themes, subjects = [], []
     group = Group.objects.get(pk = group_id)
-
     teacher = Teacher.objects.get(user=request.user)
 
-    
     authorizing_access_group(request,teacher,group ) 
-
 
     if student_id == 0  :
         students = group.students.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
@@ -1737,72 +1734,26 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         except :
             median = 0
 
-        # Vérifie que le parcours par défaut est donné
-        nb_k_p , nb_p = 0 , 0 
-        parcourses = student_parcours_studied(student)
 
-        knowledges , knowledge_ids  = [] ,  []
+        k_ids = studentanswers.values_list("exercise__knowledge_id", flat=True).distinct()
+        nb_k_p = k_ids.count()
 
-        knowledge_ids = Relationship.objects.values_list("exercise__knowledge_id", flat=True).filter(parcours__in = parcourses,exercise__theme__in= themes , exercise__level = student.level).distinct()
-        nb_k_p += knowledge_ids.count()
-        
-        exercise_ids  = Relationship.objects.values_list("exercise_id", flat=True).filter(parcours__in = parcourses,exercise__theme__in= themes , exercise__level = student.level).distinct()
-        nb_p += exercise_ids.count()
+        exo_ids = studentanswers.values_list("exercise_id", flat=True).distinct()
+        nb_e = exo_ids.count()
 
-        knows_ids = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id__in = knowledge_ids, exercise_id__in= exercise_ids).filter(date__lte = date_stop , date__gte= date_start)
-        nb_k = knows_ids.count()
+        skill_ids = studentanswers.values_list("exercise__supportfile__skills", flat=True).distinct()
+        nb_skills = skill_ids.count()
 
-        # Les taux
-        try :
-            p_k = int(nb_k/nb_k_p * 100 )
-            if p_k > 100 :
-                p_k = 100
-        except :
-            p_k = 0
-        try :
-            p_e = int(nb_exo/nb_p * 100)
-            if p_e > 100 :
-                p_e = 100
-        except :
-            p_e = 0
-
-        relationships = Relationship.objects.filter(parcours__in = parcourses).exclude(date_limit=None)
-        done, late, no_done = 0 , 0 , 0 
-        for relationship in relationships :
-
-            ontime = student.answers.filter(exercise = relationship.exercise )
-            nb_ontime = ontime.count()
-            nb = ontime.filter(date__lte= relationship.date_limit ).count()
-            if nb_ontime == 0 :
-                no_done += 1
-            elif nb > 0 :
-                done += 1
-            else :
-                late += 1 
-        t_r = no_done + done + late
- 
-        ##########################################################################
-        #### Gestion de l'autonomie
-        ##########################################################################
-        if nb_exo > nb_p :
-            nbr = nb_exo - nb_p
-            complt = " dont "+str(nbr)+" en autonomie"
-        else :
-            complt = ""
-        if nb_k > nb_k_p :
-            nbrk = nb_k - nb_k_p
-            complement = " dont "+str(nbrk)+" en autonomie" 
-        else :
-            complement = ""
-
- 
+        print(k_ids)
+        print(exo_ids)
+        print(skill_ids)
         ##########################################################################
         #### Gestion des labels à afficher
         ##########################################################################
         labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Mois :"+str(month_id)+"/"+str(this_year),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%, score médian : "+str(median)+"%" , \
-                 "Exercices SACADO proposés : " +str(nb_p) , "dont "+str(nb_exo)+" étudiés "+complt+", soit un taux d'étude de "+str(p_e)+"%", "Bilan des compétences "]
+                 "Exercices SACADO proposés : " +str(nb_e),"Bilan des compétences "]
 
-        spacers , titles,subtitles = [1,3,5] ,[0],[6]
+        spacers , titles,subtitles = [1,3] ,[0],[5]
 
         i = 0
         for label in labels :
@@ -1823,18 +1774,20 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
             elements.append(Spacer(0, height*inch))
             i+=1   
 
+
         ##########################################################################
         #### Gestion des compétences
         ##########################################################################
-        sk_tab = []
-        skills = Skill.objects.filter(subject= subject)
-        for skill  in skills :
+
+        sk_tab , skill_tab = [] , []
+ 
+        for skill_id  in skill_ids :
+            skill = Skill.objects.get(pk= skill_id)
             try :
                 resultlastskill  = skill.student_resultskill.get(student = student)
                 sk_tab.append([skill.name, code_couleur(resultlastskill.point,teacher) ])
             except :
                 sk_tab.append([skill.name,  "N.E"  ])
-
 
         try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
             skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
@@ -1858,7 +1811,11 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         w_tab = [] 
         bgc = 0  
 
-        for theme  in themes :
+
+
+
+        for studentanswer  in studentanswers :
+            theme = studentanswer.exercise.theme
             waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
             th_tab.append([theme.name,  " " ])
             bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
@@ -1892,7 +1849,7 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         elements.append(theme_tab)
 
         loop  = 0
-        for theme  in themes :
+        for theme_id  in theme_ids :
             ##########################################################################
             #### Gestion des knowledges par thème
             ##########################################################################
@@ -1902,6 +1859,7 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
                     elements.append(PageBreak()) # Ouvre une nouvelle page - 2 thèmes
                 loop +=1
                 # Append le thème 
+                theme = Theme.objects.get(pk=theme_id)
                 paragraph = Paragraph( theme.name , title )  
                 elements.append(paragraph)
                 elements.append(Spacer(0, 0.2*inch)) 
@@ -1909,17 +1867,17 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
                 #######
 
 
-                for knowledge_id in knowledge_ids :
+                for k_id in k_ids :
                     # Savoir faire
-                    name_k = Knowledge.objects.get(pk = knowledge_id).name
+                    name_k = Knowledge.objects.get(pk = k_id).name
                     name   = split_paragraph(name_k,80)
 
                     ##########################################################################
                     #### Affichage des résultats par knowledge
                     ##########################################################################                    
                     try :      
-                        knowledgeResult = student.results_k.get(knowledge_id  = knowledge_id)
-                        knowledgeResult_nb = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id = knowledge_id ).count()          
+                        knowledgeResult = student.results_k.get(knowledge_id  = k_id)
+                        knowledgeResult_nb = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id = k_id ).count()          
                         knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult.point,teacher) , knowledgeResult_nb )          )
                     except : 
                         knowledge_tab.append(      ( name ,   "N.E"  , 0  )        )

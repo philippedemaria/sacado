@@ -1038,6 +1038,7 @@ def detail_student_all_views(request, id):
             aptitude = request.user.school.aptitude.last()
  
             student_answers = Studentanswer.objects.filter( student  = student , date__gte = date_start  )
+            print(  student_answers  )
             st0 = student_answers.filter(point__lt= aptitude.low).count()
             st1 = student_answers.filter(point__lt= aptitude.medium).count()
             st2 = student_answers.filter(point__lt= aptitude.up).count()
