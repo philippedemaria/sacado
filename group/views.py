@@ -1622,7 +1622,7 @@ def print_statistiques(request, group_id, student_id):
 
 
 
-def print_monthly_statistiques(request, month_id, group_id,student_id):
+def print_monthly_statistiques(request):
 
     themes, subjects = [], []
     group = Group.objects.get(pk = group_id)
@@ -1697,9 +1697,8 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         else :
             feb_day = 28
 
-        months = [31,feb_day ,31,30,31,30,31,31,30,31,30,31]
-        date_start = date(this_year,month_id,1)
-        date_stop = date(this_year,month_id,months[month_id-1])
+        date_start = request.POST.get('date_start')
+        date_stop  = request.POST.get('date_stop') 
 
         studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
 
