@@ -1018,7 +1018,6 @@ def detail_student_all_views(request, id):
         ###################
         #### Suivi si academie
         i = 1
-        score_bool = False # Permet de ne pas afficher la grille de semaine si aucun exercice n'est fait durant cette semaine.
         if request.user.school_id == 50 and request.user.is_in_academy  :
             sep = "-"
             for waiting in group.waitings() :
@@ -1031,14 +1030,15 @@ def detail_student_all_views(request, id):
                     total_score += score
                 scoreswRadar += str(score)+sep
                 i+=1
-            if total_score > 0 : score_bool = True
+            
 
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
             aptitude = request.user.school.aptitude.last()
  
             student_answers = Studentanswer.objects.filter( student  = student , date__gte = date_start  )
-            print(  student_answers  )
+            score_bool = False # Permet de ne pas afficher la grille de semaine si aucun exercice n'est fait durant cette semaine.
+            if student_answers.count() : score_bool = True
             st0 = student_answers.filter(point__lt= aptitude.low).count()
             st1 = student_answers.filter(point__lt= aptitude.medium).count()
             st2 = student_answers.filter(point__lt= aptitude.up).count()

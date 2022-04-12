@@ -150,6 +150,7 @@ def separate_values(request, line, is_group,simple) :
 
 
 def convert_seconds_in_time(secondes):
+    if secondes : secondes = int(secondes)
     if secondes < 60:
         return "{}s".format(secondes)
     elif secondes < 3600:
