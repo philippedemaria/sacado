@@ -398,14 +398,15 @@ def include_students(request , liste, group):
 
 
 def convert_seconds_in_time(secondes):
+    if secondes : secondes = int(secondes)
     if secondes < 60:
-        return "{}s".format(secondes)
+        return "{}s.".format(secondes)
     elif secondes < 3600:
         minutes = secondes // 60
         sec = secondes % 60
         if sec < 10:
             sec = f'0{sec}'
-        return "{}:{}".format(minutes, sec)
+        return "{}min. {}s.".format(minutes, sec)
     else:
         hours = secondes // 3600
         minutes = (secondes % 3600) // 60
@@ -414,7 +415,7 @@ def convert_seconds_in_time(secondes):
             sec = f'0{sec}'
         if minutes < 10:
             minutes = f'0{minutes}'
-        return "{}:{}:{}".format(hours, minutes, sec)
+        return "{}h. {}min. {}s.".format(hours, minutes, sec)
 
 
 
@@ -1640,13 +1641,6 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
     students = [student]
     title_of_report = student.user.last_name+"_"+student.user.first_name+"_"+str(timezone.now().date())
 
-    knows = knowledges_of_a_student(student)
-    for know in knows :
-        if not know.theme in themes :
-            themes.append(know.theme)
-
-    subject = group.subject
-
     elements = []        
 
     response = HttpResponse(content_type='application/pdf')
@@ -1709,7 +1703,9 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
 
         studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
 
-        studentanswer_ids = studentanswers.values_list("id",flat=True).distinct() 
+        studentanswer_ids = studentanswers.values_list("exercise_id",flat=True).distinct() 
+
+
         nb_exo = studentanswer_ids.count() # Nombre d'exercices traités
         info = studentanswers.aggregate( duration =  Sum("secondes"), score =  Sum("point"), avg =  Avg("point"))
         scores = studentanswers.values_list("point",flat=True).order_by("point")
@@ -1722,18 +1718,6 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         if info["avg"]:
             average_score = int(info["avg"])
 
-        try :
-            if len(studentanswers)>1 :
-                if len(scores)%2 == 0 :
-                    med = (scores[(len(scores)-1)//2]+scores[(len(scores)-1)//2+1])/2 ### len(scores)-1 , ce -1 est causé par le rang 0 du tableau
-                else:
-                    med = scores[(len(scores)-1)//2+1]
-                median = int(med)
-            else :
-                median = int(score)
-        except :
-            median = 0
-
 
         k_ids = studentanswers.values_list("exercise__knowledge_id", flat=True).distinct()
         nb_k_p = k_ids.count()
@@ -1744,14 +1728,13 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         skill_ids = studentanswers.values_list("exercise__supportfile__skills", flat=True).distinct()
         nb_skills = skill_ids.count()
 
-        print(k_ids)
-        print(exo_ids)
-        print(skill_ids)
+        theme_ids = studentanswers.values_list("exercise__theme_id", flat=True).distinct()
+
         ##########################################################################
         #### Gestion des labels à afficher
         ##########################################################################
-        labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Mois :"+str(month_id)+"/"+str(this_year),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%, score médian : "+str(median)+"%" , \
-                 "Exercices SACADO proposés : " +str(nb_e),"Bilan des compétences "]
+        labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Mois :"+str(month_id)+"/"+str(this_year),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , \
+                 "Exercices SACADO travaillés : " +str(nb_e),"Bilan des compétences "]
 
         spacers , titles,subtitles = [1,3] ,[0],[5]
 
@@ -1774,31 +1757,7 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
             elements.append(Spacer(0, height*inch))
             i+=1   
 
-
-        ##########################################################################
-        #### Gestion des compétences
-        ##########################################################################
-
-        sk_tab , skill_tab = [] , []
  
-        for skill_id  in skill_ids :
-            skill = Skill.objects.get(pk= skill_id)
-            try :
-                resultlastskill  = skill.student_resultskill.get(student = student)
-                sk_tab.append([skill.name, code_couleur(resultlastskill.point,teacher) ])
-            except :
-                sk_tab.append([skill.name,  "N.E"  ])
-
-        try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
-            skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
-            skill_tab.setStyle(TableStyle([
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                       ]))
-        except : 
-            skill_tab = Table(sk_tab, hAlign='LEFT', colWidths=[5.2*inch,1*inch])
-
-        elements.append(skill_tab)
         ##########################################################################
         #### Gestion des themes
         ##########################################################################
@@ -1807,93 +1766,46 @@ def print_monthly_statistiques(request, month_id, group_id,student_id):
         elements.append(paragraph)
         elements.append(Spacer(0, 0.15*inch))
 
-        th_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
+        e_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
         w_tab = [] 
         bgc = 0  
 
 
+        paragraphexo = Paragraph( "Résultats des exercices" , title )
+        elements.append(paragraphexo)
+
+        studentanswer_orders = studentanswers.prefetch_related('exercise').order_by("exercise") 
+
+        exo_dict          = dict()
+        exo_intitule_dict = dict()
+        for studentanswer  in studentanswer_orders :
+            if  studentanswer.exercise.id in exo_dict :
+                exo_dict[studentanswer.exercise.id].append(studentanswer.point)
+            else :
+                exo_dict[studentanswer.exercise.id] = [studentanswer.point]
+                exo_intitule_dict[studentanswer.exercise.id] =  studentanswer.exercise.supportfile.title
+
+        print(exo_dict)     
+        print(exo_intitule_dict) 
+
+        bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
 
 
-        for studentanswer  in studentanswers :
-            theme = studentanswer.exercise.theme
-            waiting_set = set(theme.waitings.filter(theme__subject = group.subject, level = group.level)) # on profite de cette boucle pour créer la liste des attendus
-            th_tab.append([theme.name,  " " ])
-            bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
+        for k,v in exo_dict :
+            e_tab.append( (exo_intitule_dict[k], v ) )
+
+
+        e_tab_tab = Table(e_tab, hAlign='LEFT', colWidths=[6*inch,0.5*inch,0.8*inch])
+        e_tab_tab.setStyle(TableStyle([
+                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+                       ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                        ('BACKGROUND', (0,0), (-1,0), colors.Color(0,0.5,0.62))
+                       ]))
+                
+     
+        elements.append(e_tab_tab)
 
  
-
-            for waiting in waiting_set :
-                bgc += 1
-
-                resultwaitings = student.results_e.filter(exercise__knowledge__waiting__name = waiting.name )
-
-                som_ws = 0
-                for result in resultwaitings :
-                    som_ws += result.point
-
-                w_tab.append([waiting.name, som_ws ])
-                try :
-                    avg_ws = int(som_ws / len(resultwaitings))
-                    th_tab.append([waiting.name,  code_couleur(avg_ws,teacher) ])
-                except :
-                    th_tab.append([waiting.name,  "N.E" ])
-                
-            bgc += 1
-
-        try : # Test pour les élèves qui n'auront rien fait, il n'auront pas de th_tab donc il ne faut l'afficher 
-            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
-            theme_tab.setStyle(TableStyle(bgc_tab))
-        except : 
-            theme_tab = Table(th_tab, hAlign='LEFT', colWidths=[6*inch,1*inch])
-
-        elements.append(theme_tab)
-
-        loop  = 0
-        for theme_id  in theme_ids :
-            ##########################################################################
-            #### Gestion des knowledges par thème
-            ##########################################################################
-            if len(knowledge_ids) > 0 :
-
-                if loop%2 == 0 :
-                    elements.append(PageBreak()) # Ouvre une nouvelle page - 2 thèmes
-                loop +=1
-                # Append le thème 
-                theme = Theme.objects.get(pk=theme_id)
-                paragraph = Paragraph( theme.name , title )  
-                elements.append(paragraph)
-                elements.append(Spacer(0, 0.2*inch)) 
-                knowledge_tab = [['Savoir faire','Score','Nombre de \n fois étudié',]]
-                #######
-
-
-                for k_id in k_ids :
-                    # Savoir faire
-                    name_k = Knowledge.objects.get(pk = k_id).name
-                    name   = split_paragraph(name_k,80)
-
-                    ##########################################################################
-                    #### Affichage des résultats par knowledge
-                    ##########################################################################                    
-                    try :      
-                        knowledgeResult = student.results_k.get(knowledge_id  = k_id)
-                        knowledgeResult_nb = student.answers.values_list("id",flat=True).filter(exercise__knowledge_id = k_id ).count()          
-                        knowledge_tab.append(      ( name ,  code_couleur(knowledgeResult.point,teacher) , knowledgeResult_nb )          )
-                    except : 
-                        knowledge_tab.append(      ( name ,   "N.E"  , 0  )        )
-                
-                ##########################################################################
-                # Bordure du savoir faire
-                ##########################################################################
-
-                knowledge_tab_tab = Table(knowledge_tab, hAlign='LEFT', colWidths=[6*inch,0.5*inch,0.8*inch])
-                knowledge_tab_tab.setStyle(TableStyle([
-                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-                           ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                            ('BACKGROUND', (0,0), (-1,0), colors.Color(0,0.5,0.62))
-                           ]))
-
-                elements.append(knowledge_tab_tab)
 
         elements.append(PageBreak())
 
