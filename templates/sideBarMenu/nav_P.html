@@ -5,7 +5,7 @@
     </a>
  
 
-    {% if  if request.user.is_in_academy %}
+    {% if request.user.is_in_academy %}
     <a href="{% url 'logout_academy' %}"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
         <div class="captionmenu sacado_menu">
          SACADO
