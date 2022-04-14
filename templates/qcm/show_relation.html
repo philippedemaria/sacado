@@ -469,6 +469,7 @@
   function updateListener(objName) {  
 
                   var applet     =  ggbApplet; 
+                  var exercise_id=  "{{ exercise.id }}"; 
                   var grade      = applet.getValue("grade");
                   var numexo     = applet.getValue("numexo");
                   var situation  = parseInt("{{ relation.situation }}") ; 
@@ -489,7 +490,7 @@
                        { console.log("debut exo");
                          window.socket.send(JSON.stringify(
                              {"command":"ExoDebut",
-							   "ide"  : {{ exercise.id }}, 
+							   "ide"  : exercise_id, 
 							   "typexo" : "ggb"  
                         }));
                     }
@@ -499,7 +500,7 @@
                         console.log("situationFinie");
                         window.socket.send(JSON.stringify(
                               {"command":"SituationFinie",
-							   "ide"  : {{ exercise.id }},
+							   "ide"  : exercise_id,
                                "payload" : {
 								  "resultat" :applet.getValue("test"),
                                   "grade" : grade,
@@ -558,6 +559,7 @@
    }
     function realtime(objName) {  
         var applet     =  ggbApplet; 
+        var exercise_id=  "{{ exercise.id }}"; 
         var grade      = applet.getValue("grade");
         var numexo     = applet.getValue("numexo");
         var situation  = parseInt("{{ relation.situation }}") ; 
@@ -569,17 +571,17 @@
         numexo = parseInt(numexo) ;
         if (situation !=0) { score = grade/situation ;} else {score=-1;}
           if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1) 
-        {   console.log("exodebut_realtime ", {{ exercise.id }});
+        {   console.log("exodebut_realtime ", exercise_id);
              window.socket.send(JSON.stringify(
                  {
-		     "command":"ExoDebut", "ide"  : {{ exercise.id }}, "typexo":"ggb"}));}
+		     "command":"ExoDebut", "ide"  : exercise_id, "typexo":"ggb"}));}
              if (applet.getValue("demarrer") && objName=="ok")
                   {
                    if (applet.getValue("ok")) {
 		       console.log("SituationFinieRT");
 		       window.socket.send(JSON.stringify(
                          {"command":"SituationFinie",
-						  "ide"  : {{ exercise.id }},
+						  "ide"  : exercise_id,
                           "payload":  {
 							   "resultat": applet.getValue("test"),
                                "grade" : grade,

@@ -1674,7 +1674,9 @@ def print_monthly_statistiques(request):
                 ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
             ]
         )
-
+    
+    date_start = request.POST.get('date_start')
+    date_stop  = request.POST.get('date_stop') 
 
     for student in students :
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
@@ -1697,8 +1699,7 @@ def print_monthly_statistiques(request):
         else :
             feb_day = 28
 
-        date_start = request.POST.get('date_start')
-        date_stop  = request.POST.get('date_stop') 
+
 
         studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
 
