@@ -9,13 +9,13 @@
     <script>
         require(['script/ajax-group']);
     </script>
-
+    {% comment %}
     {% if request.user.is_in_academy %}
     <script>
         require(['script/charts-academy']);
     </script>
     {% endif %}
-
+    {% endcomment %}
 {% endblock %}
 
             
@@ -106,8 +106,9 @@
                 <div class="col-sm-12 col-md-12">
                     <form action="{% url 'print_monthly_statistiques' %}" method="POST">{% csrf_token %}
                         <img src="{% static 'img/pdf.png' %}" width="20px"/> Je veux imprimer le bilan pdf du <input type="date" id="date_start_id" name="date_start" /> au <input type="date" id="date_stop_id" name="date_stop" />
-                        <input type="text" name="group_id" id="group_id" value="{{ group.id }}" />
-                        <input type="text" name="student_id" id="student_id" value="{{ student.user.id }}" />
+                        <input type="hidden" name="group_id" id="group_id" value="{{ group.id }}" />
+                        <input type="hidden" name="student_id" id="student_id" value="{{ student.user.id }}" />
+                        <a href="#"  name="student_id" id="submit_print_monthly" class="btn btn-primary">imprimer </a>
                     </form>
                 </div>
             </div>

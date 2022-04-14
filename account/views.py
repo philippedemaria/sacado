@@ -1048,7 +1048,7 @@ def detail_student_all_views(request, id):
             datebar = "du "+str(date_start.strftime("%d/%m/%Y"))+" au "+str(today.strftime("%d/%m/%Y"))
 
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
-                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar , 'score_bool' : score_bool  }
+                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar ,   }
 
 
     return render(request, 'account/detail_student_all_views.html', context)

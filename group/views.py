@@ -1655,6 +1655,15 @@ def print_statistiques(request, group_id, student_id):
 def print_monthly_statistiques(request):
 
     themes, subjects = [], []
+
+
+    date_start = request.POST.get('date_start')
+    date_stop  = request.POST.get('date_stop') 
+    group_id   = request.POST.get('group_id')
+    student_id = request.POST.get('student_id') 
+
+    print(date_start , date_stop , group_id , student_id )
+
     group = Group.objects.get(pk = group_id)
 
     if request.user.is_teacher :
@@ -1704,8 +1713,7 @@ def print_monthly_statistiques(request):
             ]
         )
 
-    date_start = request.POST.get('date_start')
-    date_stop  = request.POST.get('date_stop') 
+
 
     for student in students :
         #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
@@ -1762,7 +1770,7 @@ def print_monthly_statistiques(request):
         ##########################################################################
         #### Gestion des labels à afficher
         ##########################################################################
-        labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Mois :"+str(month_id)+"/"+str(this_year),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , \
+        labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Du :"+str(date_start)+" au "+str(date_stop),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , \
                  "Exercices SACADO travaillés : " +str(nb_e),"Bilan des compétences "]
 
         spacers , titles,subtitles = [1,3] ,[0],[5]
@@ -1802,7 +1810,7 @@ def print_monthly_statistiques(request):
         paragraphexo = Paragraph( "Résultats des exercices" , title )
         elements.append(paragraphexo)
 
-        studentanswer_orders = studentanswers.prefetch_related('exercise').order_by("exercise") 
+        studentanswer_orders = studentanswers.prefetch_related('exercise') 
 
         exo_dict          = dict()
         exo_intitule_dict = dict()
@@ -1813,14 +1821,13 @@ def print_monthly_statistiques(request):
                 exo_dict[studentanswer.exercise.id] = [studentanswer.point]
                 exo_intitule_dict[studentanswer.exercise.id] =  studentanswer.exercise.supportfile.title
 
-        print(exo_dict)     
-        print(exo_intitule_dict) 
-
         bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
 
-
-        for k,v in exo_dict :
-            e_tab.append( (exo_intitule_dict[k], v ) )
+        for k,vs in exo_dict.items() :
+            chn = ""
+            for v in vs : 
+                chn += str(v)+"%  "
+            e_tab.append( (exo_intitule_dict[k], chn ) )
 
 
         e_tab_tab = Table(e_tab, hAlign='LEFT', colWidths=[6*inch,0.5*inch,0.8*inch])
@@ -1837,8 +1844,8 @@ def print_monthly_statistiques(request):
 
         elements.append(PageBreak())
 
-        d = radar(w_tab)
-        elements.append(d)
+        #d = radar(w_tab)
+        #elements.append(d)
 
     doc.build(elements)
 

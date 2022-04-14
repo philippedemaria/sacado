@@ -348,6 +348,44 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
                     $("#choosen_parcours_by_this_level_and_subject").hide(500);
                 }
             });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('#submit_print_monthly').on('click', function (event) {
+            let date_start = $("#date_start_id").val();
+            let date_stop  = $("#date_stop_id").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $("#student_id").val();
+            let group_id   = $("#group_id").val();
+
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'date_start': date_start,
+                        'date_stop' : date_stop,
+                        'student_id'   : student_id,
+                        'group_id'     : group_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../group/print_monthly_statistiques",
+                    success: function (data) {
+                        console.log("test");
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
  
        
     });
