@@ -41,6 +41,8 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import yellow, red, black, white, blue , Color
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.graphics.charts.axes import XCategoryAxis,YValueAxis
 
 from reportlab.graphics.shapes import Drawing,Rect,String,Line
 from textwrap import TextWrapper
@@ -1304,7 +1306,36 @@ def radar(L):
     return d
 
 
-
+def diagBaton(data) :
+    d = Drawing(400, 200)
+    
+    # code to produce the above chart
+    bc = VerticalBarChart()
+    couleurs=[[Color(0.95,0.95,0.95),Color(0.8,0.3,0.3) ], #non acquis
+    [Color(0.95,0.95,0.95),Color(0.7,0.2,0.6) ],          #en cours
+    [Color(0.95,0.95,0.95),Color(0.5,0.7,0.5) ],
+    [Color(0.95,0.95,0.95),Color(0.2,0.2,0.8) ]]
+    
+    bc.x = 50
+    bc.y = 10
+    bc.height = 105
+    bc.width = 300
+    bc.data = data
+    for i in range(len(data[0])):
+        for j in range(len(data)):
+            bc.bars[(j,i)].fillColor=couleurs[i%4][j%2]
+    bc.strokeColor = black
+    bc.valueAxis.valueMin = 0
+    bc.valueAxis.valueMax = 100
+    bc.valueAxis.valueStep = 10
+    bc.categoryAxis.labels.boxAnchor = 'ne'
+    bc.categoryAxis.labels.dx = 8
+    bc.categoryAxis.labels.dy = -2
+    bc.categoryAxis.labels.angle = 30
+    bc.categoryAxis.categoryNames = ['Non acquis', 'En cours ', 'Acquis', 'Expert']
+    d.add(bc)
+    return d
+  
 
 def print_statistiques(request, group_id, student_id):
 
@@ -1621,12 +1652,10 @@ def print_statistiques(request, group_id, student_id):
     return response
 
 
-
 def print_monthly_statistiques(request):
 
     themes, subjects = [], []
     group = Group.objects.get(pk = group_id)
-
 
     if request.user.is_teacher :
         teacher = Teacher.objects.get(user=request.user)
@@ -1674,7 +1703,7 @@ def print_monthly_statistiques(request):
                 ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
             ]
         )
-    
+
     date_start = request.POST.get('date_start')
     date_stop  = request.POST.get('date_stop') 
 
@@ -1769,7 +1798,6 @@ def print_monthly_statistiques(request):
         e_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
         w_tab = [] 
         bgc = 0  
-
 
         paragraphexo = Paragraph( "Résultats des exercices" , title )
         elements.append(paragraphexo)
