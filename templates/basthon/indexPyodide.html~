@@ -1,0 +1,298 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+{% block python %}
+
+
+<link rel="stylesheet" href="{% static 'basthon/fontawesome/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'basthon/css/style.css' %}">
+<script src="{% static 'basthon/js/basthon-kernel/basthon.js' %}"></script>
+<script src="{% static 'basthon/js/basthon-kernel/basthon_goodies.js' %}"></script>
+
+<script src="{% static 'basthon/ace/ace.js' %}"></script>
+<script src="{% static 'basthon/ace/ext-language_tools.js' %}"></script>
+
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script> 
+{% endblock %}
+
+
+{% block page_title %}<i class="fab fa-python"></i>       {% include 'breadcrumb_student.html' %}  <img src="{% static 'img/angle-right.png' %}"/>
+   <a href="{% url 'show_parcours_student' relationship.parcours.id %}" style="color:{{ relationship.parcours.color }}"> {{ relationship.parcours }}</a>
+{% endblock %}
+ 
+ 
+{% block page_menu_right %}
+  <small>Avec l'aimable autorisation de <a href="https://python.infobrisson.fr/" target="_blank">Romain Casati</a></small>
+{% endblock %}
+ 
+
+{%  block body %}
+<form action="" method="POST">
+
+    {% csrf_token %}
+    <div id="container">
+      {% if relationship %}
+      <div class="row">
+          <div class="col-xs-12 col-md-7 consigne" >  
+
+
+           
+            <b>{{ relationship.exercise.supportfile.title }}</b><br/> 
+         
+             <label>Enoncé : </label>
+
+              {% if relationship.instruction   %} 
+
+                  {{ relationship.instruction|safe }}<br/>   
+
+              {% elif relationship.exercise.supportfile.annoncement %} 
+
+                  {{ relationship.exercise.supportfile.annoncement|safe }} <br/>
+
+              {% endif %}
+ 
+
+ 
+              {% for remediation in relationship.relationship_remediation.all %}
+                  {% if remediation.consigne %}
+                  <audio controls>
+                      <source src="{{ remediation.mediation.url }}" type="audio/mpeg">
+                      <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                  </audio>
+                  {% endif %}
+              {% endfor  %} 
+
+          {% if relationship.is_correction_visible %}
+              <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn-success btn-xs">
+                  Corrigé  
+              </a>
+          {% endif %}
+
+
+          </div>
+          <div class="col-xs-12 col-md-4" >         
+            <label>Aides : </label>
+              {% for remediation in relationship.relationship_remediation.all %}
+                  <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0" data-url="1" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                      {% include 'qcm/remediation_choices.html' %}
+                  </a>
+              {% endfor  %} 
+          </div>
+
+          <div class="col-xs-12 col-md-1" >     
+          {% if w_a %}
+              <a href="#" data-target="#copy_viewer"  data-toggle='modal' class="btn btn-primary btn-xs">
+                  Mon code  
+              </a>
+          {% endif %}
+
+          </div>
+
+      </div>
+      {% endif %}
+      <div id="left-div">
+        <div id="editor"> </div>
+        <div style="padding: 1vw 0px 0px 0px; display: flex; float: left; margin-bottom: 15px">
+          <a id="run" class="btn" title="Exécuter le script">
+            Tester votre script avant de l'envoyer
+          </a>
+          <a id="download" class="btn" title="Télécharger le script">
+            <i class="fas fa-download fa-fw btn-logo"></i>
+          </a>
+          <a id="hide-editor" class="btn" title="Afficher seulement la console" style="display: none;">
+            <i class="fas fa-eye-slash fa-fw btn-logo"></i>
+          </a>
+        </div>
+
+      {% if   'write_exercise' in request.path %}
+       <div style="clear:both; margin-top: 20px"> 
+        {% get_is_lock parcours today as is_lock %}
+        {% if  is_lock or  relationship.is_lock  %}  
+        <button  class="btn btn-primary" disabled="" >Exercice verrouillé</button>   <br/> 
+        {% else  %} 
+        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" onclick="return control_script()"  >Envoyer  le script </button>   
+        {% endif %}
+        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                   class="btn btn-default "/></a>
+        </div>
+      {% endif %}
+
+
+      </div>
+      <div id="right-div">
+        <div id="graphics" style="display: none; justify-content: center;  align-items: center;"></div>
+        <textarea id="shell" autocomplete="off" spellcheck="false"></textarea>
+        <div style="padding: 1vw 0px 0px 0px; display: flex; float: left;">
+          <a id="raz" class="btn" title="Redémarrer Python">
+            <i class="fas fa-broom fa-fw btn-logo"></i>
+          </a>
+          <a id="btn_shell" class="btn" title="Afficher la console">
+            <i class="fas fa-terminal fa-fw btn-logo"></i>
+          </a>
+          <a id="btn_graph_view" class="btn" title="Afficher la vue graphique">
+            <i class="fas fa-image fa-fw btn-logo"></i>
+          </a>
+          <a id="darklight" class="btn" title="Changer le thème (sombre/lumineux)">
+            <i class="fas fa-adjust fa-fw btn-logo"></i>
+          </a>
+          <a id="switch" class="btn" title="Échanger l'éditeur et la console">
+            <i class="fas fa-exchange-alt fa-fw btn-logo"></i>
+          </a>
+          <a id="hide-console" class="btn" title="Afficher seulement l'éditeur">
+            <i class="fas fa-eye-slash fa-fw btn-logo"></i>
+          </a>
+          <a id="show-editor-console" class="btn" title="Afficher l'éditeur et la console" style="display: none;">
+            <i class="fas fa-columns fa-fw btn-logo"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+</form>
+
+{% include 'qcm/signal_exercise_peda_live.html' %}
+
+<div class="modal fade" id="copy_viewer" tabindex="-1" role="dialog" aria-labelledby="copy_viewer">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class='thin' style="width:100%" >Mon code <a href="#" data-dismiss="modal" class="pull-right" ><i class="fa fa-times"></i> </a> </h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                  {% if relationship.is_correction_visible %}
+                      <div class="col-xs-12 col-md-6" >  
+                        {% if w_a.answer %}
+                            <pre>{{ w_a.answer |safe }}</pre>
+                        {% endif %}
+                      </div>
+                      <div class="col-xs-12 col-md-6" >  
+                          <pre>{{ relationship.exercise.supportfile.correction |safe }}</pre>
+                      </div>
+                  {% else %}
+                      {% if w_a.answer %}
+                          <pre>{{ w_a.answer |safe }}</pre>
+                      {% endif %}
+                  {% endif %}
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+{% block python_js %}
+
+<script>
+   require(['mathjax4']);
+</script>  
+<script>
+function control_script_RT() {
+    document.getElementsByName('answer')[0].value = editor.getValue();
+    var script = document.getElementsByName('answer')[0].value;
+    if (!confirm('Vous envoyez le script suivant :\n\n'+ script+'\n Confirmer ? ' )) return false;
+    socket.send(JSON.stringify({
+        "command":"sendExercise",
+        "parcours":"{{ parcours.id }}",
+            "ide":"{{ customexercise.id }}",
+            "user":"{{user.id}}",
+            "typexo":"python",
+            "payload":editor.getValue()
+            }));
+     };        
+
+
+
+
+     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+     var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
+     window.socket = new WebSocket(ws_path); // window pour rendre globale la variable
+     socket.onopen = function () {
+   console.log("exo:{{ customexercise.id }}");
+     socket.send(JSON.stringify({
+            "command":"connexionEleve",
+            "dest":"c", 
+            "parcours":"{{ parcours.id }}",
+            "ide":"{{ customexercise.id }}",
+            "user":"{{user.id}}",
+            "typexo":"python"}));
+            };        
+           // Handle incoming messages
+ socket.onmessage = function (message) {
+       var data = JSON.parse(message.data);
+       if (data.error) {alert(data.error);
+       return;
+     }
+   if (data.type=='messageProf'){
+     console.log("message recu : ", data.payload);
+     var t=document.getElementById("chat");
+     if (t!=null){      
+     t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+
+         data.from+"<br/>"+ data.payload+"</div>";
+     }
+     }; 
+   if (data.type=='requestProd'){
+     //console.log("le prof demande",editor.getValue());
+     prod=editor.getValue();
+     if (prod!="") {
+       socket.send(JSON.stringify({
+         "command":"sendProd",
+         "ide":"{{ customexercise.id }}",
+               "typexo":"python",
+               "payload": prod}));
+     } 
+   }
+   if (data.type=='connexionProf'){
+    console.log("connexion prof");
+    //$('#peda_set_live').removeClass("pull-right btn btn-default");
+    //$('#peda_set_live').addClass("pull-right btn btn-danger");
+    //$('#form_peda_set_live').removeClass("hidden");
+   };
+   if (data.type=='deconnexionProf'){
+     console.log("deconnexion prof");
+     $('#peda_set_live').removeClass("pull-right btn btn-danger");  
+     $('#peda_set_live').addClass("pull-right btn btn-default");
+     $('#form_peda_set_live').addClass("hidden");
+   };
+  } // fin traitement messages entrants
+   
+   
+   function PostMessage(text){
+       console.log("entree dans PostMessage"); 
+       window.socket.send(JSON.stringify({
+      "command":"messageEleve",
+          "payload": text}
+       ));
+       console.log("message envoyé :"+text);
+   };
+
+   chat=document.getElementById("entreechat");
+   if (chat!=null){   
+     chat.addEventListener("change",function () {
+         console.log("message à envoyer :"+chat.value);
+       PostMessage(chat.value);
+       chat.value="";
+     });
+   }
+   window.onbeforeunload=function(){
+    console.log("deconnexion");
+    window.socket.close();
+   };
+      
+
+</script>
+
+     <script src="{% static 'basthon/js/editor.js' %}"></script>
+    <script src="{% static 'basthon/js/shell.js' %}"></script>
+    <script src="{% static 'basthon/js/gui.js' %}"></script>
+{% endblock %}
+
+    

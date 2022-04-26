@@ -260,7 +260,7 @@ def logout_view(request):
 def all_routes(request,adresse):
     print(request.path)
     print(adresse)
-
+    return render(request, 'home.html', {})
 
 def logout_academy(request):
     logout(request)

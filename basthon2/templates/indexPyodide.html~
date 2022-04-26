@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+        <style type="text/css" media="screen">
+        #editor { 
+            position: absolute;
+            top: 0;
+            right: 10;
+            bottom: 0;
+            left: 0;
+	    width:45%;
+        }
+
+        .container {
+            width: 50%;
+            height: 500px;
+            margin: auto;
+            padding: 4px;
+        }
+        .one {
+            width: 40%;
+            height: 500px;
+            float: left;
+        }
+        .two {
+            margin-left: 50%;
+            height: 500px;
+	    
+        }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ext-static_highlight.js"></script>
+
+  </head>
+  <body>
+
+   <p>
+   Execution d'un code python sur le client...
+   </p>
+
+        <div style="float:left;width:45%;height:500px">
+            <pre id="editor"></pre>
+    </div>
+       <div style="float:left;width:45%;height:500px" >
+            <textarea id="output"></textarea>
+        </div>
+	<button style="clear:both" onclick="evaluatePython()">Run</button>
+
+    <script>
+      const output = document.getElementById("output");
+      const code = document.getElementById("code");
+
+      function addToOutput(s) {
+          //output.value += ">>>" + code.value + "\n" + s + "\n";
+	  output.value += s + "\n>>>";
+	  output.scrollTop=output.scrollHeight;
+      }
+
+      output.value = "Initializing...\n";
+      // init Pyodide
+      async function main() {
+        let pyodide = await loadPyodide();
+          output.value += "Ready!\n";
+	  //console.logs=[];
+	  //output.value += pyodide.runPython("import sys ; print(sys.version)");
+	  //addToOutput(console.logs.join("\n"));
+	  output.value+="prêt\n>>>"
+        return pyodide;
+      }
+      let pyodideReadyPromise = main();
+
+      async function evaluatePython() {
+          let pyodide = await pyodideReadyPromise;
+	  console.logs=[];
+        try {
+            let output = pyodide.runPython(editor.getValue());
+	    
+            addToOutput(console.logs.join("\n"));
+        } catch (err) {
+            addToOutput(err);
+	
+        }
+      }
+
+    function configEditor(){
+                // configure the ace editor to make it usable
+                editor = ace.edit("editor");
+                editor.setTheme("ace/theme/monokai");
+                editor.session.setMode("ace/mode/python");
+                editor.setShowPrintMargin(false);
+                editor.setBehavioursEnabled(true);
+                editor.setFontSize(18);
+            }      
+    document.addEventListener('DOMContentLoaded', (event) => {
+     
+                // Capture the output from Pyodide and add it to an array
+                console.stdlog = console.log.bind(console);
+                console.logs = [];
+                console.log = function(){
+                    console.logs.push(Array.from(arguments));
+                    console.stdlog.apply(console, arguments);
+                }
+                 configEditor();
+
+                
+    });
+
+      
+    </script>
+  </body>
+</html>

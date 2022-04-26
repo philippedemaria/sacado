@@ -1,0 +1,20 @@
+  <script type="text/javascript">
+      async function main(){
+        let pyodide = await loadPyodide();
+        console.log(pyodide.runPython(`
+            import sys
+            sys.version
+        `));
+        console.log(pyodide.runPython("print(1 + 2)"));
+      }
+      main();
+    </script>
+  </body>
+</html>
+
+{% endblock %}
+
+
+
+
+    
