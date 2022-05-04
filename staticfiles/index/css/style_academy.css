@@ -1618,6 +1618,15 @@ table.table-bordered.dataTable {
   margin-bottom: 15px;
 }
 
+#pricing .card  .gratis {
+  font-size: 20px;
+  position: relative;
+  font-weight: 400;
+  letter-spacing: 0px;
+  color : red;
+}
+
+
 #pricing .card .btn-asso, #get_detail .btn-asso {
   text-transform: uppercase;
   font-size: 13px;
@@ -1690,7 +1699,8 @@ table.table-bordered.dataTable {
 }
 
 #faq .collapsed{
-   color: #5d4391; 
+   color: #5d4391;
+   cursor: pointer; 
 }
 
 #faq .btn{

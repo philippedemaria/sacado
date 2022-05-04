@@ -15,16 +15,33 @@
 
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <h4 class="title_page">  L'adhésion {{ formule.adhesion }} 
+
+                
+                <h4 class="title_page"> 
+
+                <span class="sub_header">Inscription </span> 
+                    pour 
+                    {% if no_parent %}
+                    <b>moi-même</b> retient mon 
+                    {% else %}
+                    <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} 
+                    {% endif %}
+                {% comment %} L'adhésion {{ formule.adhesion }} 
                     <span class="sub_header">{{ formule.name }}</span> 
                     pour 
                     {% if no_parent %}
                     <b>moi-même</b> retient mon 
                     {% else %}
-                    <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} retient votre 
+                    <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} 
                     {% endif %}
 
-                    attention pour un total de <span class="line_through">{{ data_post.total_price }}</span> €, <small class="title_page"> soit {{ data_post.nb_month }} x <span class="line_through">{{ data_post.month_price }}</span>€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
+
+                    retient votre attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} mois x {{ data_post.month_price}}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
+                {% endcomment %}
+
+                <h4 class="title_page">Adhérer pour une semaine gratuite</h4>
+                <small class="title_page">Pour prolonger l'adhésion, un formulaire sera accessible depuis votre tableau de bord.</small>
+
             </div>
 
     {% comment %}
@@ -106,12 +123,16 @@
                 </div>             
             </div>  
 
+            {% comment %}
             <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
             <input type="hidden" name="month_price" value="{{ data_post.month_price  }}"  />                
             <input type="hidden" name="nb_month" value="{{ data_post.nb_month }}"  />
             <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
-            <input type="hidden" name="menu_id" value="{{ formule.id}}" />
+            {% endcomment %}
+
+            <input type="hidden" name="menu_id" value="0" />
             <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" />
+
             <div class="row">
                 {% for form in userFormset %}
                 <div class="col-sm-12 col-md-6" {% if  forloop.counter > 1 %} style="margin-top:30px" {% endif %}>

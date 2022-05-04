@@ -17,7 +17,7 @@ Intro Section -
 
     <div class="row">
         <div class="col-xs-12 col-md-12 texte_accueil grandstander" align="center" >
-            + de 30 000 élèves utilisent déjà SacAdo chaque jour, pourquoi pas votre enfant ?
+           10 minutes/jour pour réviser tout le programme de l'année  
         </div>
     </div>
 
@@ -38,6 +38,9 @@ Intro Section -
 
     <div class="row">
         <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
+
+            <a href="{% url 'student_to_association' %}" class="btn-test grandstander outline_orange">Première inscription ? Première semaine gratuite</a>
+            {% comment %}
             "The only way to learn mathematics is to do mathematics." 
 
             <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
@@ -45,6 +48,9 @@ Intro Section -
                                 </span>
 
                                 Paul Halmos
+
+            {% endcomment %}
+
         </div>
     </div>
 
@@ -53,7 +59,7 @@ Intro Section -
 
     <div class="row">
         <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
-            <a href="#exercise" class="btn-test grandstander outline_orange"> Testez les exercices </a>
+            <a href="#exercise" class="btn-inscription bg_orange"> Testez les exercices </a>
         </div>
     </div>
 
@@ -79,8 +85,8 @@ Intro Section -
             <img src="../../static/img/horloge20.png" width="60px" />
             <br/> <br/> 
             <h2 class="color_sacado grandstander">  Un peu de maths tous les jours</h2>
-            <li class="sanspuce grandstander"><h4><b>20 minutes/jour</b> x 6 jours = 120 minutes</h4> </li>
-            <li class="sanspuce grandstander"><h4>= 2 h d'entraînement efficace par semaine</h4></li>
+            <li class="sanspuce grandstander"><h4><b>10 minutes/jour</b> x 6 jours = 1h/semaine</h4> </li>
+            <li class="sanspuce grandstander"><h4>= Tout le programe sur l'année</h4></li>
 
 
 
@@ -336,7 +342,7 @@ Intro Section -
             <div class="photo_background" id="photo_background6">
                 <img src="{% static 'img/academy_index4.jpg' %}" class="photo_background"  /> 
                 <div class="photo_background_titre"></div>                 
-                <div class="photo_titre">en élite </div>
+                <div class="photo_titre">en mode élite </div>
                 <div class="photo_background_texte"  id="photo_background_texte6"><small><b>Et il veut</b></small> <br/> Dynamiser ses pratiques </div>
             </div>
         </div> 

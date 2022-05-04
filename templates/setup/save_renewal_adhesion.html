@@ -91,15 +91,21 @@
                                                       }
                                                     }] ,
                                 });
-                              },
+                            },
 
-                              onApprove: function(data, actions) {
-                                return actions.order.capture().then(function(details) {
+                              onApprove: function(data, actions){
 
-                                  alert('Transaction en cours');
-
-                                });
-                              },
+                                return actions.order.capture().then(function (details) {
+                                    // Call your server to save the transaction
+                                    return fetch('/accept_renewal_adhesion' + document.getElementById("{{    }}").value,
+                                    {
+                                    method: 'post',
+                                    headers: { 'content-type': 'application/json' },
+                                    body: JSON.stringify({ orderID: data.orderID, })
+                                    });
+                                    });
+                                    
+                            },
 
                               onError: function(err) {
                                 console.log(err);

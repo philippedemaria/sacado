@@ -108,7 +108,8 @@
                         <img src="{% static 'img/pdf.png' %}" width="20px"/> Je veux imprimer le bilan pdf du <input type="date" id="date_start_id" name="date_start" /> au <input type="date" id="date_stop_id" name="date_stop" />
                         <input type="hidden" name="group_id" id="group_id" value="{{ group.id }}" />
                         <input type="hidden" name="student_id" id="student_id" value="{{ student.user.id }}" />
-                        <a href="#"  name="student_id" id="submit_print_monthly" class="btn btn-primary">imprimer </a>
+
+                        <input type="submit"  value="Imprimer" class="btn btn-primary" />
                     </form>
                 </div>
             </div>

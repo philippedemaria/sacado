@@ -59,6 +59,8 @@ urlpatterns = [
 
     path('accept_renewal_adhesion', accept_renewal_adhesion, name='accept_renewal_adhesion'),
 
+    path('renewal_adhesion', renewal_adhesion, name='renewal_adhesion'),
+
     path('list_exercises_academy/<int:id>', list_exercises_academy, name='academy_level'),
 
     path('logout_academy', logout_academy , name='logout_academy'), 

@@ -9,14 +9,19 @@
 
 <section id="pricing">
     <div class="full_container">
-
-        <div class="alert alert-danger">Les tarifs indiqués ne sont pas comptabilisés dans l'adhésion qui reste gratuite jusqu'au 30 juin 2022. Vous pouvez par contre simuler les tarifs pour l'année 2022-2023.</div>
-
-
         <div class="row">
             <div class="col-sm-12 col-md-12" align="center" style="margin-bottom: 20px">
                 <img src="{% if name == "Autonomie" %}{% static 'img/menu_autonomie.png' %}{% else %}{% static 'img/menu_accompagnement.png' %}{% endif %}" width="60px">
                 Menu <span class="sub_header"> {{ name }}</span> 
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12" align="center">
+                <p>Choisir le nombre d'enfants que vous souhaitez inscrire</p>
+            </div>
+        </div> 
+
+
                 <span class="pull-right">
 
 
@@ -62,7 +67,33 @@
             <div class="col-sm-12 col-md-12" align="center">
                 <p></p>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12" align="center">
+                <p>Semaine gratuite</p>
+            </div>
         </div> 
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12" align="center">
+                <p></p>
+            </div>
+        </div> 
+        
+        <div class="row" id = "result_price">
+            <form action="{% url 'details_of_adhesion' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="menu_id" id="menu_id" value="0" />
+                <input type="hidden" name="nb_child" class="nb_child" value="1" />
+                <input type="submit" name="sending" class="btn-inscription" value="Valider le nombre d'enfants" /> 
+
+            </form>
+        </div>
+
+
+
+        {% comment %}
         <div class="row" id = "result_price">
             {% for formule in formules %}                
             <div class="col-sm-4 col-md-4" align="center">
@@ -70,8 +101,8 @@
                 {% csrf_token %}
                 <input type="hidden" name="total_price" id="total_price{{ formule.id }}" value="{{ formule.data.total1 }}" />
                 <input type="hidden" name="month_price" id="month_price{{ formule.id }}" value="{{ formule.data.price1 }}"  />                
-                <input type="hidden" name="nb_month" id="nb_month{{ formule.id }}"  value="{{ formule.data.left_month }}"  />
-                <input type="hidden" name="date_end" id="date_end{{ formule.id }}"  value='{{ formule.data.end|date:"d F Y" }}'  />
+                <input type="hidden" name="nb_month" id="nb_month{{ formule.id }}"  value="{% cycle  12 3 1  %}"  />
+                <input type="hidden" name="date_end" id="date_end{{ formule.id }}"  value='{% cycle formule.data.end1|date:"d F Y" formule.data.end2|date:"d F Y" formule.data.end3|date:"d F Y" %}'  />
                 <input type="hidden" name="menu_id" id="menu_id{{ formule.id }}" value="{{ formule.id}}" />
                 <input type="hidden" name="nb_child" class="nb_child" value="1" />
 
@@ -89,28 +120,42 @@
 
                         <div class="card-body">
                             <div class="currency">
-                                <span class="family zero line_through" id="total_price_zero{{ formule.id }}">{{ formule.data.total1|floatformat:2 }}</span>
-                                <span class="family one line_through" id="total_price_one{{ formule.id }}">{{ formule.data.total1|floatformat:2 }}</span>
-                                <span class="family two line_through" id="total_price_two{{ formule.id }}">{{ formule.data.total2|floatformat:2 }}</span>
-                                <span class="family three line_through" id="total_price_three{{ formule.id }}">{{ formule.data.total3|floatformat:2 }}</span>
-                                <span class="family four line_through" id="total_price_four{{ formule.id }}">{{ formule.data.total4|floatformat:2 }}</span>
-                                <span class="family more line_through" id="total_price_more{{ formule.id }}">{{ formule.data.total5|floatformat:2 }}</span>€ 
+                                <span class="family zero" id="total_price_zero{{ formule.id }}">
+                                    {% cycle formule.data.total1a|floatformat:2  formule.data.total1m|floatformat:2  formule.data.total1|floatformat:2 %}
+                                </span>
+                                <span class="family one" id="total_price_one{{ formule.id }}">
+                                    {% cycle formule.data.total1a|floatformat:2  formule.data.total1m|floatformat:2   formule.data.total1|floatformat:2 %}
+                                </span>
+                                <span class="family two" id="total_price_two{{ formule.id }}">
+                                    {% cycle formule.data.total2a|floatformat:2  formule.data.total2m|floatformat:2  formule.data.total2|floatformat:2 %}
+                                </span>
+                                <span class="family three" id="total_price_three{{ formule.id }}">
+                                    {% cycle formule.data.total3a|floatformat:2  formule.data.total3m|floatformat:2  formule.data.total3|floatformat:2 %}
+                                </span>
+                                <span class="family four" id="total_price_four{{ formule.id }}">
+                                    {% cycle formule.data.total4a|floatformat:2  formule.data.total4m|floatformat:2  formule.data.total4|floatformat:2 %}
+                                </span>
+                                <span class="family more" id="total_price_more{{ formule.id }}">
+                                    {% cycle formule.data.total5a|floatformat:2  formule.data.total5m|floatformat:2  formule.data.total5|floatformat:2 %}
+                                </span>€ 
 
 
                             </div>
-                            <div class="card-block">
-                                <p class="card-text this_center" ><small> Adhésion jusqu'au {{ formule.data.end|date:"d F Y" }} </small></p>
+                            <div class="card-block">        
+                                <p class="card-text this_center" >
+                                    <small> Adhésion du {{ formule.data.start|date:"d F Y" }} jusqu'au {% cycle formule.data.end1|date:"d F Y" formule.data.end2|date:"d F Y" formule.data.end3|date:"d F Y" %} </small>
+                                </p>
                             </div>
                             <input type="submit" name="sending{{ formule.id }}" class="btn-asso" value="Choisir ce menu" />                            <br/>
 
-                            <small>Facturé en un seul paiement.<br/> Soit <span class="family zero line_through" id="payment_zero{{ formule.id }}">{{ formule.data.price1|floatformat:2 }}</span>
-                                                                          <span class="family one line_through" id="payment_one{{ formule.id }}">{{ formule.data.price1|floatformat:2 }}</span>
-                                                                          <span class="family two line_through"  id="payment_two{{ formule.id }}">{{ formule.data.price2|floatformat:2 }}</span>
-                                                                          <span class="family three line_through"  id="payment_three{{ formule.id }}">{{ formule.data.price3|floatformat:2 }}</span>
-                                                                          <span class="family four line_through"  id="payment_four{{ formule.id }}">{{ formule.data.price4|floatformat:2 }}</span>
-                                                                          <span class="family more line_through"  id="payment_more{{ formule.id }}">{{ formule.data.price5|floatformat:2 }}</span>
+                            <small>Facturé en un seul paiement.<br/> Soit <span class="family zero" id="payment_zero{{ formule.id }}">{{ formule.data.price1|floatformat:2 }}</span>
+                                                                          <span class="family one" id="payment_one{{ formule.id }}">{{ formule.data.price1|floatformat:2 }}</span>
+                                                                          <span class="family two"  id="payment_two{{ formule.id }}">{{ formule.data.price2|floatformat:2 }}</span>
+                                                                          <span class="family three"  id="payment_three{{ formule.id }}">{{ formule.data.price3|floatformat:2 }}</span>
+                                                                          <span class="family four"  id="payment_four{{ formule.id }}">{{ formule.data.price4|floatformat:2 }}</span>
+                                                                          <span class="family more"  id="payment_more{{ formule.id }}">{{ formule.data.price5|floatformat:2 }}</span>
 
-                                                                        € x {{ formule.data.left_month }} mois.
+                                                                        € x {% cycle 12 3 1 %} mois.
                             </small>
 
                         </div>
@@ -119,6 +164,9 @@
             </div>   
             {% endfor %}
         </div>
+
+        {% endcomment %}
+
     </div>
 </section> 
 

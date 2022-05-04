@@ -1248,7 +1248,7 @@ def radar(L):
     """
     from reportlab.lib.units import cm
     
-    haut=15*cm   #hauteur et largeur du rectangle encadrant
+    haut=18*cm   #hauteur et largeur du rectangle encadrant
     larg=18*cm
     rayon=6*cm   #rayon du radar
     n=len(L)
@@ -1256,7 +1256,7 @@ def radar(L):
     angle=1.5707   #angle de départ : pi/2 (verticale)
     deno=100  #note sur ?
     tick=10   #graduation tous les ?
-    cfond=Color(0.95,0.95,0.95) #couleur du fond
+    #cfond=Color(1,1,1) #couleur du fond
     cgrille=Color(0.8,0.8,0.8)  #couleur de la grille
     cligne=Color(1,0,0)         #couleur des la ligne des données
     w=TextWrapper(width=20)     #les intitules auront au plus 20 caractères
@@ -1264,7 +1264,9 @@ def radar(L):
 
     #-------------------------------------------------
     d=Drawing(larg,haut)
-    d.add(Rect(0,0,larg,haut,fillColor=cfond))
+    d.setFont("Times-Roman", 24)
+    d.add(String(larg/2,haut-0.5*cm,"Graphique des attendus", textAnchor="middle"))
+    #d.add(Rect(0,0,larg,haut,fillColor=cfond))
     if n<=2 :  
         d.add(String(larg/2,haut/2,"pas assez de notes pour le graphique", textAnchor="middle"))
         return d
@@ -1662,8 +1664,6 @@ def print_monthly_statistiques(request):
     group_id   = request.POST.get('group_id')
     student_id = request.POST.get('student_id') 
 
-    print(date_start , date_stop , group_id , student_id )
-
     group = Group.objects.get(pk = group_id)
 
     if request.user.is_teacher :
@@ -1724,20 +1724,6 @@ def print_monthly_statistiques(request):
         elements.append(logo_tab_tab)
         elements.append(Spacer(0, 0.1*inch))
 
-        if timezone.now().month < 9 :
-            scolar_year = str(timezone.now().year-1)+"-"+str(timezone.now().year)
-            this_year = timezone.now().year
-        else :
-            scolar_year = str(timezone.now().year)+"-"+str(timezone.now().year+1)
-            this_year = timezone.now().year+1
-
-        if this_year%4 == 0:
-            feb_day = 29
-        else :
-            feb_day = 28
-
-
-
         studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
 
         studentanswer_ids = studentanswers.values_list("exercise_id",flat=True).distinct() 
@@ -1771,7 +1757,7 @@ def print_monthly_statistiques(request):
         #### Gestion des labels à afficher
         ##########################################################################
         labels = [str(student.user.last_name)+" "+str(student.user.first_name), "Classe de "+str(student.level)+", Du :"+str(date_start)+" au "+str(date_stop),"Temps de connexion : "+convert_seconds_in_time(duration), "Score moyen : "+str(average_score)+"%" , \
-                 "Exercices SACADO travaillés : " +str(nb_e),"Bilan des compétences "]
+                 "Exercices SACADO travaillés : " +str(nb_e)]
 
         spacers , titles,subtitles = [1,3] ,[0],[5]
 
@@ -1799,9 +1785,6 @@ def print_monthly_statistiques(request):
         #### Gestion des themes
         ##########################################################################
         elements.append(Spacer(0, 0.25*inch))
-        paragraph = Paragraph( "Bilan des attendus" , title )
-        elements.append(paragraph)
-        elements.append(Spacer(0, 0.15*inch))
 
         e_tab, bgc_tab = [] , [('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),('BOX', (0,0), (-1,-1), 0.25, colors.black),]
         w_tab = [] 
@@ -1809,11 +1792,15 @@ def print_monthly_statistiques(request):
 
         paragraphexo = Paragraph( "Résultats des exercices" , title )
         elements.append(paragraphexo)
+        elements.append(Spacer(0, 0.15*inch))
 
         studentanswer_orders = studentanswers.prefetch_related('exercise') 
 
         exo_dict          = dict()
         exo_intitule_dict = dict()
+        waitings_exo_dict = dict()
+        waitings_intitule_dict = dict()
+
         for studentanswer  in studentanswer_orders :
             if  studentanswer.exercise.id in exo_dict :
                 exo_dict[studentanswer.exercise.id].append(studentanswer.point)
@@ -1821,7 +1808,15 @@ def print_monthly_statistiques(request):
                 exo_dict[studentanswer.exercise.id] = [studentanswer.point]
                 exo_intitule_dict[studentanswer.exercise.id] =  studentanswer.exercise.supportfile.title
 
-        bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62)) )
+            w_id = studentanswer.exercise.knowledge.waiting.id    
+            if  w_id in waitings_exo_dict :
+                waitings_exo_dict[w_id].append(studentanswer.point)
+            else :
+                waitings_exo_dict[w_id] = [w_id]
+                waitings_intitule_dict[w_id] = studentanswer.exercise.knowledge.waiting.name   
+
+
+        bgc_tab.append(  ('BACKGROUND', (0,bgc), (-1,bgc), colors.Color(0,0.5,0.62))  )
 
         for k,vs in exo_dict.items() :
             chn = ""
@@ -1829,23 +1824,29 @@ def print_monthly_statistiques(request):
                 chn += str(v)+"%  "
             e_tab.append( (exo_intitule_dict[k], chn ) )
 
-
-        e_tab_tab = Table(e_tab, hAlign='LEFT', colWidths=[6*inch,0.5*inch,0.8*inch])
-        e_tab_tab.setStyle(TableStyle([
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-                       ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                        ('BACKGROUND', (0,0), (-1,0), colors.Color(0,0.5,0.62))
-                       ]))
-                
-     
-        elements.append(e_tab_tab)
+        liste_radar = []
+        for n,ws in waitings_exo_dict.items() :
+            liste_radar.append( [ waitings_intitule_dict[n], sum(ws)/len(ws) ] )
 
  
 
-        elements.append(PageBreak())
 
-        #d = radar(w_tab)
-        #elements.append(d)
+        e_tab_tab = Table(e_tab, hAlign='LEFT', colWidths=[5.5*inch,1.8*inch])
+        e_tab_tab.setStyle(TableStyle([
+                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+                       ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                       ]))
+                
+        elements.append(e_tab_tab)
+
+        #elements.append(PageBreak())
+
+        d = radar(liste_radar)
+        elements.append(d)
+
+
+
+
 
     doc.build(elements)
 

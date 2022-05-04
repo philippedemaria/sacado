@@ -28,16 +28,21 @@
                                 <img src="{% static 'img/menu_autonomie.png' %}" width="60px">
                             </div>
                             <div class="col-sm-8 col-md-9">
-                             Menu<div class="sub_header">{{ frml.name }}</div> 
+                            Menu<div class="sub_header">{{ frml.name }}</div> 
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="this_price">dès <span class="currency line_through">{{ frml.price }}€</span>/mois,  soit <span class="currency">0,00 €</span></div>
+                        <div class="this_price">
+
+                          {% comment %}  dès <span class="currency ">{{ frml.price  }}€</span>/mois. {% endcomment %}
+
+
+                          <br/><span class="gratis">Première semaine gratuite</span></div>
                         <div class="card-block">
-                            <p class="card-text"><i class="fa fa-th"></i> Parcours d'exercices interactifs auto-corrigés conformes aux attendus des programmes.</p> 
+                            <p class="card-text"><i class="fa fa-th"></i> Parcours d'exercices interactifs auto-corrigés.</p> 
                             <p class="card-text"><i class="fa fa-desktop"></i> Cours, exemples interactifs adossés aux parcours.</p>
-                            <p class="card-text"><i class="fa fa-database"></i> Accès au contenu de tous les niveaux.</p>
+                            <p class="card-text"><i class="fa fa-database"></i> Création de flashcards de révision.</p>
                             <p class="card-text"><i class="fa fa-tasks"></i> Suivis de progression</p>
                         </div>
                         <a href="{% url 'choice_menu' frml.name  %}" class="btn-asso">{% comment %}Choisir ce menu{% endcomment %}Continuer</a>
@@ -90,14 +95,14 @@
         <div id="accordion">
             <div id="headingOne0">
               <h5 class="mb-0">
-                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseOne0" aria-expanded="false" aria-controls="collapseOne0">
-                  Pourquoi SACADO Académie est-elle gratuite jusqu'au 30 Juin 2022 ? et après ?
-                </button>
+                <a class="btn-link collapsed" data-toggle="collapse" data-target="#collapseOne0" aria-expanded="false" aria-controls="collapseOne0">
+                  Pourquoi SACADO Académie propose une semaine gratuite ?
+                </a>
               </h5>
             </div>
             <div id="collapseOne0" class="collapse" aria-labelledby="headingOne0" data-parent="#accordion">
               <div class="card-body">
-                  SACADO Académie est totalement gratuite jusqu'au 30 Juin 2022 pour permettre à chacun de tester l'interface et la qualité des supports numériques.<br/> Après....., durant l'été, il sera possible de travailler sur des parcours numériques de vacances, et durant l'année, souscrire un abonnement annuel, trimestriel ou mensuel. 
+                  Tout simplement pour tester les exercices et le suivi de la SACADO Académie. 
               </div>
             </div>
           <hr/>
@@ -105,9 +110,9 @@
 
             <div id="headingOne">
               <h5 class="mb-0">
-                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <a class="btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                   Que comprend l'adhésion ?
-                </button>
+                </a>
               </h5>
             </div>
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
@@ -119,9 +124,9 @@
  
             <div  id="headingTwo">
               <h5 class="mb-0">
-                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="headingTwo">
+                <a class="btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="headingTwo">
                   L'élève peut-il accéder à tous les exercices d'un niveau ?
-                </button>
+                </a>
               </h5>
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
@@ -134,9 +139,9 @@
  
           <div  id="headingFour">
               <h5 class="mb-0">
-                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <a class="btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                   Quels sont les moyens de paiement acceptés sur sacado.xyz ?
-                </button>
+                </a>
               </h5>
             </div>
             <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
@@ -147,9 +152,9 @@
           <hr/>
             <div  id="headingFive">
               <h5 class="mb-0">
-                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <a class="btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                   Le paiement est-il sécurisé ?
-                </button>
+                </a>
               </h5>
             </div>
             <div id="collapseFive" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
@@ -160,14 +165,14 @@
           <hr/>
             <div  id="headingSix">
               <h5 class="mb-0">
-                <button class="btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                <a class="btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                   Comment arrêter mon abonnement ?
-                </button>
+                </a>
               </h5>
             </div>
             <div id="collapseSix" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
               <div class="card-body">
-                L'abonnement SACADO n'est pas un abonnement par reconduction tacite. Vous devez le reconduire à la fin de chaque période. Si vous ne souhaitez plus profiter des fonctionnalités de l'abonnement, vous pouvez l'annuler à tout moment par email à l'adresse info@sacado.xyz. Des frais de gestion sont appliqués. 
+                L'abonnement SACADO n'est pas un abonnement par reconduction tacite. Vous devez le reconduire à la fin de chaque période. Si vous ne souhaitez plus profiter des fonctionnalités de l'abonnement, vous ne reconduisez pas votre abonnement.
               </div>
             </div>
         </div>

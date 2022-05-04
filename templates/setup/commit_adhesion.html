@@ -14,15 +14,20 @@
     <div class="container"> 
         <div class="row">
             <div class="col-sm-12 col-md-12">
+                {% comment %}
                 <div class="card_recapitulatif" >  
                     Menu  <b>{{ formule.name }}</b> <br/>
                     Adhésion <b>{{ formule.adhesion }}</b> <br/>
                     Nombre d'enfant : <b>{{ data_post.nb_child }}</b> <br/>
                     Fin de l'adhésion : <b>{{ data_post.date_end }}</b>  <br/>
                     Montant total de l'adhésion : <b class="line_through">{{ data_post.total_price }}€</b> = {{ data_post.nb_month }} mois x <span  class="line_through">{{ data_post.month_price }}€/mois </span><br/><br/>
-                    {% comment %}<small>Pour toute résiliation de l'adhésion avant la fin mentionnée ci-dessus, les frais de gestion s'élèvent à 5,99€.</small>{% endcomment %}
-
+                    <small>Pour toute résiliation de l'adhésion avant la fin mentionnée ci-dessus, les frais de gestion s'élèvent à 5,99€.</small>
+                </div>
+                {% endcomment %}
+                <div class="card_recapitulatif" >  
+                     Semaine d'essai gratuite
                </div>
+
             </div>
 
         </div> 
@@ -61,7 +66,7 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    Ce récapitulatif vous sera envoyé à l'adresse courriel renseignée ci-dessus dès le réglement de l'adhésion effectuée.
+                                    Ce récapitulatif vous sera envoyé à l'adresse courriel renseignée ci-dessus.
                                 </div>
                             </div>  
                         </div>
