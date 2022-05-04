@@ -1,3 +1,4 @@
+"""
 from django.urls import path
 
 #from channels.http import AsgiHandler
@@ -9,6 +10,7 @@ from qcm.consumers import TableauConsumer
 from tool.consumers import VisioConsumer
 #from qcm.consumers import CepythonConsumer
 application = ProtocolTypeRouter({
+
     "websocket": AuthMiddlewareStack(
         URLRouter([
             # URLRouter just takes standard Django path() or url() entries.
@@ -23,8 +25,8 @@ application = ProtocolTypeRouter({
 })
 
 
-
 """
+
 from django.urls import path
 from qcm.consumers import TableauConsumer
 from tool.consumers import VisioConsumer
@@ -34,6 +36,6 @@ ws_urlpatterns = [
 	path('qcm/tableau/', TableauConsumer.as_asgi()),
 	path('tool/visiocast/', VisioConsumer.as_asgi())
 ]
-"""
+
 
 

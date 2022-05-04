@@ -37,12 +37,12 @@ class Formule(models.Model):
 	    ('Accompagnement', 'Accompagnement'),
 	)
 
-	name = models.CharField(max_length=255, verbose_name="Nom", choices=NAMES)
+	name     = models.CharField(max_length=255, verbose_name="Nom", choices=NAMES)
 	adhesion = models.CharField(max_length=255, default ="" ,verbose_name="Adhésion", choices=ADHESIONS)
-	price = models.CharField(max_length=255, default ="" , verbose_name="Montant")
+	price    = models.DecimalField(max_digits=6, decimal_places = 2 , verbose_name="Montant")
 
 	is_family = models.BooleanField(default=0, verbose_name="Forfait famille ?") 
-	nb_month = models.PositiveIntegerField(default=1, verbose_name="Nombre de mois")     
+	nb_month  = models.PositiveIntegerField(default=1, verbose_name="Nombre de mois")     
 
 	def __str__(self):
 	    return "{}".format(self.name)
@@ -58,9 +58,7 @@ class Formule(models.Model):
 		date = datetime.now()
 		this_month = date.month
 
-		price_tab = self.price.split(",")
-		price = price_tab[0]+"."+price_tab[1]
-
+ 
 
 		if this_month < 13 and this_month > 6 :
 			left_month = 19 - int(this_month)
@@ -81,7 +79,7 @@ class Formule(models.Model):
 
 				end = date 	+ timedelta(days = 31*left_month)  
  
-		adh =  float(price) 
+		adh =  float(self.price) 
 		adh2 =  adh * coeff_two 
 		adh3 =  adh * coeff_three
 		adh4 =  adh * coeff_four
@@ -112,6 +110,19 @@ class Formule(models.Model):
 		data["price5"] = round(adh5,2)	
 		
 		return data
+
+
+
+	def total(self) :
+		return round( self.price  * int(self.nb_month) , 2)
+
+
+
+
+
+
+
+
 
 TIMES = (
 	    (20, 20),

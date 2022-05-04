@@ -33,55 +33,67 @@ define(['jquery', 'bootstrap'], function ($) {
         $('.validate_renewal').attr("disabled",true); 
         var liste = [] ;
  
-        $('.renewal_user_class').on('click', function (event) {
+        $('.renewal_user_class').on('click', function (event) { 
 
+            let data_user_id = $(this).attr("data_user_id");
             let data_name = $(this).attr("data_name");
-            let data_id = $(this).val()
-            let level = $("#level"+data_id).val();
-            levels = ["Cours Préparatoire", "Cours Elémentaire 1", "Cours Elémentaire 2","Cours Moyen 1","Cours Moyen 2","Sixième", "Cinquième", "Quatrième","Troisième","Seconde","Première","Terminale"]
+            let data_id = $(this).attr("data_id");
+            let level = $("#level"+data_user_id).val();
+            levels = ["Cours Préparatoire", "Cours Elémentaire 1", "Cours Elémentaire 2","Cours Moyen 1","Cours Moyen 2","Sixième", "Cinquième", "Quatrième","Troisième","Seconde","Première","Terminale","Classe Prépa PCSI","Maternelle"]
 
-            if (!$(this).is(':checked'))
-            {
-            desconstruct_user("Enfant",data_id) ; 
-            }
-            else
-            {
-            construct_user("Enfant",data_name, levels[level-1] ,data_id ) ; 
+            let engagement = $("input[name='engagement"+data_user_id+"']:checked").val() ;
+
+            construct_user("Enfant",data_name, levels[level-1] ,data_id , engagement ) ; 
          
-            }
-
-
         });    
 
 
 
-        function construct_user(statut,name,level,id){
-                let nb_child = $("#nb_child").val();
-                nb =  parseInt(nb_child);
+        function construct_user(statut,name,level,id, engagement ){
 
-                var div = "<div class='renewal_user selector' id="+id+"><label>"+statut+"</label><div>"+ name +"<br/> "+ level +"</div></div>" ;  
+                let nb_child = $("#nb_child").val();
+
+                tab_eng = engagement.split("-")
+
+
+                nb =  parseInt(nb_child);
+                var div = "<div class='renewal_user selector' id="+id+"><div>"+ name +"<br/> "+ level + "<br/> "+ tab_eng[0] +" mois<br/> "+tab_eng[1]+"€ </div></div>" ;
+
+
+                if ( document.getElementById(id) !== null ) {
+                    $("#"+id).remove() ;
+                }
+
                 $("#show_confirm_renewal").append(div) ;
 
-                 liste.push(id); 
+
+
+                liste.push(id); 
                 $('#renewal'+id).parent().parent().addClass("selector") ;
 
- 
                 if (nb ==  parseInt(liste.length)) {  
                     $('.renewal_user').hide();
                     $('.selector').show();
                     }
+
                 $('.validate_renewal').attr("disabled",false); 
+
             }
 
-        function desconstruct_user(statut,id){
-                let nb_child = $("#nb_child").val();
 
-                $("#"+id).remove();  
-                $('#renewal'+id).parent().parent().removeClass("selector") ;
-                $('.renewal_user').show();
-                liste.splice(liste.indexOf(id),1);  
-            }
 
+        $('.cancel_user_class').on('click', function (event) { 
+
+            let data_user_id = $(this).attr("data_user_id");
+ 
+            if ( document.getElementById("renewal"+data_user_id) !== null ) {
+                    $("#renewal"+data_user_id).remove() ;
+                }
+            $("input[name='engagement"+data_user_id+"']").prop('checked', false );
+
+        });  
+
+ 
 
 
             $("#id_username").on('change', function () {

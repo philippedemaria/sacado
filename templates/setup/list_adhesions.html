@@ -20,7 +20,12 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'add_adhesion' %}" class="btn btn-new pull-right"> Nouvelle adhésion</a>    
+    <a href="{% url 'add_adhesion' %}" class="btn btn-new pull-right"> Nouvelle adhésion</a>  
+
+
+ 
+    <a href="{% url 'renewal_adhesion'   %}" class="btn btn-new pull-right"> Renouveler</a>   
+
 {% endblock %}
 
 
@@ -29,51 +34,36 @@
 {% block body %}
     <section class="content_main"> 
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-12 col-md-7">
                 <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                     <table id="standard_tab" class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Code</th>
-                            <th>Menu</th>
-                            <th>Enfant.s </th>
-                            <th>Date de souscription</th>
-                            <th>Fin d'engagement</th>
-                            <th>Montant</th>
-                            <th>Actions</th>
+                            <th>Chrono</th>
+                            <th>Adhésions</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {% for adh in adhesions %}
+                            {% for facture in factures %}
                                 <tr>
                                     <td>
-                                        {{ adh.code }}
-                                    </td>
-                                    <td>
-                                        {{ adh.formule }}
-                                    </td>
-                                    <td>
-                                        {% for s in adh.children_associated %}
-                                            {{ s }} {% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {{ adh.date_start|date:"d N Y à H:i" }}
-                                    </td>
-                                    <td>
-                                        {{ adh.date_end|date:"d N Y" }} <small>[{{ adh.duration}}mois]</small>
-                                    </td>
-                                    <td>
-                                        {{ adh.amount }}€
-                                    </td>
-                                    <td style="font-size : 12px">
                                         
-                                        <a href="{% url 'student_to_association'     %}"> Renouveler</a> | 
-                                        {% if adh.date_end < last_week %}66{% endif %}
-                                        <a href="{% url 'student_to_association' %}"> Modifier</a> |
-                                        <a href="#" data-toggle='modal' data-target='#remboursement' data_id='{{ adh.id }}' class="adh_select"> Résilier</a> |
-                                        <a href="{{ adh.file.url }}" target="_blank"> Télécharger</a>
+
+                                        {% if facture.file %}
+                                            <a href="{{ facture.file.url }}" target="_blank" class="pull-right"> Télécharger {{ facture.chrono }}</a>
+                                        {% else %}
+                                            {{ facture.chrono }}
+                                        {% endif %}
+
+
+                                    </td>
+                                    <td>
+                                        {% for adh in facture.adhesions.all %}
+                                            <li class="sanspuce">
+                                                {{ adh.student }} - {{ adh.amount }}   
+                                            </li>
+                                        {% endfor %}
                                     </td>
                                 </tr>
                             {% endfor %}

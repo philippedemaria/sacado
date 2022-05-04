@@ -2,7 +2,7 @@
 ASGI entrypoint. Configures Django and then runs the application
 defined in the ASGI_APPLICATION setting.
 """
-
+"""
 import os
 import django
 from channels.routing import get_default_application
@@ -23,7 +23,8 @@ application= get_default_application()
 #})
 
 
-"""import os
+"""
+import os
 
 import django
 django.setup()
@@ -43,4 +44,4 @@ application = ProtocolTypeRouter({
     # WebSocket handler
     "websocket": AuthMiddlewareStack(  URLRouter(ws_urlpatterns)  ) 
 })
-"""
+

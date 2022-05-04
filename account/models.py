@@ -629,28 +629,37 @@ class Student(ModelWithCode):
 
 class Adhesion(models.Model):
     """docstring for Facture"""
-    chrono     = models.CharField(max_length=50,  verbose_name="Code", editable= False) # Insertion du code de la facture.
-    user       = models.ForeignKey(User, blank=True,  null=True, related_name="adhesions", on_delete=models.CASCADE, editable= False)
-    file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
-    date_start = models.DateTimeField(auto_now_add=True, verbose_name="Date de création", editable= False)
-    date_end   = models.DateTimeField( verbose_name="Date de fin", editable= False)
-    amount     = models.CharField(max_length=10,  verbose_name="Montant", editable= False)
+    amount     = models.DecimalField(max_digits = 6,decimal_places=2,  verbose_name="Montant", editable= False)
     menu       = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
-    children   = models.PositiveIntegerField( default=1,  verbose_name="Nb enfant", editable= False)
     duration   = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)
-    levels     = models.ManyToManyField(Level, related_name="adhesions", blank=True, editable= False)
-    students   = models.ManyToManyField(Student, related_name="adhesions", blank=True, editable= False)
+
+    start      = models.DateTimeField(null=True, blank=True, editable= False)
+    stop       = models.DateTimeField(null=True, blank=True, editable= False)
+
+    level      = models.ForeignKey(Level, related_name="adhesions", on_delete=models.CASCADE, null=True,blank=True, editable= False)
+    student    = models.ForeignKey(Student, related_name="adhesions", on_delete=models.CASCADE,  null=True, blank=True, editable= False)
 
     def __str__(self):
-        return "{} {}".format(self.user, self.file)
+        return "{} {} : {}€".format(self.student.user.last_name, self.student.user.first_name, self.amount)
 
     def formule(self):
         Formule = apps.get_model('setup', 'Formule')
         return Formule.objects.get(pk = int(self.menu))
 
 
-    def children_associated(self):
-        return self.user.parent.students.all()
+
+class Facture(models.Model):
+    """docstring for Facture"""
+    chrono     = models.CharField(max_length=50,  verbose_name="Chrono", editable= False) # Insertion du code de la facture.
+    user       = models.ForeignKey(User, blank=True,  null=True, related_name="factures", on_delete=models.CASCADE, editable= False)
+    file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
+    adhesions  = models.ManyToManyField(Adhesion, related_name="factures", blank=True, editable= False)
+
+    def __str__(self):
+        return "{} {}".format(self.user, self.file)
+
+
+
 
 
 class Teacher(models.Model):

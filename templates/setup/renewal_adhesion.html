@@ -37,86 +37,76 @@
      
 {% block body %}     
 <section class="content_main"> 
- 
-    <div class="row">
-        <div class="col-sm-12 col-md-10">
-            <h4 class="title_page">  L'adhésion {{ formule.adhesion }} 
-                <span class="sub_header">{{ formule.name }}</span> 
-                pour 
-                {% if no_parent %}
-                <b>moi-même</b> retient mon 
-                {% else %}
-                <b>{{ data_post.nb_child }}</b> enfant{{ data_post.nb_child|pluralize }} retient votre 
-                {% endif %}
 
-                attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} x {{ data_post.month_price }}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
-        </div>
-        {% comment %}
-        <div class="col-sm-12 col-md-2">
-            <a href="{% url 'student_to_association'  %}" class="small_action"><i class="fa fa-random"></i> Changer de menu</a><br/>
-            <a  href="javascript:history.back()" class="small_action"><i class="fa fa-times"></i>  Modifer mes choix</a> 
-        </div>
-        {% endcomment %}
-    </div> 
-    <hr/> 
     <div class="row">
-        <form action="" method="POST">
+        <form action="{% url 'save_renewal_adhesion' %}" method="POST">{% csrf_token %}
             <div class="col-sm-12 col-md-6">
-
-                <input type="hidden" name="total_price" value="{{ data_post.total_price }}" />
-                <input type="hidden" name="month_price" value="{{ data_post.month_price  }}"  />                
-                <input type="hidden" name="nb_month"    value="{{ data_post.nb_month }}"  />
-                <input type="hidden" name="date_end"    value='{{ data_post.date_end  }}'  />
-                <input type="hidden" name="menu_id"     value="{{ formule.id}}" />
-                <input type="hidden" name="nb_child"    value="{{ data_post.nb_child }}" id="nb_child"  />
 
                 je suis 
 
-                <div class="renewal_user selector" ><label>{{ adhesion.user }} <input type="hidden" name="user"  value="{{ adhesion.user.id }}" /></label></div>
+                <div class="renewal_user selector" ><label>{{ user }} </label></div>
                 <div>
-                    et sollicite cette adhésion pour  
+                    et sollicite cette adhésion à compter d'aujourd'hui pour  
                 </div>
-                {% for s in adhesion.user.parent.students.all %}
+                {% for s in user.parent.students.all %}
                     <div class="renewal_user renewal_student" > 
-                        <label>{{ s }} <input type="checkbox"  name="students"  data_name="{{ s.user }}" class="renewal_user_class" id="renewal{{ s.user.id }}"  value="{{ s.user.id }}" /></label>
+                        <h5>{{ s }} </h5>
+                        <input type="hidden" value="{{ s.user.id }}" name="student_ids"   />
                         <div class="renewal_user_level"> 
                             <label>Niveau favori :</label>
                             <select id="level{{ s.user.id }}" name="level" class="form-control select2">
                                 {% for l in levels %}
-                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                    <option value="{{ l.id }}" {% if l.id == s.level.id %} selected {% endif %}>{{ l.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
+                        <h5>Durée d'engagement</h5>
+                        <div class="renewal_student"> 
+                            {% for formule in formules %} 
+                            <div>
+                                <label>
+                                    <input  type="radio"  name="engagement{{ s.user.id }}" 
+                                            data_duration="{{ formule.nb_month }}" value="{{ formule.nb_month }}-{{ formule.total }}" /> 
+                                            {% cycle  12 3 1   %} mois : {{  formule.price }}  € x {{ formule.nb_month }} = {{  formule.total }} €
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                         <a href="#"  
+                            class="cancel_user_class btn btn-defaut" 
+                            data_id="cancel{{ s.user.id }}"   
+                            data_user_id="{{ s.user.id }}"  > Annuler </a>
+
+
+
+                        <a href="#" 
+                            data_name="{{ s.user }}" 
+                            class="renewal_user_class btn btn-sacado pull-right" 
+                            data_id="renewal{{ s.user.id }}"   
+                            data_user_id="{{ s.user.id }}"  > Choisir </a>
+              
                     </div>
                 {% endfor %}
 
 
-                {% comment %}
-                {% if data_post.nb_child != adhesion.user.parent.students.all.count %}
-                <div class="renewal_bottom">
-                    <div class="alert alert-warning">
-                        Votre choix d'adhésion concerne {{ data_post.nb_child }} enfant{{ data_post.nb_child|pluralize }}. Vous ne pourrez pas sélectionner tous vos enfants.
-                    </div>
-                </div>
-                {% endif %}
-                {% endcomment %}
 
-                <div class="renewal_bottom">
-                    <a href="#" class="btn btn-primary validate_renewal" >Valider et payer</a>
-                    <a href="javascript:history.back()" class="btn btn-default">Annuler</a>
-                </div>
             </div>
             <div class="col-sm-12 col-md-6">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <p class="thin"><b>Adhésion{{ data_post.nb_child|pluralize }} pour</b></p>
+                        <p class="thin"><b>Adhésion pour</b></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12" id="show_confirm_renewal">
-                        Sélectionner vos enfants et leur niveau associé
+                        Sélectionnez vos enfants et leur niveau associé
                     </div>
                 </div>
+
+                <div class="renewal_bottom">
+                    <button class="btn btn-primary validate_renewal" >Valider et payer</button>
+                </div>   
             </div>
         </form>    
     </div>

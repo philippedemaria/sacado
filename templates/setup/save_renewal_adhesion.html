@@ -1,0 +1,113 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+     <script>
+        require(['script/ajax-adhesion']);
+    </script>
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    
+    <i class='fa fa-audio-description'></i> Renouvellement d'une adhésion
+
+{% endblock %}
+
+
+ 
+{% block page_menu_right %}
+    <a href="{% url 'student_to_association' %}" class="btn btn-new pull-right"> Nouvelle adhésion</a>    
+
+{% endblock %}
+
+
+ 
+     
+{% block body %}     
+<section class="content_main"> 
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+                {% for s in students %}
+                    <div class="renewal_user renewal_student" > 
+                        <h5>{{ s.name }} </h5>
+                         
+                        <h5>Abonnement : {{ s.duration }} mois</h5>
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+               <h2>Net à payer : {{ somme  }} €</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+                    <!-- page de paiement en ligne -->
+                    <div id="smart-button-container">
+                        <div style="text-align: center;">
+                          <div id="paypal-button-container"></div>
+                        </div>
+                    </div>
+
+<!--                     <script src="https://www.paypal.com/sdk/js?client-id=AXACtNPjRo8Xi5W4Z3d8mvex4kxmjmEGQwxKAzJBDYp-OwF80Z50aQfxnqBEn9-BFm8LVA57z8u467Pu&currency=EUR" data-sdk-integration-source="button-factory"></script> -->
+
+
+                    <script src="https://www.paypal.com/sdk/js?client-id=AYLTaxBmQtg5Feh_8n5PCTNwRp6ksXJroB-SeeFKxuwlgC3rM_CdW8fp5GO5C4mux3Tjwmvan8MSmYgx&currency=EUR" data-sdk-integration-source="button-factory"></script>
+
+
+
+                    <script>
+
+                        var amount = "{{ somme|decimal2number }}";
+
+                        paypal.Buttons({
+                              style: {
+                                shape: 'rect',
+                                color: 'blue',
+                                layout: 'vertical',
+                                label: 'paypal',
+                                
+                              },
+
+                              createOrder: function(data, actions) {
+                                return actions.order.create({
+                                  purchase_units: [{"amount":
+                                                      {
+                                                        "currency_code":"EUR","value": amount ,
+                                                      }
+                                                    }] ,
+                                });
+                              },
+
+                              onApprove: function(data, actions) {
+                                return actions.order.capture().then(function(details) {
+
+                                  alert('Transaction en cours');
+
+                                });
+                              },
+
+                              onError: function(err) {
+                                console.log(err);
+                              }
+                            }).render('#paypal-button-container');
+                           
+                    </script>
+        </div>
+    </div>
+</section>            
+{% endblock %}
