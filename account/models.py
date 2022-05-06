@@ -630,8 +630,7 @@ class Student(ModelWithCode):
 class Adhesion(models.Model):
     """docstring for Facture"""
     amount     = models.DecimalField(max_digits = 6,decimal_places=2,  verbose_name="Montant", editable= False)
-    menu       = models.CharField(max_length=50,  verbose_name="Menu", editable= False)
-    duration   = models.PositiveIntegerField( default=1,  verbose_name="Durée de l'adhésion", editable= False)
+    formule_id = models.PositiveIntegerField( null=True, blank=True, verbose_name="Formule", editable= False)
 
     start      = models.DateTimeField(null=True, blank=True, editable= False)
     stop       = models.DateTimeField(null=True, blank=True, editable= False)
@@ -654,6 +653,9 @@ class Facture(models.Model):
     user       = models.ForeignKey(User, blank=True,  null=True, related_name="factures", on_delete=models.CASCADE, editable= False)
     file       = models.FileField(upload_to=file_directory_path,verbose_name="fichier", blank=True, null= True, default ="", editable= False)
     adhesions  = models.ManyToManyField(Adhesion, related_name="factures", blank=True, editable= False)
+    date       = models.DateTimeField(null=True, blank=True, editable= False)
+
+
 
     def __str__(self):
         return "{} {}".format(self.user, self.file)

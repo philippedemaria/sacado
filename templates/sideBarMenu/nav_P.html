@@ -42,12 +42,10 @@ active
     </a>
 </li>
  
- 
-{% if request.user.is_in_academy %}
+
 <li class='dropdown'>
     <a href="{% url 'adhesions_academy' %}" class="main" >
         <i class="fa fa-audio-description fa-2x"></i> 
-        <div class="captionmenu">Adhésions</div>
+        <div class="captionmenu">Académie</div>
     </a>
 </li>
-{% endif %}
