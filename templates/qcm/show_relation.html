@@ -466,6 +466,10 @@
           //              fin de socket pour channel
           //----------------------------------------------------
           //----------------------------------------------------
+
+</script>
+ {% if  relation.parcours.is_evaluation %}
+<script type="text/javascript">
   function updateListener(objName) {  
       var applet     =  ggbApplet; 
       var exercise_id=  "{{ exercise.id }}"; 
@@ -483,9 +487,6 @@
   	  console.log("test=",applet.getValue("test"));
   	  console.log("grade=",applet.getValue("grade"));
   	  console.log("numexo=",applet.getValue("numexo"));
-	  
-	  
-     
       }
       if (p_available != "") 
            {var nb_attempt = parseInt(p_available) ;}
@@ -520,7 +521,7 @@
       
       };
 
-      {% if  relation.parcours.is_evaluation %}
+     
           if ( applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ){
               // Modification du nombre de tentatives
               nb_left = nb_attempt-1;
@@ -565,12 +566,67 @@
                   });
             }
 
-      {% endif %}   
+    
    }
+</script>  
+{% else %} 
+<script type="text/javascript">
+  function updateListener(objName) {  
+      var applet     =  ggbApplet; 
+      var exercise_id=  "{{ exercise.id }}"; 
+      var grade      = applet.getValue("grade");
+      var numexo     = applet.getValue("numexo");
+      var situation  = parseInt("{{ relation.situation }}") ; 
+      var start_time = "{{ start_time}}" ;
+      var relation_id= "{{ relation.id}}" ;
+      var p_available= "{{ parcours_available.nbleft}}" ;
+      var available  = "{{ available.nbleft}}" ;
+      var ide = "{{ide}}" ;
+      if (objName=="score" || objName=="ok" || objName=="grade" || objName=="numexo" || objName=="valider" ){ 
+      console.log("RT objName:",objName,"valeur : ",applet.getValue(objName));
+      console.log("valider=",applet.getValue("valider"));
+      console.log("test=",applet.getValue("test"));
+      console.log("grade=",applet.getValue("grade"));
+      console.log("numexo=",applet.getValue("numexo"));
+      }
+      if (p_available != "") 
+           {var nb_attempt = parseInt(p_available) ;}
+      else if ( available != "") 
+           {var nb_attempt = parseInt(available) ;}
+      else 
+           {var nb_attempt = 0 ;}
+      numexo = parseInt(numexo) ;
+      if (situation !=0) { score = grade/situation ;} else {score=-1;}
+      if (objName=="ok" && applet.getValue("ok")==0 && applet.getValue("init")==1){
+    console.log("debut exo");
+          window.socket.send(JSON.stringify({
+        "command":"ExoDebut",
+        "ide"  : exercise_id,
+        "typexo" : "ggb"  
+               }));
+      }
+      if (applet.getValue("valider") && objName=="ok"){
+          //if (applet.getValue("ok")==1) 
+          console.log("situationFinie, grade=",grade,"ide=",exercise_id, "situation",situation,
+          "numexo:",numexo, "resultat:",applet.getValue("ok"));
+ 
+              window.socket.send(JSON.stringify({
+      "command":"SituationFinie",
+      "ide"  : exercise_id,
+                  "payload" : {
+          "resultat" :applet.getValue("ok"),
+                      "grade" : grade,
+                      "situation" : situation,
+                      "numexo" : numexo-1}
+                          }));
+      
+      };
+   }
+</script>  
+{% endif %} 
 
 
-     
-    </script>
+
     <div style="height:40px;clear: both"></div>
      <div class="checkbox_no_display" id="draft" >
           <div class="col-sm-0 col-md-1 col-lg-1"></div>
