@@ -478,11 +478,11 @@
       var available  = "{{ available.nbleft}}" ;
       var ide = "{{ide}}" ;
       if (objName=="score" || objName=="ok" || objName=="grade" || objName=="numexo" || objName=="valider" ){	
-	  console.log("RT objName:",objName,"valeur : ",applet.getValue(objName));
-	  console.log("valider=",applet.getValue("valider"));
-	  console.log("test=",applet.getValue("test"));
-	  console.log("grade=",applet.getValue("grade"));
-	  console.log("numexo=",applet.getValue("numexo"));
+  	  console.log("RT objName:",objName,"valeur : ",applet.getValue(objName));
+  	  console.log("valider=",applet.getValue("valider"));
+  	  console.log("test=",applet.getValue("test"));
+  	  console.log("grade=",applet.getValue("grade"));
+  	  console.log("numexo=",applet.getValue("numexo"));
 	  
 	  
      
@@ -519,49 +519,53 @@
                           }));
       
       };
-      if ( applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ){
-          // Modification du nombre de tentatives
-          nb_left = nb_attempt-1;
-          if ( nb_left < 0){
-              nb_left = 0;
-          }
-          $("#attempt").html(nb_left); 
-	  // ========= AJAX ================
-          use_ajax( 1 , start_time, score, relation_id, "ok" , true )
-      }
-      if ( applet.getValue("demarrer") && numexo > situation && objName == "numexo"   ){
-          use_ajax( numexo, start_time, score, relation_id, "ok" , false )
-      }
-      if ( applet.getValue("fini")  ==  1 ) {
-          alert("Vous êtes en évaluation. L'exercice est fini. Passer à l'exercice suivant.") ;
-          applet.setValue("fini", 0) ; 
-      }
 
-      function use_ajax( numexo, start_time, score, relation_id, is_ajax , init ){
-            if (init) 
-              {dataset = {'numexo': numexo, 'start_time' : start_time ,
-        'score': score,  'relation_id': relation_id,
-        'is_ajax': is_ajax, 'init' : init } 
-                         }
-            else 
-              {dataset = {'numexo'     : numexo, 'start_time' : start_time ,
-        'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax   }
-        }
-           $.ajax({
-              url: '../../store_the_score_relation_ajax/',
-              data: dataset ,
-              type: "POST",
-              dataType: "json",
-              success: function (data) {
-                 $('#is_storage').show();
-                 $('#is_storage').html(data.html);
-                 setTimeout(function(){ $('#is_storage').hide() }, 3000);
-                if (situation == data.numexo)
-                { 
-                  $('#submit_button_evaluation').show(); }
-           }
-        });
-     }
+      {% if  relation.parcours.is_evaluation %}
+          if ( applet.getValue("demarrer")  &&  objName == "demarrer"  &&  applet.getValue("init")   ){
+              // Modification du nombre de tentatives
+              nb_left = nb_attempt-1;
+              if ( nb_left < 0){
+                  nb_left = 0;
+              }
+              $("#attempt").html(nb_left); 
+    	  // ========= AJAX ================
+              use_ajax( 1 , start_time, score, relation_id, "ok" , true )
+          }
+          if ( applet.getValue("demarrer") && numexo > situation && objName == "numexo"   ){
+              use_ajax( numexo, start_time, score, relation_id, "ok" , false )
+          }
+          if ( applet.getValue("fini")  ==  1 ) {
+              alert("Vous êtes en évaluation. L'exercice est fini. Passer à l'exercice suivant.") ;
+              applet.setValue("fini", 0) ; 
+          }
+
+          function use_ajax( numexo, start_time, score, relation_id, is_ajax , init ){
+                if (init) 
+                        {dataset = {'numexo': numexo, 'start_time' : start_time ,
+                  'score': score,  'relation_id': relation_id,
+                  'is_ajax': is_ajax, 'init' : init } 
+                                   }
+                      else 
+                        {dataset = {'numexo'     : numexo, 'start_time' : start_time ,
+                  'score': score,  'relation_id': relation_id, 'is_ajax'    : is_ajax   }
+                  }
+               $.ajax({
+                  url: '../../store_the_score_relation_ajax/',
+                  data: dataset ,
+                  type: "POST",
+                  dataType: "json",
+                  success: function (data) {
+                     $('#is_storage').show();
+                     $('#is_storage').html(data.html);
+                     setTimeout(function(){ $('#is_storage').hide() }, 3000);
+                    if (situation == data.numexo)
+                    { 
+                      $('#submit_button_evaluation').show(); }
+                     }
+                  });
+            }
+
+      {% endif %}   
    }
 
 
