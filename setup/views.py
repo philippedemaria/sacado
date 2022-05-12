@@ -13,7 +13,7 @@ from django.contrib import messages
  
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail
 from django.db.models import Count, Q
 
@@ -36,7 +36,7 @@ from bibliotex.models import Exotex
 from datetime import date, datetime , timedelta
 
 from itertools import chain
-from general_fonctions import *
+from general_fonctions import create_chrono
 from payment_fonctions import *
 
 import random
@@ -807,16 +807,17 @@ def renewal_adhesion(request) :
 
 
 def creation_facture(facture):
+    print('entree dans creation facture')
     ##################################################################################################################
     # Création de la facture de l'adhésion au format pdf
     ##################################################################################################################
 
-    filename = str(user.id)+str(datetime.now().strftime('%Y%m%d'))+".pdf"
+    #filename = str(user.id)+str(datetime.now().strftime('%Y%m%d'))+".pdf"
+    filename= facture.chrono+".pdf"
     now = datetime.now().date()
 
-    outfilename = filename+".pdf"
     #outfiledir = "D:/uwamp/www/sacadogit/sacado/static/uploads/factures/{}/".format(user.id) # local
-    outfiledir = "uploads/factures/{}/".format(user.id) # on a server
+    outfiledir = "uploads/factures/{}/".format(facture.user.id) # on a server
     if not os.path.exists(outfiledir):
         os.makedirs(outfiledir)
 
@@ -870,120 +871,169 @@ def creation_facture(facture):
     elements.append(Spacer(0, 0.3*inch))
 
  
+    
+    #para = Paragraph(  "Adhésion : "+formule.adhesion  , normal )
+    #elements.append(para)
+    #elements.append(Spacer(0, 0.1*inch))
 
-    para = Paragraph(  "Adhésion : "+formule.adhesion  , normal )
-    elements.append(para)
-    elements.append(Spacer(0, 0.1*inch))
-
-    para1 = Paragraph( "Menu : "+formule.name  , normal )
-    elements.append(para1)
-    elements.append(Spacer(0, 0.3*inch))
+    #para1 = Paragraph( "Menu : "+formule.name  , normal )
+    #elements.append(para1)
+    #elements.append(Spacer(0, 0.3*inch))
  
-
+    print("entree dans la boucle des adhesions")
     total_price = 0     
     for adhesion in facture.adhesions.all() :
 
         delta    = adhesion.stop - adhesion.start
-        duration = round(delta.days/30,0)
+        duration = int(round(delta.days/30,0))
 
-        paragraph_msg = Paragraph( "  -  "+ adhesion.student.user.first_name+ " " + adhesion.student.user.last_name + ",  montant  "+ adhesion.amount + "€ , durée : " + duration +" mois "  , normal )
+        paragraph_msg = Paragraph( "  -  {} {}, montant : {:.2f}€, durée : {:d} mois ".\
+                  format(adhesion.student.user.first_name,adhesion.student.user.last_name,adhesion.amount,duration)  , normal )
         elements.append(paragraph_msg)
         elements.append(Spacer(0, 0.1*inch))
         total_price += adhesion.amount
 
-    elements.append(Spacer(0, 2*inch))
-    para3 = Paragraph( "Montant de l'adhésion : "+total_price+"€"  , normal )
+    elements.append(Spacer(0, 0.5*inch))
+    para3 = Paragraph( "Montant de l'adhésion : {:6.2f}€".format(total_price)  , normal )
     elements.append(para3)
     elements.append(Spacer(0, 0.1*inch))
  
         
     elements.append(Spacer(0, 2*inch))
-    para3 = Paragraph( "Date de paiement : "+ adhesion.date +" "  , normal )
+    para3 = Paragraph( "Date de paiement : "+ facture.date.strftime('%d/%m/%Y') +" "  , normal )
     elements.append(para3)
     elements.append(Spacer(0, 0.1*inch))
  
 
     doc.build(elements)
-
+    print("pdf facture ok")
     return store_path
   
 
 
 def save_renewal_adhesion(request) :
+	"""page de paiement paypal
+	request.POST contient une liste student_ids, une liste level, et des
+	listes "engagement"+student_ids"""
+	print(request.POST)
+    #----- on met les informations concernant le paiment dans session
+	dicoSession={'student_ids': request.POST.getlist('student_ids'),
+     'level' : request.POST.getlist('level')}
+	listeEngagements=[]
+	for si in dicoSession['student_ids']:
+		if request.POST.getlist('engagement'+si) == [] :
+			ns=dicoSession['student_ids'].index(si)
+			dicoSession['student_ids'].pop(ns)
+			dicoSession['level'].pop(ns)
+		else :	
+			listeEngagements.append(request.POST.getlist('engagement'+si)[0])
+	dicoSession['engagements']=listeEngagements
+	request.session["detail_adhesions"]=dicoSession
+	print("save_renewal_adhesion, post=",request.session['detail_adhesions'])
+    #------------- extraction des infos pour les passer au template
+	somme = 0
+	students = []
+	for i,sid in enumerate(dicoSession['student_ids']) :
+		stud = {}
+		tab_engagement = dicoSession['engagements'][i].split("-")
 
-    request.session["paypal_payment"] = request.POST
+		amount = tab_engagement[1].replace(",",".")
+		somme +=  float(amount)
+		student = Student.objects.get(pk = sid)
+		stud['duration'] = tab_engagement[0]
+		stud['name'] = student.user.first_name +" " +student.user.last_name 
+		students.append(stud)
 
-    somme = 0
-    students = []
-    for student_id in request.POST.getlist("student_ids") :
-        stud = {}
-        tab_engagement = request.POST.get("engagement"+student_id).split("-")
-
-        amont = tab_engagement[1].replace(",",".")
-        somme +=  float(amont)
-        student = Student.objects.get(pk = student_id)
-
-        stud['duration'] = tab_engagement[0]
-        stud['name'] = student.user.first_name +" " +student.user.last_name 
-        students.append(stud)
-
-    context = { 'somme' : somme , 'students' : students }
-
-    return render(request, 'setup/save_renewal_adhesion.html', context)  
+	context = { 'somme' : somme , 'students' : students }
+	print(context)
+	return render(request, 'setup/save_renewal_adhesion.html', context)  
 
 
-
+@csrf_exempt
 def accept_renewal_adhesion(request) :
+   
+	print("reception d'un paiement accepté par paypal")
+	body=json.loads(request.body)
+	#---------- Vérification du paiement auprès de paypal
+	orderID = body['orderID'] 
+	#print("https://api-m.sandbox.paypal.com/v2/checkout/orders/"+orderID)
+	#r = requests.post("https://api-m.sandbox.paypal.com/v2/checkout/orders/"+orderID )
+	#print(r.content)
+	#print(request.session.keys())
+	#print(request.session['paypal_payment'])
+	ok=True
+	if ok :
+		parent=request.user
+		adh=request.session['detail_adhesions']
+		print("adhésion : ", adh, "demandée par le parent :",parent)
+		
+		code = str(uuid.uuid4())[:8]
+		chrono = create_chrono(Facture,"F")
+		#-----------creation d'une nouvelle facture
+		new_fact=Facture()
+		new_fact.chrono=chrono
+		new_fact.user=parent
+		new_fact.orderID=orderID
+		new_fact.date=datetime.now()
+		new_fact.save() #il faut sauver avant de pouvoir ajouter les adhesions 
+		print("facture prééditée, sans les adhesions")
+		#-------- modification de la closure des students
+		for i,student_id in enumerate(adh['student_ids']) :
+			student_user = User.objects.get(pk = student_id)
+			eng = adh['engagements'][i].split("-")  # mois-prix 
+			duration = int(eng[0]) * 31
+			closure = student_user.closure
+		
+			if closure :    #il y a deja un abonnement en cours : le debut
+							#du nouvel abonnement commence le lendemain de la fin
+				debut=closure+timedelta(days=1)
+			else : 
+				debut=datetime.now()
+				
+			new_closure = debut + timedelta(days = duration)
+			User.objects.filter(pk = student_id).update(closure=new_closure)
+		
+			#-----------creation d'une nouvelle adhésion
+			new_adh=Adhesion()
+			new_adh.amount=float(eng[1].replace(",","."))
+			#new_adh.formule_id = eng[0]
+			new_adh.start      = debut
+			new_adh.stop       = new_closure
+			print(Level.objects.filter(id=int(adh['level'][i])))
+			new_adh.level      = Level.objects.filter(id=adh['level'][i])[0]
+			new_adh.student    = Student.objects.get(user_id=student_id)
+			print("new_adh :",  new_adh)
+			new_adh.save()
+			print("adhesion enregistrée")
+			new_fact.adhesions.add(new_adh)
+			#for pid in paypal_payment.getlist("user") :
+			#Adhesion.objects.filter(user_id = pid).update(date_end=new_closure)
+			#Adhesion.objects.filter(user_id = pid).update(file = creation_facture(user,data_posted,code))
+		new_fact.save()
+		new_fact.file=creation_facture(new_fact)
+		print("nouvelle facture enregistrée")
+			
 
 
-    orderID = request.POST["orderID"] 
-    r = requests.POST("https://api-m.sandbox.paypal.com/v2/checkout/orders/"+orderID )
+		#     user = User.objects.get(pk = pid)
 
-    print(r.content)
-
-    # paypal_payment = request.session.get("paypal_payment")
-    # code = str(uuid.uuid4())[:8]
-    # chrono = create_chrono(Adhesion,"F")
-
-    # for student_id in paypal_payment.getlist("student_ids") :
- 
-    #     tab_engagement = paypal_payment.get("engagement"+student_id).split("-")
-    #     duration = int(tab_engagement[0]) * 31
-
-    #     student_user = User.objects.get(pk = student_id)
-    #     closure = student_user.closure
-    #     new_closure = datetime.now() + timedelta(days = duration)
-    #     if closure :
-    #         new_closure = closure + timedelta(days = duration) 
-        
-    #     User.objects.filter(pk = student_id).update(closure=new_closure)
-
-
-    # for pid in paypal_payment.getlist("user") :
-
-    #     Adhesion.objects.filter(user_id = pid).update(date_end=new_closure)
-    #     Adhesion.objects.filter(user_id = pid).update(file = creation_facture(user,data_posted,code))
-
-
-
-    #     user = User.objects.get(pk = pid)
-
-    #     ##################################################################################################################
-    #     # Envoi du courriel
-    #     ##################################################################################################################
-    #     msg = "Bonjour "+ user.first_name +" "+ user.last_name +",\n\n vous venez de souscrire à un prolongement de l'abonnement à la SACADO Académie. \n"
-    #     msg += "votre référence d'adhésion est "+chrono+".\n\n"
-    #     msg += "Les identifiants de connexion n'ont pas changé.\n"
-    #     msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
-    #     send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, [ user.email ])
- 
-    # # Envoi à SACADO
-    # sacado_rcv = ["philippe.demaria83@gmail.com","brunoserres33@gmail.com","sacado.asso@gmail.com"]
-    # sacado_msg = "Renouvellement d'adhésion après période d'essai : user_id"+ user.id +" : "+ user.first_name +" "+ user.last_name 
-    # send_mail("Renouvellement d'adhésion après période d'essai", sacado_msg, settings.DEFAULT_FROM_EMAIL, sacado_rcv)
-     
-    return redirect( 'index' )
-
+		#     ##################################################################################################################
+		#     # Envoi du courriel
+		#     ##################################################################################################################
+		#     msg = "Bonjour "+ user.first_name +" "+ user.last_name +",\n\n vous venez de souscrire à un prolongement de l'abonnement à la SACADO Académie. \n"
+		#     msg += "votre référence d'adhésion est "+chrono+".\n\n"
+		#     msg += "Les identifiants de connexion n'ont pas changé.\n"
+		#     msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
+		#     send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, [ user.email ]
+		# # Envoi à SACADO
+		# sacado_rcv = ["philippe.demaria83@gmail.com","brunoserres33@gmail.com","sacado.asso@gmail.com"]
+		# sacado_msg = "Renouvellement d'adhésion après période d'essai : user_id"+ user.id +" : "+ user.first_name +" "+ user.last_name 
+		# send_mail("Renouvellement d'adhésion après période d'essai", sacado_msg, settings.DEFAULT_FROM_EMAIL, sacado_rcv)
+		data={"ok":True} 
+		print('on renvoie ok')
+		 
+		#return JsonResponse(data,safe=True)
+		return HttpResponse("ok")
 
 
 

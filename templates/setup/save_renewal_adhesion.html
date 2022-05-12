@@ -32,7 +32,6 @@
 
 {% endblock %}
 
-
  
      
 {% block body %}     
@@ -57,62 +56,56 @@
     <div class="row">
         <div class="col-sm-12 col-md-12">
                     <!-- page de paiement en ligne -->
+                   <div id="partiePaiement">
                     <div id="smart-button-container">
                         <div style="text-align: center;">
                           <div id="paypal-button-container"></div>
                         </div>
                     </div>
-
-<!--                     <script src="https://www.paypal.com/sdk/js?client-id=AXACtNPjRo8Xi5W4Z3d8mvex4kxmjmEGQwxKAzJBDYp-OwF80Z50aQfxnqBEn9-BFm8LVA57z8u467Pu&currency=EUR" data-sdk-integration-source="button-factory"></script> -->
-
-
-                    <script src="https://www.paypal.com/sdk/js?client-id=AYLTaxBmQtg5Feh_8n5PCTNwRp6ksXJroB-SeeFKxuwlgC3rM_CdW8fp5GO5C4mux3Tjwmvan8MSmYgx&currency=EUR" data-sdk-integration-source="button-factory"></script>
+				</div>
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=AXACtNPjRo8Xi5W4Z3d8mvex4kxmjmEGQwxKAzJBDYp-OwF80Z50aQfxnqBEn9-BFm8LVA57z8u467Pu&currency=EUR" data-sdk-integration-source="button-factory"></script> -->
 
 
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=Ach0eLMW8eNmEbbNXCWQ7NiGu_wchRDZ6Bgirh4szOOeTcQSWG2UNLYmWpEchBnb-3KZFa-OlrDdI3mA&currency=EUR" data-sdk-integration-source="button-factory"></script>
+-->
+ <script src="https://www.paypal.com/sdk/js?client-id=Aaf8dshCf_uvh_AjYNv4Yug8tA_0DmjY2ReZEPv8CeVzFa7zxMwDFhe1lAeC493z9nd7iqsVnOSnCAGE&currency=EUR" data-sdk-integration-source="button-factory"></script>
+<script>
+   var amount = "{{ somme|decimal2number }}";
+   console.log(amount);
+   paypal.Buttons({
+     style: {shape: 'rect', color: 'blue',layout: 'vertical',label: 'paypal'},
+     createOrder: 
+           function(data, actions) {
+               return actions.order.create({
+                    purchase_units: [{"amount":{"currency_code":"EUR","value": amount}
+                                    }] 
+                       });
+           },
+     
+     onApprove: 
+          function(data, actions){
+			    return actions.order.capture().then(
+			         function (details) {
+                        // Call your server to save the transaction
+                        console.log("paiement ok, details : ",details);
+                        return fetch('accept_renewal_adhesion',
+                                 { method: 'post',
+                                   headers: { 'content-type': 'application/json' ,
+											//'X-CSRF-Token':csrf
+											},
+                                   body: JSON.stringify({ 'orderID' : data.orderID })
+                                 }).then(function(reponse) {
+											if (reponse['ok']) {
+												paiement=document.getElementById("partiePaiement");
+												paiement.innerHTML='<div style="text-align:center">Paiement validé, Merci pour votre confiance</div>';
+									     }})
+                    });               
+           },
 
-                    <script>
-
-                        var amount = "{{ somme|decimal2number }}";
-
-                        paypal.Buttons({
-                              style: {
-                                shape: 'rect',
-                                color: 'blue',
-                                layout: 'vertical',
-                                label: 'paypal',
-                                
-                              },
-
-                              createOrder: function(data, actions) {
-                                return actions.order.create({
-                                  purchase_units: [{"amount":
-                                                      {
-                                                        "currency_code":"EUR","value": amount ,
-                                                      }
-                                                    }] ,
-                                });
-                            },
-
-                              onApprove: function(data, actions){
-
-                                return actions.order.capture().then(function (details) {
-                                    // Call your server to save the transaction
-                                    return fetch('accept_renewal_adhesion',
-                                        {
-                                        method: 'post',
-                                        headers: { 'content-type': 'application/json' },
-                                        body: JSON.stringify({ 'orderID' : data.orderID, })
-                                        });
-                                    });
-                                    
-                            },
-
-                              onError: function(err) {
-                                console.log(err);
-                              }
-                            }).render('#paypal-button-container');
+     onError: function(err) {console.log("erreur",err);}
+   }).render('#paypal-button-container');
                            
-                    </script>
+  </script>
         </div>
     </div>
 </section>            
