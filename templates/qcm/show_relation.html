@@ -504,7 +504,7 @@
 	      "typexo" : "ggb"  
                }));
       }
-      if (applet.getValue("valider") && objName=="ok"){
+      if (applet.getValue("ok") && objName=="ok"){
           //if (applet.getValue("ok")==1) 
           console.log("situationFinie, grade=",grade,"ide=",exercise_id, "situation",situation,
 		      "numexo:",numexo, "resultat:",applet.getValue("ok"));
@@ -513,7 +513,7 @@
 		  "command":"SituationFinie",
 		  "ide"  : exercise_id,
                   "payload" : {
-		      "resultat" :applet.getValue("ok"),
+		      "resultat" :applet.getValue("test"),
                       "grade" : grade,
                       "situation" : situation,
                       "numexo" : numexo-1}
@@ -605,7 +605,7 @@
         "typexo" : "ggb"  
                }));
       }
-      if (applet.getValue("valider") && objName=="ok"){
+      if (applet.getValue("ok") && objName=="ok"){
           //if (applet.getValue("ok")==1) 
           console.log("situationFinie, grade=",grade,"ide=",exercise_id, "situation",situation,
           "numexo:",numexo, "resultat:",applet.getValue("ok"));
@@ -614,7 +614,7 @@
       "command":"SituationFinie",
       "ide"  : exercise_id,
                   "payload" : {
-          "resultat" :applet.getValue("ok"),
+          "resultat" :applet.getValue("test"),
                       "grade" : grade,
                       "situation" : situation,
                       "numexo" : numexo-1}
