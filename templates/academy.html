@@ -123,6 +123,16 @@
                             </div>        
                         </div>
                     </div>
+                    {% if 'academy' in request.path %}
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12" align='center'>  
+                            <div class="form-group">   
+                                <a href="{% url 'student_to_association' %}">Nouvelle inscription</a>  
+                            </div>        
+                        </div>
+                    </div>
+                    {% endif %}
                 </form> 
             </div>
         </div>

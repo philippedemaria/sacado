@@ -111,6 +111,15 @@
                             </div>        
                         </div>
                     </div>
+                    {% if 'academy' in request.path %}
+                    <div class="row">
+                        <div class="col-xs-12">  
+                            <div class="form-group">   
+                                <a href="{% url 'student_to_association' %}" >Nouvelle inscription</a>  
+                            </div>        
+                        </div>
+                    </div>
+                    {% endif %}
                 </form> 
             </div>
         </div>

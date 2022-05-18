@@ -1191,14 +1191,14 @@ def save_adhesion(request) :
             nbc = "s"
 
 
-        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\n vous venez de souscrire à une adhésion "+formule_adhesion +" à l'académie SACADO avec le menu "+formule_name+". \n"
+        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\nVous venez de souscrire à une adhésion "+formule_adhesion +" à l'académie SACADO avec le menu "+formule_name+". \n"
         msg += "votre référence d'adhésion est "+chrono+".\n\n"
         msg += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
-        msg += "Vous avez inscrit : :\n"
+        msg += "Vous avez inscrit : \n"
         for s in students_of_adhesion :
-            msg += "- "+s["first_name"]+" "+s["last_name"]+", identifiants de connexion : "+s["username"]+" / "+s["password_no_crypted"]+" \n"
+            msg += "- "+s["first_name"]+" "+s["last_name"]+", l'identifiant de connexion est : "+s["username"]+", le mot de passe est "+s["password_no_crypted"]+" \n"
 
-        msg += "\n\n Il est possible de retrouver ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
+        msg += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
 
         msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
 
