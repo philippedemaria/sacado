@@ -183,11 +183,16 @@ def student_dashboard(request,group_id):
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
     else :
+
         group = student.students_to_group.first()
+
         try :
             folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         except :
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
+
+
+        print(group.id)
 
         bases = student.students_to_parcours
         parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0).order_by("ranking")

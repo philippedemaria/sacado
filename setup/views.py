@@ -1152,12 +1152,16 @@ def save_adhesion(request) :
         user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email ,  "school_id" : 50 , "closure" : date_end_dateformat })
         student,created_s = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
 
-        group = Group.objects.filter(level = level, school_id = 50).last()
+        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
         group.students.add(student)
-
 
         parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
         test = attribute_all_documents_to_student(parcourses, student)
+
+
+        folders = Folder.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
+        for f in folders :
+            f.students.add(student)
 
         if created_s : 
             students_in.append(student) # pour associer les enfants aux parents 
