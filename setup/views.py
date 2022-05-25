@@ -807,7 +807,7 @@ def renewal_adhesion(request) :
 
 
 def creation_facture(facture):
-    print('entree dans creation facture')
+ 
     ##################################################################################################################
     # Création de la facture de l'adhésion au format pdf
     ##################################################################################################################
@@ -880,7 +880,7 @@ def creation_facture(facture):
     #elements.append(para1)
     #elements.append(Spacer(0, 0.3*inch))
  
-    print("entree dans la boucle des adhesions")
+ 
     total_price = 0     
     for adhesion in facture.adhesions.all() :
 
@@ -1170,6 +1170,9 @@ def save_adhesion(request) :
         adhesion = Adhesion.objects.create( student = student , level = level , start = today , amount = total_price , stop = date_end_dateformat , formule_id  = None )
         adhesions_in.append(adhesion)
 
+    print(parents_of_adhesion)
+
+
     for p in parents_of_adhesion :
 
         # if nb_child == 0 : # enfant émancipé ou majeur
@@ -1241,10 +1244,17 @@ def save_adhesion(request) :
 
     #########################################################
 
+    username = parents_of_adhesion[0]["username"]
+    password = parents_of_adhesion[0]["password_no_crypted"]
 
-    context = {      }
+    print( username , password )
 
-    return render(request, 'setup/save_adhesion.html', context)
+
+    user = authenticate(username=username, password=password)
+    login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+
+
+    return redirect( 'index' )
 
 
 
