@@ -215,9 +215,12 @@ class User(AbstractUser):
         if self.school_id == 50 :
             if self.is_parent  :
                 try :
-                    adhesion = self.adhesions.last()
-                    if today > adhesion.date_start and  today < adhesion.date_end :
-                        is_sacado = True
+                    facture = self.factures.last()
+                    adhesions = facture.adhesions.all()
+                    for adhesion in adhesions :
+                        if today > adhesion.start and  today < adhesion.stop :
+                            is_sacado = True
+                            break
                 except :
                     is_sacado = False
             elif self.is_student : 
