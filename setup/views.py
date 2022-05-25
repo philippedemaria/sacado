@@ -1170,9 +1170,7 @@ def save_adhesion(request) :
         adhesion = Adhesion.objects.create( student = student , level = level , start = today , amount = total_price , stop = date_end_dateformat , formule_id  = None )
         adhesions_in.append(adhesion)
 
-    print(parents_of_adhesion)
-
-
+    i = 0
     for p in parents_of_adhesion :
 
         # if nb_child == 0 : # enfant émancipé ou majeur
@@ -1181,8 +1179,15 @@ def save_adhesion(request) :
         user, created = User.objects.update_or_create(username = username, password = password , user_type = 1 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email ,  "school_id" : 50 ,  "closure" : date_end_dateformat })
         parent,create = Parent.objects.update_or_create(user = user, defaults = { "task_post" : 1 })
 
-        facture = Facture.objects.create(chrono = chrono , user = user, date = None ,    file = None )
+        if i == 0 :
+            facture = Facture.objects.create(chrono = chrono , user = user, date = None ,    file = None )
+            new_facture = facture
+        else :
+            facture = new_facture
+
+        i += 1
         
+
         for adh in adhesions_in :
             facture.adhesions.add(adh)
 
@@ -1246,9 +1251,6 @@ def save_adhesion(request) :
 
     username = parents_of_adhesion[0]["username"]
     password = parents_of_adhesion[0]["password_no_crypted"]
-
-    print( username , password )
-
 
     user = authenticate(username=username, password=password)
     login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )

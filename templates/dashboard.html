@@ -450,7 +450,7 @@
                 </div>
             </div>
         {% endif %}
-    {% elif request.user.is_parent %}
+    {% elif request.user.is_parent and not request.user.is_in_academy %}
         <hr>      
         <div class="row">
             <div class="col-lg-12 col-xs-12" style=" padding-top: 5px;">
