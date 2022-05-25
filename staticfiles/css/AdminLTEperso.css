@@ -7654,7 +7654,23 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   color : #fff;
 }
  
+.btn-inscription {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f5b96;
+  padding: 10px 24px;
+  margin-right: 10px;
+  letter-spacing: 1px;
+  border-radius: 20px;
+  display: inline-block;
+  background: #5d4391;
+  color: #fff!important;
+}
 
+.btn-inscription:hover {
+  opacity: 0.5;
+}
 /********************************************* violet hover :  #5d4391 ************************************/
 /********************************************* violet light :  #f1eef7 ************************************/
 
