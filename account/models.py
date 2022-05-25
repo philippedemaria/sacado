@@ -226,10 +226,13 @@ class User(AbstractUser):
             elif self.is_student : 
                 try :
                     parent   = self.student.students_parent.first()
-                    adhesion = parent.user.adhesions.last() 
-                    if today > adhesion.date_start and  today < adhesion.date_end   :
-                        is_sacado = True
-                except :
+                    facture = parent.user.factures.last()
+                    adhesions = facture.adhesions.all()
+                    for adhesion in adhesions :
+                        if today > adhesion.start and  today < adhesion.stop :
+                            is_sacado = True
+                            break
+                except:    
                     is_sacado = False
 
         return is_sacado 
