@@ -772,12 +772,14 @@ class Parcours(ModelWithCode):
 
         data["opacity"] = opacity
 
-        if nb_done > nb_exo_in_parcours // 2 :
+        nb_exos = nb_exo_in_parcours // 2
+
+        if nb_done > nb_exos :
             data["size"] = "20px"
 
             max_tab.sort()
 
-            if len(max_tab)>0 :
+            if len(max_tab) >  nb_exos :
                 score = max_tab[0]
             else :
                 score = None

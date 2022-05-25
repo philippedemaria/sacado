@@ -2484,7 +2484,7 @@ li.my_slide{
 
 .background_badge{
   position: absolute;
-  right:0px;
+  left:0px;
   margin: 10px;
   border-radius: 50%;
   padding-top : 15px;
