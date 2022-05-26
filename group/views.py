@@ -1845,9 +1845,9 @@ def print_monthly_statistiques(request):
  
 
         #elements.append(PageBreak())
-
-        d = radar(liste_radar)
-        elements.append(d)
+        if len(liste_radar) > 0 :
+            d = radar(liste_radar)
+            elements.append(d)
 
     doc.build(elements)
 
