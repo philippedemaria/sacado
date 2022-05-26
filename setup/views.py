@@ -1083,7 +1083,7 @@ def commit_adhesion(request) :
             user["password_no_crypted"]  =  form.cleaned_data["password1"] 
             user["password"]   =  make_password(form.cleaned_data["password1"])
             user["email"]      =  form.cleaned_data["email"]   
-            if levels[i] : 
+            if 1<= i <= nb_child : 
                 level          = Level.objects.get(pk = int(levels[i])).name
                 user["level"]  = level 
                 students.append(user)
