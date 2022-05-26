@@ -92,6 +92,7 @@ active
     </a>
 </li> 
 
+{% comment %} 
 
 {% if request.user.is_in_academy %}   
 <li  class="dropdown  {% if '/academy' in request.path %} active{% endif %}">
@@ -100,7 +101,6 @@ active
         <div class="captionmenu">Auto-test</div>
     </a>
 </li> 
-
- 
-
 {% endif %}  
+
+{% endcomment %}  
