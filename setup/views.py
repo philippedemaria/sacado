@@ -756,9 +756,9 @@ def details_of_adhesion(request) :
 
     total_price = request.POST.get("total_price")    
     month_price = request.POST.get("month_price")
-    nb_month = request.POST.get("nb_month")    
-    date_end = request.POST.get("date_end")
-    menu_id = request.POST.get("menu_id")
+    nb_month    = request.POST.get("nb_month")    
+    date_end    = request.POST.get("date_end")
+    menu_id     = request.POST.get("menu_id")
 
     data_post = request.POST
     levels = Level.objects.all()
@@ -1057,21 +1057,21 @@ def add_adhesion(request) :
 
 def commit_adhesion(request) :
 
-    data_post = request.POST
-    nb_child = int( data_post.get("nb_child") )   
-    menu_id = int(data_post.get("menu_id"))    
+    data_post   = request.POST
+    nb_child    = int( data_post.get("nb_child") )   
+    menu_id     = int(data_post.get("menu_id"))    
     data_posted = {"total_price" : data_post.get('total_price'), "month_price" : data_post.get('month_price'), "nb_month" : data_post.get('nb_month'), "date_end" : data_post.get('date_end'), "menu_id" : menu_id , "nb_child" : nb_child }
  
-    levels = request.POST.getlist("level")
+    levels      = request.POST.getlist("level")
 
-    max_num = nb_child + 2
+    max_num     = nb_child + 2
     userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num = max_num , formset=BaseUserFormSet)
-    formset = userFormset(data_post)
+    formset     = userFormset(data_post)
 
     if int(menu_id) > 0 : formule = Formule.objects.get(pk = int(menu_id))
     else :  
         formule= None
- 
+
     parents  , students = [] , []
     if formset.is_valid():
         i = 0
@@ -1080,19 +1080,17 @@ def commit_adhesion(request) :
             user["last_name"]  =  form.cleaned_data["last_name"]
             user["first_name"] =  form.cleaned_data["first_name"]
             user["username"]   =  form.cleaned_data["username"]
-            user["password_no_crypted"]   =   form.cleaned_data["password1"] 
+            user["password_no_crypted"]  =  form.cleaned_data["password1"] 
             user["password"]   =  make_password(form.cleaned_data["password1"])
             user["email"]      =  form.cleaned_data["email"]   
             if levels[i] : 
-                level = Level.objects.get(pk = int(levels[i])).name
-                user["level"]      = level 
+                level          = Level.objects.get(pk = int(levels[i])).name
+                user["level"]  = level 
                 students.append(user)
             else :
-                level = ""
-                user["level"]      = level 
+                user["level"]      = "" 
                 parents.append(user)
             i += 1
-            print(i, user)
 
         # mise en session des coordonnées des futurs membres  et  des détails de l'adhésion
  
@@ -1126,11 +1124,8 @@ def save_adhesion(request) :
     total_price = data_posted.get("total_price")
     nb_child = int(data_posted.get("nb_child"))
 
-    print(parents_of_adhesion)
-
     users = []
 
- 
     total_price = 0
     formule          = None
     formule_adhesion = " semaine d'essai "
@@ -1204,8 +1199,8 @@ def save_adhesion(request) :
             nbc = "s"
 
 
-        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\nVous venez de souscrire à une adhésion "+formule_adhesion +" à l'académie SACADO avec le menu "+formule_name+". \n"
-        msg += "votre référence d'adhésion est "+chrono+".\n\n"
+        msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\nVous venez de souscrire à une adhésion "+formule_adhesion +" à la SACADO Académie avec le menu "+formule_name+". \n"
+        msg += "Votre référence d'adhésion est "+chrono+".\n\n"
         msg += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
         msg += "Vous avez inscrit : \n"
         for s in students_of_adhesion :

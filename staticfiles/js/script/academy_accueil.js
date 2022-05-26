@@ -316,13 +316,17 @@ $(document).ready(function () {
             nb_parent = $('#id_form-TOTAL_FORMS').val();
  
             var object = $('#formsetZone').html(); 
+            $("#pasteZone").html(object) ;
+            
 
-            $("#formsetZone input").each(function(){ 
+            $("#pasteZone input").each(function(){ 
                 $(this).attr('id',$(this).attr('id').replace('__prefix__',nb_parent));
                 $(this).attr('name',$(this).attr('name').replace('__prefix__',nb_parent));
             });
 
-            $("#pasteZone").html(object) ;
+            $('#id_form-TOTAL_FORMS').val( parseInt(nb_parent)+1 ) ; 
+
+
             $("#add_parent").hide(500);
  
         });
