@@ -1835,23 +1835,19 @@ def print_monthly_statistiques(request):
 
  
 
-
-        e_tab_tab = Table(e_tab, hAlign='LEFT', colWidths=[5.5*inch,1.8*inch])
-        e_tab_tab.setStyle(TableStyle([
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-                       ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                       ]))
-                
-        elements.append(e_tab_tab)
+        if len(e_tab) > 0 :
+            e_tab_tab = Table(e_tab, hAlign='LEFT', colWidths=[5.5*inch,1.8*inch])
+            e_tab_tab.setStyle(TableStyle([
+                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+                           ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                           ]))    
+            elements.append(e_tab_tab)
+ 
 
         #elements.append(PageBreak())
 
         d = radar(liste_radar)
         elements.append(d)
-
-
-
-
 
     doc.build(elements)
 
