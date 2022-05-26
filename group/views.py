@@ -1269,7 +1269,6 @@ def radar(L):
 
     #-------------------------------------------------
     d=Drawing(larg,haut)
-    d.setFont("Times-Roman", 24)
     d.add(String(larg/2,haut-0.5*cm,"Graphique des attendus", textAnchor="middle"))
     #d.add(Rect(0,0,larg,haut,fillColor=cfond))
     if n<=2 :  
