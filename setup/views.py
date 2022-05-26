@@ -780,14 +780,12 @@ def details_of_adhesion(request) :
             adhesion = Adhesion.objects.filter(user = request.user).last()
             context = {  'formule' : formule , 'formules'  : formules ,   'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True,   }
             return render(request, 'setup/renewal_adhesion.html', context)   
-
         else : 
-
-            userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
+            userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 2, formset=BaseUserFormSet)
             context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, "renewal" : False }
             return render(request, 'setup/detail_of_adhesion.html', context)   
     except :
-        userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 1, formset=BaseUserFormSet)
+        userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num= nb_child + 2, formset=BaseUserFormSet)
         context = {  'formule' : formule ,  'no_parent' : no_parent , 'data_post' : data_post ,  'levels' : levels ,  'userFormset' : userFormset, "renewal" : False }
         return render(request, 'setup/detail_of_adhesion.html', context)   
 
@@ -915,7 +913,6 @@ def save_renewal_adhesion(request) :
 	"""page de paiement paypal
 	request.POST contient une liste student_ids, une liste level, et des
 	listes "engagement"+student_ids"""
-	print(request.POST)
     #----- on met les informations concernant le paiment dans session
 	dicoSession={'student_ids': request.POST.getlist('student_ids'),
      'level' : request.POST.getlist('level')}
@@ -1067,7 +1064,8 @@ def commit_adhesion(request) :
  
     levels = request.POST.getlist("level")
 
-    userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num = nb_child + 1, formset=BaseUserFormSet)
+    max_num = nb_child + 2
+    userFormset = formset_factory(UserForm, extra = nb_child + 1, max_num = max_num , formset=BaseUserFormSet)
     formset = userFormset(data_post)
 
     if int(menu_id) > 0 : formule = Formule.objects.get(pk = int(menu_id))
@@ -1094,6 +1092,7 @@ def commit_adhesion(request) :
                 user["level"]      = level 
                 parents.append(user)
             i += 1
+            print(i, user)
 
         # mise en session des coordonnées des futurs membres  et  des détails de l'adhésion
  
@@ -1126,6 +1125,8 @@ def save_adhesion(request) :
     data_posted = request.session.get("data_posted") # détails de l'adhésion
     total_price = data_posted.get("total_price")
     nb_child = int(data_posted.get("nb_child"))
+
+    print(parents_of_adhesion)
 
     users = []
 
