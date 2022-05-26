@@ -56,6 +56,17 @@
 
                 </ul>
             </nav><!-- .main-nav -->
+            {% elif '/list_exercises_academy' in request.path %}
+
+            <nav class="main-nav float-right d-none d-lg-block">
+                <ul>
+
+                    <li><a  href="{% url 'academy' %}">Retour à la page d'accueil</a></li>
+
+                </ul>
+            </nav><!-- .main-nav -->
+
+
             {% endif %}
 
         </div>
