@@ -8,12 +8,24 @@
            
 {% endblock %}  
    
-    {% block general_js %}
+
+
+
+
+{% block general_js %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script type="text/javascript">
     require(['script/accueil']); 
     </script>
-    {% endblock %} 
+{% endblock %} 
+
+
+
+
+
+
+
+
 
 {% block body %}
 
