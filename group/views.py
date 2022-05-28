@@ -876,10 +876,6 @@ def sender_mail(request,form):
             print(form.errors)
  
 
-
-
-
-
 #@user_is_group_teacher
 def result_group(request, id):
 
@@ -1170,8 +1166,6 @@ def associate_exercise_by_parcours(request,id,idt):
     parcourses = Parcours.objects.filter(teacher = teacher, level = group.level,is_trash=0)
  
     return redirect('result_group_theme', group.id, theme.id)
-
-
 
 
 

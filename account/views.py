@@ -1031,7 +1031,6 @@ def detail_student_all_views(request, id):
                 scoreswRadar += str(score)+sep
                 i+=1
             
-
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
             aptitude = request.user.school.aptitude.last()
@@ -1048,7 +1047,7 @@ def detail_student_all_views(request, id):
             datebar = "du "+str(date_start.strftime("%d/%m/%Y"))+" au "+str(today.strftime("%d/%m/%Y"))
 
         context = {'exercises': exercises, 'knowledges': knowledges,  'parcourses': parcourses, 'std': std, 'themes': themes, 'communications' : [], 'group' : group ,  'today' : today  , 'teacher' : None , 'groups' : groups ,
-                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar ,   }
+                   'student': student, 'parcours': None, 'sprev_id': None, 'snext_id': None, 'score_bool' : score_bool  ,'months':months , 'waitingsRadar' : waitingsRadar , 'scoreswRadar' : scoreswRadar  , 'score_str' : score_str  , 'datebar' : datebar ,   }
 
 
     return render(request, 'account/detail_student_all_views.html', context)
