@@ -1018,6 +1018,7 @@ def detail_student_all_views(request, id):
         ###################
         #### Suivi si academie
         i = 1
+
         if request.user.school_id == 50 or request.user.is_in_academy  :
             sep = "-"
             for waiting in group.waitings() :
@@ -1036,8 +1037,10 @@ def detail_student_all_views(request, id):
             aptitude = request.user.school.aptitude.last()
  
             student_answers = Studentanswer.objects.filter( student  = student , date__gte = date_start  )
+
             score_bool = False # Permet de ne pas afficher la grille de semaine si aucun exercice n'est fait durant cette semaine.
             if student_answers.count() : score_bool = True
+
             st0 = student_answers.filter(point__lt= aptitude.low).count()
             st1 = student_answers.filter(point__lt= aptitude.medium).count()
             st2 = student_answers.filter(point__lt= aptitude.up).count()

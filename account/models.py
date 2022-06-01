@@ -223,6 +223,7 @@ class User(AbstractUser):
                             break
                 except :
                     is_sacado = False
+
             elif self.is_student : 
                 try :
                     parent   = self.student.students_parent.first()
