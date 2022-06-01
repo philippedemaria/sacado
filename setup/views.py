@@ -1528,8 +1528,10 @@ def admin_tdb(request):
 
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
+
+    renew_propose = True
  
-    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  
+    return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  'renew_propose' : renew_propose ,
                                                     'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 'school_year' : school_year ,  'rates' : rates , 
                                                     'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
                                                     })

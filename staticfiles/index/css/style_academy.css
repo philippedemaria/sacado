@@ -112,11 +112,7 @@ a.sublisting:focus{
   margin: 20px;
 }
 
-@media (max-width: 768px) {
-  .inside_page{
-    width: 100%;
-  }
-}
+
 
 
 .helper_tip {
@@ -1857,6 +1853,23 @@ table.table-bordered.dataTable {
 .description{
   padding-top: 770px;
 }
+
+
+@media (max-width: 768px) {
+  .inside_page{
+    width: 100%;
+    margin-bottom: 200px;
+  }
+  .description{
+    padding-top: 1000px;
+  }
+  .index_academy{
+    height:1000px;
+  }
+
+}
+
+
 .exercices{
   margin-top: 80px;
 }
