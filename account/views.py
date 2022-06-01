@@ -1018,7 +1018,7 @@ def detail_student_all_views(request, id):
         ###################
         #### Suivi si academie
         i = 1
-        if request.user.school_id == 50 and request.user.is_in_academy  :
+        if request.user.school_id == 50   :
             sep = "-"
             for waiting in group.waitings() :
                 if i == len(group.waitings()) :
