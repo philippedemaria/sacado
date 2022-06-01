@@ -978,7 +978,7 @@ def detail_student_all_views(request, id):
         this_month["rg"] = i
         this_month["name"] = names[i-1]
         months.append(this_month)
-
+    score_bool = False
     if request.user.is_teacher:
         students = []
         teacher = Teacher.objects.get(user=request.user)
