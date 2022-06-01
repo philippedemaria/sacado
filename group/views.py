@@ -191,9 +191,6 @@ def student_dashboard(request,group_id):
         except :
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
-
-        print(group.id)
-
         bases = student.students_to_parcours
         parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0).order_by("ranking")
         evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,is_trash=0).order_by("ranking")
