@@ -313,11 +313,11 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="text-align:center;">
             {% if user.user_type == 2 %}         
-                Version
+                
                 {% if sacado_asso %}
-                    établissement <br/>{{ user.school.name }}
+                    Etablissement <br/>{{ user.school.name }}
                 {% else %}
-                    enseignant
+                    Enseignant
                 {% endif  %}
             {% elif user.user_type == 1 %}
                 Parent

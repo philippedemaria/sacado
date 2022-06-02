@@ -173,24 +173,20 @@
             </div>
             {% endif %}
             <div class="row">
+                {% if teacher.user.username|length < 50 %}
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <label>{{ user_form.email.label_tag }}</label>
  
-                        {% if teacher.user.username|length > 50 %}
-                            {{ user_form.email.label_tag }}
-                            {{ user_form.email  |add_class:"form-control"|attr:"readonly" }}
-                            {{ user_form.email.errors }}
-                        {% else %}
-                            {{ user_form.email.label_tag }}
+ 
                             {{ user_form.email |add_class:"form-control" }}
                             {{ user_form.email.errors }}
-                        {% endif %}
+ 
 
 
                     </div>
                 </div>
-
+                {% endif %}
                 <div class="col-sm-12 col-md-6">
                     <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
                         <label>{{ user_form.time_zone.label_tag }}{% if not teacher.time_zone %} <i class="fa fa-warning"></i> Renseigner{% endif %}</label> 
@@ -255,6 +251,8 @@
 
 
             </div>
+
+            {% if teacher.user.username|length < 50 %}
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
@@ -358,6 +356,10 @@
                 </div>
                 {% endif  %}
             </div>
+            {% endif %}
+
+
+
             <div class="row" style="margin-top:20px">
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
