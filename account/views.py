@@ -1003,6 +1003,7 @@ def detail_student_all_views(request, id):
             return redirect("index")
  
     else :
+
         group = Group.objects.filter(students=student).last()
         groups = student.students_to_group.all()
         themes = set()
@@ -1019,7 +1020,7 @@ def detail_student_all_views(request, id):
         #### Suivi si academie
         i = 1
 
-        if request.user.school_id == 50 or request.user.is_in_academy  :
+        if request.user.school_id == 50 or student.user.is_in_academy :
             sep = "-"
             for waiting in group.waitings() :
                 if i == len(group.waitings()) :
@@ -1035,8 +1036,9 @@ def detail_student_all_views(request, id):
             today   = time_zone_user(request.user) 
             date_start = today - timedelta(days=7)
             aptitude = request.user.school.aptitude.last()
- 
+
             student_answers = Studentanswer.objects.filter( student  = student , date__gte = date_start  )
+
 
             score_bool = False # Permet de ne pas afficher la grille de semaine si aucun exercice n'est fait durant cette semaine.
             if student_answers.count() : score_bool = True

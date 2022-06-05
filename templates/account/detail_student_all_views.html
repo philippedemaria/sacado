@@ -9,13 +9,13 @@
     <script>
         require(['script/ajax-group']);
     </script>
-    {% comment %}
-    {% if request.user.is_in_academy %}
+
+    {% if request.user.is_in_academy or student.user.is_in_academy %}
     <script>
         require(['script/charts-academy']);
     </script>
     {% endif %}
-    {% endcomment %}
+
 {% endblock %}
 
             
@@ -72,7 +72,7 @@
                         Durée totale  <span class="pull-right">{{ std.duration|time_done  }}</span> 
                     </td>
                 </tr> 
-                {% if not request.user.is_in_academy %} 
+                {% if not request.user.is_in_academy and request.user.school_id != 50 %} 
                 <tr>
                     <td>
                         Tâches à rendre <span class="pull-right">{{ std.nb  }}</span>
@@ -100,7 +100,9 @@
         <div id="groups{{ forloop.counter }}" class="collapse bilan_details">
         {% endif %}
 
-            {% if request.user.is_in_academy %}
+
+
+            {% if student.user.is_in_academy  %}
 
             <div class="row bilan_div">
                 <div class="col-sm-12 col-md-12">

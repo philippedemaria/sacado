@@ -10,8 +10,8 @@ $(document).ready(function () {
         // chart.js
         // *************************************************************
         var marksCanvas   = document.getElementById("marksChart");
-        var scoreswRadar      = document.getElementById("scoreswRadar").value;
-        var waitingsRadar      = document.getElementById("waitingsRadar").value;
+        var scoreswRadar  = document.getElementById("scoreswRadar").value;
+        var waitingsRadar = document.getElementById("waitingsRadar").value;
 
         var liste_score_w_n = [] ; 
         var colors = [  "rgb(245,127,241,0.6)", 
@@ -51,7 +51,6 @@ $(document).ready(function () {
 
 
         var liste_colors = [] ; 
-
         liste_score_w = scoreswRadar.split("-");
 
         liste_score_w.forEach( (item,index) =>{ 
