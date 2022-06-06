@@ -130,39 +130,48 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
             $("#id_last_name").on('change', function () {
-                    $("#div_display").show() 
-                 $("#div_last_name").show();
-                 $("#verif_last_name").html( $("#id_last_name").val() );
+                $("#div_display").show() 
+                $("#div_last_name").show();
+                $("#verif_last_name").html( $("#id_last_name").val() );
 
             });
 
 
             $("#id_first_name").on('change', function () {
-                    $("#div_display").show() 
-                 $("#div_first_name").show();
-                 $("#verif_first_name").html( $("#id_first_name").val() );
+                $("#div_display").show() 
+                $("#div_first_name").show();
+                $("#verif_first_name").html( $("#id_first_name").val() );
 
             });
  
 
 
             $("#id_level").on('change', function () {
-                    $("#div_display").show() 
-                 $("#div_level").show();
-                 $("#verif_level").html( $('option[value="'+$("#id_level").val()+'"]')   );
+                $("#div_display").show() 
+                $("#div_level").show();
+
+                levels = ["", "Cours Préparatoire", "Cours Elémentaire 1", "Cours Elémentaire 2","Cours Moyen 1","Cours Moyen 2","Sixième", "Cinquième", "Quatrième","Troisième","Seconde","Première","Terminale","Classe Prépa PCSI","Maternelle"]
+
+                $("#verif_level").html( levels [ $("#id_level").val() ]  );
 
             });
 
 
             $("#id_email").on('change', function () {
-                    $("#div_display").show() 
-                 $("#div_email").show();
-                 $("#verif_email").html( $("#id_email").val() );
+                $("#div_display").show() 
+                $("#div_email").show();
+                $("#verif_email").html( $("#id_email").val() );
 
             });
  
 
 
+            $("#id_username").on('change', function () {
+                $("#div_display").show() 
+                $("#div_email").show();
+                $("#verif_email").html( $("#id_username").val() );
+
+            });
 
 
     });

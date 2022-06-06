@@ -59,7 +59,7 @@
                         <div class="helper_tip_text_right" style="font-size:14px;">Lire les commentaires des flashcards</div>
                         {% else %}
                         <i class="bi bi-cloud-plus  text-validate"></i>
-                        <div class="helper_tip_text_right" style="font-size:14px;">Proposer des flashcards</div>
+                        <div class="helper_tip_text_right" style="font-size:14px;">Créer des flashcards</div>
                         {% endif %}
                     </span>
                 </a>
@@ -83,7 +83,7 @@
                     <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-play"></i> Tester mes connaissances <small>{{ spaced_repetitions.count }} <i class="bi bi-stack"></i> </small></a>                    
                 {% else %}
                     {% if not flashpack.is_global %}
-                        <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-bootstrap-reboot"></i> Revoir les flashcards </a> 
+                        <a href="{% url 'show_flashpack' flashpack.id %}" class="edit" onclick="return launch_flashpack()"><i class="bi bi-bootstrap-reboot"></i> Lancer les flashcards </a> 
                     {% else %}
                         <span class="automatic_insertion">Pas de flashcard aujourd'hui</span>
                         <a href="{% url 'flashpack_results' flashpack.id 0 %}" class="edit pull-right" ><i class="bi bi-trophy"></i> Résultats</a>
