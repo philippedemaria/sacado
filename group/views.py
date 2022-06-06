@@ -1242,6 +1242,7 @@ def radar(L):
     """dessine le radar d'une liste de listes [intitulé, note/100]
     valeur de retour : une "shape" de type Drawing
     """
+    #print("radar : ",L)
     from reportlab.lib.units import cm
     
     haut=18*cm   #hauteur et largeur du rectangle encadrant
@@ -1261,7 +1262,6 @@ def radar(L):
     #-------------------------------------------------
     d=Drawing(larg,haut)
     d.add(String(larg/2,haut-0.5*cm,"Graphique des attendus", textAnchor="middle"))
-    #d.add(Rect(0,0,larg,haut,fillColor=cfond))
     if n<=2 :  
         d.add(String(larg/2,haut/2,"pas assez de notes pour le graphique", textAnchor="middle"))
         return d
@@ -1290,8 +1290,8 @@ def radar(L):
                        strokeColor=cgrille ))
 
         #--------------------- la ligne des données  
-        r1=L[i-1][1]
-        r2=L[i % n][1]
+        r1=L[i-1][1]*rayon/deno
+        r2=L[i % n][1]*rayon/deno
         d.add(Line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle),\
                    strokeColor=cligne, strokeWidth=2))
 
@@ -1802,12 +1802,11 @@ def print_monthly_statistiques(request):
             else :
                 exo_dict[studentanswer.exercise.id] = [studentanswer.point]
                 exo_intitule_dict[studentanswer.exercise.id] =  studentanswer.exercise.supportfile.title
-
             w_id = studentanswer.exercise.knowledge.waiting.id    
             if  w_id in waitings_exo_dict :
                 waitings_exo_dict[w_id].append(studentanswer.point)
             else :
-                waitings_exo_dict[w_id] = [w_id]
+                waitings_exo_dict[w_id] = [studentanswer.point]
                 waitings_intitule_dict[w_id] = studentanswer.exercise.knowledge.waiting.name   
 
 
