@@ -292,7 +292,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
 
-    print(gars) # A supprimer.  
+    print("dico_gars : " , gars) # A supprimer.  
     dico_received = dict()
     for gar in gars :
         dico_received[gar['key']] = gar['value']
@@ -329,7 +329,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     groups     = dico_received["GRO"]
     civilite   = dico_received["CIV"]
-    print(dico_received) # A supprimer.
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
