@@ -5048,8 +5048,17 @@ def store_the_score_relation_ajax(request):
                     sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec )
                     pass
 
+                try :
+                    rec_p = []
+                    for parent in student.students_parent.filter(user__school_id = 50): 
+                        rec_p.append(parent.user.email)
+                        sending_mail("SacAdo Académie Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec_p )
+                except :
+                    pass
+                    
             except:
                 pass
+
             try :
                 nb_done = 0
                 for exercise in relation.parcours.exercises.all() :
