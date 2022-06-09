@@ -115,16 +115,17 @@ define(['jquery', 'bootstrap'], function ($) {
                          $("#div_username").show();
                          $("#verif_username").html( $("#id_username").val() );
 
-                         $("#id_save").show();
-
-
+                        
                     } 
+
                 }); 
 
             });
 
  
-
+            $("#id_password1").on('change', function () {
+                    $("#id_save").show();
+            });
      
 
 
