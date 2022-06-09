@@ -1043,9 +1043,9 @@ def add_adhesion(request) :
 
     if request.method == "POST" :
         if form.is_valid():
-            form.save()
+            student = form.save()
             parent = request.user.parent
-            parent.students.add(form)
+            parent.students.add(student)
  
     context = {  "renewal" : True, "form" : form, "formule" : formule  ,   'levels' : levels , }
     return render(request, 'setup/add_adhesion.html', context)   
