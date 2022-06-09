@@ -215,7 +215,7 @@ class User(AbstractUser):
         if self.school_id == 50 :
             if self.is_parent  :
                 try :
-                    facture = self.factures.order_by("stop").last()
+                    facture = self.factures.order_by("chrono").last()
                     adhesions = facture.adhesions.all()
                     for adhesion in adhesions :
                         if today > adhesion.start and  today < adhesion.stop :
@@ -223,7 +223,8 @@ class User(AbstractUser):
                             break
                 except :
                     is_sacado = False
-
+                if self.closure > today :
+                    is_sacado = True
             elif self.is_student : 
                 try :
                     adhesion = self.student.adhesions.order_by("stop").last()
@@ -231,7 +232,7 @@ class User(AbstractUser):
                         is_sacado = True
                 except:    
                     is_sacado = False
-
+        
         return is_sacado 
 
 
