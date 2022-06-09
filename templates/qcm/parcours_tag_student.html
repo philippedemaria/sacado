@@ -27,7 +27,9 @@
             <div class="row extend_student "> 
                 <div class="col-xs-12">  
                     <a href="{% url 'show_parcours_student' parcours.id   %}" class="edit"><i class="bi bi-explicit" ></i> {{  data_min.nb_exercise }} exercices</a> 
-                    <span class="pull-right" style="color:#39fa5a;" >{{ data_min.pc }}%</span>
+                    <span class="pull-right avncmnt" style="color:#39fa5a;cursor: help;" >{{ data_min.pc }}%  
+                        <span class="text_avncmnt">Avancement</span> 
+                    </span>
 
                     <div style="width:{{ data_min.pc }}%; height:5px; background-color: #39fa5a;font-size:6px;text-align: right;color:#FFF;position: absolute;top:170px;z-index:99;border-radius :0% 10% 10% 0%;"></div>
                     {% if data_min.pc > 0 %}
