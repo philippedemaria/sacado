@@ -290,6 +290,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
+    print("request.headers : " , request.headers) # A supprimer.
+    
     print("data_xml : " , data_xml) # A supprimer. 
     gars = json.loads(data_xml)
     print(" ========================================================== ")
@@ -415,7 +417,7 @@ def school_adhesion(request):
     school_year = rates.first().year #tarifs pour l'année scolaire
     form = SchoolForm(request.POST or None, request.FILES  or None)
     token = request.POST.get("token", None)
-    today = datetime.now()
+    today = time_zone_user(request.user)
     u_form = UserForm(request.POST or None)
 
 
@@ -910,40 +912,43 @@ def creation_facture(facture):
 
 
 def save_renewal_adhesion(request) :
-	"""page de paiement paypal
-	request.POST contient une liste student_ids, une liste level, et des
-	listes "engagement"+student_ids"""
+    """page de paiement paypal
+    request.POST contient une liste student_ids, une liste level, et des
+    listes "engagement"+student_ids"""
     #----- on met les informations concernant le paiment dans session
-	dicoSession={'student_ids': request.POST.getlist('student_ids'),
-     'level' : request.POST.getlist('level')}
-	listeEngagements=[]
-	for si in dicoSession['student_ids']:
-		if request.POST.getlist('engagement'+si) == [] :
-			ns=dicoSession['student_ids'].index(si)
-			dicoSession['student_ids'].pop(ns)
-			dicoSession['level'].pop(ns)
-		else :	
-			listeEngagements.append(request.POST.getlist('engagement'+si)[0])
-	dicoSession['engagements']=listeEngagements
-	request.session["detail_adhesions"]=dicoSession
-	print("save_renewal_adhesion, post=",request.session['detail_adhesions'])
+
+    dicoSession={'student_ids': request.POST.getlist('student_ids'), 'level' : request.POST.getlist('level')}
+    listeEngagements=[]
+
+    for si in dicoSession['student_ids']:
+        if request.POST.getlist('engagement'+si) == [] :
+            ns=dicoSession['student_ids'].index(si)
+            dicoSession['student_ids'].pop(ns)
+            dicoSession['level'].pop(ns)
+        else :	
+            listeEngagements.append(request.POST.getlist('engagement'+si)[0])
+
+    dicoSession['engagements']=listeEngagements
+    request.session["detail_adhesions"]=dicoSession
     #------------- extraction des infos pour les passer au template
-	somme = 0
-	students = []
-	for i,sid in enumerate(dicoSession['student_ids']) :
-		stud = {}
-		tab_engagement = dicoSession['engagements'][i].split("-")
+    somme = 0
+    students = []
 
-		amount = tab_engagement[1].replace(",",".")
-		somme +=  float(amount)
-		student = Student.objects.get(pk = sid)
-		stud['duration'] = tab_engagement[0]
-		stud['name'] = student.user.first_name +" " +student.user.last_name 
-		students.append(stud)
+    for i,sid in enumerate(dicoSession['student_ids']) :
 
-	context = { 'somme' : somme , 'students' : students }
-	print(context)
-	return render(request, 'setup/save_renewal_adhesion.html', context)  
+    	stud = {}
+    	tab_engagement = dicoSession['engagements'][i].split("-")
+
+    	amount = tab_engagement[1].replace(",",".")
+    	somme +=  float(amount)
+    	student = Student.objects.get(pk = sid)
+    	stud['duration'] = tab_engagement[0]
+    	stud['name'] = student.user.first_name +" " +student.user.last_name 
+    	students.append(stud)
+
+    context = { 'somme' : somme , 'students' : students }
+
+    return render(request, 'setup/save_renewal_adhesion.html', context)  
 
 
 @csrf_exempt
@@ -1040,12 +1045,22 @@ def add_adhesion(request) :
     form =  UserForm(request.POST or None)
     formule = Formule.objects.get(pk = 1)
     levels = Level.objects.order_by("ranking")
+    today = time_zone_user(request.user)
 
     if request.method == "POST" :
         if form.is_valid():
-            student = form.save()
+            form_user = form.save(commit=False)
+            form_user.closure = today + timedelta(days=7)
+            form_user.school_id = 50
+            form_user.cgu = 1
+            form_user.country_id = 4
+            form_user.user_type = 0
+            form_user.save()
+            level_id = request.POST.get("level")
+            student = Student.objects.create(user=form_user, level_id = level_id)
             parent = request.user.parent
             parent.students.add(student)
+            return redirect("index")
  
     context = {  "renewal" : True, "form" : form, "formule" : formule  ,   'levels' : levels , }
     return render(request, 'setup/add_adhesion.html', context)   
