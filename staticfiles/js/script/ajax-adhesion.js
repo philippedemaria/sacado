@@ -42,7 +42,6 @@ define(['jquery', 'bootstrap'], function ($) {
             levels = ["Cours Préparatoire", "Cours Elémentaire 1", "Cours Elémentaire 2","Cours Moyen 1","Cours Moyen 2","Sixième", "Cinquième", "Quatrième","Troisième","Seconde","Première","Terminale","Classe Prépa PCSI","Maternelle"]
 
             let engagement = $("input[name='engagement"+data_user_id+"']:checked").val() ;
-
             construct_user("Enfant",data_name, levels[level-1] ,data_id , engagement ) ; 
          
         });    
@@ -57,7 +56,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
                 nb =  parseInt(nb_child);
-                var div = "<div class='renewal_user selector' id="+id+"><div>"+ name +"<br/> "+ level + "<br/> "+ tab_eng[0] +" mois<br/> "+tab_eng[1]+"€ </div></div>" ;
+                var div = "<div class='renewal_user selector' id="+id+"><div>"+ name +"<br/> "+ level + "<br/> "+ tab_eng[1] +" mois<br/> "+tab_eng[2]+"€ </div></div>" ;
 
 
                 if ( document.getElementById(id) !== null ) {

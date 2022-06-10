@@ -290,12 +290,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     # création du dictionnaire qui avec les données du GAR  
     data_xml = request.headers["X-Gar"]
-    print("request.headers : " , request.headers) # A supprimer.
-    
-    print("data_xml : " , data_xml) # A supprimer. 
     gars = json.loads(data_xml)
-    print(" ========================================================== ")
-    print("dico_gars : " , gars) # A supprimer.  
     dico_received = dict()
     for gar in gars :
         dico_received[gar['key']] = gar['value']
@@ -911,40 +906,48 @@ def creation_facture(facture):
   
 
 
+def all_from_parent_user(user) :
+    students = user.parent.students.all()
+    u_parents = []
+    for s in students :
+        for  p in s.students_parent.all() : 
+            if p not in u_parents :
+                u_parents.append(p.user)
+    return u_parents
+
+
+
+
+
 def save_renewal_adhesion(request) :
     """page de paiement paypal
     request.POST contient une liste student_ids, une liste level, et des
     listes "engagement"+student_ids"""
     #----- on met les informations concernant le paiment dans session
-
-    dicoSession={'student_ids': request.POST.getlist('student_ids'), 'level' : request.POST.getlist('level')}
-    listeEngagements=[]
-
-    for si in dicoSession['student_ids']:
-        if request.POST.getlist('engagement'+si) == [] :
-            ns=dicoSession['student_ids'].index(si)
-            dicoSession['student_ids'].pop(ns)
-            dicoSession['level'].pop(ns)
-        else :	
-            listeEngagements.append(request.POST.getlist('engagement'+si)[0])
-
-    dicoSession['engagements']=listeEngagements
-    request.session["detail_adhesions"]=dicoSession
     #------------- extraction des infos pour les passer au template
     somme = 0
     students = []
+    print(  request.POST.getlist('student_ids')  )
+    for student_id in request.POST.getlist('student_ids') :
+ 
+        try :
+            engagement_si_tab = request.POST.get('engagement'+student_id)
+            engagement_si = engagement_si_tab.split("-")
+            student_id = engagement_si[0]
+            nb_month = engagement_si[1]
+            formule = engagement_si[2] 
+            level_si = request.POST.get('level'+student_id)
 
-    for i,sid in enumerate(dicoSession['student_ids']) :
+            amount = engagement_si[2].replace(",",".")
+            somme +=  float(amount)
+            student = Student.objects.get(pk = student_id)
+            stud['duration'] = tab_engagement[1]
+            stud['name'] = student.user.first_name +" " +student.user.last_name 
+            students.append(stud)
+            print(students)
 
-    	stud = {}
-    	tab_engagement = dicoSession['engagements'][i].split("-")
-
-    	amount = tab_engagement[1].replace(",",".")
-    	somme +=  float(amount)
-    	student = Student.objects.get(pk = sid)
-    	stud['duration'] = tab_engagement[0]
-    	stud['name'] = student.user.first_name +" " +student.user.last_name 
-    	students.append(stud)
+        except :	
+            pass
 
     context = { 'somme' : somme , 'students' : students }
 
@@ -1049,8 +1052,9 @@ def add_adhesion(request) :
 
     if request.method == "POST" :
         if form.is_valid():
+            end = today + timedelta(days=7)
             form_user = form.save(commit=False)
-            form_user.closure = today + timedelta(days=7)
+            form_user.closure = end
             form_user.school_id = 50
             form_user.cgu = 1
             form_user.country_id = 4
@@ -1058,8 +1062,16 @@ def add_adhesion(request) :
             form_user.save()
             level_id = request.POST.get("level")
             student = Student.objects.create(user=form_user, level_id = level_id)
-            parent = request.user.parent
-            parent.students.add(student)
+            u_parents = all_from_parent_user(request.user)
+            for u_p in u_parents : 
+                u_p.parent.students.add(student)
+
+            chrono = create_chrono(Facture,"F")
+
+            adhesion = Adhesion.objects.create(start = today, stop = end, student = student , level_id = level_id  , amount = 0  , formue = None ) 
+            facture = Facture.objects.create(chrono = chrono, file = "" , user = request.user , date = today     ) 
+            facture.adhesions.add(adhesion)
+
             return redirect("index")
  
     context = {  "renewal" : True, "form" : form, "formule" : formule  ,   'levels' : levels , }
@@ -1145,7 +1157,7 @@ def save_adhesion(request) :
     formule          = None
     formule_adhesion = " semaine d'essai "
     formule_name     = " Essai "
-    today = datetime.now()
+    today = time_zone_user(request.user)
     date_end_dateformat = today + timedelta(days=7)
     date_end = str(date_end_dateformat)
     nb_month = 0
@@ -1191,7 +1203,7 @@ def save_adhesion(request) :
         parent,create = Parent.objects.update_or_create(user = user, defaults = { "task_post" : 1 })
 
         if i == 0 :
-            facture = Facture.objects.create(chrono = chrono , user = user, date = None ,    file = None )
+            facture = Facture.objects.create(chrono = chrono , user = user, date = today ,    file = None )
             new_facture = facture
         else :
             facture = new_facture
@@ -1273,7 +1285,13 @@ def save_adhesion(request) :
 
 def adhesions_academy(request):
     """ liste des adhésions """
-    factures =  request.user.factures.all()
+    user = request.user
+
+    u_parents = all_from_parent_user(user)
+
+    factures =  Facture.objects.filter(user__in=u_parents) 
+
+
     today = time_zone_user(request.user)
     last_week = today + timedelta(days = 7)
     context = { "factures" : factures,  "last_week" : last_week    }

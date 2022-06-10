@@ -65,10 +65,8 @@
                             {% for formule in formules %} 
                             <div>
                                 <label>
-                                    <input  type="radio"  name="engagement"  id="engagement{{ s.user.id }}" 
-                                            data_duration="{{ formule.nb_month }}" 
-                                            data_user="{{ s.user.id }}"
-                                            value="{{ formule.nb_month }}-{{ formule.total }}" /> 
+                                    <input  type="radio"  name="engagement{{ s.user.id }}"  
+                                            value="{{ s.user.id }}-{{ formule.nb_month }}-{{ formule.total }}" /> 
                                             {% cycle  12 3 1   %} mois : {{  formule.price }}  € x {{ formule.nb_month }} = {{  formule.total }} €
                                 </label>
                             </div>
