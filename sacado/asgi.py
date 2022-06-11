@@ -1,23 +1,21 @@
-"""
-WSGI config for sacado project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
-"""
-
 import os
 
-from django.core.wsgi import get_wsgi_application
+import django
+django.setup()
 
- 
+from django.core.asgi import get_asgi_application
 
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sacado.settings')
+from .routing import ws_urlpatterns
 
-application = get_wsgi_application()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sacado.settings")
 
+application = ProtocolTypeRouter({
+    # Django's ASGI application to handle traditional HTTP requests
+    "http": get_asgi_application() ,
+    # WebSocket handler
+    "websocket": AuthMiddlewareStack(  URLRouter(ws_urlpatterns)  ) 
+})
 
- 
- 

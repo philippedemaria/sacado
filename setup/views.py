@@ -927,7 +927,6 @@ def save_renewal_adhesion(request) :
     #------------- extraction des infos pour les passer au template
     somme = 0
     students = []
-    #print(  request.POST.getlist('student_ids')  )
     for student_id in request.POST.getlist('student_ids') :
  
         try :
@@ -952,7 +951,6 @@ def save_renewal_adhesion(request) :
 @csrf_exempt
 def accept_renewal_adhesion(request) :
    
-	print("reception d'un paiement accepté par paypal")
 	body=json.loads(request.body)
 	#---------- Vérification du paiement auprès de paypal
 	orderID = body['orderID'] 
@@ -965,7 +963,6 @@ def accept_renewal_adhesion(request) :
 	if ok :
 		parent=request.user
 		adh=request.session['detail_adhesions']
-		print("adhésion : ", adh, "demandée par le parent :",parent)
 		
 		code = str(uuid.uuid4())[:8]
 		chrono = create_chrono(Facture,"F")
@@ -976,7 +973,6 @@ def accept_renewal_adhesion(request) :
 		new_fact.orderID=orderID
 		new_fact.date=datetime.now()
 		new_fact.save() #il faut sauver avant de pouvoir ajouter les adhesions 
-		print("facture prééditée, sans les adhesions")
 		#-------- modification de la closure des students
 		for i,student_id in enumerate(adh['student_ids']) :
 			student_user = User.objects.get(pk = student_id)
@@ -999,21 +995,15 @@ def accept_renewal_adhesion(request) :
 			#new_adh.formule_id = eng[0]
 			new_adh.start      = debut
 			new_adh.stop       = new_closure
-			print(Level.objects.filter(id=int(adh['level'][i])))
 			new_adh.level      = Level.objects.filter(id=adh['level'][i])[0]
 			new_adh.student    = Student.objects.get(user_id=student_id)
-			print("new_adh :",  new_adh)
 			new_adh.save()
-			print("adhesion enregistrée")
 			new_fact.adhesions.add(new_adh)
 			#for pid in paypal_payment.getlist("user") :
 			#Adhesion.objects.filter(user_id = pid).update(date_end=new_closure)
 			#Adhesion.objects.filter(user_id = pid).update(file = creation_facture(user,data_posted,code))
 		new_fact.save()
 		new_fact.file=creation_facture(new_fact)
-		print("nouvelle facture enregistrée")
-			
-
 
 		#     user = User.objects.get(pk = pid)
 
@@ -1030,8 +1020,6 @@ def accept_renewal_adhesion(request) :
 		# sacado_msg = "Renouvellement d'adhésion après période d'essai : user_id"+ user.id +" : "+ user.first_name +" "+ user.last_name 
 		# send_mail("Renouvellement d'adhésion après période d'essai", sacado_msg, settings.DEFAULT_FROM_EMAIL, sacado_rcv)
 		data={"ok":True} 
-		print('on renvoie ok')
-		 
 		#return JsonResponse(data,safe=True)
 		return HttpResponse("ok")
 
