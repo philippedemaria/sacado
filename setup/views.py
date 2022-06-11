@@ -927,27 +927,23 @@ def save_renewal_adhesion(request) :
     #------------- extraction des infos pour les passer au template
     somme = 0
     students = []
-    print(  request.POST.getlist('student_ids')  )
+    #print(  request.POST.getlist('student_ids')  )
     for student_id in request.POST.getlist('student_ids') :
  
         try :
             engagement_si_tab = request.POST.get('engagement'+student_id)
-            print(engagement_si_tab)
             student_id,duration,amount = engagement_si_tab.split("-")
             amount=amount.replace(",",".")
-            level_si = request.POST.get('level'+student_id)
             somme +=  float(amount)
+            level_si = request.POST.get('level'+student_id)
             student = Student.objects.get(pk = student_id)
             students.append({
                 'duration' : duration, 
                 'name' : student.user.first_name +" " +student.user.last_name}
                 ) 
-            
- 
-
         except :	
             pass
-
+    somme = "{:.2f}".format(somme).replace(".",",")
     context = { 'somme' : somme , 'students' : students }
 
     return render(request, 'setup/save_renewal_adhesion.html', context)  
