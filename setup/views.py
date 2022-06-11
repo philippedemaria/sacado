@@ -932,19 +932,18 @@ def save_renewal_adhesion(request) :
  
         try :
             engagement_si_tab = request.POST.get('engagement'+student_id)
-            engagement_si = engagement_si_tab.split("-")
-            student_id = engagement_si[0]
-            nb_month = engagement_si[1]
-            formule = engagement_si[2] 
+            print(engagement_si_tab)
+            student_id,duration,amount = engagement_si_tab.split("-")
+            amount=amount.replace(",",".")
             level_si = request.POST.get('level'+student_id)
-
-            amount = engagement_si[2].replace(",",".")
             somme +=  float(amount)
             student = Student.objects.get(pk = student_id)
-            stud['duration'] = tab_engagement[1]
-            stud['name'] = student.user.first_name +" " +student.user.last_name 
-            students.append(stud)
-            print(students)
+            students.append({
+                'duration' : duration, 
+                'name' : student.user.first_name +" " +student.user.last_name}
+                ) 
+            
+ 
 
         except :	
             pass

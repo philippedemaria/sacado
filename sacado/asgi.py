@@ -1,47 +1,23 @@
 """
-ASGI entrypoint. Configures Django and then runs the application
-defined in the ASGI_APPLICATION setting.
+WSGI config for sacado project.
+
+It exposes the WSGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
 """
-"""
-import os
-import django
-from channels.routing import get_default_application
-#from django.core.asgi import get_asgi_application
-#from channels.auth import AuthMiddlewareStack
-#from .routing import ws_urlpatterns
 
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sacado.settings")
-
-django.setup()
-application= get_default_application()
-#application = ProtocolTypeRouter({
-# Django's ASGI application to handle traditional HTTP requests
-#"http": get_asgi_application() ,
-# WebSocket handler
-#    "websocket": AuthMiddlewareStack(  URLRouter(ws_urlpatterns)  )
-#})
-
-
-"""
 import os
 
-import django
-django.setup()
+from django.core.wsgi import get_wsgi_application
 
-from django.core.asgi import get_asgi_application
+ 
 
-from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
 
-from .routing import ws_urlpatterns
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sacado.settings')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sacado.settings")
+application = get_wsgi_application()
 
-application = ProtocolTypeRouter({
-    # Django's ASGI application to handle traditional HTTP requests
-    "http": get_asgi_application() ,
-    # WebSocket handler
-    "websocket": AuthMiddlewareStack(  URLRouter(ws_urlpatterns)  ) 
-})
 
+ 
+ 

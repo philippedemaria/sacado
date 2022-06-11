@@ -270,3 +270,108 @@ def synthese_parcours(request,user_id) :
 
 
  
+ 
+ 
+ 
+ ###################################################################
+ ##       creation des graphiques et pdf
+ ####################################################################
+ 
+ 
+def radar(L):
+
+    """dessine le radar d'une liste de listes [intitulé, note/100]
+    valeur de retour : une "shape" de type Drawing
+    """
+    from reportlab.lib.units import cm
+    
+    haut=18*cm   #hauteur et largeur du rectangle encadrant
+    larg=18*cm
+    rayon=6*cm   #rayon du radar
+    n=len(L)
+    dangle=6.2832/n  #angle d'un secteur angulaire
+    angle=1.5707   #angle de départ : pi/2 (verticale)
+    deno=100  #note sur ?
+    tick=10   #graduation tous les ?
+    #cfond=Color(1,1,1) #couleur du fond
+    cgrille=Color(0.8,0.8,0.8)  #couleur de la grille
+    cligne=Color(1,0,0)         #couleur des la ligne des données
+    w=TextWrapper(width=20)     #les intitules auront au plus 20 caractères
+                                #de large, on les decoupe sur plusieurs lignes
+
+    #-------------------------------------------------
+    d=Drawing(larg,haut)
+    d.setFont("Times-Roman", 24)
+    d.add(String(larg/2,haut-0.5*cm,"Graphique des attendus", textAnchor="middle"))
+    #d.add(Rect(0,0,larg,haut,fillColor=cfond))
+    if n<=2 :  
+        d.add(String(larg/2,haut/2,"pas assez de notes pour le graphique", textAnchor="middle"))
+        return d
+    
+    for i in range(n) :
+        a=angle+i*dangle
+        # ----------- placement des intitulés
+        intitule=Label()
+        intitule.setOrigin(larg/2+(rayon+0.2*cm)*cos(a),haut/2+(rayon+0.2*cm)*sin(a))
+        if 0.78 <(a % 6.28) <2.35 : 
+            intitule.boxAnchor="s"
+        elif 2.35 <= (a % 6.28) <3.92 : 
+            intitule.boxAnchor="e"
+        elif  3.92<=a % 6.28<5.5 :
+            intitule.boxAnchor="n"
+        else :
+            intitule.boxAnchor="w"
+        intitule.setText(w.fill(L[i][0]))
+        d.add(intitule)
+        #-------------------- la grille du radar
+        d.add(Line(larg/2,haut/2,larg/2+rayon*cos(a),haut/2+rayon*sin(a), strokeColor=cgrille))
+        for j in range(1,int(deno/tick)+1):
+            r=rayon*j*tick/deno
+            d.add(Line(larg/2+r*cos(angle+i*dangle),haut/2+r*sin(angle+i*dangle),\
+                       larg/2+r*cos(angle+(i+1)*dangle),haut/2+r*sin(angle+(i+1)*dangle),\
+                       strokeColor=cgrille ))
+
+        #--------------------- la ligne des données  
+        r1=L[i-1][1]
+        r2=L[i % n][1]
+        d.add(Line(larg/2+r1*cos(a),haut/2+r1*sin(a),larg/2+r2*cos(a+dangle),haut/2+r2*sin(a+dangle),\
+                   strokeColor=cligne, strokeWidth=2))
+
+    #------------------------ graduations
+    
+    for i in range(1,int(deno/tick)+1):
+        r=rayon*(i-0.3)*tick/deno
+        d.add(String(larg/2+r*cos(angle),haut/2+r*sin(angle),str(i*tick)))     
+    return d
+
+
+def diagBaton(data) :
+    d = Drawing(400, 200)
+    
+    # code to produce the above chart
+    bc = VerticalBarChart()
+    couleurs=[[Color(0.95,0.95,0.95),Color(0.8,0.3,0.3) ], #non acquis
+    [Color(0.95,0.95,0.95),Color(0.7,0.2,0.6) ],          #en cours
+    [Color(0.95,0.95,0.95),Color(0.5,0.7,0.5) ],
+    [Color(0.95,0.95,0.95),Color(0.2,0.2,0.8) ]]
+    
+    bc.x = 50
+    bc.y = 10
+    bc.height = 105
+    bc.width = 300
+    bc.data = data
+    for i in range(len(data[0])):
+        for j in range(len(data)):
+            bc.bars[(j,i)].fillColor=couleurs[i%4][j%2]
+    bc.strokeColor = black
+    bc.valueAxis.valueMin = 0
+    bc.valueAxis.valueMax = 100
+    bc.valueAxis.valueStep = 10
+    bc.categoryAxis.labels.boxAnchor = 'ne'
+    bc.categoryAxis.labels.dx = 8
+    bc.categoryAxis.labels.dy = -2
+    bc.categoryAxis.labels.angle = 30
+    bc.categoryAxis.categoryNames = ['Non acquis', 'En cours ', 'Acquis', 'Expert']
+    d.add(bc)
+    return d
+  
