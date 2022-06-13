@@ -917,17 +917,6 @@ def all_from_parent_user(user) :
 
 
 
-def attribute_all_documents_to_student_by_level(level,student) :
-    try :
-        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
-        group.students.add(student)
-        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
-        test = attribute_all_documents_to_student(parcourses, student)
-        success = True
-    except :
-        success = False
-    return success
-
 
 
 def save_renewal_adhesion(request) :
@@ -946,18 +935,18 @@ def save_renewal_adhesion(request) :
             amount=amount.replace(",",".")
             somme +=  float(amount)
             level_si = request.POST.get('level'+student_id)
-            student = Student.objects.get(pk = student_id)
+            student  = Student.objects.get(pk = student_id)
+            level    = Level.objects.get(pk = level_si)
             students.append({
                 'duration' : duration, 
-                'name' : student.user.first_name +" " +student.user.last_name}
+                'name' : student.user.first_name +" " +student.user.last_name ,
+                'level_name' : level.name } 
                 )
 
-            level   = Level.objects.get(pk = level_si)
-            success = attribute_all_documents_to_student_by_level(level,student)
+
 
         except :	
-            print("erreur de renouvellement d'inscription")
-
+            pass
     somme = "{:.2f}".format(somme).replace(".",",")
     context = { 'somme' : somme , 'students' : students }
 
@@ -1135,6 +1124,17 @@ def commit_adhesion(request) :
     return render(request, 'setup/commit_adhesion.html', context)   
 
 
+
+def attribute_all_documents_to_student_by_level(level,student) :
+    try :
+        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
+        group.students.add(student)
+        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
+        test = attribute_all_documents_to_student(parcourses, student)
+        success = True
+    except :
+        success = False
+    return success
 
 
 
