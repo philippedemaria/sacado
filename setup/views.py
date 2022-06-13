@@ -917,6 +917,17 @@ def all_from_parent_user(user) :
 
 
 
+def attribute_all_documents_to_student_by_level(level,student) :
+    try :
+        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
+        group.students.add(student)
+        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
+        test = attribute_all_documents_to_student(parcourses, student)
+        success = True
+    except :
+        success = False
+    return success
+
 
 
 def save_renewal_adhesion(request) :
@@ -939,9 +950,14 @@ def save_renewal_adhesion(request) :
             students.append({
                 'duration' : duration, 
                 'name' : student.user.first_name +" " +student.user.last_name}
-                ) 
+                )
+
+            level   = Level.objects.get(pk = level_si)
+            success = attribute_all_documents_to_student_by_level(level,student)
+
         except :	
-            pass
+            print("erreur de renouvellement d'inscription")
+
     somme = "{:.2f}".format(somme).replace(".",",")
     context = { 'somme' : somme , 'students' : students }
 
@@ -1124,8 +1140,6 @@ def commit_adhesion(request) :
 
 
 
-
-
 def save_adhesion(request) :
 
     parents_of_adhesion = request.session.get("parents_of_adhesion")
@@ -1158,11 +1172,7 @@ def save_adhesion(request) :
         user, created = User.objects.update_or_create(username = username, password = password , user_type = 0 , defaults = { "last_name" : last_name , "first_name" : first_name  , "email" : email ,  "school_id" : 50 , "closure" : date_end_dateformat })
         student,created_s = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
 
-        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
-        group.students.add(student)
-
-        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
-        test = attribute_all_documents_to_student(parcourses, student)
+        success = attribute_all_documents_to_student_by_level(level,student)
 
 
         folders = Folder.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
