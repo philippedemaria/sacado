@@ -1029,6 +1029,17 @@ def accept_renewal_adhesion(request) :
 		return HttpResponse("ok")
 
 
+def attribute_all_documents_to_student_by_level(level,student) :
+    try :
+        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
+        group.students.add(student)
+        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
+        test = attribute_all_documents_to_student(parcourses, student)
+        success = True
+    except :
+        success = False
+    return success
+
 
 
 def add_adhesion(request) :
@@ -1050,11 +1061,17 @@ def add_adhesion(request) :
             form_user.save()
             level_id = request.POST.get("level")
             student = Student.objects.create(user=form_user, level_id = level_id)
+            level   = Level.objects.get(pk = level_id)
             u_parents = all_from_parent_user(request.user)
             for u_p in u_parents : 
                 u_p.parent.students.add(student)
 
             chrono = create_chrono(Facture,"F")
+
+            success = attribute_all_documents_to_student_by_level(level,student)
+            print(success)
+
+
 
             adhesion = Adhesion.objects.create(start = today, stop = end, student = student , level_id = level_id  , amount = 0  , formule_id = None ) 
             facture = Facture.objects.create(chrono = chrono, file = "" , user = request.user , date = today     ) 
@@ -1125,17 +1142,6 @@ def commit_adhesion(request) :
 
 
 
-def attribute_all_documents_to_student_by_level(level,student) :
-    try :
-        group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
-        group.students.add(student)
-        parcourses = Parcours.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
-        test = attribute_all_documents_to_student(parcourses, student)
-        success = True
-    except :
-        success = False
-    return success
-
 
 
 
@@ -1173,7 +1179,6 @@ def save_adhesion(request) :
         student,created_s = Student.objects.update_or_create(user = user, defaults = { "task_post" : 1 , "level" : level })
 
         success = attribute_all_documents_to_student_by_level(level,student)
-
 
         folders = Folder.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
         for f in folders :
