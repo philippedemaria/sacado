@@ -1069,10 +1069,7 @@ def add_adhesion(request) :
             chrono = create_chrono(Facture,"F")
 
             success = attribute_all_documents_to_student_by_level(level,student)
-            print(success)
-
-
-
+ 
             adhesion = Adhesion.objects.create(start = today, stop = end, student = student , level_id = level_id  , amount = 0  , formule_id = None ) 
             facture = Facture.objects.create(chrono = chrono, file = "" , user = request.user , date = today     ) 
             facture.adhesions.add(adhesion)
