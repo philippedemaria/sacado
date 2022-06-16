@@ -1051,7 +1051,8 @@ def add_adhesion(request) :
 
     if request.method == "POST" :
         if form.is_valid():
-            end = today + timedelta(days=7)
+            #end = today + timedelta(days=7)
+            end = datetime(2022,8,15) 
             form_user = form.save(commit=False)
             form_user.closure = end
             form_user.school_id = 50
@@ -1158,7 +1159,8 @@ def save_adhesion(request) :
     formule_adhesion = " semaine d'essai "
     formule_name     = " Essai "
     today = time_zone_user(request.user)
-    date_end_dateformat = today + timedelta(days=7)
+    #date_end_dateformat = today + timedelta(days=7)
+    date_end_dateformat = datetime(2022,8,15)  
     date_end = str(date_end_dateformat)
     nb_month = 0
     menu_id = 1
