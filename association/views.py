@@ -300,6 +300,7 @@ def adhesions(request):
 
     today = datetime.now()
     this_month = today.month
+    this_year = today.year
  
 
     activeyear, year = get_active_year()
