@@ -1180,7 +1180,7 @@ def save_adhesion(request) :
 
         success = attribute_all_documents_to_student_by_level(level,student)
 
-        folders = Folder.objects.filter(level = level, teacher = group.teacher , is_trash=0) # 2480 est SacAdoProf
+        folders = Folder.objects.filter(level = level, teacher_id = 2480 , is_trash=0) # 2480 est SacAdoProf
         for f in folders :
             f.students.add(student)
 
