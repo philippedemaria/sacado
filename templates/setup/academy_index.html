@@ -58,9 +58,13 @@ Intro Section -
 
 
     <div class="row">
-        <div class="col-xs-12 col-md-12 texte_accueil" align="center" >
+        <div class="col-xs-6 col-md-6 texte_accueil" align="center" >
             <a href="#exercise" class="btn-inscription bg_orange"> Testez les exercices </a>
         </div>
+        <div class="col-xs-6 col-md-6 texte_accueil" align="center" >
+            <a href="#" data-toggle='modal' data-target='#tarifs' class="btn-inscription bg_orange ">Tarifs</a>
+        </div>
+        
     </div>
 
 </section>
@@ -453,6 +457,7 @@ Intro Section -
     </div> 
 </section>
 
+
 <footer id="footer" class="section-bg wow fadeIn">
     <div class="footer-top" style="padding-top:40px">
       <div class="container">
@@ -543,4 +548,26 @@ Intro Section -
       </div>
     </div>
 </footer>
+
+
+
+
+
+<div class="modal fade" id="tarifs" tabindex="-1" role="dialog" aria-labelledby="tarifs">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Les tarifs</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+                {% for formule in formules %} 
+                    <p>{% cycle  12 3 1   %} mois : {{  formule.price }}  € x {{ formule.nb_month }} = {{  formule.total }} €</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div> 
+</div>
 {% endblock %} 
