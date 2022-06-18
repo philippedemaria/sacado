@@ -60,7 +60,8 @@ Intro Section -
     <div class="row">
         <div class="col-xs-6 col-md-6 texte_accueil" align="center" >
             <a href="#exercise" class="btn-inscription bg_orange"> Testez les exercices </a>
-
+        </div>
+        <div class="col-xs-6 col-md-6 texte_accueil" align="center" >
             <a href="#" data-toggle='modal' data-target='#tarifs' class="btn-inscription bg_orange ">Tarifs</a>
         </div>
         
@@ -562,7 +563,7 @@ Intro Section -
                 </button> 
             </div>
             <div class="modal-body">
-                <h3>Gratuité jusqu'au 15 août</h3>
+                <h3>Gratuité jusqu'au 15 août</h3><p>Et ensuite ?</p>
                 {% for formule in formules %} 
                     <p>{% cycle  12 3 1   %} mois : {{  formule.price }}  € x {{ formule.nb_month }} = {{  formule.total }} €</p>
                 {% endfor %}
