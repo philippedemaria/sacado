@@ -761,7 +761,10 @@ def details_of_adhesion(request) :
     data_post = request.POST
     levels = Level.objects.all()
 
-    nb_child = int(request.POST.get("nb_child"))
+    try :
+        nb_child = int(request.POST.get("nb_child"))
+    except :
+        nb_child = 1
 
     if nb_child == 0 :
         no_parent = True
