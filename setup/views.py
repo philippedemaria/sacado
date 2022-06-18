@@ -771,7 +771,7 @@ def details_of_adhesion(request) :
     else :
         no_parent = False
 
-    if int(menu_id) > 0 : formule = Formule.objects.get(pk = int(menu_id))
+    if  menu_id  : formule = Formule.objects.get(pk = int(menu_id))
     else :  
         formule= None
 
