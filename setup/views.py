@@ -770,10 +770,8 @@ def details_of_adhesion(request) :
         no_parent = True
     else :
         no_parent = False
-
-    if int(menu_id) > 0 : formule = Formule.objects.get(pk = int(menu_id))
-    else :  
-        formule = Formule.objects.get(pk = 1)
+  
+    formule = Formule.objects.get(pk = 1)
 
     try :
         if request.user.is_in_academy :
