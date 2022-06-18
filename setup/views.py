@@ -713,7 +713,7 @@ def academy(request):
 
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0 ).count()
     nb_students  = Student.objects.count()
-    formules = Formule.objects.get(pk__lte=3)
+    formules = Formule.objects.filter(pk__lte=3)
  
 
     form = AuthenticationForm()
@@ -774,7 +774,7 @@ def details_of_adhesion(request) :
 
     try :
         if request.user.is_in_academy :
-            formules = Formule.objects.get(pk__lte=3)
+            formules = Formule.objects.filter(pk__lte=3)
             adhesion = Adhesion.objects.filter(user = request.user).last()
             context = {  'formule' : formule , 'formules'  : formules ,   'no_parent' : no_parent , 'data_post' : data_post , "nb_child" : nb_child ,  'levels' : levels ,  'adhesion' : adhesion, "renewal" : True,   }
             return render(request, 'setup/renewal_adhesion.html', context)   
