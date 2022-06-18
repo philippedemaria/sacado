@@ -39,7 +39,7 @@
                     retient votre attention pour un total de {{ data_post.total_price }} €, <small class="title_page"> soit {{ data_post.nb_month }} mois x {{ data_post.month_price}}€.</small> Elle prend fin le  <b>  {{ data_post.date_end }}</b>.</h4>
                 {% endcomment %}
 
-                <h4 class="title_page">Adhérer pour une semaine gratuite</h4>
+                <h4 class="title_page">Adhérer pour un essai gratuit</h4>
                 <small class="title_page">Pour prolonger l'adhésion, un formulaire sera accessible depuis votre tableau de bord.</small>
 
             </div>
@@ -130,7 +130,7 @@
             <input type="hidden" name="date_end"   value='{{ data_post.date_end  }}'  />
             {% endcomment %}
 
-            <input type="hidden" name="menu_id" value="0" />
+            <input type="hidden" name="menu_id" value="1" />
             <input type="hidden" name="nb_child"  value="{{ data_post.nb_child }}" />
 
             <div class="row">
