@@ -756,7 +756,6 @@ def details_of_adhesion(request) :
     month_price = request.POST.get("month_price")
     nb_month    = request.POST.get("nb_month")    
     date_end    = request.POST.get("date_end")
-    menu_id     = request.POST.get("menu_id")
 
     data_post = request.POST
     levels = Level.objects.all()
@@ -771,9 +770,7 @@ def details_of_adhesion(request) :
     else :
         no_parent = False
 
-    if int(menu_id) > 0 : formule = Formule.objects.get(pk = int(menu_id))
-    else :  
-        formule = Formule.objects.get(pk = 1)
+    formule = Formule.objects.get(pk = 1)
 
     try :
         if request.user.is_in_academy :
