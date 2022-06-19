@@ -26,6 +26,7 @@ from account.decorators import user_can_create
 from templated_email import send_templated_mail
 from django.db.models import Q
 from django.db.models import Avg, Count, Min, Sum
+
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from reportlab.platypus.flowables import Flowable
@@ -53,7 +54,7 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
-from datetime import datetime, date 
+from datetime import datetime, date , timedelta
 from general_fonctions import *
 import qrcode
 import qrcode.image.svg
@@ -1720,9 +1721,10 @@ def print_monthly_statistiques(request):
         elements.append(logo_tab_tab)
         elements.append(Spacer(0, 0.1*inch))
 
-        date_stop += timedelta(days=1)
+        ys , ms, ds = date_stop.split("-")
+        date_stopped = datetime( int(ys) , int(ms), int(ds)) + timedelta(days =1)
 
-        studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
+        studentanswers = student.answers.filter(date__lte = date_stopped , date__gte= date_start)
 
         studentanswer_ids = studentanswers.values_list("exercise_id",flat=True).distinct() 
 
