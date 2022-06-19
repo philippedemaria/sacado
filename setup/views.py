@@ -1037,12 +1037,9 @@ def attribute_all_documents_to_student_by_level(level,student) :
         group.students.add(student)
         parcourses = Parcours.objects.filter(level = level, teacher=group.teacher , is_trash=0) # 2480 est SacAdoProf
         test = attribute_all_documents_to_student(parcourses, student)
-        print("test" , test)
         success = True
     except :
         success = False
-
-    print(success)
     return success
 
 
