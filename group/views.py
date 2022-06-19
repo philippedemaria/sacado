@@ -1723,6 +1723,8 @@ def print_monthly_statistiques(request):
 
         studentanswer_ids = studentanswers.values_list("exercise_id",flat=True).distinct() 
 
+        print("studentanswer_ids : " , studentanswer_ids)
+
 
         nb_exo = studentanswer_ids.count() # Nombre d'exercices traités
         info = studentanswers.aggregate( duration =  Sum("secondes"), score =  Sum("point"), avg =  Avg("point"))
@@ -1795,6 +1797,9 @@ def print_monthly_statistiques(request):
         exo_intitule_dict = dict()
         waitings_exo_dict = dict()
         waitings_intitule_dict = dict()
+
+
+        print("studentanswer_orders : " , studentanswer_orders)
 
         for studentanswer  in studentanswer_orders :
             if  studentanswer.exercise.id in exo_dict :
