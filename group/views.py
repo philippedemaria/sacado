@@ -1800,9 +1800,6 @@ def print_monthly_statistiques(request):
         waitings_exo_dict = dict()
         waitings_intitule_dict = dict()
 
-
-        print("studentanswer_orders : " , studentanswer_orders)
-
         for studentanswer  in studentanswer_orders :
             if  studentanswer.exercise.id in exo_dict :
                 exo_dict[studentanswer.exercise.id].append(studentanswer.point)
