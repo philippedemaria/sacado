@@ -1671,6 +1671,8 @@ def print_monthly_statistiques(request):
 
 
     student = Student.objects.get(user_id = student_id)
+
+    print( "student : " , student )
     students = [student]
     title_of_report = student.user.last_name+"_"+student.user.first_name+"_"+str(timezone.now().date())
 
