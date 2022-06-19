@@ -1672,7 +1672,6 @@ def print_monthly_statistiques(request):
 
     student = Student.objects.get(user_id = student_id)
 
-    print( "student : " , student )
     students = [student]
     title_of_report = student.user.last_name+"_"+student.user.first_name+"_"+str(timezone.now().date())
 
@@ -1721,12 +1720,11 @@ def print_monthly_statistiques(request):
         elements.append(logo_tab_tab)
         elements.append(Spacer(0, 0.1*inch))
 
+        date_stop += timedelta(days=1)
+
         studentanswers = student.answers.filter(date__lte = date_stop , date__gte= date_start)
 
         studentanswer_ids = studentanswers.values_list("exercise_id",flat=True).distinct() 
-
-        print("studentanswer_ids : " , studentanswer_ids)
-
 
         nb_exo = studentanswer_ids.count() # Nombre d'exercices traités
         info = studentanswers.aggregate( duration =  Sum("secondes"), score =  Sum("point"), avg =  Avg("point"))
