@@ -213,7 +213,7 @@ def delete_student_academy(request, ids, level_id ):
     if rq_user.is_board :
         level = Level.objects.get(pk=level_id) 
         today = time_zone_user(rq_user)
-        adhesions = Adhesion.objects.filter(start__lte=today ,  level=level)
+        adhesions = Adhesion.objects.filter(start__lte=today , stop__gte=today  , level=level)
  
 
         student = Student.objects.get(user_id=ids)
