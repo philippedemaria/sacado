@@ -168,8 +168,8 @@ define(['jquery', 'bootstrap'], function ($) {
 
             $("#id_username").on('change', function () {
                 $("#div_display").show() 
-                $("#div_email").show();
-                $("#verif_email").html( $("#id_username").val() );
+                $("#div_username").show();
+                $("#verif_username").html( $("#id_username").val() );
 
             });
 
