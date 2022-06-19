@@ -5052,6 +5052,7 @@ def store_the_score_relation_ajax(request):
                     rec_p = []
                     for parent in student.students_parent.filter(user__school_id = 50): 
                         rec_p.append(parent.user.email)
+                        msg += "" # désincription
                         sending_mail("SacAdo Académie Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec_p )
                 except :
                     pass
