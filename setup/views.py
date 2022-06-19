@@ -1044,6 +1044,7 @@ def attribute_all_documents_to_student_by_level(level,student) :
 
 
 
+
 def add_adhesion(request) :
 
     form =  UserForm(request.POST or None)
@@ -1066,16 +1067,26 @@ def add_adhesion(request) :
             student = Student.objects.create(user=form_user, level_id = level_id)
             level   = Level.objects.get(pk = level_id)
             u_parents = all_from_parent_user(request.user)
+
+            u_p_mails = []
             for u_p in u_parents : 
                 u_p.parent.students.add(student)
+                u_p_mails.append(u_p.email)
 
             chrono = create_chrono(Facture,"F")
-
             success = attribute_all_documents_to_student_by_level(level,student)
  
             adhesion = Adhesion.objects.create(start = today, stop = end, student = student , level_id = level_id  , amount = 0  , formule_id = None ) 
             facture = Facture.objects.create(chrono = chrono, file = "" , user = request.user , date = today     ) 
             facture.adhesions.add(adhesion)
+
+            msg = "Bonjour,\n\nVous venez de souscrire à une adhésion à la SACADO Académie. \n"
+            msg += "Votre référence d'adhésion est "+chrono+".\n\n"
+            msg += "Vous avez inscrit : \n"
+            msg += "- "+student.user.first_name+" "+student.user.last_name+", l'identifiant de connexion est : "+student.user.username +" \n"
+            msg += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
+            msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
+            send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, u_p_mails )
 
             return redirect("index")
  
