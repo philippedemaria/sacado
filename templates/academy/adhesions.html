@@ -19,7 +19,7 @@
     {% if historic %}
          Historique des adhésions
     {% else %}
-         Adhésions en cours 
+         Adhésions en cours > {{ level.name }}
     {% endif  %}
 {% endblock %}
 
@@ -45,36 +45,26 @@
                 <table id="standard_tab" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <td>Code</td>
-                        <td>Parents</td>
                         <td>Elèves </td>
-                        <td>Facture</td>
-                        <td>Date de valeur</td>
+                        <td>Dates </td>
                         <td>Montant</td>
+                        <td></td>
                     </tr>
                     </thead>
                     <tbody>
-                        {% for adhesion  in adhesions %}
+                        {% for adhesion in adhesions %}
                             <tr>
-                                <td >
-                                    {{ adhesion.chrono }} 
-                                </td>
-                                <td style="width:150px">
-                                     {{ adhesion.user }}
+                                <td>
+                                    {{ adhesion.student }}
                                 </td>
                                 <td>
-                                    {% for s in adhesion.students.all  %} 
-                                       <li class="sanspuce">    {{s}}   </li>
-                                    {% endfor %}  
+                                    {{ adhesion.start|date:"d N Y" }} - {{ adhesion.stop|date:"d N Y" }}
                                 </td>
                                 <td>
-                                    <a href="{{ adhesion.file.url }}" target="blank"><img src="{% static 'img/pdf.png' %}"  width="30px" /></a>
+                                    {{ adhesion.amount }}€
                                 </td>
                                 <td>
-                                     {{ adhesion.date_start|date:"d m Y" }} au {{ adhesion.date_end|date:"d m Y" }}
-                                </td>
-                                <td>
-                                     {{ adhesion.amount }}€
+                                    <a href="{% url 'delete_adhesion' %}">Supprimer cette adhésion</a> | <a href="{% url 'delete_student_academy' adhesion.student.user_id adhesion.level.id %}">Supprimer cet élève</a>
                                 </td>
                             </tr>
                         {% endfor %}

@@ -9,7 +9,9 @@ from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
 from django.http import JsonResponse 
-from account.models import  Adhesion
+from account.models import  Adhesion, Student, Resultknowledge
+from qcm.models import  Resultexercise, Studentanswer
+
 from academy.models import  Autotest 
 from academy.forms import  AutotestForm
 from socle.models import  Level
@@ -159,11 +161,10 @@ def details_adhesion(request,level_id):
 	if rq_user.is_board :
 		today = time_zone_user(rq_user)
 		level = Level.objects.get(pk=level_id)
-		adhesions = Adhesion.objects.filter(levels=level,date_start__lte=today ,date_end__gte=today )
+		adhesions = level.adhesions.filter( start__lte=today , stop__gte=today )
 
 		context = { 'adhesions' : adhesions ,  'level' : level,   'historic' : False }
 
- 
 		return render(request, "academy/adhesions.html" , context)
 
 	else:
@@ -173,19 +174,68 @@ def details_adhesion(request,level_id):
 
 def historic_adhesions(request,level_id):
 
-	rq_user = request.user 
-	level = Level.objects.get(pk=level_id)
-	if rq_user.is_board :
-		adhesions = Adhesion.objects.filter(levels=level)
+    rq_user = request.user 
+    level = Level.objects.get(pk=level_id)
+    if rq_user.is_board :
+        today = time_zone_user(rq_user)
+        adhesions = Adhesion.objects.filter(start__lte=today ,  level=level)
+        context = { 'adhesions' : adhesions ,  'level' : level ,  'historic' : True   }
+        return render(request, "academy/adhesions.html" , context)
 
-		context = { 'adhesions' : adhesions ,  'level' : level ,  'historic' : True   }
+    else:
+        return redirect("index")
 
+
+
+
+
+
+
+def delete_adhesion(request,ida):
+
+    adhesion = Adhesion.objects.get(pk=ida)
+    rq_user = request.user 
+    if rq_user.is_board :
+        level =  adhesion.level 
+        adhesion.delete()
+        today = time_zone_user(rq_user)
+        adhesions = Adhesion.objects.filter(start__lte=today ,  level=level)
+        context = { 'adhesions' : adhesions ,  'level' : level ,  'historic' : False   }
+        return render(request, "academy/adhesions.html" , context)
+
+    else:
+        return redirect("index")
+
+
+def delete_student_academy(request, ids, level_id ):
+
+    rq_user = request.user 
+    if rq_user.is_board :
+        level = Level.objects.get(pk=level_id) 
+        today = time_zone_user(rq_user)
+        adhesions = Adhesion.objects.filter(start__lte=today ,  level=level)
  
-		return render(request, "academy/adhesions.html" , context)
 
-	else:
-		return redirect("index")
+        student = Student.objects.get(user_id=ids)
+        results = Resultknowledge.objects.filter(student=student)
+        for r in results :
+            r.delete()
 
+        res = Resultexercise.objects.filter(student=student)
+        for re in res :
+            re.delete()
+
+        ress = Studentanswer.objects.filter(student=student)
+        for rs in ress :
+            rs.delete()
+
+        student.user.delete()
+        context = { 'adhesions' : adhesions ,  'level' : level ,  'historic' : False   }
+
+        return render(request, "academy/adhesions.html" , context)
+
+    else:
+        return redirect("index")
 
 
 def autotests(request) :

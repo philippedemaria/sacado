@@ -191,7 +191,7 @@ class Level(models.Model):
         data      = {}
         today     = datetime.now()
         Adhesion  = apps.get_model('account', 'Adhesion')
-        adhesions = Adhesion.objects.filter(user__school_id=50 , date_start__lte= today , date_end__gte= today, levels=self ) 
+        adhesions = self.adhesions.filter(student__user__school_id=50 , start__lte= today , stop__gte= today ) 
         adheses   = adhesions.aggregate(total_amount=Sum('amount')) 
 
         data["nba"] = adhesions.count()

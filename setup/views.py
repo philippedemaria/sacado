@@ -1234,8 +1234,7 @@ def save_adhesion(request) :
         nbc = ""
         if nb_child > 1 :
             nbc = "s"
-
-
+            
         msg = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\nVous venez de souscrire à une adhésion "+formule_adhesion +" à la SACADO Académie avec le menu "+formule_name+". \n"
         msg += "Votre référence d'adhésion est "+chrono+".\n\n"
         msg += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
@@ -1246,6 +1245,13 @@ def save_adhesion(request) :
         msg += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
 
         msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
+
+        ###### Quelques recommandations pour les parents
+
+        msg += ""
+
+
+        #########
 
         send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, [p["email"]])
 
