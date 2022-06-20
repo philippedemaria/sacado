@@ -321,8 +321,10 @@
         {% if relation.parcours.teacher.is_mailing %}
             {% include 'qcm/signal_exercise_peda.html' %}
         {% endif %}
-        {% include 'qcm/signal_exercise_peda_live.html' %}
- 
+
+        {% if not request.user.is_in_academy %}
+          {% include 'qcm/signal_exercise_peda_live.html' %}
+        {% endif %}
 
     </div> 
 
