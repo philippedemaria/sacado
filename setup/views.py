@@ -1035,8 +1035,9 @@ def attribute_all_documents_to_student_by_level(level,student) :
     try :
         group = Group.objects.filter(level = level, school_id = 50, teacher_id=2480).first()
         group.students.add(student)
-        parcourses = Parcours.objects.filter(level = level, teacher=group.teacher , is_trash=0) # 2480 est SacAdoProf
-        test = attribute_all_documents_to_student(parcourses, student)
+        parcourses = Parcours.objects.filter(level = level, teacher_id=2480 , is_trash=0) # 2480 est SacAdoProf
+        groups = [group]
+        test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
         success = True
     except :
         success = False
