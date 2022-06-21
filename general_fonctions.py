@@ -371,6 +371,7 @@ def attribute_all_documents_to_students(parcourses, students ):
 def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     """  assigner les documents   """
     # Assigne les dossiers et leurs contenus à aprtir d'un groupe
+
     for group in groups :
         for folder in group.group_folders.all():
             folder.students.add(student)
@@ -405,7 +406,8 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
             for course in courses:
                 course.students.add(student)
     test = True
- 
+
+
     return test
 
 
