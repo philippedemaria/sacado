@@ -37,6 +37,11 @@
                                 Tâches
                             </a>  
                         </div>
+                        {% else %}
+
+                        <div class="col-lg-6 col-xs-6">
+                            <i class="fa fa-angle-right"></i>  {{ student.user.username }} 
+                        </div>
                         {% endif %}
 
                         {% endcomment %}
