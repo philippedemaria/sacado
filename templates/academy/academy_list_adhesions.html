@@ -62,7 +62,7 @@
                                     {{ adhesion.amount }}€
                                 </td>
                                 <td>
-                                    <a href="{% url 'delete_adhesion' %}">Supprimer cette adhésion</a> 
+                                    <a href="{% url 'delete_adhesion' adhesion.id %}">Supprimer cette adhésion</a> 
                                 </td>
                             </tr>
                         {% endfor %}
