@@ -47,7 +47,7 @@
                         {% for parent in parents %}
                             <tr>
                                 <td>
-                                    {{ parent }}
+                                    {{ parent.user.last_name }} {{ parent.user.first_name }}
                                 </td>
                                 <td>
                                     {% for s in parent.students.all %}  
