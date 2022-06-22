@@ -1086,6 +1086,23 @@ def add_adhesion(request) :
             msg += "- "+student.user.first_name+" "+student.user.last_name+", l'identifiant de connexion est : "+student.user.username +" \n"
             msg += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
             msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
+
+
+
+            msg += "Voici quelques conseils pour votre enfant :\n\nConnecte toi sur https://sacado.xyz/academy\n\n"
+            msg += "Indique ton Nom d’utilisateur et ton Mot de passe\n\n"
+            msg += "Clique sur le bouton « connexion »   -> Tu arrives ensuite sur ton profil. \n\n"   
+            msg += "Le menu est à gauche :\n\n"
+            msg += "« Compte » permet de changer ton mot de passe, te déconnecter et choisir ton avatar.\n\n"
+            msg += "« Matières » te permet d’accéder à tes parcours d’exercices. Tu cliques sur « accéder » pour entrer dans le dossier, puis tu choisis un thème."
+            msg += "A l’intérieur, tu auras tous les exercices.\n\n"
+            msg += "Tu vas à ton rythme, tu choisis les exercices que tu as besoin de travailler, de réviser…\n\n"
+            msg += "Tu enregistres quand tu as fait au moins 5 situations (parfois 10), si tu as fait des erreurs, c’est normal parce que tu apprends, essaie de bien comprendre la correction proposée, puis continue les exercices suivants pour améliorer ton score."
+            msg += "Une pastille de couleur sur un exercice permet de voir que tu l’as déjà fait (% de réussite).\n\n"
+            msg += "« Suivi » permet de voir ton évolution. Clique en bas sur les différents bilans et en haut à droite pour la synthèse.\n\n"
+            msg += "« Flashpack » : permet de créer des propres cartes de révision, pour entraîner ta mémoire.\n\n"
+
+                
             send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, u_p_mails )
 
             return redirect("index")
@@ -1248,8 +1265,18 @@ def save_adhesion(request) :
 
         ###### Quelques recommandations pour les parents
 
-        msg += ""
-
+        msg += "Voici quelques conseils pour votre enfant :\n\nConnecte toi sur https://sacado.xyz/academy\n\n"
+        msg += "Indique ton Nom d’utilisateur et ton Mot de passe\n\n"
+        msg += "Clique sur le bouton « connexion »   -> Tu arrives ensuite sur ton profil. \n\n"   
+        msg += "Le menu est à gauche :\n\n"
+        msg += "« Compte » permet de changer ton mot de passe, te déconnecter et choisir ton avatar.\n\n"
+        msg += "« Matières » te permet d’accéder à tes parcours d’exercices. Tu cliques sur « accéder » pour entrer dans le dossier, puis tu choisis un thème."
+        msg += "A l’intérieur, tu auras tous les exercices.\n\n"
+        msg += "Tu vas à ton rythme, tu choisis les exercices que tu as besoin de travailler, de réviser…\n\n"
+        msg += "Tu enregistres quand tu as fait au moins 5 situations (parfois 10), si tu as fait des erreurs, c’est normal parce que tu apprends, essaie de bien comprendre la correction proposée, puis continue les exercices suivants pour améliorer ton score."
+        msg += "Une pastille de couleur sur un exercice permet de voir que tu l’as déjà fait (% de réussite).\n\n"
+        msg += "« Suivi » permet de voir ton évolution. Clique en bas sur les différents bilans et en haut à droite pour la synthèse.\n\n"
+        msg += "« Flashpack » : permet de créer des propres cartes de révision, pour entraîner ta mémoire.\n\n"
 
         #########
 
