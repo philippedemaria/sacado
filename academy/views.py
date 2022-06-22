@@ -9,7 +9,7 @@ from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
 from django.http import JsonResponse 
-from account.models import  Adhesion, Student, Resultknowledge
+from account.models import  Adhesion, Student, Resultknowledge , Parent
 from qcm.models import  Resultexercise, Studentanswer
 
 from academy.models import  Autotest 
