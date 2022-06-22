@@ -20,7 +20,7 @@ urlpatterns = [
 
     path('academy_list_adhesions', academy_list_adhesions , name='academy_list_adhesions'),
     path('academy_list_parents'  , academy_list_parents   , name='academy_list_parents'),
-    path('academy_delete_parent' , academy_delete_parent  , name='academy_delete_parent'),
+    path('academy_delete_parent/<int:user_id>' , academy_delete_parent  , name='academy_delete_parent'),
 ]
 
 
