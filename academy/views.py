@@ -203,6 +203,15 @@ def academy_list_parents(request):
 
 
 
+def academy_delete_parent(request,idp):
+
+    parent = Parent.objects.get(user_id = idp) 
+    parent.delete()
+    return redirect("academy_list_parents")
+
+
+
+
 def details_adhesion(request,level_id):
 
     rq_user = request.user 

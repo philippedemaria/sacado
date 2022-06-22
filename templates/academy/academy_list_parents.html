@@ -39,7 +39,6 @@
                     <tr>
                         <td>Parents </td>
                         <td>Elèves </td>
-                        <td>Niveau </td>
                         <td></td>
                     </tr>
                     </thead>
@@ -55,7 +54,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>
-                                    <a href="#">Supprimer ce parent</a> 
+                                    <a href="{% url 'academy_delete_parent' parent.user.id %}">Supprimer ce parent</a> 
                                 </td>
                             </tr>
                         {% endfor %}
