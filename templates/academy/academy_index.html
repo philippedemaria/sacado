@@ -20,6 +20,28 @@
 
 {% block page_menu_right %}
  
+ <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Bilans et suivis <b class="caret"></b> </a>
+
+    <ul   class="dropdown-menu clearfix pull-right" role="menu">
+
+
+
+        
+        <li>
+            <a href="{% url 'academy_list_adhesions'  %}" > Liste des adhésions  </a>   
+        </li>
+          <li class="divider"></li>      
+        
+        <li>
+             <a href="{% url 'academy_list_parents' %}" > Liste des parents  </a> 
+        </li> 
+    </ul>
+</li>
+
+
+
+
 {% endblock %}
 
 

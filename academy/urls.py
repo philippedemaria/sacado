@@ -1,4 +1,4 @@
-
+academy_list_adhesions
 from django.urls import path, re_path
 from .views import *
 
@@ -19,8 +19,8 @@ urlpatterns = [
     path('synthese_parcours/<int:user_id>', synthese_parcours , name='synthese_parcours'),
 
 
-
-
+    path('academy_list_adhesions', academy_list_adhesions , name='academy_list_adhesions'),
+    path('academy_list_parents', academy_list_parents , name='academy_list_parents'),
 
 ]
 

@@ -37,26 +37,25 @@
                 <table id="standard_tab" class="table table-bordered table-hover">
                     <thead>
                     <tr>
+                        <td>Parents </td>
                         <td>Elèves </td>
-                        <td>Dates </td>
-                        <td>Montant</td>
+                        <td>Niveau </td>
                         <td></td>
                     </tr>
                     </thead>
                     <tbody>
-                        {% for adhesion in adhesions %}
+                        {% for parent in parents %}
                             <tr>
                                 <td>
-                                    {{ adhesion.student }}
+                                    {{ parent }}
                                 </td>
                                 <td>
-                                    {{ adhesion.start|date:"d N Y" }} - {{ adhesion.stop|date:"d N Y" }}
+                                    {% for s in parent.students.all %}  
+                                        <li>{{ s }} - {{ s.level }}</li>
+                                    {% endfor %}
                                 </td>
                                 <td>
-                                    {{ adhesion.amount }}€
-                                </td>
-                                <td>
-                                    <a href="{% url 'delete_adhesion' %}">Supprimer cette adhésion</a> | <a href="{% url 'delete_student_academy' adhesion.student.user_id adhesion.level.id %}">Supprimer cet élève</a>
+                                    <a href="#">Supprimer ce parent</a> 
                                 </td>
                             </tr>
                         {% endfor %}
