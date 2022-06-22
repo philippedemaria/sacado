@@ -1801,7 +1801,9 @@ def mentions(request):
     context = {  }
     return render(request, 'setup/mentions.html', context)  
 
-
+def mentions_academy(request):
+    context = {  }
+    return render(request, 'setup/mentions_academy.html', context)  
 
 
 def tweeters(request):

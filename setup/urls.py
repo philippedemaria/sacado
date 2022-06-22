@@ -41,7 +41,9 @@ urlpatterns = [
     path('gar_rgpd', gar_rgpd, name='gar_rgpd'), 
     path('cgv', cgv, name='cgv'), 
     path('cgu', cgu, name='cgu'), 
-    path('mentions', mentions, name='mentions'),    
+    path('mentions', mentions, name='mentions'), 
+    path('mentions_academy', mentions_academy, name='mentions_academy'), 
+
     ############################################################################################
     #######  SACADO Académie
     ############################################################################################
