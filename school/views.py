@@ -679,7 +679,6 @@ def renew_school_adhesion(request):
 	if Accounting.objects.filter( school = school , is_abonnement =  1 , is_active = 0 ):
 		accounting    = Accounting.objects.filter(school = school , is_abonnement =  1, is_active = 0 ).last()
 		accounting_id = accounting.id
-		abonnement    = accounting.abonnement
 		administration= ""
 	else :
 		accounting_id           = accounting_adhesion(school, today , None , user, False , "Renouvellement" )
