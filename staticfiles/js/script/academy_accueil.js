@@ -17,7 +17,6 @@ $(document).ready(function () {
         $("#id_form-0-username").on('change', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            console.log(username);
             $.ajax({
                 url: '/account/ajax/userinfo/',
                 data: {
@@ -29,7 +28,10 @@ $(document).ready(function () {
                 success: function (data) {
                     $("#ajaxresult0").html(data["html"]);
 
-                    if(data["test"]) { $("#sendit").prop("disabled", false ) ;} else { $("#sendit").prop("disabled", true ) ;}
+                    if(data["test"]) 
+                        { $("#sendit").prop("disabled", false ) ;} 
+                    else 
+                        { $("#sendit").prop("disabled", true ) ;}
                 }
             });
         });
@@ -37,7 +39,6 @@ $(document).ready(function () {
         $("#id_form-0-email").on('blur', function () {
             let email = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            console.log(email);
             $.ajax({
                 url: '/account/ajax/userinfomail/',
                 data: {
@@ -92,7 +93,6 @@ $(document).ready(function () {
         $("#student_form #id_username").on('keyup', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            console.log(username);
             $.ajax({
                 url: '/account/ajax/userinfo/',
                 type: "POST",
@@ -111,7 +111,6 @@ $(document).ready(function () {
         $("#student_form #id_group").on('keyup', function () {
             let groupe_code = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            console.log(groupe_code);
             $.ajax({
                 url: '/account/ajax/courseinfo/',
                 type: "POST",
@@ -162,7 +161,6 @@ $(document).ready(function () {
         $("#parent_form #id_username").on('blur', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            console.log(username);
             $.ajax({
                 url: '/account/ajax/userinfo/',
                 type: "POST",
