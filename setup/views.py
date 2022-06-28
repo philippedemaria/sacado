@@ -14,7 +14,14 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
 from django.db.models import Count, Q
 
 from account.decorators import is_manager_of_this_school
@@ -1282,6 +1289,35 @@ def save_adhesion(request) :
 
         send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, [p["email"]])
 
+        #####################"
+        # envoi du courriel 2e version, bêta
+        ##################################################
+        content1 = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\nVous venez de souscrire à une adhésion "+formule_adhesion +" à la SACADO Académie avec le menu "+formule_name+". \n"
+        content1 += "Votre référence d'adhésion est "+chrono+".\n\n"
+        content1 += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
+        content1 += "Vous avez inscrit : \n"
+        for s in students_of_adhesion :
+            content1 += "- "+s["first_name"]+" "+s["last_name"]+", l'identifiant de connexion est : "+s["username"]+", le mot de passe est "+s["password_no_crypted"]+" \n"
+
+        content1 += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
+
+        content1 += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
+        email=EmailMessage("test",content1,settings.DEFAULT_FROM_EMAIL,["stephan.ceroi@gmail.com"])
+
+        image=MIMEBase('application','octet-stream')
+        nomImage="Instructions.png"
+        fichierImage=open(settings.STATIC_ROOT+"/img/"+nomImage,'rb')
+        image.set_payload((fichierImage).read())
+        encoders.encode_base64(image)
+        image.add_header('Content-Disposition', "inline ; filename= %s" % nomImage)
+        
+        email.attach(image)
+        
+        email.send()
+        #####################"
+        # fin envoi du courriel 2e version, bêta
+        ##################################################
+       
 
     for s in students_of_adhesion :
         srcv = []        
