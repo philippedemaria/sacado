@@ -72,6 +72,39 @@
         </div>   
   
  
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    Notifications
+                     <table class="table">
+                        <tr>
+                            <td><label><small>Recevoir un mail pour chaque exercice effectué ?</small></label></td>
+                            <td>{{ parent_form.task_post |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
+                                {{ parent_form.task_post.errors }}
+                            </td>                            
+                        </tr>
+                        <tr>
+                            <td><label><small>Recevoir un mail récaptitulatif ? en nombre de jours. 0 pour refus de réception.</small></label></td>
+                            <td>{{ parent_form.periodicity|add_class:"form-control"  }}    
+                                {{ parent_form.periodicity.errors }}
+                            </td>                            
+                        </tr>
+                    </table>               
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
         <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
