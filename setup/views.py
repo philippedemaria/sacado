@@ -1193,7 +1193,7 @@ def save_adhesion(request) :
 
     total_price = 0
     formule          = None
-    formule_adhesion = " semaine d'essai "
+    formule_adhesion = " période d'essai "
     formule_name     = " Essai "
     today = time_zone_user(request.user)
     #date_end_dateformat = today + timedelta(days=7)
