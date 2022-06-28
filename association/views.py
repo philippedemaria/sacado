@@ -63,13 +63,11 @@ def get_active_year():
 def get_active_abonnements(user):
 
     active_year, this_year = get_active_year() # active_year = 2020-2021 ALORS QUE this_year est 2020
-    strt = datetime(this_year,7,15)
-    stp  = datetime(this_year+1,9,1)
+    strt = datetime(this_year,6,1)
     start = dt_naive_to_timezone(strt,user.time_zone)
-    stop  = dt_naive_to_timezone(stp,user.time_zone)
 
 
-    abonnements = Abonnement.objects.filter(date_start__gte = start , date_stop__lte = stop).exclude(accounting__date_payment = None).order_by("school__country__name")
+    abonnements = Abonnement.objects.filter(date_start__gte = start).exclude(accounting__date_payment = None).order_by("school__country__name")
     return abonnements
 
 
