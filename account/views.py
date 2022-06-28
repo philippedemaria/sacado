@@ -1637,7 +1637,7 @@ def my_profile(request):
 
                 else:
                     print(form.errors)
-            return render(request, 'account/parent_form.html', {'form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
+            return render(request, 'account/parent_form.html', {'parent_form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
     else :
         redirect("index")
 
