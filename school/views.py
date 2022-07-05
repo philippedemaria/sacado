@@ -46,6 +46,26 @@ import csv
 #################################################################################
 
 
+'''
+def ajout_school(request):
+
+	with open ("https://ressources/etablissement.csv", newline ="") as file :
+		rows = csv.reader (file, delimiter=";")
+		for row in rows :
+			if len(row[4]) == 4 : zip_c = "0"+str(row[4])
+			else : zip_c = row[4]
+			School.objects.create(name = row[0], country_id = 5 , town = row[1] , code_acad = row[2] , address = row[3] , zip_code = zip_c )
+ 
+'''
+ 
+ 
+
+
+
+
+
+
+
 def authorizing_access_school(teacher, school) :
 	if (school == teacher.user.school and teacher.user.is_manager) or (school in teacher.user.schools.all() and teacher.user.is_manager) or teacher.user.is_superuser :
 		return True

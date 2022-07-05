@@ -85,7 +85,6 @@ def end_of_contract() :
     return end
 
 
-
 def index(request):
 
     if request.user.is_authenticated :
@@ -129,20 +128,15 @@ def index(request):
             sgps    = Group.objects.filter(pk__in=shared_grps_id)
             groupes =  grps | sgps
             groups  = groupes.order_by("level__ranking") 
-
             this_user = request.user
             nb_teacher_level = teacher.levels.count()
             relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
-
-
             folders_tab = teacher.teacher_folders.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).exclude(teacher__user__username__contains="_e-test") ## Dossiers  favoris non affectés
-
             teacher_parcours = teacher.teacher_parcours
             parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).exclude(teacher__user__username__contains="_e-test").order_by("is_evaluation") ## Parcours / évaluation favoris non affecté
             
             #Menu_right
             parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
-
             communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
 
             request.session["tdb"] = True
@@ -175,12 +169,12 @@ def index(request):
     else:  ## Anonymous
         #########
         ###################
-        form = AuthenticationForm()
-        u_form = UserForm()
-        t_form = TeacherForm()
-        s_form = StudentForm()
+        form    = AuthenticationForm()
+        u_form  = UserForm()
+        t_form  = TeacherForm()
+        s_form  = StudentForm()
         np_form = NewpasswordForm()
-        levels = Level.objects.order_by("ranking")
+        levels  = Level.objects.order_by("ranking")
 
         try :
             holidaybook = Holidaybook.objects.get(pk=1)
