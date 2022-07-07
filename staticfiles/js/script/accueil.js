@@ -39,7 +39,7 @@ $(document).ready(function () {
 
             filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ;           
 
-            if !(filtre_mail_academique.test( email )) { alert(" Vous devez utiliser une adresse académique @ac-****.fr  ou nous contacter.") ; return false;}
+            if (!filtre_mail_academique.test( email )) { alert(" Vous devez utiliser une adresse académique @ac-****.fr  ou nous contacter.") ; return false;}
 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
  
