@@ -37,7 +37,7 @@ $(document).ready(function () {
         $("#teacher_form #id_email").on('blur', function () {
             let email = $(this).val();
 
-            filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ;
+            filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ;           
 
             if !(filtre_mail_academique.test( email )) { alert(" Vous devez utiliser une adresse académique @ac-****.fr  ou nous contacter.") ; return false;}
 
