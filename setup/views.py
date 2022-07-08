@@ -279,11 +279,6 @@ def singleLogoutGar(request):
     for gar in gars :
         dico_received[gar['key']] = gar['value']
     username   = dico_received["IDO"]
-    print(" ======================= singleLogoutGar =================================== ")
-    print(dico_received)
-    print(" ========================================================== ")
-    print(username)
-    print(" ========================================================== ")
     logout(request)
 
 
@@ -298,6 +293,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
     ##########################################################
     today = datetime.now()
  
+
+    print(" ======================= singleLogoutGar =================================== ")
+    print(dico_received)
+    print(" ========================================================== ")
+
+
+
     uai        = dico_received["UAI"]
     school     = School.objects.get(code_acad = uai)
     last_name  = dico_received["NOM"] 
