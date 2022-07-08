@@ -39,24 +39,40 @@ $(document).ready(function () {
 
             filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ;           
 
-            if (!filtre_mail_academique.test( email )) { alert(" Vous devez utiliser une adresse académique @ac-****.fr  ou nous contacter.") ; return false;}
+            if (!filtre_mail_academique.test( email )) { 
 
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
-            $.ajax({
-                url: '/account/ajax/userinfomail/',
-                data: {
-                    'email': email,
-                    'csrf_token' : csrf_token ,
-                },
-                type: "POST",
-                dataType: "json",
-                success: function (data) {
-                    $(".ajaxresultmail").html(data["html"]);
 
-                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
-                }
-            });
+                alert(" Vous devez utiliser une adresse académique @ac-****.fr  ou nous contacter.") ; $(".sendit").prop("disabled", true ) ; 
+
+            }
+            else
+            {
+
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+     
+                $.ajax({
+                    url: '/account/ajax/userinfomail/',
+                    data: {
+                        'email': email,
+                        'csrf_token' : csrf_token ,
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        $(".ajaxresultmail").html(data["html"]);
+
+                        if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                    }
+                });
+
+            }
+
+
+
+
+
+
+
         });
 
 
