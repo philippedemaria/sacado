@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 
 from flashcard.models import Flashcard, Flashpack , Answercard , Madeflashpack
 from flashcard.forms import FlashcardForm ,  FlashpackForm , CommentflashcardForm , FlashpackAcademyForm
-from qcm.models import  Parcours, Exercise , Folder
+from qcm.models import  Parcours, Exercise , Folder , Relationship
 from account.models import Student , Teacher
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
@@ -252,6 +252,69 @@ def create_flashpack_from_parcours(request, idp=0):
     context = {'form': form, 'communications' : [] , 'flashpack': None , 'parcours': parcours , 'group': group  , 'folder': folder  }
 
     return render(request, 'flashcard/form_flashpack.html', context)
+
+
+
+
+
+def peuplate_flashpack_parcours(request,idp):
+
+    teacher = request.user.teacher
+    parcours = Parcours.objects.get(id=idp)
+
+    flashpacks = Flashpack.objects.filter(parcours=parcours)
+
+
+    context = {'parcours': parcours, 'teacher': teacher , 'flashpacks' : flashpacks , 'type_of_document' : 4 }
+
+    return render(request, 'flashcard/form_peuplate_flashpack_parcours.html', context)
+
+
+
+
+
+def ajax_find_peuplate_sequence(request):
+
+    id_parcours = request.POST.get("id_parcours",0)
+    subject_id  = request.POST.get("id_subject",0) 
+    level_id    = request.POST.get("id_level",None) 
+ 
+    level = Level.objects.get(pk=level_id)
+    flashpacks = Flashpack.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level )
+    context = { "flashpacks" : flashpacks }
+
+
+    data = {}
+    data['html']    = render_to_string( 'flashcard/ajax_flashpack_peuplate_sequence.html' , context)
+
+    return JsonResponse(data)  
+
+
+def clone_flashpack_sequence(request, idf):
+    """ cloner un parcours """
+
+    teacher = request.user.teacher
+    flashpack = Flashpack.objects.get(pk=idf) # parcours à cloner.pk = None
+    flashcards = flashpack.flashcards.all()
+    flashpack.pk = None
+    flashpack.teacher = teacher
+    flashpack.save()
+    flashpack.flashcards.set(flashcards)
+
+    parcours_id = request.session.get("parcours_id",None)  
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = flashpack.id , document_id = flashpack.id  , type_id = 4 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+        flashpack.students.set(students)
+
+        return redirect('show_parcours' , 0, parcours_id )
+    else :
+        return redirect('list_quizzes')
+ 
+
+
 
 
 def delete_flashpack(request, id):

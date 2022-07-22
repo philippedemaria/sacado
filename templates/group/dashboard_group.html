@@ -101,6 +101,19 @@
             {% endif %}  
 
             <!-- *************************************** Parcours ******************************************* -->
+            {%  if sequences %}
+            <div class="row"></div> 
+                <h2 class='thin'>Sequences</h2>
+                {% for parcours in sequences %}
+                        {% get_percent parcours student as data %}  
+                        {% get_min_score parcours student as data_min %}
+                        
+                        {% include 'qcm/sequence_tag_student.html' %}
+
+                {% endfor  %}   
+            {% endif %}  
+
+
             {%  if parcourses %}
             <div class="row"></div> 
                 <h2 class='thin'>Parcours</h2>

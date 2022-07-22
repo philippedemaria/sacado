@@ -198,6 +198,13 @@ class Exercise(models.Model):
                 score = score + str(studentanswer.point) + " - "
         return score
     ############################################# 
+    def is_exercise(self):
+        return True
+
+
+    def type_of_document(self):
+        return 0
+
 
     def score_and_time(self, student_id):
         scores_times_tab = []
@@ -411,8 +418,9 @@ class Parcours(ModelWithCode):
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     
- 
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
+
+    is_sequence = models.BooleanField(default=0, verbose_name="Séquence d'apprentissage ?")
 
     def __str__(self):
         flds = ""
@@ -890,6 +898,10 @@ class Parcours(ModelWithCode):
 
 
 
+
+
+
+
  
 class Folder(models.Model):
 
@@ -1334,6 +1346,10 @@ class Relationship(models.Model):
     mark = models.CharField(max_length=3, default="", verbose_name="Sur ?")
     is_correction_visible = models.BooleanField(default=0, editable=False  )
 
+    # document : type du doc et id du doc ( exercice = 0 , custom = 1 , cours = 2 , quizz= 3 , biblio = 4 , flash = 5)
+    document_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)    
+    type_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)
+
     def __str__(self):
 
         try :
@@ -1343,6 +1359,28 @@ class Relationship(models.Model):
 
     class Meta:
         unique_together = ('exercise', 'parcours')
+
+
+    def type_of_document(self):
+        Quizz = apps.get_model('tool', 'Quizz')
+        Flashpack = apps.get_model('flashcard', 'Flashpack')
+        Bibliotex = apps.get_model('bibliotex', 'Bibliotex')
+        if self.type_id == 1 :
+            document = Customexercise.objects.get(pk=self.document_id)
+        elif self.type_id == 2 :
+            document = Course.objects.get(pk=self.document_id)     
+        elif self.type_id == 3 :
+            document = Quizz.objects.get(pk=self.document_id)
+        elif self.type_id == 4 :
+            document = Flashpack.objects.get(pk=self.document_id)
+        elif self.type_id == 5 :
+            document = Bibliotex.objects.get(pk=self.document_id)
+        return document
+
+
+
+
+
 
 
     def score_student_for_this(self,student):
@@ -1599,6 +1637,11 @@ class Relationship(models.Model):
         return test
 
 
+
+
+
+
+
     def just_students(self) :  
         return self.students.exclude(user__username__contains= "_e-test").order_by("user__last_name")
 
@@ -1824,6 +1867,8 @@ class Customexercise(ModelWithCode):
         data["nb_done"] = nb_exercise_done
         return data
 
+    def type_of_document(self):
+        return 1
 
     def is_done(self,student):
         done = False
@@ -2197,7 +2242,8 @@ class Course(models.Model): # pour les
                     levels.append(sb)       
         return levels
 
-
+    def type_of_document(self):
+        return 2
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 #############################################################  Remediation       ########################################################## 

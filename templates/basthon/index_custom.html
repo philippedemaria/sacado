@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-    <a href="{% url 'show_parcours_student' parcours.id %}" style="color:{{ parcours.color }}"><i class="fab fa-python"></i> {{ parcours }}</a> <img src="{% static 'img/angle-right.png' %}"/> <small> Exercice corrigé par l'enseignant</small>
+    <i class="fab fa-python"></i> {{ parcours }}<img src="{% static 'img/angle-right.png' %}"/> <small> Exercice corrigé par l'enseignant</small>
 {% endblock %}
  
  

@@ -15,7 +15,7 @@ from django.http import JsonResponse , FileResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
-from qcm.models import Folder , Parcours
+from qcm.models import Folder , Parcours , Relationship
 from qcm.views import get_teacher_id_by_subject_id, all_levels
 from group.models import Group , Sharing_group
 from socle.models import  Knowledge , Level , Skill , Waiting , Subject
@@ -686,6 +686,60 @@ def ajax_my_bibliotexs(request):
 
 
 
+
+
+def ajax_find_peuplate_sequence(request):
+
+    id_parcours = request.POST.get("id_parcours",0)
+    subject_id  = request.POST.get("id_subject",0) 
+    level_id    = request.POST.get("id_level",None) 
+ 
+    level       = Level.objects.get(pk=level_id)
+    subject     = Subject.objects.get(pk=subject_id)
+    bibliotexs  = Bibliotex.objects.filter(teacher = request.user.teacher , subjects = subject , levels=level )
+    context = { "bibliotexs" : bibliotexs }
+
+    data = {}
+    data['html']    = render_to_string( 'bibliotex/ajax_bibliotex_peuplate_sequence.html' , context)
+
+    return JsonResponse(data)  
+
+
+
+def clone_bibliotex_sequence(request, idb):
+    """ cloner un parcours """
+
+    teacher = request.user.teacher
+    bibliotex = Bibliotex.objects.get(pk=idb) # parcours à cloner.pk = None
+    relationtexs = bibliotex.relationtexs.all()
+    bibliotex.pk = None
+    bibliotex.teacher = teacher
+    bibliotex.save()
+
+    parcours_id = request.session.get("parcours_id",None) 
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = bibliotex.id , document_id = bibliotex.id  , type_id = 5 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students) 
+                
+    for r in relationtexs :
+        r.pk = None
+        r.teacher = teacher
+        r.save()
+        
+        if parcours_id :
+            r.students.set(students)
+
+
+
+    return redirect('show_parcours' , 0, parcours_id )
+
+
+
+
+
+
  
 
 def ajax_search_bibliotex(request):
@@ -881,6 +935,19 @@ def create_bibliotex_from_parcours(request,idp=0):
 
 
 
+
+
+
+def peuplate_bibliotex_parcours(request,idp):
+
+    teacher = request.user.teacher
+    parcours = Parcours.objects.get(id=idp)
+    bibliotexs = Bibliotex.objects.filter(parcours=parcours)
+
+
+    context = {'parcours': parcours, 'teacher': teacher , 'bibliotexs' : bibliotexs , 'type_of_document' : 5 }
+
+    return render(request, 'bibliotex/form_peuplate_bibliotex_parcours.html', context)
 
 
 

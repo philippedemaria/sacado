@@ -197,7 +197,6 @@ def get_is_lock(obj,todaytimer):
     """Bloque un exercice dans une évaluation si celui-ci a une date de verrou"""
     return obj.is_lock(todaytimer)
 
- 
 
 
 @register.simple_tag

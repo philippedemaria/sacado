@@ -1,0 +1,136 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-peuplate_parcours']);
+    </script> 
+
+{% endblock %} 
+
+
+{% block page_title %}
+    <span style="color:{{ parcours.color }}"><i class="bi bi-cloud"></i>     
+        {% include 'qcm/breadcrumb.html' %}
+         <small> Sélection des quizz </small>
+{% endblock %}
+
+{% block page_menu_right %}
+    {% include 'qcm/submenu_parcours.html' %}
+{% endblock %}
+
+
+{% block body %}
+ 
+  
+     
+<section class="content_main">
+    <div class="col-sm-12 col-md-12">
+
+        {% include 'document_finder.html' %}
+                
+            <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px">
+                <div class="form-group">
+                {% if parcours.is_evaluation %}
+                    <a href="{% url 'show_evaluation' parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour à l'évaluation {{ parcours.title }}</a> 
+                    <a href="{% url 'evaluations' %}"  class="btn btn-primary">Valider et retour à la liste des évaluations</a> 
+                {% else %}
+                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour au parcours {{ parcours.title }}</a> 
+                    <a href="{% url 'parcours' %}"  class="btn btn-primary">Valider et retour à la liste des parcours</a>   
+                {% endif  %}
+
+                {% if parcours %}
+                    {% if group %}
+                        <a href="{% url 'list_parcours_group' group.id %}"  class="btn btn-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">Valider et retour au groupe</a>   
+                    {% endif  %}
+                {% endif  %}
+                </div>
+            </div>
+    </div>   
+</section>  
+
+
+
+<div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
+
+        {% if user.user_type == 2 %}
+            <div class="modal-content help" >
+                <div class="helpdiv_help_title_page"  style="margin-top:80px;left:160px;width:600px">
+                    Sélectionner le ou les niveaux des exercices souhaités
+                </div>
+
+                <div class="helpdiv_help_title_page"  style="margin-top:80px;left:660px;width:600px">
+                    Sélectionner le ou les thèmes des exercices souhaités
+                </div>
+
+
+
+                <div class="helpdiv_help_title_page"  style="margin-top:150px;left:175px">
+                    <img src="{% static 'img/fleche_bottom_left.png' %}" width="40px" />
+
+                    <div class="help_groupe" style="float:left" >
+                        Cocher/décocher pour placer un exercice dans le parcours. Enregistrement automatique.
+                    </div>
+
+                </div>
+
+                <div class="helpdiv_help_acces" style="margin-top:50px">
+                    Indicateur de publication du parcours<img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align: bottom" />
+                </div>
+
+
+                <div class="helpdiv_help_acces" style="margin-top:40px;right:140px;border-top: 2px #FFF solid">
+                    Menu contextuel
+                </div>
+
+
+
+                <div class="helpdiv_help_title_page"  style="margin-top:235px;left:500px">
+
+                    <div class="help_groupe" style="float:left" >
+                       Code de l'exercice<br>Durée estimée<br>Nombre de situations requises pour l'enregistrement du score.
+                    </div>
+
+                </div>
+
+
+                <div class="helpdiv_help_menu_right_bar" style="margin-top:100px">            
+
+                    <br><br> <br><br> <img src="{% static 'img/fleche_bottom_left.png' %}" width="40px" />
+                    <div class="help_groupe" style="float:left" >
+ 
+                            <h2>Liste des exercices</h2> 
+                            Au chargement de la page, la liste des exercices déjà dans le parcours est montrée.<br><br> 
+                            Après la sélection des niveaux et thèmes, la liste des exercices souhaitée apparait.<br><i class="fa fa-warning"></i> Seuls les savoir faire du niveau du groupe seront évalués.
+                            <br><br>
+                            Passer la souris sur une vignette pour l'agrandir.
+
+ 
+                    </div>
+
+                </div>
+ 
+                    
+
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+ 
+ 
+ 
+       
+ 
+ 

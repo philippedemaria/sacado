@@ -1,0 +1,23 @@
+{% load item_tags %}
+
+
+{% for c in customs %}
+ 
+	<div class="quizz_card" style=" border-radius: 5px; float:left;
+		{% if c.imagefile %}
+			background-image: url('{{ c.imagefile.url }}'); background-size: cover; 
+		{% endif %}">
+		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
+			<span style="font-size:15px">{{ c.instruction|truncatechars:"50"|safe }}</span>
+			<p> <small>{{ c.duration|time_done }}</small> </p>
+
+			<p>
+				<a href="{% url 'show_custom_sequence' c.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
+				<a href="{% url 'clone_custom_sequence' c.id %}"  class="btn btn-primary btn-xs">Insérer dans la séquence</a>
+			</p>
+
+		</div>
+	</div>
+ 
+{% endfor %}
+ 

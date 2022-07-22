@@ -1,0 +1,59 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+        require(['script/remove_css']);
+    </script> 
+    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+<span  style="color:{{ parcours.color }}"> <i class="bi bi-file-font"></i> 
+    {% include 'qcm/breadcrumb_student.html' %}
+       <small class="thin"> Le cours </small>   
+{% endblock %}
+
+
+{% block page_menu_right %}
+    {% if not parcours.is_sequence %}
+        {% include 'qcm/submenu_parcours_student.html' %}
+    {% endif %}
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">  
+    <div class="row">
+        {% if   course  %}
+            <div class="col-md-12 col-xs-12 col-lg-12">
+                <h1 class="thin">  <span id="this_course_title">{{ course.title }}</span>   </h1>
+                <hr>
+                <div id="this_course_viewer">{{ course.annoncement|decode|safe }} </div>
+            </div>
+        {% else %} 
+            <div class="col-md-12 col-xs-12 col-lg-12">
+                <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
+            </div>
+        {% endif %} 
+      </div> 
+    </div>
+</section>
+
+<input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
+
+ 
+{% endblock %} 

@@ -1019,10 +1019,48 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     });
                 }
 
-    
-        sorter_exercises('#exercise_sorter' , ".div_exercise_id");
-        sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
+        function sorter_sequence($div_class , $exercise_class ) {
 
+                $($div_class).sortable({
+                    cursor: "move",
+                    swap: true,    
+                    animation: 150,
+                    distance: 10,
+                    revert: true,
+                    tolerance: "pointer" , 
+                    start: function( event, ui ) { 
+                           $(ui.item).css("box-shadow", "10px 5px 10px gray"); 
+                       },
+                    stop: function (event, ui) {
+
+                        let parcours = $("#parcours").val();
+                        var valeurs = "";
+
+
+                        $($exercise_class).each(function() {
+                            cstm = parseInt($(this).attr("data-custom"));
+                            let div_exercise_id = $(this).val();
+                            valeurs = valeurs + div_exercise_id +"-";
+                        });
+ 
+
+                        $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
+
+                        $.ajax({
+                                data:   { 'valeurs': valeurs ,  'parcours' : parcours,} ,    
+                                type: "POST",
+                                dataType: "json",
+                                url: "../../ajax/sort_sequence" 
+                            }); 
+                        }
+                    });
+                }    
+
+
+
+        sorter_exercises('#exercise_sorter' , ".div_exercise_id");
+        sorter_sequence('#sequence_sorter' , ".relationship_id_sequence");
+        sorter_exercises('#exercise_sortable_list' , ".sorted_exercise_id");
 
         function sorter_parcours($div_class , $exercise_class, $choice ) {
 

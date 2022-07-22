@@ -331,7 +331,8 @@ class Quizz(ModelWithCode):
 
 
 
-
+    def type_of_document(self):
+        return 3
 
 
 

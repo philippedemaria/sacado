@@ -34,8 +34,8 @@ urlpatterns = [
     path('delete_relationtex/<int:id>', delete_relationtex , name='delete_relationtex'),
 
     path('create_bibliotex_from_parcours/<int:idp>', create_bibliotex_from_parcours , name='create_bibliotex_from_parcours'),
- 
-
+    path('peuplate_bibliotex_parcours/<int:idp>', peuplate_bibliotex_parcours , name='peuplate_bibliotex_parcours'), 
+    path('clone_bibliotex_sequence/<int:idb>', clone_bibliotex_sequence, name='clone_bibliotex_sequence'),
 
 
     path('real_time_bibliotex/<int:id>', real_time_bibliotex, name='real_time_bibliotex'),  
@@ -81,5 +81,13 @@ urlpatterns = [
 
     path('ajax_sort_exotexs_in_bibliotex', ajax_sort_exotexs_in_bibliotex, name='ajax_sort_exotexs_in_bibliotex'), 
  
+
+
+    path('ajax_find_peuplate_sequence', ajax_find_peuplate_sequence, name='ajax_find_peuplate_sequence'),
+    path('clone_bibliotex_sequence/<int:idb>', clone_bibliotex_sequence, name='clone_bibliotex_sequence'),
+
+
+
+
 
  ]

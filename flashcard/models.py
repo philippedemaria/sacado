@@ -107,7 +107,8 @@ class Flashcard(models.Model):
             pass
         return t 
 
-
+    def type_of_document(self):
+        return 5
 
 class Flashpack(models.Model):
     """
@@ -150,8 +151,6 @@ class Flashpack(models.Model):
  
     def duration(self):
         d = 0
-        for q in self.questions.filter(is_publish=1) :
-            d += q.duration + self.interslide
         return d
 
     def flashcards_to_validate(self):

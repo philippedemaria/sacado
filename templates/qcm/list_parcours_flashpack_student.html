@@ -24,14 +24,15 @@
         {% include 'qcm/breadcrumb_student.html' %}   <span style="color:{{ parcours.color  }}"> <small class="thin">Les flashpacks</small></span>  
 {% endblock %}
 
+ 
+
 {% block page_menu_right %}
-
-
-        
-    {% include 'qcm/submenu_parcours_student.html' %}
-
-  
+    {% if not parcours.is_sequence %}
+        {% include 'qcm/submenu_parcours_student.html' %}
+    {% endif %}
 {% endblock %}
+
+ 
 
 {% block css_files %}
 {% endblock %}

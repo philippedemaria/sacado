@@ -115,6 +115,10 @@ urlpatterns = [
     path('ajax/course_viewer', ajax_course_viewer, name='ajax_course_viewer'),
     path('parcours_get_course', ajax_parcours_get_course, name='ajax_parcours_get_course'),
     path('ajax_individualise_this_exercise', ajax_individualise_this_exercise, name='ajax_individualise_this_exercise'),
+    path('ajax_individualise_this_document', ajax_individualise_this_document, name='ajax_individualise_this_document'),
+
+
+
     path('ajax_reset_this_exercise', ajax_reset_this_exercise, name='ajax_reset_this_exercise'),
 
     path('real_time/<int:id>', real_time, name='real_time'),
@@ -161,6 +165,7 @@ urlpatterns = [
 
     path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 
 
+    path('show_custom_sequence/<int:idc>/', show_custom_sequence, name='show_custom_sequence'),
 
     path('show_exercise/<int:id>/', show_exercise, name='show_exercise'),       #from index  
     path('exercises_level/<int:id>/', exercises_level , name='exercises_level'), 
@@ -199,8 +204,18 @@ urlpatterns = [
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
     path('show_one_course/<int:idc>', show_one_course, name='show_one_course'),
 
+    path('clone_course_sequence/<int:idc>', clone_course_sequence, name='clone_course_sequence'),
+
+    path('peuplate_course_parcours/<int:idp>', peuplate_course_parcours, name='peuplate_course_parcours'),
+    path('ajax_find_peuplate_sequence', ajax_find_peuplate_sequence, name='ajax_find_peuplate_sequence'), 
+
+    path('peuplate_custom_parcours/<int:idp>', peuplate_custom_parcours, name='peuplate_custom_parcours'),
+    path('clone_custom_sequence/<int:idc>', clone_custom_sequence, name='clone_custom_sequence'),    
 
     path('parcours_show_course_student/<int:idc>/<int:id>', show_course_student, name='show_course_student'),
+    path('show_course_sequence_student/<int:idc>/<int:id>', show_course_sequence_student, name='show_course_sequence_student'),
+
+
     path('parcours_show_courses_from_folder/<int:idf>/0', show_courses_from_folder, name='show_courses_from_folder'),  
     path('parcours_only_create_course/0', only_create_course, name='only_create_course'), 
     path('parcours_only_update_course/<int:idc>', only_update_course, name='only_update_course'), 
@@ -295,7 +310,8 @@ urlpatterns = [
     path('ajax_knowledge_exercise', ajax_knowledge_exercise, name='ajax_knowledge_exercise'),
     path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),
     path('ajax_level_exercise', ajax_level_exercise, name='ajax_level_exercise'),
-    path('ajax/sort_exercise', ajax_sort_exercise, name='ajax_sort_exercise'), 
+    path('ajax/sort_exercise', ajax_sort_exercise, name='ajax_sort_exercise'),
+    path('ajax/sort_sequence', ajax_sort_sequence, name='ajax_sort_sequence'),
     path('ajax/publish', ajax_publish, name='ajax_publish'),  
     path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),
     path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'),

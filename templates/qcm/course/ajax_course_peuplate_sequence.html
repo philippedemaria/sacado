@@ -1,0 +1,20 @@
+{% load item_tags %}
+
+
+{% for course in courses %}
+ 
+	<div class="quizz_card" style=" border-radius: 5px; float:left;">
+		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
+			<span style="font-size:25px">{{ course.title|truncatechars:"25" }}</span>
+			<p> <small>{{ course.duration|time_done }}</small> </p>
+
+			<p>
+				<a href="{% url 'show_one_course' course.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
+				<a href="{% url 'clone_course_sequence' course.id %}"  class="btn btn-primary btn-xs">Insérer dans la séquence</a>
+			</p>
+
+		</div>
+	</div>
+ 
+{% endfor %}
+ 

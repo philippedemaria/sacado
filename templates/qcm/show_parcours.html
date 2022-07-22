@@ -10,7 +10,6 @@
 
     <script>
         require(['script/ajax-parcours']);
-
     </script> 
 {% endblock %} 
 
@@ -73,200 +72,310 @@ body{
     <section class="content_list content_list_add">
      
      
-    {% if parcours.stop %}
-
- 
+        {% if parcours.stop %}
         <div class="row" >
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger" >{% if parcours.is_evaluation %}Cette évaluation est verrouillée {% else %}Ce parcours est verrouillé {% endif %} à partir du <b>{{ parcours.stop|date:"d F Y à H:i" }}</b></div>
             </div>
         </div>
- 
-    {% endif %}
+        {% endif %}
 
-        <div class="row {% if accordion %}documents_div documents_div_shadow{% endif %}">
-            <div class="col-sm-12 col-md-12"  id="exercise_sorter">
-                <h1 class="thin">Les exercices  
-                    {% if accordion %}
-                    <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> 
-                    <span class="fontLabel" >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</span> 
-                    {% endif %}
-                </h1>
-                    <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+        {% if parcours.is_sequence %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12" >
+                    <h1 class="thin">La séquence  
+                        <a href="#" data-toggle='modal' data-target='#documentpopup' ><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                        </a>
+                    </h1>
+                </div>
+                <div class="col-sm-12 col-md-12"  id="sequence_sorter">
                     {% for rc in relationships_customexercises %}
-                        {%  if rc.exercise.supportfile.is_title %}     
-                            <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                {% if rc.is_header_of_section  %}
-                                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                        {% if rc.type_id == 0 %}
+                            {%  if rc.exercise.supportfile.is_title %}     
+                                <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                    {% if rc.is_header_of_section  %}
+                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                                            {% if  rc.exercise.supportfile.title %}  
+                                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                            {% else %}
+                                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                    {% else %}
                                         {% if  rc.exercise.supportfile.title %}  
                                             {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                                         {% else %}
                                             {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                        {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                {% else %}
-                                    {% if  rc.exercise.supportfile.title %}  
-                                        {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                    {% else %}
-                                        {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            </h2>
-                        {%  elif rc.exercise.supportfile.is_subtitle %}
-                            <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                {% if rc.is_header_of_section %}
-                                    <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                {% else %}
-                                    {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
-                                {% endif %}
-                            </h3>
-                        {% else %}  
-                            {% include 'qcm/details_all_cards.html' %}            
+                                </h2>
+                            {%  elif rc.exercise.supportfile.is_subtitle %}
+                                <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                    {% if rc.is_header_of_section %}
+                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                    {% else %}
+                                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                                    {% endif %}
+                                </h3>
+                            {% else %}
+                                {% include 'details_document.html' %}
+                            {% endif %}  
+                        {% else %}
+                            {% include 'details_document.html' %}
                         {% endif %}  
                     {% endfor %}
 
-         
-                        <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="bi bi-cloud-plus-fill btn-create-group" ></i> 
-                            <div class="helper_tip_text" >Sélectionner des exercices.</div>
-                        </a>
-                        <a href="{% url 'parcours_create_custom_exercise' parcours.id 1 %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                            <div class="helper_tip_text" >Nouvel exercice personnalisé</div>
-                        </a>
-               
+                </div>
             </div>
-            {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
-        </div>  
+
+        {% else %}
+            <div class="row {% if accordion %}documents_div documents_div_shadow{% endif %}">
+                <div class="col-sm-12 col-md-12"  id="exercise_sorter">
+                    
+
+                    <h1 class="thin">Les exercices 
+                        {% if accordion %}
+                        <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> 
+                        <span class="fontLabel" >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</span> 
+                        {% endif %}
+                    </h1>
      
-     
+                        <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+                        {% for rc in relationships_customexercises %}
+                                {%  if rc.exercise.supportfile.is_title %}     
+                                    <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                        {% if rc.is_header_of_section  %}
+                                            <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                                                {% if  rc.exercise.supportfile.title %}  
+                                                    {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                                {% else %}
+                                                    {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                                {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                        {% else %}
+                                            {% if  rc.exercise.supportfile.title %}  
+                                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                            {% else %}
+                                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                            {% endif %}
+                                        {% endif %}
+                                    </h2>
+                                {%  elif rc.exercise.supportfile.is_subtitle %}
+                                    <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                        {% if rc.is_header_of_section %}
+                                            <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                        {% else %}
+                                            {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                                        {% endif %}
+                                    </h3>
+                                {% else %}  
+                                    {% include 'qcm/details_all_cards.html' %}            
+                                {% endif %}  
+ 
+                        {% endfor %}
 
-
-        {% if relationships_customexercises|length == 0   %}
-
-                <div class="row">
-                    <div class="col-sm-3 col-md-3" style="margin:40px">
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-                    </div> 
-                    <div class="col-sm-3 col-md-3" style="margin:40px">
-                    <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-                    </div> 
+                        {% if relationships_customexercises|length > 0   %}
+                            <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="bi bi-cloud-plus-fill btn-create-group" ></i> 
+                                <div class="helper_tip_text" >Sélectionner des exercices.</div>
+                            </a>
+                            <a href="{% url 'parcours_create_custom_exercise' parcours.id 1 %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                                <div class="helper_tip_text" >Nouvel exercice personnalisé</div>
+                            </a>
+                        {% endif %}
+                   
+                   
+                </div>
+                {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
+            </div>  
+ 
+            {% if relationships_customexercises|length == 0   %}
+            <div class="row">
+                <div class="col-sm-3 col-md-3" style="margin:40px">
+                <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
                 </div> 
+                <div class="col-sm-3 col-md-3" style="margin:40px">
+                <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
+                </div> 
+            </div>  
+            {% endif %}
+            {% if parcours.teacher == teacher %}
+
+
+                {% if parcours.course.count > 0  %}  
+                    <div class="row documents_div documents_div_shadow">           
+                        <div class="col-sm-12 col-md-12">
+                            <h1 class="thin">Les cours   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.course.count }} cours</span></h1>
+                            {% for course in parcours.course.all|dictsort:"ranking" %}
+                                {% include 'qcm/course/course_tag.html' %}
+                            {% endfor %}
+                            <a href="{% url 'create_course' 0 parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                                <div class="helper_tip_text" >Nouveau cours</div>
+                            </a>
+                        </div> 
+                        <div class="shadow_bottom"></div>
+                    </div>  
+                {% endif %} 
+
+
+
+                {% if parcours.quizz.count > 0  %}
+                    <div class="row documents_div documents_div_shadow">           
+                        <div class="col-sm-12 col-md-12">
+                            <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.quizz.count }} quizz</span></h1>
+                            {% for quizz in parcours.quizz.all %}
+                                {% include 'tool/quizz_tag.html' %}
+                            {% endfor %} 
+                            <a href="{% url 'create_quizz_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                                <div class="helper_tip_text" >Nouveau quizz</div>
+                            </a>
+                        </div> 
+                        <div class="shadow_bottom"></div>
+                    </div>  
+                {% endif %} 
+
+                {% if parcours.bibliotexs.count > 0  %}
+                    <div class="row documents_div documents_div_shadow">            
+                        <div class="col-sm-12 col-md-12">
+                            <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.bibliotexs.count }} biblioTex</span> </h1>
+                            {% for bibliotex in parcours.bibliotexs.all %}
+                                {% include 'bibliotex/bibliotex_tag.html' %}
+                            {% endfor %}
+                            <a href="{% url 'create_bibliotex_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                                <div class="helper_tip_text" >Nouveau bibliotex</div>
+                            </a>
+                        </div>
+                        <div class="shadow_bottom"></div>
+                    </div>  
+                {% endif %} 
+
+
+
+                {% if parcours.flashpacks.count > 0  %}  
+                    <div class="row documents_div documents_div_shadow">           
+                        <div class="col-sm-12 col-md-12">
+                            <h1 class="thin">Les flashpacks   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.flashpacks.count }} flashpacks</span></h1>
+                            {% for flashpack in parcours.flashpacks.all  %}
+                                {% include 'flashcard/flashpack_tag.html' %}
+                            {% endfor %} 
+
+                            <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                                <div class="helper_tip_text" >Nouveau flaspack</div>
+                            </a>
+                    </div>
+                        </div> 
+                        <div class="shadow_bottom"></div>
+                    </div>  
+                {% endif %} 
+            {% endif %} 
 
         {% endif %}
 
 
 
-{% if parcours.teacher == teacher %}
 
-
-    {% if parcours.course.count > 0  %}  
-        <div class="row documents_div documents_div_shadow">           
-            <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les cours   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.course.count }} cours</span></h1>
-                {% for course in parcours.course.all|dictsort:"ranking" %}
-                    {% include 'qcm/course/course_tag.html' %}
-                {% endfor %}
-                <a href="{% url 'create_course' 0 parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                    <div class="helper_tip_text" >Nouveau cours</div>
-                </a>
-            </div> 
-            <div class="shadow_bottom"></div>
-        </div>  
-    {% endif %} 
-
-
-
-    {% if parcours.quizz.count > 0  %}
-        <div class="row documents_div documents_div_shadow">           
-            <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.quizz.count }} quizz</span></h1>
-                {% for quizz in parcours.quizz.all %}
-                    {% include 'tool/quizz_tag.html' %}
-                {% endfor %} 
-                <a href="{% url 'create_quizz_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                    <div class="helper_tip_text" >Nouveau quizz</div>
-                </a>
-            </div> 
-            <div class="shadow_bottom"></div>
-        </div>  
-    {% endif %} 
-
-    {% if parcours.bibliotexs.count > 0  %}
-        <div class="row documents_div documents_div_shadow">            
-            <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.bibliotexs.count }} biblioTex</span> </h1>
-                {% for bibliotex in parcours.bibliotexs.all %}
-                    {% include 'bibliotex/bibliotex_tag.html' %}
-                {% endfor %}
-                <a href="{% url 'create_bibliotex_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                    <div class="helper_tip_text" >Nouveau bibliotex</div>
-                </a>
+    <div class="row" style="margin-top:50px">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                {% if sacado_asso %}
+                    {% if parcours.teacher != teacher  and  parcours.is_share %}
+                        <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
+                        <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cours associé</a>  
+                    {% endif %} 
+                {% endif %}  
+                <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
             </div>
-            <div class="shadow_bottom"></div>
-        </div>  
-    {% endif %} 
-
-
-
-    {% if parcours.flashpacks.count > 0  %}  
-        <div class="row documents_div documents_div_shadow">           
-            <div class="col-sm-12 col-md-12">
-                <h1 class="thin">Les flashpacks   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.flashpacks.count }} flashpacks</span></h1>
-                {% for flashpack in parcours.flashpacks.all  %}
-                    {% include 'flashcard/flashpack_tag.html' %}
-                {% endfor %} 
-
-                <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                    <div class="helper_tip_text" >Nouveau flaspack</div>
-                </a>
         </div>
-            </div> 
-            <div class="shadow_bottom"></div>
-        </div>  
-    {% endif %} 
-{% endif %} 
-
-
-
-
-
-
-<div class="row" style="margin-top:50px">
-    <div class="col-sm-12 col-md-12">
-        <div class="form-group">
-            {% if sacado_asso %}
-                {% if parcours.teacher != teacher  and  parcours.is_share %}
-                    <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
-                    <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cours associé</a>  
-                {% endif %} 
-            {% endif %}  
-            <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
-        </div>
-    </div>
-</div>  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </div>  
 
 
     </section>
 </form>
  
+
+
+<div class="modal fade" id="documentpopup" tabindex="-1" role="dialog" aria-labelledby="sacadopopup" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2  class="sacado">Créer/Associer un docUment  </h2>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                    Exercices  
+                    </div>  
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-warning"> Associer des exercices SACADO </a>  
+                    </div> 
+                </div> 
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                    Exercices personnalisés
+                    </div>  
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_custom_parcours' parcours.id   %}" class="btn btn-warning"> Associer  un existant </a>  
+                    </div> 
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer  un nouveau</a>  
+                    </div> 
+                </div>        
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                    Cours
+                    </div>   
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_course_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
+                    </div>                     
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'create_course' 0 parcours.id   %}" class="btn btn-danger"> Créer un nouveau</a>  
+                    </div> 
+                </div> 
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                    Quizz
+                    </div> 
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
+                    </div> 
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_quizz_parcours' parcours.id  %}" class="btn btn-danger"> Créer un nouveau</a>  
+                    </div> 
+                </div> 
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                    Flashpack
+                    </div> 
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_flashpack_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'create_flashpack_from_parcours' parcours.id   %}" class="btn btn-danger"> Créer un nouveau</a>  
+                    </div> 
+                </div> 
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3">
+                    BiblioTex
+                    </div> 
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="btn btn-warning"> Associer une existante</a>  
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                    <a href="{% url 'create_bibliotex_from_parcours' parcours.id   %}" class="btn btn-danger"> Créer une nouvelle</a>  
+                    </div> 
+                </div> 
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

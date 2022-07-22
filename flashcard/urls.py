@@ -16,6 +16,10 @@ urlpatterns = [
 
 
     path('create_flashpack_from_parcours/<int:idp>', create_flashpack_from_parcours , name='create_flashpack_from_parcours'),
+    path('peuplate_flashpack_parcours/<int:idp>', peuplate_flashpack_parcours , name='peuplate_flashpack_parcours'),
+    path('ajax_find_peuplate_sequence', ajax_find_peuplate_sequence, name='ajax_find_peuplate_sequence'),
+    path('clone_flashpack_sequence/<int:idf>', clone_flashpack_sequence, name='clone_flashpack_sequence'),
+
 
     path('flashpack_peuplate/<int:id>', flashpack_peuplate, name='flashpack_peuplate'),
     path('set_flashcards_to_flashpack/<int:id>', set_flashcards_to_flashpack, name='set_flashcards_to_flashpack'),   

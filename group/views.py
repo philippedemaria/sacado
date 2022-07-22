@@ -178,7 +178,8 @@ def student_dashboard(request,group_id):
         
         bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None, is_archive =0 , is_trash=0).distinct()
 
-        parcourses = bases.filter(is_evaluation=0).order_by("ranking")
+        parcourses = bases.filter(is_evaluation=0, is_sequence=0).order_by("ranking")
+        sequences  = bases.filter(is_evaluation=0, is_sequence=1).order_by("ranking")
         evaluations = bases.filter(is_evaluation=1).order_by("ranking")
 
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
@@ -193,7 +194,8 @@ def student_dashboard(request,group_id):
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
         bases = student.students_to_parcours
-        parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0).order_by("ranking")
+        parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0, is_sequence=0).order_by("ranking")
+        sequences = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0, is_sequence=1).order_by("ranking")
         evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,is_trash=0).order_by("ranking")
         last_exercises_done = student.answers.order_by("-date")[:5]
    
@@ -246,7 +248,7 @@ def student_dashboard(request,group_id):
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
-               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index}
+               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index , 'sequences' : sequences}
 
  
     return template, context

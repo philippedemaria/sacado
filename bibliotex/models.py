@@ -155,6 +155,8 @@ class Bibliotex(models.Model):
         data["students"] = intersection
         return data 
 
+    def type_of_document(self):
+        return 4
 ########################################################################################################
 ########################################################################################################
 class Relationtex(models.Model):
@@ -217,7 +219,8 @@ class Relationtex(models.Model):
         return data 
 
  
-
+    def type_of_exercise(self):
+        return 4
 
 
 

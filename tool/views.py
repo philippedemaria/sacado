@@ -9,7 +9,7 @@ from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide 
 from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm, QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
 from group.models import Group 
 from socle.models import Level, Waiting , Theme , Knowledge
-from qcm.models import  Parcours, Exercise , Folder
+from qcm.models import  Parcours, Exercise , Folder , Relationship
 from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
  
@@ -321,6 +321,63 @@ def clone_quizz(request, id_quizz):
     else :
         return redirect('list_quizzes')
  
+
+
+def clone_quizz_sequence(request, id_quizz):
+    """ cloner un parcours """
+
+    teacher = request.user.teacher
+    quizz = Quizz.objects.get(pk=id_quizz) # parcours à cloner.pk = None
+    questions = quizz.questions.all()
+    levels = quizz.levels.all()
+    qrandoms = quizz.qrandoms.all()
+    themes = quizz.themes.all()
+
+    quizz.pk = None
+    quizz.teacher = teacher
+    quizz.code = str(uuid.uuid4())[:8]
+    quizz.save()
+
+    parcours_id = request.session.get("parcours_id",None)  
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = quizz.id , document_id = quizz.id  , type_id = 3 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+
+
+    tab_id , t_idd = [] , []
+    for q in questions :
+        tab_id.append(q.id)
+        q.pk = None
+        q.save()
+        t_idd.append(q.id)
+        quizz.questions.add(q)
+
+    i = 0
+    for tid in tab_id :
+        quest = Question.objects.get(pk=tid)
+        for c in quest.choices.all():
+            c.pk = None
+            c.question_id = t_idd[i]
+            c.save()
+        i+=1
+
+
+    for l in levels :
+        quizz.levels.add(l)
+    for qr in qrandoms :
+        quizz.qrandoms.add(qr)
+    for t in themes :
+        quizz.themes.add(t)
+
+    if parcours_id :
+        return redirect('show_parcours' , 0, parcours_id )
+    else :
+        return redirect('list_quizzes')
+ 
+
+
 
 
 @csrf_exempt
@@ -653,6 +710,48 @@ def delete_quizz(request,id):
         quizz.delete() 
 
     return redirect('list_quizzes')
+
+
+
+
+
+def peuplate_quizz_parcours(request,idp):
+
+    teacher = request.user.teacher
+    parcours = Parcours.objects.get(id=idp)
+
+    quizzes = Quizz.objects.filter(parcours=parcours)
+
+
+    context = {'parcours': parcours, 'teacher': teacher , 'quizzes' : quizzes, 'type_of_document' : 2 }
+
+    return render(request, 'tool/form_peuplate_quizz_parcours.html', context)
+
+
+
+def ajax_find_peuplate_sequence(request):
+
+    id_parcours = request.POST.get("id_parcours",0)
+    subject_id  = request.POST.get("id_subject",0) 
+    level_id    = request.POST.get("id_level",None) 
+    theme_id    = request.POST.getlist("theme_id",None) 
+    level = Level.objects.get(pk=level_id)
+    quizzes = Quizz.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level,is_numeric=1 )
+    context = { "quizzes" : quizzes }
+
+
+    data = {}
+    data['html']    = render_to_string( 'tool/ajax_quizz_peuplate_sequence.html' , context)
+
+    return JsonResponse(data)  
+
+
+
+
+
+
+
+
 
 
  

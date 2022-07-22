@@ -1,0 +1,103 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+{% with rc.type_of_document as tod %}
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+
+        {% if rc.type_id == 1 %}
+            {% if rc.imagefile %}
+                <img  src="{{ rc.imagefile.url }}"  width="400px" />
+            {% elif rc.is_python %} 
+                <img  src="{% static 'img/python.jpg' %}"  width="400px" />
+            {% else %} 
+                <img  src="{% static 'img/custom_exercise.jpg' %}"  width="400px" />
+            {% endif %} 
+        {% elif rc.type_id == 2 %} 
+            <img  src="{% static 'img/cours.jpg' %}"  width="400px" />
+        {% elif rc.type_id == 3 %} 
+            <img  src="{% static 'img/quizz_menu.jpg' %}"  width="400px" />
+        {% elif rc.type_id == 4 %} 
+            <img  src="{% static 'img/flash_accueil.png' %}"  width="400px" />
+        {% elif rc.type_id == 5 %} 
+            <img  src="{% static 'img/bibliotex.jpg' %}"  width="400px" />
+        {% endif %} 
+
+        <hr/>
+        <span class="btn btn-info select_student" 
+            id="selecteur{{tod.id}}"    
+            data-student_id="0"   data-custom=1
+            data-exercise_id="{{ tod.id }}" 
+            data-statut="False"   
+            data-parcours_id="{{ parcours.id }}"  style="min-width:75px; margin:1px; margin-right:0px" >Attribuer à tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"    data-custom=1
+            data-exercise_id="{{ tod.id }}" 
+            data-statut="False"   
+            data-parcours_id="{{ parcours.id }}" />
+        </span>
+        <span class="btn btn-warning select_student" 
+            id="selecteur{{tod.id}}"    
+            data-student_id="0"    data-custom=1
+            data-exercise_id="{{ tod.id }}" 
+            data-statut="True"   
+            data-parcours_id="{{ parcours.id }}"  style="min-width:75px; margin:1px; margin-left:0px" >Détacher tous les élèves
+
+            <input  type="checkbox"  style="display:none"
+            data-student_id="0"    data-custom=1
+            data-exercise_id="{{ tod.id }}" 
+            data-statut="True"   
+            data-parcours_id="{{ parcours.id }}" />
+        </span>
+
+    </div> 
+    <div class="col-sm-12 col-md-6">
+ 
+        <h3>
+ 
+          {% if rc.type_id == 1 %}   {{ rc.instruction|decode|cleanhtml }}         
+   
+          {% else %} {{ tod.title }}
+          {% endif %}
+
+
+
+            
+        </h3>
+ 
+
+        <hr/>
+ 
+
+
+
+ 
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+            {%  for s in  students %}
+
+                {% get_exercise s rc as has_it %}
+
+                    <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_studentCustom{{tod.id}}" 
+                    id="studentCustom{{tod.id}}-{{s.user.id }}"
+                    data-student_id="{{ s.user.id }}" data-exercise_id="{{ tod.id }}"   data-custom=1 data-parcours_id="{{ parcours.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                    style="min-width:155px; margin:1px">
+
+
+
+
+                    {{ s.user.last_name }} {{ s.user.first_name|truncatechars:6 }}
+                </span>
+
+            {%  endfor %}
+        </form>
+     </div> 
+</div>
+
+{% endwith %}
+
+ 
+       

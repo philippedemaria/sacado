@@ -23,7 +23,7 @@
 
     {% include 'qcm/breadcrumb_student.html' %}
      
-    <small class="thin">{{ nb_exercises }} exercice{{ nb_exercises|pluralize }} 
+    <small class="thin">{{ nb_exercises }} {% if parcours.is_sequence %}document{{ nb_exercises|pluralize }}{% else %}exercice{{ nb_exercises|pluralize }} {% endif %}
 
     {% if parcours.is_achievement %}
         <img src="{% static 'img/angle-right.png' %}"/>
@@ -35,8 +35,10 @@
 
 
 
-{% block page_menu_right %} 
-    {% include 'qcm/submenu_parcours_student.html' %}
+{% block page_menu_right %}
+    {% if not parcours.is_sequence %}
+        {% include 'qcm/submenu_parcours_student.html' %}
+    {% endif %}
 {% endblock %}
 
 
@@ -61,8 +63,51 @@
             </div>
         </div>
         {% endif %}
-    {% endif %}    
+    {% endif %}  
 
+
+
+    {% if parcours.is_sequence %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    {% for rc in relationships_customexercises %}
+                        {% if rc.type_id == 0 %}
+                            {%  if rc.exercise.supportfile.is_title %}     
+                                <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                    {% if rc.is_header_of_section  %}
+                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
+                                            {% if  rc.exercise.supportfile.title %}  
+                                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                            {% else %}
+                                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                    {% else %}
+                                        {% if  rc.exercise.supportfile.title %}  
+                                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
+                                        {% else %}
+                                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
+                                        {% endif %}
+                                    {% endif %}
+                                </h2>
+                            {%  elif rc.exercise.supportfile.is_subtitle %}
+                                <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                    {% if rc.is_header_of_section %}
+                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                    {% else %}
+                                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                                    {% endif %}
+                                </h3>
+                            {% else %}
+                                {% include 'details_document_student.html' %}
+                            {% endif %}  
+                        {% else %}
+                            {% include 'details_document_student.html' %}
+                        {% endif %}  
+                    {% endfor %}
+
+                </div>
+            </div>
+    {% else %}
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             {% for rc in relationships_customexercises %}
@@ -551,6 +596,11 @@
             {% endfor %}
         </div>
     </div>
+
+    {% endif %}
+
+
+
 </section>
  
 

@@ -1,0 +1,23 @@
+{% load item_tags %}
+
+
+{% for f in flashpacks %}
+ 
+	<div class="quizz_card" style=" border-radius: 5px; float:left;
+		{% if f.vignette %}
+			background-image: url('{{ f.vignette.url }}'); background-size: cover; 
+		{% endif %}">
+		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
+			<span style="font-size:25px">{{ f.title|truncatechars:"25" }}</span>
+			<p>{{ f.flashcards.count }} flashcards, <small>{{ f.duration|time_done }}</small> </p>
+
+			<p>
+				<a href="{% url 'show_flashpack' f.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
+				<a href="{% url 'clone_flashpack_sequence' f.id %}"  class="btn btn-primary btn-xs">Insérer dans la séquence</a>
+			</p>
+
+		</div>
+	</div>
+ 
+{% endfor %}
+ 

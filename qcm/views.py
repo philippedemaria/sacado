@@ -20,6 +20,8 @@ from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, Remediatio
 from tool.forms import QuizzForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from bibliotex.models import Bibliotex
+from tool.models import Quizz
+from flashcard.models import Flashpack
 from django.http import JsonResponse 
 from django.core import serializers
 from django.template.loader import render_to_string
@@ -1273,6 +1275,38 @@ def ajax_individualise_this_exercise(request):
     return JsonResponse(data)
 
 
+
+
+def ajax_individualise_this_document(request):
+
+    relationship_id = int(request.POST.get("relationship_id"))
+    group_id        = request.POST.get("group_id",None) 
+
+    rc = Relationship.objects.get(pk=relationship_id)
+    parcours = rc.parcours 
+
+    if group_id :
+        group    = Group.objects.get(pk=group_id)
+        students = group.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+    else :
+        students = rc.students.exclude(user__username__contains="_e-test").order_by("user__last_name") 
+
+
+    data = {}
+    data['html'] = render_to_string('qcm/ajax_individualise_this_document.html', {'rc' : rc, 'parcours' : parcours, 'students' : students, })
+
+    return JsonResponse(data)
+
+
+
+
+
+
+
+
+
+
+
 def ajax_reset_this_exercise(request):
 
     relationship_id = int(request.POST.get("relationship_id"))
@@ -2457,9 +2491,7 @@ def ordering_number(parcours):
     customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
     listing_ordered.update(relationships)
     listing_ordered.update(customexercises)
-
     listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
-
 
     nb_exo_only, nb_exo_visible  = [] , []   
     i , j = 0, 0
@@ -2554,13 +2586,16 @@ def show_parcours(request, idf = 0, id=0):
 def ordering_number_for_student(parcours,student):
     """ créer une seule liste des exercices personnalisés et des exercices sacado coté eleve """
 
-    listing_ordered = set() 
-    relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1).prefetch_related('exercise__supportfile').order_by("ranking")
-    customexercises = Customexercise.objects.filter(parcourses=parcours, students=student, is_publish=1).order_by("ranking") 
-    listing_ordered.update(relationships)
-    listing_ordered.update(customexercises)
+    listing_ordered = set()
 
-    listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
+    if parcours.is_sequence : 
+        listing_order = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1).order_by("ranking")
+    else :
+        relationships = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1).prefetch_related('exercise__supportfile').order_by("ranking")
+        customexercises = Customexercise.objects.filter(parcourses=parcours, students=student, is_publish=1).order_by("ranking")
+        listing_ordered.update(relationships)
+        listing_ordered.update(customexercises)
+        listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
 
 
 
@@ -3661,11 +3696,7 @@ def ajax_folders_sorter(request):
 @csrf_exempt
 def ajax_sort_exercise(request):
     """ tri des exercices""" 
-
-
-
     try :
-
         parcours = request.POST.get("parcours")
 
         exercise_ids = request.POST.get("valeurs")
@@ -3673,7 +3704,6 @@ def ajax_sort_exercise(request):
 
         customizes = request.POST.get("customizes")
         customize_tab = customizes.split("-") 
-
 
         for i in range(len(exercise_tab)-1):
             if int(customize_tab[i]) == 1 :
@@ -3686,6 +3716,25 @@ def ajax_sort_exercise(request):
     return JsonResponse(data) 
 
 
+
+
+@csrf_exempt
+def ajax_sort_sequence(request):
+    """ tri des exercices""" 
+    try :
+        parcours = request.POST.get("parcours")
+
+        exercise_ids = request.POST.get("valeurs")
+        exercise_tab = exercise_ids.split("-") 
+
+        print(exercise_tab)
+
+        for i in range(len(exercise_tab)-1):
+            Relationship.objects.filter(pk = exercise_tab[i]).update(ranking = i)
+    except :
+        pass
+    data = {}
+    return JsonResponse(data) 
 
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
@@ -6306,6 +6355,13 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
     else :
         return redirect("index")
 
+ 
+
+ 
+
+
+
+
 
 
 #################################################################################################################
@@ -6423,6 +6479,23 @@ def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non a
         url = "qcm/form_writing_custom.html" 
 
     return render(request, url , context)
+
+
+
+def show_custom_sequence(request,idc): # vue pour le prof de l'exercice non autocorrigé par le prof
+
+    customexercise = Customexercise.objects.get(pk = idc)
+    today = timezone.now()
+
+    context = { 'customexercise' : customexercise, 'today' : today , 'student' : None, }
+
+    if customexercise.is_python :
+        url = "basthon/index_custom.html" 
+    else :
+        url = "qcm/form_writing_custom.html" 
+
+    return render(request, url , context)
+
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -6945,7 +7018,91 @@ def ajax_delete_constraint(request):
         data["nbre"] = nbre
     return JsonResponse(data)
 
+
+
+
+
+def peuplate_custom_parcours(request,idp):
+
+    teacher = request.user.teacher
+    parcours = Parcours.objects.get(id=idp)
+
+    context = {'parcours': parcours, 'teacher': teacher ,  'type_of_document' : 1 }
+
+    return render(request, 'qcm/form_peuplate_custom_parcours.html', context)
  
+
+def ajax_find_peuplate_sequence(request):
+
+    id_parcours      = request.POST.get("id_parcours",0)
+    subject_id       = request.POST.get("id_subject",0) 
+    level_id         = request.POST.get("id_level",None) 
+    type_of_document = request.POST.get("type_of_document",None) 
+
+    theme_id    = request.POST.getlist("theme_id",None) 
+    level = Level.objects.get(pk=level_id)
+    data = {}   
+    if type_of_document == "2":
+        courses = Course.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
+        context = { "courses" : courses }    
+        data['html']    = render_to_string( 'qcm/course/ajax_course_peuplate_sequence.html' , context)
+    else :
+        customs = Customexercise.objects.filter(teacher = request.user.teacher )
+        context = { "customs" : customs }
+        data['html']    = render_to_string( 'qcm/ajax_custom_peuplate_sequence.html' , context)
+
+    return JsonResponse(data)  
+
+
+ 
+def clone_course_sequence(request, idc):
+    """ cloner un cours dans une sequence """
+
+    teacher = request.user.teacher
+    course = Course.objects.get(pk=idc) # parcours à cloner.pk = None
+
+    course.pk = None
+    course.teacher = teacher
+    course.save()
+
+    parcours_id = request.session.get("parcours_id",None)  
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = course.id , document_id = course.id  , type_id = 2 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+        return redirect('show_parcours' , 0, parcours_id )
+    else :
+        return redirect('list_quizzes')
+ 
+
+
+
+
+def clone_custom_sequence(request, idc):
+    """ cloner un parcours """
+
+    teacher = request.user.teacher
+    customexercise = Customexercise.objects.get(pk=idc) # parcours à cloner.pk = None
+    customexercise.pk = None
+    customexercise.teacher = teacher
+    customexercise.code = str(uuid.uuid4())[:8]
+    customexercise.save()
+
+    parcours_id = request.session.get("parcours_id",None)  
+    if parcours_id :
+        parcours = Parcours.objects.get(pk = parcours_id)
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = customexercise.id , document_id = customexercise.id  , type_id = 1 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+        customexercise.students.set(students)
+
+        return redirect('show_parcours' , 0, parcours_id )
+    else :
+        return redirect('list_quizzes')
+
+
+
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 #################   exports PRONOTE ou autre
@@ -7580,6 +7737,33 @@ def delete_course(request, idc , id  ):
         return redirect('index')  
 
 
+
+
+
+def peuplate_course_parcours(request,idp):
+
+    teacher = request.user.teacher
+    parcours = Parcours.objects.get(id=idp)
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+
+    if not authorizing_access(teacher,parcours, access ):
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        return redirect('index')
+
+    
+    courses = Course.objects.filter(parcours=parcours)
+
+
+    context = {'parcours': parcours, 'teacher': teacher , 'courses' : courses , 'type_of_document' : 2 }
+
+    return render(request, 'qcm/form_peuplate_course_parcours.html', context)
+
+
+
+
+
 #@user_is_parcours_teacher
 def show_course(request, idc , id ) :
     """
@@ -7976,6 +8160,24 @@ def show_course_student(request, idc , id ):
     context = {  'courses': courses,  'course': course, 'parcours': parcours , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/course/show_course_student.html', context)
  
+
+
+@student_can_show_this_course
+def show_course_sequence_student(request, idc , id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    this_user = request.user
+    parcours = Parcours.objects.get(pk =  id)
+    today = time_zone_user(this_user)  
+    course = Course.objects.get(pk=idc) 
+
+    context = { 'course': course, 'parcours': parcours , 'group_id' : None, 'communications' : []}
+    return render(request, 'qcm/course/show_course_sequence_student.html', context)
+ 
+
+
+
 
 
  

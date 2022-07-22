@@ -20,13 +20,19 @@ urlpatterns = [
     
     path('create_quizz_folder/<int:idf>', create_quizz_folder, name='create_quizz_folder'),
     path('create_quizz_parcours/<int:idp>', create_quizz_parcours, name='create_quizz_parcours'),
- 
+
+    path('peuplate_quizz_parcours/<int:idp>', peuplate_quizz_parcours, name='peuplate_quizz_parcours'),
+    path('ajax_find_peuplate_sequence', ajax_find_peuplate_sequence, name='ajax_find_peuplate_sequence'), 
+
 
 
     path('all_quizzes/search', all_quizzes, name='all_quizzes'), 
     path('ajax_shared_quizzes', ajax_shared_quizzes, name='ajax_shared_quizzes'), 
     path('clone_quizz/<int:id_quizz>', clone_quizz, name='clone_quizz'),
     path('ajax_chargethemes_quizz', ajax_chargethemes_quizz, name='ajax_chargethemes_quizz'),
+
+    path('clone_quizz_sequence/<int:id_quizz>', clone_quizz_sequence, name='clone_quizz_sequence'),
+    
 
     path('show_quizz_shared/<int:id>', show_quizz_shared, name='show_quizz_shared'), 
 
