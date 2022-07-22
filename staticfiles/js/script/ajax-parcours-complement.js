@@ -10,6 +10,7 @@ define(['jquery','bootstrap'], function ($) {
        
         $('#id_is_favorite').prop('checked', true); 
 
+        $('#id_is_sequence').prop('checked', false); 
         $('#id_zoom').prop('checked', false); 
  
         $('#id_is_publish').prop('checked', true); 
