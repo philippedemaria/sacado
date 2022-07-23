@@ -20,9 +20,11 @@ urlpatterns = [
     #path('get_folder_to_folder', get_folder_to_folder, name='parcours'),
 
     path('parcours', list_parcours, name='parcours'),
+    path('sequences', list_sequences, name='sequences'),
     path('evaluations', list_evaluations, name='evaluations'),
     path('archives', list_archives, name='archives'),
     path('evaluations_archives', list_evaluations_archives, name='evaluations_archives'),
+    path('sequences_archives', list_sequences_archives, name='sequences_archives'),
 
     path('parcours_create/<int:idf>/', create_parcours, name='create_parcours'),
     path('parcours_create_evaluation/<int:idf>/', create_evaluation, name='create_evaluation'),

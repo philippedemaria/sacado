@@ -36,9 +36,14 @@
 
 
         <div style="font-size:14px;margin-top:-5px;">
- 
             {% with nbp=parcours.nb_exercises %}
-                {{ nbp }} exercice{{ nbp|pluralize }}
+                {{ nbp }} 
+                {% if 'parcours' in request.path %}
+                    exercice
+                {% else %}
+                    document
+                {% endif %}
+                {{ nbp|pluralize }}
             {% endwith %}
             <small> {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. </small>
         </div>

@@ -130,16 +130,16 @@ def get_accordion(c,q,b,f):
 #Récupération du parcours Seconde to Maths complémentaires
 #################################################################
 
-def folders_contains_evaluation(folds, is_eval) :
+def folders_contains_evaluation(folds, is_eval,is_sequence) :
     folders = []
     if is_eval :
         for folder in folds :
-            for p in folder.parcours.all() :
+            for p in folder.parcours.filter(is_trash=0) :
                 if p.is_evaluation and folder not in folders :
                     folders.append(folder)
     else :
         for folder in folds :
-            for p in folder.parcours.all() :
+            for p in folder.parcours.filter(is_sequence = is_sequence,is_trash=0) :
                 if not p.is_evaluation and folder not in folders :
                     folders.append(folder)
     return folders
@@ -452,11 +452,11 @@ def teacher_has_folders(teacher ,is_archive ):
 
 
 
-def teacher_has_own_parcourses_and_folder(teacher,is_evaluation,is_archive ):
+def teacher_has_own_parcourses_and_folder(teacher,is_evaluation,is_archive,is_sequence ):
     """
     Renvoie les parcours et les dossiers dont le prof est propriétaire
     """
-    parcourses =  teacher.teacher_parcours.filter( is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0 ).order_by("subject","level")
+    parcourses =  teacher.teacher_parcours.filter( is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0,is_sequence = is_sequence ).order_by("subject","level")
 
     return parcourses
 
@@ -1475,11 +1475,11 @@ def list_parcours(request):
     today   = time_zone_user(teacher.user)
 
     folds   = teacher_has_folders(teacher, 0  ) #  is_archive
-    folders = folders_contains_evaluation(folds, False)
+    folders = folders_contains_evaluation(folds, False,0)
 
-    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0, is_archive=0,is_trash=0)
+    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0,is_sequence=0, is_archive=0,is_trash=0)
 
-    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,0 )   )   
     nb_base = len( folders ) + parcourses.count()
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
@@ -1502,8 +1502,8 @@ def list_archives(request):
     today = time_zone_user(teacher.user)
 
     folders = teacher_has_folders(teacher, 1  ) #  is_archive
-    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_archive=1,is_trash=0)
-    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1 )   )   
+    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_archive=1,is_sequence=0,is_trash=0)
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,0 )   )   
  
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -1513,16 +1513,63 @@ def list_archives(request):
 
 
 
+
+def list_sequences(request):
+
+    teacher = request.user.teacher
+    today   = time_zone_user(teacher.user)
+
+    folds   = teacher_has_folders(teacher, 0  ) #  is_archive
+    folders = folders_contains_evaluation(folds, False,1)
+
+    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=0, is_archive=0,is_sequence=1,is_trash=0)
+
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,1)   )   
+    nb_base = len( folders ) + parcourses.count()
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
+    groups = teacher.has_groups()
+
+    if request.session.has_key("group_id"):
+        del request.session["group_id"]
+    if request.session.has_key("folder_id"):
+        del request.session["folder_id"]
+
+    return render(request, 'qcm/list_parcours.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
+                    'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
+
+
+
+
+def list_sequences_archives(request):
+
+    teacher = request.user.teacher
+    today = time_zone_user(teacher.user)
+
+    folders = teacher_has_folders(teacher, 1  ) #  is_archive
+    parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_archive=1,is_sequence=1,is_trash=0)
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,1 )   )   
+ 
+ 
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
+    return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  
+                                                        'today' : today ,  'teacher' : teacher , 'nb_base' : nb_archive   })
+
+
+
+
+
 def list_evaluations(request):
 
     teacher = request.user.teacher
     today = time_zone_user(teacher.user)
 
     folds = teacher_has_folders(teacher, 0  ) #  is_archive
-    folders = folders_contains_evaluation(folds, True)
+    folders = folders_contains_evaluation(folds, True,0)
 
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=1,is_archive=0,is_trash=0)
-    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,1,1 )   )   
+    nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,1,1,0 )   )   
     nb_base = len( folders ) + parcourses.count()
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  

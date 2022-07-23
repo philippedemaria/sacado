@@ -529,6 +529,14 @@
         </div>
     </div>
     <hr/>
+    {% if request.user.is_sacado_member %}
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{% url 'sequences' %}"><i class="bi bi-ladder" ></i> Séquences </a>
+        </div>
+    </div>
+    <hr/>
+    {% endif %}
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{% url 'parcours' %}"><i class="fa fa-th" ></i> Parcours </a>

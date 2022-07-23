@@ -12,7 +12,7 @@
 
         
         <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'stat_evaluation' parcours.id %}" > Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% else %}stats du parcours{% endif %}   </a>   
+            <a href="{% url 'stat_evaluation' parcours.id %}" > Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% elif parcours.is_sequence %} résultats de la séquence{% else %}stats du parcours{% endif %}   </a>   
         </li>
         
         
@@ -82,13 +82,17 @@
         {% if group_id %}
             {% if parcours.is_evaluation %}
                 <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id group_id  %}"><i class="bi bi-gear"></i> Modifier l'évaluation</a>   </li>
-            {% else %} 
+            {% elif parcours.is_sequence %} 
+                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="bi bi-gear"></i> Modifier la séquence</a>   </li>
+            {% else %}
                 <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="bi bi-gear"></i> Modifier le parcours</a>   </li>
             {% endif %} 
         {% else %}  
             {% if parcours.is_evaluation %}
                 <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id 0 %}"><i class="bi bi-gear"></i> Modifier l'évaluation</a>   </li>
-            {% else %} 
+            {% elif parcours.is_sequence %} 
+                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="bi bi-gear"></i> Modifier la séquence</a>   </li>
+            {% else %}
                 <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="bi bi-gear"></i> Modifier le parcours</a>   </li>
             {% endif %} 
         {% endif %} 

@@ -18,7 +18,11 @@
  
 
 {% block page_title %}
+    {% if 'parcours' in request.path %}
    <i class="fa fa-th sacado_color_text"></i>  Parcours
+    {% else %}
+   <i class="bi bi-ladder sacado_color_text"></i>  Séquences
+    {% endif %}
 {% endblock %}
 
 
@@ -26,7 +30,15 @@
 
 
 {% block page_menu_right %}
+
+
+    {% if 'parcours' in request.path %}
     <li><a href="{% url 'archives' %}"  class="no_button"><i class="fa fa-archive"></i> Archives ({{ nb_archive }})</a></li> 
+    {% else %}
+    <li><a href="{% url 'sequences_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Archives ({{ nb_archive }})</a></li> 
+    {% endif %}
+
+    
     {% include 'qcm/submenu_creation_new_parcours.html' %}
 {% endblock %}
 

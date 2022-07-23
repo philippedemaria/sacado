@@ -17,9 +17,8 @@
  
 
 {% block page_title %}
-
 <span style="color:{{ parcours.color }}">  
-    <i class="bi bi-explicit"></i> 
+    {% if parcours.is_sequence %}<i class="bi bi-ladder"></i> {% else %} <i class="fa fa-th"></i>{% endif %}
 </span>
 
     {% include 'qcm/breadcrumb.html' %}
