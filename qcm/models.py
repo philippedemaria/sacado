@@ -1359,6 +1359,8 @@ class Relationship(models.Model):
         Quizz = apps.get_model('tool', 'Quizz')
         Flashpack = apps.get_model('flashcard', 'Flashpack')
         Bibliotex = apps.get_model('bibliotex', 'Bibliotex')
+        if self.type_id == 0 :
+            document = Exercise.objects.get(pk=self.document_id)
         if self.type_id == 1 :
             document = Customexercise.objects.get(pk=self.document_id)
         elif self.type_id == 2 :
