@@ -7089,17 +7089,21 @@ def ajax_find_peuplate_sequence(request):
 
     theme_id    = request.POST.getlist("theme_id",None) 
     level = Level.objects.get(pk=level_id)
-    data = {}   
+    data = {}  
+
+    print(type_of_document , subject_id , level_id  , keyword)
+
     if type_of_document == "2":
         if keyword :
-            courses = Course.objects.filter( Q(title__contains=keyword)|Q(annoncement__contains=keyword) ,    teacher = request.user.teacher , subject_id=subject_id,level=level )
+            courses = Course.objects.filter( Q(title__icontains=keyword)|Q(annoncement__icontains=keyword) ,    teacher = request.user.teacher , subject_id=subject_id,level=level )
         else :
             courses = Course.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
+        print(courses)
         context = { "courses" : courses }    
         data['html']    = render_to_string( 'qcm/course/ajax_course_peuplate_sequence.html' , context)
     else :
         if keyword :
-            customs = Customexercise.objects.filter( instruction__contains=keyword ,    teacher = request.user.teacher  )
+            customs = Customexercise.objects.filter( instruction__icontains=keyword ,    teacher = request.user.teacher  )
         else :
             customs = Customexercise.objects.filter(teacher = request.user.teacher )
         

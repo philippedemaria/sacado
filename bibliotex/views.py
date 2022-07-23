@@ -699,16 +699,16 @@ def ajax_find_peuplate_sequence(request):
     subject     = Subject.objects.get(pk=subject_id)
 
     if keyword :
-        bibliotexs  = Bibliotex.objects.filter( title__contains=keyword,    teacher = request.user.teacher , subject_id=subject_id,level=level )
+        bibliotexs  = Bibliotex.objects.filter( title__icontains=keyword,    teacher = request.user.teacher , subject_id=subject_id,level=level )
     else :
         bibliotexs  = Bibliotex.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
  
 
     if keyword and level_id :
         level = Level.objects.get(pk=level_id)
-        bibliotexs  = Bibliotex.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level  )
+        bibliotexs  = Bibliotex.objects.filter( title__icontains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level  )
     elif keyword :
-        bibliotexs  = Bibliotex.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id  )
+        bibliotexs  = Bibliotex.objects.filter( title__icontains=keyword, teacher = request.user.teacher , subject_id=subject_id  )
     else :
         level = Level.objects.get(pk=level_id)
         bibliotexs  = Bibliotex.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level )

@@ -283,9 +283,9 @@ def ajax_find_peuplate_sequence(request):
 
     if keyword and level_id :
         level = Level.objects.get(pk=level_id)
-        flashpacks = Flashpack.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level  )
+        flashpacks = Flashpack.objects.filter( title__icontains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level  )
     elif keyword :
-        flashpacks = Flashpack.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id  )
+        flashpacks = Flashpack.objects.filter( title__icontains=keyword, teacher = request.user.teacher , subject_id=subject_id  )
     else :        
         level = Level.objects.get(pk=level_id)
         flashpacks = Flashpack.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level )
