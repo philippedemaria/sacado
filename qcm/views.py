@@ -7139,7 +7139,7 @@ def clone_custom_sequence(request, idc):
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
         parcours = Parcours.objects.get(pk = parcours_id)
-        relation = Relationship.objects.create(parcours = parcours , exercise_id = customexercise.id , document_id = customexercise.id  , type_id = 1 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = customexercise.id  , type_id = 1 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
         students = parcours.students.all()
         relation.students.set(students)
         customexercise.students.set(students)

@@ -304,7 +304,7 @@ def clone_flashpack_sequence(request, idf):
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
         parcours = Parcours.objects.get(pk = parcours_id)
-        relation = Relationship.objects.create(parcours = parcours , exercise_id = flashpack.id , document_id = flashpack.id  , type_id = 4 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = flashpack.id  , type_id = 4 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
         students = parcours.students.all()
         relation.students.set(students)
         flashpack.students.set(students)
