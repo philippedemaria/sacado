@@ -1656,7 +1656,8 @@ def list_sub_parcours_group(request,idg,idf):
     except :
         group = groupe
  
-    parcours_tab = folder.parcours.filter(is_archive=0 ,  is_trash=0).order_by("is_evaluation", "ranking")
+    parcours_tab = folder.parcours.filter(is_archive=0 , is_sequence=0 , is_trash=0).order_by("is_evaluation", "ranking")
+    sequences    = folder.parcours.filter(is_archive=0 , is_sequence=1 , is_trash=0).order_by("ranking")
     quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
     bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
     flashpacks   = folder.flashpacks.filter(Q(teacher=teacher),is_archive=0,parcours=None)
@@ -1667,7 +1668,7 @@ def list_sub_parcours_group(request,idg,idf):
     clear_realtime(parcours_tab , today.now() ,  1800 )
 
 
-    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,    'role' : role , 'today' : today , 'accordion' : accordion  }
+    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'sequences' : sequences ,  'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,    'role' : role , 'today' : today , 'accordion' : accordion  }
 
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 
