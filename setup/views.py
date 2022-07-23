@@ -1282,23 +1282,7 @@ def save_adhesion(request) :
         msg += "« Flashpack » : permet de créer des propres cartes de révision, pour entraîner ta mémoire.\n\n"
 
         #########
-
-        send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, [p["email"]])
-
-        #####################"
-        # envoi du courriel 2e version, bêta
-        ##################################################
-        content1 = "Bonjour "+p["first_name"]+" "+p["last_name"]+",\n\nVous venez de souscrire à une adhésion "+formule_adhesion +" à la SACADO Académie avec le menu "+formule_name+". \n"
-        content1 += "Votre référence d'adhésion est "+chrono+".\n\n"
-        content1 += "Votre identifiant est "+p["username"]+" et votre mot de passe est "+p["password_no_crypted"]+"\n"
-        content1 += "Vous avez inscrit : \n"
-        for s in students_of_adhesion :
-            content1 += "- "+s["first_name"]+" "+s["last_name"]+", l'identifiant de connexion est : "+s["username"]+", le mot de passe est "+s["password_no_crypted"]+" \n"
-
-        content1 += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
-
-        content1 += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
-        email=EmailMessage("test",content1,settings.DEFAULT_FROM_EMAIL,["stephan.ceroi@gmail.com"])
+        email=EmailMessage("Inscription SACADO Académie",msg,settings.DEFAULT_FROM_EMAIL,[p["email"]])
 
         image=MIMEBase('application','octet-stream')
         nomImage="instruction.png"
