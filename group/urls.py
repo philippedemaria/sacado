@@ -11,6 +11,10 @@ urlpatterns = [
     path('new', create_group, name='create_group'),
     path('update/<int:id>/', update_group, name='update_group'),
     path('delete/<int:id>/', delete_group, name='delete_group'),
+    path('delete_group_and_his_documents/<int:id>/', delete_group_and_his_documents, name='delete_group_and_his_documents'),
+
+
+
 
     path('delete_all_groups', delete_all_groups , name='delete_all_groups'),
 

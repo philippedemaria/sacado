@@ -615,8 +615,6 @@ def update_group(request, id):
 
 
 def delete_group(request, id):
-
-
     group = Group.objects.get(id=id)
     # Si le prof n'appartient pas à un établissement
     teacher = request.user.teacher
@@ -637,7 +635,6 @@ def delete_group(request, id):
         return redirect('index')
     else :
         if teacher.user.is_manager and group.teacher.user.school == request.user.school :
-
             if group.group_parcours.count() == 0  :
                 group.delete()
                 request.session.pop('group', None)
@@ -645,11 +642,54 @@ def delete_group(request, id):
                 messages.success(request,"Groupe supprimé.")
             else :
                 messages.error(request,"Le groupe ne peut pas être supprimé. Il contient des dossiers, parcours ou évaluations.")
-            return redirect('school_groups')
- 
         else :
-            messages.error(request,"Vous ne pouvez pas supprimer le groupe. Contacter l'administrateur de votre étalissement.")
-            return redirect('school_groups')    
+            messages.error(request,"Vous ne pouvez pas supprimer le groupe, vous n'êtes pas son administrateur. Contacter l'administrateur de votre étalissement.")
+        return redirect('school_groups')    
+
+
+
+
+
+def delete_group_and_his_documents(request, id):
+    group = Group.objects.get(id=id)
+    # Si le prof n'appartient pas à un établissement
+    teacher = request.user.teacher
+    authorizing_access_group(request,teacher,group )
+    if not teacher.user.is_sacado_member :
+        for student in group.students.all() :
+            if not student.user.school :
+                if Group.objects.filter(students=student).exclude(pk=group.id) == 0 : 
+                    student.student_user.delete()
+                    student.delete()
+        group.delete()
+        request.session.pop('group', None)
+        request.session.pop('group_id', None)
+        messages.success(request,"Groupe supprimé.")
+        return redirect('index')
+    else :
+        if teacher.user.is_manager and group.teacher.user.school == request.user.school :
+            group.delete()
+            request.session.pop('group', None)
+            request.session.pop('group_id', None)
+            messages.success(request,"Groupe supprimé.")
+        else :
+            messages.error(request,"Vous ne pouvez pas supprimer le groupe, vous n'êtes pas son administrateur. Contacter l'administrateur de votre étalissement.")
+        return redirect('school_groups')    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
