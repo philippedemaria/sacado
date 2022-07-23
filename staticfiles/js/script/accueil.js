@@ -39,8 +39,10 @@ $(document).ready(function () {
             let email = $(this).val();
             filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ; 
             filtre_mail_aefe = /^[a-z0-9_\.\-]+@aefe.fr$/i ; 
+            filtre_mail_education = /^[a-z0-9_\.\-]+@education.lu$/i ; 
 
-            if ( (filtre_mail_aefe.test( email )) || (filtre_mail_academique.test( email )) )  { 
+
+            if ( (filtre_mail_education.test( email )) || (filtre_mail_aefe.test( email )) || (filtre_mail_academique.test( email )) )  { 
 
 
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
