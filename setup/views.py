@@ -1301,7 +1301,7 @@ def save_adhesion(request) :
         email=EmailMessage("test",content1,settings.DEFAULT_FROM_EMAIL,["stephan.ceroi@gmail.com"])
 
         image=MIMEBase('application','octet-stream')
-        nomImage="instructions.png"
+        nomImage="instruction.png"
         fichierImage=open(settings.STATIC_ROOT+"/img/"+nomImage,'rb')
         image.set_payload((fichierImage).read())
         encoders.encode_base64(image)
