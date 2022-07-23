@@ -276,11 +276,20 @@ def peuplate_flashpack_parcours(request,idp):
 def ajax_find_peuplate_sequence(request):
 
     id_parcours = request.POST.get("id_parcours",0)
-    subject_id  = request.POST.get("id_subject",0) 
+    subject_id  = request.POST.get("id_subject",0)
+    keyword     = request.POST.get("keyword",None)  
     level_id    = request.POST.get("id_level",None) 
  
-    level = Level.objects.get(pk=level_id)
-    flashpacks = Flashpack.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level )
+
+    if keyword and level_id :
+        level = Level.objects.get(pk=level_id)
+        flashpacks = Flashpack.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level  )
+    elif keyword :
+        flashpacks = Flashpack.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id  )
+    else :        
+        level = Level.objects.get(pk=level_id)
+        flashpacks = Flashpack.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level )
+
     context = { "flashpacks" : flashpacks }
 
 

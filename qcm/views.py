@@ -7084,17 +7084,25 @@ def ajax_find_peuplate_sequence(request):
     id_parcours      = request.POST.get("id_parcours",0)
     subject_id       = request.POST.get("id_subject",0) 
     level_id         = request.POST.get("id_level",None) 
-    type_of_document = request.POST.get("type_of_document",None) 
+    type_of_document = request.POST.get("type_of_document",None)
+    keyword          = request.POST.get("keyword",None)
 
     theme_id    = request.POST.getlist("theme_id",None) 
     level = Level.objects.get(pk=level_id)
     data = {}   
     if type_of_document == "2":
-        courses = Course.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
+        if keyword :
+            courses = Course.objects.filter( Q(title__contains=keyword)|Q(annoncement__contains=keyword) ,    teacher = request.user.teacher , subject_id=subject_id,level=level )
+        else :
+            courses = Course.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
         context = { "courses" : courses }    
         data['html']    = render_to_string( 'qcm/course/ajax_course_peuplate_sequence.html' , context)
     else :
-        customs = Customexercise.objects.filter(teacher = request.user.teacher )
+        if keyword :
+            customs = Customexercise.objects.filter( instruction__contains=keyword ,    teacher = request.user.teacher  )
+        else :
+            customs = Customexercise.objects.filter(teacher = request.user.teacher )
+        
         context = { "customs" : customs }
         data['html']    = render_to_string( 'qcm/ajax_custom_peuplate_sequence.html' , context)
 

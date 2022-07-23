@@ -29,6 +29,7 @@ define(['jquery','bootstrap'], function ($) {
 
             let id_level = $(this).val();
             let id_parcours = $("#id_parcours").val();
+            let keyword     = $("#keyword").val();
             let type_of_document = $("#type_of_document").val();
             if ((id_level == "")||(id_level == " ")) { alert("Sélectionner un niveau") ; return false ;}
             let id_subject = $("#id_subject").val();
@@ -45,7 +46,7 @@ define(['jquery','bootstrap'], function ($) {
                         'id_parcours': id_parcours ,
                         'id_level': id_level,
                         'id_subject': id_subject,
-
+                        'keyword': keyword,
                         'type_of_document': type_of_document,
                         csrfmiddlewaretoken: csrf_token
                     },
@@ -62,6 +63,42 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('#keyword').on('keyup', function (event) {
+
+            let id_level    = $("#id_level").val();
+            let id_parcours = $("#id_parcours").val();
+            let keyword     = $(this).val();
+            let type_of_document = $("#type_of_document").val();
+            if ((id_level == "")||(id_level == " ")) { alert("Sélectionner un niveau") ; return false ;}
+            let id_subject = $("#id_subject").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_parcours': id_parcours ,
+                        'id_level': id_level,
+                        'id_subject': id_subject,
+                        'keyword': keyword,
+                        'type_of_document': type_of_document,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_find_peuplate_sequence" ,
+                    success: function (data) {
+ 
+                        $('#content_exercises').html("").html(data.html);
+                        $("#loader").html(""); 
+                        
+                        }
+                }
+            )
+        });
 
 
          

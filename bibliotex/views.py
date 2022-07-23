@@ -693,10 +693,28 @@ def ajax_find_peuplate_sequence(request):
     id_parcours = request.POST.get("id_parcours",0)
     subject_id  = request.POST.get("id_subject",0) 
     level_id    = request.POST.get("id_level",None) 
- 
+    keyword     = request.POST.get("keyword",None) 
+
     level       = Level.objects.get(pk=level_id)
     subject     = Subject.objects.get(pk=subject_id)
-    bibliotexs  = Bibliotex.objects.filter(teacher = request.user.teacher , subjects = subject , levels=level )
+
+    if keyword :
+        bibliotexs  = Bibliotex.objects.filter( title__contains=keyword,    teacher = request.user.teacher , subject_id=subject_id,level=level )
+    else :
+        bibliotexs  = Bibliotex.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
+ 
+
+    if keyword and level_id :
+        level = Level.objects.get(pk=level_id)
+        bibliotexs  = Bibliotex.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level  )
+    elif keyword :
+        bibliotexs  = Bibliotex.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id  )
+    else :
+        level = Level.objects.get(pk=level_id)
+        bibliotexs  = Bibliotex.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level )
+
+
+
     context = { "bibliotexs" : bibliotexs }
 
     data = {}

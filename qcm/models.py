@@ -897,12 +897,6 @@ class Parcours(ModelWithCode):
 
 
 
-
-
-
-
-
- 
 class Folder(models.Model):
 
     title = models.CharField(max_length=255, verbose_name="Titre")

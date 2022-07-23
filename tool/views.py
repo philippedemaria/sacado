@@ -734,9 +734,17 @@ def ajax_find_peuplate_sequence(request):
     id_parcours = request.POST.get("id_parcours",0)
     subject_id  = request.POST.get("id_subject",0) 
     level_id    = request.POST.get("id_level",None) 
-    theme_id    = request.POST.getlist("theme_id",None) 
-    level = Level.objects.get(pk=level_id)
-    quizzes = Quizz.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level,is_numeric=1 )
+    keyword     = request.POST.get("keyword",None)  
+
+    if keyword and level_id :
+        level = Level.objects.get(pk=level_id)
+        quizzes = Quizz.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id,levels=level,is_numeric=1 )
+    elif keyword :
+        quizzes = Quizz.objects.filter( title__contains=keyword, teacher = request.user.teacher , subject_id=subject_id, is_numeric=1 )
+    else :
+        level = Level.objects.get(pk=level_id)
+        quizzes = Quizz.objects.filter(teacher = request.user.teacher , subject_id=subject_id,levels=level,is_numeric=1 )
+    
     context = { "quizzes" : quizzes }
 
 
