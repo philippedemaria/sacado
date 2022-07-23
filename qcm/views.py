@@ -7091,14 +7091,11 @@ def ajax_find_peuplate_sequence(request):
     level = Level.objects.get(pk=level_id)
     data = {}  
 
-    print(type_of_document , subject_id , level_id  , keyword)
-
     if type_of_document == "2":
         if keyword :
             courses = Course.objects.filter( Q(title__icontains=keyword)|Q(annoncement__icontains=keyword) ,    teacher = request.user.teacher , subject_id=subject_id,level=level )
         else :
             courses = Course.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
-        print(courses)
         context = { "courses" : courses }    
         data['html']    = render_to_string( 'qcm/course/ajax_course_peuplate_sequence.html' , context)
     else :

@@ -75,7 +75,7 @@ define(['jquery','bootstrap'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
-
+console.log(keyword) ; 
             $.ajax(
                 {
                     type: "POST",
