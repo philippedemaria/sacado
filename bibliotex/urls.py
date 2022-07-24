@@ -21,6 +21,8 @@ urlpatterns = [
     path('my_bibliotexs', my_bibliotexs, name='my_bibliotexs'),
     path('actioner', actioner, name='actioner'),
 
+    path('create_bibliotex_sequence/<int:id>', create_bibliotex_sequence, name='create_bibliotex_sequence'),
+
  
     path('my_bibliotex_archives', my_bibliotex_archives, name='my_bibliotex_archives'),
 

@@ -24,7 +24,7 @@ urlpatterns = [
     path('peuplate_quizz_parcours/<int:idp>', peuplate_quizz_parcours, name='peuplate_quizz_parcours'),
     path('ajax_find_peuplate_sequence', ajax_find_peuplate_sequence, name='ajax_find_peuplate_sequence'), 
 
-
+    path('create_quizz_sequence/<int:id>', create_quizz_sequence , name='create_quizz_sequence'),
 
     path('all_quizzes/search', all_quizzes, name='all_quizzes'), 
     path('ajax_shared_quizzes', ajax_shared_quizzes, name='ajax_shared_quizzes'), 

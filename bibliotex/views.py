@@ -686,6 +686,49 @@ def ajax_my_bibliotexs(request):
 
 
 
+def create_bibliotex_sequence(request,id):
+
+    teacher = request.user.teacher
+    folder_id = request.session.get("folder_id",None)
+    group_id = request.session.get("group_id",None)
+    if group_id :group = Group.objects.get(id=group_id)
+    else : group = None
+    if folder_id : folder = Folder.objects.get(id=folder_id)
+    else : folder = None
+
+    parcours = Parcours.objects.get(id=id)
+
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder,  group = group, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+
+    if form.is_valid():
+        nf = form.save(commit = False) 
+        nf.author = teacher
+        nf.teacher = teacher
+        nf.save()
+        form.save_m2m() 
+
+        group_ids = request.POST.getlist("groups",[])
+        folder_ids = request.POST.getlist("folders",[])
+        nf.groups.set(group_ids)
+        nf.folders.set(folder_ids)
+        all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
+
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = nf.id  , type_id = 5 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+
+
+        return redirect('exercise_bibliotex_peuplate', nf.id)
+
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'bibliotex': None, 'folder': folder, 'group': group, 'parcours': parcours  }
+
+    return render(request, 'bibliotex/form_bibliotex.html', context)
+
+
+
 
 
 def ajax_find_peuplate_sequence(request):

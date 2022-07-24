@@ -6121,7 +6121,7 @@ def ajax_remove_my_appreciation(request):
 #####################################################################################################################################
 
 
-def create_aaaaaaaaccounting(request,tp):
+def create_accounting(request,tp):
  
     form     = AccountingForm(request.POST or None )
     form_abo = AbonnementForm(request.POST or None )
@@ -7741,6 +7741,107 @@ def create_course(request, idc , id ):
     context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
 
     return render(request, 'qcm/course/form_course.html', context)
+
+
+
+
+#@user_is_parcours_teacher
+def create_course_sequence(request, id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    teacher =  request.user.teacher
+    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
+    if parcours.is_sequence :
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        
+        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+            return redirect('index')
+
+        form = CourseForm(request.POST or None , parcours = parcours )
+        if request.method == "POST" :
+            if form.is_valid():
+                nf =  form.save(commit = False)
+                nf.parcours = parcours
+                nf.teacher = teacher
+                nf.author = teacher
+                nf.subject = parcours.subject
+                nf.level = parcours.level
+                nf.save()
+                relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = nf.id  , type_id = 2 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+                students = parcours.students.all()
+                relation.students.set(students)
+                try :
+                    return redirect('show_course' , 0 , id)
+                except :
+                    return redirect('index')
+            else:
+                print(form.errors)
+
+        context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
+
+
+    else :
+        messages.error(request,"Le cours doit être inclus dans une séquence. ")
+
+
+    return render(request, 'qcm/course/form_course.html', context)
+
+
+
+
+#@user_is_parcours_teacher
+def create_custom_sequence(request, id ):
+    """
+    idc : course_id et id = parcours_id pour correspondre avec le decorateur
+    """
+    parcours = Parcours.objects.get(pk =  id)
+    teacher =  request.user.teacher
+    relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
+    if parcours.is_sequence :
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        
+        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+            return redirect('index')
+
+        form = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
+        if request.method == "POST" :
+            if form.is_valid():
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
+                nf.save()
+                ceForm.save_m2m()
+                nf.parcourses.add(parcours)
+                nf.students.set( parcours.students.all() )  
+
+                relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = nf.id  , type_id = 1 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+                students = parcours.students.all()
+                relation.students.set(students)
+                try :
+                    return redirect('show_course' , 0 , id)
+                except :
+                    return redirect('index')
+            else:
+                print(form.errors)
+
+        context = {'form': form,   'teacher': teacher, 'parcours': parcours , 'relationships': relationships , 'course': None , 'communications' : [], 'group' : group, 'group_id' : group_id , 'role' : role }
+
+
+    else :
+        messages.error(request,"Le cours doit être inclus dans une séquence. ")
+
+
+    return render(request, 'qcm/form_exercise_custom.html', context)
+
+
+
+
+
+
+
 
 
 

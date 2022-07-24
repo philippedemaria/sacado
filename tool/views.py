@@ -585,6 +585,49 @@ def create_quizz(request):
     return render(request, 'tool/form_quizz.html', context)
 
 
+
+def create_quizz_sequence(request,id) : 
+
+    teacher = request.user.teacher
+    group_id   = request.session.get("group_id",None)
+    folder_id  = request.session.get("folder_id",None)
+    if group_id : group = Group.objects.get(pk=group_id )
+    else : group = None
+
+    if folder_id : folder = Folder.objects.get(pk=folder_id )
+    else : folder = None
+
+    if teacher.subjects.count() == 1 :
+        subject = teacher.subjects.first()
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
+    else :
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
+    parcours = Parcours.objects.get(pk=id )
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.is_questions = 1
+        nf.save()
+        form.save_m2m()
+        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") )
+
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = nf.id  , type_id = 3 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+
+        return redirect('create_question' , nf.pk , 0 )
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'teacher': teacher, }
+
+    return render(request, 'tool/form_quizz.html', context)
+
+
+
+
  
 def create_quizz_folder(request,idf):
     

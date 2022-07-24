@@ -211,6 +211,13 @@ urlpatterns = [
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
     path('show_one_course/<int:idc>', show_one_course, name='show_one_course'),
 
+    path('create_course_sequence/<int:id>', create_course_sequence, name='create_course_sequence'),
+    path('create_custom_sequence/<int:id>', create_custom_sequence, name='create_custom_sequence'),
+
+
+
+
+
     path('clone_course_sequence/<int:idc>', clone_course_sequence, name='clone_course_sequence'),
 
     path('peuplate_course_parcours/<int:idp>', peuplate_course_parcours, name='peuplate_course_parcours'),

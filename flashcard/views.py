@@ -257,6 +257,51 @@ def create_flashpack_from_parcours(request, idp=0):
 
 
 
+def create_flashpack_sequence(request, id):
+
+    teacher = request.user.teacher
+    folder_id = request.session.get("folder_id",None)
+    group_id = request.session.get("group_id",None)
+    if group_id :group = Group.objects.get(id=group_id)
+    else : group = None
+    if folder_id : folder = Folder.objects.get(id=folder_id)
+    else : folder = None
+
+    parcours = Parcours.objects.get(id=id)
+
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher  = teacher
+        nf.save()
+        form.save_m2m()
+
+        group_students = set()
+        for group_id in request.POST.getlist("groups") :
+            group = Group.objects.get(pk = group_id)
+            nf.levels.add(group.level)
+            group_students.update(group.students.all())
+
+        nf.students.set(group_students)
+        relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = nf.id  , type_id =  4 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
+        students = parcours.students.all()
+        relation.students.set(students)
+
+        messages.success(request, 'Le flashpack a été créé avec succès !')
+        return redirect('set_flashcards_to_flashpack' , nf.id)
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'flashpack': None , 'parcours': parcours , 'group': group  , 'folder': folder  }
+
+    return render(request, 'flashcard/form_flashpack.html', context)
+
+
+
+
+
+
 def peuplate_flashpack_parcours(request,idp):
 
     teacher = request.user.teacher

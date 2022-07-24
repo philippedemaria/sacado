@@ -294,7 +294,7 @@ body{
     <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
         <div class="modal-content">
             <div class="modal-header">
-                <h2  class="sacado">Créer/Associer un docUment  </h2>
+                <h2  class="sacado">Créer/Associer un document  </h2>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -319,7 +319,7 @@ body{
                     <a href="{% url 'peuplate_custom_parcours' parcours.id   %}" class="btn btn-warning"> Associer  un existant </a>  
                     </div> 
                     <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer  un nouveau</a>  
+                    <a href="{% url 'create_custom_sequence' parcours.id  %}" class="btn btn-danger"> Créer  un nouveau</a>  
                     </div> 
                 </div>        
                 <hr/>
@@ -331,7 +331,7 @@ body{
                     <a href="{% url 'peuplate_course_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
                     </div>                     
                     <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_course' 0 parcours.id   %}" class="btn btn-danger"> Créer un nouveau</a>  
+                    <a href="{% url 'create_course_sequence' parcours.id   %}" class="btn btn-danger"> Créer un nouveau</a>  
                     </div> 
                 </div> 
                 <hr/>
@@ -343,7 +343,7 @@ body{
                     <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
                     </div> 
                     <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_quizz_parcours' parcours.id  %}" class="btn btn-danger"> Créer un nouveau</a>  
+                    <a href="{% url 'create_quizz_sequence' parcours.id  %}" class="btn btn-danger"> Créer un nouveau</a>  
                     </div> 
                 </div> 
                 <hr/>
@@ -355,7 +355,7 @@ body{
                     <a href="{% url 'peuplate_flashpack_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
                     </div>
                     <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_flashpack_from_parcours' parcours.id   %}" class="btn btn-danger"> Créer un nouveau</a>  
+                    <a href="{% url 'create_flashpack_sequence' parcours.id   %}" class="btn btn-danger"> Créer un nouveau</a>  
                     </div> 
                 </div> 
                 <hr/>
@@ -367,7 +367,7 @@ body{
                     <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="btn btn-warning"> Associer une existante</a>  
                     </div>
                     <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_bibliotex_from_parcours' parcours.id   %}" class="btn btn-danger"> Créer une nouvelle</a>  
+                    <a href="{% url 'create_bibliotex_sequence' parcours.id   %}" class="btn btn-danger"> Créer une nouvelle</a>  
                     </div> 
                 </div> 
 
