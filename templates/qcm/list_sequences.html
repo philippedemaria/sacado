@@ -1,0 +1,67 @@
+{% extends 'qcm/list_parcours.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_mini.js' %}"></script>
+    <script>
+        require(['script/ajax-parcours']);
+        require(['script/ajax-evaluations_inside_data']);
+    </script> 
+{% endblock %}
+
+ 
+{% block page_title %}
+
+   <i class="bi bi-ladder sacado_color_text"></i>  Séquences
+
+{% endblock %}
+
+
+
+
+{% block page_menu_right %}
+
+    <li><a href="{% url 'sequences_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Séquence{{ nb_archive|pluralize }} archivée{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
+
+    {% include 'qcm/submenu_creation_sequence.html' %}
+
+{% endblock %}
+
+
+ 
+{% block evaluations  %} 
+    {% if parcours.is_sequence and not parcours.is_archive %}
+        <tr>
+            {% include 'qcm/list_parcours_folder_data.html' %}
+        </tr>
+    {% endif %}  
+{% endblock  %}
+
+
+
+
+{% block inside_folder_actions %}
+    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/évaluations')"> 
+        <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
+    </button>
+
+
+    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/séquences')"> 
+        <i class="fa fa-trash"> </i>   Supprimer la sélection
+    </button>
+{% endblock  %}
+
+  
+
+{% block outside_folder %}
+    {% for parcours in parcourses|dictsortreversed:"is_favorite" %}
+        {% if parcours.is_sequence %}
+        <tr >
+           {% include 'qcm/list_parcours_data.html' %}
+        </tr>
+        {% endif  %} 
+    {% endfor  %} 
+{% endblock  %} 

@@ -30,7 +30,12 @@ urlpatterns = [
     path('parcours_create_evaluation/<int:idf>/', create_evaluation, name='create_evaluation'),
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
     path('parcours_evaluation_show/<int:id>/', show_evaluation, name='show_evaluation'), 
+
+
+    path('parcours_create_sequence/<int:idf>/', create_sequence, name='create_sequence'),
+    path('parcours_sequence_update/<int:id>/<int:idg>/', update_sequence, name='update_sequence'),
  
+
     path('parcours_update/<int:id>/<int:idg>/', update_parcours, name='update_parcours'),
     path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'),  
     path('parcours_archive/<int:id>/<int:idg>/', archive_parcours, name='archive_parcours'),

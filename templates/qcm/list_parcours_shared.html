@@ -24,9 +24,9 @@
     {% if parcours %} 
         <span style="color:{{ parcours.color|contrast_color_title }}"><i class="bi bi-explicit"></i> </span>
         {% include 'qcm/breadcrumb.html' %}
-        <small> Les {% if is_eval %}évaluations mutualisées{% else %}parcours mutualisés{% endif  %}   </small>
+        <small> Les {% if is_eval == 1 %}évaluations mutualisées{% elif is_eval == 2 %}séquences mutualisées{% else %}parcours mutualisés{% endif  %}   </small>
     {% else  %} 
-        <i class="fa fa-laptop"></i> Les {% if is_eval %}évaluations mutualisées{% else %}parcours mutualisés{% endif  %} 
+        <i class="fa fa-laptop"></i> Les {% if is_eval == 1 %}évaluations mutualisées{% elif is_eval == 2 %}séquences mutualisées{% else %}parcours mutualisés{% endif  %} 
     {% endif  %} 
 
 
@@ -38,8 +38,10 @@
 
 
 
-    {% if is_eval %}
+    {% if is_eval == 1  %}
     <li> <a href="{% url 'evaluations' %}"   class="btn btn-new-evaluation"> Mes évaluations</a> </li>
+    {% elif is_eval == 2 %}
+    <li> <a href="{% url 'sequences' %}"   class="btn btn-new"> Mes sequences</a> </li>
     {% else %}
     <li> <a href="{% url 'parcours' %}"   class="btn btn-new"> Mes parcours</a> </li>
     {% endif %}

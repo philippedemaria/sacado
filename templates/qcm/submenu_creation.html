@@ -21,15 +21,40 @@
         		<a href="#"  class="no_sacado_asso" title="Ne peut être actif qu'à partir d'un groupe"> Récupérer un dossier mutualisé</a> 
         	{% endif %} 
         </li>
- 
+        <li class="divider"></li>
+        {% endif %}
+
+        {% if request.user.is_sacado_member %}
+        {% if folder %}
+        <li> <a href="{% url 'create_sequence' folder.id %}"  > Créer une séquence</a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_sequence' 0 %}"  > Créer une séquence</em></a> </li>
+        {% endif %}
+        <li>{% if sacado_asso %} 
+                <a href="{% url 'all_parcourses' 2 %}" > Récupérer une séquence mutualisée  
+
+                {% if not group %} 
+                    <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >
+                                <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. La séquence sera <br/>directement affectée à votre<br/> groupe.   
+                            </div>
+                    </span>
+                {% endif %} 
+                </a>
+
+            {% else %}
+                <a href="#"  class="no_sacado_asso" > Récupérer une séquence mutualisée</a> 
+            {% endif %}
+        </li> 
+        <li class="divider"></li>
         {% endif %}
 
 
-		<li class="divider"></li>
         {% if folder %}
-        <li> <a href="{% url 'create_parcours' folder.id %}"  > Créer un parcours/une séquence</a> </li>
+        <li> <a href="{% url 'create_parcours' folder.id %}"  > Créer un parcours</a> </li>
         {% else %}
-        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours/une séquence</em></a> </li>
+        <li> <a href="{% url 'create_parcours' 0 %}"  > Créer un parcours</em></a> </li>
         {% endif %}
         <li>{% if sacado_asso %} 
         		<a href="{% url 'all_parcourses' 0 %}" > Récupérer un parcours mutualisé  
@@ -50,8 +75,8 @@
         </li>
 
 
+        <li class="divider"></li>
 
-		<li class="divider"></li>
 
 		{% if sacado_asso %}
 		    {% if folder %}

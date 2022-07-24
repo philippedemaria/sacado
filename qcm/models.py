@@ -420,7 +420,7 @@ class Parcours(ModelWithCode):
     
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
 
-    is_sequence = models.BooleanField(default=0, verbose_name="Séquence d'apprentissage ?")
+    is_sequence = models.BooleanField(default=0, verbose_name="Séquence d'apprentissage ?", editable=False)
 
     def __str__(self):
         flds = ""

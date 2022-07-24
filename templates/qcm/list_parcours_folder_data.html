@@ -39,11 +39,7 @@
             {% with nbp=parcours.nb_exercises %}
                 {{ nbp }} 
                 {% if 'parcours' in request.path %}
-                    exercice
-                {% else %}
-                    document
-                {% endif %}
-                {{ nbp|pluralize }}
+                    exercice{% else %}document{% endif %}{{ nbp|pluralize }}
             {% endwith %}
             <small> {% if parcours.is_evaluation %}{{  parcours.evaluation_duration|int_minutes  }}{% else %}{{  parcours.duration_overall|int_minutes }}{% endif %}min. </small>
         </div>
@@ -60,6 +56,8 @@
             {% else %}
                 {% if parcours.is_evaluation %}
                 <a href="{% url 'update_evaluation' parcours.id 0 %}" > <i class="bi bi-pencil" aria-hidden="true"></i></a> 
+                {% elif parcours.is_sequence %}
+                <a href="{% url 'update_sequence' parcours.id 0 %}" > <i class="bi bi-pencil" aria-hidden="true"></i></a> 
                 {% else %}
                 <a href="{% url 'update_parcours' parcours.id 0 %}"> <i class="bi bi-pencil" aria-hidden="true"></i></a> 
                 {% endif %}

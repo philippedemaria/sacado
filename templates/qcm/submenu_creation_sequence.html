@@ -1,0 +1,51 @@
+{% if sacado_asso %}
+ 
+
+
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouvelle séquence <b class="caret"></b> </a>
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        {% if folder %}
+        <li> <a href="{% url 'create_sequence' folder.id %}"  > Créer une séquence </a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_sequence' 0 %}"  > Créer une séquence </a> </li>
+        {% endif %}
+        <li>{% if sacado_asso %} 
+                <a href="{% url 'all_parcourses' 2 %}" > Récupérer une séquence mutualisée
+
+                {% if not group %} 
+                    <span class="helper_tip"> 
+                            <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >
+                                <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. La séquence sera <br/>directement affectée à votre<br/> groupe.   
+                            </div>
+                    </span>
+                {% endif %} 
+
+
+                </a>
+            {% else %}
+                <a href="#"  class="no_sacado_asso" > Récupérer une séquence mutualisée</a> 
+            {% endif %}
+        </li>
+ 
+    </ul>
+</li>  
+{% else %}
+ 
+
+
+
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new-evaluation"  title="Version établissement requise."> Nouvelle séquence <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        <li><a href="#"   class="no_sacado_asso" > Créer une séquence</a> </li> 
+        <li> <a href="#"  class="no_sacado_asso" > Récupérer une séquence mutualisée</a>  </li>         
+        
+    </ul>
+</li>
+
+
+ 
+{% endif %}

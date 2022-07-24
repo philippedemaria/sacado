@@ -1535,7 +1535,7 @@ def list_sequences(request):
     if request.session.has_key("folder_id"):
         del request.session["folder_id"]
 
-    return render(request, 'qcm/list_parcours.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
+    return render(request, 'qcm/list_sequences.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
                     'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
 
@@ -1804,9 +1804,15 @@ def ajax_all_parcourses(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if request.user.is_superuser :
-        parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval).order_by('level','ranking')
+        if is_eval == 2 :
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_sequence = 1).order_by('level','ranking')
+        else :
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval).order_by('level','ranking')
     else :
-        parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level','ranking')
+        if is_eval == 2 :
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_sequence = 1).order_by('level','ranking')
+        else :
+            parcours_ids = Parcours.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,is_evaluation = is_eval).exclude(exercises=None ,teacher=teacher).order_by('level','ranking')
 
     keywords = request.POST.get('keywords',None)
 
@@ -2233,7 +2239,7 @@ def affectation_students_to_contents_parcours_or_evaluation(parcours_ids,all_stu
 
 
 
-def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
+def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_sequence):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher         = request.user.teacher
     levels          = teacher.levels.all()
@@ -2266,6 +2272,7 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
         nf.author = teacher
         nf.teacher = teacher
         nf.is_evaluation = is_eval
+        nf.is_sequence   = is_sequence
         if nf.is_share :
             if is_eval :
                 texte = "Une nouvelle évaluation"
@@ -2326,19 +2333,26 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf):
 
 def create_parcours(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
-    return create_parcours_or_evaluation(request, False , False,idf)
+    return create_parcours_or_evaluation(request, False , False,idf , 0 )
 
     
 
 def create_evaluation(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
-    return create_parcours_or_evaluation(request, False , True, idf)
+    return create_parcours_or_evaluation(request, False , True, idf , 0 )
+
+
+
+def create_sequence(request,idf=0):
+    """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
+    return create_parcours_or_evaluation(request, False , False, idf , 1 )
+
     
 #######################################################################################################################
 ###################  Modification
 #######################################################################################################################
 
-def update_parcours_or_evaluation(request, is_eval, id, idg=0 ): 
+def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ): 
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher = Teacher.objects.get(user_id=request.user.id)
     levels = teacher.levels.all()
@@ -2389,6 +2403,7 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
         if form.is_valid():
             nf = form.save(commit=False)
             nf.is_evaluation = is_eval
+            nf.is_sequence   = is_sequence
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
             nf.save()
@@ -2442,14 +2457,16 @@ def update_parcours_or_evaluation(request, is_eval, id, idg=0 ):
 
 @parcours_exists
 def update_parcours(request, id, idg=0 ): 
-    return  update_parcours_or_evaluation(request, False, id, idg)
+    return  update_parcours_or_evaluation(request, False, id,0, idg)
 
 
 @parcours_exists
-def update_evaluation(request, id, idg=0 ): 
-    return  update_parcours_or_evaluation(request, True, id, idg )
+def update_evaluation(request, id,idg=0): 
+    return  update_parcours_or_evaluation(request, True, id,0, idg )
 
-
+@parcours_exists
+def update_sequence(request, id, idg=0 ): 
+    return  update_parcours_or_evaluation(request, True, id,1, idg )
 
 ##########################################################################################################################
 ##########################################################################################################################
@@ -3485,6 +3502,8 @@ def clone_parcours(request, id, course_on ):
     else :
         if parcours.is_evaluation :
             return redirect('all_parcourses' , 1 )
+        elif parcours.is_sequence :
+            return redirect('all_parcourses' , 2 )   
         else :
             return redirect('all_parcourses', 0 )
 
