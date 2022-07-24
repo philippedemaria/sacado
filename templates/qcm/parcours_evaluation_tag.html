@@ -153,7 +153,7 @@
 
     <!-- box-footer DES FONCTIONNALITES  -->
 
-    <div class="box-footer"  style="position: relative; padding-top: 0px;">
+    <div class="box-footer"  style="position: relative; padding-top: 0px;"> 
         {% if role or parcours.teacher == teacher %}
 
 
@@ -195,7 +195,17 @@
                 </div> 
                 <div class="col-lg-4 col-xs-4">
                     {% if not parcours.is_evaluation %}
-                        <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa  fa-desktop"></i> <span class="label_icon">Cours </span> </a>
+
+
+
+                        {% if parcours.is_sequence %}
+         
+                                <a href="{% url 'peuplate_course_parcours' parcours.id   %}" class="edit"> <i class="fa  fa-desktop"></i> <span class="label_icon">Cours </span> </a>
+                        {% else  %}   
+                                <a href="{% url 'show_course' 0 parcours.id   %}"  class="edit" {% if parcours.is_courses_exists %} style="color:{{ parcours.color }}" {% endif %} ><i class="fa  fa-desktop"></i> <span class="label_icon">Cours </span> </a>
+                        {% endif  %}
+
+
                     {% else  %}                 
                         <a href="{% url 'peuplate_parcours_evaluation' parcours.id   %}" class="edit" {% if parcours.contains_exercises %} style="color:{{ parcours.color }}" {% endif %}><i class="bi bi-cloud"></i> <span class="label_icon">Exercices </span>
                         </a>  
@@ -218,30 +228,52 @@
             {% if not parcours.is_evaluation %}
             <div class="row extend">    
                 <div class="col-xs-4 col-md-4 col-lg-4">
+
+                    {% if parcours.is_sequence %}
+                    <a href="{% url 'peuplate_flashpack_parcours' parcours.id   %}" class="edit"  title="Associer un flashpack"> <i class="bi bi-stack"></i>                  
+                        <span class="label_icon">F-pack <i class="bi bi-patch-plus-fill"></i></span>  
+                    </a>  
+                    {% else %}
                     <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if parcours.flashpacks.count %} style="color:{{ parcours.color }}" {% endif %}>
-          
                         <i class="bi bi-stack"></i>                  
-                          <span class="label_icon">F-pack</span>
+                        <span class="label_icon">F-pack</span>                    
+                        <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
                     </span>
-                    <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
-                         <i class="fa fa-plus-circle"></i> 
-                    </a>
+                    {% endif  %}
                 </div> 
                 <div class="col-xs-4 col-md-4 col-lg-4">
-                    <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if parcours.bibliotexs.count  %} style="color:{{ parcours.color }}" {% endif %}>
-                        <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex</span> 
-                    </span>
-                    <a href="{% url 'create_bibliotex_from_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter une évaluation à ce dossier">   
-                         <i class="fa fa-plus-circle"></i> 
-                    </a>
+                    {% if parcours.is_sequence %}
+                        <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="edit"  title="Associer une biblioTex"> <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex <i class="bi bi-patch-plus-fill"></i></span> </a>
+                    {% else %}
+                        <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if parcours.bibliotexs.count  %} style="color:{{ parcours.color }}" {% endif %}>
+                            <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex</span> 
+                        </span>
+                        <a href="{% url 'create_bibliotex_from_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter une biblioTex à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+                    {% endif  %}
                 </div> 
                 <div class="col-xs-4 col-md-4 col-lg-4">
+
+                    {% if parcours.is_sequence %}
+                    <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="edit" title="Associer un quiz"> <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz <i class="bi bi-patch-plus-fill"></i></span> </a> 
+                    {% else %}
                     <span href="javascript:void()"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if parcours.quizz.count   %} style="color:{{ parcours.color }}" {% endif %}>
                         <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> 
                     </span>
                     <a href="{% url 'create_quizz_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
                          <i class="fa fa-plus-circle"></i> 
-                    </a>
+                    </a> 
+                    {% endif  %}
+
+
+
+
+
+
+
                 </div>  
             </div>
 
@@ -254,8 +286,12 @@
                 </div>  
 
                 <div class="col-lg-4 col-xs-4">
+                    {% if parcours.is_sequence %}
+                    <a href="{% url 'peuplate_custom_parcours' parcours.id   %}" class="edit"> <i class="bi bi-explicit-fill"></i> <span class="label_icon">Exos Persos</span> </a> 
+                    {% else %}
                     <a href="{% url 'parcours_create_custom_exercise' parcours.id 1  %}" class="edit" {% if parcours.contains_exo_perso %} style="color:{{ parcours.color }}" {% endif %} ><i class="bi bi-explicit-fill"></i> <span class="label_icon">Exos Persos</span>
                     </a>  
+                    {% endif  %}
                 </div>  
 
                 <div class="col-lg-4 col-xs-4">

@@ -849,28 +849,51 @@ class Parcours(ModelWithCode):
 
         data = {}
         today = timezone.now()
-        
-        exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
-        courses    = self.course.all()
-        bibliotex  = self.bibliotexs.all() 
-        quizz      = self.quizz.all()
-        flashpacks = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) )
+        if self.is_sequence :
+            exercises  = self.parcours_relationship.filter(type_id=0 ) 
+            custom     = self.parcours_relationship.filter(type_id=1 ) 
+            courses    = self.parcours_relationship.filter(type_id=2)
+            bibliotex  = self.parcours_relationship.filter(type_id=5)
+            quizz      = self.parcours_relationship.filter(type_id=3)
+            flashpacks = self.parcours_relationship.filter( type_id=4 )
+
+            nb_exercises_published = exercises.filter(is_publish = 1).count() + custom.filter(is_publish = 1).count()
+            nb_cours_published     = courses.filter(is_publish = 1).count() 
+
+            nb_exercises = exercises.count() + self.parcours_customexercises.count()
+            nb_cours     = courses.count()
+
+            nb_bibliotex_published = bibliotex.filter(is_publish = 1).count() 
+            nb_quizz_published     = quizz.filter(is_publish = 1).count() 
+
+            nb_bibliotex = bibliotex.count()  
+            nb_quizz     = quizz.count()
+
+            nb_flashpack           = flashpacks.count() 
+            nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
+
+        else :
+            exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
+            courses    = self.course.all()
+            bibliotex  = self.bibliotexs.all() 
+            quizz      = self.quizz.all()
+            flashpacks = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) )
 
 
-        nb_exercises_published = exercises.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
-        nb_cours_published     = courses.filter(is_publish = 1).count() 
+            nb_exercises_published = exercises.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
+            nb_cours_published     = courses.filter(is_publish = 1).count() 
 
-        nb_exercises = exercises.count() + self.parcours_customexercises.count()
-        nb_cours     = courses.count()
+            nb_exercises = exercises.count() + self.parcours_customexercises.count()
+            nb_cours     = courses.count()
 
-        nb_bibliotex_published = bibliotex.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
-        nb_quizz_published     = quizz.filter(is_publish = 1).count() 
+            nb_bibliotex_published = bibliotex.filter(is_publish = 1).count() 
+            nb_quizz_published     = quizz.filter(is_publish = 1).count() 
 
-        nb_bibliotex = bibliotex.count() + self.parcours_customexercises.count()
-        nb_quizz     = quizz.count()
+            nb_bibliotex = bibliotex.count() 
+            nb_quizz     = quizz.count()
 
-        nb_flashpack           = flashpacks.count() 
-        nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
+            nb_flashpack           = flashpacks.count() 
+            nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
 
 
         data["nb_exercises"]            = nb_exercises
