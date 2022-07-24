@@ -1,0 +1,54 @@
+{% extends 'qcm/form_parcours.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if parcours %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-parcours-create']);
+    </script> 
+
+    {% block require_complement %}
+        {% if not parcours %}    
+            <script>
+                require(['script/ajax-parcours-complement']);
+            </script> 
+        {% endif %}
+    {% endblock %} 
+
+{% endblock %} 
+
+
+{% block page_title %}
+
+      {% include 'qcm/breadcrumb.html' %}
+
+    <small>  
+        {% if parcours %}
+            Configuration  
+        {% else %}
+            Nouvelle séquence
+        {% endif %}
+    </small> 
+
+{% endblock %}
+
+
+ 
+
+
+
+
+
+
+
+      
+ 
+ 

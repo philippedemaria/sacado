@@ -2326,6 +2326,8 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
 
     if is_eval :
         return render(request, 'qcm/form_evaluation.html', context)
+    elif is_sequence :
+        return render(request, 'qcm/form_sequence.html', context) 
     else :
         return render(request, 'qcm/form_parcours.html', context) 
 
