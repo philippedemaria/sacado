@@ -55,7 +55,7 @@ urlpatterns = [
     path('aggregate_group',  aggregate_group, name='aggregate_group'), 
 
     path('export_skills',  export_skills, name='export_skills'), 
-    
+    path('envoieStatsEnMasse',envoieStatsEnMasse, name="envoieStatsEnMasse"), 
     path('<slug:slug>', enroll , name='enroll'),
 
 

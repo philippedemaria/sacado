@@ -1,6 +1,6 @@
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect, get_object_or_404
-from account.models import Student, Teacher, User, Resultknowledge, Resultlastskill, Resultskill
+from account.models import Student, Teacher, Parent, Adhesion, User, Resultknowledge, Resultlastskill, Resultskill
 from account.forms import UserForm
 from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
@@ -33,6 +33,8 @@ from reportlab.platypus.flowables import Flowable
 from django.utils import formats, timezone
 from io import BytesIO, StringIO
 from django.http import  HttpResponse
+
+from .fonctionsPdf import *
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape , letter
@@ -1690,6 +1692,28 @@ def print_statistiques(request, group_id, student_id):
     doc.build(elements)
 
     return response
+
+def envoieStatsEnMasse(request):
+    #users=User.objects.filter(last_name="ceroi")
+    listParents=Parent.objects.all()
+    #listParents=Parent.objects.filter(user=users[len(users)-1])
+    cr="" #le compte rendu de l'opération
+    auj=datetime.now().replace(tzinfo=pytz.UTC) 
+    for parent in listParents :
+        for enfant in parent.students.all():
+            adhs=Adhesion.objects.filter(student=enfant)
+            for adh in adhs :
+                if adh.start < auj  <= adh.stop and (auj - adh.start).days % parent.periodicity==0 :
+                    try :
+                        sendStats(parent,enfant,auj-timedelta(days=parent.periodicity),auj)
+                        cr+="envoi à "+str(parent)+" : ok\n"
+                    except :
+                        cr+="envoi à "+str(parent)+" : échec\n"
+    return render(request,'group/envoieMails.html',{'status':cr})
+
+
+
+
 
 
 def print_monthly_statistiques(request):
