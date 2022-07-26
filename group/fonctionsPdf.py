@@ -324,9 +324,9 @@ def sendStats(parent,enfant,date_start,date_stop):
         content+= "\npour la période du "+date_start.strftime("%d/%m/%y")+" au "+date_stop.strftime("%d/%m/%y")+"."
         content +="\n\nL'équipe Sacado."
         # developpement
-        email=EmailMessage("Rapport d'activité "+enfant.user.first_name,content,settings.DEFAULT_FROM_EMAIL,["stephan.ceroi@gmail.com"])
+        #email=EmailMessage("Rapport d'activité "+enfant.user.first_name,content,settings.DEFAULT_FROM_EMAIL,["stephan.ceroi@gmail.com"])
         #production
-        #email=EmailMessage("Rapport d'activité "+enfant.user.first_name,content,settings.DEFAULT_FROM_EMAIL,[parent.user.email])
+        email=EmailMessage("Rapport d'activité "+enfant.user.first_name,content,settings.DEFAULT_FROM_EMAIL,[parent.user.email])
 
         email.attach("Rapport_"+enfant.user.first_name+".pdf",doc, 'application/pdf')
         email.send()
