@@ -66,6 +66,47 @@ import html
 from general_fonctions import *
  
 
+#################################################################
+# Transformation de parcours en séquences
+#################################################################
+
+
+def parcours_to_sequences(request):
+
+    parcourses = Parcours.objects.filter(teacher_id=2480,is_trash=0,is_sequence = 0)
+    for parcours in parcourses :
+        students = parcours.students.all()
+
+        courses    = parcours.course.all()
+        for course in courses : 
+            relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = course.id  , type_id = 2 , ranking =  200 , is_publish= course.is_publish  , start= None , date_limit= None, duration= course.duration, situation= 0 ) 
+            relation.students.set(students)
+        
+        quizzes    = parcours.quizz.all()
+        for quizz in quizzes : 
+            relationq = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = quizz.id  , type_id = 3 , ranking =  200 , is_publish= quizz.is_publish , start= None , date_limit= None, duration= 10, situation= 0 ) 
+            relationq.students.set(students)
+
+        flashpacks  = parcours.flashpacks.all()
+        for flashpack in flashpacks : 
+            relationf = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = flashpack.id  , type_id = 4 , ranking =  200 , is_publish= flashpack.is_publish  , start= None , date_limit= None, duration= 10, situation= 0 ) 
+            relationf.students.set(students)
+
+        bibliotexs = parcours.bibliotexs.all()
+        for bibliotex in bibliotexs : 
+            relationb = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = bibliotex.id  , type_id = 5 , ranking =  200 , is_publish= bibliotex.is_publish  , start= None , date_limit= None, duration= 10, situation= 0 ) 
+            relationb.students.set(students)
+
+
+        Parcours.objects.filter(pk=parcours.id).update(is_sequence=1)
+
+
+    return 
+
+#################################################################
+#  
+#################################################################
+
 def fill_the_skills(request):
 
     rs = Relationship.objects.filter(skills=None,exercise__supportfile__is_title=0)

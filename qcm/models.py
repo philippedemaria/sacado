@@ -376,8 +376,6 @@ class Exercise(models.Model):
         return remediations
 
 
-
-
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
