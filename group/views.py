@@ -64,7 +64,6 @@ from io import BytesIO
 from math import sin,cos
 
 
-
 def get_username_teacher(request ,ln):
     """
     retourne un username

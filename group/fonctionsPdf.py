@@ -318,6 +318,7 @@ def print_monthly_statistiques(student,date_start,date_stop):
         buffer.close()
         return pdf
 
+
 def sendStats(parent,enfant,date_start,date_stop):
         doc=print_monthly_statistiques(enfant,date_start,date_stop)
         content = "Bonjour,\n\nvoici le rapport d'activité de " +  str(enfant.user.first_name)
