@@ -39,19 +39,19 @@
             <div class="col-sm-12 col-md-12" align="center">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-violet_border family_selected active" id="one_child" data_value="one"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
-                        <input type="radio" name="children" id="one_child_radio" value="1" checked   >  1 enfant*
+                        <input type="radio" name="children" id="one_child_radio" value="1" checked   >  1 enf<span class="no_visualisation">ant</span>*
                     </label>
                     <label class="btn btn-violet_border family_selected" id="two_children" data_value="two" data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
-                        <input type="radio" name="children"  id="two_children_radio" value="2"  >  2 enfants
+                        <input type="radio" name="children"  id="two_children_radio" value="2"  >  2 enf<span class="no_visualisation">ants</span>
                     </label>
                     <label class="btn btn-violet_border family_selected" id="three_children" data_value="three"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
-                        <input type="radio" name="children"  id="three_children_radio" value="3"  >  3 enfants
+                        <input type="radio" name="children"  id="three_children_radio" value="3"  >  3 enf<span class="no_visualisation">ants</span>
                     </label>
                     <label class="btn btn-violet_border family_selected" id="four_children" data_value="four"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
-                        <input type="radio" name="children"  id="four_children_radio" value="4"    >  4 enfants
+                        <input type="radio" name="children"  id="four_children_radio" value="4"    >  4 enf<span class="no_visualisation">ants</span>
                     </label>
                     <label class="btn btn-violet_border family_selected" id="more_children" data_value="more"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
-                        <input type="radio" name="children"  id="more_children_radio" value="5"   >  5 enfants
+                        <input type="radio" name="children"  id="more_children_radio" value="5"   >  5 enf<span class="no_visualisation">ants</span>
                     </label>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="menu_id" id="menu_id" value="0" />
                 <input type="hidden" name="nb_child" class="nb_child" value="1" />
-                <input type="submit" name="sending" class="btn-inscription" value="Valider le nombre d'enfants" /> 
+                <input type="submit" name="sending" class="btn-inscription" value="Valider le nombre d'enfants" style="margin-left: 20%;" /> 
 
             </form>
         </div>

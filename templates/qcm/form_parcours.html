@@ -34,7 +34,7 @@
         {% if parcours %}
             Configuration  
         {% else %}
-            Nouveau parcours <small>(Pour la séquence, cocher Séquence d'apprentissage) </small>
+            Nouveau parcours  
         {% endif %}
     </small> 
 
@@ -263,7 +263,7 @@
 
     
     <div class="row" style="margin-top:40px">
-        <div class="col-sm-12 col-md-8">
+        <div class="col-sm-12 col-md-6">
             <div class="form-group">
 
                 <input value="Enregistrer et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" />                
@@ -274,7 +274,7 @@
         </div> 
 
         {% block save_evaluation %}
-        <div class="col-sm-12 col-md-4">
+        <div class="col-sm-12 col-md-6">
         {% if parcours %}
                 
                 <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('ce parcours')"> 
@@ -293,7 +293,15 @@
                 <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('ce parcours')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>
-    
+
+
+                {% if request.user.is_superuser and not parcours.is_sequence %}
+                    <a href="{% url 'this_parcours_to_sequences' parcours.id   %}" class="btn btn-primary"> 
+                        <i class="fa fa-th"> </i>   Parcours <i class="bi bi-arrow-right"></i>  Séquence
+                    </a>
+                {% endif %}
+
+
         {% endif %}  
         </div>
         {% endblock %}
