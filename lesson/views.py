@@ -114,26 +114,22 @@ def update_event(request,id):
 
     if form.is_valid():
         new_form = form.save(commit=False)
-        if not new_form.is_allday :
-            start_hour = request.POST.get("start_hour")
-            tabs = start_hour.split(":")
-            new_form.start = new_form.start + timedelta(hours=int(tabs[0]),minutes=int(tabs[1]))
+        start_hour = request.POST.get("start_hour")
+        tabs = start_hour.split(":")
+        new_form.start = new_form.start + timedelta(hours=int(tabs[0]),minutes=int(tabs[1]))
 
-            #new_form.type_of_event = request.POST.get("type_of_event")
+        #new_form.type_of_event = request.POST.get("type_of_event")
 
-            end_hour = request.POST.get("end_hour")
-            tabe = end_hour.split(":")
-            new_form.end = new_form.end + timedelta(hours=int(tabe[0]),minutes=int(tabe[1]))
+        end_hour = request.POST.get("end_hour")
+        tabe = end_hour.split(":")
+        new_form.end = new_form.end + timedelta(hours=int(tabe[0]),minutes=int(tabe[1]))
+        new_form.user = user 
         new_form.save()
-        user = User.objects.get(pk = request.user.id)
-        cals = Calendar.objects.filter(default=1).filter(user=user)
-        for cal in cals :
-            new_form.calendar.add(cal)
+
     else :
         print(form.errors)
- 
-
-    return redirect('calendar_initialize') 
+        
+    return redirect('calendar_show' , 0)
 
 
 def shift_event(request):
@@ -141,7 +137,6 @@ def shift_event(request):
     event_id = request.POST.get('event_id')
     new_start_event = request.POST.get('start_event')
     event = Event.objects.filter(pk=event_id).update(start=new_start_event)
-    
  
     data = {} 
     return JsonResponse(data)

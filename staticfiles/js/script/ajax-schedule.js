@@ -87,7 +87,7 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 					                       'event_id': event.id,
 					                        csrfmiddlewaretoken: csrf_token
 					                    },
-					                    url: "show_event" ,
+					                    url: "../show_event" ,
 					                    success: function (data) {
 					                    $("#formulaire").html("").append(data.html); 
 					                    }
