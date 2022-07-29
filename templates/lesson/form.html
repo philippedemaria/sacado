@@ -29,21 +29,21 @@
               <div class="row">                      
                   <div class="col-sm-12 col-md-12">
                      <div class="form-group">
-                        {{ form.title |add_class:"form-control"|attr:"placeholder:Ajouter un titre ou le code de la visio"  }}
+                        {{ form.title |add_class:"form-control"|attr:"placeholder:Ajouter un titre"  }}
                     </div>
                   </div>
               </div>
 
               <div class="row">                    
                   <div class="col-sm-12 col-md-12">
-                      <div class="form-group">
+                      <div class="form-group"> 
                           <div class="form-group">url<br>
-                              {{ form.url |add_class:"form-control"  }}
+                              {{ form.url |add_class:"form-control"|attr:"placeholder:Code de la visio"  }}
                           </div>
                       </div>
                   </div>
               </div> 
-              
+
               <div class="row" style="display:none;">              
                   <div class="col-sm-8 col-md-8">                        
                       <div class="form-group">

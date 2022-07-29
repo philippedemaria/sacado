@@ -174,7 +174,7 @@ def delete_event(request,id):
  
     event = Event.objects.get(pk=id)    
     event.delete()
-    return redirect('calendar_initialize') 
+    return redirect('calendar_show' , 0)
 
 
 
