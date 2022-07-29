@@ -1,0 +1,102 @@
+{% load static %}
+{% load widget_tweaks %}   
+
+      <div class="modal-content">
+          <div class="modal-header">
+              <div class="row">                      
+                  <div class="col-sm-11 col-md-11">
+                     <div class="form-group">
+                        <font style="font-size:16px">Nouvelle leçon <a href="#" class="vue" data-dismiss="modal"><i class="fa fa-times pull-right"></i></a></font>
+                      </div>
+                  </div> 
+              </div>
+          </div>
+          <div class="modal-body">                  
+ 
+              <div class="row event_div" id="animation">              
+                  <div class="col-sm-12 col-md-12">                        
+                      <div class="form-group">
+                          <label>Elèves</label>
+                          {{ form.users |add_class:"form-control select2"   }}
+                      </div> 
+                  </div>
+              </div> 
+
+
+
+
+
+              <div class="row">                      
+                  <div class="col-sm-12 col-md-12">
+                     <div class="form-group">
+                        {{ form.title |add_class:"form-control"|attr:"placeholder:Ajouter un titre ou le code de la visio"  }}
+                    </div>
+                  </div>
+              </div>
+              <div class="row" style="display:none;">              
+                  <div class="col-sm-8 col-md-8">                        
+                      <div class="form-group">
+                        Du {{ form.start |add_class:"form-control" }}
+                      </div> 
+                  </div>                  
+              </div>
+              <div class="row">
+                  <div class="col-sm-6 col-md-6">
+                      <div class="form-group">
+                              <div class="form-group">
+                              Couleur <span id="selected_color"><i class="fa fa-square" style="color:#00819F"></i></span> <br>{{ form.color.as_hidden  }}  
+ 
+                                <a href="#"><i class="fa fa-square text-primary fa-2x selector_color" data-color="primary" data-code="0152a3"></i></a>
+                                <a href="#"><i class="fa fa-square text-success fa-2x selector_color" data-color="success" data-code="3c763d"></i></a>
+                                <a href="#"><i class="fa fa-square text-danger fa-2x selector_color" data-color="danger" data-code="a94442"></i></a> 
+                                <a href="#"><i class="fa fa-square text-warning fa-2x selector_color" data-color="warning" data-code="ffcc00"></i></a>
+                                <a href="#"><i class="fa fa-square text-orange fa-2x selector_color" data-color="orange" data-code="ef6d02"></i></a> 
+                                <a href="#"><i class="fa fa-square text-purple fa-2x selector_color" data-color="purple" data-code="605ca8"></i></a>
+                                <a href="#"><i class="fa fa-square text-pink fa-2x selector_color" data-color="pink" data-code="f442f1"></i></a>
+                                <a href="#"><i class="fa fa-square text-water fa-2x selector_color" data-color="water" data-code="23afa5"></i></a>
+                              </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3">
+                      <div class="form-group">De 
+                          <select  id='start_hour' name='start_hour' class="form-control select2">
+                              {% for h in hours %}
+                                  <option value="{{ h }}">{{ h }}</option>
+                              {% endfor %}
+                          </select>  
+                      </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3">
+                      <div class="form-group">à
+                          <select  id='end_hour' name='end_hour' class="form-control select2">
+                              {% for h in hours %}
+                                  <option value="{{ h }}">{{ h }}</option>
+                              {% endfor %}
+                          </select>    
+                      </div>
+                  </div>
+
+              </div>
+
+
+              <div class="row">                    
+                  <div class="col-sm-12 col-md-12">
+                       <div class="form-group">
+                          <div class="form-group">Commentaire
+                              {{ form.comment |add_class:"form-control"|attr:"rows:3"  }}
+                          </div>
+                      </div>
+                  </div>
+              </div> 
+              <div class="row"> 
+                  <div class="col-sm-4 col-md-4">
+                      <div class="form-group"><br>
+                        <input value="Enregistrer" type="submit" class="btn btn-primary" style="width:100%"/> 
+                      </div>
+                  </div> 
+              </div> 
+          </div>
+
+
+
+      </div>

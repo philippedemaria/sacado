@@ -1,0 +1,176 @@
+{% load static %}
+{% load widget_tweaks %}   
+<script>
+$("[data-toggle='toggle']").bootstrapToggle();
+
+          $('.selector_color').on('click', function () {
+              let color = $(this).attr("data-color");
+              let code = $(this).attr("data-code");
+
+              console.log("couleur"+color);
+
+          $('#selected_colored').html("<i class='fa fa-square text-"+color+"'></i>");
+          $('#id_colored').val("#"+code);
+          });
+
+
+$('.select2').select2({'width':'100%', });
+
+            $("#alldaydiv1").show();
+            $('#is_allday1').on('change', function () { 
+                $("#alldaydiv1").toggle(500);
+            });
+$('.datepicker').datepicker();
+
+
+</script>
+ 
+
+<form  action="{% url 'update_event' event.id %}" method="POST">
+  
+    <div class="row">                      
+      <div class="col-sm-7 col-md-7">
+         <div class="form-group"><input type="hidden" name="event_id" value="{{ event.id }}" />
+             <input value='{{ event.title  }}' type="text" id="title" name="title" class="form-control"/> 
+        </div>
+      </div>
+      <div class="col-sm-5 col-md-5">
+            <div class="form-group"> 
+              <input value="Enregistrer" type="submit" class="btn btn-warning" style="width:100%"/> 
+            </div>
+      </div> 
+    </div>
+    <div class="row"> 
+      <div class="col-sm-3 col-md-3">
+            <div class="form-group">Du<br>
+                <input value='{{ event.start |date:"Y-m-d"}}' type="date" id="id_start" name="start" class="form-control"/> 
+            </div>
+      </div> 
+      <div class="col-sm-4 col-md-4">
+            <div class="form-group">au <small style="color:#a94442">Modifier si même jour</small><br>
+                <input value='{{ event.start |date:"Y-m-d"}}' type="date" id="id_end" name="end" class="form-control"/> 
+            </div>
+      </div> 
+      <div class="col-sm-5 col-md-5">
+            <div class="form-group">
+                    <div class="form-group">
+                    Couleur <span id="selected_colored"></span> <br><input type="hidden" id="id_colored" name="color" required  value="{{ event.color }}" />
+                                <a href="#"><i class="fa fa-square text-primary fa-2x selector_color" data-color="primary" data-code="0152a3"></i></a>
+                                <a href="#"><i class="fa fa-square text-success fa-2x selector_color" data-color="success" data-code="3c763d"></i></a>
+                                <a href="#"><i class="fa fa-square text-danger fa-2x selector_color" data-color="danger" data-code="a94442"></i></a> 
+                                <a href="#"><i class="fa fa-square text-warning fa-2x selector_color" data-color="warning" data-code="ffcc00"></i></a>
+                                <a href="#"><i class="fa fa-square text-orange fa-2x selector_color" data-color="orange" data-code="ef6d02"></i></a> 
+                                <a href="#"><i class="fa fa-square text-purple fa-2x selector_color" data-color="purple" data-code="605ca8"></i></a>
+                                <a href="#"><i class="fa fa-square text-pink fa-2x selector_color" data-color="pink" data-code="f442f1"></i></a>
+                                <a href="#"><i class="fa fa-square text-water fa-2x selector_color" data-color="water" data-code="23afa5"></i></a>
+                    </div>
+            </div>
+      </div>                
+    </div>
+    <div class="row">
+
+    <div class="col-sm-3 col-md-3">                        
+        <div class="form-group">
+            Journée entière ?<br>
+                    <input type="checkbox" id="is_allday1" name="is_allday" data-toggle="toggle" data-size="small"
+                     data-on="O" value="1"
+                     data-off="N" data-onstyle="primary">
+        </div>
+        </div>
+        <div id="alldaydiv1">
+            <div class="col-sm-3 col-md-3">
+                <div class="form-group">De 
+                    <select  id='start_hour' name='start_hour' class="form-control select2">
+                        {% for h in hours %}
+                            <option value="{{ h }}" {% if event.start_hour == h %} selected {% endif %}>{{ h }}</option>
+                        {% endfor %}
+                    </select>  
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="form-group">à<br>
+                    <select  id='end_hour' name='end_hour' class="form-control select2">
+                        {% for h in hours %}
+                            <option value="{{ h }}" {% if event.start_hour == h %} selected {% endif %}>{{ h }}</option>
+                        {% endfor %}
+                    </select>    
+                </div>
+            </div>
+        </div>
+    </div>
+<!--     <div class="row">              
+        <div class="col-sm-12 col-md-12">                        
+            <div class="form-group">
+              Type d'évènement : <br><label style="font-weight: 300;margin-right:15px"><input type="radio" name="type_of_event" value ="1" /> Tache</label>
+              <label style="font-weight: 300;margin-right:15px"><input type="radio" name="type_of_event" value ="2" /> Visite de classe</label>
+              <label style="font-weight: 300;margin-right:15px"><input type="radio" name="type_of_event" value ="3" /> Animation</label> 
+              <label style="font-weight: 300;margin-right:15px" style="font-weight: 300"><input type="radio" name="type_of_event" value ="4" /> Stage</label>
+              <label style="font-weight: 300;margin-right:15px"><input type="radio" name="type_of_event" value ="0" /> Autre</label>
+            </div> 
+        </div>
+    </div>  -->
+
+    <div class="row">   
+        <div class="col-sm-2 col-md-2">
+            <div class="form-group">
+                <div class="form-group">
+                    Partagé ?<br>
+                            <input type="checkbox" id="display" name="display" data-toggle="toggle" data-size="mini"
+                             data-on="O" value="1" {% if event.display == 1 %} checked {% endif %}
+                             data-off="N" data-onstyle="primary">
+                </div>
+            </div>
+        </div>         
+        <div class="col-sm-10 col-md-10">                      
+            <div class="form-group">
+                Lieu<br>
+                <input value='{{ event.place  }}' type="text" id="place" name="place" class="form-control"/> 
+            </div> 
+        </div>
+    </div> 
+    <!--<div class="row">   
+        <div class="col-sm-2 col-md-2">                      
+            <div class="form-group">
+                <div class="form-group">
+                    Notification<br>
+                            <input type="checkbox" id="notification" name="notification" data-toggle="toggle" data-size="mini"
+                             data-on="O" value="1"
+                             data-off="N" data-onstyle="primary">
+                </div>
+            </div>  
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <input  type="number" id='days' name='days'  placeholder="jours avant" class="form-control select2"/>
+            </div>
+        </div> 
+         <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <input  type="date" id='date_notif' name='date_notif' class="form-control select2"/>
+            </div>
+        </div>                  
+    </div> -->
+    <div class="row">                    
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group">Calendrier <small>(calendrier par défaut si vide)</small><br>
+                {{ form.calendar |add_class:"form-control select2"  }}
+            </div>
+        </div>
+         <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+                <div class="form-group">Inviter d'autres personnes<br>
+                    {{ form.users |add_class:"form-control select2"  }}
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="row">                    
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <div class="form-group">Commentaire<br>
+                    <textarea class="form-control" rows="3" name="comment" id="id_comment">{{ event.comment }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>   
+</form>   

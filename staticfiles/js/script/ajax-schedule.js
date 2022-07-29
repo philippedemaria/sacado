@@ -3,14 +3,18 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
         console.log("chargement JS ajax-schedule.js OK");
 
 
- 		        $("#alldaydiv").show();
-		        $('#is_allday').on('change', function () { 
-		            $("#alldaydiv").toggle(500);
-		        });
-
  				$('.update_event_modal').on('click', function () { 
 					$('#show_event').modal('hide');
 					});
+
+
+  				$('.selector_color').on('click', function () {
+  				    let color = $(this).attr("data-color");
+  				    let code = $(this).attr("data-code");
+					$('#selected_color').html("<i class='fa fa-square text-"+color+"'></i>");
+					$('#id_color').val("#"+code);
+					});
+
 
 
 
@@ -20,6 +24,7 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 		                      center: 'title',
 		                      right: 'month,agendaWeek,agendaDay'
 	                  		},
+ 
 					editable: true,
                  	selectable: true,
                  	selectHelper: true,
@@ -37,15 +42,15 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 	                      week:     'Semaine',
 	                      day:      'Jour'
 	                  },
-					select: function(event) {
+      				events: '../events_json',	                  
+					select: function(startDate, endDate) {
 	 						$("#new_event").modal('show');
- 							$("#id_start").val(event.date_limit.format());
- 							$("#id_end").val(event.date_limit.format());
+ 							$("#id_start").val(startDate.format());
+ 							$("#id_end").val(endDate.format());
 					    },
-      				events: '/schedule/events_json',
 	                eventDrop: function(event, delta, revertFunc) {
 
-						if (!confirm(event.exercise.knowledge.name + " est déplacé au " + event.date_limit.format()+". Etes-vous sûr de ce changement ?")) {
+						if (!confirm(event.title + " est déplacé au " + event.start.format()+". Etes-vous sûr de ce changement ?")) {
 						      revertFunc();
 						    }
 						else
@@ -57,7 +62,7 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 					                    dataType: "json",
 					                    data: {
 					                       'event_id': event.id,
-					                       'start_event': event.date_limit.format(),
+					                       'start_event': event.start.format(),
 					                        csrfmiddlewaretoken: csrf_token
 					                    },
 					                    url: "shift_event" ,
@@ -87,7 +92,7 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 					                    $("#formulaire").html("").append(data.html); 
 					                    }
 					                }
-					            );
+					            )
 
 					    $("#show_event").modal('show');
  	
@@ -95,23 +100,8 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 				}) ;
 
 
-				$('.event_div').hide();
- 
- 
-
-
- 
-
-
-
-
-
-
-
-
-
 				
-	}); 
+			}); 
 
 })
 

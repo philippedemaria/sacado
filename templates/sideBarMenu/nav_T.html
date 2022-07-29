@@ -72,6 +72,23 @@
     </a>
 </li>
 
+
+
+
+
+{% if request.user.is_superuser    %}
+
+<li  class="dropdown  {% if not request.session.tdb and 'lesson' in request.path %}  active{% endif %}">
+    <a href="{% url 'calendar_show' 0 %}" class="main" >
+        <i class="bi bi-camera-video icon_size"></i> 
+        <div class="captionmenu">Leçons</div>
+    </a>
+</li>
+ 
+{% endif %}
+
+
+
 <li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path  %}active{% endif %}">
     <a href="#" class="main"  id="documents" style="cursor: grab;">
         <i class="bi bi-folder icon_size"></i> 
@@ -142,6 +159,13 @@
 </li>
 {% endif %}
  
+
+
+
+
+
+
+
 
 {% if request.user.is_superuser or request.user.is_extra  %}
 

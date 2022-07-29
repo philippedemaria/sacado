@@ -28,7 +28,6 @@ urlpatterns = [
                   path('qcm/', include('qcm.urls')),
                   path('sendmail/', include('sendmail.urls')),
                   re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
-                  path('schedule/', include('schedule.urls')),
                   path('school/', include('school.urls')),
                   path('oauth/', include('social_django.urls')),
                   path('basthon/', include('basthon.urls')),    
@@ -39,7 +38,8 @@ urlpatterns = [
                   path('aefe/', include('aefe.urls')),
                   path('flashcard/', include('flashcard.urls')),
                   path('academy/', include('academy.urls')),
-
+                  path('lesson/', include('lesson.urls')),
+                  
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
