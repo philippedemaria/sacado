@@ -2260,3 +2260,14 @@ def export_skills(request):
 
 
 
+def schedule_task_group(request, id):
+    
+    group = Group.objects.get(id=id)
+    teacher =   request.user.teacher
+    request.session["group_id"] = group.id   
+
+    relationships = Relationship.objects.filter(parcours__teacher = teacher).exclude(date_limit = None) 
+
+    context = {  'group': group, 'relationships' : relationships , 'teacher' : teacher  }
+
+    return render(request, 'schedule/base_group.html', context )

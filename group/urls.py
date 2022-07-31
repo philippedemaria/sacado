@@ -34,6 +34,8 @@ urlpatterns = [
 
     path('task_group/<int:id>/', task_group, name='task_group'),
 
+    path('schedule_task_group/<int:id>/', schedule_task_group, name='schedule_task_group'),
+
 
     path('group_theme/<int:id>/<int:idt>/', result_group_theme, name='result_group_theme'),
 
@@ -52,8 +54,15 @@ urlpatterns = [
     path('aggregate_group',  aggregate_group, name='aggregate_group'), 
 
     path('export_skills',  export_skills, name='export_skills'), 
-    path('envoieStatsEnMasse',envoieStatsEnMasse, name="envoieStatsEnMasse"), 
+    path('envoieStatsEnMasse',envoieStatsEnMasse, name="envoieStatsEnMasse"),
+
+
+
+
     path('<slug:slug>', enroll , name='enroll'),
+
+
+
 
 
 ]
