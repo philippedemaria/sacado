@@ -331,6 +331,17 @@
                             {{ user_form.is_manager.errors }}
                         </div>  
                         {% if request.user.is_superuser %}
+                        <div class="form-group"> 
+                            <label>Propose des cours</label> <small>(facultatif)</small> 
+                            {{ teacher_form.is_lesson |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}
+                            {{ teacher_form.is_lesson.errors }}
+                        </div>
+                        <div class="form-group"> 
+                            <label>Propose des cours</label> <small>(facultatif)</small> 
+                            {{ teacher_form.comment |add_class:"form-control"|attr:"rows:3"   }}
+                            {{ teacher_form.comment.errors }}
+                        </div>
+
                         <div class="form-group">
                             <label>Créateur d'exercices ?</label>
                             {{ user_form.is_extra |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}

@@ -1,0 +1,86 @@
+{% extends 'dashboard.html' %} 
+
+{% load item_tags %}
+{% load static %}
+
+
+
+{% block page_title %} 
+    <i class="bi bi-camera-video sacado_color_text"></i> 
+    Les leçons   
+{% endblock  %}
+
+
+
+
+
+{% block page_menu_right %} 
+ 
+ 
+{% endblock  %}
+
+
+
+
+
+
+
+
+{% block body  %} 
+<section class="content_container">  
+
+    <div class="alert alert-warning">
+ 
+        Sacado Académie vous met en relation avec des enseignants qualifiés ou des élèves ingénieurs. La transaction s'opère entre l'enseignant et vous. Sacado Académie n'est qu'une interface intermédiaire. <br/>
+        <ol>
+            <li>Choisir un enseignant. </li>
+            <li>Le contacter via le mail ou son numéro de téléphone s'il est renseigné. </li>
+            <li>L'enseignant vous inscrit sur son agenda et vous revevrez un email de confirmation avec le lien de connexion.</li>
+            <li>La visio est alors pogrammée et prête.</li>
+        </ol>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12">
+            {%  for teacher in teachers %}
+
+     
+                <div class="box box-widget widget-user-2" style="padding:15px 15px 0px 15px"> 
+                      <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="handler widget-user-header">
+                        <div class="row"> 
+                            <div class="col-sm-5 col-md-5">
+                                {% if teacher.user.avatar %}
+                                    <img src="{{ teacher.user.avatar }}" class="avatar_big"  />
+                                {% endif %}
+                                <div class="box_title_vignette"> 
+                                    <span class="thin"> {{ teacher.user.first_name  }} </span>
+                                </div> 
+                            </div>
+                            <div class="col-sm-7 col-md-7" style="font-size:15px">
+                                {% if teacher.comment %}
+                                {{ teacher.comment|safe }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="row extend">                              
+     
+                             {{ teacher.user.email }}
+
+                      
+                        </div>
+                    </div>
+                </div>
+                </a>  
+            {% endfor %}
+        </div>
+    </div>
+
+ 
+</section> 
+
+ 
+{% endblock  %}
+ 

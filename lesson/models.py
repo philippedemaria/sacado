@@ -1,9 +1,10 @@
-from account.models import User
+from account.models import User  
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from datetime import datetime, time
 
+ 
 
 
 class Event(models.Model):

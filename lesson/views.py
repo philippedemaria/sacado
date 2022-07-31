@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from lesson.models import Event
 from lesson.forms import EventForm
-from account.models import User, Student , Teacher
+from account.models import User, Student , Teacher, Parent
 from school.models import School
 
 from datetime import datetime,timedelta
@@ -12,7 +12,8 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse 
 from django.core import serializers
 from django.core.mail import send_mail
- 
+from general_fonctions import *
+
 
 def get_hours():
     hours = []
@@ -60,8 +61,8 @@ def calendar_show(request,id=0):
     user  = request.user
     form = EventForm(user, request.POST or None)
     hours = get_hours()
-
-    context = { 'user_shown' : user , 'form' : form , 'hours' : hours ,   }  
+    students = user.teacher.students.all()
+    context = { 'user_shown' : user , 'form' : form , 'hours' : hours , 'students' : students ,  }  
 
     return render(request, "lesson/calendar_show.html" , context )
  
@@ -178,4 +179,68 @@ def delete_event(request,id):
 
 
 
+def add_students_to_my_lesson_group(request):
  
+    user = request.user
+    if request.method == "POST":
+        students = request.POST.getlist('students')
+
+        for s in students :
+            print(s)
+            user.teacher.students.add(s)
+        return redirect('calendar_show' , 0)
+
+    today   = time_zone_user(user)
+    students = Student.objects.filter(user__school_id = 50,user__user_type=0, user__closure__lte= today  ).order_by("level__ranking", "user__last_name")
+    
+    context = { 'user' : user , 'students' : students , 'teacher' : user.teacher   }   
+    return render(request, "lesson/add_students_to_my_lesson_group.html" , context )
+
+
+
+def delete_student_to_my_lesson_group(request,id):
+ 
+    user = request.user  
+    s= Student.objects.get(user_id=id) 
+    user.teacher.students.remove(s)
+    return redirect('calendar_show' , 0)
+
+
+
+
+
+def dashboard_parent(request):
+ 
+    parent = Parent.objects.get(user=request.user)
+    students = parent.students.order_by("user__first_name")
+    index_tdb = False  # Permet l'affichage des tutos Youtube dans le dashboard
+    today = time_zone_user(request.user)
+    context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, }
+    template = 'lesson/dashboard_lesson_parent.html'
+      
+    return render(request, template , context )
+
+
+
+
+def detail_student_lesson(request,id):
+ 
+    user = request.user
+    student = Student.objects.get(user_id=id)
+    lessons = student.user.these_events.all()
+    
+    context = { 'user' : user , 'student' : student , 'lessons' : lessons   }   
+    return render(request, "lesson/list_lessons.html" , context )
+
+
+
+
+
+def ask_lesson(request,id):
+ 
+    user = request.user
+    student = Student.objects.get(user_id=id)
+    teachers = Teacher.objects.filter(user__school_id=50,is_lesson=1).order_by("user__last_name")
+    
+    context = { 'user' : user , 'student' : student , 'teachers' : teachers   }   
+    return render(request, "lesson/ask_lesson.html" , context )

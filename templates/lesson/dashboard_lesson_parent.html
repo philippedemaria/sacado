@@ -1,0 +1,80 @@
+{% extends 'dashboard.html' %} 
+
+{% load item_tags %}
+{% load static %}
+
+
+
+{% block page_title %} 
+    <i class="bi bi-camera-video sacado_color_text"></i> 
+    Les leçons   
+{% endblock  %}
+
+
+
+
+
+{% block page_menu_right %} 
+ 
+ 
+{% endblock  %}
+
+
+
+
+
+
+
+
+{% block body  %} 
+<section class="content_container">  
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xs-12">
+        {%  for student in students %}
+
+            <a  href="{% url 'detail_student_all_views' student.user.id  %}"  class="edit" >
+            <div  class="box box-widget widget-user-2" 
+                  style="background-color: #af9cd4"  > 
+                  <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="handler widget-user-header">
+                    {% if student.user.avatar %}
+                    <div style="position: absolute; top : 10px; text-align: center;"> 
+                        <img src="{{ student.user.avatar }}" class="avatar_big"  />
+                    </div>
+                    {% endif %}
+                    <div class="box_title_vignette"> 
+                        <span style="color:#FFF;" class="thin"> {{ student.user.first_name  }} </span>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div class="row extend">                              
+                        <div class="col-lg-4 col-xs-5">
+                            <a  href="{% url 'detail_student_lesson' student.user.id  %}"  class="edit" ><i class="fa fa-list"></i> List</a>   
+                        </div>
+          
+ 
+
+                        <div class="col-lg-8 col-xs-7">
+                            
+                            <a  href="{% url 'ask_lesson' student.user.id %}"  ><i class="bi bi-plus-circle"></i> Nouvelle
+                            </a>  
+
+
+                        </div>
+     
+
+                  
+                    </div>
+                </div>
+            </div>
+            </a>  
+        {% endfor %}
+    </div>
+</div>
+
+ 
+</section> 
+
+ 
+{% endblock  %}
+ 

@@ -25,26 +25,34 @@
                 </div>
                 <div class="box-footer">
                     <div class="row extend">                              
-                        <div class="col-lg-6 col-xs-6">
-                            <a  href="{% url 'detail_student_all_views' student.user.id  %}"  class="edit" ><i class="fa fa-mortar-board"></i> Suivi</a>   
+                        <div class="col-lg-7 col-xs-7">
+                            <a  href="{% url 'detail_student_all_views' student.user.id  %}"  class="edit" ><i class="fa fa-mortar-board"></i> Suivi des exercices</a>   
                         </div>
-          
+                        <div class="col-lg-5 col-xs-5">
+                            <a  href="{% url 'detail_student_lesson' student.user.id  %}"  class="edit" ><i class="bi bi-camera-video-fill"></i> Leçons</a>   
+                        </div>
+                    </div>
+                    <div class="row">                              
+
+ 
 
                         {% if not request.user.is_in_academy %}
-                        <div class="col-lg-6 col-xs-6">
+                        <div class="col-lg-12 col-xs-12">
                             <a  href="{% url 'my_child_tasks' student.user.id %}"  {% if not student.is_task_exists %}class="edit"{% endif %}  >
                                 {% if not student.is_task_exists %}<i class="fa fa-calendar"></i>{% else %}<i class="fa fa-calendar-check"></i>{% endif %}
                                 Tâches
                             </a>  
                         </div>
                         {% else %}
-
-                        <div class="col-lg-6 col-xs-6">
-                            <small> Id : {{ student.user.username }} </small>
+                        <div class="col-lg-12 col-xs-12">
+                            <span class="helper_tip" style="color: #998fa6;"> <i class="bi bi-chevron-bar-right"></i>  {{ student.user.username }} 
+                                <div class="helper_tip_text" >Identifiant de connexion de {{ student.user.first_name  }} .</div>
+                            </span>
                         </div>
                         {% endif %}
 
-                  
+
+
                     </div>
                 </div>
             </div>

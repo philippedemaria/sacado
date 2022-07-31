@@ -1024,3 +1024,12 @@ def include_in_flashpack (obj, flashpack):
 def get_permit_access (obj, model):
     """ Vérifie l'accès pour un modèle cloné """
     return obj.permit_access( model ) 
+
+
+@register.simple_tag
+def is_inside_my_lesson(obj,student): 
+    """
+    retourne  la réponse pour un quizz avec une question. peutn être sous forme d'id.
+    """
+    return obj.student_in_my_lesson(student) 
+

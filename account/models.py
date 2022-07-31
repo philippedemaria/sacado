@@ -679,9 +679,23 @@ class Teacher(models.Model):
     subjects      = models.ManyToManyField(Subject, related_name="teacher", verbose_name="Enseignements")
     is_mailing    = models.BooleanField(default=0, verbose_name="Réception de messages ?")
     helping_right = models.BooleanField(default=0, verbose_name="Aide à distance ?")
+    students      = models.ManyToManyField(Student, related_name="teachers", blank=True, editable= False)
+    is_lesson     = models.BooleanField(default=0, verbose_name="Propose des cours ?")
+    comment       = models.TextField( blank=True, null=True, verbose_name="Commentaire")
 
     def __str__(self):
         return f"{self.user.last_name.capitalize()} {self.user.first_name.capitalize()}"
+
+
+
+
+
+    def student_in_my_lesson(self,student):
+        inside = False
+        if student in self.students.all():
+            inside = True
+        return inside
+
 
     def notify_registration(self):
         """

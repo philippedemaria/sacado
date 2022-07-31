@@ -1,0 +1,82 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+ 
+{% block page_title %}
+     Liste des leçons {{ student  }}  
+{% endblock %}
+
+{% block page_menu_right %}
+    <li><a href="{% url 'ask_lesson' student.user.id %}" class="btn btn-new pull-right" ><i class="fa fa-plus-circle"></i> Nouvelle leçon</a> </li> 
+{% endblock %}
+
+
+{% block  body %}
+<section class="content_main"> 
+
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-bordered table-hover standard_tab_sort2000" style="width:100%">
+                  <thead>
+                      <tr>
+
+                        <th  style="width:300px">Horaire</th>                  
+                        <th>Titre</th> 
+                        <th>Lien</th> 
+                        <th>Bénéficiaires</th> 
+                        <th style="width:10px">Enseignant </th>                                      
+                        <th>Commentaire</th> 
+                      </tr>
+                  </thead>
+                  <tbody>
+                        {% for lesson in lessons %}
+                        <tr> 
+                          <td style="background-color:{{ lesson.color }}">
+                          </td>
+                          <td>
+                             {{ lesson.start|date:"d m Y à H:i" }}  
+                          </td>
+                          <td >
+                             {{ lesson.title }}
+                          </td>
+                          <td >
+                               {% for u in lesson.users.all  %}   
+                                  {{ u.first_name }} {{ u.last_name }}{% if not forloop.last %},{% endif %}
+                              {% endfor %} 
+                          </td>
+
+                          <td>
+                             {{ lesson.user }}  
+                          </td>
+                          <td >
+                             {{ lesson.comment|safe }}
+                          </td>
+
+
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 
