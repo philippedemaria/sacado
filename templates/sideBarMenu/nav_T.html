@@ -76,7 +76,7 @@
 
 
 
-{% if request.user.is_superuser    %}
+{% if request.user.is_superuser or  request.user.teacher.is_lesson   %}
 
 <li  class="dropdown  {% if not request.session.tdb and 'lesson' in request.path %}  active{% endif %}">
     <a href="{% url 'calendar_show' 0 %}" class="main" >
