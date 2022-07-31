@@ -332,7 +332,7 @@
                         </div>  
                         {% if request.user.is_superuser %}
                         <div class="form-group"> 
-                            <label>Propose des cours</label> <small>(facultatif)</small> 
+                            <label>Propose des leçons</label> <small>(facultatif)</small> 
                             {{ teacher_form.is_lesson |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}
                             {{ teacher_form.is_lesson.errors }}
                         </div>
