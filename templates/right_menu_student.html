@@ -1,9 +1,7 @@
 {% load item_tags %} 
  
 
-<div class="events_title">
-    A venir<small><span  class="pull-right parcours_displayer pull-right_top"><i class="fa fa-calendar"></i> <a href="{% url 'calendar_initialize' %}">Afficher le calendrier</a> <a href="{% url 'calendar_initialize' %}" style="font-size:10px" target="_blank" title="Lien externe"><i class="fa fa-share"></i></a></span></small>
-</div>
+ 
 <div class="events {% if relationships|length > 8 %} div_events{% endif %}" >
         {%  if relationships|length > 0 %} 
             {% for relationship in relationships|dictsort:"date_limit" %}
