@@ -51,6 +51,10 @@ urlpatterns = [
     path('delete_school_students', delete_school_students , name='delete_school_students'),
     path('delete_selected_students', delete_selected_students , name='delete_selected_students'),
 
+    path('delete_school_group_and_students', delete_school_group_and_students , name='delete_school_group_and_students'),
+
+
+
     path('get_school_students', get_school_students , name='get_school_students'),
     path('manage_stage', manage_stage, name='manage_stage'),
 

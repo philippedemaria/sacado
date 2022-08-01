@@ -540,6 +540,28 @@ def delete_school_students(request):
  
 
 
+#@is_manager_of_this_school
+def delete_school_group_and_students(request):
+	
+	school = this_school_in_session(request)
+
+	teacher = Teacher.objects.get(user=request.user)
+	if not authorizing_access_school(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
+		return redirect('index')
+
+	User.objects.filter(school = school, user_type = 0).delete()
+
+	for g in school.school_group.all():
+		g.delete()
+
+	return redirect('admin_tdb')
+
+
+
+
+
+
 
 #@is_manager_of_this_school
 def delete_selected_students(request):
