@@ -558,6 +558,8 @@ def delete_school_group_and_students(request):
 		s.user.delete()
 
 	for g in school.school_group.all():
+		for sg in g.group_sharingteacher.all():
+			sg.delete()		
 		g.delete()
 
 	return redirect('admin_tdb')
