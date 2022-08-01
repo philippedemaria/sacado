@@ -23,9 +23,7 @@ function TestRenew() {
     if (!confirm("Vous souhaitez renouveler la cotisation ? En cliquant, vous créez une facture et pourrez choisir le mode de réglement qui vous convient. Une fois la cotisation reçue, nous enclenchons la version établissement." )) return false;
 }
 
-function TestRenewAdh() {
-    if (!confirm("Vous avez déjà renouvelé l'adhésion. Son traitement est en cours. Une fois la cotisation reçue, nous enclenchons la version établissement." )) return false;
-}
+ 
 
 
 function TestDuplicate(f1) {

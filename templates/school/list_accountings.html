@@ -77,9 +77,9 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">  
 
-    
-    <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return {% if renew_propose %}TestRenewAdh('cette adhésion'){% else %}TestRenew('cette adhésion') {% endif %}">Réabonnement Nouvelle Année Scolaire</a> 
-    
+    {% if not renew_propose %}
+    <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a> 
+    {% endif %}
 
 
 
