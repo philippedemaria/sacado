@@ -164,19 +164,6 @@
                             {% endif %}
                             {{ form.email.errors }}
                         </div>
-                        {% if not forloop.first %}
-                        <div class="form-group">
-                            <label>Niveau favori :</label>
-                            <select name="level" class="form-control select2">
-                                {% for l in levels|dictsort:"ranking" %}
-                                    <option value="{{ l.id }}">{{ l.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <small>Le niveau favori est le niveau accessible depuis le tableau de bord.</small>
-                        </div>
-                        {% else %}
-                            <input name="level" value="" type="hidden" />
-                        {% endif %}
                         <div class="row"> 
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
@@ -203,6 +190,19 @@
                                 </div>
                             </div>
                         </div> 
+                        {% if not forloop.first %}
+                        <div class="form-group">
+                            <label>Niveau :</label>
+                            <select name="level" class="form-control select2">
+                                {% for l in levels|dictsort:"ranking" %}
+                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <small>Le niveau favori est le niveau accessible depuis le tableau de bord.</small>
+                        </div>
+                        {% else %}
+                            <input name="level" value="" type="hidden" />
+                        {% endif %}
                         {% if forloop.counter == 1 %}
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
