@@ -73,18 +73,25 @@
             </div>
         </div>
 
+        {% if renew_propose %}
+        <div class="row alert alert-warning">
+            <div class="col-sm-12 col-md-12">  
+                Une demande d'adhésion a été envoyée. La demande est en cours de traitement.  
+            </div>
+        </div>
+        {% endif %}
+
+
+
 
         <div class="row">
             <div class="col-sm-12 col-md-12">  
-
-    {% if not renew_propose %}
-    <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a> 
-    {% endif %}
-
-
-
-                    <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
+                {% if not renew_propose %}
+                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a> 
+                {% endif %}
+                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
             </div>
         </div>
+
     </section>
 {% endblock %}

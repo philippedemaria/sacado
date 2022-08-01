@@ -1057,7 +1057,7 @@ def add_adhesion(request) :
     if request.method == "POST" :
         if form.is_valid():
             #end = today + timedelta(days=7)
-            end = datetime(2022,8,15) 
+            end = datetime(2022,8,31) 
             form_user = form.save(commit=False)
             form_user.closure = end
             form_user.school_id = 50

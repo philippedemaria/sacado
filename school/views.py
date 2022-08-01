@@ -707,6 +707,11 @@ def renew_school_adhesion(request):
 
 	request.session["inscription_school_id"] = None
 
+    renew_propose = False
+    last_accounting = school.accountings.filter(date_payment=None)
+    if last_accounting :
+        renew_propose = True
+
 	today = datetime.now()
 	try :
 		if today < datetime(today.year,7,1) :
@@ -740,7 +745,7 @@ def renew_school_adhesion(request):
 
 	request.session["accounting_id"] = accounting_id
 
-	context =  {  'school' : school  , 'user' : user , 'accounting_id' : accounting_id, 'accounting' : accounting  }
+	context =  {  'school' : school  , 'user' : user , 'accounting_id' : accounting_id, 'accounting' : accounting , 'renew_propose' : renew_propose }
 
 	return render(request, 'school/renew_school_adhesion.html', context)
 
