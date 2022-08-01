@@ -1011,7 +1011,7 @@ def get_school(request):
 				for g in groups :
 					Group.objects.filter(pk=g.id).update(school = school) 
 					for s in g.students.all() :
-						User.objects.filter(user_id=s.user.id).update(user__school = school)
+						User.objects.filter(pk=s.user.id).update(school = school)
 			except :
 				pass
 			messages.success(request,"Rattachement à l'établissement " +school.name+ " réussi")
