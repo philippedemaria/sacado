@@ -3,7 +3,8 @@ $(document).ready(function () {
  
         console.log("---- NEW test ajax-accueil.js ---") ;  
 
- 
+
+
 
         setTimeout(function(){ 
            $("#container_messages").css('display', "none"); 

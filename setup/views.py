@@ -1120,7 +1120,11 @@ def add_adhesion(request) :
 def commit_adhesion(request) :
 
     data_post   = request.POST
-    nb_child    = int( data_post.get("nb_child") )   
+    try :
+        nb_child = int( data_post.get("nb_child") )
+    except :
+        nb_child = 1     
+
     menu_id     = int(data_post.get("menu_id"))    
     data_posted = {"total_price" : data_post.get('total_price'), "month_price" : data_post.get('month_price'), "nb_month" : data_post.get('nb_month'), "date_end" : data_post.get('date_end'), "menu_id" : menu_id , "nb_child" : nb_child }
  
@@ -1162,8 +1166,9 @@ def commit_adhesion(request) :
  
         ############################################################
     else:
-        print("formset.errors : ", formset.errors)
-        return redirect('details_of_adhesion')
+        messages.error(request,formset.errors)
+        messages.error(request,"Confirmation du mot de passe erronée. Merci de revenir à la page précédente.")
+
 
 
     context = {'formule' : formule ,  'data_post' : data_posted , 'parents' : parents  , 'students' : students  }

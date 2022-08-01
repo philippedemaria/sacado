@@ -3,7 +3,97 @@ $(document).ready(function () {
  
         console.log("---- NEW test accueil_accueil.js ---") ;  
 
- 
+
+   
+
+                
+        if ( $("#id_form-0-password1").length ) {   
+                $("#id_form-0-password2").on('blur', function () {
+                    let f2 = $(this).val();
+                    let f1 = $("#id_form-0-password1").val();
+                    if (f1 != f2) {
+                        alert('La confirmation du mot de passe ne correspond pas !');
+                        $("#sendit").prop("disabled", true ) ;
+                    }
+                    else
+                        { $("#sendit").prop("disabled", false ) ; }
+                });
+            }
+
+
+        if ( $("#id_form-1-password1").length ) {   
+                $("#id_form-1-password2").on('blur', function () {
+                    let f2 = $(this).val();
+                    let f1 = $("#id_form-1-password1").val();
+                    if (f1 != f2) {
+                        alert('La confirmation du mot de passe ne correspond pas !');
+                        $("#sendit").prop("disabled", true ) ;
+                    }
+                    else
+                        { $("#sendit").prop("disabled", false ) ; }
+                });
+            }
+
+        if ( $("#id_form-2-password1").length ) {   
+                $("#id_form-2-password2").on('blur', function () {
+                    let f2 = $(this).val();
+                    let f1 = $("#id_form-2-password1").val();
+                    if (f1 != f2) {
+                        alert('La confirmation du mot de passe ne correspond pas !');
+                        $("#sendit").prop("disabled", true ) ;
+                    }
+                    else
+                        { $("#sendit").prop("disabled", false ) ; }
+                });
+            }
+
+        if ( $("#id_form-3-password1").length ) {   
+                $("#id_form-3-password2").on('blur', function () {
+                    let f2 = $(this).val();
+                    let f1 = $("#id_form-3-password1").val();
+                    if (f1 != f2) {
+                        alert('La confirmation du mot de passe ne correspond pas !');
+                        $("#sendit").prop("disabled", true ) ;
+                    }
+                    else
+                        { $("#sendit").prop("disabled", false ) ; }
+                    
+                });
+            }
+
+
+
+
+        if ( $("#id_form-4-password1").length ) {   
+                $("#id_form-4-password2").on('blur', function () {
+                    let f2 = $(this).val();
+                    let f1 = $("#id_form-4-password1").val();
+                    if (f1 != f2) {
+                        alert('La confirmation du mot de passe ne correspond pas !');
+                        $("#sendit").prop("disabled", true ) ;
+                    }
+                    else
+                        { $("#sendit").prop("disabled", false ) ; }
+                });
+            }
+
+        if ( $("#id_form-5-password1").length ) {   
+                $("#id_form-5-password2").on('blur', function () {
+                    let f2 = $(this).val();
+                    let f1 = $("#id_form-5-password1").val();
+                    if (f1 != f2) {
+                        alert('La confirmation du mot de passe ne correspond pas !');
+                        $("#sendit").prop("disabled", true ) ;
+                    }
+                    else
+                        { $("#sendit").prop("disabled", false ) ; }
+                    
+                });
+            }
+
+
+
+
 
         setTimeout(function(){ 
            $("#container_messages").css('display', "none"); 
