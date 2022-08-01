@@ -550,7 +550,12 @@ def delete_school_group_and_students(request):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
 
-	User.objects.filter(school = school, user_type = 0).delete()
+	students = Student.objects.filter(user__school = school, user_type = 0)
+	for s in students :
+		relations = Relationship.objects.filter(students = s)
+		for r in relations :
+			r.students.remove(s)
+		s.user.delete()
 
 	for g in school.school_group.all():
 		g.delete()
