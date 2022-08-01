@@ -6183,10 +6183,13 @@ li .list_no_indent{
 .table tr > td .progress {
   margin: 0;
 }
-.progress-bar-light-blue,
-.progress-bar-primary {
+.progress-bar-light-blue{
   background-color: #3c8dbc;
 }
+.progress-bar-primary {
+  background-color: #00A65A;
+}
+
 .progress-striped .progress-bar-light-blue,
 .progress-striped .progress-bar-primary {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -6195,7 +6198,7 @@ li .list_no_indent{
 }
 .progress-bar-green,
 .progress-bar-success {
-  background-color: #00a65a;
+  background-color: #62D85A;
 }
 .progress-striped .progress-bar-green,
 .progress-striped .progress-bar-success {

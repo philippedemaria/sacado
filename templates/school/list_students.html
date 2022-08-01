@@ -25,12 +25,19 @@
  
 {% block page_menu_right %}
 
+
+                                <a href="{% if sacado_asso %}{% url 'csv_full_group'  %}{% else %}#{% endif %}" class="btn btn-danger"> Initialiser tous les groupes d'élèves </a> 
+
+
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Gestion des élèves <b class="caret"></b> </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        <li> <a href="{% url 'school_groups' %}"  >Enregistrer un élève (passer par sa classe) </a></li> 
-        <li> <a href="{% url 'school_groups' %}"  >Enregistrer plusieurs élèves(passer par leur classe) </a></li> 
+        
+        {% comment %}
+        <li> <a href="{% url 'school_groups' %}"  >Ajouter un élève (passer par sa classe) </a></li> 
+        <li> <a href="{% url 'school_groups' %}"  >Ajouter plusieurs élèves (passer par leur classe) </a></li>
+        {% endcomment %}
         <li> <a href="{% url 'register_users_by_csv' 0 %}">Importer à partir d'un csv</a></li>
 
         <li> <a href="{% url 'print_school_ids' %}">Imprimer les identifiants par groupes</a></li>

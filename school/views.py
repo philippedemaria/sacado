@@ -868,6 +868,8 @@ def manage_stage(request):
 			nf = stage_form.save(commit = False) 
 			nf.school = school
 			nf.save()
+			return redirect('admin_tdb')
+
 
 
 

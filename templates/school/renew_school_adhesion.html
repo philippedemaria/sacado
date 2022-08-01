@@ -52,10 +52,12 @@
 
             <div class="row">                    
                 <div class="col-sm-12 col-md-12">
-                    <div class="form-group">
+
                         <a href="{% url 'delete_renewal_school_adhesion' %}" class="btn btn-danger" onclick="return TestDelete('cette adhésion')" >Annuler cette demande</a>
-                    </div> 
-                </div>  
+                        <a href="{% url 'school_accounting' %}" class="btn btn-sacado">Page des cotisations</a>
+                        <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+                </div>
+
             </div> 
 
         </div>

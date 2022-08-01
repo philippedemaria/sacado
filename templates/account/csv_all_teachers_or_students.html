@@ -17,7 +17,7 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
  
  
 {% block page_title %}
-    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/>     {% if key == 0  %}Elèves  {% else %}Enseignant.e.s     {% endif %}par csv
+    <i class='fa fa-users'></i> {{ request.user.school.name}} <img src="{% static 'img/angle-right.png' %}"/>   Import d'{% if key == 0  %}élèves  {% else %}enseignant.e.s     {% endif %}par csv
 {% endblock %}
  
 
@@ -26,7 +26,7 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
 {% block page_menu_right %}
     {% if idg == 0  %}
  
-        <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > + Nouvel.le enseignant.e</a></li>        
+        <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > <i class="bi bi-plus"></i> Nouvel.le enseignant.e manuellement</a></li>        
     {% endif %}
 
 {% endblock %}
@@ -50,29 +50,21 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
     <form action="{% url 'register_users_by_csv' 0 %}" method="POST" enctype="multipart/form-data" > 
     {% endif %}
 
-    <div class="alert alert-danger alert-dismissible" role="alert">
+ 
 
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-      </button>
-
-        <strong>Avant de lancer votre fichier csv, assurez-vous que tous les élèves ont été supprimés de la base de données.</strong> <br>
-
-        <i class="fa fa-warning fa-2x"></i> Votre fichier csv doit être <strong>encodé en utf-8</strong> et les données doivent vérifier le format imposé (comme exemple). Ces données doivent être séparées d'un <strong>point virgule (;)</strong>. 
-
-             <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
-
-    </div>
-        <h3 class="thin">Gestion des identifiants</h3>        
+ 
+ 
+ 
+        <h3 class="thin"><img src="{% static 'img/excel.png' %}" /> Gestion des identifiants {% if idg == 0  %}Enseignant.e.s{% else %}Élève {% endif %}</h3>        
         <ul>
             <li><label>Laisser SACADO attribuer des identifiants  <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
-            <li><label> Gérer manuellement les identifiants  <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label> <small>Vous devez alors impérativement renseigner les identifiants dans le fichier csv.</small></li>
+            <li><label> Gérer manuellement les identifiants  <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label> </li>
         </ul>      
 
 
         <div id="without_username">
             <p>Vous avez choisi la gestion automatisée des identifiants par SACADO. </p>
-            <p>Quel niveau de complexité souhaitez-vous pour ces identifiants élèves ? 
+            <p>Quel niveau de complexité souhaitez-vous pour ces identifiants ? 
                  <label><input type="radio" name="simple" value=0 /> Facile</label> 
                 <label><input type="radio" name="simple" value=1 /> Complexe</label>
             </p>
@@ -80,7 +72,7 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
                 <li>Niveau de classe <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
                 <li>Nom</li>
                 <li>Prénom</li>                
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
+                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
             </ul> 
             Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
             <pre style="font-size:20px">1;Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>1;Agnesi;Maria;maria.agnesi@curves.edu<br>2;Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>3;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
@@ -94,7 +86,7 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
                 <li>Nom</li>
                 <li>Prénom</li> 
                 <li>Identifiant</li>            
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
+                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
             </ul> 
             Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
  
@@ -102,15 +94,18 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
  
         </div>
 
- 
+        <div class="row alert alert-warning">
+            <div class="col-sm-12 col-md-12">
+                <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="name" >Fichier CSV : </label>
-                         <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
-                 
+                    <label for="name" >Veuillez sélectionner votre fichier d'import puis cliquer sur le bouton "Téléverser"</label>
+                    <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
                 </div>
             </div>
         </div>

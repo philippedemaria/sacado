@@ -24,7 +24,7 @@
 {% block page_menu_right %}
     {% if idg == 0  %}
  
-        <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > + Nouvel.le enseignant.e</a></li>        
+        <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > Ajouter Enseignant.e manuellement</a></li>        
     {% endif %}
 
 {% endblock %}
@@ -43,26 +43,19 @@
         <h1 class="thin">Classe de {{ group.name }}</h1>
     {% endif %}
 
-
-    <div class="alert alert-danger alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-      </button>
-
-        <strong>Avant de lancer votre fichier csv, assurez-vous que tous les {% if is_teacher %}enseignants{% else %}élèves{% endif %} ont été supprimés de la base de données.</strong> <br>
+ 
             {% if is_teacher %}
-            <div class="alert alert-info">
+            <div class="alert alert-warning">
                         Si un enseignant est déjà inscrit sur SACADO, il suffit de lui donner ce token pour qu'il rejoigne votre établissement. 
                         Ne le ré-inscrivez pas. <br/>
-                        <b>Token à fournir : {{ request.user.school.code_acad}}_{{ request.user.school.id}}</b><br/>
-                        Procédure à donner au collègue <b>déjà inscrit</b> : A partir de l'icone <i class="fa fa-user"></i> <small>Compte</small>, sélectionner Rejoindre un établissement et suivre les indications.
+                        <b>Token à fournir : {{ request.user.school.code_acad}}_{{ request.user.school.id}}</b><br/><br/>
+                        Procédure à donner au collègue <b>déjà inscrit</b> : A partir de son compte, cliquer sur "Rejoindre un établissement" et suivre les indications pour copier ce token.
             </div>
             {% endif %}
 
-            <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
 
 
-    </div>
+ 
 
     {% if idg > 0  %}
     <form action="{% url 'register_by_csv' 0 idg %}" method="POST" enctype="multipart/form-data" > 
@@ -71,16 +64,16 @@
     {% endif %}
 
 
-        <h3 class="thin">Gestion des identifiants</h3>        
+        <h3 class="thin"><img src="{% static 'img/excel.png' %}" /> Gestion des identifiants  {% if idg == 0  %}Enseignant.e.s{% else %}Élève {% endif %}</h3>        
         <ul>
             <li class="sanspuce"><label><input type="radio" id="show_without_username" name="manage_username" value="auto" /> Laisser SACADO attribuer des identifiants </label> </li> 
-            <li class="sanspuce"><label><input type="radio" id="show_with_username" name="manage_username" value="hand" /> Gérer manuellement les identifiants </label> <small>Vous devez alors impérativement renseigner les identifiants dans le fichier csv.</small></li>
+            <li class="sanspuce"><label><input type="radio" id="show_with_username" name="manage_username" value="hand" /> Gérer manuellement les identifiants </label> </li>
         </ul>      
 
 
         <div id="without_username">
             <p>Vous avez choisi la gestion automatisée des identifiants par SACADO. </p>
-            <p>Quel niveau de complexité souhaitez-vous pour ces identifiants élèves ? 
+            <p>Quel niveau de complexité souhaitez-vous pour ces identifiants {% if is_teacher %}enseignants{% else %}élèves{% endif %} ? 
                 <li class="sanspuce"><label><input type="radio" name="simple" value=0 /> Facile <em>nom.initiale_du_prenom</em></label></li>
                 <li class="sanspuce"><label><input type="radio" name="simple" value=1 /> Complexe <em>nom.initiale_du_prenom_code de 4 chiffres</em></label></li>
             </p>
@@ -99,28 +92,31 @@
                 <li>Nom</li>
                 <li>Prénom</li>  
                 <li>Identifiant </li>      
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle si vous en avez une.{% endif %}</li>
+                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
             </ul> 
             Les quatre données par utilisateur s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
             <pre style="font-size:20px">Turing;Alan;T.Alan;{% if idg == 0  %}alan.turing@enigma.edu{% endif  %}<br>Agnesi;Maria;AgensiM;maria.agnesi@curves.edu<br>Chasles;Michel;ChaslesMichel;{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>de Fermat;Pierre;pfermat;pierre.fermat@rsa.edu</pre>
             
         </div>
 
-
-
+ 
+            <div class="col-sm-12 col-md-12 alert alert-warning">
+                <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
+            </div>
+ 
 
  
 
-        <div class="row">
+ 
             <div class="col-sm-12 col-md-12">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="name" >Fichier CSV : </label>
+                    <label for="name" >Veuillez sélectionner votre fichier d'import puis cliquer sur le bouton "Téléverser"</label>
                          <input type="file" name="csv_file" id="csv_file" required="True" class="btn btn-default">
                  
                 </div>
             </div>
-        </div>
+ 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
                 <div class="form-group">                    

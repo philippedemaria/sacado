@@ -1590,7 +1590,7 @@ def admin_tdb(request):
 
     nb_teachers = teachers.count()
     nb_students = User.objects.filter(school=school, user_type=0).exclude(username__contains="_e-test_").count()
-    nb_groups = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
+    nb_groups   = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
     
     is_lycee = False
     try :
@@ -1622,10 +1622,14 @@ def admin_tdb(request):
         else :
             school_id = 0
 
-    rates = Rate.objects.all() #tarifs en vigueur 
+    rates       = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
 
-    renew_propose = True
+    renew_propose = False
+    last_accounting = school.accountings.filter(date_payment=None)
+    if last_accounting :
+        renew_propose = True
+
  
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  'renew_propose' : renew_propose ,
                                                     'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 'school_year' : school_year ,  'rates' : rates , 
