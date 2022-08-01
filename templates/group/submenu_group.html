@@ -245,19 +245,13 @@
         </li> 
 
         <li class="divider"></li>
-        {% if group.studentprofile %}
+
         <li >
             <a href="{% url 'switch_teacher_student' group.id %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %}>
                <i class="fa fa-glasses fa-fw"></i> Accéder à la vue élève
             </a>
         </li> 
-        {% else %}
-        <li >
-            <a href="{% url 'update_group' group.id %}" class="no_button {% if not sacado_asso %}no_sacado_asso{% endif %}" {% if not sacado_asso %}title="version établissement requise"{% endif %}>
-               <i class="fa fa-glasses fa-fw"></i> Vue élève : cocher le profil élève
-            </a>
-        </li> 
-        {% endif %}
+
 
 
     </ul>

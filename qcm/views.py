@@ -7205,16 +7205,16 @@ def ajax_find_peuplate_sequence(request):
 
     if type_of_document == "2":
         if keyword :
-            courses = Course.objects.filter( Q(title__icontains=keyword)|Q(annoncement__icontains=keyword) ,    teacher = request.user.teacher , subject_id=subject_id,level=level )
+            courses = Course.objects.filter( Q(title__icontains=keyword)|Q(annoncement__icontains=keyword) ,   teacher__user__school = request.user.school , subject_id=subject_id,level=level )
         else :
-            courses = Course.objects.filter(teacher = request.user.teacher , subject_id=subject_id,level=level )
+            courses = Course.objects.filter(teacher__user__school = request.user.school , subject_id=subject_id,level=level )
         context = { "courses" : courses }    
         data['html']    = render_to_string( 'qcm/course/ajax_course_peuplate_sequence.html' , context)
     else :
         if keyword :
-            customs = Customexercise.objects.filter( instruction__icontains=keyword ,    teacher = request.user.teacher  )
+            customs = Customexercise.objects.filter( instruction__icontains=keyword ,  teacher__user__school = request.user.school  )
         else :
-            customs = Customexercise.objects.filter(teacher = request.user.teacher )
+            customs = Customexercise.objects.filter(teacher__user__school = request.user.school )
         
         context = { "customs" : customs }
         data['html']    = render_to_string( 'qcm/ajax_custom_peuplate_sequence.html' , context)
