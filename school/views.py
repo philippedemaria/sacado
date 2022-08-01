@@ -707,10 +707,10 @@ def renew_school_adhesion(request):
 
 	request.session["inscription_school_id"] = None
 
-    renew_propose = False
-    last_accounting = school.accountings.filter(date_payment=None)
-    if last_accounting :
-        renew_propose = True
+	renew_propose = False
+	last_accounting = school.accountings.filter(date_payment=None)
+	if last_accounting :
+		renew_propose = True
 
 	today = datetime.now()
 	try :
