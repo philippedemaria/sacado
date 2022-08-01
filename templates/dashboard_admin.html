@@ -69,9 +69,7 @@
                                 </div>
 
 
-                                {% if data.nbg %}
-                                <a   href="{% if sacado_asso %}{% url 'group_to_teacher'  %}{% else %}#{% endif %}" class="btn btn-default btn-accueil" style="margin-left:10px;width:280px;position: absolute; top:150px;"> Attribuer des groupes existants </a>      
-                                {% endif %}
+
                                 <div class="icon">
                                     {{ data.nbt }} 
                                 </div>
@@ -168,14 +166,14 @@
                     <div class="row" style="margin-top:10px" {% if nb_students > 0 %} id="help_from_tdb" {% endif %} >
                         <div class="col-lg-6 col-md-6 col-xs-12">
 
-                            <p {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><b>Étape 1 : Création ou importation des enseignants</b> </p>
+                            <p {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><b>Étape 1 : Création ou importation des enseignants</b> {% if data.nbt > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
                                 <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'register_teacher_from_admin' %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}>Gestion des enseignants   <i class="fa fa-arrow-circle-right"></i>  </a> </li>                    
+                                    <li> <a href="{% if sacado_asso %}{% url 'register_teacher_from_admin' %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}>Gestion des enseignants manuellement  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                    
                                     <li> <a href="{% if sacado_asso %}{% url 'register_by_csv' 2 0 %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><img src="{% static 'img/excel.png' %}" width="15px"/> Gestion des enseignants par CSV <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
                                 </ul>
 
 
-                            <p {% if data.nbg > 0 %} style="color:#AAA" {% endif%}><b>Étape 2 : Création des groupes (ou classes)</b></p>
+                            <p {% if data.nbg > 0 %} style="color:#AAA" {% endif%}><b>Étape 2 : Création des groupes (ou classes)</b> {% if data.nbg > 0 %} <i class="fa fa-check text-success"></i> {% endif%}</p>
                  
                                 <ul>
 
@@ -191,7 +189,7 @@
                         
 
 
-                            <p {% if data.nbs > 0 %} style="color:#AAA" {% endif%}><b>Étape 3 : Création ou importation des élèves</b> </p>
+                            <p {% if data.nbs > 0 %} style="color:#AAA" {% endif%}><b>Étape 3 : Création ou importation des élèves</b>{% if data.nbs > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
                  
                                 <ul>
 
@@ -232,10 +230,16 @@
 
                             <p><b> Paramétrer les seuils d'acquisition des savoir faire et compétences </b> </p>
                                 <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}">Modification</a></li>
+                                    <li> <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}">Modifier</a></li>
                                 </ul>
-
-                            <hr/>
+                            {% if data.nbg %}
+                            <p><b> Ré-attribuer des enseignants à des groupes existants </b> </p>
+                                <ul>
+                                    <li>                                
+                                        <a href="{% if sacado_asso %}{% url 'group_to_teacher'  %}{% else %}#{% endif %}"> Ré-attribuer </a>      
+                                    </li>
+                                </ul>
+                            {% endif %}
                             <p><b> Télécharger les identifiants des élèves </b> 
 
                                 <ul>
