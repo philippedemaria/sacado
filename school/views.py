@@ -1004,7 +1004,16 @@ def get_school(request):
 
 		if token == school.code_acad+"_"+str(school.id) :
 
-			User.objects.filter(pk=request.user.id).update(school = school)
+			user = User.objects.filter(pk=request.user.id).update(school = school)
+			try : 
+				teacher = user.teacher
+				groups  = teacher.groups.all()
+				for g in groups :
+					Group.objects.filter(pk=g.id).update(school = school) 
+					for s in g.students.all() :
+						User.objects.filter(user_id=s.user.id).update(user__school = school)
+			except :
+				pass
 			messages.success(request,"Rattachement à l'établissement " +school.name+ " réussi")
 		else :
 			messages.error(request,"Echec du rattachement à l'établissement " +school.name )
