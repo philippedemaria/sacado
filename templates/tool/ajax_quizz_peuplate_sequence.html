@@ -12,7 +12,11 @@
 			<p>{{ q.questions.count }} questions, <small>{{ q.duration|time_done }}</small> </p>
 
 			<p>
+				{% if q.is_numeric %}
+				<a href="{% url 'goto_quizz_numeric' q.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
+				{% else %}
 				<a href="{% url 'show_quizz_shared' q.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
+				{% endif %}
 				<a href="{% url 'clone_quizz_sequence' q.id %}"  class="btn btn-primary btn-xs">Insérer dans la séquence</a>
 			</p>
 
