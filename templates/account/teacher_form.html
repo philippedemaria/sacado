@@ -212,7 +212,7 @@
                         <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
                             <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}  
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Choisir votre (ou vos) niveau(x) préféré(s) qui apparait(ront) dans votre espace personnalisé. Sans choix, vous ne pouvez pas sélectionner d'exercices.</div>
+                                    <div class="helper_tip_text" >Choisir vos niveaux de travail pour avoir accès aux ressources.</div>
                                 </span> 
                             </label>
                             {{ teacher_form.levels  |add_class:"form-control select2" }}

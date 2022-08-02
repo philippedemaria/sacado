@@ -673,7 +673,7 @@ class Teacher(models.Model):
     Modèle représentant un enseignant.
     """
     user          = models.OneToOneField(User, blank=True, related_name="teacher", on_delete=models.CASCADE, primary_key=True)
-    levels        = models.ManyToManyField(Level, related_name="levels_to_group", blank=True, verbose_name="Niveaux préférés")
+    levels        = models.ManyToManyField(Level, related_name="levels_to_group", blank=True, verbose_name="Niveaux souhaités")
     notification  = models.BooleanField(default=0, verbose_name="Réception de notifications ?")
     exercise_post = models.BooleanField(default=0, verbose_name="Réception de notification de création d'exercice ?")
     subjects      = models.ManyToManyField(Subject, related_name="teacher", verbose_name="Enseignements")
