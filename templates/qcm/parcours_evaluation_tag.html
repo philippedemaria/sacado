@@ -228,49 +228,64 @@
             {% if not parcours.is_evaluation %}
             <div class="row extend">    
                 <div class="col-xs-4 col-md-4 col-lg-4">
-
-                    {% if parcours.is_sequence %}
-                    <a href="{% url 'peuplate_flashpack_parcours' parcours.id   %}" class="edit"  title="Associer un flashpack"> <i class="bi bi-stack"></i>                  
-                        <span class="label_icon">F-pack <i class="bi bi-patch-plus-fill"></i></span>  
-                    </a>  
-                    {% else %}
-                    <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if parcours.flashpacks.count %} style="color:{{ parcours.color }}" {% endif %}>
-                        <i class="bi bi-stack"></i>                  
-                        <span class="label_icon">F-pack</span>                    
-                        <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
-                             <i class="fa fa-plus-circle"></i> 
-                        </a>
-                    </span>
-                    {% endif  %}
-                </div> 
-                <div class="col-xs-4 col-md-4 col-lg-4">
-                    {% if parcours.is_sequence %}
-                        <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="edit"  title="Associer une biblioTex"> <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex <i class="bi bi-patch-plus-fill"></i></span> </a>
-                    {% else %}
-                        <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if parcours.bibliotexs.count  %} style="color:{{ parcours.color }}" {% endif %}>
-                            <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex</span> 
+                    {% if request.user.is_sacado_member %}
+                        {% if parcours.is_sequence %}
+                        <a href="{% url 'peuplate_flashpack_parcours' parcours.id   %}" class="edit"  title="Associer un flashpack"> <i class="bi bi-stack"></i>                  
+                            <span class="label_icon">F-pack <i class="bi bi-patch-plus-fill"></i></span>  
+                        </a>  
+                        {% else %}
+                        <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if parcours.flashpacks.count %} style="color:{{ parcours.color }}" {% endif %}>
+                            <i class="bi bi-stack"></i>                  
+                            <span class="label_icon">F-pack</span>                    
+                            <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
+                                 <i class="fa fa-plus-circle"></i> 
+                            </a>
                         </span>
-                        <a href="{% url 'create_bibliotex_from_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter une biblioTex à ce dossier">   
-                             <i class="fa fa-plus-circle"></i> 
-                        </a>
+                        {% endif  %}
+                    {% else  %}
+
+                        <i class="bi bi-stack"></i> <span class="label_icon">F-pack</span> 
+                        
                     {% endif  %}
+
+                    
                 </div> 
                 <div class="col-xs-4 col-md-4 col-lg-4">
+                    {% if request.user.is_sacado_member %}
+                        {% if parcours.is_sequence %}
+                            <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="edit"  title="Associer une biblioTex"> <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex <i class="bi bi-patch-plus-fill"></i></span> </a>
+                        {% else %}
+                            <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if parcours.bibliotexs.count  %} style="color:{{ parcours.color }}" {% endif %}>
+                                <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex</span> 
+                            </span>
+                            <a href="{% url 'create_bibliotex_from_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter une biblioTex à ce dossier">   
+                                 <i class="fa fa-plus-circle"></i> 
+                            </a>
+                        {% endif  %}
+                    {% else  %}
 
-                    {% if parcours.is_sequence %}
-                    <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="edit" title="Associer un quiz"> <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz <i class="bi bi-patch-plus-fill"></i></span> </a> 
-                    {% else %}
-                    <span href="javascript:void()"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if parcours.quizz.count   %} style="color:{{ parcours.color }}" {% endif %}>
-                        <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> 
-                    </span>
-                    <a href="{% url 'create_quizz_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
-                         <i class="fa fa-plus-circle"></i> 
-                    </a> 
+                        <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex</span> 
+                        
                     {% endif  %}
 
+                </div> 
+                <div class="col-xs-4 col-md-4 col-lg-4">
+                    {% if request.user.is_sacado_member %}
+                        {% if parcours.is_sequence %}
+                        <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="edit" title="Associer un quiz"> <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz <i class="bi bi-patch-plus-fill"></i></span> </a> 
+                        {% else %}
+                        <span href="javascript:void()"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if parcours.quizz.count   %} style="color:{{ parcours.color }}" {% endif %}>
+                            <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> 
+                        </span>
+                        <a href="{% url 'create_quizz_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a> 
+                        {% endif  %}
+                    {% else  %}
 
-
-
+                        <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> 
+                        
+                    {% endif  %}
 
 
 

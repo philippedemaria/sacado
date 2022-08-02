@@ -21,7 +21,7 @@ define(['jquery', 'bootstrap','moment', 'fullcalendar'], function ($) {
 	                      day:      'Jour'
 	                  },
 					 
-      				events: '/schedule/events_json',
+      				events: '/schedule/events_json_',
 	               
 
 				}) ;

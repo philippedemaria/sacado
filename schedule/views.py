@@ -70,7 +70,7 @@ def delete_in_calendar(user,type_of_event,link):
 ##################################################################################################################################
 
 
-def events_json(request):
+def events_json_(request):
     # Get all events - Pas encore terminé
     user = User.objects.get(pk=request.user.id)
     today = time_zone_user(request.user)
