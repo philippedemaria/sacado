@@ -50,11 +50,22 @@
             <ul> 
                 {% comment %}<li><a href="{% url 'academy' %}">Académie</a></li>{% endcomment %} 
                 
+
+                <li><a href="#" data-toggle='modal' data-target='#inscription' >S'inscrire</a></li>
+
+                {% comment %}
                 <li><a href="#exercises">Exercices</a></li>
                 <li><a href="#teachers">Enseignants</a></li>
                 <li><a href="#students">Élèves</a></li>
                 <li><a href="#parents">Parents</a></li>
-                <li><a href="#footer">Contact</a></li>          
+
+
+
+                {% endcomment %} 
+
+
+                <li><a href="#footer">Contact</a></li>
+
             </ul>
         </nav><!-- .main-nav -->
     </div>
@@ -62,6 +73,138 @@
  
 {% block body %}
 {% endblock %}
+
+
+<div class="modal fade" id="inscription" tabindex="-1" role="dialog" aria-labelledby="inscription" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3  class="sacado">Inscription  </h3>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+
+            </div>
+            <div class="modal-body">
+                <div class="row" align="center">
+                    <div class="col-lg-12 col-md-12 col-xs-12">
+                        <h2 class="sacado">Vous êtes Enseignant</h2>
+                         
+                        <a href="{% url 'register_teacher_accueil' %}"><img src="{% static 'img/teacherss.jpg' %}" width="400" class="img-fluid"></a>
+                    </div>
+                </div>
+
+                <div class="row" align="center">
+                    <div class="col-lg-6 col-md-6 col-xs-6">
+                        <h2 class="sacado">Vous êtes Élève</h2>
+                        <a href="#" data-toggle='modal' data-target='#students' ><img src="{% static 'img/students.jpg' %}" width="400" class="img-fluid"></a>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-6">
+                        <h2 class="sacado">Vous êtes Parent</h2>
+                        <a href="#" data-toggle='modal' data-target='#parents' ><img src="{% static 'img/parentss.jpg' %}" width="400" class="img-fluid"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--==========================
+      Parent  Section
+    ============================-->
+<div class="modal fade" id="parents" tabindex="-1" role="dialog" aria-labelledby="parents">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Inscription Parents</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                      <div class="col-xs-6 col-lg-6" align="center">
+                        <div class="teachers-img">
+                          <img src="{% static 'img/parents.jpg' %}" width="400" class="img-fluid">
+                        </div>
+
+                          <div class="features wow bounceInUp clearfix">
+                          <br>
+                            <h3 class="thin">Suivi des activités en temps réel</h3>
+                          </div>
+                      </div>
+                      <div class="col-xs-6 col-lg-6">
+                            <form action="{%  url 'register_parent' %}" method="POST" id="parent_form"  >
+                            {% csrf_token %}
+                                {% include 'parent_form.html' %}
+                                <div class="row">
+
+                                    <div class="col-lg-6 col-xs-6">
+                                        <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary is_child_exist" value="Valider" /></div>
+                                    </div>
+                                    <div class="col-lg-6 col-xs-6" >Vous n'avez pas d'enfants dans Sacado.
+                                        <a href="https://sacado-academie.fr" class="btn btn-primary" > Vers la Sacado Académie</a>
+                                    </div>
+                                </div>
+                            </form>
+                      </div>
+                  </div>
+             </div>
+        </div>
+    </div>    
+</div>
+
+
+
+
+
+
+    <!--==========================
+      Student  Section
+    ============================-->
+<div class="modal fade" id="students" tabindex="-1" role="dialog" aria-labelledby="students">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h2  class='sacado'  >Inscription Elèves</h2>              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                  <div class="col-xs-6 col-lg-6">
+                    <div class="teachers-img">
+                      <img src="{% static 'img/students.jpg' %}" width="700" class="img-fluid">
+                    </div>
+                  </div>
+                  <div class="col-xs-6 col-lg-6">
+                        <form action="{%  url 'register_student' %}" method="POST" id="student_form"  >
+                        {% csrf_token %}
+                            {% include 'student_form.html' %}
+                            <div style="height: 40px"></div>
+                            <div class="row">
+                                <div class="col-lg-6 col-xs-6">
+                                    <div class="form-group"><input name="envoi" id="join_group" type="submit" class="btn btn-primary sendit"  disabled value="Rejoindre mon groupe" /></div>
+                                </div>
+                                <div class="col-lg-6 col-xs-6" >Vous n'avez pas de groupe.
+                                    <a href="https://sacado-academie.fr" class="btn btn-primary" >Vers la  Sacado Académie</a>
+                                </div>
+                            </div>
+                        </form>
+                  </div>
+                </div>
+             </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+
+
+
 
 
 

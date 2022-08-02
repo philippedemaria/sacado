@@ -1143,6 +1143,15 @@ def close_my_account(request):
 
 #########################################Teacher #######################################################################
  
+
+def register_teacher_accueil(request) :
+
+    u_form  = UserForm()
+
+    context = {'u_form':  u_form  }
+    return render(request, 'account/form_teacher_register.html', context)
+
+
 def register_teacher(request):
     if request.method == 'POST':
 

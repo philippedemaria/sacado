@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% load item_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block require %}
+           
+{% endblock %}  
+   
+{% block general_js %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script type="text/javascript">
+    require(['script/accueil']); 
+    </script>
+{% endblock %} 
+
+{% block body %}
+
+      <div class="container">
+
+        <header class="section-header">
+          <h3>Enseignants</h3>
+        </header>
+
+
+        <div class="row">
+
+          <div class="col-lg-5 col-xs-12">
+              <div class="teachers-img">
+ 
+                    <video src="https://sacado.xyz/ressources/videos/presentationSacado.mp4" width="480" height="275"  controls  >
+                      Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
+                    </video>
+
+              </div>
+              <div class="features wow bounceInUp clearfix" style="text-align: center;margin-top:50px">
+                <h4 class="thin">Proposer des parcours individualisés,<br>suivre les acquisitions de savoir faire,<br> de compétences en quelques clics</h4>
+              </div>
+
+
+
+
+          </div>
+          <div class="col-lg-1 col-xs-12">
+          </div>
+          <div class="col-lg-6 col-xs-12">
+              <div class="features wow bounceInUp clearfix">
+                <h4>Devenir membre  <span class="sacado">SACADO</span></h4>
+                <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
+                {% csrf_token %}
+                    {% include 'user_form.html' %}
+
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-xs-3" align="center">  
+                            <div class="form-group">
+                                <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-ss_index"> Version Étab.</a>
+                            </div>    
+                        </div> 
+
+                        <div class="col-lg-10 col-md-10 col-xs-9">  
+                            <div class="form-group">
+                                <small>Exportations PRONOTE ou CSV, suivi des acquisitions, co-animation, espace de stockage accru, image de présentation, mutualisations des ressources, .... <br/>Optez pour la version établissement. <a href="#footer"> Nous contacter</a></small>
+                            </div>    
+                        </div>                   
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">   
+                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
+                        </div>        
+                        <div class="col-lg-6 col-xs-6">   
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button> 
+                        </div>             
+                    </div> 
+                </form>            
+              </div>
+          </div>
+        </div>
+
+      </div>
+
+{% endblock %}

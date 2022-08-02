@@ -21,7 +21,6 @@ urlpatterns = [
     path('delete_school_adhesion', delete_school_adhesion , name='delete_school_adhesion'), 
     path('print_proformat_school', print_proformat_school, name='print_proformat_school'),  
 
-
     path('iban_asking/<int:school_id>/<int:user_id>', iban_asking, name='iban_asking'),  
 
     ############################################################################################

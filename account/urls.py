@@ -76,6 +76,11 @@ urlpatterns = [
     path('register_by_csv/<int:key>/<int:idg>', register_by_csv, name='register_by_csv'),
     path('register_users_by_csv/<int:key>', register_users_by_csv, name='register_users_by_csv'),
 
+
+    path('register_teacher_accueil', register_teacher_accueil, name='register_teacher_accueil'),  
+
+
+
     path('profile', my_profile, name='profile'),
 
     path('ajax/userinfo/', ajax_userinfo, name='ajax_userinfo'),

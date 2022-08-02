@@ -760,7 +760,7 @@ def delete_renewal_school_adhesion(request):
 
     accounting = Accounting.objects.filter(school=school,is_active = 0).last() 
     accounting.delete()
-    send_mail("Résisiliation d'adhésion",
+    send_mail("Résiliation d'adhésion",
 	          "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'adhésion   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 	          settings.DEFAULT_FROM_EMAIL ,
 	          [request.user.email, "sacado.asso@gmail.com"])
