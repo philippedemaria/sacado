@@ -67,25 +67,32 @@
                 <i class="bi bi-stack"></i>                  
                 {% endif %} <span class="label_icon">F-pack</span>
             </span>
+            {% if request.user.is_sacado_member %}
             <a href="{% url 'create_flashpack' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
                  <i class="fa fa-plus-circle"></i> 
             </a>
+            {% endif %}
         </div> 
         <div class="col-xs-4 col-md-4 col-lg-4">
             <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
                 <i class="bi bi-trophy"></i> <span class="label_icon">Évaluat°</span> 
             </span>
+            {% if request.user.is_sacado_member %}
             <a href="{% url 'create_evaluation' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter une évaluation à ce dossier">   
                  <i class="fa fa-plus-circle"></i> 
-            </a>
+            </a>            
+            {% endif %}
         </div> 
         <div class="col-xs-4 col-md-4 col-lg-4">
             <span href="javascript:void()"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_quizz_exists   %} style="color:{{ folder.color }}" {% endif %}>
                 <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> 
             </span>
+
+            {% if request.user.is_sacado_member %}
             <a href="{% url 'create_quizz_folder' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
                  <i class="fa fa-plus-circle"></i> 
             </a>
+            {% endif %}
         </div>  
     </div>                     
     {% if folder.folder_only_students_count.nb > 0 %}  
