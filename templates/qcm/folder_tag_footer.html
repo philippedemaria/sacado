@@ -51,9 +51,12 @@
         <div class="col-xs-4 col-md-4 col-lg-4">
             <span href="#"  class="edit click_bibliotex_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_bibliotex_exists %} style="color:{{ folder.color }}" {% endif %}>
                 <i class="bi bi-bootstrap"></i>  <span class="label_icon"> BiblioTex
-            </span><a href="{% url 'create_bibliotex' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un biblioTex à ce dossier">   
+            </span>
+            {% if request.user.is_sacado_member %}
+            <a href="{% url 'create_bibliotex' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un biblioTex à ce dossier">   
                  <i class="fa fa-plus-circle"></i> 
             </a>
+            {% endif %} 
         </div> 
     </div>
 
