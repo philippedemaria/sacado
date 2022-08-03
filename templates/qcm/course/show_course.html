@@ -60,10 +60,13 @@
                             <a href="#" {% if sacado_asso %} class="course_viewer"  {% elif course.author_id == request.user_id %} class="course_viewer" {% else %} title="Version établissement requise"  {% endif  %} data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
 
                                 <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" ></i>
-                                 {{ course.title }}   
+                                 {{ course.title }} 
+                                   
+                                 {% comment %}
                                  {% if not sacado_asso and course.author_id != request.user.teacher_id %}
                                     <i class="fa fa-times text-danger"></i>
                                  {% endif  %}
+                                 {% endcomment %}
 
                                 {% if course.relationships.count > 0 %} <sup title="Cours lié à une section"><i class="fa fa-paperclip" style="font-size:8px" ></i></sup> {% endif %}
 
