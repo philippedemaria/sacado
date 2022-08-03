@@ -224,8 +224,8 @@ def events_json_group(request):
     for evaluation in evaluation_tab : # evaluation est un parcours
 
  
-        evaluation_start =  datetime.combine(evaluation.start,  evaluation.starter) 
-        evaluation_stop =  datetime.combine(evaluation.stop,  evaluation.stopper)  
+        evaluation_start =  evaluation.start
+        evaluation_stop =  evaluation.stop
 
 
         event_list.append({
