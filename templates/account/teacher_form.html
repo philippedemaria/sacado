@@ -307,7 +307,12 @@
                             {% if sacado_asso %}
                              <table class="table">
                                 <tr>
-                                    <td><label><small> Permettre l'aide à distance ?</small></label></td>
+                                    <td><label><small> Permettre l'aide à distance ?</small>  
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                <div class="helper_tip_text" >Permettre à l'équipe sacado la prise en main de la plateforme sacado.xyz à distance sur votre demande par mail depuis la page d'accueil. Votre compte sera verrouillé pendant l'intervention.</div>
+                                            </span>
+                                        </label>
+                                    </td>
                                     <td>{{ teacher_form.helping_right |attr:"data-toggle:toggle" |attr:"data-onstyle:danger"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
                                         {{ teacher_form.helping_right.errors }}
                                     </td>                            
