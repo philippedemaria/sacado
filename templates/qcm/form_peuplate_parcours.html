@@ -181,8 +181,8 @@
                     <a href="{% url 'show_evaluation' parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour à l'évaluation {{ parcours.title }}</a> 
                     <a href="{% url 'evaluations' %}"  class="btn btn-primary">Valider et retour à la liste des évaluations</a> 
                 {% else %}
-                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour {% if parcours.is_sequence %}à la séquence{% else %} auparcours{% endif %} {{ parcours.title }}</a> 
-                    <a href="{% url 'parcours' %}"  class="btn btn-primary">Valider et retour à la liste des {% if parcours.is_sequence %}séquence{% else %}parcours{% endif %}</a>   
+                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour {% if parcours.is_sequence %}à la séquence{% else %} au parcours{% endif %} {{ parcours.title }}</a> 
+                    <a href="{% url 'parcours' %}"  class="btn btn-primary">Valider et retour à la liste des {% if parcours.is_sequence %}séquences{% else %}parcours{% endif %}</a>   
                 {% endif  %}
 
                 {% if parcours %}
