@@ -86,7 +86,10 @@
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
-                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">               
+                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all"> 
+                            <td>
+                                <span >{{ accounting.id }} </span> 
+                            </td>    
                             <td>
                                 <span >{{ accounting.date_payment|date:"Y-m-d" }} </span> 
                             </td>
@@ -187,6 +190,7 @@
 
                     {% if tp == 0 %}
                         <tr style="background-color: #F0F0F0">
+                            <td> </td>
                             <td> </td>
                             <td> </td>
                             <td> </td>                                
