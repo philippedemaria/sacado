@@ -1714,8 +1714,9 @@ def list_parcours_group(request,id):
     bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, folders = None, is_trash=0).distinct()
 
 
-    evaluations = bases.filter( is_evaluation=1).order_by("ranking")
-    parcourses  = bases.exclude(is_evaluation=1).order_by("ranking")
+    evaluations = bases.filter( is_evaluation=1, is_sequence=0).order_by("ranking")
+    parcourses  = bases.filter( is_evaluation=0, is_sequence=0).order_by("ranking")
+    sequences   = bases.filter( is_sequence=1).order_by("ranking")
 
     parcours_tab = evaluations | parcourses
 
@@ -1724,7 +1725,7 @@ def list_parcours_group(request,id):
     nb_bases = bases.count() + folders.count()
 
     context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
-                 'parcourses': parcourses , 'evaluations' : evaluations , 'nb_bases' : nb_bases }
+                 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
     return render(request, 'qcm/list_parcours_group.html', context )
 
@@ -2395,7 +2396,7 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
         coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
         ################################################
         lock_all_exercises_for_student(nf.stop,nf)
-          
+
         if is_sequence :
             return redirect('show_parcours', 0 , nf.id)
         elif request.POST.get("save_and_choose") :
