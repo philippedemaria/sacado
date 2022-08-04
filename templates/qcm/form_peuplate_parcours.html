@@ -182,7 +182,12 @@
                     <a href="{% url 'evaluations' %}"  class="btn btn-primary">Valider et retour à la liste des évaluations</a> 
                 {% else %}
                     <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour {% if parcours.is_sequence %}à la séquence{% else %} au parcours{% endif %} {{ parcours.title }}</a> 
-                    <a href="{% url 'parcours' %}"  class="btn btn-primary">Valider et retour à la liste des {% if parcours.is_sequence %}séquences{% else %}parcours{% endif %}</a>   
+
+                    {% if parcours.is_sequence %} 
+                    <a href="{% url 'sequences' %}"  class="btn btn-primary">Valider et retour à la liste des  séquences </a>  
+                    {% else %}
+                    <a href="{% url 'parcours' %}"  class="btn btn-primary">Valider et retour à la liste des  séquences </a> 
+                    {% endif  %}
                 {% endif  %}
 
                 {% if parcours %}
