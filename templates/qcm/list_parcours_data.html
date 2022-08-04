@@ -29,7 +29,7 @@
 
         {% for f in  parcours.folders.all  %}
 
-            <a href="{% url 'show_parcours' f.id parcours.id %}" title="Voir les exercices du parcours" > <i class="fa fa-th" ></i></a>
+            <a href="{% url 'show_parcours' f.id parcours.id %}" title="Voir les exercices du parcours" > <i class="{% if parcours.is_sequence %}bi bi-ladder{% else %}fa fa-th{% endif %}" ></i></a>
         {% empty %}
 
             <a href="{% url 'show_parcours' 0 parcours.id %}" ><i class="fa fa-th" ></i></a>
