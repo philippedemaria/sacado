@@ -1130,9 +1130,9 @@ def update_accounting(request, id):
                 else :
                     print(form_abo.errors)
 
-            if tp == 0 :
+            if accounting.tp == 0 :
                 redirect('list_accountings', 0)
-            elif tp == 2 :
+            elif accounting.tp == 2 :
                 redirect('list_accountings', 2) 
             else :
                 redirect('list_paypal') 
