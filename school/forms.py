@@ -1,5 +1,5 @@
 from django import forms
-from .models import School, Country , Stage 
+from .models import School, Country , Stage
 from group.models import Group
 from account.models import User, Teacher
 
@@ -7,20 +7,8 @@ from account.models import User, Teacher
 
 class SchoolForm(forms.ModelForm):
     country = forms.ModelChoiceField(queryset=Country.objects.all().order_by("name") )
-    class Meta:
-    	model = School
-    	fields = '__all__'
 
 
-
-class SuivilabelForm(forms.ModelForm):
-    class Meta:
-    	model = School
-    	fields = '__all__'
-
-
-class SuiviForm(forms.ModelForm):
-    country = forms.ModelChoiceField(queryset=Country.objects.all().order_by("name") )
     class Meta:
     	model = School
     	fields = '__all__'
