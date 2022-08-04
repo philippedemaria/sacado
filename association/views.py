@@ -1075,7 +1075,6 @@ def update_accounting(request, id,tp):
 
     today    = datetime.now()
     accounting = Accounting.objects.get(id=id)
-    is_credit =  accounting.is_credit
     try :
         abonnement = accounting.abonnement 
         form_abo = AbonnementForm(request.POST or None, instance= abonnement  )
@@ -1087,7 +1086,7 @@ def update_accounting(request, id,tp):
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
     form_ds = formSet(request.POST or None, instance = accounting)
 
-    if accounting.tp == 0:
+    if tp == 0:
         template = 'association/form_accounting.html'
     else :
         template = 'association/form_accounting_bank.html'
@@ -1109,7 +1108,7 @@ def update_accounting(request, id,tp):
             for d in details :
                 som += d.amount
 
-            Accounting.objects.filter(pk = accounting.id).update( amount = som , is_credit = is_credit )
+            Accounting.objects.filter(pk = accounting.id).update( amount = som  )
  
             if nf.is_abonnement :
                 if form_abo.is_valid():
@@ -1130,7 +1129,6 @@ def update_accounting(request, id,tp):
                 else :
                     print(form_abo.errors)
 
-            print(tp, type(tp))
 
             if int(tp) == 0 :
                 redirect('list_accountings', 0)
@@ -1142,8 +1140,14 @@ def update_accounting(request, id,tp):
         else :
             print(form.errors)
         
-        return redirect('list_accountings', accounting.tp)
 
+        if int(tp) == 0 :
+            return redirect('list_accountings', 0)
+        elif int(tp) == 2 :
+            return redirect('list_accountings', 2) 
+        else :
+            return redirect('list_paypal') 
+    
     context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'form_abo': form_abo, 'abonnement' : abonnement  }
 
     return render(request, template , context )
