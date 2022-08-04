@@ -19,7 +19,7 @@
 {% block page_title %}
         <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Journal des opérations 
 
-        {% if tp == 0 %}Client{% elif tp == 1 %}Fournisseur{% elif   'list_paypal' in request.path  %} PAYPAL {% else %}Banque{% endif %}
+        {% if tp == 0 %}Client{% elif tp == 1 %}Achats{% elif   'list_paypal' in request.path  %} PAYPAL {% else %}Banque{% endif %}
 
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
@@ -69,35 +69,41 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table   class="standard_tab_sort300 table table-bordered table-hover">
+            <table   class="{% if tp < 2 %}standard_tab_sort300_no_paiement{% else %}standard_tab_sort300{% endif %} table table-bordered table-hover table-striped">
                 <thead>
-                <tr>                     
+                <tr> 
+                    <td style="width:120px">Date paiement</td>                                     
                     <td style="width:120px">Chrono</td>                     
-                    <td style="width:120px">Date</td>                        
                     <td  >{% if tp == 2 %}Client/Fournisseurs{% elif tp == 1 %}Fournisseurs/autre{% elif tp == 0 %}Client{% endif %}   </td>
                     <td>Libellé </td>
-                    <td style="width:80px">{% if tp == 2 %}Payé{% elif tp == 1 %}Paiement fait{% elif tp == 0 %}Reste à payer{% endif %}  </td>
-                    <td style="width:80px">{% if tp == 2 %}Reçu{% elif tp == 1 %}Reste à payer{% elif tp == 0 %}Paiement fait{% endif %}</td>
+                    <td style="width:80px">{% if tp == 2 %}Entrée{% elif tp == 1 %}Paiement fait{% elif tp == 3 %}Entrée{% else %}Montant{% endif %}  </td>
+                    <td style="width:80px">{% if tp == 2 %}Sortie{% elif tp == 1 %}Montant{% elif tp == 3 %}Sortie{% else %}Paiement{% endif %}</td>
+
+                    <td style="width:80px">Solde</td>
+
                     {% if tp < 2 %}<td>Comptes</td>{% endif %}
                 </tr>
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
-                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
+                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">               
+                            <td>
+                                <span >{{ accounting.date_payment|date:"Y-m-d" }} </span> 
+                            </td>
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
-                            </td>                  
-                            <td>
-                                <span >{{ accounting.date|date:"Y-m-d" }} </span> 
-                            </td>
+                            </td>   
                             <td><span class="helper_tip"><a href="{% url 'update_accounting'  accounting.id %}" >
                                 {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
                                 </a></span>
-
-                                <a href="{% url 'delete_accounting'  accounting.id %}" class="pull-right"  onclick="return TestDelete('cette facture')"><i class="fa fa-trash"></i> </a>
-                                <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
-                                <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>
+ 
+                                <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px" title="Imprimer"><i class="fa fa-print"></i> </a>
+                                <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px" title="Voir"><i class="fa fa-eye"></i> </a>
+                                <a href="#" data-toggle='modal' data-target='#eyeglasses' class="pull-right" style="margin-right:10px" title="Voir le solde"><i class="bi bi-eyeglasses"></i> </a>
+                                {% if accounting.is_display    %}
+                                <a href="{% url 'create_avoir'  accounting.id %}" class="pull-right" style="margin-right:10px" title="Créer un avoir"><i class="fa fa-times text-danger"></i> </a>
+                                {% endif %}
                             </td> 
                             <td>
                                 {%  if accounting.mode == "par virement bancaire" %}
@@ -117,37 +123,51 @@
                                         <div class="helper_tip_text" >par carte de crédit</div>
                                     </span>
                                 {% endif %}
-                
-                                {{ accounting.objet }}
+                                {% if accounting.forme == "FACTURE" %}
+                                    {{ accounting.objet|safe  }}
+                                {% else %}
+                                    {{ accounting.observation|safe }}
+                                {% endif %}
 
                                 {%  if accounting.mode == "Période de test" %}
                                     <span class="text-danger">Période d'essai jusqu'au {{ accounting.abonnement.date_stop|date:"d N Y" }}</span>
                                 {% endif %}  
                             </td>
 
-
-                            {% if tp == 2 %}
+                            {% if tp == 2 or tp == 3 %}
                                 <td style="width:80px">
-                                    {% if accounting.tp == 1  %}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
+                                    {% if  accounting.is_credit  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
                                 </td>
                                 <td style="width:80px">
-                                    {% if accounting.tp  == 0  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
+                                    {% if not accounting.is_credit  %}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
                                 </td>
                             {% elif tp == 1 %}
                                 <td style="width:80px">
+                                     <span class="text-danger">{{ accounting.amount }} €</span> 
+                                </td>                            
+                                <td style="width:80px">
                                     {% if accounting.date_payment  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %} 
                                 </td>
-                                <td style="width:80px">
-                                     <span class="text-danger">{{ accounting.amount }} €</span> 
-                                </td>
                             {% else %}
+                           
                                 <td style="width:80px">
                                     {% if accounting.plan.code > 700 %}<span class="text-danger">{{ accounting.amount }} €</span>{% endif %}
                                 </td>
                                 <td style="width:80px">
                                     {% if accounting.date_payment  %}<span class="text-success">{{ accounting.amount }} €</span>{% endif %}
-                                </td>
+                                </td> 
                             {% endif %}
+                                <td style="width:80px">
+                                    {% if tp == 2 %}
+                                        {{ accounting.total_solde }} € 
+                                    {% elif tp == 0  %}
+                                        {{ accounting.solde }} € 
+                                    {% elif tp == 3 %}
+                                        {{ accounting.total_solde_paypal }} € 
+                                    {% else %}
+                                        {{ accounting.solde }}                                        
+                                    {% endif %}
+                                </td>
 
                             {% if tp < 2 %}
                             <td style="width:80px">
@@ -157,9 +177,27 @@
                                 </span>
                             </td>
                             {% endif %}
+
+
+
+
                         </tr>
 
                     {% endfor %}
+
+                    {% if tp == 0 %}
+                        <tr style="background-color: #F0F0F0">
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>                                
+                            <td> </td>
+                            <td> {{ accounting_no_payment }} </td>
+                            <td> {{ accounting_amount }}     </td> 
+                            <td> </td>
+                            <td> </td> 
+                        </tr>
+                    {% endif %}
+
                 </tbody>
             </table>
         </div>
@@ -174,6 +212,20 @@
 </section>
  
 
+
+
+<div class="modal fade" id="eyeglasses" tabindex="-1" role="dialog" aria-labelledby="eyeglasses">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2  >Historique et solde Client <span id="client_id"></span></h2>
+            </div>
+            <div class="modal-body" id="historic_client">
+               
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="modal fade" id="e_bilans" tabindex="-1" role="dialog" aria-labelledby="e_bilans">

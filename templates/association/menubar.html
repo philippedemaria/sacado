@@ -12,6 +12,7 @@
                 Journal opérations Client
             </a> 
         </li> 
+        {% comment %}
         <li class="divider"></li>
         <li>
             <a href="{% url 'create_accounting' 1 %}" > Nouvelle opération Fournisseur    </a>   
@@ -21,23 +22,23 @@
                 Journal opérations Fournisseur 
             </a> 
         </li> 
+        {% endcomment %}
         <li class="divider"></li>
         <li>
-            <a href="{% url 'create_accounting' 2 %}" > Nouvelle opération Bancaire    </a>  
+            <a href="{% url 'create_accounting' 2 %}" > Nouvelle opération Bancaire </a>  
         </li>
         <li>
-            <a href="{% url 'list_accountings' 2 %}"  class="no_button" > 
-                Journal opérations Bancaire  
-            </a> 
-        </li> 
+            <a href="{% url 'list_accountings' 2 %}"  class="no_button" > Journal opérations bancaires  CA</a> 
+        </li>
+        <li>
+         <a href="{% url 'list_paypal' %}" class="no_button">Journal opérations bancaires Paypal</a>
+        </li>
     </ul>
 </li>
 <li>
  <a href="{% url 'adhesions' %}" class="no_button">Abonnements</a>
 </li>
-<li>
- <a href="{% url 'list_paypal' %}" class="no_button">Paypal</a>
-</li>
+
 <li>
  <a href="{% url 'bank_bilan' %}" class="no_button">Bilan</a>
 </li>

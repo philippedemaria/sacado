@@ -9,6 +9,8 @@ from school.models import School , Country
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
+from datetime import date
+
 
 
 class Plancomptable(models.Model):
@@ -18,13 +20,22 @@ class Plancomptable(models.Model):
     def __str__(self):
         return "{} : {}".format(self.code,self.name)
 
-YEARS = (
-         (2021, "2021-2022"  ), (2022, "2022-2023"  ), (2023, "2023-2024"  ),   (2024, "2024-2025"  ),   (2025, "2025-2026"  ) ,(2026, "2026-2027" ),   
-        )
+annee = date.today().year
+if date.today().month < 9 :  
+    annee = annee -1
+
+YEARS = []
+for i in range (20) :
+    a = annee + i
+    b = annee + i + 1
+    YEARS.append( (a , str(a)+"-"+str(b)) )
+
+ 
+        
 
 class Activeyear(models.Model):
 
-    year = models.PositiveIntegerField(default=2021, choices=YEARS , verbose_name="Année") 
+    year = models.PositiveIntegerField(default=2021, choices=YEARS , verbose_name="Année de l'exercice") 
  
     def __str__(self):
         nexty = self.year + 1 
@@ -186,7 +197,45 @@ class Accounting(models.Model):
         cs = self.school.users.filter(is_extra=1)
         return  cs
 
- 
+
+    def solde(self):
+        if self.date_payment :
+            solde = 0
+        else :
+            solde = self.amount
+        return solde
+
+
+    def is_display(self):
+        ok = False
+        if not self.date_payment and self.forme=="FACTURE" and not "Avoir" in self.observation  :
+            ok = True
+        return ok
+
+
+    def total_solde(self):
+        accs = Accounting.objects.filter( date_payment__lte=self.date_payment,is_paypal=0).order_by("date_payment")
+        s=0
+        for a in accs :
+            if a.is_credit :
+                s +=a.amount
+            else :
+                s -=a.amount
+        return s
+
+
+    def total_solde_paypal(self):
+        accs = Accounting.objects.filter( date_payment__lte=self.date_payment,is_paypal=1).order_by("date_payment")
+        s=0
+        for a in accs :
+            if a.is_credit :
+                s +=a.amount
+            else :
+                s -=a.amount
+        return s
+
+
+
 class Detail(models.Model):
     """ detail d'un Accounting   """
  

@@ -72,7 +72,7 @@ define(['jquery', 'bootstrap' ], function ($) {
 
         //         }); 
 
-        $('#id_is_paypal').prop('checked', false);       
+  
 
         $("body").on('change', '#id_mode', function (event) {  
 

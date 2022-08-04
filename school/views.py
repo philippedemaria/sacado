@@ -315,9 +315,11 @@ def school_accounting(request):
 		return redirect('index')
 
 
-	accountings = Accounting.objects.filter(school = school).order_by("-date")  
+	accountings = Accounting.objects.filter(school = school).order_by("-date")
+	renew_propose =  renew(school)
 
-	return render(request,'school/list_accountings.html', { 'accountings' : accountings , 'school' : school , })
+
+	return render(request,'school/list_accountings.html', { 'accountings' : accountings , 'school' : school , 'renew_propose' : renew_propose })
 
 
 
@@ -637,7 +639,15 @@ def new_group_many(request):
 	return render(request,'school/many_group_form.html', {'formset' : group_formset , 'school': school , 'communications' : [] , 'group' : None  })
 
  
+def chargeschools(request) :
 
+    data = {}
+    country_id =  request.POST.get("country_id")  
+    print(country_id)
+    schools = School.objects.values_list('id', 'name').filter(country_id=country_id) 
+    print(schools)
+    data['schools'] = list(schools)
+    return JsonResponse(data)
 
 
 ###############################################################################################
@@ -707,10 +717,7 @@ def renew_school_adhesion(request):
 
 	request.session["inscription_school_id"] = None
 
-	renew_propose = False
-	last_accounting = school.accountings.filter(date_payment=None)
-	if last_accounting :
-		renew_propose = True
+	renew_propose = renew(school)
 
 	today = datetime.now()
 	try :

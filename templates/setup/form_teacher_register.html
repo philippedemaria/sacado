@@ -48,7 +48,11 @@
               <div class="features wow bounceInUp clearfix">
                 <h4>Devenir membre  <span class="sacado">SACADO</span></h4>
                 <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
-                {% csrf_token %}
+                    {% csrf_token %}
+
+
+
+
                     {% include 'user_form.html' %}
 
                     <div class="row">

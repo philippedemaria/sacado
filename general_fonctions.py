@@ -7,7 +7,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.http import HttpResponseRedirect , HttpResponse
 from django.shortcuts import  redirect
-from school.models import Stage
+from school.models import Stage, School
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
   
@@ -689,3 +689,16 @@ def this_year_from_today(today) :
     else :
         year = str(today.year-1) +"-"+str(today.year)
     return year
+
+
+def renew(school) :
+    renew_propose = False
+    last_accounting = school.accountings.exclude(date_payment=None).filter(is_credit=1).count()
+    all_accountings = school.accountings.count()
+
+    print(last_accounting)
+
+    if   last_accounting   :
+        renew_propose = True
+
+    return renew_propose

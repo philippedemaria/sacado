@@ -11,7 +11,7 @@
 {% block general_js %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script type="text/javascript">
-    require(['script/accueil']); 
+    require(['script/ajax-register_school']); 
     </script>
 {% endblock %} 
 
@@ -44,6 +44,54 @@
                 <h4>Devenir membre  <span class="sacado">SACADO</span></h4>
                 <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
                 {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <h3>Sélectionner votre établissement</h3>  
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"><label>Sélectionner le pays</label>
+                                <select id="country_id" name="country" class="form-control select2">
+                                    {% for c in countries %}
+                                        <option value="{{ c.id }}">{{ c.name }}</option>
+                                    {%  endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"><label>Sélectionner l'établissement</label>
+                                <select id="id_school" name="school" class="form-control select2" required>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="#"  id="show_from_here">cliquez ici</a>.
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row"  id="show_here">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                              
+                            </div>
+                        </div>
+                    </div>
+ 
+
+
+
                     {% include 'user_form.html' %}
 
                     <div class="row">

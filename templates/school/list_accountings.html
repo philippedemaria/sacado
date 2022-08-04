@@ -52,28 +52,32 @@
                     <tbody>
                         {% for accounting in  accountings %}
                             <tr>
-                                <td>{{ accounting.date|date:"d N Y" }}</td>
+                                <td>{{ accounting.date_payment|date:"d N Y" }}</td>
                                 <td>{{ accounting.chrono }}</td>
                                 <td>{{ accounting.objet }}</td>                                
                                 <td>{{ accounting.amount }} €</td>
-                                <td>{% if accounting.date_payment %}Payé le {{ accounting.date_payment }}{% else %} En attente de paiement {% endif %}</td>
-                                <td>
+                                <td>{% if accounting.date_payment %}Payé le {{ accounting.date_payment }}{% elif  "Avoir" in accounting.objet  %} Facture suspendue {% else %} En attente de paiement {% endif %}</td>
+                                <td> 
                                     {% if accounting.date_payment %}
-                                        <a href="{% url 'print_bill_school' accounting.id %}" class="btn btn-xs btn-default"><i class="fa fa-print"></i> Imprimer la facture </a>
+                                        <a href="{% url 'print_bill_school' accounting.id %}" class="btn btn-xs btn-default">
+                                            <i class="fa fa-print"></i> Imprimer {% if  accounting.is_credit   %}la facture{% else %}l'avoir{% endif %} 
+                                        </a>
                                     {% else %} 
-                                        <a href="{% url 'print_accounting' accounting.id %}"  class="btn btn-xs btn-primary"> Imprimer la facture </a>
-                                        <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> En attente de paiement </a>
+                                        <a href="{% url 'print_accounting' accounting.id %}"  class="btn btn-xs btn-primary"> Imprimer {% if  accounting.is_credit   %}la facture{% else %}l'avoir{% endif %}  </a>
+                                        {% if  accounting.is_credit and not "Avoir" in accounting.objet  %}<a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> En attente de paiement </a>{% endif %} 
                                     {% endif %}
                                 </td>
                             </tr>
 
                         {% endfor %}
+
+
                     </tbody>
                 </table>
             </div>
         </div>
 
-        {% if renew_propose %}
+        {% if  renew_propose   %}
         <div class="row alert alert-warning">
             <div class="col-sm-12 col-md-12">  
                 Une demande d'adhésion a été envoyée. La demande est en cours de traitement.  
@@ -86,7 +90,7 @@
 
         <div class="row">
             <div class="col-sm-12 col-md-12">  
-                {% if not renew_propose %}
+                {% if  not renew_propose %}
                 <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a> 
                 {% endif %}
                 <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>

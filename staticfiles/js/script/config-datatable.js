@@ -58,10 +58,18 @@ $('.display_info').dataTable( {
  
  
 $('.standard_tab_sort300').dataTable( {
+    "pageLength": 300,
+    "info":     false
+} );
+
+$('.standard_tab_sort300_no_paiement').dataTable( {
     "order": [],
     "pageLength": 300,
     "info":     false
 } );
+
+
+
 
  
 $('.standard_tab_sort2000').dataTable( {

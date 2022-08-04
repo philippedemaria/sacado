@@ -26,60 +26,117 @@
 
 
 {% block body %}
-<section class="content_main"> 
+<section class="content_main" style="padding:20px"> 
     {% if request.user.is_board %}
 
 
-    <div class="row">
- 
-
+    <div class="row alert-warning" align="center">
         <div class="col-lg-12 col-md-12 col-xs-12">
+
+            <h1>Compte de résultat</h1>
+            <h3 style="color:red">Résultat : {{ cr }} €</h3>
+        </div>
+    </div>
+
+
+    <div class="row alert-warning" style="margin-top:10px">
+
+        <div class="col-lg-6 col-md-6 col-xs-12">
+
+            <h2>Dépenses  : {{ accountings_purchase }} €</h2>
             <table class="table">
-                
+                {% for a in accountings_list_purchases %}
                 <tr>
-                    <td></td>
-                    <td>Charges</td>
-                    <td>Produits</td>
-                    <td>Bilan</td>                
-                </tr>                
-                <tr>
-                    <td>Banque CA</td>
-                    <td>
+                    <td>{{ a.code }}</td>   
+                    <td width="70%">{{ a.name }} </td>  
+                    <th style="text-align: right">{{ a.solde }} €</th>                
+                </tr>
+                {% endfor %}
+            </table>
  
-                    </td>
-                    <td> {{ actif }} €</td>
-                    <td> </td>             
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <h2>Recettes  : {{ accountings_sale }} €</h2>
+             <table class="table">
+                
+ 
+                {% for a in accountings_list_sales %}
+                <tr>
+                    <td>{{ a.code }}</td>   
+                    <td width="70%">{{ a.name }} </td>  
+                    <th style="text-align: right">{{ a.solde }} €</th>                
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row" align="center">
+ 
+ 
+        <div class="col-lg-12 col-md-12 col-xs-12">
+
+            <h1>Bilan</h1>
+            
+        </div>
+ 
+
+    </div>
+
+
+    <div class="row alert-warning">
+ 
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <h2>Actif</h2>
+             <table class="table">
+                <tr>
+                    <td>411 </td>   
+                    <td width="70%">Client </td>  
+                    <th style="text-align: right">{{ a_411 }} €</th>                
+                </tr>
+                   <tr>
+                    <td>512 </td>   
+                    <td width="70%"> Banque CA </td>  
+                    <th style="text-align: right">{{ accountings_ca  }} €</th>                
                 </tr>
                 <tr>
-                    <td>Banque Paypal</td>
-                    <td> </td>                    
-                    <td>{{ result_paypal }} €</td> 
-                    <td></td>                
+                    <td>512 </td>   
+                    <td width="70%"> Banque Paypal </td>  
+                    <th style="text-align: right">{{ accountings_paypal  }} €</th>                
+                </tr>
+
+
+            </table>
+        </div>
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <h2>Passif</h2>
+             <table class="table">
+                <tr>
+                    <td>1 </td>   
+                    <td width="70%"> Capitaux </td>  
+                    <th style="text-align: right">0 €</th>                
+                </tr>
+                   <tr>
+                    <td>2  </td>   
+                    <td width="70%"> Immobilisation  </td>  
+                    <th style="text-align: right">0 €</th>                
                 </tr>
                 <tr>
-                    <td>En attente</td>
-                    <td>
-                    </td>                    
-                    <td>{{product}}</td>
-                    <td></td>                
+                    <td>3  </td>   
+                    <td width="70%"> Stock </td>  
+                    <th style="text-align: right">0 €</th>                
                 </tr>
 
                 <tr>
-                    <td>Total</td>   
-                    <td>{{ charge }} € 
-                         <span class="helper_tip"> Détails </i> 
-                            <div class="helper_tip_text" style="width:330px" >
-                                {% for c in charges_list %}
-                                    {{ c.objet }} <b>{{ c.amount }}</b> {% if not forloop.last %}<br/>{% endif %}
-                                {% endfor %}
-                            </div>
-                        </span>
-                    </td> 
-                    <td>{{ total }} € </td>   
-                    <th> {{ result }} € </th>                
+                    <td>1  </td>   
+                    <td width="70%"  style=" color: red"> Résultat </td>  
+                    <th style="text-align: right;color: red"> {{ crf }} €</th>                
                 </tr>
             </table>
         </div>
+
     </div>
  
     {% endif %} 

@@ -73,6 +73,6 @@ urlpatterns = [
 
 
 
-
+    path('chargeschools', chargeschools, name='chargeschools'),
 
 ]

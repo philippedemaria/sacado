@@ -5,7 +5,7 @@ define(['jquery', 'bootstrap' ], function ($) {
 
         $('#id_is_abonnement').prop('checked', false);
         $('#id_is_gar').prop('checked', false);
-        $('#id_is_payal').prop('checked', false);
+        $('#id_is_paypal').prop('checked', false);
 
      
  

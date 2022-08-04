@@ -32,9 +32,10 @@ from account.models import User, Teacher, Student, Resultknowledge, Parent , Res
 from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
-from socle.models import Level
-from socle.models import Theme
 from sendmail.forms import EmailForm
+from socle.models import Level, Theme
+from school.models import  Country
+from school.forms import SchoolForm
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm , AvatarForm , AvatarUserForm, BackgroundForm , BackgroundUserForm
 from templated_email import send_templated_mail
 from general_fonctions import *
@@ -1147,8 +1148,17 @@ def close_my_account(request):
 def register_teacher_accueil(request) :
 
     u_form  = UserForm()
-
-    context = {'u_form':  u_form  }
+    countries = Country.objects.order_by("name")
+    form = SchoolForm(request.POST or None, request.FILES  or None)
+    
+    if form.is_valid():
+        school = form.save()
+        school.is_active = 0
+        school.save()
+        Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
+        message.success(request,"Votre école vient d'être enregistrée. ")
+ 
+    context = {'u_form':  u_form , 'countries':  countries , 'form':  form  }
     return render(request, 'account/form_teacher_register.html', context)
 
 

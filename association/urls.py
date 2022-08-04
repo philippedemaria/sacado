@@ -18,7 +18,7 @@ urlpatterns = [
     path('list_accountings/<int:tp>/', list_accountings, name='list_accountings'),
     path('new/<int:tp>/', create_accounting, name='create_accounting'),
     path('update/<int:id>/', update_accounting, name='update_accounting'),
-    path('delete/<int:id>/', delete_accounting, name='delete_accounting'),
+    path('create_avoir/<int:id>/', create_avoir, name='create_avoir'),
     path('show/<int:id>/', show_accounting, name='show_accounting'), 
     path('print/<int:id>/', print_accounting, name='print_accounting'), 
     path('renew/<int:ids>/', renew_accounting, name='renew_accounting'),
@@ -72,6 +72,8 @@ urlpatterns = [
 
 
     path('all_schools', all_schools, name='all_schools'),
+
+    path('show_school_solde', all_schools, name='all_schools'),
 
 
 ]

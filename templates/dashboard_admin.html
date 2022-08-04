@@ -130,7 +130,7 @@
                                     </span> :   {{ school.code_acad}}_{{ school.id }}  
                                 </div>
  
-                                {% if renew_propose %}
+                                {% if not renew_propose %}
                                 <a href="{% url 'school_accounting' %}" class="btn btn-warning btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" > Réabonnement </a> 
                                 {% endif %}
  

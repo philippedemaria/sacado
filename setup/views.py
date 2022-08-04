@@ -1625,10 +1625,8 @@ def admin_tdb(request):
     rates       = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
 
-    renew_propose = False
-    last_accounting = school.accountings.filter(date_payment=None)
-    if last_accounting :
-        renew_propose = True
+
+    renew_propose = renew(school)
 
  
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  'renew_propose' : renew_propose ,
