@@ -6645,7 +6645,7 @@ def show_custom_sequence(request,idc): # vue pour le prof de l'exercice non auto
     customexercise = Customexercise.objects.get(pk = idc)
     today = timezone.now()
 
-    context = { 'customexercise' : customexercise, 'today' : today , 'student' : None, }
+    context = { 'customexercise' : customexercise, 'today' : today , 'student' : None, 'only_show' : False }
 
     if customexercise.is_python :
         url = "basthon/index_custom.html" 
