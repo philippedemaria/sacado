@@ -1488,6 +1488,7 @@ class Relationship(models.Model):
             data["percent"] = percent
             data["nb_done"] = nb_exercise_done
         except :
+            data = {}
             data["nb"] = 0
             data["percent"] = 0
             data["nb_done"] = 0
