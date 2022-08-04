@@ -238,6 +238,7 @@
 </form>
 {% else %}
 
+    {% if 'parcours' in request.path %}
 
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
@@ -249,20 +250,17 @@
         
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
-                <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
-                <ol><i class="fa fa-hand-o-right"></i> Les parcours par défaut (Recommandé pour une première utilisation) <p> Ces parcours contiennent tous les exercices  de  {% if  group %}{{ group.level }}{% else %}niveau_du_groupe{% endif %} proposés par <span class="sacado">sacado</span>, classés par le thème. Vous pouvez les utiliser directement, leur ajouter, leur supprimer des exercices.<br>Choisir le parcours souhaité <a href="#" data-toggle="modal" data-target="#parcours_default_modal"   ><i class="fa fa-caret-right"></i>  Parcours par défaut</a><p></ol>
-                <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
+                <h2 class='thin'><i class="fa fa-recycle"></i> 2 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
+                
+                <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés 
+                    <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
 
                     {% if sacado_asso %}
                         <a href="{% url 'all_parcourses' 0 %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                     {% else %}    
                         <a href="#" class="no_sacado_asso"  ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
                     {% endif %}
-
-
-                </p>
-
-
+                    </p>
                 </ol>
                 <ol><i class="fa fa-hand-o-right"></i>  
                     Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br/>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. 
@@ -270,6 +268,19 @@
                 </ol>
             </div>
         </div>
+
+    {% elif 'sequences' in request.path %}
+
+                <div class="row">
+                    <div class="round" style="margin-top: 50px;"> 
+                        <h1 class="sacado">1.</h1>
+                        <a href="{% url 'create_sequence' 0 %}">Créer une séquence</a>
+                    </div>
+                </div>
+
+    {% endif %}
+
+
 {% endif  %}
 </section>
 
