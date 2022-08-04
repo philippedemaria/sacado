@@ -17,7 +17,7 @@
                         <label>Niveau</label>
                         <select id="id_level" name="level" class="form-control select2" >
                             <option value=" ">Choisir un niveau</option>
-                            {% for l in levels %}
+                            {% for l in levels|dictsort:"ranking" %}
                                 <option value="{{l.id}}">{{ l.name }}</option>
                             {% endfor %}
                         </select>
