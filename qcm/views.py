@@ -7910,7 +7910,7 @@ def create_custom_sequence(request, id ):
                 students = parcours.students.all()
                 relation.students.set(students)
                 try :
-                    return redirect('show_course' , 0 , id)
+                    return redirect('show_parcours' , 0 , id)
                 except :
                     return redirect('index')
             else:
