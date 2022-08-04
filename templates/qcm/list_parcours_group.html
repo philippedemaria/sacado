@@ -63,7 +63,24 @@
         </div>
     </div>
     {% endif %}
+
     
+    {% if sequences %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1 class="thin">Mes séquences    </h1>
+            <div class="row" > 
+                <div class="col-sm-12 col-md-12">
+                    {% for parcours in parcourses %}   
+                          {% include 'qcm/parcours_evaluation_tag.html' %} 
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
     
     {% if parcourses.count > 0 %} 
     <div class="row"> 
@@ -126,25 +143,12 @@
     {% endif %}
 
 
-
-
-
-
-
-
-
-
-
     {% if nb_bases == 0 %} 
         {% if role %}
         <div class="row"> 
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-warning">
-
                     <img src="{% static 'img/fleche_up_right_violet.png' %}" style="position: absolute; right:250px" />
-
-
-
                     <h2 class='thin'> 2 façons de disposer d'un parcours </h2>  
                     
                         <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours personnalisés</label> 
@@ -159,7 +163,6 @@
                         </ol>
 
                 </div>
- 
                 <h3 class='thin'><i class="fa fa-question-circle text-warning"></i> Conseils : Classer vos parcours par dossier - 2 approches au choix.</h3> 
                 <div class="col-sm-6 col-md-6 col-lg-4">
                     <div class="alert alert-warning">
@@ -181,14 +184,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-                        
-
-                        
-
-
             </div>
         </div>
         {% else %}
@@ -200,9 +195,6 @@
             </div>
         {% endif %}
     {% endif %}
-
-
-  
 </section>
 
 <div class="modal fade" id="parcours_default_modal" tabindex="-1" role="dialog" aria-labelledby="parcours_default_modal">
