@@ -44,7 +44,7 @@
                 <h4>Devenir membre  <span class="sacado">SACADO</span></h4>
                 <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
                 {% csrf_token %}
-
+                    {% comment %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <h3>Sélectionner votre établissement</h3>  
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                     </div>
- 
+                     {% endcomment %}
 
 
 
