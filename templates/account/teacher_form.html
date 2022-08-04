@@ -199,7 +199,7 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <div class="{% if teacher.subjects.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                            <label>{{ teacher_form.subjects.label_tag }} {% if teacher.subjects.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} 
+                            <label>Matières {% if teacher.subjects.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %} 
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Choisir votre (ou vos) enseignement(s) pour sélectionner les exercices correspondants.</div>
                                 </span> 
