@@ -208,7 +208,7 @@
                     <canvas id="myCanvas" style="border:1px solid #f8f8f8"></canvas>                
                 {% endif %}
 
-
+                {% if only_show %}
                 <div class="row">
                     <div class="col-sm-12 col-lg-8">
                         <div class="form-group">
@@ -238,6 +238,9 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
+
             </form> 
             {% include 'qcm/signal_exercise_peda_live.html' %}    
             <!-- ======================================================================= -->   
