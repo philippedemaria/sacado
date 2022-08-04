@@ -210,7 +210,7 @@
                     </div>
                     <div class="form-group">
                         <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
-                            <label>{{ teacher_form.levels.label_tag }} {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}  
+                            <label>Niveaux {% if teacher.levels.count == 0 %} <i class="fa fa-warning"></i> Renseigner{% endif %}  
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Choisir vos niveaux de travail pour avoir accès aux ressources.</div>
                                 </span> 
