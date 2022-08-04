@@ -8,9 +8,9 @@ class GroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(GroupForm, self).__init__(*args, **kwargs)
         subjects = Subject.objects.filter(is_active=1)
-        self.fields['subject']  = forms.ModelMultipleChoiceField(queryset=subjects)
+        self.fields['subject']  = forms.ModelChoiceField(queryset=subjects)
         levels = Level.objects.order_by("ranking")
-        self.fields['level']  = forms.ModelMultipleChoiceField(queryset=levels)
+        self.fields['level']  = forms.ModelChoiceField(queryset=levels)
 
     class Meta:
         model = Group 
