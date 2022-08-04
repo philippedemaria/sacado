@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Teacher, User, Student, Parent , Response , Newpassword , Avatar , Background
-from socle.models import Subject
+from socle.models import Subject , Level
 from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
 
@@ -73,7 +73,8 @@ class TeacherForm(forms.ModelForm):
         super(TeacherForm, self).__init__(*args, **kwargs)
         subjects = Subject.objects.filter(is_active=1)
         self.fields['subjects']  = forms.ModelMultipleChoiceField(queryset=subjects)
-
+        levels = Level.objects.order_by("ranking")
+        self.fields['levels']  = forms.ModelMultipleChoiceField(queryset=levels)
     class Meta :
         model = Teacher
         fields = '__all__'
