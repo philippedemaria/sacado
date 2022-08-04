@@ -448,7 +448,16 @@ def bank_bilan(request):
     accountings_paypal_c1 = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_paypal =1 , is_credit=1, tp=0).exclude(date_payment=None).aggregate(Sum('amount'))
     accountings_paypal_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,is_paypal =1 , is_credit=0).exclude(tp=0).aggregate(Sum('amount'))
     accountings_paypal_d1 = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_paypal =1 , is_credit=0, tp=0).exclude(date_payment=None).aggregate(Sum('amount'))
-    accountings_paypal  = accountings_paypal_c["amount__sum"] + accountings_paypal_c1["amount__sum"] - accountings_paypal_d["amount__sum"] - accountings_paypal_d1["amount__sum"]
+    if accountings_paypal_c["amount__sum"] : accounting1 = accountings_paypal_c["amount__sum"] 
+    else : accounting1 = 0 
+    if accountings_paypal_c1["amount__sum"] : accounting2 = accountings_paypal_c["amount__sum"] 
+    else : accounting2 = 0 
+    if accountings_paypal_d["amount__sum"] : accounting3 = accountings_paypal_c["amount__sum"] 
+    else : accounting3 = 0 
+    if accountings_paypal_d1["amount__sum"] : accounting4 = accountings_paypal_c["amount__sum"] 
+    else : accounting4 = 0 
+
+    accountings_paypal  = accounting1 + accounting2 - accounting3 - accounting4
 
 
     accountings_ca_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,is_paypal =0 , is_credit=0).exclude(tp=0).aggregate(Sum('amount'))
