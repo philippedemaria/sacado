@@ -100,7 +100,7 @@
 
                             </td> 
                             <td>
-                                <a href="{% url 'update_accounting'  abonnement.accounting.id %}" >{{ abonnement.accounting.objet }}</a>
+                                <a href="{% url 'update_accounting'  abonnement.accounting.id 3 %}" >{{ abonnement.accounting.objet }}</a>
 
                                 <a href="{% url 'print_accounting'  abonnement.accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-print"></i> </a>
                                 <a href="{% url 'show_accounting'  abonnement.accounting.id %}" class="pull-right" style="margin-right:10px"><i class="fa fa-eye"></i> </a>

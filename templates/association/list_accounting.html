@@ -19,7 +19,7 @@
 {% block page_title %}
         <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Journal des opérations 
 
-        {% if tp == 0 %}Client{% elif tp == 1 %}Achats{% elif   'list_paypal' in request.path  %} PAYPAL {% else %}Banque{% endif %}
+        {% if tp == 0 %}Client{% elif tp == 1 %}Achats{% elif   'list_paypal' in request.path  %} PAYPAL {% else %}Banque CA{% endif %}
 
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
@@ -98,7 +98,7 @@
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
                             </td>   
-                            <td><span class="helper_tip"><a href="{% url 'update_accounting'  accounting.id %}" >
+                            <td><span class="helper_tip"><a href="{% url 'update_accounting'  accounting.id tp %}" >
                                 {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
                                 </a></span>

@@ -45,7 +45,7 @@
                         {% for rate in rates %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'update_accounting' rate.id %}">{{ rate.year }}</a>
+                                    <a href="{% url 'update_accounting' rate.id 2 %}">{{ rate.year }}</a>
                                     <a href="{% url 'delete_accounting' rate.id %}" class="pull-right"  onclick="return TestDelete('ce tarif')"><i class="fa fa-trash"></i> </a>
                                 </td>
                                 <td>

@@ -1071,7 +1071,7 @@ def renew_accounting(request,ids):
 
 
 @user_passes_test(user_is_board)
-def update_accounting(request, id):
+def update_accounting(request, id,tp):
 
     today    = datetime.now()
     accounting = Accounting.objects.get(id=id)
@@ -1130,9 +1130,9 @@ def update_accounting(request, id):
                 else :
                     print(form_abo.errors)
 
-            if accounting.tp == 0 :
+            if tp == 0 :
                 redirect('list_accountings', 0)
-            elif accounting.tp == 2 :
+            elif tp == 2 :
                 redirect('list_accountings', 2) 
             else :
                 redirect('list_paypal') 
