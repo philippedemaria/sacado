@@ -64,14 +64,14 @@
 
 
 
-
+{% if nb_levels or request.user.is_superuser %}
 <li class="dropdown {% if  request.session.tdb and 'parcours_group' in request.path %}active{% endif %}">
     <a href="{% url 'index' %}" class="main closer_notification" >
         <i class="bi bi-people icon_size" ></i> 
         <div class="captionmenu">Groupes</div>
     </a>
 </li>
-
+{% endif %}
 
 
 

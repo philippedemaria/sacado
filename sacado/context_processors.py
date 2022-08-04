@@ -58,6 +58,7 @@ def menu(request):
             teacher = request.user.teacher
 
             nb_groups = teacher.groups.count()
+            nb_levels = teacher.levels.count()
             #nbs = Studentanswer.objects.filter(parcours__teacher=teacher, date=today).count()
             nbe = Email.objects.values_list("id").distinct().filter(receivers=request.user, today=today).count()
             #nb_not = nbs + nbe
@@ -85,8 +86,8 @@ def menu(request):
                     renew_hidden = True
                     request.session["renewal"] = renew_hidden
             
- 
-            return { 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+
+            return { 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             
