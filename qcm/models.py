@@ -1473,20 +1473,24 @@ class Relationship(models.Model):
 
         students          = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
         nb_student        = len(students)
-
-        if self.exercise.supportfile.is_ggbfile :
-            nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
-        else :
-            nb_exercise_done = Writtenanswerbystudent.objects.filter(relationship= self, student__in= students ).values_list("student",flat= True).order_by("student").distinct().count()        
- 
         try :
-            percent = int(nb_exercise_done * 100/nb_student)
-        except : 
-            percent = 0
-        data = {}
-        data["nb"] = nb_student
-        data["percent"] = percent
-        data["nb_done"] = nb_exercise_done
+            if self.exercise.supportfile.is_ggbfile :
+                nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
+            else :
+                nb_exercise_done = Writtenanswerbystudent.objects.filter(relationship= self, student__in= students ).values_list("student",flat= True).order_by("student").distinct().count()        
+     
+            try :
+                percent = int(nb_exercise_done * 100/nb_student)
+            except : 
+                percent = 0
+            data = {}
+            data["nb"] = nb_student
+            data["percent"] = percent
+            data["nb_done"] = nb_exercise_done
+        except :
+            data["nb"] = 0
+            data["percent"] = 0
+            data["nb_done"] = 0
         return data
 
 
