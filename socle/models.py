@@ -39,6 +39,7 @@ class Subject(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
     color = models.CharField(max_length=255, default ="" , verbose_name="Couleur")
     shortname = models.CharField(max_length=10, default ="" , verbose_name="Abréviation")
+    is_active = models.BooleanField(default=0, verbose_name="Active ?")
 
  
     def __str__(self):
