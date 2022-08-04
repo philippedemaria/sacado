@@ -7897,12 +7897,12 @@ def create_custom_sequence(request, id ):
         form = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
         if request.method == "POST" :
             if form.is_valid():
-                nf = ceForm.save(commit=False)
+                nf = form.save(commit=False)
                 nf.teacher = teacher
                 if nf.is_scratch :
                     nf.is_image = True
                 nf.save()
-                ceForm.save_m2m()
+                form.save_m2m()
                 nf.parcourses.add(parcours)
                 nf.students.set( parcours.students.all() )  
 
