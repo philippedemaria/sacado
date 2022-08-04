@@ -71,27 +71,29 @@
         <div class="col-sm-12 col-md-12">
             <table   class="{% if tp < 2 %}standard_tab_sort300_no_paiement{% else %}standard_tab_sort300{% endif %} table table-bordered table-hover table-striped">
                 <thead>
-                <tr> 
-                    <td style="width:120px">Date paiement</td>                                     
+                <tr>  
+                    <td style="width:120px">Date paiement</td> 
+                    <td style="width:40px">Id </td>                       
                     <td style="width:120px">Chrono</td>                     
                     <td  >{% if tp == 2 %}Client/Fournisseurs{% elif tp == 1 %}Fournisseurs/autre{% elif tp == 0 %}Client{% endif %}   </td>
-                    <td>Libellé </td>
+                    <td style="width:120px">Libellé </td>
+
                     <td style="width:80px">{% if tp == 2 %}Entrée{% elif tp == 1 %}Paiement fait{% elif tp == 3 %}Entrée{% else %}Montant{% endif %}  </td>
                     <td style="width:80px">{% if tp == 2 %}Sortie{% elif tp == 1 %}Montant{% elif tp == 3 %}Sortie{% else %}Paiement{% endif %}</td>
 
                     <td style="width:80px">Solde</td>
 
-                    {% if tp < 2 %}<td>Comptes</td>{% endif %}
+                    {% if tp == 0 %}<td>Comptes</td>{% endif %}
                 </tr>
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
                         <tr id="this_tr_{{ accounting.id }}" class="this_tr_all"> 
                             <td>
-                                <span >{{ accounting.id }} </span> 
-                            </td>    
-                            <td>
                                 <span >{{ accounting.date_payment|date:"Y-m-d" }} </span> 
+                            </td>
+                            <td>
+                                <span >{{ accounting.id }} </span> 
                             </td>
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
@@ -172,18 +174,19 @@
                                     {% endif %}
                                 </td>
 
-                            {% if tp < 2 %}
+                            {% if tp == 0 %}
                             <td style="width:80px">
-                                {{ accounting.plan.code }}
+                                {% if tp == 0 and accounting.is_cpca == 1 %}
+                                    <span style="color:red">487</span> <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Client produits constatés d'avance</div>
+                                </span>
+                                {% elif tp < 2 %}{{ accounting.plan.code }}
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >{{ accounting.plan }}</div>
                                 </span>
+                                {% endif %}
                             </td>
                             {% endif %}
-
-
-
-
                         </tr>
 
                     {% endfor %}
