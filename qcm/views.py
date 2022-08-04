@@ -2391,16 +2391,14 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
         nf.students.set(groups_students)
         attribute_all_documents_to_students([nf],groups_students)
         ################################################            
-
         #Gestion de la coanimation
         coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
- 
-
-
         ################################################
-        lock_all_exercises_for_student(nf.stop,nf)  
-
-        if request.POST.get("save_and_choose") :
+        lock_all_exercises_for_student(nf.stop,nf)
+          
+        if is_sequence :
+            return redirect('show_parcours', 0 , nf.id)
+        elif request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
         elif group_id and idf == 0 :
             return redirect('list_parcours_group' , group_id)                

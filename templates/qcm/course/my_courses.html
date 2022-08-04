@@ -127,20 +127,23 @@
 
 
 
-
-
-
+{% if parcours_courses %} 
+        <div class="row" style="margin-top:50px;padding-left: 15px;">
+            <div class="col-sm-12 col-md-12 alert alert-warning">
+                <img src="{% static 'img/conseil.png' %}"/> Pour désarchiver un cours, il suffit de désarchiver le parcours auquel il est lié.
+            </div>
+        </div>
+{% endif %}
 
 
 
 
 
  
-    <div class="row" style="margin-top:50px;padding-left: 15px;">
-        <div class="col-sm-12 col-md-12 alert alert-warning">
-            <img src="{% static 'img/conseil.png' %}"/> Pour désarchiver un cours, il suffit de désarchiver le parcours auquel il est lié.
-        </div>
-    </div>
+
+
+
+
 </form>
  
 </section>
