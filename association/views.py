@@ -381,7 +381,10 @@ def bank_bilan(request):
 
     accountings_sales_c = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700,is_credit=1).aggregate(Sum('amount'))
     accountings_sales_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700,is_credit=0).aggregate(Sum('amount'))
-    accountings_sale  = accountings_sales_c["amount__sum"] + accountings_sales_d["amount__sum"]
+    try : 
+        accountings_sale  = accountings_sales_c["amount__sum"] + accountings_sales_d["amount__sum"]
+    except :
+        accountings_sale  = accountings_sales_c["amount__sum"]  
  
 
     plan_sales = Plancomptable.objects.filter(code__gte=700)
