@@ -35,9 +35,39 @@
         </li>
     </ul>
 </li>
-<li>
- <a href="{% url 'adhesions' %}" class="no_button">Abonnements</a>
+ 
+
+
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Suivi Clients <b class="caret"></b> </a>
+    <ul   class="dropdown-menu clearfix pull-right" role="menu">
+        <li>
+            <a href="{% url 'adhesions' %}" class="no_button">Abonnements</a>   
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'all_schools' %}"  class="no_button" > 
+                Fichier Clients
+            </a> 
+        </li> 
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'list_accountings' 0 %}"  class="no_button" > 
+                Prospection Clients
+            </a> 
+        </li>
+    </ul>
 </li>
+
+ 
+
+
+
+
+
+
+
+
 
 <li>
  <a href="{% url 'bank_bilan' %}" class="no_button">Bilan</a>

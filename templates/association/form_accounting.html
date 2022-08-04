@@ -166,13 +166,22 @@
                     </div>
                     {% endif %}
                     <div class="row" style="margin: 10px 0px"> 
-                        <div class="col-sm-3 col-md-2">
-                            Compte cible
+                        <div class="col-sm-6 col-md-2">
+                            Compte cible ?
                         </div>
-                        <div class="col-sm-9 col-md-8">
+                        <div class="col-sm-6 col-md-3">
                             {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Crédit Agricole"}} 
                             {{ form.is_paypal.errors }} 
                         </div>
+                        <div class="col-sm-6 col-md-4" align="right">
+                            Produits constatés d'avance ?
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            {{ form.is_cpca |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                            {{ form.is_cpca.errors }} 
+                        </div>
+
+
                     </div>
 
                 </div>

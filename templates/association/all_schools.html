@@ -41,9 +41,9 @@
                         {% else %}
                             <span style="font-size:1px;color:#FFF">0</span><i class="fa fa-times text-danger"></i>
                         {% endif %}
-                    </td>
+                    </td> 
                     <td>
-                        {{ school.name|lower|capfirst }}
+                        <a href="{% url 'update_school_admin'  school.id %}">{{ school.name|lower|capfirst }}</a>
                         {% if school.active_accounting %}
                             <a href="{% url 'update_accounting'  school.active_accounting.id %}" class="pull-right"><i class="fa fa-euro"></i></a>
                         {% else %}

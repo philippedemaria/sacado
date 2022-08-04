@@ -18,6 +18,7 @@ from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentF
 from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
+from school.forms import SchoolForm
 from school.gar import *
 from setup.models import Formule
 from setup.forms import FormuleForm
@@ -40,7 +41,7 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
-from datetime import datetime 
+from datetime import datetime  , timedelta
 from general_fonctions import *
 import xlwt
 import uuid
@@ -184,6 +185,57 @@ def all_schools(request):
     context = { 'schools': schools}
 
     return render(request, 'association/all_schools.html', context ) 
+
+
+
+
+
+@user_passes_test(user_is_board) 
+def update_school_admin(request,id):
+
+    today    = datetime.now()
+    today_time = today -   timedelta(days = 15)
+    school = School.objects.get(id=id)
+    form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
+
+    teachers = school.users.filter(user_type=2) 
+
+
+    nb_total = school.users.filter(user_type=0).count()
+    nb = 150
+    if nb > nb_total:
+        nb = nb_total
+
+    abonnements = school.abonnement.all()
+
+    abonnement = abonnements.last()
+
+    if abonnement :
+        status = "Abonné"
+    else :
+        status = "Non abonné"
+        if school.accountings.filter(date_payment=None, date__lte=today_time).last() :
+            status = "En attente de paiement"
+
+    if form.is_valid():
+        school = form.save()
+        school.is_active = 1
+        school.save()
+
+        return redirect('all_schools')
+
+    return render(request,'association/update_school_admin.html', { 'abonnements':abonnements, 'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total ,'teachers' : teachers , 'status' : status })
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -367,7 +419,7 @@ def bank_activities(request):
 
 
 @user_passes_test(user_is_board)
-def bank_bilan(request):
+def calcule_bank_bilan(request):
     """ page d'accueil de la comptabilité"""
     this_year = Activeyear.objects.get(pk=1).year
     nyear = Activeyear.objects.get(pk=1).year+1
@@ -394,8 +446,8 @@ def bank_bilan(request):
 
     for p in plan_sales :
         my_dico = {}
-        accountings_sales_debit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code , is_credit=0).aggregate(Sum('amount'))
-        accountings_sales_credit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code  , is_credit=1).aggregate(Sum('amount'))
+        accountings_sales_debit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code , is_cpca = 0 , is_credit=0).aggregate(Sum('amount'))
+        accountings_sales_credit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code  , is_cpca = 0 , is_credit=1).aggregate(Sum('amount'))
         my_dico["code"] = p.code 
         my_dico["name"] = p.name
         if accountings_sales_credit["amount__sum"] and accountings_sales_debit["amount__sum"] :
@@ -463,8 +515,8 @@ def bank_bilan(request):
     accountings_ca_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,is_paypal =0 , is_credit=0).exclude(tp=0).aggregate(Sum('amount'))
     accountings_ca_c1 = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_paypal =0 , is_credit=1, tp=0).exclude(date_payment=None).aggregate(Sum('amount'))
     accountings_ca  = accountings_ca_c1["amount__sum"]   - accountings_ca_d["amount__sum"]
-
-
+    
+    cpca = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_cpca = 1 , tp=0 , plan__code=706).aggregate(Sum('amount'))
 
     a_sales = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700)
     a_purchase = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700,plan__code__gte=600)
@@ -472,14 +524,242 @@ def bank_bilan(request):
     cr = accountings_sale  - accountings_purchase 
     crf = a_411+accountings_ca+accountings_paypal
 
-        
-    context = {  'crf' : crf ,  'accountings_paypal' : accountings_paypal ,  'accountings_ca' : accountings_ca  , 'a_411' : a_411 ,   'a_sales': a_sales, 'a_purchase': a_purchase , 'accountings_sale': accountings_sale, 'accountings_purchase': accountings_purchase , 'cr' : cr , 'accountings_list_sales' : accountings_list_sales , "accountings_list_purchases" : accountings_list_purchases }  
+    return cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  
 
+
+
+@user_passes_test(user_is_board)
+def bank_bilan(request):
+
+    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  = calcule_bank_bilan(request)
+
+    context = {  'cpca' : cpca ,  'crf' : crf ,  'accountings_paypal' : accountings_paypal ,  'accountings_ca' : accountings_ca  , 'a_411' : a_411 ,   'a_sales': a_sales, 'a_purchase': a_purchase , 'accountings_sale': accountings_sale, 'accountings_purchase': accountings_purchase , 'cr' : cr , 'accountings_list_sales' : accountings_list_sales , "accountings_list_purchases" : accountings_list_purchases }  
 
     return render(request, 'association/bank_bilan.html', context )   
 
  
+@user_passes_test(user_is_board)
+def print_bank_bilan(request):
 
+    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  = calcule_bank_bilan(request)
+    year_active = Activeyear.objects.get(pk=1)
+    #########################################################################################
+    ### Instanciation
+    #########################################################################################
+    elements = []        
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Compte_resultat_'+str(year_active.year)+'.pdf"'
+    doc = SimpleDocTemplate(response,   pagesize=(landscape(letter)), 
+                                        topMargin=0.5*inch,
+                                        leftMargin=0.5*inch,
+                                        rightMargin=0.5*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+    OFFSET_INIT = 0.2
+    #########################################################################################
+    ### Style
+    #########################################################################################
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page_blue = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+
+    title = ParagraphStyle('title', 
+                            fontSize=16,                             
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+
+    subtitle = ParagraphStyle('title', 
+                            fontSize=14, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+ 
+    mini = ParagraphStyle(name='mini',fontSize=9 )  
+
+    normal = ParagraphStyle(name='normal',fontSize=12,)   
+
+    dateur_style = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style = ParagraphStyle('dateur_style', 
+                            fontSize=11, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_mini = ParagraphStyle('dateur_style', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_blue = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+    offset = 0 # permet de placer le bas de page
+    #########################################################################################
+    ### Logo Sacado
+    #########################################################################################
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
+    elements.append(logo_tab_tab)
+    #########################################################################################
+    ### Facture
+    #########################################################################################
+    elements.append(Spacer(0,0.3*inch))
+    f = Paragraph( "Compte de résultat" , sacado )
+    elements.append(f) 
+    elements.append(Spacer(0,0.1*inch))
+    fa = Paragraph( "Résultat : " + str(cr) + " €" , title )
+    elements.append(fa) 
+
+    details_list_sales , details_list_purchases = [] , [] 
+    #########################################################################################
+    ### Details_list_purchases
+    #########################################################################################
+    for a in accountings_list_purchases :
+        if str(a["solde"]) != "0" :
+            details_list_purchases.append(    ( str(a["code"])+". "+ str(a["name"]) , str(a["solde"])  )    )
+           
+    details_table_purchases = Table(details_list_purchases, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
+    details_table_purchases.setStyle(TableStyle([
+               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
+               ]))
+
+
+    #########################################################################################
+    ### Accountings_list_sales
+    #########################################################################################
+    for a in accountings_list_sales :
+        if str(a["solde"]) != "0" :
+            details_list_sales.append(  ( str(a["code"]) +". "+ str(a["name"]) , str(a["solde"])  )    )
+           
+    details_table_sales = Table(details_list_sales, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
+    details_table_sales.setStyle(TableStyle([
+               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
+               ]))
+
+    #########################################################################################
+    ### A mettre sur 2 colonnes
+    #########################################################################################
+
+    elements.append(Spacer(0,0.3*inch))
+    g = Paragraph( "Charges : " + str(accountings_purchase) +"€", subtitle )
+    elements.append(g)    
+    elements.append(Spacer(0,0.1*inch))
+    elements.append(details_table_purchases)
+
+    elements.append(Spacer(0,0.3*inch))
+    h = Paragraph( "Produits: " +str(accountings_sale) +"€" , subtitle )
+    elements.append(h) 
+    elements.append(Spacer(0,0.1*inch))
+    elements.append(details_table_sales)
+
+
+
+
+    #########################################################################################
+    ### Bilan  
+    #########################################################################################
+
+    elements.append(Spacer(0,0.3*inch))
+    b = Paragraph( "Bilan" , sacado )
+    elements.append(b) 
+ 
+
+    #########################################################################################
+    ### Bilan actif
+    #########################################################################################
+    elements.append(Spacer(0,0.3*inch))
+    actif = Paragraph( "Actif"  , subtitle )
+    elements.append(actif)  
+    elements.append(Spacer(0,0.1*inch))
+    accountings_list_qc = [("411. Client", a_411 ) , ("411. Banque CA", accountings_ca ) , ("411. Banque Paypal", accountings_paypal )   ]
+
+           
+    accountings_list_qc_ = Table(accountings_list_qc, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
+    accountings_list_qc_.setStyle(TableStyle([
+               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
+               ]))
+    elements.append(accountings_list_qc_)             
+
+    #########################################################################################
+    ### Bilan passif
+    #########################################################################################
+
+ 
+    elements.append(Spacer(0,0.3*inch))
+    actif = Paragraph( "Passif"  , subtitle )
+    elements.append(actif)  
+    elements.append(Spacer(0,0.1*inch))
+    accountings_list_qc = [ ("487 . Clients produits constatés d'avance", cpca["amount__sum"] ) , ( " Résultat", crf )   ]
+
+           
+    accountings_list_qc_ = Table(accountings_list_qc, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
+    accountings_list_qc_.setStyle(TableStyle([
+               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
+               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
+                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
+               ]))
+    elements.append(accountings_list_qc_)  
+
+
+
+    #########################################################################################
+    ### Bas de page
+    #########################################################################################
+    nb_inches = 4.4 - offset
+    elements.append(Spacer(0,nb_inches*inch)) 
+    asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
+    elements.append(asso)
+    asso2 = Paragraph( "Association SacAdo"  , bas_de_page )
+    elements.append(asso2)
+    asso3 = Paragraph( "siren : 903345569"  , bas_de_page )
+    elements.append(asso3)
+    asso30 = Paragraph( "siret : 903345569 00011"  , bas_de_page )
+    elements.append(asso30)
+    asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
+    elements.append(asso4)
+
+    doc.build(elements)
+
+    return response    
+
+
+  
 
 
 @user_passes_test(user_is_board)
@@ -850,6 +1130,13 @@ def update_accounting(request, id):
                 else :
                     print(form_abo.errors)
 
+            if tp == 0 :
+                redirect('list_accountings', 0)
+            elif tp == 2 :
+                redirect('list_accountings', 2) 
+            else :
+                redirect('list_paypal') 
+
         else :
             print(form.errors)
         
@@ -888,12 +1175,7 @@ def create_avoir(request, id):
     return redirect('list_accountings', 0)
     
 
-
-def show_school_solde(request):
-    pass
-
-
-
+ 
 
 
 
@@ -1375,7 +1657,7 @@ def export_bilan(request):
     row_n = 0
     for accounting in accountings :
         row_n += 1
-        print(accounting)
+ 
  
         for col_num in range(len(accounting)):
             

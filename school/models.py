@@ -31,6 +31,8 @@ class School(models.Model):
     is_active           = models.BooleanField(default=0,   editable=False)
     gar                 = models.BooleanField(default=0, verbose_name="Connexion via le GAR souhaitée")
     logo                = models.ImageField(upload_to=image_directory_path, verbose_name="Logo de l'établissement", blank=True, default="")
+    comment             = models.TextField( verbose_name="Commentaire", blank=True, default="")
+    resiliation         = models.TextField( verbose_name="Motif de Résiliation", blank=True, default="")
 
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
@@ -123,3 +125,7 @@ class Stage(models.Model):
 
     def __str__(self):
         return "seuils d'aquisition {}".format(self.school.name)
+
+ 
+
+ 

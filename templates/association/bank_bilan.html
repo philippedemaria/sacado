@@ -13,6 +13,8 @@
 
 {% block page_title %}
     <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Bilan comptable année {{ this_year }} </a>
+
+    <a href="{% url 'print_bank_bilan' %}" class="btn btn-primary" ><i class="fa fa-print"></i> Impression </a>    
 {% endblock %} 
 
 {% block page_menu_right %}
@@ -43,30 +45,34 @@
 
         <div class="col-lg-6 col-md-6 col-xs-12">
 
-            <h2>Dépenses  : {{ accountings_purchase }} €</h2>
+            <h2>Charges  : {{ accountings_purchase }} €</h2>
             <table class="table">
                 {% for a in accountings_list_purchases %}
-                <tr>
-                    <td>{{ a.code }}</td>   
-                    <td width="70%">{{ a.name }} </td>  
-                    <th style="text-align: right">{{ a.solde }} €</th>                
-                </tr>
+                    {% if a.solde %}
+                        <tr>
+                            <td>{{ a.code }}</td>   
+                            <td width="70%">{{ a.name }} </td>  
+                            <th style="text-align: right">{{ a.solde }} €</th>                
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
  
         </div>
 
         <div class="col-lg-6 col-md-6 col-xs-12">
-            <h2>Recettes  : {{ accountings_sale }} €</h2>
+            <h2>Produits  : {{ accountings_sale }} €</h2>
              <table class="table">
                 
  
                 {% for a in accountings_list_sales %}
-                <tr>
-                    <td>{{ a.code }}</td>   
-                    <td width="70%">{{ a.name }} </td>  
-                    <th style="text-align: right">{{ a.solde }} €</th>                
-                </tr>
+                    {% if a.solde %}
+                        <tr>
+                            <td>{{ a.code }}</td>   
+                            <td width="70%">{{ a.name }} </td>  
+                            <th style="text-align: right">{{ a.solde }} €</th>                
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </div>
@@ -91,12 +97,14 @@
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Actif</h2>
              <table class="table">
+                {% if a_411 %}
                 <tr>
                     <td>411 </td>   
                     <td width="70%">Client </td>  
                     <th style="text-align: right">{{ a_411 }} €</th>                
                 </tr>
-                   <tr>
+                {% endif %}
+                <tr>
                     <td>512 </td>   
                     <td width="70%"> Banque CA </td>  
                     <th style="text-align: right">{{ accountings_ca  }} €</th>                
@@ -113,24 +121,20 @@
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Passif</h2>
              <table class="table">
+                {% comment %}
                 <tr>
-                    <td>1 </td>   
+                    <td>100 </td>   
                     <td width="70%"> Capitaux </td>  
                     <th style="text-align: right">0 €</th>                
                 </tr>
-                   <tr>
-                    <td>2  </td>   
-                    <td width="70%"> Immobilisation  </td>  
-                    <th style="text-align: right">0 €</th>                
+                {% endcomment %}
+                <tr>
+                    <td>487  </td>   
+                    <td width="70%"> Clients produits constatés d'avance  </td>  
+                    <th style="text-align: right">{{ cpca.amount__sum  }} €</th>                
                 </tr>
                 <tr>
-                    <td>3  </td>   
-                    <td width="70%"> Stock </td>  
-                    <th style="text-align: right">0 €</th>                
-                </tr>
-
-                <tr>
-                    <td>1  </td>   
+                    <td></td>   
                     <td width="70%"  style=" color: red"> Résultat </td>  
                     <th style="text-align: right;color: red"> {{ crf }} €</th>                
                 </tr>

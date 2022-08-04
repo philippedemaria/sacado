@@ -180,14 +180,16 @@ class Accounting(models.Model):
 
     observation = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Observation")
 
-    date_payment = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet") # date de paiement
-    date = models.DateTimeField(auto_now_add=True) # date de création de la facture
-    user = models.ForeignKey(User, related_name="accountings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
-    is_active = models.BooleanField(default=0, verbose_name="Actif")
-    is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement")
-    ticket = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
-    plan = models.ForeignKey(Plancomptable, default=17, related_name="plan_accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
-    tp  = models.PositiveIntegerField(default=0, editable=False)
+    date_payment  = models.DateTimeField(null=True, blank=True, verbose_name="Date d'effet") # date de paiement
+    date          = models.DateTimeField(auto_now_add=True) # date de création de la facture
+    user          = models.ForeignKey(User, related_name="accountings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
+    is_active     = models.BooleanField(default=0, verbose_name="Actif ?")
+    is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement ?")
+    is_cpca       = models.BooleanField(default=0, verbose_name="Produits constatés d'avance ?")
+    ticket        = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
+    plan          = models.ForeignKey(Plancomptable, default=17, related_name="plan_accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
+    tp            = models.PositiveIntegerField(default=0, editable=False)
+
 
     def __str__(self):
         return self.beneficiaire
@@ -249,6 +251,7 @@ class Detail(models.Model):
 
 
 
+ 
 
 
 

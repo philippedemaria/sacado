@@ -23,6 +23,7 @@ urlpatterns = [
     path('print/<int:id>/', print_accounting, name='print_accounting'), 
     path('renew/<int:ids>/', renew_accounting, name='renew_accounting'),
 
+    path('print_bank_bilan', print_bank_bilan, name='print_bank_bilan'),
 
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
@@ -72,9 +73,7 @@ urlpatterns = [
 
 
     path('all_schools', all_schools, name='all_schools'),
-
-    path('show_school_solde', all_schools, name='all_schools'),
-
-
+    path('update_school_admin/<int:id>/', update_school_admin, name='update_school_admin'),
+  
 ]
  

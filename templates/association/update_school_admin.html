@@ -1,0 +1,217 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block page_title %} 
+   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {% if request.user.is_superuser %}Gestion d'un établissement {% else %}Modifier l'établissement{% endif %}
+{% endblock  %}
+
+
+{% block require %}
+{% if school %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+{% else %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+{% endif %}
+{% endblock %} 
+
+
+{% block page_menu_right %}
+
+    <li>Statut : {{ status }}</li>
+
+{% endblock %}
+
+
+
+
+
+{% block body  %}    
+<form  action="" method="POST" enctype='multipart/form-data'> 
+<section class="content_main">
+    <div class="row">
+        <div class="col-sm-12 col-md-4 alert alert-warning">
+            
+                {% csrf_token %}
+
+                <div class="form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name |add_class:"form-control" }}
+                    {{ form.name.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label>Pays :</label>
+                    {{ form.country |add_class:"form-control select2" }}
+                    {{ form.country.errors }}
+                </div>
+
+                <div class="form-group">                
+                    {{ form.address.label_tag }}
+                    {{ form.address |add_class:"form-control" }}
+                    {{ form.address.errors }}
+                </div>
+ 
+                <div class="row">
+                    <div class="col-sm-9 col-md-9">
+                        <div class="form-group">                
+                            {{ form.complement.label_tag }}
+                            {{ form.complement |add_class:"form-control" }}
+                            {{ form.complement.errors }}
+                        </div>
+                    </div> 
+                    <div class="col-sm-3 col-md-3">
+                         <div class="form-group">                
+                            {{ form.zip_code.label_tag }}
+                            {{ form.zip_code |add_class:"form-control" }}
+                            {{ form.zip_code.errors }}
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">                
+                            {{ form.town.label_tag }}
+                            {{ form.town |add_class:"form-control" }}
+                            {{ form.town.errors }}
+                        </div>
+                    </div> 
+                    <div class="col-sm-6 col-md-6">
+                         <div class="form-group">                
+                            {{ form.code_acad.label_tag }}
+                            {{ form.code_acad |add_class:"form-control" }}
+                            {{ form.code_acad.errors }}
+                        </div>
+                    </div>
+                </div>
+
+
+                 <div class="form-group">                
+                    <label>Logo de l'établissement : <em>20ko max. 60px*60px (optionnel)</em></label>
+                    {{ form.logo }}
+                    {{ form.logo.errors }}
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">                
+                            <label>GAR ? </label>
+                            {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            {{ form.gar.errors }}
+                        </div>
+                    </div> 
+                    <div class="col-sm-6 col-md-6">
+                         <div class="form-group">                
+                            {{ form.rythme.label_tag }}
+                            {{ form.rythme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Nord"|attr:"data-off:Sud"}}
+                            {{ form.rythme.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                         <div class="form-group">                
+                            {{ form.nbstudents.label_tag }}
+                            {{ form.nbstudents |add_class:"form-control" }}
+                            {{ form.nbstudents.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>
+                    </div>
+                </div>
+                {% comment %}
+                <div class="form-group">
+                    <a href="{% url 'delete_school'  school.id %}"  class="btn btn-danger pull-right"  onclick="return TestDelete(' cet établissement ')">Supprimer l'établissement</a>
+                </div>    
+                {% endcomment %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    {{ form.comment.label_tag }}
+                    {{ form.comment |add_class:"form-control"|attr:"rows:4" }}
+                    {{ form.comment.errors }}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            
+                <div class="form-group alert alert-warning">                
+                   <i class="bi bi-person-circle"></i> Admin
+                </div>
+                <div class="form-group">                
+                    {% for u in school.admin %} <li class="sanspuce">{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
+                </div>
+                <hr/>
+                <div class="form-group alert alert-warning">                
+                    <i class="bi bi-envelope"></i>  Mailing Admin
+                </div>
+                <div class="form-group">                
+                    {% for u in school.admin %}{{u.email}}, {% endfor %}
+                </div>
+                <hr/>
+
+                <div class="form-group alert alert-warning">                
+                    <i class="fa fa-users"></i> Enseignants
+                </div>
+                <div class="form-group">                
+                    {% for t in  teachers %}
+                        <li class="sanspuce">{{ t }} - {{ t.email }}</li>
+                    {% endfor %}
+                </div>
+                 <hr/>
+                <div class="form-group alert alert-warning">                
+                    <i class="bi bi-envelope"></i> Mailing Enseignants
+                </div>
+                <div class="form-group">                
+                    {% for t in teachers %}{{t.email}}, {% endfor %}
+                </div>
+                <hr/>
+
+                <div class="col-sm-12 col-md-12">
+                    {{ form.resiliation.label_tag }}
+                    {{ form.resiliation|add_class:"form-control" |attr:"rows:4" }}
+                    {{ form.resiliation.errors }}
+                </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            
+                <div class="form-group alert alert-warning">                
+                   <i class="bi bi-person-circle"></i>Abonnements
+                </div>
+
+                <table class="table table-striped table-hover table-responsive">
+                        <tr> 
+                            <th>Début</th> 
+                            <th>Fin</th> 
+                            <th>Type</th>
+                            <th style="text-align:center">Montant</th> 
+                            <th style="text-align:center">Paiement</th> 
+                        </tr>
+                    {% for a in abonnements  %}
+                        <tr> 
+                            <td>{{ a.date_start|date:"Y-m-d" }}</td> 
+                            <td>{{ a.date_stop|date:"Y-m-d"  }}</td> 
+                            <td>{{ a.accounting.forme }}</td>
+                            <td style="color:red;text-align:center">{{ a.accounting.amount }}€</td>
+                            <td style="text-align:center">{% if a.accounting.payment %} 
+                                    {{ a.accounting.payment|date:"Y-m-d" }} {% if a.accounting.is_paypal %} <i class="bi bi-paypal"></i> {% else %}<i class="bi bi-coin"></i>{% endif %}
+                                {% else %}
+                                    <i class="fa fa-times text-danger"></i>
+                                {% endif %}
+                            </td> 
+                        </tr>
+                    {% endfor %}
+                </table>
+
+                 
+
+        </div>
+
+    </div>
+</section>
+</form>
+{% endblock  %}
