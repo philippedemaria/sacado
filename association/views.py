@@ -429,7 +429,12 @@ def calcule_bank_bilan(request):
 
     accountings_purchases_c = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700, plan__code__gte=600,is_credit=1).aggregate(Sum('amount'))
     accountings_purchases_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700, plan__code__gte=600,is_credit=0).aggregate(Sum('amount'))
-    accountings_purchase = accountings_purchases_d["amount__sum"] - accountings_purchases_c["amount__sum"]
+    try : 
+        accountings_purchase = accountings_purchases_d["amount__sum"] - accountings_purchases_c["amount__sum"]
+    except :
+        accountings_purchase = accountings_purchases_d["amount__sum"]  
+
+
 
     accountings_sales_c = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700, is_cpca = 0,is_credit=1).aggregate(Sum('amount'))
     accountings_sales_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700, is_cpca = 0,is_credit=0).aggregate(Sum('amount'))
