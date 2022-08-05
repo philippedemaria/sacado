@@ -33,6 +33,7 @@ class School(models.Model):
     logo                = models.ImageField(upload_to=image_directory_path, verbose_name="Logo de l'établissement", blank=True, default="")
     comment             = models.TextField( verbose_name="Commentaire", blank=True, default="")
     resiliation         = models.TextField( verbose_name="Motif de Résiliation", blank=True, default="")
+    tiers               = models.PositiveIntegerField(default=411 ,  editable=False)
 
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)

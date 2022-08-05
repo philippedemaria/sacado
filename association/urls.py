@@ -23,7 +23,12 @@ urlpatterns = [
     path('print/<int:id>/', print_accounting, name='print_accounting'), 
     path('renew/<int:ids>/', renew_accounting, name='renew_accounting'),
 
+    path('accounting_to_accountancy', accounting_to_accountancy, name='accounting_to_accountancy'),
+
+
     path('print_bank_bilan', print_bank_bilan, name='print_bank_bilan'),
+    path('print_balance', print_balance, name='print_balance'),
+    path('print_grand_livre', print_grand_livre, name='print_grand_livre'),
 
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),

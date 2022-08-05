@@ -35,8 +35,10 @@
     <div class="row alert-warning" align="center">
         <div class="col-lg-12 col-md-12 col-xs-12">
 
-            <h1>Compte de résultat</h1>
+            <h1>Compte de résultat</h1> 
             <h3 style="color:red">Résultat : {{ cr }} €</h3>
+            <h5><a href="{% url 'accounting_to_accountancy' %}" >Rattrapage</a>  </h5>
+
         </div>
     </div>
 
@@ -104,7 +106,7 @@
                     <th style="text-align: right">{{ a_411 }} €</th>                
                 </tr>
                 {% endif %}
-                {% if a_486.amount %}
+                {% if a_486 %}
                 <tr>
                     <td>486 </td>   
                     <td width="70%">Charges constatées d'avance </td>  
@@ -151,6 +153,19 @@
     </div>
  
     {% endif %} 
+
+
+
+    <div class="row">
+ 
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <a href="{% url 'print_balance' %}" class="btn btn-default">Imprimer la balance</a>
+        </div>
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <a href="{% url 'print_grand_livre' %}" class="btn btn-default">Imprimer le grand livre</a>
+        </div>
+
+    </div>
 
 
 </section> 

@@ -159,6 +159,7 @@ class Accounting(models.Model):
         ("AVOIR", "AVOIR"),
     )
 
+
     amount = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, editable=False)
     is_credit = models.BooleanField(default=0, verbose_name="is_credit ?" )
     is_paypal = models.BooleanField(default=0, verbose_name="is_paypal ?" )
@@ -187,7 +188,7 @@ class Accounting(models.Model):
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement ?")
     is_cpca       = models.BooleanField(default=0, verbose_name="Produits constatés d'avance ?")
     ticket        = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
-    plan          = models.ForeignKey(Plancomptable, default=17, related_name="plan_accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
+    plan          = models.ForeignKey(Plancomptable, default=17, related_name="accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
     tp            = models.PositiveIntegerField(default=0, editable=False)
 
 
@@ -249,10 +250,63 @@ class Detail(models.Model):
         return self.accounting
 
 
+class Provider(models.Model):
+    name       = models.CharField(max_length=255, verbose_name="Nom") 
+    address    = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
+    complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    town       = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    country    = models.ForeignKey(Country, related_name="providers", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
+    contact    = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
+    phone      = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
+
+
+    def __str__(self):
+        return self.name
+
+
+class Bank(models.Model):
+    name       = models.CharField(max_length=255, verbose_name="Nom") 
+    address    = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
+    complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    town       = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    country    = models.ForeignKey(Country, related_name="banks", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
+    contact    = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
+    phone      = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
+
+
+    def __str__(self):
+        return self.name
 
 
  
 
+class Accountancy(models.Model):
+    """ Accounting   """
+
+    TYPES = (
+
+        ("Période de test", "Période d'essai"),
+        ("par carte de crédit", "Carte de crédit"),
+        ("par virement bancaire", "Virement bancaire"),
+        ("en espèces", "Espèces"),
+        ("par mandatement administratif", "Mandatement administratif"),
+    )
+
+    FORMES = (
+        ("FACTURE", "FACTURE"),        
+        ("AVOIR", "AVOIR"),
+    )
+
+    accounting_id = models.PositiveIntegerField(default=0, blank=True,  null=True, editable=False) # cet id doit se mettre dans les 2 lignes
+    ranking       = models.PositiveIntegerField(default=1, editable=False) # cet id doit se mettre dans les 2 lignes
+    plan_id       = models.PositiveIntegerField(default=0, verbose_name="Plan comptable") # cet id doit se mettre dans les 2 lignes
+    is_credit     = models.BooleanField(default=0, verbose_name="is_credit ?" )
+    amount        = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2,  verbose_name="Montant")
+    date          = models.DateTimeField(auto_now_add=True) # date de création de la facture
+
+
+    def __str__(self):
+        return "{}.{}".format(self.accounting_id,self.ranking )
 
 
 
