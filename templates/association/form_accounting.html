@@ -152,10 +152,14 @@
                                 {{ form.date_payment |add_class:"form-control datetimepicker"|attr:"placeholder:Date de paiement"}}  
                                 {{ form.date_payment.errors }}
                         </div>
-                        <div class="col-sm-6 col-md-4 col-lg-5">
+                        <div class="col-sm-5 col-md-4 col-lg-5">
                                 {{ form.mode |add_class:"form-control select2"}}  
                                 {{ form.mode.errors }}
-                        </div>  
+                        </div>
+                        <div class="col-sm-3 col-md-5">
+                            {{ form.is_credit|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Crédit"|attr:"data-off:Débit"}} 
+                            {{ form.is_credit.errors }} 
+                        </div> 
                     </div>
                     {% endif %}
                     <div class="row" style="margin: 10px 0px"> 
