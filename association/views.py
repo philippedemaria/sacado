@@ -683,7 +683,7 @@ def calcule_bank_bilan(request):
         plan_resultats.append( my_dico )
 
     results = products - charges
-    rs = ps - cs
+    rs =  cs - ps
 
 
     return list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs   

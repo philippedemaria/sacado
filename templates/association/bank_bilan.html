@@ -87,7 +87,7 @@
     </div>
     <div class="row alert-warning">
         <div class="col-lg-6 col-md-6 col-xs-12">
-            <h2>Actif {{ cs }}€</h2>
+            <h2>Actif <small>{{ cs }}€</small></h2>
             <table class="table">
                 {% for a in plan_immos %}
                     {% if a.solde %}
@@ -101,7 +101,7 @@
             </table>
         </div>
         <div class="col-lg-6 col-md-6 col-xs-12">
-            <h2>Passif {{ ps }}€</h2>
+            <h2>Passif <small>{{ ps }}€</small></h2>
              <table class="table">
                 {% for a in plan_resultats %}
                     {% if a.solde %}
