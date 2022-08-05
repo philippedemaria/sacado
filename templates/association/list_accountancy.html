@@ -57,7 +57,7 @@
                                     {{ accountancy.id }} 
                                 </td>
                                 <td>
-                                    {{ accountancy.accounting.id }} 
+                                    {{ accountancy.accounting_id }} 
                                 </td>
                                 <td>
                                      {{ accountancy.ranking }}  
@@ -72,7 +72,7 @@
                                     {% if accountancy.is_credit %}<span class="text-success"> Crédit</span> {% else %}<span class="text-danger">Débit</span>  {% endif %}
                                 </td>
                                 <td style="width:80px">
-                                    {{ date|date:"Y-m-d" }}
+                                    {{ accountancy.date|date:"Y-m-d" }}
                                 </td>
              
                             </tr>
