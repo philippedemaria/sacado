@@ -913,8 +913,6 @@ def print_balance(request):
     for p in plan :
         elements.append(Spacer(0, 0.25*inch))
         paragraph = Paragraph( str(p.code) , subtitle )
-        elements.append(paragraph)
-        elements.append(Spacer(0, 0.15*inch))
         details_list  = [(   "Débit","Crédit" , "Solde")] 
         p_code = p.code
         accountancies = Accountancy.objects.filter(plan_id=p_code)
@@ -929,6 +927,9 @@ def print_balance(request):
         solde =  a_credit + a_debit # les débits sont en négatifs
 
         if solde:
+
+            elements.append(paragraph)
+            elements.append(Spacer(0, 0.15*inch))
             details_list.append(   (   str( abs(a_debit ))+ " €" , str(a_credit)+ " €" ,  str(solde) + " €" )    )
      
             ##########################################################################
@@ -1093,8 +1094,6 @@ def print_big_book(request):
     for p in plan :
         elements.append(Spacer(0, 0.25*inch))
         paragraph = Paragraph( str(p.code) , subtitle )
-        elements.append(paragraph)
-        elements.append(Spacer(0, 0.15*inch))
         details_list  = [(" "," ","Date","Id journal","Débit","Crédit")] 
         p_code = p.code
         accountancies = Accountancy.objects.filter(plan_id=p_code)
@@ -1109,7 +1108,10 @@ def print_big_book(request):
                 a_debit +=  a.amount 
             i+=1  
         solde =  a_credit + a_debit # les débits sont en négatifs
+
         if solde :
+            elements.append(paragraph)
+            elements.append(Spacer(0, 0.15*inch))
             details_list.append(   ( "" , ""  ,   "", "Soldes"    , str( abs(a_debit ))+ " €" , str(a_credit)+ " €" )    )
             details_list.append(   ( "" ,  ""    , " " ,  "Résultat"   ,  str(solde) + " €" , " " )    )
             ##########################################################################
