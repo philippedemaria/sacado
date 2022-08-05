@@ -496,7 +496,7 @@ def calcule_bank_bilan(request):
 
  
 
-    accs = Accounting.objects.filter( date__gte = start_date  , date__lte = end_date, is_paypal = 1 ).order_by("date_payment")
+    accs = Accounting.objects.filter( date_payment__gte=  start_date  , is_paypal = 1 ).order_by("date_payment")
     accountings_paypal=0
     for a in accs :
         if a.is_credit :
@@ -507,7 +507,7 @@ def calcule_bank_bilan(request):
 
 
 
-    accs = Accounting.objects.filter( date__gte = start_date  , date__lte = end_date, is_paypal = 0 ).order_by("date_payment")
+    accs = Accounting.objects.filter( date_payment__gte=  start_date   , is_paypal = 0 ).order_by("date_payment")
     accountings_ca=0
     for a in accs :
         if a.is_credit :
