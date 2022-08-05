@@ -1097,7 +1097,13 @@ def update_accounting(request, id,tp):
             nf.user = request.user
             forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
+
+            date_payment = request.POST.get("date_payment", None)
+            if date_payment :
+                nf.is_credit = 1
+                nf.tp = 2
             nf.save()
+
 
             for form_d in form_ds :
                 if form_d.is_valid():
