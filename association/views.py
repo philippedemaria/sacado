@@ -1072,6 +1072,9 @@ def renew_accounting(request,ids):
 @user_passes_test(user_is_board)
 def update_accounting(request, id,tp):
 
+
+
+
     today    = datetime.now()
     accounting = Accounting.objects.get(id=id)
     try :
@@ -1096,7 +1099,7 @@ def update_accounting(request, id,tp):
             nf.user = request.user
             forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
-            nf.is_credit = request.POST.get("is_credit", None)
+
             date_payment = request.POST.get("date_payment", None)
             if date_payment :
                 nf.tp = 2
