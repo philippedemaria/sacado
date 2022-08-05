@@ -696,8 +696,6 @@ def renew(school) :
     last_accounting = school.accountings.exclude(date_payment=None).filter(is_credit=1).count()
     all_accountings = school.accountings.count()
 
-    print(last_accounting)
-
     if   last_accounting   :
         renew_propose = True
 

@@ -1096,7 +1096,7 @@ def update_accounting(request, id,tp):
             nf.user = request.user
             forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
-
+            nf.is_credit = request.POST.get("is_credit", None)
             date_payment = request.POST.get("date_payment", None)
             if date_payment :
                 nf.tp = 2
@@ -1135,11 +1135,11 @@ def update_accounting(request, id,tp):
 
 
             if int(tp) == 0 :
-                redirect('list_accountings', 0)
+                return redirect('list_accountings', 0)
             elif int(tp) == 2 :
-                redirect('list_accountings', 2) 
+                return redirect('list_accountings', 2) 
             else :
-                redirect('list_paypal') 
+                return redirect('list_paypal') 
 
         else :
             print(form.errors)
