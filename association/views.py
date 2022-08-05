@@ -650,7 +650,7 @@ def calcule_bank_bilan(request):
     cs, ps   = 0 , 0 
     for p in plan_immo :
         my_dico = {}
-        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
+        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p    ).aggregate(Sum('amount'))
         my_dico["code"] = p.code 
         my_dico["name"] = p.name
         my_dico["solde"]= accountings_sales["amount__sum"]
@@ -662,7 +662,7 @@ def calcule_bank_bilan(request):
 
     for p in plan_resultat :
         my_dico = {}
-        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
+        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p   ).aggregate(Sum('amount'))
         my_dico["code"] = p.code 
         my_dico["name"] = p.name
         my_dico["solde"]= accountings_sales["amount__sum"]
