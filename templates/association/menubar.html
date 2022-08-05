@@ -75,15 +75,6 @@
 
         <li>
             <a href="{% url 'list_accountancy' %}" class="no_button">Journal de comptabilité</a>
-        </li>
-        <li class="divider"></li>
-
-        <li>
-            <a href="{% url 'print_balance' %}" class="no_button">Balance</a>   
-        </li>
-
-        <li>
-            <a href="{% url 'print_big_book' %}"  class="no_button" >Grand livre</a> 
         </li> 
         <li class="divider"></li>
         <li>
@@ -92,6 +83,16 @@
         <li>
             <a href="{% url 'archive_accountancy' %}" class="no_button">Archive</a>
         </li>
+        <li class="divider"></li>
+
+        <li>
+            <a href="{% url 'print_balance' %}" class="no_button">Imprimer la Balance</a>   
+        </li>
+
+        <li>
+            <a href="{% url 'print_big_book' %}"  class="no_button" >Imprimer le Grand livre</a> 
+        </li> 
+
 
     </ul>
 </li>

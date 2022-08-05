@@ -110,7 +110,7 @@ def module_bas_de_page(elements, nb_inches,bas_de_page):
     elements.append(asso30)
     asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
     elements.append(asso4)
-    return
+    return elements
 
 
 def module_logo(elements):
@@ -118,7 +118,7 @@ def module_logo(elements):
     logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
     elements.append(logo_tab_tab)
-    return
+    return elements
 
 def module_style(elements):
 
@@ -179,7 +179,7 @@ def module_style(elements):
             ]
         )
     offset = 0 # permet de placer le bas de page
-    return
+    return sacado , bas_de_page, bas_de_page_blue, title , subtitle , mini , normal , dateur_style , signature_style , signature_style_mini, signature_style_blue , style_cell
 
 
 #####################################################################################################################################
@@ -506,113 +506,7 @@ def bank_activities(request):
 def calcule_bank_bilan(request):
     """ page d'accueil de la comptabilité"""
 
-    """    
-    this_year = Activeyear.objects.get(pk=1).year
-    nyear = Activeyear.objects.get(pk=1).year+1
-    start_date   = datetime(this_year, 1, 1)
-    end_date     = datetime(nyear, 8, 31)
-
-
-    accountings_purchases_c = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700, plan__code__gte=600,is_credit=1).aggregate(Sum('amount'))
-    accountings_purchases_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700, plan__code__gte=600,is_credit=0).aggregate(Sum('amount'))
-    try : 
-        accountings_purchase = accountings_purchases_d["amount__sum"] - accountings_purchases_c["amount__sum"]
-    except :
-        accountings_purchase = accountings_purchases_d["amount__sum"]  
-
-    accountings_sales_c = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700, is_cpca = 0,is_credit=1).aggregate(Sum('amount'))
-    accountings_sales_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700, is_cpca = 0,is_credit=0).aggregate(Sum('amount'))
-    try : 
-        accountings_sale  = accountings_sales_c["amount__sum"] + accountings_sales_d["amount__sum"]
-    except :
-        accountings_sale  = accountings_sales_c["amount__sum"]  
  
-
-    plan_sales = Plancomptable.objects.filter(code__gte=700)
-    plan_purchase = Plancomptable.objects.filter( code__lt=700, code__gte=600)
-
-    accountings_list_sales , accountings_list_purchases = [] , []
-
-    for p in plan_sales :
-        my_dico = {}
-        accountings_sales_debit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code , is_cpca = 0 , is_credit=0).aggregate(Sum('amount'))
-        accountings_sales_credit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code  , is_cpca = 0 , is_credit=1).aggregate(Sum('amount'))
-        my_dico["code"] = p.code 
-        my_dico["name"] = p.name
-        if accountings_sales_credit["amount__sum"] and accountings_sales_debit["amount__sum"] :
-            my_dico["solde"] = accountings_sales_credit["amount__sum"] + accountings_sales_debit["amount__sum"]
-        elif accountings_sales_credit["amount__sum"] and not accountings_sales_debit["amount__sum"] :
-            my_dico["solde"] = accountings_sales_credit["amount__sum"]  
-        elif not accountings_sales_credit["amount__sum"] and  accountings_sales_debit["amount__sum"] :
-            my_dico["solde"] =  + accountings_sales_debit["amount__sum"]
-        else :
-            my_dico["solde"] = 0
-        if accountings_sales_credit["amount__sum"] : my_dico["credit"] = accountings_sales_credit["amount__sum"] 
-        else : my_dico["credit"] = 0
-        if accountings_sales_debit["amount__sum"] :  my_dico["debit"] = accountings_sales_debit["amount__sum"]
-        else : my_dico["debit"] = 0
-        accountings_list_sales.append( my_dico )
-
-
-    for p in plan_purchase :
-        my_dico = {}
-        accountings_sales_debit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code , is_credit=0).aggregate(Sum('amount'))
-        accountings_sales_credit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code  , is_credit=1).aggregate(Sum('amount'))
-        my_dico["code"] = p.code 
-        my_dico["name"] = p.name
-        if accountings_sales_credit["amount__sum"] and accountings_sales_debit["amount__sum"] :
-            my_dico["solde"] = accountings_sales_credit["amount__sum"] + accountings_sales_debit["amount__sum"]
-        elif accountings_sales_credit["amount__sum"] and not accountings_sales_debit["amount__sum"] :
-            my_dico["solde"] = accountings_sales_credit["amount__sum"]  
-        elif not accountings_sales_credit["amount__sum"] and  accountings_sales_debit["amount__sum"] :
-            my_dico["solde"] =  accountings_sales_debit["amount__sum"]
-        else :
-            my_dico["solde"] = 0
-        if accountings_sales_credit["amount__sum"] : my_dico["credit"] = accountings_sales_credit["amount__sum"] 
-        else : my_dico["credit"] = 0
-        if accountings_sales_debit["amount__sum"] :  my_dico["debit"] = accountings_sales_debit["amount__sum"]
-        else : my_dico["debit"] = 0
-        accountings_list_purchases.append( my_dico )
-
-
- 
-
-    a_411    = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date , date_payment=None).aggregate(Sum('amount'))["amount__sum"]    
-
-    try :
-        a_486 = Accounting.objects.get(plan__code = 486).amount 
-    except :
-        a_486 = 0
-
-    accs = Accounting.objects.filter( date_payment__gte=  start_date  , is_paypal = 1 ).order_by("date_payment")
-    accountings_paypal=0
-    for a in accs :
-        if a.is_credit :
-            accountings_paypal +=a.amount
-        else :
-            accountings_paypal -=a.amount
-
-
-
-
-    accs = Accounting.objects.filter( date_payment__gte=  start_date   , is_paypal = 0 ).order_by("date_payment")
-    accountings_ca=0
-    for a in accs :
-        if a.is_credit :
-            accountings_ca +=a.amount
-        else :
-            accountings_ca -=a.amount
-
- 
-    cpca = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_cpca = 1 ,  plan__code=706).aggregate(Sum('amount'))["amount__sum"]    
- 
-
-    a_sales = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700)
-    a_purchase = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700,plan__code__gte=600)
- 
-    cr = accountings_sale  - accountings_purchase 
-    crf = a_411 +accountings_ca+accountings_paypal-cpca+a_486
-    """
     this_year     = Activeyear.objects.get(pk=1).year
     plan_sale     = Plancomptable.objects.filter(code__gte=700,code__lt=800).order_by("code")
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 ).order_by("code")
@@ -722,11 +616,73 @@ def print_bank_bilan(request):
     #########################################################################################
     ### Style
     #########################################################################################
-    module_style(elements)
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page_blue = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    title = ParagraphStyle('title', 
+                            fontSize=16,                             
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    subtitle = ParagraphStyle('title', 
+                            fontSize=14, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    mini = ParagraphStyle(name='mini',fontSize=9 )  
+    normal = ParagraphStyle(name='normal',fontSize=12,)   
+    dateur_style = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style = ParagraphStyle('dateur_style', 
+                            fontSize=11, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_mini = ParagraphStyle('dateur_style', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_blue = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+    offset = 0 # permet de placer le bas de page
+    return sacado , bas_de_page, bas_de_page_blue, title , subtitle , mini , normal , dateur_style , signature_style , signature_style_mini, signature_style_blue , style_cell
+
+
     #########################################################################################
     ### Logo Sacado
     #########################################################################################
-    module_logo()
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
+    elements.append(logo_tab_tab)
     #########################################################################################
     ### Facture
     #########################################################################################
@@ -831,7 +787,17 @@ def print_bank_bilan(request):
     ### Bas de page
     #########################################################################################
     nb_inches = 4.4 - offset
-    module_bas_de_page(elements, nb_inches, bas_de_page)
+    elements.append(Spacer(0,nb_inches*inch)) 
+    asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
+    elements.append(asso)
+    asso2 = Paragraph( "Association SacAdo"  , bas_de_page )
+    elements.append(asso2)
+    asso3 = Paragraph( "siren : 903345569"  , bas_de_page )
+    elements.append(asso3)
+    asso30 = Paragraph( "siret : 903345569 00011"  , bas_de_page )
+    elements.append(asso30)
+    asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
+    elements.append(asso4)
 
 
     doc.build(elements)
@@ -860,11 +826,71 @@ def print_balance(request):
     #########################################################################################
     ### Style
     #########################################################################################
-    module_style(elements)
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page_blue = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    title = ParagraphStyle('title', 
+                            fontSize=16,                             
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    subtitle = ParagraphStyle('title', 
+                            fontSize=14, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    mini = ParagraphStyle(name='mini',fontSize=9 )  
+    normal = ParagraphStyle(name='normal',fontSize=12,)   
+    dateur_style = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style = ParagraphStyle('dateur_style', 
+                            fontSize=11, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_mini = ParagraphStyle('dateur_style', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_blue = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ]
+        )
+    offset = 0 # permet de placer le bas de page
+
     #########################################################################################
     ### Logo Sacado
     #########################################################################################
-    module_logo()
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
+    elements.append(logo_tab_tab)
     #########################################################################################
     ### Facture
     #########################################################################################
@@ -969,7 +995,17 @@ def print_balance(request):
     ### Bas de page
     #########################################################################################
     nb_inches = 4.4 - offset
-    module_bas_de_page(elements, nb_inches, bas_de_page)
+    elements.append(Spacer(0,nb_inches*inch)) 
+    asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
+    elements.append(asso)
+    asso2 = Paragraph( "Association SacAdo"  , bas_de_page )
+    elements.append(asso2)
+    asso3 = Paragraph( "siren : 903345569"  , bas_de_page )
+    elements.append(asso3)
+    asso30 = Paragraph( "siret : 903345569 00011"  , bas_de_page )
+    elements.append(asso30)
+    asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
+    elements.append(asso4)
 
 
     doc.build(elements)
@@ -1003,7 +1039,156 @@ def list_accountancy(request):
 
 @user_passes_test(user_is_board)
 def print_big_book(request):
-    pass
+ 
+    list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
+    year_active = Activeyear.objects.get(pk=1)
+    #########################################################################################
+    ### Instanciation
+    #########################################################################################
+    elements = []        
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Compte_resultat_'+str(year_active.year)+'.pdf"'
+    doc = SimpleDocTemplate(response,   pagesize=(landscape(letter)), 
+                                        topMargin=0.5*inch,
+                                        leftMargin=0.5*inch,
+                                        rightMargin=0.5*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+    OFFSET_INIT = 0.2
+    #########################################################################################
+    ### Style
+    #########################################################################################
+    sacado = ParagraphStyle('sacado', 
+                            fontSize=20, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            )
+    bas_de_page_blue = ParagraphStyle('sacado', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    title = ParagraphStyle('title', 
+                            fontSize=16,                             
+                            alignment= TA_CENTER,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    subtitle = ParagraphStyle('title', 
+                            fontSize=14, 
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    mini = ParagraphStyle(name='mini',fontSize=9 )  
+    normal = ParagraphStyle(name='normal',fontSize=12,)   
+    dateur_style = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            leading=26,
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style = ParagraphStyle('dateur_style', 
+                            fontSize=11, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_mini = ParagraphStyle('dateur_style', 
+                            fontSize=9, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            )
+    signature_style_blue = ParagraphStyle('dateur_style', 
+                            fontSize=12, 
+                            borderPadding = 0,
+                            alignment= TA_RIGHT,
+                            textColor=colors.HexColor("#00819f"),
+                            )
+    style_cell = TableStyle(
+            [
+                ('SPAN', (0, 1), (1, 1)),
+                ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
+            ])
+    offset = 0 # permet de placer le bas de page
+
+
+
+    #########################################################################################
+    ### Logo Sacado
+    #########################################################################################
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
+    elements.append(logo_tab_tab)
+    #########################################################################################
+    ### Facture
+    #########################################################################################
+    elements.append(Spacer(0,0.3*inch))
+    f = Paragraph( "Grand livre de compte" , sacado )
+    elements.append(f) 
+    elements.append(Spacer(0,0.1*inch))
+    fa = Paragraph( str(year_active.year) +" " + str(year_active.year +1)  , title )
+    elements.append(fa) 
+    elements.append(Spacer(0,0.3*inch))
+
+    #########################################################################################
+    ### Details_list_purchases
+    #########################################################################################
+    plan = Plancomptable.objects.order_by("code")
+
+    for p in plan :
+        elements.append(Spacer(0, 0.25*inch))
+        paragraph = Paragraph( str(p.code) , subtitle )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.15*inch))
+        details_list  = [(" "," ","Date","Id journal","Débit","Crédit")] 
+        p_code = p.code
+        accountancies = Accountancy.objects.filter(plan_id=p_code)
+        i = 1
+        a_debit , a_credit = 0 , 0
+        for a in accountancies :
+            if a. is_credit:
+                details_list.append(   (i ,  str(a.plan_id)  , a.date.strftime("%d %m %Y")    , a.id , " " , str(a.amount)+ " €" )    )
+                a_credit +=  a.amount
+            else :
+                details_list.append(  ( i ,str(a.plan_id)  , a.date.strftime("%d %m %Y")    ,  a.id ,  str(a.amount)+ " €", " ")    )
+                a_debit +=  a.amount 
+            i+=1  
+        solde =  a_credit - a_debit
+        details_list.append(   ( "" , ""  ,   "", "Soldes"    , str(a_debit)+ " €" , str(a_credit)+ " €" )    )
+        details_list.append(   ( "" ,  ""    , " " ,  "Résultat"   ,  str(solde) + " €" , " " )    )
+        ##########################################################################
+        ####  
+        ##########################################################################
+        details_tabs = [ ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray)  ,  ('BOX', (0,0), (-1,-1), 0.25, colors.gray)  ,   ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))  ]
+        details_listing = Table(details_list, hAlign='LEFT', colWidths=[  0.9*inch,  0.9*inch, inch,1.2*inch,1.2*inch,1.2*inch])
+        details_listing.setStyle(TableStyle(  details_tabs   ))
+      
+        elements.append(details_listing) 
+
+    #########################################################################################
+    ### Bas de page
+    #########################################################################################
+
+    elements.append(Spacer(0,inch)) 
+    asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
+    elements.append(asso)
+    asso2 = Paragraph( "Association SacAdo"  , bas_de_page )
+    elements.append(asso2)
+    asso3 = Paragraph( "siren : 903345569"  , bas_de_page )
+    elements.append(asso3)
+    asso30 = Paragraph( "siret : 903345569 00011"  , bas_de_page )
+    elements.append(asso30)
+    asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
+    elements.append(asso4)
+    doc.build(elements)
+
+    return response 
 
 
 @user_passes_test(user_is_board)

@@ -39,6 +39,18 @@ def decode(arg):
     return string
 
 
+@register.filter
+def valeur_absolue(arg):
+    '''HTML entity decode'''
+    try :
+        va = - arg
+    except :
+        va = 0
+    return va
+
+
+
+
 
 
 @register.filter
