@@ -911,7 +911,7 @@ def print_balance(request):
     plan = Plancomptable.objects.order_by("code")
 
     for p in plan :
-        paragraph = Paragraph( str(p.code) + p.name , subtitle )
+        paragraph = Paragraph( str(p.code) +". "+ p.name , subtitle )
         details_list  = [(   "Débit","Crédit" , "Solde")] 
         p_code = p.code
         accountancies = Accountancy.objects.filter(plan_id=p_code)
@@ -1090,7 +1090,7 @@ def print_big_book(request):
     plan = Plancomptable.objects.order_by("code")
 
     for p in plan :
-        paragraph = Paragraph( str(p.code)+ p.name , subtitle )
+        paragraph = Paragraph( str(p.code)+". "+ p.name , subtitle )
         details_list  = [(" "," ","Date","Id journal","Débit","Crédit")] 
         p_code = p.code
         accountancies = Accountancy.objects.filter(plan_id=p_code)
