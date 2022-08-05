@@ -937,7 +937,6 @@ def print_balance(request):
             details_tabs = [ ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray)  ,  ('BOX', (0,0), (-1,-1), 0.25, colors.gray)  ,   ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))  ]
             details_listing = Table(details_list, hAlign='LEFT', colWidths=[  1.2*inch,1.2*inch,1.2*inch])
             details_listing.setStyle(TableStyle(  details_tabs   ))
-            elements.append(Spacer(0, 0.25*inch))
             elements.append(details_listing) 
 
     #########################################################################################
@@ -1118,7 +1117,7 @@ def print_big_book(request):
             details_tabs = [ ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray)  ,  ('BOX', (0,0), (-1,-1), 0.25, colors.gray)  ,   ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))  ]
             details_listing = Table(details_list, hAlign='LEFT', colWidths=[  0.9*inch,  0.9*inch, inch,1.2*inch,1.2*inch,1.2*inch])
             details_listing.setStyle(TableStyle(  details_tabs   ))
-            elements.append(Spacer(0, 0.25*inch))
+          
             elements.append(details_listing) 
 
     #########################################################################################
