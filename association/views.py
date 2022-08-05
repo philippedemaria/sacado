@@ -617,7 +617,7 @@ def calcule_bank_bilan(request):
     plan_sale     = Plancomptable.objects.filter(code__gte=700,code__lt=800).order_by("code")
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 ).order_by("code")
     plan_immo     =  Plancomptable.objects.filter(code__in= [411,486,5121,5122] ).order_by("code")
-    plan_resultat =  Plancomptable.objects.filter(code__in=  [487]  )
+    plan_resultat =  Plancomptable.objects.get(code  =  487 )
     my_dico = {}
     list_sales , list_purchases,plan_immos , plan_resultats = [] , [] , [] , []
 
