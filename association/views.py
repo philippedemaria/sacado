@@ -1159,7 +1159,7 @@ def print_big_book(request):
                 details_list.append(  ( i ,str(a.plan_id)  , a.date.strftime("%d %m %Y")    ,  a.id ,  str(abs(a.amount)) + " €", " ")    )
                 a_debit +=  a.amount 
             i+=1  
-        solde =  a_credit - a_debit
+        solde =  a_credit + a_debit # les débits sont en négatifs
         details_list.append(   ( "" , ""  ,   "", "Soldes"    , str( abs(a_debit ))+ " €" , str(a_credit)+ " €" )    )
         details_list.append(   ( "" ,  ""    , " " ,  "Résultat"   ,  str(solde) + " €" , " " )    )
         ##########################################################################
