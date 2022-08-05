@@ -910,8 +910,8 @@ def create_accountancy(request):
         plan_id_c = request.POST.get("plan_id_c",None)
         plan_id_d = request.POST.get("plan_id_c",None)
         amount = request.POST.get("amount",None)
-        Accountancy.objects.create(accounting_id = 0 , ranking = 2 , plan_id = plan_id_c , is_credit = 1, amount = accounting.amount )             
-        Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = plan_id_d , is_credit = 0, amount = -accounting.amount )  
+        Accountancy.objects.create(accounting_id = 0 , ranking = 2 , plan_id = plan_id_c , is_credit = 1, amount = amount )             
+        Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = plan_id_d , is_credit = 0, amount = -amount )  
         return redirect('list_accountancy')
 
     return render(request, 'association/form_accountancy.html', {'form': form , 'plan': plan ,    })
