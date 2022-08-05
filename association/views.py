@@ -434,8 +434,6 @@ def calcule_bank_bilan(request):
     except :
         accountings_purchase = accountings_purchases_d["amount__sum"]  
 
-
-
     accountings_sales_c = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700, is_cpca = 0,is_credit=1).aggregate(Sum('amount'))
     accountings_sales_d = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700, is_cpca = 0,is_credit=0).aggregate(Sum('amount'))
     try : 
@@ -451,8 +449,8 @@ def calcule_bank_bilan(request):
 
     for p in plan_sales :
         my_dico = {}
-        accountings_sales_debit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code , is_cpca = 1 , is_credit=0).aggregate(Sum('amount'))
-        accountings_sales_credit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code  , is_cpca = 1 , is_credit=1).aggregate(Sum('amount'))
+        accountings_sales_debit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code , is_cpca = 0 , is_credit=0).aggregate(Sum('amount'))
+        accountings_sales_credit = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code = p.code  , is_cpca = 0 , is_credit=1).aggregate(Sum('amount'))
         my_dico["code"] = p.code 
         my_dico["name"] = p.name
         if accountings_sales_credit["amount__sum"] and accountings_sales_debit["amount__sum"] :
