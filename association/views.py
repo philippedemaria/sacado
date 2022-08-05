@@ -516,8 +516,9 @@ def calcule_bank_bilan(request):
             accountings_ca -=a.amount
 
  
-    
-    cpca = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_cpca = 1 , tp=0 , plan__code=706).aggregate(Sum('amount'))
+    cpca1 = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_cpca = 1 , tp=0 , plan__code=706).aggregate(Sum('amount'))["amount__sum"]    
+    cpca2 = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date, is_cpca = 1 , tp=2 , plan__code=706).aggregate(Sum('amount'))["amount__sum"]    
+    cpca =  cpca1 + cpca2
 
     a_sales = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__gte=700)
     a_purchase = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700,plan__code__gte=600)
