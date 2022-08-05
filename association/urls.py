@@ -25,7 +25,6 @@ urlpatterns = [
 
     path('accounting_to_accountancy', accounting_to_accountancy, name='accounting_to_accountancy'),
     path('create_accountancy', create_accountancy, name='create_accountancy'),
-    path('update_accountancy', update_accountancy, name='update_accountancy'),
     path('list_accountancy', list_accountancy, name='list_accountancy'),
     path('print_balance', print_balance, name='print_balance'),
     path('print_big_book', print_big_book, name='print_big_book'),

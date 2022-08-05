@@ -905,36 +905,19 @@ def print_balance(request):
 @user_passes_test(user_is_board)
 def create_accountancy(request):
     form = AccountancyForm(request.POST or None )
-
+    plan = Plancomptable.objects.order_by("code")
     if request.method == "POST":
-        if form.is_valid():
-            form.save()
-        else :
-            print(form.errors)
-        
+        plan_id_c = request.POST.get("plan_id_c",None)
+        plan_id_d = request.POST.get("plan_id_c",None)
+        amount = request.POST.get("amount",None)
+        Accountancy.objects.create(accounting_id = 0 , ranking = 2 , plan_id = plan_id_c , is_credit = 1, amount = accounting.amount )             
+        Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = plan_id_d , is_credit = 0, amount = -accounting.amount )  
         return redirect('list_accountancy')
 
-    return render(request, 'association/form_accountancy.html', {'form': form   })
+    return render(request, 'association/form_accountancy.html', {'form': form , 'plan': plan ,    })
 
 
-@user_passes_test(user_is_board)
-def update_accountancy(request,id):
-
-    a = Accountancy.objects.get(pk=id)
-    form = AccountancyForm(request.POST or None ,  instance = a  )
-
-    if request.method == "POST":
-        if form.is_valid():
-            form.save()
-        else :
-            print(form.errors)
-        
-        return redirect('list_accountancy')
-
-    return render(request, 'association/form_accountancy.html', {'form': form   })
-
-
-
+ 
 
 @user_passes_test(user_is_board)
 def list_accountancy(request):
@@ -946,7 +929,7 @@ def list_accountancy(request):
 def print_big_book(request):
     pass
 
-    
+
 @user_passes_test(user_is_board)
 def archive_accountancy(request):
     pass
