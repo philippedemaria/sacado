@@ -616,8 +616,8 @@ def calcule_bank_bilan(request):
     this_year     = Activeyear.objects.get(pk=1).year
     plan_sale     = Plancomptable.objects.filter(code__gte=700)
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 )
-    plan_immo = [411,486,5121,5122]  
-    plan_resultat = [487] 
+    plan_immo     =  Plancomptable.objects.filter(code__in = [411,486,5121,5122] )
+    plan_resultat =  Plancomptable.objects.filter(code  =  487  )
     my_dico = {}
     list_sales , list_purchases,plan_immos , plan_resultats = [] , [] , [] , []
 
@@ -648,10 +648,12 @@ def calcule_bank_bilan(request):
         list_purchases.append( my_dico )
 
     cs, ps   = 0 , 0 
+    print(plan_immo)
     for p in plan_immo :
         my_dico = {}
+        print(p)
         accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p    ).aggregate(Sum('amount'))
-        my_dico["code"] = p.code 
+        my_dico["code"] = p.code
         my_dico["name"] = p.name
         my_dico["solde"]= accountings_sales["amount__sum"]
         try :
@@ -676,14 +678,14 @@ def calcule_bank_bilan(request):
     rs = ps - cs
 
 
-    return list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs   
+    return list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs   
 
 
 
 @user_passes_test(user_is_board)
 def bank_bilan(request):
 
-    list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs   = calcule_bank_bilan(request)
+    list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs   = calcule_bank_bilan(request)
 
     context = {  'list_sales' : list_sales ,  'list_purchases' : list_purchases ,  'plan_resultats' :  plan_resultats ,  'plan_immos' : plan_immos ,  'results' : results ,  'products' : products ,  'charges' :  charges ,  'rs' : rs  , 'ps' : ps, 'cs' : cs }  
 
@@ -693,7 +695,7 @@ def bank_bilan(request):
 @user_passes_test(user_is_board)
 def print_bank_bilan(request):
 
-    list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
+    list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
     year_active = Activeyear.objects.get(pk=1)
     #########################################################################################
     ### Instanciation
