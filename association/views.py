@@ -1153,10 +1153,10 @@ def print_big_book(request):
         a_debit , a_credit = 0 , 0
         for a in accountancies :
             if a. is_credit:
-                details_list.append(   (i ,  str(a.plan_id)  , a.date.strftime("%d %m %Y")    , a.id , " " , str(a.amount.amount_valeur_absolue))+ " €" )    )
+                details_list.append(   (i ,  str(a.plan_id)  , a.date.strftime("%d %m %Y")    , a.id , " " , str(a.amount.amount_valeur_absolue)+ " €" )    )
                 a_credit +=  a.amount
             else :
-                details_list.append(  ( i ,str(a.plan_id)  , a.date.strftime("%d %m %Y")    ,  a.id ,  str(a.amount.amount_valeur_absolue))+ " €", " ")    )
+                details_list.append(  ( i ,str(a.plan_id)  , a.date.strftime("%d %m %Y")    ,  a.id ,  str(a.amount.amount_valeur_absolue)+ " €", " ")    )
                 a_debit +=  a.amount 
             i+=1  
         solde =  a_credit - a_debit
