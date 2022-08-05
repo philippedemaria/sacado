@@ -493,7 +493,7 @@ def calcule_bank_bilan(request):
 
     a_411    = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date , date_payment=None).aggregate(Sum('amount'))["amount__sum"]    
  
-
+    a_486    = Accounting.objects.get(plan__code = 486) 
  
 
     accs = Accounting.objects.filter( date_payment__gte=  start_date  , is_paypal = 1 ).order_by("date_payment")
@@ -534,7 +534,7 @@ def bank_bilan(request):
 
     cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  = calcule_bank_bilan(request)
 
-    context = {  'cpca' : cpca ,  'crf' : crf ,  'accountings_paypal' : accountings_paypal ,  'accountings_ca' : accountings_ca  , 'a_411' : a_411 ,   'a_sales': a_sales, 'a_purchase': a_purchase , 'accountings_sale': accountings_sale, 'accountings_purchase': accountings_purchase , 'cr' : cr , 'accountings_list_sales' : accountings_list_sales , "accountings_list_purchases" : accountings_list_purchases }  
+    context = {  'a_486' : a_486 ,  'cpca' : cpca ,  'crf' : crf ,  'accountings_paypal' : accountings_paypal ,  'accountings_ca' : accountings_ca  , 'a_411' : a_411 ,   'a_sales': a_sales, 'a_purchase': a_purchase , 'accountings_sale': accountings_sale, 'accountings_purchase': accountings_purchase , 'cr' : cr , 'accountings_list_sales' : accountings_list_sales , "accountings_list_purchases" : accountings_list_purchases }  
 
     return render(request, 'association/bank_bilan.html', context )   
 
