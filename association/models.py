@@ -303,7 +303,7 @@ class Accountancy(models.Model):
     is_credit     = models.BooleanField(default=0, verbose_name="is_credit ?" )
     amount        = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2,  verbose_name="Montant")
     date          = models.DateTimeField(auto_now_add=True) # date de création de la facture
-
+    current_year  = models.PositiveIntegerField(default=2021, verbose_name="Année") # date de création de la facture
 
     def __str__(self):
         return "{}.{}".format(self.accounting_id,self.ranking )

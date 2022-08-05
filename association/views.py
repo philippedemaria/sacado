@@ -505,6 +505,8 @@ def bank_activities(request):
 @user_passes_test(user_is_board)
 def calcule_bank_bilan(request):
     """ page d'accueil de la comptabilité"""
+
+    """    
     this_year = Activeyear.objects.get(pk=1).year
     nyear = Activeyear.objects.get(pk=1).year+1
     start_date   = datetime(this_year, 1, 1)
@@ -610,17 +612,80 @@ def calcule_bank_bilan(request):
  
     cr = accountings_sale  - accountings_purchase 
     crf = a_411 +accountings_ca+accountings_paypal-cpca+a_486
+    """
+    this_year     = Activeyear.objects.get(pk=1).year
+    plan_sale     = Plancomptable.objects.filter(code__gte=700)
+    plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 )
+    plan_immo = [411,486,5121,5122]  
+    plan_resultat = [487] 
+    my_dico = {}
+    list_sales , list_purchases,plan_immo , plan_resultat = [] , [] , [] , []
 
-    return cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486  
+    charges, products   = 0 , 0  
+    for p in plan_sale :
+        my_dico = {}
+        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
+        my_dico["code"] = p.code 
+        my_dico["name"] = p.name
+        my_dico["solde"]= accountings_sales["amount__sum"]
+        try :
+            products +=accountings_sales["amount__sum"]
+        except :
+            pass
+        list_sales.append( my_dico )
+
+
+    for p in plan_purchase :
+        my_dico = {}
+        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
+        my_dico["code"] = p.code 
+        my_dico["name"] = p.name
+        my_dico["solde"]= accountings_sales["amount__sum"]
+        try :
+            charges +=accountings_sales["amount__sum"]
+        except :
+            pass
+        list_purchases.append( my_dico )
+
+    cs, ps   = 0 , 0 
+    for p in plan_immo :
+        my_dico = {}
+        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
+        my_dico["code"] = p.code 
+        my_dico["name"] = p.name
+        my_dico["solde"]= accountings_sales["amount__sum"]
+        try :
+            cs += accountings_sales["amount__sum"]
+        except :
+            pass
+        plan_immo.append( my_dico )
+
+    for p in plan_resultat :
+        my_dico = {}
+        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
+        my_dico["code"] = p.code 
+        my_dico["name"] = p.name
+        my_dico["solde"]= accountings_sales["amount__sum"]
+        try :
+            ps += accountings_sales["amount__sum"]
+        except :
+            pass
+        plan_resultat.append( my_dico )
+
+    results = products - charges
+    rs = ps - cs
+
+
+    return list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs   
 
 
 
 @user_passes_test(user_is_board)
 def bank_bilan(request):
 
-    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486   = calcule_bank_bilan(request)
+    list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs   = calcule_bank_bilan(request)
 
-    context = {  'a_486' : a_486 ,  'cpca' : cpca ,  'crf' : crf ,  'accountings_paypal' : accountings_paypal ,  'accountings_ca' : accountings_ca  , 'a_411' : a_411 ,   'a_sales': a_sales, 'a_purchase': a_purchase , 'accountings_sale': accountings_sale, 'accountings_purchase': accountings_purchase , 'cr' : cr , 'accountings_list_sales' : accountings_list_sales , "accountings_list_purchases" : accountings_list_purchases }  
+    context = {  'list_sales' : list_sales ,  'list_purchases' : list_purchases ,  'plan_resultat' :  plan_resultat ,  'plan_immo' : plan_immo ,  'results' : results ,  'products' : products ,  'charges' :  charges ,  'rs' : rs  , 'ps' : ps, 'cs' : cs }  
 
     return render(request, 'association/bank_bilan.html', context )   
 
@@ -628,7 +693,7 @@ def bank_bilan(request):
 @user_passes_test(user_is_board)
 def print_bank_bilan(request):
 
-    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486 = calcule_bank_bilan(request)
+    list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
     year_active = Activeyear.objects.get(pk=1)
     #########################################################################################
     ### Instanciation
@@ -905,13 +970,14 @@ def print_balance(request):
 @user_passes_test(user_is_board)
 def create_accountancy(request):
     form = AccountancyForm(request.POST or None )
+    year = Activeyear.objects.get(pk=1)
     plan = Plancomptable.objects.order_by("code")
     if request.method == "POST":
         plan_id_c = request.POST.get("plan_id_c",None)
         plan_id_d = request.POST.get("plan_id_c",None)
         amount = request.POST.get("amount",None)
-        Accountancy.objects.create(accounting_id = 0 , ranking = 2 , plan_id = int(plan_id_c) , is_credit = 1, amount = float(amount) )             
-        Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = int(plan_id_d) , is_credit = 0, amount = -float(amount) )  
+        Accountancy.objects.create(accounting_id = 0 , ranking = 2 , plan_id = int(plan_id_c) , is_credit = 1, amount = float(amount)  , current_year = year )             
+        Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = int(plan_id_d) , is_credit = 0, amount = -float(amount) , current_year = year )  
         return redirect('list_accountancy')
 
     return render(request, 'association/form_accountancy.html', {'form': form , 'plan': plan ,    })
