@@ -971,25 +971,23 @@ def accounting_to_accountancy(request) :
         if accounting.is_paypal : paypal = 5122
         else : paypal = 5121
 
-        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, amount = accounting.amount )  
+        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, amount = -accounting.amount )  
         Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 1, amount = accounting.amount )  
 
         Accountancy.objects.create(accounting_id = accounting.id , ranking = 3 , plan_id = 411 , is_credit = 1, amount = accounting.amount )  
-        Accountancy.objects.create(accounting_id = accounting.id , ranking = 4 , plan_id = paypal , is_credit = 0, amount = accounting.amount ) 
+        Accountancy.objects.create(accounting_id = accounting.id , ranking = 4 , plan_id = paypal , is_credit = 0, amount = -accounting.amount ) 
 
 
     accountings = Accounting.objects.filter(plan=18,date_payment=None)
     for accounting in accountings :
-        is_credit1 = 0
-        is_credit2 = 1
-        if accounting.is_paypal : paypal = 5122
-        else : paypal = 5121
 
+        if accounting.amount >= 0 :
+            Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, amount = accounting.amount )  
+            Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 1, amount = accounting.amount ) 
 
-        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, amount = accounting.amount )  
-        Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 1, amount = accounting.amount ) 
-
-
+        else : 
+            Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = accounting.amount )  
+            Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = accounting.amount )
 
     # Journal bancaire
     accountings = Accounting.objects.exclude(plan=18) 
