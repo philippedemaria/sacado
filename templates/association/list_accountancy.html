@@ -1,0 +1,87 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if accounting %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-accounting_complement']);
+    </script> 
+    {% endif %}
+ 
+    <script>
+        require(['script/ajax-accounting']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}  
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Opération de banque 
+{% endblock %}
+
+{% block page_menu_right %}
+{% include 'association/menubar.html' %}
+{% endblock %}
+ 
+
+{% block body %}     
+<div class="content_main">
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div class="row">                
+ 
+            <div class="col-sm-12 col-md-12">
+          
+                <table class="standard_tab_sort300_no_paiementtable table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>  
+                        <td>Id</td> 
+                        <td>Id Opérations</td> 
+                        <td>Ordre </td>                       
+                        <td>Poste</td>                     
+                        <td>Montant</td>
+                        <td>Crédit/Débit </td>
+                        <td>Date </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for accountancy in accontancies %}
+                            <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
+                                <td>
+                                    {{ accountancy.id }} 
+                                </td>
+                                <td>
+                                    {{ accountancy.accounting.id }} 
+                                </td>
+                                <td>
+                                     {{ accountancy.ranking }}  
+                                </td>
+                                <td>
+                                     {{ accountancy.plan_id }} 
+                                </td>   
+                                <td> 
+                                    {{ accountancy.amount }}
+                                </td> 
+                                <td>
+                                    {% if accountancy.is_credit %}<span class="text-success"> Crédit</span> {% else %}<span class="text-danger">Débit</span>  {% endif %}
+                                </td>
+                                <td style="width:80px">
+                                    {{ date|date:"Y-m-d" }}
+                                </td>
+             
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+    </form>
+</div>  
+{% endblock %}

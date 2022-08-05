@@ -14,7 +14,7 @@ from django.db.models import Q , Sum
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
 from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm
 from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
@@ -763,6 +763,7 @@ def print_bank_bilan(request):
 
     return response    
 
+@user_passes_test(user_is_board)
 def print_balance(request):
 
     cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486 = calcule_bank_bilan(request)
@@ -901,12 +902,56 @@ def print_balance(request):
     return response    
 
 
-def print_grand_livre(request): 
-    pass   
+@user_passes_test(user_is_board)
+def create_accountancy(request):
+    form = AccountancyForm(request.POST or None )
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+        else :
+            print(form.errors)
+        
+        return redirect('list_accountancy')
+
+    return render(request, 'association/form_accountancy.html', {'form': form   })
+
+
+@user_passes_test(user_is_board)
+def update_accountancy(request,id):
+
+    a = Accountancy.objects.get(pk=id)
+    form = AccountancyForm(request.POST or None ,  instance = a  )
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+        else :
+            print(form.errors)
+        
+        return redirect('list_accountancy')
+
+    return render(request, 'association/form_accountancy.html', {'form': form   })
 
 
 
-  
+
+@user_passes_test(user_is_board)
+def list_accountancy(request):
+    accontancies = Accountancy.objects.all()
+    return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies   })
+
+
+@user_passes_test(user_is_board)
+def print_big_book(request):
+    pass
+
+    
+@user_passes_test(user_is_board)
+def archive_accountancy(request):
+    pass
+
+ 
 
 
 @user_passes_test(user_is_board)
@@ -1007,7 +1052,6 @@ def accounting_to_accountancy(request) :
 
     return redirect('bank_bilan')
  
-
 
 
 @user_passes_test(user_is_board)

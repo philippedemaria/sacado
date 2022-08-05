@@ -24,11 +24,14 @@ urlpatterns = [
     path('renew/<int:ids>/', renew_accounting, name='renew_accounting'),
 
     path('accounting_to_accountancy', accounting_to_accountancy, name='accounting_to_accountancy'),
-
-
-    path('print_bank_bilan', print_bank_bilan, name='print_bank_bilan'),
+    path('create_accountancy', create_accountancy, name='create_accountancy'),
+    path('update_accountancy', update_accountancy, name='update_accountancy'),
+    path('list_accountancy', list_accountancy, name='list_accountancy'),
     path('print_balance', print_balance, name='print_balance'),
-    path('print_grand_livre', print_grand_livre, name='print_grand_livre'),
+    path('print_big_book', print_big_book, name='print_big_book'),
+    path('archive_accountancy', archive_accountancy, name='archive_accountancy'),
+    path('create_accountancy', create_accountancy, name='create_accountancy'),
+    path('print_bank_bilan', print_bank_bilan, name='print_bank_bilan'),
 
 
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
@@ -79,6 +82,7 @@ urlpatterns = [
 
     path('all_schools', all_schools, name='all_schools'),
     path('update_school_admin/<int:id>/', update_school_admin, name='update_school_admin'),
-  
+
+
 ]
  

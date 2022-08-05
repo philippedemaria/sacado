@@ -1,5 +1,5 @@
 <li>
- <a href="{% url 'accountings' %}" class="no_button">Comptabilité</a>
+ <a href="{% url 'accountings' %}" class="no_button">Introduction</a>
 </li>
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Opérations <b class="caret"></b> </a>
@@ -64,14 +64,43 @@
 
 
 
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Comptabilité <b class="caret"></b> </a>
+    <ul   class="dropdown-menu clearfix pull-right" role="menu">
 
 
+        <li>
+            <a href="{% url 'create_accountancy' %}" class="no_button">Nouvelle opération comptable</a>
+        </li>
 
+        <li>
+            <a href="{% url 'list_accountancy' %}" class="no_button">Journal de comptabilité</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'list_accountancy' %}" class="no_button">Journal de comptabilité</a>
+        </li>
+        <li class="divider"></li>
 
+        <li>
+            <a href="{% url 'print_balance' %}" class="no_button">Balance</a>   
+        </li>
 
-<li>
- <a href="{% url 'bank_bilan' %}" class="no_button">Bilan</a>
+        <li>
+            <a href="{% url 'print_big_book' %}"  class="no_button" >Grand livre</a> 
+        </li> 
+        <li class="divider"></li>
+        <li>
+            <a href="{% url 'bank_bilan' %}" class="no_button">Bilan</a>
+        </li>
+        <li>
+            <a href="{% url 'archive_accountancy' %}" class="no_button">Archive</a>
+        </li>
+
+    </ul>
 </li>
+
+
  
 
 
