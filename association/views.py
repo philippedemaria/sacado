@@ -807,7 +807,9 @@ def print_bank_bilan(request):
 @user_passes_test(user_is_board)
 def print_balance(request):
 
-    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486 = calcule_bank_bilan(request)
+    
+ 
+    list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
     year_active = Activeyear.objects.get(pk=1)
     #########################################################################################
     ### Instanciation
@@ -880,9 +882,10 @@ def print_balance(request):
             [
                 ('SPAN', (0, 1), (1, 1)),
                 ('TEXTCOLOR', (0, 1), (-1, -1),  colors.Color(0,0.7,0.7))
-            ]
-        )
+            ])
     offset = 0 # permet de placer le bas de page
+
+
 
     #########################################################################################
     ### Logo Sacado
@@ -895,107 +898,53 @@ def print_balance(request):
     ### Facture
     #########################################################################################
     elements.append(Spacer(0,0.3*inch))
-    f = Paragraph( "Compte de résultat" , sacado )
+    f = Paragraph( "Grand livre de compte" , sacado )
     elements.append(f) 
     elements.append(Spacer(0,0.1*inch))
-    fa = Paragraph( "Résultat : " + str(cr) + " €" , title )
+    fa = Paragraph( str(year_active.year) +" " + str(year_active.year +1)  , title )
     elements.append(fa) 
-    details_list_sales , details_list_purchases = [] , [] 
+    elements.append(Spacer(0,0.3*inch))
+
     #########################################################################################
     ### Details_list_purchases
     #########################################################################################
-    for a in accountings_list_purchases :
-        if str(a["solde"]) != "0" :
-            details_list_purchases.append(    ( str(a["code"])+". "+ str(a["name"]) , str(a["solde"])  )    )
-           
-    details_table_purchases = Table(details_list_purchases, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
-    details_table_purchases.setStyle(TableStyle([
-               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
-               ]))
+    plan = Plancomptable.objects.order_by("code")
 
+    for p in plan :
+        elements.append(Spacer(0, 0.25*inch))
+        paragraph = Paragraph( str(p.code) , subtitle )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.15*inch))
+        details_list  = [(   "Débit","Crédit" , "Solde")] 
+        p_code = p.code
+        accountancies = Accountancy.objects.filter(plan_id=p_code)
+        i = 1
+        a_debit , a_credit = 0 , 0
+        for a in accountancies :
+            if a. is_credit:
+                a_credit +=  a.amount
+            else :
+                a_debit +=  a.amount 
+            i+=1  
+        solde =  a_credit + a_debit # les débits sont en négatifs
 
-    #########################################################################################
-    ### Accountings_list_sales
-    #########################################################################################
-    for a in accountings_list_sales :
-        if str(a["solde"]) != "0" :
-            details_list_sales.append(  ( str(a["code"]) +". "+ str(a["name"]) , str(a["solde"])  )    )
-           
-    details_table_sales = Table(details_list_sales, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
-    details_table_sales.setStyle(TableStyle([
-               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
-               ]))
+        if solde:
+            details_list.append(   (   str( abs(a_debit ))+ " €" , str(a_credit)+ " €" ,  str(solde) + " €" )    )
+     
+            ##########################################################################
+            ####  
+            ##########################################################################
+            details_tabs = [ ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray)  ,  ('BOX', (0,0), (-1,-1), 0.25, colors.gray)  ,   ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))  ]
+            details_listing = Table(details_list, hAlign='LEFT', colWidths=[  1.2*inch,1.2*inch,1.2*inch])
+            details_listing.setStyle(TableStyle(  details_tabs   ))
+          
+            elements.append(details_listing) 
 
-    #########################################################################################
-    ### A mettre sur 2 colonnes
-    #########################################################################################
-
-    elements.append(Spacer(0,0.3*inch))
-    g = Paragraph( "Charges : " + str(accountings_purchase) +"€", subtitle )
-    elements.append(g)    
-    elements.append(Spacer(0,0.1*inch))
-    elements.append(details_table_purchases)
-
-    elements.append(Spacer(0,0.3*inch))
-    h = Paragraph( "Produits: " +str(accountings_sale) +"€" , subtitle )
-    elements.append(h) 
-    elements.append(Spacer(0,0.1*inch))
-    elements.append(details_table_sales)
-    #########################################################################################
-    ### Bilan  
-    #########################################################################################
-
-    elements.append(Spacer(0,0.3*inch))
-    b = Paragraph( "Bilan" , sacado )
-    elements.append(b) 
- 
-
-    #########################################################################################
-    ### Bilan actif
-    #########################################################################################
-    elements.append(Spacer(0,0.3*inch))
-    actif = Paragraph( "Actif"  , subtitle )
-    elements.append(actif)  
-    elements.append(Spacer(0,0.1*inch))
-    accountings_list_qc = [ ("411. Client", a_411 ) , ("411. Banque CA", accountings_ca ) , ("411. Banque Paypal", accountings_paypal )   ]
-
-           
-    accountings_list_qc_ = Table(accountings_list_qc, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
-    accountings_list_qc_.setStyle(TableStyle([
-               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
-               ]))
-    elements.append(accountings_list_qc_)             
-
-    #########################################################################################
-    ### Bilan passif
-    #########################################################################################
-
- 
-    elements.append(Spacer(0,0.3*inch))
-    actif = Paragraph( "Passif"  , subtitle )
-    elements.append(actif)  
-    elements.append(Spacer(0,0.1*inch))
-    accountings_list_qc = [ ("487 . Clients produits constatés d'avance", cpca["amount__sum"] ) , ( " Résultat", crf )   ]
-
-           
-    accountings_list_qc_ = Table(accountings_list_qc, hAlign='LEFT', colWidths=[4.2*inch,0.8*inch])
-    accountings_list_qc_.setStyle(TableStyle([
-               ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray),
-               ('BOX', (0,0), (-1,-1), 0.25, colors.gray),
-                ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))
-               ]))
-    elements.append(accountings_list_qc_)  
     #########################################################################################
     ### Bas de page
     #########################################################################################
-    nb_inches = 4.4 - offset
-    elements.append(Spacer(0,nb_inches*inch)) 
+
+    elements.append(Spacer(0,inch)) 
     asso = Paragraph(  "___________________________________________________________________"  , bas_de_page_blue )
     elements.append(asso)
     asso2 = Paragraph( "Association SacAdo"  , bas_de_page )
@@ -1006,11 +955,11 @@ def print_balance(request):
     elements.append(asso30)
     asso4 = Paragraph( "2B Avenue de la pinède, La Capte, 83400 Hyères - FRANCE"  , bas_de_page )
     elements.append(asso4)
-
-
     doc.build(elements)
 
-    return response    
+    return response 
+
+
 
 
 @user_passes_test(user_is_board)
@@ -1160,16 +1109,17 @@ def print_big_book(request):
                 a_debit +=  a.amount 
             i+=1  
         solde =  a_credit + a_debit # les débits sont en négatifs
-        details_list.append(   ( "" , ""  ,   "", "Soldes"    , str( abs(a_debit ))+ " €" , str(a_credit)+ " €" )    )
-        details_list.append(   ( "" ,  ""    , " " ,  "Résultat"   ,  str(solde) + " €" , " " )    )
-        ##########################################################################
-        ####  
-        ##########################################################################
-        details_tabs = [ ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray)  ,  ('BOX', (0,0), (-1,-1), 0.25, colors.gray)  ,   ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))  ]
-        details_listing = Table(details_list, hAlign='LEFT', colWidths=[  0.9*inch,  0.9*inch, inch,1.2*inch,1.2*inch,1.2*inch])
-        details_listing.setStyle(TableStyle(  details_tabs   ))
-      
-        elements.append(details_listing) 
+        if solde :
+            details_list.append(   ( "" , ""  ,   "", "Soldes"    , str( abs(a_debit ))+ " €" , str(a_credit)+ " €" )    )
+            details_list.append(   ( "" ,  ""    , " " ,  "Résultat"   ,  str(solde) + " €" , " " )    )
+            ##########################################################################
+            ####  
+            ##########################################################################
+            details_tabs = [ ('INNERGRID', (0,0), (-1,-1), 0.25, colors.gray)  ,  ('BOX', (0,0), (-1,-1), 0.25, colors.gray)  ,   ('BACKGROUND', (0,0), (-1,0), colors.Color(1,1,1))  ]
+            details_listing = Table(details_list, hAlign='LEFT', colWidths=[  0.9*inch,  0.9*inch, inch,1.2*inch,1.2*inch,1.2*inch])
+            details_listing.setStyle(TableStyle(  details_tabs   ))
+          
+            elements.append(details_listing) 
 
     #########################################################################################
     ### Bas de page
