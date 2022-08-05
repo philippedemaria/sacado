@@ -665,6 +665,7 @@ def calcule_bank_bilan(request):
             pass
         plan_immos.append( my_dico )
 
+
     for p in plan_resultat :
         my_dico = {}
         accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code   ).aggregate(Sum('amount'))
@@ -676,6 +677,7 @@ def calcule_bank_bilan(request):
         except :
             pass
         plan_resultats.append( my_dico )
+        print(plan_resultats)
 
     results = products - charges
     rs = ps - cs
@@ -975,11 +977,11 @@ def print_balance(request):
 @user_passes_test(user_is_board)
 def create_accountancy(request):
     form = AccountancyForm(request.POST or None )
-    year = Activeyear.objects.get(pk=1)
+    year = Activeyear.objects.get(pk=1).year
     plan = Plancomptable.objects.order_by("code")
     if request.method == "POST":
         plan_id_c = request.POST.get("plan_id_c",None)
-        plan_id_d = request.POST.get("plan_id_c",None)
+        plan_id_d = request.POST.get("plan_id_d",None)
         amount = request.POST.get("amount",None)
         Accountancy.objects.create(accounting_id = 0 , ranking = 2 , plan_id = int(plan_id_c) , is_credit = 1, amount = float(amount)  , current_year = year )             
         Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = int(plan_id_d) , is_credit = 0, amount = -float(amount) , current_year = year )  
