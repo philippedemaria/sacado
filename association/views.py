@@ -677,7 +677,6 @@ def calcule_bank_bilan(request):
         except :
             pass
         plan_resultats.append( my_dico )
-        print(plan_resultats)
 
     results = products - charges
     rs = ps - cs
