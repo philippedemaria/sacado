@@ -985,21 +985,16 @@ def accounting_to_accountancy(request) :
         if accounting.is_paypal : paypal = 5122
         else : paypal = 5121
 
-        if accounting.amount >= 0 :
-            amount = accounting.amount 
-            Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, amount = amount )  
-            Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 1, amount = amount ) 
 
-        else : 
-            amount = - accounting.amount
-            Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = amount )  
-            Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = amount )
+        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, amount = accounting.amount )  
+        Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 1, amount = accounting.amount ) 
+
+
 
     # Journal bancaire
     accountings = Accounting.objects.exclude(plan=18) 
     for accounting in accountings :
         amount = accounting.amount
-        print(accounting.plan.id) 
         if accounting.is_paypal : paypal = 5122
         else : paypal = 5121
 
