@@ -90,7 +90,7 @@
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Actif</h2>
             <table class="table">
-                {% for a in plan_immo %}
+                {% for a in plan_immos %}
                     {% if a.solde %}
                         <tr>
                             <td>{{ a.code }}</td>   
@@ -104,7 +104,7 @@
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Passif</h2>
              <table class="table">
-                {% for a in plan_resultat %}
+                {% for a in plan_resultats %}
                     {% if a.solde %}
                         <tr>
                             <td>{{ a.code }}</td>   

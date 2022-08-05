@@ -619,7 +619,7 @@ def calcule_bank_bilan(request):
     plan_immo = [411,486,5121,5122]  
     plan_resultat = [487] 
     my_dico = {}
-    list_sales , list_purchases,plan_immo , plan_resultat = [] , [] , [] , []
+    list_sales , list_purchases,plan_immos , plan_resultats = [] , [] , [] , []
 
     charges, products   = 0 , 0  
     for p in plan_sale :
@@ -658,7 +658,7 @@ def calcule_bank_bilan(request):
             cs += accountings_sales["amount__sum"]
         except :
             pass
-        plan_immo.append( my_dico )
+        plan_immos.append( my_dico )
 
     for p in plan_resultat :
         my_dico = {}
@@ -670,7 +670,7 @@ def calcule_bank_bilan(request):
             ps += accountings_sales["amount__sum"]
         except :
             pass
-        plan_resultat.append( my_dico )
+        plan_resultats.append( my_dico )
 
     results = products - charges
     rs = ps - cs
@@ -685,7 +685,7 @@ def bank_bilan(request):
 
     list_sales ,  list_purchases ,  plan_resultat ,  plan_immo , results , products , charges, rs , ps , cs   = calcule_bank_bilan(request)
 
-    context = {  'list_sales' : list_sales ,  'list_purchases' : list_purchases ,  'plan_resultat' :  plan_resultat ,  'plan_immo' : plan_immo ,  'results' : results ,  'products' : products ,  'charges' :  charges ,  'rs' : rs  , 'ps' : ps, 'cs' : cs }  
+    context = {  'list_sales' : list_sales ,  'list_purchases' : list_purchases ,  'plan_resultats' :  plan_resultats ,  'plan_immos' : plan_immos ,  'results' : results ,  'products' : products ,  'charges' :  charges ,  'rs' : rs  , 'ps' : ps, 'cs' : cs }  
 
     return render(request, 'association/bank_bilan.html', context )   
 
