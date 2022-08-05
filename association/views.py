@@ -614,7 +614,7 @@ def calcule_bank_bilan(request):
     crf = a_411 +accountings_ca+accountings_paypal-cpca+a_486
     """
     this_year     = Activeyear.objects.get(pk=1).year
-    plan_sale     = Plancomptable.objects.filter(code__gte=700).order_by("code")
+    plan_sale     = Plancomptable.objects.filter(code__gte=700,code__lt=800).order_by("code")
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 ).order_by("code")
     plan_immo     =  Plancomptable.objects.filter(code__in = [411,486,5121,5122] ).order_by("code")
     plan_resultat =  Plancomptable.objects.filter(code  =  487  )
@@ -657,6 +657,8 @@ def calcule_bank_bilan(request):
         my_dico["name"] = p.name
         if p.code > 5000 :
             my_dico["solde"]= -accountings_sales["amount__sum"]
+        else :
+            my_dico["solde"]= accountings_sales["amount__sum"]
         try :
             cs += accountings_sales["amount__sum"]
         except :
