@@ -525,14 +525,14 @@ def calcule_bank_bilan(request):
     cr = accountings_sale  - accountings_purchase 
     crf = a_411 +accountings_ca+accountings_paypal-cpca
 
-    return cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  
+    return cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486  
 
 
 
 @user_passes_test(user_is_board)
 def bank_bilan(request):
 
-    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  = calcule_bank_bilan(request)
+    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486   = calcule_bank_bilan(request)
 
     context = {  'a_486' : a_486 ,  'cpca' : cpca ,  'crf' : crf ,  'accountings_paypal' : accountings_paypal ,  'accountings_ca' : accountings_ca  , 'a_411' : a_411 ,   'a_sales': a_sales, 'a_purchase': a_purchase , 'accountings_sale': accountings_sale, 'accountings_purchase': accountings_purchase , 'cr' : cr , 'accountings_list_sales' : accountings_list_sales , "accountings_list_purchases" : accountings_list_purchases }  
 
@@ -542,7 +542,7 @@ def bank_bilan(request):
 @user_passes_test(user_is_board)
 def print_bank_bilan(request):
 
-    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  = calcule_bank_bilan(request)
+    cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases , a_486 = calcule_bank_bilan(request)
     year_active = Activeyear.objects.get(pk=1)
     #########################################################################################
     ### Instanciation
