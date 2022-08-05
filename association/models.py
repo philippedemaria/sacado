@@ -308,11 +308,7 @@ class Accountancy(models.Model):
     def __str__(self):
         return "{}.{}".format(self.accounting_id,self.ranking )
 
-    def amount_valeur_absolue(self):
-
-        if self.amount < 0 : va = - self.amount
-        else : va = self.amount
-        return va
+ 
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
