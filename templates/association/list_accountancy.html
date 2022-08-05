@@ -58,7 +58,7 @@
                                      {{ accountancy.plan_id }} 
                                 </td>   
                                 <td> 
-                                    {{ accountancy.amount }}
+                                    {% if accountancy.amount < 0  %}{{ -accountancy.amount }}{% else %}{{ accountancy.amount }}{% endif %}
                                 </td> 
                                 <td>
                                     {% if accountancy.is_credit %}<span class="text-success"> Crédit</span> {% else %}<span class="text-danger">Débit</span>  {% endif %}
