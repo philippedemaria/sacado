@@ -657,12 +657,16 @@ def calcule_bank_bilan(request):
         my_dico["name"] = p.name
         if p.code > 5000 :
             my_dico["solde"]= -accountings_sales["amount__sum"]
+            try :
+                cs -= accountings_sales["amount__sum"]
+            except :
+                pass
         else :
             my_dico["solde"]= accountings_sales["amount__sum"]
-        try :
-            cs += accountings_sales["amount__sum"]
-        except :
-            pass
+            try :
+                cs += accountings_sales["amount__sum"]
+            except :
+                pass
         plan_immos.append( my_dico )
 
 
