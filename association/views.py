@@ -491,7 +491,7 @@ def calcule_bank_bilan(request):
 
  
 
-    a_411    = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date , date_payment=None).aggregate(Sum('amount'))    
+    a_411    = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date , date_payment=None).aggregate(Sum('amount'))["amount__sum"]    
  
 
 
@@ -523,7 +523,7 @@ def calcule_bank_bilan(request):
     a_purchase = Accounting.objects.filter(date__gte = start_date  , date__lte = end_date,plan__code__lt=700,plan__code__gte=600)
  
     cr = accountings_sale  - accountings_purchase 
-    crf = a_411+accountings_ca+accountings_paypal
+    crf = a_411 +accountings_ca+accountings_paypal
 
     return cpca ,  crf ,  accountings_paypal ,  accountings_ca  ,  a_411 ,  a_sales,  a_purchase , accountings_sale, accountings_purchase , cr , accountings_list_sales , accountings_list_purchases  
 
