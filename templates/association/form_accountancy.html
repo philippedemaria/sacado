@@ -53,16 +53,6 @@
             <div class="row"> 
                 <div class="col-sm-12 col-md-3">
                     <div class="form-group">
-                        <label>Compte créditeur</label>
-                        <select name="plan_id_c" class="form-control select2" >
-                            {% for p in plan %}
-                            <option value="{{p.code}}">{{p.code}}. {{p.name}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>    
-                <div class="col-sm-12 col-md-3">
-                    <div class="form-group">
                         <label>Compte débiteur</label>
                         <select name="plan_id_d" class="form-control select2" >
                             {% for p in plan %}
@@ -71,6 +61,17 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        <label>Compte créditeur</label>
+                        <select name="plan_id_c" class="form-control select2" >
+                            {% for p in plan %}
+                            <option value="{{p.code}}">{{p.code}}. {{p.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>    
+
             </div>
                   
             <div class="row">
