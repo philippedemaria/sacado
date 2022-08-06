@@ -2644,9 +2644,10 @@ def ordering_number(parcours):
 
     listing_ordered = set() 
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
-    customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
     listing_ordered.update(relationships)
-    listing_ordered.update(customexercises)
+    if not parcours.is_sequence :
+        customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
+        listing_ordered.update(customexercises)
     listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
 
     nb_exo_only, nb_exo_visible  = [] , []   

@@ -2,6 +2,7 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
+  
 
 {% if rc.type_id == 0 %}
 <div class="card_freeze" style="{% if not rc.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{rc.id}}">
@@ -489,8 +490,6 @@
     </div>
     <!-- Partie sur laquelle est posée l'image  -->   
 </div> 
-
-
 {% elif rc.type_id == 1 %}
 
   {% with rc.type_of_document as tod %}
@@ -786,7 +785,6 @@
           </a>
                        
           <div class="card-score" style="margin-left:10px;width:100%;font-size: 30px;color: #5d4391">
-   
                     {% if rc.type_id == 2 %}  COURS   
                     {% elif rc.type_id == 3 %} QUIZ  
                     {% elif rc.type_id == 4 %} FLASHPACK   
