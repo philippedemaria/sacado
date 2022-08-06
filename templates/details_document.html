@@ -880,9 +880,9 @@
 
             <span class="custom_select_details horizontalmargin5"  ><!-- l'id permet de modifier après ajax le temps -->
 
-                    {% if rc.type_id == 3 %}  {{ rc.type_of_document.questions.count }} questions
-                    {% elif rc.type_id == 4 %}  {{ rc.type_of_document.flashcards.count }} flashcards
-                    {% elif rc.type_id == 5 %}  {{ rc.type_of_document.relationtexs.count }} exercices
+                    {% if rc.type_id == 3 %}  {{ rc.type_of_document.questions.count }} question{{ rc.type_of_document.questions.count|pluralize }}
+                    {% elif rc.type_id == 4 %}  {{ rc.type_of_document.flashcards.count }} flashcard{{ rc.type_of_document.questions.count|pluralize }}
+                    {% elif rc.type_id == 5 %}  {{ rc.type_of_document.relationtexs.count }} exercice{{ rc.type_of_document.questions.count|pluralize }}
                     {% endif %}
 
 
