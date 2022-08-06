@@ -898,7 +898,7 @@ def print_balance(request):
     ### Facture
     #########################################################################################
     elements.append(Spacer(0,0.3*inch))
-    f = Paragraph( "Grand livre de compte" , sacado )
+    f = Paragraph( "Balance" , sacado )
     elements.append(f) 
     elements.append(Spacer(0,0.1*inch))
     fa = Paragraph( str(year_active.year) +" " + str(year_active.year +1)  , title )
@@ -922,8 +922,11 @@ def print_balance(request):
                 a_credit +=  a.amount
             else :
                 a_debit +=  a.amount 
-            i+=1  
-        solde =  a_credit + a_debit # les débits sont en négatifs
+            i+=1
+        if p_code > 5000 : 
+            solde =  -(a_credit + a_debit) # les débits sont en négatifs
+        else :
+            solde =  a_credit + a_debit # les débits sont en négatifs
 
         if solde:
 
