@@ -205,20 +205,13 @@
                         <div class="form-group">
                             <input value="Enregistrer et choisir les exercices" type="submit" class="btn btn-primary" id="click_button" />
 
-                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                            <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
                         </div>
                     </div>   
                     {% if bibliotex %}
                         <div class="col-sm-6 col-md-6">
-                         
-                            {% if parcours.is_sequence %}
-                            <div class="question_bank" >
-                                <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default">
-                                    Retour à la séquence {{ parcours.title }}
-                                </a> 
-                            </div>
-                            {% endif %} 
 
+ 
                             <a href="{% url 'delete_bibliotex' bibliotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette biblioTex')" > 
                                 <i class="fa fa-trash"> </i>   Supprimer
                             </a>
