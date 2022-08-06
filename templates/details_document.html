@@ -916,7 +916,7 @@
                 <a  class="white"
                     {% if rc.type_id == 1 %}  {% if rc.type_of_document.teacher == rc.type_of_document.author %} href="{%  url 'parcours_update_custom_exercise'  rc.type_of_document.id  parcours.id %}"{% else %}href="#" title="Vous devez être l'auteur pour modifier"{% endif %}
                     {% elif rc.type_id == 2 %} {% if rc.type_of_document.teacher == rc.type_of_document.author %} href="{%  url 'update_course'  rc.type_of_document.id  parcours.id   %}"{% else %}href="#" title="Vous devez être l'auteur pour modifier"{% endif %}
-                    {% elif rc.type_id == 3 %} {% if rc.type_of_document.teacher == rc.type_of_document.author %} href="{%  url 'update_quizz'  rc.type_of_document.id   %}"{% else %}href="#" title="Vous devez être l'auteur pour modifier"{% endif %}
+                    {% elif rc.type_id == 3 %} {% if rc.type_of_document.teacher == parcours.teacher %} href="{%  url 'update_quizz'  rc.type_of_document.id   %}"{% else %}href="#" title="Vous devez être l'auteur pour modifier"{% endif %}
                     {% elif rc.type_id == 4 %} {% if rc.type_of_document.teacher == rc.type_of_document.author %} href="{%  url 'update_flashpack'  rc.type_of_document.id    %}"{% else %}href="#" title="Vous devez être l'auteur pour modifier"{% endif %}
                     {% elif rc.type_id == 5 %} {% if rc.type_of_document.teacher == rc.type_of_document.author %} href="{%  url 'update_bibliotex'  rc.type_of_document.id %}"{% else %}href="#" title="Vous devez être l'auteur pour modifier"{% endif %}
                     {% endif %}
