@@ -896,8 +896,21 @@
 
 
             </span>
-            <!-- Appel des situations -->
+            <!-- Config -->
              
+                <a  class="white"
+                    {% if rc.type_id == 1 %}  href="{%  url 'parcours_update_custom_exercise'  rc.type_of_document.id  parcours.id %}"
+                    {% elif rc.type_id == 2 %}  href="{%  url 'update_course'  rc.type_of_document.id  parcours.id   %}"
+                    {% elif rc.type_id == 3 %}  href="{%  url 'update_quizz'  rc.type_of_document.id   %}"
+                    {% elif rc.type_id == 4 %}  href="{%  url 'update_flashpack'  rc.type_of_document.id    %}"
+                    {% elif rc.type_id == 5 %}  href="{%  url 'update_bibliotex'  rc.type_of_document.id %}"
+                    {% endif %}
+                    target="_blank" style="font-size:14px"><i class="bi bi-gear"></i>
+                </a>
+
+
+
+
             <!-- Appel de partage  -->
  
                 <a  class="white"
@@ -907,7 +920,7 @@
                     {% elif rc.type_id == 4 %}  href="{%  url 'show_flashpack'  rc.type_of_document.id    %}"
                     {% elif rc.type_id == 5 %}  href="{%  url 'show_bibliotex'  rc.type_of_document.id %}"
                     {% endif %}
-                    target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i>
+                    target="_blank" style="font-size:14px"><i class="fa fa-eye fa-fw"></i>
                 </a>
 
 

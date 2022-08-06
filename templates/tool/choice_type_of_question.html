@@ -32,13 +32,7 @@
 {% endblock %}
  
  
-{% block goto_sequence %}  
-    {% if parcours.is_sequence %}
-        <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
-            Retour à la séquence {{ parcours.title }}
-        </a> 
-    {% endif %} 
-{% endblock %}
+
 
 
 {% block type_of_question %}
