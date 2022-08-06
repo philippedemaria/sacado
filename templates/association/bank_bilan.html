@@ -37,8 +37,9 @@
 
             <h1>Compte de résultat</h1> 
             <h3 style="color:red">Résultat : {{ results }} €</h3>
+            {% comment %}
             <h5><a href="{% url 'accounting_to_accountancy' %}" >Rattrapage</a>  </h5>
-
+            {% endcomment %}
         </div>
     </div>
 
