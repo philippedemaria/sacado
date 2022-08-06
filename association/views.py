@@ -1435,19 +1435,40 @@ def create_accounting(request,tp):
 
             if tp == 0 :
                 if nf.is_credit :
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am )  
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am ) 
+                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1):
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am )  
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am ) 
+                    else :
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1 ).update(amount = nf.amount)  
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0 ).update(amount = -nf.amount)  
                 else :
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am )  
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am )  
-            else :
-                if nf.is_credit :
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am )  
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = am ) 
+                   
+                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0):
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am )  
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am )
+                    else :
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0 ).update(amount = -nf.amount)  
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1 ).update(amount = nf.amount) 
 
+            else :
+
+                if nf.is_credit :
+                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1):
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am )  
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = am ) 
+                    else :
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1 ).update(amount = nf.amount)  
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0 ).update(amount = nf.amount)  
                 else :
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = am )  
-                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am )  
+                   
+                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0):
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = am )  
+                        Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am )
+                    else :
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0 ).update(amount = nf.amount)  
+                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1 ).update(amount = nf.amount)
+
+
 
 
         else :
