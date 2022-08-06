@@ -3564,6 +3564,7 @@ def clone_parcours(request, id, course_on ):
             # clone le cours associé au parcours
             course.pk = None
             course.parcours = parcours
+            course.teacher = request.user.teacher
             course.save()
 
 
