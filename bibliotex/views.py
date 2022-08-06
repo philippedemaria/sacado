@@ -742,19 +742,19 @@ def ajax_find_peuplate_sequence(request):
     subject     = Subject.objects.get(pk=subject_id)
 
     if keyword :
-        bibliotexs  = Bibliotex.objects.filter( title__icontains=keyword,    teacher__user__school = request.user.school , subjects=subject,levels=level )
+        bibliotexs  = Bibliotex.objects.filter(  Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword,    teacher__user__school = request.user.school , subjects=subject,levels=level )
     else :
-        bibliotexs  = Bibliotex.objects.filter(teacher__user__school = request.user.school , subjects=subject,levels=level )
+        bibliotexs  = Bibliotex.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) ,teacher__user__school = request.user.school , subjects=subject,levels=level )
  
 
     if keyword and level_id :
         level = Level.objects.get(pk=level_id)
-        bibliotexs  = Bibliotex.objects.filter( title__icontains=keyword, teacher__user__school = request.user.school , subjects=subject,levels=level  )
+        bibliotexs  = Bibliotex.objects.filter(  Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword, teacher__user__school = request.user.school , subjects=subject,levels=level  )
     elif keyword :
-        bibliotexs  = Bibliotex.objects.filter( title__icontains=keyword, teacher__user__school = request.user.school , subjects=subject  )
+        bibliotexs  = Bibliotex.objects.filter(  Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword, teacher__user__school = request.user.school , subjects=subject  )
     else :
         level = Level.objects.get(pk=level_id)
-        bibliotexs  = Bibliotex.objects.filter(teacher__user__school = request.user.school , subjects=subject ,levels=level )
+        bibliotexs  = Bibliotex.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , teacher__user__school = request.user.school , subjects=subject ,levels=level )
 
 
 
