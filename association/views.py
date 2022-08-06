@@ -1404,9 +1404,10 @@ def create_accounting(request,tp):
 
 
             if  tp == 1 :
-                Accounting.objects.filter(pk = nf.id).update(amount=-som)
+                am =-som 
             else :
-                Accounting.objects.filter(pk = nf.id).update(amount=som)
+                am = som
+            Accounting.objects.filter(pk = nf.id).update(amount=am)
 
             if nf.is_abonnement :
                 if form_abo.is_valid():
@@ -1424,6 +1425,29 @@ def create_accounting(request,tp):
                             messages.success(request,"Activation du GAR réussie")
                         else :
                             messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+
+            if request.POST.get("validation_demande",None) and tp == 0 :
+                nb = 411
+            elif nf.is_paypal :
+                nb = 5212
+            else :
+                nb = 5211
+
+            if tp == 0 :
+                if nf.is_credit :
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am )  
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am ) 
+                else :
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am )  
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am )  
+            else :
+                if nf.is_credit :
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am )  
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = am ) 
+
+                else :
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = am )  
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am )  
 
 
         else :
@@ -1511,11 +1535,10 @@ def renew_accounting(request,ids):
 @user_passes_test(user_is_board)
 def update_accounting(request, id,tp):
 
-
-
-
-    today    = datetime.now()
+    today      = datetime.now()
     accounting = Accounting.objects.get(id=id)
+    valeur     = accounting.amount
+    print(valeur)
     try :
         abonnement = accounting.abonnement 
         form_abo = AbonnementForm(request.POST or None, instance= abonnement  )
@@ -1575,6 +1598,36 @@ def update_accounting(request, id,tp):
                 else :
                     print(form_abo.errors)
 
+            # Dans accountancy
+ 
+            if Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0).count() == 0   : 
+   
+                Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 )  
+                Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 )
+            elif  nf.amount != valeur :
+                Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 ).update(amount = -nf.amount)  
+                Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 ).update(amount = nf.amount)
+
+ 
+
+            if  nf.date_payment :
+                if Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0).count() == 0   : 
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 )  
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 )
+                elif  nf.amount != valeur :
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 ).update(amount = -nf.amount)  
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 ).update(amount = nf.amount) 
+
+                if nf.is_paypal : bank = 5122
+                else : bank = 5121  
+                if Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 0).count() == 0   : 
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1 )  
+                    Accountancy.objects.create(accounting_id = nf.id , ranking = 4 , plan_id = bank , is_credit = 0 )
+                elif  nf.amount != valeur :
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1 ).update(amount = -nf.amount)  
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 4 , plan_id = bank  , is_credit = 0 ).update(amount = nf.amount) 
+
+
 
             if int(tp) == 0 :
                 return redirect('list_accountings', 0)
@@ -1617,13 +1670,23 @@ def create_avoir(request, id):
     accounting.objet = texte
     accounting.observation = texte
     accounting.mode = " Avoir sur facture " + chrono
-    accounting.save()
+    acc = accounting.save()
+
+    # Création des avoirs
+    Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = -accounting.amount )  
+    Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = -accounting.amount )  
+ 
+
 
     accounting = Accounting.objects.get(id=id) 
     accounting.objet += " Avoir sur " + chrono
     accounting.observation += " Avoir sur " + chrono
     accounting.is_active = 0
     accounting.save()
+
+
+
+
     return redirect('list_accountings', 0)
     
 

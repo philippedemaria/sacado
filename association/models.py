@@ -186,7 +186,9 @@ class Accounting(models.Model):
     user          = models.ForeignKey(User, related_name="accountings", null=True, blank=True,  on_delete=models.CASCADE, editable=False)
     is_active     = models.BooleanField(default=0, verbose_name="Actif ?")
     is_abonnement = models.BooleanField(default=0, verbose_name="Abonnement ?")
-    is_cpca       = models.BooleanField(default=0, verbose_name="Produits constatés d'avance ?")
+
+    is_facturation= models.BooleanField(default=0, verbose_name="Affiche la facture sur l'interface client ?")
+
     ticket        = models.FileField(upload_to=accounting_directory_path, blank=True, verbose_name="Justificatif",  default="" )
     plan          = models.ForeignKey(Plancomptable, default=17, related_name="accountings", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Plan comptable")
     tp            = models.PositiveIntegerField(default=0, editable=False)

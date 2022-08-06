@@ -138,15 +138,18 @@
                                 {{ form.forme |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
                                 {{ form.forme.errors }}
                         </div>
-                        <div class="col-sm-6 col-md-6  col-lg-5">
+                        <div class="col-sm-5 col-md-5  col-lg-5">
                             <div class="form-group"> 
                                 {{ form.objet |add_class:"form-control"|attr:"placeholder:Libellé"}}  
                                 {{ form.objet.errors }}
                             </div>
                         </div>
+
+
+
                     </div>
 
-                    {% if accounting %}  
+  
                     <div class="row">          
                         <div class="col-sm-4 col-md-3 col-lg-3">
                                 {{ form.date_payment |add_class:"form-control datetimepicker"|attr:"placeholder:Date de paiement"}}  
@@ -156,28 +159,31 @@
                                 {{ form.mode |add_class:"form-control select2"}}  
                                 {{ form.mode.errors }}
                         </div>
-                        <div class="col-sm-3 col-md-4">
+                        <div class="col-sm-3 col-md-4" style="display:none">
                             {{ form.is_credit|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Entrée"|attr:"data-off:Sortie"}} 
                             {{ form.is_credit.errors }} 
                         </div> 
                     </div>
-                    {% endif %}
+
                     <div class="row" style="margin: 10px 0px"> 
-                        <div class="col-sm-6 col-md-2">
-                            Compte cible ?
+                        <div class="col-sm-6 col-md-4" align="right">
+                            <label>Compte cible ?</label>
                         </div>
-                        <div class="col-sm-6 col-md-3">
+                        <div class="col-sm-6 col-md-8">
                             {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Crédit Agricole"}} 
                             {{ form.is_paypal.errors }} 
                         </div>
+                    </div>
+                    <div class="row" style="margin: 10px 0px"> 
                         <div class="col-sm-6 col-md-4" align="right">
-                            Produits constatés d'avance ?
+                            <label>Affiche la facture sur l'interface client ?</label>
                         </div>
-                        <div class="col-sm-6 col-md-2">
-                            {{ form.is_cpca |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
-                            {{ form.is_cpca.errors }} 
+                        <div class="col-sm-6 col-md-8">
+                            {{ form.is_facturation |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
+                            {{ form.is_facturation.errors }}  
                         </div>
 
+       
 
                     </div>
 
@@ -289,9 +295,12 @@
         <div class="row">
             <div class="col-sm-12 col-md-8">
                 <div class="form-group">
-                    <input value="Enregistrer la transaction" type="submit" class="btn btn-primary"   />
-                    <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                               class="btn btn-default "/></a>
+ 
+ 
+                    <input value="Valider la demande" type="submit" class="btn btn-primary" name="validation_demande"   />
+           
+                     <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                   class="btn btn-default "/></a>
                 </div>
             </div>    
         </div>

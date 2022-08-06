@@ -7,7 +7,7 @@ define(['jquery', 'bootstrap' ], function ($) {
         $('#id_is_gar').prop('checked', false);
         $('#id_is_paypal').prop('checked', false);
 
-        $('#id_is_cpca').prop('checked', false);     
+        $('#id_is_facturation').prop('checked', false);     
  
 
 
