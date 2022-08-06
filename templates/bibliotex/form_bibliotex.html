@@ -203,12 +203,16 @@
                 <div class="row" style="margin-top:15px" >
                     <div class="col-sm-6 col-md-6">
                         <div class="form-group">
-                            <input value="Créer et choisir les exercices" type="submit" class="btn btn-primary" id="click_button" />
+                            <input value="Enregistrer et choisir les exercices" type="submit" class="btn btn-primary" id="click_button" />
+
                             <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                         </div>
                     </div>   
                     {% if bibliotex %}
-                        <div class="col-sm-6 col-md-6">                                             
+                        <div class="col-sm-6 col-md-6"> 
+                            <a href="{% url 'delete_bibliotex' bibliotex.id   %}"><input type="button" value="Annuler" class="btn btn-default "/></a>
+
+
                             <a href="{% url 'delete_bibliotex' bibliotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette biblioTex')" > 
                                 <i class="fa fa-trash"> </i>   Supprimer
                             </a>
