@@ -315,17 +315,22 @@
 	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
 	            </div>
 	        </div> 
-            <div class="col-sm-6 col-md-6"> 
             {% if quizz %}
-                
- 
+
+            <div class="col-sm-3 col-md-3"> 
+
+                <a href="{% url 'create_question' quizz.id 0 %}" class="btn btn-quizz_bank"  > 
+                    <i class="fa fa-trash"> </i>   Modifier Question
+                </a>
+            </div> 
+            <div class="col-sm-3 col-md-3"> 
                 <a href="{% url 'delete_quizz' quizz.id %}" class="btn btn-danger"  onclick="return TestDelete('ce quizz')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>
     
-            {% endif %}  
+  
             </div> 
-
+            {% endif %}
 
 
 
