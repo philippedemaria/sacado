@@ -84,16 +84,12 @@
                 <a href="#"   class="btn btn-quizz_bank no_sacado" title="Version Etablissement requise" >Banque de questions</a> 
                 {% endif %} 
 
-
-                {% if parcours.is_sequence %}
-                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
-                        Retour à la séquence {{ parcours.title }}
-                    </a> 
-                {% endif %} 
-
+                {% block goto_sequence %}
+ 
+                {% endblock %}
             </div>
 
-            
+
             {% endif %}
 
 
