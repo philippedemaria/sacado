@@ -1816,7 +1816,7 @@ def create_question(request,idq,qtype):
 
     parcours_id = request.session.get("parcours_id", None)
     if parcours_id :
-        parcours = Parcours.objects.values('id', 'title', 'color').get(pk = parcours_id)
+        parcours = Parcours.objects.values('id', 'title', 'color', 'is_sequence').get(pk = parcours_id)
     else :
         parcours = None
  
