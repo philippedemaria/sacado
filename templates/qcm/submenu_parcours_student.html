@@ -1,7 +1,7 @@
 {% load static %}
 
     <li><a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-new-violet"><i class="bi bi-explicit" ></i><span class="label_plus"> Exercices</span></a></li> 
-    <li><a href="{% url 'show_course_student' 0 parcours.id %}" class="btn btn-new-violet"><i class="bi bi-file-earmark-font"></i><span class="label_plus"> Cours</span></a></li>
+    <li><a href="{% url 'show_course_student' 0 parcours.id %}" class="btn btn-new-violet"><i class="bi bi-c-square"></i><span class="label_plus"> Cours</span></a></li>
     <li><a href="{% url 'list_parcours_quizz_student' parcours.id %}" class="btn btn-new-violet"><i class="bi bi-aspect-ratio" ></i><span class="label_plus"> Quizz</span></a></li>
     <li><a href="{% url 'list_parcours_bibliotex_student' parcours.id %}" class="btn btn-new-violet "><i class="bi bi-bootstrap" ></i><span class="label_plus"> Bibliotex </span></a></li>
     <li><a href="{% url 'list_parcours_flashpack_student' parcours.id %}" class="btn btn-new-violet"><i class="bi bi-stack" ></i><span class="label_plus"> Flashpack</span></a> </li>
