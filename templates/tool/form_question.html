@@ -86,7 +86,7 @@
                 </div>
                 {% if parcours.is_sequence %}
                 <div class="question_bank" >
-                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
+                    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default">
                         Retour à la séquence {{ parcours.title }}
                     </a> 
                 </div>
