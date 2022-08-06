@@ -205,7 +205,7 @@
                         <div class="form-group">
                             <input value="Enregistrer et choisir les exercices" type="submit" class="btn btn-primary" id="click_button" />
 
-                            <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+                            <a href="javascript:history.back()"><input type="button" value="Retour {% if parcours.is_sequence %}à la séquence{% endif %}" class="btn btn-default "/></a>
                         </div>
                     </div>   
                     {% if bibliotex %}
