@@ -2,10 +2,19 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
+
+
+{% if courses %}
+
+<div class="row alert alert-warning">
+<img src="{% static 'conseil.png' %}" width="30px"/> Si vous souhaitez insérer plusieurs cours, cliquer "Insérer dans la séquence" en maintenant enfoncer la touche CTRL. Ouvrir alors le dernier onglet.
+</div>
+{% endif  %}
+
+
 {% for course in courses %}
 
            
- 
 <div  class="box box-widget widget-user-2"  style="cursor: move; background-color:#f1eef7;">
     <div class="handler widget-user-header" >
         <div style="position: absolute; top:0px; z-index:99; left:0px; background-color:#f1eef7; width:290px; height:140px; opacity:0.8; border-radius: 5px"> 
