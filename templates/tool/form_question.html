@@ -68,7 +68,6 @@
                 </div>
 
             {% else  %}
-
             <form action="#" method="POST" >
                 <div class="quizz_list_question">
                     <ul id="questions_sortable_list">
@@ -78,7 +77,6 @@
                     </ul>
                 </div>
             </form>
-
             <div class="question_bank" >
                 {% if sacado_asso %}
                 <a href="#" data-toggle='modal' data-target='#question_choice' class="btn btn-quizz_bank" >Banque de questions</a> 
@@ -86,18 +84,16 @@
                 <a href="#"   class="btn btn-quizz_bank no_sacado" title="Version Etablissement requise" >Banque de questions</a> 
                 {% endif %} 
 
+
                 {% if parcours.is_sequence %}
                     <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                         Retour à la séquence {{ parcours.title }}
                     </a> 
                 {% endif %} 
 
-
-
             </div>
 
-
-
+            
             {% endif %}
 
 
