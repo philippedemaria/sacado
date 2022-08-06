@@ -266,7 +266,7 @@
         <div class="col-sm-12 col-md-6">
             <div class="form-group">
                 {% block save %}
-                <input value="Enregistrer et choisir les exercices" type="submit" name="save_and_choose" class="btn btn-primary" />  
+                <input value="Enregistrer {% if not  parcours.is_sequence %}et choisir les exercices{% endif %}" type="submit" name="save_and_choose" class="btn btn-primary" />  
                 {% endblock %}
                 <input value="Enregistrer" type="submit" name="saver" class="btn btn-default"  />
 
