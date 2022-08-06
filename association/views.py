@@ -1103,8 +1103,11 @@ def print_big_book(request):
             else :
                 details_list.append(  ( i ,str(a.plan_id)  , a.date.strftime("%d %m %Y")    ,  a.id ,  str(abs(a.amount)) + " €", " ")    )
                 a_debit +=  a.amount 
-            i+=1  
-        solde =  a_credit + a_debit # les débits sont en négatifs
+            i+=1 
+        if p.code > 5000 :
+            solde =  -(a_credit + a_debit) # les débits sont en négatifs
+        else : 
+            solde =  a_credit + a_debit # les débits sont en négatifs
 
         if solde :
             elements.append(paragraph)
