@@ -1,4 +1,12 @@
 {% load item_tags %}
+{% load static %}
+
+{% if courses %}
+
+<div class="row alert alert-warning">
+<img src="{% static 'img/conseil.png' %}" width="30px"/> Si vous souhaitez insérer plusieurs cours, cliquer "Insérer dans la séquence" en maintenant enfoncée la touche CTRL. Ouvrir alors le dernier onglet.
+</div>
+{% endif  %}
 
 
 {% for course in courses %}
