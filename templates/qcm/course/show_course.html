@@ -82,9 +82,17 @@
             <hr/>
 
             {% if sacado_asso %}
-             <a href="{% url 'get_course_in_this_parcours'  parcours.id %}"  class="btn btn-default btn-fullwidth"><i class="fa fa-caret-right"></i> Cours mutualisés</a> 
+                {% if parcours.is_sequence %}
+                    <a href="{% url 'show_parcours'  parcours.id %}"  class="btn btn-default btn-fullwidth no_sacado_asso"  title="Version établissement requise"><i class="fa fa-caret-right"></i> Cours mutualisés</a> 
+                {% else %}
+                    <a href="{% url 'get_course_in_this_parcours'  parcours.id %}"  class="btn btn-default btn-fullwidth"><i class="fa fa-caret-right"></i> Cours mutualisés</a>                  
+                {% endif  %}
             {% else %}
-             <a href="#"  class="btn btn-default btn-fullwidth no_sacado_asso"  title="Version établissement requise"><i class="fa fa-caret-right"></i> Cours mutualisés</a> 
+                {% if parcours.is_sequence %}
+                    <a href="#"  class="btn btn-default btn-fullwidth no_sacado_asso"  title="Version établissement requise"><i class="fa fa-caret-right"></i> Vers la séquence</a> 
+                {% else %}
+                    <a href="#"  class="btn btn-default btn-fullwidth no_sacado_asso"  title="Version établissement requise"><i class="fa fa-caret-right"></i> Cours mutualisés</a>                  
+                {% endif  %}
             {% endif  %}
 
 
