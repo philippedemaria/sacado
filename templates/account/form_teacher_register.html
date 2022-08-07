@@ -11,7 +11,7 @@
 {% block general_js %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script type="text/javascript">
-    require(['script/accueil']); 
+    require(['script/accueil_teacher_register']); 
     </script>
 {% endblock %} 
 
@@ -27,12 +27,12 @@
                 <h2 class="sacado">Enseignants</h2>
  
  
- 
                 <h4>Devenir membre  <span class="sacado">SACADO</span> GRATUITEMENT</h4>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group"><label>Sélectionner le pays</label>
                                 <select id="id_country_school" name="country_school" class="form-control select2" required>
+                                        <option value="{{ c.id }}">--------------</option>
                                     {% for c in countries %}
                                         <option value="{{ c.id }}">{{ c.name }}</option>
                                     {%  endfor %}
@@ -94,19 +94,17 @@
           <div class="col-lg-1 col-xs-12">
           </div>
           <div class="col-lg-6 col-xs-12">
-                <div class="features wow bounceInUp clearfix">
-                    <div id="show_form_teacher">
-                        {% include 'user_form.html' %}
-                        <div class="row">
-                            <div class="col-lg-6 col-xs-6">   
-                                <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
-                            </div>        
-                            <div class="col-lg-6 col-xs-6">   
-                                <a href="javascript:history.back()"  class="btn btn-default pull-right" >Retour</a> 
-                            </div>             
-                        </div> 
-                    </div>           
-                </div>
+                <div id="show_form_teacher">
+                    {% include 'user_form.html' %}
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">   
+                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
+                        </div>        
+                        <div class="col-lg-6 col-xs-6">   
+                            <a href="javascript:history.back()"  class="btn btn-default pull-right" >Retour</a> 
+                        </div>             
+                    </div> 
+                </div>           
           </div>
         </div>
     </form> 

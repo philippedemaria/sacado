@@ -562,7 +562,7 @@ $(document).ready(function () {
         $("#show_form_teacher").hide();
 
 
-        $('#id_country_school').on('change', function (event) {   
+        $('#id_country_school').on('change', function (event) {   console.log("test");
 
             let id_country_school = $(this).val();
             if (id_country_school == " ") { alert("Sélectionner un pays") ; return false ;} 
