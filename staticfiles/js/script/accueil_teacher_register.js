@@ -136,7 +136,12 @@
                         $('select[name=town_school]').empty("");
                         if (towns.length >0)
 
-                        { 
+                        { if (towns.length == 1 )
+                            {   let option_null = $("<option>", {  'value': Number(0), 'html': "------------------" });
+                                $('select[name=town_school]').append(option_null);
+                            }
+
+
                             for (let i = 0; i < towns.length ; i++) {            
                                 let town       = towns[i][0];  
                                 let towns_name = towns[i][1];   
@@ -184,7 +189,8 @@
                         schools = data["schools"] ;
                         if (schools.length >0)
 
-                        { for (let i = 0; i < schools.length; i++) {
+                        {  
+                            for (let i = 0; i < schools.length; i++) {
                                     
                                 let school_id   = schools[i][0];
                                 let school_name = schools[i][1]  ;
