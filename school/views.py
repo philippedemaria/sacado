@@ -50,7 +50,7 @@ import csv
 def csv_new_school(request):
 
 	with open ("https://sacado.xyz/ressources/etablissements.csv", newline ="") as file :
-		rows = csv.reader (file, delimiter=";")
+		rows = csv.reader (file, delimiter=",")
 		for row in rows :
 			if len(row[4]) == 4 : zip_c = "0"+str(row[4])
 			else : zip_c = row[4]
