@@ -4,17 +4,9 @@
       <td>jusqu'à</td>        <td>500 élèves</td>        <td>1 000 élèves</td>        <td>1500 élèves</td> <td>+ de 1500 élèves</td>
   </tr>
 
-  {% comment %}
+ 
   <tr>
-      <td>Avant le 1 juillet 2021</td>
-        {% for r in rates %}        
-          <td>{{ r.discount }} €</td>        
-        {% endfor  %}  
-          <td><a href="{% url 'index' %}#footer"  data-dismiss="modal">Nous contacter</a></td>
-  </tr>
-  {% endcomment %}
-  <tr>
-      <td>Après le 1 juillet 2021</td>        
+      <td> </td>        
         {% for r in rates %}        
           <td>{{ r.amount }} €</td>        
         {% endfor  %} 
