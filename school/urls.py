@@ -77,7 +77,7 @@ urlpatterns = [
 
 
 
-    path('csv_new_school', csv_new_school, name='csv_new_school'),
+    #path('csv_new_school', csv_new_school, name='csv_new_school'),
 
 
 ]
