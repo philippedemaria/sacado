@@ -522,15 +522,15 @@ $(document).ready(function () {
 
 
 
-      // $(".regular").slick({
-      //       slidesToShow: 3,
-      //       slidesToScroll: 3,
-      //       autoplay: false,
-      //       autoplaySpeed: 2000,        
-      //       dots: false,
-      //       infinite: true,
+      $(".regular").slick({
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            autoplay: false,
+            autoplaySpeed: 2000,        
+            dots: false,
+            infinite: true,
  
-      // });
+      });
 
 
 
