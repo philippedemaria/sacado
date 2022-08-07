@@ -58,12 +58,12 @@ def csv_new_school(request):
 			School.objects.create(name = row[0], country_id = row[2] , town = row[1] , code_acad = "999efe" , address = "" , zip_code = "999999" , nbstudents = 500 , tiers = 411 )
  
 
-	with open ("https://ressources/etablissementfr.csv", newline ="") as file :
-		rows = csv.reader (file, delimiter=";")
-		for row in rows :
-			if len(row[4]) == 4 : zip_c = "0"+str(row[4])
-			else : zip_c = row[4]
-			School.objects.create(name = row[0], country_id = 5 , town = row[1] , code_acad = row[2] , address = row[3] , zip_code = zip_c , nbstudents = 500 , tiers = 411) 
+	# with open ("https://ressources/etablissementfr.csv", newline ="") as file :
+	# 	rows = csv.reader (file, delimiter=";")
+	# 	for row in rows :
+	# 		if len(row[4]) == 4 : zip_c = "0"+str(row[4])
+	# 		else : zip_c = row[4]
+	# 		School.objects.create(name = row[0], country_id = 5 , town = row[1] , code_acad = row[2] , address = row[3] , zip_code = zip_c , nbstudents = 500 , tiers = 411) 
  
  
 
