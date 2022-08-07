@@ -109,4 +109,11 @@ urlpatterns = [
     path('switch_student_teacher', switch_student_teacher, name='switch_student_teacher'),
 
     path('aggregate_child', aggregate_child, name='aggregate_child'),
+
+    # Enregistrement d'un enseignant avec son enseignant
+    path('ajax_charge_town'  , ajax_charge_town, name='ajax_charge_town'),
+    path('ajax_charge_school', ajax_charge_school, name='ajax_charge_school'),
+
+
+
 ]

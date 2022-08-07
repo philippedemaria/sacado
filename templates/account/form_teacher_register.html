@@ -18,46 +18,32 @@
 {% block body %}
 
 <div class="container">
-
+    <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
+    {% csrf_token %}
         <div class="row">
 
           <div class="col-lg-5 col-xs-12">
-              <div class="teachers-img">
-                    <h2 class="sacado">Enseignants</h2>
-                    <video src="https://sacado.xyz/ressources/videos/presentationSacado.mp4" width="480" height="275"  controls  >
-                      Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
-                    </video>
-
-              </div>
-              <div class="features wow bounceInUp clearfix" style="text-align: center;margin-top:50px">
-                <h4 class="thin">Proposer des parcours individualisés,<br>suivre les acquisitions de savoir faire,<br> de compétences en quelques clics</h4>
-              </div>
-
-
-
-
-          </div>
-          <div class="col-lg-1 col-xs-12">
-          </div>
-          <div class="col-lg-6 col-xs-12">
-              <div class="features wow bounceInUp clearfix">
-                <h4>Devenir membre  <span class="sacado">SACADO</span></h4>
-                <form action="{%  url 'register_teacher' %}" method="POST" id="teacher_form"  > 
-                {% csrf_token %}
-                    {% comment %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <h3>Sélectionner votre établissement</h3>  
-                        </div>
-                    </div>
-
+ 
+                <h2 class="sacado">Enseignants</h2>
+ 
+ 
+ 
+                <h4>Devenir membre  <span class="sacado">SACADO</span> GRATUITEMENT</h4>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group"><label>Sélectionner le pays</label>
-                                <select id="country_id" name="country" class="form-control select2">
+                                <select id="id_country_school" name="country_school" class="form-control select2" required>
                                     {% for c in countries %}
                                         <option value="{{ c.id }}">{{ c.name }}</option>
                                     {%  endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"><label>Sélectionner la ville</label>
+                                <select id="id_town_school" name="town_school" class="form-control select2">
                                 </select>
                             </div>
                         </div>
@@ -87,39 +73,43 @@
                             </div>
                         </div>
                     </div>
-                     {% endcomment %}
-
-
-
-                    {% include 'user_form.html' %}
-
+                    <hr/>
                     <div class="row">
-                        <div class="col-lg-2 col-md-2 col-xs-3" align="center">  
-                            <div class="form-group">
-                                <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-ss_index"> Version Étab.</a>
+                        <div class="col-lg-12 col-md-12 col-xs-12">  
+                            <div class="form-group">                
+                                <h4>Inscrire son établissement à l'asso  <span class="sacado">SACADO</span></h4> 
                             </div>    
                         </div> 
 
-                        <div class="col-lg-10 col-md-10 col-xs-9">  
+                        <div class="col-lg-12 col-md-12 col-xs-12">  
                             <div class="form-group">
-                                <small>Exportations PRONOTE ou CSV, suivi des acquisitions, co-animation, espace de stockage accru, image de présentation, mutualisations des ressources, .... <br/>Optez pour la version établissement. <a href="#footer"> Nous contacter</a></small>
+                                Cette inscription couvre l'ensemble des enseignants de votre établissement et tous les élèves. Elle ouvre les droits à la récupération des cours, des parcours, des quizz <span class="sacado">SACADO</span>  déjà créés, au suivi des acquisitions, à la gestion de la co-animation, à un espace de stockage accru, à des images de présentation, à la mutualisation des ressources, aux exportations PRONOTE ou CSV,.... <br/>Optez pour la version établissement. 
+                                <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-ss_index"> En savoir plus.</a>
                             </div>    
                         </div>                   
                     </div> 
 
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-6">   
-                            <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
-                        </div>        
-                        <div class="col-lg-6 col-xs-6">   
-                            <a href="javascript:history.back()"  class="btn btn-default pull-right" >Retour</a> 
-                        </div>             
-                    </div> 
-                </form>            
-              </div>
+
+          </div>
+          <div class="col-lg-1 col-xs-12">
+          </div>
+          <div class="col-lg-6 col-xs-12">
+                <div class="features wow bounceInUp clearfix">
+                    <div id="show_form_teacher">
+                        {% include 'user_form.html' %}
+                        <div class="row">
+                            <div class="col-lg-6 col-xs-6">   
+                                <div class="form-group"><input name="envoi" type="submit" class="btn btn-primary sendit" value="S'inscrire" /></div>
+                            </div>        
+                            <div class="col-lg-6 col-xs-6">   
+                                <a href="javascript:history.back()"  class="btn btn-default pull-right" >Retour</a> 
+                            </div>             
+                        </div> 
+                    </div>           
+                </div>
           </div>
         </div>
-
-      </div>
+    </form> 
+</div>
 
 {% endblock %}

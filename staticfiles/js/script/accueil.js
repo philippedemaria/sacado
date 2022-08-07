@@ -522,15 +522,15 @@ $(document).ready(function () {
 
 
 
-      $(".regular").slick({
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            autoplay: false,
-            autoplaySpeed: 2000,        
-            dots: false,
-            infinite: true,
+      // $(".regular").slick({
+      //       slidesToShow: 3,
+      //       slidesToScroll: 3,
+      //       autoplay: false,
+      //       autoplaySpeed: 2000,        
+      //       dots: false,
+      //       infinite: true,
  
-      });
+      // });
 
 
 
@@ -604,6 +604,107 @@ $(document).ready(function () {
                 }
             )
         });
+
+
+
+        $("#show_form_teacher").hide();
+
+ 
+    
+        $('#id_country_school').on('change', function (event) {   
+
+            let id_country_school = $(this).val();
+            if (id_country_school == " ") { alert("Sélectionner un pays") ; return false ;} 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_country_school': id_country_school,                      
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "ajax_charge_town",
+                    success: function (data) {
+
+                        towns = data["towns"] ;
+                        $('select[name=town_school]').empty("");
+                        if (towns.length >0)
+
+                        { 
+                            for (let i = 0; i < towns.length ; i++) {            
+                                let town       = towns[i][0];  
+                                let towns_name = towns[i][1];   
+                                let option = $( "<option>"  ,  { 'value':  town , 'html': towns_name }    );
+                                $('select[name=town_school]').append(option);
+                            }
+                        }
+                        else
+                        {
+                            let option = $("<option>", {
+                                'value': 0,
+                                'html': "Aucun contenu disponible"
+                            });
+                            $('select[name=town_school]').append(option);
+                        }
+                        
+                    }
+                }
+            )
+        });
+
+
+
+
+        $('#id_town_school').on('change', function (event) {
+
+            let id_country = $("#id_country_school").val();
+            let id_town = $(this).val();
+            if (id_town == " ") { alert("Sélectionner une ville") ; return false ;}
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_town'   : id_town,  
+                        'id_country': id_country,                      
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "ajax_charge_school",
+                    success: function (data) {
+
+                        $('select[name=school]').empty("");                        
+                        schools = data["schools"] ;
+                        if (schools.length >0)
+
+                        { for (let i = 0; i < schools.length; i++) {
+                                    
+                                let school_id   = schools[i][0];
+                                let school_name = schools[i][1]  ;
+                                let option = $("<option>", {  'value': Number(school_id), 'html': school_name });
+                                $('select[name=school]').append(option);
+                            }
+                        }
+                        else
+                        {
+                            let option = $("<option>", {  'value': 0, 'html': "Aucun contenu disponible" });
+                            $('select[name=school]').append(option);  
+                        }
+
+
+                        $("#show_form_teacher").show();
+                        
+                    }
+                }
+            )
+        });
+
+
+
 
 });
 

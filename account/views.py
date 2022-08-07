@@ -1145,20 +1145,39 @@ def close_my_account(request):
 #########################################Teacher #######################################################################
  
 
+
+@csrf_exempt
+def ajax_charge_town(request):
+
+    id_country =  request.POST.get("id_country_school")
+    data = {}
+    towns = School.objects.values_list('town','town').filter(country_id=id_country).order_by("town") 
+    data['towns'] = list(towns)
+
+    return JsonResponse(data)
+
+
+
+@csrf_exempt
+def ajax_charge_school(request):
+
+    id_country =  request.POST.get("id_country")
+    town       =  request.POST.get("id_town")
+
+    data = {}
+    schools = School.objects.values_list('id', 'name').filter(country_id=id_country, town = town).order_by("name")  
+    data['schools'] = list(schools)
+    return JsonResponse(data)
+
+
+
 def register_teacher_accueil(request) :
 
     u_form  = UserForm()
     countries = Country.objects.order_by("name")
-    form = SchoolForm(request.POST or None, request.FILES  or None)
-    
-    if form.is_valid():
-        school = form.save()
-        school.is_active = 0
-        school.save()
-        Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
-        message.success(request,"Votre école vient d'être enregistrée. ")
+
  
-    context = {'u_form':  u_form , 'countries':  countries , 'form':  form  }
+    context = {'u_form':  u_form , 'countries':  countries   }
     return render(request, 'account/form_teacher_register.html', context)
 
 
@@ -1170,6 +1189,9 @@ def register_teacher(request):
         if user_form.is_valid():
             user = user_form.save(commit=False)
             user.user_type = User.TEACHER
+            if request.POST.get("school",None) :
+                user.school  =  request.POST.get("school",None)
+                user.country =  request.POST.get("country_school",None)
             user.set_password(user_form.cleaned_data["password1"])
             user.save()
             username = user_form.cleaned_data['username']
