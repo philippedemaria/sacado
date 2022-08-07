@@ -4,23 +4,16 @@ requirejs.config({
     paths: {
        
  
-  
-
-        jquery: "../index/lib/jquery/jquery.min",
-
- 
+        jquery: ['//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min', 'lib/jquery-2.2.4.min'],
+        config_select2: "script/config-select2",
+        multiselect: "lib/multiselect.min",
     },
     shim: {
        
 
-
-
-
-        "main": {
-            deps: ['jquery']
-        },
+ 
 
     }
 });
 
-require(['jquery',     ]);
+require(['jquery',  'multiselect',  'config_select2',   ]);
