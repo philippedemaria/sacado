@@ -1149,7 +1149,7 @@ def close_my_account(request):
 @csrf_exempt
 def ajax_charge_town(request):
 
-    id_country =  request.POST.get("id_country_school")
+    id_country =  request.POST.get("id_country")
     data = {}
     towns = School.objects.values_list('town','town').filter(country_id=id_country).order_by("town") 
     data['towns'] = list(towns)
@@ -1190,8 +1190,11 @@ def register_teacher(request):
             user = user_form.save(commit=False)
             user.user_type = User.TEACHER
             if request.POST.get("school",None) :
-                user.school  =  request.POST.get("school",None)
-                user.country =  request.POST.get("country_school",None)
+
+                user.school_id  =  request.POST.get("school",None)
+
+                user.country_id =  request.POST.get("country_school",None)
+
             user.set_password(user_form.cleaned_data["password1"])
             user.save()
             username = user_form.cleaned_data['username']

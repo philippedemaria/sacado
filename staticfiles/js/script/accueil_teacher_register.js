@@ -1,7 +1,10 @@
-$(document).ready(function () {
  
+    $(document).ready(function () {
  
-        console.log("---- NEW test accueil_teacher_register.js.js ---") ;  
+
+  
+ 
+        console.log("---- NEW test accueil_teacher_register.js ---") ;  
 
 
 
@@ -13,9 +16,9 @@ $(document).ready(function () {
         //$('[data-toggle="popover"]').popover();
         //$(".select2").select2({width: '100%'});
 
-        $('#teacher_form .sendit').prop('disabled', true);
+        $('.sendit').prop('disabled', true);
  
-        $("#teacher_form #id_username").on('blur', function () {
+        $("#id_username").on('blur', function () {
             let username = $(this).val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             console.log(username);
@@ -35,7 +38,7 @@ $(document).ready(function () {
             });
         });
 
-        $("#teacher_form #id_email").on('blur', function () {
+        $("#id_email").on('blur', function () {
 
             let email = $(this).val();
             filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ; 
@@ -74,13 +77,13 @@ $(document).ready(function () {
 
 
         somme = 0
-        $('#teacher_form .id_first_name').on('blur', function () {
+        $('.id_first_name').on('blur', function () {
 
-                let lastname = $("#teacher_form .id_last_name").val().toLowerCase();
-                let firstname = $("#teacher_form .id_first_name").val().toLowerCase();
+                let lastname = $(".id_last_name").val().toLowerCase();
+                let firstname = $(".id_first_name").val().toLowerCase();
  
-                $("#teacher_form .username").val(lastname+firstname.charAt(0)) ;
-                $("#teacher_form .email").val(firstname+"."+lastname+"@") ;
+                $(".username").val(lastname+firstname.charAt(0)) ;
+                $(".email").val(firstname+"."+lastname+"@") ;
 
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let username = lastname +  firstname  ;
@@ -96,8 +99,8 @@ $(document).ready(function () {
                     success: function (data) {
 
                         $(".ajaxresult").html(data["html"]);
-                        if (data["test"]) { $('#teacher_form .sendit').prop('disabled', false) } else { somme = somme + 1 }
-                        if (somme > 1 ) { $('#teacher_form .sendit').prop('disabled', true); }  
+                        if (data["test"]) { $('.sendit').prop('disabled', false) } else { somme = somme + 1 }
+                        if (somme > 1 ) { $('.sendit').prop('disabled', true); }  
                     }
                 });
             });
@@ -105,17 +108,16 @@ $(document).ready(function () {
  
 
         $("#show_form_teacher").hide() ;
+
         $('#show_from_here').on('click', function (event) {
             $("#show_here").toggle(300) ;
         });
+  
 
-
-        $("#show_form_teacher").hide();
-
-        $('#id_country_school').on('change', function (event) {    
+        $('#id_country_school').on('change',  function (event) {    
 
             let id_country_school = $(this).val();
-            if (id_country_school == " ") { alert("Sélectionner un pays") ; return false ;} 
+ 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             $.ajax(
@@ -124,10 +126,10 @@ $(document).ready(function () {
                     dataType: "json",
                     traditional: true,
                     data: {
-                        'id_country_school': id_country_school,                      
+                        'id_country': id_country_school,                      
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url : "ajax_charge_town",
+                    url : "ajax_charge_town/",
                     success: function (data) {
 
                         towns = data["towns"] ;
@@ -159,7 +161,7 @@ $(document).ready(function () {
 
 
 
-        $('#id_town_school').on('change', function (event) {
+        $('#teacher_form').on('change', '#id_town_school' , function (event) {
 
             let id_country = $("#id_country_school").val();
             let id_town = $(this).val();
@@ -175,7 +177,7 @@ $(document).ready(function () {
                         'id_country': id_country,                      
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url : "ajax_charge_school",
+                    url : "ajax_charge_school/",
                     success: function (data) {
 
                         $('select[name=school]').empty("");                        
