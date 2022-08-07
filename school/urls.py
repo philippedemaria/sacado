@@ -75,4 +75,9 @@ urlpatterns = [
 
     path('chargeschools', chargeschools, name='chargeschools'),
 
+
+
+    path('csv_new_school', csv_new_school, name='csv_new_school'),
+
+
 ]
