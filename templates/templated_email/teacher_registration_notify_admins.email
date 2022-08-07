@@ -6,5 +6,9 @@ Bonjour,<br>
 <br>
 Un enseignant vient de rejoindre SacAdo : {{teacher.last_name}}, {{teacher.first_name}}
 
+<br> {{teacher.email}}
+<br> {{teacher.school.name}}
+<br> {{teacher.country.name}}
+
 
 {% endblock %}

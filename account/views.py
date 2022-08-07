@@ -1204,7 +1204,6 @@ def register_teacher(request):
                 #teacher.notify_registration()
                 teacher.notify_registration_to_admins()
                 msg = "Bonjour "+ user.first_name +" " + user.last_name+",\n\n Votre compte Sacado est maintenant disponible.\n\nVotre identifiant est : "+user.username+".\n\nVotre mot de passe est : "+password+" \n\nPour vous connecter, redirigez-vous vers  https://sacado.xyz .\n\nCeci est un mail automatique. Merci de ne pas répondre."
-                msg_ = "Bonjour,\n\n Un enseignant vient de rejoindre SacAdo : " + user.last_name + "  "+user.first_name 
                 if user.email :
                     send_mail('INSCRIPTION SACADO', msg ,settings.DEFAULT_FROM_EMAIL,[user.email, ])
             except :
