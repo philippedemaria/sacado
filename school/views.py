@@ -67,7 +67,7 @@ def csv_new_school(request):
  
  
 
- 	return redirect('index')
+	return redirect('index')
 
 
 
