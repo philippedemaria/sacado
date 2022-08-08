@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import JsonResponse
-from .models import School, Country  , Stage
+from .models import School, Country  , Stage , Town
 from account.decorators import is_manager_of_this_school
 from account.models import User, Teacher, Student , Parent ,Response
 from qcm.models import Relationship  
