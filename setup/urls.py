@@ -100,6 +100,13 @@ urlpatterns = [
 
     path('scheduledTasks/send_reports/', send_reports ,name='send_reports'), 
     #path('<slug:adresse>', all_routes , name='all_routes'), 
+
+    # Enregistrement d'un enseignant avec son enseignant
+    path('ajax_charge_town'  , ajax_charge_town, name='ajax_charge_town'),
+    path('ajax_charge_school', ajax_charge_school, name='ajax_charge_school'),
+
+
+
 ]
 
 

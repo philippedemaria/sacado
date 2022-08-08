@@ -116,11 +116,9 @@
 
         $('#id_country_school').on('change',  function (event) {    
 
-            let id_country_school = $(this).val();
+            let id_country_school = $(this).val(); 
  
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-            console.log(id_country_school) ;
 
             $.ajax(
                 {
@@ -139,7 +137,7 @@
                         if (towns.length >0)
 
                         { if (towns.length == 1 )
-                            {   let option_null = $("<option>", {  'value': Number(0), 'html': "------------------" });
+                            {   let option_null = $("<option>", {  'value': Number(0), 'html': "--------Choisir----------" });
                                 $('select[name=town_school]').append(option_null);
                             }
 

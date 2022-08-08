@@ -14,6 +14,13 @@ class SchoolForm(forms.ModelForm):
     	fields = '__all__'
 
 
+class SchoolUpdateForm(forms.ModelForm):
+ 
+    class Meta:
+    	model = School
+    	fields = 'gar', 'logo', 'nbstudents'
+
+
 
 class CountryForm(forms.ModelForm):
 

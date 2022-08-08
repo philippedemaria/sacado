@@ -574,7 +574,7 @@ $(document).ready(function () {
                     dataType: "json",
                     traditional: true,
                     data: {
-                        'id_country_school': id_country_school,                      
+                        'id_country': id_country_school,                      
                         csrfmiddlewaretoken: csrf_token
                     },
                     url : "ajax_charge_town",
@@ -584,7 +584,13 @@ $(document).ready(function () {
                         $('select[name=town_school]').empty("");
                         if (towns.length >0)
 
-                        { 
+                        { if (towns.length == 1 )
+                            {   let option_null = $("<option>", {  'value': Number(0), 'html': "-------Choisir------" });
+                                $('select[name=town_school]').append(option_null);
+                            }
+
+
+
                             for (let i = 0; i < towns.length ; i++) {            
                                 let town       = towns[i][0];  
                                 let towns_name = towns[i][1];   

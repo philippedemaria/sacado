@@ -5,6 +5,7 @@
 
 
 
+
 {% block body %}
 
 <section class="container" style="margin-top:100px">
@@ -33,60 +34,79 @@
 
 
 
-    <form action="" method="POST" enctype='multipart/form-data' id="teacher_form">
+    <form action="" method="POST" enctype='multipart/form-data'>
         <div class="row">   
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-danger">
-                    <li>Si le demandeur est déjà inscrit, la demande doit être effectuée depuis son <a href="{% url 'index' %}">interface SACADO > Compte</a>.</li>
-                    <li>Si votre établissement est déjà inscrit, l'administrateur ou le DAF doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>.</li> 
+                Si votre établissement est déjà inscrit, l'administrateur ou le DAF doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>. 
                 </div>
             </div>
         </div>
-
-
-
         <div class="row">                    
             <div class="col-sm-12 col-md-6">
+
                   {% csrf_token %}
 
-                  <h5>Etablissement concerné</h5>
-
-                  <div class="row">
-                      <div class="col-sm-12 col-md-12">
-                          <div class="form-group"><label>Sélectionner le pays <small>+de 60 000 établissements en France. Prévoir un peu d'attente.</small></label>
-                              <select id="id_country_school" name="country_school" class="form-control select2" required>
-                                  <option value=" ">--------------</option>
-                                  {% for c in countries %}
-                                      <option value="{{ c.id }}">{{ c.name }}</option>
-                                  {%  endfor %}
-                              </select>
-                          </div>
-                      </div>
+                  <div class="form-group">
+                      <label>Nom de l'établissement  : </label>   
+                      {{ form.name |add_class:"form-control" }}
+                      {{ form.name.errors }}
                   </div>
-                  <div class="row">
-                      <div class="col-sm-12 col-md-12">
-                          <div class="form-group"><label>Sélectionner la ville</label>
-                              <select id="id_town_school" name="town_school" class="form-control select2">
-                              </select>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col-sm-12 col-md-12">
-                          <div class="form-group"><label>Sélectionner l'établissement</label>
-                              <select id="id_school" name="school" class="form-control select2" required>
-                              </select>
-                          </div>
-                      </div>
-                  </div>
-
-
                   <div class="form-group">
                       <label>Logo de l'établissement : <em>20ko max. 60px*60px (optionnel)</em></label>
                       {{ form.logo }}
                       {{ form.logo.errors }}
                   </div>
+                  <div class="form-group">                
+                      {{ form.code_acad.label_tag }} <small>Pour les établissements sans UAI, renseigner 999efe</small>
+                      {{ form.code_acad |add_class:"form-control" }}
+                      {{ form.code_acad.errors }}
+                  </div>
+                  <div class="form-group">                
+                      {{ form.address.label_tag }}
+                      {{ form.address |add_class:"form-control" }}
+                      {{ form.address.errors }}
+                  </div>
+
+                  <div class="form-group">                
+                      {{ form.complement.label_tag }}
+                      {{ form.complement |add_class:"form-control" }}
+                      {{ form.complement.errors }}
+                  </div>
+
+
                   <div class="row">     
+                      <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                              {{ form.town.label_tag }}
+                              {{ form.town |add_class:"form-control" }}
+                              {{ form.town.errors }}
+                          </div>
+                      </div>
+
+                      <div class="col-sm-12 col-md-6">
+                          <div class="form-group">
+                              {{ form.zip_code.label_tag }}
+                              {{ form.zip_code |add_class:"form-control" }}
+                              {{ form.zip_code.errors }}
+                          </div>
+                      </div>
+                  </div>
+ 
+                  <div class="form-group">
+                      <label>Pays :</label>
+                      {{ form.country |add_class:"form-control select2" }}
+                      {{ form.country.errors }}
+                  </div>
+  
+
+                  <div class="row">     
+
+                      <div class="col-sm-12 col-md-4">
+                          <div class="form-group">
+                              <img src="{% static 'img/gar.png' %}" width="150px"  />
+                          </div>
+                      </div>
                       <div class="col-sm-12 col-md-5">
                           <div class="form-group">
                               Connexion souhaitée via le GAR depuis votre ENT 
@@ -99,6 +119,9 @@
                           </div>
                       </div>
                   </div>
+
+
+
                   <div class="row">     
                       <div class="col-sm-12 col-md-6">
                           <div class="form-group">
@@ -111,7 +134,7 @@
                       <div class="col-sm-12 col-md-6">
                           <div class="form-group">
                               <label>Cotisation en euros : </label> 
-                              <input name="somme" id="somme" value=100 type="number"class="form-control" required readonly />
+                              <input name="somme" id="somme" value=90 type="number"class="form-control" required readonly />
                           </div>
                       </div>
                   </div>
@@ -119,7 +142,7 @@
 
 
             </div>
-            <div class="col-sm-12 col-md-6" id="show_form_teacher">
+            <div class="col-sm-12 col-md-6">
                                       
                   <label>Coordonnées du demandeur (DAF, enseignant, perdir,...)</label>
                   {% include 'user_form.html' %}
@@ -138,7 +161,7 @@
                   <div class="row">
                       <div class="col-sm-12 col-md-12">
                           <div class="alert alert-danger">
-                              La version établissement n'est activée qu'à partir de l'encaissement de la cotisation.
+                              A partir du 1 juillet 2021, la version établissement ne sera activée qu'à partir de l'encaissement de la cotisation.
                           </div>
                       </div>
                   </div> 

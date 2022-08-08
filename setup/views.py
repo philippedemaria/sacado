@@ -34,10 +34,10 @@ from qcm.models import Folder , Parcours, Exercise,Relationship,Studentanswer, S
 from sendmail.models import Communication
 from setup.forms import WebinaireForm , TweeterForm
 from setup.models import Formule , Webinaire , Tweeter
-from school.models import Stage , School
-from school.forms import  SchoolForm
+from school.models import Stage , School, Country , Town
+from school.forms import  SchoolForm, SchoolUpdateForm  
 from school.gar import *
-from socle.models import Level, Subject
+from socle.models import Level, Subject 
 from tool.models import Quizz, Question, Choice
 from bibliotex.models import Exotex
 from datetime import date, datetime , timedelta
@@ -408,14 +408,56 @@ def send_message(request):
 
 
 
+
+@csrf_exempt
+def ajax_charge_town(request):
+
+    id_country =  request.POST.get("id_country")
+
+    print(id_country)
+    data = {}
+    towns = Town.objects.values_list('name','name').filter(country_id=id_country).order_by("name") 
+    data['towns'] = list(towns)
+    
+    return JsonResponse(data)
+
+
+
+@csrf_exempt
+def ajax_charge_school(request):
+
+    id_country =  request.POST.get("id_country")
+    town       =  request.POST.get("id_town")
+
+    data = {}
+    schools = School.objects.values_list('id', 'name').filter(country_id=id_country, town = town).order_by("name")  
+    data['schools'] = list(schools)
+    return JsonResponse(data)
+
+
+
+
+
+
 def school_adhesion(request):
 
     rates = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
-    form = SchoolForm(request.POST or None, request.FILES  or None)
+
+    countries = Country.objects.order_by("name")
+
     token = request.POST.get("token", None)
     today = time_zone_user(request.user)
     u_form = UserForm(request.POST or None)
+
+    school_id = request.POST.get("school",None)
+    if request.POST.get("school",None):
+        school  = School.objects.get(pk=school_id)
+        form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance = school)
+        print("ici -------------------> " , school)
+    else :
+        form = SchoolUpdateForm(request.POST or None, request.FILES  or None)
+        print("la -------------------> " )
 
 
     if request.method == "POST" :
@@ -423,32 +465,17 @@ def school_adhesion(request):
 
             if token :
                 if int(token) == 7 :
-                    school_commit = form.save(commit=False)
+                    school_commit = form.save()
                     school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , 
                         code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'logo' : school_commit.logo , 'address' : school_commit.address ,'complement' : school_commit.complement , 'gar' : school_commit.gar }  )
-
-
-                    if not created :
+                    #if not created :
                         # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
-                        School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , 
-                            nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement, logo = school_commit.logo )
-                        new_user_id = request.session.get("new_user_id", None)
-                        if new_user_id :
-                            user = User.objects.get(pk = new_user_id )
-                        else :
-                            user = u_form.save(commit=False)
-                            user.user_type = User.TEACHER
-                            user.school = school_exists # on attribue l'établissement à la personne qui devient référence
-                            user.is_manager = 1 # on attribue l'établissement à la personne qui devient administratrice de sacado.
-                            user.set_password(u_form.cleaned_data["password1"])
-                            user.country = school_exists.country
-                            user.save()
-                            username = u_form.cleaned_data['username']
-                            password = u_form.cleaned_data['password1']
-                            teacher = Teacher.objects.create(user=user)
-                            request.session["new_user_id"] = user.id    
+                    #School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , 
+                    #    nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement, logo = school_commit.logo )
+                    new_user_id = request.session.get("new_user_id", None)
+                    if new_user_id :
+                        user = User.objects.get(pk = new_user_id )
                     else :
-                        # si l'établissement vient d'être créé on crée aussi la personne qui l'enregistre.
                         user = u_form.save(commit=False)
                         user.user_type = User.TEACHER
                         user.school = school_exists # on attribue l'établissement à la personne qui devient référence
@@ -459,11 +486,24 @@ def school_adhesion(request):
                         username = u_form.cleaned_data['username']
                         password = u_form.cleaned_data['password1']
                         teacher = Teacher.objects.create(user=user)
-                        request.session["new_user_id"] = user.id 
-                        ##########
-                        ##########
-                        # Si on vient de créer un établissement, on lui crée un abonnement.
-                        ##########
+                        request.session["new_user_id"] = user.id    
+                    # else :
+                    #     # si l'établissement vient d'être créé on crée aussi la personne qui l'enregistre.
+                    #     user = u_form.save(commit=False)
+                    #     user.user_type = User.TEACHER
+                    #     user.school = school_exists # on attribue l'établissement à la personne qui devient référence
+                    #     user.is_manager = 1 # on attribue l'établissement à la personne qui devient administratrice de sacado.
+                    #     user.set_password(u_form.cleaned_data["password1"])
+                    #     user.country = school_exists.country
+                    #     user.save()
+                    #     username = u_form.cleaned_data['username']
+                    #     password = u_form.cleaned_data['password1']
+                    #     teacher = Teacher.objects.create(user=user)
+                    #     request.session["new_user_id"] = user.id 
+                    #     ##########
+                    #     ##########
+                    #     # Si on vient de créer un établissement, on lui crée un abonnement.
+                    #     ##########
 
 
                     is_active   = False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
@@ -506,7 +546,7 @@ def school_adhesion(request):
             print(form.errors)
             print(u_form.errors)
 
-    context = { 'form' : form , 'rates': rates, 'school_year': school_year, 'u_form' : u_form }
+    context = { 'form' : form , 'rates': rates, 'school_year': school_year, 'u_form' : u_form , 'countries' : countries }
     return render(request, 'setup/school_adhesion.html', context)
 
 
