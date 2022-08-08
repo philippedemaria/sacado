@@ -4,7 +4,10 @@ from .views import *
 
 urlpatterns = [
 
+    path('create_town_database', create_town_database, name='create_town_database'),
 
+
+    
     path('', list_schools, name='schools'),
     path('new', create_school, name='create_school'),
     path('update/<int:id>', update_school, name='update_school'),

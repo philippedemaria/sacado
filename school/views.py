@@ -68,6 +68,17 @@ import csv
 
 
 
+def create_town_database(request) :
+	schools = School.objects.all()
+	existings = []
+	for school in schools :
+		if not school.town in existings :
+			existings.append(school.town)
+			Town.objects.create(name = school.town, country=school.country , code_acad= school.code_acad, address= school.address , zip_code = school.zip_code )
+
+	return redirect('index')
+
+
 
  
  

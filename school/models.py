@@ -17,6 +17,20 @@ class Country(models.Model):
         return self.name
 
 
+class Town(models.Model):
+    name    = models.CharField(max_length=255, verbose_name="Nom") 
+    country = models.ForeignKey(Country, default='', blank=True, related_name='towns', related_query_name="towns", on_delete=models.PROTECT, verbose_name="Pays")
+    code_acad           = models.CharField(max_length=255, default='999efe',   verbose_name="Code UAI")
+    address             = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
+    complement          = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    zip_code            = models.CharField(max_length=255, default='99999', blank=True, verbose_name="Code postal")
+
+
+    def __str__(self):
+        return "{} - {} ".format(self.name,  self.country.name)
+
+
+
 class School(models.Model):
     name                = models.CharField(max_length=255, verbose_name="nom")
     country             = models.ForeignKey(Country, default='', blank=True, related_name='school', related_query_name="school", on_delete=models.PROTECT, verbose_name="Pays")
