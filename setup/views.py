@@ -413,12 +413,13 @@ def send_message(request):
 def ajax_charge_town(request):
 
     id_country =  request.POST.get("id_country")
-
-    print(id_country)
     data = {}
-    towns = Town.objects.values_list('name','name').filter(country_id=id_country).order_by("name") 
-    data['towns'] = list(towns)
-    
+    if id_country == 5 :
+        data['towns'] = None
+    else : 
+        towns = Town.objects.values_list('name','name').filter(country_id=id_country).order_by("name") 
+        data['towns'] = list(towns)
+    data['id_country'] = id_country
     return JsonResponse(data)
 
 
@@ -434,7 +435,14 @@ def ajax_charge_school(request):
     data['schools'] = list(schools)
     return JsonResponse(data)
 
+@csrf_exempt
+def ajax_charge_school_by_rne(request):
 
+    id_rne       =  request.POST.get("id_rne")
+    data = {}
+    schools = School.objects.values_list('id', 'name').filter(country_id=5,code_acad=id_rne)
+    data['schools'] = list(schools)
+    return JsonResponse(data)
 
 
 

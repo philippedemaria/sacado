@@ -108,6 +108,7 @@
  
 
         $("#show_form_teacher").hide() ;
+        $("#select_rne").hide();
 
         $('#show_from_here').on('click', function (event) {
             $("#show_here").toggle(300) ;
@@ -133,30 +134,45 @@
                     success: function (data) {
 
                         towns = data["towns"] ;
-                        $('select[name=town_school]').empty("");
-                        if (towns.length >0)
+                        id_country = data["id_country"];
 
-                        { if (towns.length == 1 )
-                            {   let option_null = $("<option>", {  'value': Number(0), 'html': "--------Choisir----------" });
-                                $('select[name=town_school]').append(option_null);
+                        if ( id_country == '5')
+                        { 
+                            $("#select_rne").show();
+                        }
+                        else
+                        { 
+                            $('select[name=town_school]').empty("");
+                            $("#select_town").show();
+
+                            if (towns.length >0)
+
+                            { if (towns.length == 1 )
+                                {   let option_null = $("<option>", {  'value': Number(0), 'html': "--------Choisir----------" });
+                                    $('select[name=town_school]').append(option_null);
+                                }
+
+
+                                for (let i = 0; i < towns.length ; i++) {            
+                                    let town       = towns[i][0];  
+                                    let towns_name = towns[i][1];   
+                                    let option = $( "<option>"  ,  { 'value':  town , 'html': towns_name }    );
+                                    $('select[name=town_school]').append(option);
+                                }
                             }
-
-
-                            for (let i = 0; i < towns.length ; i++) {            
-                                let town       = towns[i][0];  
-                                let towns_name = towns[i][1];   
-                                let option = $( "<option>"  ,  { 'value':  town , 'html': towns_name }    );
+                            else
+                            {
+                                let option = $("<option>", {
+                                    'value': 0,
+                                    'html': "Aucun contenu disponible"
+                                });
                                 $('select[name=town_school]').append(option);
                             }
                         }
-                        else
-                        {
-                            let option = $("<option>", {
-                                'value': 0,
-                                'html': "Aucun contenu disponible"
-                            });
-                            $('select[name=town_school]').append(option);
-                        }
+ 
+        
+
+
                         
                     }
                 }

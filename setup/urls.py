@@ -104,7 +104,7 @@ urlpatterns = [
     # Enregistrement d'un enseignant avec son enseignant
     path('ajax_charge_town'  , ajax_charge_town, name='ajax_charge_town'),
     path('ajax_charge_school', ajax_charge_school, name='ajax_charge_school'),
-
+    path('ajax_charge_school_by_rne', ajax_charge_school_by_rne, name='ajax_charge_school_by_rne'),
 
 
 ]
