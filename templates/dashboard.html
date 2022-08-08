@@ -342,13 +342,14 @@
                 {% if sacado_asso %}
                     Etablissement <br/>{{ user.school.name }}
                 {% else %}
-                    Enseignant
+                    Enseignant <br/>  {{ user.school.name }}  <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a>  
                 {% endif  %}
             {% elif user.user_type == 1 %}
                 Parent
             {% else %}
                 Elève
             {% endif  %}
+             <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a>
         </div>
     </div> 
     <hr>
@@ -397,12 +398,12 @@
     </div>
     {% endif %}
 
-    {%  if request.user.is_teacher %}
-        {%  if not request.user.is_manager and not is_gar_check %}<!-- manager dans un établissement -->
+    {%  if request.user.is_teacher or request.user.is_superuser %}
+        {%  if not request.user.is_manager and not is_gar_check or request.user.is_superuser and not request.user.school %}<!-- manager dans un établissement -->
         <hr/>
         <div class="row">
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-                <a href="{% url 'get_school' %}">Rejoindre un établissement</a>
+                <a href="{% url 'get_school' %}" class="btn btn-danger">Rejoindre un établissement</a>
             </div>
         </div>
         {% endif%}

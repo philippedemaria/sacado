@@ -454,11 +454,9 @@ def school_adhesion(request):
     if request.POST.get("school",None):
         school  = School.objects.get(pk=school_id)
         form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance = school)
-        print("ici -------------------> " , school)
     else :
         form = SchoolUpdateForm(request.POST or None, request.FILES  or None)
-        print("la -------------------> " )
-
+ 
 
     if request.method == "POST" :
         if  all((u_form.is_valid(), form.is_valid())):   
