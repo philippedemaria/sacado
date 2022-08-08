@@ -1020,32 +1020,26 @@ def pdf_account(request,id):
 
 def get_school(request):
 	""" permet à un enseignant de rejoindre un établissement"""
-
-	countries = Country.objects.order_by("name")
 	if request.method == "POST":
 		token = request.POST.get("token",None)
-		school_id = request.POST.get("school_id",None)
-		school = School.objects.get(pk=school_id)
-
-		if token == school.code_acad+"_"+str(school.id) :
-
+		try :
+			school = School.objects.get(code_acad=token)
 			user = User.objects.filter(pk=request.user.id).update(school = school)
-			try : 
-				teacher = user.teacher
-				groups  = teacher.groups.all()
-				for g in groups :
-					Group.objects.filter(pk=g.id).update(school = school) 
-					for s in g.students.all() :
-						User.objects.filter(pk=s.user.id).update(school = school)
-			except :
-				pass
+ 
+			teacher = request.user.teacher
+			groups  = teacher.groups.all()
+			for g in groups :
+				Group.objects.filter(pk=g.id).update(school = school) 
+				for s in g.students.all() :
+					User.objects.filter(pk=s.user.id).update(school = school)
+ 
 			messages.success(request,"Rattachement à l'établissement " +school.name+ " réussi")
-		else :
-			messages.error(request,"Echec du rattachement à l'établissement " +school.name )
+		except :
+			messages.error(request,"Echec du rattachement à l'établissement. vérifier le token."  )
 		return redirect("index")
 
  
-	context = {  "countries" : countries  }
+	context = {   }
 	return render(request, 'school/get_school.html', context )
 
 

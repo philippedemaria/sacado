@@ -34,28 +34,13 @@
     <form action="" method="POST">
     {% csrf_token %}    
         <div class="row">    
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-3">
                 <div class="form-group">
                     <label>Token :</label>
                     <input name="token" type="text" required class="form-control" />
                 </div>
             </div>
         </div> 
- 
-        <div class="row"> 
-            <div class="col-sm-12 col-lg-12">
-                <div class="form-group">
-                    <label>Etablissement de rattachement :</label>
-                    <select name="school_id" class="form-control select2">
-                        {% for school in schools %}
-                            <option value="{{ school.id }}">{{ school.name }} - {{ school.town }} - {{ school.country }} : {% for a in school.admin %}{{ a }} {% if not forloop.last%}, {% endif %}{% endfor %}</option>
-                        {% endfor %} 
-                    </select>
-                </div>
-            </div>
-        </div> 
-
-
         <div class="row">
             <div class="col-sm-12 col-md-8">
                 <div class="form-group">
