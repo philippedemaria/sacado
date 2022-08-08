@@ -1151,7 +1151,7 @@ def ajax_charge_town(request):
 
     id_country =  request.POST.get("id_country")
     data = {}
-    towns = Town.objects.values_list('town','town').filter(country_id=id_country).order_by("town") 
+    towns = Town.objects.values_list('name','name').filter(country_id=id_country).order_by("name") 
     data['towns'] = list(towns)
 
     return JsonResponse(data)
