@@ -27,84 +27,86 @@
 <section class="content_main"> 
     {% if request.user.is_board %}
 
- 
+    <div class="alert alert-warning">
+        <div class="row">
+            <div class="col-lg-6 col-md-4 col-xs-6">
+                <table class="table bg_white">
+                    <tr>
+                        <td>Nombre d'établissements adhérents</td>
+                        <td>{{ nb_schools }}</td>
+                    </tr>
+                    <tr>
+                        <td>dont établissement français</td>
+                        <td>{{ nb_schools_fr }}</td>
+                    </tr>
+                    <tr>
+                        <td>dont établissement de l'étranger</td>
+                        <td>{{ nb_schools_no_fr }}</td>
+                    </tr>
+                    <tr style="background-color: #f1eef7">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>En attente de paiement</td>
+                        <td>{{ nb_schools_no_pay }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-6 col-md-4 col-xs-6">
+                <table class="table bg_white">
+                    <tr>
+                        <td><b>Montant perçu </b><small>(dont Paypal)</small> au {{ today|date:"d N Y" }}</td>
+                        <td><b>{{ actif }} €</b></td>
+                    </tr>
 
-    <div class="row alert alert-warning">
-        <div class="col-lg-6 col-md-4 col-xs-6">
-            <table class="table bg_white">
-                <tr>
-                    <td>Nombre d'établissements adhérents</td>
-                    <td>{{ nb_schools }}</td>
-                </tr>
-                <tr>
-                    <td>dont établissement français</td>
-                    <td>{{ nb_schools_fr }}</td>
-                </tr>
-                <tr>
-                    <td>dont établissement de l'étranger</td>
-                    <td>{{ nb_schools_no_fr }}</td>
-                </tr>
-                <tr style="background-color: #f1eef7">
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>En attente de paiement</td>
-                    <td>{{ nb_schools_no_pay }}</td>
-                </tr>
-            </table>
+                    <tr>
+                        <td>En attente de paiement</td>
+                        <td>{{ product }} €</td>
+                    </tr>                
+                    <tr>
+                        <td>Total attendu <small>(dont Paypal)</small></td>
+                        <td>{{ total }} €</td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger">Charges</td>
+                        <td class="text-danger"><b>{{ charge }} €</b></td>
+                    </tr>
+                </table>
+            </div>
+     
         </div>
-        <div class="col-lg-6 col-md-4 col-xs-6">
-            <table class="table bg_white">
-                <tr>
-                    <td><b>Montant perçu </b><small>(dont Paypal)</small> au {{ today|date:"d N Y" }}</td>
-                    <td><b>{{ actif }} €</b></td>
-                </tr>
 
-                <tr>
-                    <td>En attente de paiement</td>
-                    <td>{{ product }} €</td>
-                </tr>                
-                <tr>
-                    <td>Total attendu <small>(dont Paypal)</small></td>
-                    <td>{{ total }} €</td>
-                </tr>
-                <tr>
-                    <td class="text-danger">Charges</td>
-                    <td class="text-danger"><b>{{ charge }} €</b></td>
-                </tr>
-            </table>
-        </div>
- 
-    </div>
 
-    <div class="col-lg-12 col-xs-12">
-        Etablissements adhérents <i class="fa fa-hand-o-right"></i>
-        {% comment %}<a href="{% url 'all_schools' %}"> Tous les établissements</a>{% endcomment %}
+                {% comment %}
+                    <div class="col-lg-12 col-xs-12">
+                        Etablissements adhérents <i class="fa fa-hand-o-right"></i>
+                        <a href="{% url 'all_schools' %}"> Tous les établissements</a>
+                    </div>
+                    <div class="col-lg-12 col-xs-12">
+                        <table class="table bg_white standard_tab_sort300">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                    <td>Nom</td>
+                                    <td>Ville</td>
+                                    <td>Pays</td>
+                                    <td>Admin</td>
+                                </tr>
+                            </thead>
+                            {% for a in abonnements %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ a.school.name }}</td>
+                                <td>{{ a.school.town }}</td>
+                                <td>{{ a.school.country.name }}</td>
+                                <td>{% for u in a.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endcomment %}
     </div>
-    <div class="col-lg-12 col-xs-12">
-        <table class="table bg_white standard_tab_sort300">
-            <thead>
-                <tr>
-                    <td></td>
-                    <td>Nom</td>
-                    <td>Ville</td>
-                    <td>Pays</td>
-                    <td>Admin</td>
-                </tr>
-            </thead>
-            {% for a in abonnements %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ a.school.name }}</td>
-                <td>{{ a.school.town }}</td>
-                <td>{{ a.school.country.name }}</td>
-                <td>{% for u in a.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
     {% endif %} 
 
 
