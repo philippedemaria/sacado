@@ -78,9 +78,14 @@ urlpatterns = [
     path('delete_formule/<int:id>/', delete_formule, name='delete_formule'),
 
 
-    path('all_schools', all_schools, name='all_schools'),
+    #path('all_schools', all_schools, name='all_schools'),
     path('update_school_admin/<int:id>/', update_school_admin, name='update_school_admin'),
 
+
+    path('pending_adhesions', pending_adhesions, name='pending_adhesions'),
+    path('prospec_schools', prospec_schools, name='prospec_schools'),
+    path('prospec_to_adhesions', prospec_to_adhesions, name='prospec_to_adhesions'),
+    path('list_historic_schools', list_historic_schools, name='list_historic_schools'),
 
 ]
  

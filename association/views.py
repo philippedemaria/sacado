@@ -263,12 +263,12 @@ def delete_formule(request, id):
 
 
 
-@user_passes_test(user_is_board)
-def all_schools(request):
-    schools = School.objects.all()
-    context = { 'schools': schools}
+# @user_passes_test(user_is_board)
+# def all_schools(request):
+#     schools = School.objects.all()
+#     context = { 'schools': schools}
 
-    return render(request, 'association/all_schools.html', context ) 
+#     return render(request, 'association/all_schools.html', context ) 
 
 
 
@@ -1144,6 +1144,8 @@ def print_big_book(request):
     doc.build(elements)
 
     return response 
+
+
 
 
 @user_passes_test(user_is_board)
@@ -2563,5 +2565,40 @@ def reset_all_students_sacado(request):
 
 
 
+@user_passes_test(user_is_board)
+def pending_adhesions(request):
+    today       = time_zone_user(request.user)
+    date_limit  = today + timedelta(days=15)
+    accountings = Accounting.objects.filter(date_payment=None, date__lte=date_limit).exclude(school=None)
+    context     = { 'accountings': accountings,    }
+
+    return render(request, 'association/list_pending_adhesions.html', context )
+
+
+@user_passes_test(user_is_board)
+def prospec_schools(request):
+
+ 
+    schools     = Accounting.objects.values_list("school").distinct().exclude(school=None) 
+    user_no_adh = User.objects.filter(user_type=2).exclude(school__in= schools).order_by("-last_login")
+    context     = { 'user_no_adh': user_no_adh,    }
+
+    return render(request, 'association/list_prospec_schools.html', context )
+
+
+@user_passes_test(user_is_board)
+def prospec_to_adhesions(request):
+    today       = time_zone_user(request.user)
+    date_limit  = today + timedelta(days=15)
+    accountings = Accounting.objects.filter(date_payment=None, date__gte=date_limit).exclude(school=None)
+    context     = { 'accountings': accountings,    }
+
+    return render(request, 'association/list_prospec_schools.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def list_historic_schools(request):    
+    pass
 
  

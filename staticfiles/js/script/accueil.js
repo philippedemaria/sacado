@@ -8,7 +8,7 @@ $(document).ready(function () {
 
         setTimeout(function(){ 
            $("#container_messages").css('display', "none"); 
-        }, 3000);
+        }, 5000);
 
         //$('[data-toggle="popover"]').popover();
         //$(".select2").select2({width: '100%'});

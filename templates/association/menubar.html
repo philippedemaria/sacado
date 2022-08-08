@@ -40,21 +40,26 @@
 
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Suivi Clients <b class="caret"></b> </a>
-    <ul   class="dropdown-menu clearfix pull-right" role="menu">
+    <ul class="dropdown-menu clearfix pull-right" role="menu">
         <li>
-            <a href="{% url 'adhesions' %}" class="no_button">Abonnements</a>   
+            <a href="{% url 'adhesions' %}" class="no_button">Abonnés</a>   
+        </li>
+        <li>
+            <a href="{% url 'pending_adhesions' %}" class="no_button">En attente</a>   
         </li>
         <li class="divider"></li>
         <li>
-            <a href="{% url 'all_schools' %}"  class="no_button" > 
-                Fichier Clients
-            </a> 
+            <a href="{% url 'prospec_schools' %}"  class="no_button" >Prospec 1</a> 
+        </li> 
+        <li>
+            <a href="{% url 'prospec_to_adhesions' %}"  class="no_button" >Prospec 2</a> 
         </li> 
         <li class="divider"></li>
         <li>
-            <a href="{% url 'list_accountings' 0 %}"  class="no_button" > 
-                Prospection Clients
-            </a> 
+            <a href="{% url 'list_accountings' 0 %}"  class="no_button" > Fichier Clients</a> 
+        </li>
+        <li>
+            <a href="{% url 'list_historic_schools'  %}"  class="no_button" > Historique</a> 
         </li>
     </ul>
 </li>

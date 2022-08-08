@@ -7,11 +7,11 @@
 
 
 {% block page_title %}  
-     <i class="fa fa-university"></i> Demande d'adhésion à la version Etablissement
+     <i class="fa fa-university"></i> Demande de la version Etablissement
 {% endblock %}
 
 {% block page_menu_right %}
-    
+    <small> {{ school }}</small>
 {% endblock %}
 
 
@@ -49,7 +49,7 @@
 
 
                     <form action="" method="POST" enctype='multipart/form-data'>
-
+                        {% csrf_token %} 
                         <div class="row">
                             <div class="col-sm-3 col-md-2"  align="center">
                                 {% if request.user.school.logo %}

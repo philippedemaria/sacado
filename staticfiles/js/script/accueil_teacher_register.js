@@ -138,10 +138,12 @@
 
                         if ( id_country == '5')
                         { 
-                            $("#select_rne").show();
+                            $("#select_rne").show();        
+                            $("#select_town").hide();       
                         }
                         else
-                        { 
+                        {   
+                            $("#select_rne").hide();
                             $('select[name=town_school]').empty("");
                             $("#select_town").show();
 
@@ -182,7 +184,8 @@
 
 
 
-        $('#teacher_form').on('change', '#id_town_school' , function (event) {
+
+        $('#id_town_school').on('change', function (event) {
 
             let id_country = $("#id_country_school").val();
             let id_town = $(this).val();
@@ -205,8 +208,7 @@
                         schools = data["schools"] ;
                         if (schools.length >0)
 
-                        {  
-                            for (let i = 0; i < schools.length; i++) {
+                        { for (let i = 0; i < schools.length; i++) {
                                     
                                 let school_id   = schools[i][0];
                                 let school_name = schools[i][1]  ;
@@ -228,6 +230,51 @@
             )
         });
 
+
+
+
+
+        $('#id_rne').on('change', function (event) {
+
+            let id_rne = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_rne'   : id_rne,                      
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "ajax_charge_school_by_rne/",
+                    success: function (data) {
+
+                        $('select[name=school]').empty("");                        
+                        schools = data["schools"] ;
+                        if (schools.length >0)
+
+                        { for (let i = 0; i < schools.length; i++) {
+                                    
+                                let school_id   = schools[i][0];
+                                let school_name = schools[i][1]  ;
+                                let option = $("<option>", {  'value': Number(school_id), 'html': school_name });
+                                $('select[name=school]').append(option);
+                            }
+                        }
+                        else
+                        {
+                            let option = $("<option>", {  'value': 0, 'html': "Aucun contenu disponible" });
+                            $('select[name=school]').append(option);  
+                        }
+
+
+                        $("#show_form_teacher").show();
+                        
+                    }
+                }
+            )
+        });
 
 
 

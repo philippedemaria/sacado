@@ -399,7 +399,7 @@
     {% endif %}
 
     {%  if request.user.is_teacher or request.user.is_superuser %}
-        {%  if not request.user.is_manager and not is_gar_check or request.user.is_superuser and not request.user.school %}<!-- manager dans un établissement -->
+        {%  if not request.user.is_manager and not is_gar_check and not request.user.school or request.user.is_superuser %}<!-- manager dans un établissement -->
         <hr/>
         <div class="row">
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
@@ -512,11 +512,11 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12" >
             {% if request.user.is_in_academy %}
-            <a href="{% url 'logout_academy' %}"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
+            <a href="{% url 'logout_academy' %}"> 
                 Se déconnecter
             </a>
             {% else %}
-            <a href="{% url 'logout' %}"><img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="35px"/>
+            <a href="{% url 'logout' %}"> 
                 Se déconnecter
             </a>
             {% endif %}

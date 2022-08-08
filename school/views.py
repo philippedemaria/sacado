@@ -1050,35 +1050,34 @@ def ask_school_adhesion(request):
 	user   = request.user
 	form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance = school)
 	if request.method == "POST" :
-		if  all((u_form.is_valid(), form.is_valid())):   
+		if form.is_valid():   
 
-			if int(token) == 7 :
-				school_commit = form.save()
-				today = time_zone_user(request.user)
-				is_active   = False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
-				observation = "Paiement en ligne"             
+			school = form.save()
+			today = time_zone_user(request.user)
+			is_active   = False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
+			observation = "Paiement en ligne"             
 
-				accounting_id = accounting_adhesion(school, today , today, user, is_active , observation) # création de la facturation
+			accounting_id = accounting_adhesion(school, today , today, user, is_active , observation) # création de la facturation
 
-				########################################################################################################################
-				#############  Abonnement
-				########################################################################################################################
-				date_start, date_stop = date_abonnement(today)
+			########################################################################################################################
+			#############  Abonnement
+			########################################################################################################################
+			date_start, date_stop = date_abonnement(today)
 
-				abonnement, abo_created = Abonnement.objects.get_or_create( accounting_id = accounting_id  , defaults={'school' : school, 'is_gar' : school.gar, 'date_start' : date_start, 'date_stop' : date_stop,  'user' : user, 'is_active' : 0}  )
+			abonnement, abo_created = Abonnement.objects.get_or_create( accounting_id = accounting_id  , defaults={'school' : school, 'is_gar' : school.gar, 'date_start' : date_start, 'date_stop' : date_stop,  'user' : user, 'is_active' : 0}  )
 
-				if school.gar: # appel de la fonction qui valide le Web Service
-					create_abonnement_gar(today,school,abonnement,request.user)
+			if school.gar: # appel de la fonction qui valide le Web Service
+				create_abonnement_gar(today,school,abonnement,request.user)
 
-				send_mail("Demande d'adhésion à la version établissement",
-				          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school +"\n\nCotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'étalissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
-				          settings.DEFAULT_FROM_EMAIL,
-				          ['sacado.asso@gmail.com'])
+			send_mail("Demande d'adhésion à la version établissement",
+			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant"+ user.first_name +" "+ user.last_name +".\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'étalissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
+			          settings.DEFAULT_FROM_EMAIL,
+			          ['sacado.asso@gmail.com'])
 
-				send_mail("Demande d'adhésion à la version établissement",
-			              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school +"\n\nCotisation : "+str(school.fee())+" €. \nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
-		               settings.DEFAULT_FROM_EMAIL,
-	               [user.email])
+			send_mail("Demande d'adhésion à la version établissement",
+		              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school.name +"\n\nCotisation : "+str(school.fee())+" €. \nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
+	               settings.DEFAULT_FROM_EMAIL,
+               [user.email])
 
 			messages.success(request,"Demande d'adhésion envoyée. Vous recevrez rapidement l'IBAN de l'association à transmettre à votre DAF")
 		else :
@@ -1086,7 +1085,7 @@ def ask_school_adhesion(request):
  
 
  
-	context = {   'form' : form }
+	context = {   'form' : form , 'school' : school }
 	return render(request, 'school/ask_school_adhesion.html', context )
 
 

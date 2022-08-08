@@ -7,7 +7,7 @@
 
 
 {% block page_title %}  
-     <i class="fa fa-university"></i> Demande de rattachement à un établissement
+     <i class="fa fa-university"></i> Rejoindre un établissement
 {% endblock %}
 
 {% block page_menu_right %}
@@ -24,20 +24,19 @@
 <div class="content_main">
     <div class="row">  
         <div class="col-sm-12 col-md-12">
-            <div class="alert alert-info">
-                Pour réaliser cette demande vous devez contacter l'administrateur de votre établissement. Il devra vous donner le <b>token</b> à renseigner ici.
+            <div class="alert alert-warning">
+                <li>Pour la France : Vous devez connaitre le RNE de votre établissement à renseigner ici.</li>
+                <li>Pour l'étranger : Vous devez contacter l'administrateur de votre établissement. Il devra vous donner le <b>token</b> à renseigner ici.</li>
             </div>
         </div>
     </div>
-
-
     <form action="" method="POST">
     {% csrf_token %}    
         <div class="row">    
             <div class="col-sm-12 col-md-3">
                 <div class="form-group">
-                    <label>Token :</label>
-                    <input name="token" type="text" required class="form-control" />
+                    <label>RNE (France) ou Token :</label>
+                    <input name="token" type="text" required class="form-control" maxlength="8" />
                 </div>
             </div>
         </div> 
