@@ -34,7 +34,7 @@ from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Student
 from sendmail.models import Communication
 from sendmail.forms import EmailForm
 from socle.models import Level, Theme
-from school.models import  Country
+from school.models import  Country , Town
 from school.forms import SchoolForm
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm , AvatarForm , AvatarUserForm, BackgroundForm , BackgroundUserForm
 from templated_email import send_templated_mail
