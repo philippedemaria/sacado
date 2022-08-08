@@ -120,6 +120,8 @@
  
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            console.log(id_country_school) ;
+
             $.ajax(
                 {
                     type: "POST",
