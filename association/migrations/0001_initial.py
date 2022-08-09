@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('town', models.CharField(blank=True, max_length=255, verbose_name="Complément d'adresse")),
                 ('contact', models.CharField(blank=True, max_length=255, verbose_name='Contact')),
                 ('observation', ckeditor_uploader.fields.RichTextUploadingField(blank=True, default='', null=True, verbose_name='Observation')),
-                ('acting', models.DateTimeField(blank=True, null=True, verbose_name="Date d'effet")),
+                ('date_payment', models.DateTimeField(blank=True, null=True, verbose_name="Date d'effet")),
                 ('date', models.DateTimeField(auto_now_add=True)),
                 ('is_active', models.BooleanField(default=0, verbose_name='Actif')),
                 ('is_abonnement', models.BooleanField(default=0, verbose_name='Abonnement')),

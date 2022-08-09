@@ -14,12 +14,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
- 
-        migrations.RenameField(
-            model_name='accounting',
-            old_name='acting',
-            new_name='date_payment',
-        ),
         migrations.AddField(
             model_name='accounting',
             name='is_facturation',
