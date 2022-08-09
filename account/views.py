@@ -1171,6 +1171,20 @@ def ajax_charge_school(request):
 
 
 
+@csrf_exempt
+def ajax_charge_school_by_rne(request):
+
+    id_rne       =  request.POST.get("id_rne")
+    data = {}
+    schools = School.objects.values_list('id', 'name').filter(country_id=5,code_acad=id_rne)
+    data['schools'] = list(schools)
+    return JsonResponse(data)
+
+
+
+
+
+
 def register_teacher_accueil(request) :
 
     u_form  = UserForm()

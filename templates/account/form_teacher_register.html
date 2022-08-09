@@ -7,13 +7,16 @@
 {% block require %}
            
 {% endblock %}  
-   
+ 
+
 {% block general_js %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common_teacher_register.js' %}"></script>
-    <script type="text/javascript">
-    require(['script/accueil_teacher_register']); 
-    </script>
-{% endblock %} 
+<script src="{% static 'js/script/accueil_teacher_register.js' %}"></script> 
+<script src="{% static 'js/lib/select2.min.js' %}"></script>      
+<script src="{% static 'js/script/config-select2-accueil.js' %}"></script> 
+<script src="{% static 'js/lib/bootstrap-toggle.min.js' %}"></script> 
+<script src="{% static 'index/slick/slick.js' %}"></script>
+{% endblock %}
+ 
 
 {% block body %}
 
@@ -28,42 +31,42 @@
  
  
                 <h4>Devenir membre  <span class="sacado">SACADO</span> GRATUITEMENT</h4>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group"><label>Sélectionner le pays  <small>+de 60 000 établissements en France. Prévoir un peu d'attente.</small></label>
-                                <select id="id_country_school" name="country_school" class="form-control select2" required>
-                                    <option value=" ">--------------</option>
-                                    {% for c in countries %}
-                                        <option value="{{ c.id }}">{{ c.name }}</option>
-                                    {%  endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12" id="select_town">
-                          <div class="form-group"><label>Sélectionner la ville</label>
-                              <select id="id_town_school" name="town_school" class="form-control select2">
-                              </select>
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12">
+                              <div class="form-group"><label>Sélectionner le pays. <small>Pour la France, munissez-vous du RNE.</small></label>
+                                  <select id="id_country_school" name="country_school" class="form-control select2" required>
+                                      <option value=" ">--------------</option>
+                                      {% for c in countries %}
+                                          <option value="{{ c.id }}">{{ c.name }}</option>
+                                      {%  endfor %}
+                                  </select>
+                              </div>
                           </div>
                       </div>
-                    </div>
-                    <div class="row"  id="select_rne">
-                      <div class="col-sm-12 col-md-12 no_visu">
-                          <div class="form-group"><label>Renseigner le code RNE</label>
-                              <input type="text" name="rne" id="id_rne" class="form-control" maxlength="10" />
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12" id="select_town">
+                              <div class="form-group"><label>Sélectionner la ville</label>
+                                  <select id="id_town_school" name="town_school" class="form-control select2">
+                                  </select>
+                              </div>
                           </div>
                       </div>
-                    </div>
+                      <div class="row"  id="select_rne">
+                          <div class="col-sm-12 col-md-12 no_visu">
+                              <div class="form-group"><label>Renseigner le code RNE</label>
+                                  <input type="text" name="rne" id="id_rne" class="form-control" maxlength="10" />
+                              </div>
+                          </div>
+                      </div>
 
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
-                          <div class="form-group"><label>Sélectionner l'établissement</label>
-                              <select id="id_school" name="school" class="form-control select2 no_visu" required>
-                              </select>
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12">
+                              <div class="form-group"><label>Sélectionner l'établissement</label>
+                                  <select id="id_school" name="school" class="form-control select2 no_visu" required>
+                                  </select>
+                              </div>
                           </div>
                       </div>
-                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="{% url 'index' %}#contact">Nous contacter</a>.

@@ -150,7 +150,7 @@
                             if (towns.length >0)
 
                             { if (towns.length == 1 )
-                                {   let option_null = $("<option>", {  'value': Number(0), 'html': "--------Choisir----------" });
+                                {   let option_null = $("<option>", {  'value': "", 'html': "--------Choisir----------" });
                                     $('select[name=town_school]').append(option_null);
                                 }
 
@@ -165,7 +165,7 @@
                             else
                             {
                                 let option = $("<option>", {
-                                    'value': 0,
+                                    'value': "",
                                     'html': "Aucun contenu disponible"
                                 });
                                 $('select[name=town_school]').append(option);
@@ -218,7 +218,7 @@
                         }
                         else
                         {
-                            let option = $("<option>", {  'value': 0, 'html': "Aucun contenu disponible" });
+                            let option = $("<option>", {  'value': "", 'html': "Aucun contenu disponible" });
                             $('select[name=school]').append(option);  
                         }
 
@@ -264,7 +264,7 @@
                         }
                         else
                         {
-                            let option = $("<option>", {  'value': 0, 'html': "Aucun contenu disponible" });
+                            let option = $("<option>", {  'value': "", 'html': "Aucun contenu disponible" });
                             $('select[name=school]').append(option);  
                         }
 
