@@ -7,6 +7,9 @@
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_withoutMathJax.js' %}"></script>
+    <script>
+        require(['script/ajax-customer']);
+    </script>
 {% endblock %} 
 
 
@@ -24,41 +27,45 @@
     {% if request.user.is_board %}
         <div class="col-lg-12 col-xs-12">
 
- 
-
             <table class="table bg_white standard_tab_sort300">
                 <thead>
                     <tr>
                         <td>Id</td>
                         <td></td>
+ 
                         <td>Nom</td>
                         <td>Ville</td>
                         <td>Pays</td>
                         <td>Admin</td>
                     </tr>
                 </thead>
-                {% for a in abonnements %}
+                {% for c in customers %}
                 <tr>
-                    <td>{{ a.id }}</td>
+                    <td>{{ c.id }}</td>
                     <td>
-                        {% if a.school.adhesion %}
-                            <span style="font-size:1px;color:#FFF">1</span><i class="fa fa-check text-success"></i>
-                        {% else %}
-                            <span style="font-size:1px;color:#FFF">0</span><i class="fa fa-times text-danger"></i>
-                        {% endif %}
-                    </td> 
+                        <form methode="POST">
+                            {% csrf_token %}
+                            <select name="status" class="status_id" >
+                                <option value="0-{{ c.id }}" {% if c.status == 0 %} selected {% endif %}  >Perdu</option>
+                                <option value="1-{{ c.id }}" {% if c.status == 1 %} selected {% endif %}  >En suspens</option>
+                                <option value="2-{{ c.id }}" {% if c.status == 2 %} selected {% endif %}  >En attente</option>
+                                <option value="3-{{ c.id }}" {% if c.status == 3 %} selected {% endif %}  >Abonné</option>
+                            </select>
+                        </form>
+                    </td>
+ 
                     <td>
-                        <a href="{% url 'update_school_admin'  a.school.id %}">{{ a.school.name|lower|capfirst }}</a>
-                        {% if a.school.active_accounting %}
-                            <a href="{% url 'update_accounting'  a.school.active_accounting.id 2 %}" class="pull-right"><i class="fa fa-euro"></i></a>
+                        <a href="{% url 'update_school_admin'  c.school.id %}">{{ c.school.name|lower|capfirst }}</a>
+                        {% if c.school.active_accounting %}
+                            <a href="{% url 'update_accounting'  c.school.active_accounting.id 2 %}" class="pull-right"><i class="fa fa-euro"></i></a>
                         {% else %}
-                            <a href="{% url 'renew_accounting' a.school.id %}" class="pull-right"><i class="fa fa-credit-card"></i></a>
+                            <a href="{% url 'renew_accounting' c.school.id %}" class="pull-right"><i class="fa fa-credit-card"></i></a>
                         {% endif %}
                
                     </td>
-                    <td>{{ a.school.town|lower|capfirst }}</td>
-                    <td>{{ a.school.country.name|lower|capfirst }}</td>
-                    <td>{% for u in school.admin %} <li>{{a.u.get_full_name}}, {{a.u.email}}</li> {% endfor %}</td>
+                    <td>{{ c.school.town|lower|capfirst }}</td>
+                    <td>{{ c.school.country.name|lower|capfirst }}</td>
+                    <td>{% for u in c.school.admin %} <li>{{ u.get_full_name }}, {{ u.email }}</li> {% endfor %}</td>
                 </tr>
                 {% endfor %}
             </table>

@@ -80,6 +80,7 @@ urlpatterns = [
 
     path('all_schools', all_schools, name='all_schools'),# all_customers
     path('update_school_admin/<int:id>/', update_school_admin, name='update_school_admin'),
+    path('ajax_customer/', ajax_customer, name='ajax_customer'),
 
 
     path('pending_adhesions', pending_adhesions, name='pending_adhesions'),

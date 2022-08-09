@@ -271,20 +271,26 @@ def delete_formule(request, id):
 #             Customer.objects.create(school_id = school[0],status=3 )
 
  
- 
-
-
 
 
 @user_passes_test(user_is_board)
 def all_schools(request):
-    school_to_customer()
-    abonnements = Customer.objects.all()
-    context = { 'abonnements': abonnements }
+ 
+    customers = Customer.objects.all()
+    context = { 'customers': customers }
 
     return render(request, 'association/all_schools.html', context ) 
 
 
+@csrf_exempt
+def ajax_customer(request):
+
+    status =  request.POST.get("status_id")
+    status_tab = status.split("-")  
+    Customer.objects.filter(pk=status_tab[1]).update(status=status_tab[0])
+    data = {}
+
+    return JsonResponse(data)
 
 
 
