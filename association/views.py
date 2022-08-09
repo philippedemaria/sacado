@@ -261,14 +261,14 @@ def delete_formule(request, id):
 #####################################################################################################################################
 #####################################################################################################################################
 
-def school_to_customer():
-    today       = datetime.now()
-    abonnements = Abonnement.objects.values_list('school').distinct()
-    liste=[]
-    for school in abonnements :
-        if not school in liste :
-            liste.append(school)
-            Customer.objects.create(school_id = school[0],status=3 )
+# def school_to_customer():
+#     today       = datetime.now()
+#     abonnements = Abonnement.objects.values_list('school').distinct()
+#     liste=[]
+#     for school in abonnements :
+#         if not school in liste :
+#             liste.append(school)
+#             Customer.objects.create(school_id = school[0],status=3 )
 
  
  
