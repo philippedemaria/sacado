@@ -35,8 +35,12 @@ for i in range (20) :
 
 class Activeyear(models.Model):
 
-    year = models.PositiveIntegerField(default=2021, choices=YEARS , verbose_name="Année de l'exercice") 
- 
+    year      = models.PositiveIntegerField(default=2021, choices=YEARS , verbose_name="Année de l'exercice") 
+    solde     = models.IntegerField(default=0, verbose_name="Résultat de l'exercice précédent")
+    is_active = models.BooleanField(default=0,  verbose_name="Année active")
+
+
+
     def __str__(self):
         nexty = self.year + 1 
         return "{}-{}".format(self.year,nexty)

@@ -12,12 +12,12 @@
  
 
 {% block page_title %}
-    Année en cours
+    Année d'exercise
 {% endblock %}
 
 
 {% block page_menu_right %}
- 
+ {% include 'association/menubar.html' %}
 {% endblock %}
 
  
@@ -28,35 +28,43 @@
 
 {% block body %}
 <section class="content_main"> 
-    <form action="" method="POST">
+    
 
-        {% csrf_token %}
+
 
         <div class="row">
-            <div class="col-sm-12 col-lg-6">
-
- 
-                <div class="form-group">
-                    <a href="#"  type="submit" class="btn btn-danger" >Archivage </a>
-                </div>
 
 
-                <div class="form-group">
-                    {{ form.year.label_tag }} <em>50 caractères max.</em><br>
-                    {{ form.year|add_class:"form-control"   }}
-                    {{ form.year.errors }} 
-                </div>
-                
-                <div class="row">
-                    <div class="col-sm-12 col-lg-8">
-                        <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>
-                            <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                                       class="btn btn-default "/></a>
+
+
+            <div class="col-sm-12 col-lg-3">
+                <form action="" method="POST" class="alert alert-warning">
+                    {% csrf_token %}                    
+                    <div class="form-group">
+                        {{ form.year.label_tag }} <em>50 caractères max.</em><br>
+                        {{ form.year|add_class:"form-control select2"   }}
+                        {{ form.year.errors }} 
+                    </div>
+                    <div class="form-group">
+                        {{ form.solde.label_tag }} <br>
+                        {{ form.solde|add_class:"form-control"   }}
+                        {{ form.solde.errors }} 
+                    </div>
+                    <div class="form-group">
+                        {{ form.is_active.label_tag }}  <br>
+                        {{ form.is_active |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        {{ form.is_active.errors }} 
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-8">
+                            <div class="form-group">
+                                <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                                <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                                           class="btn btn-default "/></a>
+                            </div>
                         </div>
                     </div>
- 
-                </div>
+                </form> 
             </div>
 
             
@@ -64,6 +72,6 @@
 
 
         </div>
-    </form>  
+ 
 </section>
 {% endblock %} 

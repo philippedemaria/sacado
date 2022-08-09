@@ -1,0 +1,71 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+ 
+{% endblock %}
+ 
+
+{% block page_title %}
+    Année d'exercise
+{% endblock %}
+
+
+{% block page_menu_right %}
+ {% include 'association/menubar.html' %}
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    
+        <div class="row">
+            <div class="col-sm-12 col-lg-9">
+                <table   class="{% if tp < 2 %}standard_tab_sort300_no_paiement{% else %}standard_tab_sort300{% endif %} table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>  
+                        <td style="width:100px">Année</td> 
+                        <td style="width:100px">Résultat de l'exercice précédent </td>                       
+                        <td style="width:100px">Active</td>  
+                        <td style="width:100px"> </td>               
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for year in years %}
+                            <tr id="this_tr_{{ accounting.id }}" class="this_tr_all"> 
+                                <td>
+                                    <span >{{ year }} </span> 
+                                </td>
+                                <td>
+                                    <span >{{ year.solde }} € </span> 
+                                </td>
+                                <td>
+                                    <span >{% if year.is_active%} <i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif  %}</span> 
+                                </td> 
+                                <td>
+                                     <a href="{% url 'update_activeyear' year.id %}" style="font-size: 15px"><i class="bi bi-gear"></i></a>
+                                </td> 
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm-12 col-lg-3">
+                <a href="{% url 'create_activeyear' %}" class="btn btn-danger">Nouvelle</a>
+            </div>
+        </div>
+ 
+</section>
+{% endblock %} 

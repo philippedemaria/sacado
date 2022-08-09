@@ -5,8 +5,11 @@ from .views import *
 urlpatterns = [
 
     path('association_index', association_index, name='association_index'),
-    path('update_activeyear', update_activeyear, name='update_activeyear'),
+    path('activeyears', activeyears, name='activeyears'),
+    path('create_activeyear', create_activeyear, name='create_activeyear'),
+    path('update_activeyear/<int:id>', update_activeyear, name='update_activeyear'),
 
+ 
 
     path('accountings', accountings, name='accountings'),
     path('list_paypal', list_paypal, name='list_paypal'),

@@ -401,13 +401,29 @@ def association_index(request):
     return render(request, 'association/dashboard.html', context )
 
 
+
 @user_passes_test(user_is_board)
-def update_activeyear(request):
-    try :
-        a    = Activeyear.objects.get(pk=1)
-        form = ActiveyearForm(request.POST or None , instance = a )
-    except :
-        form = ActiveyearForm(request.POST or None )
+def create_activeyear(request):
+
+    form       = ActiveyearForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+        else :
+            print(form.errors)
+        
+        return redirect('activeyears')
+
+    return render(request, 'association/form_activeyear.html', {'form': form     })
+
+
+
+@user_passes_test(user_is_board)
+def update_activeyear(request,id):
+
+    activeyear = Activeyear.objects.get(pk=id)
+    form       = ActiveyearForm(request.POST or None , instance = activeyear)
+ 
 
     if request.method == "POST":
         if form.is_valid():
@@ -415,14 +431,21 @@ def update_activeyear(request):
         else :
             print(form.errors)
         
-        return redirect('association_index')
+        return redirect('activeyears')
 
-    return render(request, 'association/form_activeyear.html', {'form': form   })
-
-
+    return render(request, 'association/form_activeyear.html', {'form': form     })
 
 
+@user_passes_test(user_is_board)
+def activeyears(request):
 
+    years = Activeyear.objects.all()
+
+    return render(request, 'association/list_activeyear.html', { 'years' :years   })
+
+
+
+ 
 
 
 
@@ -531,7 +554,8 @@ def calcule_bank_bilan(request):
     plan_sale     = Plancomptable.objects.filter(code__gte=700,code__lt=800).order_by("code")
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 ).order_by("code")
     plan_immo     =  Plancomptable.objects.filter(code__in= [411,486,5121,5122] ).order_by("code")
-    plan_resultat =  Plancomptable.objects.filter(code=487 )
+    plan_resultat =  Plancomptable.objects.filter(code__in=[110, 487] )
+
     my_dico = {}
     list_sales , list_purchases,plan_immos , plan_resultats = [] , [] , [] , []
 
@@ -570,7 +594,10 @@ def calcule_bank_bilan(request):
         my_dico["code"] = p.code
         my_dico["name"] = p.name
         if p.code > 5000 :
-            my_dico["solde"]= -accountings_sales["amount__sum"]
+            try :
+                my_dico["solde"]= -accountings_sales["amount__sum"]
+            except :
+                pass
             try :
                 cs -= accountings_sales["amount__sum"]
             except :
@@ -1173,6 +1200,12 @@ def archive_accountancy(request):
     pass
 
  
+
+ 
+
+
+
+
 
 
 @user_passes_test(user_is_board)
