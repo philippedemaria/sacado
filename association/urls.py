@@ -78,7 +78,7 @@ urlpatterns = [
     path('delete_formule/<int:id>/', delete_formule, name='delete_formule'),
 
 
-    #path('all_schools', all_schools, name='all_schools'),
+    path('all_schools', all_schools, name='all_schools'),# all_customers
     path('update_school_admin/<int:id>/', update_school_admin, name='update_school_admin'),
 
 

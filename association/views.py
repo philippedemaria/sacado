@@ -13,7 +13,7 @@ from templated_email import send_templated_mail
 from django.db.models import Q , Sum
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
-from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy
+from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy, Customer
 from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm
 from account.models import User, Student, Teacher, Parent ,  Response
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
@@ -261,14 +261,28 @@ def delete_formule(request, id):
 #####################################################################################################################################
 #####################################################################################################################################
 
+def school_to_customer():
+    today       = datetime.now()
+    abonnements = Abonnement.objects.values_list('school').distinct()
+    liste=[]
+    for school in abonnements :
+        if not school in liste :
+            liste.append(school)
+            Customer.objects.create(school_id = school[0],status=3 )
+
+ 
+ 
 
 
-# @user_passes_test(user_is_board)
-# def all_schools(request):
-#     schools = School.objects.all()
-#     context = { 'schools': schools}
 
-#     return render(request, 'association/all_schools.html', context ) 
+
+@user_passes_test(user_is_board)
+def all_schools(request):
+    school_to_customer()
+    abonnements = Customer.objects.all()
+    context = { 'abonnements': abonnements }
+
+    return render(request, 'association/all_schools.html', context ) 
 
 
 
