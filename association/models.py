@@ -280,6 +280,28 @@ class Bank(models.Model):
         return self.name
 
 
+class Customer(models.Model):
+
+    STATUS = (
+        (0, "Perdu"),
+        (1, "En suspens"),
+        (2, "Paiement en attente"),
+        (3, "Abonné"),
+    )
+
+    school     = models.OneToOneField(School, on_delete=models.CASCADE, blank=True,  null=True, related_name='customer')
+    name       = models.CharField(max_length=255, blank=True, verbose_name="Nom") 
+    address    = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
+    complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    town       = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
+    country    = models.ForeignKey(Country, related_name="customers", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
+    contact    = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
+    phone      = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
+    status     = models.PositiveSmallIntegerField(default=3,choices=STATUS)
+
+
+    def __str__(self):
+        return self.name
  
 
 class Accountancy(models.Model):
