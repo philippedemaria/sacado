@@ -41,23 +41,29 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group"><label>Sélectionner la ville</label>
-                                <select id="id_town_school" name="town_school" class="form-control select2">
-                                </select>
-                            </div>
-                        </div>
+                      <div class="col-sm-12 col-md-12" id="select_town">
+                          <div class="form-group"><label>Sélectionner la ville</label>
+                              <select id="id_town_school" name="town_school" class="form-control select2">
+                              </select>
+                          </div>
+                      </div>
                     </div>
+                    <div class="row"  id="select_rne">
+                      <div class="col-sm-12 col-md-12 no_visu">
+                          <div class="form-group"><label>Renseigner le code RNE</label>
+                              <input type="text" name="rne" id="id_rne" class="form-control" maxlength="10" />
+                          </div>
+                      </div>
+                    </div>
+
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group"><label>Sélectionner l'établissement</label>
-                                <select id="id_school" name="school" class="form-control select2" required>
-                                </select>
-                            </div>
-                        </div>
+                      <div class="col-sm-12 col-md-12">
+                          <div class="form-group"><label>Sélectionner l'établissement</label>
+                              <select id="id_school" name="school" class="form-control select2 no_visu" required>
+                              </select>
+                          </div>
+                      </div>
                     </div>
-
-
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="{% url 'index' %}#contact">Nous contacter</a>.
