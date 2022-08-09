@@ -280,6 +280,8 @@ class Bank(models.Model):
         return self.name
 
 
+
+
 class Customer(models.Model):
 
     STATUS = (
@@ -298,7 +300,6 @@ class Customer(models.Model):
     contact    = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
     phone      = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
     status     = models.PositiveSmallIntegerField(default=3,choices=STATUS)
-
 
     def __str__(self):
         return self.name
