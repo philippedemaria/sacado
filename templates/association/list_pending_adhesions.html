@@ -41,7 +41,7 @@
             {% for c in customers %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ c.school.name }}</td>
+                <td><a href="{% url 'update_school_admin'  c.school.id %}">{{ c.school.name|lower|capfirst }}</a></td>
                 <td>{{ c.school.town }}</td>
                 <td>{{ c.school.date }}</td>
                 <td>{% for u in c.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
