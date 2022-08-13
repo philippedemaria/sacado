@@ -2646,16 +2646,12 @@ def prospec_schools(request):
 @user_passes_test(user_is_board)
 def prospec_to_adhesions(request):
 
-    today       = time_zone_user(request.user)
-    date_limit  = today - timedelta(days=180)
+    customers     = Customer.objects.filter(status=1)
+    context     = { 'customers': customers,  'prosp' : False     }
 
-    accountings      = Accounting.objects.filter(date_payment=None, date__gte=date_limit).exclude(school=None)    
-    list_abonnements = Abonnement.objects.filter(accounting__in=accountings)
+ 
 
-
-    context     = { 'list_abonnements': list_abonnements,  'prosp' : False     }
-
-    return render(request, 'association/list_prospec_schools.html', context )
+    return render(request, 'association/list_pending_adhesions.html', context )
 
 
 
