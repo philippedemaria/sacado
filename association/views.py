@@ -1615,7 +1615,7 @@ def update_accounting(request, id,tp):
     today      = datetime.now()
     accounting = Accounting.objects.get(id=id)
     valeur     = accounting.amount
-    print(valeur)
+
     try :
         abonnement = accounting.abonnement 
         form_abo = AbonnementForm(request.POST or None, instance= abonnement  )

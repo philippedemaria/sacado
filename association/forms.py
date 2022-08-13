@@ -10,10 +10,13 @@ class HolidaybookForm(forms.ModelForm):
 
 
 class AccountingForm(forms.ModelForm):
+    customers = Customer.objects.all()
     class Meta:
         model = Accounting 
         fields = '__all__' 
-
+    def __init__(self, *args, **kwargs):
+        super(AccountingForm, self).__init__(*args, **kwargs)
+        self.fields['school'] = forms.ModelChoiceField(queryset=customers,    required=False )
 
 
 class AccountancyForm(forms.ModelForm):
