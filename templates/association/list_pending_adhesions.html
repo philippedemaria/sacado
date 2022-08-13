@@ -13,7 +13,7 @@
 
 
 {% block page_title %}
-    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Opérations en attente 
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>{% if prosp %} Opérations en attente {% else %} Anciens clients {%  endif %}  
 {% endblock %} 
 
 

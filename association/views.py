@@ -2626,7 +2626,7 @@ def pending_adhesions(request):
     date_limit  = today - timedelta(days=15)
 
     customers     = Customer.objects.filter(status=2)
-    context     = { 'customers': customers,    }
+    context     = { 'customers': customers,  'prosp' : True    }
 
     return render(request, 'association/list_pending_adhesions.html', context )
 
