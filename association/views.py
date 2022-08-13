@@ -1735,7 +1735,7 @@ def create_avoir(request, id):
  
     accounting = Accounting.objects.get(id=id)
     amount = -accounting.amount
-    chrono = accounting.chrono
+    chronof = accounting.chrono
 
     accounting.pk = None
     accounting.amount = amount
@@ -1743,10 +1743,10 @@ def create_avoir(request, id):
     accounting.forme = "AVOIR"
     chrono = create_chrono(Accounting, "AVOIR")
     accounting.chrono = chrono
-    texte = " Avoir sur facture " + chrono
+    texte = " Avoir sur facture " + chronof
     accounting.objet = texte
     accounting.observation = texte
-    accounting.mode = " Avoir sur facture " + chrono
+    accounting.mode = " Avoir sur facture " + chronof
     acc = accounting.save()
 
     # Création des avoirs
@@ -1756,8 +1756,8 @@ def create_avoir(request, id):
 
 
     accounting = Accounting.objects.get(id=id) 
-    accounting.objet += " Avoir sur " + chrono
-    accounting.observation += " Avoir sur " + chrono
+    accounting.objet += " Avoir sur " + chronof
+    accounting.observation += " Avoir sur " + chronof
     accounting.is_active = 0
     accounting.save()
 
