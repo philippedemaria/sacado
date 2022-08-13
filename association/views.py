@@ -492,7 +492,8 @@ def adhesions(request):
     date_start = datetime(year, 8, 31)
     date_stop  = datetime(year+1, 8, 31)
 
-    abonnements = Abonnement.objects.filter(is_active=1  ).order_by("-accounting__date")    
+    schools = Customer.objects.values("school").filter(status=3)
+    abonnements = Abonnement.objects.filter(is_active=1, school__in=schools  ).order_by("-accounting__date")    
 
     context =  {'abonnements': abonnements , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month, 'activeyear' : activeyear }
  
