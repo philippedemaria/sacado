@@ -34,19 +34,17 @@
                     <td></td>
                     <td>Nom</td>
                     <td>Ville</td>
-                    <td>Montant</td>
                     <td>Date</td>
                     <td>Admins</td>
                 </tr>
             </thead>
-            {% for a in accountings %}
+            {% for c in customers %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ a.school.name }}</td>
-                <td>{{ a.town }}</td>
-                <td>{{ a.amount }} €</td>
-                <td>{{ a.date }}</td>
-                <td>{% for u in a.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
+                <td>{{ c.school.name }}</td>
+                <td>{{ c.school.town }}</td>
+                <td>{{ c.school.date }}</td>
+                <td>{% for u in c.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}</td>
             </tr>
             {% endfor %}
         </table>
