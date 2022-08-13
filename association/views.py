@@ -2625,7 +2625,7 @@ def pending_adhesions(request):
     today       = time_zone_user(request.user)
     date_limit  = today - timedelta(days=15)
 
-    schools     = Customer.objects.values("school",flat=True).filter(status=2)
+    schools     = Customer.objects.values_list("school",flat=True).filter(status=2)
     accountings = Accounting.objects.filter(school__in=schools, date__gte=date_limit).exclude(school=None)
     context     = { 'accountings': accountings,    }
 
