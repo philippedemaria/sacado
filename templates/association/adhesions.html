@@ -17,10 +17,14 @@
 
 
 {% block page_title %}
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Abonnements {{ activeyear}}
- 
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Abonnements {{ activeyear}} - <small>{{ abonnements.count }}</small>
+
+        {% comment %}
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
         <a href="#" data-toggle='modal' data-target='#p_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-pdf-o fa-xs text-danger"></i> Imprimer le bilan</a>
+        {% endcomment %}
+
+
 {% endblock %}
 
 {% block page_menu_right %}
@@ -72,7 +76,7 @@
             <table   class="standard_tab_sort300 table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <td style="width:80px">Chrono</td>                    
+                    <td style="width:50px">Chrono</td>                    
                     <td style="width:150px">Date de valeur</td>                     
                     <td>Etablissement</td>
                     <td>Ville</td>
