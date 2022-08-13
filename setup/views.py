@@ -27,13 +27,13 @@ from django.db.models import Count, Q
 from account.decorators import is_manager_of_this_school
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
 from account.models import  User, Teacher, Student  , Parent , Adhesion , Facture
-from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook
+from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook, Customer
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
 from qcm.models import Folder , Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from sendmail.models import Communication
 from setup.forms import WebinaireForm , TweeterForm
-from setup.models import Formule , Webinaire , Tweeter
+from setup.models import Formule , Webinaire , Tweeter 
 from school.models import Stage , School, Country , Town
 from school.forms import  SchoolForm, SchoolUpdateForm  
 from school.gar import *
@@ -474,7 +474,13 @@ def school_adhesion(request):
                     school_commit = form.save()
                     school_exists, created = School.objects.get_or_create(name = school_commit.name, town = school_commit.town , country = school_commit.country , 
                         code_acad = school_commit.code_acad , defaults={ 'nbstudents' : school_commit.nbstudents , 'logo' : school_commit.logo , 'address' : school_commit.address ,'complement' : school_commit.complement , 'gar' : school_commit.gar }  )
-                    #if not created :
+                    try :
+                        if not created :
+                            Customer.objects.create(school=school_exists,status= 0,town = school_exists.town , country = school_exists.country )
+                    except :
+                        pass
+
+                    #    nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement, logo = school_commit.logo )
                         # si l'établisseent est déjà créé, on la modifie et on récupère son utilisateur.
                     #School.objects.filter(pk = school_exists.id).update(town = school_commit.town , country = school_commit.country , code_acad = school_commit.code_acad , 
                     #    nbstudents = school_commit.nbstudents , address = school_commit.address , complement = school_commit.complement, logo = school_commit.logo )
