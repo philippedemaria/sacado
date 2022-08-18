@@ -288,9 +288,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
     gars = json.loads(data_xml)
 
     print(" ======================= singleLogoutGar =================================== ")
+    print(data_xml)
+    print(" ========================================================== ")
     print(gars)
     print(" ========================================================== ")
-    
+
     dico_received = dict()
     for gar in gars :
         dico_received[gar['key']] = gar['value']
