@@ -284,6 +284,8 @@ def singleLogoutGar(request):
 def ressource_sacado(request): #Protection saml pour le GAR
 
     # création du dictionnaire qui avec les données du GAR  
+
+
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
 
@@ -294,7 +296,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     print(" ========================================================== ")
 
 
-    context = {"gars" : gars , 'data_xml' : data_xml }
+    context = {  "rh" : request.headers , "gars" : gars , 'data_xml' : data_xml }
     return render(request, 'setup/test_gar.html', context)
 
     # dico_received = dict()
