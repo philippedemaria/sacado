@@ -11,7 +11,7 @@
 
 
 {% block page_title %}
-     Tweets  
+     test GAR  
 {% endblock %}    
  
 
@@ -19,8 +19,8 @@
 
 
 {% block page_menu_right %}
-    <li><a href="{% url 'tweeter_create' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau tweet</a></li>   
-{% endblock %}
+ 
+{% endblock %} 
  
  
  
@@ -29,8 +29,17 @@
 
 <section class="content_main"> 
     <div class="row">
-        {% include 'setup/tweeter_inclusion.html' %}
+
+         {{   gars }}
     </div>
+    <hr/>
+    <div class="row">
+         {{   data_xml }}
+    </div>
+
+
+
+
 </section>
 
  

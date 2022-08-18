@@ -293,84 +293,88 @@ def ressource_sacado(request): #Protection saml pour le GAR
     print(gars)
     print(" ========================================================== ")
 
-    dico_received = dict()
-    for gar in gars :
-        dico_received[gar['key']] = gar['value']
-    ##########################################################
-    today = datetime.now()
+
+    context = {"gars" : gars , 'data_xml' : data_xml }
+    return render(request, 'setup/test_gar.html', context)
+
+    # dico_received = dict()
+    # for gar in gars :
+    #     dico_received[gar['key']] = gar['value']
+    # ##########################################################
+    # today = datetime.now()
  
 
-    print(" ======================= singleLogoutGar =================================== ")
-    print(dico_received)
-    print(" ========================================================== ")
+    # print(" ======================= singleLogoutGar =================================== ")
+    # print(dico_received)
+    # print(" ========================================================== ")
 
 
 
-    uai        = dico_received["UAI"]
-    school     = School.objects.get(code_acad = uai)
-    last_name  = dico_received["NOM"] 
-    first_name = dico_received["PRE"]
+    # uai        = dico_received["UAI"]
+    # school     = School.objects.get(code_acad = uai)
+    # last_name  = dico_received["NOM"] 
+    # first_name = dico_received["PRE"]
 
-    email = str(today.timestamp()) + "@sacado.xyz"
+    # email = str(today.timestamp()) + "@sacado.xyz"
  
-    if 'ens' in dico_received["PRO"] :
-        user_type  = 2
-        if "P_MEL" in dico_received.keys() : 
-            email = dico_received["P_MEL"]
-            if not email :
-                email = str(today.timestamp()) + "@sacado.xyz"
-    else :
-        user_type  = 0 
+    # if 'ens' in dico_received["PRO"] :
+    #     user_type  = 2
+    #     if "P_MEL" in dico_received.keys() : 
+    #         email = dico_received["P_MEL"]
+    #         if not email :
+    #             email = str(today.timestamp()) + "@sacado.xyz"
+    # else :
+    #     user_type  = 0 
 
-    closure    = None
-    time_zone  = "Europe/Paris"
-    is_extra   = 0
-    is_manager = 0 
-    cgu        = 1
-    is_testeur = 0
-    country    = school.country
-    is_board   = 0
+    # closure    = None
+    # time_zone  = "Europe/Paris"
+    # is_extra   = 0
+    # is_manager = 0 
+    # cgu        = 1
+    # is_testeur = 0
+    # country    = school.country
+    # is_board   = 0
 
-    username   = dico_received["IDO"]
-    password   = make_password("sacado_gar")
+    # username   = dico_received["IDO"]
+    # password   = make_password("sacado_gar")
 
-    groups     = dico_received["GRO"]
-    civilite   = dico_received["CIV"]
-    ###########################################################################################
-    ###########################################################################################
-    request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
-    ###########################################################################################
-    ###########################################################################################
+    # groups     = dico_received["GRO"]
+    # civilite   = dico_received["CIV"]
+    # ###########################################################################################
+    # ###########################################################################################
+    # request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
+    # ###########################################################################################
+    # ###########################################################################################
 
-    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+    # if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
  
-        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
-        if user_type == 0 and created :
-            level      = dico_received["E_MS1"]
-            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+    #     user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+    #     if user_type == 0 and created :
+    #         level      = dico_received["E_MS1"]
+    #         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
 
-        elif user_type == 2 and created :
-            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+    #     elif user_type == 2 and created :
+    #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
         
-        if user_type == 2 :
-            for group in groups :
-                g_tab = group.split("##")
-                #name = g_tab[0]
-                teacher = Teacher.objects.get(user = user)
-                #level   =  Level.objects.get(pk = 10)
-                #Group.objects.get_or_create(name = name , teacher = teacher ,  level = level ,  school = school , defaults = { "lock" : 1 })
+    #     if user_type == 2 :
+    #         for group in groups :
+    #             g_tab = group.split("##")
+    #             #name = g_tab[0]
+    #             teacher = Teacher.objects.get(user = user)
+    #             #level   =  Level.objects.get(pk = 10)
+    #             #Group.objects.get_or_create(name = name , teacher = teacher ,  level = level ,  school = school , defaults = { "lock" : 1 })
 
-        user_authenticated = authenticate( username= username, password= "sacado_gar")
+    #     user_authenticated = authenticate( username= username, password= "sacado_gar")
  
-        if user_authenticated is not None:
-            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            request.session["user_id"] = user.id
-        else : 
-            messages.error(request,"Votre compte n'est pas connu par SACADO.")
+    #     if user_authenticated is not None:
+    #         login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
+    #         request.session["user_id"] = user.id
+    #     else : 
+    #         messages.error(request,"Votre compte n'est pas connu par SACADO.")
 
-    else :
-        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-    return index(request)
+    # else :
+    #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+    # return index(request)
 
 
 
