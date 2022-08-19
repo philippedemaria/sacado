@@ -42,8 +42,10 @@ $(document).ready(function () {
             filtre_mail_aefe = /^[a-z0-9_\.\-]+@aefe.fr$/i ; 
             filtre_mail_education = /^[a-z0-9_\.\-]+@education.lu$/i ; 
             filtre_mail_mlf = /^[a-z0-9_\.\-]+@mlfmonde.org$/i ;
+            filtre_mail_berlin = /^[a-z0-9_\.\-]+@fg-berlin.eu$/i ;
 
-            if ( (filtre_mail_education.test( email )) || (filtre_mail_aefe.test( email )) || (filtre_mail_academique.test( email ))  || (filtre_mail_mlf.test( email )) )  { 
+
+            if ( (filtre_mail_education.test( email )) || (filtre_mail_aefe.test( email )) || (filtre_mail_academique.test( email ))  || (filtre_mail_berlin.test( email ))   || (filtre_mail_mlf.test( email )) )  { 
 
 
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
