@@ -1742,6 +1742,7 @@ def create_avoir(request, id):
     accounting.pk = None
     accounting.amount = amount
     accounting.is_credit = 0
+
     accounting.forme = "AVOIR"
     chrono = create_chrono(Accounting, "AVOIR")
     accounting.chrono = chrono
@@ -1761,6 +1762,7 @@ def create_avoir(request, id):
     accounting.objet += " Avoir sur " + chronof
     accounting.observation += " Avoir sur " + chronof
     accounting.is_active = 0
+    accounting.is_abonnement = 0
     accounting.save()
 
 
