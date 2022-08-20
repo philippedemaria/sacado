@@ -1,4 +1,4 @@
-from association.models import  Accounting, Detail
+from association.models import  Accounting, Detail , Customer
 from datetime import  datetime
 from datetime import  datetime
 from general_fonctions import *
@@ -18,6 +18,12 @@ def accounting_adhesion(school, today , date_payment, user, is_active , observat
 
 
     Detail.objects.create( accounting = accounting  ,  description = objet , amount = fee)
+
+    if Customer.objects.filter(school=school):
+        Customer.objects.filter(school=school).update(status=2)
+    else :
+        Customer.objects.create(school=school, name =  school.name , town= school.town , address= school.address ,  country= school.country, status=2)
+
 
 
 
