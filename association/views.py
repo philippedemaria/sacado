@@ -1642,6 +1642,7 @@ def update_accounting(request, id,tp):
             date_payment = request.POST.get("date_payment", None)
             if date_payment :
                 nf.tp = 2
+                nf.is_credit = 1
             nf.save()
 
 
@@ -1682,9 +1683,9 @@ def update_accounting(request, id,tp):
    
                 Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 )  
                 Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 )
-            elif  nf.amount != valeur :
-                Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 ).update(amount = -nf.amount)  
-                Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 ).update(amount = nf.amount)
+            elif  som != valeur :
+                Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 ).update(amount = -som)  
+                Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 ).update(amount = som)
 
  
 
@@ -1692,18 +1693,18 @@ def update_accounting(request, id,tp):
                 if Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0).count() == 0   : 
                     Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 )  
                     Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 )
-                elif  nf.amount != valeur :
-                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 ).update(amount = -nf.amount)  
-                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 ).update(amount = nf.amount) 
+                elif  som != valeur :
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = 411 , is_credit = 0 ).update(amount = -som)  
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = 706 , is_credit = 1 ).update(amount = som) 
 
                 if nf.is_paypal : bank = 5122
                 else : bank = 5121  
                 if Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 0).count() == 0   : 
                     Accountancy.objects.create(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1 )  
                     Accountancy.objects.create(accounting_id = nf.id , ranking = 4 , plan_id = bank , is_credit = 0 )
-                elif  nf.amount != valeur :
-                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1 ).update(amount = -nf.amount)  
-                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 4 , plan_id = bank  , is_credit = 0 ).update(amount = nf.amount) 
+                elif  som != valeur :
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1 ).update(amount = -som)  
+                    Accountancy.objects.filter(accounting_id = nf.id , ranking = 4 , plan_id = bank  , is_credit = 0 ).update(amount = som) 
 
 
 
