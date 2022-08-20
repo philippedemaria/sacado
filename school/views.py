@@ -746,16 +746,19 @@ def renew_school_adhesion(request):
 
 	user = request.user
 
+
 	if Accounting.objects.filter( school = school , is_abonnement =  1 , is_active = 0 ):
 		accounting    = Accounting.objects.filter(school = school , is_abonnement =  1, is_active = 0 ).last()
 		accounting_id = accounting.id
 		administration= ""
+
 	else :
 		accounting_id           = accounting_adhesion(school, today , None , user, False , "Renouvellement" )
 		accounting              = Accounting.objects.get(pk = accounting_id) 
 		date_start, date_stop   = date_abonnement(today)
 		#abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
 		administration= ". Nous traitons votre demande."
+
 
 	subject = "Adhésion SACADO - demande d'IBAN"
 	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
