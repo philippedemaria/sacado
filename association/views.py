@@ -1699,7 +1699,7 @@ def update_accounting(request, id,tp):
 
                 if nf.is_paypal : bank = 5122
                 else : bank = 5121  
-                if Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 0).count() == 0   : 
+                if Accountancy.objects.filter(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1).count() == 0   : 
                     Accountancy.objects.create(accounting_id = nf.id , ranking = 3 , plan_id = 411 , is_credit = 1 )  
                     Accountancy.objects.create(accounting_id = nf.id , ranking = 4 , plan_id = bank , is_credit = 0 )
                 elif  som != valeur :
