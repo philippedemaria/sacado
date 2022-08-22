@@ -67,7 +67,7 @@ define(['jquery','bootstrap'], function ($) {
                                     imgs = "";
                                     for (let i = 0; i < data.imagefiles.length; i++) {
                                  
-                                                    imgs = imgs + "<img src='https://sacado.xyz/ressources/"+data.imagefiles[i]+"'  width='200px'  data-url_image='"+data.imagefiles[i]+"' class='selector_image_from_ajax' />";
+                                                    imgs = imgs + "<img src='https://sacado-academie.fr/ressources/"+data.imagefiles[i]+"'  width='200px'  data-url_image='"+data.imagefiles[i]+"' class='selector_image_from_ajax' />";
                                                 }
                                             
                                             $('#prop_vignette').append(imgs);
