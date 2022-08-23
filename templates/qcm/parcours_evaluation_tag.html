@@ -189,6 +189,8 @@
                 <div class="col-lg-4 col-xs-4">
                 {% if parcours.is_evaluation %}
                     <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
+                {% elif parcours.is_sequence %}
+                    <a href="{% url 'update_sequence' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
                 {% else  %}
                     <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
                 {% endif  %}

@@ -36,30 +36,30 @@
         <div class="row dossier" style="padding-top: 3px;padding-bottom: 3px;"> 
 
 
-                <div class="col-xs-4 col-md-4 col-lg-4"> 
-                    {{  data_min.nb_parcours }} parcours <br/> 
-                    {% if data_min.nb_evaluations %}
-                    {{  data_min.nb_evaluations }} évaluations 
-                    {% endif %}
-                </div>
-                <div class="col-xs-4 col-md-4 col-lg-3">
-                    {% if data_min.nb_cours %}
-                    {{  data_min.nb_cours }} cours  
-                    {% endif %}<br/>
-                    {% if data_min.nb_quizz %}
-                    {{  data_min.nb_quizz }} quizz 
-                    {% endif %}
-                </div>
+            <div class="col-xs-4 col-md-4 col-lg-4"> 
+                {{  data_min.nb_parcours }} parcours <br/> 
+                {% if data_min.nb_evaluations %}
+                {{  data_min.nb_evaluations }} évaluations 
+                {% endif %}
+            </div>
+            <div class="col-xs-4 col-md-4 col-lg-3">
+                {% if data_min.nb_cours %}
+                {{  data_min.nb_cours }} cours  
+                {% endif %}<br/>
+                {% if data_min.nb_quizz %}
+                {{  data_min.nb_quizz }} quizz 
+                {% endif %}
+            </div>
 
-                <div class="col-xs-4 col-md-4 col-lg-4"> 
-                    {% if data_min.nb_bibliotex %}
-                    {{  data_min.nb_bibliotex }} biblioTex 
-                    {% endif %}
-                    {% if data_min.nb_flashpack %}
-                    <br/>
-                    {{  data_min.nb_flashpack }} flashpack
-                    {% endif %}
-                </div>
+            <div class="col-xs-4 col-md-4 col-lg-4"> 
+                {% if data_min.nb_bibliotex %}
+                {{  data_min.nb_bibliotex }} biblioTex 
+                {% endif %}
+                {% if data_min.nb_flashpack %}
+                <br/>
+                {{  data_min.nb_flashpack }} flashpack
+                {% endif %}
+            </div>
         </div>
         <div class="row extend_student" style="margin-left: 5px"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
