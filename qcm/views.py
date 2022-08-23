@@ -2557,7 +2557,7 @@ def update_evaluation(request, id,idg=0):
 
 @parcours_exists
 def update_sequence(request, id, idg=0 ): 
-    return  update_parcours_or_evaluation(request, True, id,1, idg )
+    return  update_parcours_or_evaluation(request, False, id,1, idg )
 
 ##########################################################################################################################
 ##########################################################################################################################
