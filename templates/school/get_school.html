@@ -15,7 +15,14 @@
 {% endblock %}
 
 
- 
+     {% block require %}
+
+        {% if not new %}
+        <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+        {% else %}
+        <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common-index.js' %}"></script> 
+        {% endif %}
+    {% endblock %}
 
 
  
@@ -32,14 +39,57 @@
     </div>
     <form action="" method="POST">
     {% csrf_token %}    
-        <div class="row">    
-            <div class="col-sm-12 col-md-3">
-                <div class="form-group">
-                    <label>RNE (France) ou Token :</label>
-                    <input name="token" type="text" required class="form-control" maxlength="8" />
-                </div>
-            </div>
-        </div> 
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12">
+                              <div class="form-group"><label>Sélectionner le pays. <small>Pour la France, munissez-vous du RNE.</small></label>
+                                  <select id="id_country_school" name="country_school" class="form-control select2" required>
+                                      <option value=" ">--------------</option>
+                                      {% for c in countries %}
+                                          <option value="{{ c.id }}">{{ c.name }}</option>
+                                      {%  endfor %}
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12" id="select_town">
+                              <div class="form-group"><label>Sélectionner la ville</label>
+                                  <select id="id_town_school" name="town_school" class="form-control select2">
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row"  id="select_rne">
+                          <div class="col-sm-12 col-md-12 no_visu">
+                              <div class="form-group"><label>Renseigner le code RNE</label>
+                                  <input type="text" name="rne" id="id_rne" class="form-control" maxlength="10" />
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col-sm-12 col-md-12">
+                              <div class="form-group"><label>Sélectionner l'établissement</label>
+                                  <select id="id_school" name="school" class="form-control select2 no_visu" required>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="{% url 'index' %}#contact">Nous contacter</a>.
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+
+
+
+
+
+
+
+
         <div class="row">
             <div class="col-sm-12 col-md-8">
                 <div class="form-group">
