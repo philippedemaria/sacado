@@ -59,12 +59,15 @@
                                 <td>{% if accounting.date_payment %}Payé le {{ accounting.date_payment }}{% elif  "Avoir" in accounting.objet  %} Facture suspendue {% else %} En attente de paiement {% endif %}</td>
                                 <td>  
                                     {% if accounting.date_payment and accounting.is_facturation %}
-                                        <a href="{% url 'print_bill_school' accounting.id %}" class="btn btn-xs btn-default">
+                                        <a href="{% url 'print_accounting' accounting.id %}" class="btn btn-xs btn-default">
                                             <i class="fa fa-print"></i> Imprimer {% if  accounting.is_credit   %}la facture{% else %}l'avoir{% endif %} 
                                         </a>
-                                    {% elif accounting.date_payment and not accounting.is_facturation  %}
-                                        <a href="{% url 'print_accounting' accounting.id %}"  class="btn btn-xs btn-primary"> Imprimer {% if  accounting.is_credit   %}la facture{% else %}l'avoir{% endif %}  </a>
-                                        {% if  accounting.is_credit and not "Avoir" in accounting.objet  %}<a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> En attente de paiement </a>{% endif %}                                        
+
+                                    {% comment %}
+                                        {% elif  accounting.is_credit and not "Avoir" in accounting.objet  %}
+                                            <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-danger"> Renouvellement </a>
+                             
+                                    {% endcomment %} 
                                     {% else %} 
                                         Votre demande est prise en compte par l'équipe Sacado. Vous recevrez rapidement une facture dans cet espace.
                                     {% endif %}
@@ -72,6 +75,9 @@
                             </tr>
 
                         {% endfor %}
+
+
+
 
 
                     </tbody>
