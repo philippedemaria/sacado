@@ -1921,8 +1921,9 @@ def init_password_teacher(request, id ):
 
     teacher = Teacher.objects.get(pk=id)
     password =  str(uuid.uuid4())[:8]
-    teacher.user.password = make_password(password)
-    User.objects.filter(pk= teacher.user_id).update(password = password)
+    password_hash = make_password(password)
+    teacher.user.password = password_hash
+    User.objects.filter(pk= teacher.user_id).update(password = password_hash)
     
     msg = "Bonjour, \n\n Votre nouveau mot de passe : " + password + "\nest attribué. Il est généré automatiquement.\n\n Vous pouvez le modifer via votre profil. Ceci est un mail automatique, ne pas répondre.\n\nL'équipe SACADO."
     
