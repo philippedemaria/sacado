@@ -319,7 +319,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     is_manager = 0 
     cgu        = 1
     is_testeur = 0
-    country    = school.country
+    #country    = school.country
     is_board   = 0
 
     username   = dico_received["IDO"]
