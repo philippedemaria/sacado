@@ -298,13 +298,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
 
     uai        = dico_received["UAI"][0] 
-    #school     = School.objects.get(code_acad = uai)
+    school     = School.objects.get(code_acad = uai)
     last_name  = dico_received["NOM"][0] 
     first_name = dico_received["PRE"][0]
 
     email = str(today.timestamp()) + "@sacado.xyz"
  
-    if 'ens' in dico_received["PRO"] :
+    if 'ens' in dico_received["PRO"][0] :
         user_type  = 2
         if "P_MEL" in dico_received.keys() : 
             email = dico_received["P_MEL"][0]
@@ -326,7 +326,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
 
     groups     = dico_received["GRO"]
-    civilite   = dico_received["CIV"]
+    civilite   = dico_received["CIV"][0]
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
@@ -364,8 +364,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # else :
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     # return index(request)
-
-    context = {  "username" : username , "groups" : groups ,   'uai' : uai  }
+ 
+ 
+    context = {  "username" : username , "groups" : groups ,   'uai' : uai ,   'school' : school ,   'ens' : dico_received["PRO"][0] ,   'civilite' : civilite ,   'first_name' : first_name  ,   'last_name' : last_name  }
     return render(request, 'setup/test_gar.html', context)
 
 
