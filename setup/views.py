@@ -319,7 +319,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     is_manager = 0 
     cgu        = 1
     is_testeur = 0
-    #country    = school.country
+    country    = school.country
     is_board   = 0
 
     username   = dico_received["IDO"][0]
@@ -338,39 +338,41 @@ def ressource_sacado(request): #Protection saml pour le GAR
         gros.append(gro)
 
 
-    # if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
+    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
  
-    #     user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
-    #     if user_type == 0 and created :
-    #         level      = dico_received["E_MS1"]
-    #         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+        if user_type == 0 and created :
+            level             = dico_received["E_MS1"]
+            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
 
-    #     elif user_type == 2 and created :
-    #         teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+        elif user_type == 2 and created :
+            teacher,created_s = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
         
-    #     if user_type == 2 :
-    #         for group in groups :
-    #             g_tab = group.split("##")
-    #             #name = g_tab[0]
-    #             teacher = Teacher.objects.get(user = user)
-    #             #level   =  Level.objects.get(pk = 10)
-    #             #Group.objects.get_or_create(name = name , teacher = teacher ,  level = level ,  school = school , defaults = { "lock" : 1 })
+        if user_type == 2 :
+            for g in gros :
+                name = g
+                if name[0] == 6 : level_id = 6
+                elif name[0] == 5 : level_id = 7
+                elif name[0] == 4 : level_id = 8
+                elif name[0] == 3 : level_id = 9
+                elif name[0] == 2 : level_id = 10
+                elif name[0] == 1 : level_id = 11
+                else : level_id = 12
 
-    #     user_authenticated = authenticate( username= username, password= "sacado_gar")
- 
-    #     if user_authenticated is not None:
-    #         login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-    #         request.session["user_id"] = user.id
-    #     else : 
-    #         messages.error(request,"Votre compte n'est pas connu par SACADO.")
+                Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
 
-    # else :
-    #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-    # return index(request)
+        user_authenticated = authenticate( username= username, password= "sacado_gar")
  
+        if user_authenticated is not None:
+            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
+            request.session["user_id"] = user.id
+        else : 
+            messages.error(request,"Votre compte n'est pas connu par SACADO.")
+    else :
+        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+    return index(request)
  
-    context = {  "username" : username , "gros" : gros ,   'uai' : uai ,   'school' : school ,   'ens' : dico_received["PRO"][0] ,   'civilite' : civilite ,   'first_name' : first_name  ,   'last_name' : last_name  }
-    return render(request, 'setup/test_gar.html', context)
+
 
 
 def send_message(request):
