@@ -276,7 +276,7 @@ def singleLogoutGar(request):
     gars = json.loads(data_xml)
     dico_received = dict()
     for gar in gars :
-        dico_received[gar['key']] = gar['value']
+        dico_received[gar['key']] = gar['values']
     username   = dico_received["IDO"]
     logout(request)
 
@@ -289,29 +289,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
 
-    print(" ======================= singleLogoutGar =================================== ")
-    print(data_xml)
-    print(" ========================================================== ")
-    print(gars)
-    print(" ========================================================== ")
 
-
-    context = {  "rh" : request.headers , "gars" : gars , 'data_xml' : data_xml }
-    return render(request, 'setup/test_gar.html', context)
-
-    # dico_received = dict()
-    # for gar in gars :
-    #     dico_received[gar['key']] = gar['value']
-    # ##########################################################
-    # today = datetime.now()
+    dico_received = dict()
+    for gar in gars :
+        dico_received[gar['key']] = gar['values']
+    ##########################################################
+    today = datetime.now()
  
 
-    # print(" ======================= singleLogoutGar =================================== ")
-    # print(dico_received)
-    # print(" ========================================================== ")
 
-
-
+    context = {  "rh" : request.headers , "gars" : gars , 'data_xml' : data_xml , 'dico_received' : dico_received }
+    return render(request, 'setup/test_gar.html', context)
     # uai        = dico_received["UAI"]
     # school     = School.objects.get(code_acad = uai)
     # last_name  = dico_received["NOM"] 
