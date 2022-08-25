@@ -351,6 +351,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_type == 2 :
             for g in gros :
                 name = g
+                teacher = user.teacher
                 if name[0] == 6 : level_id = 6
                 elif name[0] == 5 : level_id = 7
                 elif name[0] == 4 : level_id = 8
@@ -368,11 +369,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
             request.session["user_id"] = user.id
         else : 
             messages.error(request,"Votre compte n'est pas connu par SACADO.")
+
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     return index(request)
  
-
 
 
 def send_message(request):
