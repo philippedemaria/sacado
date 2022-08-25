@@ -32,26 +32,30 @@
 
 
     <div class="row">
-         {{   rh }}
+         groups : {{   groups }}
     </div>
+
+
+    <div class="row">
+        {% for g in  groups %} {{ g }}{% endfor %}
+    </div>
+
     <hr/>
 
     <div class="row">
 
-         {{   gars }}
+         dico_received : {{   dico_received }}
     </div>
     <hr/>
     <div class="row">
-         {{   data_xml }}
+         school : {{   school }}
     </div>
     <hr/>
     <div class="row">
-        {{ dico_received }}
+        username : {{ username }}
     </div>
 
 </section>
-
- 
 
 
 {% endblock  %}   

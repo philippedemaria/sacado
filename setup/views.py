@@ -297,44 +297,43 @@ def ressource_sacado(request): #Protection saml pour le GAR
     today = datetime.now()
  
 
+    uai        = dico_received["UAI"][0]
+    school     = School.objects.get(code_acad = uai)
+    last_name  = dico_received["NOM"][0]
+    first_name = dico_received["PRE"][0]
 
-    context = {  "rh" : request.headers , "gars" : gars , 'data_xml' : data_xml , 'dico_received' : dico_received }
-    return render(request, 'setup/test_gar.html', context)
-    # uai        = dico_received["UAI"]
-    # school     = School.objects.get(code_acad = uai)
-    # last_name  = dico_received["NOM"] 
-    # first_name = dico_received["PRE"]
-
-    # email = str(today.timestamp()) + "@sacado.xyz"
+    email = str(today.timestamp()) + "@sacado.xyz"
  
-    # if 'ens' in dico_received["PRO"] :
-    #     user_type  = 2
-    #     if "P_MEL" in dico_received.keys() : 
-    #         email = dico_received["P_MEL"]
-    #         if not email :
-    #             email = str(today.timestamp()) + "@sacado.xyz"
-    # else :
-    #     user_type  = 0 
+    if 'ens' in dico_received["PRO"][0] :
+        user_type  = 2
+        if "P_MEL" in dico_received.keys() : 
+            email = dico_received["P_MEL"][0]
+            if not email :
+                email = str(today.timestamp()) + "@sacado.xyz"
+    else :
+        user_type  = 0 
 
-    # closure    = None
-    # time_zone  = "Europe/Paris"
-    # is_extra   = 0
-    # is_manager = 0 
-    # cgu        = 1
-    # is_testeur = 0
-    # country    = school.country
-    # is_board   = 0
+    closure    = None
+    time_zone  = "Europe/Paris"
+    is_extra   = 0
+    is_manager = 0 
+    cgu        = 1
+    is_testeur = 0
+    country    = school.country
+    is_board   = 0
 
-    # username   = dico_received["IDO"]
-    # password   = make_password("sacado_gar")
+    username   = dico_received["IDO"][0]
+    password   = make_password("sacado_gar")
 
-    # groups     = dico_received["GRO"]
-    # civilite   = dico_received["CIV"]
-    # ###########################################################################################
-    # ###########################################################################################
-    # request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
-    # ###########################################################################################
-    # ###########################################################################################
+    groups     = dico_received["GRO"]
+    civilite   = dico_received["CIV"][0]
+    ###########################################################################################
+    ###########################################################################################
+    request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
+    ###########################################################################################
+    ###########################################################################################
+
+
 
     # if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
  
@@ -366,6 +365,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     # return index(request)
 
+    context = {  "groups" : groups , "dico_received" : dico_received , 'school' : school , 'username' : username  }
+    return render(request, 'setup/test_gar.html', context)
 
 
 def send_message(request):
