@@ -19,18 +19,14 @@
     </div>
     <div class="box_shared_footer">
         <div class="row box_shared_label"> 
-            <div class="col-lg-12 col-xs-12" style="font-variant:small-caps; font-size: 16px">
+            <div class="col-lg-7 col-xs-12" style="font-variant:small-caps; font-size: 16px">
                 <b>{{ folder.subject.name }}</b>
+                     
+            </div> 
 
 
-                    <a href="{% url 'clone_folder' folder.id  %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="pull-right edit" title="Cloner le dossier"  > <i class="fa fa-clone"></i> </a>                      
-
-
-
-
-
-
-
+            <div class="col-lg-5 col-xs-12">      
+                 {{ folder.author}} 
             </div> 
         </div>
         <div class="row box_shared_label_last"> 
@@ -41,7 +37,7 @@
             </div> 
  
             <div class="col-lg-6 col-xs-6">      
-                 {{ folder.author}} 
+                    <a href="{% url 'clone_folder' folder.id  %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="btn btn-warning" title="Dupliquer le dossier"  > Dupliquer</a>  
             </div> 
         </div>
     </div>
