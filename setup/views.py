@@ -298,7 +298,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
 
     uai        = dico_received["UAI"] 
-    school     = School.objects.get(code_acad = uai)
+    #school     = School.objects.get(code_acad = uai)
     last_name  = dico_received["NOM"] 
     first_name = dico_received["PRE"] 
 
@@ -365,7 +365,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     # return index(request)
 
-    context = {  "username" : username , "groups" : groups , 'school' : school , 'uai' : uai  }
+    context = {  "username" : username , "groups" : groups ,   'uai' : uai  }
     return render(request, 'setup/test_gar.html', context)
 
 
