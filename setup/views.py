@@ -297,17 +297,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
     today = datetime.now()
  
 
-    uai        = dico_received["UAI"] 
+    uai        = dico_received["UAI"][0] 
     #school     = School.objects.get(code_acad = uai)
-    last_name  = dico_received["NOM"] 
-    first_name = dico_received["PRE"] 
+    last_name  = dico_received["NOM"][0] 
+    first_name = dico_received["PRE"][0]
 
     email = str(today.timestamp()) + "@sacado.xyz"
  
     if 'ens' in dico_received["PRO"] :
         user_type  = 2
         if "P_MEL" in dico_received.keys() : 
-            email = dico_received["P_MEL"]
+            email = dico_received["P_MEL"][0]
             if not email :
                 email = str(today.timestamp()) + "@sacado.xyz"
     else :
@@ -322,7 +322,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #country    = school.country
     is_board   = 0
 
-    username   = dico_received["IDO"]
+    username   = dico_received["IDO"][0]
     password   = make_password("sacado_gar")
 
     groups     = dico_received["GRO"]
