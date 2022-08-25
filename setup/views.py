@@ -297,17 +297,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
     today = datetime.now()
  
 
-    uai        = dico_received["UAI"][0]
+    uai        = dico_received["UAI"] 
     school     = School.objects.get(code_acad = uai)
-    last_name  = dico_received["NOM"][0]
-    first_name = dico_received["PRE"][0]
+    last_name  = dico_received["NOM"] 
+    first_name = dico_received["PRE"] 
 
     email = str(today.timestamp()) + "@sacado.xyz"
  
-    if 'ens' in dico_received["PRO"][0] :
+    if 'ens' in dico_received["PRO"] :
         user_type  = 2
         if "P_MEL" in dico_received.keys() : 
-            email = dico_received["P_MEL"][0]
+            email = dico_received["P_MEL"]
             if not email :
                 email = str(today.timestamp()) + "@sacado.xyz"
     else :
@@ -322,11 +322,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
     country    = school.country
     is_board   = 0
 
-    username   = dico_received["IDO"][0]
+    username   = dico_received["IDO"]
     password   = make_password("sacado_gar")
 
     groups     = dico_received["GRO"]
-    civilite   = dico_received["CIV"][0]
+    civilite   = dico_received["CIV"]
     ###########################################################################################
     ###########################################################################################
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
@@ -365,7 +365,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     #     messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
     # return index(request)
 
-    context = {  "groups" : groups , "dico_received" : dico_received , 'school' : school , 'username' : username  }
+    context = {  "username" : username , "groups" : groups , 'school' : school , 'uai' : uai  }
     return render(request, 'setup/test_gar.html', context)
 
 
