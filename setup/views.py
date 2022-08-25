@@ -332,7 +332,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
     ###########################################################################################
     ###########################################################################################
-
+    gros = []
+    for group in groups :
+        gro = group.split("##")[0]
+        gros.append(gro)
 
 
     # if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :
@@ -366,7 +369,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # return index(request)
  
  
-    context = {  "username" : username , "groups" : groups ,   'uai' : uai ,   'school' : school ,   'ens' : dico_received["PRO"][0] ,   'civilite' : civilite ,   'first_name' : first_name  ,   'last_name' : last_name  }
+    context = {  "username" : username , "gros" : gros ,   'uai' : uai ,   'school' : school ,   'ens' : dico_received["PRO"][0] ,   'civilite' : civilite ,   'first_name' : first_name  ,   'last_name' : last_name  }
     return render(request, 'setup/test_gar.html', context)
 
 
