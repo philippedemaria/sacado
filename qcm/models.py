@@ -848,15 +848,17 @@ class Parcours(ModelWithCode):
         data = {}
         today = timezone.now()
         if self.is_sequence :
-            exercises  = self.parcours_relationship.filter(type_id=0 ) 
+            exercises  = self.parcours_relationship.filter(type_id=0,exercise__supportfile__is_title=0 ) 
             custom     = self.parcours_relationship.filter(type_id=1 ) 
             courses    = self.parcours_relationship.filter(type_id=2)
             bibliotex  = self.parcours_relationship.filter(type_id=5)
             quizz      = self.parcours_relationship.filter(type_id=3)
             flashpacks = self.parcours_relationship.filter( type_id=4 )
 
+ 
             nb_exercises_published = exercises.filter(is_publish = 1).count() + custom.filter(is_publish = 1).count()
             nb_cours_published     = courses.filter(is_publish = 1).count() 
+
 
             nb_exercises = exercises.count() + self.parcours_customexercises.count()
             nb_cours     = courses.count()
@@ -869,6 +871,8 @@ class Parcours(ModelWithCode):
 
             nb_flashpack           = flashpacks.count() 
             nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
+
+
 
         else :
             exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
@@ -894,25 +898,35 @@ class Parcours(ModelWithCode):
             nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
 
 
+        nb_docs_published = nb_exercises_published + nb_cours_published + nb_quizz_published + nb_flashpack_published + nb_bibliotex_published 
+        nb_docs = nb_exercises + nb_cours + nb_quizz + nb_flashpack + nb_bibliotex 
+
+
         data["nb_exercises"]            = nb_exercises
         data["nb_exercises_published"]  = nb_exercises_published
-        data["exercises_care"] = ( nb_exercises == nb_exercises_published)
+        data["exercises_care"]          = ( nb_exercises == nb_exercises_published)
 
         data["nb_cours"]                = nb_cours
         data["nb_cours_published"]      = nb_cours_published
-        data["cours_care"]     = ( nb_cours == nb_cours_published )
+        data["cours_care"]              = ( nb_cours == nb_cours_published )
 
         data["nb_quizz"]                = nb_quizz
         data["nb_quizz_published"]      = nb_quizz_published
-        data["quizz_care"]     = ( nb_quizz == nb_quizz_published )        
+        data["quizz_care"]              = ( nb_quizz == nb_quizz_published )        
 
         data["nb_flashpack"]            = nb_flashpack
         data["nb_flashpack_published"]  = nb_flashpack_published
-        data["flashpack_care"] = ( nb_flashpack == nb_flashpack_published)
+        data["flashpack_care"]          = ( nb_flashpack == nb_flashpack_published)
 
         data["nb_bibliotex"]            = nb_bibliotex        
         data["nb_bibliotex_published"]  = nb_bibliotex_published
-        data["bibliotex_care"] = ( nb_bibliotex == nb_bibliotex_published)
+        data["bibliotex_care"]          = ( nb_bibliotex == nb_bibliotex_published)
+
+        data["nb_docs"]                 = nb_docs        
+        data["nb_docs_published"]       = nb_docs_published
+        data["docs_care"]               = ( nb_docs == nb_docs)
+
+
 
         return data
 

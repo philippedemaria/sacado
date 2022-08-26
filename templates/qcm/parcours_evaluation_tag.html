@@ -160,13 +160,26 @@
             {% if not parcours.is_evaluation  %}
             <div class="row dossier"   style="position: relative; margin-bottom: 10px;"> 
                 <div class="col-xs-4 col-md-4 col-lg-4"> 
-                    {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   
-                    {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
-                        <i class="fa fa-circle text-danger" style="font-size:8px"></i>
-                    {% endif %}
 
-                    {% if parcours.is_active %}<br/> 
-                        <span style="color:red">En ce moment</span>
+                    {% if parcours.is_sequence %}
+
+                        {{  parcours.nb_exercices_and_cours.nb_docs }} document{{  parcours.nb_exercices_and_cours.nb_docs|pluralize }} 
+                        {% if not  parcours.nb_docs.nb_docs_care %} 
+                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>
+                        {% endif %}<br/> 
+                        {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   
+
+
+                    {% else %}
+
+                        {{  parcours.nb_exercices_and_cours.nb_exercises }} exercice{{  parcours.nb_exercices_and_cours.nb_exercises|pluralize }}   
+                        {% if not  parcours.nb_exercices_and_cours.exercises_care %} 
+                            <i class="fa fa-circle text-danger" style="font-size:8px"></i>
+                        {% endif %}
+
+                        {% if parcours.is_active %}<br/> 
+                            <span style="color:red">En ce moment</span>
+                        {% endif %}
                     {% endif %}
 
                 </div>
