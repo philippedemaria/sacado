@@ -24,6 +24,7 @@ from payment_fonctions import *
 from django.conf import settings # récupération de variables globales du settings.py
 from django.db.models import Avg, Count, Min, Sum
 from django.contrib.auth import login, authenticate, logout
+from django.template.loader import render_to_string
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -128,13 +129,9 @@ def sharing_teachers(request,group, teachers):
 @user_is_superuser
 def list_schools(request):
 
-	schools = list()
-	today = datetime.now()
-	abonnements = Abonnement.objects.filter( date_stop__gte=today, date_start__lte=today,is_active = 1 ).order_by("school__country")
-	for a in abonnements :
-		schools.append(a.school)
-	nb = len(schools)
-	return render(request, 'school/lists.html', { 'communications' : [], 'schools': schools, 'nb': nb})
+	countries = Country.objects.all()
+
+	return render(request, 'school/lists.html', {  'countries': countries    })
 
 
 @user_is_superuser
@@ -659,9 +656,7 @@ def chargeschools(request) :
 
     data = {}
     country_id =  request.POST.get("country_id")  
-    print(country_id)
     schools = School.objects.values_list('id', 'name').filter(country_id=country_id) 
-    print(schools)
     data['schools'] = list(schools)
     return JsonResponse(data)
 
@@ -1420,3 +1415,48 @@ def reset_all_groups_school(request) :
  
 	context = {'form':form,  'communications' : [], 'school':school ,'nb':nb ,'nb_total':nb_total }
 	return render(request,'school/_form.html', context)
+
+
+
+
+
+@csrf_exempt
+def ajax_charge_town(request):
+
+    id_country =  request.POST.get("id_country")
+    data = {}
+    if id_country == 5 :
+        data['towns'] = None
+    else : 
+        towns = Town.objects.values_list('name','name').filter(country_id=id_country).order_by("name") 
+        data['towns'] = list(towns)
+    data['id_country'] = id_country
+    return JsonResponse(data)
+
+
+
+@csrf_exempt
+def ajax_charge_school(request):
+
+    id_country =  request.POST.get("id_country")
+    town       =  request.POST.get("id_town")
+
+    data = {}
+    schools = School.objects.filter(country_id=id_country, town = town).order_by("name")  
+ 
+    context = {  'schools': schools,   }
+    data['html'] = render_to_string('school/ajax_list_schools.html', context)
+ 
+    return JsonResponse(data)
+
+@csrf_exempt
+def ajax_charge_school_by_rne(request):
+
+    id_rne       =  request.POST.get("id_rne")
+    data = {}
+    schools = School.objects.filter(country_id=5,code_acad=id_rne)
+ 
+    context = {  'schools': schools,   }
+    data['html'] = render_to_string('school/ajax_list_schools.html', context)
+ 
+    return JsonResponse(data)

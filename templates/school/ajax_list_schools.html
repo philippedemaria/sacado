@@ -1,0 +1,46 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+ 
+{{schools }}
+ 
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-bordered table-hover standard_tab_sort">
+                    <thead>
+                        <tr>
+                            <td>Nom</td>
+                            <td>Pays </td>
+                            <td>Ville </td>
+                            <td>Adresse </td>
+                            <td>RNE </td>
+                            <td>Nb élèves </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                          {% for school in schools %}
+                          <tr>
+                            <td>{{ school.name}}</td>
+                            <td>{{ school.country.name}}</td>
+                            <td>{{ school.town}}</td>
+                            <td>{{ school.address}}</td>
+                            <td>{{ school.code_acad}}</td>
+                            <td>{{ school.nbstudents}}</td>
+                          </tr>
+                          {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,7 @@
     <script>
     
         require(['script/ajax-dashboard']);
+        require(['script/ajax_load_schools']);
     </script>
 {% endblock %}
 
@@ -29,49 +30,43 @@
 <section class="content_main">
  
  
-  <div class="row"> 
-    <div class="col-sm-12 col-md-12">
-        <table  class="table table-bordered table-hover standard_tab_sort" style="width:100%">
-              <thead>
-                  <tr>
-                    <th width="100px">Pays</th>                  
-                    <th>Nom</th> 
-                    <th>Ville</th>  
-                    <th>Token</th>  
-                    <th>Nombre d'utilisateurs</th>                                                         
-                  </tr>
-              </thead>
-              <tbody>
-                    {% for school in schools %}
-                    <tr> 
-                      <td> {{ school.country.name }}
-                      </td>                    
-                      <td>
-                          <a href="{% url 'update_school'  school.id %}" > {{ school.name }}</a> 
-                          <a href="{% url 'delete_school'  school.id %}" class="pull-right" onclick="return TestDelete('{{ school.name }}')"><i class="fa fa-trash"></i> </a>
-                          {% if school.logo %}
-                            <img src="{{ school.logo.url }}" width="40px" />
-                          {% endif %}
-                      </td>
-                      <td>
-                          {{ school.town }}
-                      </td>
-                      <td>
-                          {{ school.code_acad}}_{{ school.id }}
-                      </td>
-                      <td>
-                          {%  with school.student_and_teacher as data %}
-                            {{ school.users.count }} <small>({{ data.nbt }} enseignant{{ data.nbt|pluralize }} - {{ data.nbs }} élève{{ data.nbs|pluralize }})</small>
-                          {%  endwith  %}
-                      </td>
+ 
+                  <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                          <div class="form-group"><label>Sélectionner le pays. <small>Pour la France, munissez-vous du RNE.</small></label>
+                              <select id="id_country_school" name="country_school" class="form-control select2" required>
+                                  <option value=" ">--------------</option>
+                                  {% for c in countries %}
+                                      <option value="{{ c.id }}">{{ c.name }}</option>
+                                  {%  endfor %}
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-12 col-md-12" id="select_town">
+                          <div class="form-group"><label>Sélectionner la ville</label>
+                              <select id="id_town_school" name="town_school" class="form-control select2">
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row"  id="select_rne">
+                      <div class="col-sm-12 col-md-12 no_visu">
+                          <div class="form-group"><label>Renseigner le code RNE</label>
+                              <input type="text" name="rne" id="id_rne" class="form-control" maxlength="10" />
+                          </div>
+                      </div>
+                  </div>
 
-
-                      
-                    </tr>
-                    {% endfor %}
-              </tbody>
-        </table>
-    </div>
-  </div>
+                  <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                          <div class="form-group">
+                              <div id="id_school">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+ 
 </section> 
 {% endblock %}
