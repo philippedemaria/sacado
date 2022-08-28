@@ -1950,44 +1950,34 @@ def ajax_all_parcourses(request):
                                                             teacher__user__school = teacher.user.school ,  level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct() 
                 else :
                     if is_eval == 2 :
-                        parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_sequence = 1, 
-                                                            exercises__knowledge__theme__in = themes_tab, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()                             
+                        parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_sequence = 1, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()                             
                     else :
-                        parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval, 
-                                                            exercises__knowledge__theme__in = themes_tab, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()   
+                        parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()   
         else :
-            if keywords:
-                parcourses = Parcours.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exercises__supportfile__title__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,is_evaluation = is_eval,
-                                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct() 
-            else :
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval,
-                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct() 
-
-
 
             if keywords :
                 if is_eval == 2 :
                     parcourses = Parcours.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exercises__supportfile__title__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,is_sequence = 1,
                                                         level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct() 
                 else :
-                    parcourses = Parcours.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exercises__supportfile__title__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1, is_evaluation = is_eval,
-                                                        teacher__user__school = teacher.user.school ,  level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct() 
+                    parcourses = Parcours.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exercises__supportfile__title__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,is_evaluation = is_eval,
+                                                        level_id = int(level_id) ,is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct() 
             else :
                 if is_eval == 2 :
                     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_sequence = 1, 
-                                                        exercises__knowledge__theme__in = themes_tab, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()                             
+                                                        level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()                             
                 else :
                     parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, is_evaluation = is_eval, 
-                                                            exercises__knowledge__theme__in = themes_tab, level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()   
+                                                            level_id = int(level_id),is_trash=0).exclude(teacher=teacher).order_by('teacher','ranking').distinct()   
 
 
 
     else :
         if keywords:
             if is_eval == 2 :
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1 , is_sequence = 1,exercises__supportfile__title__icontains = keywords,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords) |Q(exercises__supportfile__title__icontains = keywords) ,is_share = 1 , is_sequence = 1 ,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
             else :
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1 , is_evaluation = is_eval,exercises__supportfile__title__icontains = keywords,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)|Q(exercises__supportfile__title__icontains = keywords)  ,is_share = 1 , is_evaluation = is_eval,,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
         
         else :
 
