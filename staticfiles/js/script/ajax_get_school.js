@@ -15,6 +15,19 @@ define(['jquery', 'bootstrap'], function ($) {
         });
   
 
+
+ 
+        $("#show_get_school_div").hide();
+
+        $('#get_school_div').on('click', function (event) {
+            $("#show_get_school_div").toggle(300) ;
+        });
+  
+
+
+
+
+
         $('#id_country_school').on('change',  function (event) {    
 
             let id_country_school = $(this).val(); 
