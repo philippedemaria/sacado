@@ -596,7 +596,11 @@ def calcule_bank_bilan(request):
         accountings_sales_credit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=0   ).aggregate(Sum('amount'))
         my_dico["code"] = p.code 
         my_dico["name"] = p.name
-        solde = accountings_sales_credit["amount__sum"] - accountings_sales_debit["amount__sum"]
+        try :
+            solde = accountings_sales_credit["amount__sum"] - accountings_sales_debit["amount__sum"]
+        except :
+            solde = accountings_sales_credit["amount__sum"]
+            
         my_dico["solde"]= solde
 
         if p.code > 5000 :
