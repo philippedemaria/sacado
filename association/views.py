@@ -590,35 +590,61 @@ def calcule_bank_bilan(request):
  
     for p in plan_immo :
         my_dico = {}
- 
-        my_dico = {}
-        accountings_sales_debit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=1   ).aggregate(Sum('amount'))
-        accountings_sales_credit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=0   ).aggregate(Sum('amount'))
-        my_dico["code"] = p.code 
-        my_dico["name"] = p.name
-        try :
-            solde = accountings_sales_credit["amount__sum"] - accountings_sales_debit["amount__sum"]
-        except :
-            solde = accountings_sales_credit["amount__sum"]
-            
-        my_dico["solde"]= solde
+        
+        if p.code ==411 :
 
-        if p.code > 5000 :
+            my_dico = {}
+            accountings_sales_debit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=1   ).aggregate(Sum('amount'))
+            accountings_sales_credit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=0   ).aggregate(Sum('amount'))
+            my_dico["code"] = p.code 
+            my_dico["name"] = p.name
             try :
-                my_dico["solde"]= solde
+                solde = accountings_sales_credit["amount__sum"] - accountings_sales_debit["amount__sum"]
             except :
-                pass
-            try :
-                cs -= solde
-            except :
-                pass
-        else :
+                solde = accountings_sales_credit["amount__sum"]
+                
             my_dico["solde"]= solde
-            try :
-                cs += solde
-            except :
-                pass
-        plan_immos.append( my_dico )
+
+            if p.code > 5000 :
+                try :
+                    my_dico["solde"]= solde
+                except :
+                    pass
+                try :
+                    cs -= solde
+                except :
+                    pass
+            else :
+                my_dico["solde"]= solde
+                try :
+                    cs += solde
+                except :
+                    pass
+            plan_immos.append( my_dico )
+
+
+        else : 
+
+
+            accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code    ).aggregate(Sum('amount'))
+            my_dico["code"] = p.code
+            my_dico["name"] = p.name
+            if p.code > 5000 :
+                try :
+                    my_dico["solde"]= -accountings_sales["amount__sum"]
+                except :
+                    pass
+                try :
+                    cs -= accountings_sales["amount__sum"]
+                except :
+                    pass
+            else :
+                my_dico["solde"]= accountings_sales["amount__sum"]
+                try :
+                    cs += accountings_sales["amount__sum"]
+                except :
+                    pass
+            plan_immos.append( my_dico )
 
 
     for p in plan_resultat :
@@ -981,7 +1007,7 @@ def print_balance(request):
                 a_debit +=  a.amount 
             i+=1
         if p_code > 5000 : 
-            solde = -(a_credit - a_debit) # les débits sont en négatifs
+            solde = -( a_credit - a_debit) # les débits sont en négatifs
         else :
             solde =  a_credit - a_debit # les débits sont en négatifs
 
