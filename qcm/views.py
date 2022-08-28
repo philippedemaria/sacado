@@ -1977,7 +1977,7 @@ def ajax_all_parcourses(request):
             if is_eval == 2 :
                 parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords) |Q(exercises__supportfile__title__icontains = keywords) ,is_share = 1 , is_sequence = 1 ,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
             else :
-                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)|Q(exercises__supportfile__title__icontains = keywords)  ,is_share = 1 , is_evaluation = is_eval,,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
+                parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords) |Q(exercises__supportfile__title__icontains = keywords) ,is_share = 1 , is_eval = is_eval ,is_trash=0).exclude(teacher=teacher).order_by('author','ranking').distinct()
         
         else :
 
