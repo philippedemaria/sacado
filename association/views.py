@@ -554,8 +554,8 @@ def calcule_bank_bilan(request):
     this_year     = Activeyear.objects.get(pk=1).year
     plan_sale     = Plancomptable.objects.filter(code__gte=700,code__lt=800).order_by("code")
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 ).order_by("code")
-    plan_immo     =  Plancomptable.objects.filter(code__in= [411,486,5121,5122] ).order_by("code")
-    plan_resultat =  Plancomptable.objects.filter(code__in=[110, 487] )
+    plan_immo     = Plancomptable.objects.filter(code__in= [411,486,5121,5122] ).order_by("code")
+    plan_resultat = Plancomptable.objects.filter(code__in=[110, 487] )
 
     my_dico = {}
     list_sales , list_purchases,plan_immos , plan_resultats = [] , [] , [] , []
@@ -591,22 +591,27 @@ def calcule_bank_bilan(request):
     for p in plan_immo :
         my_dico = {}
  
-        accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code    ).aggregate(Sum('amount'))
-        my_dico["code"] = p.code
+        my_dico = {}
+        accountings_sales_debit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=1   ).aggregate(Sum('amount'))
+        accountings_sales_credit = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code, is_credit=0   ).aggregate(Sum('amount'))
+        my_dico["code"] = p.code 
         my_dico["name"] = p.name
+        solde = accountings_sales_credit["amount__sum"] - accountings_sales_debit["amount__sum"]
+        my_dico["solde"]= solde
+
         if p.code > 5000 :
             try :
-                my_dico["solde"]= -accountings_sales["amount__sum"]
+                my_dico["solde"]= solde
             except :
                 pass
             try :
-                cs -= accountings_sales["amount__sum"]
+                cs -= solde
             except :
                 pass
         else :
-            my_dico["solde"]= accountings_sales["amount__sum"]
+            my_dico["solde"]= solde
             try :
-                cs += accountings_sales["amount__sum"]
+                cs += solde
             except :
                 pass
         plan_immos.append( my_dico )
@@ -972,9 +977,9 @@ def print_balance(request):
                 a_debit +=  a.amount 
             i+=1
         if p_code > 5000 : 
-            solde =  -(a_credit + a_debit) # les débits sont en négatifs
+            solde = -(a_credit - a_debit) # les débits sont en négatifs
         else :
-            solde =  a_credit + a_debit # les débits sont en négatifs
+            solde =  a_credit - a_debit # les débits sont en négatifs
 
         if solde:
 
