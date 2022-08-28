@@ -115,6 +115,15 @@
         });
   
 
+
+        $("#sacadopopup_div").hide() ;
+
+        $('#sacadopopup_div_show').on('click', function (event) {
+            $("#sacadopopup_div").toggle(300) ;
+        });
+
+
+
         $('#id_country_school').on('change',  function (event) {    
 
             let id_country_school = $(this).val(); 

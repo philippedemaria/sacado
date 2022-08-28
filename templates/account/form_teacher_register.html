@@ -69,7 +69,7 @@
                       </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="{% url 'index' %}#contact">Nous contacter</a>.
+                            <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="{% url 'index' %}#footer">Nous contacter</a>.
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                         <div class="col-lg-12 col-md-12 col-xs-12">  
                             <div class="form-group">
                                 Cette inscription couvre l'ensemble des enseignants de votre établissement et tous les élèves. Elle ouvre les droits à la récupération des cours, des parcours, des quizz <span class="sacado">SACADO</span>  déjà créés, au suivi des acquisitions, à la gestion de la co-animation, à un espace de stockage accru, à des images de présentation, à la mutualisation des ressources, aux exportations PRONOTE ou CSV,.... <br/>Optez pour la version établissement. 
-                                <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-ss_index"> En savoir plus.</a>
+                                <a href="#" id="sacadopopup_div_show" class="btn btn-ss_index"> En savoir plus.</a>
                             </div>    
                         </div>                   
                     </div> 
@@ -108,6 +108,28 @@
           </div>
         </div>
     </form> 
+</div>
+
+<div  id="sacadopopup_div"  >
+    <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3  class="sacado">SACADO - Version établissement <a href="#" data-toggle='modal' data-target='#worldwide' > <i class="fa fa-globe"></i></a>  </h3>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+
+            </div>
+            <div class="modal-body">
+                Toutes les fonctionnalités qui s'utilisent en établissement ou qui demandent de la ressource du serveur ne sont pas incluses dans la version enseignant. Lorsqu'une fonctionnalité est proposée <i class="fa fa-check text-success"></i>, elle reste à la discrétion de l'enseignant. Les établissements SACADO dans le monde <a href="#" data-toggle='modal' data-target='#worldwide' > <i class="fa fa-globe"></i></a> 
+                 <br/><a href="{% url 'school_adhesion' %}" class="btn btn-primary">Passez à la version Etablissement - 15 jours gratuit</a> 
+
+                <br/>La version Etablissement est valable jusqu'au 13 juillet de l'année scolaire en cours.
+                 {% include 'sacado_asso.html' %}
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
