@@ -71,7 +71,7 @@ urlpatterns = [
     path('reset_all_students_school', reset_all_students_school, name='reset_all_students_school'),
     path('reset_all_groups_school', reset_all_groups_school, name='reset_all_groups_school'),
 
-
+    path('register_school_new', register_school_new, name='register_school_new'),
 
     path('chargeschools', chargeschools, name='chargeschools'),
 

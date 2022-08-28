@@ -69,7 +69,7 @@
                       </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="{% url 'index' %}#footer">Nous contacter</a>.
+                            <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="#" id="add_new_school">envoyez-nous ses coordonnées</a>.
                             </div>
                         </div>
                     </div>
@@ -87,10 +87,13 @@
                                 <a href="#" id="sacadopopup_div_show" class="btn btn-ss_index"> En savoir plus.</a>
                             </div>    
                         </div>                   
-                    </div> 
-
-
+                    </div>
           </div>
+
+
+
+
+
           <div class="col-lg-1 col-xs-12">
           </div>
           <div class="col-lg-6 col-xs-12">
@@ -109,7 +112,83 @@
         </div>
     </form> 
 </div>
+<div  id="show_add_new_school" class="alert alert-danger"  >
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+          <h3>Demande de création d'établissement</h3>
+        </div>
+    </div>
+    <div class="row">
+    <form action="{%  url 'register_school_new' %}" method="POST" > 
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Courriel du demandeur</label>   
+                <input name="email" id="email" class="form-control" type ="email" required />
+            </div>    
+        </div>
+        {% csrf_token %}
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Nom</label>               
+                <input name="school_name" id="school_name" class="form-control" required />
+            </div>    
+        </div> 
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Pays</label>               
+                <select id="school_country" name="school_country" class="form-control select2" required>
+                    <option value=" ">--------------</option>
+                    {% for c in countries %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                    {%  endfor %}
+                </select>
+            </div>
+        </div> 
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Ville</label>               
+                <input name="school_town" id="school_town" class="form-control" required />
+            </div>    
+        </div> 
 
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Code RNE (si connu ou existant sinon 999_efe pour l'étranger)</label>               
+                <input name="school_rne" id="school_rne" class="form-control" required />
+            </div>    
+        </div>
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Adresse</label>               
+                <input name="school_address" id="school_address" class="form-control" required />
+            </div>    
+        </div>
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Nombre d'élèves</label>               
+                <input name="school_nbstudents" id="school_nbstudents" class="form-control" type ="number" required />
+            </div>    
+        </div> 
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group"> 
+                <label>Code postal (si connu ou existant)</label>   
+                <input name="school_zip" id="school_zip" class="form-control"  />
+            </div>    
+        </div>
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group">
+              <img src="{% static 'img/som_token.png' %}" />
+              <input type="text" name="token" class="form-control" id="token" placeholder="Ecrire le résultat de la somme" required />
+             </div>   
+        </div>
+        <div class="col-lg-12 col-md-12 col-xs-12">  
+            <div class="form-group">
+                <div class="text-center"><button type="submit" name="info_academy" value="no" class="btn btn-sacado">Envoyer</button></div>
+             </div>   
+        </div>
+    </form>
+  </div>
+</div>
 <div  id="sacadopopup_div"  >
     <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
         <div class="modal-content">
@@ -131,5 +210,11 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
 
 {% endblock %}

@@ -107,6 +107,15 @@
 
  
 
+
+        $("#show_add_new_school").hide() ;
+
+        $('#add_new_school').on('click', function (event) {
+            $("#show_add_new_school").toggle(300) ;
+        });
+
+
+
         $("#show_form_teacher").hide() ;
         $("#select_rne").hide();
 

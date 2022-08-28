@@ -1245,9 +1245,44 @@ def get_reverse_the_teacher_profile(request):
 	return redirect('index')
 
 
+def register_school_new(request):
 
+	school_name       = request.POST.get("school_name",None) 
+	school_country    = request.POST.get("school_country",None) 
+	school_town       = request.POST.get("school_town",None) 
+	school_rne        = request.POST.get("school_rne",None) 
+	school_address    = request.POST.get("school_address",None) 
+	school_nbstudents = request.POST.get("school_nbstudents",None) 
+	school_zip        = request.POST.get("school_zip",None) 
+	email             = request.POST.get("email",None) 
+	token             = request.POST.get("token",None)
 
+	if token :
+		if int(token) == 7 :
+		#### Si c'est un établissement qui fait une demande 
+			school_datas = ""
 
+			try :
+				school_country_name = Country.object.get(pk = school_country).name
+			except:
+				school_country_name = school_name
+
+			subject = "Nouvel établissement"
+			school_datas = "\n"+school_name +"\nNb élèves : " + str(school_nbstudents) +  " élèves \n" + school_address +  "\nVille, pays : "+school_town+", "+school_country_name +  "\nCode postal : "+school_zip
+			############################################################  
+
+			send_mail(subject,
+		            "Salut la Team, ce mail est envoyé à partir de l'adresse : " + email + "\n\n" + school_datas,
+		          settings.DEFAULT_FROM_EMAIL,
+		          ["sacado.asso@gmail.com" ])
+			messages.success(request,"Message envoyé.....Nous vous répondrons à l'adresse indiquée dans les plus brefs délais. Merci. L'équipe Sacado.")
+
+		else :
+			messages.error(request,"Erreur d'opération....")
+	else :
+		messages.error(request,"Oubli de token.")
+
+	return redirect("register_teacher_accueil")
 
 ###############################################################################################
 ###############################################################################################
