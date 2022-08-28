@@ -406,6 +406,13 @@
                 <a href="{% url 'get_school' %}" class="btn btn-danger">Rejoindre un établissement</a>
             </div>
         </div>
+        {% else %}
+        <hr/>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+                <a href="{% url 'get_school' %}">Changer d'établissement</a>
+            </div>
+        </div>
         {% endif%}
         {% if not is_gar_check %}
         <hr/>         

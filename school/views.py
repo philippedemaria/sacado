@@ -1030,9 +1030,9 @@ def get_school(request):
 				for s in g.students.all() :
 					User.objects.filter(pk=s.user.id).update(school = school)
  
-			messages.success(request,"Rattachement à l'établissement " +school.name+ " réussi")
+			messages.success(request,"Rattachement à l'établissement réussi")
 		except :
-			messages.error(request,"Echec du rattachement à l'établissement. vérifier le token."  )
+			messages.error(request,"Echec du rattachement à l'établissement."  )
 		return redirect("index")
 
 	countries = Country.objects.order_by("name")
