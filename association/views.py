@@ -493,7 +493,7 @@ def adhesions(request):
     date_stop  = datetime(year+1, 8, 31)
 
     schools = Customer.objects.values("school").filter(status=3)
-    abonnements = Abonnement.objects.filter( school__in=schools, date_stop__gte = today ).order_by("-accounting__date")    
+    abonnements = Abonnement.objects.filter( school__in=schools).order_by("-accounting__date")    
 
     context =  {'abonnements': abonnements , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month, 'activeyear' : activeyear }
  
@@ -1736,8 +1736,8 @@ def update_accounting(request, id,tp):
 def create_avoir(request, id):
  
     accounting = Accounting.objects.get(id=id)
-    amount = -accounting.amount
-    chronof = accounting.chrono
+    amount     = accounting.amount
+    chronof    = accounting.chrono
 
     accounting.pk = None
     accounting.amount = amount
@@ -1753,17 +1753,17 @@ def create_avoir(request, id):
     acc = accounting.save()
 
     # Création des avoirs
-    Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = -accounting.amount )  
+    Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = accounting.amount )  
     Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = -accounting.amount )  
  
 
 
-    accounting = Accounting.objects.get(id=id) 
-    accounting.objet += " Avoir sur " + chronof
-    accounting.observation += " Avoir sur " + chronof
-    accounting.is_active = 0
-    accounting.is_abonnement = 0
-    accounting.save()
+    accounti = Accounting.objects.get(id=id) 
+    accounti.objet += " Avoir sur " + chronof
+    accounti.observation += " Avoir sur " + chronof
+    accounti.is_active = 0
+    accounti.is_abonnement = 0
+    accounti.save()
 
 
 
