@@ -20,31 +20,10 @@
  ===================================================================
   <br/> <br/>
 
-{{ dico_received.DIV_APP }}<br/>
-{{ dico_received.PRO }}<br/>
-{{ dico_received.UAI }}<br/>
-{{ dico_received.GRO }}<br/>
-{{ dico_received.IDO }}<br/>
+{{ dico_received   }}<br/>
+ 
  
 
-   <br/> <br/>
- ===================================================================
- {% if  user_authenticated.is_authenticated %}
-
- gagné {% else  %} perdu
-
- {% endif  %}
-
-   <br/> <br/>
- ===================================================================
- user_authenticated ---> {{ user_authenticated }} < -----
-
-   <br/> <br/>
- ===================================================================
- request.session.user_id  ---> {{ request.session.user_id  }} < -----
-    <br/> <br/>
- ===================================================================
-user_after  ---> {{ user_after  }} < -----
  
 </body>
 </html>
