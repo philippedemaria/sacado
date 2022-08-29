@@ -339,6 +339,7 @@ urlpatterns = [
     path('ajax/skills', ajax_skills, name='ajax_skills'), 
     path('ajax/notes', ajax_notes, name='ajax_notes'), 
     path('ajax/maxexo', ajax_maxexo, name='ajax_maxexo'), 
+    path('ajax/coefficient', ajax_coefficient, name='ajax_coefficient'), 
     path('ajax/delete_notes', ajax_delete_notes, name='ajax_delete_notes'), 
     path('ajax/remediation', ajax_remediation, name='ajax_remediation'),
 

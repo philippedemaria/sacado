@@ -3352,16 +3352,20 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     total_nb_exo = len(relationships)
     student["total_nb_exo"] = total_nb_exo       
 
+    total_coeff = 0
     for studentanswer_id in  studentanswer_ids : 
         studentanswer = Studentanswer.objects.get(pk=studentanswer_id)
+        coefficient = Relationship.objects.get(exercise = studentanswer.exercise , parcours = studentanswer.parcours  ).coefficient
         duration += int(studentanswer.secondes)
         score += int(studentanswer.point)
+        score_coeff += int(studentanswer.point)*coefficient
         total_numexo += int(studentanswer.numexo)
         good_answer += int(studentanswer.numexo*studentanswer.point/100)
         tab.append(studentanswer.point)
         tab_date.append(studentanswer.date)
         tab_title_exo.append(studentanswer.exercise.supportfile.title)
         student_tab.append(studentanswer)
+        total_coeff += coefficient
 
     try :
         student["tab_title_exo"] = tab_title_exo        
@@ -3369,6 +3373,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         student["total_numexo"] = int(total_numexo)
         student["last_connexion"] = studentanswer.date
         student["score"] = int(score)
+        student["score_coeff"] = math.ceil(int(score_coeff)/int(total_coeff))
         student["score_tab"] = student_tab
         percent = math.ceil(int(good_answer)/int(total_numexo) * 100)
         if percent > 100 :
@@ -3402,17 +3407,16 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         else :
             average_score = int(score)
             student["average_score"] = int(score)
-            student["median"] = int(score)     
+            student["median"] = int(score)   
+
+        student["score_coeff_display"] = False
+        if total_coeff != len(studentanswer_ids): SI la somme des coeff est différente de la longueur alors il y a des coeff différents sur les exos. 
+            student["score_coeff_display"] = True  
     except :
         pass
 
     details_c , score_custom , cen , score_total = "" , 0 , [] , 0
     total_knowledge, total_skill, detail_skill, detail_knowledge = 0,0, "",""
-
-
-
-
-
 
     for ce in customexercises :
         score_total += float(ce.mark)
@@ -4245,6 +4249,16 @@ def ajax_maxexo(request):
     relationship_id = request.POST.get("relationship_id")
     maxexo =  request.POST.get("maxexo")
     Relationship.objects.filter(pk = relationship_id ).update(maxexo = maxexo)
+    return JsonResponse(data) 
+
+
+@csrf_exempt
+def ajax_coefficient(request):  
+    data = {}
+    relationship_id = request.POST.get("relationship_id")
+    coefficient =  request.POST.get("coefficient")
+    Relationship.objects.filter(pk = relationship_id ).update(coefficient = coefficient)
+    data['html'] = coefficient
     return JsonResponse(data) 
 
 
@@ -8705,10 +8719,13 @@ def create_mastering(request,id):
     stage = get_stage(request.user)
     form = MasteringForm(request.POST or None, request.FILES or None, relationship = relationship )
 
-    masterings_q = Mastering.objects.filter(relationship = relationship , scale = 4).order_by("ranking")
-    masterings_t = Mastering.objects.filter(relationship = relationship , scale = 3).order_by("ranking")
-    masterings_d = Mastering.objects.filter(relationship = relationship , scale = 2).order_by("ranking")
-    masterings_u = Mastering.objects.filter(relationship = relationship , scale = 1).order_by("ranking")
+
+    base_m       = Mastering.objects.filter(relationship = relationship)
+
+    masterings_q = base_m.filter(scale = 4).order_by("ranking")
+    masterings_t = base_m.filter(scale = 3).order_by("ranking")
+    masterings_d = base_m.filter(scale = 2).order_by("ranking")
+    masterings_u = base_m.filter(scale = 1).order_by("ranking")
     teacher = request.user.teacher
 
     if not teacher_has_permisson_to_parcourses(request,teacher,relationship.parcours) :

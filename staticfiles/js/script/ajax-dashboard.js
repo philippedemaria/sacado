@@ -1565,6 +1565,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ==================================================================================================
             $(".card-dateur").hide();
             $(".card-skill").hide();
+            $(".card-coefficient").hide();
+
 
             function display_custom_modal($actionner,$target){
   
@@ -1576,6 +1578,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             } ;
 
+
+            display_custom_modal($('.coefficients'),"#coefficient");
             display_custom_modal($('.action_task'),"#task_detail");
             display_custom_modal($('.select_task'),"#detail_dateur");
             display_custom_modal($('.select_publish'),"#detail_pub");
@@ -1592,6 +1596,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             display_custom_modal($('.select_skill_close'),"#skill");
             display_custom_modal($('.select_constraint_close'),"#detail_constraint");
             display_custom_modal($('.select_note_close'),"#select_note");
+            display_custom_modal($('.select_coefficient_close'),"#coefficient");
 
             display_custom_modal($('.select_div_group'),"#affectation"); 
             display_custom_modal($('.select_div_group_close'),"#affectation");
@@ -1750,6 +1755,36 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     });
  
 
+        // ==================================================================================================
+        // ==================================================================================================
+        // =============  Coefficients
+        // ==================================================================================================
+        // ==================================================================================================
+ 
+
+            $('.coefficient').on('change', function (event) {
+                let relationship_id = $(this).attr("data-relationship_id");
+                let coefficient = $(this).val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'relationship_id': relationship_id,
+                            'coefficient': coefficient,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "../../ajax/coefficient" , 
+                        success: function (data) {
+                            $("#this_coeff"+relationship_id).html("").html(data["html"]);
+                            }
+
+
+                    })
+                });
+
+ 
         // ==================================================================================================
         // ==================================================================================================
         // =============  Constraint

@@ -282,14 +282,12 @@
           =============================================================================================================
           =============================================================================================================-->
           <div id="skill{{ rc.id }}" class="card-skill no_visu_on_load"> 
-
-        
               <div class="row">
                     <div class="col-sm-12 col-md-12 title"><span   class="select_skill_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>         
                         Compétences visées  
                     </div>
                </div> 
-            <hr style="padding:0px; margin:10px 0px"/><br>
+              <hr style="padding:0px; margin:10px 0px"/><br>
                 {% for skill in rc.parcours.subject.skill.all %}  
                       <label style="font-size:10px">
                       <input type="checkbox" name="skills" data-relationship_id="{{rc.id}}" value="{{skill.id}}" class="skill_selector" {% if skill in rc.skills.all %} checked  {% endif %}  />
@@ -304,9 +302,37 @@
            <!--  
           =============================================================================================================
           =============================================================================================================
+              Coefficients
+          =============================================================================================================
+          =============================================================================================================-->
+          <div id="coefficient{{ rc.id }}" class="card-skill no_visu_on_load"> 
+              <div class="row">
+                    <div class="col-sm-12 col-md-12 title"><span class="select_coefficient_close pull-right" data-relationship_id="{{rc.id}}"><i class="fa fa-times"></i></span>         
+                        Coefficients
+                    </div>
+               </div> 
+              <hr style="padding:0px; margin:10px 0px"/><br>
+              Coefficient actuel :  <span id="this_coeff{{ rc.id }}">{{ rc.coefficient  }}</span> 
+              <hr style="padding:0px; margin:10px 0px"/><br>
+              Notez ici le coefficient de l'exercice : Compris entre 0,25 et 10.
+              <input type="number"  min="0.25" max="10" step="0.05" data-relationship_id="{{rc.id}}" id="coefficient{{rc.id}}" data-custom=0  value="{{ rc.coefficient  }}" class="coefficient" />
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <span class="select_coefficient_close btn btn-xs btn-primary" data-relationship_id="{{rc.id}}">Valider</span>
+                    </div>
+                </div>
+
+          </div>
+           <!--  
+          =============================================================================================================
+          =============================================================================================================
               Pop up des notes
           =============================================================================================================
           =============================================================================================================-->
+
+
+
           {% if not rc.exercise.supportfile.is_ggbfile %}
           <div id="select_note{{ rc.id }}"  class="card-dateur no_visu_on_load"  >  
               <div class="row">
@@ -407,7 +433,22 @@
             {% endif %}
 
 
- 
+            {% if parcours.is_evaluation %}
+                {% if sacado_asso %}
+                <span class="horizontalmargin5">
+                    <span style="cursor:pointer;color:{{ parcours.color|contrast_color }}" data-relationship_id="{{ rc.id }}"  class="coefficients" title="Coefficienter l'évaluation" >
+                            <i class="bi bi-thermometer-half"></i>
+                    </span>
+                </span>
+                {% else %}
+                <span class="horizontalmargin5">
+                    <span style="cursor:not-allowed;color:{{ parcours.color|contrast_color }}"  class="coefficients" title="Version établissement requise." >
+                            <i class="bi bi-thermometer-half"></i>
+                    </span>
+                </span>
+                {% endif %}
+            {% endif %}
+
 
             {% if rc.exercise.supportfile.is_ggbfile %}
             <!-- Appel des situations et durée -->
