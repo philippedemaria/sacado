@@ -300,9 +300,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # return render(request, 'setup/test_gar.html', context)
 
 
-    
+
     uai        = dico_received["UAI"][0] 
-    school     = School.objects.get(code_acad = uai)
+    school     = School.objects.filter(code_acad = uai).last()
     last_name  = dico_received["NOM"][0] 
     first_name = dico_received["PRE"][0]
 
