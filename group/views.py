@@ -195,9 +195,21 @@ def student_dashboard(request,group_id):
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
         bases = student.students_to_parcours
-        parcourses = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0, is_sequence=0).order_by("ranking")
-        sequences = bases.filter(is_evaluation=0, folders = None, is_publish=1,is_trash=0, is_sequence=1).order_by("ranking")
-        evaluations = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), folders = None, is_evaluation=1,is_trash=0).order_by("ranking")
+
+        parcourses_brut  = bases.filter(is_evaluation=0, is_publish=1,is_trash=0, is_sequence=0).order_by("ranking")
+        sequences_brut   = bases.filter(is_evaluation=0, is_publish=1,is_trash=0, is_sequence=1).order_by("ranking")
+        evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_evaluation=1,is_trash=0).order_by("ranking")
+
+
+        parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")
+        sequences   = sequences_brut.filter(folders = None).order_by("ranking")
+        evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
+
+
+
+
+
+
         last_exercises_done = student.answers.order_by("-date")[:5]
    
         parcourses_on_fire = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
@@ -206,19 +218,19 @@ def student_dashboard(request,group_id):
 
     customexercises_set = set()
     nb_custom = 0
-    for p in parcourses :
+    for p in parcourses_brut :
         custom_exercises = Customexercise.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcourses = p , date_limit__gte=today).order_by("date_limit")
         nb_custom += custom_exercises.count()
         customexercises_set.update(set(custom_exercises))
     customexercises = list(customexercises_set)
 
-    relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).order_by("date_limit")
+    relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today)).filter(Q(parcours__in=parcourses_brut)| Q(parcours__in=sequences_brut)).filter( date_limit__gte=today).order_by("date_limit")
     nb_relationships =  relationships.count()
 
 
     exercise_tab = []
     for r in relationships:
-        if r not in exercise_tab:
+        if r.type_id == 0 and  r not in exercise_tab:
             exercise_tab.append(r.exercise)
     num = 0
     for e in exercise_tab:
@@ -243,8 +255,9 @@ def student_dashboard(request,group_id):
     studentanswers =  student.answers.all()
     exercises = Exercise.objects.filter(pk__in=studentanswers.values_list('exercise', flat=True))
     
-    relationships_in_late = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
-    relationships_in_tasks = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__in=parcourses, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
+    relationships_in_late = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today) ).filter( Q(parcours__in=parcourses_brut)|Q(parcours__in=sequences_brut) ).filter( is_evaluation=0, date_limit__lt=today).exclude(exercise__in=exercises).order_by("date_limit")
+    relationships_in_tasks = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today) ).filter( Q(parcours__in=parcourses_brut)|Q(parcours__in=sequences_brut) ).filter( is_evaluation=0, date_limit__gte=today).exclude(exercise__in=exercises).order_by("date_limit")
+
 
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,

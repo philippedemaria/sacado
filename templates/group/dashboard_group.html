@@ -140,9 +140,9 @@
             <!-- *********************************** Tache à faire ****************************************** -->            
             {% if relationships_in_tasks|length > 0 %}
                <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="row"></div>
+            <div class="row"></div>            
             <hr>
-            <h2 class="thin">Tâches en cours</h2>
+            <div class="in_this_time">Tâches en cours </div>
                  {% for relation in relationships_in_tasks %}
                         <div class="card_freeze">
                             <div class="card-body student">
