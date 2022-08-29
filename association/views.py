@@ -624,8 +624,6 @@ def calcule_bank_bilan(request):
 
 
         else : 
-
-
             accountings_sales = Accountancy.objects.filter(current_year = this_year  ,  plan_id = p.code    ).aggregate(Sum('amount'))
             my_dico["code"] = p.code
             my_dico["name"] = p.name
