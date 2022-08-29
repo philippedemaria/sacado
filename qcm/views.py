@@ -3410,7 +3410,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
             student["median"] = int(score)   
 
         student["score_coeff_display"] = False
-        if total_coeff != len(studentanswer_ids): SI la somme des coeff est différente de la longueur alors il y a des coeff différents sur les exos. 
+        if total_coeff != len(studentanswer_ids): ### Si la somme des coeff est différente de la longueur alors il y a des coeff différents sur les exos. 
             student["score_coeff_display"] = True  
     except :
         pass
