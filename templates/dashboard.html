@@ -399,22 +399,23 @@
     {% endif %}
 
     {%  if request.user.is_teacher or request.user.is_superuser %}
-        {%  if not request.user.is_manager and not is_gar_check and not request.user.school or request.user.is_superuser %}<!-- manager dans un établissement -->
-        <hr/>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-                <a href="{% url 'get_school' %}" class="btn btn-danger">Rejoindre un établissement</a>
-            </div>
-        </div>
-        {% else %}
-        <hr/>
-        <div class="row">
-            <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
-                <a href="{% url 'get_school' %}">Changer d'établissement</a>
-            </div>
-        </div>
-        {% endif%}
         {% if not is_gar_check %}
+            {%  if not request.user.is_manager and not request.user.school or request.user.is_superuser %}<!-- manager dans un établissement -->
+            <hr/>
+            <div class="row">
+                <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+                    <a href="{% url 'get_school' %}" class="btn btn-danger">Rejoindre un établissement</a>
+                </div>
+            </div>
+            {% else %}
+            <hr/>
+            <div class="row">
+                <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
+                    <a href="{% url 'get_school' %}">Changer d'établissement</a>
+                </div>
+            </div>
+            {% endif%}
+
         <hr/>         
         <div class="row">
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
