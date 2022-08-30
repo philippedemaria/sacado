@@ -876,7 +876,7 @@ def print_balance(request):
     #########################################################################################
     elements = []        
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="Compte_resultat_'+str(year_active.year)+'.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="Compte_Balance_Résultat_'+str(year_active.year)+'.pdf"'
     doc = SimpleDocTemplate(response,   pagesize=(landscape(letter)), 
                                         topMargin=0.5*inch,
                                         leftMargin=0.5*inch,
@@ -1061,7 +1061,7 @@ def print_big_book(request):
     #########################################################################################
     elements = []        
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="Compte_resultat_'+str(year_active.year)+'.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="Compte_GrandLivre_resultat_'+str(year_active.year)+'.pdf"'
     doc = SimpleDocTemplate(response,   pagesize=(landscape(letter)), 
                                         topMargin=0.5*inch,
                                         leftMargin=0.5*inch,
