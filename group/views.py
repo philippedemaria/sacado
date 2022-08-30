@@ -606,7 +606,7 @@ def create_group(request):
 
 
 
-        return redirect("show_group", group.id)
+        return redirect("show_group", nf.id)
     else:
         print(form.errors)
 
