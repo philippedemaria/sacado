@@ -22,14 +22,6 @@
      
 {% block body %}     
 <div class="content_main">
-    <div class="row">  
-        <div class="col-sm-12 col-md-12">
-            <div class="alert alert-warning">
-                Après l'envoi de cette demande, vous recevrez rapidement, à votre adresse mail, l'IBAN de l'association à transmettre à votre DAF. Nous contacter en cas de besoin avec le formulaire ci-dessous.
-            </div>
-        </div>
-    </div>
-
 
     <h3 style="color: red">
         15 jours d'essai gratuit* </span><span style="font-size : 10px;color: #CCC"> *Pour toute demande d'adhésion</span>
@@ -133,6 +125,7 @@
         <div class="col-sm-6 col-md-6">
 
             <form action="{% url 'send_message' %}" method="post" class="alert alert-warning" >
+              <p>Après l'envoi de cette demande, vous recevrez rapidement, à votre adresse mail, l'IBAN de l'association à transmettre à votre DAF. Nous contacter en cas de besoin avec le formulaire ci-dessous.</p>
               {% csrf_token %}
             <div class="form-group">
               <input type="hidden" name="name" class="form-control" id="name" value="{{ request.user }}" required />

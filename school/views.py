@@ -1062,6 +1062,10 @@ def ask_school_adhesion(request):
 			#############  Abonnement
 			########################################################################################################################
 			date_start, date_stop = date_abonnement(today)
+			# Celui qui demande est manager de l'école
+			User.objects.filter(pk=user.id).update(is_manager=1)
+			User.objects.filter(pk=user.id).update(school=school)
+
 
 			abonnement, abo_created = Abonnement.objects.get_or_create( accounting_id = accounting_id  , defaults={'school' : school, 'is_gar' : school.gar, 'date_start' : date_start, 'date_stop' : date_stop,  'user' : user, 'is_active' : 0}  )
 
