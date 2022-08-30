@@ -32,7 +32,7 @@ for i in range (20) :
 
  
 def compta_directory_path(instance, filename):
-    return "accountancy/{}/{}".format(year, filename)        
+    return "accountancy/{}/{}".format(instance.year, filename)        
 
 class Activeyear(models.Model):
 
