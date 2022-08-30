@@ -395,7 +395,7 @@ def association_index(request):
 @user_passes_test(user_is_board)
 def create_activeyear(request):
 
-    form       = ActiveyearForm(request.POST or None)
+    form       = ActiveyearForm(request.POST or None, request.FILES or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -412,7 +412,7 @@ def create_activeyear(request):
 def update_activeyear(request,id):
 
     activeyear = Activeyear.objects.get(pk=id)
-    form       = ActiveyearForm(request.POST or None , instance = activeyear)
+    form       = ActiveyearForm(request.POST or None , request.FILES or None , instance = activeyear)
  
 
     if request.method == "POST":
