@@ -31,14 +31,17 @@ for i in range (20) :
     YEARS.append( (a , str(a)+"-"+str(b)) )
 
  
-        
+def compta_directory_path(instance, filename):
+    return "accountancy/{}/{}".format(year, filename)        
 
 class Activeyear(models.Model):
 
     year      = models.PositiveIntegerField(default=2021, choices=YEARS , verbose_name="Année de l'exercice") 
     solde     = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2,   verbose_name="Résultat de l'exercice précédent")
     is_active = models.BooleanField(default=0,  verbose_name="Année active")
-
+    balance   = models.FileField(upload_to=compta_directory_path, verbose_name="Balance",blank=True, default="" )
+    book      = models.FileField(upload_to=compta_directory_path, verbose_name="Grand livre",blank=True, default="" )
+    bilan     = models.FileField(upload_to=compta_directory_path, verbose_name="Bilan",blank=True, default="" )
 
 
     def __str__(self):
