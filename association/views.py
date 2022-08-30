@@ -489,7 +489,7 @@ def adhesions(request):
 def list_paypal(request):
 
     active_year, this_year    = get_active_year() 
-    accountings = get_accountings(request.user).filter(is_paypal=1).exclude(date_payment=None)
+    accountings = Accounting.objects.filter(is_paypal=1).exclude(date_payment=None)
     accounting_no_payment,  accounting_amount = 0, 0
     pay_accountings = accountings.exclude(date_payment=None)
     no_accountings = accountings.filter(date_payment=None)
