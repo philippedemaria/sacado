@@ -36,6 +36,15 @@
     {% endif %} 
     </a>    
 </li>
+{% else %}
+
+<li class="dropdown {% if '/myaccount' in request.path %}active{% endif %}">
+    <a href="#" class="main">
+        <img src="{{ request.user.avatar  }}" class="avatar" />
+        <div class="captionmenu">{{ request.user.first_name }}</div>
+    </a>    
+</li>
+
 {% endif %}
 
 <li class='dropdown'>
