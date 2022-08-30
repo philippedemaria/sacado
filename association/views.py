@@ -636,7 +636,12 @@ def calcule_bank_bilan(request):
             pass
         plan_resultats.append( my_dico )
 
-    results = products - charges
+    try :
+        prev_year    = Activeyear.objects.get(is_active=1).year - 1  
+        resulat_prev = Activeyear.objects.get(year=prev_year).solde 
+        results      = products - charges + resulat_prev
+    except :
+        results = products - charges
     rs =  cs - ps
 
 
