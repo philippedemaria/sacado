@@ -1047,7 +1047,8 @@ def create_accountancy(request):
 
 @user_passes_test(user_is_board)
 def list_accountancy(request):
-    accontancies = Accountancy.objects.all()
+    year = Activeyear.objects.get(is_active=1).year
+    accontancies = Accountancy.objects.filter(current_year=year)
     return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies   })
 
 
