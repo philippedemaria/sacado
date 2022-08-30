@@ -991,7 +991,7 @@ def print_balance(request):
             solde =  abs(a_credit) - abs(a_debit) # les débits sont en négatifs
 
         if solde:
-
+            solde =  abs(solde)
             elements.append(paragraph)
             elements.append(Spacer(0, 0.15*inch))
             details_list.append(   (   str( abs(a_debit ))+ " €" , str(a_credit)+ " €" ,  str(solde) + " €" )    )
