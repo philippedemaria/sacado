@@ -530,7 +530,7 @@ def calcule_bank_bilan(request):
     """ page d'accueil de la comptabilité"""
 
  
-    this_year     = Activeyear.objects.get(is_active=1).year
+    this_year     = Activeyear.objects.get(is_active=1).year  
     plan_sale     = Plancomptable.objects.filter(code__gte=700,code__lt=800).order_by("code")
     plan_purchase = Plancomptable.objects.filter(code__gte=600,code__lt=700 ).order_by("code")
     plan_immo     = Plancomptable.objects.filter(code__in= [411,486,5121,5122] ).order_by("code")
