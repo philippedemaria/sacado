@@ -36,8 +36,9 @@
                     <tr>  
                         <td style="width:100px">Année</td> 
                         <td style="width:100px">Résultat de l'exercice précédent </td>                       
-                        <td style="width:100px">Active</td>  
-                        <td style="width:100px"> </td>               
+                        <td style="width:100px">Active</td> 
+                        <td style="width:100px">Fichiers </td> 
+                        <td style="width:100px">Configuration</td>               
                     </tr>
                     </thead>
                     <tbody>
@@ -51,7 +52,16 @@
                                 </td>
                                 <td>
                                     <span >{% if year.is_active%} <i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif  %}</span> 
-                                </td> 
+                                </td>
+
+                                <td>
+                                    {% if year.balance %}<a href="{{ year.balance.url }}" target="_blank">balance</a>  {% endif  %}|
+                                    {% if year.book %} <a href="{{ year.book.url }}" target="_blank">Grand Livre</a> {% endif  %} |
+                                    {% if year.bilan %} <a href="{{ year.bilan.url }}" target="_blank">bilan</a> {% endif  %}
+                                </td>
+
+
+
                                 <td>
                                      <a href="{% url 'update_activeyear' year.id %}" style="font-size: 15px"><i class="bi bi-gear"></i></a>
                                 </td> 
