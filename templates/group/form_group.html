@@ -46,7 +46,7 @@
      
 {% block body %}     
 <div class="content_main">
-    <form action="" method="POST">
+    <form action="" method="POST"><input id="is_update" value="{% if group %}yes{% else %}no{% endif %}" type="hidden" />
     <div class="row">
         <div class="col-sm-12 col-md-6">
             {% csrf_token %}

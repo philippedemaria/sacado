@@ -4,7 +4,7 @@ from account.models import Student, Teacher, Parent, Adhesion, User, Resultknowl
 from account.forms import UserForm
 from group.models import Group, Sharing_group
 from socle.models import Knowledge, Theme, Level, Skill
-from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker , Folder
 from group.forms import GroupForm , GroupTeacherForm
 from flashcard.models import Flashpack
 from sendmail.models import Email
@@ -26,7 +26,7 @@ from account.decorators import user_can_create
 from templated_email import send_templated_mail
 from django.db.models import Q
 from django.db.models import Avg, Count, Min, Sum
-
+ 
 ############### bibliothèques pour les impressions pdf  #########################
 import os
 from reportlab.platypus.flowables import Flowable
@@ -547,7 +547,7 @@ def create_student_profile_inside(request, nf) :
             code = str(uuid.uuid4())[:8]                 
             student = Student.objects.create(user=user, level=nf.level, code=code)
             nf.students.add(student)
-            get_all_documents_from_group(nf,student)
+            attribute_all_documents_of_groups_to_a_new_student([nf],student)
 
         else :
             student = Student.objects.get(user=user)
@@ -571,13 +571,42 @@ def create_group(request):
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
+
+
+        folders_ids  = request.POST.getlist("folder_ids")
+        for f_id in folders_ids :
+            folder = Folder.objects.get(pk=f_id)
+            parcourses = folder.parcours.all()
+            folder.pk = None
+            folder.teacher = request.user.teacher
+            folder.save()
+            folder.groups.add(nf)
+            for parcours in parcourses :
+                parcours.pk = None
+                parcours.code = str(uuid.uuid4())[:8]
+                parcours.teacher = request.user.teacher
+                parcours.save()
+                parcours.groups.add(nf)
+        
+        parcours_ids = request.POST.getlist("parcours_ids")
+        for parcours_id in parcours_ids :
+            parcours = Parcours.objects.get(pk=parcours_id)
+            parcours.pk = None
+            parcours.code = str(uuid.uuid4())[:8]
+            parcours.teacher = request.user.teacher
+            parcours.save()
+            parcours.groups.add(nf)
+
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts,nf)
-        create_student_profile_inside(request, nf)          
+        create_student_profile_inside(request, nf) 
 
-        return redirect("show_group", nf.id)
+
+
+
+        return redirect("show_group", group.id)
     else:
         print(form.errors)
 
@@ -592,8 +621,8 @@ def update_group(request, id):
 
 
     teacher = Teacher.objects.get(user= request.user)
-    group = Group.objects.get(id=id)
-    stdnts = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
+    group   = Group.objects.get(id=id)
+    stdnts  = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
 
 
     stu = group.students.values_list("user_id",flat=True)
@@ -611,11 +640,41 @@ def update_group(request, id):
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
+
+        folders_ids  = request.POST.getlist("folder_ids")
+        for f_id in folders_ids :
+            folder = Folder.objects.get(pk=f_id)
+            parcourses = folder.parcours.all()
+            folder.pk = None
+            folder.teacher = request.user.teacher
+            folder.save()
+            folder.groups.add(nf)
+            for parcours in parcourses :
+                parcours.pk = None
+                parcours.code = str(uuid.uuid4())[:8]
+                parcours.teacher = request.user.teacher
+                parcours.save()
+                parcours.groups.add(nf)
+        
+        parcours_ids = request.POST.getlist("parcours_ids")
+        for parcours_id in parcours_ids :
+            parcours = Parcours.objects.get(pk=parcours_id)
+            parcours.pk = None
+            parcours.code = str(uuid.uuid4())[:8]
+            parcours.teacher = request.user.teacher
+            parcours.save()
+            parcours.groups.add(nf)
+
+
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
-                include_students(request , stdts,group)
- 
+                include_students(request , stdts, group)
+        try :
+            student = group.students.filter(user__username__contains="_e-test").first()
+            attribute_all_documents_of_groups_to_a_new_student([group], student) 
+        except :
+            pass
  
         return redirect("show_group", group.id)
     else:
@@ -892,11 +951,15 @@ def ajax_choose_parcours(request):
 
     if level_id and subject_id :
         parcours = Parcours.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 ,is_trash=0)
+        folders  = Folder.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 ,is_trash=0)
     else :
-        parcours = Parcours.objects.filter(level_id=0 , subject_id = 0 , teacher_id = 2480, is_share=1 ,is_trash=0)
+        parcours = Parcours.objects.filter(level_id=0 , subject_id = 0 ,teacher_id = 2480, is_share=1 ,is_trash=0)
+        folders  = Folder.objects.filter(level_id=0 , subject_id = 0 ,teacher_id = 2480, is_share=1 ,is_trash=0)
 
     data = {}
-    data['html'] = render_to_string('group/listingOfparcours.html', {  'parcourses':parcours  })
+
+    print(folders)
+    data['html'] = render_to_string('group/listingOfparcours.html', {  'parcourses':parcours , 'folders':folders })
  
  
     return JsonResponse(data)
