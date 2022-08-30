@@ -32,11 +32,11 @@
                         <div class="box-footer">
                             <div class="row" align="center">
                                 <span style="color:#222">
-                                    <i class="fa fa-folder"></i> Dossier
+                                    <i class="fa fa-folder"></i> Dossier <small>avec  {{ folder.parcours.count }} parcours  </small>
                                 </span>
                             </div> 
                             <div class="row" align="center">
-                                <label class="btn btn-xs btn-primary"><input type="checkbox" name="folder_ids" value="{{ folder.id}}"/> Sélectionner</label> 
+                                <label class="btn btn-xs btn-mastering"><input type="checkbox" name="folder_ids" value="{{ folder.id}}"/> Sélectionner</label> 
                             </div>  
                         </div>
 
@@ -93,7 +93,7 @@
                                 </span>
                             </div> 
                             <div class="row" align="center">
-                                <label class="btn btn-xs btn-primary"><input type="checkbox" name="parcours_ids" value="{{ parcours.id}}"/> Sélectionner</label> 
+                                <label class="btn btn-xs btn-new"><input type="checkbox" name="parcours_ids" value="{{ parcours.id}}"/> Sélectionner</label> 
                             </div>  
                         </div>
 

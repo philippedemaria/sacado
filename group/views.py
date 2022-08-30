@@ -533,7 +533,7 @@ def create_group(request):
             if len(stdts) > 0 :
                 include_students(request , stdts,nf)
         student = create_student_profile_inside(request, nf) 
-        duplicate_all_folders_of_group_to_a_new_student(nf , folders,teacher,   student)
+        duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student)
         duplicate_all_parcours_of_group_to_a_new_student(nf , parcourses, teacher,  student)
 
 
