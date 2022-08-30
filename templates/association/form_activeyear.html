@@ -38,7 +38,7 @@
 
 
             <div class="col-sm-12 col-lg-3">
-                <form action="" method="POST" class="alert alert-warning">
+                <form action="" method="POST" enctype='multipart/form-data' class="alert alert-warning">
                     {% csrf_token %}                    
                     <div class="form-group">
                         {{ form.year.label_tag }} <em>50 caractères max.</em><br>
