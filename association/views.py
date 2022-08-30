@@ -984,9 +984,11 @@ def print_balance(request):
                 a_debit +=  a.amount 
             i+=1
         if p_code > 5000 : 
-            solde = -( a_credit - a_debit) # les débits sont en négatifs
+            solde = abs(a_debit) - abs(a_credit) # les débits sont en négatifs
+        elif p_code == 411 : 
+            solde =   abs(a_debit) - abs(a_credit)
         else :
-            solde =  a_credit - a_debit # les débits sont en négatifs
+            solde =  abs(a_credit) - abs(a_debit) # les débits sont en négatifs
 
         if solde:
 
@@ -1001,6 +1003,7 @@ def print_balance(request):
             details_listing = Table(details_list, hAlign='LEFT', colWidths=[  1.2*inch,1.2*inch,1.2*inch])
             details_listing.setStyle(TableStyle(  details_tabs   ))
             elements.append(details_listing) 
+
 
     #########################################################################################
     ### Bas de page
