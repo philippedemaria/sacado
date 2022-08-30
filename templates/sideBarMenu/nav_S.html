@@ -40,7 +40,11 @@
 
 <li class="dropdown {% if '/myaccount' in request.path %}active{% endif %}">
     <a href="#" class="main">
-        <img src="{{ request.user.avatar  }}" class="avatar" />
+        {% if request.user.avatar  %}
+            <img src="{{ request.user.avatar  }}" class="avatar" />
+        {% else %} 
+            <i class="bi bi-person-circle icon_size"></i> 
+        {% endif %} 
         <div class="captionmenu">{{ request.user.first_name }}</div>
     </a>    
 </li>
