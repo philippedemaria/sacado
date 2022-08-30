@@ -157,6 +157,7 @@
                     </div>
                 </div>
             </div>
+             {% if not is_gar_check %}
             <div class="row recording" id="teacher_record">
                 <div class="col-sm-12 col-md-12"><hr>
                     <div class="form-group">
@@ -167,6 +168,7 @@
                     </div>
                 </div>
             </div> 
+            {% endif %}
             <div class="row recording" id="auto_record">
                 <div class="col-sm-12 col-md-12"><hr>
                     <div class="form-group">
@@ -278,14 +280,16 @@
         <div class="col-sm-12 col-md-6">
             {% if group %}
                 {% if not group.lock %}
-                <div class="alert alert-info">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
-                        Les élèves peuvent aussi rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire à l’adresse <strong>https://sacado.xyz/#students</strong> et utiliser le code suivant : <strong>{{ group.code }}</strong>
+                    {% if not is_gar_check %}
+                    <div class="alert alert-info">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
+                            Les élèves peuvent aussi rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire à l’adresse <strong>https://sacado.xyz/#students</strong> et utiliser le code suivant : <strong>{{ group.code }}</strong>
+                        </div>
                     </div>
-                </div>
+                    {% endif %}
                 {% endif %}
                 <table class="table table-striped table-hover display50" id="maTable">
                     <thead> 
