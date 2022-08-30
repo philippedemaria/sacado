@@ -579,7 +579,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
         quizzes         = parcours.quizz.all() # récupération des quizzes
         flashpacks      = parcours.flashpacks.all() # récupération des flashpacks
         bibliotexs      = parcours.bibliotexs.all() # récupération des bibliotexs
-
+        is_sequence     = parcours.is_sequence
         #clone du parcours
         parcours.pk = None
         parcours.teacher = teacher
@@ -591,7 +591,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
         parcours.code = str(uuid.uuid4())[:8]
         parcours.save()
         parcours.students.add(student)
-        folder.parcours.add(parcours)
+ 
         # fin du clone
 
         if is_sequence :
