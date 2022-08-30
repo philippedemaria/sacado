@@ -411,7 +411,7 @@ def create_activeyear(request):
 @user_passes_test(user_is_board)
 def update_activeyear(request,id):
 
-    activeyear = Activeyear.objects.get(is_active=1)
+    activeyear = Activeyear.objects.get(pk=id)
     form       = ActiveyearForm(request.POST or None , instance = activeyear)
  
 
