@@ -411,7 +411,7 @@ def create_activeyear(request):
 @user_passes_test(user_is_board)
 def update_activeyear(request,id):
 
-    activeyear = Activeyear.objects.get(pk=id)
+    activeyear = Activeyear.objects.get(is_active=1)
     form       = ActiveyearForm(request.POST or None , instance = activeyear)
  
 
@@ -658,7 +658,7 @@ def bank_bilan(request):
 def print_bank_bilan(request):
 
     list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
-    year_active = Activeyear.objects.get(pk=1)
+    year_active = Activeyear.objects.get(is_active=1)
     #########################################################################################
     ### Instanciation
     #########################################################################################
@@ -870,7 +870,7 @@ def print_balance(request):
     
  
     list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
-    year_active = Activeyear.objects.get(pk=1)
+    year_active = Activeyear.objects.get(is_active=1)
     #########################################################################################
     ### Instanciation
     #########################################################################################
@@ -1030,7 +1030,7 @@ def print_balance(request):
 @user_passes_test(user_is_board)
 def create_accountancy(request):
     form = AccountancyForm(request.POST or None )
-    year = Activeyear.objects.get(pk=1).year
+    year = Activeyear.objects.get(is_active=1).year
     plan = Plancomptable.objects.order_by("code")
     if request.method == "POST":
         plan_id_c = request.POST.get("plan_id_c",None)
@@ -1055,7 +1055,7 @@ def list_accountancy(request):
 def print_big_book(request):
  
     list_sales ,  list_purchases ,  plan_resultats ,  plan_immos , results , products , charges, rs , ps , cs = calcule_bank_bilan(request)
-    year_active = Activeyear.objects.get(pk=1)
+    year_active = Activeyear.objects.get(is_active=1)
     #########################################################################################
     ### Instanciation
     #########################################################################################
@@ -1332,13 +1332,19 @@ def list_accountings(request,tp):
     active_year, this_year    = get_active_year() 
  
 
-    if tp == 0 :
-        accountings = get_accountings(request.user).filter(plan__code__gte=700)
-    elif  tp == 1 :
-        accountings = get_accountings(request.user).filter(plan__code__gte=600, plan__code__lt=700 )
-    else :
-        accountings = get_accountings(request.user).exclude(is_paypal=1).exclude(date_payment=None)
+    # if tp == 0 :
+    #     accountings = get_accountings(request.user).filter(plan__code__gte=700)
+    # elif  tp == 1 :
+    #     accountings = get_accountings(request.user).filter(plan__code__gte=600, plan__code__lt=700 )
+    # else :
+    #     accountings = get_accountings(request.user).exclude(is_paypal=1).exclude(date_payment=None)
 
+    if tp == 0 :
+        accountings = Accounting.objects.filter(plan__code__gte=700)
+    elif  tp == 1 :
+        accountings = Accounting.objects.filter(plan__code__gte=600, plan__code__lt=700 )
+    else :
+        accountings = Accounting.objects.exclude(is_paypal=1).exclude(date_payment=None)
 
     accounting_no_payment,  accounting_amount = 0, 0
     accountings_no_payments = accountings.filter(date_payment=None)
