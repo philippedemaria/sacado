@@ -1169,6 +1169,8 @@ def print_big_book(request):
             i+=1 
         if p.code > 5000 :
             solde =  -(a_credit + a_debit) # les débits sont en négatifs
+        elif p.code == 411 : 
+            solde =  a_debit - a_credit 
         else : 
             solde =  a_credit + a_debit # les débits sont en négatifs
 
