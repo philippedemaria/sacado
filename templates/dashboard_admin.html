@@ -132,6 +132,8 @@
  
                                 {% if school.customer.status == 1  %}
                                 <a href="{% url 'school_accounting' %}" class="btn btn-warning btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" > Réabonnement </a> 
+                                {% elif not sacado_asso %}
+                                <a href="{% url 'school_accounting' %}" class="btn btn-warning btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" > Abonnement </a> 
                                 {% endif %}
  
                                     <a href="{% url 'school_accounting'  %}" class="small-box-footer" ><i

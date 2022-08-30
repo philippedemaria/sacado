@@ -99,7 +99,9 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">  
                 {% if  school.customer.status == 1 %}
-                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a> 
+                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a>
+                {% elif not sacado_asso %}
+                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Abonnement Nouvelle Année Scolaire</a>
                 {% endif %}
                 <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
             </div>

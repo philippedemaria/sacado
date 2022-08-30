@@ -333,16 +333,6 @@ def update_school_admin(request,id):
 
 
 
-
-
-
-
-
-
-
-
-
-
 @user_passes_test(user_is_board)
 def association_index(request):
 
@@ -445,11 +435,6 @@ def activeyears(request):
 
 
 
- 
-
-
-
-
 def total(first_date, last_date) :
 
     accountings =  Accounting.objects.filter(date_payment__gte=first_date, date_payment__lte=last_date).exclude(date_payment=None)
@@ -461,8 +446,6 @@ def total(first_date, last_date) :
         else :
             total_amount -= a.amount
     return total_amount
-
-
 
 
 
@@ -506,11 +489,7 @@ def adhesions(request):
 def list_paypal(request):
 
     active_year, this_year    = get_active_year() 
- 
-
     accountings = get_accountings(request.user).filter(is_paypal=1).exclude(date_payment=None)
-
-
     accounting_no_payment,  accounting_amount = 0, 0
     pay_accountings = accountings.exclude(date_payment=None)
     no_accountings = accountings.filter(date_payment=None)
