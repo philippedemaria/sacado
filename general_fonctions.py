@@ -400,7 +400,9 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
                 for bibliotex in bibliotexs:
                     bibliotex.students.add(student)
                     
-
+                quizz = parcours.quizz.all()
+                for quiz in quizz:
+                    quiz.students.add(student)
         # Assigne les parcours et leurs contenus 
         for parcours in group.group_parcours.filter(folders=None):
             parcours.students.add(student)
@@ -424,12 +426,11 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
             bibliotexs = parcours.bibliotexs.all()
             for bibliotex in bibliotexs:
                 bibliotex.students.add(student)
+                
+            quizz = parcours.quizz.all()
+            for quiz in quizz:
+                quiz.students.add(student)
 
-
-    test = True
-
-
-    return test
 
 
 
@@ -508,19 +509,6 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
     test = True
  
     return test
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
