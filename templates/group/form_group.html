@@ -301,9 +301,9 @@
                         {% if not is_gar_check %}
                          <th>  Identifiant
                         </th>
-                        {% endif %}
                          <th>  
                         </th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -313,11 +313,13 @@
                             </td>
                             <td>{{ student.user.first_name|lower|capfirst    }}  
                             </td>
-                            {% if not is_gar_check %}<td>{{ student.user.username    }}  
-                            </td>{% endif %}
+                            {% if not is_gar_check %}
+                            <td>{{ student.user.username    }}  
+                            </td>
                             <td> 
                                 <a class="btn btn-xs btn-danger student_remove_from_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" ><i class="fa fa-trash"></i></a> 
                             </td>
+                            {% endif %}
                         </tr>
                     {% empty %}
                         <tr>
