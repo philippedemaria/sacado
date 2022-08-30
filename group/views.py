@@ -534,8 +534,6 @@ def create_group(request):
                 include_students(request , stdts,nf)
         student = create_student_profile_inside(request, nf) 
         duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student)
-        duplicate_all_parcours_of_group_to_a_new_student(nf , parcourses, teacher,  student)
-
 
         return redirect("show_group", nf.id)
     else:
@@ -593,7 +591,6 @@ def update_group(request, id):
         try :
             student = group.students.filter(user__username__contains="_e-test").first()
             duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student)
-            duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher,  student)
         except :
             pass
  
@@ -871,10 +868,8 @@ def ajax_choose_parcours(request):
     subject_id = request.POST.get("subject_id",None) 
 
     if level_id and subject_id :
-        parcours = Parcours.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 ,is_trash=0)
         folders  = Folder.objects.filter(level_id=level_id , subject_id = subject_id , teacher_id = 2480, is_share=1 ,is_trash=0)
     else :
-        parcours = Parcours.objects.filter(level_id=0 , subject_id = 0 ,teacher_id = 2480, is_share=1 ,is_trash=0)
         folders  = Folder.objects.filter(level_id=0 , subject_id = 0 ,teacher_id = 2480, is_share=1 ,is_trash=0)
 
     data = {}
