@@ -363,61 +363,6 @@ def include_students(request , liste, group):
 
  
 
-
-# def include_students_in_a_model(request, liste,model):
- 
-#     students_tab = liste.split("\r\n")
-#     tested = False
-#     n = 0
-#     for student_tab in students_tab :
-#         details = student_tab.split(";")
-#         try:
-#             lname = str(cleanhtml(details[0]).replace(" ", "")).strip()            
-#             fname = str(cleanhtml(details[1]).replace(" ", "")).strip()
-#             password = make_password("sacado2020")
-#             username = get_username(request,lname , fname)
-
-#             try:
-#                 for c in details[2] :
-#                     if c == "@":
-#                         email = cleanhtml(details[2])
-#                     else :
-#                         username = cleanhtml(details[2])
-#             except IndexError:
-#                 email = ""
-                
-
-#             try:
-#                 for car in details[3] :
-#                     if car == "@":
-#                         email = cleanhtml(details[3])
-#                     else :
-#                         username = cleanhtml(details[3])
-#             except IndexError:
-#                 email = ""
- 
-#             try :
-#                 if email != "" :
-#                     send_mail("Inscription SacAdo", "Bonjour "+fname+", \n Votre enseignant vous a inscrit à SACADO.\n Vos identifiants sont \n Identifiant : "+username+"\n Mot de passe : sacado2020 \n Pour plus de sécurité, changez votre mot de passe lors de votre première connexion.\n Merci." , settings.DEFAULT_FROM_EMAIL , [email])
-#             except :
-#                 pass
-
-
-
-#             user = User.objects.create(last_name=str(lname), first_name=str(fname), username=username, password=password, email=email,user_type=0)
-#             code = str(uuid.uuid4())[:8] # code pour la relation avec les parents
-#             student = Student.objects.create(user=user, level=group.level, code=code)
-#             model.students.add(student)
-#             n +=1 
-#         except:
-#             pass
-#     if n == len(students_tab) :
-#         tested = True
-
-#     return tested
-
-
-
 def convert_seconds_in_time(secondes):
     if secondes : secondes = int(secondes)
     if secondes < 60:
@@ -549,7 +494,7 @@ def create_student_profile_inside(request, nf) :
             nf.students.add(student)
         else :
             student = Student.objects.get(user=user)
-        st = True   
+        st = student   
 
     else :
         st = False

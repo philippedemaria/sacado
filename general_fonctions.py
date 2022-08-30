@@ -457,6 +457,7 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
 
 
 def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student):
+
     for folder in folders :
         parcourses = folder.parcours.all() # récupération des parcours
         #clone du dossier
