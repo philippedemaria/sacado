@@ -878,8 +878,7 @@ def ajax_choose_parcours(request):
         folders  = Folder.objects.filter(level_id=0 , subject_id = 0 ,teacher_id = 2480, is_share=1 ,is_trash=0)
 
     data = {}
-
-    print(folders)
+    
     data['html'] = render_to_string('group/listingOfparcours.html', {  'parcourses':parcours , 'folders':folders })
  
  
