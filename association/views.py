@@ -1712,8 +1712,12 @@ def update_accounting(request, id,tp):
                     if nf.mode == "Période de test" or  nf.date_payment:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
+
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
+                    
+                        School.objects.filter(pk=nf.school.id).update(gar=1)
                         test, raison , header , decode  = create_abonnement_gar( today , nf.school , nf  , request.user )
+
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
