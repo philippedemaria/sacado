@@ -181,6 +181,7 @@
             </div>  
             {% else   %}
             <hr>
+            {% if not is_gar_check %}
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
@@ -188,6 +189,7 @@
                     </div>
                 </div>
             </div> 
+            {% endif %}
                 {% if group %}
                     <div class="row collapse" id="collapsed"  >
                         <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
