@@ -74,14 +74,16 @@
                 </div>
                 {% if accordion or list_parcours|length > 1 %}<div class="shadow_bottom"></div>{% endif %}
             </div>                
-            {% empty %}
+            {% empty %}   
+             {% if not sequences %}
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="alert alert-warning">
                         Ce dossier ne contient encore aucun parcours.
                     </div>
                 </div>
-            </div>   
+            </div> 
+            {% endif %}  
             {% endfor %}
 
 
