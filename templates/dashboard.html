@@ -455,7 +455,7 @@
             </div>
         </div>
         <hr/>
-        {% endif %}
+
         <div class="row">
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
                 {% for g in groups %}
@@ -465,6 +465,7 @@
                 {% endfor %}
             </div>
         </div>
+        {% endif %}        
         {% if student.suiviparent %}
             <div class="btn btn-default full_width" style="font-size:15px; margin-bottom: 5px">
                 <span data-toggle="collapse" data-parent="#accordion" href="#collapsered" >
