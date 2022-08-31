@@ -92,10 +92,11 @@
 
                         </td>
                         <td>Dernière connexion</td>
-                        <td><span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
+                        <td>{% if not is_gar_check %}<span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
                             <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Lors de la création d'un élève ou d'une ré-initialisation de mot de passe, <b>sacado2020</b> est le mot de passe attribué.</div>
                                 </span></span>
+                            {% endif %}
                         </td> 
                     </tr>
                     </thead>
