@@ -460,12 +460,11 @@
             <div class="col-lg-12 col-xs-12" style="padding-top: 10px;">
                 {% for g in groups %}
                     <li class="sanspuce">
-                        <a href="{% url 'dashboard_group' g.id %}"><i class="fa fa-square" style="color:{{ g.subject.color }}"></i> {{ g.subject.shortname }}  <small class="pull-right">({{ g.level.name }})</small></a>
+                        <a href="{% url 'dashboard_group' g.id %}"><i class="fa fa-square" style="color:{{ g.subject.color }}"></i> {{ g.subject.name }}  <small class="pull-right">({{ g.level.name }})</small></a>
                     </li>
                 {% endfor %}
             </div>
         </div>
-        <hr>
         {% if student.suiviparent %}
             <div class="btn btn-default full_width" style="font-size:15px; margin-bottom: 5px">
                 <span data-toggle="collapse" data-parent="#accordion" href="#collapsered" >
