@@ -138,13 +138,50 @@
                                 {% endif  %} 
                             </div>                    
                             <div class="card-image">
-                                {% if student %}
+
                                 <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+
+                                {% if  relation.date_limit %}
+                                    {% get_done relation student as result   %} 
+                                    {% if not result %} 
+                                        <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
+                                              Avant le {{relation.date_limit|date:"d N Y" }}
+                                        </div>
+                                    {% endif %}    
+                                {% endif %}   
+                                <div class="card-text" style="background-color:{{ relation.parcours.color }}">
+                                    <i class="fa fa-barcode"></i> {{ relation.exercise.supportfile.code }}  
+                                    <i class="fa fa-clock-o"></i> {{ relation.duration }} min.
+                                    <i class="fa fa-save"></i> {{ relation.situation}}
+                                </div>
+                            </div>
+                        </div> 
+                 {% endfor %}
+            {% endif %}
+            <!-- ******************************************************************************************** -->
+
+            <!-- ******************************************************************************************** -->
+            <!-- *********************************** Exercices en retard ****************************************** -->            
+            {% if relationships_in_late|length > 0 %}
+               <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="row"></div>
+            <hr>
+            <h2 class="thin">Exercices en retard</h2>
+                 {% for relation in relationships_in_late %}
+                        <div class="card_freeze">
+                            <div class="card-body student">
+                                <span style="color:{{ relation.parcours.color }}"> {{ relation.parcours }}</span>
+     
+                                {% if relation.exercise.supportfile.calculator %}
+                                  <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" />
                                 {% else %}
-                                <a href="#" class="detail_parcours"  data-exercise_id="{{ relation.exercise.id }}"  data-num_exo="{{ forloop.counter}}"   data-parcours_id="{{ parcours.id }}">
-                                    <img src="{{ relation.exercise.supportfile.imagefile.url }}" class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}  >
-                                </a> 
-                                {% endif  %}
+                                  <img src="{% static 'img/no_calculator.png' %}" class="pull-right"   width="35px" />
+                                {% endif  %} 
+                            </div>                    
+                            <div class="card-image">
+              
+                                <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+
 
 
                                 {% if  relation.date_limit %}
@@ -165,6 +202,9 @@
                  {% endfor %}
             {% endif %}
             <!-- ******************************************************************************************** -->
+
+
+
         </div>
  
     </div>
