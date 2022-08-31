@@ -204,7 +204,7 @@ def student_dashboard(request,group_id):
         parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")
         sequences   = sequences_brut.filter(folders = None).order_by("ranking")
         evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
-        
+
         last_exercises_done = student.answers.order_by("-date")[:5]
    
         parcourses_on_fire = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
@@ -869,7 +869,7 @@ def ajax_choose_parcours(request):
 
     data = {}
     
-    data['html'] = render_to_string('group/listingOfparcours.html', {  'parcourses':parcours , 'folders':folders })
+    data['html'] = render_to_string('group/listingOfparcours.html', {   'folders':folders })
  
  
     return JsonResponse(data)
