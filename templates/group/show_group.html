@@ -83,7 +83,8 @@
                         </td>
                         {% endif %} 
                         <td>Nom </td>
-                        <td>Prénom </td>
+                        <td>Prénom </td> 
+                        {% if not is_gar_check %}  
                         <td>Courriel </td>
                         <td>Identifiant <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Pour changer un identifiant, le modifier directement. Si l'identifiant choisi n'est pas disponible, la validation ne se fera pas.</div>
@@ -91,6 +92,7 @@
 
 
                         </td>
+                        {% endif %}
                         <td>Dernière connexion</td>
                         <td>{% if not is_gar_check %}<span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
                             <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
@@ -143,6 +145,7 @@
                                                         <i class="fa fa-expand"></i>
                                             </a>
                                         </td>
+
                                         <td>
                                             {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
                                         </td>
@@ -178,6 +181,8 @@
                                     </td>
                                     <td>
                                         {{ student.user.first_name|lower|title }}
+                                    </td>
+                                    {% if not is_gar_check %}
                                     <td>
                                         {{ student.user.email }}
                                     </td>
@@ -191,6 +196,7 @@
                                                     style="background: #f2f0f0; border: none;width:180px" />
                                         <a href="#" data-toggle='modal' class="div_username"  data-target='#div_username' data-username_div="{{ student.user.username }}"  style="font-size: 11px"><i class="fa fa-expand"></i></a>  
                                     </td>
+                                    {% endif %}
                                     <td>
                                         {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
                                     </td>
