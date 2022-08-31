@@ -306,6 +306,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     school     = School.objects.filter(code_acad = uai).last()
     last_name  = dico_received["NOM"][0] 
     first_name = dico_received["PRE"][0]
+    subjects   = dico_received["P_MS4"] 
 
     email = str(today.timestamp()) + "@sacado.xyz"
  
@@ -323,9 +324,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
             for group in groups :
                 gro = group.split("##")[0]
                 gros.append(gro)
-        if matiere in dico_received["P_MS4"] :
-            print(matiere)
-
 
 
     else :
