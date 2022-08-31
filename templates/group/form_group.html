@@ -249,13 +249,14 @@
                         </div>
                     </div>
                 {% if not sacado_asso or request.user.is_manager or request.user.is_superuser    %}
-
+                    {% if is_gar_check %}
                     <div class="col-sm-12 col-md-7">
                         <div class="form-group">
                             <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
                             <a href="{% url 'delete_group_and_his_documents' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')"><i class="bi bi-radioactive"></i> Forcer la suppresion de ce groupe</a>
                         </div>
                     </div>
+                    {% endif %}
                 {% endif %}
                 
 
