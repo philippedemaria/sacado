@@ -203,15 +203,15 @@
         {%  get_access_to_this_group  group   teacher  as     has_access_to_this_group %}
         {%  if  has_access_to_this_group.access   %}
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer le groupe/Ajouter des élèves</span></a>    
+            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer le groupe{% if not is_gar_check %}/Ajouter des élèves{% endif %}</span></a>    
         </li>  
 
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
-             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right  fa-fw"></i>  Lire les détails/Modifier les élèves </a>
+             <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right  fa-fw"></i>  Lire les détails{% if not is_gar_check %}/Modifier les élèves{% endif %}</a>
         </li>
         {%  endif %} 
 
-
+        {% if not is_gar_check %}
         <li {% if 'group/print_list_ids/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'print_list_ids' group.id  %}" ><i class="fa fa-list  fa-fw"></i> Télécharger la liste des identifiants </a>
         </li>
@@ -219,7 +219,7 @@
         <li {% if 'group/print_ids/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'print_ids' group.id  %}" ><i class="fa fa-th  fa-fw"></i> Télécharger les identifiants en étiquette</a>
         </li>
- 
+        {% endif %}
 
 
         <li {% if 'schedule' in request.path %} class="active" {% endif %}>
@@ -243,7 +243,7 @@
         <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
         </li> 
-
+        {% if not is_gar_check %}
         <li class="divider"></li>
 
         <li >
@@ -251,7 +251,7 @@
                <i class="fa fa-glasses fa-fw"></i> Accéder à la vue élève
             </a>
         </li> 
-
+        {% endif %}
 
 
     </ul>
