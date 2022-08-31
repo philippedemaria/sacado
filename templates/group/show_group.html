@@ -44,10 +44,12 @@
 <div class="content_main"> 
     <div class="row">        
         <div class="col-sm-12 col-md-4">
-            <p style="color:{{ group.color }}">Niveau : <strong>{{ group.level.name }}</strong> - Code : <strong>{{ group.code }}</strong> 
+            <p style="color:{{ group.color }}">Niveau : <strong>{{ group.level.name }}</strong> - Code : <strong>{{ group.code }}</strong>
+                {% if not is_gar_check %} 
                 <a href="#" data-toggle='modal' data-target='#mdp_code' title="Afficher le code et le mot de passe en plein écran"><i class="fa fa-expand"></i></a>
 
                 <a href="#" data-toggle='modal' data-target='#qr_code' title="Afficher le code et le mot de passe en plein écran">Rejoindre <i class="fa fa-qrcode"></i></a> 
+                {% endif %}
             </p>
         </div>
         {% if sacado_asso %}
@@ -154,6 +156,7 @@
                                             <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
                                                voir le bilan  
                                             </a> 
+                                            {% if not is_gar_check %}
                                             <small>|</small> 
                                             <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
                                                 onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
@@ -163,6 +166,7 @@
                                                 onclick="return TestDelete('cet élève')" style="font-size:11px"  >
                                                 Supprimer
                                             </a> 
+                                            {% endif %}
                                         </td>
                                     </tr>
                             {% else %}
