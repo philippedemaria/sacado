@@ -190,7 +190,8 @@ def index(request):
         
         subjects = Subject.objects.filter(pk__in=[1,2,3])
         #abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
-        abonnements  = Abonnement.objects.filter(is_active = 1).order_by("school__country__name")
+        #abonnements  = Abonnement.objects.filter(is_active = 1).order_by("school__country__name")
+        customers    = Customer.objects.filter().order_by("school__country__name")
  
         today_start = datetime.date(datetime.now())
 
@@ -213,7 +214,7 @@ def index(request):
         cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
 
         context = { 'cookie_rgpd_accepted' : cookie_rgpd_accepted , 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                    'nb_exotex': nb_exotex, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'abonnements' : abonnements}
+                    'nb_exotex': nb_exotex, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
 
         response = render(request, 'home.html', context)
         return response

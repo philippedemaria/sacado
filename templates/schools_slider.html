@@ -63,14 +63,14 @@
  
  
   <section class="regular slider">
-    {% for abonnement in abonnements %}
+    {% for customer in customers %}
     <div class="school_data">
-        {% if  abonnement.school.logo %}
-          <img src="{{ abonnement.school.logo.url }}" /> 
+        {% if  customer.school.logo %}
+          <img src="{{ customer.school.logo.url }}" /> 
         {% endif %}
-        <div style="font-variant: small-caps;font-weight: 600"> {{ abonnement.school.name }}</div>
-        <div style="z-index: 10"> {{ abonnement.school.town|lower|capfirst }}</div>
-        <div style="z-index: 10"> {{ abonnement.school.country.name|lower|capfirst|truncatewords:1 }}</div>
+        <div style="font-variant: small-caps;font-weight: 600"> {{ customer.school.name }}</div>
+        <div style="z-index: 10"> {{ customer.school.town|lower|capfirst }}</div>
+        <div style="z-index: 10"> {{ customer.school.country.name|lower|capfirst|truncatewords:1 }}</div>
 
     </div>
     {% endfor  %}
