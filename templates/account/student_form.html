@@ -99,15 +99,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="form-group">
-                            <label>{{ user_form.time_zone.label_tag }}</label>
-                            {{ user_form.time_zone  |add_class:"form-control select2" }}
-                            {{ user_form.time_zone.errors }}
-                        </div>
-                    </div>
-                </div>  
+   
                 {% endif %}
             </div>
 
@@ -135,7 +127,7 @@
                 </div>
             </div>
         </div> 
-        {% endif %}
+
 
             <div class="row">
                 <div class="col-sm-12 col-md-6">
@@ -153,10 +145,14 @@
                     </div>
                 </div>
             </div>
+        {% endif %}
+
         <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
-                        <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                        {% if not is_gar_check %}
+                         <input value="Enregistrer" type="submit" class="btn btn-primary"/>        
+                        {% if not is_gar_check %}
                         <a href="javascript:history.back()">
                             <input type="button" value="Annuler"
                                    class="btn btn-default "/>
