@@ -30,17 +30,21 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
-    body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
-    body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
-    body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
+
+    if not abonnement.school.is_primaire :
+        body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
+        body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+        body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
     body += "<publicCible>ENSEIGNANT</publicCible>"
     body += "<publicCible>ELEVE</publicCible>"
-    body += "<publicCible>DOCUMENTALISTE</publicCible>"
+    
+    if not abonnement.school.is_primaire :
+        body += "<publicCible>DOCUMENTALISTE</publicCible>"
     body += "<publicCible>AUTRE PERSONNEL</publicCible>"
     body += "</abonnement>"
     return body
 
-  
+
 
 
 
@@ -57,6 +61,7 @@ def create_abonnement_gar(today,school,abonnement ,user):
     directory = '/home/sacado/'
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+
     body      = web_abonnement_xml(abonnement,id_abonnement, today) 
     r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
