@@ -5443,15 +5443,15 @@ def ajax_create_title_parcours(request):
     if form.is_valid():
         
         supportfile = form.save(commit=False)
-        supportfile.knowledge_id = 1
+        supportfile.knowledge_id = 1762
         supportfile.author = teacher
         supportfile.code=code
-        supportfile.level_id=1
-        supportfile.theme_id=1
+        supportfile.level_id=13
+        supportfile.theme_id=49
         supportfile.is_title=1
         supportfile.save()
 
-        exe = Exercise.objects.create(knowledge_id=1, level_id=1, theme_id=1, supportfile=supportfile)
+        exe = Exercise.objects.create(knowledge_id=1762, level_id=13, theme_id=49, supportfile=supportfile)
         relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, ranking=0)
 
         parcours = Parcours.objects.get(pk = parcours_id)
