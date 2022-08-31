@@ -230,7 +230,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div class="form-group">
-                    {% if not sacado_asso %}
+                    {% if not sacado_asso and not is_gar_check %}
                         <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return TestDelete('ces élèves')"  />
                     {% endif %}
                     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
