@@ -1798,7 +1798,7 @@ def update_accounting(request, id,tp):
 def abonnements_gar(request):
     ###### Création d'accountancy
     test, raison , header , content   = abonnements_gar()
-    content = str(response.content.decode('utf-8'))
+    content = str(content)
     context = {'content': content  }
 
     return render(request, "association/abonnements_gar.html" , context )
