@@ -224,9 +224,9 @@ class Accounting(models.Model):
             ok = True
         return ok
 
-
+ 
     def total_solde(self):
-        accs = Accounting.objects.filter( date_payment__lte=self.date_payment,is_paypal=0).order_by("date_payment")
+        accs = Accounting.objects.filter( date_payment__lte=self.date_payment,is_paypal=0).order_by("date_payment","id")
         s=0
         for a in accs :
             if a.is_credit :
@@ -237,7 +237,7 @@ class Accounting(models.Model):
 
 
     def total_solde_paypal(self):
-        accs = Accounting.objects.filter( date_payment__lte=self.date_payment,is_paypal=1).order_by("date_payment")
+        accs = Accounting.objects.filter( date_payment__lte=self.date_payment,is_paypal=1).order_by("date_payment","id")
         s=0
         for a in accs :
             if a.is_credit :
@@ -397,6 +397,6 @@ class Abonnement(models.Model):
     is_gar              = models.BooleanField(default=0, verbose_name="Usage du GAR")
     is_active           = models.BooleanField(default=0, verbose_name="Actif")
     gar_abonnement_id   = models.CharField(max_length=255, default='',  blank=True, editable=False)
-     
+
     def __str__(self):
         return "{}".format(self.school.name)
