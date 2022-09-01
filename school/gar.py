@@ -74,7 +74,7 @@ def create_abonnement_gar(today,school,abonnement ,user):
 
 
 
-def delete_abonnement_gar(today,bonnement ,user):
+def delete_abonnement_gar(today,abonnement ,user):
     """Création d'un abonnement dans la base de données"""
 
     now = datetime.now()

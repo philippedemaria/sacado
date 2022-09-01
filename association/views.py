@@ -1734,10 +1734,17 @@ def update_accounting(request, id,tp):
                         School.objects.filter(pk=nf.school.id).update(gar=1)
                         test, raison , header , decode  = create_abonnement_gar( today , nf.school , nf  , request.user )
 
+                    else :
+                        try :
+                            test, raison , header , decode  = delete_abonnement_gar( today ,  nf  , request.user )
+                        except :
+                            test, raison , header , decode  = None , None , None ,  None 
+
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
                             messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+
                     fa.save()
                 else :
                     print(form_abo.errors)
