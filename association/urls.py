@@ -17,10 +17,6 @@ urlpatterns = [
     path('bank_bilan', bank_bilan, name='bank_bilan'),
     path('adhesions', adhesions, name='adhesions'),
 
-    path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
-
-
-
     path('list_accountings/<int:tp>/', list_accountings, name='list_accountings'),
     path('new/<int:tp>/', create_accounting, name='create_accounting'),
     path('update/<int:id>/<int:tp>', update_accounting, name='update_accounting'),
@@ -92,6 +88,12 @@ urlpatterns = [
     path('prospec_schools', prospec_schools, name='prospec_schools'),
     path('prospec_to_adhesions', prospec_to_adhesions, name='prospec_to_adhesions'),
     path('list_historic_schools', list_historic_schools, name='list_historic_schools'),
+
+    ### -------------------------  GAR
+    path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
+    path('delete_abonnement_gar/<int:idg>', delete_abonnement_gar, name='delete_abonnement_gar'),
+
+
 
 ]
  

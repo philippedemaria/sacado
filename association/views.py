@@ -1724,12 +1724,6 @@ def update_accounting(request, id,tp):
                                 messages.success(request,"Activation du GAR réussie")
                             else :
                                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
-                    else :
-                        test, raison , header , decode   = delete_abonnement_gar('id_abonnement')
-                        if test :
-                            messages.success(request,"Suppression de l'abonnement du GAR réussie")
-                        else :
-                            messages.error(request,"Suppression de l'abonnement du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                     fa.save()
                 else :
@@ -1796,13 +1790,28 @@ def update_accounting(request, id,tp):
 
 @user_passes_test(user_is_board)
 def abonnements_gar(request):
-    ###### Création d'accountancy
     test, raison , header , content   = these_abonnements_gar()
     content = str(content)
     context = {'content': content  }
 
     return render(request, "association/abonnements_gar.html" , context )
 
+
+
+
+
+
+@user_passes_test(user_is_board)
+def delete_abonnement_gar(request,idg):
+  
+    test, raison , header , decode   = delete_abonnement_gar(idg)
+    if test :
+        messages.success(request,"Suppression de l'abonnement du GAR réussie")
+    else :
+        messages.error(request,"Suppression de l'abonnement du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+
+
+    return render(request, "association/abonnements_gar.html" , context )
 
 
 
