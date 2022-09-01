@@ -30,8 +30,8 @@ function TestDuplicate(f1) {
     if (!confirm('Vous souhaitez dupliquer ' + f1 + ' ?')) return false;
 }
 
-function TestRefus() {
-    if (!confirm('Vous souhaitez refuser cette mission ?')) return false;
+function Test_all_Admin() {
+    if (!confirm('Vous souhaitez donner cette fonction à tous les enseignants ?')) return false;
 }
 
 function testPassword(f1, f2) {
