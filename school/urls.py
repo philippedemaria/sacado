@@ -15,6 +15,7 @@ urlpatterns = [
     path('update_country/<int:id>', update_country, name='update_country'),
     path('delete_country/<int:id>', delete_country, name='delete_country'),
 
+    path('manager_teachers', manager_teachers, name='manager_teachers'),
 
     path('teachers', school_teachers, name='school_teachers'),
     path('students', school_students , name='school_students'),

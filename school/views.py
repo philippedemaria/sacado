@@ -661,6 +661,12 @@ def chargeschools(request) :
     return JsonResponse(data)
 
 
+def manager_teachers(request):
+	school = this_school_in_session(request)
+	for u in school.users.all() :
+		User.objects.filter(pk=u.id).update(is_manager=1)
+	return redirect("school_teachers")
+
 ###############################################################################################
 ######  Renouvellement de l'adhésion
 ###############################################################################################
