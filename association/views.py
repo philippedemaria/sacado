@@ -1811,21 +1811,21 @@ def abonnements_gar(request):
     test, raison , header , cont   = these_abonnements_gar()
     global_content = str(cont)
 
-    content_tab = global_content.split("<abonnement>")
+    # content_tab = global_content.split("<abonnement>")
 
-    balises_values = ["idAbonnement" , "commentaireAbonnement" ,"idDistributeurCom" , "debutValidite" ,"finValidite" , "anneeFinValidite" ,"uaiEtab" , "categorieAffectation" ,"nbLicenceEnseignant" ,"nbLicenceEleve" , "nbLicenceAutrePersonnel" , "nbLicenceProfDoc"]
-    balises_start  = ["<idAbonnement>" , "<commentaireAbonnement>" ,"<idDistributeurCom>" , "<debutValidite>" ,"<finValidite>" , "<anneeFinValidite>" ,"<uaiEtab>" , "<categorieAffectation>" ,"<nbLicenceEnseignant>" ,"<nbLicenceEleve>" , "<nbLicenceAutrePersonnel>" , "<nbLicenceProfDoc>" ]
-    balises_close  = ["</idAbonnement>" , "</commentaireAbonnement>" ,"</idDistributeurCom>" , "</debutValidite>" ,"</finValidite>" , "</anneeFinValidite>" ,"</uaiEtab>" , "</categorieAffectation>" ,"</nbLicenceEnseignant>" ,"</nbLicenceEleve>" , "</nbLicenceAutrePersonnel>" , "</nbLicenceProfDoc>" ]
-    dataset        = []
-    for content in content_tab :
-        dico = {}
-        for i in range(len(balises_values)) :
-            result, new_content = get_the_string_between(content , balises_start[i] , balises_close[i])
-            dico[balises_values[i]] = result
-            content = new_content
-        dataset.append(dico)
+    # balises_values = ["idAbonnement" , "commentaireAbonnement" ,"idDistributeurCom" , "debutValidite" ,"finValidite" , "anneeFinValidite" ,"uaiEtab" , "categorieAffectation" ,"nbLicenceEnseignant" ,"nbLicenceEleve" , "nbLicenceAutrePersonnel" , "nbLicenceProfDoc"]
+    # balises_start  = ["<idAbonnement>" , "<commentaireAbonnement>" ,"<idDistributeurCom>" , "<debutValidite>" ,"<finValidite>" , "<anneeFinValidite>" ,"<uaiEtab>" , "<categorieAffectation>" ,"<nbLicenceEnseignant>" ,"<nbLicenceEleve>" , "<nbLicenceAutrePersonnel>" , "<nbLicenceProfDoc>" ]
+    # balises_close  = ["</idAbonnement>" , "</commentaireAbonnement>" ,"</idDistributeurCom>" , "</debutValidite>" ,"</finValidite>" , "</anneeFinValidite>" ,"</uaiEtab>" , "</categorieAffectation>" ,"</nbLicenceEnseignant>" ,"</nbLicenceEleve>" , "</nbLicenceAutrePersonnel>" , "</nbLicenceProfDoc>" ]
+    # dataset        = []
+    # for content in content_tab :
+    #     dico = {}
+    #     for i in range(len(balises_values)) :
+    #         result, new_content = get_the_string_between(content , balises_start[i] , balises_close[i])
+    #         dico[balises_values[i]] = result
+    #         content = new_content
+    #     dataset.append(dico)
  
-    context = {'dataset': dataset  }
+    context = {'global_content': global_content  }
 
     return render(request, "association/abonnements_gar.html" , context )
 
