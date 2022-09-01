@@ -73,7 +73,7 @@ def create_abonnement_gar(today,abonnement ,user):
 def delete_abonnement_gar(id_abonnement):
     """Supression d'un abonnement dans la base de données"""
 
-    host      = "https://abonnement.partenaire.test-gar.education.fr/SACADO_0350103X_1662032445"  # Adresse d'envoi
+    host      = "https://abonnement.partenaire.test-gar.education.fr/SACADO_0350103X_1662032944"  # Adresse d'envoi
     directory = '/home/sacado/'
 
     header    =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
