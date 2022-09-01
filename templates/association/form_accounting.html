@@ -192,7 +192,7 @@
             <div class="col-sm-12 col-md-4">
                 {% if tp == 0 or accounting %}
                 <div class="alert alert-warning"> 
-                    Abonnement
+                    Abonnement {% if abonnement %} {{ abonnement.id }} {% endif %}
                     <table class="table">
                         <tr>
                             <td>Actif ?</td><td>{{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
