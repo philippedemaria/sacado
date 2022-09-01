@@ -663,7 +663,7 @@ def chargeschools(request) :
 
 def manager_teachers(request):
 	school = this_school_in_session(request)
-	for u in school.users.all() :
+	for u in school.users.filter(user_type=2) :
 		User.objects.filter(pk=u.id).update(is_manager=1)
 	return redirect("school_teachers")
 
