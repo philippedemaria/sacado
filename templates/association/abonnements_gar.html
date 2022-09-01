@@ -29,34 +29,36 @@ Etablssements accès au GAR
 {% block body %}
 
     <section class="content_main">     
- {{ global_content}}
+ 
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <label>id Distributeur  : 832020065_0000000000000000</label> 
             </div>
         </div>
-    
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table id="standard_tab" class="table table-bordered table-hover">
                     <thead>
                         <tr>
+                            <th>Nom</th> 
                             <th>idAbonnement</th>
                             <th>debutValidite</th>
                             <th>finValidite</th>
-                            <th>anneeFinValidite</th>
                             <th>uaiEtab</th>
-                            <th>categorieAffectation</th>
-                            <th>nbLicenceEnseignant</th>
-                            <th>nbLicenceEleve</th>
-                            <th>nbLicenceAutrePersonnel</th>
-                            <th>nbLicenceProfDoc</th>
+                            <th>categorie Affectation</th>
+                            <th>nb Licence Enseignant</th>
+                            <th>nb Licence Eleve</th>
+                            <th>nb Licence AutrePersonnel</th>
+                            <th>nb Licence ProfDoc</th>
                             <th>Supression</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for data in dataset %}
                             <tr>
+                                <td>
+                                    {{ data.name }}
+                                </td> 
                                 <td>
                                     {{ data.idAbonnement }}
                                 </td> 
@@ -65,9 +67,6 @@ Etablssements accès au GAR
                                 </td>
                                 <td>
                                     {{ data.finValidite }}
-                                </td>
-                                <td>
-                                    {{ data.anneeFinValidite }}
                                 </td>
                                 <td>
                                     {{ data.uaiEtab }}
@@ -88,45 +87,9 @@ Etablssements accès au GAR
                                     {{ data.nbLicenceProfDoc }}
                                 </td>
                                 <td>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <h2 class="thin">Adhésion cahier de vacances</h2>
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table id="standard_tab" class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>                        
-                            <th>Adhésion</th>
-                            <th>Montant (€)</th>
-                            <th>Durée en mois</th>
-                            <th>Pack</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for f in formules %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'update_formule' f.id %}">{{ f.name }}</a>
-                                    <a href="{% url 'delete_formule' f.id %}" class="pull-right"  onclick="return TestDelete('cette formule')"><i class="fa fa-trash"></i> </a>
-                                </td>
-                                <td>
-                                    {{ f.adhesion }}
-                                </td>
-                                <td>
-                                    {{ f.price }} €
-                                </td> 
-                                <td>
-                                    {{ f.nb_month }}
-                                </td>
-                                <td>
-                                    {% if f.is_family %}<span class="text-success">Pack famille</span>{% else %}<span class="text-danger">Elève</span>{% endif %}
+                                    {% if data.idAbonnement %}
+                                    <a href="{% url 'delete_abonnement_gar'  data.idAbonnement  %}" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

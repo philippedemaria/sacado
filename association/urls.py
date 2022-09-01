@@ -91,7 +91,7 @@ urlpatterns = [
 
     ### -------------------------  GAR
     path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
-    path('delete_abonnement_gar/<int:idg>', delete_abonnement_gar, name='delete_abonnement_gar'),
+    path('delete_abonnement_gar/<slug:idg>', delete_abonnement_gar, name='delete_abonnement_gar'),
 
 
 
