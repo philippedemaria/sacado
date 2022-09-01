@@ -1852,7 +1852,7 @@ def delete_abonnement_gar(request,idg):
         messages.error(request,"Suppression de l'abonnement du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
 
-    return render(request, "association/abonnements_gar.html" , context )
+    return redirect("abonnements_gar"  )
 
 
 
