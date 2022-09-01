@@ -169,7 +169,7 @@
                         <div class="col-lg-6 col-md-6 col-xs-12">
                             <p {% if data.nbs == 0 %} style="color:#AAA" {% endif%}><b>Étape 1 : Remise à zéro de l'année en cours</b>{% if data.nbs == 0 %} <i class="fa fa-check text-success"></i> {% endif%}  </p>
                                 <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'delete_school_group_and_students' %}{% else %}#{% endif %}" >Purge des groupes et des élèves  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
+                                    <li> <a href="{% if sacado_asso %}{% url 'delete_school_group_and_students' %}{% else %}#{% endif %}" onclick="return TestDelete(' ces élèves et groupes ')">Purge des groupes et des élèves  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
                                 </ul>
                             <p {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><b>Étape 2 : Création ou importation des enseignants</b> {% if data.nbt > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
                                 <ul>

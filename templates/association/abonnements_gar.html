@@ -84,7 +84,7 @@ Etablissements accès au GAR
                                 </td>
                                 <td>
                                     {% if data.idAbonnement %}
-                                    <a href="{% url 'delete_abonnement_gar'  data.idAbonnement  %}" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                    <a href="{% url 'delete_abonnement_gar'  data.idAbonnement  %}" class="btn btn-xs btn-danger"  onclick="return TestDelete(' cet abonnement ')"><i class="fa fa-trash"></i></a>
                                     {% endif %}
                                 </td>
                             </tr>
