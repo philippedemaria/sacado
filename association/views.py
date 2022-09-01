@@ -1826,7 +1826,10 @@ def abonnements_gar(request):
         for i in range(len(balises_values)) :
             try :
                 result = get_the_string_between(content , balises_start[i] , balises_close[i])
-
+                store = True
+                if balises_values[i] == 'idAbonnement' :
+                    if 'AUTO' in result :
+                        store = False
                 if balises_values[i] == 'uaiEtab' :
                     school = School.objects.filter(code_acad = result).first()
                     dico["name"] = school.name
@@ -1837,7 +1840,7 @@ def abonnements_gar(request):
 
             except :
                 pass
-        if len(dico) :
+        if len(dico) and store :
             dataset.append(dico)
     context = {'dataset': dataset  }
 
