@@ -1842,8 +1842,10 @@ def abonnements_gar(request):
 
 @user_passes_test(user_is_board)
 def delete_abonnement_gar(request,idg):
+
+    print(idg)
   
-    test, raison , header , decode   = delete_abonnement_gar(idg)
+    test, raison , header , decode   = delete_gar_abonnement(idg)
     if test :
         messages.success(request,"Suppression de l'abonnement du GAR réussie")
     else :

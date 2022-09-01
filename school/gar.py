@@ -70,7 +70,7 @@ def create_abonnement_gar(today,abonnement ,user):
 
 
 
-def delete_abonnement_gar(id_abonnement):
+def delete_gar_abonnement(id_abonnement):
     """Supression d'un abonnement dans la base de données"""
 
     host      = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
