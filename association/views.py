@@ -1790,6 +1790,30 @@ def update_accounting(request, id,tp):
 
 
 
+
+
+
+
+@user_passes_test(user_is_board)
+def abonnements_gar(request):
+    ###### Création d'accountancy
+    test, raison , header , content   = abonnements_gar()
+    content = str(response.content.decode('utf-8'))
+    context = {'content': content  }
+
+    return render(request, "association/abonnements_gar.html" , context )
+
+
+
+
+
+
+
+
+
+
+
+
 @user_passes_test(user_is_board)
 def create_avoir(request, id):
  

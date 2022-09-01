@@ -1,0 +1,115 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+ 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+
+{% endblock %}
+
+{% block page_menu_right %}
+
+{% endblock %}
+
+ 
+
+
+{% block body %}
+
+{{ content }}
+
+
+
+<!--     <section class="content_main"> 
+        <h2 class="thin">Cotisation établissement</h2>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Année</th>                        
+                            <th>Nombre d'élèves</th>
+                            <th>Montant (€)</th>
+                            <th>Montant réduit (€)</th>
+                            <th>Année active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rate in rates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'update_accounting' rate.id 2 %}">{{ rate.year }}</a>
+                                    <a href="{% url 'delete_accounting' rate.id %}" class="pull-right"  onclick="return TestDelete('ce tarif')"><i class="fa fa-trash"></i> </a>
+                                </td>
+                                <td>
+                                    {{ rate.quantity }}
+                                </td>
+                                <td>
+                                    {{ rate.amount }} €
+                                </td> 
+                                <td>
+                                    {{ rate.discount }} €
+                                </td>
+                                <td>
+                                    {% if rate.is_active %}<span class="text-success">actif</span>{% else %}<span class="text-danger">inactif</span>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2 class="thin">Adhésion cahier de vacances</h2>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="standard_tab" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>                        
+                            <th>Adhésion</th>
+                            <th>Montant (€)</th>
+                            <th>Durée en mois</th>
+                            <th>Pack</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in formules %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'update_formule' f.id %}">{{ f.name }}</a>
+                                    <a href="{% url 'delete_formule' f.id %}" class="pull-right"  onclick="return TestDelete('cette formule')"><i class="fa fa-trash"></i> </a>
+                                </td>
+                                <td>
+                                    {{ f.adhesion }}
+                                </td>
+                                <td>
+                                    {{ f.price }} €
+                                </td> 
+                                <td>
+                                    {{ f.nb_month }}
+                                </td>
+                                <td>
+                                    {% if f.is_family %}<span class="text-success">Pack famille</span>{% else %}<span class="text-danger">Elève</span>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section> -->
+{% endblock %}
+
+ 

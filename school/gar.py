@@ -73,8 +73,6 @@ def create_abonnement_gar(today,abonnement ,user):
 def delete_abonnement_gar(id_abonnement):
     """Supression d'un abonnement dans la base de données"""
 
- 
-
     host      = "https://abonnement.partenaire.test-gar.education.fr/SACADO_0350103X_1662032030"  # Adresse d'envoi
     directory = '/home/sacado/'
 
@@ -82,12 +80,11 @@ def delete_abonnement_gar(id_abonnement):
 
     r         = requests.delete(host, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
-    if r.status_code == 201 or r.status_code==200 :
+    if r.status_code == 204 :
         return True , "ok" , "ok" , "ok"  
     else :
         return False, r.status_code , r.headers , r.content.decode('utf-8')  
 
- 
 
 
 def abonnements_gar():
