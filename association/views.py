@@ -1727,9 +1727,9 @@ def update_accounting(request, id,tp):
                     else :
                         test, raison , header , decode   = delete_abonnement_gar('id_abonnement')
                         if test :
-                            messages.success(request,"Activation du GAR réussie")
+                            messages.success(request,"Suppression de l'abonnement du GAR réussie")
                         else :
-                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+                            messages.error(request,"Suppression de l'abonnement du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                     fa.save()
                 else :
