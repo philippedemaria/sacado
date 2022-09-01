@@ -1070,7 +1070,7 @@ def ask_school_adhesion(request):
 			abonnement, abo_created = Abonnement.objects.get_or_create( accounting_id = accounting_id  , defaults={'school' : school, 'is_gar' : school.gar, 'date_start' : date_start, 'date_stop' : date_stop,  'user' : user, 'is_active' : 0}  )
 
 			if school.gar: # appel de la fonction qui valide le Web Service
-				create_abonnement_gar(today,school,abonnement,request.user)
+				create_abonnement_gar(today, abonnement,request.user)
 
 			send_mail("Demande d'adhésion à la version établissement",
 			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant"+ user.first_name +" "+ user.last_name +".\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",

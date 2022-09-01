@@ -1500,7 +1500,7 @@ def create_accounting(request,tp):
                     fa.save()
 
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        test, raison , header , decode  = create_abonnement_gar( today , nf.school , nf  , request.user )
+                        test, raison , header , decode  = create_abonnement_gar( today , nf  , request.user )
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
@@ -1583,25 +1583,6 @@ def create_accounting(request,tp):
 
 
 
-
-
-@user_passes_test(user_is_board) 
-def delete_activation_gar(request,ida):
-    abonnement = Abonnement.objects.get(pk=ida)
-    today      = datetime.now()
-    test, raison , header , decode  = delete_abonnement_gar(today,abonnement,request.user)
- 
-    if test :
-        messages.success(request,"Activation du GAR réussie")
-    else :
-        messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-
- 
-    return redirect('list_accountings',0)
-    
-
-
-
 @user_passes_test(user_is_board) 
 def renew_accounting(request,ids):
  
@@ -1649,12 +1630,12 @@ def renew_accounting(request,ids):
                     if nf.date_payment:
                         fa.active = 1
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        test, raison , header , decode  = create_abonnement_gar( today , nf.school , nf  , request.user )
+                        test, raison , header , decode , ida  = create_abonnement_gar( today , nf  , request.user )
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
                             messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
-
+                    fa.gar_abonnement_id = ida
                     fa.save()
         else :
             print(form.errors)
@@ -1679,10 +1660,12 @@ def update_accounting(request, id,tp):
 
     try :
         abonnement = accounting.abonnement 
-        form_abo = AbonnementForm(request.POST or None, instance= abonnement  )
+        form_abo   = AbonnementForm(request.POST or None, instance= abonnement  )
+        id_a_gar   = abonnement.gar_abonnement_id
     except :
         abonnement = False
-        form_abo = AbonnementForm(request.POST or None )
+        form_abo   = AbonnementForm(request.POST or None )
+        id_a_gar   = None
 
     form = AccountingForm(request.POST or None, instance=accounting )
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
@@ -1717,7 +1700,7 @@ def update_accounting(request, id,tp):
                 som += d.amount
 
             Accounting.objects.filter(pk = accounting.id).update( amount = som  )
- 
+            
             if nf.is_abonnement :
                 if form_abo.is_valid():
                     fa = form_abo.save(commit = False)
@@ -1730,20 +1713,13 @@ def update_accounting(request, id,tp):
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
 
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                    
-                        School.objects.filter(pk=nf.school.id).update(gar=1)
-                        test, raison , header , decode  = create_abonnement_gar( today , nf.school , nf  , request.user )
-
-                    else :
-                        try :
-                            test, raison , header , decode  = delete_abonnement_gar( today ,  nf  , request.user )
-                        except :
-                            test, raison , header , decode  = None , None , None ,  None 
-
-                        if test :
-                            messages.success(request,"Activation du GAR réussie")
-                        else :
-                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+                        School.objects.filter(pk=nf.school.id).update(gar=1)                    
+                        if not id_a_gar :
+                            test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
+                            if test :
+                                messages.success(request,"Activation du GAR réussie")
+                            else :
+                                messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                     fa.save()
                 else :

@@ -49,9 +49,7 @@ urlpatterns = [
     path('update_section/<int:id>/', update_section, name='update_section'),
     path('delete_section/<int:id>/', delete_section, name='delete_section'),
 
-
-    path('delete_activation_gar/<int:ida>', delete_activation_gar, name='delete_activation_gar'),
-
+ 
 
     path('list_documents', list_documents, name='list_documents'),
     path('create_document', create_document, name='create_document'),

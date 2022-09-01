@@ -389,13 +389,14 @@ class Document(models.Model): # pour l'asso'
 
 class Abonnement(models.Model):
 
-    school     = models.ForeignKey(School, on_delete=models.CASCADE, related_name='abonnement', editable=False)
-    date_start = models.DateTimeField( blank=True, verbose_name="Date de début")
-    date_stop  = models.DateTimeField( blank=True, verbose_name="Date de fin")
-    accounting = models.OneToOneField(Accounting, on_delete=models.CASCADE,  related_name="abonnement", editable=False)
-    user       = models.ForeignKey(User, on_delete=models.CASCADE, related_name='abonnement', editable=False)
-    is_gar     = models.BooleanField(default=0, verbose_name="Usage du GAR")
-    is_active  = models.BooleanField(default=0, verbose_name="Actif")
-
+    school              = models.ForeignKey(School, on_delete=models.CASCADE, related_name='abonnement', editable=False)
+    date_start          = models.DateTimeField( blank=True, verbose_name="Date de début")
+    date_stop           = models.DateTimeField( blank=True, verbose_name="Date de fin")
+    accounting          = models.OneToOneField(Accounting, on_delete=models.CASCADE,  related_name="abonnement", editable=False)
+    user                = models.ForeignKey(User, on_delete=models.CASCADE, related_name='abonnement', editable=False)
+    is_gar              = models.BooleanField(default=0, verbose_name="Usage du GAR")
+    is_active           = models.BooleanField(default=0, verbose_name="Actif")
+    gar_abonnement_id   = models.CharField(max_length=255, default='',  blank=True, editable=False)
+     
     def __str__(self):
         return "{}".format(self.school.name)

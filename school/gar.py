@@ -45,11 +45,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     return body
 
 
-
-
-
-
-def create_abonnement_gar(today,school,abonnement ,user):
+def create_abonnement_gar(today,abonnement ,user):
     """Création d'un abonnement dans la base de données"""
 
     now = datetime.now()
@@ -66,20 +62,38 @@ def create_abonnement_gar(today,school,abonnement ,user):
     r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
-        return True , "ok" , "ok" , "ok" 
+        return True , "ok" , "ok" , "ok"  , id_abonnement 
     else :
-        return False, r.status_code , r.headers , r.content.decode('utf-8')
+        return False, r.status_code , r.headers , r.content.decode('utf-8') , None
 
 
 
 
 
-def delete_abonnement_gar(today,abonnement ,user):
+# def delete_abonnement_gar(today,abonnement ,user):
+#     """Création d'un abonnement dans la base de données"""
+
+#     now = datetime.now()
+#     timestamp = datetime.timestamp(now)
+#     salt = str(timestamp).split(".") 
+
+#     host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
+#     directory = '/home/sacado/'
+
+#     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+
+#     r         = requests.delete(host, data= {'id' =  id_abonnement }, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+
+#     if r.status_code == 201 or r.status_code==200 :
+#         return True , "ok" , "ok" , "ok"  
+#     else :
+#         return False, r.status_code , r.headers , r.content.decode('utf-8')  
+
+ 
+
+
+def abonnements_gar(today,abonnement ,user):
     """Création d'un abonnement dans la base de données"""
-
-    now = datetime.now()
-    timestamp = datetime.timestamp(now)
-    salt = str(timestamp).split(".") 
 
     id_abonnement = "SACADO_" + str(abonnement.school.code_acad)+"_"+salt[0]
     host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
@@ -88,7 +102,7 @@ def delete_abonnement_gar(today,abonnement ,user):
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
     body      = web_abonnement_xml(abonnement,id_abonnement, today) 
-    r         = requests.delete(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+    r         = requests.get(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
         return True , "ok" , "ok" , "ok" 
