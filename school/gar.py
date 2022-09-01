@@ -87,7 +87,7 @@ def delete_abonnement_gar(id_abonnement):
 
 
 
-def abonnements_gar():
+def these_abonnements_gar():
     """Création d'un abonnement dans la base de données"""
 
     host          = "https://abonnement.partenaire.test-gar.education.fr/abonnements"  # Adresse d'envoi

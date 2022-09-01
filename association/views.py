@@ -1797,7 +1797,7 @@ def update_accounting(request, id,tp):
 @user_passes_test(user_is_board)
 def abonnements_gar(request):
     ###### Création d'accountancy
-    test, raison , header , content   = abonnements_gar()
+    test, raison , header , content   = these_abonnements_gar()
     content = str(content)
     context = {'content': content  }
 
