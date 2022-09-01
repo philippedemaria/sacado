@@ -1504,7 +1504,7 @@ def create_accounting(request,tp):
                         if test :
                             messages.success(request,"Activation du GAR réussie")
                         else :
-                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+                            messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
 
             if request.POST.get("validation_demande",None) and tp == 0 :
                 nb = 411
@@ -1583,6 +1583,12 @@ def create_accounting(request,tp):
 
 
 
+
+
+@user_passes_test(user_is_board) 
+def delete_activation_gar(request,ida):
+    delete_gar_affectation(request,ida)
+    
 
 
 
