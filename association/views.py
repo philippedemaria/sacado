@@ -1837,7 +1837,8 @@ def abonnements_gar(request):
 
             except :
                 pass
-        dataset.append(dico)
+        if len(dico) :
+            dataset.append(dico)
     context = {'dataset': dataset  }
 
     return render(request, "association/abonnements_gar.html" , context )
