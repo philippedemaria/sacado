@@ -192,7 +192,11 @@
             <div class="col-sm-12 col-md-4">
                 {% if tp == 0 or accounting %}
                 <div class="alert alert-warning"> 
-                    Abonnement {% if abonnement %} {{ abonnement.id }} {% endif %}
+                    Abonnement {% if abonnement %} {{ abonnement.id }} {% endif %}          
+                {% if abonnement %}
+                    <a href="{% url 'delete_activation_gar' abonnement.id %}"  onclick="return TestDelete('ce webservice')" class="btn btn-xs btn-danger" />
+                {% endif %} 
+   
                     <table class="table">
                         <tr>
                             <td>Actif ?</td><td>{{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
@@ -306,15 +310,7 @@
                 </div>
             </div> 
         </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-8">
-                {% if abonnement %}
  
-                    <a href="{% url 'delete_activation_gar' abonnement.id %}"  onclick="return TestDelete('ce webservice')" class="pull-right"  />
-   
-                {% endif %}
-            </div> 
-        </div>
 
 
 
