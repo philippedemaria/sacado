@@ -15,11 +15,12 @@
 
 
 {% block page_title %}
-
+Etablssements accès au GAR
 {% endblock %}
 
-{% block page_menu_right %}
 
+{% block page_menu_right %}
+{% include 'association/menubar.html' %} 
 {% endblock %}
 
  
@@ -27,42 +28,66 @@
 
 {% block body %}
 
-{{ content }}
-
-
-
-<!--     <section class="content_main"> 
-        <h2 class="thin">Cotisation établissement</h2>
+    <section class="content_main">     
+ 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <label>id Distributeur  : 832020065_0000000000000000</label> 
+            </div>
+        </div>
+    
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table id="standard_tab" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Année</th>                        
-                            <th>Nombre d'élèves</th>
-                            <th>Montant (€)</th>
-                            <th>Montant réduit (€)</th>
-                            <th>Année active</th>
+                            <th>idAbonnement</th>
+                            <th>debutValidite</th>
+                            <th>finValidite</th>
+                            <th>anneeFinValidite</th>
+                            <th>uaiEtab</th>
+                            <th>categorieAffectation</th>
+                            <th>nbLicenceEnseignant</th>
+                            <th>nbLicenceEleve</th>
+                            <th>nbLicenceAutrePersonnel</th>
+                            <th>nbLicenceProfDoc</th>
+                            <th>Supression</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for rate in rates %}
+                        {% for data in dataset %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'update_accounting' rate.id 2 %}">{{ rate.year }}</a>
-                                    <a href="{% url 'delete_accounting' rate.id %}" class="pull-right"  onclick="return TestDelete('ce tarif')"><i class="fa fa-trash"></i> </a>
-                                </td>
-                                <td>
-                                    {{ rate.quantity }}
-                                </td>
-                                <td>
-                                    {{ rate.amount }} €
+                                    {{ data.idAbonnement }}
                                 </td> 
                                 <td>
-                                    {{ rate.discount }} €
+                                    {{ data.debutValidite }}
                                 </td>
                                 <td>
-                                    {% if rate.is_active %}<span class="text-success">actif</span>{% else %}<span class="text-danger">inactif</span>{% endif %}
+                                    {{ data.finValidite }}
+                                </td>
+                                <td>
+                                    {{ data.anneeFinValidite }}
+                                </td>
+                                <td>
+                                    {{ data.uaiEtab }}
+                                </td>
+                                <td>
+                                    {{ data.categorieAffectation }}
+                                </td> 
+                                <td>
+                                    {{ data.nbLicenceEnseignant }}
+                                </td>
+                                <td>
+                                    {{ data.nbLicenceEleve }}
+                                </td>
+                                <td>
+                                    {{ data.nbLicenceAutrePersonnel }}
+                                </td>
+                                <td>
+                                    {{ data.nbLicenceProfDoc }}
+                                </td>
+                                <td>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -109,7 +134,7 @@
                 </table>
             </div>
         </div>
-    </section> -->
+    </section>
 {% endblock %}
 
  

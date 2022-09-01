@@ -1783,20 +1783,51 @@ def update_accounting(request, id,tp):
     return render(request, template , context )
 
 
+###############################################################################
+#
+#---------------------------------     GAR     --------------------------------
+#
+###############################################################################
+ 
+
+
+def get_the_string_between(content,sub1,sub2) :
+    # Récupère la valeur de la clé
+    idx1 = content.index(sub1)
+    idx2 = content.index(sub2)
+    res = ''
+    # getting elements in between
+    for idx in range(idx1 + len(sub1) + 1, idx2):
+        res = res + test_str[idx]
+    new_content = content[idx2:]
+
+    return result, new_content
 
 
 
-
-
+ 
 @user_passes_test(user_is_board)
 def abonnements_gar(request):
-    test, raison , header , content   = these_abonnements_gar()
-    content = str(content)
-    context = {'content': content  }
+    test, raison , header , cont   = these_abonnements_gar()
+    global_content = str(cont)
+
+    content_tab = global_content.split("<abonnement>")
+
+    balises_values = ["idAbonnement" , "commentaireAbonnement" ,"idDistributeurCom" , "debutValidite" ,"finValidite" , "anneeFinValidite" ,"uaiEtab" , "categorieAffectation" ,"nbLicenceEnseignant" ,"nbLicenceEleve" , "nbLicenceAutrePersonnel" , "nbLicenceProfDoc"]
+    balises_start  = ["<idAbonnement>" , "<commentaireAbonnement>" ,"<idDistributeurCom>" , "<debutValidite>" ,"<finValidite>" , "<anneeFinValidite>" ,"<uaiEtab>" , "<categorieAffectation>" ,"<nbLicenceEnseignant>" ,"<nbLicenceEleve>" , "<nbLicenceAutrePersonnel>" , "<nbLicenceProfDoc>" ]
+    balises_close  = ["</idAbonnement>" , "</commentaireAbonnement>" ,"</idDistributeurCom>" , "</debutValidite>" ,"</finValidite>" , "</anneeFinValidite>" ,"</uaiEtab>" , "</categorieAffectation>" ,"</nbLicenceEnseignant>" ,"</nbLicenceEleve>" , "</nbLicenceAutrePersonnel>" , "</nbLicenceProfDoc>" ]
+    dataset        = []
+    for content in content_tab :
+        dico = {}
+        for i in range(len(balises_values)) :
+            result, new_content = get_the_string_between(content , balises_start[i] , balises_close[i])
+            dico[balises_values[i]] = result
+            content = new_content
+        dataset.append(dico)
+ 
+    context = {'dataset': dataset  }
 
     return render(request, "association/abonnements_gar.html" , context )
-
-
 
 
 
