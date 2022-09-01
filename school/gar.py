@@ -100,7 +100,7 @@ def delete_gar_affectation(request,ida):
     """ permet à un enseignant de rejoindre un établissement"""
     
     abonnement = Abonnement.objects.get(pk=ida)
-    today = time_zone_user(request.user)
+    today      = datetime.now()
     test, raison , header , decode  = delete_abonnement_gar(today,abonnement,request.user)
  
     if test :
