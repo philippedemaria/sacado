@@ -302,15 +302,21 @@
                      <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                    class="btn btn-default "/></a>
  
+
+                </div>
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
                 {% if abonnement %}
  
                     <a href="{% url 'delete_activation_gar' abonnement.id %}"  onclick="return TestDelete('ce webservice')" class="pull-right"  />
    
                 {% endif %}
             </div> 
-
-
         </div>
+
+
 
  
     </form>
