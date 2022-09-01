@@ -17,6 +17,9 @@ urlpatterns = [
     path('bank_bilan', bank_bilan, name='bank_bilan'),
     path('adhesions', adhesions, name='adhesions'),
 
+    path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
+
+
 
     path('list_accountings/<int:tp>/', list_accountings, name='list_accountings'),
     path('new/<int:tp>/', create_accounting, name='create_accounting'),
@@ -48,7 +51,6 @@ urlpatterns = [
     path('create_section', create_section, name='create_section'),
     path('update_section/<int:id>/', update_section, name='update_section'),
     path('delete_section/<int:id>/', delete_section, name='delete_section'),
-
  
 
     path('list_documents', list_documents, name='list_documents'),
