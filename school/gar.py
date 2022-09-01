@@ -74,18 +74,25 @@ def create_abonnement_gar(today,school,abonnement ,user):
 
 
 
-def delete_abonnement_gar(request,ida):
-    """ permet à un enseignant de rejoindre un établissement"""
-    
-    abonnement = Abonnement.objects.get(pk=ida)
-    today      = datetime.now()
-    test, raison , header , decode  = delete_abonnement_gar(today,abonnement,request.user)
- 
-    if test :
-        messages.success(request,"Activation du GAR réussie")
+def delete_abonnement_gar(today,bonnement ,user):
+    """Création d'un abonnement dans la base de données"""
+
+    now = datetime.now()
+    timestamp = datetime.timestamp(now)
+    salt = str(timestamp).split(".") 
+
+    id_abonnement = "SACADO_" + str(abonnement.school.code_acad)+"_"+salt[0]
+    host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
+    directory = '/home/sacado/'
+
+    header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+
+    body      = web_abonnement_xml(abonnement,id_abonnement, today) 
+    r         = requests.delete(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+
+    if r.status_code == 201 or r.status_code==200 :
+        return True , "ok" , "ok" , "ok" 
     else :
-        messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+        return False, r.status_code , r.headers , r.content.decode('utf-8')
 
  
-    return redirect('list_accountings',0)
-
