@@ -193,7 +193,7 @@
                 {% if tp == 0 or accounting %}
                 <div class="alert alert-warning"> 
                     Abonnement {% if abonnement %} {{ abonnement.id }} {% endif %}          
-                {% if abonnement %}
+                {% if abonnement.gar_abonnement_id %}
                     <a href="{% url 'delete_abonnement_gar' abonnement.gar_abonnement_id %}"  onclick="return TestDelete('ce webservice ' + str(abonnement.gar_abonnement_id) )" class="btn btn-xs btn-danger pull-right" />Supprimer ce webservice</a>
                 {% endif %} 
    
