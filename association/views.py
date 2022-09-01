@@ -1816,9 +1816,9 @@ def abonnements_gar(request):
     content_tab = global_content.split("<abonnement>")
 
 
-    balises_values = ["idAbonnement" , "commentaireAbonnement" ,"idDistributeurCom" , "debutValidite" ,"finValidite" , "anneeFinValidite" ,"uaiEtab" , "categorieAffectation" ,"nbLicenceEnseignant" ,"nbLicenceEleve" , "nbLicenceAutrePersonnel" , "nbLicenceProfDoc"]
-    balises_start  = ["<idAbonnement>" , "<commentaireAbonnement>" ,"<idDistributeurCom>" , "<debutValidite>" ,"<finValidite>" , "<anneeFinValidite>" ,"<uaiEtab>" , "<categorieAffectation>" ,"<nbLicenceEnseignant>" ,"<nbLicenceEleve>" , "<nbLicenceAutrePersonnel>" , "<nbLicenceProfDoc>" ]
-    balises_close  = ["</idAbonnement>" , "</commentaireAbonnement>" ,"</idDistributeurCom>" , "</debutValidite>" ,"</finValidite>" , "</anneeFinValidite>" ,"</uaiEtab>" , "</categorieAffectation>" ,"</nbLicenceEnseignant>" ,"</nbLicenceEleve>" , "</nbLicenceAutrePersonnel>" , "</nbLicenceProfDoc>" ]
+    balises_values = ["idAbonnement" , "commentaireAbonnement" ,"idDistributeurCom" , "debutValidite" ,"finValidite" ,  "uaiEtab" , "categorieAffectation" ,"nbLicenceEnseignant" ,"nbLicenceEleve" , "nbLicenceAutrePersonnel" , "nbLicenceProfDoc"]
+    balises_start  = ["<idAbonnement>" , "<commentaireAbonnement>" ,"<idDistributeurCom>" , "<debutValidite>" ,"<finValidite>" ,  "<uaiEtab>" , "<categorieAffectation>" ,"<nbLicenceEnseignant>" ,"<nbLicenceEleve>" , "<nbLicenceAutrePersonnel>" , "<nbLicenceProfDoc>" ]
+    balises_close  = ["</idAbonnement>" , "</commentaireAbonnement>" ,"</idDistributeurCom>" , "</debutValidite>" ,"</finValidite>" ,  "</uaiEtab>" , "</categorieAffectation>" ,"</nbLicenceEnseignant>" ,"</nbLicenceEleve>" , "</nbLicenceAutrePersonnel>" , "</nbLicenceProfDoc>" ]
     dataset        = []
 
     for content in content_tab :
@@ -1826,10 +1826,15 @@ def abonnements_gar(request):
         for i in range(len(balises_values)) :
             try :
                 result = get_the_string_between(content , balises_start[i] , balises_close[i])
-                dico[balises_values[i]] = result
+
                 if balises_values[i] == 'uaiEtab' :
                     school = School.objects.filter(code_acad = result).first()
                     dico["name"] = school.name
+                elif balises_values[i] == 'debutValidite' or balises_values[i] == 'finValidite' :
+                    dico[balises_values[i]]  = result.split("T")[0]
+                else :
+                    dico[balises_values[i]] = result
+
             except :
                 pass
         dataset.append(dico)
@@ -1842,8 +1847,6 @@ def abonnements_gar(request):
 
 @user_passes_test(user_is_board)
 def delete_abonnement_gar(request,idg):
-
-    print(idg)
   
     test, raison , header , decode   = delete_gar_abonnement(idg)
     if test :
