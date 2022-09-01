@@ -70,42 +70,42 @@ def create_abonnement_gar(today,abonnement ,user):
 
 
 
-# def delete_abonnement_gar(today,abonnement ,user):
-#     """Création d'un abonnement dans la base de données"""
+def delete_abonnement_gar(id_abonnement):
+    """Supression d'un abonnement dans la base de données"""
 
-#     now = datetime.now()
-#     timestamp = datetime.timestamp(now)
-#     salt = str(timestamp).split(".") 
+ 
 
-#     host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
-#     directory = '/home/sacado/'
+    host      = "https://abonnement.partenaire.test-gar.education.fr/SACADO_0350103X_1661971939"  # Adresse d'envoi
+    directory = '/home/sacado/'
 
-#     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+    header    =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
-#     r         = requests.delete(host, data= {'id' =  id_abonnement }, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+    r         = requests.delete(host, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
-#     if r.status_code == 201 or r.status_code==200 :
-#         return True , "ok" , "ok" , "ok"  
-#     else :
-#         return False, r.status_code , r.headers , r.content.decode('utf-8')  
+    if r.status_code == 201 or r.status_code==200 :
+        return True , "ok" , "ok" , "ok"  
+    else :
+        return False, r.status_code , r.headers , r.content.decode('utf-8')  
 
  
 
 
-def abonnements_gar(today,abonnement ,user):
+def abonnements_gar():
     """Création d'un abonnement dans la base de données"""
 
-    id_abonnement = "SACADO_" + str(abonnement.school.code_acad)+"_"+salt[0]
-    host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
-    directory = '/home/sacado/'
+    host          = "https://abonnement.partenaire.test-gar.education.fr/abonnements"  # Adresse d'envoi
+    directory     = '/home/sacado/'
 
-    header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+    header        =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
-    body      = web_abonnement_xml(abonnement,id_abonnement, today) 
-    r         = requests.get(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+    body          = '<filtres xmlns="http://www.atosworldline.com/wsabonnement/v1.0/"><filtre><filtreNom>idDistributeurCom</filtreNom>'
+    body          += '<filtreValeur>832020065_0000000000000000</filtreValeur>'
+    body          += '</filtre></filtres>'
+
+    r             = requests.get(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
-        return True , "ok" , "ok" , "ok" 
+        return True , "ok" , "ok" ,  r.content.decode('utf-8') # open('responses/subs.xml', 'w').write(str(response.content.decode('utf-8'))) 
     else :
         return False, r.status_code , r.headers , r.content.decode('utf-8')
 

@@ -1638,6 +1638,7 @@ def renew_accounting(request,ids):
                             messages.success(request,"Activation du GAR réussie")
                         else :
                             messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+
                     
                     fa.save()
         else :
@@ -1723,6 +1724,12 @@ def update_accounting(request, id,tp):
                                 messages.success(request,"Activation du GAR réussie")
                             else :
                                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+                    else :
+                        test, raison , header , decode   = delete_abonnement_gar('id_abonnement')
+                        if test :
+                            messages.success(request,"Activation du GAR réussie")
+                        else :
+                            messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                     fa.save()
                 else :
