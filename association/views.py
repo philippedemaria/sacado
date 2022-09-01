@@ -1719,8 +1719,8 @@ def update_accounting(request, id,tp):
                         School.objects.filter(pk=nf.school.id).update(gar=1)                    
                         if not id_a_gar :
                             test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
-                            fa.gar_abonnement_id = ida
                             if test :
+                                fa.gar_abonnement_id = ida
                                 messages.success(request,"Activation du GAR réussie")
                             else :
                                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
