@@ -187,30 +187,31 @@
         {% if request.user.is_authenticated %}
             {% if user.is_teacher %}
                 {% get_com_is_reading user as boolean_reader %}
-                {% if not boolean_reader %}        
-                    <div id="advises" class="advises">
-                        <div class="row"> 
-                            <div class="col-xs-11 col-md-11 col-lg-11" id ="principal_section">
-                                <form action="#" method="POST" > 
-                                    <h1 class="sacado" >Notre actu.</h1>
+                {% if not is_gar_check %}
+                    {% if not boolean_reader %}        
+                        <div id="advises" class="advises">
+                            <div class="row"> 
+                                <div class="col-xs-11 col-md-11 col-lg-11" id ="principal_section">
+                                    <form action="#" method="POST" > 
+                                        <h1 class="sacado" >Notre actu.</h1>
 
-                                        {% for c in communications %}
-                                            <h3> {{ c.today|date:"d N Y" }} : {{ c.subject }} </h3>
-                                            {{ c.texte|safe }}
-                                            <hr>
-                                        {% endfor %}
+                                            {% for c in communications %}
+                                                <h3> {{ c.today|date:"d N Y" }} : {{ c.subject }} </h3>
+                                                {{ c.texte|safe }}
+                                                <hr>
+                                            {% endfor %}
 
-                                    <a href="#" id="reader_new"   class="btn btn-danger" >
-                                        J'ai lu l'actu. proposée
-                                    </a>
-                                </form>
+                                        <a href="#" id="reader_new"   class="btn btn-danger" >
+                                            J'ai lu l'actu. proposée
+                                        </a>
+                                    </form>
 
 
+                                </div>
                             </div>
-                        </div>
-                    </div> 
+                        </div> 
+                    {% endif %}
                 {% endif %}
-
 
                 {% include 'dashboard_teacher.html' %}
             {% elif user.is_parent %}
