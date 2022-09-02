@@ -471,11 +471,13 @@ def list_groups(request):
 
 def get_this_group(request, id):
     Group.objects.filter(pk=id).update(teacher=request.user.teacher)
+    messages.success(request,"Groupe récupéré.")
     return redirect( 'update_group' , id )
 
 
 def get_out_this_group(request, id):
     Group.objects.filter(pk=id).update(teacher=None)
+    messages.success(request,"Groupe quitté et redistribué.")
     return redirect( 'index' )
 
 
