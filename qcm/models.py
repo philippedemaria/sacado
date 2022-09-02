@@ -602,9 +602,13 @@ class Parcours(ModelWithCode):
     def parcours_group_students_count(self,group):
 
         data = {}
-        group_students = group.students.all() #.exclude(user__username__contains="_e-test")
-        parcours_students = self.students.exclude(user__username__contains="_e-test")
-        intersection = list(set(group_students) & set(parcours_students))
+        try :
+            group_students = group.students.all() #.exclude(user__username__contains="_e-test")
+            parcours_students = self.students.exclude(user__username__contains="_e-test")
+            intersection = list(set(group_students) & set(parcours_students))
+        except :
+            parcours_students = self.students.exclude(user__username__contains="_e-test")
+            intersection = list(parcours_students)
 
         data["nb"]= len(intersection)
         data["students"] = intersection
