@@ -163,7 +163,7 @@
                             <!-- Legende de la small-box -->
                             <div class="inner" style="color:white;opacity:0.9"><br/>
                                 <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
-                                <a href="{% url 'show_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};" onclick="return get_this_group('{{ group_prim.name }}')"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Récupérer ce groupe </span></a> 
+                                <a href="{% url 'show_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};" onclick="return get_this_group('{{ group_prim.name }}')"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Voir ce groupe ?</span></a> 
                             </div>
                             <div class="small-box-footer" >
                                 <div class="row">                    
