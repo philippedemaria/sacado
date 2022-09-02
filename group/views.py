@@ -436,11 +436,14 @@ def get_complement(request, teacher, parcours_or_group):
 def authorizing_access_group(request,teacher,group ):
 
     test = False
-    if teacher.teacher_sharingteacher.filter(group = group).count() > 0 :
-        test = True
+    if teacher :
+        if teacher.teacher_sharingteacher.filter(group = group).count() > 0 :
+            test = True
 
-    if group.teacher == teacher or test or request.user.is_manager :
-        test = True   
+        if group.teacher == teacher or test or request.user.is_manager :
+            test = True
+    else :
+        test = True
 
     if not test :
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -466,34 +469,17 @@ def list_groups(request):
 
 
 
-def create_student_profile_inside(request, nf) : 
+def get_this_group(request, id):
+    Group.objects.filter(pk=id).update(teacher=request.user.teacher)
+    return redirect( 'update_group' , id )
 
-    first_name = str(request.user.first_name).replace(" ", "")
-    last_name  = str(request.user.last_name).replace(" ","") 
-    name       = last_name + "_e-test"
-    username   = get_username_teacher(request,name)
-    password   = make_password("sacado2020")  
-    email      = ""
 
-    if nf.students.filter( user__username__contains=name).count() == 0 :
-        user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
+def get_out_this_group(request, id):
+    Group.objects.filter(pk=id).update(teacher=None)
+    return redirect( 'index' )
 
-        if created :
-            mesg = "Bonjour\n\nVous venez de créer un groupe avec un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
-            try :
-                send_mail("Identifiant Profil élève",  mesg , settings.DEFAULT_FROM_EMAIL , [email] )
-            except :
-                pass
-            code = str(uuid.uuid4())[:8]                 
-            student = Student.objects.create(user=user, level=nf.level, code=code)
-            nf.students.add(student)
-        else :
-            student = Student.objects.get(user=user)
-        st = student   
 
-    else :
-        st = False
-    return st
+
 
 
  
@@ -510,25 +496,20 @@ def create_group(request):
             nf.school = teacher.user.school
         nf.save()
 
+        folders    = list()
+        parcourses =  list()
 
-        folders_ids  = request.POST.getlist("folder_ids")
-        folders , parcourses = [] , []
+        folders_ids  = request.POST.getlist("folder_ids")        
         for f_id in folders_ids :
             folder = Folder.objects.get(pk=f_id)
             folders.append(folder)
-
-        
-        parcours_ids = request.POST.getlist("parcours_ids")
-        for parcours_id in parcours_ids :
-            parcours = Parcours.objects.get(pk=parcours_id)
-            parcourses.append(parcours)
 
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts,nf)
-        student = create_student_profile_inside(request, nf) 
-        duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student)
+        student = create_student_profile_inside(request, nf) # dans general_fonction.py
+        duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student) # dans general_fonction.py
 
         return redirect("show_group", nf.id)
     else:
@@ -544,7 +525,7 @@ def create_group(request):
 def update_group(request, id):
 
 
-    teacher = Teacher.objects.get(user= request.user)
+    teacher = request.user.teacher
     group   = Group.objects.get(id=id)
     stdnts  = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
 
@@ -565,29 +546,22 @@ def update_group(request, id):
             nf.school = teacher.user.school
         nf.save()
 
-
-        folders_ids  = request.POST.getlist("folder_ids")
-        folders , parcourses = [] , []
+        folders    = list()
+        folders_ids = request.POST.getlist("folder_ids")        
         for f_id in folders_ids :
             folder = Folder.objects.get(pk=f_id)
             folders.append(folder)
-
-        
-        parcours_ids = request.POST.getlist("parcours_ids")
-        for parcours_id in parcours_ids :
-            parcours = Parcours.objects.get(pk=parcours_id)
-            parcourses.append(parcours)
-
 
         stdts = request.POST.get("students")
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts, group)
-        try :
+
+        if group.students.filter(user__username__contains="_e-test").count() == 0 : # Un professeur a donc toujours un profil élève dans son groupe
+            student = create_student_profile_inside(request, nf) 
+        else :
             student = group.students.filter(user__username__contains="_e-test").first()
-            duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student)
-        except :
-            pass
+        duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student)
  
         return redirect("show_group", group.id)
     else:

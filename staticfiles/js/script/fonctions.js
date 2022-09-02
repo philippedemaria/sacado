@@ -24,6 +24,13 @@ function TestRenew() {
 }
 
  
+function get_this_group(f1) {
+    if (!confirm("Vous souhaitez récupérer ce groupe  " + f1 + " ? " )) return false;
+}
+
+function get_out_this_group(f1) {
+    if (!confirm("Vous souhaitez laisser ce groupe " + f1 + " ? " )) return false;
+}
 
 
 function TestDuplicate(f1) {

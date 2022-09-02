@@ -15,6 +15,9 @@ urlpatterns = [
 
     path('delete_all_groups', delete_all_groups , name='delete_all_groups'),
 
+    path('get_this_group/<int:id>/', get_this_group, name='get_this_group'),
+    path('get_out_this_group/<int:id>/', get_out_this_group, name='get_out_this_group'),  
+
 
     path('show/<int:id>/', show_group, name='show_group'), 
     path('result/<int:id>/', result_group, name='result_group'),
