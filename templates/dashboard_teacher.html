@@ -141,6 +141,13 @@
                         Gérer vos groupes ou classes, des parcours d'apprentissage, des évaluations, des cours (version établissement), des quizz et utiliser nos outils pédagogiques testés en classe avec nos élèves.
                         <span class="pull-right">L'équipe SACADO </span>
                     </div>
+
+                    <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-danger"> 
+                        <h1><b>IMPERATIF avec l'usage du GAR</h1>
+                        Vous devez vérifier vos niveaux d'enseignement et matières avant toute utilisation.<br/>
+                        <a href="{% url 'profile' %}">Mon profil & Notifications</a>
+                    </div>
+
                 </div> 
                 {% if  request.user.school.is_primaire %}    
                     {% for group_prim in group_prims %}
