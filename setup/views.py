@@ -360,7 +360,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     elif code_level == 2212 : level_id = 11
                     else : level_id = 12
                     level = Level.objects.get(pk=level_id)
-                    teacher.subjects.add(level)
+                    teacher.levels.add(level)
 
 
                 for group in groups :
