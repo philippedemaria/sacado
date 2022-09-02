@@ -21,6 +21,30 @@ def delete_session_key(request,key):
     # supprime la clé key d'une session
     if request.session.has_key(key) :
         del request.session[key]  
+        
+
+def get_username_teacher(request ,ln):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+    if request.user.school :
+        suffixe = request.user.school.country.name[2]
+    else :
+        suffixe = ""
+    name = str(ln).replace(" ","_")    
+    un = name + "_" + suffixe + code 
+
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+ 
+    return un 
 
 
 
