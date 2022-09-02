@@ -133,44 +133,90 @@
                 </div>
 
         {% empty %}
-
-            {% if nb_teacher_level == 0 %} 
-
+            {% if is_gar_check %}
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-warning"> 
                         <h1>Bienvenue dans l'univers SACADO </h1>
                         L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
-                        Gérer vos groupes ou classes, des parcours d'apprentissage, des évaluations, des cours (version établissement), des quizz et utiliser nos outils pédagogiques testés en classe avec nos élèves.<br/>
-                        Pour démarrer, nous vous proposons :
-                        <li style="list-style: none">1. de configurer votre compte</li>
-                        <li style="list-style: none">2. de créer votre premier groupe</li>
-                        <li style="list-style: none">3. de créer votre premier parcours</li>
-                        Bonne prise en main. Pour toute difficulté, nous écrire via <a href="#">info@sacado.xyz</a>. 
+                        Gérer vos groupes ou classes, des parcours d'apprentissage, des évaluations, des cours (version établissement), des quizz et utiliser nos outils pédagogiques testés en classe avec nos élèves.
                         <span class="pull-right">L'équipe SACADO </span>
                     </div>
-                </div>     
-                <div class="row">
-                    <div class="round" style="margin-top: 50px;"> 
-                        <h1 class="sacado">1.<br>Démarrez  avec </h1>
-                        <a href="{% url 'profile' %}">Configurer mon compte</a>
-                        <h1 class="sacado">sacAdo </h1>
-                    </div>
-                </div>
-            {% else %}  
+                </div> 
+                {% if  request.school.is_primaire %}    
+                    {% for group_prim in group_prims %}
+                        <div class="small-box" style="background-color:{{ group_prim.color }};color:{{ group_prim.color|contrast_color }}">
+                            <!-- modal qui affiche la liste des élèves -->
+                            <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}"> 
+                                <font style="color:#CCC">
+                                    {% for s in group_prim.students.all %} 
+                                        {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </font>
+                            </div>
+                            <!-- Legende de la small-box -->
+                            <div class="inner" style="color:white;opacity:0.9"><br/>
+                                <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
+                                 <span style="color:{{ group_prim.color|contrast_color }};font-size: 16px"> {{ group_prim.code }} </span> 
+                            </div>
+                            <div class="small-box-footer" >
+                                <div class="row">                    
+                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
+                                        <a href="{% url 'show_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Récupérer ce groupe </span></a>    
+                                    </div>
 
 
-
-                <div class="row">
-                    <div class="col-lg-12 col-xs-12">
-                        <p></p>
-                        <div class="round" style="background-color: #FFB400">
-                            <h1 class="sacado">2.<br>Démarrez  avec </h1>
-                            <a href="{% url 'create_group' %}" >Créer mon premier groupe</a>
+                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
+                                        <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group_prim.id }}" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-users"></i>
+                                            <span class="helper_tip small_displayer"  style="color:{{ group_prim.color|contrast_color }};"> 
+                                                Élève{{ data.snt|pluralize }}
+                                            </span> 
+                                        </a>   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="alert alert-warning">En attente d'inscription...</div>
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                {% if nb_teacher_level == 0 %} 
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-warning"> 
+                            <h1>Bienvenue dans l'univers SACADO </h1>
+                            L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
+                            Gérer vos groupes ou classes, des parcours d'apprentissage, des évaluations, des cours (version établissement), des quizz et utiliser nos outils pédagogiques testés en classe avec nos élèves.<br/>
+                            Pour démarrer, nous vous proposons :
+                            <li style="list-style: none">1. de configurer votre compte</li>
+                            <li style="list-style: none">2. de créer votre premier groupe</li>
+                            <li style="list-style: none">3. de créer votre premier parcours</li>
+                            Bonne prise en main. Pour toute difficulté, nous écrire via <a href="#">info@sacado.xyz</a>. 
+                            <span class="pull-right">L'équipe SACADO </span>
+                        </div>
+                    </div>     
+                    <div class="row">
+                        <div class="round" style="margin-top: 50px;"> 
+                            <h1 class="sacado">1.<br>Démarrez  avec </h1>
+                            <a href="{% url 'profile' %}">Configurer mon compte</a>
                             <h1 class="sacado">sacAdo </h1>
                         </div>
                     </div>
-                </div>
+                {% else %}  
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12">
+                            <p></p>
+                            <div class="round" style="background-color: #FFB400">
+                                <h1 class="sacado">2.<br>Démarrez  avec </h1>
+                                <a href="{% url 'create_group' %}" >Créer mon premier groupe</a>
+                                <h1 class="sacado">sacAdo </h1>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
+
+
+
         {% endfor %}
 
         {% if teacher.groups.count > 0 and teacher.user.username|length < 50 %} 

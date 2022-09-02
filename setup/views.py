@@ -142,10 +142,18 @@ def index(request):
             request.session["tdb"] = True
 
             webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
- 
+
+            # Pour la GAR et le Primaire
+            group_prims = []
+            if is_gar_check and request.user.school and request.user.school.is_primaire :   
+                group_prims = request.user.school.school_group.all()
+
+
+
+
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
-                       'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 
+                       'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims , 
                        'parcours_tab': parcours_tab, 'webinaire': webinaire, #'parcourses': parcourses,'communications': communications, 
                        }
         
