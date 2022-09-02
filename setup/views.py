@@ -145,7 +145,7 @@ def index(request):
 
             # Pour la GAR et le Primaire
             group_prims = []
-            if is_gar_check and request.user.school and request.user.school.is_primaire :   
+            if request.user.school and request.user.school.is_primaire :   
                 group_prims = request.user.school.school_group.all()
 
 
