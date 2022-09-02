@@ -1389,14 +1389,6 @@ def ajax_individualise_this_document(request):
 
 
 
-
-
-
-
-
-
-
-
 def ajax_reset_this_exercise(request):
 
     relationship_id = int(request.POST.get("relationship_id"))
@@ -2567,6 +2559,8 @@ def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ):
 
             if request.POST.get("save_and_choose") :
                 return redirect('peuplate_parcours', nf.id)
+            elif request.POST.get("to_index"):
+                return redirect('index') 
             elif idg == 99999999999:
                 return redirect('index')
             elif request.session.get("folder_id",None) :
@@ -2575,6 +2569,7 @@ def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ):
                 return redirect('list_parcours_group', idg)     
             else:
                 return redirect('parcours')
+
 
         else :
             print(form.errors)
@@ -3351,7 +3346,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     student["legal_duration"] = parcours.duration
     total_nb_exo = len(relationships)
     student["total_nb_exo"] = total_nb_exo       
-
+    score_coeff = 0
     total_coeff = 0
     for studentanswer_id in  studentanswer_ids : 
         studentanswer = Studentanswer.objects.get(pk=studentanswer_id)
@@ -9164,6 +9159,8 @@ def create_folder(request,idg):
 
             if group :    
                 return redirect ("list_parcours_group", idg ) 
+            elif request.POST.get("to_index"):
+                return redirect('index') 
             else :
                 return redirect ("folders") 
         else:
@@ -9212,8 +9209,9 @@ def update_folder(request,id,idg):
             affectation_students_to_contents_parcours_or_evaluation( parcours_ids , all_students )
             change_coanimation_teachers(nf, folder , group_ids , teacher)
 
-
-            if group_id :
+            if request.POST.get("to_index"):
+                return redirect('index') 
+            elif group_id :
                 return redirect ("list_parcours_group", group_id )
             else :
                 return redirect ("parcours")
