@@ -142,7 +142,7 @@
                         <span class="pull-right">L'équipe SACADO </span>
                     </div>
                 </div> 
-                {% if  request.school.is_primaire %}    
+                {% if  request.user.school.is_primaire %}    
                     {% for group_prim in group_prims %}
                         <div class="small-box" style="background-color:{{ group_prim.color }};color:{{ group_prim.color|contrast_color }}">
                             <!-- modal qui affiche la liste des élèves -->
