@@ -44,7 +44,7 @@
 <div class="content_main"> 
     <div class="row">        
         <div class="col-sm-12 col-md-4">
-            <p style="color:{{ group.color }}">Niveau : <strong>{{ group.level.name }}</strong> - Code : <strong>{{ group.code }}</strong>
+            <p style="color:{{ group.color }}">Niveau : <strong>{{ group.level.name }}</strong> {% if not is_gar_check %}- Code : <strong>{{ group.code }}</strong>{% endif %}
                 {% if not is_gar_check %} 
                 <a href="#" data-toggle='modal' data-target='#mdp_code' title="Afficher le code et le mot de passe en plein écran"><i class="fa fa-expand"></i></a>
 
@@ -54,20 +54,13 @@
         </div>
         {% if sacado_asso %}
         <div class="col-sm-12 col-md-7"> 
-            <form action="" method="POST"> 
-                {% csrf_token %}
-                <p style="color:{{ group.color }}"> 
-                    {% for sp in  studentprofiles   %}
-                    <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" >Ident. élève : {{ sp.user.username }} 
-                        {% comment %}
-                        <a href="#" class="delete_student_profile edit" data-student_id="{{ sp.user.id }}" onclick="return TestDelete('votre profil élève')">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                        {% endcomment %}
-                    </span>
-                    {% endfor %}
-                </p>
-            </form>
+ 
+            <p style="color:{{ group.color }}"> 
+                {% for sp in  studentprofiles   %}
+                <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" ><label>Profil élève Id :</label> {{ sp.user.username }}</span>
+                {% endfor %}
+            </p>
+ 
         </div>
         {% endif %}
     </div>
@@ -232,6 +225,8 @@
                 <div class="form-group">
                     {% if not sacado_asso and not is_gar_check %}
                         <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return TestDelete('ces élèves')"  />
+                    {% else %}
+                        <a href="{% url 'get_this_group' group.id %}" class="btn btn-danger" onclick="return get_this_group('{{group.name}}')">Récupérer ce groupe  </a>
                     {% endif %}
                     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
                 </div>
@@ -239,34 +234,52 @@
         </div> 
     </form>
 	{% if group %}
-    {% if not is_gar_check %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12 alert alert-info">
-            <div style="font-size: 16px"><i class="fa fa-info-circle"></i>
-                <b>Lien d'inscription :</b> Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <a href="https://sacado.xyz/group/{{ group.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-        {% if group.group_parcours.count == 0 %}
-            <div class="row">
-                <div class="col-lg-12 col-xs-12">
-                    <p></p>
-                    <div class="round" style="background-color: {{ group.color }};">
-                        <a href="{% url 'list_parcours_group' group.id %}" style="color: {{ group.color|contrast_color }};" > 
-                            <h1 class="sacado"> <br> 
-                                3. Créer <br> un dossier ou  <br> un parcours
-                            </h1>
-                        </a>
 
+
+
+
+        {% if not is_gar_check %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12 alert alert-info">
+                    <div style="font-size: 16px"><i class="fa fa-info-circle"></i>
+                        <b>Lien d'inscription :</b> Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <a href="https://sacado.xyz/group/{{ group.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
                     </div>
                 </div>
             </div>
+        {% else %}
+            {% if group.teacher and group.teacher == request.user.teacher %}
+                    <hr/>Vous avez fait une fausse manip ? 
+                    <a href="{% url 'get_out_this_group' group.id %}" onclick="return get_out_this_group('{{group.name}}')">Quittez ce groupe</a>
+            {% else %}
+                <div class="row">
+                    <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-danger"> 
+                        <h1><b>IMPERATIF avec l'usage du GAR</h1>
+                        Tant que vous n'avez pas récupéré tous vos élèves, ne changez pas le nom du groupe.
+                        <hr/>
+                        <a href="{% url 'get_this_group' group.id %}" onclick="return get_this_group('{{group.name}}')">Récupérer ce groupe ?</a>
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
 
-    
-    {% endif %}
+            {% if group.group_parcours.count == 0 %}
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                        <p></p>
+                        <div class="round" style="background-color: {{ group.color }};">
+                            <a href="{% url 'list_parcours_group' group.id %}" style="color: {{ group.color|contrast_color }};" > 
+                                <h1 class="sacado"> <br> 
+                                    3. Créer <br> un dossier ou  <br> un parcours
+                                </h1>
+                            </a>
 
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+
+    {% endif %}
 
 </div> 
 
