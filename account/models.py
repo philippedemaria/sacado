@@ -244,7 +244,7 @@ class Student(ModelWithCode):
     Modèle représentant un élève.
     """
     user      = models.OneToOneField(User, blank=True, related_name="student", on_delete=models.CASCADE, primary_key=True)
-    level     = models.ForeignKey(Level, blank=True, related_name="level_student", default='', on_delete=models.PROTECT, verbose_name="Niveau")
+    level     = models.ForeignKey(Level, blank=True, null= True , related_name="level_student", default='', on_delete=models.PROTECT, verbose_name="Niveau")
     task_post = models.BooleanField(default=True, verbose_name="Notification de tache ?")
     ebep      = models.BooleanField(default=False, editable=False)
 

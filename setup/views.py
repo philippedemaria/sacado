@@ -367,7 +367,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
                 group.students.add(student)
             except :
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" :  "" })
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" :  None })
 
         elif user_type == 2 :
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
