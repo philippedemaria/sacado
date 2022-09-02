@@ -236,13 +236,17 @@ class Group(ModelWithCode):
         Authorise l'acces de ce groupe à un enseignant
         """
         access, role = False, False
-        if teacher.teacher_sharingteacher.filter(group = self).count() > 0 :
-            access = True
-        if self.teacher == teacher or access :
-            access = True 
-        if access and teacher.teacher_sharingteacher.filter(group = self).exists():
-            sg = teacher.teacher_sharingteacher.filter(group = self).last()
-            role = sg.role
+        if teacher : 
+            if teacher.teacher_sharingteacher.filter(group = self).count() > 0 :
+                access = True
+            if self.teacher == teacher or access :
+                access = True 
+            if access and teacher.teacher_sharingteacher.filter(group = self).exists():
+                sg = teacher.teacher_sharingteacher.filter(group = self).last()
+                role = sg.role
+        elif self.school.is_primaire :
+            access, role = True, True
+
 
         data = {}
         data["role"] = role
