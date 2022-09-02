@@ -173,7 +173,7 @@
                                 </ul>
                             <p {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><b>Étape 2 : Création ou importation des enseignants</b> {% if data.nbt > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
                                 <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'register_teacher_from_admin' %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}>Gestion des enseignants manuellement  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                    
+                                    <li> <a href="{% if sacado_asso %}{% url 'school_teachers' %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}>Gestion des enseignants manuellement  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                    
                                     <li> <a href="{% if sacado_asso %}{% url 'register_by_csv' 2 0 %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><img src="{% static 'img/excel.png' %}" width="15px"/> Gestion des enseignants par CSV <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
                                 </ul>
 
