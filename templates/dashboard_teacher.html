@@ -144,7 +144,7 @@
 
                     <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-danger"> 
                         <h1><b>IMPERATIF avec l'usage du GAR</h1>
-                        Vous devez vérifier vos niveaux d'enseignement et matières avant toute utilisation.<br/>
+                        Vous devez vérifier vos niveaux d'enseignement et matières avant toute utilisation.
                         <a href="{% url 'profile' %}">Mon profil & Notifications</a>
                     </div>
 
@@ -155,7 +155,7 @@
                             <!-- modal qui affiche la liste des élèves -->
                             <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}"> 
                                 <font style="color:{{ group_prim.color }}">
-                                    {% for s in group_prim.students %} 
+                                    {% for s in group_prim.students.all %} 
                                         {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
                                     {% endfor %}
                                 </font>
