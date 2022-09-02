@@ -374,17 +374,20 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
             div   = dico_received["DIV"][0]
             name  = div.split("##")[0]
-            group, c_g    = Group.objects.get_or_create(school = school, name = name)
 
             user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
             
             if not school.is_primaire :
+                group, c_g        = Group.objects.get_or_create(school = school, name = name )
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level }) 
             else :
                 level = Level.objects.get(pk=1)
+                group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level }  )
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-
-            group.students.add(student)
+            try :
+                group.students.add(student)
+            except: 
+                pass
 
 
         #########################################################
