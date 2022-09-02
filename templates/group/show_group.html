@@ -225,7 +225,7 @@
                 <div class="form-group">
                     {% if not sacado_asso and not is_gar_check %}
                         <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return TestDelete('ces élèves')"  />
-                    {% else %}
+                    {% elif is_gar_check %}
                         <a href="{% url 'get_this_group' group.id %}" class="btn btn-danger" onclick="return get_this_group('{{group.name}}')">Récupérer ce groupe  </a>
                     {% endif %}
                     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
