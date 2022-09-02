@@ -156,16 +156,14 @@
                             <!-- Legende de la small-box -->
                             <div class="inner" style="color:white;opacity:0.9"><br/>
                                 <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
-                                 <span style="color:{{ group_prim.color|contrast_color }};font-size: 16px"> {{ group_prim.code }} </span> 
+                                <a href="{% url 'show_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Récupérer ce groupe </span></a> 
                             </div>
                             <div class="small-box-footer" >
                                 <div class="row">                    
-                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                        <a href="{% url 'show_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Récupérer ce groupe </span></a>    
-                                    </div>
 
 
-                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
+
+                                    <div class="col-lg-12 col-xs-12" style="padding-right:0px">
                                         <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group_prim.id }}" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-users"></i>
                                             <span class="helper_tip small_displayer"  style="color:{{ group_prim.color|contrast_color }};"> 
                                                 Élève{{ data.snt|pluralize }}
