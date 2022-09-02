@@ -153,7 +153,8 @@
                     {% for group_prim in group_prims %}
                         <div class="small-box" style="background-color:{{ group_prim.color }};color:{{ group_prim.color|contrast_color }}">
                             <!-- modal qui affiche la liste des élèves -->
-                            <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}"> 
+                            <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}">
+                                <label>Les élèves</label> <hr/>
                                 <font style="color:{{ group_prim.color }}">
                                     {% for s in group_prim.students.all %} 
                                         {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
