@@ -332,8 +332,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
      
         if 'ens' in dico_received["PRO"][0] : # si ENSEIGNANT 
-            user_type  = 2    
-            subjects   = dico_received["P_MS4"] 
+            user_type   = 2    
+            code_levels = dico_received["P_MS4"] 
             if "P_MEL" in dico_received.keys() : 
                 email = dico_received["P_MEL"][0]
                 if not email :
@@ -343,6 +343,18 @@ def ressource_sacado(request): #Protection saml pour le GAR
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
             if not school.is_primaire :
+                for code_level in code_levels  : 
+                    if code_level == 2111 : level_id = 6
+                    elif code_level == 2112 : level_id = 7
+                    elif code_level == 2115 : level_id = 8
+                    elif code_level == 2216 : level_id = 9
+                    elif code_level== 2211 : level_id = 10
+                    elif code_level == 2212 : level_id = 11
+                    else : level_id = 12
+                    level = Level.objects.get(pk=level_id)
+                    Teacher.subjects.add(level)
+
+
                 for group in groups :
                     name = group.split("##")[0]
                     teacher = user.teacher
@@ -367,11 +379,12 @@ def ressource_sacado(request): #Protection saml pour le GAR
             user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
             
             if not school.is_primaire :
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                group.students.add(student)
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level }) 
             else :
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : None })
+                level = Level.objects.get(pk=1)
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
 
+            group.students.add(student)
 
         #########################################################
 
