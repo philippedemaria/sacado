@@ -386,6 +386,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
             group.students.add(student)
 
+
         #########################################################
 
 
