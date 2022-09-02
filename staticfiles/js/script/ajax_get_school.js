@@ -62,10 +62,12 @@ define(['jquery', 'bootstrap'], function ($) {
 
                             if (towns.length >0)
 
-                            { if (towns.length == 1 )
-                                {   let option_null = $("<option>", {  'value': "", 'html': "--------Choisir----------" });
+                            { 
+
+                               let option_null = $("<option>", {  'value': "", 'html': "--------Choisir----------" });
                                     $('select[name=town_school]').append(option_null);
-                                }
+                             
+                             
 
 
                                 for (let i = 0; i < towns.length ; i++) {            
