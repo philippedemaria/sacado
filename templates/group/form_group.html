@@ -59,6 +59,12 @@
                         {{ form.name.errors }}
                     </div>
                 </div>
+                {% else %}
+                    {% if group %}
+                    <input name="name" type="hidden" id="id_name" value="{{ group.name }}"/>
+                    {% endif %}
+
+
                 {% endif %}
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
