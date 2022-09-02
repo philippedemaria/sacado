@@ -306,12 +306,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
     school     = School.objects.filter(code_acad = uai).last()
     last_name  = dico_received["NOM"][0] 
     first_name = dico_received["PRE"][0]
-    subjects   = dico_received["P_MS4"] 
+    
 
     email = str(today.timestamp()) + "@sacado.xyz"
  
     if 'ens' in dico_received["PRO"][0] :
         user_type  = 2
+        subjects   = dico_received["P_MS4"] 
         if "P_MEL" in dico_received.keys() : 
             email = dico_received["P_MEL"][0]
             if not email :
