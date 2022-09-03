@@ -107,13 +107,6 @@
                 </table>
             </div>
         </div>
-        {% else %}                        
-            <div class="round" style="background-color: #5d4391; padding-top: 60px;color:#FFF"> 
-                <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Récupérer <br/> les comptes <br/>élèves déjà <br/> existants</a>
-            </div> 
-        {% endif %}
-
-
 
 
 
@@ -126,5 +119,34 @@
                 <a href="{% url 'admin_tdb' %}"  class="btn btn-default" >Tableau de bord Admin </a>
             </div>
         </div>
+
+         
+        {% else %} 
+
+            <div class="alert alert-warning"> 
+                <br/>
+                Aucun groupe existant.
+                <br/><br/>   
+                    <a href="{% url 'new_group_many' %}" class="btn btn-new">Créer plusieurs groupes à la fois</a>  
+    <a href="{% url 'new_group' %}" class="btn btn-new">Créer un seul groupe </a> 
+            </div> 
+        {% comment %}                        
+            <div class="alert alert-danger"> 
+                <i class="fa fa-warning"></i>
+                Si vous rejoignez SACADO, des enseignants ont sans doute déjà inscrits leurs élèves avant l'adhésion de l'établissement.  
+                <br/><br/>
+                <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Cliquer ici pour récupérer alors les comptes des élèves déjà existant
+                <br/><br/>   
+            </div> 
+        {% endcomment %}  
+
+
+        {% endif %}
+
+
+
+
+
+
     </section>
 {% endblock %}

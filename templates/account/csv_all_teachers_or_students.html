@@ -55,7 +55,7 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
  
  
  
-        <h3 class="thin"><img src="{% static 'img/excel.png' %}" /> Gestion des identifiants {% if idg == 0  %}Enseignant.e.s{% else %}Élève {% endif %}</h3>        
+        <h3 class="thin"><img src="{% static 'img/excel.png' %}"  width="20px" /> Gestion des identifiants {% if idg == 0  %}Enseignant.e.s{% else %}Élève {% endif %}</h3>        
         <ul>
             <li><label>Laisser SACADO attribuer des identifiants  <input type="radio" id="show_without_username" name="manage_username" value="auto" /></label> </li> 
             <li><label> Gérer manuellement les identifiants  <input type="radio" id="show_with_username" name="manage_username" value="hand" /></label> </li>
@@ -68,33 +68,33 @@ Ce fichier permet d'enregistrer des élèves ou des enseignants dans la base de 
                  <label><input type="radio" name="simple" value=0 /> Facile</label> 
                 <label><input type="radio" name="simple" value=1 /> Complexe</label>
             </p>
-            <ul style="margin:10px"> 4 champs sont demandés :
+            <ul style="margin:10px"> 4 champs {% if key == 0  %}(dont le courriel optionnel){% endif %} sont demandés :
                 <li>Niveau de classe <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li>
                 <li>Nom</li>
                 <li>Prénom</li>                
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
+                <li>Courriel, {% if key == 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
             </ul> 
-            Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            Ces quatre données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
             <pre style="font-size:20px">1;Turing;Alan{% if idg == 0  %};alan.turing@enigma.edu{% endif  %}<br>1;Agnesi;Maria;maria.agnesi@curves.edu<br>2;Chasles;Michel{% if idg == 0  %};michel.chasles@vector.edu {% endif %}<br>3;de Fermat;Pierre;pierre.fermat@rsa.edu</pre>
  
         </div>
 
         <div id="with_username">
-            5 champs sont demandés :
+            5 champs {% if key == 0  %}(dont le courriel optionnel){% endif %} sont demandés :
             <ul style="margin:10px">
                 <li>Niveau de classe <i class="fa fa-warning"></i> Noter le code du niveau : CP = 1 | CE1 = 2 | CE2 = 3 ..... 6ème = 6 | 5ème = 7 | ... 2nde = 10 | Term = 12</li> 
                 <li>Nom</li>
                 <li>Prénom</li> 
                 <li>Identifiant</li>            
-                <li>Courriel, {% if idg > 0  %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
+                <li>Courriel, {% if key == 0   %}optionnel mais préférable pour la correspondance et les notifications.{% else %}renseigner votre adresse professionnelle.{% endif %}</li>
             </ul> 
-            Ces trois données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées.<br>
+            Ces cinq données s'écrivent sur une seule ligne. Dans l'exemple ci-dessous, 4 personnes sont enregistrées, 2 en CP, 1 en CE1 et 1 en CE2.<br>
  
             <pre style="font-size:20px">1;Turing;Alan;alan.T;alan.turing@enigma.edu <br>1;Agnesi;Maria;A.maria<br>2;Chasles;Michel;Ch.michel;michel.chasles@vector.edu<br>3;de Fermat;Pierre;dfpierre;pierre.fermat@rsa.edu</pre>
  
         </div>
 
-        <div class="row alert alert-warning">
+        <div class="row" style="margin-bottom:40px">
             <div class="col-sm-12 col-md-12">
                 <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
             </div>

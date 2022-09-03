@@ -24,7 +24,7 @@
 
  
 {% block page_menu_right %}
- 
+    <li> <a href="{% url 'register_by_csv' 2 0 %}" class="btn btn-new" ><img src="{% static 'img/excel.png' %}" width="15px"/> Gestion des enseignants par CSV  </a> </li>  
    <li> <a href="{% url 'register_teacher_from_admin' %}" class="btn btn-new"  > + Nouvel.le enseignant.e</a></li>
 {% endblock %}
 

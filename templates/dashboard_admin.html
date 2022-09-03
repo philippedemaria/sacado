@@ -9,7 +9,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
     <script>   
-        require(['script/ajax-dashboard']);
+        require(['script/ajax-dashboard','script/ajax-dashboard_admin']);
     </script>
 {% endblock %} 
 
@@ -34,9 +34,7 @@
 {% endif %}
 
     {% if request.user.is_manager %}
-    <form  action="" method="POST" >        
-        {% csrf_token %}
- 
+     
             {% for school in schools_tab %}
                 {% with school.get_data as data %}
 
@@ -59,7 +57,7 @@
                     <div class="row">
                         <!-- ./col -->
                  
-
+                        {% if data.nbt %}
                         <div class="col-lg-3 col-md-4 col-xs-6">
                             <!-- small box -->
                             <div class="small-box bg-purple">
@@ -77,7 +75,8 @@
                                         class="fa fa-arrow-circle-right"></i> Gestion des enseignants </a>
                             </div>
                         </div>
-
+                        {% endif %}
+                        {% if data.nbg %}
                         <div class="col-lg-3 col-md-4 col-xs-6">
                             <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
                                 <div class="inner">
@@ -86,7 +85,7 @@
                                 <div class="icon">
                                     {{ data.nbg }}
                                 </div>
-                                {% if  data.nbt > 0 %}
+                                {% if  data.nbt %}
                                     <a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="small-box-footer"><i
                                         class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>
                                 {% else %}
@@ -95,8 +94,8 @@
                                 {% endif %}
                             </div>
                         </div>
-
-
+                        {% endif %}
+                        {% if data.nbs %}
                         <div class="col-lg-3 col-md-4 col-xs-6">
                             <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
                                 <div class="inner">
@@ -115,8 +114,8 @@
                                 {% endif %}
                             </div>
                         </div>
-
-                         
+                        {% endif %}
+ 
                         <div class="col-lg-3 col-md-4 col-xs-6">
                             <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
                                 <div class="inner">
@@ -146,10 +145,10 @@
 
                     </div>
 
- 
+
                     <div class="row" >
                         <div class="col-lg-8 col-md-8 col-xs-12">
-                            <h3 class="thin">Configuration de mon établissement  <a href="javascript:void();" id="show_help_from_tdb" style="font-size : 14px">Créer étape par étape</a>
+                            <h3 class="thin">Configuration des enseignants, groupes, élèves  <a href="javascript:void();" id="show_help_from_tdb" style="font-size : 14px">  étape par étape</a>
                             </h3>
                         </div>
                         <div class="col-lg-4 col-md-4 col-xs-12">
@@ -158,108 +157,283 @@
                             </a>
                         </div>
                     </div>
+                    {% comment %}
+                        <div class="row" style="margin-top:10px" {% if nb_students > 0 %} id="help_from_tdb" {% endif %} >
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <p {% if data.nbs == 0 %} style="color:#AAA" {% endif%}><b>Étape 1 : Remise à zéro de l'année en cours</b>{% if data.nbs == 0 %} <i class="fa fa-check text-success"></i> {% endif%}  </p>
+                                    <ul>
+                                        <li> <a href="{% if sacado_asso %}{% url 'delete_school_group_and_students' %}{% else %}#{% endif %}" onclick="return TestDelete(' ces élèves et groupes ')">Purge des groupes et des élèves  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
+                                    </ul>
+                                <p {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><b>Étape 2 : Création ou importation des enseignants</b> {% if data.nbt > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
+                                    <ul>
+                                        <li> <a href="{% if sacado_asso %}{% url 'school_teachers' %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}>Gestion des enseignants manuellement  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                    
+                                        <li> <a href="{% if sacado_asso %}{% url 'register_by_csv' 2 0 %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><img src="{% static 'img/excel.png' %}" width="15px"/> Gestion des enseignants par CSV <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
+                                    </ul>
 
-                    <div class="row" >
- 
-                        <div class="col-lg-4 col-md-4 col-xs-4">
 
+                                <p {% if data.nbg > 0 %} style="color:#AAA" {% endif%}><b>Étape 3 : Création des groupes (ou classes)</b> {% if data.nbg > 0 %} <i class="fa fa-check text-success"></i> {% endif%}</p>
+                     
+                                    <ul>
+
+        
+                                    </ul>
+
+                            
+
+
+                                <p {% if data.nbs > 0 %} style="color:#AAA" {% endif%}><b>Étape 4 : Création ou importation des élèves</b>{% if data.nbs > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
+                     
+                                    <ul>
+
+
+                                        <li>
+                                            <img src="{% static 'img/excel.png' %}" width="15px"/>  <a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" {% if data.nbs > 0 %} style="color:#AAA" {% endif%}> Gestion groupe par groupe <i class="fa fa-arrow-circle-right"></i> </a>  
+                                            <ul>
+                                                <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title="Ajouter plusieurs élèves à ce groupe avec du CSV" > + <i class="fa fa-users text-success"></i> csv </a> 
+                                                    <small {% if data.nbs > 0 %} style="color:#AAA" {% endif%}>Ajoute directement des élèves au groupe sélectionné </small>
+                                                </li>
+                                                <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title="Ajouter un élève à ce groupe" >  +  <i class="fa fa-user"></i></a> 
+                                                    <small {% if data.nbs > 0 %} style="color:#AAA" {% endif%}> Ajouter un seul élève à un groupe </small>
+                                                </li> 
+                                            </ul> 
+                                        </li> 
+
+                                        <li><img src="{% static 'img/excel.png' %}" width="15px"/>  <a href="{% if sacado_asso %}{% url 'register_users_by_csv' 0 %}{% else %}#{% endif %}" {% if data.nbs > 0 %} style="color:#AAA" {% endif%}> Gestion des élèves sans groupe <i
+                                                            class="fa fa-arrow-circle-right"></i> </a>  
+                                             
+                                        </li> 
+                                    </ul>
+     
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-xs-12">
+                                <h3 class="thin">Options</h3>
+
+     
+                                <p><b> Récupérer les comptes élèves déjà existants</b> </p>
+                     
+                                    <ul>
+
+
+                                        <li> <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Récupération  </a> </li>
+                         
+
+                                    </ul>
+
+
+                                <p><b> Paramétrer les seuils d'acquisition des savoir faire et compétences </b> </p>
+                                    <ul>
+                                        <li> <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}">Modifier</a></li>
+                                    </ul>
+                                {% if data.nbg %}
+                                <p><b> Ré-attribuer des enseignants à des groupes existants </b> </p>
+                                    <ul>
+                                        <li>                                
+                                            <a href="{% if sacado_asso %}{% url 'group_to_teacher'  %}{% else %}#{% endif %}"> Ré-attribuer </a>      
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                                <p><b> Télécharger les identifiants des élèves </b> 
+
+                                    <ul>
+                                        <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title=" " > <i class="fa fa-list"></i> Télécharger les identifiants par groupe </a> <small>Impression par listes</small>
+
+                                        </li>
+                                        <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title=" " > <img src="{% static 'img/pdf.png' %}" width="15px"/> Identifiants  </a> <small>Impression par étiquettes</small>
+                                        </li>
+
+
+                                    </ul> 
+
+
+                            </div>
                         </div>
-                    </div>
+                    {% endcomment %}
+
+
+
+
                     <div class="row" style="margin-top:10px" {% if nb_students > 0 %} id="help_from_tdb" {% endif %} >
                         <div class="col-lg-6 col-md-6 col-xs-12">
-                            <p {% if data.nbs == 0 %} style="color:#AAA" {% endif%}><b>Étape 1 : Remise à zéro de l'année en cours</b>{% if data.nbs == 0 %} <i class="fa fa-check text-success"></i> {% endif%}  </p>
+                            <h4>1. Gestion des enseignants <small>(Seulement si nouvel enseignant dans l'établissement)</small> </h4>
                                 <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'delete_school_group_and_students' %}{% else %}#{% endif %}" onclick="return TestDelete(' ces élèves et groupes ')">Purge des groupes et des élèves  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
+                                    <li class="sanspuce"> 
+                                        <a href="{% url 'school_teachers' %}">
+                                            <small><i class="fa fa-arrow-circle-right"></i></small> 
+                                            Gérer les enseignants.  
+                                        </a> 
+                                        <a   href="javascript:void()"  class="edit show_help4"> <i class="fa fa-question-circle"></i></a>
+                                        <div class="no_visu_on_load shadow_bow" id="show_div_help4">
+                                            Dans l’interface de gestion des enseignants vous pouvez ajouter un enseignant , importer les comptes enseignants par CSV ou modifier un compte enseignant ( pour le dissocier de votre établissement par exemple.)
+                                            <img src="{% static 'img/help_register5.png' %}" min-width="450px" width="90%" /><br/>
+                                            <div class="alert alert-warning">Attention ! : Si un enseignant est déjà inscrit sur SacAdo, ne le ré-inscrivez pas !
+                                            Demandez lui de rejoindre l’établissement en modifiant son compte SacAdo. ( accès par Token ou rejoindre un établissement ).</div>
+                                            <a href="javascript:void()"  class="btn btn-default show_help4"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
+                                        </div>
+                                    </li>                                            
                                 </ul>
-                            <p {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><b>Étape 2 : Création ou importation des enseignants</b> {% if data.nbt > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
+                            <h4>2. Gestion des groupes et des élèves</h4>
+                            <div id="step1" {% if not data.nbs  %} style="color:#AAA" {% endif%}>
+                                <label>Étape 1 : Suppression des élèves et des groupes{% if data.nbs == 0 %} <i class="fa fa-check text-success"></i> {% endif%}  </label>
+                                    <ul>
+                                        <li class="sanspuce"> 
+                                            <a href="{% url 'delete_school_group_and_students' %}" onclick="return TestDelete(' élèves et groupes ')"  {% if data.nbs == 0 %} style="color:#AAA" {% endif%}>
+                                            <small><i class="fa fa-arrow-circle-right"></i></small>  
+                                            Supprimer les élèves et les groupes
+                                            </a> 
+                                            <a  href="javascript:void()" class="show_help5" style="color:#cb2131"> <i class="fa fa-warning"></i> <small>La suppression est obligatoire même en cas de gestion des groupes par enseignant.</small></a>
+                                        </li>   
+
+                                        <div class="no_visu_on_load shadow_bow" id="show_div_help5">
+                                            <div class="alert alert-warning">
+                                                <i class="fa fa-warning"></i> Après cette suppression, tous les documents ( dossiers, parcours, cours....) se retrouvent en <b>Non Affectés</b> sur le tableau de bord de chaque enseignant. <br/>Après l'attribution des groupes aux enseignants, chaque enseignant devra ré assigner ses documents à chacun de ses groupes. 
+                                            </div>
+                                            <a href="javascript:void()"  class="btn btn-default show_help5"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
+                                        </div>
+
+
+
+
+
+                                    </ul>
+                            </div>
+
+                            <div id="step2" >
+                                <label>Étape 2 : Mode de gestion {% if data.nbg > 0 %} <i class="fa fa-check text-success"></i> {% endif%}</label>
                                 <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'school_teachers' %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}>Gestion des enseignants manuellement  <i class="fa fa-arrow-circle-right"></i>  </a> </li>                    
-                                    <li> <a href="{% if sacado_asso %}{% url 'register_by_csv' 2 0 %}{% else %}#{% endif %}" {% if data.nbt > 0 %} style="color:#AAA" {% endif%}><img src="{% static 'img/excel.png' %}" width="15px"/> Gestion des enseignants par CSV <i class="fa fa-arrow-circle-right"></i>  </a> </li>                          
+                                    <form action="{% url 'choose_managing_school' %}" method="POST">        {% csrf_token %}
+                                        <li class="sanspuce">
+                                            <label><input name="authorize_managing" value="1" type="radio" {% if only_admin_can_manage  %}checked{% endif %} /> Gestion  par le compte Admin uniquement(Par défaut). <small>Seul l'administrateur SACADO pourra créer les groupes et affecter des élèves.  </small></label>
+                                        </li>                                        
+                                        <li class="sanspuce">
+                                            <label><input name="authorize_managing" value="0" type="radio" {% if not only_admin_can_manage  %}checked{% endif %} /> Gestion par les enseignants. <small>Chaque enseignant pourra créer ses groupes et affecter les élèves.  </small></label>
+                                        </li>
+                                        <input value="Choisir" type="submit"  class="btn btn-xs btn-mastering" />
+                                    </form>
                                 </ul>
-
-
-                            <p {% if data.nbg > 0 %} style="color:#AAA" {% endif%}><b>Étape 3 : Création des groupes (ou classes)</b> {% if data.nbg > 0 %} <i class="fa fa-check text-success"></i> {% endif%}</p>
-                 
+                                {% if only_admin_can_manage  %}
+                                    <div class="alert alert-warning"><i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement</div>
+                                {% else %} 
+                                    <div class="alert alert-danger"><i class="fa fa-users"></i>Gestion   par les enseignants </div>
+                                {% endif%}   
+                            </div>
+                            <div id="step3"   {% if not only_admin_can_manage %}       class="no_visu_on_load" {% endif%}>
+                                <label>Étape 3 : Gestion  par l'Admin</b>{% if data.nbs > 0 %} <i class="fa fa-check text-success"></i> {% endif%} 
+                                    <br/><small>L’administrateur de l’établissement dispose de 3 moyens pour gérer les groupes et les élèves, à choisir selon l’effectif de l’établissement et le format de sa liste d’élèves.</small>
+                                </label> 
+                     
                                 <ul>
-
-                                    <li><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" {% if data.nbg > 0 %} style="color:#AAA"  {% endif%} > Gestion des groupes (ou classes)  <b>sans</b> les élèves <i class="fa fa-arrow-circle-right"></i></a>   </li>
-                                    <li>
-                                        <img src="{% static 'img/excel.png' %}" width="15px"/> 
-                                        <a href="{% if sacado_asso %}{% url 'csv_full_group'  %}{% else %}#{% endif %}" {% if data.nbg > 0 %} style="color:#AAA"  {% endif%}  > Gestion des groupes ou des classes <b>avec</b> les élèves par CSV 
-                                            <i class="fa fa-arrow-circle-right"></i> 
+                                    <li class="sanspuce">
+                                        <a href="{% url 'csv_full_group'  %}" >
+                                            <small><i class="fa fa-arrow-circle-right"></i></small> 
+                                            Création des groupes (ou classes)  <b>avec</b>  élèves par CSV <img src="{% static 'img/excel.png' %}" width="15px"/> 
                                         </a>  
+                                        <a  href="javascript:void()" class="edit show_help1"> <i class="fa fa-question-circle"></i></a>
+                                        <div class="no_visu_on_load shadow_bow" id="show_div_help1">
+                                            L’admin crée les groupes, en renseignant le niveau, la matière et l’enseignant référent.
+                                            <img src="{% static 'img/help_register1.png' %}" min-width="450px" width="70%" />
+                                            <br/>Il peut ensuite assigner les élèves à chacun des groupes.
+                                            <img src="{% static 'img/help_register2.png' %}" min-width="450px" width="90%" /> <br/>                                           
+
+                                            <a   href="javascript:void()"  class="btn btn-default show_help1"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
+                                        </div>
                                     </li>
-                                </ul>
+                                    <li class="sanspuce">
+                                        <a href="{% url 'school_groups' %}"> 
+                                            <small><i class="fa fa-arrow-circle-right"></i></small> 
+                                            Création des groupes (ou classes)  <b>sans</b>  élève 
+                                        </a>  
+                                        <a   href="javascript:void()"  class="edit show_help2"> <i class="fa fa-question-circle"></i></a>
+                                        <div class="no_visu_on_load shadow_bow" id="show_div_help2">
+                                            L’admin peut importer par CSV tous les élèves, chaque enseignant pourra ensuite les affecter dans ses groupes en parcourant la liste.
+                                            <img src="{% static 'img/help_register4.png' %}" min-width="450px" width="90%" /><br/>                                           
 
-                        
+                                            <a   href="javascript:void()"  class="btn btn-default show_help2"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
+                                        </div>
+                                    </li>
+                                    <li class="sanspuce">
+                                        <small><i class="fa fa-arrow-circle-right"></i></small> 
+                                        <a href="{% url 'register_users_by_csv' 0 %}"> 
+                                        Création des élèves sans groupe par CSV 
+                                        </a> <img src="{% static 'img/excel.png' %}" width="15px"/>  
+                                        <small>Les enseignants pourront alors peupler leurs groupes avec ces élèves.</small> 
+                                        <a   href="javascript:void()"  class="edit show_help3"> <i class="fa fa-question-circle"></i></a>
+                                        <div class="no_visu_on_load shadow_bow" id="show_div_help3">
+                                            L’admin peut importer par CSV tous les élèves, chaque enseignant pourra ensuite les affecter dans ses groupes en parcourant la liste.
+                                            <img src="{% static 'img/help_register3.png' %}" min-width="450px" width="90%"  /><br/>                                           
 
-
-                            <p {% if data.nbs > 0 %} style="color:#AAA" {% endif%}><b>Étape 4 : Création ou importation des élèves</b>{% if data.nbs > 0 %} <i class="fa fa-check text-success"></i> {% endif%} </p>
-                 
-                                <ul>
-
-
-                                    <li>
-                                        <img src="{% static 'img/excel.png' %}" width="15px"/>  <a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" {% if data.nbs > 0 %} style="color:#AAA" {% endif%}> Gestion groupe par groupe <i class="fa fa-arrow-circle-right"></i> </a>  
-                                        <ul>
-                                            <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title="Ajouter plusieurs élèves à ce groupe avec du CSV" > + <i class="fa fa-users text-success"></i> csv </a> 
-                                                <small {% if data.nbs > 0 %} style="color:#AAA" {% endif%}>Ajoute directement des élèves au groupe sélectionné </small>
-                                            </li>
-                                            <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title="Ajouter un élève à ce groupe" >  +  <i class="fa fa-user"></i></a> 
-                                                <small {% if data.nbs > 0 %} style="color:#AAA" {% endif%}> Ajouter un seul élève à un groupe </small>
-                                            </li> 
-                                        </ul> 
+                                            <a   href="javascript:void()"  class="btn btn-default show_help3"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
+                                        </div>
                                     </li> 
-
-                                    <li><img src="{% static 'img/excel.png' %}" width="15px"/>  <a href="{% if sacado_asso %}{% url 'register_users_by_csv' 0 %}{% else %}#{% endif %}" {% if data.nbs > 0 %} style="color:#AAA" {% endif%}> Gestion des élèves sans groupe <i
-                                                        class="fa fa-arrow-circle-right"></i> </a>  
-                                         
-                                    </li> 
                                 </ul>
- 
+                            </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-xs-12">
                             <h3 class="thin">Options</h3>
-
- 
                             <p><b> Récupérer les comptes élèves déjà existants</b> </p>
                  
                                 <ul>
-
-
-                                    <li> <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Récupération  </a> </li>
-                     
-
+                                    <li class="sanspuce"> <a href="{% url 'get_school_students' %}"  onclick="return getAllStudents()">Récupération  </a> </li>
                                 </ul>
 
-
-                            <p><b> Paramétrer les seuils d'acquisition des savoir faire et compétences </b> </p>
-                                <ul>
-                                    <li> <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}">Modifier</a></li>
-                                </ul>
                             {% if data.nbg %}
                             <p><b> Ré-attribuer des enseignants à des groupes existants </b> </p>
                                 <ul>
-                                    <li>                                
+                                    <li class="sanspuce">                                
                                         <a href="{% if sacado_asso %}{% url 'group_to_teacher'  %}{% else %}#{% endif %}"> Ré-attribuer </a>      
                                     </li>
                                 </ul>
-                            {% endif %}
-                            <p><b> Télécharger les identifiants des élèves </b> 
 
+                            <p><b> Télécharger les identifiants des élèves par groupe de tout l'établissement</b> 
                                 <ul>
-                                    <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title=" " > <i class="fa fa-list"></i> Télécharger les identifiants par groupe </a> <small>Impression par listes</small>
-
+                                    <li class="sanspuce">
+                                        <a href="{% url 'print_school_ids' %}" class="btn btn-xs btn-default"  > 
+                                            <i class="fa fa-list"></i> Télécharger les identifiants par groupe de tout l'établissement
+                                        </a> 
+                                        <small>Impression par listes</small>
                                     </li>
-                                    <li class="sanspuce"><a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="btn btn-xs btn-default" title=" " > <img src="{% static 'img/pdf.png' %}" width="15px"/> Identifiants  </a> <small>Impression par étiquettes</small>
-                                    </li>
-
-
                                 </ul> 
-
-
+                            <p><b> Télécharger les identifiants des élèves par étiquette groupe par groupe</b> 
+                                <ul>
+                                    <li class="sanspuce"> 
+                                        <a href="{% url 'school_groups' %}">
+                                        <small><i class="fa fa-arrow-circle-right"></i></small> Cliquer ici
+                                        </a> puis cliquer sur le bouton
+                                        <span class="btn btn-xs btn-default" > 
+                                            <img src="{% static 'img/pdf.png' %}" width="15px"/> Identifiants 
+                                        </span> 
+                                        du groupe correspondant.
+                                    </li>
+                                </ul> 
+                            {% endif %}
                         </div>
                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <div class="row">
                         <div class="col-sm-12 col-md-12 ">
                             <h3 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}" style="font-size : 14px">Modifier</a></h3>
@@ -295,7 +469,7 @@
 
             {% endfor %}
  
-    </form>
+    
 
 
     {% endif %} 

@@ -968,6 +968,15 @@ label {
 }
 
 
+
+.shadow_bow{
+  padding : 20px; 
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+
  /******************************************** this_course_viewer  **************************************/
 
 #this_course_viewer p {
@@ -1851,12 +1860,17 @@ a.no_visual_link{
 #without_username, #with_username, #show_help_utf{
   display:none;
   border-radius: 4px;
-  border: 1px solid #CCC;
-  background-color: #F0F0F0;
+  border: 1px solid #5d4391;
+  background-color: #f1eef7;  
+  color :  #5d4391 ;
   padding: 15px;
 }
 #help_from_tdb{
   display:none;
+}
+
+pre{
+    background-color: #FFF; 
 }
 
  /******************************************** Quizz  ********************************************/

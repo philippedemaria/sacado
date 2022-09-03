@@ -901,7 +901,14 @@ def print_bill_school(request,a_id):
 ###############################################################################################
 ###############################################################################################
 
-
+def choose_managing_school(request):
+	''' Choix du mode d'Admin'''
+	school = this_school_in_session(request)
+	authorize_managing = request.POST.get('authorize_managing',None)
+	# 0 si tout enseignant
+	# 1 si seulement l'Admin
+	School.objects.filter(pk=school.id).update(is_managing=authorize_managing)
+	return redirect('admin_tdb')
 
 
 #@is_manager_of_this_school

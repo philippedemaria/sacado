@@ -521,6 +521,11 @@ def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
     form = GroupTeacherForm(request.POST or None, teacher = teacher )
 
+    try :
+        is_managing = teacher.user.school.is_managing # permet de savoir si un admin gère les groupes. True si c'est l'admin
+    except:
+        is_managing = False
+
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -549,7 +554,7 @@ def create_group(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'group': None,   'students': None,}
+    context = {'form': form, 'teacher': teacher, 'group': None,   'students': None,  'is_managing': is_managing }
 
     return render(request, 'group/form_group.html', context)
 
@@ -562,7 +567,10 @@ def update_group(request, id):
     teacher = request.user.teacher
     group   = Group.objects.get(id=id)
     stdnts  = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
-
+    try :
+        is_managing = teacher.user.school.is_managing # permet de savoir si un admin gère les groupes. True si c'est l'admin
+    except:
+        is_managing = False
 
     stu = group.students.values_list("user_id",flat=True)
     all_students = Student.objects.filter(user__user_type=0, level=group.level, user__school=teacher.user.school).exclude(user_id__in = stu ).order_by("user__last_name")
@@ -601,7 +609,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,  }
+    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing }
 
     return render(request, 'group/form_group.html', context )
 

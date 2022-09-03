@@ -1724,14 +1724,14 @@ def admin_tdb(request):
 
     rates       = Rate.objects.all() #tarifs en vigueur 
     school_year = rates.first().year #tarifs pour l'année scolaire
-
+    only_admin_can_manage = school.is_managing
 
     renew_propose = renew(school)
 
  
     return render(request, 'dashboard_admin.html', {'nb_teachers': nb_teachers, 'nb_students': nb_students, 'school_id' : school_id , "school" : school ,  'renew_propose' : renew_propose ,
                                                     'nb_groups': nb_groups, 'schools_tab': schools_tab, 'stage': stage, 'is_lycee' : is_lycee , 'school_year' : school_year ,  'rates' : rates , 
-                                                    'eca': eca, 'ac': ac, 'dep': dep , 'communications' : [],
+                                                    'eca': eca, 'ac': ac, 'dep': dep , 'only_admin_can_manage' : only_admin_can_manage
                                                     })
 
 

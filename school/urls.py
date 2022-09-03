@@ -58,7 +58,7 @@ urlpatterns = [
 
     path('get_school_students', get_school_students , name='get_school_students'),
     path('manage_stage', manage_stage, name='manage_stage'),
-
+    path('choose_managing_school', choose_managing_school, name='choose_managing_school'), # choix du mode d'administration de l'établissement
 
     path('renew_school_adhesion', renew_school_adhesion , name='renew_school_adhesion'), 
     path('delete_renewal_school_adhesion', delete_renewal_school_adhesion, name='delete_renewal_school_adhesion'), 

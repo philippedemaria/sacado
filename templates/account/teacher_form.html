@@ -39,11 +39,9 @@
     {% if new %}
     <div class="row">  
         <div class="col-sm-12 col-md-12">
-            <div class="alert alert-info">
-                Si un enseignant est déjà inscrit sur SACADO, il suffit de lui donner ce token pour qu'il rejoigne votre établissement. 
-                Ne le ré-inscrivez pas. <br/>
-                <b>Token à fournir : {{ school.code_acad}}_{{ school.id}}</b><br/>
-                Procédure à donner au collègue <b>déjà inscrit</b> : A partir de l'icone <i class="fa fa-user"></i> <small>Compte</small>, sélectionner Rejoindre un établissement et suivre les indications.
+            <div class="alert alert-danger">
+                Si un enseignant est déjà inscrit sur SACADO, <b>ne le ré-inscrivez pas</b>. <br/>
+                Il suffit de lui donner ce token pour qu'il rejoigne votre établissement. 
             </div>
         </div>
     </div>
