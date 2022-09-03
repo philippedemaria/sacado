@@ -1889,7 +1889,7 @@ class Customexercise(ModelWithCode):
 
  
         if len(levels) == 0 :
-            for sb in self.teacher.levels.all() :
+            for sb in self.teacher.levels.order_by("ranking") :
                 if sb  not in levels :
                     levels.append(sb)       
         return levels
@@ -2280,7 +2280,7 @@ class Course(models.Model): # pour les
 
  
         if len(levels) == 0 :
-            for sb in self.teacher.levels.all() :
+            for sb in self.teacher.levels.order_by("ranking") :
                 if sb  not in levels :
                     levels.append(sb)       
         return levels

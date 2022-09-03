@@ -15,7 +15,7 @@ class ExotexForm(forms.ModelForm):
 		super(ExotexForm, self).__init__(*args, **kwargs)
 		if teacher:
 			subjects = teacher.subjects.all()
-			levels   = teacher.levels.all()
+			levels   = teacher.levels.order_by("ranking")
 			if knowledge :
 				skills     = knowledge.theme.subject.skill.all()
 				knowledges = Knowledge.objects.filter(level = knowledge.level )
@@ -39,7 +39,7 @@ class BibliotexForm(forms.ModelForm):
 		folder  = kwargs.pop('folder')
 		group   = kwargs.pop('group')
 		super(BibliotexForm, self).__init__(*args, **kwargs)
-		levels = teacher.levels.all()     
+		levels = teacher.levels.order_by("ranking")  
  
 		
 
@@ -75,7 +75,7 @@ class RelationtexForm(forms.ModelForm):
 		super(RelationtexForm, self).__init__(*args, **kwargs)
 		if teacher:
 			subjects = teacher.subjects.all()
-			levels   = teacher.levels.all()
+			levels   = teacher.levels.order_by("ranking")
  
 			skills = Skill.objects.filter(subject__in=subjects)
 			knowledges = Knowledge.objects.filter(theme__subject__in=subjects,level__in=levels )   

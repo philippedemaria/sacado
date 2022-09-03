@@ -884,7 +884,7 @@ def ajax_populate(request):
 
 def peuplate_parcours(request,id):
     teacher = request.user.teacher
-    levels =  teacher.levels.all() 
+    levels =  teacher.levels.order_by("ranking")
     parcours = Parcours.objects.get(id=id)
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -950,7 +950,7 @@ def peuplate_parcours(request,id):
 
 def peuplate_parcours_evaluation(request,id):
     teacher = request.user.teacher
-    levels =  teacher.levels.all() 
+    levels =  teacher.levels.order_by("ranking")
  
     parcours = Parcours.objects.get(id=id)
 
@@ -2370,7 +2370,7 @@ def affectation_students_to_contents_parcours_or_evaluation(parcours_ids,all_stu
 def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_sequence):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher         = request.user.teacher
-    levels          = teacher.levels.all()
+    levels          = teacher.levels.order_by("ranking")
     ############################################################################################## 
     ################# ############## On regarde s'il existe un groupe  ###########################
     images = [] 
@@ -2483,7 +2483,7 @@ def create_sequence(request,idf=0):
 def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ): 
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     teacher = Teacher.objects.get(user_id=request.user.id)
-    levels = teacher.levels.all()
+    levels = teacher.levels.order_by("ranking")
     parcours = Parcours.objects.get(id=id)
 
     images = [] 
@@ -4624,9 +4624,9 @@ def all_levels(user, status):
     levels_tab,knowledges_tab, exercises_tab    =   [],  [],  []
 
     if status == 0 : 
-        levels = teacher.levels.all()
+        levels = teacher.levels.order_by("ranking")
     elif status == 1 : 
-        levels = Level.objects.all().order_by("id")
+        levels = Level.objects.order_by("ranking")
 
     for level in levels :
         levels_dict = {}

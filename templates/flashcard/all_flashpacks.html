@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <select id="id_level" name="level" class="form-control select2" >
                         <option value=" ">Choisir un niveau</option>
-                        {% for l in teacher.levels.all %}
+                        {% for l in teacher.levels.all|dictsort:"ranking" %}
                             <option value="{{l.id}}">{{ l.name }}</option>
                         {% endfor %}
                     </select>

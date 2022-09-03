@@ -82,7 +82,7 @@ def list_my_flashpacks(request):
     ########################################################################
     # insere les cartes d'un flashpack de parcours dans les flashpack annuel
     ########################################################################
-    for level in teacher.levels.all() :
+    for level in teacher.levels.order_by("ranking") :
         dataset_include_cards  = dataset_user.filter(is_global=1,is_inclusion=1,levels=level)
         dataset_parcourses     = dataset_user.filter(is_global=0,levels=level)
         for dataset_include_card in dataset_include_cards :

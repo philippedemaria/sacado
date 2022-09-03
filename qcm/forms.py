@@ -281,7 +281,7 @@ class CourseNPForm(forms.ModelForm):
 		teacher = kwargs.pop('teacher')
 		super(CourseNPForm, self).__init__(*args, **kwargs)
  
-		self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.all(), required=False )
+		self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"), required=False )
 		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False )
 		self.fields['parcours'] = forms.ModelChoiceField(queryset=teacher.teacher_parcours.all(), required=False )
 

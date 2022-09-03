@@ -391,7 +391,7 @@
 
                     <p><select name="level_selected_id" id="level_selected_id"  data-url="yes" class="form-control select2" required>
                             <option value=" ">Sélectionner un niveau</option>
-                            {% for level in teacher.levels.all %}
+                            {% for level in teacher.levels.all|dictsort:"ranking" %}
                             <option value="{{ level.id }}">{{level.name }}</option>
                             {% endfor %}
                         </select>
