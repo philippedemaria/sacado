@@ -73,7 +73,7 @@ class TeacherForm(forms.ModelForm):
         super(TeacherForm, self).__init__(*args, **kwargs)
         subjects = Subject.objects.filter(is_active=1)
         self.fields['subjects']  = forms.ModelMultipleChoiceField(queryset=subjects)
-        levels = Level.objects.order_by("ranking")
+        levels = Level.objects.filter(is_active=1).order_by("ranking")
         self.fields['levels']  = forms.ModelMultipleChoiceField(queryset=levels)
     class Meta :
         model = Teacher
