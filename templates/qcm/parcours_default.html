@@ -1,6 +1,6 @@
 
 
-
+{% if group %}
 <form action="{% url 'associate_parcours' group.id %}" method="POST" enctype='multipart/form-data'> 
 	<table style="margin: 10px">
 	    {% for theme in group.level.themes.all %}
@@ -23,3 +23,7 @@
 
 
 </form>
+ 
+
+
+{% endif %}

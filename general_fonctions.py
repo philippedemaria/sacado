@@ -21,61 +21,7 @@ def delete_session_key(request,key):
     # supprime la clé key d'une session
     if request.session.has_key(key) :
         del request.session[key]  
-        
 
-def get_username_teacher(request ,ln):
-    """
-    retourne un username
-    """
-    ok = True
-    i = 0
-    code = str(uuid.uuid4())[:3] 
-    if request.user.school :
-        suffixe = request.user.school.country.name[2]
-    else :
-        suffixe = ""
-    name = str(ln).replace(" ","_")    
-    un = name + "_" + suffixe + code 
-
-    while ok:
-        if User.objects.filter(username=un).count() == 0:
-            ok = False
-        else:
-            i += 1
-            un = un + str(i)
- 
-    return un 
-
-
-
-def create_student_profile_inside(request, nf) : 
-
-    first_name = str(request.user.first_name).replace(" ", "")
-    last_name  = str(request.user.last_name).replace(" ","") 
-    name       = last_name + "_e-test"
-    username   = get_username_teacher(request,name)
-    password   = make_password("sacado2020")  
-    email      = ""
-
-    if nf.students.filter( user__username__contains=name).count() == 0 :
-        user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : email, 'user_type' : 0})
-
-        if created :
-            mesg = "Bonjour\n\nVous venez de créer un groupe avec un profil élève. Identifiant : "+username+"\n\n Mot de passe : sacado2020 \n\n Ce mot de passe est générique. N'oubliez pas de le modifier. \n\n Merci." 
-            try :
-                send_mail("Identifiant Profil élève",  mesg , settings.DEFAULT_FROM_EMAIL , [email] )
-            except :
-                pass
-            code = str(uuid.uuid4())[:8]                 
-            student = Student.objects.create(user=user, level=nf.level, code=code)
-            nf.students.add(student)
-        else :
-            student = Student.objects.get(user=user)
-        st = student   
-
-    else :
-        st = False
-    return st
 
 
 
