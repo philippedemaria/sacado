@@ -153,7 +153,7 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-xs-12">
                              <a href="https://sacado.xyz/ressources/prise_en_main.pdf" target ="_blank" class="pulll-right btn btn-outline-danger"  >
-                                Tuto des fonctionnalités  <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                                Tuto de configuration  <img src="{% static 'img/pdf.png' %}" width="15px"/>
                             </a>
                         </div>
                     </div>
@@ -310,11 +310,7 @@
                                         <input value="Choisir" type="submit"  class="btn btn-xs btn-mastering" />
                                     </form>
                                 </ul>
-                                {% if only_admin_can_manage  %}
-                                    <div class="alert alert-warning"><i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement</div>
-                                {% else %} 
-                                    <div class="alert alert-danger"><i class="fa fa-users"></i>Gestion   par les enseignants </div>
-                                {% endif%}   
+ 
                             </div>
                             <div id="step3"   {% if not only_admin_can_manage %}       class="no_visu_on_load" {% endif%}>
                                 <label>Étape 3 : Gestion  par l'Admin</b>{% if data.nbs > 0 %} <i class="fa fa-check text-success"></i> {% endif%} 
@@ -408,32 +404,16 @@
                         </div>
                     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-xs-12">
+                        {% if only_admin_can_manage  %}
+                            <div class="alert alert-warning"><i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement</div>
+                        {% else %} 
+                            <div class="alert alert-danger"><i class="fa fa-users"></i>Gestion   par les enseignants </div>
+                        {% endif%} 
+                        </div>
+                    </div>
+  
                     <div class="row">
                         <div class="col-sm-12 col-md-12 ">
                             <h3 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}" style="font-size : 14px">Modifier</a></h3>
