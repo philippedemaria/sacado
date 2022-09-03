@@ -1871,8 +1871,10 @@ def all_parcourses(request,is_eval):
     else :
         inside = False
 
- 
-    return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
+    levels = teacher.levels.order_by("ranking")
+    print(levels) 
+
+    return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher , "levels" : levels ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
 
 
 
