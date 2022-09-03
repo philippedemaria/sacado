@@ -21,10 +21,10 @@
 
                         {% if parcours %}
                             <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course" style="color:white;"
-                                onclick="return get_this_confirmation('tous les cours')"  title="Récupérer ce cours"  >
+                                onclick="return get_this_confirmation('tous les cours')"  title="Récupérer tous les cours"  >
                                 <i class="fa fa-clone"></i></a>
                         {% else %} 
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit" title="Récupérer ce cours" >
+                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit" title="Récupérer tous les cours" >
                                 <i class="fa fa-clone"></i>
                             </a>
                         {% endif %}
