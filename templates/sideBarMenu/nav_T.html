@@ -86,16 +86,16 @@
 {% endif %}
 
 
-{% if nb_groups or request.user.is_superuser %}
+
 
     <li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path  %}active{% endif %}">
-        <a href="#" class="main"  id="documents" style="cursor: grab;">
+        <a href="#" class="main"  id="documents" style="cursor: pointer;">
             <i class="bi bi-folder icon_size"></i> 
             <div class="captionmenu">Documents</div>
         </a>
     </li>
 
-     
+{% if nb_groups or request.user.is_superuser %}     
     <li  class="dropdown {% if not request.session.tdb and '/exercise' in request.path  %}active{% endif %}">
         <a href="{% url 'exercises' %}" class="main closer_notification" >
             <i class="bi bi-explicit icon_size" aria-hidden="true"></i> 
@@ -157,6 +157,9 @@
     </li>
     {% endif %}
      
+ 
+
+
 {% endif  %}
 
 
