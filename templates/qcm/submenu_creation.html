@@ -24,7 +24,7 @@
         <li class="divider"></li>
         {% endif %}
 
-        {% if request.user.is_sacado_member %}
+        {% if request.user.is_superuser %}
         {% if folder %}
         <li> <a href="{% url 'create_sequence' folder.id %}"  > Créer une séquence</a> </li>
         {% else %}
