@@ -1832,6 +1832,35 @@ def change_durations_in_all_relationships(request,idf,idp):
     return render(request, 'qcm/change_durations.html', context)
 
 
+
+
+def change_publications_in_all_relationships(request,idf,idp):
+
+    parcours      = Parcours.objects.get(id=idp)
+    relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0)
+    teacher       = request.user.teacher
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+    if request.method == "POST" :
+        global_publication = request.POST.get('global', 0)
+
+        for r in relationships :
+            Relationship.objects.filter(pk=r.id).update(is_publish = global_publication)
+
+        parcours_publication = request.POST.get('parcours', 0)
+        # si tous les exercices sont dépubliés, on dépublie le parcours et si vous publiez tous 
+        Parcours.objects.filter(pk=idp).update(is_publish = parcours_publication)
+
+
+
+        return redirect('show_parcours' , idf , idp )
+
+
+
+    context = { 'parcours': parcours, 'relationships': relationships , 'role' : role , 'teacher': teacher   }
+
+    return render(request, 'qcm/change_publications.html', context)
+
 ############################################################################################################################################
 ############################################################################################################################################
 ##################   Fin des listes dossiers parcours évaluation archives  #################################################################
