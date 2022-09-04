@@ -56,10 +56,11 @@
         {% endif  %} 
         </div>
 
+        {% comment %}
         <div class="situation">
             <a href="#" id="open_draft"><img src="{% static 'img/draft.png' %}"  class="img_size_square_75"  /></a> </br>
         </div>
-
+        {% endcomment %}
 
         <div class="situation">
             {% if relation.duration == 5 %}
@@ -96,33 +97,36 @@
             <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
         </div>
         <div class="situation" > 
-        {% if  parcours.maxexo > -1 %}
+          {% if  parcours.maxexo > -1 %}
 
-            {% with nb_attempt=parcours_available.nbleft  %}
+              {% with nb_attempt=parcours_available.nbleft  %}
 
-                <div class="available" id="attempt" style="font-weight:800" >
-                      {{ nb_attempt }} 
-                </div>
-                <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
-            {% endwith %}
-
-        {% else %}
-            {% if  relation.maxexo > -1 %}
-                {% with nb_attempt=available.nbleft  %}
                   <div class="available" id="attempt" style="font-weight:800" >
-                     {{ nb_attempt }}   
+                        {{ nb_attempt }} 
                   </div>
                   <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
-                {% endwith %}
-            {% else  %} 
-                <div class="available_infinite" id="attempt" style="font-weight:800" > 
-                   &infin;  
-                </div>
-                <p>Tentatives restantes</p>
-            {% endif  %} 
-        {% endif %}
+              {% endwith %}
 
+          {% else %}
+              {% if  relation.maxexo > -1 %}
+                  {% with nb_attempt=available.nbleft  %}
+                    <div class="available" id="attempt" style="font-weight:800" >
+                       {{ nb_attempt }}   
+                    </div>
+                    <p>Tentative{{ nb_attempt|pluralize  }} restante{{ nb_attempt|pluralize  }}</p>
+                  {% endwith %}
+              {% else  %} 
+                  <div class="available_infinite" id="attempt" style="font-weight:800" > 
+                     &infin;  
+                  </div>
+                  <p>Tentatives restantes</p>
+              {% endif  %} 
+          {% endif %}
+        </div>
 
+        <div class="situation" style="text-align: center">
+            <div   style="font-weight:800;font-size: 25px;" >{{ relation.coefficient }}  </div>
+            <p>Coefficient</p>
         </div>
 
         <div class="barcode">
