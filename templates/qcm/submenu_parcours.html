@@ -147,9 +147,9 @@
         </li> 
         <li {% if 'change_durations/' in request.path %} class="active" {% endif %}>
             {% if folder %}
-            <a href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}" ><i class="bi bi-clock-history"></i> Gérer les durées</a> 
+            <a href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}" ><i class="bi bi-clock"></i> Gérer les durées</a> 
             {% else %}
-            <a href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}" ><i class="bi bi-clock-history"></i> Gérer les durées</a> 
+            <a href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}" ><i class="bi bi-clock"></i> Gérer les durées</a> 
             {% endif %}
         </li> 
         {% else %}
@@ -157,7 +157,7 @@
             <a href="#" class="no_sacado_asso" ><i class="bi bi-123"></i> Gérer le nombre de situations</a> 
         </li> 
         <li>
-            <a href="#" class="no_sacado_asso" ><i class="bi bi-clock-history"></i> Gérer les durées</a> 
+            <a href="#" class="no_sacado_asso" ><i class="bi bi-clock"></i> Gérer les durées</a> 
         </li> 
         {% endif %}
 
