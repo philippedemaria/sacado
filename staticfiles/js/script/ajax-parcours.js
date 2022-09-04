@@ -1353,5 +1353,8 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Permet d'avoir les vignettes de cours plus jolies
+        $(".display_annoncement_for_courses").find("*").css("font-size","12px");
+        $('.display_annoncement_for_courses').find("table").css("width","0px");
     });
 });
