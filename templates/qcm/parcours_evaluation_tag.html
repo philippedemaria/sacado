@@ -12,19 +12,21 @@
         {% endif  %}
 
         <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
+            {% if group %} 
                 {% csrf_token %}
                 <a  href="#principal_section" class="vue menuactionparcours" data-toggle='modal' style="float:left; margin-right:10px"  
                     data-group_name='{{ group.name }}' data-parcours_id='{{ parcours.id }}' data-target='#listing'> 
                     {% get_parcours_group_students_count parcours group as parcours_group_students %}
                     <span class="label label-default"> {{ parcours_group_students.nb }}<i class="fa fa-users"></i></span>
                 </a> 
-            <font style="font-size:11px; color:#AAA">
-                {% for s in parcours_group_students.students|dictsort:"user.last_name"  %}
-                <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
-                    data-parcours_id="{{ parcours.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </font>
+                <font style="font-size:11px; color:#AAA">
+                    {% for s in parcours_group_students.students|dictsort:"user.last_name"  %}
+                    <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
+                        data-parcours_id="{{ parcours.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </font>
             <div style="clear:both"></div>
+            {% endif %}
         </div>
 
         <span style="cursor:pointer" data-parcours_id="{{parcours.id }}" class="overlay_show white" >
@@ -200,12 +202,14 @@
 
             <div class="row extend" {% if parcours.is_evaluation  %} style="padding-top: 5px;" {% endif  %}> 
                 <div class="col-lg-4 col-xs-4">
-                {% if parcours.is_evaluation %}
+                {% if group and parcours.is_evaluation %}
                     <a href="{% url 'update_evaluation' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
-                {% elif parcours.is_sequence %}
+                {% elif group and parcours.is_sequence %}
                     <a href="{% url 'update_sequence' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
-                {% else  %}
+                {% elif group and parcours  %}
                     <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
+                {% else  %}
+                    <a href="#"  class="edit"><i class="bi bi-gear"></i> <span class="label_icon">Sans groupe</span> </a>
                 {% endif  %}
                 </div> 
                 <div class="col-lg-4 col-xs-4">

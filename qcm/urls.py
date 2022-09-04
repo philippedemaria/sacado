@@ -66,7 +66,9 @@ urlpatterns = [
 
     path('actioner_pef', actioner_pef, name='actioner_pef'), #archiver ou supprimer une sélection
 
- 
+    path('change_situations/<int:idf>/<int:idp>', change_situations_in_all_relationships , name='change_situations_in_all_relationships'),
+
+
     # Résultats d'un parcours
     path('parcours_result/<int:id>/<int:is_folder>', result_parcours, name='result_parcours'), 
     path('parcours_result_theme/<int:id>/<int:idt>/<int:is_folder>', result_parcours_theme, name='result_parcours_theme'),  # Je ne sais pas si cette route est utilisée ?????
@@ -95,6 +97,8 @@ urlpatterns = [
     path('ajax_populate', ajax_populate, name='ajax_populate'),
     path('ajax_individualise', ajax_individualise , name='ajax_individualise'),
     path('ajax_reset', ajax_reset , name='ajax_reset'),
+
+
 
 
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité

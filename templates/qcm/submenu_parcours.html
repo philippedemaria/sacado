@@ -137,7 +137,19 @@
 
         <li><a href="#"  id="handler_order_exercises" ><i class="bi bi-filter-circle"></i> Organiser les exercices </a> </li>
 
-
+        {% if sacado_asso %}
+        <li {% if 'change_situations/' in request.path %} class="active" {% endif %}>
+            {% if folder %}
+            <a href="{% url 'change_situations_in_all_relationships' folder.id parcours.id  %}" ><i class="bi bi-123"></i> Gérer le nombre de situations</a> 
+            {% else %}
+            <a href="{% url 'change_situations_in_all_relationships' 0 parcours.id  %}" ><i class="bi bi-123"></i> Gérer le nombre de situations</a> 
+            {% endif %}
+        </li> 
+        {% else %}
+        <li>
+            <a href="#" class="no_sacado_asso" ><i class="bi bi-explicit-fill"></i> Gérer le nombre de situations</a> 
+        </li> 
+        {% endif %}
 
         <li {% if 'parcours_individualise/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="bi bi-people"></i> Individualiser les exercices</a> 

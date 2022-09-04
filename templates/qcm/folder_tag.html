@@ -10,114 +10,115 @@
     {% if folder.folder_only_students_count.nb > 0 %}
         <div class="handler widget-user-header">
         <!-- Add signet to folder --> 
-
-            {% get_data_parcours_evaluations_from_group_folder folder group as dataset %}         
             <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
+            {% if group %}
 
-            <div class="group_show  group_show{{folder.id }} no_visu_on_load"> 
-                {% get_students_from_group_and_folder  folder group as data %}
-     
-                    {% csrf_token %}
+                {% get_data_parcours_evaluations_from_group_folder folder group as dataset %}         
+                <div class="group_show  group_show{{folder.id }} no_visu_on_load"> 
+                    {% get_students_from_group_and_folder  folder group as data %}
+                        {% csrf_token %}
 
                         <span class="label label-default" style="color:{{ folder.color|contrast_color }};background-color:{{ folder.color }};"> {{ data.nb }}<i class="fa fa-users"></i></span>
-     
-     
-                <font style="font-size:11px; color:#AAA"> 
-                    {% for s in data.only_students|dictsort:"user.last_name"  %}
-                    <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
-                        data-parcours_id="{{ folder.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
+         
+         
+                    <font style="font-size:11px; color:#AAA"> 
+                        {% for s in data.only_students|dictsort:"user.last_name"  %}
+                        <a  href="#principal_section" class="detail_student_parcours"  data-student_id="{{ s.user.id }}"  
+                            data-parcours_id="{{ folder.id }}" >{{s}}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+         
+                    </font>
+                    <div style="clear:both"></div>
+                </div>
+
+                <span data-parcours_id="{{folder.id }}" class="overlay_show white" style="cursor:pointer">
+                    <div class="disc   disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                         <i class="fa fa-circle-o-notch"></i>
+                    </div>
+
+
+                    <div class="{% if not folder.is_publish %}
+                                    disc_persistant
+                                {% else %}
+                                    disc 
+                                {% endif %}
+                                disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                         <i class="fa fa-circle-o-notch"></i>
+                    </div>
+                </span> 
+          
+                <!-- Fenetre accessible par l'icone qui montre les parcours  -->
+                <div class="group_show no_visu_on_load" id="folder{{folder.id }}" style="font-size:12px; color:#AAA"> 
+                    <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                        <a href="#" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="folder" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                        Parcours 
+                    </h4> 
+                    {% for p in dataset.parcours   %} 
+                        <li class="sans_puce_hover" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }} 
+                            <a href="{% url 'show_parcours' folder.id p.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
+                            <a href="{% url 'update_parcours' p.id 0  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                        </li> 
                     {% endfor %}
-     
-                </font>
-                <div style="clear:both"></div>
-            </div>
-
-            <span data-parcours_id="{{folder.id }}" class="overlay_show white" style="cursor:pointer">
-                <div class="disc   disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
-                     <i class="fa fa-circle-o-notch"></i>
                 </div>
-
-
-                <div class="{% if not folder.is_publish %}
-                                disc_persistant
-                            {% else %}
-                                disc 
-                            {% endif %}
-                            disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
-                     <i class="fa fa-circle-o-notch"></i>
+                <!-- Fenetre accessible par l'icone qui montre les evaluations  -->
+                <div class="group_show no_visu_on_load" id="evaluations_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
+                    <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                        <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="evaluations_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                        Evaluations 
+                    </h4> 
+                    {% for p in dataset.evaluations  %} 
+                        <li class="sans_puce_hover" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}  
+                            <a href="{% url 'show_parcours' folder.id p.id %}" class="pull-right"><i class="bi bi-eye"></i></a> 
+                            <a href="{% url 'update_parcours' p.id 0 %}" class="pull-right"><i class="bi bi-pencil"></i></a>
+                        </li> 
+                    {% endfor %}
                 </div>
-            </span> 
-      
-            <!-- Fenetre accessible par l'icone qui montre les parcours  -->
-            <div class="group_show no_visu_on_load" id="folder{{folder.id }}" style="font-size:12px; color:#AAA"> 
-                <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="#" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="folder" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
-                    Parcours 
-                </h4> 
-                {% for p in dataset.parcours   %} 
-                    <li class="sans_puce_hover" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }} 
-                        <a href="{% url 'show_parcours' folder.id p.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
-                        <a href="{% url 'update_parcours' p.id 0  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
-                    </li> 
-                {% endfor %}
-            </div>
-            <!-- Fenetre accessible par l'icone qui montre les evaluations  -->
-            <div class="group_show no_visu_on_load" id="evaluations_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
-                <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="evaluations_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
-                    Evaluations 
-                </h4> 
-                {% for p in dataset.evaluations  %} 
-                    <li class="sans_puce_hover" {% if p.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ p.title }}  
-                        <a href="{% url 'show_parcours' folder.id p.id %}" class="pull-right"><i class="bi bi-eye"></i></a> 
-                        <a href="{% url 'update_parcours' p.id 0 %}" class="pull-right"><i class="bi bi-pencil"></i></a>
-                    </li> 
-                {% endfor %}
-            </div>
-            <!-- Fenetre accessible par l'icone qui montre les flashpacks  -->
-            <div class="group_show no_visu_on_load" id="flashpacks_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
-                <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="flashpacks_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
-                    Flashpacks 
-                </h4> 
-                {% for f in dataset.flashpacks  %} 
-                    <li class="sans_puce_hover" {% if f.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ f.title }} 
-                        <a href="{% url 'show_flashpack' f.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
-                        <a href="{% url 'update_flashpack' f.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                <!-- Fenetre accessible par l'icone qui montre les flashpacks  -->
+                <div class="group_show no_visu_on_load" id="flashpacks_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
+                    <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                        <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="flashpacks_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                        Flashpacks 
+                    </h4> 
+                    {% for f in dataset.flashpacks  %} 
+                        <li class="sans_puce_hover" {% if f.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ f.title }} 
+                            <a href="{% url 'show_flashpack' f.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
+                            <a href="{% url 'update_flashpack' f.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
 
-                        {% if f.flashcards_to_validate %}
-                         <a href="{% url 'validate_flashcards_to_flashpack' f.id %}" class="pull-right"><i class="fa fa-copyright text-validate"  title="Flashpack à corriger"></i></a> 
-                        {% endif %} 
+                            {% if f.flashcards_to_validate %}
+                             <a href="{% url 'validate_flashcards_to_flashpack' f.id %}" class="pull-right"><i class="fa fa-copyright text-validate"  title="Flashpack à corriger"></i></a> 
+                            {% endif %} 
 
-                    </li> 
-                {% endfor %}
-            </div>
-            <!-- Fenetre accessible par l'icone qui montre les quizz  -->
-            <div class="group_show no_visu_on_load" id="quizz_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
-                <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="quizz_in"  style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
-                    Quizz 
-                </h4> 
-                {% for q in dataset.quizzes  %} 
-                    <li class="sans_puce_hover" {% if q.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ q.title }} 
-                        <a href="{% url 'show_quizz' q.id %}" class="pull-right"><i class="bi bi-eye"></i></a>  
-                        <a href="{% url 'update_quizz' q.id %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
-                    </li> 
-                {% endfor %}
-            </div>
-            <!-- Fenetre accessible par l'icone qui montre les bibliotex  -->
-            <div class="group_show no_visu_on_load" id="bibliotex_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
-                <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
-                    <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="bibliotex_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
-                    BiblioTex 
-                </h4> 
-                {% for b in dataset.bibliotexs  %} 
-                    <li class="sans_puce_hover" {% if b.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ b.title }}
-                        <a href="{% url 'show_bibliotex' b.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
-                        <a href="{% url 'update_bibliotex' b.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
-                    </li> 
-                {% endfor %}
-            </div>
+                        </li> 
+                    {% endfor %}
+                </div>
+                <!-- Fenetre accessible par l'icone qui montre les quizz  -->
+                <div class="group_show no_visu_on_load" id="quizz_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
+                    <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                        <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="quizz_in"  style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                        Quizz 
+                    </h4> 
+                    {% for q in dataset.quizzes  %} 
+                        <li class="sans_puce_hover" {% if q.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ q.title }} 
+                            <a href="{% url 'show_quizz' q.id %}" class="pull-right"><i class="bi bi-eye"></i></a>  
+                            <a href="{% url 'update_quizz' q.id %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                        </li> 
+                    {% endfor %}
+                </div>
+                <!-- Fenetre accessible par l'icone qui montre les bibliotex  -->
+                <div class="group_show no_visu_on_load" id="bibliotex_in{{folder.id }}" style="font-size:12px; color:#AAA"> 
+                    <h4  style="border-bottom: 1px solid {{ parcours.color }}; color:{{ folder.color }};">
+                        <a href="javascript:void();" class="subparcours_show_close pull-right" data-close="{{folder.id}}" data-name="bibliotex_in" style="color:{{ folder.color }};"><i class="fa fa-times"></i></a>
+                        BiblioTex 
+                    </h4> 
+                    {% for b in dataset.bibliotexs  %} 
+                        <li class="sans_puce_hover" {% if b.is_publish %} style="color:{{ folder.color }};"{% endif %}>{{ b.title }}
+                            <a href="{% url 'show_bibliotex' b.id %}" class="pull-right"><i class="bi bi-eye"></i></a>                       
+                            <a href="{% url 'update_bibliotex' b.id  %}" class="pull-right"><i class="bi bi-pencil"></i></a> 
+                        </li> 
+                    {% endfor %}
+                </div>
+            {% endif %}
+
 
             <!-- Fenetre accessible par le disc   -->
 
@@ -166,8 +167,8 @@
                 </div> 
             {% endif  %}
             <div class="box_title_vignette"> 
-     
-                <a href="{% url 'list_sub_parcours_group' group.id folder.id  %}" style="color:{{ folder.color|contrast_color }};">
+        
+                <a href="{% if group %}{% url 'list_sub_parcours_group' group.id folder.id  %}{% endif %}" style="color:{{ folder.color|contrast_color }};">
 
 
 

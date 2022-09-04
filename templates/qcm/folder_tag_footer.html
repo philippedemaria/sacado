@@ -4,7 +4,7 @@
 
  
 <div class="box-footer" style="position: relative; padding-top: 0px;">
-    {% if folder.folder_only_students_count.nb > 0 %}    
+    {% if group and folder.folder_only_students_count.nb > 0 %}    
     {% get_data_parcours_evaluations_from_group_folder folder group as dataset %} 
     <div class="row dossier"> 
             <div class="col-xs-4 col-md-4 col-lg-4"> 
@@ -35,7 +35,7 @@
 
     <div class="row extend_parcours"> 
         <div class="col-xs-4 col-md-4 col-lg-4">
-        {% if folder.folder_only_students_count.nb > 0 %}      
+        {% if group and folder.folder_only_students_count.nb > 0 %}      
             <a href="{% url 'update_folder' folder.id  group.id  %}" class="edit" style="color:{{ folder.color}};"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
         {% else %}    
             <a href="{% url 'update_folder' folder.id  0  %}" class="edit" style="color:{{ folder.color}};"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
