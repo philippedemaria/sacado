@@ -157,9 +157,25 @@ hr.divider {
 }
 
 
-
+.img_size_square_75{
+    width:75px ;
+    height:75px;
+  }
 
  
+.refresh_5x{
+          font-size : 4em;
+        }
+
+.available_attempt{
+  width:60px;
+  height:60px;
+  border-radius: 50%;
+  border : 2px solid #F0F0F0 ;
+  font-size : 30px ;
+  padding: 10px;
+  text-align:center;
+}
 
 
 .imagefile{
@@ -4207,7 +4223,20 @@ table.table-bordered.dataTable {
   border : 2px solid #F0F0F0 ;
   font-size : 36px ;
   padding: 2px;
-  margin: auto;
+}
+
+@media (max-width:660px){
+ 
+
+    .available_attempt {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #F0F0F0;
+            font-size: 30px;
+            padding: 2px 7px;
+            margin: auto;
+        }
 }
 
 .label_progress_bar{
