@@ -67,7 +67,7 @@ urlpatterns = [
     path('actioner_pef', actioner_pef, name='actioner_pef'), #archiver ou supprimer une sélection
 
     path('change_situations/<int:idf>/<int:idp>', change_situations_in_all_relationships , name='change_situations_in_all_relationships'),
-
+    path('change_durations/<int:idf>/<int:idp>', change_durations_in_all_relationships , name='change_durations_in_all_relationships'),
 
     # Résultats d'un parcours
     path('parcours_result/<int:id>/<int:is_folder>', result_parcours, name='result_parcours'), 
