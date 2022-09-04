@@ -436,13 +436,13 @@
             
                 {% if sacado_asso %}
                 <span class="horizontalmargin5">
-                    <span style="cursor:pointer;color:{{ parcours.color|contrast_color }}" data-relationship_id="{{ rc.id }}"  class="coefficients" title="Coefficienter {% if parcours.is_evaluation %}l'évaluation{% else %}le parcours{% endif %}" >
+                    <span style="cursor:pointer;color:{{ parcours.color|contrast_color }}" data-relationship_id="{{ rc.id }}"  class="coefficients" title="Coefficienter l'exercice" >
                             <i class="bi bi-thermometer-half"></i>
                     </span>
                 </span>
                 {% else %}
                 <span class="horizontalmargin5">
-                    <span style="cursor:not-allowed;color:{{ parcours.color|contrast_color }}"  class="coefficients" title="Coefficienter {% if parcours.is_evaluation %}l'évaluation{% else %}le parcours{% endif %}. Version établissement requise." >
+                    <span style="cursor:not-allowed;color:{{ parcours.color|contrast_color }}"  class="coefficients" title="Coefficienter l'exercice. Version établissement requise." >
                             <i class="bi bi-thermometer-half"></i>
                     </span>
                 </span>
