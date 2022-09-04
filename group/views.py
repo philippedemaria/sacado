@@ -177,7 +177,7 @@ def student_dashboard(request,group_id):
 
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         
-        bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None, is_active=0,  is_archive =0 , is_trash=0).distinct()
+        bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
 
         parcourses = bases.filter(is_evaluation=0, is_sequence=0).order_by("ranking")
         sequences  = bases.filter(is_evaluation=0, is_sequence=1).order_by("ranking")
@@ -196,9 +196,9 @@ def student_dashboard(request,group_id):
 
         bases = student.students_to_parcours 
 
-        parcourses_brut  = bases.filter(is_evaluation=0, is_publish=1,is_trash=0, is_active = 0, is_sequence=0).order_by("ranking")
-        sequences_brut   = bases.filter(is_evaluation=0, is_publish=1,is_trash=0, is_active = 0, is_sequence=1).order_by("ranking")
-        evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active = 0, is_evaluation=1,is_trash=0).order_by("ranking")
+        parcourses_brut  = bases.filter(is_evaluation=0, is_publish=1,is_trash=0,  is_sequence=0).order_by("ranking")
+        sequences_brut   = bases.filter(is_evaluation=0, is_publish=1,is_trash=0,  is_sequence=1).order_by("ranking")
+        evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_evaluation=1,is_trash=0).order_by("ranking")
 
 
         parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")

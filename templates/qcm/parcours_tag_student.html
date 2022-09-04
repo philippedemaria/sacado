@@ -7,15 +7,7 @@
 
 <div  class="box box-widget widget-user-2 folder_sorter height_max_box"  style="{% if parcours.vignette %}background-image: url('{{parcours.vignette.url }}');{% endif  %} background-size: 100% 100%;background-color:{{parcours.color }}"> 
     <div class="handler widget-user-header">
-         {% if  student.user.school %}  
-            {% if  data_min.pc > 0 %}
-            <div class="background_badge" >
-                <i class="fa fa-trophy" style="color:{{ data_min.colored }};font-size: {{ data_min.size }};z-index:999999; "></i>
-                <br/>
-                <font style="font-size:12px;color:{{parcours.color }};">{{ data_min.label }}</font>
-            </div>
-            {% endif  %}
-        {% endif  %} 
+         {% include 'qcm/evaluation_tag_student_badge_and_trophy.html'  %} 
     </div>
 
     <!-- box-footer DES FONCTIONNALITES  -->
@@ -23,6 +15,9 @@
         <div class="parcours_tag_student_fermeture no_visu_on_load" ><i class="fa fa-times"></i> Fermer </div>
 
         <a href="javascript:void();" class="show_parcours_tag_student_submenu"  style="color:{{ parcours.color|contrast_color }}">{{ parcours.title|truncatechars:15  }} <i class="bi bi-folder-symlink" style="color:{{ parcours.color|contrast_color }}"></i></a>
+
+
+
         <div class="parcours_tag_student_submenu no_visu_on_load" >
             <div class="row extend_student "> 
                 <div class="col-xs-12">  
@@ -40,7 +35,11 @@
             </div>
             <div class="row extend_student"> 
                 <div class="col-xs-12">  
-                    <a href="{% url 'show_course_student' 0 parcours.id %}" class="edit"><i class="bi bi-c-square"></i> {{ data_min.nb_cours }} cours</a>                          
+                    <a href="{% url 'show_course_student' 0 parcours.id %}" class="edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
+                          <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/>
+                          <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/>
+                        </svg> {{ data_min.nb_cours }} cours</a>                          
                 </div>
             </div>
             <div class="row extend_student"> 
