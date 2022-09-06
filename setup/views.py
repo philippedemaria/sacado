@@ -182,7 +182,7 @@ def index(request):
         t_form  = TeacherForm()
         s_form  = StudentForm()
         np_form = NewpasswordForm()
-        levels  = Level.objects.order_by("ranking")
+        levels  = Level.objects.filter(is_active=1).order_by("ranking")
 
         try :
             holidaybook = Holidaybook.objects.get(pk=1)
