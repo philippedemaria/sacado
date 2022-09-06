@@ -12,6 +12,7 @@ from django.db.models import Q, Min, Max
 import os.path
 from django.utils import timezone
 from general_fonctions import *
+from math import ceil
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User 
 # User.objects.create_superuser("admin","admin@gmail.com","motdepasse", user_type=0).save()
@@ -755,11 +756,6 @@ class Parcours(ModelWithCode):
         return data  ,  relationships , customs, answers ,  answers_c
 
 
-
-
-
-
-
     def min_score(self,student):
         """
         min score d'un parcours par élève
@@ -800,10 +796,8 @@ class Parcours(ModelWithCode):
             med = 65
             low = 35
 
-
-
         try :
-            score_ggb = score_ggb / coeffs
+            score_ggb = ceil( (score_ggb / coeffs) * data["pc"]/100  )
             data["score_ggb"] = score_ggb
         except :
             score_ggb = None
