@@ -38,7 +38,6 @@ urlpatterns = [
                   path('aefe/', include('aefe.urls')),
                   path('flashcard/', include('flashcard.urls')),
                   path('academy/', include('academy.urls')),
-                  path('lesson/', include('lesson.urls')),
                   path('schedule/', include('schedule.urls')),
 
                   
