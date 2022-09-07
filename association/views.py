@@ -2045,12 +2045,13 @@ def print_accounting(request, id ):
         beneficiaire = accounting.beneficiaire
         address = accounting.address
         complement = accounting.complement
+        zip_code = accounting.school.zip_code
         town = accounting.town 
         country = accounting.country.name
         contact = accounting.contact
         name_contact = ""
 
-    beneficiaire = Paragraph( beneficiaire , signature_style )
+    beneficiaire = Paragraph( beneficiaire  , signature_style )
     elements.append(beneficiaire)
     elements.append(Spacer(0,0.1*inch))
     if address :
@@ -2059,12 +2060,19 @@ def print_accounting(request, id ):
         offset += OFFSET_INIT
 
     if complement :
-        complement = Paragraph( complement , signature_style_mini )
-        elements.append(complement)
+        compl = Paragraph( complement , signature_style_mini )
+        elements.append(compl)
+        offset += OFFSET_INIT
+
+    if zip_code :
+        complementz = Paragraph( zip_code , signature_style_mini )
+        elements.append(complementz)
         offset += OFFSET_INIT
 
     town = Paragraph( town + " - " + country , signature_style_mini )
     elements.append(town)
+
+
     #########################################################################################
     ### Code de facture
     #########################################################################################
