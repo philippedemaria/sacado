@@ -2036,6 +2036,7 @@ def print_accounting(request, id ):
         complement = accounting.school.complement
         town = accounting.school.town 
         country = accounting.school.country.name
+        zip_code = accounting.school.zip_code
         contact = ""
         name_contact = ""
         for u in accounting.school.users.filter(is_manager=1) :
