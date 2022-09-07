@@ -437,7 +437,7 @@
                 {% if sacado_asso %}
                 <span class="horizontalmargin5">
                     <span style="cursor:pointer;color:{{ parcours.color|contrast_color }}" data-relationship_id="{{ rc.id }}"  class="coefficients" title="Coefficienter l'exercice" >
-                            <i class="bi bi-thermometer-half"></i>
+                            <i class="bi bi-thermometer-half"></i><font style="font-size:9px">{{ rc.coefficient }}</small>
                     </span>
                 </span>
                 {% else %}
@@ -453,7 +453,7 @@
             {% if rc.exercise.supportfile.is_ggbfile %}
             <!-- Appel des situations et durée -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
-                <!-- <i class="fa fa-clock-o"></i> --><span style="font-size:10px">{{ rc.duration }} min.</span> 
+                <!-- <i class="fa fa-clock-o"></i> --><span style="font-size:9px">{{ rc.duration }} min.</span> 
             </span>
             <!-- Appel des situations -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier le nombre de situations"><!-- l'id permet de modifier après ajax le nombre de situation -->
@@ -462,7 +462,7 @@
             {% else %}
             <!-- Appel des durées -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
-                 <span style="font-size:10px">{{ rc.duration }} min.</span> 
+                 <span style="font-size:9px">{{ rc.duration }} min.</span> 
             </span>
             <!-- Appel des situations -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier la consigne"><!-- l'id permet de modifier après ajax le nombre de situation -->
