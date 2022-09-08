@@ -1660,7 +1660,7 @@ def update_accounting(request, id,tp):
     today      = datetime.now()
     accounting = Accounting.objects.get(id=id)
     valeur     = accounting.amount
-
+    school     = accounting.school
     try :
         abonnement = accounting.abonnement 
         form_abo   = AbonnementForm(request.POST or None, instance= abonnement  )
@@ -1691,7 +1691,7 @@ def update_accounting(request, id,tp):
                 nf.tp = 2
                 nf.is_credit = 1
             nf.save()
-            school = accounting.school
+            
 
             for form_d in form_ds :
                 if form_d.is_valid():
