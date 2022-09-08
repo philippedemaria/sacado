@@ -1037,7 +1037,7 @@ def get_school(request):
 			changing_school = False
 			if request.user.school :
 				changing_school = True
- 			if not changing_school : 
+			if not changing_school : 
 				teacher = request.user.teacher
 				groups  = teacher.groups.all()
 				for g in groups :
