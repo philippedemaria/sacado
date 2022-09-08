@@ -736,12 +736,13 @@ def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0
 #################   parcours par defaut
 #######################################################################################################################################################################
 #######################################################################################################################################################################
+@login_required(login_url= 'index')
 def advises(request):
     teacher = request.user.teacher
     return render(request, 'advises.html', {'teacher': teacher})
 
 
-
+@login_required(login_url= 'index')
 def associate_parcours(request,id):
     teacher = request.user.teacher
     group = Group.objects.get(pk = id)
@@ -775,6 +776,7 @@ def ajax_parcours_default(request):
  
     return JsonResponse(data)
 
+@login_required(login_url= 'index')
 def get_parcours_default(request):
     teacher = request.user.teacher
     level_id = request.POST.get("level_selected_id")
@@ -947,7 +949,7 @@ def peuplate_parcours(request,id):
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
 
-
+@login_required(login_url= 'index')
 def peuplate_parcours_evaluation(request,id):
     teacher = request.user.teacher
     levels =  teacher.levels.order_by("ranking")
@@ -1014,7 +1016,7 @@ def peuplate_parcours_evaluation(request,id):
     return render(request, 'qcm/form_peuplate_parcours.html', context)
 
 
-
+@login_required(login_url= 'index')
 def individualise_parcours(request,id):
 
     folder_id = request.session.get("folder_id",None)
@@ -1502,7 +1504,7 @@ def ajax_charge_group_from_target(request):
 ##################     Listes dossiers parcours évaluation archives  #######################################################################
 ############################################################################################################################################
 ############################################################################################################################################
-
+@login_required(login_url= 'index')
 def list_folders(request):
 
     teacher = request.user.teacher
@@ -1526,6 +1528,7 @@ def list_folders(request):
                     'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
 
 
+@login_required(login_url= 'index')
 def list_folders_archives(request):
 
     teacher = request.user.teacher
@@ -1550,7 +1553,7 @@ def list_folders_archives(request):
 
 
 
-
+@login_required(login_url= 'index')
 def list_parcours(request):
 
     teacher = request.user.teacher
@@ -1577,7 +1580,7 @@ def list_parcours(request):
 
 
 
-
+@login_required(login_url= 'index')
 def list_archives(request):
 
     teacher = request.user.teacher
@@ -1595,7 +1598,7 @@ def list_archives(request):
 
 
 
-
+@login_required(login_url= 'index')
 def list_sequences(request):
 
     teacher = request.user.teacher
@@ -1622,7 +1625,7 @@ def list_sequences(request):
 
 
 
-
+@login_required(login_url= 'index')
 def list_sequences_archives(request):
 
     teacher = request.user.teacher
@@ -1641,7 +1644,7 @@ def list_sequences_archives(request):
 
 
 
-
+@login_required(login_url= 'index')
 def list_evaluations(request):
 
     teacher = request.user.teacher
@@ -1666,7 +1669,7 @@ def list_evaluations(request):
 
  
 
-
+@login_required(login_url= 'index')
 def list_evaluations_archives(request):
     teacher = request.user.teacher
     parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive 
@@ -1680,7 +1683,7 @@ def list_evaluations_archives(request):
 
 
 
-##@user_is_group_teacher
+@login_required(login_url= 'index')
 def list_parcours_group(request,id):
 
     teacher = request.user.teacher
@@ -1722,7 +1725,7 @@ def list_parcours_group(request,id):
     return render(request, 'qcm/list_parcours_group.html', context )
 
 
-
+@login_required(login_url= 'index')
 def list_sub_parcours_group(request,idg,idf):
 
     teacher = request.user.teacher
@@ -1756,6 +1759,8 @@ def list_sub_parcours_group(request,idg,idf):
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 
 
+
+@login_required(login_url= 'index')
 def list_sub_parcours_group_student(request,idg,idf):
 
     rq_user = request.user
@@ -1785,6 +1790,8 @@ def list_sub_parcours_group_student(request,idg,idf):
         return redirect("index")
 
 
+
+@login_required(login_url= 'index')
 def change_situations_in_all_relationships(request,idf,idp):
 
     parcours      = Parcours.objects.get(id=idp)
@@ -1809,7 +1816,7 @@ def change_situations_in_all_relationships(request,idf,idp):
 
 
 
-
+@login_required(login_url= 'index')
 def change_durations_in_all_relationships(request,idf,idp):
 
     parcours      = Parcours.objects.get(id=idp)
@@ -1833,7 +1840,7 @@ def change_durations_in_all_relationships(request,idf,idp):
 
 
 
-
+@login_required(login_url= 'index')
 def change_publications_in_all_relationships(request,idf,idp):
 
     parcours      = Parcours.objects.get(id=idp)
@@ -1867,7 +1874,7 @@ def change_publications_in_all_relationships(request,idf,idp):
 ############################################################################################################################################
 ############################################################################################################################################
 
-
+@login_required(login_url= 'index')
 def parcours_progression(request,id,idg):
 
     parcours = Parcours.objects.get(id=id)
@@ -1893,7 +1900,7 @@ def parcours_progression(request,id,idg):
 
 
 
-
+@login_required(login_url= 'index')
 def parcours_progression_student(request,id):
 
     parcours = Parcours.objects.get(id=id)
@@ -1909,7 +1916,7 @@ def parcours_progression_student(request,id):
 
 
 
-
+@login_required(login_url= 'index')
 def all_parcourses(request,is_eval):
     teacher = request.user.teacher
     #parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
@@ -1952,8 +1959,7 @@ def all_parcourses(request,is_eval):
 
     return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher , "levels" : levels ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
 
-
-
+ 
 def ajax_all_parcourses(request):
 
     teacher = request.user.teacher
@@ -2072,7 +2078,7 @@ def ajax_all_parcourses(request):
     return JsonResponse(data)
 
 
-
+@login_required(login_url= 'index')
 def all_folders(request):
     teacher = request.user.teacher
     #parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
@@ -2105,7 +2111,7 @@ def all_folders(request):
 
 
 
-
+ 
 def ajax_all_folders(request):
 
     teacher = request.user.teacher
@@ -2148,7 +2154,7 @@ def ajax_all_folders(request):
     return JsonResponse(data)
 
 
-
+@login_required(login_url= 'index')
 def clone_folder(request, id ):
     """ cloner un dossier """
     folder = Folder.objects.get(pk = id)
@@ -2534,19 +2540,19 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
         return render(request, 'qcm/form_parcours.html', context) 
 
 
-
+@login_required(login_url= 'index')
 def create_parcours(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     return create_parcours_or_evaluation(request, False , False,idf , 0 )
 
     
-
+@login_required(login_url= 'index')
 def create_evaluation(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     return create_parcours_or_evaluation(request, False , True, idf , 0 )
 
 
-
+@login_required(login_url= 'index')
 def create_sequence(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     return create_parcours_or_evaluation(request, False , False, idf , 1 )
@@ -2661,16 +2667,17 @@ def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ):
  
     return render(request, 'qcm/form_parcours.html', context) 
 
-
+@login_required(login_url= 'index')
 @parcours_exists
 def update_parcours(request, id, idg=0 ): 
     return  update_parcours_or_evaluation(request, False, id,0, idg)
 
-
+@login_required(login_url= 'index')
 @parcours_exists
 def update_evaluation(request, id,idg=0): 
     return  update_parcours_or_evaluation(request, True, id,0, idg )
 
+@login_required(login_url= 'index')
 @parcours_exists
 def update_sequence(request, id, idg=0 ): 
     return  update_parcours_or_evaluation(request, False, id,1, idg )
@@ -2682,11 +2689,7 @@ def update_sequence(request, id, idg=0 ):
 ##########################################################################################################################
 
 
-
-
-
-
-#@user_is_parcours_teacher 
+@login_required(login_url= 'index')
 def archive_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
@@ -2699,6 +2702,7 @@ def archive_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
+@login_required(login_url= 'index')
 @parcours_exists
 def unarchive_parcours(request, id, idg=0):
 
@@ -2712,6 +2716,7 @@ def unarchive_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
+@login_required(login_url= 'index')
 @parcours_exists
 def delete_parcours(request, id, idg=0):
 
@@ -2803,7 +2808,7 @@ def rcs_for_realtime(parcours):
     return listing_order
 
 
-
+@login_required(login_url= 'index')
 def show_parcours(request, idf = 0, id=0):
     """ show parcours coté prof """
     if idf > 0 :
@@ -2892,46 +2897,45 @@ def ordering_number_for_student(parcours,student):
 
     return listing_order , nb_exo_only, nb_exo_visible
 
-
+@login_required(login_url= 'index')
 def show_parcours_student(request, id):
 
-    if request.user.is_authenticated :
-        folder = None
-        folder_id = request.session.get('folder_id', None)
-        if folder_id :
-            folder = Folder.objects.get(id=folder_id)
-
-        parcours = Parcours.objects.get(id=id)
-
-        if parcours.stop :
-            lock_all_exercises_for_this_student(parcours,request.user.student)
-
-        user = request.user
-        student = user.student
-        today = time_zone_user(user)
-        stage = get_stage(user)
-
-        tracker_execute_exercise(True ,  user , id , None , 0)
-
-        relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
-        nb_exercises = len(relationships_customexercises)
-
-        nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
-        nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
-
-
-
-        context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
-                    'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
-                    'today': today ,    }
-
-        return render(request, 'qcm/show_parcours_student.html', context)
-    else :
-        return redirect('index') 
-
-
-
  
+    folder = None
+    folder_id = request.session.get('folder_id', None)
+    if folder_id :
+        folder = Folder.objects.get(id=folder_id)
+
+    parcours = Parcours.objects.get(id=id)
+
+    if parcours.stop :
+        lock_all_exercises_for_this_student(parcours,request.user.student)
+
+    user = request.user
+    student = user.student
+    today = time_zone_user(user)
+    stage = get_stage(user)
+
+    tracker_execute_exercise(True ,  user , id , None , 0)
+
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
+    nb_exercises = len(relationships_customexercises)
+
+    nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
+    nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
+
+
+
+    context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
+                'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
+                'today': today ,    }
+
+    return render(request, 'qcm/show_parcours_student.html', context)
+ 
+
+
+
+@login_required(login_url= 'index')
 def show_folder_student(request, id):
 
     folder = Folder.objects.get(id=id)
@@ -2951,8 +2955,7 @@ def show_folder_student(request, id):
  
 
 
-
- 
+@login_required(login_url= 'index')
 def list_parcours_quizz_student(request, idp):
 
     parcours = Parcours.objects.get(id=idp)
@@ -2967,7 +2970,7 @@ def list_parcours_quizz_student(request, idp):
 
 
 
- 
+@login_required(login_url= 'index')
 def list_parcours_bibliotex_student(request, idp):
 
     parcours = Parcours.objects.get(id=idp)
@@ -2980,7 +2983,7 @@ def list_parcours_bibliotex_student(request, idp):
     return render(request, 'qcm/list_parcours_bibliotex_student.html', context)
 
 
-
+@login_required(login_url= 'index')
 def parcours_show_bibliotex_student(request, idp,id):
 
     try :
@@ -2998,8 +3001,7 @@ def parcours_show_bibliotex_student(request, idp,id):
 
 
 
-
-
+@login_required(login_url= 'index')
 def list_parcours_flashpack_student(request, idp):
 
     parcours = Parcours.objects.get(id=idp)
@@ -3015,7 +3017,7 @@ def list_parcours_flashpack_student(request, idp):
 
 
 
-
+@login_required(login_url= 'index')
 @parcours_exists
 def show_parcours_visual(request, id):
 
@@ -3080,12 +3082,11 @@ def replace_exercise_into_parcours(request):
     return redirect('show_parcours' , 0, parcours_id)
 
  
-
+@login_required(login_url= 'index')
 def result_parcours(request, id, is_folder):
 
-
     teacher = request.user.teacher
- 
+
     if  is_folder == 1 :
         folder = Folder.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, folder)
@@ -3136,7 +3137,7 @@ def result_parcours(request, id, is_folder):
 
 
 
- 
+@login_required(login_url= 'index') 
 def result_parcours_theme(request, id, idt, is_folder):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -3803,9 +3804,14 @@ def ajax_getter_parcours_exercice_custom(request):
 def  exercise_error(request):
 
     message     = request.POST.get("message")  
-    exercise_id = request.POST.get("exercise_id")
+    exercise_id = request.POST.get("exercise_id",None)
+    if exercise_id :
+        exercise = Exercise.objects.get(id = int(exercise_id))
+    else :
+        messages.error(request, "L'exercice n'est pas reconnu.")
+        redirect('index')        
     parcours_id = request.POST.get("parcours_id",None)
-    exercise = Exercise.objects.get(id = int(exercise_id))
+
     if request.user :
         usr = request.user
         email = " "
@@ -5252,16 +5258,17 @@ def show_this_exercise(request, id):
     return render(request, url, context)
 
 
-
+@login_required(login_url= 'index')
 def execute_exercise(request, idp,ide):
 
     if not request.user.is_authenticated :
+        messages.error(request,"Utilisateur non authentifié")
         return redirect("index")
         
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
     if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
-        messages.error("Cet exercercice n'est plus disponible.")
+        messages.error(request,"Cet exercercice n'est plus disponible.")
         return redirect("index")
 
     relation = Relationship.objects.get(parcours=parcours, exercise=exercise)
@@ -5283,7 +5290,12 @@ def execute_exercise(request, idp,ide):
 @csrf_exempt    
 def store_the_score_relation_ajax(request):
 
-    parcours_id = int(request.POST.get("parcours_id"))
+    p_id = request.POST.get("parcours_id",None)
+    if p_id :
+        parcours_id = int(p_id)
+    else :
+        messages.error(request, "Score non enregistré. Le parcours n'est pas reconnu.")
+        return redirect('index')
     try :
         time_begin = request.POST.get("start_time",None)
 
@@ -5305,16 +5317,6 @@ def store_the_score_relation_ajax(request):
             score = round(float(request.POST.get("score")),2)*100
             if score > 100 :
                 score = 100
-            ##########################################################
-            ########################### Storage student answer
-            ##########################################################
-            # try :
-            #     this_studentanswer, new_studentanswer =  Studentanswer.objects.get_or_create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, defaults = { "numexo" : numexo,  "point" : score, "secondes" : timer }   )
-            #     if not new_studentanswer : 
-            #         Studentanswer.objects.filter(pk = this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
-            # except :
-            #     multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student).last()
-            #     multi_studentanswer.update( numexo   = numexo, point    = score , secondes = timer )
             multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student)
             if multi_studentanswer.count() > 0 :
                 this_studentanswer = multi_studentanswer.last()
@@ -5479,7 +5481,7 @@ def ajax_level_exercise(request):
         ajax = False
         parcours_id = None
 
-    if level_id and theme_ids[0] != "" : 
+    if level_id and theme_ids and theme_ids[0] != "" : 
         exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
  
      
@@ -5609,7 +5611,7 @@ def ajax_search_exercise(request):
 
 
 
-#@user_is_parcours_teacher 
+@login_required(login_url= 'index')
 def show_evaluation(request, id):
 
     parcours = Parcours.objects.get(id=id)
@@ -5741,7 +5743,7 @@ def ajax_sharer_course(request):
 #####################################################################################################################################
 
 
-
+@login_required(login_url= 'index')
 def correction_exercise(request,id,idp,ids=0):
     """
     script qui envoie au prof les fichiers à corriger custom et SACADO
@@ -6369,7 +6371,7 @@ def create_accounting(request,tp):
 
 
 
- 
+@login_required(login_url= 'index') 
 def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
     parcours = Parcours.objects.get(pk=id)
@@ -6402,13 +6404,13 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
     return render(request, 'qcm/form_exercise_custom.html', context)
 
 
- 
+@login_required(login_url= 'index') 
 def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
     custom = Customexercise.objects.get(pk=idcc)
 
-    teacher = Teacher.objects.get(user= request.user)
-    stage = get_stage(teacher.user)
+    teacher = request.user.teacher
+    stage = get_stage(request.user)
 
     if id == 0 :
 
@@ -6501,10 +6503,10 @@ def ajax_auto_evaluation(request):
 
 
 
-  
+@login_required(login_url= 'index')   
 def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exercice non autocorrigé dans un parcours
 
-    teacher = Teacher.objects.get(user=request.user)
+    teacher = request.user.teacher
     custom = Customexercise.objects.get(pk=idcc)
 
     folder_id = request.session.get("folder_id",0)
@@ -6524,10 +6526,10 @@ def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exerci
         return redirect('show_parcours', folder_id , id )
  
 
-
+@login_required(login_url= 'index') 
 def write_exercise(request,id): # Coté élève
  
-    student = Student.objects.get(user = request.user)  
+    student = request.user.student
     relationship = Relationship.objects.get(pk = id)
 
     tracker_execute_exercise(True ,  student.user , relationship.parcours.id  , relationship.exercise.id , 0)
@@ -6570,80 +6572,78 @@ def write_exercise(request,id): # Coté élève
 
 
 
-
+@login_required(login_url= 'index') 
 def write_custom_exercise(request,id,idp): # Coté élève - exercice non autocorrigé
  
-    if request.user.is_authenticated :
-        user = request.user
-        student = user.student
-        customexercise = Customexercise.objects.get(pk = id)
-        parcours = Parcours.objects.get(pk = idp)
-        today = time_zone_user(user)
+    user = request.user
+    student = user.student
+    customexercise = Customexercise.objects.get(pk = id)
+    parcours = Parcours.objects.get(pk = idp)
+    today = time_zone_user(user)
 
-        try :
-            tracker_execute_exercise(True , user , idp  , id , 1) 
-        except :
-            pass
-
-
-        if customexercise.is_realtime :
-            on_air = True
-        else :
-            on_air = False   
-     
-
-        if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
-            c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
-            cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
-            images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
-
-        else :
-            cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
-            c_e = False
-            images = False
-
-        if customexercise.is_image :
-            form_ans = inlineformset_factory( Customanswerbystudent , Customanswerimage , fields=('image',) , extra=1)
-        else :
-            form_ans = None
+    try :
+        tracker_execute_exercise(True , user , idp  , id , 1) 
+    except :
+        pass
 
 
-        if request.method == "POST":
-            if cForm.is_valid():
-                w_f = cForm.save(commit=False)
-                w_f.customexercise = customexercise
-                w_f.parcours_id = idp
-                w_f.student = student
-                w_f.is_corrected = 0
-                w_f.save()
-
-                if customexercise.is_image :
-                    form_images = form_ans(request.POST or None,  request.FILES or None, instance = w_f)
-                    for form_image in form_images :
-                        if form_image.is_valid():
-                            form_image.save()
-
-                ### Envoi de mail à l'enseignant
-                msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
-
-                if customexercise.teacher.notification :
-                    sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [customexercise.teacher.user.email] )
-                    pass
-
-                return redirect('show_parcours_student' , idp )
-
-        context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today , 'on_air' : on_air}
-
-        if customexercise.is_python :
-            url = "basthon/index_custom.html" 
-        else :
-            pad_student = str(student.user.id)+"_"+str(idp)+"_"+str(customexercise.id)
-            context.update(pad_student=pad_student)
-            url = "qcm/form_writing_custom.html" 
-
-        return render(request, url , context)
+    if customexercise.is_realtime :
+        on_air = True
     else :
-        return redirect("index")
+        on_air = False   
+ 
+
+    if Customanswerbystudent.objects.filter(student = student, customexercise = customexercise ).exists() : 
+        c_e = Customanswerbystudent.objects.get(student = student, customexercise = customexercise )
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None, instance = c_e )
+        images = Customanswerimage.objects.filter(customanswerbystudent = c_e) 
+
+    else :
+        cForm = CustomanswerbystudentForm(request.POST or None, request.FILES or None )
+        c_e = False
+        images = False
+
+    if customexercise.is_image :
+        form_ans = inlineformset_factory( Customanswerbystudent , Customanswerimage , fields=('image',) , extra=1)
+    else :
+        form_ans = None
+
+
+    if request.method == "POST":
+        if cForm.is_valid():
+            w_f = cForm.save(commit=False)
+            w_f.customexercise = customexercise
+            w_f.parcours_id = idp
+            w_f.student = student
+            w_f.is_corrected = 0
+            w_f.save()
+
+            if customexercise.is_image :
+                form_images = form_ans(request.POST or None,  request.FILES or None, instance = w_f)
+                for form_image in form_images :
+                    if form_image.is_valid():
+                        form_image.save()
+
+            ### Envoi de mail à l'enseignant
+            msg = "Exercice : "+str(unescape_html(cleanhtml(customexercise.instruction)))+"\n Parcours : "+str(parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(cForm.cleaned_data['answer'])
+
+            if customexercise.teacher.notification :
+                sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [customexercise.teacher.user.email] )
+                pass
+
+            return redirect('show_parcours_student' , idp )
+
+    context = {'customexercise': customexercise, 'communications' : [] , 'c_e' : c_e , 'form' : cForm , 'images':images, 'form_ans' : form_ans , 'parcours' : parcours ,'student' : student, 'today' : today , 'on_air' : on_air}
+
+    if customexercise.is_python :
+        url = "basthon/index_custom.html" 
+    else :
+        pad_student = str(student.user.id)+"_"+str(idp)+"_"+str(customexercise.id)
+        context.update(pad_student=pad_student)
+        url = "qcm/form_writing_custom.html" 
+
+    return render(request, url , context)
+ 
 
  
 
@@ -6659,7 +6659,7 @@ def write_custom_exercise(request,id,idp): # Coté élève - exercice non autoco
 ################   Canvas
 #################################################################################################################
 #################################################################################################################
-@login_required
+@login_required(login_url= 'index') 
 def show_canvas(request):
     user = request.user
     context = { "user" :  user  }
@@ -6668,7 +6668,7 @@ def show_canvas(request):
 
 
 
-@login_required
+@login_required(login_url= 'index') 
 def ajax_save_canvas(request):
 
     actions           = request.POST.get("actions",None)
@@ -6704,7 +6704,7 @@ def ajax_delete_custom_answer_image(request):
 
  
 
-
+@login_required(login_url= 'index') 
 def asking_parcours_sacado(request,pk):
     """demande de parcours par un élève"""
     group = Group.objects.get(pk = pk)
@@ -6868,11 +6868,11 @@ def detail_task_parcours(request,id,s,c):
         return render(request, 'qcm/task.html', context)
 
 
- 
+@login_required(login_url= 'index') 
 def detail_task(request,id,s):
 
     parcours = Parcours.objects.get(pk=id) 
-    teacher = Teacher.objects.get(user= request.user)
+    teacher = request.user.teacher
 
     today = time_zone_user(teacher.user) 
 
@@ -6915,7 +6915,7 @@ def detail_task(request,id,s):
         return render(request, 'qcm/task.html', context)
 
 
-
+@login_required(login_url= 'index') 
 def all_my_tasks(request):
     today = time_zone_user(request.user) 
     teacher = request.user.teacher 
@@ -6925,7 +6925,7 @@ def all_my_tasks(request):
     return render(request, 'qcm/all_tasks.html', context)
 
 
-
+@login_required(login_url= 'index') 
 def these_all_my_tasks(request):
     today = time_zone_user(request.user) 
     teacher = request.user.teacher 
@@ -6937,13 +6937,13 @@ def these_all_my_tasks(request):
 
 
  
-
+@login_required(login_url= 'index') 
 def group_tasks(request,id):
 
 
     group = Group.objects.get(pk = id)
-    teacher = Teacher.objects.get(user= request.user)
-    today = time_zone_user(teacher.user) 
+    teacher =  request.user.teacher
+    today = time_zone_user(request.user) 
 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
     students = group.students.prefetch_related("students_to_parcours")
@@ -6965,10 +6965,11 @@ def group_tasks(request,id):
     return render(request, 'qcm/group_task.html', context)
 
 
+@login_required(login_url= 'index')
 def group_tasks_all(request,id):
 
     group = Group.objects.get(pk = id)
-    teacher = Teacher.objects.get(user= request.user)
+    teacher = request.user.teacher
     today = time_zone_user(teacher.user) 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
 
@@ -6992,7 +6993,7 @@ def group_tasks_all(request,id):
 
 
 
-
+@login_required(login_url= 'index')
 def my_child_tasks(request,id):
     user = request.user
     today = time_zone_user(user) 
@@ -7094,12 +7095,7 @@ def ajax_remediation(request):
 
     parcours_id =  request.POST.get("parcours_id",None) 
 
-    cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
-    cookie_rgpd_accepted =  cookie_rgpd_accepted  == "True" 
-
-    print(cookie_rgpd_accepted)
-
-
+ 
     if parcours_id :
         parcours_id =  int(request.POST.get("parcours_id"))
         customexercise_id =  int(request.POST.get("customexercise_id"))
@@ -7110,7 +7106,7 @@ def ajax_remediation(request):
 
         remediations = Remediationcustom.objects.filter(customexercise = customexercise)
 
-        context = {'form': form,  'customexercise' : customexercise ,  'remediations' : remediations , 'relationship' : None , 'parcours_id' : parcours_id ,'cookie_rgpd_accepted' : cookie_rgpd_accepted  } 
+        context = {'form': form,  'customexercise' : customexercise ,  'remediations' : remediations , 'relationship' : None , 'parcours_id' : parcours_id } 
 
     else :
         relationship_id =  int(request.POST.get("relationship_id"))
@@ -7121,7 +7117,7 @@ def ajax_remediation(request):
 
         remediations = Remediation.objects.filter(relationship = relationship)
 
-        context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations, 'customexercise' : None , 'parcours_id' : relationship.parcours.id ,'cookie_rgpd_accepted' : cookie_rgpd_accepted   } 
+        context = {'form': form,  'relationship' : relationship ,  'remediations' : remediations, 'customexercise' : None , 'parcours_id' : relationship.parcours.id  } 
     
     html = render_to_string('qcm/ajax_remediation.html',context)
     data['html'] = html       
@@ -7311,7 +7307,7 @@ def ajax_delete_constraint(request):
 
 
 
-
+@login_required(login_url= 'index')
 def peuplate_custom_parcours(request,idp):
 
     teacher = request.user.teacher
@@ -7353,7 +7349,7 @@ def ajax_find_peuplate_sequence(request):
     return JsonResponse(data)  
 
 
- 
+@login_required(login_url= 'index') 
 def clone_course_sequence(request, idc):
     """ cloner un cours dans une sequence """
 
@@ -7377,7 +7373,7 @@ def clone_course_sequence(request, idc):
 
 
 
-
+@login_required(login_url= 'index')
 def clone_custom_sequence(request, idc):
     """ cloner un parcours """
 
@@ -7829,7 +7825,7 @@ def export_note(request,idg,idp):
 #######################################################################################################################################################################
 
 
-
+@login_required(login_url= 'index')
 def list_courses(request):
 
     teacher = request.user.teacher
@@ -7850,7 +7846,7 @@ def list_courses(request):
 
 
 
-
+@login_required(login_url= 'index')
 def list_courses_archives(request):
 
     teacher = request.user.teacher
@@ -7865,17 +7861,9 @@ def list_courses_archives(request):
 
     return render(request, 'qcm/course/my_courses_archives.html', { 'parcours_courses' : parcours_courses  })
 
- 
 
 
-
-
-
-
-
-
-
-
+@login_required(login_url= 'index')
 def only_create_course(request):
  
     teacher =  request.user.teacher
@@ -7897,7 +7885,7 @@ def only_create_course(request):
 
 
 
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def only_update_course(request,idc):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -7923,11 +7911,7 @@ def only_update_course(request,idc):
 
 
 
-
-
-
-
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def create_course(request, idc , id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -7966,7 +7950,7 @@ def create_course(request, idc , id ):
 
 
 
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def create_course_sequence(request, id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -8012,7 +7996,7 @@ def create_course_sequence(request, id ):
 
 
 
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def create_custom_sequence(request, id ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -8060,13 +8044,7 @@ def create_custom_sequence(request, id ):
 
 
 
-
-
-
-
-
-
-#@user_can_modify_this_course
+@login_required(login_url= 'index')
 def update_course(request, idc, id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -8111,13 +8089,13 @@ def update_course(request, idc, id  ):
     return render(request, 'qcm/course/form_course.html', context )
 
 
-
+@login_required(login_url= 'index')
 def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     try :
-        teacher = Teacher.objects.get(user= request.user)
+        teacher = request.user.teacher
         course = Course.objects.get( id = idc )
         parcours  = Parcours.objects.get( id = id )
         if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
@@ -8125,7 +8103,7 @@ def delete_course(request, idc , id  ):
         course.delete()
 
     except :
-        teacher = Teacher.objects.get(user= request.user)
+        teacher = request.user.teacher
         course = Course.objects.get(id=idc)
         if course.teacher == teacher or teacher.user.is_superuser :
             course.delete()
@@ -8139,7 +8117,7 @@ def delete_course(request, idc , id  ):
 
 
 
-
+@login_required(login_url= 'index')
 def peuplate_course_parcours(request,idp):
 
     teacher = request.user.teacher
@@ -8163,8 +8141,7 @@ def peuplate_course_parcours(request,idp):
 
 
 
-
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def show_course(request, idc , id ) :
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -8189,8 +8166,7 @@ def show_course(request, idc , id ) :
     return render(request, 'qcm/course/show_course.html', context)
 
  
-
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def show_one_course(request, idc  ) :
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -8204,7 +8180,7 @@ def show_one_course(request, idc  ) :
 
 
 
-#@user_is_parcours_teacher
+@login_required(login_url= 'index')
 def show_courses_from_folder(request,  idf ) :
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
@@ -8321,7 +8297,7 @@ def ajax_parcours_clone_course(request):
     return JsonResponse(data)
 
 
-  
+@login_required(login_url= 'index')  
 def get_this_course_for_this_parcours(request,typ,id_target,idp):
     """ Clone un parcours depuis la liste ver un parcours de provenance """
 
@@ -8349,7 +8325,7 @@ def get_this_course_for_this_parcours(request,typ,id_target,idp):
  
 
 
-
+@login_required(login_url= 'index')
 def all_courses(request):
  
     teacher = request.user.teacher
@@ -8359,7 +8335,7 @@ def all_courses(request):
 
 
 
-
+@login_required(login_url= 'index')
 def get_course_in_this_parcours(request,id):
     parcours = Parcours.objects.get(pk = id) 
     user = request.user
@@ -8380,7 +8356,7 @@ def get_course_in_this_parcours(request,id):
         return redirect('index')  
 
 
-
+@login_required(login_url= 'index')
 def course_custom_show_shared(request):
     
     user = request.user
@@ -8657,7 +8633,7 @@ def ajax_this_course_viewer(request):
 #######################################################################################################################################################################
 
 
-
+@login_required(login_url= 'index')
 def list_demands(request):
 
     demands = Demand.objects.order_by("done")
@@ -8666,7 +8642,7 @@ def list_demands(request):
 
 
 
-
+@login_required(login_url= 'index')
 def create_demand(request):
     teacher = request.user.teacher
     form = DemandForm(request.POST or None  )
@@ -8694,7 +8670,7 @@ def create_demand(request):
 
 
 
-
+@login_required(login_url= 'index')
 def update_demand(request, id):
  
     demand = Demand.objects.get(id=id)
@@ -8719,7 +8695,7 @@ def update_demand(request, id):
 
 
 
-
+@login_required(login_url= 'index')
 def delete_demand(request, id  ):
     """
     idc : demand_id et id = parcours_id pour correspondre avec le decorateur
@@ -8730,15 +8706,15 @@ def delete_demand(request, id  ):
 
 
 
-
+@login_required(login_url= 'index')
 def show_demand(request, id ):
     """
     idc : demand_id et id = parcours_id pour correspondre avec le decorateur
     """
     demand = Demand.objects.get(pk =  id)
 
-    user = User.objects.get(pk = request.user.id)
-    teacher = Teacher.objects.get(user = user)
+    user = request.user 
+    teacher = user.teacher
     context = {  'demands': demands, 'teacher': teacher , 'parcours': None , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/demand/show_demand.html', context)
 
@@ -9194,7 +9170,7 @@ def affectation_students_in_folder_and_affectation_groups_in_folder(nf,group_ids
     return all_students
 
 
- 
+@login_required(login_url= 'index') 
 def create_folder(request,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
     teacher = request.user.teacher 
@@ -9249,7 +9225,7 @@ def create_folder(request,idg):
     return render(request, 'qcm/form_folder.html', context)
  
 
-
+@login_required(login_url= 'index')
 @folder_exists
 def update_folder(request,id,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
@@ -9302,43 +9278,55 @@ def update_folder(request,id,idg):
     return render(request, 'qcm/form_folder.html', context)
  
 
+@login_required(login_url= 'index')
 @folder_exists
 def folder_archive(request,id,idg):
 
-    folder = Folder.objects.get(id=id)
-    folder.is_archive = 1
-    folder.save()
-    parcourses = folder.parcours.all()
- 
-    for p in parcourses :
-        p.is_archive = 1
-        p.save()
+    if folder.teacher == request.user.teacher :
+        folder = Folder.objects.get(id=id)
+        folder.is_archive = 1
+        folder.save()
+        parcourses = folder.parcours.all()
+     
+        for p in parcourses :
+            p.is_archive = 1
+            p.save()
 
-    return redirect('list_parcours_group' , idg )
+        return redirect('list_parcours_group' , idg )
+        messages.error(request,"Dossier" + folder.title +" archivé")
+    else :
+        messages.error(request,"Vous n'avez pas les droits d'accès")
+        return redirect('index')
 
 
 
 
+
+@login_required(login_url= 'index')
 @folder_exists
 def folder_unarchive(request,id,idg):
 
-    folder = Folder.objects.get(id=id)
-    folder.is_archive = 0
-    folder.is_favorite = 0
-    folder.save()
-    subparcours = folder.parcours.all()
+    if folder.teacher == request.user.teacher :
+        folder = Folder.objects.get(id=id)
+        folder.is_archive = 0
+        folder.is_favorite = 0
+        folder.save()
+        subparcours = folder.parcours.all()
+     
+        for p in subparcours :
+            p.is_archive = 0
+            p.is_favorite = 0
+            p.save()
+        messages.error(request,"Dossier" + folder.title +" désarchivé")
+    else :
+        messages.error(request,"Vous n'avez pas les droits d'accès")
+        return redirect('index')
  
-    for p in subparcours :
-        p.is_archive = 0
-        p.is_favorite = 0
-        p.save()
-
- 
-    return redirect('parcours')
+    return redirect('parcours') 
  
 
 
-
+@login_required(login_url= 'index')
 @folder_exists
 def delete_folder(request,id,idg):
 
@@ -9360,7 +9348,7 @@ def delete_folder(request,id,idg):
         return redirect ("list_parcours_group", idg )  
 
 
-
+@login_required(login_url= 'index')
 def parcours_delete_from_folder(request):
 
     parcours_id =  request.POST.get("parcours_id",None) 
@@ -9373,7 +9361,7 @@ def parcours_delete_from_folder(request):
     return JsonResponse(data)
 
 
- 
+@login_required(login_url= 'index')
 @folder_exists
 def delete_folder_and_contents(request,id,idg):
 
