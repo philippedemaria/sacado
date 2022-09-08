@@ -218,7 +218,6 @@ def index(request):
 
 
         cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
-
         cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
 
         context = { 'cookie_rgpd_accepted' : cookie_rgpd_accepted , 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
