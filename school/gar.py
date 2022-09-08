@@ -27,7 +27,7 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<debutValidite>"+date_start+"</debutValidite>"
     body += "<finValidite>"+date_stop+"</finValidite>"
     body += "<uaiEtab>"+abonnement.school.code_acad+"</uaiEtab>"
-    body += "<categorieAffectation>transferable</categorieAffectation>"
+    body += "<categorieAffectation>Transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
