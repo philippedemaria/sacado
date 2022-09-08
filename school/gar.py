@@ -32,11 +32,11 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
 
-    if not abonnement.school.is_primaire :
-        body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
-        body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
-        body += "<publicCible>DOCUMENTALISTE</publicCible>"
-        body += "<publicCible>AUTRE PERSONNEL</publicCible>"
+
+    body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+    body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
+    body += "<publicCible>DOCUMENTALISTE</publicCible>"
+    body += "<publicCible>AUTRE PERSONNEL</publicCible>"
         
     body += "<publicCible>ENSEIGNANT</publicCible>"
     body += "<publicCible>ELEVE</publicCible>"
