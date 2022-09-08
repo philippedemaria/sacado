@@ -1764,7 +1764,7 @@ def list_sub_parcours_group(request,idg,idf):
 def list_sub_parcours_group_student(request,idg,idf):
 
     rq_user = request.user
-    if rq_user.is_authenticated :
+    try :
         student = rq_user.student
         today   = time_zone_user(rq_user)
         folder  = Folder.objects.get(pk = idf) 
@@ -1786,7 +1786,9 @@ def list_sub_parcours_group_student(request,idg,idf):
 
         return render(request, 'qcm/list_sub_parcours_group_student.html', context )
     
-    else :
+    except :
+        messages.error(request, "Erreur...... Vous devez être affecté à un groupe. Contactez votre enseignant.")
+
         return redirect("index")
 
 
