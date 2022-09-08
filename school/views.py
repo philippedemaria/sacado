@@ -1036,13 +1036,18 @@ def get_school(request):
 		school = request.POST.get("school",None)
 		try :
 			user = User.objects.filter(pk=request.user.id).update(school = school)
- 
-			teacher = request.user.teacher
-			groups  = teacher.groups.all()
-			for g in groups :
-				Group.objects.filter(pk=g.id).update(school = school) 
-				for s in g.students.all() :
-					User.objects.filter(pk=s.user.id).update(school = school)
+			
+			# Si le prof ne change pas d'école alors on lui rattache ses élèves
+			changing_school = False
+			if request.user.school :
+				changing_school = True
+ 			if not changing_school : 
+				teacher = request.user.teacher
+				groups  = teacher.groups.all()
+				for g in groups :
+					Group.objects.filter(pk=g.id).update(school = school) 
+					for s in g.students.all() :
+						User.objects.filter(pk=s.user.id).update(school = school)
  
 			messages.success(request,"Rattachement à l'établissement réussi")
 		except :
