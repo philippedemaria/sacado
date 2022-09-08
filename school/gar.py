@@ -32,11 +32,11 @@ def web_abonnement_xml(abonnement,id_abonnement , today):
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(abonnement.school.nbstudents)+"</nbLicenceEleve>"
 
-
-    body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
-    body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
-    body += "<publicCible>DOCUMENTALISTE</publicCible>"
-    body += "<publicCible>AUTRE PERSONNEL</publicCible>"
+    if not abonnement.school.is_primaire :
+        body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+        body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
+        body += "<publicCible>DOCUMENTALISTE</publicCible>"
+        body += "<publicCible>AUTRE PERSONNEL</publicCible>"
         
     body += "<publicCible>ENSEIGNANT</publicCible>"
     body += "<publicCible>ELEVE</publicCible>"
@@ -53,7 +53,7 @@ def create_abonnement_gar(today,abonnement ,user):
     salt = str(timestamp).split(".") 
 
     id_abonnement = "SACADO_" + str(abonnement.school.code_acad)+"_"+salt[0]
-    host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
+    host   = "https://abonnement.partenaire.gar.education.fr/"+id_abonnement  # Adresse d'envoi
     directory = '/home/sacado/'
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
