@@ -179,35 +179,37 @@ def student_dashboard(request,group_id):
         
         bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
 
-        parcourses = bases.filter(is_evaluation=0, is_sequence=0).order_by("ranking")
-        sequences  = bases.filter(is_evaluation=0, is_sequence=1).order_by("ranking")
-        evaluations = bases.filter(is_evaluation=1).order_by("ranking")
 
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
+
     else :
 
-        group = student.students_to_group.first()
-
         try :
+            group = student.students_to_group.first()
             folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         except :
+            group = None
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
         bases = student.students_to_parcours 
-
-        parcourses_brut  = bases.filter(is_evaluation=0, is_publish=1,is_trash=0,  is_sequence=0).order_by("ranking")
-        sequences_brut   = bases.filter(is_evaluation=0, is_publish=1,is_trash=0,  is_sequence=1).order_by("ranking")
-        evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_evaluation=1,is_trash=0).order_by("ranking")
-
-
-        parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")
-        sequences   = sequences_brut.filter(folders = None).order_by("ranking")
-        evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
-
         last_exercises_done = student.answers.order_by("-date")[:5]
+
+
+
+    parcours_sequences = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_evaluation=0, is_trash=0)
+    evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_evaluation=1,is_trash=0).order_by("ranking") 
+       
+    parcourses_brut  = parcours_sequences.filter(is_sequence=0).order_by("ranking")
+    sequences_brut   = parcours_sequences.filter(is_sequence=1).order_by("ranking")
+
+
+    parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")
+    sequences   = sequences_brut.filter(folders = None).order_by("ranking")
+    evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
    
-        parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
+   
+    parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
 
     flashpacks = Flashpack.objects.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today), students=student,is_global=1).exclude(madeflashpack__date=today).distinct()
 
@@ -753,11 +755,14 @@ def show_group(request, id ):
 def aggregate_group(request):
 
     code_groupe = request.POST.get("groupe")
-    student = Student.objects.get(user=request.user)
 
-    if Group.objects.exclude(students = student).filter(code = code_groupe,lock=0).exists()  :    
-        group = Group.objects.get(code = code_groupe)
-        group.students.add(student)
+    try :
+        student = request.user.student
+        if Group.objects.exclude(students = student).filter(code = code_groupe,lock=0).exists()  :    
+            group = Group.objects.get(code = code_groupe)
+            group.students.add(student)
+    except :
+        pass
 
     return redirect("index") 
 
@@ -1250,20 +1255,34 @@ def enroll(request, slug):
                                   [request.POST.get("email")])
                 except :
                     pass 
-                user = authenticate(username=username, password=password)
-                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-                request.session["user_id"] = request.user.id
+                try :
+                    user = authenticate(username=username, password=password)
+                    login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+                    request.session["user_id"] = request.user.id
+                except :
+                    messages.error(request, "L'utilisateur n'est pas authentifié.")
+                    return redirect ('index')
             else :
                 messages.error(request, "Inscription abandonnée !")
                 return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })    
         else :
 
             username = request.POST.get("this_username")
-            group_id = request.POST.get("group_id")
-            group = get_object_or_404(Group, pk=group_id)
+            g_id = request.POST.get("group_id",None)
+            if g_id :
+                group_id = int(g_id)
+                group    = get_object_or_404(Group, pk=group_id)
+            else :
+                messages.error(request,"Le groupe n'est pas reconnu.")
+                return redirect('index') 
+
             password = request.POST.get("this_password")
-            
-            user = authenticate(username=username, password=password)
+            try :
+                user = authenticate(username=username, password=password)
+            except :
+                messages.error(request, "L'utilisateur n'est pas connecté. Erreur d'authentification.")
+                return redirect('index' )
+
             if user.is_authenticated :
                 login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 request.session["user_id"] = request.user.id
