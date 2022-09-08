@@ -578,7 +578,7 @@ def school_adhesion(request):
                     abonnement, abo_created = Abonnement.objects.get_or_create( accounting_id = accounting_id  , defaults={'school' : school_exists, 'is_gar' : school_exists.gar, 'date_start' : date_start, 'date_stop' : date_stop,  'user' : user, 'is_active' : 0}  )
  
                     if school_exists.gar: # appel de la fonction qui valide le Web Service
-                        create_abonnement_gar(today,school_exists,abonnement,request.user)
+                        create_abonnement_gar(today,abonnement,request.user)
                     ########################################################################################################################
                     #############  FIN  Abonnement
                     ########################################################################################################################
