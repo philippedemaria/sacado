@@ -608,17 +608,13 @@ def delete_selected_students(request):
 				Student.objects.filter(user_id=user_id).update(ebep = True)
 	else :
 		for user_id in user_ids :
-			user = User.objects.get(pk=user_id)
 			try :
 				student = Student.objects.get(user_id=user_id)
 				clear_detail_student(student)
 				student.delete()
 			except :
 				pass
-			try :
-				user.delete()
-			except :
-				pass
+
 
 
 	return redirect('school_students')
@@ -1036,7 +1032,7 @@ def get_school(request):
 		school = request.POST.get("school",None)
 		try :
 			user = User.objects.filter(pk=request.user.id).update(school = school)
-			
+
 			# Si le prof ne change pas d'école alors on lui rattache ses élèves
 			changing_school = False
 			if request.user.school :
