@@ -1691,7 +1691,7 @@ def update_accounting(request, id,tp):
                 nf.tp = 2
                 nf.is_credit = 1
             nf.save()
-
+            school = accounting.school
 
             for form_d in form_ds :
                 if form_d.is_valid():
@@ -1709,14 +1709,15 @@ def update_accounting(request, id,tp):
                     fa = form_abo.save(commit = False)
                     fa.user = request.user
                     fa.accounting = accounting
-                    fa.school = nf.school
-                    Customer.objects.get_or_create(school =  nf.school, defaults={  'status' : 3 } )
+                    fa.school = school
+
+                    Customer.objects.get_or_create(school =  school , defaults={  'status' : 3 } )
                     if nf.mode == "Période de test" or  nf.date_payment:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
 
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        School.objects.filter(pk=nf.school.id).update(gar=1)                    
+                        School.objects.filter(pk= school.id).update(gar=1)                    
                         if not id_a_gar :
                             test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
                             if test :
