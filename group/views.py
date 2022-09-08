@@ -208,7 +208,7 @@ def student_dashboard(request,group_id):
     sequences   = sequences_brut.filter(folders = None).order_by("ranking")
     evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
    
-   
+
     parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
 
     flashpacks = Flashpack.objects.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today), students=student,is_global=1).exclude(madeflashpack__date=today).distinct()
@@ -1283,7 +1283,7 @@ def enroll(request, slug):
                 messages.error(request, "L'utilisateur n'est pas connecté. Erreur d'authentification.")
                 return redirect('index' )
 
-            if user.is_authenticated :
+            if user :
                 login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 request.session["user_id"] = request.user.id
                 group.students.add(user.student)
