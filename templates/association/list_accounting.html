@@ -93,7 +93,7 @@
                                 <span >{{ accounting.date_payment|date:"Y-m-d" }} </span> 
                             </td>
                             <td>
-                                <span >{{ accounting.id }} {% if accounting.is_abonnement %}<small>Abonnement</small>{% endif %}</span> 
+                                <span >{{ accounting.id }} </span> 
                             </td>
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
@@ -108,34 +108,41 @@
                                 {% if accounting.is_display    %}
                                 <a href="{% url 'create_avoir'  accounting.id %}" class="pull-right" style="margin-right:10px" title="Créer un avoir"><i class="fa fa-times text-danger"></i> </a>
                                 {% endif %}
+
+ 
+
                             </td> 
                             <td>
-                                {%  if accounting.mode == "par virement bancaire" %}
-                                    <span class="helper_tip"> <i class="fa fa-send"></i>
-                                        <div class="helper_tip_text" >par virement bancaire</div>
-                                    </span>
-                                {% elif accounting.mode == "en espèces" %}
-                                    <span class="helper_tip"> <i class="fa fa-euro"></i>
-                                        <div class="helper_tip_text" >Espèces</div>
-                                    </span>
-                                {% elif accounting.mode == "par mandatement administratif" %}
-                                    <span class="helper_tip"> <i class="fa fa-envelop"></i>
-                                        <div class="helper_tip_text" >Mandat administratif</div>
-                                    </span>
-                                {% elif accounting.mode == "par carte de crédit" %}
-                                    <span class="helper_tip"> <i class="fa fa-credit-card"></i>
-                                        <div class="helper_tip_text" >par carte de crédit</div>
-                                    </span>
-                                {% endif %}
-                                {% if accounting.forme == "FACTURE" %}
-                                    {{ accounting.objet|safe  }}
+                                {% if accounting.is_abonnement %}
+                                    {%  if accounting.mode == "par virement bancaire" %}
+                                        <span class="helper_tip"> <i class="fa fa-send"></i>
+                                            <div class="helper_tip_text" >par virement bancaire</div>
+                                        </span>
+                                    {% elif accounting.mode == "en espèces" %}
+                                        <span class="helper_tip"> <i class="fa fa-euro"></i>
+                                            <div class="helper_tip_text" >Espèces</div>
+                                        </span>
+                                    {% elif accounting.mode == "par mandatement administratif" %}
+                                        <span class="helper_tip"> <i class="fa fa-envelop"></i>
+                                            <div class="helper_tip_text" >Mandat administratif</div>
+                                        </span>
+                                    {% elif accounting.mode == "par carte de crédit" %}
+                                        <span class="helper_tip"> <i class="fa fa-credit-card"></i>
+                                            <div class="helper_tip_text" >par carte de crédit</div>
+                                        </span>
+                                    {% endif %}
+                                    {% if accounting.forme == "FACTURE" %}
+                                        {{ accounting.objet|safe  }}
+                                    {% else %}
+                                        {{ accounting.observation|safe }}
+                                    {% endif %}
+                                    {%  if accounting.mode == "Période de test" %}
+                                        <span class="text-danger">Période d'essai jusqu'au {{ accounting.abonnement.date_stop|date:"d N Y" }}</span>
+                                    {% endif %} 
                                 {% else %}
-                                    {{ accounting.observation|safe }}
+                                     <span class="text-danger">Erreur de demande.</span>
                                 {% endif %}
 
-                                {%  if accounting.mode == "Période de test" %}
-                                    <span class="text-danger">Période d'essai jusqu'au {{ accounting.abonnement.date_stop|date:"d N Y" }}</span>
-                                {% endif %}  
                             </td>
 
                             {% if tp == 2 or tp == 3 %}
