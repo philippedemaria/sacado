@@ -143,3 +143,9 @@ function ebepSelectedStudents(f) {
 function launch_flashpack() {
      if (!confirm('Vous souhaitez lancer ce flashpack ? Si vous cliquez OK vous devrez le terminer et ne pourrez plus vous tester ce jour. \nCommencez le test ?')) return false;
  }
+
+
+function get_data_to_gar(f) {
+    if (!confirm('Vous souhaitez récupérer vos données depuis le compte de '+f+' ? \nAction irréversible.')) return false;
+ }
+

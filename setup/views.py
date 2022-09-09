@@ -328,7 +328,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     username   = dico_received["IDO"][0]
     password   = make_password("sacado_gar")
-    groups     = dico_received["DIV"]
     civilite   = dico_received["CIV"][0]
 
 
@@ -338,7 +337,28 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
      
-        if 'ens' in dico_received["PRO"][0] : # si ENSEIGNANT 
+
+        if 'elv' in dico_received["PRO"][0] : # si ELEVE 
+            user_type  = 0 
+
+            div   = dico_received["DIV"][0]
+            name  = div.split("##")[0]
+
+            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+            
+            if not school.is_primaire :
+                group, c_g        = Group.objects.get_or_create(school = school, name = name )
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level }) 
+            else :
+                level = Level.objects.get(pk=1)
+                group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level }  )
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+            try :
+                group.students.add(student)
+            except: 
+                pass
+ 
+        else : # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
             code_levels = dico_received["P_MS4"] 
             if "P_MEL" in dico_received.keys() : 
@@ -361,42 +381,22 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     level = Level.objects.get(pk=level_id)
                     teacher.levels.add(level)
 
+                try :    
+                    groups = dico_received["DIV"]
+                    for group in groups :
+                        name = group.split("##")[0]
+                        teacher = user.teacher
+                        if name[0] == 6 : level_id = 6
+                        elif name[0] == 5 : level_id = 7
+                        elif name[0] == 4 : level_id = 8
+                        elif name[0] == 3 : level_id = 9
+                        elif name[0] == 2 : level_id = 10
+                        elif name[0] == 1 : level_id = 11
+                        else : level_id = 12
 
-                for group in groups :
-                    name = group.split("##")[0]
-                    teacher = user.teacher
-                    if name[0] == 6 : level_id = 6
-                    elif name[0] == 5 : level_id = 7
-                    elif name[0] == 4 : level_id = 8
-                    elif name[0] == 3 : level_id = 9
-                    elif name[0] == 2 : level_id = 10
-                    elif name[0] == 1 : level_id = 11
-                    else : level_id = 12
-
-                    Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
-
-
-        else : # si ELEVE 
-            user_type  = 0 
-
-            div   = dico_received["DIV"][0]
-            name  = div.split("##")[0]
-
-            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
-            
-            if not school.is_primaire :
-                group, c_g        = Group.objects.get_or_create(school = school, name = name )
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level }) 
-            else :
-                level = Level.objects.get(pk=1)
-                group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level }  )
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-            try :
-                group.students.add(student)
-            except: 
-                pass
-
-
+                        Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
+                except :
+                    pass
         #########################################################
 
 

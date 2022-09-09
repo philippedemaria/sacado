@@ -12,11 +12,11 @@ import csv
 import pytz
 from datetime import datetime , timedelta
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import   logout
+from django.contrib.auth import login, authenticate , logout , update_session_auth_hash
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
 from django.core.mail import send_mail
 from django.db.models import Q, Avg, Sum
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
@@ -26,7 +26,6 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from django.contrib.auth import   logout
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
 from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword , Avatar , Background
 from group.models import Group, Sharing_group
@@ -191,16 +190,47 @@ def myaccount(request):
         teacher = Teacher.objects.get(user_id=request.session.get('user_id'))
         context = {'teacher': teacher, }
         return render(request, 'account/teacher_account.html', context)
-    else:
+    elif request.user.is_student:
         student = Student.objects.get(user_id=request.session.get('user_id'))
         context = {'student': student, }
-
         return render(request, 'account/student_account.html', context)
+    else:
+        parent = Parent.objects.get(user_id=request.session.get('user_id'))
+        context = {'parent': parent, }
+        return render(request, 'account/parent_account.html', context)
 
 
 
+@login_required(login_url= 'index')
+def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde le compte ante-gar Mais il ne sera plus mis à jour.
+ 
+    if request.user.is_teacher:
+        teacher = request.user.teacher
+        school  = teacher.user.school
+        users   = User.objects.filter(last_name=teacher.user.last_name , first_name=teacher.user.first_name , school=school , user_type=2)
+        if request.method== "POST" :
+            user_id = request.POST.get("user_id",None)
+            if user_id :
+                teacher = Teacher.objects.get(user_id=user_id)
+
+                if request.POST.get("keep") == "yes" : 
+                    keep_it = "Le compte personel est conservé avec les mêmes identifiants."
+                    test = migrate_all_documents_to_gar(teacher , request.user.teacher , 1)
+                else : 
+                    keep_it = "Le compte personel est supprimé."
+                    test = migrate_all_documents_to_gar(teacher , request.user.teacher , 0)
+                
+                if test :
+                    messages.success(request,'Tous les documents ont été migrés. ' + keep_it)
+                else :
+                    messages.error(request,"Erreur... Tous les documents n'ont pas été migrés. " + keep_it) 
+                return redirect('index')
+            else :
+                messages.error(request,"Erreur... Enseignant inconnu. ")   
 
 
+    context = {'users': users, }
+    return render(request, 'account/get_dataset_to_gar.html', context)
 
 
 ########################################            AVATAR                   #########################################

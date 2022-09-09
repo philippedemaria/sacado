@@ -90,7 +90,7 @@ def delete_gar_abonnement(id_abonnement):
 
 
 def these_abonnements_gar():
-    """Création d'un abonnement dans la base de données"""
+    """récupération des abonnements dans la base de données"""
 
     host          = "https://abonnement.gar.education.fr/abonnements"  # Adresse d'envoi
     directory     = '/home/sacado/'

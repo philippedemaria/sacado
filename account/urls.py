@@ -20,6 +20,9 @@ urlpatterns = [
     #path('password/reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
     #path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     #path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    
+
+    path('get_dataset_to_gar', get_dataset_to_gar, name='get_dataset_to_gar'), # récupère les données anvant le GAR -> GAR 
 
 
     path('password/reset/', passwordResetView, name='password_reset'),

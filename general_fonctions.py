@@ -456,6 +456,8 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
 
 
 
+
+
 def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student):
 
     for folder in folders :
@@ -679,6 +681,132 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
 
 
 
+
+def migrate_all_documents_from_parcourses(teacher,parcourses) :
+    for parcours in parcourses:
+        # Récupératin des doc du parcours
+        relationships   = parcours.parcours_relationship.all() # récupération des relations
+        courses         = parcours.course.all() # récupération des relations
+        customexercises = parcours.parcours_customexercises.all() # récupération des customexercises
+        quizzes         = parcours.quizz.all() # récupération des quizzes
+        flashpacks      = parcours.flashpacks.all() # récupération des flashpacks
+        bibliotexs      = parcours.bibliotexs.all() # récupération des bibliotexs
+        is_sequence     = parcours.is_sequence
+        #clone du parcours
+        parcours.pk      = None
+        parcours.teacher = teacher
+        parcours.code    = str(uuid.uuid4())[:8]
+        parcours.save()
+        folder.parcours.add(parcours)
+
+        if is_sequence :
+            for r  in relationships : 
+                skills = r.skills.all() 
+                r.pk = None
+                r.save()                        
+                r.skills.set(skills)
+
+        else :
+
+            for c  in customexercises : 
+                skills     = c.skills.all() 
+                knowledges = c.knowledges.all() 
+                c.pk       = None
+                c.teacher  = teacher
+                c.save()
+                c.skills.set(skills)
+                c.knowledges.set(knowledges)
+                c.parcourses.add(parcours)
+
+            n_r = []
+            for course in courses : 
+                relationships_c  = course.relationships.all() 
+                course.pk      = None
+                course.parcours = parcours
+                course.teacher = teacher
+                course.save()
+                
+                for r in relationships_c :
+                    try :
+                        skills = r.skills.all() 
+                        r.pk       = None
+                        r.parcours = parcours
+                        r.save()
+                        r.skills.set(skills)
+                        course.relationships.add(r)
+                    except :
+                        pass
+                    n_r.append(r.id)
+
+            for r in relationships.exclude(pk__in=n_r) :
+                try :
+                    skills = r.skills.all() 
+                    r.pk       = None
+                    r.parcours = parcours
+                    r.save()
+                    r.skills.set(skills)
+                except :
+                    pass
+
+            for quizz in quizzes :  
+                questions = quizz.questions.all()    
+                themes    = quizz.themes.all()  
+                levels    = quizz.levels.all()  
+
+                quizz.pk      = None
+                quizz.teacher = teacher
+                quizz.save()
+
+                for question in questions :
+                    choices = question.choices.all()
+                    question.pk = None
+                    question.save()
+                    quizz.questions.add(question)
+                    for choice in choices :
+                        choice.pk= None
+                        choice.question = question
+                        choice.save()
+
+                quizz.parcours.add(parcours)
+                quizz.folders.add(folder)
+                quizz.levels.set(levels)
+                quizz.themes.set(themes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+def migrate_all_documents_to_gar(init , target , is_delete) :
+    folders              = init.teacher_folders.all()
+    parcourses_no_folder = init.teacher_parcours.filter(parcours=None)# on ne récupère que les parcours sans dossier puisque ceux dans les dossiers sont déjà récupérés 
+    try :
+        for folder in folders :
+            parcourses = folder.parcours.all()
+            folder.pk      = None
+            folder.teacher = target
+            folder.save()
+
+            migrate_all_documents_from_parcourses(target,parcourses)
+
+        migrate_all_documents_from_parcourses(target,parcourses_no_folder)
+
+        if is_delete :
+            init.delete()
+
+        is_test = True
+    except :
+
+        is_test = False
+
+    return is_test
 
 
 

@@ -1,0 +1,51 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+ 
+{% block require %}
+
+
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+
+{% endblock %}
+
+
+{% block page_title %}
+    Récupérer les données avant le GAR
+
+{% endblock %}
+
+{% block body %}
+<section class="content_list"> 
+<div class="row"> 
+    <div class="col-sm-12 col-md-9">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% for u in users %}
+                <form method="POST"  enctype='multipart/form-data'> 
+                    <div class="box box-widget widget-user-2" style="padding:10px 30px 30px 30px;height:300px" >
+                        <div class="handler widget-user-header">
+                            <input type="hidden" name="user_id" value="{{ u.id }}"  required /><label><h3 class="thin">{{ u.first_name }} {{ u.last_name }}</h3>Id : {{ u.username }}</label><br/><br/>
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" name="keep" value="no" onclick="return get_data_to_gar('{{ u.username }} et supprimer le compte HORS GAR')">Migrer les données <br/>et<br/> supprimer le compte HORS GAR</button>   <br/><br/>
+                            <button type="submit" class="btn btn-sacado" name="keep" value="yes" onclick="return get_data_to_gar('{{ u.username }} et conserver le compte HORS GAR')">Migrer les données <br/>et<br/> conserver le compte HORS GAR</button> 
+                        </div>
+                    </div>
+                </form>
+                {% endfor %}
+            </div>
+        </div>      
+    </div>
+</div> 
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+
+        <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default"  /></a>
+    </div>
+</div>
+
+</section>
+
+{% endblock %}
