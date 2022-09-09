@@ -1772,11 +1772,10 @@ def update_accounting(request, id,tp):
 
 
             else :
-                if Accounting.objects.filter(pk = accounting.id,is_abonnement=1) :
-                    abo = Abonnement.objects.get(accounting = accounting)
-                    abo.delete()
+                if Abonnement.objects.filter(accounting = accounting)  :
+                    Abonnement.objects.filter(accounting = accounting).delete()
                     Accounting.objects.filter(pk = accounting.id).update(is_abonnement=0)
-                    messages.info(request,"Abonnement "+abo+" supprimé")
+                    messages.info(request,"Abonnement supprimé")
                 else :
                     messages.error(request,"BIZARRE")
 
