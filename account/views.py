@@ -215,15 +215,15 @@ def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde
 
                 if request.POST.get("keep") == "yes" : 
                     keep_it = "Le compte personel est conservé avec les mêmes identifiants."
-                    test = migrate_all_documents_to_gar(teacher , request.user.teacher , 1)
+                    test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 1)
                 else : 
                     keep_it = "Le compte personel est supprimé."
-                    test = migrate_all_documents_to_gar(teacher , request.user.teacher , 0)
-                
+                    test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 0)
+                print(test, raison)
                 if test :
                     messages.success(request,'Tous les documents ont été migrés. ' + keep_it)
                 else :
-                    messages.error(request,"Erreur... Tous les documents n'ont pas été migrés. " + keep_it) 
+                    messages.error(request,"Erreur... Tous les documents n'ont pas été migrés. \n"+raison+"\n" + keep_it) 
                 return redirect('index')
             else :
                 messages.error(request,"Erreur... Enseignant inconnu. ")   

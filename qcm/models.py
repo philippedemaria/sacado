@@ -2236,7 +2236,19 @@ class Exerciselocker(ModelWithCode):
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 class Course(models.Model): # pour les 
-
+    FORMES = (
+        ("ACTIVITE", "ACTIVITE"),
+        ("APPLICATION", "APPLICATION"),
+        ("COURS"  , "COURS"),
+        ("CONSIGNE"  , "CONSIGNE"),
+        ("EXEMPLE", "EXEMPLE"),
+        ("EXPLICATION", "EXPLICATION"),
+        ("HISTOIRE", "HISTOIRE"),
+        ("ILLUSTRATION", "ILLUSTRATION"),
+        ("MÉTHODE", "MÉTHODE"),
+        (""       , "PRESENTATION"),
+        ("VIDEO"  , "VIDEO"),
+    )
     parcours = models.ForeignKey(Parcours,  on_delete=models.CASCADE, blank=True, null=True,  related_name='course') 
     title = models.CharField(max_length=50, default='',  blank=True, verbose_name="Titre")    
     annoncement = RichTextUploadingField( blank=True, verbose_name="Texte*") 
@@ -2270,7 +2282,7 @@ class Course(models.Model): # pour les
     level    = models.ForeignKey(Level, on_delete=models.CASCADE,  related_name="courses", default=None,  blank=True, null=True , verbose_name="Niveau")
     subject  = models.ForeignKey(Subject, on_delete=models.CASCADE,  related_name="courses", default=None,   blank=True, null=True, verbose_name="Enseignement" )
 
-
+    forme   = models.CharField(max_length=50,choices=FORMES, default='COURS',  blank=True, verbose_name="Type")  
 
     def __str__(self):
         return self.title 

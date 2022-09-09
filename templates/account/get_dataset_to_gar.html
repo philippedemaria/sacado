@@ -9,6 +9,8 @@
 
     <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
 
+ 
+
 {% endblock %}
 
 
@@ -29,8 +31,9 @@
                         <div class="handler widget-user-header">
                             <input type="hidden" name="user_id" value="{{ u.id }}"  required /><label><h3 class="thin">{{ u.first_name }} {{ u.last_name }}</h3>Id : {{ u.username }}</label><br/><br/>
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger" name="keep" value="no" onclick="return get_data_to_gar('{{ u.username }} et supprimer le compte HORS GAR')">Migrer les données <br/>et<br/> supprimer le compte HORS GAR</button>   <br/><br/>
-                            <button type="submit" class="btn btn-sacado" name="keep" value="yes" onclick="return get_data_to_gar('{{ u.username }} et conserver le compte HORS GAR')">Migrer les données <br/>et<br/> conserver le compte HORS GAR</button> 
+                            <button type="submit" class="btn btn-danger get_gar_dataset" data-user_id ='{{ u.id }}' name="keep" value="no" onclick="return get_data_to_gar('{{ u.username }} et supprimer le compte HORS GAR')">Migrer les données <br/>et<br/> supprimer le compte HORS GAR</button>   <br/><br/>
+                            <button type="submit" class="btn btn-sacado get_gar_dataset" data-user_id ='{{ u.id }}' name="keep" value="yes" onclick="return get_data_to_gar('{{ u.username }} et conserver le compte HORS GAR')">Migrer les données <br/>et<br/> conserver le compte HORS GAR</button> 
+                            <div id='loader{{ u.id }}'></div>
                         </div>
                     </div>
                 </form>

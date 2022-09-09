@@ -456,8 +456,6 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
 
 
 
-
-
 def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student):
 
     for folder in folders :
@@ -494,6 +492,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
                 for r  in relationships : 
                     skills = r.skills.all() 
                     r.pk = None
+                    r.parcours = parcours 
                     r.save()                        
                     r.skills.set(skills)
                     r.students.add(student)
@@ -504,6 +503,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
                     skills     = c.skills.all() 
                     knowledges = c.knowledges.all() 
                     c.pk       = None
+                    c.code    = str(uuid.uuid4())[:8]
                     c.teacher  = teacher
                     c.save()
                     c.students.add(student)
@@ -550,6 +550,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
                     levels    = quizz.levels.all()  
 
                     quizz.pk      = None
+                    quizz.code    = str(uuid.uuid4())[:8]
                     quizz.teacher = teacher
                     quizz.save()
 
@@ -570,7 +571,45 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
                     quizz.themes.set(themes)
                     quizz.students.add(student)
 
+                for bibliotex in bibliotexs :  
+                    relationtexs = bibliotex.relationtexs.all()    
+                    themes       = bibliotex.subjects.all()  
+                    levels       = bibliotex.levels.all()    
 
+                    bibliotex.pk      = None
+                    bibliotex.teacher = teacher
+                    bibliotex.save()
+
+                    for relationtex in relationtexs :
+                        relationtex.pk        = None
+                        relationtex.bibliotex = bibliotex
+                        relationtex.teacher   = teacher
+                        relationtex.save()
+                        relationtex.skills.set(skills)
+                        relationtex.knowledges.set(knowledges)
+     
+                    bibliotex.themes.set(themes)
+                    bibliotex.levels.set(levels)
+
+
+
+                for flashpack in flashpacks :  
+                    flashcards = flashpack.flashcards.all()    
+                    themes     = flashpack.subjects.all()  
+                    levels     = flashpack.levels.all()    
+     
+                    flashpack.pk      = None
+                    flashpack.teacher = teacher
+                    flashpack.save()
+
+                    for flashcard in flashcards :
+                        flashcard.pk        = None
+                        flashcard.save()
+     
+                    flashpack.authors.add(teacher.user)
+                    flashpack.parcours.add(parcours)
+                    flashpack.themes.set(themes)
+                    flashpack.levels.set(levels)
 
 
 def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher,  student):
@@ -601,6 +640,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
             for r  in relationships : 
                 skills = r.skills.all() 
                 r.pk = None
+                r.parcours = parcours
                 r.save()                        
                 r.skills.set(skills)
                 r.students.add(student)
@@ -611,6 +651,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
                 skills     = c.skills.all() 
                 knowledges = c.knowledges.all() 
                 c.pk       = None
+                c.code    = str(uuid.uuid4())[:8]
                 c.teacher  = teacher
                 c.save()
                 c.students.add(student)
@@ -658,6 +699,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
 
                 quizz.pk      = None
                 quizz.teacher = teacher
+                quizz.code    = str(uuid.uuid4())[:8]
                 quizz.save()
 
                 for question in questions :
@@ -677,12 +719,49 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
                 quizz.themes.set(themes)
                 quizz.students.add(student)
 
+            for bibliotex in bibliotexs :  
+                relationtexs = bibliotex.relationtexs.all()    
+                themes       = bibliotex.subjects.all()  
+                levels       = bibliotex.levels.all()    
+ 
+                bibliotex.pk      = None
+                bibliotex.teacher = teacher
+                bibliotex.save()
+
+                for relationtex in relationtexs :
+                    relationtex.pk        = None
+                    relationtex.bibliotex = bibliotex
+                    relationtex.teacher   = teacher
+                    relationtex.save()
+                    relationtex.skills.set(skills)
+                    relationtex.knowledges.set(knowledges)
+ 
+                bibliotex.themes.set(themes)
+                bibliotex.levels.set(levels)
+
+            for flashpack in flashpacks :  
+                flashcards = flashpack.flashcards.all()    
+                themes     = flashpack.subjects.all()  
+                levels     = flashpack.levels.all()    
+ 
+                flashpack.pk      = None
+                flashpack.teacher = teacher
+                flashpack.save()
+
+                for flashcard in flashcards :
+                    flashcard.pk        = None
+                    flashcard.save()
+ 
+                flashpack.authors.add(teacher.user)
+                flashpack.parcours.add(parcours)
+                flashpack.themes.set(themes)
+                flashpack.levels.set(levels)
 
 
+def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) :
 
-
-
-def migrate_all_documents_from_parcourses(teacher,parcourses) :
+    raison = ""
+ 
     for parcours in parcourses:
         # Récupératin des doc du parcours
         relationships   = parcours.parcours_relationship.all() # récupération des relations
@@ -693,120 +772,198 @@ def migrate_all_documents_from_parcourses(teacher,parcourses) :
         bibliotexs      = parcours.bibliotexs.all() # récupération des bibliotexs
         is_sequence     = parcours.is_sequence
         #clone du parcours
-        parcours.pk      = None
+        if not is_delete :
+            parcours.pk      = None
         parcours.teacher = teacher
         parcours.code    = str(uuid.uuid4())[:8]
         parcours.save()
-        folder.parcours.add(parcours)
+        if folder :
+            folder.parcours.add(parcours)
 
         if is_sequence :
-            for r  in relationships : 
-                skills = r.skills.all() 
-                r.pk = None
-                r.save()                        
-                r.skills.set(skills)
+            try :
+                for r  in relationships : 
+                    skills = r.skills.all() 
+                    if not is_delete :
+                        r.pk = None
+                    r.parcours = parcours
+                    r.save() 
+                    if not is_delete :                     
+                        r.skills.set(skills)
+            except :
+                raison += " Séquence non récupérée"
 
         else :
-
-            for c  in customexercises : 
-                skills     = c.skills.all() 
-                knowledges = c.knowledges.all() 
-                c.pk       = None
-                c.teacher  = teacher
-                c.save()
-                c.skills.set(skills)
-                c.knowledges.set(knowledges)
-                c.parcourses.add(parcours)
+            try :
+                for c  in customexercises : 
+                    skills     = c.skills.all() 
+                    knowledges = c.knowledges.all() 
+                    if not is_delete :
+                        c.pk = None
+                        c.code     = str(uuid.uuid4())[:8]
+                    c.teacher  = teacher
+                    c.save()
+                    if not is_delete :  
+                        c.skills.set(skills)
+                        c.knowledges.set(knowledges)
+                        c.parcourses.add(parcours)
+            except :
+                raison += " Exercice personalisé non récupéré."
 
             n_r = []
-            for course in courses : 
-                relationships_c  = course.relationships.all() 
-                course.pk      = None
-                course.parcours = parcours
-                course.teacher = teacher
-                course.save()
-                
-                for r in relationships_c :
+            try :
+                for course in courses : 
+                    relationships_c  = course.relationships.all()
+                    if not is_delete :   
+                        course.pk = None
+                    course.parcours = parcours
+                    course.teacher = teacher
+                    course.save()
+                    
+                    for r in relationships_c :
+                        try :
+                            skills = r.skills.all() 
+                            if  is_delete :  
+                                r. pk = None
+                            r.parcours = parcours
+                            r.save()
+                            if not is_delete :  
+                                r.skills.set(skills)
+                                course.relationships.add(r)
+                        except :
+                            pass
+                        n_r.append(r.id)
+            except :
+                raison += " Cours non récupéré."
+
+            try :
+                for r in relationships.exclude(pk__in=n_r) :
                     try :
                         skills = r.skills.all() 
-                        r.pk       = None
+                        if not is_delete :  
+                            r.pk = None
                         r.parcours = parcours
                         r.save()
-                        r.skills.set(skills)
-                        course.relationships.add(r)
+                        if not is_delete :
+                            r.skills.set(skills)
                     except :
                         pass
-                    n_r.append(r.id)
+            except :
+                raison += " Exercice non récupéré."
 
-            for r in relationships.exclude(pk__in=n_r) :
-                try :
-                    skills = r.skills.all() 
-                    r.pk       = None
-                    r.parcours = parcours
-                    r.save()
-                    r.skills.set(skills)
-                except :
-                    pass
+            try :
+                for quizz in quizzes :  
+                    questions = quizz.questions.all()    
+                    themes    = quizz.themes.all()  
+                    levels    = quizz.levels.all()  
+                    if not is_delete :
+                        quizz.pk      = None
+                        quizz.code    = str(uuid.uuid4())[:8]
+                    quizz.teacher = teacher
+                    quizz.save()
 
-            for quizz in quizzes :  
-                questions = quizz.questions.all()    
-                themes    = quizz.themes.all()  
-                levels    = quizz.levels.all()  
+                    if not is_delete :
+                        for question in questions :
+                            choices = question.choices.all()
+                            question.pk = None
+                            question.save()
+                            quizz.questions.add(question)
+                            for choice in choices :
+                                choice.pk       = None
+                                choice.question = question
+                                choice.save()
 
-                quizz.pk      = None
-                quizz.teacher = teacher
-                quizz.save()
+                        quizz.parcours.add(parcours)
+                        if folder :
+                            quizz.folders.add(folder)
+                        quizz.levels.set(levels)
+                        quizz.themes.set(themes)
+            except :
+                raison += " Quizz non récupéré."
+            try :   
+                for bibliotex in bibliotexs :  
+                    relationtexs = bibliotex.relationtexs.all()    
+                    themes       = bibliotex.subjects.all()  
+                    levels       = bibliotex.levels.all()    
+                    if not is_delete :
+                        bibliotex.pk      = None
+                    bibliotex.teacher = teacher
+                    bibliotex.save()
 
-                for question in questions :
-                    choices = question.choices.all()
-                    question.pk = None
-                    question.save()
-                    quizz.questions.add(question)
-                    for choice in choices :
-                        choice.pk= None
-                        choice.question = question
-                        choice.save()
+                    for relationtex in relationtexs :
+                        knowledges = relationtex.knowledges.all()    
+                        skills     = relationtex.skills.all()    
+                        if not is_delete :
+                            relationtex.pk        = None
+                            relationtex.bibliotex = bibliotex
+                        relationtex.teacher   = teacher
+                        relationtex.save()
+                        relationtex.skills.set(skills)
+                        relationtex.knowledges.set(knowledges)
+                    
+                    if not is_delete :
+                        bibliotex.themes.set(themes)
+                        bibliotex.levels.set(levels)
+            except :
+                raison += " Bibliotex non récupéré."
 
-                quizz.parcours.add(parcours)
-                quizz.folders.add(folder)
-                quizz.levels.set(levels)
-                quizz.themes.set(themes)
+            try :  
+                for flashpack in flashpacks :  
+                    flashcards = flashpack.flashcards.all()    
+                    themes     = flashpack.themes.all()  
+                    levels     = flashpack.levels.all()    
+                    if not is_delete :
+                        flashpack.pk      = None
+                    flashpack.teacher = teacher
+                    flashpack.save()
 
+                    if not is_delete :
+                        for flashcard in flashcards :
+                            flashcard.pk        = None
+                            flashcard.save()
+     
+                        flashpack.authors.add(teacher.user)
+                        flashpack.parcours.add(parcours)
+                        flashpack.themes.set(themes)
+                        flashpack.levels.set(levels)
+            except :
+                raison += " Flashpack non récupéré."
 
+    if len(raison) : is_test = True
+    else           : is_test = False
 
+    print( "is_test , raison" , is_test , raison)
 
-
-
-
-
-
-
-
+    return is_test , raison
 
 
 def migrate_all_documents_to_gar(init , target , is_delete) :
+
     folders              = init.teacher_folders.all()
-    parcourses_no_folder = init.teacher_parcours.filter(parcours=None)# on ne récupère que les parcours sans dossier puisque ceux dans les dossiers sont déjà récupérés 
-    try :
-        for folder in folders :
-            parcourses = folder.parcours.all()
-            folder.pk      = None
-            folder.teacher = target
-            folder.save()
+ 
+    for folder in folders :
+        parcourses = folder.parcours.all()
+        folder.pk      = None
+        folder.teacher = target
+        folder.save()
 
-            migrate_all_documents_from_parcourses(target,parcourses)
+        is_ok , raisonf = migrate_all_documents_from_parcourses(target,folder ,parcourses,is_delete)
 
-        migrate_all_documents_from_parcourses(target,parcourses_no_folder)
+    parcourses_no_folder = init.teacher_parcours.filter(folders=None)# on ne récupère que les parcours sans dossier puisque ceux dans les dossiers sont déjà récupérés 
+ 
+    is_test,raison = migrate_all_documents_from_parcourses(target,None, parcourses_no_folder,is_delete)
+ 
 
-        if is_delete :
-            init.delete()
+    test = is_ok and is_test
 
-        is_test = True
-    except :
+    this_raison = ""
+    if not is_ok   : this_raison += raisonf
+    if not is_test : this_raison += raison
 
-        is_test = False
+    print("test , this_raison" , test , this_raison)
 
-    return is_test
+
+    return test, this_raison
 
 
 

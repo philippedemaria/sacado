@@ -345,7 +345,7 @@
 
                     {% if request.user.school.gar %}
                         <br/><a href="{% url 'get_dataset_to_gar' %}">Migrer mes données ante-GAR</a>
-                    {% endif %}
+                    {% endif %} <br/><a href="{% url 'get_dataset_to_gar' %}" style="font-size:10px">Migrer mes données ante-GAR</a>
 
                 {% else %}
                     Enseignant <br/>  {{ user.school.name }}  <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a>  

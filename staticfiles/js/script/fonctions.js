@@ -147,5 +147,9 @@ function launch_flashpack() {
 
 function get_data_to_gar(f) {
     if (!confirm('Vous souhaitez récupérer vos données depuis le compte de '+f+' ? \nAction irréversible.')) return false;
+
+    let user_id = this.getAttribute('data-user_id');
+    document.getElementById("#loader"+user_id).innerHTML ="MIGRATIONS EN COURS <i class='fa fa-spinner fa-pulse'></i>" ;
+
  }
 
