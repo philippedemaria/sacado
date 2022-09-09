@@ -1773,8 +1773,10 @@ def update_accounting(request, id,tp):
 
             else :
                 if Accounting.objects.filter(pk = accounting.id,is_abonnement=1) :
+                    abo = Abonnement.objects.get(accounting = accounting)
+                    abo.delete()
                     Accounting.objects.filter(pk = accounting.id).update(is_abonnement=0)
-                    Abonnement.objects.filter(accounting = accounting).delete()
+                    
 
 
 
