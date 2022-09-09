@@ -665,9 +665,6 @@ class Facture(models.Model):
         return "{} {}".format(self.user, self.file)
 
 
-
-
-
 class Teacher(models.Model):
     """
     Modèle représentant un enseignant.
@@ -682,11 +679,17 @@ class Teacher(models.Model):
     students      = models.ManyToManyField(Student, related_name="teachers", blank=True, editable= False)
     is_lesson     = models.BooleanField(default=0, verbose_name="Propose des cours ?")
     comment       = models.TextField( blank=True, null=True, verbose_name="Commentaire")
+    is_migration  = models.BooleanField(default=0,  editable= False) #Signale si un enseignant a fait une migration de ses documents vers son compte GAR
 
     def __str__(self):
         return f"{self.user.last_name.capitalize()} {self.user.first_name.capitalize()}"
 
 
+    def is_done_the_migration(self):
+        is_done = False
+        if student in self.students.all():
+            is_done = True
+        return is_done
 
 
 
@@ -774,6 +777,7 @@ class Teacher(models.Model):
             nb = True
         return nb
         
+
 
 class Resultknowledge(models.Model):
     student = models.ForeignKey(Student, related_name="results_k", default="", on_delete=models.CASCADE, editable=False)

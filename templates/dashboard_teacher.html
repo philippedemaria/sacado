@@ -3,7 +3,7 @@
 
 
         {% if request.user.is_authenticated %}
-            {% if request.user.school.gar and request.user.is_teacher and is_gar_check %}                    
+            {% if is_gar_check and not request.user.teacher.is_migration %}                    
             <div class="row"> 
                 <div class="col-xs-12 col-md-12 col-lg-12" >
                     <div id="advises" class="advises">
