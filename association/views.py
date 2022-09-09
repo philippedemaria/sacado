@@ -1716,7 +1716,7 @@ def update_accounting(request, id,tp):
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 2 } )
-                    
+                        messages.success(request,"Abonnement créé en période de Test")
                     if nf.date_payment:
                         fa.is_active = 1
                         Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
@@ -1724,7 +1724,7 @@ def update_accounting(request, id,tp):
                         if not create :
                             customer.status = 3
                             customer.save()
-
+                        messages.success(request,"Abonnement payé.")
 
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
                         School.objects.filter(pk= school.id).update(gar=1)                    
@@ -1776,6 +1776,7 @@ def update_accounting(request, id,tp):
                     abo = Abonnement.objects.get(accounting = accounting)
                     abo.delete()
                     Accounting.objects.filter(pk = accounting.id).update(is_abonnement=0)
+                    messages.info(request,"Abonnement "+abo+" supprimé")
                     
 
 
