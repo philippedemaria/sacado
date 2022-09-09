@@ -482,6 +482,7 @@ def ajax_charge_school(request):
     data['schools'] = list(schools)
     return JsonResponse(data)
 
+
 @csrf_exempt
 def ajax_charge_school_by_rne(request):
 
@@ -489,6 +490,16 @@ def ajax_charge_school_by_rne(request):
     data = {}
     schools = School.objects.values_list('id', 'name').filter(country_id=5,code_acad=id_rne)
     data['schools'] = list(schools)
+
+    school = School.objects.filter(country_id=5,code_acad=id_rne).first()
+    is_active = False
+
+    customer = Customer.objects.get(pk=school.id)
+    if customer.status > 1 : 
+        is_active = True 
+
+    data["is_active"] = is_active
+
     return JsonResponse(data)
 
 

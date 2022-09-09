@@ -700,26 +700,36 @@ $(document).ready(function () {
                     url : "ajax_charge_school_by_rne",
                     success: function (data) {
 
-                        $('select[name=school]').empty("");                        
-                        schools = data["schools"] ;
-                        if (schools.length >0)
 
-                        { for (let i = 0; i < schools.length; i++) {
-                                    
-                                let school_id   = schools[i][0];
-                                let school_name = schools[i][1]  ;
-                                let option = $("<option>", {  'value': Number(school_id), 'html': school_name });
-                                $('select[name=school]').append(option);
-                            }
+                        if (data.is_active){  
+
+                            $("#response_ajax").append("<div class='alert alert-danger'>Votre établissement a demandé un abonnement. Contacter l'administrateur de SACADO  de votre établissement... en Maths ou SPC.</div>");
                         }
-                        else
-                        {
-                            let option = $("<option>", {  'value': "", 'html': "Aucun contenu disponible" });
-                            $('select[name=school]').append(option);  
+                        else {
+
+
+                                $('select[name=school]').empty("");                        
+                                schools = data["schools"] ;
+                                if (schools.length >0)
+
+                                { for (let i = 0; i < schools.length; i++) {
+                                            
+                                        let school_id   = schools[i][0];
+                                        let school_name = schools[i][1]  ;
+                                        let option = $("<option>", {  'value': Number(school_id), 'html': school_name });
+                                        $('select[name=school]').append(option);
+                                    }
+                                }
+                                else
+                                {
+                                    let option = $("<option>", {  'value': "", 'html': "Aucun contenu disponible" });
+                                    $('select[name=school]').append(option);  
+                                }
+
+
+                            $("#show_form_teacher").show();                            
                         }
 
-
-                        $("#show_form_teacher").show();
                         
                     }
                 }
