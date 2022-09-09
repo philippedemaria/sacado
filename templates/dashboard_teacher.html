@@ -2,6 +2,31 @@
 {% load item_tags %} 
 
 
+        {% if request.user.is_authenticated %}
+            {% if request.user.school.gar and request.user.is_teacher  %}                    
+            <div class="row"> 
+                <div class="col-xs-12 col-md-12 col-lg-12" >
+                    <div id="advises" class="advises">
+
+                            <form action="#" method="POST" > 
+                                <h1 class="thin" >Accès au GAR.</h1>
+                                <p>Avant l'arrivée du GAR dans SACADO, vous utilisiez déjà SACADO. Vous devez faire une migration de votre compte Perso vers le compte géré par le GAR. Sans cette action, vous ne pourrez pas récupéré vos documents.</p>
+                                <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
+                                    Je comprends et je fais la migration.
+                                </a>
+                                <hr/>
+
+                                <p>Avant l'arrivée du GAR dans SACADO, vous n'utilisiez pas SACADO. vous n'avez rien à faire.</p>
+                                <a href="{% url 'pass_get_dataset_to_gar' %}" class="btn btn-warning" >
+                                    Je comprends et je passe.
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+            {% endif %}
+        {% endif %}
+
 
 
 
