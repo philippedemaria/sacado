@@ -93,7 +93,7 @@
                                 <span >{{ accounting.date_payment|date:"Y-m-d" }} </span> 
                             </td>
                             <td>
-                                <span >{{ accounting.id }} </span> 
+                                <span >{{ accounting.id }} {% if accounting.is_abonnement %}<small>Abonnement</small>{% endif %}</span> 
                             </td>
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
