@@ -1775,7 +1775,7 @@ def update_accounting(request, id,tp):
                     Accounting.objects.filter(pk = accounting.id).update(is_active=0)
                     messages.success(request,"Abonnement supprimé")
                 else :
-                    messages.error(request,"BIZARRE")
+                    messages.error(request,"Abonnement déjà supprimé ou inexistant.")
 
 
 
