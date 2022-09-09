@@ -210,24 +210,29 @@ def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde
         users   = User.objects.filter(last_name=teacher.user.last_name , first_name=teacher.user.first_name , school=school , user_type=2)
         if request.method== "POST" :
             user_id = request.POST.get("user_id",None)
-            if user_id :
-                teacher = Teacher.objects.get(user_id=user_id)
+            
+            if teacher.is_migration == 0 :
+                if user_id  and teacher.is_migration == 0 :
+                    teacher = Teacher.objects.get(user_id=user_id)
 
-                if request.POST.get("keep") == "yes" : 
-                    keep_it = "Le compte personel est conservé avec les mêmes identifiants."
-                    test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 1)
-                else : 
-                    keep_it = "Le compte personel est supprimé."
-                    test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 0)
-                print(test, raison)
-                if test :
-                    messages.success(request,'Tous les documents ont été migrés. ' + keep_it)
+                    if request.POST.get("keep") == "yes" : 
+                        keep_it = "Le compte personel est conservé avec les mêmes identifiants."
+                        test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 1)
+                    else : 
+                        keep_it = "Le compte personel est supprimé."
+                        test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 0)
+                    
+                    if test :
+                        teacher.is_migration = 1
+                        teacher.save()
+                        messages.success(request,'Tous les documents ont été migrés. ' + keep_it)
+                    else :
+                        messages.error(request,"Erreur... Tous les documents n'ont pas été migrés. \n"+raison+"\n" + keep_it) 
+                    return redirect('index')
                 else :
-                    messages.error(request,"Erreur... Tous les documents n'ont pas été migrés. \n"+raison+"\n" + keep_it) 
-                return redirect('index')
+                    messages.error(request,"Erreur... Enseignant inconnu. ")   
             else :
-                messages.error(request,"Erreur... Enseignant inconnu. ")   
-
+                messages.error(request,"Migration déjà effectuée. ") 
 
     context = {'users': users, }
     return render(request, 'account/get_dataset_to_gar.html', context)
