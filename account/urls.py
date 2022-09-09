@@ -23,7 +23,7 @@ urlpatterns = [
     
 
     path('get_dataset_to_gar', get_dataset_to_gar, name='get_dataset_to_gar'), # récupère les données anvant le GAR -> GAR 
-
+    path('get_dataset_to_gar_by_link', get_dataset_to_gar_by_link, name='get_dataset_to_gar_by_link'), # récupère les données anvant le GAR -> GAR 
 
     path('password/reset/', passwordResetView, name='password_reset'),
     path('password/reset/done/', passwordResetDoneView, name='password_reset_done'),

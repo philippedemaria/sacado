@@ -210,7 +210,7 @@ def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde
         users   = User.objects.filter(last_name=teacher.user.last_name , first_name=teacher.user.first_name , school=school , user_type=2)
         if request.method== "POST" :
             user_id = request.POST.get("user_id",None)
-            
+
             if teacher.is_migration == 0 :
                 if user_id  and teacher.is_migration == 0 :
                     teacher = Teacher.objects.get(user_id=user_id)
@@ -236,6 +236,17 @@ def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde
 
     context = {'users': users, }
     return render(request, 'account/get_dataset_to_gar.html', context)
+
+
+
+@login_required(login_url= 'index')
+def get_dataset_to_gar_by_link(request): # 0 on supprime le compte hors gar - 1 On garde le compte ante-gar Mais il ne sera plus mis à jour.
+    teacher = request.user.teacher
+    teacher.is_migration = 1
+    teacher.save()
+    return redirect( 'index')
+
+
 
 
 ########################################            AVATAR                   #########################################
