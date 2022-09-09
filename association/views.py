@@ -1710,16 +1710,13 @@ def update_accounting(request, id,tp):
                     fa.user = request.user
                     fa.accounting = accounting
                     fa.school = school
-
-                    
+                    Accounting.objects.filter(pk = accounting.id).update(is_abonnement = 1)
+                    Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
+                    fa.is_active = 1
                     if nf.mode == "Période de test":
-                        fa.is_active = 1
-                        Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 2 } )
                         messages.success(request,"Abonnement créé en période de Test")
                     if nf.date_payment:
-                        fa.is_active = 1
-                        Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
                         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 3 } )
                         if not create :
                             customer.status = 3
@@ -1775,6 +1772,7 @@ def update_accounting(request, id,tp):
                 if Abonnement.objects.filter(accounting = accounting)  :
                     Abonnement.objects.filter(accounting = accounting).delete()
                     Accounting.objects.filter(pk = accounting.id).update(is_abonnement=0)
+                    Accounting.objects.filter(pk = accounting.id).update(is_active=0)
                     messages.success(request,"Abonnement supprimé")
                 else :
                     messages.error(request,"BIZARRE")
