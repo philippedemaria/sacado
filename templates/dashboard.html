@@ -343,8 +343,8 @@
                 {% if sacado_asso %}
                     Etablissement <br/>{{ user.school.name }}
 
-                    {% if request.user.school.gar  and  is_gar_check %}   %}
-                        <br/><a href="{% url 'get_dataset_to_gar' %}">Migrer mes données ante-GAR</a>
+                    {% if is_gar_check and  not request.user.teacher.is_migration %}   
+                        <br/><a href="{% url 'get_dataset_to_gar' %}">Migrer mes données dans le GAR</a>
                     {% endif %} 
 
                 {% else %}
