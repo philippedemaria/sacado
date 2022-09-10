@@ -194,7 +194,7 @@ def index(request):
         school_year = rates.first().year #tarifs pour l'année scolaire
 
         nb_teacher = Teacher.objects.all().count()
-        nb_student = 104025 #Student.objects.all().count()
+        nb_student = Student.objects.all().count()
         
         subjects = Subject.objects.filter(pk__in=[1,2,3])
         #abonnements = Abonnement.objects.filter(is_active =1).prefetch_related("school__country").order_by("school__country__name")
