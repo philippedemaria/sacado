@@ -1685,9 +1685,7 @@ class Relationship(models.Model):
             is_ok = False
         if self.maxexo == -1   :
             is_ok = True
-
-
-                       
+        
         data["is_ok"] = is_ok
         data["nbleft"] = nbleft
 
@@ -1699,10 +1697,6 @@ class Relationship(models.Model):
         if self.relationship_exerciselocker.filter(student= student).count()>0:
             test = True
         return test
-
-
-
-
 
 
 
@@ -1721,8 +1715,8 @@ class Relationship(models.Model):
             data["nb"]= len(only_students)
         except :
             pass
-
         return data 
+
 
     def all_results_custom(self,student,parcours): # résultats vue élève
         data = {}
@@ -2339,6 +2333,8 @@ class Remediation(models.Model):
     def __str__(self):        
         return "title {}".format(self.title)
 
+
+
 class Remediationcustom(models.Model):
 
     title = models.CharField(max_length=255, default='',  blank=True,verbose_name="Titre")
@@ -2353,11 +2349,13 @@ class Remediationcustom(models.Model):
     def __str__(self):        
         return "title {}".format(self.title)
 
+
+
 class Constraint(models.Model):
 
-    code = models.CharField(max_length=8, default='', editable=False)# code de l'exo qui constraint
+    code         = models.CharField(max_length=8, default='', editable=False)# code de l'exo qui constraint
     relationship = models.ForeignKey(Relationship, on_delete=models.CASCADE, default='',   blank=True, related_name='relationship_constraint') 
-    scoremin = models.PositiveIntegerField(  default=80, editable=False)  
+    scoremin     = models.PositiveIntegerField(  default=80, editable=False)  
 
 
     def __str__(self):        
@@ -2385,22 +2383,21 @@ class Demand(models.Model):
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-########################################################   Mastering        ############################################################### 
+########################################################     Mastering      ############################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 class Mastering(models.Model):
 
     relationship = models.ForeignKey(Relationship, related_name="relationship_mastering", on_delete=models.PROTECT, verbose_name="Exercice")
-    consigne = models.CharField(max_length=255, default='',  blank=True,   verbose_name="Consigne")   
-    video = models.CharField(max_length=50, default='',  blank=True,   verbose_name="code de vidéo Youtube")   
-    mediation = models.FileField(upload_to= directory_path_mastering, verbose_name="Fichier", default="", null = True, blank= True) 
-    writing = models.BooleanField( default=0,  verbose_name="Page d'écriture", ) 
-    duration = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée")    
-
-    scale = models.PositiveIntegerField(default=3, editable= False) 
-    ranking = models.PositiveIntegerField(default=0,  editable= False) 
-    exercise = models.ForeignKey(Exercise, related_name = "exercise", on_delete=models.PROTECT, editable=False, default="", null = True, blank= True )   
-    courses = models.ManyToManyField(Course, blank=True, related_name='courses_mastering')
+    consigne     = models.CharField(max_length=255, default='',  blank=True,   verbose_name="Consigne")   
+    video        = models.CharField(max_length=50, default='',  blank=True,   verbose_name="code de vidéo Youtube")   
+    mediation    = models.FileField(upload_to= directory_path_mastering, verbose_name="Fichier", default="", null = True, blank= True) 
+    writing      = models.BooleanField( default=0,  verbose_name="Page d'écriture", ) 
+    duration     = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée")    
+    scale        = models.PositiveIntegerField(default=3, editable= False) 
+    ranking      = models.PositiveIntegerField(default=0, editable= False) 
+    exercise     = models.ForeignKey(Exercise, related_name = "exercise", on_delete=models.PROTECT, editable=False, default="", null = True, blank= True )   
+    courses      = models.ManyToManyField(Course, blank=True, related_name='courses_mastering')
     
     def __str__(self):
         return "{}".format(self.relationship)
@@ -2424,7 +2421,7 @@ class Mastering_done(models.Model):
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-################################################   Mastering  from customexercise       ################################################### 
+################################################     Mastering from customexercise      ################################################### 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 class Masteringcustom(models.Model):
@@ -2445,12 +2442,12 @@ class Masteringcustom(models.Model):
         return "{}".format(self.customexercise)
 
 
-
     def is_done(self,student): 
         is_do = False  
         if Masteringcustom_done.objects.filter(mastering = self, student = student).count() > 0 :  
             is_do = True  
         return is_do       
+
 
 class Masteringcustom_done(models.Model):
 
@@ -2475,6 +2472,7 @@ class Comment(models.Model): # Commentaire du l'enseignant vers l'élève pour l
     def __str__(self):        
         return "{} : {}".format(self.comment, self.teacher)
 
+
 class Generalcomment(models.Model): # Commentaire conservé d'une copie  coté enseignant
 
     teacher = models.ForeignKey(Teacher,  on_delete=models.CASCADE, blank=True,  related_name='teacher_generalcomment', editable=False)
@@ -2482,6 +2480,7 @@ class Generalcomment(models.Model): # Commentaire conservé d'une copie  coté e
 
     def __str__(self):        
         return "{} : {}".format(self.comment, self.teacher)
+
 
 class CommonAnnotation(models.Model):
  
@@ -2493,6 +2492,7 @@ class CommonAnnotation(models.Model):
     class Meta:
         abstract = True
 
+
 class Annotation(CommonAnnotation):
 
     writtenanswerbystudent = models.ForeignKey(Writtenanswerbystudent, on_delete=models.CASCADE,related_name='annotations') 
@@ -2502,6 +2502,7 @@ class Annotation(CommonAnnotation):
 
     class Meta:
         unique_together = ['writtenanswerbystudent', 'attr_id']
+
 
 class Customannotation(CommonAnnotation):
 
