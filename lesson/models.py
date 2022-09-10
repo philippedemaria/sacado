@@ -36,7 +36,6 @@ class ConnexionEleve(models.Model):
     urlJoinEleve=models.CharField(_('url'), null=True,  blank=True,  max_length=250)
 
 
-
 class Slot(models.Model): # disponibilité des profs
 
     user        = models.ForeignKey(User, null=True, blank = True, related_name='slots' , on_delete=models.CASCADE )    
