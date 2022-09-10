@@ -29,13 +29,13 @@
 
 
 
-
+{% if request.user.school %}
 <div class="row" id ="principal_section">
-{% comment %} 
-    {% if nb_teacher_level > 0 %}   
-        <a href="#" class="sub_menu_right pull-right whire" id="right_menu_open"><i class="fa fa-angle-double-left"></i> </a> 
-    {% endif %}
-{% endcomment %} 
+    {% comment %} 
+        {% if nb_teacher_level > 0 %}   
+            <a href="#" class="sub_menu_right pull-right whire" id="right_menu_open"><i class="fa fa-angle-double-left"></i> </a> 
+        {% endif %}
+    {% endcomment %} 
 
 
 
@@ -386,8 +386,25 @@
     </div>
     {% endcomment %}
 </div>
+{% else %}
+<div class="row" id ="principal_section">
+    <div class="col-xs-12 col-md-12 col-lg-12">
+        <div id="advises" class="advises">
+            <div class="row"> 
+                <div class="col-xs-12">
+                    Cher collègue,<br/><br/>
+                    comme annoncé, vous ne pouvez plus utiliser SACADO si vous n'êtes pas rattaché à un établissement scolaire. SACADO reste évidemment gratuit pour la version "Professeur isolé" mais il est nécessaire d'appartenir à un établissement. Si votre établissement ne figure pas dans la liste, nous contacter à partir de la page d'accueil du site.<br/><br/>L'équipe SACADO
+                    <hr/>
+                    <a href="{% url 'get_school' %}" class="btn btn-sacado" >
+                        Trouvez mon établissement.        
+                    </a>
+                </div>
+            </div>
+        </div> 
 
-
+    </div>
+</div>
+{% endif  %}
 <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

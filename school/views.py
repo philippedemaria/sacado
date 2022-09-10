@@ -1044,7 +1044,13 @@ def get_school(request):
 					Group.objects.filter(pk=g.id).update(school = school) 
 					for s in g.students.all() :
 						User.objects.filter(pk=s.user.id).update(school = school)
- 
+			try :
+				send_mail("Rattachement d'établissement",
+						"Bonjour la Team,  :\n\n L'enseignant  \n\n" + user + " \n\na rejoint l'établissement" +  school +". \n\n Ceci est un mail automatique. Ne pas répondre.",
+						settings.DEFAULT_FROM_EMAIL ,
+						[request.user.email, "sacado.asso@gmail.com"])
+			except:
+				pass
 			messages.success(request,"Rattachement à l'établissement réussi")
 		except :
 			messages.error(request,"Echec du rattachement à l'établissement."  )
