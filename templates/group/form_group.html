@@ -303,7 +303,7 @@
                                                                        class="btn btn-default "/></a>
                         </div>
                     </div>
-                {% if not sacado_asso or request.user.is_manager or request.user.is_superuser    %}
+                {% if not sacado_asso or request.user.is_manager or request.user.is_superuser or not is_managing  %}
                     {% if not is_gar_check %}
                     <div class="col-sm-12 col-md-7">
                         <div class="form-group">
