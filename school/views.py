@@ -612,9 +612,14 @@ def delete_selected_students(request):
 				student = Student.objects.get(user_id=user_id)
 				clear_detail_student(student)
 				student.delete()
-				student.user.delete()
 			except :
 				pass
+			try :
+				user = User.objects.get(pk=user_id)
+				user.delete()
+			except :
+				pass
+
 
 
 
