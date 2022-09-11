@@ -591,7 +591,8 @@ def school_adhesion(request):
                     asking_gar = "Pas d'accès au GAR demandé."
                     if school_exists.gar: # appel de la fonction qui valide le Web Service
                         asking_gar = "Accès au GAR demandé."
-                        create_abonnement_gar(today, abonnement,request.user)
+                        
+                        #create_abonnement_gar(today, abonnement,request.user)
 
                     ########################################################################################################################
                     #############  FIN  Abonnement
