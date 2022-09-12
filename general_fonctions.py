@@ -315,14 +315,41 @@ def attribute_all_documents_to_students(parcourses, students ):
 def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     """  assigner les documents   """
     # Assigne les dossiers et leurs contenus à aprtir d'un groupe
+    try :
+        for group in groups :
+            for folder in group.group_folders.all():
+                folder.students.add(student)
 
-    for group in groups :
-        for folder in group.group_folders.all():
-            folder.students.add(student)
+                for parcours in folder.parcours.all():
+                    parcours.students.add(student)
 
-            for parcours in folder.parcours.all():
+                    relationships = parcours.parcours_relationship.all()
+                    for r in relationships:
+                        r.students.add(student)
+
+                    customexercises = parcours.parcours_customexercises.all()
+                    for c in customexercises:
+                        c.students.add(student)
+
+                    courses = parcours.course.all()
+                    for course in courses:
+                        course.students.add(student)
+
+
+                    flashpacks = parcours.flashpacks.all()
+                    for flashpack in flashpacks:
+                        flashpack.students.add(student)
+
+                    bibliotexs = parcours.bibliotexs.all()
+                    for bibliotex in bibliotexs:
+                        bibliotex.students.add(student)
+                        
+                    quizz = parcours.quizz.all()
+                    for quiz in quizz:
+                        quiz.students.add(student)
+            # Assigne les parcours et leurs contenus 
+            for parcours in group.group_parcours.filter(folders=None):
                 parcours.students.add(student)
-
                 relationships = parcours.parcours_relationship.all()
                 for r in relationships:
                     r.students.add(student)
@@ -347,34 +374,11 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
                 quizz = parcours.quizz.all()
                 for quiz in quizz:
                     quiz.students.add(student)
-        # Assigne les parcours et leurs contenus 
-        for parcours in group.group_parcours.filter(folders=None):
-            parcours.students.add(student)
-            relationships = parcours.parcours_relationship.all()
-            for r in relationships:
-                r.students.add(student)
+        test = True
+    except :
+        test = False
 
-            customexercises = parcours.parcours_customexercises.all()
-            for c in customexercises:
-                c.students.add(student)
-
-            courses = parcours.course.all()
-            for course in courses:
-                course.students.add(student)
-
-
-            flashpacks = parcours.flashpacks.all()
-            for flashpack in flashpacks:
-                flashpack.students.add(student)
-
-            bibliotexs = parcours.bibliotexs.all()
-            for bibliotex in bibliotexs:
-                bibliotex.students.add(student)
-                
-            quizz = parcours.quizz.all()
-            for quiz in quizz:
-                quiz.students.add(student)
-
+    return test
 
 
 
