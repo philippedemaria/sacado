@@ -169,7 +169,7 @@
                 <form action="{% url 'print_quizz_to_pdf' %}" method="POST">
                     <div class="row">            {% csrf_token %}
                         <div class="col-sm-12 col-md-12"> 
-                            <input type="text" id="index_idq" name="idq" />
+                            <input type="hidden" id="index_idq" name="idq" />
                             <table class="table borderless">
                                 <tr>
                                     <td>Questions mélangées ?</td>
