@@ -9,6 +9,18 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
  
 
 
+        $(document).on('click', '.quizz_to_pdf_modal', function (event) {
+
+        	idq = $(this).data("idq")
+        	$("#index_idq").val(idq);
+
+        	title = $(this).data("title");
+        	$("#idq_title").append(title);
+
+
+
+            });
+
  
     });
 });
