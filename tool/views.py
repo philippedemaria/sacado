@@ -1773,7 +1773,7 @@ def print_quizz_to_pdf(request):
     letters = ["A","B","C","D","E","F","G","H","I","J","K"]
     for question_id in question_ids :
         question = Question.objects.get(pk=question_id)
-        elements += r"\exo {\bf }" +question.title+r"\hfill{"+str(question.point)+r" points}"
+        elements += r"\exo {\bf }" +question.title+r"\hfill{"+str(question.point)+r" points}\\"
         if question.imagefile :
             elements += r"\includegraphics[scale=1]{"+question.imagefile.url+r"}"
         
