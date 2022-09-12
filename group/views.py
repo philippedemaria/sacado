@@ -686,17 +686,6 @@ def delete_group_and_his_documents(request, id):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 def delete_all_groups(request) :
 
     all_contents = request.POST.get("all_contents",None)
@@ -1231,6 +1220,11 @@ def enroll(request, slug):
             if user_form.is_valid() :
                 user = user_form.save(commit=False)
                 user.user_type = User.STUDENT
+                try :
+                    school = group.teacher.user.school
+                    user.school= school
+                except :
+                    pass
                 password = request.POST.get("password1")
                 username = request.POST.get("username")
                 user.set_password(password)

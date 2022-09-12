@@ -416,8 +416,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
             return redirect('index')
 
         #########################################################
-
-
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
         if user_authenticated is not None:
