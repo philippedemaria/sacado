@@ -147,10 +147,10 @@
         | <a href="{% url 'clone_quizz' quizz.id  %}" title="Cloner le quizz" onclick="return clone('le quizz' , '{{ quizz.title }}' )"> 
             <i class="bi bi-clouds"></i> Cloner
         </a>  
-        | <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ quizz.title }}"  data-idq="{{ quizz.id }}"  class="quizz_to_pdf_modal"  title="Imprimer le quizz"><i class="bi bi-file-pdf"></i> </a> |
+        | <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ quizz.title }}"  data-idq="{{ quizz.id }}"  class="quizz_to_pdf_modal"  title="Télécharger le quizz en pdf"><i class="bi bi-file-pdf"></i> Imprimer</a> |
     {% else %}| 
-        <a href="#" title="Version établissement requise"><i class="bi bi-file-pdf"></i> </a> |    
-        <a href="#" title="Version établissement requise"><i class="bi bi-clouds"></i> Cloner</a> |
+        <a href="#" title="Version établissement requise"><i class="bi bi-clouds"></i> Cloner </a> |    
+        <a href="#" title="Version établissement requise"><i class="bi bi-file-pdf"></i> Imprimer </a> |
     {% endif  %}
 
  
