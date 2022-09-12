@@ -138,7 +138,7 @@
         <div class="text-warning" style="margin-bottom: 10px;font-size:14px"><i class="fa fa-desktop"></i> Version numérique  </div> 
     {% endif  %}
 
-
+    <div style="font-size:14px">
     <a href="{% url 'update_quizz' quizz.id  %}" title="Modifier le quizz"> 
         <i class="bi bi-pencil"></i> Modifier    
     </a>
@@ -155,5 +155,5 @@
 
  
     <a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action text-danger"   style="font-size:14px" onclick="return TestDelete('ce quizz')"><i class="bi bi-trash"></i>  Supprimer</a> 
-
+    </div>
 </td>
