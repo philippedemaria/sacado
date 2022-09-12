@@ -1,3 +1,9 @@
+#################################
+#### Auteur : philipe Demaria 
+#### pour SACADO
+#################################
+
+from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse , FileResponse
 from django.core import serializers
