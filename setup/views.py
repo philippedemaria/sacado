@@ -90,6 +90,14 @@ def index(request):
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
   
+
+        try :
+            is_gar_check = request.session.get("is_gar_check",None)
+            # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
+        except :
+            is_gar_check  = False
+
+
         today = time_zone_user(request.user)
 
         ############################################################################################
@@ -153,7 +161,7 @@ def index(request):
 
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
-                       'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims , 
+                       'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check ,
                        'parcours_tab': parcours_tab, 'webinaire': webinaire, #'parcourses': parcourses,'communications': communications, 
                        }
         
