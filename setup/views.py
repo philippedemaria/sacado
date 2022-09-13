@@ -331,8 +331,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     civilite   = dico_received["CIV"][0]
 
 
-    context = {"dico_received" : dico_received , 'data_xml' : data_xml }
-    return render(request, 'setup/test_gar.html', context)
+    # context = {"dico_received" : dico_received , 'data_xml' : data_xml }
+    # return render(request, 'setup/test_gar.html', context)
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
      
@@ -342,7 +342,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             div   = dico_received["DIV"][0]
             name  = div.split("##")[0]
 
-            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+            user, created = User.objects.get_orV1t7Y0n3f0B0Z0Zcreate(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
             
             if not school.is_primaire :
                 group, c_g        = Group.objects.get_or_create(school = school, name = name )
