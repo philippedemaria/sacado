@@ -49,49 +49,17 @@
 
         </div>
         <div class="col-sm-12 col-md-7">
-            <div class="card_association" >
-                <h3 class="thin">Mode de paiement </h3>
-                <div class="row">
-                      <div class="col-sm-3 col-md-3">
-                          <a href="#" id="on_line">En ligne</a>
-                      </div>
-                      <div class="col-sm-5 col-md-5">
-                          <a href="#" id="virement_bancaire">Virement bancaire</a>
-                      </div>
-                      <div class="col-sm-4 col-md-4">
-                          <a href="#" id="envoi_postal">Envoi postal</a>
-                      </div>  
-                </div>
-            </div>
-
-
-            <div class="card_association this_card show_div_for_payment" id="show_on_line">
-                <h3 class="thin">Paiement en ligne</h3>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
- 
-
-                          <!-- page de paiement en ligne -->
-                          <div id="smart-button-container">
-                              <div style="text-align: center;">
-                                <div id="paypal-button-container"></div>
-                              </div>
-                          </div>
-                          {% include 'payment/payment_module.html' %}
-                          <!-- page de paiement en ligne -->
- 
-
-                    </div>  
-                </div>
-            </div>
 
 
 
 
-            <div class="card_association this_card show_div_for_payment" id="show_virement_bancaire">
+
+
+
+            <div class="card_association">
                   <h3 class="thin">Virement bancaire</h3>
                   <p>
-                      Pour effectuer un virement bancaire à l'association SACADO, vous devez demander l'IBAN de l'assoication en cliquant sur le bouton proposé ci-dessous. <br/>Après une vérification de conformité par notre équipe, vous recevrez un IBAN à l'adresse {{user.email}}. 
+                      Pour effectuer un virement bancaire à l'association SACADO, vous devez demander l'IBAN de l'assoication en cliquant sur le bouton proposé ci-dessous. <br/>Après une vérification de conformité par notre équipe, vous recevrez un IBAN à l'adresse <b>{{user.email}}</b>. 
                   </p>
 
 
@@ -99,20 +67,7 @@
         
             </div>
 
-
-
-
-
-            <div class="card_association this_card show_div_for_payment" id="show_envoi_postal">
-                <h3 class="thin">Envoi postal </h3>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <p> Vous devez éditer le devis suivant et nous le retourner signé et accompagné d'un chèque bancaire du montant correspondant à la cotisation et à l'ordre de ASSOCIATION SACADO.XYZ . <small>L'envoi postal occasionne des frais de dossier de 2€.</small></p>
-                        <p><a href="{% url 'print_proformat_school' %}"><i class="fa fa-print"></i> Editer le devis</a></p> 
-                    </div>
-
-                </div>
-            </div>
+ 
 
         </div>  
     </div> 
