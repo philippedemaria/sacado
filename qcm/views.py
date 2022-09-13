@@ -9264,8 +9264,11 @@ def update_folder(request,id,idg):
             all_students = affectation_students_in_folder_and_affectation_groups_in_folder(nf,group_ids,parcours_ids)
             affectation_students_to_contents_parcours_or_evaluation( parcours_ids , all_students )
             change_coanimation_teachers(nf, folder , group_ids , teacher)
+            
 
-            if request.POST.get("to_index"):
+            if idg == 999999999999999999 :
+                return redirect('index') 
+            elif request.POST.get("to_index"):
                 return redirect('index') 
             elif group_id :
                 return redirect ("list_parcours_group", group_id )
@@ -9343,8 +9346,9 @@ def delete_folder(request,id,idg):
     
     else :
         messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ folder.title +". Contacter le propriétaire.")
-    
-    if idg == 0 :
+    if idg == 999999999999999999 :
+        return redirect ("index" )  
+    elif idg == 0 :
         return redirect ("parcours" )  
     else :
         return redirect ("list_parcours_group", idg )  

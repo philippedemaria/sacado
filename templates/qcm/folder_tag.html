@@ -184,11 +184,22 @@
                     {% endif %}
                 </a>
             </div>
-        </div>
-
+        </div>        
         <!-- box-footer DES FONCTIONNALITES  -->
-        {% include 'qcm/folder_tag_footer.html' %}
-
+        {% if folder.folder_only_students_count.nb > 0 and 'qcm' not in request.path %}
+            <div class="box-footer" style="position: relative; padding-top: 0px;">
+                <div class="row extend_parcours"> 
+                    <div class="col-xs-7 col-md-7"> 
+                        <a href="{% url 'update_folder' folder.id  999999999999999999  %}" class="edit" style="color:{{ folder.color}};"><i class="bi bi-people"></i> <span class="label_icon">Attribuer à des groupes</span> </a>
+                    </div> 
+                    <div class="col-xs-5 col-md-5"> 
+                        <a href="{% url 'delete_folder' folder.id  999999999999999999  %}" class="edit" style="color:{{ folder.color}};" onclick="return TestDeleteFolder('ce dossier')"><i class="bi bi-trash"></i> <span class="label_icon">Supprimer</span> </a>
+                    </div> 
+                </div> 
+            </div>
+        {% else %}
+            {% include 'qcm/folder_tag_footer.html' %}
+        {% endif %}
 
 
 </div>   
