@@ -384,14 +384,18 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 try :    
                     groups = dico_received["DIV"]
                     for group in groups :
-                        name = group.split("##")[0]
+                        classe = group.split("##")[0]
+                        try :
+                            classe = classe.split("~")[1]
+                        except :
+                            pass
                         teacher = user.teacher
-                        if name[0] == 6 : level_id = 6
-                        elif name[0] == 5 : level_id = 7
-                        elif name[0] == 4 : level_id = 8
-                        elif name[0] == 3 : level_id = 9
-                        elif name[0] == 2 : level_id = 10
-                        elif name[0] == 1 : level_id = 11
+                        if classe[0] == 6 : level_id = 6
+                        elif classe[0] == 5 : level_id = 7
+                        elif classe[0] == 4 : level_id = 8
+                        elif classe[0] == 3 : level_id = 9
+                        elif classe[0] == 2 : level_id = 10
+                        elif classe[0] == 1 : level_id = 11
                         else : level_id = 12
 
                         Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
