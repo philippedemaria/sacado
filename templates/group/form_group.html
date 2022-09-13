@@ -151,6 +151,7 @@
 
 
             {% if not sacado_asso and not is_gar_check %}
+                {% if not is_gar_check %}            
                 <hr>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
@@ -162,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-                {% if not is_gar_check %}
+
                 <div class="row recording" id="teacher_record">
                     <div class="col-sm-12 col-md-12"><hr>
                         <div class="form-group">
