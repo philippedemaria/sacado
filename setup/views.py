@@ -523,10 +523,12 @@ def ajax_charge_school_by_rne(request):
     school = School.objects.filter(country_id=5,code_acad=id_rne).first()
     is_active = False
 
-    if Customer.objects.filter(pk=school.id) :
+    try :
         customer = Customer.objects.get(pk=school.id)
         if customer.status > 1 : 
             is_active = True 
+    except :
+        is_active = False
 
     data["is_active"] = is_active
 
