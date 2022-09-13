@@ -297,7 +297,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
     ###########################################################################################
     ###########################################################################################
-
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
 
@@ -331,8 +330,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     civilite   = dico_received["CIV"][0]
 
 
-    # context = {"dico_received" : dico_received , 'data_xml' : data_xml }
-    # return render(request, 'setup/test_gar.html', context)
+    context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
+    return render(request, 'setup/test_gar.html', context)
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
      
