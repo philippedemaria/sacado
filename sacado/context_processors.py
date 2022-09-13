@@ -44,7 +44,7 @@ def menu(request):
         try :
             is_gar_check = request.session.get("is_gar_check",None)
         except :
-            is_gar_check = None
+            is_gar_check = False
 
         sacado_asso = False
         if request.user.time_zone:
