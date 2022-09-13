@@ -168,7 +168,7 @@
             {% endif  %}
             <div class="box_title_vignette"> 
         
-                <a href="{% if group %}{% url 'list_sub_parcours_group' group.id folder.id  %}{% url 'list_sub_parcours_group' 0 folder.id  %}{% else %}{% endif %}" style="color:{{ folder.color|contrast_color }};">
+                <a href="{% if group %}{% url 'list_sub_parcours_group' group.id folder.id  %}{% else %}{% url 'list_sub_parcours_group' 0 folder.id  %}{% endif %}" style="color:{{ folder.color|contrast_color }};">
                     <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"25" }}
                         <div class="helper_tip_text_right">{{ folder.title }}</div>
                     </span>
