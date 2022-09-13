@@ -145,7 +145,7 @@ def index(request):
             
             #Menu_right
             #parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
-            #communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
+            communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
 
             request.session["tdb"] = True
 
@@ -162,7 +162,7 @@ def index(request):
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
                        'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check ,
-                       'parcours_tab': parcours_tab, 'webinaire': webinaire, #'parcourses': parcourses,'communications': communications, 
+                       'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,   #'parcourses': parcourses
                        }
         
         elif request.user.is_student:  ## student
@@ -214,6 +214,7 @@ def index(request):
         communications = Communication.objects.filter(active= 1).order_by("-today")
 
 
+
         nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
@@ -223,7 +224,7 @@ def index(request):
  
         i = random.randrange(0, exercise_nb)
         exercise = exercises[i]
-
+ 
 
         cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
         cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
