@@ -2820,7 +2820,11 @@ def show_parcours(request, idf = 0, id=0):
 
     parcours = Parcours.objects.get(id=id)
     rq_user = request.user
-    teacher = rq_user.teacher
+
+    try :
+        teacher = rq_user.teacher
+    except :
+        return redirect ('index')
 
     today = time_zone_user(rq_user)
     delete_session_key(request, "quizz_id")
