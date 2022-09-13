@@ -7,7 +7,7 @@
 <div  class="box box-widget widget-user-2 folder_sorter"  data-parcours_id ="{{folder.id}}"  
       style="cursor: move;{% if folder.vignette %}background-image: url('{{ folder.vignette.url }}'); background-size: cover; {% endif %}background-color:{{folder.color }};">
 
-    {% if folder.folder_only_students_count.nb > 0 %}
+
         <div class="handler widget-user-header">
         <!-- Add signet to folder --> 
             <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
@@ -168,13 +168,10 @@
             {% endif  %}
             <div class="box_title_vignette"> 
         
-                <a href="{% if group %}{% url 'list_sub_parcours_group' group.id folder.id  %}{% endif %}" style="color:{{ folder.color|contrast_color }};">
-
-
-
-
-                        <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"25" }}
-                            <div class="helper_tip_text_right">{{ folder.title }}</div></span>
+                <a href="{% if group %}{% url 'list_sub_parcours_group' group.id folder.id  %}{% url 'list_sub_parcours_group' 0 folder.id  %}{% else %}{% endif %}" style="color:{{ folder.color|contrast_color }};">
+                    <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"25" }}
+                        <div class="helper_tip_text_right">{{ folder.title }}</div>
+                    </span>
      
                     {% if folder.is_pending_folder_correction %}
                     <i class="fa fa-cc text-warning" style="font-size:16px;color:{{ folder.color|contrast_color }}; " title="Copies à corriger" ></i> 
@@ -188,37 +185,10 @@
                 </a>
             </div>
         </div>
+    {% if folder.folder_only_students_count.nb > 0 %}
         <!-- box-footer DES FONCTIONNALITES  -->
         {% include 'qcm/folder_tag_footer.html' %}
-    {% else  %}
-        <div class="handler widget-user-header">
-            {% if folder.vignette %}                
-                <div class="box_title_underlay_vignette" style="background-color:{{ folder.color }};">
-                </div> 
-            {% endif  %}
-        
-            <div class="box_title_vignette"> 
-
-                <a href="{% url 'list_sub_parcours_group' 0 folder.id  %}" style="color:{{ folder.color|contrast_color }};">
-                    {% if folder.is_pending_folder_correction %}
-                    <i class="fa fa-cc text-warning pull-right" style="font-size:12px;color:{{ folder.color|contrast_color }};" title="Copies à corriger" ></i> 
-                    {% endif %}
-
-
-
-                        <span class="helper_tip" style="color:{{ folder.color|contrast_color }};font-size:20px">{{ folder.title|truncatechars:"25" }}
-                            <div class="helper_tip_text_right">{{ folder.title }}</div></span>
-
-
-
-                    {% if folder.is_folder_real_time %}
-                        <sup class="white" title="En composition" style="font-size:12px" >
-                            <i class="fa fa-fw fa-clock"></i> 
-                        </sup>
-                    {% endif %}
-                </a>
-            </div>
-        </div>        
+    {% else  %}      
         <!-- box-footer DES FONCTIONNALITES  -->
         {% include 'qcm/folder_tag_footer.html' %}
 
