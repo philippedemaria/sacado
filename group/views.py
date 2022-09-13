@@ -528,6 +528,12 @@ def create_group(request):
     except:
         is_managing = False
 
+    try :
+        is_gar_check = request.session.get("is_gar_check",None)
+        # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
+    except :
+        is_gar_check  = False
+
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -611,7 +617,7 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing }
+    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing  }
 
     return render(request, 'group/form_group.html', context )
 

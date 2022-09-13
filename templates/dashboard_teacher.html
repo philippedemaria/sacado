@@ -21,7 +21,7 @@
                             </a>
                             <hr/>
 
-                            <p>Avant l'arrivée du GAR dans SACADO, <b>vous n'utilisiez pas SACADO</b>. Comment récupérer les documents SACADO ?.</p>
+                            <p>Avant l'arrivée du GAR dans SACADO, <b>vous n'utilisiez pas SACADO</b>. Comment récupérer les documents de SACADO ?</p>
                                 <ul> 
                                     <li class="sanspuce">1. Accéder à un groupe</li>
                                     <li class="sanspuce">2. Cliquer sur Nouveau document > Récupérer un dossier mutualisé</li>
@@ -68,7 +68,7 @@
                                 <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </font>
-                        {% if not is_gar_checked %}
+                        {% if not is_gar_check %}
                         <div style="clear:both"></div>
                         <span style="color:{{ group.color }};font-size:12px"><a href="{% url 'update_group' group.id %}" style="background-color:{{ group.color }}; color:{{ group.color|contrast_color }}; padding :1px 5px; border-radius: 3px">+ Ajouter</a> ou lien d'inscription à donner aux élèves  : https://sacado.xyz/group/{{ group.code }}   
                               

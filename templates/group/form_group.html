@@ -23,7 +23,6 @@
 
 
 {% block page_title %}  
-    
     {% if group %} <span style="color:{{group.color|contrast_color_title }}" ><i class='fa fa-cogs'></i> </span>
         {% include 'group/breadcrumb.html' %}
           <small> Configuration</small> </span> 
@@ -151,7 +150,6 @@
 
 
             {% if not sacado_asso and not is_gar_check %}
-                {% if not is_gar_check %}            
                 <hr>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
@@ -163,7 +161,7 @@
                         </div>
                     </div>
                 </div>
-
+                {% if not is_gar_check %}
                 <div class="row recording" id="teacher_record">
                     <div class="col-sm-12 col-md-12"><hr>
                         <div class="form-group">
@@ -183,7 +181,7 @@
                         </div>
                     </div>
                 </div>  
-            {% elif not is_managing %}
+            {% elif not is_managing and not is_gar_check %}
                 <hr>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
@@ -232,6 +230,9 @@
                     </div>
                 </div> 
             {% endif %}
+
+
+
                 {% if group %}
                     <div class="row collapse" id="collapsed"  >
                         <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
