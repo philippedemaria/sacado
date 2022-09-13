@@ -90,7 +90,6 @@ def index(request):
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
   
-
         try :
             is_gar_check = request.session.get("is_gar_check",None)
             # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
@@ -376,6 +375,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
             user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+            try :
+                subject = Subject.objects.get(pk=1)
+                teacher.subjects.add(subject)
+            except :
+                pass
 
             if not school.is_primaire :
                 for code_level in code_levels  : 
@@ -394,19 +398,36 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     for group in groups :
                         name = group.split("##")[0]
                         try :
-                            name = name.split("~")[1]
+                            level = name.split("~")[1]
+                            if level[0] == 6 : level_id = 6
+                            elif level[0] == 5 : level_id = 7
+                            elif level[0] == 4 : level_id = 8
+                            elif level[0] == 3 : level_id = 9
+                            elif level[0] == 2 : level_id = 10
+                            elif level[0] == 1 : level_id = 11
+                            else : level_id = 12
+                        except :
+                            if name[0] == 6 : level_id = 6
+                            elif name[0] == 5 : level_id = 7
+                            elif name[0] == 4 : level_id = 8
+                            elif name[0] == 3 : level_id = 9
+                            elif name[0] == 2 : level_id = 10
+                            elif name[0] == 1 : level_id = 11
+                            else : level_id = 12
+
+                        teacher = user.teacher
+
+                        grp, creat = Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
+                        try :  # Profil élève
+                            if creat :
+                                username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                                password = make_password("sacado2020") 
+                                user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                                student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                                grp.students.add(student)
                         except :
                             pass
-                        teacher = user.teacher
-                        if name[0] == 6 : level_id = 6
-                        elif name[0] == 5 : level_id = 7
-                        elif name[0] == 4 : level_id = 8
-                        elif name[0] == 3 : level_id = 9
-                        elif name[0] == 2 : level_id = 10
-                        elif name[0] == 1 : level_id = 11
-                        else : level_id = 12
 
-                        Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
                 except :
                     pass
 

@@ -542,7 +542,7 @@ def create_group(request):
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
-
+        messages.success(request, "Le groupe est créé. ")
         folders    = list()
         parcourses =  list()
 
@@ -595,6 +595,7 @@ def update_group(request, id):
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
+        messages.success(request, "Le groupe est modifié. ")
 
         folders    = list()
         folders_ids = request.POST.getlist("folder_ids")        
