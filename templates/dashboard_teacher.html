@@ -8,19 +8,35 @@
                 <div class="col-xs-12 col-md-12 col-lg-12" >
                     <div id="advises" class="advises">
 
-                            <form action="#" method="POST" > 
-                                <h1 class="thin" >Accès au GAR.</h1>
-                                <p>Avant l'arrivée du GAR dans SACADO, vous utilisiez déjà SACADO. Vous devez faire une migration de votre compte Perso vers le compte géré par le GAR. Sans cette action, vous ne pourrez pas récupéré vos documents.</p>
-                                <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
-                                    Je comprends et je fais la migration.
-                                </a>
-                                <hr/>
+                            <h1 class="thin" >Accès au GAR. <b>A lire attentivement</b></h1>
+                                <ul> Avant toute utilisation, vous devez par étapes :
+                                    <li class="sanspuce">1. Renseigner votre vos matières et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
+                                    <li class="sanspuce">2. Vérifier la matière et le niveau de vos groupes, via Détails > Paramètres > Configurer</li>
+                                    <li class="sanspuce">3. Utiliser les ressources SACADO comme indiqué ci-dessous</li>
+                                </ul>
+                            <hr/>
+                            <p>Avant l'arrivée du GAR dans SACADO, vous utilisiez déjà SACADO. Vous devez faire une migration de votre compte Perso vers le compte géré par le GAR. Sans cette action, vous ne pourrez pas récupéré vos documents.</p>
+                            <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
+                                Je comprends et je fais la migration.
+                            </a>
+                            <hr/>
 
-                                <p>Avant l'arrivée du GAR dans SACADO, vous n'utilisiez pas SACADO. vous n'avez rien à faire.</p>
-                                <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
-                                    Je comprends et je passe.
-                                </a>
-                            </form>
+                            <p>Avant l'arrivée du GAR dans SACADO, vous n'utilisiez pas SACADO. Comment récupérer les documents SACADO ?.</p>
+                                <ul> 
+                                    <li class="sanspuce">1. Accéder à un groupe</li>
+                                    <li class="sanspuce">2. Cliquer sur Nouveau document > Récupérer un dossier mutualisé</li>
+                                    <li class="sanspuce">3. Sélectioner le niveau de votre groupe.</li>
+                                    <li class="sanspuce">4. Dupliquer le dossier.</li>
+                                    <li class="sanspuce">5. Publier le dossier via sa configuration.</li>
+
+                                </ul>
+
+
+
+                            <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
+                                J'ai fini les étapes de configuration de chaque groupe et je passe.
+                            </a>
+
                         </div>
                     </div>
                 </div> 

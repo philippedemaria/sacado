@@ -30,7 +30,7 @@
                     </font>
                     <div style="clear:both"></div>
                 </div>
-
+            {% endif %}
                 <span data-parcours_id="{{folder.id }}" class="overlay_show white" style="cursor:pointer">
                     <div class="disc   disc{{folder.id }}" style="background-color:{% if folder.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
                          <i class="fa fa-circle-o-notch"></i>
@@ -117,7 +117,7 @@
                         </li> 
                     {% endfor %}
                 </div>
-            {% endif %}
+
 
 
             <!-- Fenetre accessible par le disc   -->
