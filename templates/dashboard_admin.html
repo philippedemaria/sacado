@@ -32,7 +32,7 @@
         </div>
     </div>
 {% endif %}
-
+{% if not is_gar_check %}
     {% if request.user.is_manager %}
      
             {% for school in schools_tab %}
@@ -145,7 +145,7 @@
 
                     </div>
 
-                    {% if not is_gar_check %}
+      
                     <div class="row" >
                         <div class="col-lg-8 col-md-8 col-xs-12">
                             <h3 class="thin">Configuration des enseignants, groupes, élèves  <a href="javascript:void();" id="show_help_from_tdb" style="font-size : 14px">  étape par étape</a>
@@ -444,15 +444,7 @@
                         </div>
                     </div>
                     </div>
-                    {% else %}
-                    <div class="row" >
-                        <div class="col-lg-12 col-md-12 col-xs-12">
 
-                            <h3 class="thin alert alert-danger">Configuration avec le GAR
-                            </h3>
-                        </div>
-                    </div>
-                    {% endif %}
 
                     {% if not forloop.last %}<hr/>{% endif %}
                 {% endwith %} 
@@ -464,7 +456,41 @@
 
     {% endif %} 
 
+{% else %}
 
+
+
+    {% if data.nbs %}
+    <div class="row" >
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
+                <div class="inner">
+                     <span style="font-size: 35px">Élèves </span>
+
+                </div>
+                <div class="icon">
+                    {{ data.nbs }}  
+                </div>
+                {% if  data.nbs > 0 %}
+                    <a href="{% if sacado_asso %}{% url 'school_students' %}{% else %}#{% endif %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> Gestion des élèves </a>
+                {% else %}
+                    <a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row" >
+        <div class="col-lg-12 col-md-12 col-xs-12">
+
+            <h3 class="thin alert alert-danger">Configuration avec le GAR
+            </h3>
+        </div>
+    </div>
+{% endif %}
 
     {% comment %} 
     {% if is_lycee %}
