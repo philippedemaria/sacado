@@ -398,22 +398,24 @@
                                    class="btn btn-default "/>
                         </a>
                     </div>   
-                </div>
-            {% if request.user.is_manager %}     
-                {% if teacher %}
-                <div class="col-sm-12 col-md-4">
-                    <div class="form-group">
-                        <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-warning" onclick="return TestRemove('cet enseignant')" > Dissocier cet enseignant de mon établissement</a>
-                    </div>   
-                </div>
+                </div> 
+                {% if not is_gar_check %}
+                    {% if request.user.is_manager %}     
+                        {% if teacher %}
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-warning" onclick="return TestRemove('cet enseignant')" > Dissocier cet enseignant de mon établissement</a>
+                            </div>   
+                        </div>
 
-                <div class="col-sm-12 col-md-2">
-                    <div class="form-group">
-                        <a href="{% url 'delete_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestDelete('cet enseignant')" > Supprimer cet enseignant</a>
-                    </div>   
-                </div>
-                {% endif  %} 
-            {% endif  %}
+                        <div class="col-sm-12 col-md-2">
+                            <div class="form-group">
+                                <a href="{% url 'delete_teacher' teacher.user.id %}" class="btn btn-danger" onclick="return TestDelete('cet enseignant')" > Supprimer cet enseignant</a>
+                            </div>   
+                        </div>
+                        {% endif  %} 
+                    {% endif  %}
+                {% endif  %}
             </div>
         </form>
     </section>
