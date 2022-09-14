@@ -156,46 +156,43 @@
             </a>
         </li>
         {% endif %}
-         
-
-
-
+ 
     {% endif  %}
 
 
-
-    {% if request.user.is_superuser or request.user.is_extra  %}
-    <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path  or 'school' in request.path  %} active{% endif %}">
-        <a href="#"   id="admin" class="main">
-            <i class="bi bi-cloud icon_size"></i> 
-            {% if not renew_propose %}
-                <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
-            {% endif  %}
-            <div class="captionmenu">Admin</div>
-        </a>
-    </li>
-    {% elif request.user.is_manager   %} <!-- manager dans un établissement -->
-    <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
-        <a href="{% url 'admin_tdb' %}" class="main" >
-            <i class="bi bi-cloud icon_size"></i> 
-            {% if not renew_propose %}
-                <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
-            {% endif  %}
-            <div class="captionmenu">Admin</div>
-        </a>
-    </li>
-    {% elif request.user.is_testeur   %} <!-- testeur des documents -->
-    <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
-        <a href="{% url 'admin_testeur' %}" class="main closer_notification" >
-            <i class="bi bi-cloud icon_size"></i> 
-            {% if not renew_propose %}
-                <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
-            {% endif  %}
-            <div class="captionmenu">Admin</div>
-        </a>
-    </li>
+    {% if not is_gar_check  %}
+        {% if request.user.is_superuser or request.user.is_extra  %}
+        <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path  or 'school' in request.path  %} active{% endif %}">
+            <a href="#"   id="admin" class="main">
+                <i class="bi bi-cloud icon_size"></i> 
+                {% if not renew_propose %}
+                    <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
+                {% endif  %}
+                <div class="captionmenu">Admin</div>
+            </a>
+        </li>
+        {% elif request.user.is_manager   %} <!-- manager dans un établissement -->
+        <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
+            <a href="{% url 'admin_tdb' %}" class="main" >
+                <i class="bi bi-cloud icon_size"></i> 
+                {% if not renew_propose %}
+                    <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
+                {% endif  %}
+                <div class="captionmenu">Admin</div>
+            </a>
+        </li>
+        {% elif request.user.is_testeur   %} <!-- testeur des documents -->
+        <li  class="dropdown  {% if not request.session.tdb and 'admin' in request.path or '/school' in request.path %} active{% endif %}">
+            <a href="{% url 'admin_testeur' %}" class="main closer_notification" >
+                <i class="bi bi-cloud icon_size"></i> 
+                {% if not renew_propose %}
+                    <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
+                {% endif  %}
+                <div class="captionmenu">Admin</div>
+            </a>
+        </li>
+        {% endif  %}
     {% endif  %}
-
 {% else %}
     <li  class="dropdown">
         <a href="{% url 'get_school' %}" class="main" >
