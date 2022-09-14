@@ -145,7 +145,7 @@
 
                     </div>
 
-
+                    {% if not is_gar_check %}
                     <div class="row" >
                         <div class="col-lg-8 col-md-8 col-xs-12">
                             <h3 class="thin">Configuration des enseignants, groupes, élèves  <a href="javascript:void();" id="show_help_from_tdb" style="font-size : 14px">  étape par étape</a>
@@ -250,7 +250,7 @@
                     {% endcomment %}
 
 
-                    {% if not is_gar_check %}
+
 
                     <div class="row" style="margin-top:10px" {% if nb_students > 0 %} id="help_from_tdb" {% endif %} >
                         <div class="col-lg-6 col-md-6 col-xs-12">
@@ -443,6 +443,14 @@
                             {% endif %}
                         </div>
                     </div>
+                    </div>
+                    {% else %}
+                    <div class="row" >
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+
+                            <h3 class="thin alert alert-danger">Configuration avec le GAR
+                            </h3>
+                        </div>
                     </div>
                     {% endif %}
 
