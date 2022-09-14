@@ -58,7 +58,7 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="row">
                         <div class="col-sm-10 col-md-8">
-                        {% if teacher.user.username|length > 50 %}
+                        {% if is_gar_check %}
                             <div class="form-group">
                                 {{ user_form.username.label_tag }}<br/>
                                 <label>Connexion via le GAR</label>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                    {% if teacher.user.username|length > 50 %}
+                    {% if is_gar_check %}
                     <div class="row">
                         <div class="col-sm-8 col-md-10">
                             <div class="form-group">                        
@@ -110,7 +110,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-5">
                             <div class="form-group">
-                                {% if teacher.user.username|length > 50 %}
+                                {% if is_gar_check %}
                                     {{ user_form.first_name.label_tag }}
                                     {{ user_form.first_name  |add_class:"form-control"|attr:"readonly" }}
                                     {{ user_form.first_name.errors }}
