@@ -204,7 +204,7 @@
 
 
                         </div>
-                        {% if group %}
+                        {% if group and not is_gar_check %}
                         <div class="col-sm-12 col-md-4">
                             {% if group.students.all|length > 0 %}
                             <div class="form-group" style="margin-top: 250px">
@@ -224,7 +224,7 @@
                     </div>
             </div>
             <div class="col-sm-12 col-md-6">
-                
+                {% if not is_gar_check %}
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
@@ -233,6 +233,7 @@
                         </div>
                     </div>
                 </div> 
+                {% endif %}
      
             </div>
         </div>
