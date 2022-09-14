@@ -485,6 +485,26 @@ def authorizing_access_group(request,teacher,group ):
 
 #####################################################################################################################################
 #####################################################################################################################################
+####    GAR
+#####################################################################################################################################
+#####################################################################################################################################
+
+
+def get_this_group(request, id):
+    Group.objects.filter(pk=id).update(teacher=request.user.teacher)
+    messages.success(request,"Groupe récupéré.")
+    return redirect( 'update_group' , id )
+
+
+def get_out_this_group(request, id):
+    Group.objects.filter(pk=id).update(teacher=None)
+    messages.success(request,"Groupe quitté et redistribué.")
+    return redirect( 'index' )
+
+
+
+#####################################################################################################################################
+#####################################################################################################################################
 ####    Group
 #####################################################################################################################################
 #####################################################################################################################################
@@ -503,22 +523,7 @@ def list_groups(request):
 
 
 
-def get_this_group(request, id):
-    Group.objects.filter(pk=id).update(teacher=request.user.teacher)
-    messages.success(request,"Groupe récupéré.")
-    return redirect( 'update_group' , id )
 
-
-def get_out_this_group(request, id):
-    Group.objects.filter(pk=id).update(teacher=None)
-    messages.success(request,"Groupe quitté et redistribué.")
-    return redirect( 'index' )
-
-
-
-
-
- 
 def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
     form = GroupTeacherForm(request.POST or None, teacher = teacher )
@@ -710,6 +715,10 @@ def show_group(request, id ):
 
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
+    is_managing = False
+    if request.user.school :
+        is_managing = request.user.school.is_managing
+
     request.session["group_id"] = id
     data = get_complement(request, teacher, group)
     role = data['role']
@@ -742,7 +751,7 @@ def show_group(request, id ):
     studentprofiles = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     students = group.students.exclude( user__username__contains= "_e-test").order_by("user__last_name")
 
-    context = {  'group': group,  'communications' : [] , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles , 'show_qr' : show_qr }
+    context = {  'group': group,  'is_managing' : is_managing , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles , 'show_qr' : show_qr }
 
     return render(request, 'group/show_group.html', context )
 
