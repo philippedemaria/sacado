@@ -525,10 +525,7 @@ def send_message(request):
     else :
         messages.error(request,"Oubli de token.")
 
-    if request.POST["info_academy"] == "yes" :
-        return redirect("academy")
-    else :
-        return redirect("index")
+    return redirect("index")
 
 
 
