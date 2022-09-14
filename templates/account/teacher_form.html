@@ -178,20 +178,24 @@
             </div>
             {% endif %}
             <div class="row">
-                {% if teacher.user.username|length < 50 %}
+                {% if is_gar_check %}
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <label>{{ user_form.email.label_tag }}</label>
- 
- 
+                            {{ user_form.email |add_class:"form-control"|attr:"readonly" }}
+                            {{ user_form.email.errors }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label>{{ user_form.email.label_tag }}</label>
                             {{ user_form.email |add_class:"form-control" }}
                             {{ user_form.email.errors }}
- 
-
-
                     </div>
                 </div>
                 {% endif %}
+
                 <div class="col-sm-12 col-md-6">
                     <div class="{% if teacher.levels.all.count == 0 %} alert alert-danger{% else %}form-group{% endif %}">
                         <label>{{ user_form.time_zone.label_tag }}{% if not teacher.time_zone %} <i class="fa fa-warning"></i> Renseigner{% endif %}</label> 
