@@ -89,7 +89,7 @@ def index(request):
 
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
-  
+
         try :
             is_gar_check = request.session.get("is_gar_check",None)
             # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
@@ -415,18 +415,45 @@ def ressource_sacado(request): #Protection saml pour le GAR
                             elif name[0] == 1 : level_id = 11
                             else : level_id = 12
 
-                        teacher = user.teacher
-
-                        grp, creat = Group.objects.get_or_create(name = name , teacher = teacher ,  school = school , defaults = {  'level_id' : level_id , "lock" : 0  })
-                        try :  # Profil élève
-                            if creat :
+                        if  school.is_primaire :
+                            nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
+                            if nb_group == 1 :
                                 username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
                                 password = make_password("sacado2020") 
                                 user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
-                                student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
-                                grp.students.add(student)
-                        except :
-                            pass
+                                this_student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                            else :
+                                this_student = None
+
+                            grp, creat = Group.objects.get_or_create(name = name ,  school = school , defaults = {  'subject_id' : 1 ,  'teacher' : teacher ,  'level_id' : level_id , "lock" : 0  })
+                            try :  # Profil élève
+                                if this_student :
+                                    grp.students.add(this_student)
+                            except :
+                                pass
+
+                        else :
+                            grp, creat = Group.objects.get_or_create(name = name , teacher  = teacher ,  school = school , defaults = { 'subject_id' : 1 ,  'level_id' : level_id , "lock" : 0  })
+                            try :  # Profil élève
+                                if creat :
+                                    username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                                    password = make_password("sacado2020") 
+                                    user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                                    student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                                    grp.students.add(student)
+                            except :
+                                pass
+
+
+
+
+
+
+
+
+
+
+
 
                 except :
                     pass
