@@ -91,7 +91,7 @@ class School(models.Model):
                 nbs += 1
         data_nb = {"nbt": nbt, "nbs": nbs}
 
-        data_nb.update({"nbg": nbg , "low": low , "eca": eca, "ac": ac , "dep": dep, "medium": medium , "up": up  })
+        data_nb.update({"nbg": nbg , "low": low , "eca": eca, "ac": ac , "dep": dep, "medium": medium , "up": up , "nbs_max": self.nbstudents  })
  
         return data_nb
 

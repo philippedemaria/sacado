@@ -97,7 +97,7 @@
                         {% endif %}
                         {% if data.nbs %}
                         <div class="col-lg-3 col-md-4 col-xs-6">
-                            <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
+                            <div class="small-box bg-{% if  data.nbg > 0 %}purple{% elif  data.nbs > data.nbs_max %}warning{% else %}danger{% endif %}">
                                 <div class="inner">
                                      <span style="font-size: 35px">Élèves </span>
                  
@@ -107,7 +107,7 @@
                                 </div>
                                 {% if  data.nbs > 0 %}
                                     <a href="{% if sacado_asso %}{% url 'school_students' %}{% else %}#{% endif %}" class="small-box-footer"><i
-                                        class="fa fa-arrow-circle-right"></i> Gestion des élèves </a>
+                                        class="fa fa-arrow-circle-right"></i> Gestion des élèves <small>[{{ data.nbs_max }}]</small></a>
                                 {% else %}
                                     <a href="{% if sacado_asso %}{% url 'school_groups' %}{% else %}#{% endif %}" class="small-box-footer"><i
                                         class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>

@@ -964,9 +964,6 @@ def migrate_all_documents_to_gar(init , target , is_delete) :
     if not is_ok   : this_raison += raisonf
     if not is_test : this_raison += raison
 
-    print("test , this_raison" , test , this_raison)
-
-
     return test, this_raison
 
 
@@ -1170,3 +1167,12 @@ def renew(school) :
         renew_propose = True
 
     return renew_propose
+
+
+def can_inscribe_students(school, compare):
+
+    nb_students = school.nbstudents - school.users.filter(user_type=0).count()
+    test = False
+    if nb_students > compare :
+        test = True
+    return test

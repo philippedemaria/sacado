@@ -303,6 +303,8 @@ def count_unique(datas):
 def include_students(request , liste, group):
 
     students_tab = liste.split("\r\n")
+    if not can_inscribe_students(group.teacher.user.school, len(students_tab) ) :
+        return redirect ('index')
 
     for student_tab in students_tab:
 
@@ -556,9 +558,14 @@ def create_group(request):
             folder = Folder.objects.get(pk=f_id)
             folders.append(folder)
 
+        if not teacher.user.school :
+            messages.error(request,"Erreur... Vous devez renseigner votre établissement.")
+            return redirect('index')
+
+
         stdts = request.POST.get("students")
         if stdts : 
-            if len(stdts) > 0 :
+            if len(stdts) > 0  :
                 include_students(request , stdts,nf)
         student = create_student_profile_inside(request, nf) # dans general_fonction.py
         duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student) # dans general_fonction.py

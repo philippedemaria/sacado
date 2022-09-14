@@ -464,6 +464,14 @@ def update_group_school(request,id):
 	if request.method == "POST" :
 		if form.is_valid():
 			form.save()
+			################################################### Si l'élève n'est pas rattaché à un établissement on le joint ici
+			teacher_school = group.teacher.user.school
+			if teacher_school :
+				for student in group.students.all():
+					if not student.user.school :
+						student.user.school = group.teacher.user.school
+						student.user.save()
+			###################################################
 
 			sharing_teachers(request,group,teachers)
 			stdts = request.POST.get("students")

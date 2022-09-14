@@ -430,31 +430,35 @@ def register_student_from_admin(request):
 
     user_form = NewUserTForm(request.POST or None) 
     if request.method == 'POST':
-        if user_form.is_valid():
-            u_form = user_form.save(commit=False)
-            u_form.password = make_password("sacado2020")
-            u_form.user_type = User.STUDENT
-            u_form.school = this_school_in_session(request)
-            u_form.username = get_username(request, u_form.last_name, u_form.first_name)
-            u_form.save()
+        if user_form.is_valid() :
+            if can_inscribe_students(request.user.school, 1) :
+                u_form = user_form.save(commit=False)
+                u_form.password = make_password("sacado2020")
+                u_form.user_type = User.STUDENT
+                u_form.school = this_school_in_session(request)
+                u_form.username = get_username(request, u_form.last_name, u_form.first_name)
+                u_form.save()
 
-            # On récupère les parcours, exercices et cours du premier élève de ce groupe et on les attribue au nouvel élève.
-            try :
-                student = Student.objects.create(user=u_form, level=group.level, task_post=1)
-                group.students.add(student)
-                test = attribute_all_documents_of_groups_to_a_new_student([group], student)
-                phrase = ""
-                if test :
-                    phrase = " Les documents du groupe lui ont été attribués."
-                messages.success(request, 'Le profil a été changé avec succès !'+phrase)
-            except :
-                print("attribution et création non établies")
+                # On récupère les parcours, exercices et cours du premier élève de ce groupe et on les attribue au nouvel élève.
+                try :
+                    student = Student.objects.create(user=u_form, level=group.level, task_post=1)
+                    group.students.add(student)
+                    test = attribute_all_documents_of_groups_to_a_new_student([group], student)
+                    phrase = ""
+                    if test :
+                        phrase = " Les documents du groupe lui ont été attribués."
+                    messages.success(request, 'Le profil a été changé avec succès !'+phrase)
+                except :
+                    messages.error(request, 'attribution et création non établies')  
 
-            send_templated_mail(
-                template_name="student_registration",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[u_form.email, ],
-                context={"student": u_form, }, )
+                send_templated_mail(
+                    template_name="student_registration",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[u_form.email, ],
+                    context={"student": u_form, }, )
+
+            else :
+                messages.error(request, "Erreur... Nombre d'élèves dépassé. Augmenter la capacité de votre établissement")
 
             return redirect('school_groups')
         else:
@@ -470,48 +474,53 @@ def register_student(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
-            username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
-            user = user_form.save(commit=False)
-            user.username = username
-            user.user_type = User.STUDENT
-            password = request.POST.get("password1")
-            ######################### Choix du groupe  ###########################################
-            if request.POST.get("choose_alone"):  # groupe sans prof
-                # l'élève rejoint le groupe par défaut sur le niveau choisi
-                teacher = Teacher.objects.get(user_id=2)  # 2480
-                group = Group.objects.get(teacher=teacher, level_id=int(request.POST.get("level_selector")))
-                parcours = Parcours.objects.filter(teacher=teacher, level=group.level)
+            if can_inscribe_students(request.user.school, 1) :
+                username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
+                user = user_form.save(commit=False)
+                user.username = username
+                user.user_type = User.STUDENT
+                password = request.POST.get("password1")
+                ######################### Choix du groupe  ###########################################
+                if request.POST.get("choose_alone"):  # groupe sans prof
+                    # l'élève rejoint le groupe par défaut sur le niveau choisi
+                    teacher = Teacher.objects.get(user_id=2)  # 2480
+                    group = Group.objects.get(teacher=teacher, level_id=int(request.POST.get("level_selector")))
+                    parcours = Parcours.objects.filter(teacher=teacher, level=group.level)
+                else:  # groupe du prof  de l'élève
+                    code_group = request.POST.get("group")
+                    if Group.objects.filter(code=code_group, lock = 0 ).exists():
+                        group = Group.objects.get(code=code_group)
+                        parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level,is_trash=0)
+                    else :
+                        parcours = []
+                        group = None
+                #######################################################################################
+                if group :
+                    try :
+                        user.school = group.teacher.user.school
+                    except :
+                        pass
+                    user.save()
+                    student = Student.objects.create(user=user, level=group.level)
+                    try :
+                        attribute_all_documents_of_groups_to_a_new_student([group], student)
+                    except :
+                        print("Attribution et création non établies")
 
-            else:  # groupe du prof  de l'élève
-                code_group = request.POST.get("group")
-                if Group.objects.filter(code=code_group, lock = 0 ).exists():
-                    group = Group.objects.get(code=code_group)
-                    parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level,is_trash=0)
-                else :
-                    parcours = []
-                    group = None
-            #######################################################################################
-            if group :
-                user.save()
-                student = Student.objects.create(user=user, level=group.level)
-                try :
-                    attribute_all_documents_of_groups_to_a_new_student([group], student)
-                except :
-                    print("Attribution et création non établies")
-
-                user = authenticate(username=username, password=password)
-                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-                request.session["user_id"] = request.user.id
-                messages.success(request, "Inscription réalisée avec succès !")               
-                if user_form.cleaned_data['email']:
-                    send_templated_mail(
-                        template_name="student_registration",
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        recipient_list=[user_form.cleaned_data['email'], ],
-                        context={"student": user, }, )
-            else:
-                messages.error(request, "Erreur lors de l'enregistrement. Vous devez spécifier un groupe...")     
-
+                    user = authenticate(username=username, password=password)
+                    login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+                    request.session["user_id"] = request.user.id
+                    messages.success(request, "Inscription réalisée avec succès !")               
+                    if user_form.cleaned_data['email']:
+                        send_templated_mail(
+                            template_name="student_registration",
+                            from_email=settings.DEFAULT_FROM_EMAIL,
+                            recipient_list=[user_form.cleaned_data['email'], ],
+                            context={"student": user, }, )
+                else:
+                    messages.error(request, "Erreur lors de l'enregistrement. Vous devez spécifier un groupe...")     
+            else :
+                messages.error(request, "Erreur... Nombre d'élèves dépassé. Augmenter la capacité de votre établissement")
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')
@@ -1533,43 +1542,56 @@ def register_users_by_csv(request,key):
         #lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display = []
         list_names = ""
-        for line in file_data :
-            try:
-                line = line.decode("utf-8")
-            except UnicodeDecodeError:
-                messages.error(request, 'Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
-                return HttpResponseRedirect(reverse("register_users_by_csv", args=[key]))
-            try : 
-                simple = request.POST.get("simple",None)
-                ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 1 , simple) # 2 donne la forme du CSV
 
-                if key == User.TEACHER:  # Enseignant
-                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
-                                                      school=this_school_in_session(request), time_zone=request.user.time_zone,
-                                                      is_manager=0,
-                                                      defaults={'username': username, 'password': password,
-                                                                'is_extra': 0})
-                    Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
-                else:  # Student
-                    user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
-                                                               school=this_school_in_session(request),
-                                                               time_zone=request.user.time_zone, is_manager=0,
-                                                               defaults={'username': username, 'password': password,
-                                                                         'is_extra': 0})
-                    student, creator = Student.objects.get_or_create(user=user, level_id=level, task_post=1)
+        if not request.user.school :
+            return redirect ('index')
+        else :
+            school = request.user.school
 
-                if is_username_changed :
-                    list_names += ln+" "+fn+" : "+username+"; "
+        if can_inscribe_students(school, len(file_data) ) :
+            for line in file_data :
+                try:
+                    line = line.decode("utf-8")
+                except UnicodeDecodeError:
+                    messages.error(request, 'Erreur..... Votre fichier contient des caractères spéciaux qui ne peuvent pas être décodés. Merci de vérifier que votre fichier .csv est bien encodé au format UTF-8.')
+                    return HttpResponseRedirect(reverse("register_users_by_csv", args=[key]))
+                try : 
+                    simple = request.POST.get("simple",None)
+                    ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 1 , simple) # 2 donne la forme du CSV
 
-            except :
-                pass
-     
-        if len(list_names) >  0 :
-            if key == User.TEACHER:
-                user_type = " enseignants "
-            else :
-                user_type = " élèves "
-            messages.error(request,"Les identifiants des "+user_type+" suivants ont été modifiés lors de la création "+list_names)
+                    if key == User.TEACHER:  # Enseignant
+                        user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=2,
+                                                          school=this_school_in_session(request), time_zone=request.user.time_zone,
+                                                          is_manager=0,
+                                                          defaults={'username': username, 'password': password,
+                                                                    'is_extra': 0})
+                        Teacher.objects.get_or_create(user=user, notification=1, exercise_post=1)
+                    else:  # Student
+                         
+        
+                        user, created = User.objects.get_or_create(last_name=ln, first_name=fn, email=email, user_type=0,
+                                                                   school=this_school_in_session(request),
+                                                                   time_zone=request.user.time_zone, is_manager=0,
+                                                                   defaults={'username': username, 'password': password,
+                                                                             'is_extra': 0})
+                        student, creator = Student.objects.get_or_create(user=user, level_id=level, task_post=1)
+
+                    if is_username_changed :
+                        list_names += ln+" "+fn+" : "+username+"; "
+
+                except :
+                    pass
+
+            if len(list_names) >  0 :
+                if key == User.TEACHER:
+                    user_type = " enseignants "
+                else :
+                    user_type = " élèves "
+                messages.error(request,"Les identifiants des "+user_type+" suivants ont été modifiés lors de la création "+list_names)
+
+        else :
+            messages.error(request,"Erreur... Nombre d'élèves dépassé. Vous devez augmenter le nombre d'élèves.")
+
 
         if key == User.TEACHER:
             return redirect('school_teachers')
