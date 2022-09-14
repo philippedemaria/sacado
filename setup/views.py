@@ -694,6 +694,7 @@ def school_adhesion(request):
 
                     return redirect('payment_school_adhesion')
         else :
+            messages.error(request,"Une erreur s'est produite, votre identifiant est sans doute déjà pris ou une case n'est pas renseignée. Renouveler l'opération.")
             print(form.errors)
             print(u_form.errors)
 
