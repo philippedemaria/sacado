@@ -87,7 +87,7 @@
                                         {% for s in group.students|exclude_teacher  %} 
                                            <font style="font-size:14px">    <a  href="{% url 'update_student'  s.user.id group.id  %}"> {{s}} </a>{% if not forloop.last %}, {% endif %} </font>
                                         {% empty %}
-                                        {% if group %}<br>
+                                        {% if group and not is_gar_check %}<br>
                                             <div class="alert alert-danger">
                                             Les élèves peuvent rejoindre ce groupe en utilisant cette URL : <strong>https://sacado.xyz/group/{{ group.code }}</strong>. 
                                             </div>
