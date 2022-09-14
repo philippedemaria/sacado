@@ -8,26 +8,43 @@
                 <div class="col-xs-12 col-md-12 col-lg-12" >
                     <div id="advises" class="advises">
 
-                            <h1 class="thin" >Accès au GAR. <b>A lire attentivement</b></h1>
-                                <ul> Avant toute utilisation, vous devez par étapes :
-                                    <li class="sanspuce">1. Renseigner votre/vos matières et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
-                                    <li class="sanspuce">2. Vérifier la matière et le niveau de vos groupes, via Détails > Paramètres > Configurer</li>
-                                    <li class="sanspuce">3. Utiliser les ressources SACADO comme indiqué ci-dessous</li>
-                                </ul>
+                            <h1 class="thin sacado_color" >Accès au GAR. <b>A lire attentivement</b></h1>
 
-                                        <a href="https://sacado.xyz/ressources/tuto_gar_2022.pdf" target ="_blank" class="btn btn-outline-danger" >
-                                             Tutoriel de démarrage Secondaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
-                                        </a>
+
+                            <div class="row sacado_color"> 
+                                <div class="col-xs-6 col-md-12 col-lg-6" >
+                                    <h2>Primaire  <small>(Maternelle et élémentaire)</small></h2>
+                                    <ul> Avant toute utilisation, vous devez par étapes :
+                                        <li class="sanspuce">1. Renseigner votre matière et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
+                                        <li class="sanspuce">2. Récupérer vos élèves dans votre classe</li>
+                                        <li class="sanspuce">3. Utiliser les ressources SACADO comme indiqué ci-dessous</li>
+                                    </ul>
+                                    <a href="https://sacado.xyz/ressources/tuto_gar_2022_primaire.pdf" target ="_blank" class="btn btn-outline-danger" >
+                                         Tutoriel de démarrage Primaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                                    </a>
+                                </div>
+                                <div class="col-xs-6 col-md-12 col-lg-6" >
+                                    <h2>Secondaire <small>(Collège et lycée)</small></h2>
+                                    <ul> Avant toute utilisation, vous devez par étapes :
+                                        <li class="sanspuce">1. Renseigner votre matière et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
+                                        <li class="sanspuce">2. Vérifier la matière et le niveau de vos groupes, via Détails > Paramètres > Configurer</li>
+                                        <li class="sanspuce">3. Utiliser les ressources SACADO comme indiqué ci-dessous</li>
+                                    </ul>
+                                    <a href="https://sacado.xyz/ressources/tuto_gar_2022_secondaire.pdf" target ="_blank" class="btn btn-outline-danger" >
+                                         Tutoriel de démarrage Secondaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                                    </a>
+                                </div>
+                            </div>
 
 
                             <hr/>
-                            <p>Avant l'arrivée du GAR dans SACADO, <b>vous utilisiez déjà SACADO</b>. Vous pouvez faire une migration de votre compte Perso vers le compte géré par le GAR.</p>
+                            <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous utilisiez déjà SACADO</b>. Vous pouvez faire une migration de votre compte Perso vers le compte géré par le GAR.</p>
                             <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
                                 Je comprends et je fais la migration.
                             </a>
                             <hr/>
 
-                            <p>Avant l'arrivée du GAR dans SACADO, <b>vous n'utilisiez pas SACADO</b>. Comment récupérer les documents de SACADO ?</p>
+                            <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous n'utilisiez pas SACADO</b>. Comment récupérer les documents de SACADO ?</p>
                                 <ul> 
                                     <li class="sanspuce">1. Accéder à un groupe</li>
                                     <li class="sanspuce">2. Cliquer sur Nouveau document > Récupérer un dossier mutualisé</li>
@@ -36,7 +53,7 @@
                                     <li class="sanspuce">5. Publier le dossier via sa configuration.</li>
                                 </ul>
                             <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
-                                J'ai fini les étapes de configuration de chaque groupe et je passe.
+                                J'ai fini les étapes de configuration de chaque groupe.
                             </a>
                         </div>
                     </div>
@@ -202,26 +219,28 @@
                         <div class="small-box" style="background-color:{{ group_prim.color }};color:{{ group_prim.color|contrast_color }}">
                             <!-- modal qui affiche la liste des élèves -->
                             <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}"> 
-                                <font style="color:{{ group_prim.color }}">
-                                    {% for s in group_prim.students.all %} 
-                                        {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
+                                <font style="font-size:12px;color:{{ group_prim.color }}" class="thin">
+                                    {% for s in group_prim.students.all|dictsort:"user.last_name" %} 
+                                        {{s.user.last_name|lower|capfirst}} {{s.user.first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
                                     {% endfor %}
                                 </font>
                             </div>
                             <!-- Legende de la small-box -->
                             <div class="inner" style="color:white;opacity:0.9"><br/>
-                                <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
-                                <a href="{% url 'show_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};" onclick="return get_this_group('{{ group_prim.name }}')"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Voir ce groupe ?</span></a> 
+                                <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br><br/><br><br>
+                                        <a href="{% url 'get_this_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};" onclick="return get_this_group('{{ group_prim.name }}')"><span class="small_displayer"> Récupérer ce groupe ?</span></a>  
                             </div>
+
+ 
+
+
+
                             <div class="small-box-footer" >
                                 <div class="row">                    
-
-
-
                                     <div class="col-lg-12 col-xs-12" style="padding-right:0px">
                                         <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group_prim.id }}" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-users"></i>
                                             <span class="helper_tip small_displayer"  style="color:{{ group_prim.color|contrast_color }};"> 
-                                                Élève{{ data.snt|pluralize }}
+                                               Voir les élève{{ data.snt|pluralize }} ?
                                             </span> 
                                         </a>   
                                     </div>
