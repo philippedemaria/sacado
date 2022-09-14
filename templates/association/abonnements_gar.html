@@ -35,6 +35,14 @@ Etablissements accès au GAR
                 <label>id Distributeur  : 832020065_0000000000000000</label> 
             </div>
         </div>
+
+        {% if error %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="aler alert-danger">Erreur de récupération des établissements</div> 
+            </div>
+        </div>
+        {% else %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table class="table table-bordered table-hover ordering_tab_1000">
@@ -93,6 +101,9 @@ Etablissements accès au GAR
                 </table>
             </div>
         </div>
+        {% endif %}
+
+
     </section>
 {% endblock %}
 
