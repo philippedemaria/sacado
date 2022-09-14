@@ -250,7 +250,7 @@
                     {% endcomment %}
 
 
-
+                    {% if not is_gar_check %}
 
                     <div class="row" style="margin-top:10px" {% if nb_students > 0 %} id="help_from_tdb" {% endif %} >
                         <div class="col-lg-6 col-md-6 col-xs-12">
@@ -444,6 +444,8 @@
                         </div>
                     </div>
                     </div>
+                    {% endif %}
+
                     {% if not forloop.last %}<hr/>{% endif %}
                 {% endwith %} 
 

@@ -31,6 +31,7 @@ def is_sacado_asso(this_user, today):
         pass
     return is_sacado, is_active
 
+
 ##############################################################################################################################################
 ##############################################################################################################################################
 ##############################################################################################################################################
@@ -42,6 +43,12 @@ def menu(request):
     if request.user.is_authenticated:
 
         is_gar_check = request.session.get("is_gar_check",None)
+
+        try : # Vérifie qu'un user ne crée pas un compte annexe pour scunter le GAR
+            if not is_gar_check and request.user.school.gar :
+                request.session["is_gar_check"] = True
+        except : 
+            pass
 
         sacado_asso = False
         if request.user.time_zone:
