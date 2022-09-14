@@ -634,27 +634,9 @@ def school_adhesion(request):
                         password = u_form.cleaned_data['password1']
                         teacher = Teacher.objects.create(user=user)
                         request.session["new_user_id"] = user.id    
-                    # else :
-                    #     # si l'établissement vient d'être créé on crée aussi la personne qui l'enregistre.
-                    #     user = u_form.save(commit=False)
-                    #     user.user_type = User.TEACHER
-                    #     user.school = school_exists # on attribue l'établissement à la personne qui devient référence
-                    #     user.is_manager = 1 # on attribue l'établissement à la personne qui devient administratrice de sacado.
-                    #     user.set_password(u_form.cleaned_data["password1"])
-                    #     user.country = school_exists.country
-                    #     user.save()
-                    #     username = u_form.cleaned_data['username']
-                    #     password = u_form.cleaned_data['password1']
-                    #     teacher = Teacher.objects.create(user=user)
-                    #     request.session["new_user_id"] = user.id 
-                    #     ##########
-                    #     ##########
-                    #     # Si on vient de créer un établissement, on lui crée un abonnement.
-                    #     ##########
-
-
+ 
                     is_active   = False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
-                    observation = "Paiement en ligne"             
+                    observation = "Période de test"             
  
                     accounting_id = accounting_adhesion(school_exists, today , None, user, is_active , observation) # création de la facturation
 
