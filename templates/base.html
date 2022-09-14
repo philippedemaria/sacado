@@ -48,22 +48,20 @@
         </div>
         <nav class="main-nav float-right d-none d-lg-block">
             <ul> 
-                {% comment %}<li><a href="{% url 'academy' %}">Académie</a></li>{% endcomment %} 
-                
-
-                <li><a href="#" data-toggle='modal' data-target='#inscription' >S'inscrire</a></li>
 
                 {% comment %}
-                <li><a href="#exercises">Exercices</a></li>
-                <li><a href="#teachers">Enseignants</a></li>
-                <li><a href="#students">Élèves</a></li>
-                <li><a href="#parents">Parents</a></li>
+                    <div class="row" align="center">
+                        <div class="col-sm-12 col-md-12">
+                 
+                                    <video src="https://sacado.xyz/ressources/videos/presentationSacado.mp4" width="480" height="275"  controls  >
+                                      Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
+                                    </video>
+                        </div>
+                    </div>
+                {% endcomment %}
 
 
-
-                {% endcomment %} 
-
-
+                <li><a href="#" data-toggle='modal' data-target='#inscription' >S'inscrire</a></li>
                 <li><a href="#footer">Contact</a></li>
 
             </ul>
@@ -88,10 +86,15 @@
             </div>
             <div class="modal-body">
                 <div class="row" align="center">
-                    <div class="col-lg-12 col-md-12 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-xs-6">
                         <h2 class="sacado">Vous êtes Enseignant</h2>
                          
                         <a href="{% url 'register_teacher_accueil' %}"><img src="{% static 'img/teacherss.jpg' %}" width="400" class="img-fluid"></a>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-6">
+                        <h2 class="sacado">Vous représentez un établissement</h2>
+                         
+                        <a href="{% url 'school_adhesion' %}"><img src="{% static 'img/schoolss.jpg' %}" width="400" class="img-fluid"></a>
                     </div>
                 </div>
 
