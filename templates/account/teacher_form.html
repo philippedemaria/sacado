@@ -26,11 +26,11 @@
 {% endblock %}
  
 {% block page_menu_right %}
-
-    {% if request.user.is_manager %}
-    <li> <a href="{% url 'register_by_csv' 2 0 %}" class="btn btn-new"  > <img src="{% static 'img/excel.png' %}" width="15px"/> Ajouter Enseignant.e.s par csv</a></li>
-    {% endif %}
-
+    {% if not is_gar_check %}
+        {% if request.user.is_manager %}
+        <li> <a href="{% url 'register_by_csv' 2 0 %}" class="btn btn-new"  > <img src="{% static 'img/excel.png' %}" width="15px"/> Ajouter Enseignant.e.s par csv</a></li>
+        {% endif %}
+    {% endif  %}
 {% endblock %}
 
 
