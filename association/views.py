@@ -1495,9 +1495,6 @@ def create_accounting(request,tp):
                     fa.user = request.user
                     fa.accounting = nf
                     fa.school = nf.school
-                    if nf.date_payment:
-                        fa.is_active = 1
-
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
                         test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
                         if test :

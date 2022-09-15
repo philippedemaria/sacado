@@ -199,7 +199,10 @@
    
                     <table class="table">
                         <tr>
-                            <td>Actif ?</td><td>{{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
+                            <td>Abonnement ?</td><td>{{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
+                        </tr>
+                        <tr>
+                            <td>Actif ?</td><td>{{ form_abo.is_active |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
                         </tr>
                         <tr>
                             <td>Début</td><td>{{ form_abo.date_start|add_class:" datetimepicker"}}   {{ form_abo.date_start.errors }}</td>
