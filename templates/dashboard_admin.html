@@ -302,7 +302,7 @@
                                 <ul>
                                     <form action="{% url 'choose_managing_school' %}" method="POST">        {% csrf_token %}
                                         <li class="sanspuce">
-                                            <label><input name="authorize_managing" value="1" type="radio" {% if only_admin_can_manage  %}checked{% endif %} /> Gestion  par le compte Admin uniquement(Par défaut). <small>Seul l'administrateur SACADO pourra créer les groupes et affecter des élèves.  </small></label>
+                                            <label><input name="authorize_managing" value="1" type="radio" {% if only_admin_can_manage  %}checked{% endif %} /> Gestion  par le compte Admin uniquement(Par défaut). <small>Seul l'administrateur SACADO pourra affecter des élèves.  </small></label>
                                         </li>                                        
                                         <li class="sanspuce">
                                             <label><input name="authorize_managing" value="0" type="radio" {% if not only_admin_can_manage  %}checked{% endif %} /> Gestion par les enseignants. <small>Chaque enseignant pourra créer ses groupes et affecter les élèves.  </small></label>
