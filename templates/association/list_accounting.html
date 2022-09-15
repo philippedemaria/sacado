@@ -88,7 +88,7 @@
                 </thead>
                 <tbody>
                     {% for accounting in accountings %}
-                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all"> 
+                        <tr id="this_tr_{{ accounting.id }}" class="this_tr_all" {% if accounting.is_historic %}style="display:none"{% endif %}> 
                             <td>
                                 <span >{{ accounting.date_payment|date:"Y-m-d" }} </span> 
                             </td>

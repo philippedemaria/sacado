@@ -1452,6 +1452,7 @@ def create_accounting(request,tp):
             nf.user = request.user
             forme = request.POST.get("forme",None)
             nf.chrono = str(uuid.uuid4())[:5]
+            nf.is_active = 1
             if tp == 0 : 
                 nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
             nf.tp = tp
@@ -1488,6 +1489,7 @@ def create_accounting(request,tp):
             else :
                 am = som
             Accounting.objects.filter(pk = nf.id).update(amount=am)
+            Accounting.objects.filter(pk = nf.id).update(country=nf.school.country)
 
             if nf.is_abonnement :
                 if form_abo.is_valid():
