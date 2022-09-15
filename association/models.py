@@ -247,21 +247,21 @@ class Accounting(models.Model):
         return s
 
 
-    def is_historic(self):
-        active_year = Activeyear.objects.get(is_active = 1)
-        this_year = int(active_year.year)
-        next_year = int(active_year.year) + 1
+    # def is_historic(self):
+    #     active_year = Activeyear.objects.get(is_active = 1)
+    #     this_year = int(active_year.year)
+    #     next_year = int(active_year.year) + 1
 
-        forme,year,month,day =  str(self.chrono).split("-")
+    #     forme,year,month,day =  str(self.chrono).split("-")
 
-        if int(month) > 5 and int(year) == this_year :
-            test = False
-        elif int(month) < 8 and int(year) == next_year :
-            test = False
-        else :
-            test = True
+    #     if int(month) > 5 and int(year) == this_year :
+    #         test = False
+    #     elif int(month) < 8 and int(year) == next_year :
+    #         test = False
+    #     else :
+    #         test = True
 
-        return test
+    #     return test
 
 
 
