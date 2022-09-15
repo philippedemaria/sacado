@@ -249,14 +249,14 @@ class Accounting(models.Model):
 
     def is_historic(self):
         active_year = Activeyear.objects.get(is_active = 1)
-        this_year = active_year.year
+        this_year = int(active_year.year)
         next_year = int(active_year.year) + 1
 
         forme,year,month,day =  str(self.chrono).split("-")
         test = False
-        if month > 6 and year == this_year :
+        if int(month) > 6 and int(year) == this_year :
             test = True
-        elif month < 8 and year == next_year :
+        elif int(month) < 8 and int(year) == next_year :
             test = True
         else :
             test = False
