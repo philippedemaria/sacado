@@ -96,7 +96,6 @@ def index(request):
         except :
             is_gar_check  = False
 
-
         today = time_zone_user(request.user)
 
         ############################################################################################
@@ -122,7 +121,15 @@ def index(request):
             request.user.last_login = today
             request.user.save()
 
-        if request.user.is_teacher:
+        
+        if request.user.is_teacher :
+
+            over_students = False
+            if request.user.school :
+                over_students , nbss , nbsa  = oversize_students(request.user.school)
+                if over_students :
+                    messages.error(request,"Erreur...Vous avez dépassé le nombre maximal d'élèves inscrits. Veuillez augmenter votre capacité.")
+
 
             teacher = request.user.teacher
             grps = teacher.groups.all() 
@@ -159,9 +166,9 @@ def index(request):
 
 
             template = 'dashboard.html'
-            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 
+            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 'nbss' : nbss , 'nbsa': nbsa ,
                        'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check ,
-                       'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,   #'parcourses': parcourses
+                       'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,  'over_students' : over_students  #'parcourses': parcourses
                        }
         
         elif request.user.is_student:  ## student

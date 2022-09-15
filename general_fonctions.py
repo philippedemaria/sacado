@@ -1176,3 +1176,13 @@ def can_inscribe_students(school, compare):
     if nb_students > compare :
         test = True
     return test
+
+
+def oversize_students(school):
+    nbsa = school.users.filter(user_type=0).count()
+    nbss = school.nbstudents
+    nb_students = nbsa - nbss
+    test = False
+    if nb_students > 0 :
+        test = True
+    return test , nbss , nbsa
