@@ -36,6 +36,7 @@
                         <td>Nom</td>
                         <td>Ville</td>
                         <td>Pays</td>
+                        <td>GAR</td>
                         <td>Admin</td>
                     </tr>
                 </thead>
@@ -64,6 +65,11 @@
                     </td>
                     <td>{{ c.school.town|lower|capfirst }}</td>
                     <td>{{ c.school.country.name|lower|capfirst }}</td>
+                    <td> 
+                        {% if c.school.gar %}
+                            <span class="text-success" >GAR</span>
+                        {% endif %}
+                    </td>
                     <td>{% for u in c.school.admin %} <li>{{ u.get_full_name }}, {{ u.email }}</li> {% endfor %}</td>
                 </tr>
                 {% endfor %}
