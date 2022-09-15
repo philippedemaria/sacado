@@ -253,13 +253,13 @@ class Accounting(models.Model):
         next_year = int(active_year.year) + 1
 
         forme,year,month,day =  str(self.chrono).split("-")
-        test = False
-        if int(month) > 6 and int(year) == this_year :
-            test = True
-        elif int(month) < 8 and int(year) == next_year :
-            test = True
-        else :
+
+        if int(month) > 5 and int(year) == this_year :
             test = False
+        elif int(month) < 8 and int(year) == next_year :
+            test = False
+        else :
+            test = True
 
         return test
 
