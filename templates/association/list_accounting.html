@@ -103,7 +103,7 @@
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
                                 </a></span>
 
-                                <a href="{% url 'relance_accounting'  accounting.id %}" class="pull-right" title="Relancer"><i class="bi bi-repeat"></i> </a>
+                                <a href="{% url 'relance_accounting'  accounting.id %}" class="pull-right" title="Relancer"><i class="fa fa-repeat"></i> </a>
                                 <a href="{% url 'print_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px" title="Imprimer"><i class="fa fa-print"></i> </a>
                                 <a href="{% url 'show_accounting'  accounting.id %}" class="pull-right" style="margin-right:10px" title="Voir"><i class="fa fa-eye"></i> </a>
                                 {% if accounting.is_display    %}
