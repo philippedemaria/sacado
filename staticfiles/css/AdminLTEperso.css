@@ -8497,7 +8497,7 @@ text-align: center;
 }
 
 
-
+ 
 .widget-user-header .disc_course{
   position: absolute;
   top:10px;
@@ -8506,7 +8506,7 @@ text-align: center;
   border-radius:50%;
   width:40px;
   height:40px;
-  padding: 8px 11px;
+  padding: 2px 5px;
   color:#FFF;
   z-index: 1;
   background-color: #f1eef7;
@@ -8522,11 +8522,19 @@ text-align: center;
   border-radius:50%;
   width:40px;
   height:40px;
-  padding: 8px 11px;
-  color:#f1eef7;
+  padding: 2px 5px;
+  color:#FFF;
   z-index: 1;
-  background-color: #FFF;
+  background-color: #5d4391;
 }
+
+.widget-user-header .disc_course:hover a, .course_section:hover a, .course_section a:hover{
+  color:#FFF;
+}
+
+
+
+
 
 .widget-user-header .overlay .overlay_expand{
   padding-bottom: 5px;
