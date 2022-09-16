@@ -1905,7 +1905,7 @@ def create_avoir(request, id):
     chronof    = accounting.chrono
 
     accounting.pk = None
-    accounting.amount = amount
+    accounting.amount = -amount
     accounting.is_credit = 0
 
     accounting.forme = "AVOIR"
