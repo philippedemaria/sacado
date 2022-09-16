@@ -124,7 +124,7 @@ def index(request):
         
         if request.user.is_teacher :
 
-            over_students = False
+            over_students, nbss , nbsa = False , 0 , 0
             if request.user.school :
                 over_students , nbss , nbsa  = oversize_students(request.user.school)
                 if over_students :
