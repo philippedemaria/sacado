@@ -24,6 +24,8 @@ urlpatterns = [
     path('show/<int:id>/', show_accounting, name='show_accounting'), 
     path('print/<int:id>/', print_accounting, name='print_accounting'), 
     path('renew/<int:ids>/', renew_accounting, name='renew_accounting'),
+    path('relance_accounting/<int:id>', relance_accounting, name='relance_accounting'),
+
 
     path('accounting_to_accountancy', accounting_to_accountancy, name='accounting_to_accountancy'),
     path('create_accountancy', create_accountancy, name='create_accountancy'),

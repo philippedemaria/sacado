@@ -1,3 +1,4 @@
+from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
@@ -1921,17 +1922,12 @@ def create_avoir(request, id):
     Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = accounting.amount )  
     Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = -accounting.amount )  
  
-
-
     accounti = Accounting.objects.get(id=id) 
     accounti.objet += " Avoir sur " + chronof
     accounti.observation += " Avoir sur " + chronof
     accounti.is_active = 0
     accounti.is_abonnement = 0
     accounti.save()
-
-
-
 
     return redirect('list_accountings', 0)
     
@@ -2213,8 +2209,6 @@ def print_accounting(request, id ):
  
 
 
-
-
 def print_bilan(request):
 
     date_start = request.POST.get("date_start")
@@ -2455,6 +2449,32 @@ def export_bilan(request):
     return response
  
 
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    Relance
+#####################################################################################################################################
+#####################################################################################################################################
+
+@user_passes_test(user_is_board)
+def relance_accounting(request, id ):
+
+    accounting = Accounting.objects.get(pk=id)
+    managers = accounting.school.users.filter(is_manager=1)
+    dest = [user.email for user in managers]
+
+    chrono = accounting.chrono
+
+
+    msg = "Bonjour Madame, Monsieur,\n\nRéférence : "+chrono+ "\n\nComme suite à la demande d'abonnement SACADO de votre établissement " + accounting.school +", nous n'avons pas reçu votre cotisation durant la période d'essai qui vient de se terminer.\n\nPourriez-vous nous confirmer le règlement de ladite cotisation ? \n\nCordialement."
+
+    send_mail("Rappel Abonnement SACADO", msg , settings.DEFAULT_FROM_EMAIL , dest)
+
+
+    return redirect("list_accountings" , 0 )
+
+
+
 #####################################################################################################################################
 #####################################################################################################################################
 ####    Associate
@@ -2552,7 +2572,7 @@ def create_voting(request,id):
         try : 
             rcv = ["sacado.asso@gmail.com"]
             msg = "Une proposition de membre est postée par "+str(request.user)+". Rendez-vous sur https://sacado.xyz"
-            send_mail("Proposition de membre", msg , 'info@sacado.xyz', rcv)
+            send_mail("Proposition de membre", msg , settings.DEFAULT_FROM_EMAIL , rcv)
         except :
             pass
         return redirect('list_associate')
