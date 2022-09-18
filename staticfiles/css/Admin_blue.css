@@ -2,8 +2,8 @@
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
 /********************************************* bleu :  #005e74 ************************************/
-/********************************************* violet hover :  #5d4391 ************************************/
-/********************************************* violet light :  #f1eef7 ************************************/
+/********************************************* violet hover :  #2994b1 ************************************/
+/********************************************* violet light :  #99e7ff ************************************/
 /********************************************* vert : #1bc074 *******************************************/
 /********************************************* orange: #ffb400 ***************************************/
 /********************************************* rouge: #cb2131 ***************************************/
@@ -31,7 +31,7 @@ body {
   font-family:  'Roboto', Helvetica, Arial, sans-serif;
   font-weight: 300;
   overflow-y: auto;
-  color:#271942;
+  color:#122f54;
   font-size:18px;
  /*height : 100vh ;*/
 }
@@ -42,7 +42,7 @@ p{
   margin-left:0px; 
   margin-right:0px; 
   border:1px solid #CCC; 
-  background: #F0F0F0;
+  background: #99e7ff;
   padding-top: 15px; 
   background-image: url('/static/img/fond_search.png')
 }
@@ -63,7 +63,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 
 .bg_violet{
-  background-color: #f1eef7 ;
+  background-color: #99e7ff ;
   }                
 .bg_gray{
   background-color: #F0F0F0 ;
@@ -81,15 +81,18 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 .sacado_color_text{
-  color:  #5d4391 ;
+  color:  #2994b1 ;
 }
 
+
+ 
 
 .alert-warning{
-  background-color: #f1eef7 ;
-  border : solid 1px #f1eef7 ;
-  color :  #5d4391 ;
+  background-color: #FFF ;
+  color :  #2994b1 ;  
+  border : solid 1px #FFF ;
 }
+
 
 .counter{
   font-size:60px;
@@ -114,7 +117,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 .checkbox_ajax{
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   min-height: 25px;
   padding:5px;
 }
@@ -137,9 +140,9 @@ h1, .h1, h2, .h2, h3, .h3 {
   overflow-y: auto;
   color:#271942;
   font-size:18px;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   padding: 20px;
-  border: 3px solid #5d4391;
+  border: 3px solid #2994b1;
   border-radius:10px;
   margin-bottom: 20px;
 }
@@ -208,7 +211,7 @@ hr.divider {
   cursor:help;
 }
 .img_bulle:hover{
-  background-color: #5d4391;
+  background-color: #2994b1;
 }
 
 
@@ -315,13 +318,13 @@ hr.divider {
 }
 
 .panel-group_list .panel-default {
-    border-color: #d1cae0;
+    border-color: #b3edff;
 }
 
 .panel-group_list .panel-default > .panel-heading {
     color: #333;
-    background-color: #f1eef7;
-    border-color: #d1cae0;
+    background-color: #b3edff;
+    border-color: #b3edff;
 }
 
 .panel-group_list .panel-heading {
@@ -359,7 +362,7 @@ hr.divider {
 }
 
 .violet{
-  color: #5d4391 ;
+  color: #2994b1 ;
 }
 
 .profile_student_incognito{
@@ -436,7 +439,7 @@ border-radius:0px;
 
  
 .un_collapsed:hover{
-  background-color: #5d4391;
+  background-color: #2994b1;
   transform: rotate(180deg);  
 }
 
@@ -694,7 +697,7 @@ li label{
 
 .list_choice_bibliotex{
   margin-top: 5px;
-  /*background-color: #f1eef7;*/
+  /*background-color: #99e7ff;*/
   padding: 0px  0px 10px 10px;
 }
 
@@ -759,7 +762,7 @@ li label{
 
     padding-top:10px;
     border-radius: 50%;
-    background-color: #f1eef7;
+    background-color: #99e7ff;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -950,7 +953,7 @@ label {
   width:300px;
   height:170px;
   overflow: hidden;
-  border:3px solid #5d4391;
+  border:3px solid #2994b1;
   -webkit-box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
   box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
   display: block ;
@@ -960,7 +963,7 @@ label {
 
 
 .folder_line:hover{
-  background-color: #5d4391;
+  background-color: #2994b1;
   color:white;
   border-radius: 0px 20px 0px 0px;
 }
@@ -973,7 +976,7 @@ label {
 }
 
 .selected_account{
-   background-color: #f1eef7;
+   background-color: #99e7ff;
 }
 
 
@@ -1027,9 +1030,9 @@ label {
 }
 
 .dossier{
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   font-size: 10px; 
-  color: #5d4391 ;
+  color: #2994b1 ;
   font-variant-caps: small-caps;
   font-weight: 600;
   margin-left: -10px;
@@ -1037,9 +1040,9 @@ label {
 }
 
 .dossier_index{
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   font-size: 10px; 
-  color: #5d4391 ;
+  color: #2994b1 ;
   font-size:12px;
   font-weight: 100; 
   padding-top: 2px;
@@ -1096,7 +1099,7 @@ label {
 
 .show_by_popup{
   font-size: 12px;
-  background-color: #5d4391;
+  background-color: #2994b1;
   position: absolute;
   bottom:10px;
   right:10px;
@@ -1120,7 +1123,7 @@ label {
 
 .consigne{
   font-size:16px;
-  border-left : 5px solid #5d4391 ;
+  border-left : 5px solid #2994b1 ;
   padding: 10px;
   margin-bottom: 10px ;
 }
@@ -1131,7 +1134,7 @@ label {
 
 .exotex_show_exercice{
   font-size :20px;
-  background-color: #5d4391 ;
+  background-color: #2994b1 ;
   color: #FFF;
   padding: 0px 10px;
   border-radius: 4px;
@@ -1142,8 +1145,8 @@ label {
 
 .exotex_knowledges{
   font-size :14px;
-  background-color: #f1eef7;
-  color: #5d4391 ;
+  background-color: #99e7ff;
+  color: #2994b1 ;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 10px ;
@@ -1163,13 +1166,13 @@ label {
 }
 
 .relative_div_exotex:hover{
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   padding: 6px 9px ;
   border-radius: 3px 0px 0px 3px ;
 }
 
 .relative_div_exotex:hover a, .relative_div_exotex:hover span {
-  color:  #5d4391!important ;
+  color:  #2994b1!important ;
 }
 
 .legend_exotex_parameter{
@@ -1185,7 +1188,7 @@ label {
   z-index: 999;
   left:40px;
   top:0px;
-  background-color: #5d4391;
+  background-color: #2994b1;
   color: #FFF!important  ;
   -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
   box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
@@ -1229,7 +1232,7 @@ label {
   padding: 15px;
   margin-bottom: 20px;
   /*background-image: url('/static/img/fond_chat.png');
-  background-color: #f1eef7;*/
+  background-color: #99e7ff;*/
   height : 380px;
   width:3000px;
   overflow-x: auto;
@@ -1241,8 +1244,8 @@ label {
   font-weight: 100;
   padding-left: 5px;
   margin-bottom: 5px;
-  background-color: #5d4391;
-  color: #f1eef7;
+  background-color: #2994b1;
+  color: #99e7ff;
   width:400px;
   -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .3);
   box-shadow: 2px 2px 6px rgba(79, 73, 66, .3);
@@ -1259,8 +1262,8 @@ label {
   height : 380px;
   width:80px;
   opacity:0.9;
-  background-color:#f1eef7;
-  color: #5d4391;
+  background-color:#99e7ff;
+  color: #2994b1;
   z-index: 100000;
   -webkit-box-shadow: -3px 0px 5px rgba(79, 73, 66, .3);
   box-shadow: -3px 0px 5px rgba(79, 73, 66, .3);
@@ -1278,7 +1281,7 @@ label {
 
 .automatic_insertion{
     padding          : 5px;
-    background-color : #f1eef7; 
+    background-color : #99e7ff; 
     font-size        : 12px;
     border-radius    : 3px;
 }
@@ -1321,7 +1324,7 @@ label {
     border-radius: 5px;
     width: 100%; 
     font-size:2em
-    /*background-color: #f1eef7;*/
+    /*background-color: #99e7ff;*/
 }
 
 .qflashcard{
@@ -1363,7 +1366,7 @@ label {
   position: absolute;
   height : 260px;
   width : 100%;
-  background-color: #f1eef7; 
+  background-color: #99e7ff; 
   margin-right: 15px; 
 }
 
@@ -1381,7 +1384,7 @@ label {
   }
 
 .bottom_flashcard{
-    background-color: #5d4391;
+    background-color: #2994b1;
     cursor: pointer;
     color:#FFF;
     padding-top: 1px ;
@@ -1395,7 +1398,7 @@ label {
     float :left ;
     width: 33%;
     cursor: pointer;
-    background-color: #5d4391;
+    background-color: #2994b1;
     color:#FFF;
 }
 
@@ -1428,7 +1431,7 @@ label {
 }
 
 .flashcard_is_validate  {
-  background-color: #5d4391;
+  background-color: #2994b1;
   border-radius: 5px;
   margin-bottom: 10px;
   font-size:12px!important;
@@ -1448,7 +1451,7 @@ label {
 
 
 .comments{
-  background-color:  #f1eef7; 
+  background-color:  #99e7ff; 
   border-radius: 5px;
   margin: 5px;
   font-size:14px;
@@ -1556,7 +1559,7 @@ a.no_visual_link{
   padding: 5px;
   border-radius:0px 0px 5px 5px;
   left:70px;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   height: 50px;
   max-height: 300px;
   overflow-y: auto;
@@ -1583,7 +1586,7 @@ a.no_visual_link{
    margin-left: auto;
    margin-right: auto;
    padding: 3px;
-   border: 1px solid #5d4391;
+   border: 1px solid #2994b1;
    font-size: 12px;
    word-wrap: break-word;
    overflow-x: hidden;
@@ -1593,7 +1596,7 @@ a.no_visual_link{
 }
 
 .this_chat_box{
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   padding: 5px;
   width:100px;    
   margin-top: -10px;
@@ -1612,7 +1615,7 @@ a.no_visual_link{
   margin:10px;
   width: 350px;
   border-radius: 5px;
-  background-color: #5d4391 ;
+  background-color: #2994b1 ;
   color : #FFF;
   padding:5px;
   opacity : 0.95;
@@ -1632,7 +1635,7 @@ a.no_visual_link{
   padding: 5px;
   border-radius:0px 0px 5px 5px;
   right:0px;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden ;
@@ -1658,7 +1661,7 @@ a.no_visual_link{
    margin-left: auto;
    margin-right: auto;
    padding: 3px;
-   border: 1px solid #5d4391;
+   border: 1px solid #2994b1;
    font-size: 12px;
    word-wrap: break-word;
    overflow-x: hidden;
@@ -1668,7 +1671,7 @@ a.no_visual_link{
 }
 
 .this_chat_box{
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   padding: 5px;
   width:100px;    
   margin-top: -10px;
@@ -1686,7 +1689,7 @@ a.no_visual_link{
   margin:10px;
   width: 350px;
   border-radius: 5px;
-  background-color: #5d4391 ;
+  background-color: #2994b1 ;
   color : #FFF;
   padding:5px;
   opacity : 0.95;
@@ -1725,7 +1728,7 @@ a.no_visual_link{
   width: 300px;
   top: 0px;
   height: 100vh;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
     -webkit-box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
     box-shadow: -2px -2px 6px rgba(79, 73, 66, .5);
   z-index: 999;
@@ -1734,7 +1737,7 @@ a.no_visual_link{
 
 
 .sub_menu_right{
-   background-color: #f1eef7;
+   background-color: #99e7ff;
    padding: 10px;
    position: absolute;
    top:140px;
@@ -1753,7 +1756,7 @@ a.no_visual_link{
 .submenu_div {
   position:relative;
   background-color: #FFF;
-  color: #5d4391 ;
+  color: #2994b1 ;
 }
 
 .submenu_div:hover {
@@ -1787,7 +1790,7 @@ a.no_visual_link{
   list-style: none;
   margin-left:0px;
   padding: 5px;
-  color: #5d4391 ;   
+  color: #2994b1 ;   
   font-weight: 400;
 }
 
@@ -1813,7 +1816,7 @@ a.no_visual_link{
 
  
 .submenu_div:hover  > .dropdown-submenu li:hover {
-  background-color: #5d4391 ;
+  background-color: #2994b1 ;
   color: #FFF ; 
   margin-left:0px;
   padding: 5px;
@@ -1847,7 +1850,7 @@ a.no_visual_link{
 .webinaire{
  
   padding:20px;
-  background-color: #f1eef7 ;
+  background-color: #99e7ff ;
 
 }
 
@@ -1857,7 +1860,7 @@ a.no_visual_link{
   height:40px;
   top : -10px;
   left:35%;
-  background-color: #f1eef7 ;
+  background-color: #99e7ff ;
   border-radius: 3px;
   font-size: 16px;
   padding:10px;
@@ -1869,9 +1872,9 @@ a.no_visual_link{
 #without_username, #with_username, #show_help_utf{
   display:none;
   border-radius: 4px;
-  border: 1px solid #5d4391;
-  background-color: #f1eef7;  
-  color :  #5d4391 ;
+  border: 1px solid #2994b1;
+  background-color: #99e7ff;  
+  color :  #2994b1 ;
   padding: 15px;
 }
 #help_from_tdb{
@@ -2032,7 +2035,7 @@ pre{
     margin-top: 60px;
 }
 .quizz_card:hover {
-    background: #f1eef7;
+    background: #99e7ff;
     -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
 }
@@ -2067,7 +2070,7 @@ a.selector_question:hover {
   }
 
 .quizz_assets:hover {
-    background: #f1eef7;
+    background: #99e7ff;
     -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .5);
   }
@@ -2151,8 +2154,8 @@ a.selector_question:hover {
 } 
 
 .btn-quizz_bank{
-  background-color: #5d4391;  
-  border-color: #5d4391;
+  background-color: #2994b1;  
+  border-color: #2994b1;
   color: #FFF ; 
   width : 195px; 
 } 
@@ -2160,8 +2163,8 @@ a.selector_question:hover {
 
 .btn-quizz_bank:hover{
   background-color: #a996cf;  
-  border-color: #5d4391;
-  color: #5d4391 ;  
+  border-color: #2994b1;
+  color: #2994b1 ;  
 } 
 
 
@@ -2356,7 +2359,7 @@ li.my_slide{
 
 
 .countdown{
-   background-color: #5d4391;  
+   background-color: #2994b1;  
    border-radius: 50%;
    width :60px;
    height:60px;
@@ -2375,14 +2378,14 @@ li.my_slide{
    font-size : 35px;    
    text-align: center ;
    font-weight: bold;
-   background-color: #5d4391;
+   background-color: #2994b1;
    color:#FFF; 
    padding: 5px;
 }
 
 
 .counterdown{
-   background-color: #5d4391;  
+   background-color: #2994b1;  
    border-radius: 50%;
    width :50px;
    text-align: center ;
@@ -2598,7 +2601,7 @@ li.menu_course{
 
 li.menu_course > a {
   font-size: 16px;
-  color: #5d4391;
+  color: #2994b1;
  
 }
  
@@ -2606,22 +2609,22 @@ li.menu_course > a {
 li.menu_document_section  {
   font-size: 16px;
   color: #FFF;
-  background-color: #5d4391 ;
+  background-color: #2994b1 ;
 }
 li.menu_document{
   list-style-type: none;
   background-color: #dbcdf7;
-  color: #5d4391;
+  color: #2994b1;
 }
 
 li.menu_document > a {
   font-size: 16px;
-  color: #5d4391;
+  color: #2994b1;
 }
 li.menu_document:active {
   font-size: 16px;
   color: #FFF;
-  background-color: #5d4391 ;
+  background-color: #2994b1 ;
 }
 li.menu_document:hover, li.menu_document:hover > a {
   font-size: 16px;
@@ -2634,7 +2637,7 @@ li.menu_document:hover, li.menu_document:hover > a {
  *********************************************************************************************************/
 
 .exercise_tools{
-  background-color: #f1eef7 ;
+  background-color: #99e7ff ;
 }
 
 
@@ -2682,23 +2685,23 @@ li.menu_document:hover, li.menu_document:hover > a {
 .select_mastering {
   height:150px;
   width:50px;
-  border: 2px dashed #5d4391 ; 
+  border: 2px dashed #2994b1 ; 
   padding: 60px 0px;
   text-align: center;
   font-size: 16px;
-  color: #5d4391;
+  color: #2994b1;
   display: block;
 }
 .select_mastering:hover {
   height:150px;
   width:50px;
-  border: 2px dashed #5d4391 ; 
+  border: 2px dashed #2994b1 ; 
   padding: 60px 0px;
   text-align: center;
   font-size: 16px;
   color: #FFF;
   display: block;
-  background-color: #5d4391;
+  background-color: #2994b1;
 }
 
  /****************************************** help *******************************************************/
@@ -2988,14 +2991,14 @@ text-align: right;
     }
 
     .text-is_favorite {
-        color:  #5d4391!important;
+        color:  #2994b1!important;
     }
 
 
     a.listing{
       font-size:20px;
       font-weight: 200;
-      color:#5d4391; /*#0e7bb5;*/
+      color:#2994b1; /*#0e7bb5;*/
     }
     a.listing:hover,
     a.listing:active,
@@ -3006,7 +3009,7 @@ text-align: right;
 
     a.sublisting{
       font-size:18px;
-      color: #5d4391 ; /*#c2a829;*/
+      color: #2994b1 ; /*#c2a829;*/
     }
     a.sublisting:hover,
     a.sublisting:active,
@@ -3160,12 +3163,12 @@ width:100%;
 
 /* On mouse-over, add a grey background color */
 .container_checkbox:hover input ~ .checkmark  {
-  background-color: #5d4391;
+  background-color: #2994b1;
 }
 
 /* When the checkbox is checked, add a blue background */
 .container_checkbox input:checked ~ .checkmark    {
-  background-color: #5d4391;
+  background-color: #2994b1;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -3463,7 +3466,7 @@ width:100%;
     top: 0;
     bottom: 0;
     padding: 30px;
-    border: 10px solid #5d4391;
+    border: 10px solid #2994b1;
     z-index:1051 !important;
     overflow: auto;
     background: #FFF;
@@ -3516,7 +3519,7 @@ width:100%;
   margin-left : 0px;
   margin-right : 0px;
   margin-bottom: 20px;  
-  background-color: #f1eef7;
+  background-color: #99e7ff;
 }
 
 
@@ -3532,7 +3535,7 @@ a.bilan_title .fa-angle-down{
 
 a.bilan_title:hover,a.bilan_title:active,a.bilan_title:focus{
   font-size: 20px;
-  color: #5d4391;
+  color: #2994b1;
   text-decoration: none;
 }
 
@@ -3586,7 +3589,7 @@ a.surline:hover   {
      font-size: 16px;
 }
 .edit:hover {
-     color: #5d4391 ;/*  #309ae4;*/
+     color: #2994b1 ;/*  #309ae4;*/
      text-decoration: none;
 }
 
@@ -3699,7 +3702,7 @@ a.menuright:hover{
   top: calc(50% - 30px);
   left: calc(50% - 30px);
   border: 16px solid #f2f2f2;
-  border-top: 16px solid #5d4391 ;
+  border-top: 16px solid #2994b1 ;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -3724,7 +3727,7 @@ a.menuright:hover{
   top: calc(50% - 30px);
   left: calc(50% - 30px);
   border: 16px solid #f2f2f2;
-  border-top: 16px solid #5d4391 ;
+  border-top: 16px solid #2994b1 ;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -3745,7 +3748,7 @@ a.menuright:hover{
 
 #preload_div #preload  {
   border: 16px solid #f2f2f2;
-  border-top: 16px solid #5d4391 ;
+  border-top: 16px solid #2994b1 ;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -3923,8 +3926,8 @@ table.table-bordered.dataTable {
 .course_section:hover{
   font-size: 14px;
   list-style: none;
-  background-color: #f1eef7;
-  color: #5d4391;
+  background-color: #99e7ff;
+  color: #2994b1;
   border-radius: 3px;
 }
 
@@ -4023,20 +4026,20 @@ table.table-bordered.dataTable {
 .card_freeze_sequence{
   float: left;
   margin: 20px ;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, .255);
     box-shadow: 2px 2px 6px rgba(79, 73, 66, .255);
     position:relative;
     width:290px;
     height:235px;
-    border : 3px solid #5d4391;    
+    border : 3px solid #2994b1;    
     border-radius: 0px 30px 0px 0px ;
 }
 
 
 /********************************************* bleu :  #005e74 ************************************/
-/********************************************* violet hover :  #5d4391 ************************************/
-/********************************************* violet light :  #f1eef7 ************************************/
+/********************************************* violet hover :  #2994b1 ************************************/
+/********************************************* violet light :  #99e7ff ************************************/
 /********************************************* vert : #1bc074 *******************************************/
 /********************************************* orange: #ffb400 ***************************************/
 /********************************************* rouge: #cb2131 ***************************************/
@@ -4298,12 +4301,12 @@ table.table-bordered.dataTable {
     width:50px;
     height:130px;
     display: block;
-    border: 2px dashed #5d4391 ;
+    border: 2px dashed #2994b1 ;
     text-align: center;
     padding-top: 50px;
 }
 .select_mastering:hover{
-    background-color:  #5d4391 ;
+    background-color:  #2994b1 ;
     width:50px;
     height:130px;
 }
@@ -4328,21 +4331,21 @@ table.table-bordered.dataTable {
 }
 .title_mastering{
   padding: 0px 0px 0px 2px ;
-  color:#5d4391;
+  color:#2994b1;
   font-size: 10px;
   cursor: move ;
   position: relative;
 }
 .consigne_mastering{
   padding: 10px 5px 5px 5px ;
-  color:#5d4391;
+  color:#2994b1;
   font-size: 11px;
   cursor: move ;
   font-style: italic ;
 }
 .consigne_mastering_modal{
   padding: 10px  ;
-  color:#5d4391;
+  color:#2994b1;
   border-radius: 4px 4px 0px 0px ; 
 }
 #m_duration{
@@ -4353,7 +4356,7 @@ table.table-bordered.dataTable {
     background: #f4f6f9 ;
 }
 .title_mastering_violet{
-    color:#5d4391 ;
+    color:#2994b1 ;
     position: absolute;
     bottom : 0px;
     font-size: 12px;
@@ -4463,10 +4466,10 @@ color: #AAA;
 }
 
 a.delete:hover{
-color: #5d4391;
+color: #2994b1;
 }
 a.deleted{
-color: #5d4391;
+color: #2994b1;
 }
 
 a.deleted:hover{
@@ -4664,7 +4667,7 @@ body.hold-transition .main-header .logo {
   margin-left: 0;  
   margin-bottom: 15px;
   margin-right: 0px;
-  border-bottom : solid #5d4391 1px;
+  border-bottom : solid #2994b1 1px;
 }
 .content_body {
   min-height: 450px;
@@ -4702,7 +4705,7 @@ body.hold-transition .main-header .logo {
   color: #5f5b96;
   width : 300px;
   margin : 15px 0px;
-  background-color: #f1eef7 ;
+  background-color: #99e7ff ;
 }
 
 .renewal_student{
@@ -4751,7 +4754,7 @@ h6,
 
 /* General Links */
 a {
-  color: #5d4391 ; /*#007EE2;*/ 
+  color: #2994b1 ; /*#007EE2;*/ 
   font-weight: 100;
 }
 a.normal {
@@ -4763,7 +4766,7 @@ a:active,
 a:focus {
   outline: none;
   text-decoration: underline;
-  color: #5d4391 ;
+  color: #2994b1 ;
 }
 /* Page Header */
 .page-header {
@@ -5136,7 +5139,7 @@ font-weight: 600;
 .sans_puce_hover:hover{
   list-style-type: none ;
   padding-top: 5px; 
-  background-color : #f1eef7 ;
+  background-color : #99e7ff ;
 }
 
 
@@ -5151,7 +5154,7 @@ font-weight: 600;
   text-align: center; 
   position: absolute; 
   top:0px; 
-  background-color: #5d4391; 
+  background-color: #2994b1; 
   color: #FFF; border-radius: 
   4px;
   z-index: 9;
@@ -5706,7 +5709,7 @@ li .list_no_indent{
 
 .dropdown-menu > li > a {
   padding-top : 7px;
-  color:#5d4391 ; /* #271942;*/
+  color:#2994b1 ; /* #271942;*/
 }
 
 .dropdown-menu > li > a.edit {
@@ -5744,7 +5747,7 @@ li .list_no_indent{
   margin-right: 10px;
 }
 .dropdown-menu > li > a:hover {
-  background-color: #5d4391;
+  background-color: #2994b1;
   color: #EEE;
 }
 .dropdown-menu > .divider {
@@ -5752,7 +5755,7 @@ li .list_no_indent{
 }
 
 .dropdown-menu > li:hover {
-  background-color: #5d4391;
+  background-color: #2994b1;
   color: #EEE;
 }
 .navbar-nav > .notifications-menu > .dropdown-menu,
@@ -6793,7 +6796,7 @@ li .list_no_indent{
   width:220px;
   height:300px;
   overflow-y:auto; 
-  background-color: #f1eef7;
+  background-color: #99e7ff;
 }
 
 @media only screen and (min-width: 1500px) { 
@@ -6802,7 +6805,7 @@ li .list_no_indent{
       width:430px;
       height:300px;
       overflow-y:auto; 
-      background-color: #f1eef7; 
+      background-color: #99e7ff; 
    }
 
 }
@@ -6813,7 +6816,7 @@ li .list_no_indent{
       width:430px;
       height:300px;
       overflow-y:auto; 
-      background-color: #f1eef7; 
+      background-color: #99e7ff; 
    }
 
 }
@@ -7105,7 +7108,7 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   font-size: 14px;
   position: absolute;
   padding:2px;
-  color: #5d4391;
+  color: #2994b1;
 }
 
 .div_results{
@@ -7322,7 +7325,7 @@ overflow-y: auto;
 
 }
 .helper_tip:hover {
-  color:#5d4391 ;
+  color:#2994b1 ;
 }
 
 
@@ -7619,7 +7622,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 /*****************************************************  Bouton sacado *************/
 .btn-mastering  {
-  background-color: #5d4391  ; /* #deeaea*rgb(219, 205, 247)*/
+  background-color: #2994b1  ; /* #deeaea*rgb(219, 205, 247)*/
   color:#FFF;  /* #657574*/
   min-width: 120px;
   border-radius: 20px;
@@ -7634,7 +7637,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .btn-mastering:active,
 .btn-mastering.hover {
   background-color: rgb(219, 205, 247);
-  color:#5d4391!important;
+  color:#2994b1!important;
   border-radius: 20px;
 }
 
@@ -7675,8 +7678,8 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .btn-accueil-student.hover {
   border-radius: 20px;
   background-color: #FFF;
-  color:#5d4391!important;
-  border-color:#5d4391!important;
+  color:#2994b1!important;
+  border-color:#2994b1!important;
 }
 
 
@@ -7687,7 +7690,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 .btn-create-group:hover{ 
-  color:#5d4391;
+  color:#2994b1;
 }
 
 
@@ -7764,15 +7767,15 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   letter-spacing: 1px;
   border-radius: 20px;
   display: inline-block;
-  background: #5d4391;
+  background: #2994b1;
   color: #fff!important;
 }
 
 .btn-inscription:hover {
   opacity: 0.5;
 }
-/********************************************* violet hover :  #5d4391 ************************************/
-/********************************************* violet light :  #f1eef7 ************************************/
+/********************************************* violet hover :  #2994b1 ************************************/
+/********************************************* violet light :  #99e7ff ************************************/
 
 .btn-new-violet {
   color : #998fa6!important;
@@ -7784,24 +7787,24 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .btn-new-violet:hover, .btn-new-violet:hover > a , 
 .btn-new-violet:active, .btn-new-violet:active > a ,
 .btn-new-violet.hover,  .btn-new-violet.hover > a   {
-  background-color: #f1eef7!important;/*   #dd4b39!important;*/
-  color: #5d4391!important;
+  background-color: #99e7ff!important;/*   #dd4b39!important;*/
+  color: #2994b1!important;
   text-decoration: none;
 }
 
 
 .btn-sacado {
-  color : #5d4391!important;
+  color : #2994b1!important;
   border-radius: 5px; /*radius des boutons*/
-  border: 1px solid #5d4391!important;
-  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  border: 1px solid #2994b1!important;
+  background-color: #99e7ff!important;/*   #dd4b39!important;*/
 }
 
 .btn-sacado:hover,
 .btn-sacado:active,
 .btn-sacado.hover {
-  background-color: #5d4391!important;/*   #dd4b39!important;*/
-  color: #f1eef7!important;
+  background-color: #2994b1!important;/*   #dd4b39!important;*/
+  color: #99e7ff!important;
 }
 
 
@@ -8040,7 +8043,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 /* NAV PILLS */
 
 .select_item {
-  background: #5d4391;
+  background: #2994b1;
 }
 .select_item > a {
   color:#FFF !important ;
@@ -8056,7 +8059,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  background: #5d4391;
+  background: #2994b1;
   color: #FFF!important;
 }
  
@@ -8068,7 +8071,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 .nav-stacked > li.active > a,
 .nav-stacked > li.active > a:hover {
-  background:  #5d4391!important;
+  background:  #2994b1!important;
   color: #FFF!important;
   border-top: 0;
   border-radius:2px;
@@ -8221,16 +8224,17 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   margin-top: 5px;
 }
 
+
 .table-sacado > thead > tr > th,
 .table-sacado > tbody > tr > th,
 .table-sacado > tfoot > tr > th,
 .table-sacado > thead > tr > td,
 .table-sacado > tfoot > tr > td {
-  background-color:#f9f7fe;
+  background-color:#f2fdff;
 }
 
 .table-sacado  > tbody > tr > td {
-  border-top: 5px solid #f9f7fe;
+  border-top: 5px solid #f2fdff;
   background-color:#FFF ;
   color: #444 ;
 }
@@ -8242,14 +8246,12 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 .table-sacado  > thead > tr > th {
-  border-bottom: 0px solid #f9f7fe;
+  border-bottom: 0px solid #f2fdff;
 }
 
 .table-sacado  tr td .progress {
   margin-top: 2px;
 } 
-
-
 
 
 
@@ -8543,7 +8545,7 @@ text-align: center;
   padding: 2px 5px;
   color:#FFF;
   z-index: 1;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
 }
 
 
@@ -8559,7 +8561,7 @@ text-align: center;
   padding: 2px 5px;
   color:#FFF;
   z-index: 1;
-  background-color: #5d4391;
+  background-color: #2994b1;
 }
 
 .widget-user-header .disc_course:hover a, .course_section:hover a, .course_section a:hover{
@@ -8652,7 +8654,7 @@ text-align: center;
   width:60px;
   height:60px;
   border-radius:50%;
-  background-color: #f1eef7;
+  background-color: #99e7ff;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);  
 
 }
@@ -8819,7 +8821,7 @@ a.crud{
 }
 
 .bg-bleu {
-  background-color: #5d4391 !important;
+  background-color: #2994b1 !important;
 }
  
  
@@ -8925,7 +8927,7 @@ a.crud{
   color: #0073b7 !important;
 }
 .text-blue1 {
-  color: #5d4391!important;
+  color: #2994b1!important;
 }
 .text-black {
   color: #111111 !important;
