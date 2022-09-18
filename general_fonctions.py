@@ -1059,28 +1059,41 @@ def get_level_by_point(student, point):
     point = int(point)
     if student.user.school :
         school = student.user.school
-        stage = Stage.objects.get(school = school)
+        try 
+            stage = Stage.objects.get(school = school)
 
-        if point > stage.up :
-            level = 4
-        elif point > stage.medium :
-            level = 3
-        elif point > stage.low :
-            level = 2
-        else   :
-            level = 1
+            if point > stage.up :
+                level = 4
+            elif point > stage.medium :
+                level = 3
+            elif point > stage.low :
+                level = 2
+            else   :
+                level = 1
+        except :
+            stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+
+            if point > 85  :
+                level = 4
+            elif point > 70  :
+                level = 3
+            elif point > 50  :
+                level = 2
+            else :
+                level = 1
  
     else : 
         stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
 
-        if point > stage["up"]  :
+        if point > 85  :
             level = 4
-        elif point > stage["medium"]  :
+        elif point > 70  :
             level = 3
-        elif point > stage["low"]  :
+        elif point > 50  :
             level = 2
         else :
             level = 1
+            
     return level
 
 
