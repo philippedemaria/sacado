@@ -7786,7 +7786,7 @@ def export_knowledges_after_evaluation(request):
     parcours      = Parcours.objects.get(pk = parcours_id)  
 
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;filename=Skills_exercice_{}.csv'.format(parcours.id)
+    response['Content-Disposition'] = 'attachment;filename=Knowledges_parcours_{}.csv'.format(parcours.id)
     response.write(u'\ufeff'.encode('utf8'))
     writer = csv.writer(response)
     
