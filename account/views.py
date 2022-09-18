@@ -372,8 +372,10 @@ def background(request) :
 
     if request.method == 'POST':
         if background_form.is_valid():
-            user.background = request.POST.get("background")
-            print(request.POST.get("background"))
+            if request.POST.get("background") == 'https://sacado.xyz/ressources/background/no_background.jpg' :
+                user.background = ''
+            else :
+                user.background = request.POST.get("background")
             user.save()
             return redirect('index')
         else:
