@@ -864,10 +864,12 @@ def student_remove_from_school(request):
 
     group.students.remove(student)
 
-    groups = student.students_to_group.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test"))
+
+    # groups = student.students_to_group.exclude(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test"))
+    # gr = ""
+    # for g in groups :
+    #     gr = gr +str(g.name)+" "
     gr = ""
-    for g in groups :
-        gr = gr +str(g.name)+" "
 
     data = {}
     data['html'] =  "<tr id='tr"+str(student.user.id)+"'><td><input type='checkbox' class='student_select_to_school' data_student_id='"+str(student.user.id)+"' data_group_id='"+str(group.id)+"' /> </td><td>"+str(student.user.last_name)+"</td><td>"+str(student.user.first_name)+"</td><td>"+gr+"</td></tr>"
