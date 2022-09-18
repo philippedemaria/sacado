@@ -7805,7 +7805,7 @@ def export_knowledges_after_evaluation(request):
 
         for knwldg in knowledges :
             data = []
-            res  = total_by_knowledge_by_student(knwldg,"",parcours,student)
+            res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,"",parcours,student))
             if res == -10 : res = "A"
             knowledge_level_tab.append(res)
  
