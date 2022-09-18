@@ -10,10 +10,10 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
         $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_results'  class='btn btn-default btn-publisher  pull-right'><i class='fa fa-print'></i></a>  ") ;        
 
-        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_marks'  class='btn btn-default pull-right'>Exporter les notes CSV</a>  ") ;
+        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_marks'  class='btn btn-default pull-right'>Notes CSV</a>  ") ;
 
-        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_skills'  class='btn btn-default pull-right'>Exporter les compétences CSV</a>  ") ;
-
+        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_skills'  class='btn btn-default pull-right'>Compétences CSV</a>  ") ;
+        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_knowledges'  class='btn btn-default pull-right'>Savoir-faire CSV</a>  ") ;
 
 
 

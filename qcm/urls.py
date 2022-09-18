@@ -413,6 +413,8 @@ urlpatterns = [
     path('export_notes_after_evaluation', export_notes_after_evaluation, name='export_notes_after_evaluation'),
     path('export_skills_after_evaluation', export_skills_after_evaluation, name='export_skills_after_evaluation'),
     path('export_results_after_evaluation', export_results_after_evaluation, name='export_results_after_evaluation'),
+    path('export_knowledges_after_evaluation', export_knowledges_after_evaluation, name='export_knowledges_after_evaluation'),
+
 
     path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),
     path('ajax/chargethemes_exercise', ajax_chargethemes_exercise, name='ajax_chargethemes_exercise'),

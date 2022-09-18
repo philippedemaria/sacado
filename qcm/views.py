@@ -686,7 +686,7 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
     return tot_s
 
 
-def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : # résultat d'un élève par comptétnece sur un parcours donné
+def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : # résultat d'un élève par knowledge sur un parcours donné
     total_knowledge = 0            
     sks = student.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
     nbk = sks.count()
@@ -7514,7 +7514,7 @@ def export_results_after_evaluation(request):
         ##########################################################################
         #### Elève
         ##########################################################################
-        paragraph = Paragraph( str(s.user.last_name)+" "+str(s.user.first_name) , title )
+        paragraph = Paragraph( str(s.user.last_name).strip()+" "+str(s.user.first_name).strip() , title )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.4*inch)) 
 
@@ -7662,6 +7662,7 @@ def export_results_after_evaluation(request):
 
     return response
 
+
 def export_notes_after_evaluation(request):
 
     parcours_id = request.POST.get("parcours_id")  
@@ -7704,7 +7705,7 @@ def export_notes_after_evaluation(request):
         else :
             final_mark = "NE" 
 
-        writer.writerow( (str(student.user.last_name).lower() , str(student.user.first_name).lower() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
+        writer.writerow( (str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
     return response
 
 def export_skills_after_evaluation(request):
@@ -7726,12 +7727,10 @@ def export_skills_after_evaluation(request):
         if not ski.name in label_in_export : 
             label_in_export.append(ski.name)
 
- 
-
     writer.writerow(label_in_export)
  
     for student in parcours.students.order_by("user__last_name") :
-        skill_level_tab = [str(student.user.last_name).capitalize(),str(student.user.first_name).capitalize()]
+        skill_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
         for skill in  skills:
             total_skill = 0
@@ -7778,6 +7777,56 @@ def export_skills_after_evaluation(request):
  
         writer.writerow( skill_level_tab )
     return response
+
+
+
+def export_knowledges_after_evaluation(request):
+
+    parcours_id   = request.POST.get("parcours_id")  
+    parcours      = Parcours.objects.get(pk = parcours_id)  
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=Skills_exercice_{}.csv'.format(parcours.id)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer = csv.writer(response)
+    
+
+    knowledges = knowledges_in_parcours(parcours)
+
+    label_in_export = ["Nom", "Prénom"]
+    for kn in knowledges :
+        if not kn.name in label_in_export : 
+            label_in_export.append(kn.name)
+
+    writer.writerow(label_in_export)
+
+    for student in parcours.students.order_by("user__last_name") :
+        knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+
+        for knwldg in knowledges :
+            data = []
+            res  = total_by_knowledge_by_student(knwldg,"",parcours,student)
+            if res == -10 : res = "A"
+            knowledge_level_tab.append(res)
+ 
+        writer.writerow( knowledge_level_tab )
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def export_note_custom(request,id,idp):
 
