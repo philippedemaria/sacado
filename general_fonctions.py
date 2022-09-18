@@ -1059,7 +1059,7 @@ def get_level_by_point(student, point):
     point = int(point)
     if student.user.school :
         school = student.user.school
-        try 
+        try :
             stage = Stage.objects.get(school = school)
 
             if point > stage.up :
