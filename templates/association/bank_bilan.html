@@ -48,7 +48,7 @@
         <div class="col-lg-6 col-md-6 col-xs-12">
 
             <h2>Charges  : {{ charges }} €</h2>
-            <table class="table">
+            <table class="table table-sacado">
                 {% for a in list_purchases %}
                     {% if a.solde %}
                         <tr>
@@ -64,7 +64,7 @@
 
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Produits  : {{ products }} €</h2>
-             <table class="table">
+             <table class="table table-sacado">
                 
  
                 {% for a in list_sales %}
@@ -89,7 +89,7 @@
     <div class="row alert-warning">
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Actif <small>{{ cs }}€</small></h2>
-            <table class="table">
+            <table class="table table-sacado">
                 {% for a in plan_immos %}
                     {% if a.solde %}
                         <tr>
@@ -103,7 +103,7 @@
         </div>
         <div class="col-lg-6 col-md-6 col-xs-12">
             <h2>Passif <small>{{ ps }}€</small></h2>
-             <table class="table">
+             <table class="table table-sacado">
                 {% for a in plan_resultats %}
                     {% if a.solde %}
                         <tr>

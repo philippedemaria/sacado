@@ -59,7 +59,7 @@
 
     <div id="collapser" class="collapse">
         <div class="panel-body" style="padding:0px">
-            <table class="table" style="margin-bottom: 0px;font-size:14px;text-align: left">
+            <table class="table table-sacado" style="margin-bottom: 0px;font-size:14px;text-align: left">
                 <tr>
                     <td>
                          <a href="{% url 'create_parcours' 0 %}" title="Parcours vide à remplir par des exercices de votre choix"><i class="fa fa-caret-right"></i> Créer un parcours <span style="font-size: 10px">(Recommandé)</span></a>
@@ -111,7 +111,7 @@
             </span>
         <div id="collapse{{ forloop.counter }}" class="collapse">
             <div class="panel-body"  style="padding:0px">
-                <table class="table" style="margin-bottom: 0px;font-size:14px;color : {{  parcours.color }}">
+                <table class="table table-sacado" style="margin-bottom: 0px;font-size:14px;color : {{  parcours.color }}">
                     <tr>
                         <td>
                         {% with  parcours.students.count as ct %}

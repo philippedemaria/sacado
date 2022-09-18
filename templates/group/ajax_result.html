@@ -15,20 +15,20 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
                       <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
-                                    <table class="table  table-bordered-dark">
+                                    <table class="table table-sacado  -dark">
                                     <tr>
                                     {% for studentanswer in studentanswers  %} 
-                                      <td class="table-bordered-dark"> Q {{ forloop.counter }}   </td>
+                                      <td class="table table-sacado-bordered-dark"> Q {{ forloop.counter }}   </td>
                                     {% endfor %} 
                                     </tr>
                                     <tr >
                                     {% for studentanswer in studentanswers  %} 
-                                          <td class="table-bordered-dark"><small> {% get_all_answers      studentanswer        studentanswer.studentanswer     as   all_answers %} {{ all_answers|safe }}</small></td>
+                                          <td class="table table-sacado-bordered-dark"><small> {% get_all_answers      studentanswer        studentanswer.studentanswer     as   all_answers %} {{ all_answers|safe }}</small></td>
                                      {% endfor %} 
                                     </tr>
                                     <tr >
                                     {% for studentanswer in studentanswers  %} 
-                                          <td class="table-bordered-dark">  {% if studentanswer.testanswer %} <font class="text-success">Juste</font> {% else %} <font class="text-danger">Erreur</font> {% endif %} </td>
+                                          <td class="table table-sacado-bordered-dark">  {% if studentanswer.testanswer %} <font class="text-success">Juste</font> {% else %} <font class="text-danger">Erreur</font> {% endif %} </td>
                                     {% endfor %} 
                                     </tr>
                                 </table>
@@ -42,7 +42,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
                       <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
-                                                              <table class="table table-hovered">
+                                                              <table class="table table-sacado table-hovered">
                         {% for skill in skill_tab  %} 
                             <tr><td>{{ skill.name }}</td>
                                   <td style="text-align:center; ">  
@@ -82,7 +82,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
                       <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table class="table table-hovered">
+                            <table class="table table-sacado table-hovered">
                               {% for theme in theme_tab  %} 
                                   <tr><td>{{ theme.name }}</td>
                                         <td style="text-align:center; ">  
@@ -124,7 +124,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
                 <div class="box">
                       <!-- /.box-header -->
                       <div class="box-body">
-                        <table class="table ">
+                        <table class="table table-sacado ">
                             <tr><th>Savoir faire</th><th>Taux de bonne réponse</th> </tr> 
 
                               {% for list in knowledge_tab  %} 
@@ -153,7 +153,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
               <strong>Résultat par attendus </strong>  
                       <div class="box">
                         <div class="box-body">
-                            <table class="table ">
+                            <table class="table table-sacado ">
                                 <tr><th>Attendus</th><th>Niveau de maitrise</th> </tr> 
 
                                   {% for list in waiting_tab  %} 

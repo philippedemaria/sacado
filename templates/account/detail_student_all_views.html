@@ -31,7 +31,7 @@
 {% if exercises|length > 0 %}
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <table class="table table-bordered table-hover">
+        <table class="table table-sacado  table-hover">
             <tbody>
                 <tr>
                     <td colspan="2">
@@ -148,7 +148,7 @@
                 <div class="col-sm-12 col-md-12">
                     <a href="#skills{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des compétences</a>
                     <div id="skills{{ forloop.counter }}" class="collapse bilan_details">
-                        <table class="table  table-hover" style="min-width:70%">
+                        <table class="table table-sacado  table-hover" style="min-width:70%">
                             {% for sk in group.subject.skill.all %}
                             {% get_bilan_skills student sk as bilan %}
                             <tr>
@@ -183,7 +183,7 @@
                     <a href="#waitings{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des attendus</a>
 
                     <div id="waitings{{ forloop.counter }}" class="collapse bilan_details">
-                        <table class="table  table-hover" >
+                        <table class="table table-sacado  table-hover" >
                             {% for waiting in group.waitings  %}
                             {% get_result_waitings student waiting as data %}
                                 <tr>
@@ -216,7 +216,7 @@
                         <a href="#knowledges{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des savoir faire </a>
                         <div id="knowledges{{ forloop.counter }}" class="collapse bilan_details">
                             {% with student.resultknowledge_dict as results %}
-                            <table class="table   table-hover"  >
+                            <table class="table table-sacado   table-hover"  >
 
                                 {% for knowledge in knowledges %}                    
                                 <tr>
@@ -262,7 +262,7 @@
                             <a href="#exercise_details{{ forloop.counter }}" data-toggle="collapse" class="bilan_title "><i class="fa fa-angle-right"></i><i class="fa fa-angle-down"></i>  {{ thme.grouper.name }}</a>
                         </div>
                         <div id="exercise_details{{ forloop.counter }}" class="collapse">
-                            <table class="table  table-hover">
+                            <table class="table table-sacado  table-hover">
                                 {% for exercise in thme.list %}  
                                 {% get_score exercise student as score %}
                                 <tr>

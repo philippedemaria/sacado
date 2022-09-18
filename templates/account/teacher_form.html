@@ -267,7 +267,7 @@
                     <div class="form-group">
                         Notifications
                             {% if sacado_asso %}
-                             <table class="table">
+                             <table class="table table-sacado">
                                 <tr>
                                     <td><label><small> Recevoir chaque fois qu'un élève effectue une tache ?</small></label></td>
                                     <td>{{ teacher_form.notification |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}    
@@ -289,7 +289,7 @@
                             </table>
                             {% else %}
                             <div class="alert alert-danger">Fonctionnalité réservée à la version établissement</div>
-                            <table class="table">
+                            <table class="table table-sacado">
                                 <tr>
                                     <td><label><small> Recevoir chaque fois qu'un élève effectue une tache ?</small></label></td>
                                     <td>{{ teacher_form.notification |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"|attr:"disabled"}}    
@@ -314,7 +314,7 @@
                     <div class="form-group">
                         Aide à distance
                             {% if sacado_asso %}
-                             <table class="table">
+                             <table class="table table-sacado">
                                 <tr>
                                     <td><label><small> Permettre l'aide à distance ?</small>  
                                             <span class="helper_tip"> <i class="fa fa-question-circle"></i> 

@@ -115,7 +115,7 @@
                                             </span>
                                             <div id="collapsed" class="collapse">
                                                 <div class="panel-body"  style="padding:0px">
-                                                    <table class="table" style="margin-bottom: 0px;font-size:14px;">
+                                                    <table class="table table-sacado" style="margin-bottom: 0px;font-size:14px;">
                                                         <tr>
                                                             <td>
                                                                 Nom et prénom
@@ -182,7 +182,7 @@
 
                             <label>Elèves du groupe</label>
                             <div class="form-group">
-                                <table class="table">
+                                <table class="table table-sacado">
                                 {% for s in group.just_students.all|dictsort:"user.last_name"  %}
                                     <tr><td>
                                             {{ s }}

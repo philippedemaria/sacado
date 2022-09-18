@@ -197,7 +197,7 @@
                     <a href="{% url 'delete_abonnement_gar' abonnement.gar_abonnement_id %}"  onclick="return TestDelete('ce webservice ' + str(abonnement.gar_abonnement_id) )" class="btn btn-xs btn-danger pull-right" />Supprimer ce webservice</a>
                 {% endif %} 
    
-                    <table class="table">
+                    <table class="table table-sacado">
                         <tr>
                             <td>Abonnement ?</td><td>{{ form.is_abonnement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}  {{ form.is_abonnement.errors }}</td>
                         </tr>

@@ -85,7 +85,7 @@
                     </div>
                     <div id="content_exercises" class="list_choice">
                     {% if parcours %}
-                        <table class="table">
+                        <table class="table table-sacado">
                         {% regroup  exercises by theme.name as theme_list %}  
                             {% for theme in theme_list %}
                                 <tr style="background:#e6e2dd"><td></td><td>{{ theme.grouper }}</td><td>Parcours</td></tr>
