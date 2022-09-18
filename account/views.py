@@ -1441,11 +1441,11 @@ def register_by_csv(request, key, idg=0):
         csv_file = request.FILES["csv_file"]
         if not csv_file.name.endswith('.csv'):
             messages.error(request, "Le fichier n'est pas format CSV")
-            return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
+            return redirect('register_by_csv', key , idg)
         # if file is too large, return
         if csv_file.multiple_chunks():
             messages.error(request, "Le fichier est trop lourd (%.2f MB)." % (csv_file.size / (1000 * 1000),))
-            return HttpResponseRedirect(reverse("register_teacher_csv", args=[key, idg]))
+            return redirect('register_by_csv', key , idg)
         
 
         file_data = csv_file.readlines()
@@ -1453,6 +1453,10 @@ def register_by_csv(request, key, idg=0):
         #lines = file_data.split("\r\n")
         # loop over the lines and save them in db. If error , store as string and then display = []
         list_names = ""
+        if len(file_data) > 500 :
+            messages.error(request, "Le fichier contient trop de ligne. Max 500.")
+            return redirect('register_by_csv', key , idg)
+
         for line in file_data :
             try:
                 line = line.decode("utf-8")
@@ -1547,6 +1551,12 @@ def register_users_by_csv(request,key):
             return redirect ('index')
         else :
             school = request.user.school
+
+        if len(file_data) > 500 :
+            messages.error(request, "Le fichier contient trop de ligne. Max 500.")
+            return redirect('register_users_by_csv', key )
+
+
 
         if can_inscribe_students(school, len(file_data) ) :
             for line in file_data :
