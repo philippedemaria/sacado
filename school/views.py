@@ -171,7 +171,20 @@ def update_school(request,id):
 			if request.user.is_superuser :
 				return redirect('schools')
 			else :
+				try :
+					subject = "Modification d'établissement"
+					school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+
+					messages.success(request,"Modification réussie de votre établissement.")
+					send_mail(subject,
+				          "Bonjour,  :\n\n Vous avez modifié votre établissement \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+				          settings.DEFAULT_FROM_EMAIL ,
+				          [request.user.email, "sacado.asso@gmail.com"])
+				except :
+					pass
 				return redirect('admin_tdb')
+
+
 
 	return render(request,'school/_form.html', {'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total  })
 
