@@ -50,6 +50,9 @@ def menu(request):
         except : 
             pass
 
+        theme_color        =  'css/Admin_'+request.user.color+'.css'
+        navbar_theme_color =  'css/navbar_'+request.user.color+'.css'
+
         sacado_asso = False
         if request.user.time_zone:
             time_zome = request.user.time_zone
@@ -91,12 +94,14 @@ def menu(request):
                     request.session["renewal"] = renew_hidden
             
 
-            return { 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+
+            return { 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             
             student = Student.objects.get(user=request.user)
             groups = student.students_to_group.all()
+ 
 
             teacher_to_student = False
             if "_e-test" in student.user.username :
@@ -119,21 +124,21 @@ def menu(request):
                 'group' : group ,
                 'groups' : groups,
                 'teacher_to_student' : teacher_to_student ,   
-                'index_tdb' : False ,              
+                'index_tdb' : False , 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color ,          
             }
 
         elif request.user.is_parent:
             this_user = User.objects.get(pk=request.user.id)
             students = this_user.parent.students.all()
             last_exercises_done = Studentanswer.objects.filter(student__in= students).order_by("-date")[:10]
-
+ 
             return {
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
                 'sacado_asso' : sacado_asso , 
                  'sacado_asso' : False , 
                  'index_tdb' : False ,
-                 'is_gar_check' : None,
+                 'is_gar_check' : None, 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color ,
             }
 
 

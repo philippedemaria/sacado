@@ -52,7 +52,7 @@ urlpatterns = [
     path('create_background/<int:id>', create_background, name='create_background'),
     path('delete_background/<int:id>', delete_background, name='delete_background'),
     path('list_backgrounds', list_backgrounds, name='list_backgrounds'),
-
+    path('change_color_police/<slug:color>', change_color_police, name='change_color_police'),
 
     path('updatepassword', updatepassword, name='updatepassword'),
 

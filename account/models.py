@@ -130,7 +130,7 @@ class User(AbstractUser):
     is_board   = models.BooleanField(default=0)
     avatar     = models.ImageField(upload_to=avatar_directory_path,verbose_name="avatar", blank=True, null= True, default ="" )
     background = models.ImageField(upload_to=background_directory_path,verbose_name="background", blank=True, null= True, default ="" )
-
+    color      = models.CharField(max_length=10, default='default', blank=True,  editable=False)
 
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)

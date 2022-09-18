@@ -24,6 +24,42 @@
 
 {% block body %}
 <section class="content_main">
+
+
+
+
+    <h2>Couleur de police et fond</h2>
+             
+    <div class="row">
+        <div class="col-sm-2 col-md-2">
+                <a href="{% url 'change_color_police' 'default' %}" title="Thème par défaut">
+                    <i class="fa fa-square fa-3x" style="color:#5d4391"></i>
+                </a>
+        </div>       
+        <div class="col-sm-10 col-md-10">
+                <a href="{% url 'change_color_police' 'blue' %}">
+                    <i class="fa fa-square fa-3x" style="color:#2994b1"></i>
+                </a>
+                <a href="{% url 'change_color_police' 'green' %}">
+                    <i class="fa fa-square fa-3x" style="color:#6bc421"></i>
+                </a>
+                <a href="{% url 'change_color_police' 'orange' %}">
+                    <i class="fa fa-square fa-3x" style="color:#ffa600"></i>
+                </a>
+                <a href="{% url 'change_color_police' 'red' %}">
+                    <i class="fa fa-square fa-3x" style="color:#a81d1c"></i>
+                </a>
+                <a href="{% url 'change_color_police' 'violet' %}">
+                    <i class="fa fa-square fa-3x" style="color:#5d4391"></i>
+                </a> 
+        </div>
+    </div>
+
+
+
+    <hr/>
+    <h2>Fonds d'écran</h2>
+
     <form action="" method="POST">
         {% csrf_token %}
         <div class="row">

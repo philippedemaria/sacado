@@ -387,6 +387,17 @@ def background(request) :
     return render(request, 'account/background_form.html', context)
 
 
+def change_color_police(request,color):
+
+    user = request.user
+
+    User.objects.filter(pk=user.id).update(color=color)
+
+    us = User.objects.get(pk=user.id)
+
+    print(us.color)
+
+    return redirect('index')
 
 
 #####################################
