@@ -175,7 +175,7 @@ def update_school(request,id):
 					subject = "Modification d'établissement"
 					school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
-					messages.success(request,"Modification réussie de votre établissement.")
+					messages.success(request,"Modification de votre établissement réussie.")
 					send_mail(subject,
 				          "Bonjour,  :\n\n Vous avez modifié votre établissement \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 				          settings.DEFAULT_FROM_EMAIL ,
