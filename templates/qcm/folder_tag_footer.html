@@ -55,11 +55,32 @@
         </div> 
     </div> 
     {% else %} 
-    <div class="row dossier"> 
-        <div class="col-xs-12 col-md-12 col-lg-12"> 
-            <a href="javascript: void(0)" data-parcours_id="{{ folder.id}}" class="open_options pull-right" title="Ouvrir les options" ><i class="fa fa-ellipsis-v" style="font-size:16px;padding-top: 5px;"></i></a> 
+        {% if folder %}    
+        <div class="row dossier"> 
+            <div class="col-xs-12 col-md-12 col-lg-12"> 
+                <a href="javascript: void(0)" data-parcours_id="{{ folder.id}}" class="open_options pull-right" title="Ouvrir les options" ><i class="fa fa-ellipsis-v" style="font-size:16px;padding-top: 5px;"></i></a> 
+            </div>
         </div>
-    </div>
+
+        <div class="row extend_parcours">
+
+            <div class="col-xs-4 col-md-4 col-lg-4"> 
+                <a href="{% url 'update_folder' folder.id  0  %}" class="edit" style="color:{{ folder.color}};"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
+            </div>
+
+
+            <div class="col-xs-4 col-md-4 col-lg-4">
+                <a  href="{% url 'result_parcours' folder.id 1 %}" class="edit" target="_blank"><i class="fa fa-fw fa-mortar-board"></i> <span class="label_icon">Suivis <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                </a>   
+            </div>
+            <div class="col-xs-4 col-md-4 col-lg-4">
+                <span href="javascript:void()" class="edit group_shower" data-parcours_id="{{folder.id }}" {% if dataset.is_students %} style="color:{{ folder.color }}" {% endif %} >
+                    <i class="fa fa-fw fa-users"></i> <span class="label_icon">Élèves</span>  
+                </span>
+            </div> 
+        </div> 
+        {% endif %} 
+
     {% endif %}   
 </div>
 
