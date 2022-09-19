@@ -1192,7 +1192,7 @@ def can_inscribe_students(school, compare):
 
 
 def oversize_students(school):
-    nbsa = school.users.filter(user_type=0).count()
+    nbsa = school.users.filter(user_type=0).exclude(username__contains="_e-test").count()
     nbss = school.nbstudents
     nb_students = nbsa - nbss
     test = False
