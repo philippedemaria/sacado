@@ -370,6 +370,16 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 group.students.add(student)
             except: 
                 pass
+
+            try :
+                test = attribute_all_documents_of_groups_to_a_new_student([group], student)
+                if test :
+                    messages.error(request,"Les documents de votre enseignant vous sont affectés.")
+                else :
+                    messages.error(request,"Les documents de votre enseignant ne vous sont pas affectés.") 
+            except :
+                messages.error(request,"Les documents ne vous sont pas affectés.")
+                
  
 
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
