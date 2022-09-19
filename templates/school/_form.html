@@ -88,7 +88,11 @@
                             {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                             {{ form.gar.errors }}
                         </div>
- 
+                        <div class="form-group">                
+                            {{ form.is_primaire.label_tag }}
+                            {{ form.is_primaire |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            {{ form.is_primaire.errors }}
+                        </div>
                         <div class="form-group">                
                             {{ form.nbstudents.label_tag }}
                             {{ form.nbstudents |add_class:"form-control" }}
