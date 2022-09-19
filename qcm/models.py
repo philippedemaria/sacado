@@ -1438,8 +1438,12 @@ class Relationship(models.Model):
 
 
 
-
-
+    def is_mastering(self):
+        test = False
+        if self.relationship_mastering.count() :
+            test = True
+        return test
+ 
 
 
     def score_student_for_this(self,student):
@@ -2123,6 +2127,11 @@ class Customexercise(ModelWithCode):
         return data 
 
 
+    def is_mastering(self):
+        test = False
+        if self.customexercise_mastering_custom.count() :
+            test = True
+        return test
 
 
 class Autoposition(models.Model): # Commentaire et note pour les exercices customisés coté enseignant
@@ -2388,7 +2397,7 @@ class Demand(models.Model):
 ########################################################################################################################################### 
 class Mastering(models.Model):
 
-    relationship = models.ForeignKey(Relationship, related_name="relationship_mastering", on_delete=models.PROTECT, verbose_name="Exercice")
+    relationship = models.ForeignKey(Relationship, related_name="relationship_mastering", on_delete=models.CASCADE, verbose_name="Exercice")
     consigne     = models.CharField(max_length=255, default='',  blank=True,   verbose_name="Consigne")   
     video        = models.CharField(max_length=50, default='',  blank=True,   verbose_name="code de vidéo Youtube")   
     mediation    = models.FileField(upload_to= directory_path_mastering, verbose_name="Fichier", default="", null = True, blank= True) 
@@ -2396,7 +2405,7 @@ class Mastering(models.Model):
     duration     = models.PositiveIntegerField(  default=15,  blank=True,  verbose_name="Durée estimée")    
     scale        = models.PositiveIntegerField(default=3, editable= False) 
     ranking      = models.PositiveIntegerField(default=0, editable= False) 
-    exercise     = models.ForeignKey(Exercise, related_name = "exercise", on_delete=models.PROTECT, editable=False, default="", null = True, blank= True )   
+    exercise     = models.ForeignKey(Exercise, related_name = "exercise", on_delete=models.CASCADE, editable=False, default="", null = True, blank= True )   
     courses      = models.ManyToManyField(Course, blank=True, related_name='courses_mastering')
     
     def __str__(self):
@@ -2411,7 +2420,7 @@ class Mastering(models.Model):
 
 class Mastering_done(models.Model):
 
-    mastering = models.ForeignKey(Mastering, related_name="mastering_done", editable=False, on_delete=models.PROTECT, verbose_name="Exercice")
+    mastering = models.ForeignKey(Mastering, related_name="mastering_done", editable=False, on_delete=models.CASCADE, verbose_name="Exercice")
     student = models.ForeignKey(Student, on_delete=models.CASCADE, editable=False, related_name='students_mastering_done')
     writing = RichTextUploadingField( blank=True, verbose_name="Texte*") 
     
@@ -2426,7 +2435,7 @@ class Mastering_done(models.Model):
 ########################################################################################################################################### 
 class Masteringcustom(models.Model):
 
-    customexercise = models.ForeignKey(Customexercise, related_name="customexercise_mastering_custom", on_delete=models.PROTECT, verbose_name="Exercice")
+    customexercise = models.ForeignKey(Customexercise, related_name="customexercise_mastering_custom", on_delete=models.CASCADE, verbose_name="Exercice")
     consigne = models.CharField(max_length=255, default='',  blank=True,   verbose_name="Consigne")   
     video = models.CharField(max_length=50, default='',  blank=True,   verbose_name="code de vidéo Youtube")   
     mediation = models.FileField(upload_to= directory_path_mastering, verbose_name="Fichier", default="", null = True, blank= True) 
@@ -2435,7 +2444,7 @@ class Masteringcustom(models.Model):
 
     scale = models.PositiveIntegerField(default=3, editable= False) 
     ranking = models.PositiveIntegerField(default=0,  editable= False) 
-    exercise = models.ForeignKey(Exercise, related_name = "exercise_mastering_custom", on_delete=models.PROTECT, editable=False, default="", null = True, blank= True )   
+    exercise = models.ForeignKey(Exercise, related_name = "exercise_mastering_custom", on_delete=models.CASCADE, editable=False, default="", null = True, blank= True )   
     courses = models.ManyToManyField(Course, blank=True, related_name='courses_mastering_custom')
     
     def __str__(self):

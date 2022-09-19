@@ -423,13 +423,23 @@
 
 
 
-            <span class="horizontalmargin5"><a href="{% url 'create_mastering' rc.id  %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
+            <span class="horizontalmargin5">
+              <a href="{% url 'create_mastering' rc.id  %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:{% if rc.is_mastering %}14{% else %}9{% endif %}px;color:{{ parcours.color|contrast_color }}">
+                <i class="fa fa-sitemap"></i>
+              </a>
+            </span> 
 
             {% if sacado_asso %}
             <!-- Appel des compétences -->
-            <span class="select_skills horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="skill{{rc.id}}" title="Ajouter des compétences" ><i class="fa fa-copyright"></i> </span>
+            <span class="select_skills horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="skill{{rc.id}}" title="Ajouter des compétences" >
+                <font style="font-size:9px">{{ rc.skills.count }}</font><i class="fa fa-copyright {% if not rc.skills.count %}text-danger{% endif %}"></i> 
+                
+            </span>
             {% else %}
-            <span class="select_skills horizontalmargin5" style="cursor:not-allowed"  title="Version établissement requise."  ><i class="fa fa-copyright"></i> </span>
+            <span class="select_skills horizontalmargin5" style="cursor:not-allowed"  title="Version établissement requise."  >
+                <font style="font-size:9px">{{ rc.skills.count }}</font><i class="fa fa-copyright"></i> 
+                
+            </span>
             {% endif %}
 
 
@@ -457,12 +467,12 @@
             </span>
             <!-- Appel des situations -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier le nombre de situations"><!-- l'id permet de modifier après ajax le nombre de situation -->
-                <i class="fa fa-save"></i> <font style="font-size:9px">{{ rc.situation}}  </font>
+                <font style="font-size:9px">{{ rc.situation}}  </font><i class="fa fa-save"></i> 
             </span>
             {% else %}
             <!-- Appel des durées -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
-                 <span style="font-size:9px"><font style="font-size:9px">{{ rc.duration }} min.</font></span> 
+                 <font style="font-size:9px">{{ rc.duration }} min.</font>
             </span>
             <!-- Appel des situations -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier la consigne"><!-- l'id permet de modifier après ajax le nombre de situation -->
@@ -765,7 +775,7 @@
             <span class="horizontalmargin5"><a href="#" style="font-size:14px;color:{{ parcours.color|contrast_color }}" class="copy_link" title="Code de l'exercice" data-code="{{ rc.code}}"><i class="fa fa-barcode"></i></a></span> 
             {% comment %}
             <!-- Appel des parcours de maitrise -->
-            <span class="horizontalmargin5"><a href="{% url 'create_mastering_custom' rc.id parcours.id %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:14px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap"></i></a></span> 
+            <span class="horizontalmargin5"><a href="{% url 'create_mastering_custom' rc.id parcours.id %}" title="Parcours de maîtrise à partir de cet exercice" style="font-size:{% if rc.is_mastering %}14{% else %}9{% endif %}px;color:{{ parcours.color|contrast_color }}"><i class="fa fa-sitemap {% if rc.is_mastering %}text-warning{% endif %}"></i></a></span> 
             {% endcomment %}
             <!-- Appel des situations et durée -->
             <span class="custom_select_details horizontalmargin5"  data-customexercise_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->

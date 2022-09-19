@@ -300,14 +300,18 @@ class MasteringForm (forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		relationship = kwargs.pop('relationship')
 		super(MasteringForm, self).__init__(*args, **kwargs)
-		relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours=relationship.parcours)
+		#relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours=relationship.parcours)
 		courses = Course.objects.filter(parcours=relationship.parcours)
-		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
+		self.fields['courses']   = forms.ModelMultipleChoiceField(queryset=courses, widget=forms.CheckboxSelectMultiple,   required=False )
+		#self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
+
  
 class MasteringDoneForm (forms.ModelForm):
 	class Meta:
 		model = Mastering_done
 		fields = ('writing',)
+
+
 
 class MasteringcustomForm (forms.ModelForm):
 	class Meta:
@@ -317,10 +321,12 @@ class MasteringcustomForm (forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		customexercise = kwargs.pop('customexercise')
 		super(MasteringcustomForm, self).__init__(*args, **kwargs)
-		relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours__in=customexercise.parcourses.filter(is_publish=1))
+		#relations = Relationship.objects.filter(exercise__supportfile__is_title = 0, parcours__in=customexercise.parcourses.filter(is_publish=1))
 		courses = Course.objects.filter(parcours__in=customexercise.parcourses.filter(is_publish=1))
-		self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
+		self.fields['courses']   = forms.ModelMultipleChoiceField(queryset=courses, widget=forms.CheckboxSelectMultiple,   required=False )
+		#self.fields['practices'] = forms.ModelMultipleChoiceField(queryset=relations, widget=forms.CheckboxSelectMultiple,   required=False )
  
+
 class MasteringcustomDoneForm (forms.ModelForm):
 	class Meta:
 		model = Masteringcustom_done
