@@ -4,7 +4,7 @@
 
  
 <div class="box-footer" style="position: relative; padding-top: 0px;">
-    {% if group and folder.folder_only_students_count.nb > 0 %}    
+    {% if group and folder  %}    
     {% get_data_parcours_evaluations_from_group_folder folder group as dataset %} 
     <div class="row dossier"> 
         <div class="col-xs-4 col-md-4 col-lg-4"> 
@@ -30,7 +30,14 @@
             {{  dataset.nb_quizzes }} quizz   
         </div>
     </div>
-    {% endif %}
+    {% else %} 
+    <div class="row dossier"> 
+        <div class="col-xs-12 col-md-12 col-lg-12"> 
+            <a href="javascript: void(0)" data-parcours_id="{{ folder.id}}" class="open_options pull-right" title="Ouvrir les options" ><i class="fa fa-ellipsis-v" style="font-size:16px;padding-top: 5px;"></i></a> 
+        </div>
+    </div>
+    {% endif %} 
+ 
                    
     {% if folder.folder_only_students_count.nb > 0 %}  
     <div class="row extend_parcours">
