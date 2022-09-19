@@ -147,11 +147,13 @@ def create_school(request):
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
 
+
+
  
 def update_school(request,id):
 
 	school = School.objects.get(id=id)
-	form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
+	form = UpdateSchoolForm(request.POST or None, request.FILES  or None, instance=school)
 
 	nb_total = school.users.filter(user_type=0).count()
 	nb = 150

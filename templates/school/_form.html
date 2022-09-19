@@ -34,71 +34,43 @@
 
                         <div class="form-group">
                             {{ form.name.label_tag }}
-                            {% if request.user.is_superuser %}
-                                {{ form.name |add_class:"form-control" }}
-                            {% else %}
-                                {{ form.name |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.name |add_class:"form-control" }}
                             {{ form.name.errors }}
                         </div>
  
                         <div class="form-group">
                             <label>Pays :</label>
-                            {% if request.user.is_superuser %}
-                                {{ form.country |add_class:"form-control select2" }}
-                            {% else %}
-                                {{ form.country |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.country |add_class:"form-control select2" }}
                             {{ form.country.errors }}
                         </div>
  
                         <div class="form-group">                
                             {{ form.address.label_tag }}
-                            {% if request.user.is_superuser %}
-                                {{ form.address |add_class:"form-control" }}
-                            {% else %}
-                                {{ form.address |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.address |add_class:"form-control" }}
                             {{ form.address.errors }}
                         </div>
  
                         <div class="form-group">                
                             {{ form.complement.label_tag }}
-                            {% if request.user.is_superuser %}
-                                {{ form.complement |add_class:"form-control" }}
-                            {% else %}
-                                {{ form.complement |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.complement |add_class:"form-control" }}
                             {{ form.complement.errors }}
                         </div>
  
                         <div class="form-group">                
                             {{ form.zip_code.label_tag }}
-                            {% if request.user.is_superuser %}
-                                {{ form.zip_code |add_class:"form-control" }}
-                            {% else %}
-                                {{ form.zip_code |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.zip_code |add_class:"form-control" }}
                             {{ form.zip_code.errors }}
                         </div>
  
                         <div class="form-group">                
                             {{ form.town.label_tag }}
-                            {% if request.user.is_superuser %}
-                                {{ form.town |add_class:"form-control" }}
-                            {% else %}
-                                {{ form.town |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.town |add_class:"form-control" }}
                             {{ form.town.errors }}
                         </div>
  
                         <div class="form-group">                
                             {{ form.code_acad.label_tag }}
-                            {% if request.user.is_superuser %}
-                                {{ form.code_acad |add_class:"form-control" }}
-                            {% else %}
-                                {{ form.code_acad |add_class:"form-control"|attr:"readonly" }}
-                            {% endif %}
+                            {{ form.code_acad |add_class:"form-control" }}
                             {{ form.code_acad.errors }}
                         </div>
                          <div class="form-group">                

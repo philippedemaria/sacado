@@ -13,6 +13,7 @@ class SchoolForm(forms.ModelForm):
     	model = School
     	fields = '__all__'
 
+ 
 
 class SchoolUpdateForm(forms.ModelForm):
  
