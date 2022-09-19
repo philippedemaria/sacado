@@ -12,7 +12,7 @@
         {% endif  %}
 
 
-
+        <!-- Fenetre des options   -->
         <div class="no_visu_on_load options" id="show_open_option{{ parcours.id}}">
             <div class="row extend" {% if parcours.is_evaluation  %} style="padding-top: 5px;" {% endif  %}> 
                 <div class="col-lg-4 col-xs-4">
@@ -146,18 +146,7 @@
             {% endif %} 
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- Fenetre des groupes -->
         <div class="group_show  group_show{{parcours.id }} no_visu_on_load"> 
             {% if group %} 
                 {% csrf_token %}

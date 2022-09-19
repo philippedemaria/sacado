@@ -9,7 +9,7 @@
 
 
         <div class="handler widget-user-header">
-        <!-- Add signet to folder --> 
+            <!-- Add signet to folder --> 
             <img src="{% static 'img/rabat_dossier.png' %}" class="rabat_dossier" />
             {% if group %}
 
@@ -117,9 +117,82 @@
                         </li> 
                     {% endfor %}
                 </div>
+            <!-- Fenetre des options   -->
+            <div class="no_visu_on_load options" id="show_open_option{{ folder.id}}">
+                <div class="row extend_parcours"> 
+
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        {% if dataset.is_folder_courses_exists %}
+                        <a href="{% url 'show_courses_from_folder'  folder.id    %}"  class="edit"  style="color:{{ folder.color }}" >
+                            <i class="fa fa-fw fa-desktop"></i>  <span class="label_icon">Cours <img src="{% static 'img/external-link.png' %}" width="7px" ></span>
+                        </a>
+                        {% else %}
+                        <a href="javascript:void()"  class="edit" style="cursor: default;" >
+                            <i class="fa fa-fw fa-desktop"  style="cursor: default;"></i>  <span class="label_icon">Cours</span>
+                        </a>
+                        {% endif %}
+                    </div>
 
 
 
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="javascript:void()"  class="edit click_parcours_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_parcours_exists %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="fa fa-th"></i> <span class="label_icon">Parcours</span> 
+                        </span>
+                        <a href="{% url 'create_parcours' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un parcours à ce dossier">   
+                            <i class="fa fa-plus-circle"></i> 
+                        </a>
+                    </div> 
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="#"  class="edit click_bibliotex_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_bibliotex_exists %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="bi bi-bootstrap"></i>  <span class="label_icon"> BiblioTex</span> 
+                        </span>
+                        {% if request.user.is_sacado_member %}
+                        <a href="{% url 'create_bibliotex' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un biblioTex à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+                        {% endif %} 
+                    </div> 
+                </div>
+
+                <div class="row extend_parcours">
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="javascript:void()"  class="edit click_flashpack_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_flashpack_exists %} style="color:{{ folder.color }}" {% endif %}>
+                            {% if dataset.flashpack_to_validate %}
+                             <i class="bi bi-exclamation-diamond-fill text-validate"  title="Flashpack à corriger"></i>
+                            {% else %}
+                            <i class="bi bi-stack"></i>                  
+                            {% endif %} <span class="label_icon">F-pack</span>
+                        </span>
+                        {% if request.user.is_sacado_member %}
+                        <a href="{% url 'create_flashpack' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un flashpack à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+                        {% endif %}
+                    </div> 
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="javascript:void()"  class="edit click_evaluations_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_evaluations_exists   %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="bi bi-trophy"></i> <span class="label_icon">Évaluat°</span> 
+                        </span>
+                        {% if request.user.is_sacado_member %}
+                        <a href="{% url 'create_evaluation' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter une évaluation à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>            
+                        {% endif %}
+                    </div> 
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                        <span href="javascript:void()"  class="edit click_quizz_show"   data-parcours_id="{{folder.id }}"  {% if dataset.is_quizz_exists   %} style="color:{{ folder.color }}" {% endif %}>
+                            <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> 
+                        </span>
+
+                        {% if request.user.is_sacado_member %}
+                        <a href="{% url 'create_quizz_folder' folder.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
+                             <i class="fa fa-plus-circle"></i> 
+                        </a>
+                        {% endif %}
+                    </div>  
+                </div>                     
+            </div>
             <!-- Fenetre accessible par le disc   -->
 
             <div class="overlay  overlay_show{{folder.id }} no_visu_on_load" > 
