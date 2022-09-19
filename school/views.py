@@ -349,16 +349,24 @@ def school_accounting(request):
 
 
 
-
 def new_student(request,slug):
 
     school = this_school_in_session(request)
     group = Group.objects.get(code=slug)
-
+ 
     user_form = NewUserSForm()
     form = StudentForm()
-    return render(request,'school/student_form.html', { 'communications' : [],'group':group, 'user_form' : user_form, 'form' : form, "school" : school  })
+    return render(request,'school/student_form.html', { 'groups':None, 'group':group,  'user_form' : user_form, 'form' : form, "school" : school  })
 
+
+def create_new_student(request):
+
+    school = this_school_in_session(request)
+    groups = school.school_group.all()
+ 
+    user_form = NewUserSForm()
+    form = StudentForm()
+    return render(request,'school/student_form.html', {  'groups':groups, 'group':None, 'user_form' : user_form, 'form' : form, "school" : school  })
 
 
 

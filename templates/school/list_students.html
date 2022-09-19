@@ -24,18 +24,15 @@
 
  
 {% block page_menu_right %}
-
-
-                                 
-
-   
- 
+                
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Gestion des élèves <b class="caret"></b> </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-        
- 
+        <li> <a href="{% url 'create_new_student' %}">Créer un nouvel élève </a></li>
+
+        <li class="divider">  </li> 
+
         <li> <a href="{% url 'register_users_by_csv' 0 %}">Importer à partir d'un csv <img src="{% static 'img/excel.png' %}" width="15px"/> </a></li>
 
         <li> <a href="{% url 'print_school_ids' %}">Imprimer les identifiants par groupes <img src="{% static 'img/pdf.png' %}" width="15px"/> </a></li>
@@ -51,14 +48,7 @@
  
     </ul>
 </li> 
-
-
-
-
-
-    
-
-   
+ 
 {% endblock %}
 
 

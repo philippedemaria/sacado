@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block page_title %} 
-  <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {{ group }} <img src="{% static 'img/angle-right.png' %}"/> Nouvel élève
+  <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a>         {% if group  %}{{ group }} {% endif %}<img src="{% static 'img/angle-right.png' %}"/>          Nouvel élève
 {% endblock  %}
 
 
@@ -31,9 +31,9 @@
 <section class="content_main">
     <form action="{% url 'register_student_from_admin' %}" method="POST">
         {% csrf_token %}
- 
+        {% if group %}
         <input type="hidden" name="group" value="{{ group.id }}" />
-
+        {% endif %}
 
         <input type="hidden" name="school" value="{{ school.id }}" />
 
@@ -72,8 +72,30 @@
                     {{ user_form.email.errors }}
                 </div>
             </div>
-
         </div>   
+
+        {% if groups %}
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label>Groupe :</label>
+                    <select name="group" class="form-control select2">
+                        {% for group in groups %}
+                            <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>  
+        {% endif %}
+
+
+
+
+
+
+
+
         <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
