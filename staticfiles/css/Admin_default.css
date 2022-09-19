@@ -15,7 +15,6 @@
 /********************************************* gris #657574 ***************************************/
 /********************************************* beige #e6e2dd ***************************************/
 /********************************************* beige clair #f2f1f0***************************************/
-
 html,
 body {
   /*min-height: 100%;*/
@@ -83,6 +82,28 @@ h1, .h1, h2, .h2, h3, .h3 {
 .sacado_color_text{
   color:  #5d4391 ;
 }
+
+
+
+.options{
+  padding:30px 10px 10px 10px;
+  background-color: white;
+  position: absolute;
+  width: 301px;
+  top:3px;
+  z-index:2;
+  height:135px;
+  opacity:0.97;
+}
+
+
+
+
+
+
+
+
+
 
 
 .alert-warning{
@@ -7227,7 +7248,7 @@ overflow-y: auto;
   border-top-right-radius: 0;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  padding: 10px 10px;
+  padding: 10px;
   background-color: #ffffff;
 }
 
@@ -7241,10 +7262,6 @@ overflow-y: auto;
   padding: 0px 10px;
 
 }
-
-
-
-
 
 
 

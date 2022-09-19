@@ -204,8 +204,6 @@ define(['jquery','bootstrap'], function ($) {
         $('body').on('click', '.selector_image_from_ajax' , function () {
 
                 let url_image = $(this).data("url_image");
-
-                console.log(url_image) ;
                 $('#this_image_selected').val(url_image);
 
                 $('.selector_image_from_ajax').addClass('opacity_selector_img');  
@@ -335,7 +333,10 @@ define(['jquery','bootstrap'], function ($) {
         });
 
 
-
+        $(".open_options").click(function(){
+            value =  $(this).data("parcours_id"); 
+            $('#show_open_option'+value).toggle(500);
+        });
 
 
 
