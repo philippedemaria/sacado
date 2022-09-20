@@ -64,6 +64,8 @@
     {% endif %}
 
 
+
+
         <h3 class="thin"><img src="{% static 'img/excel.png' %}" width="20px" /> Gestion des identifiants  {% if idg == 0  %}Enseignant.e.s{% else %}Élève {% endif %}</h3>        
         <ul>
             <li class="sanspuce"><label><input type="radio" id="show_without_username" name="manage_username" value="auto" /> Laisser SACADO attribuer des identifiants </label> </li> 
@@ -104,10 +106,14 @@
                 <b>Le fichier CSV doit être enregistré au format UTF-8.</b><br/>{% include 'help_utf.html' %}
             </div>
         </div>
-
+         <div class="row">
+            <div class="col-sm-12 col-md-12" class="text-danger">
+                <i class="fa fa-ban"></i> Votre fichier ne doit pas contenir plus de 500 élèves. Au besoin répéter l'opération.
+            </div>
+        </div>
  
 
- 
+        <div class="row">
             <div class="col-sm-12 col-md-12">
                 {% csrf_token %}
                 <div class="form-group">
@@ -116,7 +122,7 @@
                  
                 </div>
             </div>
- 
+        </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px;">
                 <div class="form-group">                    
