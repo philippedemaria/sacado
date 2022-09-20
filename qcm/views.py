@@ -9296,11 +9296,16 @@ def update_folder(request,id,idg):
         else :
             group = None
             group_id = None
-    
+            images = get_images_for_parcours_or_folder(group)
+
+    if idg == 999999999999999999 :
+        group = None
+        group_id = None            
+        images = get_images_for_parcours_or_folder(group)
     else :
         group = Group.objects.get(pk = idg)
         group_id = group.id
-        images = get_images_for_parcours_or_folder(group)
+        images = []
 
     form = FolderForm(request.POST or None, request.FILES or None, instance = folder , teacher = teacher, subject = folder.subject, level = folder.level )
     if request.method == "POST" :
