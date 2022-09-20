@@ -1490,7 +1490,10 @@ def create_accounting(request,tp):
             else :
                 am = som
             Accounting.objects.filter(pk = nf.id).update(amount=am)
-            Accounting.objects.filter(pk = nf.id).update(country=nf.school.country)
+            try :
+                Accounting.objects.filter(pk = nf.id).update(country=nf.school.country)
+            except :
+                pass
 
             if nf.is_abonnement :
                 if form_abo.is_valid():
