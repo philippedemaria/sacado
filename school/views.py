@@ -166,7 +166,7 @@ def create_school(request):
 def update_school(request,id):
 
 	school = School.objects.get(id=id)
-	form = UpdateSchoolForm(request.POST or None, request.FILES  or None, instance=school)
+	form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance=school)
 
 	nb_total = school.users.filter(user_type=0).count()
 	nb = 150
@@ -175,7 +175,11 @@ def update_school(request,id):
 
 	ok = False
 	if request.user.is_superuser or request.user.is_manager or request.user.school == school :
+		form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
 		ok = True
+	else :
+		form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance=school)
+ 
 
 	if request.user.is_superuser or ok :
 		if form.is_valid():
