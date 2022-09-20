@@ -146,7 +146,9 @@ def create_school(request):
 		t,r = Town.objects.get_or_create(  name=school.town ,  country=school.country ,  zip_code = school.zip_code )
 		try :
 			subject = "Création d'établissement"
-			school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+			if school.gar : gar = "OUI"
+			else : gar = "NON"
+			school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name+"\n\nGAR : "+gar
 
 			messages.success(request,"Création d'établissement réussie.")
 			send_mail(subject,
@@ -179,7 +181,7 @@ def update_school(request,id):
 		ok = True
 	else :
 		form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance=school)
- 
+
 
 	if request.user.is_superuser or ok :
 		if form.is_valid():
@@ -192,7 +194,9 @@ def update_school(request,id):
 			else :
 				try :
 					subject = "Modification d'établissement"
-					school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+					if school.gar : gar = "OUI"
+					else : gar = "NON"
+					school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name+"\n\nGAR : "+ gar
 
 					messages.success(request,"Modification de votre établissement réussie.")
 					send_mail(subject,
