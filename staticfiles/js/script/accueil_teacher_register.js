@@ -41,37 +41,22 @@
         $("#id_email").on('blur', function () {
 
             let email = $(this).val();
-            filtre_mail_academique = /^[a-z0-9_\.\-]+@ac-[a-z]*\.fr$/i ; 
-            filtre_mail_aefe = /^[a-z0-9_\.\-]+@aefe.fr$/i ; 
-            filtre_mail_education = /^[a-z0-9_\.\-]+@education.lu$/i ; 
-            filtre_mail_mlf = /^[a-z0-9_\.\-]+@mlfmonde.org$/i ;
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax({
+                url: '/account/ajax/userinfomail/',
+                data: {
+                    'email': email,
+                    'csrf_token' : csrf_token ,
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $(".ajaxresultmail").html(data["html"]);
 
-            if ( (filtre_mail_education.test( email )) || (filtre_mail_aefe.test( email )) || (filtre_mail_academique.test( email ))  || (filtre_mail_mlf.test( email )) )  { 
-
-
-                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-     
-                $.ajax({
-                    url: '/account/ajax/userinfomail/',
-                    data: {
-                        'email': email,
-                        'csrf_token' : csrf_token ,
-                    },
-                    type: "POST",
-                    dataType: "json",
-                    success: function (data) {
-                        $(".ajaxresultmail").html(data["html"]);
-
-                        if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
-                    }
-                });
-               
-            }
-            else
-            {
-                alert(" Vous devez utiliser une adresse académique @ac-****.fr ou @aefe.fr  ou nous contacter.") ; $(".sendit").prop("disabled", true ) ; 
-            }
-
+                    if(data["test"]) { $(".sendit").prop("disabled", false ) ;} else { $(".sendit").prop("disabled", true ) ;}
+                }
+            });
         });
 
 
