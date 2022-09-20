@@ -143,6 +143,7 @@ def create_school(request):
 		school.is_active = 1
 		school.save()
 		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
+		t,r = Town.objects.get_or_create(  name=school.town ,  country=school.country ,  zip_code = school.zip_code )
 		return redirect('schools')
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
