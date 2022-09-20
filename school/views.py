@@ -169,7 +169,8 @@ def update_school(request,id):
 
 	school = School.objects.get(id=id)
 	form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance=school)
-
+	old_school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name+"\n\nGAR : "+ gar
+	
 	nb_total = school.users.filter(user_type=0).count()
 	nb = 150
 	if nb > nb_total:
@@ -196,11 +197,12 @@ def update_school(request,id):
 					subject = "Modification d'établissement"
 					if school.gar : gar = "OUI"
 					else : gar = "NON"
+
 					school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name+"\n\nGAR : "+ gar
 
 					messages.success(request,"Modification de votre établissement réussie.")
 					send_mail(subject,
-				          "Bonjour,  :\n\n Vous avez modifié votre établissement \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+				          "Bonjour,  :\n\n Vous avez modifié votre établissement \n\n" + request.user.email + " \n\nAnciennes données : \n\n" + old_school_datas + " \n\n----------------\n\nNouvelles données : \n\n" + school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 				          settings.DEFAULT_FROM_EMAIL ,
 				          [request.user.email, "sacado.asso@gmail.com"])
 				except :
