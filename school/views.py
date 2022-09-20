@@ -144,6 +144,18 @@ def create_school(request):
 		school.save()
 		Stage.objects.create(school = school ,low = 30,  medium = 65, up = 85)
 		t,r = Town.objects.get_or_create(  name=school.town ,  country=school.country ,  zip_code = school.zip_code )
+		try :
+			subject = "Création d'établissement"
+			school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+
+			messages.success(request,"Création d'établissement réussie.")
+			send_mail(subject,
+		          "Bonjour,  :\n\n Vous avez créé un établissement \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+		          settings.DEFAULT_FROM_EMAIL ,
+		          ["sacado.asso@gmail.com"])
+		except :
+			pass
+
 		return redirect('schools')
 
 	return render(request,'school/_form.html', { 'communications' : [], 'form':form})
