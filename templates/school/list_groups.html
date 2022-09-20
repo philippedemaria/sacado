@@ -22,10 +22,23 @@
      <a href="{% url 'print_school_ids' %}" class="btn btn-default"><i class="fa fa-list"></i>  Télécharger les identifiants par groupe</a>
 {% endblock %}
 
+
+
 {% block page_menu_right %}
 
-    <a href="{% url 'new_group_many' %}" class="btn btn-new">+ Plusieurs groupes</a>  
-    <a href="{% url 'new_group' %}" class="btn btn-new">+ Nouveau groupe </a> 
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Gestion des groupes <b class="caret"></b> </a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+        <li> <a href="{% url 'new_group' %}">Créer un nouveau groupe </a></li>
+
+        <li> <a href="{% url 'new_group_many' %}" class="btn btn-new">Créer plusieurs groupes</a>  </li>
+
+        <li> <a href="{% url 'csv_full_group' %}">Importer à partir d'un csv <img src="{% static 'img/excel.png' %}" width="15px"/> </a></li>
+
+    </ul>
+</li> 
+
 {% endblock %}
 
 
