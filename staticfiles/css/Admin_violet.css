@@ -8187,6 +8187,22 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 
+.table tr.title_tr {
+  background:#5d4391; 
+  color:white
+}
+.table tr.subtitle_tr {
+  color:#5d4391;
+  background:#aa98cd; 
+  cursor: pointer
+}
+.table > tbody > tr.subsubtitle_tr {
+  background:#d4cbe6; 
+  cursor: pointer; 
+  color: #5d4391;
+}
+ 
+ 
 .table-sacado > thead > tr > th,
 .table-sacado > tbody > tr > th,
 .table-sacado > tfoot > tr > th,
@@ -8225,7 +8241,7 @@ a.listing:hover,
 a.listing:active,
 a.listing:focus{
   font-size:20px;
-  color:#c2a829;
+  color:#5d4391;
 }
 
 a.sublisting{
@@ -8251,6 +8267,11 @@ td.sublistingtd{
   font-weight: 200;
   color:#5d4391;
 }
+
+
+
+
+
 
 .table-bordered {
   border: 1px solid #e0e0e0;

@@ -8200,18 +8200,35 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 
+.table tr.title_tr {
+  background:#a81d1c; 
+  color:white
+}
+.table tr.subtitle_tr {
+  color:#a81d1c;
+  background:#fce9e9; 
+  cursor: pointer
+}
+.table > tbody > tr.subsubtitle_tr {
+  background:#fce9e9; 
+  cursor: pointer; 
+  color: #a81d1c;
+}
+
+
+
 .table-sacado > thead > tr > th,
 .table-sacado > tbody > tr > th,
 .table-sacado > tfoot > tr > th,
 .table-sacado > thead > tr > td,
 .table-sacado > tfoot > tr > td {
-  background-color:#f9f7fe;
+  background-color:#fce9e9;
 }
 
 .table-sacado  > tbody > tr > td {
-  border-top: 5px solid #f9f7fe;
+  border-top: 5px solid #fce9e9;
   background-color:#FFF ;
-  color: #444 ;
+  color: #a81d1c ;
 }
 .table-sacado  > tbody > tr  > td.right {
   border-radius: 0px 10px 7px 0px;
@@ -8221,7 +8238,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 .table-sacado  > thead > tr > th {
-  border-bottom: 0px solid #f9f7fe;
+  border-bottom: 0px solid #fce9e9;
 }
 
 .table-sacado  tr td .progress {
@@ -8237,7 +8254,7 @@ a.listing:hover,
 a.listing:active,
 a.listing:focus{
   font-size:20px;
-  color:#fce9e9;
+  color:#a81d1c;
 }
 
 a.sublisting{
@@ -8248,7 +8265,7 @@ a.sublisting:hover,
 a.sublisting:active,
 a.sublisting:focus{
   font-size:18px;
-  color:#fce9e9;
+  color:#a81d1c;
 }
 
 

@@ -8173,7 +8173,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 /* PAGINATION */
 .pagination > li > a {
-  background: #fafafa;
+  background: #fff6e6;
   color: #666;
 }
 .pagination.pagination-flat > li > a {
@@ -8190,14 +8190,31 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #fff6e6;
 }
 .table > thead > tr > th {
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid #fff6e6;
 }
 .table tr td .progress {
   margin-top: 5px;
 }
+
+
+.table tr.title_tr {
+  background:#fff6e6; 
+  color:white
+}
+.table tr.subtitle_tr {
+  color:#005e74;
+  background:#fff6e6; 
+  cursor: pointer
+}
+.table > tbody > tr.subsubtitle_tr {
+  background:#d4cbe6; 
+  cursor: pointer; 
+  color: #005e74;
+}
+
 
 
 .table-sacado > thead > tr > th,
@@ -8211,7 +8228,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 .table-sacado  > tbody > tr > td {
   border-top: 5px solid #fff6e6;
   background-color:#FFF ;
-  color: #444 ;
+  color: #ffa600 ;
 }
 .table-sacado  > tbody > tr  > td.right {
   border-radius: 0px 10px 7px 0px;
@@ -8230,25 +8247,25 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 .table tr.title_tr {
-  background:#FFA600; 
+  background:#ffa600; 
   color:white
 }
 .table tr.subtitle_tr {
-  color:#FFA600;
+  color:#ffa600;
   background:#FFE3B3; 
   cursor: pointer
 }
 .table > tbody > tr.subsubtitle_tr {
   background:#FFB400; 
   cursor: pointer; 
-  color: #FFA600;
+  color: #ffa600;
 }
  
 
 a.listing{
   font-size:20px;
   font-weight: 200;
-  color:#FFA600; /*#0e7bb5;*/
+  color:#ffa600; /*#0e7bb5;*/
 }
 a.listing:hover,
 a.listing:active,
@@ -8259,7 +8276,7 @@ a.listing:focus{
 
 a.sublisting{
   font-size:18px;
-  color: #FFA600 ; /*#c2a829;*/
+  color: #ffa600 ; /*#c2a829;*/
 }
 a.sublisting:hover,
 a.sublisting:active,

@@ -8199,6 +8199,24 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 
+.table tr.title_tr {
+  background:#6bc421; 
+  color:white
+}
+.table tr.subtitle_tr {
+  color:#6bc421;
+  background:#C3E2A9; 
+  cursor: pointer
+}
+.table > tbody > tr.subsubtitle_tr {
+  background:#C3E2A9; 
+  cursor: pointer; 
+  color: #6bc421;
+}
+
+
+
+
 .table-sacado > thead > tr > th,
 .table-sacado > tbody > tr > th,
 .table-sacado > tfoot > tr > th,
