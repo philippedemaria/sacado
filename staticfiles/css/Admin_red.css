@@ -85,7 +85,16 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 
- 
+.options{
+  padding:30px 10px 10px 10px;
+  background-color: white;
+  position: absolute;
+  width: 301px;
+  top:3px;
+  z-index:2;
+  height:135px;
+  opacity:0.97;
+}
 
 .alert-warning{
   background-color: #FFF ;
