@@ -15,12 +15,11 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
 import uuid
-from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required 
 from group.decorators import user_is_group_teacher
 from account.decorators import user_can_create
 from templated_email import send_templated_mail
@@ -143,7 +142,7 @@ def set_username_student_profile(name):
  
 
 
-
+@login_required(login_url= 'index')
 def student_dashboard(request,group_id):
 
     student = Student.objects.get(user=request.user.id)
@@ -491,13 +490,13 @@ def authorizing_access_group(request,teacher,group ):
 #####################################################################################################################################
 #####################################################################################################################################
 
-
+@login_required(login_url= 'index')
 def get_this_group(request, id):
     Group.objects.filter(pk=id).update(teacher=request.user.teacher)
     messages.success(request,"Groupe récupéré.")
     return redirect( 'update_group' , id )
 
-
+@login_required(login_url= 'index')
 def get_out_this_group(request, id):
     Group.objects.filter(pk=id).update(teacher=None)
     messages.success(request,"Groupe quitté et redistribué.")
@@ -518,14 +517,14 @@ def dashboard_group(request, id):
     template, context = student_dashboard(request,id)
     return render(request, template , context )
 
-
+@login_required(login_url= 'index')
 def list_groups(request):
     groups = Group.objects.filter(teacher__user_id = request.user.id)
     return render(request, 'group/list_group.html', {'groups': groups, 'communications' : [] , })
 
 
 
-
+@login_required(login_url= 'index')
 def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
     form = GroupTeacherForm(request.POST or None, teacher = teacher )
@@ -580,7 +579,7 @@ def create_group(request):
 
 
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def update_group(request, id):
 
 
@@ -636,7 +635,7 @@ def update_group(request, id):
 
 
 
-
+@login_required(login_url= 'index')
 def delete_group(request, id):
     group = Group.objects.get(id=id)
     # Si le prof n'appartient pas à un établissement
@@ -672,7 +671,7 @@ def delete_group(request, id):
 
 
 
-
+@login_required(login_url= 'index')
 def delete_group_and_his_documents(request, id):
     group = Group.objects.get(id=id)
     # Si le prof n'appartient pas à un établissement
@@ -717,7 +716,7 @@ def delete_all_groups(request) :
         group.delete()
     return redirect('school_groups')    
      
-
+@login_required(login_url= 'index')
 def show_group(request, id ):
 
     group = Group.objects.get(id=id)
@@ -763,7 +762,7 @@ def show_group(request, id ):
     return render(request, 'group/show_group.html', context )
 
 
-
+@login_required(login_url= 'index')
 def aggregate_group(request):
 
     code_groupe = request.POST.get("groupe")
@@ -848,7 +847,7 @@ def ajax_delete_student_profiles(request):
 
 
 
-
+@login_required(login_url= 'index')
 def student_remove_from_school(request):
 
     group_id = int(request.POST.get("group_id"))
@@ -912,7 +911,7 @@ def ajax_choose_parcours(request):
 
 
 
-
+@login_required(login_url= 'index')
 def sender_mail(request,form):
     if request.method == "POST" : 
         subject = request.POST.get("subject") 
@@ -938,7 +937,7 @@ def sender_mail(request,form):
             print(form.errors)
  
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def result_group(request, id):
 
     group = Group.objects.get(id=id)
@@ -978,7 +977,7 @@ def result_group(request, id):
 
 
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def result_group_theme(request, id, idt):
 
     teacher = Teacher.objects.get(user=request.user)
@@ -1005,7 +1004,7 @@ def result_group_theme(request, id, idt):
 
 
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def result_group_exercise(request, id):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None)
@@ -1025,7 +1024,7 @@ def result_group_exercise(request, id):
 
 
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def result_group_skill(request, id):
 
     group = Group.objects.get(id=id)
@@ -1046,7 +1045,7 @@ def result_group_skill(request, id):
 
 
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def result_group_waiting(request, id):
 
     group = Group.objects.get(id=id)
@@ -1065,7 +1064,7 @@ def result_group_waiting(request, id):
     return render(request, 'group/result_group_waiting.html', context )
 
 
-#@user_is_group_teacher
+@login_required(login_url= 'index')
 def result_group_theme_exercise(request, id, idt):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
@@ -1080,7 +1079,7 @@ def result_group_theme_exercise(request, id, idt):
     return render(request, 'group/result_group_theme_exercise.html', context )
 
  
-
+@login_required(login_url= 'index')
 def stat_group(request, id):
     group = Group.objects.get(id=id)
     form = EmailForm(request.POST or None )
@@ -1152,7 +1151,7 @@ def stat_group(request, id):
  
     return render(request, 'group/stat_group.html', context )
 
- 
+@login_required(login_url= 'index') 
 def task_group(request, id):
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
@@ -1193,7 +1192,7 @@ def task_group(request, id):
 
 
 
-
+@login_required(login_url= 'index')
 def select_exercise_by_knowledge(request):
     data = {}
     group_id = request.POST.get("group_id")
@@ -1213,7 +1212,7 @@ def select_exercise_by_knowledge(request):
 
 
 
-
+@login_required(login_url= 'index')
 def associate_exercise_by_parcours(request,id,idt):
 
 
@@ -1417,7 +1416,7 @@ def diagBaton(data) :
     d.add(bc)
     return d
   
-
+@login_required(login_url= 'index')
 def print_statistiques(request, group_id, student_id):
 
 
@@ -1754,7 +1753,7 @@ def envoieStatsEnMasse(request):
 
 
 
-
+@login_required(login_url= 'index')
 def print_monthly_statistiques(request):
 
     themes, subjects = [], []
@@ -2002,7 +2001,7 @@ def print_monthly_statistiques(request):
     p.save()
     return response 
 
-
+@login_required(login_url= 'index')
 def print_ids(request, id):
     group = Group.objects.get(id=id)
     teacher = Teacher.objects.get(user=request.user)
@@ -2089,7 +2088,7 @@ def print_ids(request, id):
 
 
 
-
+@login_required(login_url= 'index')
 def print_list_ids(request, id):
 
     group = Group.objects.get(id=id)
@@ -2147,7 +2146,7 @@ def print_list_ids(request, id):
     return response
 
  
-
+@login_required(login_url= 'index')
 def print_school_ids(request):
     """ Imprime la liste des identifiants par groupe """
     school = request.user.school
@@ -2299,7 +2298,7 @@ def export_skills(request):
 
 
 
-
+@login_required(login_url= 'index')
 def schedule_task_group(request, id):
     
     group = Group.objects.get(id=id)
