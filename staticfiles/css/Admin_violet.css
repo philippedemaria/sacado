@@ -85,7 +85,16 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 
- 
+.options{
+  padding:30px 10px 10px 10px;
+  background-color: white;
+  position: absolute;
+  width: 301px;
+  top:3px;
+  z-index:2;
+  height:135px;
+  opacity:0.97;
+}
 
 .alert-warning{
   background-color: #FFF ;
@@ -4765,7 +4774,7 @@ a:focus {
 .navbar-right > li > a.no_button {
     padding-top: 15px;
     padding-bottom: 10px;
-    color: #998fa6;
+    color: #5d4391;
     font-size : 18px ;
     margin-right: 10px;
     font-weight: 400;
@@ -4773,11 +4782,11 @@ a:focus {
 
 
 .navbar-right > li > a.no_button:visited {
-    color : #998fa6;
+    color : #364e61;
 }
 
 .navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
-    color : #007bff!important;
+    color : #5d4391!important;
 }
 
 /*
@@ -7655,20 +7664,19 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   color:#5d4391;
 }
 
-
-
+ 
 
 .btn-new  {
-  color : #007bff!important;
+  color : #f1eef7!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #007bff;
+  background-color: #5d4391;
   margin-right: 5px;
 }
 .btn-new:hover, .btn-new:hover > a ,
 .btn-new:active, .btn-new:active > a ,
 .btn-new.hover,  .btn-new.hover > a   {
-  background-color: #007bff!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
   text-decoration: none;
 }
 
@@ -7676,47 +7684,48 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 .btn-new-evaluation  {
-  color : #ffd500!important;
+  color : #f1eef7!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #ffd500;
+  background-color: #5d4391;
   margin-right: 5px;
 }
 .btn-new-evaluation:hover,
 .btn-new-evaluation:active,
 .btn-new-evaluation.hover {
-  background-color: #ffd500!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
+  text-decoration: none;
 }
 
 
 
 .btn-test  {
-  color : #b300b3!important;
+  color : #f1eef7!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #b300b3;
+  background-color: #5d4391;
   margin-right: 5px;
 }
 .btn-test:hover,
 .btn-test:active,
 .btn-test.hover {
-  background-color: #b300b3!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
+  text-decoration: none;
 }
 
 
 .btn-new-quizz-list {
-  color : #998fa6!important;
+  color : #f1eef7!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #998fa6!important;
+  background-color: #5d4391;
   margin-right: 5px;
 }
 .btn-new-quizz-list:hover, 
 .btn-new-violet:active,
 .btn-new-quizz-list.hover,    {
-  background-color: #309ae4!important;/*   #dd4b39!important;*/
-  color: #309ae4!important;
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
   text-decoration: none;
-  color : #fff;
 }
  
 .btn-inscription {
@@ -7740,9 +7749,9 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 /********************************************* violet light :  #f1eef7 ************************************/
 
 .btn-new-violet {
-  color : #998fa6!important;
+  color : #f1eef7!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #998fa6!important;
+  background-color: #5d4391!important;
   margin-right: 5px;
 }
 

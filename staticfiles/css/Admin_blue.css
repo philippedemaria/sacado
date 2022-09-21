@@ -7668,17 +7668,17 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 
-
 .btn-new  {
-  color : #007bff!important;
+  color : #99e7ff!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #007bff;
+  background-color: #2994b1;
   margin-right: 5px;
 }
+
 .btn-new:hover, .btn-new:hover > a ,
 .btn-new:active, .btn-new:active > a ,
 .btn-new.hover,  .btn-new.hover > a   {
-  background-color: #007bff!important;/*   #dd4b39!important;*/
+  background-color: #2994b1!important;/*   #dd4b39!important;*/
   color: white!important;
   text-decoration: none;
 }
@@ -7687,9 +7687,9 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 .btn-new-evaluation  {
-  color : #ffd500!important;
+  color : #2994b1!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #ffd500;
+  border: 1px solid #2994b1;
   margin-right: 5px;
 }
 .btn-new-evaluation:hover,
@@ -7702,9 +7702,9 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 .btn-test  {
-  color : #b300b3!important;
+  color : #2994b1!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #b300b3;
+  border: 1px solid #2994b1;
   margin-right: 5px;
 }
 .btn-test:hover,
@@ -7716,9 +7716,9 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 .btn-new-quizz-list {
-  color : #998fa6!important;
+  color : #2994b1!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #998fa6!important;
+  border: 1px solid #2994b1;
   margin-right: 5px;
 }
 .btn-new-quizz-list:hover, 

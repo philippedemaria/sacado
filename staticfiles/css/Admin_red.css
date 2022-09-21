@@ -7669,18 +7669,18 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 
-
 .btn-new  {
-  color : #007bff!important;
+  color : #fce9e9!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #007bff;
   margin-right: 5px;
+  background-color: #a81d1c!important;/*   #dd4b39!important;*/
 }
+
 .btn-new:hover, .btn-new:hover > a ,
 .btn-new:active, .btn-new:active > a ,
 .btn-new.hover,  .btn-new.hover > a   {
-  background-color: #007bff!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #fce9e9!important;/*   #dd4b39!important;*/
+  color: #a81d1c!important;
   text-decoration: none;
 }
 
@@ -7688,47 +7688,48 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 .btn-new-evaluation  {
-  color : #ffd500!important;
+  color : #fce9e9!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #ffd500;
   margin-right: 5px;
+  background-color: #a81d1c!important;/*   #dd4b39!important;*/
 }
 .btn-new-evaluation:hover,
 .btn-new-evaluation:active,
 .btn-new-evaluation.hover {
-  background-color: #ffd500!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #fce9e9!important;/*   #dd4b39!important;*/
+  color: #a81d1c!important;
+  text-decoration: none;
 }
 
 
 
 .btn-test  {
-  color : #b300b3!important;
+  color : #fce9e9!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #b300b3;
   margin-right: 5px;
+  background-color: #a81d1c!important;/*   #dd4b39!important;*/
 }
 .btn-test:hover,
 .btn-test:active,
 .btn-test.hover {
-  background-color: #b300b3!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #fce9e9!important;/*   #dd4b39!important;*/
+  color: #a81d1c!important;
+  text-decoration: none;
 }
 
 
 .btn-new-quizz-list {
-  color : #998fa6!important;
+  color : #fce9e9!important;
   border-radius: 20px; /*radius des boutons*/
-  border: 1px solid #998fa6!important;
   margin-right: 5px;
+  background-color: #a81d1c!important;/*   #dd4b39!important;*/
 }
 .btn-new-quizz-list:hover, 
 .btn-new-violet:active,
 .btn-new-quizz-list.hover,    {
-  background-color: #309ae4!important;/*   #dd4b39!important;*/
-  color: #309ae4!important;
+  background-color: #fce9e9!important;/*   #dd4b39!important;*/
+  color: #a81d1c!important;
   text-decoration: none;
-  color : #fff;
 }
  
 .btn-inscription {
