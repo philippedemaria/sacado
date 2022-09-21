@@ -417,20 +417,20 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         name = group.split("##")[0]
                         try :
                             level = name.split("~")[1]
-                            if level[0] == 6 : level_id = 6
-                            elif level[0] == 5 : level_id = 7
-                            elif level[0] == 4 : level_id = 8
-                            elif level[0] == 3 : level_id = 9
-                            elif level[0] == 2 : level_id = 10
-                            elif level[0] == 1 : level_id = 11
+                            if level[0] == 6 or level[0] == '6'   : level_id = 6
+                            elif level[0] == 5 or level[0] == '5'  : level_id = 7
+                            elif level[0] == 4 or level[0] == '4'  : level_id = 8
+                            elif level[0] == 3 or level[0] == '3'   : level_id = 9
+                            elif level[0] == 2 or level[0] == '2'   : level_id = 10
+                            elif level[0] == 1 or level[0] == '1'   : level_id = 11
                             else : level_id = 12
                         except :
-                            if name[0] == 6 : level_id = 6
-                            elif name[0] == 5 : level_id = 7
-                            elif name[0] == 4 : level_id = 8
-                            elif name[0] == 3 : level_id = 9
-                            elif name[0] == 2 : level_id = 10
-                            elif name[0] == 1 : level_id = 11
+                            if name[0] == 6 or name[0] == '6'  : level_id = 6
+                            elif name[0] == 5 or name[0] == '5'  : level_id = 7
+                            elif name[0] == 4 or name[0] == '4'  : level_id = 8
+                            elif name[0] == 3 or name[0] == '3'  : level_id = 9
+                            elif name[0] == 2 or name[0] == '2'  : level_id = 10
+                            elif name[0] == 1 or name[0] == '1'  : level_id = 11
                             else : level_id = 12
 
                         if  school.is_primaire :
@@ -451,7 +451,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                                 pass
 
                         else :
-                            grp, creat = Group.objects.get_or_create(name = name , teacher = teacher ,   school = school , defaults = { 'subject_id' : 1 ,   'level_id' : level_id , "lock" : 0  })
+                            grp, creat = Group.objects.get_or_create(name = name ,   school = school , defaults = { 'subject_id' : 1 ,   'teacher' : teacher ,   'level_id' : level_id , "lock" : 0  })
                             try :  # Profil élève
                                 if creat :
                                     username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
