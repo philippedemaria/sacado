@@ -1068,77 +1068,94 @@ define(['jquery','bootstrap'], function ($) {
 
 
         // Affiche  un cours connaissant le parcours et le cours
-        $('.built_diaporama').on('click', function (event) {
-     
+        $(document).on('click','.built_diaporama', function (event) {
 
-                var slideBox = $('#ul_slider'),
-                    slideWidth = 1200 ,
-                    slideQuantity = slideBox.children('li').length,
-                    currentSlide = 1 ,
-                    currentQuestion = 1 ;
+            let parcours_id = $(this).data("parcours_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'parcours_id': parcours_id,
+                        csrfmiddlewaretoken: csrf_token,
+                    },
+                    url: "../../ajax_built_diaporama",
+                    success: function (data) {
 
-                slideBox.css('width', slideWidth*slideQuantity);
+                        $('#ul_slider').html(data.html)
 
-             
-                function transition(currentSlideInput, slideWidthInput){
+                        var slideBox = $('#ul_slider'),
+                            slideWidth = 1200 ,
+                            slideQuantity = slideBox.children('li').length,
+                            currentSlide = 1 ,
+                            currentQuestion = 1 ;
 
-                    var pxValue = -(currentSlideInput -1) * slideWidthInput ; 
-                    slideBox.animate({
-                        'left' : pxValue
-                    }) ;
- 
+                        slideBox.css('width', slideWidth*slideQuantity);
 
-                }
- 
+                     
+                        function transition(currentSlideInput, slideWidthInput){
 
-               $('.nav button').on('click', function(){ 
-
+                            var pxValue = -(currentSlideInput -1) * slideWidthInput ; 
+                            slideBox.animate({
+                                'left' : pxValue
+                            }) ;
          
-                       var whichButton = $(this).data('nav'); 
-                       console.log(whichButton);
 
-                           if (whichButton === 'next') {
+                        }
+         
 
-                                if (currentSlide === slideQuantity)
-                                    { 
-                                        currentSlide = 1 ; 
-                                    }
-                                else 
-                                    { 
-                                        currentSlide++ ; 
-                                    }
-                                transition(currentSlide, slideWidth )  ;
+                       $('.nav button').on('click', function(){ 
 
-                           } else if (whichButton === 'prev') {
+                 
+                               var whichButton = $(this).data('nav'); 
+                               console.log(whichButton);
 
-                                if (currentSlide === 1)
-                                    { 
-                                        currentSlide = slideQuantity ; 
-                                    }
-                                else 
-                                    { 
-                                        currentSlide-- ; 
-                                    }
-                                transition(currentSlide, slideWidth ) ;
-                           }
+                                   if (whichButton === 'next') {
 
-                    });
+                                        if (currentSlide === slideQuantity)
+                                            { 
+                                                currentSlide = 1 ; 
+                                            }
+                                        else 
+                                            { 
+                                                currentSlide++ ; 
+                                            }
+                                        transition(currentSlide, slideWidth )  ;
 
+                                   } else if (whichButton === 'prev') {
 
-                var screen_size = 1200  ;
+                                        if (currentSlide === 1)
+                                            { 
+                                                currentSlide = slideQuantity ; 
+                                            }
+                                        else 
+                                            { 
+                                                currentSlide-- ; 
+                                            }
+                                        transition(currentSlide, slideWidth ) ;
+                                   }
 
-                if($('#ul_slider iframe').length) { 
-
-                        width = 2*parseInt($('#ul_slider').find("iframe").attr("width"));
-                        height = 2*parseInt($('#ul_slider').find("iframe").attr("height")); 
-                        coeff = width/height   ;                                 
+                            });
 
 
-                        new_size = screen_size ; 
-                        $('#ul_slider').find("iframe").attr("width", new_size ); 
-                        $('#ul_slider').find("iframe").attr("height", new_size / coeff );
-                              
+                        var screen_size = 1000  ;
+
+                        if($('#ul_slider iframe').length) { 
+
+                                width = 2*parseInt($('#ul_slider').find("iframe").attr("width"));
+                                height = 2*parseInt($('#ul_slider').find("iframe").attr("height")); 
+                                coeff = width/height   ;                                 
+
+
+                                new_size = screen_size ; 
+                                $('#ul_slider').find("iframe").attr("width", new_size ); 
+                                $('#ul_slider').find("iframe").attr("height", new_size / coeff );
+                                      
+                            }                    
                     }
+                }
+            )
         });
 
 

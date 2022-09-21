@@ -10,15 +10,24 @@ import re
 @register.filter
 def no_iframe(arg):
     '''HTML entity decode'''
-    arg = arg.replace('<iframe','___###___')
-    arg = arg.replace('</iframe>','___###___')
-    tab_arg = arg.split('___###___')
+    arg = arg.replace('<iframe','___#iframe#___')
+    arg = arg.replace('</iframe>','___#iframe#___')
+    tab_arg = arg.split('___#iframe#___')
     string = ""
     for i in range(0,len(tab_arg),2) :
         string += tab_arg[i]
     return string.strip()
 
-
+@register.filter
+def close_div(arg):
+    '''HTML entity decode'''
+    nb_div = arg.count('<div')
+    nb_cdiv = arg.count('</div>')
+    if nb_div > nb_cdiv :
+        loop = nb_div - nb_cdiv
+        for i in range(loop):
+            arg += "</div>"
+    return arg
 
 @register.filter
 def no_image(arg):
@@ -30,6 +39,19 @@ def no_image(arg):
     for i in range(0,len(tab_arg),2) :
         string += tab_arg[i]
     return string.strip()
+
+
+@register.filter
+def no_table(arg):
+    '''HTML entity decode'''
+    arg = arg.replace('<table','___#table#___')
+    arg = arg.replace('</table>','___#table#___')
+    tab_arg = arg.split('___#table#___')
+    string = ""
+    for i in range(0,len(tab_arg),2) :
+        string += tab_arg[i]
+    return string.strip()
+
 
 
 @register.filter

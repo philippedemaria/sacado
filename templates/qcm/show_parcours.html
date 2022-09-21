@@ -197,7 +197,6 @@ body{
             {% endif %}
             {% if parcours.teacher == teacher %}
 
-
                 {% if parcours.course.count > 0  %}  
                     <div class="row documents_div documents_div_shadow">           
                         <div class="col-sm-12 col-md-12">
@@ -258,10 +257,9 @@ body{
                             <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
                                 <div class="helper_tip_text" >Nouveau flaspack</div>
                             </a>
-                    </div>
-                        </div> 
-                        <div class="shadow_bottom"></div>
-                    </div>  
+                        </div>
+                    <div class="shadow_bottom"></div> 
+                    </div>                     
                 {% endif %} 
             {% endif %} 
 
@@ -270,19 +268,19 @@ body{
 
 
 
-    <div class="row" style="margin-top:50px">
-        <div class="col-sm-12 col-md-12">
-            <div class="form-group">
-                {% if sacado_asso %}
-                    {% if parcours.teacher != teacher  and  parcours.is_share %}
-                        <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
-                        <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cours associé</a>  
-                    {% endif %} 
-                {% endif %}  
-                <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
+        <div class="row" style="margin-top:50px">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    {% if sacado_asso %}
+                        {% if parcours.teacher != teacher  and  parcours.is_share %}
+                            <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
+                            <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cours associé</a>  
+                        {% endif %} 
+                    {% endif %}  
+                    <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
+                </div>
             </div>
-        </div>
-    </div>  
+        </div>  
 
 
     </section>
