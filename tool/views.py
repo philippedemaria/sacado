@@ -23,6 +23,7 @@ from qcm.views import  get_teacher_id_by_subject_id
 
 import uuid
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import  login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
@@ -102,7 +103,7 @@ def all_datas(level):
 #####################################################################################################################################
 
  
- 
+@login_required(login_url= 'index') 
 def list_tools(request):
     teacher = request.user.teacher
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -129,10 +130,10 @@ def create_tool(request):
         print(form.errors)
 
     context = {'form': form, }
-
     return render(request, 'tool/form_tool.html', context)
 
 
+@login_required(login_url= 'index')
 def update_tool(request, id):
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -173,7 +174,7 @@ def show_tool(request, id ):
 
     return render(request, url , context )
 
-
+@login_required(login_url= 'index')
 def get_this_tool(request):
 
     data = {} 
@@ -188,7 +189,7 @@ def get_this_tool(request):
     return JsonResponse(data)
 
 
-
+@login_required(login_url= 'index')
 def delete_my_tool(request):
 
     data = {} 
@@ -243,6 +244,7 @@ def user_list_of_school(teacher):
         user_ids = [2480]
     return user_ids
 
+@login_required(login_url= 'index')
 def all_quizzes(request):
 
     teacher = request.user.teacher 
@@ -261,7 +263,7 @@ def all_quizzes(request):
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours }) 
 
  
-
+@login_required(login_url= 'index')
 def ajax_shared_quizzes(request):
 
     teacher = request.user.teacher
@@ -275,7 +277,7 @@ def ajax_shared_quizzes(request):
 
 
 
-
+@login_required(login_url= 'index')
 def clone_quizz(request, id_quizz):
     """ cloner un parcours """
 
@@ -328,7 +330,7 @@ def clone_quizz(request, id_quizz):
         return redirect('list_quizzes')
  
 
-
+@login_required(login_url= 'index')
 def clone_quizz_sequence(request, id_quizz):
     """ cloner un parcours """
 
@@ -387,6 +389,7 @@ def clone_quizz_sequence(request, id_quizz):
 
 
 @csrf_exempt
+@login_required(login_url= 'index')
 def ajax_chargethemes_quizz(request):
     id_level =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
@@ -420,7 +423,7 @@ def ajax_chargethemes_quizz(request):
 
     return JsonResponse(data)
 
- 
+@login_required(login_url= 'index')
 def list_quizzes(request):
 
     request.session["parcours_id"] = False
@@ -446,7 +449,7 @@ def list_quizzes(request):
 
 
 
-
+@login_required(login_url= 'index')
 def all_quizzes_archived(request):
 
 
@@ -497,7 +500,7 @@ def attribute_student(nf, group_ids, parcours_ids):
 
 
 
-
+@login_required(login_url= 'index')
 def create_quizz(request):
     
     teacher = request.user.teacher
@@ -534,7 +537,7 @@ def create_quizz(request):
     return render(request, 'tool/form_quizz.html', context)
 
 
-
+@login_required(login_url= 'index')
 def create_quizz_sequence(request,id) : 
 
     teacher = request.user.teacher
@@ -577,7 +580,7 @@ def create_quizz_sequence(request,id) :
 
 
 
- 
+@login_required(login_url= 'index') 
 def create_quizz_folder(request,idf):
     
     teacher = request.user.teacher
@@ -614,7 +617,7 @@ def create_quizz_folder(request,idf):
 
 
 
- 
+@login_required(login_url= 'index')
 def create_quizz_parcours(request,idp):
     
     teacher = request.user.teacher
@@ -652,13 +655,11 @@ def create_quizz_parcours(request,idp):
 
 
 
- 
+@login_required(login_url= 'index')
 def update_quizz(request,id):    
     
     teacher = request.user.teacher 
     quizz = Quizz.objects.get(pk= id)
-
-    teacher = request.user.teacher 
     group_id   = request.session.get("group_id",None)
     folder_id  = request.session.get("folder_id",None)
     if group_id : group = Group.objects.get(pk=group_id )
@@ -693,7 +694,7 @@ def update_quizz(request,id):
     return render(request, 'tool/form_quizz.html', context)
 
 
-
+@login_required(login_url= 'index')
 def delete_quizz(request,id):
 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -706,7 +707,7 @@ def delete_quizz(request,id):
 
 
 
-
+@login_required(login_url= 'index')
 def peuplate_quizz_parcours(request,idp):
 
     teacher = request.user.teacher
@@ -720,7 +721,7 @@ def peuplate_quizz_parcours(request,idp):
     return render(request, 'tool/form_peuplate_quizz_parcours.html', context)
 
 
-
+@login_required(login_url= 'index')
 def ajax_find_peuplate_sequence(request):
 
     id_parcours = request.POST.get("id_parcours",0)
@@ -808,7 +809,7 @@ def result_quizz(request,id):
 
 
 
-
+@login_required(login_url= 'index')
 def delete_historic_quizz(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -915,7 +916,7 @@ def ajax_affectation_to_group(request):
     return JsonResponse(data)
 
 
-
+@login_required(login_url= 'index')
 def ajax_show_generated(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -928,7 +929,7 @@ def ajax_show_generated(request):
 
     return JsonResponse(data)  
 
-
+@login_required(login_url= 'index')
 def ajax_charge_groups(request):  # utilisé par form_quizz et form_folder aussi
 
     teacher = request.user.teacher
@@ -940,7 +941,7 @@ def ajax_charge_groups(request):  # utilisé par form_quizz et form_folder aussi
 
     return JsonResponse(data)
 
-
+@login_required(login_url= 'index')
 def ajax_charge_groups_level(request):  # utilisé par form_folder aussi
 
     teacher = request.user.teacher
@@ -962,7 +963,7 @@ def ajax_charge_groups_level(request):  # utilisé par form_folder aussi
 
     return JsonResponse(data)
 
-
+@login_required(login_url= 'index')
 def ajax_charge_folders(request):  
 
     teacher = request.user.teacher
@@ -983,7 +984,7 @@ def ajax_charge_folders(request):
         data['parcours'] =  []
     return JsonResponse(data)
 
-
+@login_required(login_url= 'index')
 def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder aussi
 
     teacher = request.user.teacher
@@ -1003,7 +1004,7 @@ def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder auss
     return JsonResponse(data)
 
 
-
+@login_required(login_url= 'index')
 def ajax_charge_parcours_without_folder(request): # utilisé que par form_folder mais placé ici pour homogénéiser la structure 
 
     teacher = request.user.teacher
@@ -1090,7 +1091,7 @@ def show_quizz_group(request,id,idg):
     return render(request, 'tool/show_quizz.html', context) 
 
 
- 
+@login_required(login_url= 'index') 
 def show_quizz_parcours_student(request,id,idp):
 
     """ show quizz d'un groupe classe """
@@ -1224,7 +1225,7 @@ def this_student_can_play(student,gquizz):
 
 
  
-
+@login_required(login_url= 'index')
 def play_quizz_student(request):
     """ Lancer le play quizz élève """
 
@@ -1298,7 +1299,8 @@ def ajax_display_question_for_student(request):
 
 
 
-@csrf_exempt 
+@csrf_exempt
+@login_required(login_url= 'index') 
 def ajax_display_question_to_student(request):  
     """ Affichage de la question aux élèves par envoie du timestamp
         Appel Ajax de la vue élève
@@ -1369,6 +1371,7 @@ def answer_is_right(form , answer,question) :
     return right
 
 
+@login_required(login_url= 'index')
 def store_student_answer(request):
     """ Lancer le play quizz élève """
     form         = AnswerplayerForm(request.POST or None)
@@ -1422,32 +1425,28 @@ def store_student_answer(request):
     return render(request, 'tool/play_quizz_start.html', context)
 
 
-
+@login_required(login_url= 'index')
 def list_quizz_student(request):
     """ Lancer le play quizz élève """
     
-    if request.user.is_authenticated :
-        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-        student = request.user.student
-        tracker_execute_exercise(False, request.user)
-        delete_session_key(request, "quizz_id")
-        quizzes = set()
-        for g in student.students_to_group.all() : 
-            teacher_user = g.teacher.user
-            today = time_zone_user(teacher_user)
-            quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today)))
 
-        context = { 'quizzes' : quizzes , }
-        return render(request, 'tool/list_quizz_student.html', context)
-    else :
-        return redirect("index")
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    student = request.user.student
+    tracker_execute_exercise(False, request.user)
+    delete_session_key(request, "quizz_id")
+    quizzes = set()
+    for g in student.students_to_group.all() : 
+        teacher_user = g.teacher.user
+        today = time_zone_user(teacher_user)
+        quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today)))
+
+    context = { 'quizzes' : quizzes , }
+    return render(request, 'tool/list_quizz_student.html', context)
 
 
 
 
-
-
-
+ 
 def store_quizz_solution( quizz_id,student,q_id, solutions,t):
     """ Enregistrement des solutions postées 
     par les id des choices proposés"""
@@ -1571,7 +1570,7 @@ def goto_quizz_numeric(request,id):
 
 
 
-
+@login_required(login_url= 'index')
 def goto_quizz_student(request,id):
     """ participation à un quizz sur poste"""
     student = request.user.student
@@ -1666,7 +1665,7 @@ def ajax_show_retroaction(request):
     data['choices'] = list(choices)
     return JsonResponse(data)
 
-
+@login_required(login_url= 'index')
 def ajax_show_my_result(request):
 
 
@@ -1696,7 +1695,7 @@ def ajax_show_my_result(request):
  
 
 
-
+@login_required(login_url= 'index')
 def quizz_actioner(request):
     teacher = request.user.teacher 
     idps = request.POST.getlist("selected_quizz") 
@@ -1720,7 +1719,7 @@ def quizz_actioner(request):
 
 
 
-
+@login_required(login_url= 'index')
 def quizz_unarchive(request):
     teacher = request.user.teacher 
     idps = request.POST.getlist("selected_quizz") 
@@ -1844,7 +1843,7 @@ def list_questions(request):
     return render(request, 'tool/list_question.html', {'questions': questions  })
 
 
- 
+@login_required(login_url= 'index')
 def create_question(request,idq,qtype):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -1920,7 +1919,7 @@ def create_question(request,idq,qtype):
 
     return render(request, template , context)
 
-
+@login_required(login_url= 'index')
 def update_question(request,id,idq,qtype):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -1998,7 +1997,9 @@ def delete_question(request,id,idq):
         messages.error(request, "  !!!  Cette question est utiolisée dans un quizz  !!! Suppression interdite.")
     return redirect ('create_question', idq, 0)
 
- 
+
+
+@login_required(login_url= 'index')
 def remove_question(request,id,idq):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2181,7 +2182,7 @@ def play_printing_teacher(request, id):
 ########## diaporama
 ############################################################################################################
 ############################################################################################################
-
+@login_required(login_url= 'index')
 def list_diaporama(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2193,7 +2194,7 @@ def list_diaporama(request):
     return render(request, 'tool/list_diaporama.html', {'diaporamas': diaporamas , 'form': form, 'is_archive' : False , 'nbd' : nbd  })
 
 
-
+@login_required(login_url= 'index')
 def all_diaporama_archived(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2204,7 +2205,7 @@ def all_diaporama_archived(request):
     return render(request, 'tool/list_diaporama.html', {'diaporamas': diaporamas , 'form': form, 'is_archive' : True , 'nbd' : nbd  })
 
 
-
+@login_required(login_url= 'index')
 def diaporama_actioner(request):
 
     teacher = request.user.teacher 
@@ -2230,7 +2231,7 @@ def diaporama_actioner(request):
 
 
 
- 
+@login_required(login_url= 'index') 
 def create_diaporama(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche     
@@ -2254,7 +2255,7 @@ def create_diaporama(request):
     return render(request, 'tool/form_diaporama.html', context)
 
 
- 
+@login_required(login_url= 'index') 
 def update_diaporama(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche     
@@ -2287,7 +2288,7 @@ def show_diaporama(request,id):
 
     return render(request, 'tool/show_diaporama.html', context)
 
-
+@login_required(login_url= 'index')
 def delete_diaporama(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
@@ -2303,17 +2304,14 @@ def delete_diaporama(request,id):
 ############################################################################################################
  
 
- 
+@login_required(login_url= 'index')
 def create_slide(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
     diaporama = Diaporama.objects.get(pk = id)
     teacher = request.user.teacher
     form = SlideForm(request.POST or None)
-
-    print(request)
-
-
+ 
     if request.method == "POST"  :  
         if form.is_valid():
             nf = form.save() 
@@ -2330,7 +2328,7 @@ def create_slide(request,id):
 
     return render(request, 'tool/form_slide.html', context)
 
- 
+@login_required(login_url= 'index') 
 def delete_slide(request,id,idp):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2343,7 +2341,7 @@ def delete_slide(request,id,idp):
     return redirect ('create_slide', idp)
 
 
- 
+@login_required(login_url= 'index') 
 def remove_slide(request,id,idq):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2354,7 +2352,7 @@ def remove_slide(request,id,idq):
     return redirect ('create_question', idq, 0)
 
 
- 
+@login_required(login_url= 'index')
 def update_slide(request,id,idp):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
@@ -2479,7 +2477,7 @@ def create_quizz_random(request,id):
     return redirect('list_quizzes' )
  
 
-
+@login_required(login_url= 'index')
 def list_qrandom(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2491,7 +2489,7 @@ def list_qrandom(request):
         return redirect('index')
 
 
-
+@login_required(login_url= 'index')
 def create_qrandom(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2526,7 +2524,7 @@ def create_qrandom(request):
     
  
 
-
+@login_required(login_url= 'index')
 def update_qrandom(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2556,7 +2554,7 @@ def update_qrandom(request,id):
         return redirect('index')
 
 
-
+@login_required(login_url= 'index')
 def delete_qrandom(request,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2571,7 +2569,7 @@ def delete_qrandom(request,id):
  
  
 
- 
+@login_required(login_url= 'index')
 def admin_qrandom(request,id_level):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2584,7 +2582,7 @@ def admin_qrandom(request,id_level):
 
 
 
-
+@login_required(login_url= 'index')
 def create_qrandom_admin(request,id_knowledge):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2620,7 +2618,7 @@ def create_qrandom_admin(request,id_knowledge):
 
 
 
-
+@login_required(login_url= 'index')
 def update_qrandom_admin(request,id_knowledge,id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2671,7 +2669,7 @@ def show_qrandom_admin(request,id):
 #####################################################################################################################################
 
  
- 
+@login_required(login_url= 'index')
 def list_visiocopie(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2700,7 +2698,7 @@ def list_visiocopie(request):
     return render(request, 'tool/list_visiocopie.html', {'form': form , 'videocopies' : videocopies })
 
 
-
+@login_required(login_url= 'index')
 def create_visiocopie(request,code):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
@@ -2721,7 +2719,7 @@ def create_visiocopie(request,code):
     return render(request, 'tool/form_visiocopie.html', context)
 
  
-
+@login_required(login_url= 'index')
 def delete_visiocopie(request, id):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
