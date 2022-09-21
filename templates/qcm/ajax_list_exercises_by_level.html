@@ -8,7 +8,7 @@
 
             <div class="row">
                     <div class="col-sm-12 col-md-12" id="">
-                        <table class="table table-sacado  table-hover display1000" style="width:100%">
+                        <table class="table table-hover display1000" style="width:100%">
                             <thead>
                                 <tr>
                                     <td></td>
@@ -17,18 +17,18 @@
                             <tbody>                    
                             {% regroup exercises by theme as theme_list %} 
                             {% for theme in theme_list  %} 
-                                <tr style="background:#5d4391; color:white">
+                                <tr class="title_tr">
                                     <td style="width:85%"> {{theme.grouper.name}}</td> 
                                 </tr> 
                                 {% regroup theme.list by knowledge.waiting as waiting_list %} 
                                 {% for waiting in waiting_list  %}
-                                    <tr style="background:#aa98cd; cursor: pointer; color: black" class="opener out"  id="{{ waiting.grouper.id }}">
+                                    <tr  class="opener out subtitle_tr"  id="{{ waiting.grouper.id }}">
                                         <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}   <small><b>{{  waiting.grouper.exercises_counter }} exercice{{ waiting.grouper.exercises_counter|pluralize  }}</b>  </small> </td> 
                                     </tr>  
                                     {% regroup waiting.list by knowledge as knowledge_list %} 
                                     {% for knowledge in knowledge_list  %}
                                         {% if knowledge_list|length > 0 %}
-                                                <tr style="background:#d4cbe6; cursor: pointer; color: black" class="opener_k opened{{ waiting.grouper.id }} out"  id="{{ knowledge.grouper.id}}" >
+                                                <tr   class="opener_k opened{{ waiting.grouper.id }} out subsubtitle_tr"  id="{{ knowledge.grouper.id}}" >
                                                     <td class="listingtd"> 
                                                        <i class="fa fa-caret-right"></i> {{ knowledge.grouper.name|capfirst }} <b><small> {{  knowledge.grouper.exercises|counting }} exercice{{  knowledge.grouper.exercises|counting|pluralize }} </small></b>
                                                     </td>
