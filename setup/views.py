@@ -357,23 +357,31 @@ def ressource_sacado(request): #Protection saml pour le GAR
             name  = div.split("##")[0]
 
 
-            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
-            
             if not school.is_primaire :
-                group, c_g        = Group.objects.get_or_create(school = school, name = name )
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level }) 
+                try :
+                    groups = Group.objects.filter(school = school, name = name )
+                    group  = groups.last()
+                    try :
+                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+                        student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                    except :
+                        pass
+                    for group in groups : 
+                        group.students.add(student)
+                        ### attribue les doc du groupe
+                except :
+                    messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
             else :
                 level = Level.objects.get(pk=1)
                 group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level }  )
+                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-            try :
                 group.students.add(student)
-            except: 
-                pass
-                
+                groups = [group]
+                    
             if created_s : 
                 try :
-                    test = attribute_all_documents_of_groups_to_a_new_student([group], student)
+                    test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
                     if test :
                         messages.error(request,"Les documents de votre enseignant vous sont affectés.")
                     else :
@@ -398,16 +406,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 teacher.subjects.add(subject)
             except :
                 pass
-
+            
             if not school.is_primaire :
+                dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
                 for code_level in code_levels  : 
-                    if code_level == 2111 : level_id = 6
-                    elif code_level == 2112 : level_id = 7
-                    elif code_level == 2115 : level_id = 8
-                    elif code_level == 2216 : level_id = 9
-                    elif code_level== 2211 : level_id = 10
-                    elif code_level == 2212 : level_id = 11
-                    else : level_id = 12
+                    if str(code_level) not in dico_level :
+                        level_id = 12
+                    else :
+                        level_id = dico_level[str(code_level)]
+
                     level = Level.objects.get(pk=level_id)
                     teacher.levels.add(level)
 
@@ -417,20 +424,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         name = group.split("##")[0]
                         try :
                             level = name.split("~")[1]
-                            if level[0] == 6 or level[0] == '6'   : level_id = 6
-                            elif level[0] == 5 or level[0] == '5'  : level_id = 7
-                            elif level[0] == 4 or level[0] == '4'  : level_id = 8
-                            elif level[0] == 3 or level[0] == '3'   : level_id = 9
-                            elif level[0] == 2 or level[0] == '2'   : level_id = 10
-                            elif level[0] == 1 or level[0] == '1'   : level_id = 11
+                            if '1' <= str(level[0]) <= '6' : level_id = 12 - int(level[0])
                             else : level_id = 12
                         except :
-                            if name[0] == 6 or name[0] == '6'  : level_id = 6
-                            elif name[0] == 5 or name[0] == '5'  : level_id = 7
-                            elif name[0] == 4 or name[0] == '4'  : level_id = 8
-                            elif name[0] == 3 or name[0] == '3'  : level_id = 9
-                            elif name[0] == 2 or name[0] == '2'  : level_id = 10
-                            elif name[0] == 1 or name[0] == '1'  : level_id = 11
+                            if '1' <= str(name[0]) <= '6' : level_id = 12 - int(name[0])
                             else : level_id = 12
 
                         if  school.is_primaire :
@@ -451,7 +448,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                                 pass
 
                         else :
-                            grp, creat = Group.objects.get_or_create(name = name ,   school = school , defaults = { 'subject_id' : 1 ,   'teacher' : teacher ,   'level_id' : level_id , "lock" : 0  })
+                            grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 ,      'level_id' : level_id , "lock" : 0  })
                             try :  # Profil élève
                                 if creat :
                                     username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
