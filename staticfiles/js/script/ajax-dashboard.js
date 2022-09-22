@@ -1780,6 +1780,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         url: "../../ajax/coefficient" , 
                         success: function (data) {
                             $("#this_coeff"+relationship_id).html("").html(data["html"]);
+                            $("#this_coeff_legend"+relationship_id).html("").html(data["html"]);
                             }
 
 
