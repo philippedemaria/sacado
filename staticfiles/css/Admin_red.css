@@ -732,6 +732,11 @@ li label{
     width:200px;
     height:200px;
 }
+
+.round_color{
+  background-color: #a81d1c;
+}
+
 .round:hover{
     border-radius: 50%;
     -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
@@ -746,10 +751,18 @@ li label{
     color:#FFF;
 }
 
+.round_color:hover{
+  background-color: #fce9e9;
+}
+
 .round:hover > a{
     color:#FFF;
 }
 
+.round_color:hover > a{
+  color: #a81d1c;
+}
+ 
 
 .small_round{
     margin-top:  50px;

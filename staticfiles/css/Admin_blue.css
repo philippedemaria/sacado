@@ -751,6 +751,21 @@ li label{
 }
 
 
+.round_color{
+  background-color: #2994b1;
+}
+
+ 
+.round_color:hover{
+  background-color: #99e7ff;
+}
+
+
+.round_color:hover > a{
+  color: #2994b1;
+}
+ 
+
 .small_round{
     margin-top:  50px;
     border-radius: 50%;
