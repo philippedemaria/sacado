@@ -1152,7 +1152,7 @@ def ask_school_adhesion(request):
 				create_abonnement_gar(today, abonnement,request.user)
 
 			send_mail("Demande d'adhésion à la version établissement",
-			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant"+ user.first_name +" "+ user.last_name +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
+			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant "+ user.first_name +" "+ user.last_name +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
 			          settings.DEFAULT_FROM_EMAIL,
 			          ['sacado.asso@gmail.com'])
 

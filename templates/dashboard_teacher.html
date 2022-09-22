@@ -8,10 +8,18 @@
         <div class="col-sm-12 col-md-12">
             <div class="alert alert-danger">
                 <h1 class="thin">Nombre d'élèves dépassé</h1>
+                <p>SACADO permet 500 inscriptions gratuites d'élèves par établissement en version Basique (Les modules de la version établissement sont verrouillés). </p>
                 <p>Vous avez dépassé le nombre autorisé d'inscription d'élèves. Vous devez modifier votre abonnement. </p>
                 <p>Vous avez inscrit {{ nbss }} et votre abonnement permet d'inscrire {{ nbsa }} élèves. </p>
-                <p><a href="{% url 'logout' %}" >Nous contacter </a></p>
 
+                <hr/>                
+                <p><a href="{% url 'logout' %}" ><i class="bi bi-envelope"></i> Nous contacter </a> ou supprimer des élèves de vos groupes actuels ci-dessous.</p>
+                <hr/>  
+                <ul>
+                {% for group in groups %}
+                    <li class="sanspuce"><i class="fa fa-square" style="color:  {{ group.color  }}"></i> <a href="{% url 'update_group' group.id %}">{{ group.name }}</a></li>
+                {% endfor %}
+                </ul>
             </div>
         </div>
  

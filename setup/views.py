@@ -130,7 +130,6 @@ def index(request):
                 if over_students :
                     messages.error(request,"Erreur...Vous avez dépassé le nombre maximal d'élèves inscrits. Veuillez augmenter votre capacité.")
 
-
             teacher = request.user.teacher
             grps = teacher.groups.all() 
             shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
@@ -663,7 +662,7 @@ def school_adhesion(request):
 
                     school_datas =  school_exists.name +"\n"+school_exists.code_acad +  " - " + str(school_exists.nbstudents) +  " élèves \n" + school_exists.address +  "\n"+school_exists.town+", "+school_exists.country.name
                     send_mail("Demande d'adhésion à la version établissement",
-                              "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n"+asking_gar+"\n\nCotisation : "+str(school_exists.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
+                              "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school_datas +"\n"+asking_gar+"\n\nCotisation : "+str(school_exists.fee())+" €.\n\nEnregistrement de la demande dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
                               settings.DEFAULT_FROM_EMAIL,
                               ['sacado.asso@gmail.com'])
 
