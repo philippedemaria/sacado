@@ -61,7 +61,8 @@ import qrcode
 import qrcode.image.svg
 from io import BytesIO
 from math import sin,cos
-
+import xlwt
+ 
 
 def get_username_teacher(request ,ln):
     """
@@ -2146,6 +2147,53 @@ def print_list_ids(request, id):
     return response
 
  
+
+
+@login_required(login_url= 'index')
+def print_list_tableur_ids(request, id):
+
+    group = Group.objects.get(id=id)
+    teacher = Teacher.objects.get(user=request.user)
+    authorizing_access_group(request,teacher,group ) 
+ 
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="etablissement.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet(group.name)
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Nom',  'Prénom',  'Identifiant']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+
+    students = group.students.order_by("user__last_name","user__first_name")
+    students_detail = []
+    for student in students :
+        students_detail.append((student.user.last_name, student.user.first_name, student.user.username))
+
+ 
+    ############################################################################################## 
+
+    row_ns = 0
+    for i in range(len(students_detail)): ## full_content est le tableau final pour l'export.
+        row_ns += 1
+        for col_num in range(len(students_detail[i])):
+            ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
+    wb.save(response)
+    return response
+
 @login_required(login_url= 'index')
 def print_school_ids(request):
     """ Imprime la liste des identifiants par groupe """
