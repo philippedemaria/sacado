@@ -67,7 +67,7 @@
                     <td>{{ c.school.country.name|lower|capfirst }}</td>
                     <td> 
                         {% if c.school.gar %}
-                            <span class="text-success" >GAR</span>
+                            <img src="{% static 'img/approche_gar.png' %}" height="20px" />
                         {% endif %}
                     </td>
                     <td>{% for u in c.school.admin %} <li>{{ u.get_full_name }}, {{ u.email }}</li> {% endfor %}</td>

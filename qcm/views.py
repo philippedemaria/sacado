@@ -5,40 +5,43 @@
 
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect
-from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill
-from account.forms import StudentForm, TeacherForm, UserForm
 from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
-from sendmail.forms import  EmailForm
-from group.forms import GroupForm 
-from group.models import Group , Sharing_group
-from school.models import Stage, School
-from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker , Criterion , Autoposition
-from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  AudioForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm
-from tool.forms import QuizzForm
-from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
-from bibliotex.models import Bibliotex
-from tool.models import Quizz
-from flashcard.models import Flashpack
+from django.db.models import Q , Sum
+from django.core.mail import send_mail
 from django.http import JsonResponse 
 from django.core import serializers
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from account.decorators import user_can_create, user_is_superuser, user_is_creator , user_is_testeur
+from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill
+from account.forms import StudentForm, TeacherForm, UserForm
+from bibliotex.models import Bibliotex
+from flashcard.models import Flashpack
+from group.decorators import user_is_group_teacher 
+from group.forms import GroupForm 
+from group.models import Group , Sharing_group
+from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher , parcours_exists , folder_exists
+from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker , Criterion , Autoposition
+from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  AudioForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm
+from school.models import Stage, School
+from sendmail.forms import  EmailForm
+from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from tool.consumers import *
+from tool.models import Quizz
+from tool.forms import QuizzForm
+
 import uuid
 import time
 import math
 import json
 import random
 from datetime import datetime , timedelta
-from django.db.models import Q
-from django.core.mail import send_mail
-from group.decorators import user_is_group_teacher 
-from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher , parcours_exists , folder_exists
-from account.decorators import user_can_create, user_is_superuser, user_is_creator , user_is_testeur
+
+
 ##############bibliothèques pour les impressions pdf  #########################
 import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
@@ -65,7 +68,6 @@ import csv
 import html
 from general_fonctions import *
  
-
 #################################################################
 # Transformation de parcours en séquences
 #################################################################
@@ -3447,6 +3449,11 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     student["total_nb_exo"] = total_nb_exo       
     score_coeff = 0
     total_coeff = 0
+
+    real_total_coeff =  Relationship.objects.filter(parcours=parcours).aggregate(Sum('amount'))
+
+
+
     for studentanswer_id in  studentanswer_ids : 
         studentanswer = Studentanswer.objects.get(pk=studentanswer_id)
         coefficient = Relationship.objects.get(exercise = studentanswer.exercise , parcours = studentanswer.parcours  ).coefficient
