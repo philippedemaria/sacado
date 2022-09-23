@@ -103,15 +103,6 @@
         {% endif %} 
 
 
-        {% if group %}
-        <li {% if 'parcours_progression/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'parcours_progression' parcours.id  group.id %}"><i class="bi bi-bar-chart-steps"></i> <span class="tool_tip">Avancement
-                <div class="tool_tip_text"><label><small>Avancement des exercices du groupe </small></label></div>
-            </span>
-            </a> 
-        </li> 
-        {% endif %}
-
         <li {% if 'real_time/' in request.path %} class="active" {% endif %}>
             {% if sacado_asso %}
             <a href="{% url 'real_time' parcours.id %}" class="{% if not sacado_asso %}no_sacado_asso{% endif %}"  >

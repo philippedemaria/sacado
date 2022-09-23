@@ -9,7 +9,7 @@ from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
-from django.db.models import Q , Sum
+from django.db.models import Q , Sum 
 from django.core.mail import send_mail
 from django.http import JsonResponse 
 from django.core import serializers
@@ -3436,7 +3436,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     student["name"] = s
 
     studentanswer_ids =  Studentanswer.objects.values_list("id",flat=True).distinct().filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
-  
+
     #nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
     nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
     #nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
@@ -3450,9 +3450,8 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     score_coeff = 0
     total_coeff = 0
 
-    real_total_coeff =  Relationship.objects.filter(parcours=parcours).aggregate(Sum('amount'))
-
-
+    rtcoeff          =  Relationship.objects.filter(parcours=parcours).exclude(exercise__supportfile__is_title=1).aggregate(Sum('coefficient'))
+    real_total_coeff = rtcoeff['coefficient__sum']
 
     for studentanswer_id in  studentanswer_ids : 
         studentanswer = Studentanswer.objects.get(pk=studentanswer_id)
@@ -3475,6 +3474,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
         student["last_connexion"] = studentanswer.date
         student["score"] = int(score)
         student["score_coeff"] = math.ceil(int(score_coeff)/int(total_coeff))
+        student["score_real_coeff"] = math.ceil(int(score_coeff)/int(real_total_coeff))
         student["score_tab"] = student_tab
         percent = math.ceil(int(good_answer)/int(total_numexo) * 100)
         if percent > 100 :
@@ -3496,8 +3496,6 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
             student["duration"] = ""
 
         if len(student_tab)>1 :
-            average_score = int(score/len(student_tab))
-            student["average_score"] = int(average_score)
             tab.sort()
             if len(tab)%2 == 0 :
                 med = (tab[len(tab)//2-1]+tab[(len(tab))//2])/2 ### len(tab)-1 , ce -1 est causé par le rang 0 du tableau
@@ -3506,13 +3504,11 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
             student["median"] = int(med)
   
         else :
-            average_score = int(score)
-            student["average_score"] = int(score)
             student["median"] = int(score)   
 
-        student["score_coeff_display"] = False
-        if total_coeff != len(studentanswer_ids): ### Si la somme des coeff est différente de la longueur alors il y a des coeff différents sur les exos. 
-            student["score_coeff_display"] = True  
+        student["score_real_coeff_display"] = False
+        if real_total_coeff != len(studentanswer_ids): ### Si la somme des coeff est différente de la longueur alors il y a des coeff différents sur les exos. 
+            student["score_real_coeff_display"] = True  
     except :
         pass
 
