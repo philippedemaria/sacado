@@ -1879,11 +1879,14 @@ def abonnements_gar(request):
 def delete_abonnement_gar(request,idg):
   
 
+    abonnement = Abonnement.objects.get(gar_abonnement_id = idg)
+    school_id  = abonnement.school.id
+
     test, raison , header , decode   = delete_gar_abonnement(idg)
 
     if test :
-        school = School.objects.get(gar_abonnement_id = idg)
-        School.objects.filter(pk = school.id).update(gar_abonnement_id="")
+        school = School.objects.get(pk = school_id)
+        School.objects.filter(pk = school.id).update(gar = 1)
         messages.success(request,"Suppression de l'abonnement du GAR réussie")
     else :
         messages.error(request,"Suppression de l'abonnement du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
