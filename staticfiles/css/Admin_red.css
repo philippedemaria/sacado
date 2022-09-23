@@ -791,7 +791,9 @@ li label{
     width:40px;
     height:40px;
 }
-
+.stat_coeff_round{
+    border :  1px solid #5d4391;
+}
 
 .stat_mark_round_max_width{
 

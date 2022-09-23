@@ -775,7 +775,7 @@ li label{
     -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    background-color: #F7F7F7;
+    background-color: #f1eef7;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -795,6 +795,11 @@ li label{
     margin-right: auto;
     width:40px;
     height:40px;
+}
+
+
+.stat_coeff_round{
+    border :  1px solid #5d4391;
 }
 
 
