@@ -34,12 +34,12 @@
     <form action="" method="POST">
         {% csrf_token %}
 
-        <div class="row">                
+        <div class="row" style="display:none;">                
         
-            <div class="col-sm-12">
+            <div class="col-sm-12" >
                 <div class="alert alert-info">
                     {% csrf_token %}
-                    <div class="row" style="display:none;">              
+                    <div class="row">              
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 {{ form.beneficiaire |add_class:"form-control"|attr:"placeholder: En faveur de"}} 
