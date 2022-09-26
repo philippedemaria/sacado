@@ -1789,20 +1789,13 @@ def update_accounting(request, id,tp):
                 if nf.is_paypal : bank = 5122
                 else : bank = 5121 
                 if nf.is_credit :
-
-                    if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = bank ).count() == 0   : 
-                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = bank , is_credit = 0, amount = -som  , current_year = current_year)  
-                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.code , is_credit = 1, amount = som  , current_year = current_year)
-                    elif  som != valeur :
-                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.code  , is_credit = 0 ).update(amount = -som)  
-                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 2 , plan_id = bank , is_credit = 1 ).update(amount = som) 
+                    Accountancy.objects.update_or_create(accounting_id = accounting.id  , plan_id = bank , is_credit = 0, amount = -som  , defaults = {"ranking" : 1 , 'current_year': current_year})   
+                    Accountancy.objects.update_or_create(accounting_id = accounting.id ,  plan_id = nf.plan.code , amount = som , is_credit = 1, defaults = {"ranking" : 2 , 'current_year' : current_year})
                 else :
-                    if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.code  ).count() == 0   : 
-                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.code  , is_credit = 1, amount = som  , current_year = current_year)  
-                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = bank , is_credit = 0, amount = -som  , current_year = current_year)
-                    elif  som != valeur :
-                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = bank , is_credit = 1 ).update(amount = som)  
-                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.code  , is_credit = 0 ).update(amount = -som) 
+                    Accountancy.objects.update_or_create(accounting_id = accounting.id  , plan_id = bank , is_credit = 1, amount = som  , defaults = {"ranking" : 1 , 'current_year': current_year})   
+                    Accountancy.objects.update_or_create(accounting_id = accounting.id ,  plan_id = nf.plan.code , is_credit = 0, amount = som , defaults = {"ranking" : 2 , 'current_year' : current_year})
+
+ 
 
 
             else :
