@@ -1788,17 +1788,17 @@ def update_accounting(request, id,tp):
                     else : bank = 5121 
                     if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = bank ).count() == 0   : 
                         Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = bank , is_credit = 0, amount = -som  , current_year = current_year)  
-                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.id , is_credit = 1, amount = som  , current_year = current_year)
+                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.code , is_credit = 1, amount = som  , current_year = current_year)
                     elif  som != valeur :
-                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.id  , is_credit = 0 ).update(amount = -som)  
+                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.code  , is_credit = 0 ).update(amount = -som)  
                         Accountancy.objects.filter(accounting_id = accounting.id , ranking = 2 , plan_id = bank , is_credit = 1 ).update(amount = som) 
                 else :
-                    if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.id  ).count() == 0   : 
-                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan  , is_credit = 1, amount = som  , current_year = current_year)  
+                    if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.code  ).count() == 0   : 
+                        Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = nf.plan.code  , is_credit = 1, amount = som  , current_year = current_year)  
                         Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = bank , is_credit = 0, amount = -som  , current_year = current_year)
                     elif  som != valeur :
                         Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = bank , is_credit = 1 ).update(amount = som)  
-                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.id  , is_credit = 0 ).update(amount = -som) 
+                        Accountancy.objects.filter(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.code  , is_credit = 0 ).update(amount = -som) 
 
 
             else :
