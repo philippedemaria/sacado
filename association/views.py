@@ -1724,7 +1724,7 @@ def update_accounting(request, id,tp):
             c_year       = Activeyear.objects.filter(is_active = 1).order_by("year").last()
             current_year = c_year.year
 
-            
+
             if nf.is_abonnement :
                 if form_abo.is_valid():
                     fa = form_abo.save(commit = False)
@@ -1786,9 +1786,10 @@ def update_accounting(request, id,tp):
 
 
             elif not nf.school : # paiement par banque
+                if nf.is_paypal : bank = 5122
+                else : bank = 5121 
                 if nf.is_credit :
-                    if nf.is_paypal : bank = 5122
-                    else : bank = 5121 
+
                     if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = bank ).count() == 0   : 
                         Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = bank , is_credit = 0, amount = -som  , current_year = current_year)  
                         Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = nf.plan.code , is_credit = 1, amount = som  , current_year = current_year)
