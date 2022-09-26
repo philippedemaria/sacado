@@ -1720,6 +1720,11 @@ def update_accounting(request, id,tp):
 
             Accounting.objects.filter(pk = accounting.id).update( amount = som  )
             
+            # Dans accountancy
+            c_year       = Activeyear.objects.filter(is_active = 1).order_by("year").last()
+            current_year = c_year.year
+
+            
             if nf.is_abonnement :
                 if form_abo.is_valid():
                     fa = form_abo.save(commit = False)
@@ -1753,9 +1758,7 @@ def update_accounting(request, id,tp):
                 else :
                     print(form_abo.errors)
 
-                # Dans accountancy
-                c_year       = Activeyear.objects.filter(is_active = 1).order_by("year").last()
-                current_year = c_year.year
+
                 if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0).count() == 0   : 
        
                     Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0 , amount = som , current_year = current_year )  
