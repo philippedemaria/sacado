@@ -99,7 +99,10 @@
                                 <span >{{ accounting.chrono }}</span> 
                             </td>   
                             <td><span class="helper_tip"><a href="{% url 'update_accounting'  accounting.id tp %}" >
-                                {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} {% else %}{{ accounting.school.name }}, {{ accounting.school.country.name }} {% endif %}
+                                {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} 
+                                {% elif accounting.school %}{{ accounting.school.name }}, {{ accounting.school.country.name }} 
+                                {% else %}{{ accounting.objet }} 
+                                {% endif %}
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
                                 </a></span>
 
