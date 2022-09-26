@@ -327,6 +327,17 @@ def update_school_admin(request,id):
         school.is_active = 1
         school.save()
 
+        if school.gar :
+            abonnement.is_gar=1
+            test, raison , header , decode , ida = create_abonnement_gar( today , abonnement  , request.user )
+            if test :
+                fa.gar_abonnement_id = ida
+                messages.success(request,"Activation du GAR réussie")
+            else :
+                messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+
+
+
         return redirect('all_schools')
 
     return render(request,'association/update_school_admin.html', { 'abonnements':abonnements, 'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total ,'teachers' : teachers , 'status' : status })
@@ -1690,9 +1701,11 @@ def update_accounting(request, id,tp):
             nf.chrono = update_chrono(Accounting, accounting, forme)
 
             date_payment = request.POST.get("date_payment", None)
-            if date_payment :
+            if date_payment and tp == 0 :
                 nf.tp = 2
                 nf.is_credit = 1
+            else :
+                nf.tp = 2
             nf.save()
             
 
@@ -1925,8 +1938,8 @@ def create_avoir(request, id):
     acc = accounting.save()
 
     # Création des avoirs
-    Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = accounting.amount )  
-    Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = -accounting.amount )  
+    Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 1, amount = -accounting.amount )  
+    Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 0, amount = accounting.amount )  
  
     accounti = Accounting.objects.get(id=id) 
     accounti.objet += " Avoir sur " + chronof
