@@ -1793,7 +1793,7 @@ def update_accounting(request, id,tp):
                     Accountancy.objects.update_or_create(accounting_id = accounting.id ,  plan_id = nf.plan.code , amount = som , is_credit = 1, defaults = {"ranking" : 2 , 'current_year' : current_year})
                 else :
                     Accountancy.objects.update_or_create(accounting_id = accounting.id  , plan_id = bank , is_credit = 1, amount = som  , defaults = {"ranking" : 1 , 'current_year': current_year})   
-                    Accountancy.objects.update_or_create(accounting_id = accounting.id ,  plan_id = nf.plan.code , is_credit = 0, amount = som , defaults = {"ranking" : 2 , 'current_year' : current_year})
+                    Accountancy.objects.update_or_create(accounting_id = accounting.id ,  plan_id = nf.plan.code , is_credit = 0, amount = -som , defaults = {"ranking" : 2 , 'current_year' : current_year})
 
  
 
