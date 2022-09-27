@@ -1620,7 +1620,6 @@ def paypal_module(request):
 
 	amount +="0"
 
-	print(amount)
 	context    = {'user':user,  'school' : school , 'accounting' : accounting , 'amount' : amount }
 
 	return render(request,'school/paypal_module.html', context)
