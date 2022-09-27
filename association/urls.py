@@ -98,7 +98,7 @@ urlpatterns = [
 
 
     ### -------------------------  to_clean_database
-    path('to_clean_database/<int:idl>', to_clean_database, name='to_clean_database'),
+    path('to_clean_database/<int:idl>/<int:start>', to_clean_database, name='to_clean_database'),
 
 ]
  
