@@ -339,10 +339,14 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
                     flashpacks = parcours.flashpacks.all()
                     for flashpack in flashpacks:
                         flashpack.students.add(student)
+                        for flashcard in flashpack.flashcards.all():
+                            flashcard.students.add(student)
 
                     bibliotexs = parcours.bibliotexs.all()
                     for bibliotex in bibliotexs:
                         bibliotex.students.add(student)
+                        for r in bibliotex.relationtexs.all():
+                            r.students.add(student)
                         
                     quizz = parcours.quizz.all()
                     for quiz in quizz:
@@ -362,14 +366,17 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
                 for course in courses:
                     course.students.add(student)
 
-
                 flashpacks = parcours.flashpacks.all()
                 for flashpack in flashpacks:
                     flashpack.students.add(student)
+                    for flashcard in flashpack.flashcards.all():
+                        flashcard.students.add(student)
 
                 bibliotexs = parcours.bibliotexs.all()
                 for bibliotex in bibliotexs:
                     bibliotex.students.add(student)
+                    for r in bibliotex.relationtexs.all():
+                        r.students.add(student)
                     
                 quizz = parcours.quizz.all()
                 for quiz in quizz:
@@ -412,13 +419,17 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
                 for course in courses:
                     course.students.add(*students)
 
-                bibliotexs = parcours.bibliotexs.all()
-                for bibliotex in bibliotexs:
-                    bibliotex.students.add(*students)
-
                 flashpacks = parcours.flashpacks.all()
                 for flashpack in flashpacks:
                     flashpack.students.add(*students)
+                    for flashcard in flashpack.flashcards.all():
+                        flashcard.students.add(*students)
+
+                bibliotexs = parcours.bibliotexs.all()
+                for bibliotex in bibliotexs:
+                    bibliotex.students.add(*students)
+                    for r in bibliotex.relationtexs.all():
+                        r.students.add(*students)
 
                 quizz = parcours.quizz.all()
                 for quiz in quizz:
@@ -440,14 +451,17 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
             for course in courses:
                 course.students.add(*students)
 
+            flashpacks = parcours.flashpacks.all()
+            for flashpack in flashpacks:
+                flashpack.students.add(*students)
+                for flashcard in flashpack.flashcards.all():
+                    flashcard.students.add(*students)
 
             bibliotexs = parcours.bibliotexs.all()
             for bibliotex in bibliotexs:
                 bibliotex.students.add(*students)
-
-            flashpacks = parcours.flashpacks.all()
-            for flashpack in flashpacks:
-                flashpack.students.add(*students)
+                for r in bibliotex.relationtexs.all():
+                    r.students.add(*students)
 
             quizz = parcours.quizz.all()
             for quiz in quizz:

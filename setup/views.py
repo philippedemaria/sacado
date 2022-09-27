@@ -731,35 +731,13 @@ def delete_school_adhesion(request):
     school_id = request.session.get("inscription_school_id")
     school = School.objects.get(pk = school_id)
 
-    if school.users.count() == 0 :
-        school.delete()
-        messages.success(request,"Demande d'adhésion annulée")  
-
-        try :
-            send_mail("Suppression d'adhésion",
-                    "Bonjour l'équipe SACADO, \nJe souhaite annuler la demande d'adhésion :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
-                        settings.DEFAULT_FROM_EMAIL,
-                        ['sacado.asso@gmail.com'])
-        except :
-            pass
-
-    elif school.users.count() == 1 :
-        for u in school.users.all():
-            u.teacher.delete()
-            u.delete()
-
-        school.delete()
-        messages.success(request,"Demande d'adhésion annulée")  
-
-        try :
-            send_mail("Suppression d'adhésion",
-                    "Bonjour l'équipe SACADO, \nJe souhaite annuler la demande d'adhésion :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
-                        settings.DEFAULT_FROM_EMAIL,
-                        ['sacado.asso@gmail.com'])
-        except :
-            pass            
-
-    else :  
+    try :
+        send_mail("Suppression d'adhésion",
+                "Bonjour l'équipe SACADO, \nJe souhaite annuler la demande d'adhésion :\n\n"+ school.name +"\n"+ school.town +","+ school.country.name +"\n\nNe pas répondre.",
+                    settings.DEFAULT_FROM_EMAIL,
+                    ['sacado.asso@gmail.com'])
+        messages.success(request,"Demande d'adhésion annulée") 
+    except :
         messages.error(request,"La demande d'annulation ne peut être validée. Des utilisateurs de votre établissement restent inscrits.")  
 
     return redirect('index')
@@ -1359,11 +1337,11 @@ def save_adhesion(request) :
 
     total_price = 0
     formule          = None
-    formule_adhesion = " période d'essai "
+    formule_adhesion = ""
     formule_name     = " Essai "
     today = time_zone_user(request.user)
-    #date_end_dateformat = today + timedelta(days=7)
-    date_end_dateformat = datetime(2022,8,15)  
+    date_end_dateformat = today + timedelta(days=15)
+    #date_end_dateformat = datetime(2022,8,15)  
     date_end = str(date_end_dateformat)
     nb_month = 0
     menu_id = 1

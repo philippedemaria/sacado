@@ -43,7 +43,6 @@ from datetime import datetime , timedelta
 
 
 ##############bibliothèques pour les impressions pdf  #########################
-import os
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats, timezone
 from io import BytesIO, StringIO
@@ -61,13 +60,13 @@ from html import escape
 from operator import attrgetter
 from itertools import chain
 cm = 2.54
-import os
 import re
 import pytz
 import csv
 import html
 from general_fonctions import *
  
+
 #################################################################
 # Transformation de parcours en séquences
 #################################################################
@@ -488,7 +487,7 @@ def get_complement(request, teacher, parcours_or_group):
         group = None
         access = False
 
-    if parcours_or_group.teacher == teacher:
+    if parcours_or_group.teacher == teacher or teacher.user.is_superuser :
         role = True
         access = True
 

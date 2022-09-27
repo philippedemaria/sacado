@@ -263,16 +263,43 @@ def delete_country(request,id):
 
 def clear_detail_student(student):
 	try : 
+		for p in student.folders.all():
+			p.students.remove(student)
+	except :
+		pass
+	try : 
 		for p in student.students_to_parcours.all():
 			p.students.remove(student)
+	except :
+		pass
+	try : 
 		for g in student.students_to_group.all():
 			g.students.remove(student)
+	except :
+		pass
+	try : 
 		for r in student.students_relationship.all():
 			r.students.remove(student)
+	except :
+		pass
+	try : 
 		for c in student.students_course.all() :
 			c.students.remove(student)
-		for a in student.answers.all() :
-			a.students.remove(student)	
+	except :
+		pass
+	try : 	
+		for a in student.relationtexs.all() :
+			a.students.remove(student)
+	except :
+		pass
+	try : 
+		for f in student.flashpacks.all() :
+			f.students.remove(student)
+	except :
+		pass
+	try : 	
+		for a in student.answercards.all() :
+			a.students.remove(student)
 	except :
 		pass
 

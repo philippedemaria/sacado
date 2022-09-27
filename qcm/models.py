@@ -188,17 +188,17 @@ class Exercise(models.Model):
         except:
             return ""
 
-    #############################################
-    # non utilisée ?????? 
-    def send_scores(self, student_id):
-        score = ""
-        student = Student.objects.get(pk=student_id)
-        if student.answers.filter(exercise=self.pk).exists():
-            studentanswers = student.answers.filter(exercise=self.pk)
-            for studentanswer in studentanswers:
-                score = score + str(studentanswer.point) + " - "
-        return score
-    ############################################# 
+    # #############################################
+    # # non utilisée ?????? 
+    # def send_scores(self, student_id):
+    #     score = ""
+    #     student = Student.objects.get(pk=student_id)
+    #     if student.answers.filter(exercise=self.pk).exists():
+    #         studentanswers = student.answers.filter(exercise=self.pk)
+    #         for studentanswer in studentanswers:
+    #             score = score + str(studentanswer.point) + " - "
+    #     return score
+    # ############################################# 
     def is_exercise(self):
         return True
 
