@@ -58,9 +58,10 @@ import json
 def to_clean_database(request,idl):
 
     levels = Level.objects.exclude(pk=13).order_by('ranking')
-    level = Level.objects.get(pk=idl)
+    list_to_remove , list_to_keep = [] , []
     names = []
     if idl :
+        level = Level.objects.get(pk=idl)
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
 
         ressources   = '/var/www/sacado/ressources/' 
@@ -69,7 +70,7 @@ def to_clean_database(request,idl):
 
         files = os.listdir(dirname)
 
-        list_to_remove , list_to_keep = [] , []
+        
 
         for file in files :
             data_file = 'ggbfiles/'+ str(idl)+"/"+file
@@ -83,6 +84,9 @@ def to_clean_database(request,idl):
 
         list_to_remove.sort()
         list_to_keep.sort()
+
+    else :
+        level = None
 
 
 
