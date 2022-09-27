@@ -59,9 +59,10 @@ def to_clean_database(request,idl):
 
     levels = Level.objects.exclude(pk=13)
     level = Level.objects.get(pk=idl)
+    names = []
     if idl :
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
-        names = []
+        
         for supportfile in supportfiles :
             name = supportfile.split("/")
             names.append(name)
@@ -75,10 +76,8 @@ def to_clean_database(request,idl):
                 list_to_remove.append(file)
 
 
-    else :
-        files = []
 
-    context = {'files' : files , 'levels' : levels, 'level' : level , 'supportfiles' : supportfiles ,  'list_to_remove' : list_to_remove}        
+    context = {'names' : names , 'levels' : levels, 'level' : level , 'supportfiles' : supportfiles ,  'list_to_remove' : list_to_remove}        
     return render(request, 'association/to_clean_database.html', context )
 
 
