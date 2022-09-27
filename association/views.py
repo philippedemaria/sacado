@@ -23,7 +23,7 @@ from school.forms import SchoolForm
 from school.gar import *
 from setup.models import Formule
 from setup.forms import FormuleForm
-
+from socle.models import Level
 from qcm.models import Supportfile
 #################################################################################
 import os
