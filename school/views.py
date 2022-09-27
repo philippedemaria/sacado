@@ -1616,7 +1616,11 @@ def paypal_module(request):
 	user       = request.user
 	school     = user.school
 	accounting = Accounting.objects.filter(school=school).last()
-	amount     = round(float(str(school.fee())) * 1.03,2)
+	amount     = str(round(float(str(school.fee())) * 1.03,1))
+
+	amount +="0"
+
+	print(amount)
 	context    = {'user':user,  'school' : school , 'accounting' : accounting , 'amount' : amount }
 
 	return render(request,'school/paypal_module.html', context)
