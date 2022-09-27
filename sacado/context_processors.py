@@ -133,11 +133,13 @@ def menu(request):
             else :
                 group = None
 
+            url_helper =  "helpers/no_helper.html"
+
             return {
                 'is_gar_check' : is_gar_check,
                 'student': student,
                 'sacado_asso' : sacado_asso , 
-                'group' : group ,
+                'group' : group , 'url_helper' : url_helper ,
                 'groups' : groups,
                 'teacher_to_student' : teacher_to_student ,   
                 'index_tdb' : False , 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color ,          
@@ -147,12 +149,13 @@ def menu(request):
             this_user = User.objects.get(pk=request.user.id)
             students = this_user.parent.students.all()
             last_exercises_done = Studentanswer.objects.filter(student__in= students).order_by("-date")[:10]
- 
+            url_helper =  "helpers/no_helper.html"
+
             return {
                 'this_user': this_user,
                 'last_exercises_done': last_exercises_done,
                 'sacado_asso' : sacado_asso , 
-                 'sacado_asso' : False , 
+                 'sacado_asso' : False ,  'url_helper' : url_helper , 
                  'index_tdb' : False ,
                  'is_gar_check' : None, 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color ,
             }
