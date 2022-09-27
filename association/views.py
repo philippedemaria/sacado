@@ -65,15 +65,18 @@ def to_clean_database(request,idl):
         
         dirname = '/var/www/sacado/ressources/ggbfiles/clone_' + str(idl)     
         files = os.listdir(dirname)
-        list_to_remove = []
+        list_to_remove , list_to_keep = [] , []
         for file in files :
             file = '/var/www/sacado/ressources/ggbfiles/'+ str(idl)+"/"+file
             if file not in supportfiles :
                 list_to_remove.append(file)
+            else :
+                list_to_keep.append(file)
 
+        list_to_remove.sort()
+        list_to_keep.sort()
 
-
-    context = {'names' : names , 'levels' : levels, 'level' : level , 'supportfiles' : supportfiles ,  'list_to_remove' : list_to_remove}        
+    context = {'list_to_keep' : list_to_keep , 'levels' : levels, 'level' : level ,  'list_to_remove' : list_to_remove}        
     return render(request, 'association/to_clean_database.html', context )
 
 
