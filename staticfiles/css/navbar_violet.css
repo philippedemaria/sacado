@@ -196,6 +196,25 @@ body{
 }
 
 
+.notification-container-right-half-page{
+  position: fixed;
+  top: 0;
+  right: 0;
+  width:  50%;
+  display: none;
+  height: 100%;
+  overflow: hidden;
+  background: #FFF;
+  z-index: 99;
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  padding: 20px;
+  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+
+
 .selectedR {
   animation: slide-inr 0.5s forwards;
   -webkit-animation: slide-inr 0.5s forwards;
@@ -207,6 +226,21 @@ body{
   animation: slide-outr 0.5s forwards;
   -webkit-animation: slide-outr 0.5s forwards;
 }
+
+
+.selectedR-half-page {
+  animation: slide-inr-half 0.5s forwards;
+  -webkit-animation: slide-inr-half 0.5s forwards;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dismissR-half-page {
+  animation: slide-outr-half 0.5s forwards;
+  -webkit-animation: slide-outr-half 0.5s forwards;
+}
+
+
 
 @keyframes slide-inr {
   0% {
@@ -243,6 +277,48 @@ body{
     -webkit-transform: translateX(700px);
   }
 }
+
+
+
+
+@keyframes slide-inr-half {
+  0% {
+    -webkit-transform: translateX(50%);
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+  }
+}
+
+@-webkit-keyframes slide-inr-half {
+  0% {
+    -webkit-transform: translateX(50%);
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+  }
+}
+@keyframes slide-outr-half {
+  0% {
+    -webkit-transform: translateX(0px);
+  }
+  100% {
+    -webkit-transform: translateX(100%);
+  }
+}
+
+@-webkit-keyframes slide-outr-half {
+  0% {
+    -webkit-transform: translateX(0px);
+  }
+  100% {
+    -webkit-transform: translateX(100%);
+  }
+}
+
+
+
+
 
 
 .navbarRight-nav{

@@ -62,6 +62,24 @@ def menu(request):
             today = timezone.now()
 
         if request.user.is_teacher:
+
+            dico_helper = { "/account/profile" : "profile" , "/account/avatar" : "get_school" , "/account/updatepassword" : "updatepassword" , "/school/get_school" : "get_school" , "account/close_my_account" : "close_my_account",
+                            "/" : "groupe" , "/#" : "groupe" ,  "/qcm/folders" : "folders" ,  "/qcm/parcours" : "parcours" ,  "/qcm/evaluations" : "evaluations" ,  "/qcm/evaluations" : "evaluations" ,  "qcm/parcours_my_courses" : "parcours_my_courses" , 
+                            "/tool_list" : "quizzes" , "/bibliotex/my_bibliotexs" : "my_bibliotexs" ,  "/flashcard/my_flashpacks" : "my_flashpacks" ,  "/qcm/exercises" : "exercises" ,  "/tool/list_visiocopie" : "list_visiocopie" ,  
+                            "/tool/list_tools" : "list_tools" , "/tool/show/" : "tool_show"  , "/sendmail/" : "sendmail" , "/aefe/" : "aefe" , "/admin_tdb" : "admin_tdb" ,"/qcm/parcours_group/" : "parcours_group",
+                            "/qcm/parcours_sub_parcours/" : 'parcours_sub_parcours' , '/qcm/parcours_update/' : "parcours_update" , "/group/show/" :"group_show" , "/group/update/" : "group_update" , '/qcm/parcours_show/' :  'parcours_show',
+                            "/school/groups" : 'school_groups' , '/school/new_student/' : 'school_new_student' , '/school/new_student_list/' : 'school_new_student_list'  }
+
+            ihelp=0 
+            request_path = str(request.path) 
+            while ihelp < len(request_path) and not('0'<=request_path[ihelp]<='9' )    : ihelp+=1  
+            helper_key = request_path[:ihelp] 
+            try :
+                url_helper = "helpers/" + dico_helper[helper_key] + ".html"
+            except :
+                url_helper = "helpers/no_helper.html"
+ 
+
             teacher = request.user.teacher
 
             nb_groups = teacher.groups.count()
@@ -93,9 +111,7 @@ def menu(request):
                     renew_hidden = True
                     request.session["renewal"] = renew_hidden
             
-
-
-            return { 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+            return { 'url_helper' : url_helper ,  'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             

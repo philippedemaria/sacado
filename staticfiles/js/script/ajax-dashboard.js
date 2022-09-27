@@ -619,6 +619,57 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             show ++ ;
         });
 
+
+
+
+
+
+        // ====================================================================================================================
+        // ====================================================================================================================
+        // =================================   Toggle sur la div des élèves d'un groupe ======================================= 
+        // ====================================================================================================================
+        // ====================================================================================================================
+
+        $('#show_detail_helper').click(function(event) { 
+          if ( show%2 == 0 ) 
+            {
+                $('#notification-helper').removeClass('dismissR-half-page').addClass('selectedR-half-page').show();
+
+                let url =  $(this).attr("data-url");  
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax({
+                    url: url  ,
+                    data: {
+                        csrfmiddlewaretoken: csrf_token,                        
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+
+                        $("#detail_of_helper").html("").html(data["html"]);
+
+                    }
+                });
+ 
+
+            }
+            else
+            {
+                $('#notification-helper').removeClass('selectedR-half-page').addClass('dismissR-half-page');
+            }
+            event.preventDefault();        
+            show ++ ;
+        });
+
+
+            $('#closeHelper').click(function(event) {
+                            show--;
+                            if ($('#notification-helper').hasClass('selectedR-half-page')) 
+                            {
+                            $('#notification-helper').removeClass('selectedR-half-page').addClass('dismissR-half-page');
+                            }
+                            event.preventDefault();
+                        });
         // ====================================================================================================================
         // ====================================================================================================================
         // =================================   Toggle sur la div des élèves d'un groupe ======================================= 

@@ -78,7 +78,7 @@ def to_clean_database(request,idl):
                 os.rename( ressources + data_file , back_up_root + file )
             else :
                 list_to_keep.append(file)
-
+                os.scp( ressources + data_file , back_up_root + file )
 
 
         list_to_remove.sort()

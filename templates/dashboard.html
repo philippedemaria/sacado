@@ -725,6 +725,9 @@
             </div> 
         </div>
     {% endfor %} 
+
+    <a href="{% url 'to_clean_database' 0 %}" style="background-color: red">Nettoie la base de données</a>
+
     <hr class="divider">
     <p class="thin">Gestion SACADO </p> 
     <div class="row">
@@ -856,6 +859,20 @@
         {% endfor %} 
 </div>
 {% endif %}
+
+
+<div class="notification-container-right-half-page dismissR-half-page" id="notification-helper">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12" id="detail_of_helper">
+
+            <a href="#" id="closeHelper" class="btn btn-default">Fermer</a>
+            {% comment %}
+            {% include  url_helper    %}
+            {% endcomment %}
+        </div>
+    </div>
+</div>
+
 
 
 
