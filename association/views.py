@@ -61,6 +61,11 @@ def to_clean_database(request,idl):
     level = Level.objects.get(pk=idl)
     if idl :
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
+        names = []
+        for supportfile in supportfiles :
+            root,level,name = supportfile.split("/")
+            names.append(name)
+
         #os.path.isfile(my_file)
         dirname = '/var/www/sacado/ressources/ggbfiles/clone_' + str(idl)     
         files = os.listdir(dirname)
@@ -73,7 +78,7 @@ def to_clean_database(request,idl):
     else :
         files = []
 
-    context = {'files' : files , 'levels' : levels, 'level' : level , 'supportfiles' : supportfiles ,  'list_to_remove' : list_to_remove}        
+    context = {'files' : files , 'levels' : levels, 'level' : level , 'names' : names ,  'list_to_remove' : list_to_remove}        
     return render(request, 'association/to_clean_database.html', context )
 
 
