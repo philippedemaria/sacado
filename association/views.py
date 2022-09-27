@@ -65,7 +65,7 @@ def to_clean_database(request,idl):
         
         for supportfile in supportfiles :
             name = supportfile.split("/")
-            names.append(name[2])
+            names.append(name)
 
         #os.path.isfile(my_file)
         dirname = '/var/www/sacado/ressources/ggbfiles/clone_' + str(idl)     
