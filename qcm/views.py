@@ -65,7 +65,7 @@ import pytz
 import csv
 import html
 from general_fonctions import *
- 
+import xlwt 
 
 #################################################################
 # Transformation de parcours en séquences
@@ -7801,32 +7801,84 @@ def export_knowledges_after_evaluation(request):
     parcours_id   = request.POST.get("parcours_id")  
     parcours      = Parcours.objects.get(pk = parcours_id)  
 
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;filename=Knowledges_parcours_{}.csv'.format(parcours.id)
-    response.write(u'\ufeff'.encode('utf8'))
-    writer = csv.writer(response)
-    
+    this_clic = request.POST.get("this_clic_knowledges")
 
-    knowledges = knowledges_in_parcours(parcours)
+    if this_clic == "csv" : 
 
-    label_in_export = ["Nom", "Prénom"]
-    for kn in knowledges :
-        if not kn.name in label_in_export : 
-            label_in_export.append(kn.name)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment;filename=Knowledges_parcours_{}.csv'.format(parcours.id)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
+        
+        knowledges = knowledges_in_parcours(parcours)
 
-    writer.writerow(label_in_export)
+        label_in_export = ["Nom", "Prénom"]
+        for kn in knowledges :
+            if not kn.name in label_in_export : 
+                label_in_export.append(kn.name)
 
-    for student in parcours.students.order_by("user__last_name") :
-        knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+        writer.writerow(label_in_export)
 
-        for knwldg in knowledges :
-            data = []
-            res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,"",parcours,student))
-            if res == -10 : res = "A"
-            knowledge_level_tab.append(res)
- 
-        writer.writerow( knowledge_level_tab )
-    return response
+        for student in parcours.students.order_by("user__last_name") :
+            knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+
+            for knwldg in knowledges :
+                total = total_by_knowledge_by_student(knwldg,"",parcours,student)
+                if total == -10 : res = "A"
+                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,"",parcours,student))
+                knowledge_level_tab.append(res)
+     
+            writer.writerow( knowledge_level_tab )
+        return response
+
+    else :
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="etablissement.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet(parcours.title)
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        knowledges = knowledges_in_parcours(parcours)
+
+        columns = ['Nom',  'Prénom'] 
+
+        for k in knowledges:
+            columns.append(k.name)
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        students_detail = []
+        for student in parcours.students.order_by("user__last_name") :
+            knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+
+            for knwldg in knowledges :
+                total = total_by_knowledge_by_student(knwldg,"",parcours,student)
+                if total == -10 : res = "A"
+                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,"",parcours,student))
+                knowledge_level_tab.append(res)
+
+            students_detail.append(knowledge_level_tab)
+
+     
+        ############################################################################################## 
+
+        row_ns = 0
+        for i in range(len(students_detail)): ## full_content est le tableau final pour l'export.
+            row_ns += 1
+            for col_num in range(len(students_detail[i])):
+                ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
+        wb.save(response)
+        return response  
 
 
 
