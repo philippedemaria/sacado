@@ -860,7 +860,7 @@
 </div>
 {% endif %}
 
-
+{% if request.user.is_teacher %}
 <div class="notification-container-right-half-page dismissR-half-page" id="notification-helper">
     <div class="row">
         <div class="col-lg-12 col-xs-12" id="detail_of_helper">
@@ -872,7 +872,7 @@
         </div>
     </div>
 </div>
-
+{% endif %}
 
 
 
