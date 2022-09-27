@@ -10,11 +10,11 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
         $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'><i class='fa fa-print'></i></a>  ") ;        
 
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'>Exporter les notes</a>  ") ;
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'>Expor des notes</a>  ") ;
 
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'>Exporter les compétences</a>  ") ;
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'>Export des compétences</a>  ") ;
 
-
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'>Export des savoir faire</a>  ") ;
 
 
         $('#mini_loader').hide() ;
