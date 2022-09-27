@@ -10,10 +10,10 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
         $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_results'  class='btn btn-default btn-publisher  pull-right'><i class='fa fa-print'></i></a>  ") ;        
 
-        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_marks'  class='btn btn-default pull-right'>Export des notes</a>  ") ;
+        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_marks'  class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> notes</a>  ") ;
 
-        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_skills'  class='btn btn-default pull-right'>Export des compétences</a>  ") ;
-        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_knowledges'  class='btn btn-default pull-right'>Export des savoir-faire</a>  ") ;
+        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_skills'  class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> compétences</a>  ") ;
+        $('.dataTables_length').append("  <a href='#' data-toggle='modal' data-target='#export_knowledges'  class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> savoir-faire</a>  ") ;
 
 
 
