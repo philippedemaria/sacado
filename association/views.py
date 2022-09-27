@@ -63,19 +63,12 @@ def to_clean_database(request,idl):
     if idl :
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
         
-        for supportfile in supportfiles :
-            try :
-                root,level, name = supportfile.split("/")
-                names.append(name)
-            except :
-                pass
-
-        #os.path.isfile(my_file)
         dirname = '/var/www/sacado/ressources/ggbfiles/clone_' + str(idl)     
         files = os.listdir(dirname)
         list_to_remove = []
         for file in files :
-            if file not in names :
+            file = '/var/www/sacado/ressources/ggbfiles/'+ str(idl)+"/"+file
+            if file not in supportfiles :
                 list_to_remove.append(file)
 
 
