@@ -57,7 +57,7 @@ import json
 @user_passes_test(user_is_board)
 def to_clean_database(request,idl):
 
-    levels = Level.objects.exclude(pk=13)
+    levels = Level.objects.exclude(pk=13).order_by('ranking')
     level = Level.objects.get(pk=idl)
     names = []
     if idl :
