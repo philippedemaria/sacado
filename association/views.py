@@ -58,6 +58,7 @@ import json
 def to_clean_database(request,idl):
 
     levels = Level.objects.exclude(pk=13)
+    level = Level.objects.get(pk=idl)
     if idl :
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
         #os.path.isfile(my_file)
@@ -72,7 +73,7 @@ def to_clean_database(request,idl):
     else :
         files = []
 
-    context = {'files' : files , 'levels' : levels, 'list_to_remove' : list_to_remove}        
+    context = {'files' : files , 'levels' : levels, 'level' : level , 'supportfiles' : supportfiles ,  'list_to_remove' : list_to_remove}        
     return render(request, 'association/to_clean_database.html', context )
 
 

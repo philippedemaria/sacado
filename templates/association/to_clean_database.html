@@ -11,7 +11,7 @@
 
 
 {% block page_title %}
-        Supprime les supportfile inutilisés de la base
+        Supprime les supportfile inutilisés de la base > {{ level }}
 {% endblock %}
 
 {% block page_menu_right %}
@@ -24,9 +24,11 @@
 <section class="content_main"> 
 
 
-
-
-
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            {{ supportfiles }}
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-3 col-md-2">
             Niveaux<hr/>
