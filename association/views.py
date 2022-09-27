@@ -75,7 +75,7 @@ def to_clean_database(request,idl):
             data_file = 'ggbfiles/'+ str(idl)+"/"+file
             if data_file not in supportfiles :
                 list_to_remove.append(data_file)
-                os.rename( ressources + data_file , back_up_root + file )
+                #os.rename( ressources + data_file , back_up_root + file )
             else :
                 list_to_keep.append(file)
 
