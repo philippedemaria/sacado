@@ -21,6 +21,9 @@
 
 {% block page_menu_right %}
 
+
+            <a href="{% url 'to_clean_database' 0 %}" class="btn btn-new pull-right">Nouvelle section </a> 
+
             <a href="{% url 'create_section' %}" class="btn btn-new pull-right">Nouvelle section </a> 
 
             <a href="{% url 'create_document' %}" class="btn btn-new pull-right">Nouveau document </a>  

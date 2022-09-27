@@ -23,6 +23,8 @@ from school.forms import SchoolForm
 from school.gar import *
 from setup.models import Formule
 from setup.forms import FormuleForm
+
+from qcm.models import Supportfile
 #################################################################################
 import os
 from django.utils import formats, timezone
@@ -48,6 +50,30 @@ import xlwt
 import uuid
 import json 
  
+
+#################################################################
+# Suppression des fichiers non utilisés
+#################################################################
+@user_passes_test(user_is_board)
+def to_clean_database(request,idl):
+
+    levels = Level.object.exclude(pk=13)
+    if idl :
+        supportfiles = Supportfile.objects.all()
+        #os.path.isfile(my_file)
+        dirname = '/var/www/sacado/ressources/'
+        dirpath = '/var/www/sacado/ressources/'+str(idl)    
+        files = os.listdir(dirpath)
+    else :
+        files = []
+
+    context = {'files' : files , 'levels' : levels}        
+    return render(request, 'association/to_clean_database.html', context )
+
+
+#################################################################
+# Suppression des fichiers non utilisés
+#################################################################
 
 def get_active_year():
     """ renvoi d'un tuple sous forme 2021-2022  et d'un entier 2021 """
