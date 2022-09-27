@@ -63,7 +63,7 @@
             }
 
             var csrftoken = getCookie('csrftoken');
-            var amount        = "{{ school.fee|decimal2number }}";
+            var amount        = "{{ amount }}";
             var accounting_id = "{{ accounting.id }}";
             var school_id = "{{ school.id }}";
             var user_id = "{{ user.id }}";
