@@ -64,8 +64,11 @@ def to_clean_database(request,idl):
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
         
         for supportfile in supportfiles :
-            name = supportfile.split("/")
-            names.append(name)
+            try :
+                root,level, name = supportfile.split("/")
+                names.append(name)
+            except :
+                pass
 
         #os.path.isfile(my_file)
         dirname = '/var/www/sacado/ressources/ggbfiles/clone_' + str(idl)     
