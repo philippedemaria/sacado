@@ -1606,3 +1606,30 @@ def ajax_charge_school_by_rne(request):
     data['html'] = render_to_string('school/ajax_list_schools.html', context)
  
     return JsonResponse(data)
+
+
+
+
+
+def paypal_module(request):
+
+	user       = request.user
+	school     = user.school
+	accounting = Accounting.objects.filter(school=school).last()
+	amount     = round(float(str(school.fee())) * 1.03,2)
+	context    = {'user':user,  'school' : school , 'accounting' : accounting }
+
+	return render(request,'school/paypal_module.html', context)
+
+
+def approve_payment_paypal(request):
+
+	user       = User.objects.get(pk=user_id)
+	accounting = Accounting.objects.get(pk=accounting_id)
+	school     = School.objects.get(pk=school_id)
+ 
+	msg = "L'établissement {} #{} \n\n  vient de payer sa cotisation \n\n  #{} de chrono : {} \n\n  par {} {}".format( school.name, school.id, accounting.id, accounting.chrono, user.first_name.capitalize() , user.last_name.capitalize()  )
+
+	send_mail("Paiement par PAYPAL", msg ,settings.DEFAULT_FROM_EMAIL,["sacado.asso@gmail.com"])  
+
+	return redirect(  'index' )

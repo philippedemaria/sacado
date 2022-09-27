@@ -87,5 +87,6 @@ urlpatterns = [
     path('ajax_charge_school_by_rne', ajax_charge_school_by_rne, name='ajax_charge_school_by_rne'),
 
 
-
+    path('paypal_module', paypal_module, name='paypal_module'),
+    path('approve_payment_paypal', approve_payment_paypal, name='approve_payment_paypal'),
 ]
