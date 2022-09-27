@@ -67,7 +67,7 @@ def to_clean_database(request,idl):
         files = os.listdir(dirname)
         list_to_remove , list_to_keep = [] , []
         for file in files :
-            file = '/var/www/sacado/ressources/ggbfiles/'+ str(idl)+"/"+file
+            file = 'ggbfiles/'+ str(idl)+"/"+file
             if file not in supportfiles :
                 list_to_remove.append(file)
             else :
