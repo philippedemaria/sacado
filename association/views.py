@@ -61,9 +61,8 @@ def to_clean_database(request,idl):
     if idl :
         supportfiles = Supportfile.objects.all()
         #os.path.isfile(my_file)
-        dirname = '/var/www/sacado/ressources/'
-        dirpath = '/var/www/sacado/ressources/'+str(idl)    
-        files = os.listdir(dirpath)
+        dirname = '/var/www/sacado/ressources/ggbfiles/' + str(idl)     
+        files = os.listdir(dirname)
     else :
         files = []
 
