@@ -7687,42 +7687,112 @@ def export_notes_after_evaluation(request):
     note_sacado  = request.POST.get("note_sacado",0)  
     note_totale  = request.POST.get("note_totale")  
 
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
-    response.write(u'\ufeff'.encode('utf8'))
-    writer = csv.writer(response)
-    
-    fieldnames = ("Nom", "Prénom", "Situations proposées", "Réponse juste", "Score rapporté aux meilleurs scores SACADO" , "Score rapporté à tous les exercices SACADO proposés" , "Note proposée"  )
-    writer.writerow(fieldnames)
+    this_clic = request.POST.get("this_clic_notes")
 
-    skills = skills_in_parcours(request,parcours)
-    knowledges = knowledges_in_parcours(parcours)
-    relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0)
-    parcours_duration = parcours.duration #durée prévue pour le téléchargement
-    exercises = []
-    for r in relationships :
-        parcours_duration += r.duration
-        exercises.append(r.exercise)
+    if this_clic_notes == "csv" :
 
-
-    for student in parcours.students.order_by("user__last_name") :
-        data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
         
-        if data_student["percent"] != "" :
+        fieldnames = ("Nom", "Prénom", "Situations proposées", "Réponse juste", "Score rapporté aux meilleurs scores SACADO" , "Score rapporté à tous les exercices SACADO proposés" , "Note proposée"  )
+        writer.writerow(fieldnames)
 
-            try :
-                final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
+        skills = skills_in_parcours(request,parcours)
+        knowledges = knowledges_in_parcours(parcours)
+        relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0)
+        parcours_duration = parcours.duration #durée prévue pour le téléchargement
+        exercises = []
+        for r in relationships :
+            parcours_duration += r.duration
+            exercises.append(r.exercise)
 
-                coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
-                final_mark = math.ceil( coefficient *  final_mark)
-            except :
+
+        for student in parcours.students.order_by("user__last_name") :
+            data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+            
+            if data_student["percent"] != "" :
+
+                try :
+                    final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
+
+                    coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
+                    final_mark = math.ceil( coefficient *  final_mark)
+                except :
+                    final_mark = "NE" 
+
+            else :
                 final_mark = "NE" 
 
-        else :
-            final_mark = "NE" 
+            writer.writerow( (str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
+        return response
 
-        writer.writerow( (str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
-    return response
+
+    else :
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="etablissement.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet(parcours.title)
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+        skills = skills_in_parcours(request,parcours)
+        knowledges = knowledges_in_parcours(parcours)
+        relationships = Relationship.objects.filter(parcours=parcours,is_publish = 1,exercise__supportfile__is_title=0)
+        parcours_duration = parcours.duration #durée prévue pour le téléchargement
+        exercises = []
+        for r in relationships :
+            parcours_duration += r.duration
+            exercises.append(r.exercise)
+
+
+        for student in parcours.students.order_by("user__last_name") :
+            data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+
+
+        columns = [ data_student['name'] , data_student['score'] , data_student['score_coeff'] ] 
+
+        for k in knowledges:
+            columns.append(k.name)
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        students_detail = []
+        for student in parcours.students.order_by("user__last_name") :
+            knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+
+            for knwldg in knowledges :
+                total = total_by_knowledge_by_student(knwldg,"",parcours,student)
+                if total == -10 : res = "A"
+                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,"",parcours,student))
+                knowledge_level_tab.append(res)
+
+            students_detail.append(knowledge_level_tab)
+
+     
+        ############################################################################################## 
+
+        row_ns = 0
+        for i in range(len(students_detail)): ## full_content est le tableau final pour l'export.
+            row_ns += 1
+            for col_num in range(len(students_detail[i])):
+                ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
+        wb.save(response)
+        return response
+
+
+
 
 def export_skills_after_evaluation(request):
 
@@ -7730,69 +7800,156 @@ def export_skills_after_evaluation(request):
     parcours = Parcours.objects.get(pk = parcours_id)  
     nb_skill = int(request.POST.get("nb_skill"))
 
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment;filename=Skills_exercice_{}.csv'.format(parcours.id)
-    response.write(u'\ufeff'.encode('utf8'))
-    writer = csv.writer(response)
-    
+    this_clic = request.POST.get("this_clic_skills")
 
-    skills = skills_in_parcours(request,parcours)
+    if this_clic == "csv" :
 
-    label_in_export = ["Nom", "Prénom"]
-    for ski in skills :
-        if not ski.name in label_in_export : 
-            label_in_export.append(ski.name)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment;filename=Skills_exercice_{}.csv'.format(parcours.id)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
+        
 
-    writer.writerow(label_in_export)
- 
-    for student in parcours.students.order_by("user__last_name") :
-        skill_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+        skills = skills_in_parcours(request,parcours)
 
-        for skill in  skills:
-            total_skill = 0
- 
-            scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
-            nbs = scs.count() 
-            offseter = min(nb_skill, nbs)
+        label_in_export = ["Nom", "Prénom"]
+        for ski in skills :
+            if not ski.name in label_in_export : 
+                label_in_export.append(ski.name)
 
-            if offseter > 0 :
-                result_custom_skills  = scs[:offseter]
-            else :
-                result_custom_skills  = scs
+        writer.writerow(label_in_export)
+     
+        for student in parcours.students.order_by("user__last_name") :
+            skill_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
-            nbsk = 0
-            for sc in result_custom_skills :
-                total_skill += int(sc.point)
-                nbsk += 1
+            for skill in  skills:
+                total_skill = 0
+     
+                scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
+                nbs = scs.count() 
+                offseter = min(nb_skill, nbs)
 
-            # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-            result_skills_set = set()
-            result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student,relationship__parcours = parcours).order_by("-id")
-            result_skills_set.update(set(result_skills__))
-            result_skills = list(result_skills_set)
-            nb_result_skill = len(result_skills)
-            offset = min(nb_skill, nb_result_skill)
+                if offseter > 0 :
+                    result_custom_skills  = scs[:offseter]
+                else :
+                    result_custom_skills  = scs
 
-            if offset > 0 :
-                result_sacado_skills  = result_skills[:offset]
-            else :
-                result_sacado_skills  = result_skills
+                nbsk = 0
+                for sc in result_custom_skills :
+                    total_skill += int(sc.point)
+                    nbsk += 1
 
-            for result_sacado_skill in result_sacado_skills:
-                total_skill += result_sacado_skill.point
-                nbsk += 1
-            ################################################################
+                # Ajout éventuel de résultat sur la compétence sur un exo SACADO
+                result_skills_set = set()
+                result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student,relationship__parcours = parcours).order_by("-id")
+                result_skills_set.update(set(result_skills__))
+                result_skills = list(result_skills_set)
+                nb_result_skill = len(result_skills)
+                offset = min(nb_skill, nb_result_skill)
 
-            if nbsk != 0 :
-                tot_s = total_skill//nbsk
-                level_skill = get_level_by_point(student,tot_s)
-            else :
-                level_skill = "A"
+                if offset > 0 :
+                    result_sacado_skills  = result_skills[:offset]
+                else :
+                    result_sacado_skills  = result_skills
 
-            skill_level_tab.append(level_skill)
- 
-        writer.writerow( skill_level_tab )
-    return response
+                for result_sacado_skill in result_sacado_skills:
+                    total_skill += result_sacado_skill.point
+                    nbsk += 1
+                ################################################################
+
+                if nbsk != 0 :
+                    tot_s = total_skill//nbsk
+                    level_skill = get_level_by_point(student,tot_s)
+                else :
+                    level_skill = "A"
+
+                skill_level_tab.append(level_skill)
+     
+            writer.writerow( skill_level_tab )
+        return response
+
+    else :
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="etablissement.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet(parcours.title)
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        skills = skills_in_parcours(request,parcours)
+
+        label_in_export = ['Nom',  'Prénom'] 
+        
+        for ski in skills :
+            if not ski.name in columns : 
+                label_in_export.append(ski.name)
+
+        for col_num in range(len(label_in_export)):
+            ws.write(row_num, col_num, label_in_export[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        students_detail = []
+        for student in parcours.students.order_by("user__last_name") :
+            knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+
+            for skill in  skills:
+                total_skill = 0
+     
+                scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
+                nbs = scs.count() 
+                offseter = min(nb_skill, nbs)
+
+                if offseter > 0 :
+                    result_custom_skills  = scs[:offseter]
+                else :
+                    result_custom_skills  = scs
+
+                nbsk = 0
+                for sc in result_custom_skills :
+                    total_skill += int(sc.point)
+                    nbsk += 1
+
+                # Ajout éventuel de résultat sur la compétence sur un exo SACADO
+                result_skills_set = set()
+                result_skills__ = Resultggbskill.objects.filter(skill= skill,student=student,relationship__parcours = parcours).order_by("-id")
+                result_skills_set.update(set(result_skills__))
+                result_skills = list(result_skills_set)
+                nb_result_skill = len(result_skills)
+                offset = min(nb_skill, nb_result_skill)
+
+                if offset > 0 :
+                    result_sacado_skills  = result_skills[:offset]
+                else :
+                    result_sacado_skills  = result_skills
+
+                for result_sacado_skill in result_sacado_skills:
+                    total_skill += result_sacado_skill.point
+                    nbsk += 1
+                ################################################################
+
+                if nbsk != 0 :
+                    tot_s = total_skill//nbsk
+                    level_skill = get_level_by_point(student,tot_s)
+                else :
+                    level_skill = "A"
+
+                skill_level_tab.append(level_skill)
+            students_detail.append(skill_level_tab)     
+        ############################################################################################## 
+
+        row_ns = 0
+        for i in range(len(students_detail)): ## full_content est le tableau final pour l'export.
+            row_ns += 1
+            for col_num in range(len(students_detail[i])):
+                ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
+        wb.save(response)
+        return response      
 
 
 
@@ -7879,19 +8036,6 @@ def export_knowledges_after_evaluation(request):
                 ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
         wb.save(response)
         return response  
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
