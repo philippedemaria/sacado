@@ -373,6 +373,9 @@ urlpatterns = [
     path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
     path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
     path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
+    path('create_custom_exercise', create_custom_exercise, name='create_custom_exercise'),
+    path('my_custom_exercises', my_custom_exercises, name='my_custom_exercises'), 
+    
  
     path('simulator', simulator, name='simulator'),
     #####################################################################################################################################

@@ -26,7 +26,7 @@ from group.forms import GroupForm
 from group.models import Group , Sharing_group
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher , parcours_exists , folder_exists
 from qcm.models import  Folder , Parcours , Blacklist , Studentanswer, Exercise, Exerciselocker ,  Relationship,Resultexercise, Generalcomment , Resultggbskill, Supportfile,Remediation, Constraint, Course, Demand, Mastering, Masteringcustom, Masteringcustom_done, Mastering_done, Writtenanswerbystudent , Customexercise, Customanswerbystudent, Comment, Correctionknowledgecustomexercise , Correctionskillcustomexercise , Remediationcustom, Annotation, Customannotation , Customanswerimage , DocumentReport , Tracker , Criterion , Autoposition
-from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  AudioForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm ,CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm
+from qcm.forms import FolderForm , ParcoursForm , Parcours_GroupForm, RemediationForm ,  AudioForm , UpdateSupportfileForm, SupportfileKForm, RelationshipForm, SupportfileForm, AttachForm ,   CustomexerciseNPForm, CustomexerciseForm , CustomexerciseOnlyForm , CourseForm , CourseNPForm , DemandForm , CommentForm, MasteringForm, MasteringcustomForm , MasteringDoneForm , MasteringcustomDoneForm, WrittenanswerbystudentForm,CustomanswerbystudentForm , WAnswerAudioForm, CustomAnswerAudioForm , RemediationcustomForm , CustomanswerimageForm , DocumentReportForm, CriterionForm , CriterionOnlyForm
 from school.models import Stage, School
 from sendmail.forms import  EmailForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
@@ -3789,7 +3789,7 @@ def exercise_custom_show_shared(request):
     if user.is_teacher:  # teacher
         teacher = Teacher.objects.get(user=user) 
         customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
-        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
+        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, })
     else :
         return redirect('index')   
  
@@ -6426,13 +6426,44 @@ def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice no
     return render(request, 'qcm/form_exercise_custom.html', context)
 
 
+
+@login_required(login_url= 'index') 
+def create_custom_exercise(request): #Création d'un exercice non autocorrigé dans un parcours
+
+    teacher = Teacher.objects.get(user= request.user)
+
+    ceForm = CustomexerciseOnlyForm(request.POST or None, request.FILES or None , teacher = teacher ) 
+    form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher) 
+
+    if request.method == "POST" :
+        if ceForm.is_valid() :
+            nf = ceForm.save(commit=False)
+            nf.teacher = teacher
+            if nf.is_scratch :
+                nf.is_image = True
+            nf.save()
+            ceForm.save_m2m()    
+        else :
+            print(ceForm.errors)
+        return redirect('my_custom_exercises' )
+ 
+    context = { 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
+
+    return render(request, 'qcm/form_exercise_custom.html', context)
+
+
+
+
+
+
+
 @login_required(login_url= 'index') 
 def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
     custom = Customexercise.objects.get(pk=idcc)
 
     teacher = request.user.teacher
-    stage = get_stage(request.user)
+    stage   = get_stage(request.user)
 
     if id == 0 :
 
@@ -6441,7 +6472,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
             return redirect('index')
 
         ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
-        form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours)
+        form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher )
 
         if request.method == "POST" :
             if ceForm.is_valid() :
@@ -6453,7 +6484,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
                 ceForm.save_m2m()
             else :
                 print(ceForm.errors)
-            return redirect('exercises' )
+            return redirect('my_custom_exercises' )
      
         context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : custom ,'parcours': None, }
 
@@ -6461,6 +6492,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
  
         parcours = Parcours.objects.get(pk=id)
         if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
             return redirect('index')
 
         ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
@@ -6482,6 +6514,22 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
         context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom }
 
     return render(request, 'qcm/form_exercise_custom.html', context)
+
+
+
+@login_required(login_url= 'index') 
+def my_custom_exercises(request): # Modification d'un exercice non autocorrigé dans un parcours
+    
+    teacher = request.user.teacher
+    customexercises = Customexercise.objects.filter(teacher=teacher)
+
+    context = { 'customexercises' : customexercises } 
+
+    return render(request, 'qcm/list_my_custom_exercises.html', context)
+
+
+
+
 
 
 def ajax_add_criterion(request):

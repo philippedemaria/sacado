@@ -630,14 +630,14 @@
             <a href="#" data-toggle='modal' data-helper_text='flashpack'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
-    {% comment %}
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'courses' %}"><i class="fa fa-copyright" ></i> Exercices personnalisés </a> <a href="#" data-toggle='modal' data-target='#helper_div' class="pull-right edit"><i class="fa fa-question-circle"></i></a> 
+            <a href="{% url 'my_custom_exercises' %}"><i class="bi bi-explicit-fill"></i> Exercices personnalisés </a> 
+            <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
-    {% endcomment %}
+
 </div>
 {% endif %}
 

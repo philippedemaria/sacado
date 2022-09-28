@@ -68,7 +68,7 @@ class ParcoursForm(forms.ModelForm):
 
 			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
 			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
-			self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"),  required=False)
+			self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.exclude(pk=13).order_by("ranking"),  required=False)
 			self.fields['folders'] = forms.ModelMultipleChoiceField(queryset=all_folders.order_by("level","title"), widget=forms.CheckboxSelectMultiple,  required=False)
 
 	def clean(self):
@@ -281,7 +281,7 @@ class CourseNPForm(forms.ModelForm):
 		teacher = kwargs.pop('teacher')
 		super(CourseNPForm, self).__init__(*args, **kwargs)
  
-		self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.order_by("ranking"), required=False )
+		self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.exclude(pk=13).order_by("ranking"), required=False )
 		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False )
 		self.fields['parcours'] = forms.ModelChoiceField(queryset=teacher.teacher_parcours.all(), required=False )
 
@@ -393,12 +393,34 @@ class CustomexerciseNPForm (forms.ModelForm):
 		custom = kwargs.pop('custom')
 		super(CustomexerciseNPForm, self).__init__(*args, **kwargs)
 		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
-		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.order_by("ranking"))
+		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.exclude(pk=13))
 		students = custom.students.all() 
 		self.fields['skills'] = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
 		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
 		
+
+
+  
+
+class CustomexerciseOnlyForm (forms.ModelForm):
+
+	class Meta:
+		model = Customexercise
+		fields = '__all__'
+	
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(CustomexerciseOnlyForm, self).__init__(*args, **kwargs)
+		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
+		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.exclude(pk=13)) 
+		parcourses = teacher.teacher_parcours.order_by("subject","level")
+		self.fields['skills']     = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
+		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
+		self.fields['parcourses'] = forms.ModelMultipleChoiceField(queryset=parcourses,  required=False ) 
+		
+
+
 
 class WAnswerAudioForm (forms.ModelForm):
 	class Meta:
@@ -470,3 +492,26 @@ class CriterionForm (forms.ModelForm):
  
 
 
+
+class CriterionOnlyForm (forms.ModelForm):
+
+	class Meta:
+		model = Criterion
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super().__init__(*args, **kwargs)
+
+		self.fields['label'] = forms.CharField(widget=forms.Textarea(attrs={
+		"placeholder": "Description du critère",
+		"rows": 6,
+		"cols": 50
+		}))
+
+		subjects = teacher.subjects.all()
+		skills     = Skill.objects.filter(subject__in = subjects )
+		knowledges = Knowledge.objects.filter(theme__subject__in =  subjects , level__in  = teacher.levels.exclude(pk=13))
+
+		self.fields['skill'] = forms.ModelChoiceField(queryset=skills,    required=False )
+		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges,  required=False ) 

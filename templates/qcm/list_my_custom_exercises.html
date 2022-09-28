@@ -1,0 +1,109 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+{% endblock %} 
+
+  
+{% block page_title %}
+    <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %} Mes exercices personnels
+{% endblock %}
+
+{% block page_menu_right %}
+
+ 
+
+
+    {% if request.user.is_superuser and  '/admin' in request.path %}
+    <li ><a href="{% url 'create_supportfile' %}"   class="btn btn-new"><i class="fa fa-plus"></i> Nouveau support GGB </a> </li> 
+    {% endif  %}
+
+    <li ><a href="{% url 'create_custom_exercise' %}"   class="btn btn-new"><i class="fa fa-plus"></i> Nouvel exercice </a> </li> 
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">
+<form method="POST"> 
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-sacado  table-hover display100">
+                <thead> 
+                    <tr>
+                        <td>Enoncé</td>
+                        <td>Option</td>
+                        <td>Matière</td>
+                        <td>Compétences</td>
+                        <td>Savoir faire</td>
+                        <td>Parcours</td>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for customexercise in customexercises  %} 
+                        <tr> 
+                            <td>
+                                {% if customexercise.text_cor != "" %}
+                                    <i class="fa fa-copyright text-danger" style="font-size:18px;cursor:help" title="Avec corrigé"></i> 
+                                {% endif  %} 
+                                <a href="{% url 'parcours_update_custom_exercise' customexercise.id 0 %}"><i class="bi bi-gear"></i> </a>
+                                {{ customexercise.instruction|safe }}
+                            </td>
+                            <td>
+                                {% if customexercise.is_python %}
+                                      <img src="{% static 'img/is_python.png' %}" width="20px" />
+                                    {% else %}
+                                      <img src="{% static 'img/is_no_python.png' %}"  width="20px" />
+                                {% endif  %}
+                                {% if customexercise.is_scratch %}
+                                      <img src="{% static 'img/is_scratch.png' %}" width="20px" />
+                                    {% else %}
+                                      <img src="{% static 'img/is_no_scratch.png' %}"  width="20px" />
+                                {% endif  %}                               
+                                {% if customexercise.calculator %}
+                                  <img src="{% static 'img/calculator.png' %}" width="20px" />
+                                {% else %}
+                                  <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
+                                {% endif  %}
+                            </td>
+                            <td>
+                               {% for subject in customexercise.subjects %} 
+                                {{ subject.shortname }}{% if not forloop.last %}<br>{% endif %}
+                               {% endfor %} 
+                            </td>
+                            <td style="font-size:12px">
+                               {% for s in customexercise.skills.all %} 
+                                {{ forloop.counter }}. {{ s }}{% if not forloop.last %}<br>{% endif %}
+                               {% endfor %} 
+                            </td>
+                            <td style="font-size:12px">
+                               {% for k in customexercise.knowledges.all %} 
+                                    {{ forloop.counter }}. {{ k }}{% if not forloop.last %}<br>{% endif %}
+                               {% endfor %} 
+                            </td>
+                            <td>
+                                {% for p in customexercise.parcourses.all %} 
+                                    <span class="btn btn-default" style="font-size:12px">{{ p }} {{ p.level.name}}</span> 
+                                {% endfor %} 
+                            </td>
+                        </tr>            
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>     
+</section>
+
+ 
+
+
+
+{% endblock %}
+
