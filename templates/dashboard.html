@@ -265,10 +265,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h1 class="sacado"  id="helper_div_title"></span></h1>
+                <h1 id="helper_div_title"></span></h1>
             </div>
             <div class="modal-body" id="helper_div_in">
- 
             </div>
         </div>
     </div>
@@ -634,7 +633,7 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{% url 'my_custom_exercises' %}"><i class="bi bi-explicit-fill"></i> Exercices personnalisés </a> 
-            <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit"><i class="fa fa-question-circle"></i></a> 
+            <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
         </div>
     </div>
 
@@ -982,9 +981,10 @@
 
 <div class="no_visu_on_load" id="helper_bibliotex_text">
     <div class="alert">
-
-        <p>Une biblioTex est un ensemble d'exercices en $\LaTeX$.</p></div>
-    <div class="alert alert-warning"><p>Avant de commencer, vous devez bien connaitre le langage $\LaTeX$ et tester vos exercices <b>en local</b>. </p>
+        <p>Une biblioTex est un ensemble d'exercices en $\LaTeX$, les exoTex.</p>
+        <p>Vous sélectionnez des exoTex proposés dans notre bibliothèque pour créer vos biblioTex ou vous pouvez créer vos propres exoTex.</p>
+    </div>
+    <div class="alert alert-info"><p>Si vous souhaitez créer des exercices en $\LaTeX$, avant de commencer, vous devez bien connaitre le langage $\LaTeX$ et tester vos exercices <b>en local</b>. </p>
         <p>Pour cela, télécharger le préamble .tex et l'installer sur votre ordinateur en local. <a href="https://sacado.xyz/ressources/tex/preambule_tex/preambule.tex" target="_blank"><i class="fa fa-save"></i></a></p>
         <p>
             <ol>
@@ -1001,13 +1001,12 @@
 
 
 
-
-
-
-
-
-
-
+<div class="no_visu_on_load" id="helper_custom_exercises_text">
+    <div class="alert">
+        <p>Les exercices personnalisés sont des exercices que vous crééz vous même.</p>
+        <p>Ces exercices se corrigent via une interface numérique. Ils sont de différents types : Python, manuscript, tapuscrit avec un rendu en ligne ou directement en classe</p> 
+    </div>
+</div>
 
 
 

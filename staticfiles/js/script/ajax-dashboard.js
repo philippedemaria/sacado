@@ -82,7 +82,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 $("#helper_div_title").html("Les quizz "); 
                 value = $("#helper_quizz_text").html();
             }
-
+            else if (condition == "custom_exercises") 
+            {
+                $("#helper_div_title").html("Les exercices personnalisés "); 
+                value = $("#helper_custom_exercises_text").html();
+            }
             $("#helper_div_in").html(value) ;
         });
 
