@@ -63,7 +63,7 @@ def menu(request):
 
         if request.user.is_teacher:
 
-            dico_helper = { "/account/profile" : "profile" , "/account/avatar" : "get_school" , "/account/updatepassword" : "updatepassword" , "/school/get_school" : "get_school" , "account/close_my_account" : "close_my_account",
+            dico_helper = { "/account/profile" : "profile" , "/account/avatar" : "avatar" , "/account/updatepassword" : "updatepassword" , "/school/get_school" : "get_school" ,  
                             "/" : "groupe" , "/#" : "groupe" ,  "/qcm/folders" : "folders" ,  "/qcm/parcours" : "parcours" ,  "/qcm/evaluations" : "evaluations" ,  "/qcm/evaluations" : "evaluations" ,  "qcm/parcours_my_courses" : "parcours_my_courses" , 
                             "/tool_list" : "quizzes" , "/bibliotex/my_bibliotexs" : "my_bibliotexs" ,  "/flashcard/my_flashpacks" : "my_flashpacks" ,  "/qcm/exercises" : "exercises" ,  "/tool/list_visiocopie" : "list_visiocopie" ,  
                             "/tool/list_tools" : "list_tools" , "/tool/show/" : "tool_show"  , "/sendmail/" : "sendmail" , "/aefe/" : "aefe" , "/admin_tdb" : "admin_tdb" ,"/qcm/parcours_group/" : "parcours_group",
