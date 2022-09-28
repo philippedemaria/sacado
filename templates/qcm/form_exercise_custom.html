@@ -156,8 +156,8 @@ ul#id_skills li{
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
-                                   Auto positionnement ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                        <div class="helper_tip_text">Après la remise du travail, les critères d'autocorrection sont proposés aux élèves pour un auto-positionnement face à leir production</div>
+                                    <label>Auto positionnement ?</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text">Après la remise du travail, les critères d'autocorrection sont proposés aux élèves pour une auto-correction critériée.</div>
                                     </span>
                                 </div>
                             </div>
@@ -190,21 +190,17 @@ ul#id_skills li{
                         <h4 class="thin">Configuration :</h4>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
-                                <div class="form-group">
-                                   Publié ?
-                                </div>
+                                    <label>Publié ?</label>  
                             </div>
                             <div class="col-sm-12 col-md-4">
-                                <div class="form-group">
                                     {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {{ form.is_publish.errors }}
-                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
-                                   Mutualisé ?  
+                                    <label>Mutualisé ?</label>    
                                    {% if not  sacado_asso %}
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text">L'exercice ne peut pas être mutualisé. Pour accéder à cette fonctionnalité, il faut utiliser la version établissement.</div>
@@ -225,21 +221,17 @@ ul#id_skills li{
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
-                                <div class="form-group">
-                                   Calculatrice ?
-                                </div>
+                                    <label>Calculatrice ?</label>  
                             </div>
                             <div class="col-sm-12 col-md-4">
-                                <div class="form-group">
                                     {{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {{ form.calculator.errors }}
-                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
-                                   Interface Python ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <label>Interface Python ?</label>   <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text">SACADO propose une interface Python</div>
                                     </span>
                                 </div>
@@ -253,41 +245,33 @@ ul#id_skills li{
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
-                                <div class="form-group">
-                                   Lien vers Scratch ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                        <div class="helper_tip_text">Un lien vers Scratch est donné pour que les élèves puissent créer leur script. Il leur suffit de prendre une capture d'écran de leur script et de la glisser déposer dans la zone de texte.</div>
+                                    <label>Lien vers Scratch ?</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text">Un lien vers Scratch est donné pour que les élèves puissent créer leur script. Il leur suffit de prendre une capture d'écran de leur script et de la glisser déposer dans la zone de texte.</div>
                                     </span>
-                                </div>
                             </div>
                             <div class="col-sm-12 col-md-4">
-                                <div class="form-group">
                                     {{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                     {{ form.is_scratch.errors }}
-                                </div>
                             </div>
                         </div>
                         <div id="config_render">
                             <h4 class="thin"> Type de remise :</h4>
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
-                                    <div class="form-group">
-                                        Saisie tapuscrite <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <label>Saisie tapuscrite</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text">Ecriture au clavier. Espace de saisie identique à celui de la consigne ci-contre.</div>
                                     </span>
-                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
-                                    <div class="form-group">
                                         {{ form.is_text |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                         {{ form.is_text.errors }}
-                                    </div>
                                 </div>
                             </div>
                             {% comment %}
                             <div class="row" {% if not customexercise %} id="collaborative_div" {% endif %}>
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
-                                        Saisie collaborative <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <label>Saisie collaborative</label> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text">Ecriture au clavier sur un espace partagé. L'enseignant voit en direct les travaux des élèves</div>
                                     </span>
                                     </div>
@@ -307,11 +291,9 @@ ul#id_skills li{
                             {% if teacher.user.is_superuser %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
-                                    <div class="form-group">
-                                        Saisie manuscrite <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <label>Saisie manuscrite </label> <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text">fonctionnnalité qui permet aux élèves d'utiliser un stylet.</div>
                                     </span>
-                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <div class="form-group">
@@ -329,7 +311,7 @@ ul#id_skills li{
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
                                     <div class="form-group">
-                                        Fichier <small>(pdf,doc,...)</small> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <label>Fichier <small>(pdf,doc,...)</small></label> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text">Nécessite la version Etablissement. Le rendu du travail est un fichier. Les élèves téléversent leurs rendus et l'enseignant le récupère dans sa console.</div>
                                     </span>
                                     </div>
@@ -347,29 +329,24 @@ ul#id_skills li{
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-md-8">
-                                    <div class="form-group">
-                                        Image <small>(jpg,png) <span style="font-size:12px;color:#c70000">max. 500ko</span></small> <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <label>Image <small>(jpg,png) <span style="font-size:12px;color:#c70000">max. 500ko</span></small></label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text">Nécessite la version Etablissement. Le rendu du travail est une image. Les élèves téléversent leurs rendus et l'enseignant le récupère dans sa console.</div>
                                     </span>
-                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
-                                    <div class="form-group">
                                         {% if  sacado_asso %}
                                             {{ form.is_image |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                         {% else %}
                                             {{ form.is_image |attr:"disabled" |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                                         {% endif %} 
                                         {{ form.is_image.errors }}
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <hr>
                         <div class="row">
                             <div class="col-sm-12 col-md-8">
                                 <div class="form-group">
-                                    Notation ?
+                                    <label>Notation ?</label>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4">
@@ -381,15 +358,11 @@ ul#id_skills li{
                         </div>
                         <div class="row" id="on_mark">
                             <div class="col-sm-12 col-md-8">
-                                <div class="form-group">
-                                    Sur ?
-                                </div>
+                                    <label>Sur ?</label>
                             </div>
                             <div class="col-sm-12 col-md-4">
-                                <div class="form-group">
                                     {{ form.mark |add_class:"form-control" }}
                                     {{ form.mark.errors }}
-                                </div>
                             </div>
                         </div>
                     </div>
