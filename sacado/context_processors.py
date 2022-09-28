@@ -71,10 +71,6 @@ def menu(request):
                             "/school/groups" : 'school_groups' , '/school/new_student/' : 'school_new_student' , '/school/new_student_list/' : 'school_new_student_list'  }
 
 
-
-
-
-
             ihelp=0 
             request_path = str(request.path) 
             while ihelp < len(request_path) and not('0'<=request_path[ihelp]<='9' )    : ihelp+=1  
