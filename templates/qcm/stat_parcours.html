@@ -9,15 +9,11 @@
     <script>
         require(['script/ajax-parcours']);
     </script>
-    {% if sacado_asso %} 
+
     <script>
         require(['script/ajax-inside_data_tab']);
     </script>
-    {% else %}
-    <script>
-        require(['script/ajax-inside_data_tab_no_asso']);
-    </script> 
-    {% endif %} 
+
 
 {% endblock %}
 
@@ -238,298 +234,315 @@ body{
 
  
 
-    <div class="modal fade" id="writer" tabindex="-1" role="dialog" aria-labelledby="writer" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Ecrire un message à  <span id="modal_student_name"></span></h5>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="post" > 
-                          {% csrf_token %}
-                        <div class="form-group"><input type="hidden" name="student_id" class="form-control" id="student_id"/>
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Nom" />
+<div class="modal fade" id="writer" tabindex="-1" role="dialog" aria-labelledby="writer" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Ecrire un message à  <span id="modal_student_name"></span></h5>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" > 
+                      {% csrf_token %}
+                    <div class="form-group"><input type="hidden" name="student_id" class="form-control" id="student_id"/>
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Nom" />
+                    </div>
+                    <div class="form-group">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Email"  />
+                    </div>
+                    <div class="form-group">
+                        {{ form.subject|add_class:"form-control"|attr:"placeholder:Objet"|attr:"required" }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.texte  }}
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" id="sender_message">Envoyer</button>   
+                        <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  
+
+
+<div class="modal fade" id="export_marks" tabindex="-1" role="dialog" aria-labelledby="export_marks" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Exporter les notes</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'export_notes_after_evaluation' %}" method="POST" > 
+                    {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
+                    <div class="row">
+                        <div class="col-sm-10 col-md-9">   
+                            <div class="form-group">
+                                <label>Rapporter la note des exercices interactifs SACADO sur :</label>
+                            </div>
                         </div>
-                        <div class="form-group">
-                          <input type="email" class="form-control" name="email" id="email" placeholder="Email"  />
+                        <div class="col-sm-2 col-md-3">   
+                            <input type="number" name="note_sacado" min=0   step=0.5 class="form-control" id="note_sacado" required  />
                         </div>
-                        <div class="form-group">
-                            {{ form.subject|add_class:"form-control"|attr:"placeholder:Objet"|attr:"required" }}
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10 col-md-9">     
+                            <div class="form-group">
+                                <label>Noter le devoir sur :</label>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            {{ form.texte  }}
+                        <div class="col-sm-10 col-md-3">     
+                            <div class="form-group">
+                                <input type="number" name="note_totale" required value=20 min=0 step=1 class="form-control" id="note_totale"   />
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary" id="sender_message">Envoyer</button>   
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">  
+
+                            {% if sacado_asso %} 
+                            <button type="submit" class="btn btn-primary" name="this_clic_notes" value="csv" id="sender_message"> Exporter en csv</button> 
+                            <button type="submit" class="btn btn-success" name="this_clic_notes" value="xls" > Exporter en tableur</button> 
+                            {% else %}
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en csv</span> 
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en tableur</span> 
+                            {% endif %} 
+
+
+
                             <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
                         </div>
-                    </form>
-                </div>
+                    </div>     
+                </form>
             </div>
         </div>
-    </div>  
+    </div>
+</div> 
 
- 
- 
 
-    <div class="modal fade" id="export_marks" tabindex="-1" role="dialog" aria-labelledby="export_marks" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Exporter les notes</h5>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'export_notes_after_evaluation' %}" method="post" > 
-                        {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
-                        <div class="row">
-                            <div class="col-sm-10 col-md-9">   
-                                <div class="form-group">
-                                    <label>Rapporter la note des exercices interactifs SACADO sur :</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-3">   
-                                <input type="number" name="note_sacado" min=0   step=0.5 class="form-control" id="note_sacado" required  />
-                            </div>
+<div class="modal fade" id="export_skills" tabindex="-1" role="dialog" aria-labelledby="export_skills" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Exporter les compétences</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'export_skills_after_evaluation' %}" method="post" > 
+                    {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
+                    <div class="row">
+                        <div class="col-sm-6">  
+                            <label>Pour une même compétence, prendre en compte </label>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-10 col-md-9">     
-                                <div class="form-group">
-                                    <label>Noter le devoir sur :</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-10 col-md-3">     
-                                <div class="form-group">
-                                    <input type="number" name="note_totale" required value=20 min=0 step=1 class="form-control" id="note_totale"   />
-                                </div>
-                            </div>
+                        <div class="col-sm-6">  
+                            <select name="nb_skill" class="form-control select2">
+                                <option value="1">La dernière évaluée</option>
+                                <option value="2">Les 2 dernières évaluées</option>
+                                <option value="3">Les 3 dernières évaluées</option>
+                                <option value="0">Toutes évaluées</option>
+                            </select> 
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">  
-                                <button type="submit" class="btn btn-primary" name="this_clic_notes" value="csv" id="sender_message"> Exporter en csv</button> 
-                                <button type="submit" class="btn btn-primary" name="this_clic_notes" value="xls" > Exporter en tableur</button> 
+                    </div>  
+                    <hr/>
 
 
-                                <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
-                            </div>
-                        </div>     
-                    </form>
-                </div>
+                    <div class="row">
+                        <div class="col-sm-12">  
+                            <label> Rappel : <br/>
+                            4 niveaux de maitrise. Les codes correpondants sont 1, 2, 3, 4 et A.<br>  
+                                <li class="sanspuce"><i class="fa fa-square text-primary"></i> Très bonne maitrise  : 4 </li>
+                                <li class="sanspuce"><i class="fa fa-square text-success"></i> Maitrise satisfaisante  : 3  </li>
+                                <li class="sanspuce"><i class="fa fa-square text-warning"></i> Maitrise fragile  : 2 </li>
+                                <li class="sanspuce"><i class="fa fa-square text-danger"></i> Maitrise insuffisante  : 1  </li>
+                                <li class="sanspuce"><i class="fa fa-square text-default"></i> Absent :   A</li>
+                                <br>  
+                                Ces codes doivent être reportés dans Pronote. Les compétences transférées doivent être les mêmes que celles en attente dans Pronote. Voir l'aide éventuellement.
+                            </label>
+                        </div>
+                    </div> 
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-12">  
+                            {% if sacado_asso %} 
+                            <button type="submit" class="btn btn-primary" name="this_clic_skills" value="csv"> Exporter en csv</button> 
+                            <button type="submit" class="btn btn-success" name="this_clic_skills" value="xls" > Exporter en tableur</button> 
+                            {% else %}
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en csv</span> 
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en tableur</span> 
+                            {% endif %} 
+
+                            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                        </div>
+                    </div>     
+                </form>
             </div>
         </div>
-    </div> 
+    </div>
+</div> 
 
 
-    <div class="modal fade" id="export_skills" tabindex="-1" role="dialog" aria-labelledby="export_skills" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Exporter les compétences</h5>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'export_skills_after_evaluation' %}" method="post" > 
-                        {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
-                        <div class="row">
-                            <div class="col-sm-6">  
-                                <label>Pour une même compétence, prendre en compte </label>
-                            </div>
-                            <div class="col-sm-6">  
-                                <select name="nb_skill" class="form-control select2">
-                                    <option value="1">La dernière évaluée</option>
-                                    <option value="2">Les 2 dernières évaluées</option>
-                                    <option value="3">Les 3 dernières évaluées</option>
-                                    <option value="0">Toutes évaluées</option>
-                                </select> 
-                            </div>
-                        </div>  
-                        <hr/>
 
-
-                        <div class="row">
-                            <div class="col-sm-12">  
-                                <label> Rappel : <br/>
-                                4 niveaux de maitrise. Les codes correpondants sont 1, 2, 3, 4 et A.<br>  
-                                    <li class="sanspuce"><i class="fa fa-square text-primary"></i> Très bonne maitrise  : 4 </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-success"></i> Maitrise satisfaisante  : 3  </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-warning"></i> Maitrise fragile  : 2 </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-danger"></i> Maitrise insuffisante  : 1  </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-default"></i> Absent :   A</li>
-                                    <br>  
-                                    Ces codes doivent être reportés dans Pronote. Les compétences transférées doivent être les mêmes que celles en attente dans Pronote. Voir l'aide éventuellement.
-                                </label>
-                            </div>
-                        </div> 
-                        <hr/>
-                        <div class="row">
-                            <div class="col-sm-12">  
-                                <button type="submit" class="btn btn-primary" name="this_clic_skills" value="csv"> Exporter en csv</button> 
-                                <button type="submit" class="btn btn-primary" name="this_clic_skills" value="xls" > Exporter en tableur</button> 
-
-
-                                <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
-                            </div>
-                        </div>     
-                    </form>
-                </div>
+<div class="modal fade" id="export_help" tabindex="-1" role="dialog" aria-labelledby="export_help" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Aide pour Pronote</h5>
             </div>
-        </div>
-    </div> 
-
-
-
-    <div class="modal fade" id="export_help" tabindex="-1" role="dialog" aria-labelledby="export_help" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Aide pour Pronote</h5>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 alert alert-info">     
+                        Il faut obligatoirement passer par le client Pronote pour importer des données.
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 alert alert-info">     
-                            Il faut obligatoirement passer par le client Pronote pour importer des données.
-                        </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">     
+                        Transfert de notes de Sacado vers Pronote (1 min. 14 s.)
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">     
-                            Transfert de notes de Sacado vers Pronote (1 min. 14 s.)
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">     
+                        <video src="https://sacado.xyz/ressources/videos/stats.mp4" width=560  height=315 controls  >
+                          Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
+                        </video>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">     
-                            <video src="https://sacado.xyz/ressources/videos/stats.mp4" width=560  height=315 controls  >
-                              Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
-                            </video>
-                        </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">     
+                        Transfert de compétences de Sacado vers Pronote (1 min. 17 s.)
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">     
-                            Transfert de compétences de Sacado vers Pronote (1 min. 17 s.)
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">     
-                            <video src="https://sacado.xyz/ressources/videos/stats_parcours.mp4" width=560  height=315 controls  >
-                              Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
-                            </video>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">     
+                        <video src="https://sacado.xyz/ressources/videos/stats_parcours.mp4" width=560  height=315 controls  >
+                          Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
+                        </video>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    <div class="modal fade" id="export_results" tabindex="-1" role="dialog" aria-labelledby="export_results" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Exporter les résultats au format pdf</h5>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'export_results_after_evaluation' %}" method="post" > 
-                        {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
+<div class="modal fade" id="export_results" tabindex="-1" role="dialog" aria-labelledby="export_results" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Exporter les résultats au format pdf</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'export_results_after_evaluation' %}" method="post" > 
+                    {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
 
 
-                        <table class="table table-sacado borderless">
-                            <tr>
-                                <td>Exporter les savoir faire ? </td>
-                                <td><input type="checkbox" name="knowledge"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
-                            </tr>
+                    <table class="table table-sacado borderless">
+                        <tr>
+                            <td>Exporter les savoir faire ? </td>
+                            <td><input type="checkbox" name="knowledge"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                        </tr>
 
-                            <tr>
-                                <td>Exporter les compétences ? </td>
-                                <td><input type="checkbox" name="skill"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
-                            </tr>
-                            <tr >
-                                <td>Exporter les notes ? </td>
-                                <td><input type="checkbox" name="mark" id="mark_shower"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
-                            </tr>
-                            <tr class="mark_div_in_score">
-                                <td>Noter les exercices SACADO sur (Mettre 0 si aucun)</td>
-                                <td><input type="number" name="exo_sacado" min="0" value="20" /></td>
-                            </tr>
-                            <tr class="mark_div_in_score">
-                                <td>Ramener les notes sur </td>
-                                <td><input type="number" name="mark_on" min="0" value="20" /></td>
-                            </tr>
-                            <tr>
-                                <td>Signature parent ?</td>
-                                <td><input type="checkbox" name="signature" data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
-                            </tr>                            
-                        </table>
-                        <div class="row">
-                            <div class="col-sm-12">  
-                                <div id="mini_loader" class="text-success">Exportation en cours. Action qui peut prendre quelques minutes.</div>
-                            </div>
-                        </div>   
-                        <hr/>
-                        <div class="row">
-                            <div class="col-sm-12">  
-                                <button type="submit" class="btn btn-primary" name="this_clic_results" value="csv"> Exporter en csv</button> 
-                                <button type="submit" class="btn btn-success" name="this_clic_results" value="xls" > Exporter en tableur</button>  
-                                <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
-                            </div>
-                        </div>     
-                    </form>
-                </div>
+                        <tr>
+                            <td>Exporter les compétences ? </td>
+                            <td><input type="checkbox" name="skill"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                        </tr>
+                        <tr >
+                            <td>Exporter les notes ? </td>
+                            <td><input type="checkbox" name="mark" id="mark_shower"  data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                        </tr>
+                        <tr class="mark_div_in_score">
+                            <td>Noter les exercices SACADO sur (Mettre 0 si aucun)</td>
+                            <td><input type="number" name="exo_sacado" min="0" value="20" /></td>
+                        </tr>
+                        <tr class="mark_div_in_score">
+                            <td>Ramener les notes sur </td>
+                            <td><input type="number" name="mark_on" min="0" value="20" /></td>
+                        </tr>
+                        <tr>
+                            <td>Signature parent ?</td>
+                            <td><input type="checkbox" name="signature" data-toggle="toggle"  data-onstyle="primary"  data-offstyle="default" data-on="Oui" data-off="Non"/></td>
+                        </tr>                            
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-12">  
+                            <div id="mini_loader" class="text-success">Exportation en cours. Action qui peut prendre quelques minutes.</div>
+                        </div>
+                    </div>   
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-12"> 
+                            {% if sacado_asso %} 
+                            <button type="submit" class="btn btn-primary"> <i class="bi bi-file-pdf"></i> Exporter en pdf</button>  
+                            {% else %}
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"><i class="bi bi-file-pdf"></i> Exporter en pdf</span> 
+                            {% endif %} 
+                            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                        </div>
+                    </div>     
+                </form>
             </div>
         </div>
     </div>
+</div>
 
 
-    <div class="modal fade" id="export_knowledges" tabindex="-1" role="dialog" aria-labelledby="export_knowledges" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                
-                    <h5 class="modal-title" >Exporter les savoir faire</h5>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'export_knowledges_after_evaluation' %}" method="post" > 
-                        {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
-                        <div class="row">
-                            <div class="col-sm-12">  
-                                <label> Rappel : <br/>
-                                4 niveaux de maitrise. Les codes correpondants sont 1, 2, 3, 4 et A.<br>  
-                                    <li class="sanspuce"><i class="fa fa-square text-primary"></i> Très bonne maitrise  : 4 </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-success"></i> Maitrise satisfaisante  : 3  </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-warning"></i> Maitrise fragile  : 2 </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-danger"></i> Maitrise insuffisante  : 1  </li>
-                                    <li class="sanspuce"><i class="fa fa-square text-default"></i> Absent :   A</li>
-                                    <br>  
-                                    Ces codes doivent être reportés dans Pronote. Les compétences transférées doivent être les mêmes que celles en attente dans Pronote. Voir l'aide éventuellement.
-                                </label>
-                            </div>
-                        </div> 
-                        <hr/>
-                        <div class="row">
-                            <div class="col-sm-12">                              
-                                <button type="submit" class="btn btn-primary" name="this_clic_knowledges" value="csv"> Exporter en csv</button> 
-                                <button type="submit" class="btn btn-success" name="this_clic_knowledges" value="xls" > Exporter en tableur</button>  
-                                <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
-                            </div>
-                        </div>     
-                    </form>
-                </div>
+<div class="modal fade" id="export_knowledges" tabindex="-1" role="dialog" aria-labelledby="export_knowledges" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Exporter les savoir faire</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'export_knowledges_after_evaluation' %}" method="post" > 
+                    {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
+                    <div class="row">
+                        <div class="col-sm-12">  
+                            <label> Rappel : <br/>
+                            4 niveaux de maitrise. Les codes correpondants sont 1, 2, 3, 4 et A.<br>  
+                                <li class="sanspuce"><i class="fa fa-square text-primary"></i> Très bonne maitrise  : 4 </li>
+                                <li class="sanspuce"><i class="fa fa-square text-success"></i> Maitrise satisfaisante  : 3  </li>
+                                <li class="sanspuce"><i class="fa fa-square text-warning"></i> Maitrise fragile  : 2 </li>
+                                <li class="sanspuce"><i class="fa fa-square text-danger"></i> Maitrise insuffisante  : 1  </li>
+                                <li class="sanspuce"><i class="fa fa-square text-default"></i> Absent :   A</li>
+                                <br>  
+                                Ces codes doivent être reportés dans Pronote. Les compétences transférées doivent être les mêmes que celles en attente dans Pronote. Voir l'aide éventuellement.
+                            </label>
+                        </div>
+                    </div> 
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-12">   
+                            {% if sacado_asso %}                 
+                            <button type="submit" class="btn btn-primary" name="this_clic_knowledges" value="csv"> Exporter en csv</button> 
+                            <button type="submit" class="btn btn-success" name="this_clic_knowledges" value="xls" > Exporter en tableur</button>  
+                            {% else %}
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en csv</span> 
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en tableur</span> 
+                            {% endif %} 
+                            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                        </div>
+                    </div>     
+                </form>
             </div>
         </div>
-    </div> 
+    </div>
+</div> 
 
 {% endblock %}

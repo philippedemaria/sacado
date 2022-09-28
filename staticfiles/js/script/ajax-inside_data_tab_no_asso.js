@@ -7,14 +7,13 @@ define(['jquery','bootstrap_popover', 'bootstrap' ], function ($) {
 
         $('.dataTables_filter').append(" <a  href='#' data-toggle='modal' data-target='#export_help'   style='float:left' class='btn btn-success btn-xs'> Aide </a>  ");
 
-
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'><i class='fa fa-print'></i></a>  ") ;        
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> résultats</a>  ") ;        
 
         $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> notes</a>  ") ;
 
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> compétences</a>  ") ;
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> compétences</a>  ") ;
 
-        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise'   class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> savoir faire</a>  ") ;
+        $('.dataTables_length').append("  <a href='#'  title='Version établissement requise' class='btn btn-default pull-right'><i class='bi bi-file-arrow-down'></i> savoir faire</a>  ") ;
 
 
         $('#mini_loader').hide() ;

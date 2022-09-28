@@ -7689,7 +7689,7 @@ def export_notes_after_evaluation(request):
 
     this_clic = request.POST.get("this_clic_notes")
 
-    if this_clic_notes == "csv" :
+    if this_clic == "csv" :
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
@@ -7716,16 +7716,17 @@ def export_notes_after_evaluation(request):
 
                 try :
                     final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
-
                     coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
                     final_mark = math.ceil( coefficient *  final_mark)
+                    final_mark_coeff =  float(data_student["score_real_coeff"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
                 except :
                     final_mark = "NE" 
-
+                    final_mark_coeff = "NE"
             else :
-                final_mark = "NE" 
+                final_mark = "NE"
+                final_mark_coeff = "NE" 
 
-            writer.writerow( (str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] , data_student["ajust"] , final_mark ) )
+            writer.writerow( (str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] ,  final_mark,  final_mark_coeff ) )
         return response
 
 
@@ -7753,34 +7754,42 @@ def export_notes_after_evaluation(request):
             exercises.append(r.exercise)
 
 
-        for student in parcours.students.order_by("user__last_name") :
-            data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
+        columns = [ 'Nom' , 'Prénom' ,  'Total des exercices'  ,  "Nombres d'exercices traités" ,  "Pourcentage",   "Note non coeff" , "Note coefficientée" ] 
 
 
-        columns = [ data_student['name'] , data_student['score'] , data_student['score_coeff'] ] 
-
-        for k in knowledges:
-            columns.append(k.name)
 
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], font_style)
 
-        # Sheet body, remaining rows
+
+        # Sheet body, style par défaut, on enlève le gras
         font_style = xlwt.XFStyle()
 
         students_detail = []
         for student in parcours.students.order_by("user__last_name") :
-            knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+            data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
 
-            for knwldg in knowledges :
-                total = total_by_knowledge_by_student(knwldg,"",parcours,student)
-                if total == -10 : res = "A"
-                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,"",parcours,student))
-                knowledge_level_tab.append(res)
+            if data_student["percent"] != "" :
+                try :
+                    final_mark = float(data_student["score_total"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
+                    coefficient = data_student["nb_exo"]  /  data_student["total_nb_exo"] 
+                    final_mark = math.ceil( coefficient *  final_mark)
+                    final_mark_coeff = float(data_student['score_real_coeff']) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
 
-            students_detail.append(knowledge_level_tab)
+                except :
+                    final_mark = "NE" 
+                    final_mark_coeff = "NE"  
+            else :
+                final_mark = "NE" 
+                final_mark_coeff = "NE"  
 
-     
+            data_s = [ str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() ,  data_student["total_nb_exo"] , data_student["nb_exo"],   data_student["percent"] ,  final_mark , final_mark_coeff  ]
+
+
+
+            students_detail.append(data_s)
+
+
         ############################################################################################## 
 
         row_ns = 0
@@ -7790,8 +7799,6 @@ def export_notes_after_evaluation(request):
                 ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
         wb.save(response)
         return response
-
-
 
 
 def export_skills_after_evaluation(request):
@@ -7885,7 +7892,7 @@ def export_skills_after_evaluation(request):
         label_in_export = ['Nom',  'Prénom'] 
         
         for ski in skills :
-            if not ski.name in columns : 
+            if not ski.name in label_in_export : 
                 label_in_export.append(ski.name)
 
         for col_num in range(len(label_in_export)):
@@ -7896,7 +7903,7 @@ def export_skills_after_evaluation(request):
 
         students_detail = []
         for student in parcours.students.order_by("user__last_name") :
-            knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
+            skill_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for skill in  skills:
                 total_skill = 0
@@ -8036,8 +8043,6 @@ def export_knowledges_after_evaluation(request):
                 ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
         wb.save(response)
         return response  
-
-
 
 
 def export_note_custom(request,id,idp):
