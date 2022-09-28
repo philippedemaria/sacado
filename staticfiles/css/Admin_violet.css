@@ -267,6 +267,7 @@ hr.divider {
   margin-bottom: 15px;
   height: 400px;
   overflow-y: auto;
+  background-color: white;
 }
 
 
@@ -833,11 +834,11 @@ a.detail_student_parcours{
 
     padding:10px;
     color: #333;
-    border-radius: 2px;
+    /*border-radius: 2px;
     background-color: #FCFCFC; 
     -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
     -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);*/
 }
 
 .select_note{
