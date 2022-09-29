@@ -95,6 +95,25 @@ def to_clean_database(request,idl,start):
     return render(request, 'association/to_clean_database.html', context )
 
 
+@user_passes_test(user_is_board)
+def to_keep_list(request):
+
+    levels = Level.objects.exclude(pk=13).order_by('ranking')
+
+    list_to_keep = []
+    for level in levels :
+        idl = level.id
+        supportfiles = Supportfile.objects.values_list('ggbfile',flat=True).filter(level=level)
+        ressources   = '/var/www/sacado/ressources/' 
+        dirname      = ressources + 'ggbfiles/' + str(idl)
+
+        files = os.listdir(dirname)
+        for file in files :
+            list_to_keep.append(str(idl)+"/"+file)
+ 
+     
+    return list_to_keep
+
 #################################################################
 # Suppression des fichiers non utilisés
 #################################################################
