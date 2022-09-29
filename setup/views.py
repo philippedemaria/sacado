@@ -361,7 +361,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     groups = Group.objects.filter(school = school, name = name )
                     group  = groups.last()
                     try :
-                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
                         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
                     except :
                         pass
@@ -373,7 +373,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             else :
                 level = Level.objects.get(pk=1)
                 group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level }  )
-                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,   "country" : country , })
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
                 group.students.add(student)
                 groups = [group]
@@ -398,7 +398,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 if not email :
                     email = str(today.timestamp()) + "@sacado.xyz"
 
-            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
             try :
                 subject = Subject.objects.get(pk=1)
@@ -465,7 +465,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
             try :
                 user_type   = 2    
-                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "is_manager" : 1 ,  "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
                 teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
                 if not dico_received["DIV"][0] :
