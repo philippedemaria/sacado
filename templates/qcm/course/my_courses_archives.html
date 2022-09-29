@@ -5,15 +5,18 @@
 
  
 
+ 
 
 
-
+{% block page_title %}
+    <i class="bi bi-archive sacado_color_text"></i>   Mes cours archivés
+    <img src="{% static 'img/angle-right.png' %}"/>
+{% endblock %}
 
 {% block page_menu_right %}
 
-    <li><a href="{% url 'courses' %}"  class="no_button"> Mes cours</a></li>
+    <li><a href="{% url 'courses' %}"  class="btn btn-new"> Mes cours</a></li>
 
-    {% include 'qcm/course/submenu_creation_course.html' %}
    
 {% endblock %}
 

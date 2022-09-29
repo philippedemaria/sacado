@@ -184,8 +184,6 @@
                                 </form>
                             </div>
                             {% endif %}  
-
-
                         {% endblock %}
                         </ul>
                     </div>
@@ -574,29 +572,42 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'folders' %}"><i class="fa fa-folder-open" ></i> Dossiers </a>
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'folders' %}"><i class="fa fa-folder-open" ></i> Dossiers </a>    
+            <a href="{% url 'folders_archives' %}" class="inside_volet pull-right" title="Mes dossiers archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'all_folders' %}" class="inside_volet pull-right" title="Récupérer un dossier mutualisé"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_folder' 0 %}" class="inside_volet pull-right" title="Créer un nouveau dossier"><i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
     <hr/>
     {% if request.user.is_superuser %}
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'sequences' %}"><i class="bi bi-ladder" ></i> Séquences </a>
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'sequences' %}"><i class="bi bi-ladder" ></i> Séquences </a>    
+            <a href="{% url 'sequences_archives' %}" class="inside_volet pull-right" title="Mes séquences archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'all_parcourses' 2 %}" class="inside_volet pull-right" title="Récupérer une séquence mutualisée"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_sequence' 0 %}" class="inside_volet pull-right" title="Créer une nouvelle séquence"><i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
     <hr/>
     {% endif %}
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'parcours' %}"><i class="fa fa-th" ></i> Parcours </a>
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'parcours' %}"><i class="fa fa-th" ></i> Parcours </a>  
+            <a href="{% url 'archives' %}" class="inside_volet pull-right" title="Mes parcours archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'all_parcourses' 0 %}" class="inside_volet pull-right" title="Récupérer un parcours mutualisé"><i class="bi bi-cloud  text-danger"></i></a>
+            <a href="{% url 'create_parcours' 0 %}" class="inside_volet pull-right" title="Créer un nouveau parcours"><i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             {% if sacado_asso %}
-            <a href="{% url 'evaluations' %}"> <i class="fa fa-trophy" ></i> Evaluations</a>
+            <a href="{% url 'evaluations' %}"> <i class="fa fa-trophy" ></i> Evaluations</a>    
+            <a href="{% url 'evaluations_archives' %}" class="inside_volet pull-right" title="Mes évaluations archivées"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'all_parcourses' 1 %}" class="inside_volet pull-right" title="Récupérer une évaluation mutualisée"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_evaluation' 0 %}" class="inside_volet pull-right" title="Créer une nouvelle évaluation"><i class="bi bi-plus-circle"></i></a>
+
             {% else %}
             <a href="#" style="cursor:not-allowed" title="Version établissement requise."> <i class="fa fa-trophy" ></i> Evaluations</a>
             {% endif %}
@@ -604,36 +615,59 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'courses' %}"><i class="fa fa-desktop" ></i> Cours </a>
+            {%  if request.user.is_superuser %}     
+            <a href="{% url 'courses_archives' %}" class="inside_volet pull-right" title="Mes cours archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'all_courses' %}" class="inside_volet pull-right" title="Récupérer un cours mutualisé"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'only_create_course'%}" class="inside_volet pull-right" title="Créer un nouveau cours"><i class="bi bi-plus-circle"></i></a>
+            {% endif %}
         </div>
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'list_quizzes' %}"><i class="bi bi-aspect-ratio" ></i>  Quizz & rituels  </a>
             <a href="#" data-toggle='modal' data-helper_text='quizz' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
+    
+            <a href="{% url 'all_quizzes_archived' %}" class="inside_volet pull-right" title="Mes quizz archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'all_quizzes' %}" class="inside_volet pull-right" title="Récupérer un quizz mutualisé"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_quizz'%}" class="inside_volet pull-right" title="Créer un nouveau quizz"><i class="bi bi-plus-circle"></i></a>
+
         </div>
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_bibliotexs' %}"><i class="bi bi-bootstrap" ></i>  BiblioTex </a> 
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'my_bibliotexs' %}"><i class="bi bi-bootstrap" ></i>  BiblioTex </a>
             <a href="#" data-toggle='modal' data-helper_text='bibliotex'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
+   
+            <a href="{% url 'my_bibliotex_archives' %}" class="inside_volet pull-right" title="Mes bibliotexs archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'bibliotexs' %}" class="inside_volet pull-right" title="Récupérer une bibliotex mutualisée"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_bibliotex' 0 %}" class="inside_volet pull-right" title="Créer une nouvelle bibliotex"><i class="bi bi-plus-circle"></i></a>
+
         </div>
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'my_flashpacks' %}"><i class="bi bi-stack" ></i> Flashpack   </a> 
             <a href="#" data-toggle='modal' data-helper_text='flashpack'  data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
+    
+            <a href="{% url 'my_flashpack_archives' %}" class="inside_volet pull-right" title="Mes flashpack archivés"><i class="bi bi-archive"></i></a>
+            <a href="{% url 'flashpacks' %}" class="inside_volet pull-right" title="Récupérer un flashpack mutualisé"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_flashpack' 0 %}" class="inside_volet pull-right" title="Créer un nouveau flashpack"><i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
     <hr/>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a href="{% url 'my_custom_exercises' %}"><i class="bi bi-explicit-fill"></i> Exercices personnalisés </a> 
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'my_custom_exercises' %}"><i class="bi bi-explicit-fill"></i> Exercices personnels </a> 
             <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
+
+            <a href="{% url 'create_custom_exercise'  %}" class="inside_volet pull-right" title="Créer une nouvel exercice perso"><i class="bi bi-plus-circle"></i></a>
+            <a href="{% url 'exercise_custom_show_shared' %}" class="inside_volet pull-right" title="Récupérer une exercice mutualisé"><i class="bi bi-cloud text-danger"></i></a>
+
         </div>
     </div>
 

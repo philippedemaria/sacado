@@ -445,7 +445,7 @@ def list_quizzes(request):
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
 
-    return render(request, 'tool/list_quizzes.html', { 'list_folders': list_folders , 'quizzes': quizzes , 'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba , 'groups' : groups  })
+    return render(request, 'tool/list_quizzes.html', { 'list_folders': list_folders , 'quizzes': quizzes , 'teacher': teacher, 'is_archive' : is_archive, 'nba' : nba , 'groups' : groups })
 
 
 
@@ -455,12 +455,12 @@ def all_quizzes_archived(request):
 
     teacher = request.user.teacher 
     quizzes = teacher.teacher_quizz.filter(is_archive=1 , folders=None) # non inclus dans un dossier
-    folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=1).distinct().order_by("folders__level")#  inclus dans un dossier
+    folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=1).exclude(folders=None).distinct().order_by("levels","folders")#  inclus dans un dossier
     list_folders = list()
     for folder in folders :
         quizzes_folders = dict()
-        quizzes_folders["folder"] = folder
-        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder)  
+        quizzes_folders["folder"] = Folder.objects.get(pk=folder)
+        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder).order_by("levels") 
         list_folders.append(quizzes_folders)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  

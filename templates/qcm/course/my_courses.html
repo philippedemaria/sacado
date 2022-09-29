@@ -15,6 +15,8 @@
 
 {% block page_title %}
    <i class="fa fa-desktop sacado_color_text"></i> Mes cours
+
+   <ul>  {% include 'qcm/course/submenu_creation_course.html' %}</ul>
 {% endblock %}
 
 
@@ -23,10 +25,8 @@
 
 
 {% block page_menu_right %}
- <li><a href="{% url 'courses_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Archives ({{ nb_archive }})</a></li>
+ 
 
-    {% include 'qcm/course/submenu_creation_course.html' %}
-   
 {% endblock %}
 
 

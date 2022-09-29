@@ -15,6 +15,8 @@
  
 {% block page_title %}
    <i class="bi bi-trophy sacado_color_text"></i>  Mes évaluations
+
+   <ul>    {% include 'qcm/submenu_creation_evaluation.html' %}</ul>
 {% endblock %}
 
 
@@ -22,9 +24,7 @@
 
 {% block page_menu_right %}
 
-    <li><a href="{% url 'evaluations_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Evaluation{{ nb_archive|pluralize }} archivée{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
 
-    {% include 'qcm/submenu_creation_evaluation.html' %}
 
 {% endblock %}
 

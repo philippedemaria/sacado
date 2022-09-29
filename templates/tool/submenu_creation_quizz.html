@@ -1,9 +1,43 @@
     <li class="dropdown">
 
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau quizz <b class="caret"></b> </a>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Nouveau quizz </a>
 
         <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
             <li> <a href="{% url 'create_quizz' %}" > Créer un quizz</a> </li> 
-            <li> {% if sacado_asso %} <a href="{% url 'all_quizzes' %}" > Récupérer un quizz mutualisé</a> {% else %}<a href="#"  class="no_sacado_asso" > Récupérer un quizz mutualisé </a> {% endif %} </li>         
+            <li> {% if sacado_asso %}
+	            	<a href="{% url 'all_quizzes' %}" > Récupérer un quizz mutualisé
+
+                    {% if not folder or not group %} 
+                        <span class="helper_tip"> 
+                                <i class="fa fa-warning text-danger"></i> 
+                                <div class="helper_tip_text" >
+                                    Préférer cloner depuis un <br/>groupe ou un dossier. Le quizz <br/>sera directement affecté à votre<br/> groupe ou votre dossier.   
+                                </div>
+                        </span>
+                    {% endif %} 
+	            	</a> 
+            	{% else %}
+            		<a href="#"  class="no_sacado_asso" > Récupérer un quizz mutualisé </a> 
+            	{% endif %} </li>   
+
+
+            <li class="divider"></li>
+
+		    <li>
+		        {% if sacado_asso %} 
+		            {% if not is_archive %}
+		                <a href="{% url 'all_quizzes_archived' %}"  class="no_button"><i class="fa fa-archive"></i> Mes quizz archivés ({{ nba }})</a> 
+		            {% else %}
+		                <a href="{% url 'list_quizzes' %}"  class="no_button" >Mes quizz  </a> 
+		            {% endif %}
+
+		        {% else %}
+		            <a href="#"  class="no_sacado_asso" >{% if not is_archive %}<i class="fa fa-archive"></i>{% endif %} Mes quizz {% if not is_archive %}archivés{% endif %}</a> 
+		        {% endif %} 
+		    </li>
+
+
+
+
         </ul>
     </li>  

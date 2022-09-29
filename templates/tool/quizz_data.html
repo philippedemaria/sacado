@@ -87,10 +87,10 @@
 <td> 
 {% if sacado_asso %}
 
-    {% if  quizz.is_video %}
+    {% if  quizz.is_video and group %}
     <span class="sanspuce historic_li"  style="border:1px solid; border-radius:20px; width:70px;">
         <i class="fa fa-gamepad"></i> | 
-        <a href="{% url 'play_quizz_teacher'  quizz.id  %}" target="_blank"  class="quizz_action" title="En version à tester" > 
+        <a href="{% url 'play_quizz_teacher'  quizz.id group.id  %}" target="_blank"  class="quizz_action" title="En version à tester" > 
             <i class="fa fa-play"></i> <small>Lancer</small>
         </a>  
     </span>

@@ -3,7 +3,7 @@
 
 
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouvelle évaluation <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Nouvelle évaluation </a>
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         {% if folder %}
         <li> <a href="{% url 'create_evaluation' folder.id %}"  > Créer une évaluation </a> </li>
@@ -15,9 +15,9 @@
 
                 {% if not group %} 
                     <span class="helper_tip"> 
-                            <i class="fa fa-question-circle"></i>
+                            <i class="fa fa-warning text-danger"></i>
                             <div class="helper_tip_text" >
-                                <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. L'évaluation sera <br/>directement affectée à votre<br/> groupe.   
+                                Préférer cloner depuis un <br/>groupe ou un dossier.<br/> L'évaluation sera directement<br/> affectée à votre  groupe ou <br/>votre dossier.   
                             </div>
                     </span>
                 {% endif %} 
@@ -28,7 +28,8 @@
                 <a href="#"  class="no_sacado_asso" > Récupérer une évaluation mutualisée</a> 
             {% endif %}
         </li>
- 
+        <li class="divider"></li>
+        <li><a href="{% url 'evaluations_archives' %}"> Mes évaluation{{ nb_archive|pluralize }} archivée{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
     </ul>
 </li>  
 {% else %}
@@ -41,7 +42,11 @@
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li><a href="#"   class="no_sacado_asso" > Créer une évaluation</a> </li> 
-        <li> <a href="#"  class="no_sacado_asso" > Récupérer une évaluation mutualisée</a>  </li>         
+        <li> <a href="#"  class="no_sacado_asso" > Récupérer une évaluation mutualisée</a>  </li>
+        <li class="divider"></li>
+        <li><a href="#"> Mes évaluation{{ nb_archive|pluralize }} archivée{{ nb_archive|pluralize }} ({{ nb_archive }})</a></li>
+
+
         
     </ul>
 </li>

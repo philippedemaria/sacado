@@ -1608,7 +1608,7 @@ def list_archives(request):
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
-    return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  
+    return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  'is_sequence': False ,
                                                         'today' : today ,  'teacher' : teacher , 'nb_base' : nb_archive   })
 
 
@@ -1653,7 +1653,7 @@ def list_sequences_archives(request):
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
-    return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  
+    return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  'is_sequence': True,
                                                         'today' : today ,  'teacher' : teacher , 'nb_base' : nb_archive   })
 
 

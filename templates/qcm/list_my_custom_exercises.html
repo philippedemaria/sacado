@@ -13,18 +13,44 @@
   
 {% block page_title %}
     <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %} Mes exercices personnels
+
+
+    <ul>
+        <li class="dropdown">
+
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Nouvel exercice perso </a>
+
+            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+                <li class="dropdown"><a href="{% url 'create_custom_exercise' %}" >Créer un exercice </a> </li>  
+                <li>
+                    {% if sacado_asso %}
+                        <a href="{% url 'exercise_custom_show_shared' %}"> Récupérer un exercice perso mutualisé</a> 
+                    {% else %}
+                        <a href="#" class="no_sacado_asso" title="Version établissement requise"> Récupérer un exercice perso mutualisé</a>
+                    {% endif %}
+                    {% if not parcours %} 
+                        <span class="helper_tip"> 
+                                <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >
+                                    <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>parcours. L'exercice sera <br/>directement affecté à votre<br/> parcours.   
+                                </div>
+                        </span>
+                    {% endif %} 
+                </li> 
+            </ul>
+        </li>  
+    </ul>
+
 {% endblock %}
 
+
+
+
 {% block page_menu_right %}
-
- 
-
 
     {% if request.user.is_superuser and  '/admin' in request.path %}
     <li ><a href="{% url 'create_supportfile' %}"   class="btn btn-new"><i class="fa fa-plus"></i> Nouveau support GGB </a> </li> 
     {% endif  %}
-
-    <li ><a href="{% url 'create_custom_exercise' %}"   class="btn btn-new"><i class="fa fa-plus"></i> Nouvel exercice </a> </li> 
 {% endblock %}
 
 

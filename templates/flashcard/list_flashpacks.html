@@ -14,23 +14,18 @@
 
 
 {% block page_title %}
-    {% include 'flashcard/logo.html' %}  Mes flashpacks {% if is_archive %}archivés{% endif %}
+    {% include 'flashcard/logo.html' %}  Mes flashpacks {% if is_archive %}archivés <img src="{% static 'img/angle-right.png' %}"/>{% endif %}
+
+    {% if not is_archive %}
+        <ul>{% include 'flashcard/submenu_creation_flashpack.html' %}</ul>
+    {% endif %}
+
 {% endblock %}
 
 {% block page_menu_right %}
-    <li>
-        {% if sacado_asso %} 
-            {% if not is_archive %}
-                <a href="{% url 'my_flashpack_archives' %}"  class="no_button"><i class="fa fa-archive"></i> Mes flashpacks archivés ({{ nba }})</a> 
-            {% else %}
-                <a href="{% url 'my_flashpacks' %}"  class="no_button" >Mes flashpacks  </a> 
-            {% endif %}
-
-        {% else %}
-            <a href="#"  class="no_sacado_asso" >{% if not is_archive %}<i class="fa fa-archive"></i>{% endif %} Mes flashpacks {% if not is_archive %}archivés{% endif %}</a> 
-        {% endif %} 
-    </li>
-    {% include 'flashcard/submenu_creation_flashpack.html' %}
+    {% if is_archive %} 
+        <a href="{% url 'my_flashpacks' %}" class="btn btn-new" >Mes flashpacks  </a> 
+    {% endif %}
 {% endblock %}
 
 

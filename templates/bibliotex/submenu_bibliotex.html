@@ -1,5 +1,5 @@
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new-violet "> Nouvelle BiblioTex <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Nouvelle BiblioTex</a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
 
@@ -9,12 +9,25 @@
         <li> <a href="{% url 'create_bibliotex' 0 %}"  > Créer une BiblioTex </em></a> </li>
         {% endif %}
         <li>{% if sacado_asso %} 
-        		<a href="{% url 'bibliotexs'   %}" > Récupérer une BiblioTex mutualisée  </a>
+        		<a href="{% url 'bibliotexs'   %}" > Récupérer une BiblioTex mutualisée  
+
+                    {% if not folder or not group %} 
+                        <span class="helper_tip"> 
+                                <i class="fa fa-warning text-danger"></i> 
+                                <div class="helper_tip_text" >
+                                    Préférer cloner depuis un <br/>groupe ou un dossier. La bibliotex sera <br/>directement affectée à votre<br/> groupe ou votre dossier.   
+                                </div>
+                        </span>
+                    {% endif %} 
+
+
+                </a>
 
         	{% else %}
         		<a href="#"  class="no_sacado_asso" > Récupérer une BiblioTex mutualisée </a> 
         	{% endif %}
         </li>
- 
+        <li class="divider"></li>
+         <li><a href="{% url 'my_bibliotex_archives' %}">Mes biblioTex Archivés ({{ nb_archive }})</a></li> 
     </ul>
 </li> 

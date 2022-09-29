@@ -1,5 +1,5 @@
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new-violet "> Nouveau flashpack <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Nouveau flashpack  </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
 
@@ -9,12 +9,24 @@
         <li> <a href="{% url 'create_flashpack' 0 %}"  > Créer un  flashpack </em></a> </li>
         {% endif %}
         <li>{% if sacado_asso %} 
-        		<a href="{% url 'flashpacks'   %}" > Récupérer un  flashpack mutualisée  </a>
+        		<a href="{% url 'flashpacks'   %}" > Récupérer un  flashpack mutualisé
+
+                    {% if not folder or not parcours %} 
+                        <span class="helper_tip"> 
+                                <i class="fa fa-warning text-danger"></i> 
+                                <div class="helper_tip_text" >
+                                    Préférer cloner depuis un <br/>parcours ou un dossier.  <br/>Le flashpack sera directement<br/> affecté à votre parcours <br/>ou votre dossier.   
+                                </div>
+                        </span>
+                    {% endif %} 
+                </a>
 
         	{% else %}
-        		<a href="#"  class="no_sacado_asso" > Récupérer un flashpack mutualisée </a> 
+        		<a href="#"  class="no_sacado_asso" > Récupérer un flashpack mutualisé </a> 
         	{% endif %}
         </li>
+        <li class="divider"></li>
+        
  
     </ul>
 </li> 
