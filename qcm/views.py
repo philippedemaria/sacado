@@ -2778,6 +2778,34 @@ def delete_parcours(request, id, idg=0):
 
 
 
+
+@login_required(login_url= 'index')
+@parcours_exists
+def dissociate_parcours(request, id, idg=0):
+
+    parcours = Parcours.objects.get(id=id)
+    parcours_is_evaluation = parcours.is_evaluation
+    parcours.folders.clear()
+
+
+
+    if idg == 99999999999:
+        return redirect('index')
+    elif idg == 0 and parcours_is_evaluation :
+        return redirect('evaluations')
+    elif idg == 0 :
+        return redirect('parcours')
+    else :
+        return redirect('list_parcours_group', idg)
+
+
+
+
+
+
+
+
+
 def ordering_number(parcours):
 
     listing_ordered = set() 

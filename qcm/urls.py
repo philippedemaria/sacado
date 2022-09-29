@@ -37,7 +37,9 @@ urlpatterns = [
  
 
     path('parcours_update/<int:id>/<int:idg>/', update_parcours, name='update_parcours'),
-    path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'),  
+    path('parcours_delete/<int:id>/<int:idg>/', delete_parcours, name='delete_parcours'), 
+    path('parcours_dissociate/<int:id>/<int:idg>/', dissociate_parcours, name='dissociate_parcours'),
+
     path('parcours_archive/<int:id>/<int:idg>/', archive_parcours, name='archive_parcours'),
     path('parcours_unarchive/<int:id>/<int:idg>/', unarchive_parcours, name='unarchive_parcours'), 
     path('parcours_show/<int:idf>/<int:id>', show_parcours, name='show_parcours'), 

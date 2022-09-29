@@ -23,7 +23,7 @@
                 {% elif group and parcours  %}
                     <a href="{% url 'update_parcours' parcours.id  group.id  %}"  class="edit" style="color:{{ parcours.color}}"><i class="bi bi-gear"></i> <span class="label_icon">Config.</span> </a>
                 {% else  %}
-                    <a href="{% url 'delete_parcours' parcours.id  99999999999  %}"  class="edit"  onclick="return TestDelete('ce parcours')" ><i class="bi bi-x-octagon"></i> <span class="label_icon">Supprimer</span> </a>
+                    <a href="{% url 'dissociate_parcours' parcours.id  99999999999  %}"  class="edit"  onclick="return TestRemove('ce parcours/cette évaluation')" ><i class="bi bi-x-octagon"></i> <span class="label_icon">Supprimer</span> </a>
                 {% endif  %}
                 </div> 
                 <div class="col-lg-4 col-xs-4">
