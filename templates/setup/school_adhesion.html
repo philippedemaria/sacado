@@ -39,6 +39,7 @@
                 <div class="alert alert-danger">
                     <li>Si le demandeur est déjà inscrit, la demande doit être effectuée depuis son <a href="{% url 'index' %}">interface SACADO > Compte</a>.</li>
                     <li>Si votre établissement est déjà inscrit, l'administrateur ou le DAF doit procéder à un renouvellement via son <a href="{% url 'index' %}">espace Admin</a>.</li> 
+                    <li>Si le demandeur n'est pas inscrit, suivre la procédure décrite ci-dessous.</li> 
                 </div>
             </div>
         </div>
@@ -158,12 +159,24 @@
         {% endcomment %}
 
         <div class="row">                    
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-12 col-md-6">
                    
+                <li class="sanspuce">1. Vous devez créer un compte, gratuitement.</li>
  
+                <li class="sanspuce">2. Opter pour la version établissement</li>
 
+                <li class="sanspuce">2.1. Depuis votre espace personnel, cliquer sur renseigner mon profil</li>
+                      <img src="{% static 'img/opter_pour0.png' %}" width="250px"  />
+                
+                <li class="sanspuce">2.2. Sélectionner le bouton orange Opter pour la version établissement</li>
+                      <img src="{% static 'img/opter_pour.png' %}"  width="250px" />
 
-            </div>  
+            </div>
+            <div class="col-sm-12 col-md-6">
+
+                <a href="{% url 'register_teacher_accueil' %}" class="btn btn-primary">Créer un compte</a>
+            </div>
+
         </div>
 
     </form>
