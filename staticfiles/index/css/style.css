@@ -229,10 +229,7 @@ font-family: "Montserrat", sans-serif;
 }
 
 .sanspuce{
-  list-style-type: square;
-  padding-bottom: 10px;
-  color : #007EE2;
-
+  list-style-type: none;
 } 
 
 table.table-bordered.dataTable {

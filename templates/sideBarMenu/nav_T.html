@@ -49,7 +49,7 @@
             <i class="bi bi-person-circle icon_size"></i>
             {% if not user.time_zone  %}
                 <i class="fa fa-info-circle text-warning" aria-hidden="true" style="position: absolute;bottom: 20px; right: 25;"></i> 
-                <div  style="position: absolute; bottom: 0px; right: 0; background: #ffb400;height:65px;padding-top:10px" > Renseignez votre profil </div>            
+                <div  style="position: absolute; bottom: 0px; right: 0; background: #ffb400;height:65px;padding-top:10px" > Renseigner mon profil </div>            
             {% endif %} 
             <div class="captionmenu">Compte</div>
         {% endif %} 
@@ -72,19 +72,6 @@
         </a>
     </li>
     {% endif %}
-
-
-
-
-    {% if request.user.is_superuser or  request.user.teacher.is_lesson   %}
-    <li  class="dropdown  {% if not request.session.tdb and 'lesson' in request.path %}  active{% endif %}">
-        <a href="{% url 'calendar_show' 0 %}" class="main" >
-            <i class="bi bi-camera-video icon_size"></i> 
-            <div class="captionmenu">Leçons</div>
-        </a>
-    </li>
-    {% endif %}
-
 
 
 
@@ -139,6 +126,14 @@
         </li>
           
 
+    {% if request.user.is_superuser or  request.user.teacher.is_lesson   %}
+    <li  class="dropdown  {% if not request.session.tdb and 'lesson' in request.path %}  active{% endif %}">
+        <a href="{% url 'calendar_show' 0 %}" class="main" >
+            <i class="bi bi-camera-video icon_size"></i> 
+            <div class="captionmenu">Leçons</div>
+        </a>
+    </li>
+    {% endif %}
   
         <li class="dropdown {% if not request.session.tdb and '/aefe' in request.path %}active{% endif %}">
             <a href="{% url 'aefe' %}" class="main closer_notification">

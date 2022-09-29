@@ -63,7 +63,7 @@ def menu(request):
 
         if request.user.is_teacher:
 
-            dico_helper = { "/account/profile" : "profile" , "/account/avatar" : "avatar" , "/account/updatepassword" : "updatepassword" , "/school/get_school" : "get_school" ,  
+            dico_helper = { "/account/profile" : "profile" , "/account/avatar" : "avatar" , "/account/updatepassword" : "updatepassword" , "/school/get_school" : "get_school" , "/account/background" : "background" ,
                             "/" : "groupe" , "/#" : "groupe" ,  "/qcm/folders" : "folders" ,  "/qcm/parcours" : "parcours" ,  "/qcm/evaluations" : "evaluations" ,  "/qcm/evaluations" : "evaluations" ,  "qcm/parcours_my_courses" : "parcours_my_courses" , 
                             "/tool_list" : "quizzes" , "/bibliotex/my_bibliotexs" : "my_bibliotexs" ,  "/flashcard/my_flashpacks" : "my_flashpacks" ,  "/qcm/exercises" : "exercises" ,  "/tool/list_visiocopie" : "list_visiocopie" ,  
                             "/tool/list_tools" : "list_tools" , "/tool/show/" : "tool_show"  , "/sendmail/" : "sendmail" , "/aefe/" : "aefe" , "/admin_tdb" : "admin_tdb" ,"/qcm/parcours_group/" : "parcours_group",
@@ -73,7 +73,7 @@ def menu(request):
 
             ihelp=0 
             request_path = str(request.path) 
-            while ihelp < len(request_path) and not('0'<=request_path[ihelp]<='9' )    : ihelp+=1  
+            while ihelp < len(request_path) and not('0'<=request_path[ihelp]<='9' ) : ihelp+=1  
             helper_key = request_path[:ihelp] 
             try :
                 url_helper = "helpers/" + dico_helper[helper_key] + ".html"

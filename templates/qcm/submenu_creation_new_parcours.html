@@ -1,5 +1,5 @@
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new">  {% if 'parcours' in request.path %}Nouveau parcours{% else %}Nouvelle séquence{% endif %} <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action">  Nouveau parcours </a>
 
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
 
@@ -11,11 +11,11 @@
         <li>{% if sacado_asso %} 
         		<a href="{% url 'all_parcourses' 0 %}" > Récupérer {% if 'parcours' in request.path %}un parcours{% else %}une séquence{% endif %} mutualisé  
 
-                {% if not group %} 
+                {% if not group or not folder %} 
                     <span class="helper_tip"> 
-                            <i class="fa fa-question-circle"></i>
+                            <i class="fa fa-warning text-danger"></i>
                             <div class="helper_tip_text" >
-                                <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>groupe. {% if 'parcours' in request.path %}Le parcours{% else %}La séquence{% endif %} sera <br/>directement affecté à votre<br/> groupe.   
+                                Préférer cloner depuis un <br/>groupe ou un dossier. <br/>{% if 'parcours' in request.path %}Le parcours{% else %}La séquence{% endif %} sera directement <br/>affecté{% if not 'parcours' in request.path %}e{% endif %} à votre groupe ou <br/>votre dossier.   
                             </div>
                     </span>
                 {% endif %} 
@@ -24,8 +24,16 @@
         	{% else %}
         		<a href="#"  class="no_sacado_asso" > Récupérer {% if 'parcours' in request.path %}un parcours{% else %}une séquence{% endif %} mutualisé{% if 'parcours' in request.path %} {% else %}e{% endif %}</a> 
         	{% endif %}
-        </li>
  
+        </li>
+        <li class="divider"></li>
+ 
+        {% if 'parcours' in request.path %}
+        <li><a href="{% url 'archives' %}"  class="no_button">  Mes parcours archivés ({{ nb_archive }})</a></li> 
+        {% else %}
+        <li><a href="{% url 'sequences_archives' %}"  class="no_button">  Mes parcours archivés ({{ nb_archive }})</a></li> 
+        {% endif %}
+
     </ul>
 </li> 
 
