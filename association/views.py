@@ -55,43 +55,36 @@ from subprocess import run
 # Suppression des fichiers non utilisés
 #################################################################
 @user_passes_test(user_is_board)
-def to_clean_database(request,idl,start):
+def to_clean_database(request,start):
 
     levels = Level.objects.exclude(pk=13).order_by('ranking')
     list_to_remove , list_to_keep = [] , []
     names = []
-    if idl :
-        level = Level.objects.get(pk=idl)
-        supportfiles = Supportfile.objects.values_list('ggbfile',flat=True)
+    
+    ressources   = '/var/www/sacado/ressources/' 
+    for level in levels :
+        dico_level = {}
+        dico_level['level'] = level.name
+        supportfiles = Supportfile.objects.values_list('ggbfile',flat=True).filter(level=level)
 
-        ressources   = '/var/www/sacado/ressources/' 
-        dirname      = ressources + 'ggbfiles/' + str(idl)
-        back_up_root = ressources + 'ggbfiles_backup/' + str(idl)+"/" 
+        dirname      = ressources + 'ggbfiles/' + str(level.id)
+        back_up_root = ressources + 'ggbfiles_backup/' + str(level.id) +"/" 
+
+        list_level = []
 
         files = os.listdir(dirname)
-
-        
-
         for file in files :
+            dico_list_level = {}
             data_file = 'ggbfiles/'+ str(idl)+"/"+file
-            if data_file not in supportfiles :
-                list_to_remove.append(data_file)
-                if start == 1 :
-                    os.rename( ressources + data_file , back_up_root + file )                    
-            else :
-                list_to_keep.append(file)
+            dico_list_level['url'] = data_file
+            list_level.append(dico_list_level)
+        dico_level['urls'] = list_level  
+        names.append(dico_level)    
  
+    if start == 1 :
+        to_keep_list()
 
-
-        list_to_remove.sort()
-        list_to_keep.sort()
-
-    else :
-        level = None
-
-
-
-    context = {'list_to_keep' : list_to_keep , 'levels' : levels, 'level' : level ,  'list_to_remove' : list_to_remove}        
+    context = {'names' : names , }        
     return render(request, 'association/to_clean_database.html', context )
 
 
@@ -101,11 +94,14 @@ def to_keep_list(request):
     levels = Level.objects.exclude(pk=13).order_by('ranking')
 
     list_to_keep = []
+
+    dir_source     = '/var/www/sacado/ressources/ggbfiles/'
+
     for level in levels :
         idl = level.id
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True).filter(level=level)
-        dir_root     = '/var/www/sacado/ressources/ggbfiles/'
-        dirname      = dir_root + str(idl)
+        
+        dirname      = dir_source + str(idl)
 
         files = os.listdir(dirname)
         for file in files :
@@ -120,28 +116,17 @@ def to_keep_list(request):
     #f.close()
     # Synchronisation des exercices de sacado vers academi                                                   
     # la liste des fichiers à modifier doit être                                                             
-    # /var/www/sacado/ressources/ggbfiles/newExos.txt                                                        
-
-    
-    dir_source="/var/www/sacado/ressources/ggbfiles/"
+    # /var/www/sacado/ressources/ggbfiles/newExos.txt                                                      
     dir_dest="/var/www/sacado-academie/ressources/ggbfiles/"
-    listeExos=open("/"+dir_source+"newExos.txt","r")
+    listeExos=open(dir_source+"newExos.txt","r")
 
     # creation de l'archive, on la place dans le même répertoire                                             
     commande = ["tar", "-C" , dir_source, "-czf", "newExos.tgz"] + list_to_keep
-    print("commande de création de l'archive :",commande)
     run(commande)
-    print("ok")
-    # On l'envoie à destination                                                                              
-    print("Envoie sur le serveur academie")
     run( ["scp", dir_source+"newExos.tgz", "root@31.207.37.10:"+dir_dest+"newExos.tgz"])
-    print("ok")
     # Récupération de la liste, sur academie                                                                 
     commande = ["ssh", "-l", "root", "31.207.37.10", "tar -tf "+dir_dest+"newExos.tgz  > "+dir_dest+"newExos.txt"]
     run(commande)
-
-
-
 
     return
 
