@@ -104,15 +104,20 @@ def to_keep_list(request):
     for level in levels :
         idl = level.id
         supportfiles = Supportfile.objects.values_list('ggbfile',flat=True).filter(level=level)
-        ressources   = '/var/www/sacado/ressources/' 
-        dirname      = ressources + 'ggbfiles/' + str(idl)
+        dir_root  = '/var/www/sacado/ressources/ggbfiles/'
+        dirname   = dir_root + str(idl)
 
         files = os.listdir(dirname)
         for file in files :
             list_to_keep.append(str(idl)+"/"+file)
  
      
-    return list_to_keep
+    f =  open(dir_root + 'new_exos.txt', "w") 
+    for url in list_to_keep:
+        print(url, file=f)
+    f.close()
+
+    return
 
 #################################################################
 # Suppression des fichiers non utilisés
