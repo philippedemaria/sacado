@@ -398,12 +398,76 @@ border-bottom: solid 1px #271942;
 border-radius:0px;
 }
 
+
+.navbar-default ul{
+list-style: none;
+float:right;
+font-size:20px;
+}
+.navbar-default .dropdown a{
+font-size:20px;
+}
+.navbar-default .dropdown-menu a{
+font-size:16px;
+}
+
+
+hr.menu {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.navbar {
+    min-height: 40px;
+}
+
+.btn-action  {
+  color : #FFE3B3!important;
+  border-radius: 10px!important;
+  background-color: #ffa600;
+  margin-right: 5px;
+  padding:0px 10px!important;
+}
+
+.btn-action:hover, .btn-action:hover > a ,
+.btn-action:active, .btn-action:active > a ,
+.btn-action.hover,  .btn-action.hover > a  {
+  background-color: #FFE3B3!important;/*   #dd4b39!important;*/
+  color: #ffa600!important;
+  text-decoration: none;
+}
+
+
+.dropdown-toggle .fa-plus{
+  font-size:25px;
+  font-weight: 800;
+}
+
+
+
+.inside_volet_show_submenu a.inside_volet{
+  display:none;
+}
+
+.inside_volet_show_submenu:hover a.inside_volet{
+  display:inline;
+  margin-right: 5px;
+}
+
+a.inside_volet:hover{
+  margin-right: 5px;
+  font-size : 1.1em;
+}
+
+
 .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
     z-index: 3;
     color: #fff;
     cursor: default;
-    background-color: #007bff ;
-    border-color: #007bff ;
+    background-color: #ffa600 ;
+    border-color: #ffa600 ;
 }
 
 
