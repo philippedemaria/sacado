@@ -49,7 +49,7 @@ from general_fonctions import *
 import xlwt
 import uuid
 import json 
- 
+from subprocess import run 
 
 #################################################################
 # Suppression des fichiers non utilisés
@@ -114,10 +114,34 @@ def to_keep_list(request):
                 list_to_keep.append(str(idl)+"/"+file)
 
      
-    f =  open(dir_root + 'new_exos.txt', "w") 
-    for url in list_to_keep:
-        print(url, file=f)
-    f.close()
+    #f =  open(dir_root + 'new_exos.txt', "w") 
+    #for url in list_to_keep:
+    #    print(url, file=f)
+    #f.close()
+    # Synchronisation des exercices de sacado vers academi                                                   
+    # la liste des fichiers à modifier doit être                                                             
+    # /var/www/sacado/ressources/ggbfiles/newExos.txt                                                        
+
+    
+    dir_source="/var/www/sacado/ressources/ggbfiles/"
+    dir_dest="/var/www/sacado-academie/ressources/ggbfiles/"
+    listeExos=open("/"+dir_source+"newExos.txt","r")
+
+    # creation de l'archive, on la place dans le même répertoire                                             
+    commande = ["tar", "-C" , dir_source, "-czf", "newExos.tgz"] + list_to_keep
+    print("commande de création de l'archive :",commande)
+    run(commande)
+    print("ok")
+    # On l'envoie à destination                                                                              
+    print("Envoie sur le serveur academie")
+    run( ["scp", dir_source+"newExos.tgz", "root@31.207.37.10:"+dir_dest+"newExos.tgz"])
+    print("ok")
+    # Récupération de la liste, sur academie                                                                 
+    commande = ["ssh", "-l", "root", "31.207.37.10", "tar -tf "+dir_dest+"newExos.tgz  > "+dir_dest+"newExos.txt"]
+    run(commande)
+
+
+
 
     return
 
