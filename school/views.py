@@ -169,7 +169,7 @@ def update_school(request,id):
 
 	school = School.objects.get(id=id)
 	form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance=school)
-	old_school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name+"\n\nGAR : "+ gar
+	old_school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name+"\n\nGAR : "+ school.gar
 	
 	nb_total = school.users.filter(user_type=0).count()
 	nb = 150
