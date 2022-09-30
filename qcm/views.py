@@ -9595,6 +9595,10 @@ def update_folder(request,id,idg):
         group = None
         group_id = None            
         images = get_images_for_parcours_or_folder(group)
+    elif idg == 0 :
+        group_id = None
+        group = None
+        images = []
     else :
         group = Group.objects.get(pk = idg)
         group_id = group.id
@@ -9616,8 +9620,9 @@ def update_folder(request,id,idg):
             affectation_students_to_contents_parcours_or_evaluation( parcours_ids , all_students )
             change_coanimation_teachers(nf, folder , group_ids , teacher)
             
-
-            if idg == 999999999999999999 :
+            if idg == 0 :
+                return redirect('folders') 
+            elif idg == 999999999999999999 :
                 return redirect('index') 
             elif request.POST.get("to_index"):
                 return redirect('index') 
