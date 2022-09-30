@@ -2077,9 +2077,12 @@ def print_ids(request, id):
         grid.append( ('BOX', (2,i+1), (3,i+1), 0.25, colors.gray, None, (2,2,1)) )
 
  
-    table = Table(dataset, colWidths=[0.5*inch,2.7*inch,0.5*inch,2.7*inch], rowHeights=110)
-    table.setStyle(TableStyle(grid)) 
-    elements.append(table)
+    try :
+        table = Table(dataset, colWidths=[0.5*inch,2.7*inch,0.5*inch,2.7*inch], rowHeights=110)
+        table.setStyle(TableStyle(grid)) 
+        elements.append(table)
+    except :
+        pass
 
     doc.build(elements) 
 
