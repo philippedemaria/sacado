@@ -2019,7 +2019,13 @@ def parcours_progression(request,id,idg):
 def parcours_progression_student(request,id):
 
     parcours = Parcours.objects.get(id=id)
-    student = request.user.student
+
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
     if parcours.is_achievement : 
  
         students = parcours.students.order_by("user__last_name")
@@ -3102,11 +3108,17 @@ def show_parcours_student(request, id):
 
     parcours = Parcours.objects.get(id=id)
 
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
+
     if parcours.stop :
-        lock_all_exercises_for_this_student(parcours,request.user.student)
+        lock_all_exercises_for_this_student(parcours,student)
 
     user = request.user
-    student = user.student
     today = time_zone_user(user)
     stage = get_stage(user)
 
@@ -5529,6 +5541,12 @@ def execute_exercise(request, idp,ide):
         messages.error(request,"Utilisateur non authentifié")
         return redirect("index")
         
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
     if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
@@ -5538,7 +5556,8 @@ def execute_exercise(request, idp,ide):
     relation = Relationship.objects.get(parcours=parcours, exercise=exercise)
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
-    student = request.user.student
+
+
     today = time_zone_user(request.user)
     timer = today.time()
     try :
@@ -6863,7 +6882,12 @@ def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exerci
 @login_required(login_url= 'index') 
 def write_exercise(request,id): # Coté élève
  
-    student = request.user.student
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
     relationship = Relationship.objects.get(pk = id)
 
     tracker_execute_exercise(True ,  student.user , relationship.parcours.id  , relationship.exercise.id , 0)
@@ -7008,7 +7032,13 @@ def ajax_save_canvas(request):
     actions           = request.POST.get("actions",None)
     customexercise_id = request.POST.get("customexercise_id",0)
     parcours_id       = request.POST.get("parcours_id",0)
-    student           = request.user.student  
+
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
     customexercise    = Customexercise.objects.get(pk = customexercise_id)
     parcours          = Parcours.objects.get(pk = parcours_id)
     today             = time_zone_user(student.user).now()
@@ -7041,12 +7071,18 @@ def ajax_delete_custom_answer_image(request):
 @login_required(login_url= 'index') 
 def asking_parcours_sacado(request,pk):
     """demande de parcours par un élève"""
+
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+    
     group = Group.objects.get(pk = pk)
 
     teacher_id = get_teacher_id_by_subject_id(group.subject.id)
 
     teacher = Teacher.objects.get(pk=teacher_id)
-    student = request.user.student
 
     subject = group.subject
     level = group.level
