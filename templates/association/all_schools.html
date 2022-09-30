@@ -43,7 +43,7 @@
                 {% for c in customers %}
                 <tr>
                     <td>{{ c.id }}</td>
-                    <td>
+                    <td style="background-color:{% if c.status == 1 %}#cb2131{% elif c.status == 2 %}#ffb400{% else %}#155724{% endif %}">
                         <form methode="POST">
                             {% csrf_token %}
                             <select name="status" class="status_id" >
