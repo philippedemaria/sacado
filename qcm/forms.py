@@ -59,7 +59,7 @@ class ParcoursForm(forms.ModelForm):
 				groups      = teacher.groups.filter(level=group.level )
 
 			else :
-				all_folders = teacher.teacher_folders.all()				
+				all_folders = teacher.teacher_folders.filter(is_trash=0)	
 				groups      = teacher.groups.all()
 
 
