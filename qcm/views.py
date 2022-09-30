@@ -270,7 +270,11 @@ def get_images_for_parcours_or_folder(group):
 
 def get_seconde_to_math_comp(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
  
     group = Group.objects.get(id=1921)#groupe fixe sur le serveur 1921
 
@@ -608,6 +612,13 @@ def teacher_has_permisson_to_folder(request,teacher,folder):
 
 def skills_in_parcours(request,parcours):
 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+
     relationships = Relationship.objects.filter(parcours=parcours)
     skillsInParcours = set()
     for r in relationships:
@@ -739,13 +750,24 @@ def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0
 #######################################################################################################################################################################
 @login_required(login_url= 'index')
 def advises(request):
-    teacher = request.user.teacher
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     return render(request, 'advises.html', {'teacher': teacher})
 
 
 @login_required(login_url= 'index')
 def associate_parcours(request,id):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     group = Group.objects.get(pk = id)
     theme_theme_ids = request.POST.getlist("themes")
     for theme_id in theme_theme_ids :
@@ -779,7 +801,11 @@ def ajax_parcours_default(request):
 
 @login_required(login_url= 'index')
 def get_parcours_default(request):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     level_id = request.POST.get("level_selected_id")
     theme_ids = request.POST.getlist("themes")
     n = 0
@@ -886,7 +912,11 @@ def ajax_populate(request):
 
 
 def peuplate_parcours(request,id):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     levels =  teacher.levels.order_by("ranking")
     parcours = Parcours.objects.get(id=id)
 
@@ -952,7 +982,11 @@ def peuplate_parcours(request,id):
 
 @login_required(login_url= 'index')
 def peuplate_parcours_evaluation(request,id):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     levels =  teacher.levels.order_by("ranking")
  
     parcours = Parcours.objects.get(id=id)
@@ -1025,7 +1059,11 @@ def individualise_parcours(request,id):
     if folder_id :
         folder = Folder.objects.get(pk = folder_id)
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     parcours = Parcours.objects.get(pk = id)
     relationships = parcours.parcours_relationship.order_by("ranking")
     customexercises = Customexercise.objects.filter(parcourses = parcours).order_by("ranking") 
@@ -1522,7 +1560,11 @@ def ajax_built_diaporama(request):
 @login_required(login_url= 'index')
 def list_folders(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today   = time_zone_user(teacher.user)
 
     folders   = teacher_has_folders(teacher, 0  ) #  is_archive
@@ -1546,7 +1588,12 @@ def list_folders(request):
 @login_required(login_url= 'index')
 def list_folders_archives(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     today   = time_zone_user(teacher.user)
 
     folders   = teacher_has_folders(teacher, 1  ) #  is_archive
@@ -1571,7 +1618,11 @@ def list_folders_archives(request):
 @login_required(login_url= 'index')
 def list_parcours(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today   = time_zone_user(teacher.user)
 
     folds   = teacher_has_folders(teacher, 0  ) #  is_archive
@@ -1598,7 +1649,11 @@ def list_parcours(request):
 @login_required(login_url= 'index')
 def list_archives(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today = time_zone_user(teacher.user)
 
     folders = teacher_has_folders(teacher, 1  ) #  is_archive
@@ -1616,7 +1671,11 @@ def list_archives(request):
 @login_required(login_url= 'index')
 def list_sequences(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today   = time_zone_user(teacher.user)
 
     folds   = teacher_has_folders(teacher, 0  ) #  is_archive
@@ -1643,7 +1702,11 @@ def list_sequences(request):
 @login_required(login_url= 'index')
 def list_sequences_archives(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today = time_zone_user(teacher.user)
 
     folders = teacher_has_folders(teacher, 1  ) #  is_archive
@@ -1662,7 +1725,11 @@ def list_sequences_archives(request):
 @login_required(login_url= 'index')
 def list_evaluations(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today = time_zone_user(teacher.user)
 
     folds = teacher_has_folders(teacher, 0  ) #  is_archive
@@ -1686,7 +1753,11 @@ def list_evaluations(request):
 
 @login_required(login_url= 'index')
 def list_evaluations_archives(request):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive 
     nb_base = len( parcourses )  
     today = time_zone_user(teacher.user)
@@ -1701,7 +1772,12 @@ def list_evaluations_archives(request):
 @login_required(login_url= 'index')
 def list_parcours_group(request,id):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     today = time_zone_user(request.user)
     group = Group.objects.get(pk = id) 
 
@@ -1743,7 +1819,11 @@ def list_parcours_group(request,id):
 @login_required(login_url= 'index')
 def list_sub_parcours_group(request,idg,idf):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today   = time_zone_user(teacher.user)
     folder  = Folder.objects.get(pk = idf)
 
@@ -1813,7 +1893,13 @@ def change_situations_in_all_relationships(request,idf,idp):
 
     parcours      = Parcours.objects.get(id=idp)
     relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0)
-    teacher       = request.user.teacher
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if request.method == "POST" :
@@ -1838,7 +1924,11 @@ def change_durations_in_all_relationships(request,idf,idp):
 
     parcours      = Parcours.objects.get(id=idp)
     relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0)
-    teacher       = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if request.method == "POST" :
@@ -1862,7 +1952,11 @@ def change_publications_in_all_relationships(request,idf,idp):
 
     parcours      = Parcours.objects.get(id=idp)
     relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0)
-    teacher       = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if request.method == "POST" :
@@ -1895,7 +1989,11 @@ def change_publications_in_all_relationships(request,idf,idp):
 def parcours_progression(request,id,idg):
 
     parcours = Parcours.objects.get(id=id)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     role, group , group_id , access = get_complement(request, teacher, parcours)
  
 
@@ -1935,7 +2033,11 @@ def parcours_progression_student(request,id):
 
 @login_required(login_url= 'index')
 def all_parcourses(request,is_eval):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     #parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
     parcours_ids = []  
 
@@ -1979,7 +2081,11 @@ def all_parcourses(request,is_eval):
  
 def ajax_all_parcourses(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     data = {}
     is_eval = int(request.POST.get('is_eval',0))
     level_id = request.POST.get('level_id',0)
@@ -2097,7 +2203,11 @@ def ajax_all_parcourses(request):
 
 @login_required(login_url= 'index')
 def all_folders(request):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     #parcours_ids = Parcours.objects.values_list("id",flat=True).filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=2480),is_evaluation = is_eval, is_share = 1,level__in = teacher.levels.all()).exclude(teacher=teacher).order_by('level').distinct()
     parcours_ids = []  
 
@@ -2131,7 +2241,11 @@ def all_folders(request):
  
 def ajax_all_folders(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     data = {}
     level_id = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
@@ -2174,6 +2288,13 @@ def ajax_all_folders(request):
 @login_required(login_url= 'index')
 def clone_folder(request, id ):
     """ cloner un dossier """
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     folder = Folder.objects.get(pk = id)
     prcs   = folder.parcours.all()
  
@@ -2181,7 +2302,7 @@ def clone_folder(request, id ):
     # clone le parcours
     #################################################
     folder.pk = None
-    folder.teacher = request.user.teacher
+    folder.teacher = teacher
     folder.is_publish = 0
     folder.is_archive = 0
     folder.is_share = 0
@@ -2205,7 +2326,7 @@ def clone_folder(request, id ):
         folder_id_tab.append(p.id) # liste des parcours du dossiers
         p.pk = None
         p.code = str(uuid.uuid4())[:8] 
-        p.teacher = request.user.teacher
+        p.teacher = teacher
         if group_id :
             p.subject = group.subject
             p.level = group.level
@@ -2264,7 +2385,11 @@ def clone_folder(request, id ):
 def ajax_chargethemes_parcours(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     teacher_id = get_teacher_id_by_subject_id(id_subject)
 
@@ -2291,7 +2416,11 @@ def ajax_chargethemes_parcours(request):
 def ajax_chargethemes_exercise(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     data = {}
     level =  Level.objects.get(pk = level_id)
@@ -2468,7 +2597,11 @@ def affectation_students_to_contents_parcours_or_evaluation(parcours_ids,all_stu
 
 def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_sequence):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
-    teacher         = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     levels          = teacher.levels.order_by("ranking")
     ############################################################################################## 
     ################# ############## On regarde s'il existe un groupe  ###########################
@@ -2710,7 +2843,11 @@ def update_sequence(request, id, idg=0 ):
 def archive_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=1,is_favorite=0,is_publish=0)
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     if idg == 99999999999:
         return redirect('index')
@@ -2724,7 +2861,11 @@ def archive_parcours(request, id, idg=0):
 def unarchive_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.filter(id=id).update(is_archive=0,is_favorite=0,is_publish=0)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     if idg == 99999999999:
         return redirect('index')
@@ -2741,7 +2882,11 @@ def delete_parcours(request, id, idg=0):
     parcours_is_evaluation = parcours.is_evaluation
     parcours.students.clear()
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     if not authorizing_access(teacher, parcours, False ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
@@ -3071,7 +3216,11 @@ def list_parcours_flashpack_student(request, idp):
 def show_parcours_visual(request, id):
 
     parcours = Parcours.objects.get(id=id)
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
@@ -3134,7 +3283,11 @@ def replace_exercise_into_parcours(request):
 @login_required(login_url= 'index')
 def result_parcours(request, id, is_folder):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     if  is_folder == 1 :
         folder = Folder.objects.get(id=id)
@@ -3354,7 +3507,11 @@ def result_parcours_knowledge(request, id, is_folder):
 @parcours_exists
 def result_parcours_waiting(request, id, is_folder):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     parcours = Parcours.objects.get(id=id)
     students = students_from_p_or_g(request,parcours)
 
@@ -3581,7 +3738,11 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 @parcours_exists
 def stat_evaluation(request, id):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     stage = get_stage(teacher.user)
     parcours = Parcours.objects.get(id=id)
     skills = skills_in_parcours(request,parcours)
@@ -3696,7 +3857,11 @@ def add_exercice_in_a_parcours(request):
 def clone_parcours(request, id, course_on ):
     """ cloner un parcours """
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     parcours = Parcours.objects.get(pk=id) # parcours à cloner
     relationships = parcours.parcours_relationship.all() 
     courses = parcours.course.filter(is_share = 1)
@@ -3735,7 +3900,7 @@ def clone_parcours(request, id, course_on ):
             # clone le cours associé au parcours
             course.pk = None
             course.parcours = parcours
-            course.teacher = request.user.teacher
+            course.teacher = teacher
             course.save()
 
 
@@ -3776,7 +3941,11 @@ def clone_parcours(request, id, course_on ):
  
 def ajax_parcours_get_exercise_custom(request):
 
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     exercise_id =  int(request.POST.get("exercise_id"))
     customexercise = Customexercise.objects.get(pk=exercise_id)
     parcourses =  teacher.teacher_parcours.all()    
@@ -3789,7 +3958,12 @@ def ajax_parcours_get_exercise_custom(request):
  
 def parcours_clone_exercise_custom(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     exercise_id =  int(request.POST.get("exercise_id"))
     customexercise = Customexercise.objects.get(pk=exercise_id)
 
@@ -3836,7 +4010,12 @@ def customexercise_shared_inside_parcours(request,idp):
  
 def ajax_getter_parcours_exercice_custom(request):
 
-    teacher        = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     exercise_id    = int(request.POST.get("exercise_id"))
     customexercise = Customexercise.objects.get(pk=exercise_id)
     parcours_id    = int(request.POST.get("parcours_id"))
@@ -3939,10 +4118,15 @@ def parcours_tasks_and_publishes(request, id):
 
 @parcours_exists
 def result_parcours_exercise_students(request,id):
-    teacher = request.user.teacher
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     parcours = Parcours.objects.get(pk = id)
  
-
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
@@ -4631,7 +4815,12 @@ def ajax_locker_exercise(request):
 def real_time(request,id):
     """ module de real time"""
     parcours = Parcours.objects.get(pk = id)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     today = time_zone_user(request.user).now()
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -4811,7 +5000,12 @@ def list_exercises(request):
 
 def ajax_list_exercises_by_level(request):
     """ Envoie la liste des exercice pour un seul niveau """
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     level_id =  int(request.POST.get("level_id"))  
  
     level = Level.objects.get(pk=level_id)
@@ -4828,7 +5022,12 @@ def ajax_list_exercises_by_level(request):
 
 def ajax_list_exercises_by_level_and_theme(request):
     """ Envoie la liste des exercice pour un seul niveau """
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     level_id =  int(request.POST.get("level_id",0))  
     theme_ids =  request.POST.getlist("theme_id")
 
@@ -4988,7 +5187,12 @@ def exercises_level_subject(request, id, subject_id):
 def create_supportfile(request):
 
     code = str(uuid.uuid4())[:8]
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
     is_ggbfile = request.POST.get("is_ggbfile")
     if request.user.is_superuser or request.user.is_extra :
@@ -5019,7 +5223,12 @@ def create_supportfile_knowledge(request,id):
 
     code = str(uuid.uuid4())[:8]
     knowledge = Knowledge.objects.get(id = id)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     form = SupportfileKForm(request.POST or None,request.FILES or None, knowledge = knowledge )
     levels = Level.objects.all()
     supportfiles = Supportfile.objects.filter(is_title=0).order_by("level","theme","knowledge__waiting","knowledge","ranking")
@@ -5055,7 +5264,12 @@ def create_supportfile_knowledge(request,id):
 @user_passes_test(user_is_creator)
 def update_supportfile(request, id, redirection=0):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     if request.user.is_superuser or request.user.is_extra :
         supportfile = Supportfile.objects.get(id=id)
         knowledge = supportfile.knowledge
@@ -5969,7 +6183,12 @@ def ajax_remove_annotation(request):
     data = {}
     custom =  int(request.POST.get("custom"))
     attr_id = request.POST.get("attr_id") 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     answer_id = request.POST.get("answer_id") 
     try :
         if custom :
@@ -6349,7 +6568,11 @@ def ajax_create_or_update_appreciation(request):
     data = {}
     comment_id = request.POST.get("comment_id",None)
     comment = request.POST.get("comment",None)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     # Choix du formulaire à compléter
     if comment_id :
@@ -6490,7 +6713,12 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
 
     custom = Customexercise.objects.get(pk=idcc)
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     stage   = get_stage(request.user)
 
     if id == 0 :
@@ -6548,7 +6776,11 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
 @login_required(login_url= 'index') 
 def my_custom_exercises(request): # Modification d'un exercice non autocorrigé dans un parcours
     
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     customexercises = Customexercise.objects.filter(teacher=teacher)
 
     context = { 'customexercises' : customexercises } 
@@ -6604,7 +6836,11 @@ def ajax_auto_evaluation(request):
 @login_required(login_url= 'index')   
 def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exercice non autocorrigé dans un parcours
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     custom = Customexercise.objects.get(pk=idcc)
 
     folder_id = request.session.get("folder_id",0)
@@ -6970,7 +7206,11 @@ def detail_task_parcours(request,id,s,c):
 def detail_task(request,id,s):
 
     parcours = Parcours.objects.get(pk=id) 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     today = time_zone_user(teacher.user) 
 
@@ -7016,7 +7256,11 @@ def detail_task(request,id,s):
 @login_required(login_url= 'index') 
 def all_my_tasks(request):
     today = time_zone_user(request.user) 
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ,is_trash=0)
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today,exercise__supportfile__is_title=0).order_by("parcours") 
     context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] , 'relationships' : [] , 'group_id' : None  , 'role' : False , }
@@ -7026,7 +7270,11 @@ def all_my_tasks(request):
 @login_required(login_url= 'index') 
 def these_all_my_tasks(request):
     today = time_zone_user(request.user) 
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index') 
     parcourses = Parcours.objects.filter(is_publish=  1,teacher=teacher ,is_trash=0)
     relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("parcours") 
     context = {'relationships': relationships, 'parcourses': parcourses, 'parcours': None,  'communications' : [] ,  'relationships' : [] ,'group_id' : None  , 'role' : False , } 
@@ -7040,7 +7288,11 @@ def group_tasks(request,id):
 
 
     group = Group.objects.get(pk = id)
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today = time_zone_user(request.user) 
 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
@@ -7067,7 +7319,11 @@ def group_tasks(request,id):
 def group_tasks_all(request,id):
 
     group = Group.objects.get(pk = id)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     today = time_zone_user(teacher.user) 
     nb_parcours_teacher = teacher.teacher_parcours.count() # nombre de parcours pour un prof
 
@@ -7140,7 +7396,11 @@ def create_remediation(request,idr): # Pour la partie superadmin
 def update_remediation(request,idr, id): # Pour la partie superadmin
 
     remediation = Remediation.objects.get(id=id)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     exercise = Exercise.objects.get(pk=ide) 
     form = RemediationUpdateForm(request.POST or None, request.FILES or None, instance=remediation, teacher = teacher  )
  
@@ -7258,8 +7518,13 @@ def json_create_remediation(request,idr,idp,typ):
 def json_delete_remediation(request,id,idp,typ):
 
     parcours = Parcours.objects.get(pk=idp) 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
-    if parcours.teacher == request.user.teacher :
+    if parcours.teacher == teacher :
         if typ == 0 :
             remediation = Remediation.objects.get(id=id)
         else :
@@ -7408,7 +7673,12 @@ def ajax_delete_constraint(request):
 @login_required(login_url= 'index')
 def peuplate_custom_parcours(request,idp):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     parcours = Parcours.objects.get(id=idp)
 
     context = {'parcours': parcours, 'teacher': teacher ,  'type_of_document' : 1 }
@@ -7451,7 +7721,12 @@ def ajax_find_peuplate_sequence(request):
 def clone_course_sequence(request, idc):
     """ cloner un cours dans une sequence """
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     course = Course.objects.get(pk=idc) # parcours à cloner.pk = None
 
     course.pk = None
@@ -7475,7 +7750,12 @@ def clone_course_sequence(request, idc):
 def clone_custom_sequence(request, idc):
     """ cloner un parcours """
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     customexercise = Customexercise.objects.get(pk=idc) # parcours à cloner.pk = None
     customexercise.pk = None
     customexercise.teacher = teacher
@@ -8176,7 +8456,12 @@ def export_note(request,idg,idp):
 @login_required(login_url= 'index')
 def list_courses(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=0).exclude(course=None).order_by("subject", "level", "title").distinct()
     parcours_courses = list()
     for parcours in parcours_dataset :
@@ -8197,7 +8482,12 @@ def list_courses(request):
 @login_required(login_url= 'index')
 def list_courses_archives(request):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=1).exclude(course=None).order_by("subject", "level", "ranking")
     parcours_courses = list()
     for parcours in parcours_dataset :
@@ -8214,7 +8504,12 @@ def list_courses_archives(request):
 @login_required(login_url= 'index')
 def only_create_course(request):
  
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     form    = CourseNPForm(request.POST or None, teacher = teacher)
     if request.method == "POST" :
         if form.is_valid():
@@ -8238,7 +8533,12 @@ def only_update_course(request,idc):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     course  =  Course.objects.get(pk=idc)
     form    =  CourseNPForm(request.POST or None, instance = course , teacher = teacher , initial = {   'subject' : course.parcours.subject  , 'level' : course.parcours.level })
     if request.method == "POST" :
@@ -8265,7 +8565,11 @@ def create_course(request, idc , id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -8304,7 +8608,12 @@ def create_course_sequence(request, id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
     if parcours.is_sequence :
         role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -8350,7 +8659,12 @@ def create_custom_sequence(request, id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
     if parcours.is_sequence :
         role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -8398,7 +8712,12 @@ def update_course(request, idc, id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
-    teacher =  request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     course = Course.objects.get(id=idc)
     course_form = CourseForm(request.POST or None, instance=course , parcours = parcours )
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
@@ -8444,6 +8763,11 @@ def delete_course(request, idc , id  ):
     """
     try :
         teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+    
+    try :
         course = Course.objects.get( id = idc )
         parcours  = Parcours.objects.get( id = id )
         if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
@@ -8451,10 +8775,10 @@ def delete_course(request, idc , id  ):
         course.delete()
 
     except :
-        teacher = request.user.teacher
         course = Course.objects.get(id=idc)
         if course.teacher == teacher or teacher.user.is_superuser :
             course.delete()
+
     if id > 0 :
         return redirect('show_course', 0, id)
     try :
@@ -8468,7 +8792,12 @@ def delete_course(request, idc , id  ):
 @login_required(login_url= 'index')
 def peuplate_course_parcours(request,idp):
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     parcours = Parcours.objects.get(id=idp)
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
@@ -8558,7 +8887,12 @@ def show_courses_from_folder(request,  idf ) :
 
 def ajax_parcours_get_course(request):
     """ Montre un cours"""
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     sacado_asso = False
     if teacher.user.school   :
         sacado_asso = True
@@ -8596,7 +8930,11 @@ def ajax_parcours_get_course(request):
 
 def ajax_parcours_clone_course(request):
     """ Clone un parcours depuis la liste des parcours"""
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     all_parcours = request.POST.get("all_parcours")
     checkbox_value = request.POST.get("checkbox_value")
@@ -8649,7 +8987,12 @@ def ajax_parcours_clone_course(request):
 def get_this_course_for_this_parcours(request,typ,id_target,idp):
     """ Clone un parcours depuis la liste ver un parcours de provenance """
 
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     if typ==1  : 
         course = Course.objects.get(pk=int(idp))
         course.pk = None
@@ -8676,7 +9019,11 @@ def get_this_course_for_this_parcours(request,typ,id_target,idp):
 @login_required(login_url= 'index')
 def all_courses(request):
  
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     context = {  'teacher': teacher ,    }
     return render(request, 'qcm/course/list_courses.html', context )
@@ -8685,48 +9032,56 @@ def all_courses(request):
 
 @login_required(login_url= 'index')
 def get_course_in_this_parcours(request,id):
+
     parcours = Parcours.objects.get(pk = id) 
-    user = request.user
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     teacher_id = get_teacher_id_by_subject_id(parcours.subject.id) 
 
-    if user.is_teacher:  # teacher
-    
-        teacher = request.user.teacher
-        role, group , group_id , access = get_complement(request, teacher, parcours)
-        request.session["parcours_id"] = parcours.id
-        request.session["group_id"] = group_id
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+    request.session["parcours_id"] = parcours.id
+    request.session["group_id"] = group_id
 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
+    courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
 
-        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'group': group , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
-    else :
-        return redirect('index')  
+    return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'group': group , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
+ 
 
 
 @login_required(login_url= 'index')
 def course_custom_show_shared(request):
     
-    user = request.user
-    if user.is_teacher:  # teacher
+    try :
         teacher = request.user.teacher
-        role, group , group_id , access = get_complement(request, teacher, parcours)
-        request.session["parcours_id"] = parcours.id
-        request.session["group_id"] = group_id
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    teacher = request.user.teacher
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+    request.session["parcours_id"] = parcours.id
+    request.session["group_id"] = group_id
 
 
-        courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(teacher = teacher).order_by("parcours","parcours__level")
+    courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(teacher = teacher).order_by("parcours","parcours__level")
 
-        return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'group': group ,  'parcours': None, 'relationships' : [] ,  'communications': [] , })
-    else :
-        return redirect('index')   
+    return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'group': group ,  'parcours': None, 'relationships' : [] ,  'communications': [] , })
+  
 
 
 
 
 def ajax_course_custom_show_shared(request):
     
-    teacher = Teacher.objects.get(user= request.user)
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
  
     data = {} 
 
@@ -8738,7 +9093,11 @@ def ajax_course_custom_show_shared(request):
     parcours_id = request.POST.get('parcours_id',None)
     if parcours_id :
         parcours = Parcours.objects.get(pk = parcours_id)
-        teacher = request.user.teacher
+        try :
+            teacher = request.user.teacher
+        except :
+            messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+            return redirect('index')
         role, group , group_id , access = get_complement(request, teacher, parcours)
         request.session["parcours_id"] = parcours.id
         request.session["group_id"] = group_id
@@ -8930,9 +9289,11 @@ def ajax_course_viewer(request):
 
         if request.user.user_type == 2 :
             is_teacher = True
+            teacher = request.user.teacher
         else : 
-            is_teacher = False 
-        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher , 'teacher' : request.user.teacher  }
+            is_teacher = False
+            teacher = None 
+        context = { 'courses' : courses , 'parcours' : relationship.parcours , 'is_teacher' : is_teacher , 'teacher' : teacher  }
         html = render_to_string('qcm/course/course_viewer.html',context)
         data['html'] = html       
 
@@ -8992,7 +9353,12 @@ def list_demands(request):
 
 @login_required(login_url= 'index')
 def create_demand(request):
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     form = DemandForm(request.POST or None  )
     if request.method == "POST" :
         if form.is_valid():
@@ -9023,7 +9389,11 @@ def update_demand(request, id):
  
     demand = Demand.objects.get(id=id)
     demand_form = DemandForm(request.POST or None, instance=demand, )
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
     
     if request.method == "POST" :
         if demand_form.is_valid():
@@ -9123,7 +9493,11 @@ def create_mastering(request,id):
     masterings_t = base_m.filter(scale = 3).order_by("ranking")
     masterings_d = base_m.filter(scale = 2).order_by("ranking")
     masterings_u = base_m.filter(scale = 1).order_by("ranking")
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     if not teacher_has_permisson_to_parcourses(request,teacher,relationship.parcours) :
         return redirect('index')
@@ -9149,7 +9523,12 @@ def create_mastering(request,id):
 def parcours_mastering_delete(request,id,idm):
 
     m = Mastering.objects.get(pk = idm)
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     if not teacher_has_permisson_to_parcourses(request,teacher,m.relationship.parcours) :
         return redirect('index')
 
@@ -9350,7 +9729,12 @@ def create_mastering_custom(request,id,idp):
     masterings_t = Masteringcustom.objects.filter(customexercise = customexercise , scale = 3).order_by("ranking")
     masterings_d = Masteringcustom.objects.filter(customexercise = customexercise , scale = 2).order_by("ranking")
     masterings_u = Masteringcustom.objects.filter(customexercise = customexercise , scale = 1).order_by("ranking")
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     if request.method == "POST" :
         exercise_id = request.POST.get("exercises",None)
         if form.is_valid():
@@ -9521,7 +9905,11 @@ def affectation_students_in_folder_and_affectation_groups_in_folder(nf,group_ids
 @login_required(login_url= 'index') 
 def create_folder(request,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     if idg > 0 :
         group_id = idg
@@ -9577,7 +9965,12 @@ def create_folder(request,idg):
 @folder_exists
 def update_folder(request,id,idg):
     """ 'parcours_is_folder' : True pour les vignettes et différencier si folder ou pas """
-    teacher = request.user.teacher
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     folder  = Folder.objects.get(id=id)
     images  = []
 
@@ -9643,7 +10036,13 @@ def update_folder(request,id,idg):
 @folder_exists
 def folder_archive(request,id,idg):
 
-    if folder.teacher == request.user.teacher :
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    if folder.teacher == teacher :
         folder = Folder.objects.get(id=id)
         folder.is_archive = 1
         folder.save()
@@ -9667,7 +10066,13 @@ def folder_archive(request,id,idg):
 @folder_exists
 def folder_unarchive(request,id,idg):
 
-    if folder.teacher == request.user.teacher :
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    if folder.teacher == teacher :
         folder = Folder.objects.get(id=id)
         folder.is_archive = 0
         folder.is_favorite = 0
@@ -9691,7 +10096,12 @@ def folder_unarchive(request,id,idg):
 @folder_exists
 def delete_folder(request,id,idg):
 
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     folder  = Folder.objects.get(id=id)
  
     if folder.teacher == teacher or request.user.is_superuser :
@@ -9713,10 +10123,17 @@ def delete_folder(request,id,idg):
 @login_required(login_url= 'index')
 def parcours_delete_from_folder(request):
 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     parcours_id =  request.POST.get("parcours_id",None) 
     if parcours_id :
         folder = Folder.objects.get( pk = int(parcours_id))
-        if parcours.teacher == request.user.teacher :
+
+        if parcours.teacher == teacher :
             Folder.objects.filter(pk=folder.id).update(is_trash=1)
     data = {}
          
@@ -9727,7 +10144,12 @@ def parcours_delete_from_folder(request):
 @folder_exists
 def delete_folder_and_contents(request,id,idg):
 
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     folder = Folder.objects.get(id=id)
 
     if not authorizing_access(teacher,parcours, True ):
@@ -9762,7 +10184,12 @@ def ajax_subparcours_check(request):
 
 def actioner_pef(request):
 
-    teacher = request.user.teacher 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
     idps = request.POST.getlist("selected_parcours")
     idfs = request.POST.getlist("selected_folders")
 
