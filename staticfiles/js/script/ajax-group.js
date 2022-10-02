@@ -274,15 +274,21 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
 
         $("#record_student_now").on('click' ,function () {    
             $("#teacher_record").show();
-            $("#auto_record").hide();             
+            $("#auto_record").hide();  
+            $("#collapsed").hide();           
         });
 
         $("#record_student_auto").on('click' ,function () {    
             $("#teacher_record").hide();
-            $("#auto_record").show();             
+            $("#auto_record").show(); 
+            $("#collapsed").hide();          
         });
 
-
+        $("#record_student_add").on('click' ,function () {    
+            $("#teacher_record").hide();
+            $("#auto_record").hide();
+            $("#collapsed").show();            
+        });
 
 
             $('.div_username').on('click', function (){  

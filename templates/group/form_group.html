@@ -119,7 +119,7 @@
                     </div>
                 {% endif %}
             </div>
-                {% if sacado_asso %}            
+            {% if sacado_asso %}            
                     <div class="row">
                         <hr>
                         <div class="col-sm-8 col-md-10">
@@ -187,6 +187,7 @@
                                      <ul>
                                         <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir un profil élève en cochant le bouton ci-dessus.  </small></label></li>
                                         <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux inscrire mes élèves plus tard et générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_add" /> Sélectionner des élèves déjà inscrits sur ce niveau dans l'établissement</a></label></li>
                                     </ul>
                                 </div>
                             </div>
@@ -229,10 +230,6 @@
                         </div> 
                     {% endif %}
                 {% endif %}
-
-            
-
-
 
                 {% if group %}
                     <div class="row collapse" id="collapsed"  >
