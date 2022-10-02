@@ -10260,7 +10260,6 @@ def actioner_pef(request):
         for idf in idfs :
             folder = Folder.objects.get(id=idf)
             for parcours in folder.parcours.all():
-                parcours = Parcours.objects.get(id=idp) 
                 parcours.students.clear()
 
                 if not authorizing_access(teacher, parcours, False ):
@@ -10288,16 +10287,14 @@ def actioner_pef(request):
 
  
     elif request.POST.get("action") == "archiver" :  
-
-        print(idps) 
-        print(idfs)
+ 
 
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 
             parcours.is_archive = 1
             parcours.is_favorite = 0
             parcours.save()
-            print(parcours) 
+ 
 
         for idf in idfs :
             folder = Folder.objects.get(id=idf) 
@@ -10311,9 +10308,6 @@ def actioner_pef(request):
                 p.save()
  
     else :
-
-        print("la",idps) 
-        print("la",idfs)
 
         for idp in idps :
             parcours = Parcours.objects.get(id=idp) 

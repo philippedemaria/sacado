@@ -9,7 +9,15 @@
 
     {% if sacado_asso %}
 
-           <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
+        <li {% if  'book_bilan_group' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'book_bilan_group' group.id %}" class="no_button">
+                Livret de compétences
+            </a>
+        </li>
+ 
+
+        <li class="divider"></li>
+        <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
             <a href="{% url 'result_group_waiting' group.id  %}" class="no_button"  >
                 Lire le bilan individualisé <i class="fa fa-caret-right fa-xs sub_caret"></i>
             </a> 
@@ -93,7 +101,12 @@
         {% endcomment %}
 
     {% else %}
-
+        <li>
+            <a href="#" class="no_button no_sacado_asso" title="version établissement requise" >
+                Livret de compétences
+            </a>
+        </li>
+        <li class="divider"></li>
         <li class="submenu_div{% if 'parcours_result/' in request.path %} active{% endif %}">
             <a href="#" class="no_button no_sacado_asso" title="version établissement requise" >
                 Lire le bilan individualisé <i class="fa fa-caret-right fa-xs sub_caret"></i>

@@ -8335,6 +8335,45 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 
 
 
+.table-sacado-color > thead > tr > th,
+.table-sacado-color > tbody > tr > th,
+.table-sacado-color > tfoot > tr > th,
+.table-sacado-color > thead > tr > td,
+.table-sacado-color > tfoot > tr > td {
+  background-color:#5d4391;
+  color: white ;
+}
+
+.table-sacado-color  > tbody > tr > td {
+  border-top: 5px solid #FFF;
+  background-color:#f9f7fe ;
+  color: #444 ;
+}
+
+.table-sacado-color  > tbody > tr > td.colored {
+  border-top: 5px solid #FFF;
+  background-color:#ded7ed ;
+  color: #5d4391 ;
+}
+
+
+.table-sacado-color  > tbody > tr  > td.right {
+  border-radius: 0px 10px 7px 0px;
+}
+.table-sacado-color  > tbody > tr  > td.left {
+  border-radius: 10px 0px 0px 7px;
+}
+
+.table-sacado-color  > thead > tr > th {
+  border-bottom: 0px solid #f9f7fe;
+}
+
+.table-sacado-color  tr td .progress {
+  margin-top: 2px;
+} 
+
+
+
 
 a.listing{
   font-size:20px;

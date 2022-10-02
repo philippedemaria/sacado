@@ -60,12 +60,11 @@ urlpatterns = [
     path('export_skills',  export_skills, name='export_skills'), 
     path('envoieStatsEnMasse',envoieStatsEnMasse, name="envoieStatsEnMasse"),
 
-
-
-
     path('<slug:slug>', enroll , name='enroll'),
 
 
+
+    path('book_bilan_group/<int:idg>', book_bilan_group , name='book_bilan_group'),
 
 
 

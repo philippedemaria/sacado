@@ -1,0 +1,92 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common4.js' %}"></script> 
+    <script>
+        require(['script/ajax-list-group']); 
+    </script>
+{% endblock %}
+
+{% block page_title %}
+    <span style="color:{{ group.color }}"><i class='fa fa-mortar-board'></i></span>        
+     {% include 'group/breadcrumb.html' %} 
+Livret de compétences par exercices proposés
+ 
+{% endblock %}
+
+
+
+
+{% block page_menu_right %}
+    {% if group %}
+        {% include 'group/submenu_group.html'  %}
+    {% endif %}
+{% endblock %}
+
+ 
+{% block body %} 
+
+<div class="content_list"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-sacado-color  table-hover display1000" style="width:100%" >
+                <tbody  id="supportfile_ranking">  
+                    {% regroup waitings by theme as theme_list %}
+                    {% for theme in theme_list  %} 
+                        <tr> 
+                            <th>{{theme.grouper.subject.name}} : {{theme.grouper.name}}</th> 
+                            <th style="width:50%;color:white">Les vignettes en surbrillance sont les exercices déjà faits par les élèves.</th>
+                        </tr> 
+
+
+
+                        {% for waiting in theme.list  %}
+                            <tr class="opener out"  id="{{ waiting.id }}">
+                                <td class="colored"><i class="fa fa-caret-right"></i> {{waiting.name}} <b>{{waiting.exercises_counter}} exercice{{waiting.exercises_counter|pluralize}}</b> </td>
+                                <td class="colored">
+                                    {% for e in waiting.exercises.all  %}
+                                        <div style="float: left;position: relative;height:20px;width:30px;">
+                                            <img src="{{ e.supportfile.imagefile.url }}" height="20px" style="position: absolute;{% if e.is_used %}opacity: 0.3{% endif %}"/>
+                                        </div>
+                                    {% endfor %}
+                                </td>
+                            </tr>  
+                            {% for knowledge in waiting.knowledges.all  %}
+ 
+                                    <tr  class="listingtd opener_k opened{{ waiting.id }} out"  id="{{ knowledge.id}}"> 
+                                        <td> 
+                                            {{ knowledge.name|capfirst }} 
+                                        </td>
+                                        <td> 
+                                            {% for e in knowledge.exercises.all  %}
+                                            <div style="float: left;position: relative;height:35px;width:48px;">
+                                                <img src="{{ e.supportfile.imagefile.url }}" height="35px" style="position: absolute;{% if e.is_used %}opacity: 0.3{% endif %}"/>
+                                            </div>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+
+                            {% endfor %}
+                            
+                        {% endfor %}
+                    {% endfor %}  
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">     
+            <a href="javascript:history.back()" class="btn btn-default" >Retour </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
