@@ -390,6 +390,52 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
 
 
 
+
+def remove_all_documents_of_groups_to_a_student(student):
+
+    try :
+        for folder in student.folders.all():
+            folder.students.remove(student)
+
+        for parcours in student.students_to_parcours.all():
+            parcours.students.remove(student)
+            relationships = parcours.parcours_relationship.all()
+            for r in relationships:
+                r.students.remove(student)
+
+            customexercises = parcours.parcours_customexercises.all()
+            for c in customexercises:
+                c.students.remove(student)
+
+            courses = parcours.course.all()
+            for course in courses:
+                course.students.remove(student)
+
+            flashpacks = parcours.flashpacks.all()
+            for flashpack in flashpacks:
+                flashpack.students.remove(student)
+                for flashcard in flashpack.flashcards.all():
+                    flashcard.students.remove(student)
+
+            bibliotexs = parcours.bibliotexs.all()
+            for bibliotex in bibliotexs:
+                bibliotex.students.remove(student)
+                for r in bibliotex.relationtexs.all():
+                    r.students.remove(student)
+                
+            quizz = parcours.quizz.all()
+            for quiz in quizz:
+                quiz.students.remove(student)
+        test = True
+    except :
+        test = False
+
+    return test
+
+
+
+
+
 def attribute_all_documents_of_groups_to_all_new_students(groups):
     """  assigner les documents   """
     # Assigne les dossiers et leurs contenus à aprtir d'un groupe
