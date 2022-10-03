@@ -288,6 +288,12 @@ class Waiting(models.Model):
 
 
 
+    def my_relationships(self,group):
+        Relationship = apps.get_model('qcm', 'Relationship')
+        parcourses = group.group_parcours.all()
+        return Relationship.objects.filter(exercise__knowledge__waiting = self, exercise__supportfile__is_title=0, parcours__in=parcourses)
+
+
 
 
 class Knowledge(models.Model):
@@ -313,14 +319,23 @@ class Knowledge(models.Model):
         Relationship = apps.get_model('qcm', 'Relationship') 
         nb = 0
         relationships = Relationship.objects.filter(exercise__knowledge=self , parcours__in = parcours_tab).order_by("exercise").distinct()
-      
         return nb 
+
 
     def exercices_by_knowledge(self,student,group):
 
         Exercise = apps.get_model('qcm', 'Exercise')
         exercises = Exercise.objects.filter(knowledge=self)
         return exercises
+
+
+
+    def my_relationships(self,group):
+
+        Relationship = apps.get_model('qcm', 'Relationship')
+        parcourses = group.group_parcours.all()
+        return Relationship.objects.filter(exercise__knowledge = self, exercise__supportfile__is_title=0, parcours__in=parcourses)
+
 
 
     def score_student_parcours(self,student,parcours):

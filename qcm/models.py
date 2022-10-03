@@ -1752,11 +1752,20 @@ class Relationship(models.Model):
         return data
 
 
-    def is_consigne_remediation():
+    def is_consigne_remediation(self):
         return self.relationship_remediation.filter(consigne = 1)
 
-    def is_not_consigne_remediation():
+    def is_not_consigne_remediation(self):
         return self.relationship_remediation.filter(consigne = 0)
+
+    def used_in_group(self,group):
+        test = False
+        students = group.students.all()
+        nb_ans = Studentanswer.objects.filter(exercise = self.exercise, parcours = self.parcours,student_in=students).count()
+        if nb_ans : test = True
+        return test
+
+
 
 
 

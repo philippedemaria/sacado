@@ -52,9 +52,11 @@ Livret de compétences par exercices proposés
                             <tr class="opener out"  id="{{ waiting.id }}">
                                 <td class="colored"><i class="fa fa-caret-right"></i> {{waiting.name}} <b>{{waiting.exercises_counter}} exercice{{waiting.exercises_counter|pluralize}}</b> </td>
                                 <td class="colored">
-                                    {% for e in waiting.exercises.all  %}
+                                    {% get_my_relationships waiting group as my_relationships %}
+                                    {% for r in  my_relationships  %}
+                                        {% get_used_in_group r group as used %}
                                         <div style="float: left;position: relative;height:20px;width:30px;">
-                                            <img src="{{ e.supportfile.imagefile.url }}" height="20px" style="position: absolute;{% if e.is_used %}opacity: 0.3{% endif %}"/>
+                                            <img src="{{ r.exercise.supportfile.imagefile.url }}" height="20px" style="position: absolute;{% if not used %}opacity: 0.3{% endif %}"/>
                                         </div>
                                     {% endfor %}
                                 </td>
@@ -65,11 +67,13 @@ Livret de compétences par exercices proposés
                                         <td> 
                                             {{ knowledge.name|capfirst }} 
                                         </td>
-                                        <td> 
-                                            {% for e in knowledge.exercises.all  %}
-                                            <div style="float: left;position: relative;height:35px;width:48px;">
-                                                <img src="{{ e.supportfile.imagefile.url }}" height="35px" style="position: absolute;{% if e.is_used %}opacity: 0.3{% endif %}"/>
-                                            </div>
+                                        <td>
+                                            {% get_my_relationships knowledge group as my_relationships %} 
+                                            {% for r in my_relationships %}
+                                                {% get_used_in_group r group as is_used %}
+                                                <div style="float: left;position: relative;height:35px;width:48px;">
+                                                    <img src="{{ r.exercise.supportfile.imagefile.url }}" height="35px" style="position: absolute;{% if not is_used %}opacity: 0.3{% endif %}"/>
+                                                </div>
                                             {% endfor %}
                                         </td>
                                     </tr>

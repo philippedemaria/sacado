@@ -535,6 +535,26 @@ def get_only_students(obj,group):
 
 
 
+
+@register.simple_tag  
+def get_used_in_group(obj,group): 
+    """
+    Si un objet est utilisé dans un groupe
+    """
+    return obj.used_in_group(group) 
+
+ 
+
+
+@register.simple_tag  
+def get_my_relationships(obj,group): 
+    """
+    Récupère les relationships utilisées dans un groupe à partir d'un obj  (waiting et knowledge) 
+    """
+    return obj.my_relationships(group) 
+
+
+
 @register.simple_tag 
 def get_exercise_used(obj,parcours_tab): 
     """

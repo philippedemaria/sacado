@@ -1956,9 +1956,13 @@ def print_monthly_statistiques(request):
 @login_required(login_url= 'index')
 def book_bilan_group(request, idg):
     group = Group.objects.get(pk = idg)
+    if request.user.is_teacher :
+        teacher = request.user.teacher
+
+
     waitings = group.level.waitings.filter(theme__subject=group.subject).order_by("theme__subject" , "theme")
 
-    context = {'group': group, 'waitings': waitings }
+    context = {'group': group, 'waitings': waitings , 'teacher' : teacher }
 
     return render(request, 'group/book_bilan_group.html', context)
 
