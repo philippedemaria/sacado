@@ -567,7 +567,7 @@ def create_group(request):
         if stdts : 
             if len(stdts) > 0  :
                 include_students(request , stdts,nf)
-        student = create_student_profile_inside(request, nf) # dans general_fonction.py
+        student = create_student_profile_inside(request, nf) 
         duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student) # dans general_fonction.py
 
         return redirect("show_group", nf.id)
@@ -620,9 +620,8 @@ def update_group(request, id):
             if len(stdts) > 0 :
                 include_students(request , stdts, group)
 
-        if group.students.filter(user__username__contains="_e-test").count() == 0 : # Un professeur a donc toujours un profil élève dans son groupe
-            student = create_student_profile_inside(request, nf) 
-        else :
+        student = create_student_profile_inside(request, nf) 
+        if not student :
             student = group.students.filter(user__username__contains="_e-test").first()
         duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student)
  

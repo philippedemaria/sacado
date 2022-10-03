@@ -52,17 +52,13 @@
                 {% endif %}
             </p>
         </div>
-        {% if sacado_asso %}
         <div class="col-sm-12 col-md-7"> 
- 
             <p style="color:{{ group.color }}"> 
                 {% for sp in  studentprofiles   %}
                 <span class="profile_student_incognito" id="profile_incognito{{ sp.user.id }}" ><label>Profil élève Id :</label> {{ sp.user.username }}</span>
                 {% endfor %}
             </p>
- 
         </div>
-        {% endif %}
     </div>
     <form action="" method="POST">{% csrf_token %}           
         <div class="row">        

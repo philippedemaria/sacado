@@ -24,8 +24,6 @@ def delete_session_key(request,key):
 
 
 
-
-
 def get_strong_username(request ,ln, fn):
     """
     retourne un username plus compliqué
@@ -66,8 +64,6 @@ def get_username(request ,ln, fn):
             is_changed = True 
     return un 
 
-
-
 def get_username_manuel(texte):
     """
     retourne un username
@@ -85,8 +81,6 @@ def get_username_manuel(texte):
             un = un + str(i)
             is_changed = True 
     return un , is_changed
-
-
 
 
 def separate_values(request, line, is_group,simple) :
@@ -145,10 +139,6 @@ def separate_values(request, line, is_group,simple) :
     return ln, fn, username , password , email , group_name , level , is_username_changed
 
 
- 
-
-
-
 def convert_seconds_in_time(secondes):
     if secondes : secondes = int(secondes)
     if secondes < 60:
@@ -177,7 +167,6 @@ def student_parcours_studied(student):
     else :
         parcourses = parces.filter(linked=0)
     return parcourses
-
 
 
 def code_couleur(score,teacher):
@@ -210,8 +199,6 @@ def code_couleur(score,teacher):
         else :
             #return Image('D:/uwamp/www/sacado/static/img/code_darkgreen.png')
             return Image('https://sacado.xyz/static/img/code_darkgreen.png')
-
-
 
 
 def sending_mail(ob , m , a ,r) :

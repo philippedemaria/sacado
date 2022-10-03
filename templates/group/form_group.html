@@ -187,7 +187,11 @@
                                      <ul>
                                         <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir un profil élève en cochant le bouton ci-dessus.  </small></label></li>
                                         <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux inscrire mes élèves plus tard et générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_add" /> Sélectionner des élèves déjà inscrits sur ce niveau dans l'établissement</a></label></li>
+                                        {% if group %}
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_add" /> Sélectionner des élèves déjà inscrits sur ce niveau dans l'établissement</label></li>
+                                        {% else %}
+                                        <li class="sans_puce"><label><input type="radio" disabled /> Pour sélectionner des élèves, le groupe doit être déjà créé. Créer-le et revenir.</label></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>
@@ -210,25 +214,6 @@
                                 </div>
                             </div>
                         </div>
-                    {% else   %}
-                        <hr>
-                        {% if group %}
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <h3 class="thin"><a href="#" data-toggle="collapse" data-target="#collapsed"> <i class="fa fa-plus-circle text-primary"></i> Ajouter des élèves</a>
-                                        <small>
-                                            {% if is_managing %}
-                                            Gestion des élèves assurée par l'administrateur SACADO. 
-                                            {% else %}
-                                            Gestion des élèves assurée par <b>vous-même</b>. 
-                                            {% endif   %}
-                                        </small>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div> 
-                        {% endif %}
                 {% endif %}
 
                 {% if group %}
@@ -270,25 +255,16 @@
                             {% endif   %}
                         </div>
                     </div> 
-                    <hr> 
-                {% else %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group alert alert-danger">
-                                Vous avez la version ETABLISSEMENT.
-                                {% if is_managing %}
-                                    La gestion des élèves est assurée par l'administrateur SACADO de votre établissement. 
-                                {% else %}
-                                    La gestion des élèves est assurée par <b>vous-même</b>. 
-                                {% endif   %}
-                                {% if group and is_managing %}
-                                    La gestion des élèves est assurée par l'administrateur SACADO de votre établissement. Vous ne pouvez donc pas assigner plus d'élèves que ceux proposés.
-                                {% else %}
-                                    L'ajout des élèves n'est possible qu'une fois le groupe créé.
-                                {% endif   %}
-                            </div>
+                {% endif   %}
+                <hr> 
+                {% if is_managing %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group alert alert-danger">
+                            Vous avez la version ETABLISSEMENT. La gestion des élèves est assurée par l'administrateur SACADO de votre établissement. Vous ne pouvez donc pas assigner plus d'élèves que ceux proposés.
                         </div>
-                    </div> 
+                    </div>
+                </div> 
                 {% endif   %}
             {% endif   %}
 
