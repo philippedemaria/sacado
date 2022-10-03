@@ -287,19 +287,20 @@ class Waiting(models.Model):
         return Exercise.objects.filter(knowledge__waiting = self, supportfile__is_title=0)
 
 
-
     def my_relationships(self,group):
         Relationship = apps.get_model('qcm', 'Relationship')
         parcourses = group.group_parcours.all()
-        return Relationship.objects.filter(exercise__knowledge__waiting = self, exercise__supportfile__is_title=0, parcours__in=parcourses)
-
-
+        group = group.group_parcours.all()
+        relationships = Relationship.objects.filter(exercise__knowledge__waiting = self, exercise__supportfile__is_title=0, parcours__in=parcourses)
+        nb = relationships.count()
+        
+        return {"nb" : nb , "relationships" : relationships }
 
 
 class Knowledge(models.Model):
-    level = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")
-    theme = models.ForeignKey(Theme, related_name="knowledges", on_delete=models.CASCADE, verbose_name="Thème")
-    name = models.CharField(max_length=10000, verbose_name="Nom")
+    level   = models.ForeignKey(Level, related_name="knowledges", default="", on_delete=models.CASCADE, verbose_name="Niveau")
+    theme   = models.ForeignKey(Theme, related_name="knowledges", on_delete=models.CASCADE, verbose_name="Thème")
+    name    = models.CharField(max_length=10000, verbose_name="Nom")
     waiting  = models.ForeignKey(Waiting, related_name="knowledges", default="",  null = True , on_delete=models.CASCADE, verbose_name="Attendu")
 
 
@@ -312,14 +313,6 @@ class Knowledge(models.Model):
     def nb_exercise(self):
         return self.exercises.count()
 
-
-    ### plus utilisée -----
-    def nb_exercise_used(self,  parcours_tab): # parcours du groupe
-
-        Relationship = apps.get_model('qcm', 'Relationship') 
-        nb = 0
-        relationships = Relationship.objects.filter(exercise__knowledge=self , parcours__in = parcours_tab).order_by("exercise").distinct()
-        return nb 
 
 
     def exercices_by_knowledge(self,student,group):
@@ -334,7 +327,9 @@ class Knowledge(models.Model):
 
         Relationship = apps.get_model('qcm', 'Relationship')
         parcourses = group.group_parcours.all()
-        return Relationship.objects.filter(exercise__knowledge = self, exercise__supportfile__is_title=0, parcours__in=parcourses)
+        group = group.group_parcours.all()
+        relationships = Relationship.objects.filter(exercise__knowledge = self, exercise__supportfile__is_title=0, parcours__in=parcourses)
+        nb = relationships.count()
 
 
 

@@ -1959,8 +1959,8 @@ def book_bilan_group(request, idg):
     if request.user.is_teacher :
         teacher = request.user.teacher
 
-
-    waitings = group.level.waitings.filter(theme__subject=group.subject).order_by("theme__subject" , "theme")
+    parcourses = group.group_parcours.all()
+    waitings   = group.level.waitings.filter(theme__subject=group.subject).order_by("theme__subject" , "theme")
 
     context = {'group': group, 'waitings': waitings , 'teacher' : teacher }
 

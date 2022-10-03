@@ -547,11 +547,11 @@ def get_used_in_group(obj,group):
 
 
 @register.simple_tag  
-def get_my_relationships(obj,group): 
+def get_my_relationships(obj,parcourses): 
     """
     Récupère les relationships utilisées dans un groupe à partir d'un obj  (waiting et knowledge) 
     """
-    return obj.my_relationships(group) 
+    return obj.my_relationships(parcourses) 
 
 
 

@@ -1761,7 +1761,7 @@ class Relationship(models.Model):
     def used_in_group(self,group):
         test = False
         students = group.students.all()
-        nb_ans = Studentanswer.objects.filter(exercise = self.exercise, parcours = self.parcours,student_in=students).count()
+        nb_ans = Studentanswer.objects.filter(exercise = self.exercise, parcours = self.parcours,student__in=students).count()
         if nb_ans : test = True
         return test
 
