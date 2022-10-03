@@ -1247,13 +1247,21 @@ def enroll(request, slug):
                 password = request.POST.get("password1")
                 username = request.POST.get("username")
                 user.set_password(password)
-                user.save()
-                student = Student.objects.create(user=user, level=group.level)
-                group.students.add(student)
-                # Affections des DOSSIERS ET parcours
-                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
-                groups = [group]
-                test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
+
+                if Student.objects.filter(user__last_name = user.last_name, user__first_name  = user.first_name , user__school = school, level=group.level ) == 0 : 
+                    user.save()
+                    student = Student.objects.create(user=user, level=group.level)
+                else :
+                    student = Student.objects.get(user__last_name = user.last_name, user__first_name  = user.first_name , user__school = school, level=group.level )
+                try :
+                    group.students.add(student)
+                    # Affections des DOSSIERS ET parcours
+                    messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
+                    groups = [group]
+                    test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
+                except :
+                    messages.success(request, "Le groupe ou l'élève n'est pas reconnu. Vérifier le groupe ou l'élève")
+                    return redirect ('enroll' , slug)
 
                 if test :
                     messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
