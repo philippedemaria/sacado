@@ -191,9 +191,12 @@
                             {% if data.nb_documents == 0 %}
                                 <div class="row">                                      
                                     <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i>
-                                            <span class="small_displayer"> Détails </span>
-                                        </a>    
+                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};" title="Configurer du groupe">
+                                            <i class="bi bi-gear"></i>
+                                        </a> 
+                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};" title="Détails du groupe">
+                                            <i class="fa fa-arrow-circle-right"></i>
+                                        </a>  
                                     </div>
                                     <div class="col-lg-6 col-xs-6" style="padding-right:0px">
                                         <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="helper_tip small_displayer" style="color:{{ group.color|contrast_color }};"> {{ data.snt }} élève{{ data.snt|pluralize }}
@@ -203,7 +206,12 @@
                             {% else  %}
                                 <div class="row">                    
                                     <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-arrow-circle-right"></i><span class="small_displayer"> Détails </span></a>    
+                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer du groupe">
+                                            <i class="bi bi-gear"></i>
+                                        </a> 
+                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Détails du groupe">
+                                            <i class="fa fa-arrow-circle-right"></i>
+                                        </a> 
                                     </div>
 
                                     <div class="col-lg-4 col-xs-4" style="padding-right:0px">
