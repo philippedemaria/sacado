@@ -146,7 +146,7 @@ def set_username_student_profile(name):
 @login_required(login_url= 'index')
 def student_dashboard(request,group_id):
 
-    student = Student.objects.get(user=request.user.id)
+    student = request.user.student
     #######Groupes de l'élève. 
     # si plusieurs matières alors on envoi =e sur dashboard_group 
     # si une seule matière alors  sur dashboard
@@ -261,7 +261,7 @@ def student_dashboard(request,group_id):
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
                'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index , 'sequences' : sequences}
 
- 
+    print(template, context)
     return template, context
 
 
