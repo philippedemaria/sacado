@@ -776,7 +776,7 @@ def get_first_adhesion(request):
 				    somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
 
 
-				accounting_id =  accounting_adhesion(school, today , None , user, False , "Première adhésion" )
+				accounting_id =  accounting_adhesion(school, today , None , user, False , "Premier abonnement" )
 				accounting = Accounting.objects.get(pk = accounting_id) 
 				date_start, date_stop = date_abonnement(today)
 				abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
@@ -787,7 +787,7 @@ def get_first_adhesion(request):
 
 
 				send_mail(subject,
-				          "Bonjour,  :\n\n Vous avez formulé une demande d'adhésion \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+				          "Bonjour,  :\n\n Vous avez formulé une demande d'abonnement \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 				          settings.DEFAULT_FROM_EMAIL ,
 				          [user.email, "sacado.asso@gmail.com"])
  
@@ -842,11 +842,11 @@ def renew_school_adhesion(request):
 	administration= ". Nous traitons votre demande."
  
 
-	subject = "Adhésion SACADO - demande d'IBAN"
+	subject = "Abonnement SACADO - demande d'IBAN"
 	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
 	send_mail(subject,
-	          "Bonjour,  :\n\n Vous avez formulé une demande de renouvellement d'adhésion"+administration+" \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+	          "Bonjour,  :\n\n Vous avez formulé une demande de renouvellement d'abonnement "+administration+" \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 	          settings.DEFAULT_FROM_EMAIL ,
 	          [user.email, "sacado.asso@gmail.com"])
 
@@ -868,13 +868,13 @@ def delete_renewal_school_adhesion(request):
 
     accounting = Accounting.objects.filter(school=school,is_active = 0).last() 
     accounting.delete()
-    send_mail("Résiliation d'adhésion",
-	          "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'adhésion   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+    send_mail("Résiliation d'abonnement",
+	          "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'abonnement   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 	          settings.DEFAULT_FROM_EMAIL ,
 	          [request.user.email, "sacado.asso@gmail.com"])
 
 
-    messages.success(request,"Demande de résiliation d'adhésion réussie")
+    messages.success(request,"Demande de résiliation d'abonnement réussie")
     return redirect('admin_tdb')
 
 
@@ -1178,17 +1178,17 @@ def ask_school_adhesion(request):
 				asking_gar = "Accès au GAR demandé."
 				create_abonnement_gar(today, abonnement,request.user)
 
-			send_mail("Demande d'adhésion à la version établissement",
+			send_mail("Demande d'abonnement à la version établissement",
 			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant "+ user.first_name +" "+ user.last_name +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
 			          settings.DEFAULT_FROM_EMAIL,
 			          ['sacado.asso@gmail.com'])
 
-			send_mail("Demande d'adhésion à la version établissement",
+			send_mail("Demande d'abonnement à la version établissement",
 		              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school.name +"\n"+asking_gar+"\n\nCotisation : "+str(school.fee())+" €.\nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
 	               settings.DEFAULT_FROM_EMAIL,
                [user.email])
 
-			messages.success(request,"Demande d'adhésion envoyée. Vous recevrez rapidement l'IBAN de l'association à transmettre à votre DAF")
+			messages.success(request,"Demande d'abonnement envoyée. Vous recevrez rapidement l'IBAN de l'association à transmettre à votre DAF")
 		else :
 			messages.error(request,"Erreur du token" )
  
