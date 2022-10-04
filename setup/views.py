@@ -341,10 +341,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     username   = dico_received["IDO"][0]
     password   = make_password("sacado_gar")
-    try :
-        civilite   = dico_received["CIV"][0]
-    except :
-        civilite = "Mme"
+    civilite = "Mme"
 
 
     # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
