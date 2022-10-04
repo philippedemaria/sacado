@@ -1248,7 +1248,7 @@ def enroll(request, slug):
                 username = request.POST.get("username")
                 user.set_password(password)
 
-                if Student.objects.filter(user__last_name = user.last_name, user__first_name  = user.first_name , user__school = school, level=group.level ) == 0 : 
+                if Student.objects.filter(user__last_name = user.last_name, user__first_name  = user.first_name , user__school = school, level=group.level ).count() == 0 : 
                     user.save()
                     student = Student.objects.create(user=user, level=group.level)
                 else :
