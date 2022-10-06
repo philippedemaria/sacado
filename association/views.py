@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
 from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy , Customer
 from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm
-from account.models import User, Student, Teacher, Parent ,  Response
+from account.models import User, Student, Teacher, Parent ,  Response , Connexion
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
 from school.forms import SchoolForm
@@ -266,6 +266,30 @@ def module_style(elements):
         )
     offset = 0 # permet de placer le bas de page
     return sacado , bas_de_page, bas_de_page_blue, title , subtitle , mini , normal , dateur_style , signature_style , signature_style_mini, signature_style_blue , style_cell
+
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    statistiques
+#####################################################################################################################################
+#####################################################################################################################################
+@user_passes_test(user_is_board)
+def statistiques(request):
+
+    date_start = time_zone_user(request.user) - timedelta(days=7)
+    date_stop  = time_zone_user(request.user)
+
+    inscriptions    = User.objects.filter(date_joined__lte=date_stop,date_joined__gt=date_start )
+    nb_inscriptions = inscriptions.count()
+    nb_students     = inscriptions.filter(user_type=0).count()
+    nb_teachers     = inscriptions.filter(user_type=2).count()
+    nb_connexions   = Connexion.objects.filter(date__lte=date_stop,date__gt=date_start ).count()
+    nb_answers      = Studentanswer.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Customanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Writtenanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count()
+ 
+    context = { 'date_start' : date_start , 'date_stop' : date_stop , 'nb_inscriptions': nb_inscriptions ,  'nb_teachers': nb_teachers ,  'nb_students': nb_students , 'nb_answers': nb_answers , 'nb_connexions': nb_connexions ,}
+
+    return render(request, 'association/statistiques.html', context) 
 
 
 #####################################################################################################################################

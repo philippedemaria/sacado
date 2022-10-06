@@ -22,11 +22,11 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-from django.db.models import Count, Q
+from django.db.models import Count, Q , F
 
 from account.decorators import is_manager_of_this_school
 from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet , NewpasswordForm
-from account.models import  User, Teacher, Student  , Parent , Adhesion , Facture
+from account.models import  User, Teacher, Student  , Parent , Adhesion , Facture , Connexion
 from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook, Customer
 from group.models import Group, Sharing_group
 from group.views import student_dashboard
@@ -90,13 +90,29 @@ def index(request):
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
 
+        today = time_zone_user(request.user)
+
+        ############################################################################################
+        #### Nbre de connexion par jour  
+        ############################################################################################ 
+
+
+        if not request.session.get("is_connexion", None) :
+            connexion, creation_date = Connexion.objects.get_or_create(date = today.date() , defaults = { 'nb' : 1 } )
+            if not creation_date :
+                Connexion.objects.filter(pk=connexion.id).update(nb=F("nb") + 1)
+            request.session["is_connexion"] = True
+
+        ############################################################################################
+        #### GAR  
+        ############################################################################################ 
         try :
             is_gar_check = request.session.get("is_gar_check",None)
             # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
         except :
             is_gar_check  = False
 
-        today = time_zone_user(request.user)
+        
 
         ############################################################################################
         #### Mise à jour et affichage des publications  
@@ -259,11 +275,6 @@ def index(request):
 
 
 def logout_view(request):
-    try:
-        connexion = Connexion.objects.get(user=user)
-        connexion.delete()
-    except:
-        pass
 
     try :
         is_gar_check = request.session.get("is_gar_check",None)

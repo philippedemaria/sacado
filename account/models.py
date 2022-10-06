@@ -51,6 +51,14 @@ class ModelWithCode(models.Model):
         abstract = True
 
 
+class Connexion(models.Model):
+    """docstring for Connexion"""
+    date = models.DateTimeField(null=True, blank=True, editable= False)
+    nb   = models.PositiveIntegerField()
+
+    def __str__(self):
+        return "{}".format(self.nb )
+        
 
 
 class Avatar(models.Model):

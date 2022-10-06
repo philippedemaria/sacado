@@ -16,7 +16,7 @@
 {% endblock %} 
 
 {% block page_menu_right %}
-
+    <li><a href="{% url 'statistiques' %}" class="btn btn-sacado">Statistiques rapides</a></li>
 {% endblock %}
 
 
@@ -155,7 +155,6 @@
 
 const months     = ['janvier','février','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','décembre'] ;
 var month_start  = {{ month_start }}-1 ;
-
 newList = [];
 
 for (let i=month_start;i<month_start+13;i++){
@@ -170,7 +169,6 @@ for (let i=month_start;i<month_start+13;i++){
  
 var xValues =  newList  ;
 var yValues = [ {{ string }} ];
-
 var barColors = ["violet", "violet","violet","violet","violet", "violet","violet","violet","violet", "violet","violet","violet" ];
 
 new Chart("myChart", {
