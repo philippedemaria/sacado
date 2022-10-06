@@ -312,7 +312,7 @@ def include_students(request , liste, group):
         elif "," in student_tab:
             details =  student_tab.split(",")
         else :
-            messages.error(request,"Votre CSV doit contenir des séparateurs tels qu'un ; ou une , ")
+            messages.error(request,"Votre liste doit contenir des séparateurs tels qu'un ; ou une , ")
             return redirect ('index')
 
         lname = str(cleanhtml(details[0])).strip()            
