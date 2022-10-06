@@ -155,7 +155,7 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
                                      <ul>
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br> <small><b>Conseil</b> : Créez-vous un compte élève maintenant pour avoir un profil élève en cochant le bouton ci-dessus.  </small></label></li>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.<br>  </li>
                                         <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> Je veux inscrire mes élèves plus tard et générer un lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
                                     </ul>
                                 </div>
@@ -346,9 +346,17 @@
                             {% if not is_gar_check %}
                             <td>{{ student.user.username    }}  
                             </td>
-                            <td> 
-                                <a class="btn btn-xs btn-danger student_remove_from_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" title="dissocier du groupe"><i class="fa fa-chain-broken"></i></a> 
-                            </td>
+                            <td>                             
+                                {% if sacado_asso %}
+                                    <a class="btn btn-xs btn-danger student_remove_from_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" title="dissocier du groupe">
+                                        <i class="fa fa-chain-broken"></i>
+                                    </a> 
+                                {% else %}
+                                    <a href="{% url 'delete_student' student.user.id  group.id %}" class="btn btn-xs btn-danger" title="Supprimer cet élève">
+                                        <i class="fa fa-times"></i>
+                                    </a> 
+                                {% endif %}
+                                </td>  
                             {% endif %}
                         </tr>
                     {% empty %}

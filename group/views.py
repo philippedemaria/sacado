@@ -303,6 +303,7 @@ def include_students(request , liste, group):
 
     students_tab = liste.split("\r\n")
     if not can_inscribe_students(group.teacher.user.school, len(students_tab) ) :
+        messages.error(request,"Vous avez dépassé le nombre d'élèves autorisés. 500 en version gratuite. Passez à la version établissement.")
         return redirect ('index')
 
     for student_tab in students_tab:
@@ -566,6 +567,7 @@ def create_group(request):
 
 
         stdts = request.POST.get("students")
+
         if stdts : 
             if len(stdts) > 0  :
                 include_students(request , stdts,nf)
