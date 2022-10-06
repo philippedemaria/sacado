@@ -163,7 +163,7 @@
                       {% if available.is_ok %} 
                           <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
                               <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
-                              Dès que lors que vous êtes dans l'exercice, vous ne pouvez plus en sortir sans avoir cliqué sur le bouton bleu "Enregistrer l'exercice". <br/>Si vous tentez de sortir de l'exercice avant, votre résultat s'enregistre automatiquement avec les réponses fournies.<br/>
+                              Dès que lors que vous commencez l'exercice, vous ne pouvez plus en sortir sans avoir cliqué sur le bouton bleu "Enregistrer l'exercice". <br/>Si vous tentez de sortir de l'exercice avant, votre résultat s'enregistre automatiquement avec les réponses fournies.<br/>
                               Vous devez répondre à <b>{{ relation.situation }} question{{ relation.situation|pluralize  }}</b>.
                               {% if parcours.is_stop %}
                                   <h3>Finir l'exercice avant d'en sortir.</h3>
