@@ -146,7 +146,11 @@ def set_username_student_profile(name):
 @login_required(login_url= 'index')
 def student_dashboard(request,group_id):
 
-    student = request.user.student
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Elève non reconnu.")
+        return redirect('index')
     #######Groupes de l'élève. 
     # si plusieurs matières alors on envoi =e sur dashboard_group 
     # si une seule matière alors  sur dashboard
