@@ -19,7 +19,7 @@ define(['jquery',  'bootstrap' ], function ($) {
     function PostMessage(id){  //id = destinataire du message
        socket.send(JSON.stringify(
           {"command":"messageProf",
-			"dest" : "e",
+      "dest" : "e",
            "to"     : id,
            "payload": $("#champ"+id).val() }));
        document.getElementById("champ"+id).value = ""; 
@@ -37,7 +37,7 @@ define(['jquery',  'bootstrap' ], function ($) {
     $("body").on('change', "#entreechat", function (event) {
         socket.send(JSON.stringify(
           {"command" : "messageProfGeneral",
-		  "dest":"a",
+      "dest":"a",
           "payload" : $("#entreechat").val() }));
          document.getElementById("entreechat").value = "";          
         }) ;
@@ -69,16 +69,18 @@ define(['jquery',  'bootstrap' ], function ($) {
     var ws_path = ws_scheme + '://' + window.location.host + "/qcm/tableau/";
     socket = new WebSocket(ws_path); 
     
-    // à l'ouverture du socket : connexion du prof
+    // A  l'ouverture du socket : connexion du prof
     socket.onopen = function () {
-		console.log("connexion du prof");
+  console.log("connexion du prof...");
         socket.send(JSON.stringify({
         "command":"connexionProf", 
         "dest":"ca",
         "parcours": parcours_id ,
-        "students":"{% for student in  students %}{{student.user.id}}|{% endfor %}"}));
-         };
-	 
+  "listeEleves":document.getElementById("listeEleves").value
+  }));
+  console.log("connexion prof ok");
+     };
+   
     // gestion messages entrants
     socket.onmessage = function (message) {
        var data = JSON.parse(message.data);
@@ -96,109 +98,109 @@ define(['jquery',  'bootstrap' ], function ($) {
                        "<p><input type=\"text\" id='champ"+data.from+"' data-from_id="+data.from+
                        " placeholder='message privé' required class='this_student_rt no_visu_on_load' /></p>";
               }
-	       			   
-		   if (data.typexo=="ggb"){// l'elève commence un exo ggb		  
+                 
+       if (data.typexo=="ggb"){// l'elève commence un exo ggb      
               var canvas=document.getElementById(data.ide+"|"+data.from);
-		      barreVierge(canvas);
-			  }
-	       else if (data.typexo=="python" || data.typexo=="tapu"){ 
-		      var divCase=document.getElementById(data.ide+"|"+data.from);
-			  var iconeInitiale=divCase.childNodes[0].outerHTML;
-			  divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-success selector_image_from_ajax"></i>';
-				   
-			  AfficheProd=function(){
-				 if (divCase.children.length==1){//pas encore de champ dans la case
-				    if (data.typexo=="python") {
-					   prod=document.createElement("textarea");
-				 	   prod.rows=20;
-					   prod.cols=40;
-					   prod.readonly="readonly";}
-					else {
-						prod=document.createElement("iframe");
-						prod.width=200;
-						prod.height=300;
-						}
-				    divCase.appendChild(prod);
-				 }
-				 else {divCase.childNodes[1].style.display="initial";}
-				 divCase.childNodes[0].outerHTML='<div></div>';
-				 divCase.childNodes[0].innerHTML='<i class="fa fa-sm  fa-sync text-info selector_image_from_ajax" title="Rafraichir"></i>\
+          barreVierge(canvas);
+        }
+         else if (data.typexo=="python" || data.typexo=="tapu"){ 
+          var divCase=document.getElementById(data.ide+"|"+data.from);
+        var iconeInitiale=divCase.childNodes[0].outerHTML;
+        divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-success selector_image_from_ajax"></i>';
+           
+        AfficheProd=function(){
+         if (divCase.children.length==1){//pas encore de champ dans la case
+            if (data.typexo=="python") {
+             prod=document.createElement("textarea");
+             prod.rows=20;
+             prod.cols=40;
+             prod.readonly="readonly";}
+          else {
+            prod=document.createElement("iframe");
+            prod.width=200;
+            prod.height=300;
+            }
+            divCase.appendChild(prod);
+         }
+         else {divCase.childNodes[1].style.display="initial";}
+         divCase.childNodes[0].outerHTML='<div></div>';
+         divCase.childNodes[0].innerHTML='<i class="fa fa-sm  fa-sync text-info selector_image_from_ajax" title="Rafraichir"></i>\
 &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-sm fa-times text-danger selector_image_from_ajax" title="Fermer"></i>';
-					    
-			     divCase.childNodes[0].onclick=function(){};
-			     
-			     // gestion bouton raffraichissement : on demande au client eleve sa production
-				 divCase.childNodes[0].firstChild.onclick=function(){
-					 socket.send(JSON.stringify(
+              
+           divCase.childNodes[0].onclick=function(){};
+           
+           // gestion bouton raffraichissement : on demande au client eleve sa production
+         divCase.childNodes[0].firstChild.onclick=function(){
+           socket.send(JSON.stringify(
                           {"command":"requestProd",
-							"dest"   : "e",
+              "dest"   : "e",
                             "to"     : data.from,
                             "ide"    : data.ide}));
-				 }
-				 divCase.childNodes[0].firstChild.dispatchEvent(new Event("click"));
-				 // gestion bouton close
-				 divCase.childNodes[0].lastChild.onclick=function(){
-				    if (divCase.children.length>=2)  {divCase.childNodes[1].style.display="None";}
-					divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-success selector_image_from_ajax"></i>';
-					divCase.childNodes[0].onclick=AfficheProd;  
-				};
-					  
-		     } // fin afficheProd 
-		      divCase.childNodes[0].onclick=AfficheProd;
+         }
+         divCase.childNodes[0].firstChild.dispatchEvent(new Event("click"));
+         // gestion bouton close
+         divCase.childNodes[0].lastChild.onclick=function(){
+            if (divCase.children.length>=2)  {divCase.childNodes[1].style.display="None";}
+          divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-success selector_image_from_ajax"></i>';
+          divCase.childNodes[0].onclick=AfficheProd;  
+        };
+            
+         } // fin afficheProd 
+          divCase.childNodes[0].onclick=AfficheProd;
            }; // fin traitement python/tapu
-		
-					      
-		  }  // fin traitement connexion eleve
-	   else if (data.type=="sendProd"){
-		  // reception d'une production python/tapu par un eleve
-		  var divCase=document.getElementById(data.ide+"|"+data.from);
-		  if (divCase.children.length==2){ //l'element contenant existe bien
-			  if (data.typexo=="python") {divCase.childNodes[1].innerHTML=data.payload;}
-			  if (data.typexo=="tapu") {divCase.childNodes[1].contentDocument.childNodes[0].childNodes[1].innerHTML=data.payload;}
-		  }
-	   }
-				 
-	   else if (data.type=="sendExercise"){ // l'elève a validé son exo et l'a envoyé à la bdd
-		   console.log("sendExercise");
-		   divCase=document.getElementById(data.ide+"|"+data.from); //la div de la case du tableau
-		   divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-primary selector_image_from_ajax"></i>';
-		   divCase.childNodes[0].onclick=function(){
-			   if (divCase.children.length==1){// il n'y a pas de zone deja creee
-				     if (data.typexo=="python") {
-					     prod=document.createElement("textarea");
-				 	     prod.rows=20;
-					     prod.cols=40;
-					     prod.readonly="readonly";
-					 }
-				     else {
-						 prod=document.createElement("iframe");
-						 prod.width=200;
-						 prod.height=300;
-					 }
-					 divCase.appendChild(prod);
-					 }
-					   
-			   if (data.typexo=="python") {divCase.childNodes[1].innerHTML=data.payload;}
-			   else if (data.typexo=="tapu") {divCase.childNodes[1].contentDocument.childNodes[0].childNodes[1].innerHTML=data.payload;}
-			   divCase.childNodes[0].onclick=function(){
-				   if (divCase.childNodes[1].style.display=="none") {divCase.childNodes[1].style.display="initial"}
-				   else divCase.childNodes[1].style.display="none";
-				   }
-			   }  //fin fonction onclick sur oeil bleu 
-			}
-	   else if (data.type=="deconnexionEleve"){
-		   ligne=document.getElementById("tr_student_"+data.from);
-	       $("#tr_student_"+data.from).find("td:first").removeClass("live");
+    
+                
+      }  // fin traitement connexion eleve
+     else if (data.type=="sendProd"){
+      // reception d'une production python/tapu par un eleve
+      var divCase=document.getElementById(data.ide+"|"+data.from);
+      if (divCase.children.length==2){ //l'element contenant existe bien
+        if (data.typexo=="python") {divCase.childNodes[1].innerHTML=data.payload;}
+        if (data.typexo=="tapu") {divCase.childNodes[1].contentDocument.childNodes[0].childNodes[1].innerHTML=data.payload;}
+      }
+     }
+         
+     else if (data.type=="sendExercise"){ // l'elève a validé son exo et l'a envoyé à  la bdd
+       console.log("sendExercise");
+       divCase=document.getElementById(data.ide+"|"+data.from); //la div de la case du tableau
+       divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-primary selector_image_from_ajax"></i>';
+       divCase.childNodes[0].onclick=function(){
+         if (divCase.children.length==1){// il n'y a pas de zone deja creee
+             if (data.typexo=="python") {
+               prod=document.createElement("textarea");
+               prod.rows=20;
+               prod.cols=40;
+               prod.readonly="readonly";
+           }
+             else {
+             prod=document.createElement("iframe");
+             prod.width=200;
+             prod.height=300;
+           }
+           divCase.appendChild(prod);
+           }
+             
+         if (data.typexo=="python") {divCase.childNodes[1].innerHTML=data.payload;}
+         else if (data.typexo=="tapu") {divCase.childNodes[1].contentDocument.childNodes[0].childNodes[1].innerHTML=data.payload;}
+         divCase.childNodes[0].onclick=function(){
+           if (divCase.childNodes[1].style.display=="none") {divCase.childNodes[1].style.display="initial"}
+           else divCase.childNodes[1].style.display="none";
+           }
+         }  //fin fonction onclick sur oeil bleu 
+      }
+     else if (data.type=="deconnexionEleve"){
+       ligne=document.getElementById("tr_student_"+data.from);
+         $("#tr_student_"+data.from).find("td:first").removeClass("live");
            a=ligne.childNodes[1].innerHTML.split("<i class");
-	       ligne.childNodes[1].innerHTML=a[0];
-	       divCase=document.getElementById(data.ide+"|"+data.from); //la div de la case du tableau
-	       if ((data.typexo=="python" || data.typexo=="tapu") && 
-	               divCase.childNodes[0].outerHTML != '<i class="fa fa-sm fa-eye text-primary"></i>')
-	               {// exo python/tapu, il n'y a pas l'oeil bleu : l'élève n'a pas validé son exo, on met un oeil gris
-					divCase=document.getElementById(data.ide+"|"+data.from);
-					divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-default"></i>';
-					if (divCase.children.length>=2) {divCase.childNodes[1].style.display="none";}
-		           }
+         ligne.childNodes[1].innerHTML=a[0];
+         divCase=document.getElementById(data.ide+"|"+data.from); //la div de la case du tableau
+         if ((data.typexo=="python" || data.typexo=="tapu") && 
+                 divCase.childNodes[0].outerHTML != '<i class="fa fa-sm fa-eye text-primary"></i>')
+                 {// exo python/tapu, il n'y a pas l'oeil bleu : l'élève n'a pas validé son exo, on met un oeil gris
+          divCase=document.getElementById(data.ide+"|"+data.from);
+          divCase.childNodes[0].outerHTML='<i class="fa fa-sm fa-eye text-default"></i>';
+          if (divCase.children.length>=2) {divCase.childNodes[1].style.display="none";}
+               }
            }
        else if (data.type=="messageEleve"){
            console.log(data.from+" a envoyé un message");
@@ -206,11 +208,11 @@ define(['jquery',  'bootstrap' ], function ($) {
            if (t !=null) 
                {t.innerHTML = t.innerHTML + "<div class='this_chat_block'># "+ data.name+"<br/>"+ data.payload+"</div>";
                }
-		   }
+       }
        else if (data.type=="ExoDebut"){
            console.log(data.from+" a initié l'exo " +data.ide);
            var canvas=document.getElementById(data.ide+"|"+data.from);
-	       barreVierge(canvas);
+         barreVierge(canvas);
            }
        else if (data.type=="SituationFinie"){
             //console.log(data.from+" a termine une situation" +data.numexo);
@@ -218,14 +220,14 @@ define(['jquery',  'bootstrap' ], function ($) {
             barrePrecis(canvas,data.payload.numexo,data.payload.resultat,data.payload.situation);
             }
     }  // fin gestion des messages
-	
-	//   fermeture du socket en cas de changement de page
-	window.onbeforeunload=function(){
-	    console.log("fermeture socket");
-	    socket.close();
-	};
+  
+  //   fermeture du socket en cas de changement de page
+  window.onbeforeunload=function(){
+      console.log("fermeture socket");
+      socket.close();
+  };
         // Helpful debugging
-	socket.onclose = function () {
+  socket.onclose = function () {
        console.log("Disconnected from chat socket");
     };
  
