@@ -377,12 +377,8 @@
                         api.setValue("situation", situation );
 
                         ggbApplet = api ; 
+                        api.registerUpdateListener("updateListener"); 
 
-                        {% if parcours.is_evaluation and parcours.is_stop %}
-                        api.registerUpdateListener("updateListener"); 
-                        {% else  %}
-                        api.registerUpdateListener("updateListener"); 
-                        {% endif  %}
                   }
               };
 
@@ -465,20 +461,29 @@
  {% if  relation.parcours.is_evaluation %}
 <script type="text/javascript">
 
-  var applet      = ggbApplet; 
-  var exercise_id = "{{ exercise.id }}"; 
-  var grade       = applet.getValue("grade");
-  var numexo      = applet.getValue("numexo");
-  var situation   = parseInt("{{ relation.situation }}") ; 
-  var parcours_id = "{{ relation.parcours.id}}" ;
-  var start_time  = "{{ start_time}}" ;
-  var relation_id = "{{ relation.id}}" ;
-  var p_available = "{{ parcours_available.nbleft}}" ;
-  var available   = "{{ available.nbleft}}" ;
-  var ide         = "{{ide}}" ;
 
 
-  window.onblur =()=>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
+  function updateListener(objName) {  
+
+
+
+
+      var applet      = ggbApplet; 
+      var exercise_id = "{{ exercise.id }}"; 
+      var grade       = applet.getValue("grade");
+      var numexo      = applet.getValue("numexo");
+      var situation   = parseInt("{{ relation.situation }}") ; 
+      var parcours_id = "{{ relation.parcours.id}}" ;
+      var start_time  = "{{ start_time}}" ;
+      var relation_id = "{{ relation.id}}" ;
+      var p_available = "{{ parcours_available.nbleft}}" ;
+      var available   = "{{ available.nbleft}}" ;
+      var ide         = "{{ide}}" ;
+
+
+    
+
+        window.onblur =()=>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
                             { return false;}
                         else { if (situation !=0) { score = grade/situation ;} else {score=-1;} 
                               use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
@@ -486,7 +491,7 @@
                         }
 
                              
-  window.onbeforeunload = (event) =>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
+        window.onbeforeunload = (event) =>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
                                             { return false;}
                                         else { if (situation !=0) { score = grade/situation ;} else {score=-1;} 
                                               use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
@@ -494,9 +499,6 @@
                                       }
 
 
-
-
-  function updateListener(objName) {  
 
       if (objName=="score" || objName=="ok" || objName=="grade" || objName=="numexo" || objName=="valider" ){	
   	  console.log("RT objName:",objName,"valeur : ",applet.getValue(objName));
