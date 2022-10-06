@@ -481,22 +481,27 @@
       var ide         = "{{ide}}" ;
 
 
-    
 
-        window.onblur =()=>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
-                            { return false;}
-                        else { if (situation !=0) { score = grade/situation ;} else {score=-1;} 
-                              use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
-                             }
-                        }
+
+      window.onblur =()=>  {  if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
+                                  { return false;}
+                                else 
+                                  {  
+                                    if (situation !=0) 
+                                        { score = grade/situation ;} 
+                                    else
+                                        {score=-1;} 
+                                    use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
+                                  }
+                            }
 
                              
-        window.onbeforeunload = (event) =>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
-                                            { return false;}
-                                        else { if (situation !=0) { score = grade/situation ;} else {score=-1;} 
-                                              use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
-                                             }
-                                      }
+        // window.onbeforeunload = (event) =>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
+        //                                     { return false;}
+        //                                 else { if (situation !=0) { score = grade/situation ;} else {score=-1;} 
+        //                                       use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
+        //                                      }
+        //                               }
 
 
 
