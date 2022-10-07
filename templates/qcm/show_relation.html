@@ -484,27 +484,22 @@
 
 
 
-      window.onblur =()=>  {  if (!confirm('Vous êtes en évaluation. Vous ne pouvez pas sortir de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées à ce stade.')) 
-                                  { return false;}
-                                else 
-                                  {  
-                                    if (situation !=0) 
-                                        { score = grade/situation ;} 
-                                    else
-                                        {score=-1;} 
-                                    use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
-                                  }
+      window.onblur =()=>  {  
+                              if ( applet.getValue("demarrer") && numexo != situation && objName == "numexo"   )
+                              {
+                                  if (!confirm('Vous êtes en évaluation. Vous ne pouvez pas sortir de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées à ce stade.')) 
+                                    { return false;}
+                                  else 
+                                    {  
+                                      if (situation !=0) 
+                                          { score = grade/situation ;} 
+                                      else
+                                          {score=-1;} 
+                                      use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
+                                    }
+                              }
                             }
-
-                             
-        // window.onbeforeunload = (event) =>  { if (!confirm('Vous sortez de la fenêtre. Si vous cliquez sur OUI, vos données sont enregistrées.')) 
-        //                                     { return false;}
-        //                                 else { if (situation !=0) { score = grade/situation ;} else {score=-1;} 
-        //                                       use_ajax( numexo, start_time, score, parcours_id, relation_id, "ok" , false ) 
-        //                                      }
-        //                               }
-
-
+                            
 
       if (objName=="score" || objName=="ok" || objName=="grade" || objName=="numexo" || objName=="valider" ){	
   	  console.log("RT objName:",objName,"valeur : ",applet.getValue(objName));
