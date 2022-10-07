@@ -294,7 +294,6 @@ def statistiques(request):
     run = 0
     string_days ,  sepn ,  sep   = "" , "" ,  "]" 
     nb_inscriptions_string = ""
-    nb_inscriptions_string = ""
     nb_students_string     = ""
     nb_teachers_string     = ""
     nb_connexions_string   = ""
@@ -331,7 +330,7 @@ def statistiques(request):
 
     context = { 'string_days' : string_days, 'nb_inscriptions_string' : nb_inscriptions_string ,  'nb_students_string' : nb_students_string ,'nb_teachers_string' : nb_teachers_string ,
                 'nb_connexions_string' : nb_connexions_string , 'nb_answers_string' : nb_answers_string , 'nb_inscriptions' : nb_inscriptions, 'nb_teachers' : nb_teachers, 'nb_students' : nb_students,
-                'nb_answers': nb_answers , 'nb_connexions': nb_connexions ,}
+                'nb_answers': nb_answers , 'nb_connexions': nb_connexions , 'date_start': date_start ,   'date_stop': date_stop   }
 
     return render(request, 'association/statistiques.html', context) 
 
