@@ -106,14 +106,14 @@ var Values_stu =  {{ nb_students_string }} ;
 var Values_tea =  {{ nb_teachers_string }} ;
 var Values_con =  {{ nb_connexions_string }} ;
 var Values_ans =  {{ nb_answers_string }} ;
-var barColors = ["violet", "violet","violet","violet","violet", "violet","violet", ];
+ 
 
 new Chart("myChart_inscriptions", {
   type: "bar",
   data: {
     labels: xValues,
     datasets: [{
-      backgroundColor: barColors,
+      backgroundColor: ["violet", "violet","violet","violet","violet", "violet","violet", ],
       data: Values_ins
     }]
   },
@@ -132,7 +132,7 @@ new Chart("myChart_teachers", {
   data: {
     labels: xValues,
     datasets: [{
-      backgroundColor: barColors,
+      backgroundColor: ["brown", "brown","brown","brown","brown", "brown","brown", ],
       data: Values_tea
     }]
   },
@@ -150,7 +150,7 @@ new Chart("myChart_students", {
   data: {
     labels: xValues,
     datasets: [{
-      backgroundColor: barColors,
+      backgroundColor: ["orange", "orange","orange","orange","orange", "orange","orange", ],
       data: Values_stu
     }]
   },
@@ -168,7 +168,7 @@ new Chart("myChart_connexions", {
   data: {
     labels: xValues,
     datasets: [{
-      backgroundColor: barColors,
+      backgroundColor: ["blue", "blue","blue","blue","blue", "blue","blue", ],
       data: Values_con
     }]
   },
@@ -186,7 +186,7 @@ new Chart("myChart_answers", {
   data: {
     labels: xValues,
     datasets: [{
-      backgroundColor: barColors,
+      backgroundColor: ["green", "green","green","green","green", "green","green", ],
       data: Values_ans
     }]
   },
