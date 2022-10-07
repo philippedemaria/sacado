@@ -327,10 +327,21 @@ def statistiques(request):
 
     ################################################################################################################################# 
     #################################################################################################################################
+    countries , all_countries = [] , []
+    for u in inscriptions :
+        if u.country  and u.country.name not in countries :
+            countries.append(u.country.name)
+            all_countries.append({'country' : u.country.name , 'nb' : 1})
+        elif u.country  :
+            idx = countries.index(u.country.name)
+            all_countries[idx]['nb'] +=1
+
+    ################################################################################################################################# 
+    #################################################################################################################################
 
     context = { 'string_days' : string_days, 'nb_inscriptions_string' : nb_inscriptions_string ,  'nb_students_string' : nb_students_string ,'nb_teachers_string' : nb_teachers_string ,
                 'nb_connexions_string' : nb_connexions_string , 'nb_answers_string' : nb_answers_string , 'nb_inscriptions' : nb_inscriptions, 'nb_teachers' : nb_teachers, 'nb_students' : nb_students,
-                'nb_answers': nb_answers , 'nb_connexions': nb_connexions , 'date_start': date_start ,   'date_stop': date_stop   }
+                'nb_answers': nb_answers , 'nb_connexions': nb_connexions , 'date_start': date_start ,   'date_stop': date_stop , 'all_countries' : all_countries   }
 
     return render(request, 'association/statistiques.html', context) 
 
