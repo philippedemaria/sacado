@@ -285,7 +285,6 @@ def statistiques(request):
     nb_students     = inscriptions.filter(user_type=0).count()
     nb_teachers     = inscriptions.filter(user_type=2).count()
     nb_connexions   = Connexion.objects.filter(date__lte=date_stop,date__gt=date_start ).aggregate(nb = Sum('nb'))["nb"]
-    print(nb_connexions)
     nb_answers      = Studentanswer.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Customanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Writtenanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count()
  
     context = { 'date_start' : date_start , 'date_stop' : date_stop , 'nb_inscriptions': nb_inscriptions ,  'nb_teachers': nb_teachers ,  'nb_students': nb_students , 'nb_answers': nb_answers , 'nb_connexions': nb_connexions ,}

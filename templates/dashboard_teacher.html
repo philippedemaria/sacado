@@ -178,7 +178,7 @@
                                 
 
                                     <a href="{% url 'list_parcours_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
-                                        Accéder                              
+                                        Accéder aux documents                             
                                         {% if group.is_pending_correction %}
                                             <i class="fa fa-copyright pull-right" style="font-size:12px; margin-top:5px" title="Copies à corriger" ></i> 
                                         {% endif %}
@@ -206,10 +206,10 @@
                             {% else  %}
                                 <div class="row">                    
                                     <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer du groupe">
+                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer le groupe">
                                             <i class="bi bi-gear"></i>
                                         </a> 
-                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Détails du groupe">
+                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe">
                                             <i class="fa fa-arrow-circle-right"></i>
                                         </a> 
                                     </div>

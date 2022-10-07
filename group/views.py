@@ -1979,46 +1979,6 @@ def book_bilan_group(request, idg):
 
 
 
-
-#def print_ids(request, id):
-    group = Group.objects.get(id=id)
-    teacher = Teacher.objects.get(user=request.user)
-
-    authorizing_access_group(request,teacher,group ) 
-
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="identifiants_groupe'+group.name+'.pdf"'
-    p = canvas.Canvas(response)
-    i = 1
-
-    img_file = 'https://sacado.xyz/static/img/sacado-icon-couleur.jpg'
-    x_start  = 20
-    for student in group.students.exclude(user__username__contains= "_e-test") :
-
-    # Create the HttpResponse object with the appropriate PDF headers.
-        string0 = "Bonjour {} {},".format(student.user.first_name, student.user.last_name) 
-        string1 = "allez sur le site https://sacado.xyz et cliquez sur le bouton bleu Se connecter." 
-        string2 = "Votre identifiant est : {}    . Votre mot de passe est :    sacado2020".format(student.user.username)
-        p.setFont("Helvetica", 12)
-
-        p.drawString(75, 900-100*i, string0)
-        p.drawString(75, 880-100*i, string1)
-        p.drawString(75, 860-100*i, string2)
-        p.line(75, 830-100*i,550,830-100*i)
-    
-        y_start = 860-100*i
-        p.drawImage(img_file, x_start, y_start, width=50, preserveAspectRatio=True )
-
-        if i%8 == 0 :
-            i = 1
-            p.showPage()
-        else : 
-            i +=1
- 
-    p.save()
-    return response 
-
 @login_required(login_url= 'index')
 def print_ids(request, id):
     group = Group.objects.get(id=id)
@@ -2178,7 +2138,7 @@ def print_list_tableur_ids(request, id):
  
 
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="etablissement.xls"'
+    response['Content-Disposition'] = 'attachment; filename="Liste_identifiant_SACADO_'+group.name+'.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(group.name)
