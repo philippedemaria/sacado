@@ -286,11 +286,54 @@ def statistiques(request):
     nb_teachers     = inscriptions.filter(user_type=2).count()
     nb_connexions   = Connexion.objects.filter(date__lte=date_stop,date__gt=date_start ).aggregate(nb = Sum('nb'))["nb"]
     nb_answers      = Studentanswer.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Customanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Writtenanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count()
- 
-    context = { 'date_start' : date_start , 'date_stop' : date_stop , 'nb_inscriptions': nb_inscriptions ,  'nb_teachers': nb_teachers ,  'nb_students': nb_students , 'nb_answers': nb_answers , 'nb_connexions': nb_connexions ,}
+
+    #################################################################################################################################
+    ##### Jour de la semaine étudiée
+    #################################################################################################################################
+    list_days = [ (time_zone_user(request.user) - timedelta(days=i) ).date() for i in range(7) ]
+    run = 0
+    string_days ,  sepn ,  sep   = "" , "" ,  "]" 
+    nb_inscriptions_string = ""
+    nb_inscriptions_string = ""
+    nb_students_string     = ""
+    nb_teachers_string     = ""
+    nb_connexions_string   = ""
+    nb_answers_string      = ""
+
+    months = [0,"janvier","février","mars","avril","mai","juin","juillet","aout","septembre","octobre","novembre","décembre"]
+    for d in list_days :
+        nbans = Studentanswer.objects.filter(date__startswith = d ).count() + Customanswerbystudent.objects.filter(date__startswith = d ).count() + Writtenanswerbystudent.objects.filter(date__startswith = d ).count()
+        if run > 0 and run < 8 : sep, sepn = "," , ","
+
+        y ,  m , day = str(d).split("-")
+        this_day = day + " " + months[int(m)] 
+        string_days = this_day+sepn+string_days
+
+
+        nb_inscriptions_string = str(User.objects.filter(date_joined__startswith = d ).count())+sep+nb_inscriptions_string
+        nb_students_string     = str(User.objects.filter(date_joined__startswith = d ,user_type=0).count())+sep+nb_students_string
+        nb_teachers_string     = str(User.objects.filter(date_joined__startswith = d ,user_type=2).count())+sep+nb_teachers_string
+        if Connexion.objects.filter(date__startswith = d ).aggregate(nb = Sum('nb'))["nb"] : nbi = Connexion.objects.filter(date__startswith = d ).aggregate(nb = Sum('nb'))["nb"]
+        else : nbi = 0    
+        nb_connexions_string   = str(nbi)+sep+nb_connexions_string
+        nb_answers_string      = str(nbans)+sep+nb_answers_string
+        run += 1
+
+
+    nb_inscriptions_string = "["+nb_inscriptions_string
+    nb_students_string     = "["+nb_students_string
+    nb_teachers_string     = "["+nb_teachers_string
+    nb_connexions_string   = "["+nb_connexions_string
+    nb_answers_string      = "["+nb_answers_string
+
+    ################################################################################################################################# 
+    #################################################################################################################################
+
+    context = { 'string_days' : string_days, 'nb_inscriptions_string' : nb_inscriptions_string ,  'nb_students_string' : nb_students_string ,'nb_teachers_string' : nb_teachers_string ,
+                'nb_connexions_string' : nb_connexions_string , 'nb_answers_string' : nb_answers_string , 'nb_inscriptions' : nb_inscriptions, 'nb_teachers' : nb_teachers, 'nb_students' : nb_students,
+                'nb_answers': nb_answers , 'nb_connexions': nb_connexions ,}
 
     return render(request, 'association/statistiques.html', context) 
-
 
 #####################################################################################################################################
 #####################################################################################################################################
