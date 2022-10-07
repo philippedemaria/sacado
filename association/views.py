@@ -328,7 +328,7 @@ def statistiques(request):
     ################################################################################################################################# 
     #################################################################################################################################
     countries , all_countries = [] , []
-    for u in inscriptions :
+    for u in inscriptions.order_by("country__name") :
         if u.country  and u.country.name not in countries :
             countries.append(u.country.name)
             all_countries.append({'country' : u.country.name , 'nb' : 1})
