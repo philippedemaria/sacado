@@ -95,14 +95,18 @@ def index(request):
         ############################################################################################
         #### Nbre de connexion par jour  
         ############################################################################################ 
+        try :
+            this_day = request.session.get("this_day", None)
+        except :
+            this_day = None
 
-
-        if not request.session.get("is_connexion", None) :
+        if this_day != str(today.date()) or  not request.session.get("is_connexion", None) :
             connexion, creation_date = Connexion.objects.get_or_create(date = today.date() , defaults = { 'nb' : 1 } )
+
             if not creation_date :
                 Connexion.objects.filter(pk=connexion.id).update(nb=F("nb") + 1)
             request.session["is_connexion"] = True
-
+            request.session["this_day"] = str(today.date())
         ############################################################################################
         #### GAR  
         ############################################################################################ 
@@ -111,8 +115,6 @@ def index(request):
             # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
         except :
             is_gar_check  = False
-
-        
 
         ############################################################################################
         #### Mise à jour et affichage des publications  
