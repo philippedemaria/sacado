@@ -124,7 +124,12 @@
                         {% block page_title %}
                                 {% if request.user.is_authenticated %}
                                     {% if user.is_teacher %}
-                                        <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span> 
+                                        <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span>                                   
+                                        {% if teacher.groups.count > 0 and teacher.user.username|length < 50 %} 
+                                            <ul>
+                                                <li> <a href="{% url 'create_group'  %}" class="btn btn-new"  > Nouveau groupe</a> </li>  
+                                            </ul> 
+                                        {% endif %}
                                         {% if webinaire %}
                                         <div class="webinaire_index">
                                             <i class="fa fa-bullhorn text-warning"></i> Invitation Webinaire</b> le {{ webinaire.date_time|date:"d-m-y à H:i"}} <i class="fa fa-hand-o-right"></i><a href="{% url 'webinaire_register'  %}" > Voir le menu</a>
