@@ -724,6 +724,7 @@ def delete_all_groups(request) :
         group.delete()
     return redirect('school_groups')    
      
+
 @login_required(login_url= 'index')
 def show_group(request, id ):
 
@@ -751,21 +752,22 @@ def show_group(request, id ):
 
         for student_id in select_these_students :
             student = get_object_or_404(Student, user_id=student_id)
-            results = Resultknowledge.objects.filter(student=student)
-            for r in results :
-                r.delete()
-            res = Resultexercise.objects.filter(student=student)
-            for re in res :
-                re.delete()
-            ress = Studentanswer.objects.filter(student=student)
-            for rs in ress :
-                rs.delete()
-            student.user.delete()
+            groups = student.students_to_group.all()
+            grp = ""
+            for g in groups:
+                grp += g.name+", "
+            if groups.count()>1:
+                group = Group.objects.get(pk=idg)
+                messages.error(request,"L'élève "+str(student)+" appatient aux groupes "+grp+" il ne peut donc pas être supprimé de l'établissement. Il est cependant dissocié du groupe "+group.name+".")
+                group.students.remove(student)
+            else :
+                student.user.delete()
+        messages.success(request,"Tous les élèves sélectionnés supprimables ont été supprimés.")
 
     studentprofiles = group.students.filter(Q(user__username = request.user.username)|Q(user__username__contains= "_e-test")).order_by("user__last_name")
     students = group.students.exclude( user__username__contains= "_e-test").order_by("user__last_name")
 
-    context = {  'group': group,  'is_managing' : is_managing , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles , 'show_qr' : show_qr }
+    context = { 'group': group,  'is_managing' : is_managing , 'teacher' : group.teacher , 'students' : students , 'studentprofiles' : studentprofiles , 'show_qr' : show_qr }
 
     return render(request, 'group/show_group.html', context )
 
@@ -831,17 +833,6 @@ def ajax_delete_student_profiles(request):
     """ suppression du compte élève du prof """
     student_id = request.POST.get("student_id", None)
     student = get_object_or_404(Student, user_id=student_id)
-    results = Resultknowledge.objects.filter(student=student)
-    for r in results :
-        r.delete()
-
-    res = Resultexercise.objects.filter(student=student)
-    for re in res :
-        re.delete()
-        
-    ress = Studentanswer.objects.filter(student=student)
-    for rs in ress :
-        rs.delete()
 
     for g in student.students_to_group.all():
         g.studentprofile = False
@@ -2158,7 +2149,7 @@ def print_list_tableur_ids(request, id):
     font_style = xlwt.XFStyle()
 
 
-    students = group.students.order_by("user__last_name","user__first_name")
+    students = group.students.exclude(user__username__contains= "_e-test").order_by("user__last_name","user__first_name")
     students_detail = []
     for student in students :
         students_detail.append((student.user.last_name, student.user.first_name, student.user.username))

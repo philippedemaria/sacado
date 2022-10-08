@@ -53,7 +53,7 @@ def get_username(request ,ln, fn):
     ok = True
     i = 0
     name = str(ln).replace(" ","") 
-    un = str(name) + "." + str(fn)[0]+str(uuid.uuid4())[:2] 
+    un = str(name).strip() + "." + str(fn)[0].strip() + str(uuid.uuid4())[:2] 
     while ok:
         if User.objects.filter(username=un).count() == 0:
             ok = False
@@ -71,7 +71,7 @@ def get_username_manuel(texte):
     User = apps.get_model('account', 'User')
     ok = True
     i = 0
-    un = str(texte)
+    un = str(texte).strip()
     is_changed = False 
     while ok:
         if User.objects.filter(username=un).count() == 0:
@@ -80,7 +80,7 @@ def get_username_manuel(texte):
             i += 1
             un = un + str(i)
             is_changed = True 
-    return un , is_changed
+    return un  , is_changed
 
 
 def separate_values(request, line, is_group,simple) :

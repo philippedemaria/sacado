@@ -66,6 +66,12 @@ function getAllStudents() {
     if (!confirm('Vous souhaitez récupérer tous les élèves de votre établissement existant dans la base de données SACADO ? \nTous les élèves associés à un enseignant de votre établissement seront associés à votre établissement.')) return false;
 }
 
+function deleteSelectedStudent(f1) {
+    if (!confirm("ATTENTION... Vous souhaitez supprimer l'élève " + f1 + "?  Tous ces résultats seront DÉFINITIVEMENT perdus. S'il est enregistré dans un autre groupe, il sera simplement dissocié de votre groupe." )) return false;
+}
+
+
+
 function deleteSelectedStudents() {
     if (!confirm('Vous souhaitez supprimer tous les élèves sélectionnés ? \nToutes leurs données actuelles seront perdues. \nCette action est irréversible si vous cliquez sur OK.')) return false;
 }

@@ -66,24 +66,44 @@
                 <table class="table table-sacado table-hover display_no_details50">
                     <thead>
                     <tr>
-                        {% if not  sacado_asso %}
-                        <td style=" width:40px">
+                        {% if not sacado_asso and not is_gar_check %}
+                            <td style=" width:40px">
                              
-                        </td>
-                        {% endif %} 
-                        <td>Nom </td>
-                        <td>Prénom </td> 
-                        {% if not is_gar_check %}  
-                        <td>Courriel </td>
-                        <td>Identifiant <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >Pour changer un identifiant, le modifier directement. Si l'identifiant choisi n'est pas disponible, la validation ne se fera pas.</div>
+                            </td>
+                        {% elif  not is_gar_check %}
+                            <td style=" width:40px">
+                             
+                            </td>
+                        {% endif %}
+                        <td>Nom 
+                            {% if not is_gar_check and not is_managing %}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Pour changer un nom, le modifier directement. Enregistrement automatique.</div>
                                 </span>
+                            {% endif %}
 
+                        </td>
+                        <td>Prénom 
+                            {% if not is_gar_check and not is_managing %}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Pour changer un prénom, le modifier directement. Enregistrement automatique.</div>
+                                </span>
+                            {% endif %}
 
+                        </td> 
+
+                        {% if not is_gar_check and not is_managing %}  
+                        <td>Courriel <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Pour changer un courriel, le modifier directement. Enregistrement automatique.</div>
+                                </span>
+                            </td>
+                        <td>Identifiant <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Pour changer un identifiant, le modifier directement. Enregistrement automatique. <span class="text-danger">Si l'identifiant choisi n'est pas disponible, la validation ne se fera pas.</span></div>
+                                </span>
                         </td>
                         {% endif %}
+
                         <td>Dernière connexion</td>
-                        <td>{% if not is_gar_check %}<span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
+                        <td>
+                            {% if not is_gar_check %}<span style=" color:#cb2131">Mot de passe par défaut : <strong>sacado2020</strong> 
                             <span class="helper_tip" style="color:#cb2131"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >Lors de la création d'un élève ou d'une ré-initialisation de mot de passe, <b>sacado2020</b> est le mot de passe attribué.</div>
                                 </span></span>
@@ -162,7 +182,11 @@
                                             {% endif %}
                                         </td>
                                     </tr>
-                            {% else %}
+                            
+
+
+
+                            {% elif is_gar_check %}
                                 <tr>
                                     <td>
                                         {{ student.user.last_name|lower|title }}
@@ -171,9 +195,52 @@
                                     <td>
                                         {{ student.user.first_name|lower|title }}
                                     </td>
-                                    {% if not is_gar_check %}
                                     <td>
-                                        {{ student.user.email }}
+                                        {% if student.user.last_login %}{{ student.user.last_login|date:"Y m d, H:i"  }}{% else %}Jamais{% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'ebep'  student.user.id  group.id  %}" class="helper_tip"   style="color:#007EE2;" onclick="return ebepSelectedStudents('cet élève')"  > 
+                                            <small>EBEP</small><div class="helper_tip_text">
+                                                Elèves à Besoins Educatifs Particuliers
+                                            </div></a> 
+                                        <small>|</small> 
+                                        <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
+                                           voir le bilan  
+                                        </a> 
+                                    </td>
+                                </tr>
+
+                            {% else %} <!-- if sacado_asso  -->
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="select_these_students" id="select_this_student" value="{{ student.user.id }}"/> 
+                                    </td>
+                                    {% if not is_managing %}
+                                    <td>
+                                        <input  type="text" 
+                                                id="studentLastName{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                class="updateStudent" 
+                                                data-is_name="1" 
+                                                value="{{ student.user.last_name|lower|title }}" 
+                                                style="background: #f2f0f0; border: none;width:140px" />
+                                                {% if student.ebep %}<i class="fa fa-key" title="Elève à Besoins Educatifs Particuliers"></i> {% endif %}     
+                                    </td>
+                                    <td><input  type="text" 
+                                                id="studentFirstName{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                data-is_name="0" 
+                                                class="updateStudent"  
+                                                value="{{ student.user.first_name|lower|title }}" 
+                                                style="background: #f2f0f0; border: none;width:120px" /> 
+                                    </td>
+                                    <td><input  type="text" 
+                                                id="studentEmail{{ student.user.id }}" 
+                                                data-student_id="{{ student.user.id }}" 
+                                                data-is_name="2" 
+                                                class="updateStudent"  
+                                                value="{{ student.user.email }}" 
+                                                style="background: #f2f0f0; border: none;width:310px" /> 
                                     </td>
                                     <td>
                                         <input  type="text" 
@@ -183,6 +250,19 @@
                                                     class="updateStudent"  
                                                     value="{{ student.user.username }}" 
                                                     style="background: #f2f0f0; border: none;width:180px" />
+                                        <a href="#" data-toggle='modal' class="div_username"  data-target='#div_username' data-username_div="{{ student.user.username }}"  style="font-size: 11px"><i class="fa fa-expand"></i></a>  
+                                    </td>
+                                    {% else %}
+                                    <td>
+                                        {{ student.user.last_name|lower|title }}
+                                        {% if student.ebep %}<i class="fa fa-key" title="Elève à Besoins Educatifs Particuliers"></i> {% endif %}     
+                                    </td>
+                                    <td>{{ student.user.first_name|lower|title }}
+                                    </td>
+                                    <td>{{ student.user.email }}
+                                    </td>
+                                    <td>
+                                        {{ student.user.username }}
                                         <a href="#" data-toggle='modal' class="div_username"  data-target='#div_username' data-username_div="{{ student.user.username }}"  style="font-size: 11px"><i class="fa fa-expand"></i></a>  
                                     </td>
                                     {% endif %}
@@ -197,16 +277,16 @@
                                         <small>|</small> 
                                         <a href="{% url 'detail_student_all_views'  student.user.id   %}"  style="font-size: 11px"> 
                                            voir le bilan  
-                                        </a> {% if not is_gar_check %}
+                                        </a> 
                                         <small>|</small> 
                                         <a  href="{% url 'newpassword_student' student.user.id  group.id   %}" data-student_id="{{ student.user.id }}" title="mot de passe par défaut : sacado2020" 
                                             onclick="return Newpassword()" style="font-size:11px; margin-right:5px"  >
                                             Init. mot de passe
                                         </a><small>|</small>       
                                         <a  href="{% url 'delete_student' student.user.id  group.id %}"
-                                            onclick="alert('Vous avez la version établissement. Contacter le gestion SACADO de votre établissement.'); return false;" style="font-size:11px"  >
+                                            onclick="return deleteSelectedStudent('{{ student }}')" style="font-size:11px"  >
                                             Supprimer
-                                        </a> {% endif %}
+                                        </a> 
                                     </td>
                                 </tr>
                             {% endif %}
@@ -220,9 +300,9 @@
             <div class="col-sm-12 col-md-12">
                 <div class="form-group">
                     {% if not sacado_asso and not is_gar_check %}
-                        <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return TestDelete('ces élèves')"  />
-                    {% elif not is_managing and not is_gar_check %}
-                        <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return TestDelete('ces élèves')"  />
+                        <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return deleteSelectedStudents()"  />
+                    {% elif  not is_gar_check %}
+                        <input value="Supprimer les élèves sélectionnés" type="submit" class="btn btn-danger" onclick="return deleteSelectedStudents()"  />
                     {% endif %}
                     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
                 </div>

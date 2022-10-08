@@ -490,7 +490,7 @@ def register_student(request):
             if can_inscribe_students(request.user.school, 1) :
                 username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
                 user = user_form.save(commit=False)
-                user.username = username
+                user.username = username.strip()
                 user.user_type = User.STUDENT
                 password = request.POST.get("password1")
                 ######################### Choix du groupe  ###########################################
@@ -676,20 +676,25 @@ def update_student_by_ajax(request):
 def delete_student(request, id,idg):
 
     student = get_object_or_404(Student, user_id=id)
-    results = Resultknowledge.objects.filter(student=student)
-    for r in results :
-        r.delete()
+    groups = student.students_to_group.all()
+    grp = ""
+    for g in groups:
+        grp += g.name+", "
 
-    res = Resultexercise.objects.filter(student=student)
-    for re in res :
-        re.delete()
-        
-    ress = Studentanswer.objects.filter(student=student)
-    for rs in ress :
-        rs.delete()
+    if groups.count()>1:
+        group = Group.objects.get(pk=idg)
+        messages.error(request,"L'élève "+str(student)+" appatient aux groupes "+grp+" il ne peut donc pas être supprimé de l'établissement. Il est cependant dissocié du groupe "+group.name+".")
+        group.students.remove(student)
+        return redirect ('show_group' ,idg )
 
+    remove_all_documents_of_groups_to_a_student(student)
     student.user.delete()
-    return redirect('update_group', idg )
+    messages.success(request,"L'élève "+str(student)+" est supprimé de l'établissement.")
+
+    if 'group/show/' in request.path :
+        return redirect ('show_group' ,idg )
+    else :
+        return redirect('update_group', idg )
 
 
 def newpassword_student(request, id,idg):
