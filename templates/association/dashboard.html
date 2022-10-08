@@ -49,11 +49,15 @@
                 </div>
 
                 <p style="text-align: center"><br/><br/>
-                <span class="counter">{{ nb_schools }}</span><br/>
-                Etablissements  </p>
-
-                <a href="{% url 'list_associate' %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                <a href="{% url 'all_schools' %}" class="btn btn-sacado" title="Etablissement">  <span class="counter">{{ nb_schools }}</span><br/>
+                Etablissements</a>  </p>
+                <div class="small-box-footer" >
+                    <a href="{% url 'schools' %}" class="white" title="Etablissement" style="font-size: 14px"> Etablissement</a>
+                    |
+                    <a href="{% url 'list_teacher' %}"  class="white"  title="Enseignants" style="font-size: 14px"> Enseignants</a>
+                    |
+                    <a href="{% url 'list_associate' %}" class="white"  title="Associés" style="font-size: 14px"> Associés</a>
+                </div>
             </div>
         </div>
 

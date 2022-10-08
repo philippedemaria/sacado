@@ -1,6 +1,8 @@
+
 <li>
- <a href="{% url 'accountings' %}" class="no_button">Introduction</a>
+    <a href="{% url 'association_index' %}" class="no_button">L'association</a>
 </li>
+
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Opérations <b class="caret"></b> </a>
     <ul   class="dropdown-menu clearfix pull-right" role="menu">
@@ -54,7 +56,7 @@
         </li>
         <li class="divider"></li>
         <li>
-            <a href="{% url 'prospec_schools' %}"  class="no_button" >Enseignants errants</a> 
+            <a href="{% url 'prospec_schools' %}"  class="no_button" >Enseignants non affectés</a> 
         </li> 
         <li>
             <a href="{% url 'prospec_to_adhesions' %}"  class="no_button" >Ex clients</a> 
@@ -101,6 +103,11 @@
         <li>
             <a href="{% url 'activeyears' %}" class="no_button">Archive</a>
         </li>
+
+        <li>
+         <a href="{% url 'accountings' %}" class="no_button">Bilan synthétique</a>
+        </li>
+
         <li class="divider"></li>
 
         <li>
