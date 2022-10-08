@@ -725,6 +725,7 @@ def delete_all_groups(request) :
     return redirect('school_groups')    
      
 
+
 @login_required(login_url= 'index')
 def show_group(request, id ):
 
@@ -757,7 +758,6 @@ def show_group(request, id ):
             for g in groups:
                 grp += g.name+", "
             if groups.count()>1:
-                group = Group.objects.get(pk=idg)
                 messages.error(request,"L'élève "+str(student)+" appatient aux groupes "+grp+" il ne peut donc pas être supprimé de l'établissement. Il est cependant dissocié du groupe "+group.name+".")
                 group.students.remove(student)
             else :
