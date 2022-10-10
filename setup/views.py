@@ -1888,19 +1888,21 @@ def webinaire_register(request):
 
     today = time_zone_user(request.user) 
     webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
-    nb_places = 20 - webinaire.users.count()
+    nb_places = 500 - webinaire.users.count()
     return render(request, 'setup/form_webinaire_register.html', {'webinaire': webinaire , 'nb_places' : nb_places })
+
 
 
 def webinaire_registrar(request,id,key):
 
-    if request.user.is_superuser :
-        webinaire = Webinaire.objects.get(id=id)
-        if key == 1:
-            webinaire.users.add(request.user)
-        else :
-            webinaire.users.remove(request.user)
 
+    webinaire = Webinaire.objects.get(id=id)
+    if key == 1:
+        webinaire.users.add(request.user)
+        messages.success(request,"Vous avez été ajouté au Webinaire")
+    else :
+        webinaire.users.remove(request.user)
+        messages.error(request,"Vous avez été supprimé du Webinaire")
     return redirect('index') 
 
 
