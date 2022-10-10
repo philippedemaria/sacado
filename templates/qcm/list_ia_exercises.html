@@ -1,0 +1,114 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-list-exercise-ia']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+    <i class="bi bi-explicit sacado_color_text"></i> Les SF
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Parcours par notions</a></li>
+        <li><a data-toggle="tab" href="#menu1">Parcours de savoir faire</a></li>
+        <li><a data-toggle="tab" href="#menu2">Parcours par thèmes</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <!-- Parcours de savoir faire -->
+            <div class="row">
+                <div class="col-sm-12 col-md-12" id="">
+                    <table class="table table-hover borderless display1000" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Parcours</th><th>Thèmes cibles</th>
+                            </tr>
+                        </thead>
+                        <tbody>  
+                        {% for  p in parcourses %}
+                            <tr><td><span data-p_id="{{ p.id }}" class="btn btn-default get_parcours_from_this_p" style="cursor: pointer;">{{ p }}</span> </td><td> {%  for t in p.get_themes %} {{ t.theme }} {% endfor %}</<td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div>
+
+
+        <div id="menu1" class="tab-pane fade">
+        <!-- Parcours de notions -->
+            <form action="" method="POST" enctype='multipart/form-data'> {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12" id="">
+                    <table class="table table-hover display1000" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>                    
+                        {% regroup exercises by theme as theme_list %} 
+                        {% for theme in theme_list  %} 
+                            <tr class="title_tr">
+                                <td style="width:85%"> {{theme.grouper.name}}</td> 
+                            </tr> 
+                            {% regroup theme.list by knowledge.waiting as waiting_list %} 
+                            {% for waiting in waiting_list  %}
+                                <tr  class="opener out subtitle_tr"  id="{{ waiting.grouper.id }}">
+                                    <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}   <small><b>{{  waiting.grouper.exercises_counter }} exercice{{ waiting.grouper.exercises_counter|pluralize  }}</b>  </small> </td> 
+                                </tr>  
+                                {% regroup waiting.list by knowledge as knowledge_list %} 
+                                {% for knowledge in knowledge_list  %}
+                                    <tr   class="opener_k opened{{ waiting.grouper.id }} out subsubtitle_tr"  id="{{ knowledge.grouper.id}}" >
+                                        <td class="listingtd"> 
+                                           <span data-k_id="{{ knowledge.grouper.id }}" class="get_parcours_from_this_k" style="cursor: pointer;">{{ knowledge.grouper.name|capfirst }} <b>{{  knowledge.grouper.exercises|counting }} exercice{{  knowledge.grouper.exercises|counting|pluralize }} </b></span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            {% endfor %}
+                        {% endfor %} 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+        <!-- Parcours de thèmes -->
+ 
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</section>
+
+ 
+
+{% endblock %}
+                                

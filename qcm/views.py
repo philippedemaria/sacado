@@ -41,7 +41,7 @@ import json
 import random
 from datetime import datetime , timedelta
 
-
+from qcm.adaptatif_phil import *
 ##############bibliothèques pour les impressions pdf  #########################
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats, timezone
@@ -68,9 +68,65 @@ from general_fonctions import *
 import xlwt 
 
 #################################################################
-# Transformation de parcours en séquences
+# IA
 #################################################################
 
+ 
+
+def list_ia_exercises(request,l_id):
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    parcourses = Parcours.objects.filter(level_id = l_id , teacher_id=2480)
+
+    exercises = Exercise.objects.filter(level_id = l_id , theme__subject_id = 1 ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
+
+
+    context = {'exercises': exercises  , "teacher" : teacher , "level_id" : l_id , "parcourses" : parcourses  }
+
+    return render(request, 'qcm/list_ia_exercises.html', context )
+
+
+
+
+def get_the_k_ia(request):
+
+    data = {}
+    k_id = request.POST.get("k_id",None)
+    get_knowledges_to_knowledge(k_id)
+
+    return JsonResponse(data)
+
+
+
+def get_the_p_ia(request):
+    print(" =========== DEPART ===============")    
+    a = time.time()
+
+    data = {}
+    p_id = request.POST.get("p_id",None)
+    get_parcourses_to_parcours(p_id)
+
+    b = time.time()
+    print(int(b-a),"secondes")
+
+    return JsonResponse(data)
+
+
+
+
+
+
+
+
+
+
+#################################################################
+# Transformation de parcours en séquences
+#################################################################
 
 def all_parcours_to_sequences(request):
 
@@ -149,8 +205,6 @@ def this_parcours_to_sequences(request,idp):
 
 
     return redirect('show_parcours' , 0 , idp  ) 
-
-
 
 
 #################################################################
