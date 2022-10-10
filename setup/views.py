@@ -423,15 +423,21 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 pass
             
             if not school.is_primaire :
-                dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
-                for code_level in code_levels  : 
-                    if str(code_level) not in dico_level :
-                        level_id = 12
-                    else :
-                        level_id = dico_level[str(code_level)]
 
-                    level = Level.objects.get(pk=level_id)
-                    teacher.levels.add(level)
+                try :
+                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
+                    for code_level in code_levels  : 
+                        if str(code_level) not in dico_level :
+                            level_id = 12
+                        else :
+                            level_id = dico_level[str(code_level)]
+
+                        level = Level.objects.get(pk=level_id)
+                        teacher.levels.add(level)
+                except :
+                    pass
+
+
 
                 try :    
                     groups = dico_received["DIV"]
@@ -444,6 +450,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         except :
                             if '1' <= str(name[0]) <= '6' : level_id = 12 - int(name[0])
                             else : level_id = 12
+                            level = Level.objects.get(pk=level_id)
+                        try :
+                            teacher.levels.add(level)
+                        except :
+                            pass
 
                         if  school.is_primaire :
                             nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
@@ -506,6 +517,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+
     return index(request)
  
 
