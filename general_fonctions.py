@@ -378,13 +378,13 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
 
 
 
-def remove_all_documents_of_groups_to_a_student(student):
+def remove_all_documents_of_groups_to_a_student(group, student):
 
     try :
-        for folder in student.folders.all():
+        for folder in student.folders.filter(subject=group.subject):
             folder.students.remove(student)
 
-        for parcours in student.students_to_parcours.all():
+        for parcours in student.students_to_parcours.filter(subject=group.subject):
             parcours.students.remove(student)
             relationships = parcours.parcours_relationship.all()
             for r in relationships:

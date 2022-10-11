@@ -41,7 +41,7 @@ import json
 import random
 from datetime import datetime , timedelta
 
-from qcm.adaptatif_phil import *
+from qcm.adaptatif import *
 ##############bibliothèques pour les impressions pdf  #########################
 from pdf2image import convert_from_path # convertit un pdf en autant d'images que de pages du pdf
 from django.utils import formats, timezone

@@ -683,11 +683,12 @@ def delete_student(request, id,idg):
 
     if groups.count()>1:
         group = Group.objects.get(pk=idg)
+        remove_all_documents_of_groups_to_a_student(group, student)
         messages.error(request,"L'élève "+str(student)+" appatient aux groupes "+grp+" il ne peut donc pas être supprimé de l'établissement. Il est cependant dissocié du groupe "+group.name+".")
         group.students.remove(student)
         return redirect ('show_group' ,idg )
 
-    remove_all_documents_of_groups_to_a_student(student)
+    
     student.user.delete()
     messages.success(request,"L'élève "+str(student)+" est supprimé de l'établissement.")
 

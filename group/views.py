@@ -854,7 +854,7 @@ def student_remove_from_school(request):
     group = Group.objects.get(id=group_id) 
     student = Student.objects.get(user_id=student_id) 
 
-    remove_all_documents_of_groups_to_a_student(student)
+    remove_all_documents_of_groups_to_a_student(group, student)
     group.students.remove(student)
 
 
