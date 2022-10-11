@@ -114,30 +114,20 @@ def get_knowledges_to_knowledge(k_id):
 def get_e_list(parcourses,all_exercise_ids):
     """Convertit des parcours en liste de bytes dont un 1 représente un exo commun""" 
     e_list = []
+    list_positions={}
+    for i,e_id in enumerate(all_exercise_ids) :
+        list_positions[e_id]=i
+  
     for p in parcourses :
-        these_list = []
+        these_list = [0]*len(all_exercise_ids)
         p_exercise_ids = p.parcours_relationship.values_list("exercise_id",flat=True)# liste des ids des exos du parcours p
-        for e_id in all_exercise_ids :
-            if e_id in p_exercise_ids : these_list.append(1)
-            else : these_list.append(0)
+        for e_id in p_exercise_ids :
+            if e_id in list_positions :
+                these_list[list_positions[e_id]]=1
         
         e_list.append(these_list)
 
     return e_list
-
-
-    # e_list = []
-
-    # for e_id in all_exercise_ids :
-    #     these_list = []
-    #     for p in parcourses :
-    #         nb_e_id_in_p = p.parcours_relationship.values_list("exercise_id",flat=True).filter(exercise_id=e_id).count()# liste des ids des exos du parcours p
-    #         if nb_e_id_in_p > 4: these_list.append(1)
-    #         else : these_list.append(0)
-            
-    #     e_list.append(these_list)
-
-    # return e_list
 
 
 
@@ -145,11 +135,11 @@ def get_parcourses_to_parcours(p_id):
 
     parcours         = Parcours.objects.get(pk = p_id)
     all_parcours     = Parcours.objects.filter(level=parcours.level, subject=parcours.subject).exclude(teacher=parcours.teacher)
-    all_exercise_ids = Exercise.objects.values_list("id",flat=True).filter(level=parcours.level, theme__subject=parcours.subject).order_by("id")
-
-
-    parcours0     = get_e_list([parcours],all_exercise_ids)[0] 
+    all_exercise_ids = Exercise.objects.values_list("id",flat=True).filter(level=parcours.level, theme__subject=parcours.subject,supportfile__title=0).order_by("id")
+    
     parcours_list = get_e_list(all_parcours,all_exercise_ids)# liste des parcours ayant au moins 1 exo en commun avec le parcours de réf
+    parcours0     = get_e_list([parcours],all_exercise_ids)[0]
+
 
     final_parcours_list = [] 
     for fp in parcours_list :
@@ -161,14 +151,14 @@ def get_parcourses_to_parcours(p_id):
 
     for fpl in final_parcours_list :
         for i in range(len(fpl)) :
-            if last_exo_ids[i] == 0 : last_exo_ids[i] += fpl[i]
+            last_exo_ids[i] += fpl[i]
 
     list_exercises_ids = []
     for i in range(len(all_exercise_ids))  :
-        if last_exo_ids[i] == 1 :
+        if last_exo_ids[i] > 10 :
             list_exercises_ids.append(all_exercise_ids[i])
 
     print(list_exercises_ids, len(list_exercises_ids))
 
-    return list_exercises_ids # liste des parcours
+    return #list_exercises_ids # liste des parcours
 

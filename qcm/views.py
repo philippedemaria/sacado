@@ -8135,6 +8135,12 @@ def export_notes_after_evaluation(request):
 
     this_clic = request.POST.get("this_clic_notes")
 
+    try : 
+        students = parcours.only_students(group)
+    except:
+        students = students_from_p_or_g(request,parcours) 
+
+
     if this_clic == "csv" :
 
         response = HttpResponse(content_type='text/csv')
@@ -8155,7 +8161,7 @@ def export_notes_after_evaluation(request):
             exercises.append(r.exercise)
 
 
-        for student in parcours.students.order_by("user__last_name") :
+        for student in students :
             data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
             
             if data_student["percent"] != "" :
@@ -8212,7 +8218,7 @@ def export_notes_after_evaluation(request):
         font_style = xlwt.XFStyle()
 
         students_detail = []
-        for student in parcours.students.order_by("user__last_name") :
+        for student in students :
             data_student = get_student_result_from_eval(student, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
 
             if data_student["percent"] != "" :
@@ -8255,6 +8261,12 @@ def export_skills_after_evaluation(request):
 
     this_clic = request.POST.get("this_clic_skills")
 
+    try : 
+        students = parcours.only_students(group)
+    except:
+        students = students_from_p_or_g(request,parcours) 
+
+
     if this_clic == "csv" :
 
         response = HttpResponse(content_type='text/csv')
@@ -8272,7 +8284,7 @@ def export_skills_after_evaluation(request):
 
         writer.writerow(label_in_export)
      
-        for student in parcours.students.order_by("user__last_name") :
+        for student in students :
             skill_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for skill in  skills:
@@ -8348,7 +8360,7 @@ def export_skills_after_evaluation(request):
         font_style = xlwt.XFStyle()
 
         students_detail = []
-        for student in parcours.students.order_by("user__last_name") :
+        for student in students :
             skill_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for skill in  skills:
@@ -8413,6 +8425,11 @@ def export_knowledges_after_evaluation(request):
 
     this_clic = request.POST.get("this_clic_knowledges")
 
+    try : 
+        students = parcours.only_students(group)
+    except:
+        students = students_from_p_or_g(request,parcours) 
+
     if this_clic == "csv" : 
 
         response = HttpResponse(content_type='text/csv')
@@ -8429,7 +8446,7 @@ def export_knowledges_after_evaluation(request):
 
         writer.writerow(label_in_export)
 
-        for student in parcours.students.order_by("user__last_name") :
+        for student in students :
             knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for knwldg in knowledges :
@@ -8468,7 +8485,7 @@ def export_knowledges_after_evaluation(request):
         font_style = xlwt.XFStyle()
 
         students_detail = []
-        for student in parcours.students.order_by("user__last_name") :
+        for student in students :
             knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for knwldg in knowledges :
@@ -8501,7 +8518,13 @@ def export_note_custom(request,id,idp):
     writer = csv.writer(response)
     fieldnames = ("Eleves", "Notes")
     writer.writerow(fieldnames)
-    for student in parcours.students.order_by("user__last_name") :
+
+    try : 
+        students = parcours.only_students(group)
+    except:
+        students = students_from_p_or_g(request,parcours) 
+
+    for student in students :
         full_name = str(student.user.last_name).lower() +" "+ str(student.user.first_name).lower() 
         try :
             studentanswer = Customanswerbystudent.objects.get(student=student, customexercise=customexercise,  parcours=parcours) 
@@ -8510,6 +8533,7 @@ def export_note_custom(request,id,idp):
             score = "Abs"
         writer.writerow( (full_name , score) )
     return response
+ 
  
 def export_note(request,idg,idp):
 
