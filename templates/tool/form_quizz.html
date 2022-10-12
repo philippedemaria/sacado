@@ -31,7 +31,7 @@
     <span class="sacado_color_text"><i class="bi bi-aspect-ratio"></i></span>  
     {% include 'qcm/breadcrumb.html' %}
 
-    {% if quizz %} Configuration {% else %} Nouveau quizz {% endif %}
+    {% if quizz %} {{ quizz}} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration</small> {% else %} Nouveau quizz {% endif %}
 
     {% include 'modes.html' %}
 {% endblock %}

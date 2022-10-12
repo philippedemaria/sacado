@@ -27,10 +27,14 @@
     <i class="bi bi-explicit-fill sacado_color_text"></i> 
 
 
+ 
     {% include 'qcm/breadcrumb.html' %}
 
+     
+    {% if customexercise %}  {{ customexercise }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration </small> {% else %} Nouvel exercice non auto-corrigé {% endif %}
 
-    Création d'un exercice non auto-corrigé
+    {% include 'modes.html' %} 
+ 
  
 {% endblock %}
 

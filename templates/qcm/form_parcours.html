@@ -28,16 +28,12 @@
 
 {% block page_title %}
 
-      {% include 'qcm/breadcrumb.html' %}
+    {% include 'qcm/breadcrumb.html' %}
 
      
-        {% if parcours %}
-             Configuration 
-        {% else %}
-            Nouveau parcours 
-            {% include 'modes.html' %}
-        {% endif %}
-    
+    {% if parcours %} {{ parcours }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration </small> {% else %} Nouveau parcours {% endif %}
+
+    {% include 'modes.html' %}    
 
 {% endblock %}
 

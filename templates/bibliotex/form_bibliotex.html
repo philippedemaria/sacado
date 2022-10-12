@@ -21,13 +21,13 @@
  
 
 {% block page_title %}
-   {% include 'bibliotex/logo.html' %}  Nouveau biblioTex <img src="{% static 'img/angle-right.png' %}" width="25px"/>  
-
+    {% include 'bibliotex/logo.html' %}    
 
     {% include 'qcm/breadcrumb.html' %}
- 
-     {% include 'modes.html' %}
+    
+    {% if bibliotex %} {{ biblioTex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration </small> {% else %} Nouvelle biblioTex {% endif %}
 
+    {% include 'modes.html' %}
 
 {% endblock %}
 
