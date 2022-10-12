@@ -31,7 +31,7 @@
 
       {% include 'qcm/breadcrumb.html' %}
   
-    {% if folder %} {{ folder }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration</small>{% else %}Nouveau dossier {% endif %}
+    {% if folder %} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration</small>{% else %}Nouveau dossier {% endif %}
     {% include 'modes.html' %}  
 {% endblock %}
 

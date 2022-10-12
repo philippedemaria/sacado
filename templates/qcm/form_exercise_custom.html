@@ -31,7 +31,7 @@
     {% include 'qcm/breadcrumb.html' %}
 
      
-    {% if customexercise %}  {{ customexercise }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration </small> {% else %} Nouvel exercice non auto-corrigé {% endif %}
+    {% if customexercise %}  <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration </small> {% else %} Nouvel exercice non auto-corrigé {% endif %}
 
     {% include 'modes.html' %} 
  
