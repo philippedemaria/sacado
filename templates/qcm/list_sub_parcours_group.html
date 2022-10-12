@@ -21,15 +21,21 @@
        <span style="color:{{ group.color  }}"><i class="bi bi-folder"></i></span>  
 
         {% include 'qcm/breadcrumb.html' %}
+
+ 
+     
+    {% if role %}
+       <ul> {% include 'qcm/submenu_creation.html' %}</ul> 
+    {% endif %}
+
+
 {% endblock %}
 
 
 
 
 {% block page_menu_right %}
-    {% if role %}
-        {% include 'qcm/submenu_creation.html' %}
-    {% endif %}
+ 
 {% endblock %}
 
 
