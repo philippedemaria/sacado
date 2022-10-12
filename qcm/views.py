@@ -2725,7 +2725,6 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
         coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
         ################################################
         lock_all_exercises_for_student(nf.stop,nf)
-
         if is_sequence :
             return redirect('show_parcours', 0 , nf.id)
         elif request.POST.get("save_and_choose") :
@@ -3006,16 +3005,13 @@ def dissociate_parcours(request, id, idg=0):
 
 
 
-
-
-
-
-
 def ordering_number(parcours):
 
     listing_ordered = set() 
-    relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
+    relationships = parcours.parcours_relationship.prefetch_related('exercise__supportfile').order_by("ranking")
     listing_ordered.update(relationships)
+
+
     if not parcours.is_sequence :
         customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
         listing_ordered.update(customexercises)

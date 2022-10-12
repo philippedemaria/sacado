@@ -126,6 +126,24 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
   
         // End Show and Hide Triggers
 
+
+ 
+        $('.no_visu').hide();
+        var i_display = 0
+        $('#more_options').on('click', function (event) {
+
+            $('.no_visu').toggle(500);
+            if (i_display%2==0)
+                { $('#more_options').html("Mode basique <i class='bi bi-dash-circle-dotted'></i> d'options</a>") ; }
+            else
+                { $('#more_options').html("Mode expert <i class='bi bi-plus-circle-dotted'></i> d'options") ; }
+            
+            i_display++;
+        });
+
+
+
+
         // END This section makes the search work.
 
 

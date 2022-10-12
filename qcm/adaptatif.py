@@ -1,8 +1,7 @@
 
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import  AuthenticationForm
-from django.db.models import Q , Sum 
+from django.db.models import Q , Sum , Count , Avg
 from django.http import JsonResponse 
 from django.core import serializers
 from django.template.loader import render_to_string
@@ -21,7 +20,7 @@ from collections import Counter
 
 ################################################################################################################################
 ################################################################################################################################
-############################### Adaptatif fonctions
+############################### Adaptatif fonctions centrées sur la k_id sélectionnée
 ################################################################################################################################
 ################################################################################################################################
 
@@ -59,47 +58,85 @@ def get_knowledges_to_knowledge(k_id):
 
 ################################################################################################################################
 ################################################################################################################################
-############################### parcours adaptatif
+############################### Adaptatif fonctions centrées sur le parcours sélectionné
 ################################################################################################################################
 ################################################################################################################################
+
+
+def quartiles(parcours_exercise_ids):
+
+    lanswers = list(Studentanswer.objects.values_list('point',flat=True).filter(exercise__in=parcours_exercise_ids))    
+    nb = len(lanswers)
+    lanswers.sort()
+    return lanswers[nb//4] , lanswers[nb//2] , lanswers[3*nb//4]
+
+   
+def get_avg(parcours_exercise_ids):
+
+    answers = Studentanswer.objects.values('exercise_id','point').filter(exercise__in=parcours_exercise_ids)
+    liste , liste_dico = [] , []
+    i=-1
+    for a in answers:
+        if a["exercise_id"] not in liste :
+            liste.append(a["exercise_id"])
+            dico = {}
+            dico['exo']       = a["exercise_id"]
+            exercise          = Exercise.objects.get(pk = a["exercise_id"])
+            dico['knowledge'] = exercise.knowledge.id
+            dico['total']     = a["point"]
+            dico['nb']        = 1
+            dico['avg']      = a["point"]
+            liste_dico.append(dico)
+            i+=1
+        else :
+            liste_dico[i]['total'] +=  a["point"]
+            liste_dico[i]['nb']    +=  1
+            liste_dico[i]['avg']   =  liste_dico[i]['total'] // liste_dico[i]['nb']
+
+    lds = sorted(liste_dico, key=lambda x:x['avg'] )
+
+    return lds
 
 
 
 
 def get_parcourses_to_parcours(p_id):
+    parcours = Parcours.objects.get(pk = p_id)
+    parcours_exercise_ids = list(parcours.parcours_relationship.values_list("exercise_id",flat=True).order_by("ranking")) 
 
-    parcours              = Parcours.objects.get(pk = p_id)
-    parcours_exercise_ids = parcours.parcours_relationship.values_list("exercise_id",flat=True).order_by("ranking")
-    
-    print( parcours_exercise_ids )
-    # parcours_list = get_e_list(all_parcours,all_exercise_ids)# liste des parcours ayant au moins 1 exo en commun avec le parcours de réf
-    # parcours0     = get_e_list([parcours],all_exercise_ids)[0]
+    q1 , q2 , q3     = quartiles(parcours_exercise_ids)
+    avg_exercise_ids = get_avg(parcours_exercise_ids)
 
-    # final_parcours_list = [] 
-    # for fp in parcours_list :
-    #     for i in range(len(fp)) :
-    #         if fp not in final_parcours_list and  parcours0[i]==fp[i] and fp[i] == 1 :
-    #             final_parcours_list.append(fp) # liste des parcours ayant au moins 1 exo au même endroit avec le parcours de réf
+    new_dico = dict()
+    for aed in avg_exercise_ids :
+        if aed['avg']>=q3:
+            aed['is_display']=0
+        else :
+            aed['is_display']=1
+        new_dico[aed['exo']] = aed['is_display']
 
-    # last_exo_ids = [0]*len(final_parcours_list[0])
+    list_to_display = list()    
+    for relationship in Relationship.objects.filter(parcours=parcours).order_by("ranking") :
+        e_id = relationship.exercise.id
+        if (e_id in new_dico and new_dico[e_id] == 1) or (not e_id in new_dico) :
+            list_to_display.append( {'r' : relationship.id , 'is_display':1 } )
+        else :
+            list_to_display.append( {'r' : relationship.id , 'is_display':0 } )
+   
 
-    # for fpl in final_parcours_list :
-    #     for i in range(len(fpl)) :
-    #         last_exo_ids[i] += fpl[i]
 
-    # list_exercises_ids = []
-    # for i in range(len(all_exercise_ids))  :
-    #     if last_exo_ids[i] > 10 :
-    #         list_exercises_ids.append(all_exercise_ids[i])
-
-    # print(list_exercises_ids, len(list_exercises_ids))
-
-    return #list_exercises_ids # liste des parcours
+    return list_to_display
 
 
 
 
 
+
+################################################################################################################################
+################################################################################################################################
+############################### Adaptatif fonctions centrées sur le parcours sélectionné
+################################################################################################################################
+################################################################################################################################
 
 
 

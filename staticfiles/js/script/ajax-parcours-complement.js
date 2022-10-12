@@ -15,19 +15,22 @@ define(['jquery','bootstrap'], function ($) {
  
         $('#id_is_publish').prop('checked', true); 
         $('#id_is_achievement').prop('checked', false); 
-
+        $('#id_is_ia').prop('checked', false); 
 
         $('#id_is_task').prop('checked', false); 
         $('#id_is_paired').prop('checked', false); 
         $('#id_notification').prop('checked', false); 
- 
+        $('#id_is_active').prop('checked', false); 
 
         $('#folder_parcours').hide(); 
         $('#folder_parcours_cible').hide(); 
 
 
         // Pour le form_parcours
-         $('#folder_div').hide(); 
+        $('#folder_div').hide();
+
+
+
 
     });
 });

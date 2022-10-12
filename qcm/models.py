@@ -417,8 +417,10 @@ class Parcours(ModelWithCode):
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     
-    is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
+    is_ia = models.BooleanField(default=0, verbose_name="Intelligence Artificielle ?" )
 
+
+    is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
     is_sequence = models.BooleanField(default=0, verbose_name="Séquence d'apprentissage ?", editable=False)
 
     def __str__(self):
