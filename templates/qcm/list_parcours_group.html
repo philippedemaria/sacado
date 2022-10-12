@@ -24,6 +24,15 @@
 
 {% block page_title %}
        <span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-th"></i>      </span>          {% include 'qcm/breadcrumb.html' %}
+
+
+    {% if role %}
+           <ul> {% include 'qcm/submenu_creation.html' %}</ul>
+    {% endif %}
+
+
+
+
 {% endblock %}
 
 {% block page_menu_right %}
@@ -31,9 +40,7 @@
 
     {% include 'group/submenu_group.html' %}
 
-    {% if role %}
-        {% include 'qcm/submenu_creation.html' %}
-    {% endif %}
+
     
 {% endblock %}
 

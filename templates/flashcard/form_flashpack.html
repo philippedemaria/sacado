@@ -142,7 +142,7 @@
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                         <div class="form-group" id="cblist">
-                            {% if flashpack or folder %}
+                            {% if flashpack or folder or group %}
                                 {{ form.folders|add_class:"select_folders" }}
                                 {{ form.folders.errors }}
                             {% else %}

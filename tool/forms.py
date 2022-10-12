@@ -99,8 +99,12 @@ class QuizzForm(forms.ModelForm):
 		teacher_groups = teacher.teacher_group.all() 
 		all_groups = groups|teacher_groups
 
+		if group :
+			self.fields['subject'].initial  = group.subject
+		else :
+			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
+
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.order_by("ranking"), required=False)
-		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=True)
 		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
 		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset = all_folders.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)

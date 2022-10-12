@@ -516,7 +516,7 @@ def create_quizz(request):
         subject = teacher.subjects.first()
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
     else :
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
 
@@ -532,7 +532,7 @@ def create_quizz(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, }
+    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group }
 
     return render(request, 'tool/form_quizz.html', context)
 

@@ -80,8 +80,8 @@
                                 </div>
                             </div>
                         </div>
-                        {% if group_id %}
-                                {{ form.subject.as_hidden}}
+                        {% if group %}
+                            {{ form.subject.as_hidden}}
                         {% else %}
                         <div class="form-group">
 				            <label>Enseignement</label>
@@ -135,7 +135,7 @@
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                         <div class="form-group" id="cblist">
-                            {% if quizz or folder %}
+                            {% if quizz or folder or group %}
                                 {{ form.folders|add_class:"select_folders" }}
                                 {{ form.folders.errors }}
                             {% else %}

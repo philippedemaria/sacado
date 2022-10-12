@@ -723,7 +723,7 @@ def create_bibliotex_sequence(request,id):
     else:
         print(form.errors)
 
-    context = {'form': form, 'bibliotex': None, 'folder': folder, 'group': group, 'parcours': parcours  }
+    context = {'form': form, 'bibliotex': None, 'folder': folder, 'group': group, 'parcours': parcours   }
 
     return render(request, 'bibliotex/form_bibliotex.html', context)
 
