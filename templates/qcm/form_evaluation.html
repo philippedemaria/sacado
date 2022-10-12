@@ -35,13 +35,16 @@
 
     {% include 'qcm/breadcrumb.html' %}
 
-    <small>   
+ 
+
         {% if parcours %}
-            Configuration 
+             Configuration 
         {% else %}
-            Nouvelle évaluation 
+            Nouvelle évaluation
+            {% include 'modes.html' %}
         {% endif %}
-    </small> 
+
+
 
 {% endblock %}
 

@@ -868,8 +868,6 @@ def delete_renewal_school_adhesion(request):
     school = request.user.school
     school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
-    accounting = Accounting.objects.filter(school=school,is_active = 0).last() 
-    accounting.delete()
     send_mail("Résiliation d'abonnement",
 	          "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'abonnement   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 	          settings.DEFAULT_FROM_EMAIL ,

@@ -26,7 +26,7 @@
     {% include 'flashcard/logo.html' %}
     {% include 'qcm/breadcrumb.html' %}
     {% if flashpack %} {{ flashpack }}  {% else %} Nouveau flashpack   {% endif %} 
-
+    {% include 'modes.html' %}
 {% endblock %}
 
 
@@ -45,7 +45,7 @@
     <form action="#" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
         {% if not parcours %}
-        <div class="row">
+        <div class="row no_visu">
             <div class="col-sm-12 col-md-12">
                 <div class="alert alert-warning">
                     <div class="row">
@@ -77,7 +77,7 @@
                                     {{ form.title.errors }}
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-4">
+                            <div class="col-sm-12 col-md-4 no_visu">
                                 <div class="form-group">
                                     {{ form.color.label_tag }}      
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -94,7 +94,7 @@
                             <input name="subject" id="id_subject" type="hidden" value="{% if flashpack %}{{ flashpack.subject.id }}{% endif %}" />
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-sm-12 col-md-6 no_visu">
                         <div class="form-group">
 				            {% if sacado_asso %}
 				            <div class="form-group"> 
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row {% if flashpack or group %}no_visu{% endif %}">
                     <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
                         <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
@@ -119,9 +119,7 @@
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
                         {% elif teacher.nb_boolean_multi_subjects %}
-                            <div class="alert alert-warning">
-                                <p style="font-size:12px">Choisir au moins un enseignement.</p>
-                            </div>
+                            <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un enseignement.</label>
                         {% else %} 
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
@@ -129,16 +127,16 @@
                         </div>
 	                </div>	
                     <div class="col-sm-12 col-md-6">
-                        <div class="form-group">  
-                            <div class="alert alert-warning">
-                                <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le flashpack est partagé entre ces groupes.</p>
-                                <p style="font-size:12px"><img src="{% static 'img/conseil.png' %}" width="25px"/> Cocher, décocher pour affiner les choix.</p>
-                            </div>
-                        </div>
+                        <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
+                            Cocher, décocher les groupes pour choisir les dossiers.<br/>
+                            <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
+                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
+                            
+                        </label>
                     </div> 
                 </div>
                 {% if not flashpack.is_global %}
-                <div class="row"  id="folders_is_global">
+                <div class="row {% if flashpack or group %}no_visu{% endif %}"  id="folders_is_global">
                     <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
@@ -148,9 +146,7 @@
                                 {{ form.folders|add_class:"select_folders" }}
                                 {{ form.folders.errors }}
                             {% else %}
-                                 <div class="alert alert-warning">
-                                    <p style="font-size:12px">Choisir au moins un groupe.</p>
-                                </div>
+                                <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
                             {% endif %}
                         </div>
                     </div>
@@ -163,14 +159,12 @@
                                     {{ form.parcours|add_class:"select_all_parcours" }}
                                     {{ form.parcours.errors }} 
                             {% else %}
-                                <div class="alert alert-warning">
-                                    <p style="font-size:12px">Choisir au moins un dossier.</p>
-                                </div>
+                                <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un dossier.</label>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="row" id="themes_is_global">
+                <div class="row no_visu" id="themes_is_global">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                             <label>Thèmes <em>utile pour organiser  et retrouver des flashcards  </em></label>
@@ -181,7 +175,7 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="col-sm-12 col-md-4 setup_ggb">
+            <div class="col-sm-12 col-md-4 setup_ggb no_visu">
                 <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
                      <table class="table table-sacado borderless">
                             <tr>

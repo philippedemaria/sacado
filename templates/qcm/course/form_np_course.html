@@ -20,13 +20,21 @@
  
 
 {% block page_title %}
-       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>  
+    <span style="color:{{ parcours.color|contrast_color_title }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
+            <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/>
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/>
+        </svg>
+        {% if parcours %}
+            {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/> 
+        {% endif %}   Cours   
+        {% include 'modes.html' %}
+    </span>  
 {% endblock %}
 
 
 {% block page_menu_right %}
 
-    {% include 'qcm/course/submenu_creation_course.html' %}
 
 {% endblock %}
 
@@ -56,7 +64,7 @@
                     {{ form.annoncement.errors }} <br>
                     <small>Astuce : Cliquez sur <img src="{% static 'img/full_screen.png' %}" width="15px" /> dans la barre d'outils pour agrandir en plein écran.</small> 
                 </div>
-                <div class="form-group">
+                <div class="form-group no_visu">
                     <div class="alert alert-info">
                          Il est possible de créer des <b>sections vidéo-projetables</b> : Cliquer sur l'icone <img src="{% static 'img/div_projection.png' %}" /> et choisir "projection" et renseigner le champ "Classes de style" par : projection <img src="{% static 'img/style_projection.png' %}" />  <br/>Cliquer sur le bouton vert OK. Ecrire alors dans cette partie. 
 

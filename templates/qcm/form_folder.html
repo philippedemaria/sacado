@@ -34,7 +34,7 @@
     {% if folder %}
         Configuration du dossier
     {% else %}
-         Nouveau dossier   
+         Nouveau dossier {% include 'modes.html' %}  
     {% endif %}
  
 {% endblock %}
@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12  col-md-4  col-lg-3">
+                <div class="col-sm-12  col-md-4  col-lg-3 no_visu">
                       {{ form.color.label_tag }}      
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -114,7 +114,7 @@
 
 
 
-            <div class="row">
+            <div class="row no_visu">
                 <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
                     <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
@@ -162,7 +162,7 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="row">
+            <div class="row no_visu">
 
 
                 <div class="col-sm-12 col-md-12">
@@ -177,12 +177,12 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-4" style="position: relative">
+        <div class="col-sm-12 col-md-4 no_visu" style="position: relative">
             {% include 'qcm/insert_vignettes.html' %}
         </div>
 
         <div class="col-sm-12 col-md-4">                      
-            <table class="table table-sacado borderless">
+            <table class="table table-sacado borderless no_visu">
                     <tr>
                         <td>{{ form.is_publish.label_tag }}
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>

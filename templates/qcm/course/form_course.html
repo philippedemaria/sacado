@@ -21,7 +21,8 @@
  
 
 {% block page_title %}
-       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>  
+       <span style="color:{{ parcours.color|contrast_color_title }}"><i class="fa fa-desktop"></i> {{ parcours }} <img src="{% static 'img/angle-right.png' %}"/>    Cours   </span>        
+       {% include 'modes.html' %}  
 {% endblock %}
 
 
@@ -59,7 +60,7 @@
                     {{ form.annoncement.errors }} <br>
                     <small>Astuce : Cliquez sur <img src="{% static 'img/full_screen.png' %}" width="15px" /> dans la barre d'outils pour agrandir en plein écran.</small> 
                 </div>
-                <div class="form-group">
+                <div class="form-group no_visu">
                     <div class="alert alert-info">
                          Il est possible de créer des <b>sections vidéo-projetables</b> : Cliquer sur l'icone <img src="{% static 'img/div_projection.png' %}" /> et choisir "projection" et renseigner le champ "Classes de style" par : projection <img src="{% static 'img/style_projection.png' %}" />  <br/>Cliquer sur le bouton vert OK. Ecrire alors dans cette partie. 
 
@@ -83,7 +84,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-4">
+            <div class="col-sm-12 col-lg-4 no_visu">
                 {% if request.user.user_type == 2 %}
                     <h4 class="thin"><i class="fa fa-cogs"></i> Configuration</h4>
                     {% include 'qcm/course/content_details.html' %}

@@ -30,13 +30,13 @@
 
       {% include 'qcm/breadcrumb.html' %}
 
-    <small>  
+
         {% if parcours %}
-            Configuration  
+             Configuration 
         {% else %}
             Nouvelle séquence
+            {% include 'modes.html' %}
         {% endif %}
-    </small> 
 
 {% endblock %}
 
