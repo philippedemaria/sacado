@@ -32,7 +32,7 @@
 <div class="content_main">
     <div class="row">  
         <div class="col-sm-12 col-md-12">
-            <div class="alert alert-warning">
+            <div class="alert alert-sacado">
                 <li>Séléctionner l'établissement dans la liste.</li>                
                 <li>Pour la France : Vous devez connaitre le RNE de votre établissement à renseigner ici.</li>
 
@@ -118,7 +118,7 @@
 
               <h4>Envoyez un message</h4>
  
-              <form action="{% url 'send_message' %}" method="post" class="alert alert-warning" >
+              <form action="{% url 'send_message' %}" method="post" class="alert alert-sacado" >
                   {% csrf_token %}
                 <div class="form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Nom" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required />

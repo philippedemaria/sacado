@@ -232,7 +232,7 @@
             {% empty %}
                 {% if is_gar_check %}
                     <div class="row">
-                        <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-warning"> 
+                        <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-sacado"> 
                             <h1>Bienvenue dans l'univers SACADO avec le GAR</h1>
                             <img src="{% static 'img/approche_gar.png' %}" width="80px" style="float:left" /> L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
                             Avec cette version , vous pouvez directemet récupérer les dossiers, les parcours et les documents classés par thèmes et les assigner à vos groupes en quelques clics, créer des évaluations, exporter les résultats en CSV ou en tableur et découvrir l'ensemble des outils SACADO. 
@@ -280,14 +280,14 @@
                                 </div>
                             </div>
                         {% empty %}
-                            <div class="alert alert-warning">En attente d'inscription...</div>
+                            <div class="alert alert-sacado">En attente d'inscription...</div>
                         {% endfor %}
                     {% endif %}
                 {% else %}
                     {% if nb_teacher_level == 0 %} 
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="alert alert-warning"> 
+                                <div class="alert alert-sacado"> 
                                     <h2>Bienvenue dans l'univers SACADO </h2>
                                     L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
                                     <i class="fa fa-user-circle"></i> <b>Avec la version Enseignant</b>, vous pouvez créer vos groupes ou classes, des parcours d'apprentissage, des quizz et utiliser certains de nos outils pédagogiques testés en classe avec nos élèves.<br/>

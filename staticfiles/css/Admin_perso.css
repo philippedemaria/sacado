@@ -114,11 +114,7 @@ h1, .h1, h2, .h2, h3, .h3 {
   opacity: 0.3;
 }
 
-.checkbox_ajax{
-  background-color: #f1eef7;
-  min-height: 25px;
-  padding:5px;
-}
+
 
 .checkbox_ajax_{
   background-color: #FFF;
@@ -376,9 +372,6 @@ border-radius:0px;
     background-color: #007bff ;
     border-color: #007bff ;
 }
-
-
-
 
 
 

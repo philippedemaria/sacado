@@ -263,7 +263,7 @@
                                         <div class="no_visu_on_load shadow_bow" id="show_div_help4">
                                             Dans l’interface de gestion des enseignants vous pouvez ajouter un enseignant , importer les comptes enseignants par CSV ou modifier un compte enseignant ( pour le dissocier de votre établissement par exemple.)
                                             <img src="{% static 'img/help_register5.png' %}" min-width="450px" width="90%" /><br/>
-                                            <div class="alert alert-warning">Attention ! : Si un enseignant est déjà inscrit sur SacAdo, ne le ré-inscrivez pas !
+                                            <div class="alert alert-sacado">Attention ! : Si un enseignant est déjà inscrit sur SacAdo, ne le ré-inscrivez pas !
                                             Demandez lui de rejoindre l’établissement en modifiant son compte SacAdo. ( accès par Token ou rejoindre un établissement ).</div>
                                             <a href="javascript:void()"  class="btn btn-default show_help4"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
                                         </div>
@@ -282,7 +282,7 @@
                                         </li>   
 
                                         <div class="no_visu_on_load shadow_bow" id="show_div_help5">
-                                            <div class="alert alert-warning">
+                                            <div class="alert alert-sacado">
                                                 <i class="fa fa-warning"></i> Après cette suppression, tous les documents ( dossiers, parcours, cours....) se retrouvent en <b>Non Affectés</b> sur le tableau de bord de chaque enseignant. <br/>Après l'attribution des groupes aux enseignants, chaque enseignant devra ré assigner ses documents à chacun de ses groupes. 
                                             </div>
                                             <a href="javascript:void()"  class="btn btn-default show_help5"> <i class="fa fa-times"></i> Fermer la fenêtre</a>
@@ -405,7 +405,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-xs-12">
                         {% if only_admin_can_manage  %}
-                            <div class="alert alert-warning"><i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement</div>
+                            <div class="alert alert-sacado"><i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement</div>
                         {% else %} 
                             <div class="alert alert-danger"><i class="fa fa-users"></i>Gestion   par les enseignants </div>
                         {% endif%} 

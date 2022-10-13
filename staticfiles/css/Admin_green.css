@@ -96,12 +96,13 @@ h1, .h1, h2, .h2, h3, .h3 {
   opacity:0.97;
 } 
 
-.alert-warning{
+ 
+.alert-sacado{
   background-color: #FFF ;
-  color :  #6bc421 ;  
-  border : solid 1px #FFF ;
+  color :  #5d4391 ;  
+  border : solid 1px #c3f19d ;
+  border-radius: 4px;
 }
-
 
 .counter{
   font-size:60px;

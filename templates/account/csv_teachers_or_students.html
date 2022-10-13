@@ -45,7 +45,7 @@
 
  
             {% if is_teacher %}
-            <div class="alert alert-warning">
+            <div class="alert alert-sacado">
                         Si un enseignant est déjà inscrit sur SACADO, il suffit de lui donner ce token pour qu'il rejoigne votre établissement. 
                         Ne le ré-inscrivez pas. <br/>
                         <b>Token à fournir : {{ request.user.school.code_acad}}_{{ request.user.school.id}}</b><br/><br/>

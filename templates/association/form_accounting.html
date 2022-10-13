@@ -112,7 +112,7 @@
         <div class="row">                
              
             <div class="col-sm-12 col-md-8">
-                <div class="alert alert-warning">
+                <div class="alert alert-sacado">
 
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
@@ -185,7 +185,7 @@
             </div>
             <div class="col-sm-12 col-md-4">
                 {% if tp == 0 or accounting %}
-                <div class="alert alert-warning"> 
+                <div class="alert alert-sacado"> 
                     Abonnement {% if abonnement %} {{ abonnement.id }} {% endif %}          
                 {% if abonnement.gar_abonnement_id %}
                     <a href="{% url 'delete_abonnement_gar' abonnement.gar_abonnement_id %}"  onclick="return TestDelete('ce webservice ' + str(abonnement.gar_abonnement_id) )" class="btn btn-xs btn-danger pull-right" />Supprimer ce webservice</a>
@@ -239,7 +239,7 @@
         </script>    
         <div class="row">
             <div class="col-sm-12 col-md-6">
-                <div class="alert alert-warning"> 
+                <div class="alert alert-sacado"> 
                     <div id="formsetZone">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6" >

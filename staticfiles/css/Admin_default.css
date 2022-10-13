@@ -101,16 +101,14 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 
 
-
-
-
-
-
-.alert-warning{
-  background-color: #f1eef7 ;
+.alert-sacado{
+  background-color: #FFF ;
+  color :  #5d4391 ;  
   border : solid 1px #f1eef7 ;
-  color :  #5d4391 ;
+  border-radius: 4px;
 }
+
+ 
 
 .counter{
   font-size:60px;

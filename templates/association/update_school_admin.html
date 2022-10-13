@@ -30,7 +30,7 @@
 <form  action="" method="POST" enctype='multipart/form-data'> 
 <section class="content_main">
     <div class="row">
-        <div class="col-sm-12 col-md-4 alert alert-warning">
+        <div class="col-sm-12 col-md-4 alert alert-sacado">
             
                 {% csrf_token %}
 
@@ -139,14 +139,14 @@
         </div>
         <div class="col-sm-12 col-md-4">
             
-                <div class="form-group alert alert-warning">                
+                <div class="form-group alert alert-sacado">                
                    <i class="bi bi-person-circle"></i> Admin
                 </div>
                 <div class="form-group">                
                     {% for u in school.admin %} <li class="sanspuce">{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
                 </div>
                 <hr/>
-                <div class="form-group alert alert-warning">                
+                <div class="form-group alert alert-sacado">                
                     <i class="bi bi-envelope"></i>  Mailing Admin
                 </div>
                 <div class="form-group">                
@@ -154,7 +154,7 @@
                 </div>
                 <hr/>
 
-                <div class="form-group alert alert-warning">                
+                <div class="form-group alert alert-sacado">                
                     <i class="fa fa-users"></i> Enseignants
                 </div>
                 <div class="form-group">                
@@ -163,7 +163,7 @@
                     {% endfor %}
                 </div>
                  <hr/>
-                <div class="form-group alert alert-warning">                
+                <div class="form-group alert alert-sacado">                
                     <i class="bi bi-envelope"></i> Mailing Enseignants
                 </div>
                 <div class="form-group">                
@@ -179,7 +179,7 @@
         </div>
         <div class="col-sm-12 col-md-4">
             
-                <div class="form-group alert alert-warning">                
+                <div class="form-group alert alert-sacado">                
                    <i class="bi bi-person-circle"></i>Abonnements
                 </div>
 

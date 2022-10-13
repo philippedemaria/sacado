@@ -101,7 +101,12 @@ h1, .h1, h2, .h2, h3, .h3 {
   color :  #ffa600 ;  
   border : solid 1px #FFF ;
 }
-
+.alert-sacado{
+  background-color: #FFF ;
+  color :  #ffa600 ;  
+  border : solid 1px #ffe7b9 ;
+  border-radius: 4px;
+}
 
 .counter{
   font-size:60px;

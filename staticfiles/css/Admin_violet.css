@@ -96,10 +96,11 @@ h1, .h1, h2, .h2, h3, .h3 {
   opacity:0.97;
 }
 
-.alert-warning{
+.alert-sacado{
   background-color: #FFF ;
   color :  #5d4391 ;  
-  border : solid 1px #FFF ;
+  border : solid 1px #d7cee7 ;
+  border-radius: 4px;
 }
 
 
@@ -397,7 +398,7 @@ background-color: transparent !important;
 border-top:  transparent !important;
 border-left:  transparent !important;
 border-right:  transparent !important;
-border-bottom: solid 1px #271942;
+border-bottom: solid 1px #d7cee7;
 border-radius:0px;
 }
 
