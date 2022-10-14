@@ -493,7 +493,7 @@ def update_school_admin(request,id):
             abonnement.is_gar=1
             test, raison , header , decode , ida = create_abonnement_gar( today , abonnement  , request.user )
             if test :
-                fa.gar_abonnement_id = ida
+                abonnement.gar_abonnement_id = ida
                 messages.success(request,"Activation du GAR réussie")
             else :
                 messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
