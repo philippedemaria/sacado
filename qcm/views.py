@@ -68,15 +68,15 @@ from general_fonctions import *
 import xlwt 
 
  
-def duration_all_relationship():
+# def duration_all_relationship():
 
-    exercises = Exercise.objects.all()
-    for exercise in exercises :
-        seconde_avg = exercise.ggbfile_studentanswer.aggregate(average=Avg("secondes"))
-        if seconde_avg['average'] :
-            for relationship in exercise.exercise_relationship.all() :
-                relationship.duration = int(seconde_avg['average'] // 60) + 2
-                relationship.save()
+#     exercises = Exercise.objects.all()
+#     for exercise in exercises :
+#         seconde_avg = exercise.ggbfile_studentanswer.aggregate(average=Avg("secondes"))
+#         if seconde_avg['average'] :
+#             for relationship in exercise.exercise_relationship.all() :
+#                 relationship.duration = int(seconde_avg['average'] // 60) + 2
+#                 relationship.save()
 
 
 
@@ -1684,7 +1684,7 @@ def list_archives(request):
 @login_required(login_url= 'index')
 def list_sequences(request):
 
-    duration_all_relationship()
+    #duration_all_relationship()
 
     try :
         teacher = request.user.teacher
