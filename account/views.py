@@ -1967,6 +1967,8 @@ def passwordResetView(request):
             link = "https://sacado.xyz/account/newpassword/"+this_form.code
             msg = "Bonjour, \nvous venez de demander la réinitialisation de votre mot de passe. Cliquez sur le lien suivant : \n"+ link +"\n\nMerci. \n\n Ceci est un mail automatique, ne pas répondre."
           
+            print(msg)
+
             send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[this_form.email, ])
             return redirect("password_reset_done")
         else :
@@ -1987,12 +1989,13 @@ def passwordResetConfirmView(request, code ):
     try :
         np = Newpassword.objects.get(code = code)
         validlink = True
-        form = SetnewpasswordForm()
+        form = SetnewpasswordForm(request.POST or None)
     except :
         validlink = False
+        messages.error(request, "Votre lien n'est pas valide.")
+        return redirect('index')
 
     if request.method == 'POST':
-        form = SetnewpasswordForm(request.POST)
         if form.is_valid():
             get_new_password = Newpassword.objects.get(code = code)
             users = User.objects.filter(email = get_new_password.email, user_type=2)
