@@ -52,27 +52,23 @@
 <section class="content_main">
     <form action="" method="POST" enctype='multipart/form-data'>
     <div class="row">
-        <div class="col-sm-12 col-md-4">
+        <div class="col-sm-12 col-md-4 form_card">
             {% csrf_token %}
             <div class="row">
                 <div class="col-sm-7 col-md-8 col-lg-9">
-                    <div class="form-group">
-                        {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
-                        {{ form.title |add_class:"form-control" }}
-                        {{ form.title.errors }}
-                    </div>
+                    {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
+                    {{ form.title |add_class:"form-control" }}
+                    {{ form.title.errors }}
                 </div>
                 <div class="col-sm-5  col-md-4 col-lg-3 no_visu">                    
-                    <div class="form-group">
-                      {{ form.color.label_tag }}      
-                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                    <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
-                                </span>
-                          <div id="color-picker-component" class="input-group colorpicker-component">
-                              {{ form.color.as_hidden }}
-                              <span class="input-group-addon"><i></i></span>
-                          </div>
-                    </div> 
+                    {{ form.color.label_tag }}      
+                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                        <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                    </span>
+                    <div id="color-picker-component" class="input-group colorpicker-component">
+                      {{ form.color.as_hidden }}
+                      <span class="input-group-addon"><i></i></span>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -172,13 +168,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 no_visu">
-            <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-4 no_visu ">
+            <div class="col-sm-12 col-md-12 form_card">
                 {% include 'qcm/insert_vignettes.html' %}
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 no_visu">                             
-            <table class="table table-sacado borderless">
+        <div class="col-sm-12 col-md-4 no_visu ">                             
+            <table class="table table-sacado borderless form_card">
                 {% block evaluation %} 
                     <tr>
                         <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>

@@ -67,16 +67,8 @@
         <div class="content_main">
             <div class="col-md-2" id="sub_menu_left">
                 <form  action="" method="POST">
-                <ul class="nav nav-pills nav-stacked admin-menu">
-                 {% comment %}
-                    <li>Messages </li> 
-                    <li class="active"><a href="#" class="nav-link" data-target-id="home">Réception <span class="pull-right">({{ emails|length }})</span></a> </li>
-                    <li ><a href="#" class="nav-link" data-target-id="profile">Envoi <span class="pull-right"> ({{ sent_emails|length }})</span></a> </li>
-                    <hr>
-                {% endcomment %}
-
-
-                     
+                <ul class="nav nav-pills nav-stacked admin-menu form_card">
+ 
                       <li>Notifications </li> 
                       <li  class="active">
                           
@@ -105,7 +97,6 @@
 
                       <li ><a href="#" class="nav-link" data-target-id="task">Tâches  </a> </li>
                       <hr>
-                      <li>Forum </li> 
                       <li>
                         <a href="#" class="nav-link" data-target-id="forum">Discussions 
 

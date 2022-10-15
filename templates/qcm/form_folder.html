@@ -62,15 +62,13 @@
 
         <span style="display: none;">{{ form.groups|add_class:"select_all"}}</span>
 
-        <div class="col-sm-12 col-md-4">
+        <div class="col-sm-12 col-md-4 form_card">
             {% csrf_token %}
             <div class="row">
                 <div class="col-sm-12 col-md-8 col-lg-9">
-                    <div class="form-group">
                         {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
                         {{ form.title |add_class:"form-control" }}
                         {{ form.title.errors }}
-                    </div>
                 </div>
 
                 <div class="col-sm-12  col-md-4  col-lg-3 no_visu">
@@ -171,12 +169,14 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-4 no_visu" style="position: relative">
+        <div class="col-sm-12 col-md-4 no_visu" style="position: relative">            
+            <div class="col-sm-12 col-md-12 form_card">
             {% include 'qcm/insert_vignettes.html' %}
+            </div>
         </div>
 
         <div class="col-sm-12 col-md-4">                      
-            <table class="table table-sacado borderless no_visu">
+            <table class="table table-sacado borderless no_visu form_card">
                     <tr>
                         <td>{{ form.is_publish.label_tag }}
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>

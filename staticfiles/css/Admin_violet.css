@@ -394,12 +394,11 @@ form{
 
 
 .navbar-default{
-background-color: transparent !important;
-border-top:  transparent !important;
-border-left:  transparent !important;
-border-right:  transparent !important;
-border-bottom: solid 1px #d7cee7;
+background-color: #FFF;
+border :  transparent !important;
+margin-bottom: 20px;
 border-radius:0px;
+
 }
 
 .navbar-default ul{
@@ -422,9 +421,7 @@ hr.menu {
     border-top: 1px solid #eee;
 }
 
-.navbar {
-    min-height: 40px;
-}
+ 
 
 .btn-action  {
   color : #f1eef7!important;
@@ -4852,10 +4849,15 @@ a:focus {
   margin-bottom: 0;
   margin-left: 230px;
   border: none;
-  min-height: 50px;
+  min-height: 40px;
   border-radius: 0;
 }
  
+ .navbar{
+  margin-bottom: 25px;
+  margin-top: 0px;
+  min-height: 50px;
+}
 
 
 .navbar-right > li > a.no_button {
@@ -4873,7 +4875,7 @@ a:focus {
 }
 
 .navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
-    color : #5d4391!important;
+    color : #5d4391;
 }
 
 /*

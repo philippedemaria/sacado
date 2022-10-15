@@ -55,58 +55,36 @@
     <form action="#" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-7">
+            <div class="col-sm-12 col-md-4 form_card">
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-8">
-
-                                <div class="form-group">
-        				            {{ form.title.label_tag }}
-        				            {{ form.title|add_class:"form-control" }}
-                                    {{ form.title.errors }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 no_visu">
-                                <div class="form-group">
-                                      {{ form.color.label_tag }}      
-                                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                                    <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
-                                                </span>
-                                      <div id="color-picker-component" class="input-group colorpicker-component">
-                                          {{ form.color.as_hidden }}
-                                          <span class="input-group-addon"><i></i></span>
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% if group %}
-                            {{ form.subject.as_hidden}}
-                        {% else %}
-                        <div class="form-group">
-				            <label>Enseignement</label>
-				            {{ form.subject|add_class:"form-control select2" }}
-                            {{ form.subject.errors }}
-                        </div>
-                        {% endif %}
+                    <div class="col-sm-7 col-md-8 col-lg-9">
+                        {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
+                        {{ form.title |add_class:"form-control" }}
+                        {{ form.title.errors }}
                     </div>
-                    <div class="col-sm-12 col-md-6 no_visu">
-                        <div class="form-group">
-				            {% if sacado_asso %}
-				            <div class="form-group"> 
-				                {{ form.vignette.label_tag }} <label><small>(Facultatif, l*h :300px*200px - 50Ko )</small></label>
-				                {{ form.vignette|add_class:"btn btn-default" }}
-				            </div>
-				            {% else %}
-				            <div class="alert alert-danger"> 
-				                Version établissement requise
-				            </div>
-				            {% endif %}
+                    <div class="col-sm-5  col-md-4 col-lg-3 no_visu">                    
+                        {{ form.color.label_tag }}      
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                            <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                        </span>
+                        <div id="color-picker-component" class="input-group colorpicker-component">
+                        {{ form.color.as_hidden }}
+                        <span class="input-group-addon"><i></i></span>
                         </div>
                     </div>
                 </div>
+
+                {% if group %}
+                    {{ form.subject.as_hidden}}
+                {% else %}
+                <div class="form-group">
+		            <label>Enseignement</label>
+		            {{ form.subject|add_class:"form-control select2" }}
+                    {{ form.subject.errors }}
+                </div>
+                {% endif %}
                 <div class="row {% if quizz or group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;overflow-x: hidden;height: 150px;">
                         <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
@@ -130,7 +108,7 @@
                     </div> 
                 </div>
                 <div class="row {% if quizz or group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;overflow-x: hidden;height: 230px;">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -143,7 +121,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;overflow-x: hidden;height: 230px;">
                         <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text_right" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -159,9 +137,19 @@
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-5 setup_ggb no_visu">
-                <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
-                     <table class="table table-sacado borderless">
+
+            <div class="col-sm-12 col-md-4 no_visu ">
+                <div class="col-sm-12 col-md-12 form_card">
+                    {% include 'qcm/insert_vignettes.html' %}
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12 col-md-4 setup_ggb no_visu">
+                <div class='form_card'>
+                    <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                        <table class="table table-sacado borderless">
                             <tr>
                                 <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text" >Visible par les élèves.</div>
@@ -302,6 +290,7 @@
 			                    <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
 			                </tr>
                     </table>
+                </div>  
             </div>
         </div>
 	    <div class="row">

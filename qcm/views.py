@@ -67,62 +67,7 @@ import html
 from general_fonctions import *
 import xlwt 
 
-#################################################################
-# IA
-#################################################################
-
  
-
-def list_ia_exercises(request,l_id):
-    try :
-        teacher = request.user.teacher
-    except :
-        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
-        return redirect('index')
-
-    parcourses = Parcours.objects.filter(level_id = l_id , teacher_id=2480)
-
-    exercises = Exercise.objects.filter(level_id = l_id , theme__subject_id = 1 ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","supportfile__ranking")
-
-
-    context = {'exercises': exercises  , "teacher" : teacher , "level_id" : l_id , "parcourses" : parcourses  }
-
-    return render(request, 'qcm/list_ia_exercises.html', context )
-
-
-
-
-def get_the_k_ia(request):
-
-    data = {}
-    k_id = request.POST.get("k_id",None)
-    get_knowledges_to_knowledge(k_id)
-
-    return JsonResponse(data)
-
-
-
-def get_the_p_ia(request):
-    print(" =========== DEPART ===============")    
-    a = time.time()
-
-    data = {}
-    p_id = request.POST.get("p_id",None)
-    get_parcourses_to_parcours(p_id)
-
-    b = time.time()
-    print(int(b-a),"secondes")
-
-    return JsonResponse(data)
-
-
-
-
-
-
-
-
-
 
 #################################################################
 # Transformation de parcours en séquences
@@ -3016,6 +2961,13 @@ def ordering_number(parcours):
         customexercises = Customexercise.objects.filter(parcourses=parcours).order_by("ranking") 
         listing_ordered.update(customexercises)
     listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
+
+    #################################################################
+    # IA
+    #################################################################
+
+    if parcours.is_ia :       
+        get_parcourses_to_parcours(parcours.id)
 
     nb_exo_only, nb_exo_visible  = [] , []   
     i , j = 0, 0

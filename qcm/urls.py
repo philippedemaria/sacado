@@ -8,14 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
 
-    #################################################################
-    # IA
-    #################################################################
-    path('list_ia_exercises/<int:l_id>', list_ia_exercises, name='list_ia_exercises'),
-    path('get_the_k_ia', get_the_k_ia, name='get_the_k_ia'),
-    path('get_the_p_ia', get_the_p_ia, name='get_the_p_ia'),
- 
- 
+
     #################################################################
     # URL
     #################################################################

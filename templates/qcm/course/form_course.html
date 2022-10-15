@@ -48,7 +48,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-lg-8">
+            <div class="col-sm-12 col-lg-8 form_card">
                 <div class="form-group">
                     {{ form.title.label_tag }} <em>50 caractères max.</em><br>
                     {{ form.title|add_class:"form-control"   }}
@@ -84,7 +84,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-4 no_visu">
+            <div class="col-sm-12 col-lg-4 no_visu form_card">
                 {% if request.user.user_type == 2 %}
                     <h4 class="thin"><i class="fa fa-cogs"></i> Configuration</h4>
                     {% include 'qcm/course/content_details.html' %}

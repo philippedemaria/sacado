@@ -160,9 +160,9 @@
         {% if sacado_asso %}
         <li {% if 'change_publications/' in request.path %} class="active" {% endif %}>
             {% if folder %}
-            <a href="{% url 'change_publications_in_all_relationships' folder.id parcours.id  %}" ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i> Gérer les pubications</a> 
+            <a href="{% url 'change_publications_in_all_relationships' folder.id parcours.id  %}" ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i> Gérer les publications</a> 
             {% else %}
-            <a href="{% url 'change_publications_in_all_relationships' 0 parcours.id  %}" ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i> Gérer les pubications</a> 
+            <a href="{% url 'change_publications_in_all_relationships' 0 parcours.id  %}" ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i> Gérer les publications</a> 
             {% endif %}
         </li>
         <li {% if 'change_situations/' in request.path %} class="active" {% endif %}>

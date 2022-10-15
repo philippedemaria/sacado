@@ -44,14 +44,14 @@
         <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
                 <div class="row">
-                    <div class="col-sm-12 col-md-8">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-5">
+                    <div class="col-sm-12 col-md-4 form_card">
+                        <div class="row ">
+                            <div class="col-sm-12 col-md-9">
                                     {{ form.title.label_tag }}  
                                     {{ form.title |add_class:"form-control"  }}
                                     {{ form.title.errors }}
                             </div>
-                            <div class="col-sm-12  col-md-2 no_visu">
+                            <div class="col-sm-12  col-md-3 no_visu">
                                   {{ form.color.label_tag }}      
                                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                                 <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -60,11 +60,6 @@
                                       {{ form.color.as_hidden }}
                                       <span class="input-group-addon"><i></i></span>
                                   </div>
-                            </div>
-                            <div class="col-sm-12 col-md-5 no_visu">
-                                    {{ form.vignette.label_tag }}<br/>
-                                    {{ form.vignette|add_class:"btn btn-default form-control"   }}
-                                    {{ form.vignette.errors }}
                             </div>
                         </div>
                         <div class="row {% if bibliotex or group %}no_visu{% endif %}">
@@ -81,7 +76,6 @@
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">  
                                     <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
-                                        Cocher, décocher les groupes pour choisir les dossiers.<br/>
                                         <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
                                         <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
                                         
@@ -91,7 +85,7 @@
                         </div>
                         <div class="row  {% if bibliotex or group %}no_visu{% endif %}">
                             <div class="col-sm-12 col-md-6" >
-
+                                <div class="form-group"> 
                                 {% if bibliotex or folder or group  %}                                
                                 
                                     <label>Inclure dans les dossiers</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
@@ -111,7 +105,7 @@
                                     </div>
 
                                 {% endif %}
-                                
+                                </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">  
@@ -132,9 +126,16 @@
                             </div>
                         </div>
                     </div>
- 
+                    <div class="col-sm-12 col-md-4 no_visu">
+                        <div class="form_card">
+                                    {{ form.vignette.label_tag }}<br/>
+                                    {{ form.vignette|add_class:"btn btn-default form-control"   }}
+                                    {{ form.vignette.errors }}
+                        </div>
+                    </div>
                     <div class="col-sm-12 col-md-4 setup_ggb no_visu">
-                        <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                        <div class="form_card">
+                            
                              <table class="table table-sacado borderless">
                                     <tr>
                                         <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -187,6 +188,7 @@
                                             {% endfor %}</td>
                                     </tr>
                             </table>
+                        </div>
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px" >

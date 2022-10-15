@@ -39,7 +39,7 @@
  
     <link rel="stylesheet" href="{% static theme_color %}"> 
     <link rel="stylesheet" href="{% static navbar_theme_color %}">
-
+    <link rel="stylesheet" href="{% static 'css/all_styles.css' %}">
 
  
 
@@ -113,8 +113,6 @@
     <b>Aide en ligne - Prise en main à distance</b><br/>Cliquer sur <img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="15px"/> dans le menu pour terminer
 </div>
 {% endif %}
-
-<div class="content-wrapper">
     <div class="content_title" id="content_title_page">
         <h1 class="thin">
             <nav class="navbar navbar-default">
@@ -196,6 +194,8 @@
             </nav> 
         </h1>
     </div>
+<div class="content-wrapper">
+
         
     {%  block body %}
         <div class="content_list" id="search_result">
@@ -443,7 +443,7 @@
         </div>   
         {% endif %}
     {% elif request.user.is_student %}
-        {% if not is_gar_check %}    
+        {% if not is_gar_check or not sacado_asso %}    
         <div class="row">
             <div class="col-lg-12 col-xs-12" style=" padding-top: 5px;">
                 <a href="#" id="aggregate_groupe">
@@ -690,10 +690,11 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'my_custom_exercises' %}"><i class="bi bi-explicit-fill"></i> Exercices personnels </a> 
+            
             <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
-
-            <a href="{% url 'create_custom_exercise'  %}" class="inside_volet pull-right" title="Créer une nouvel exercice perso"><i class="bi bi-plus-circle"></i></a>
             <a href="{% url 'exercise_custom_show_shared' %}" class="inside_volet pull-right" title="Récupérer une exercice mutualisé"><i class="bi bi-cloud text-danger"></i></a>
+            <a href="{% url 'create_custom_exercise'  %}" class="inside_volet pull-right" title="Créer une nouvel exercice perso"><i class="bi bi-plus-circle"></i></a>
+
 
         </div>
     </div>

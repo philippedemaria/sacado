@@ -88,7 +88,10 @@
 }
 
  
-body{padding-top:0;margin-left:100px}
+body{
+  padding-top:0;
+  margin-left:95px;
+  }
 
 
 	.navbarLeft-fixed-left{

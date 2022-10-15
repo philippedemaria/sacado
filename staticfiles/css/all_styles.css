@@ -1,0 +1,55 @@
+/***************************************************************************/
+/********************* navigation ******************************************/
+/***************************************************************************/
+.navbar-default{
+    background-color: #FFF;
+    border :  transparent !important;
+    margin-bottom: 20px;
+    border-radius:0px;
+}
+
+.content_title {
+    padding-left: 35px;
+    background-color: #FFF;
+    margin-left: 0px ;
+    min-height: 40px;  
+}
+
+.main-header .navbar {
+  -webkit-transition: margin-left 0.3s ease-in-out;
+  -o-transition: margin-left 0.3s ease-in-out;
+  transition: margin-left 0.3s ease-in-out;
+  margin-bottom: 0;
+  margin-left: 230px;
+  border: none;
+  min-height: 40px;
+  border-radius: 0;
+}
+ 
+ .navbar{
+  margin-bottom: 25px;
+  margin-top: 5px;
+  min-height: 45px;
+
+}
+
+.navbar-right {
+    float: right !important;
+    margin-right: 0px;
+    padding-right: 15px;
+}
+
+/***************************************************************************/
+/*********************     card   ******************************************/
+/***************************************************************************/
+.form_card{
+  padding: 25px ;
+  position:relative;
+  border : 1px solid transparent!important;
+  background-color: white;
+  border-radius: 4px;
+}
+
+/***************************************************************************/
+/*********************     form   ******************************************/
+/***************************************************************************/

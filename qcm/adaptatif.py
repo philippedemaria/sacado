@@ -65,9 +65,9 @@ def get_knowledges_to_knowledge(k_id):
 
 def quartiles(parcours_exercise_ids):
 
-    lanswers = list(Studentanswer.objects.values_list('point',flat=True).filter(exercise__in=parcours_exercise_ids))    
+    lanswers = list(Studentanswer.objects.values_list('point',flat=True).filter(exercise__in=parcours_exercise_ids))
     nb = len(lanswers)
-    lanswers.sort()
+    lanswers.sort() 
     return lanswers[nb//4] , lanswers[nb//2] , lanswers[3*nb//4]
 
    
@@ -85,17 +85,14 @@ def get_avg(parcours_exercise_ids):
             dico['knowledge'] = exercise.knowledge.id
             dico['total']     = a["point"]
             dico['nb']        = 1
-            dico['avg']      = a["point"]
             liste_dico.append(dico)
             i+=1
         else :
             liste_dico[i]['total'] +=  a["point"]
             liste_dico[i]['nb']    +=  1
-            liste_dico[i]['avg']   =  liste_dico[i]['total'] // liste_dico[i]['nb']
 
-    lds = sorted(liste_dico, key=lambda x:x['avg'] )
 
-    return lds
+    return liste_dico
 
 
 
@@ -107,23 +104,31 @@ def get_parcourses_to_parcours(p_id):
     q1 , q2 , q3     = quartiles(parcours_exercise_ids)
     avg_exercise_ids = get_avg(parcours_exercise_ids)
 
+
     new_dico = dict()
     for aed in avg_exercise_ids :
-        if aed['avg']>=q3:
+        if aed['total'] // aed['nb'] >= q3:
             aed['is_display']=0
         else :
             aed['is_display']=1
         new_dico[aed['exo']] = aed['is_display']
 
-    list_to_display = list()    
-    for relationship in Relationship.objects.filter(parcours=parcours).order_by("ranking") :
-        e_id = relationship.exercise.id
+    list_to_display = list() 
+    others_exercise_id = set()  
+    relationships = Relationship.objects.filter(parcours=parcours).order_by("ranking") 
+    for relationship in relationships :
+        print("===================================================")
+        liste = list(Relationship.objects.values_list("exercise_id",flat=True).filter(exercise__knowledge=relationship.exercise.knowledge).distinct() )
+        print({'know' : relationship.exercise.knowledge.id, 'exo' : relationship.exercise.id , 'liste' : liste } )
+        e_id = relationship.exercise.id 
         if (e_id in new_dico and new_dico[e_id] == 1) or (not e_id in new_dico) :
-            list_to_display.append( {'r' : relationship.id , 'is_display':1 } )
+            list_to_display.append( {'r_id' : relationship.id , 'is_display':1 } )
         else :
-            list_to_display.append( {'r' : relationship.id , 'is_display':0 } )
+            list_to_display.append( {'r_id' : relationship.id , 'is_display':0 } )
    
 
+    print("===================================================")
+    print(list_to_display)
 
     return list_to_display
 

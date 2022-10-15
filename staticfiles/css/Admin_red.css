@@ -4865,15 +4865,11 @@ a:focus {
     font-weight: 400;
 }
 
+ 
 
-.navbar-right > li > a.no_button:visited {
+.navbar-right > li > a.no_button:visited , .navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
     color : #998fa6;
 }
-
-.navbar-right > li > a.no_button:focus,.navbar-right > li > a.active,.navbar-right > li > a.no_button:hover{
-    color : #007bff!important;
-}
-
 /*
  * asso
  * ----------------------

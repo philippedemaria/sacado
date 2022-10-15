@@ -460,7 +460,7 @@ def register_student_from_admin(request):
                     phrase = ""
                     if test :
                         phrase = " Les documents du groupe lui ont été attribués."
-                    messages.success(request, 'Le profil a été changé avec succès !'+phrase)
+                    messages.success(request, "L'élève est affecté avec succès !"+phrase)
                 except :
                     messages.error(request, 'attribution et création non établies')  
 
