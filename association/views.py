@@ -20,6 +20,7 @@ from account.models import User, Student, Teacher, Parent ,  Response , Connexio
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
 from school.forms import SchoolForm
+from group.models import Group
 from school.gar import *
 from setup.models import Formule
 from setup.forms import FormuleForm
@@ -287,6 +288,7 @@ def statistiques(request):
     nb_connexions   = Connexion.objects.filter(date__lte=date_stop,date__gt=date_start ).aggregate(nb = Sum('nb'))["nb"]
     nb_answers      = Studentanswer.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Customanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Writtenanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count()
 
+    nb_no_get_acces = nb_teachers - Group.objects.values_list("teacher__user__id").distinct().filter(teacher__user__in=inscriptions).count() 
     #################################################################################################################################
     ##### Jour de la semaine étudiée
     #################################################################################################################################
@@ -341,7 +343,7 @@ def statistiques(request):
 
     context = { 'string_days' : string_days, 'nb_inscriptions_string' : nb_inscriptions_string ,  'nb_students_string' : nb_students_string ,'nb_teachers_string' : nb_teachers_string ,
                 'nb_connexions_string' : nb_connexions_string , 'nb_answers_string' : nb_answers_string , 'nb_inscriptions' : nb_inscriptions, 'nb_teachers' : nb_teachers, 'nb_students' : nb_students,
-                'nb_answers': nb_answers , 'nb_connexions': nb_connexions , 'date_start': date_start ,   'date_stop': date_stop , 'all_countries' : all_countries   }
+                'nb_answers': nb_answers , 'nb_connexions': nb_connexions , 'date_start': date_start ,   'date_stop': date_stop , 'all_countries' : all_countries , 'nb_no_get_acces' : nb_no_get_acces   }
 
     return render(request, 'association/statistiques.html', context) 
 
