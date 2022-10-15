@@ -870,7 +870,7 @@ def ajax_get_subject(request):
     subject_id =  request.POST.get("subject_id")
     data = {}
     level_ids = Exercise.objects.values_list("level__id", flat= True).filter(theme__subject_id = subject_id).distinct()
-    levels =  Level.objects.filter(pk__in=level_ids).order_by("ranking")
+    levels =  Level.objects.filter(pk__in=level_ids).exclude(pk=13).order_by("ranking")
     data['html'] = render_to_string('ajax_get_subject.html', { 'levels' : levels , 'subject_id' :  subject_id })
 
     return JsonResponse(data)

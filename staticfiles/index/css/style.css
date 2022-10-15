@@ -371,7 +371,8 @@ table.table-bordered.dataTable {
   position: relative;
   color : #0056b3;
   border-radius: 10px;
-  border : solid 1px #0056b3;  
+  border : solid 1px #0056b3;
+  background-color: white;  
   height: 180px; 
   width: 200px;
   padding:30px 10px; 
