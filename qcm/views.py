@@ -68,11 +68,25 @@ from general_fonctions import *
 import xlwt 
 
  
+def duration_all_relationship():
+
+    exercises = Exercise.objects.all()
+    for exercise in exercises :
+        seconde_avg = exercise.ggbfile_studentanswer.aggregate(average=Avg("secondes"))
+        if seconde_avg['average'] :
+            for relationship in exercise.exercise_relationship.all() :
+                relationship.duration = int(seconde_avg['average'] // 60) + 2
+                relationship.save()
+
+
+
+
+
+
 
 #################################################################
 # Transformation de parcours en séquences
 #################################################################
-
 def all_parcours_to_sequences(request):
 
     parcourses = Parcours.objects.filter(teacher_id=2480,is_trash=0,is_sequence = 0)
@@ -1670,6 +1684,8 @@ def list_archives(request):
 @login_required(login_url= 'index')
 def list_sequences(request):
 
+    duration_all_relationship()
+
     try :
         teacher = request.user.teacher
     except :
@@ -2962,12 +2978,12 @@ def ordering_number(parcours):
         listing_ordered.update(customexercises)
     listing_order = sorted(listing_ordered, key=attrgetter('ranking')) #set trié par ranking
 
-    #################################################################
-    # IA
-    #################################################################
+    ################################################################
+    #IA
+    ################################################################
 
-    # if parcours.is_ia :       
-    #     get_parcourses_to_parcours(parcours.id)
+    if parcours.is_ia :       
+        get_parcourses_to_parcours(parcours.id)
 
     nb_exo_only, nb_exo_visible  = [] , []   
     i , j = 0, 0
