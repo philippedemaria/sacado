@@ -2026,7 +2026,7 @@ def init_password_teacher(request, id ):
     teacher.user.password = password_hash
     User.objects.filter(pk= teacher.user_id).update(password = password_hash)
     
-    msg = "Bonjour, \n\n Votre nouveau mot de passe : " + password + "\nest attribué. Il est généré automatiquement.\n\n Vous pouvez le modifer via votre profil. Ceci est un mail automatique, ne pas répondre.\n\nL'équipe SACADO."
+    msg = "Bonjour, \n\n Votre nouveau mot de passe : sacado2020 est attribué. Il est généré automatiquement.\n\n Vous pouvez le modifer via votre profil. Ceci est un mail automatique, ne pas répondre.\n\nL'équipe SACADO."
     
     if teacher.user.email :
         send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[teacher.user.email, 'sacado.asso@gmail.com' ])
