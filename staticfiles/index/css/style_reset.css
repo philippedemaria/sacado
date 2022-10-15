@@ -21,6 +21,13 @@
     padding: 1.25rem;
     margin-bottom: 30px;
 }
+
+*, ::after, ::before {
+    box-sizing: initial; 
+}
+
+
+
 .button.is-info {
     background-color: #3298dc;
     border-color: transparent;
