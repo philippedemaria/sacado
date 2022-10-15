@@ -129,7 +129,7 @@ def sharing_teachers(request,group, teachers):
 @user_is_superuser
 def list_schools(request):
 
-	countries = Country.objects.all()
+	countries = Country.objects.order_by("name")
 
 	return render(request, 'school/lists.html', {  'countries': countries    })
 
@@ -1575,7 +1575,7 @@ def ajax_charge_town(request):
         data['towns'] = None
     else : 
         towns = Town.objects.values_list('name','name').filter(country_id=id_country).order_by("name") 
-        data['towns'] = list(towns)
+        data['towns']  = list(towns)
     data['id_country'] = id_country
     return JsonResponse(data)
 
