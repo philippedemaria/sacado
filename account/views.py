@@ -56,6 +56,17 @@ def list_teacher(request):
     return render(request, 'account/list_teacher.html', {'teachers': teachers})
 
 
+def list_teacher_letter(request,slug):
+
+    teachers = User.objects.filter(user_type=User.TEACHER,last_name__startswith=slug)
+    letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+
+    return render(request, 'account/list_teacher_letters.html', {'teachers': teachers , 'slug': slug , 'letters': letters})
+
+
+
+
+
 def navigation(group, id):
     students_ids = group.students.values_list('user__id', flat=True).order_by("user__last_name")
     index = list(students_ids).index(id)

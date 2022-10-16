@@ -1,0 +1,24 @@
+{% extends 'account/list_teacher.html' %}
+{% load static %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+    <script>
+        require(['script/ajax-group']);    
+        require(['script/ajax-dashboard']);
+    </script>
+{% endblock %}
+ 
+{% block letters %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+        {% for l in letters %}
+            <a href="{% url 'list_teacher_letter'  l %}" class="btn btn-{% if l == slug %}primary{% else %}default{% endif %}">{{ l }}</a>
+        {% endfor %}
+            <a href="{% url 'list_teacher'  %}" class="btn btn-default">Tous</a>
+        </div>
+    </div>
+
+{% endblock %}
+

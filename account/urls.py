@@ -39,6 +39,7 @@ urlpatterns = [
 
 
     path('list_teacher', list_teacher, name='list_teacher'),
+    path('list_teacher/<slug:slug>', list_teacher_letter, name='list_teacher_letter'),
 
     path('close_my_account', close_my_account, name='close_my_account'),
 
