@@ -362,25 +362,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # return render(request, 'setup/test_gar.html', context)
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
+ 
 
-        nb_user  = User.objects.filter(username = username)
-        if nb_user  :
-            user  = User.objects.get(username = username)
-            login(request, User)
-            if user.is_teacher :
-                teacher = user.teacher
-            elif user.is_student :
-                student = user.student
-            else :
-                parent = user.parent
-            request.session["user_id"] = user.id
-
-            with open("logs/output.txt", "a") as f:
-                print( login(request, user_authenticated ) , file=f)
-
-            return redirect('index')
-
-     
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
             user_type  = 0 
 
