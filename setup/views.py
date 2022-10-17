@@ -364,6 +364,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :  
      
+        try :
+            user_authenticated = authenticate( username= username, password= "sacado_gar")
+        except :
+            user_authenticated = None
+
+        if user_authenticated :
+            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
+            request.session["user_id"] = user.id
+            return redirect("index")
+
+
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
             div   = dico_received["DIV"][0]
@@ -517,7 +528,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
-    return index(request)
+    return redirect("index")
  
 
 
