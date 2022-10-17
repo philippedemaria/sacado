@@ -90,15 +90,6 @@ def index(request):
     # with open("logs/output.txt", "a") as f:
     #     print( str (request.user.is_authenticated ) , file=f)
 
-    try : 
-        with open("logs/output.txt", "a") as f:
-            print( "GAR :"  +  str (request.user.id ) + "  " +str(request.user )+ "  " +str(request.user.is_authenticated)   , file=f)
-    except :
-        with open("logs/output.txt", "a") as f:
-            print( " anonymous"    , file=f)
-
-
-
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
 
