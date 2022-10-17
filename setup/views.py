@@ -359,34 +359,18 @@ def ressource_sacado(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
     civilite = "Mme"
 
+
     # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
     # return render(request, 'setup/test_gar.html', context)
  
-    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :  
+    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
      
-        try :
-            user_authenticated = authenticate( username= username, password= "sacado_gar")
-        except :
-            user_authenticated = None
-            messages.error(request,"Utilisateur non inscrit. .")
-
-
-        if user_authenticated :
-            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            user     = User.objects.get(username = username)
-            messages.error(request, user )
-            request.session["user_id"] = user.id
-            return redirect("index")
-        else :
-            messages.error(request,"Utilisateur non inscrit. .")
-            context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
-            return render(request, 'setup/test_gar.html', context)
-
-
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
+            user_type  = 0 
 
             div   = dico_received["DIV"][0]
             name  = div.split("##")[0]
+
 
             if not school.is_primaire :
                 try :
@@ -394,14 +378,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     group  = groups.last()
                     group_is_exist = True
                     try :
-                        user, created     = User.objects.get_or_create(username = username, defaults = { "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country })
+                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
                         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                        for group in groups : 
-                            group.students.add(student)                    
                     except :
                         created_s = False
                         messages.error(request,"Le compte élève n'est pas créé, vérifiez que l'élève est inscrit.")
-
+                    for group in groups : 
+                        group.students.add(student)
+                        ### attribue les doc du groupe
                 except :
                     group = None
                     messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
@@ -420,7 +404,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         messages.error(request,"Les documents de votre enseignant ne vous sont pas affectés.") 
                 except :
                     messages.error(request,"Les documents ne vous sont pas affectés.")
-            
+                
+
+            with open("logs/output.txt", "a") as f:
+                print('Hi', file=f)
+
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
             code_levels = dico_received["P_MS4"] 
@@ -440,7 +428,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             if not school.is_primaire :
 
                 try :
-                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2321': 10 , '2212': 11   }
+                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
                     for code_level in code_levels  : 
                         if str(code_level) not in dico_level :
                             level_id = 12
@@ -533,7 +521,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
-    return redirect("index")
+    return index(request)
  
 
 
