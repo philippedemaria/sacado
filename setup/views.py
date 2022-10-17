@@ -368,10 +368,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
             user_authenticated = authenticate( username= username, password= "sacado_gar")
         except :
             user_authenticated = None
+            messages.error(request,"Utilisateur non inscrit. .")
+
 
         if user_authenticated :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
             user     = User.objects.get(username = username)
+            messages.error(request, user )
             request.session["user_id"] = user.id
             return redirect("index")
 
@@ -395,7 +398,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         created_s = False
                         messages.error(request,"Le compte élève n'est pas créé, vérifiez que l'élève est inscrit.")
 
-                        ### attribue les doc du groupe
                 except :
                     group = None
                     messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
@@ -410,9 +412,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             if created_s : 
                 try :
                     test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
-                    if test :
-                        messages.error(request,"Les documents de votre enseignant vous sont affectés.")
-                    else :
+                    if not test :
                         messages.error(request,"Les documents de votre enseignant ne vous sont pas affectés.") 
                 except :
                     messages.error(request,"Les documents ne vous sont pas affectés.")
@@ -436,7 +436,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             if not school.is_primaire :
 
                 try :
-                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
+                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2321': 10 , '2212': 11   }
                     for code_level in code_levels  : 
                         if str(code_level) not in dico_level :
                             level_id = 12
