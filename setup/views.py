@@ -471,7 +471,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             request.session["user_id"] = user_authenticated.id
 
             with open("logs/output.txt", "a") as f:
-                print( "GAR :"  +  str (user_authenticated.is_student ) + "  " +  str (user_authenticated.id ) + "  " +str(request.session.get("user_id") )+ "  " +str(login(request, user_authenticated ) )   , file=f)
+                print( "GAR :"  +  str (user_authenticated.is_student ) + "  " +  str (user_authenticated.id ) + "  " +str(request.session.get("user_id") )+ "  " +str(user_authenticated.is_authenticated)   , file=f)
 
 
 
