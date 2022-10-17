@@ -360,17 +360,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
     civilite = "Mme"
 
 
+
+
     # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
     # return render(request, 'setup/test_gar.html', context)
  
-    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
+    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :  
      
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
-            user_type  = 0 
 
             div   = dico_received["DIV"][0]
             name  = div.split("##")[0]
-
 
             if not school.is_primaire :
                 try :
@@ -378,7 +378,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     group  = groups.last()
                     group_is_exist = True
                     try :
-                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
+                        user, created     = User.objects.get_or_create(username = username, defaults = { "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country })
                         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
                     except :
                         created_s = False
@@ -406,9 +406,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         messages.error(request,"Les documents de votre enseignant ne vous sont pas affectés.") 
                 except :
                     messages.error(request,"Les documents ne vous sont pas affectés.")
-                
- 
-
+            
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
             code_levels = dico_received["P_MS4"] 
