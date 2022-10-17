@@ -1,46 +1,28 @@
-{% extends 'dashboard.html' %}
-{% load static %}
-{% load widget_tweaks %}
+<html>
+  <head>
 
-{% block require %}
+  </head>
 
-{% endblock %}
+  <body> 
 
+  <section class="content_main"> 
 
-
-{% block page_title %}
-     test GAR  
-{% endblock %}    
+      <div class="row">
+        {{ data_xml }}
+      </div>
+  <hr/>
+      <div class="row">
+        {{ dico_received }}
+      </div>
+  <hr/>
+      <div class="row">
+        {{ is_gar_check }}
+      </div>
+  </section>
+   
+  </body>
+</html>
  
-
-
-
-
-{% block page_menu_right %}
- 
-{% endblock %} 
- 
- 
- 
-
-{% block  body %} 
-
-<section class="content_main"> 
-
-    <div class="row">
-      {{ data_xml }}
-    </div>
-<hr/>
-    <div class="row">
-      {{ dico_received }}
-    </div>
-<hr/>
-    <div class="row">
-      {{ is_gar_check }}
-    </div>
-</section>
- 
-{% endblock  %}   
 
 
  
