@@ -10,10 +10,10 @@ from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
 from django.utils import formats, timezone
 from django.contrib import messages
-from django.urls import reverse
+ 
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from django.http import JsonResponse, HttpResponse , HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail, EmailMessage
 
 import smtplib
@@ -86,6 +86,12 @@ def end_of_contract() :
 
 
 def index(request):
+
+    if request.session.get("is_gar_check", None) :
+        with open("logs/output.txt", "a") as f:
+            print( " connexion GAR réussie : ", file=f)
+
+
 
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
@@ -363,7 +369,16 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
     # return render(request, 'setup/test_gar.html', context)
  
-    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :    
+    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
+
+
+        user_authenticated = authenticate( username= username, password= "sacado_gar")
+        if user_authenticated  :
+            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
+            user  = User.objects.get_or_create(username = username)
+            request.session["user_id"] = user.id
+            return redirect('index')
+
      
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
             user_type  = 0 
@@ -520,7 +535,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
 
-    return HttpResponseRedirect(reverse(index))
+    return redirect('index') 
  
 
 
