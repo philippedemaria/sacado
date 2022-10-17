@@ -377,6 +377,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
             messages.error(request, user )
             request.session["user_id"] = user.id
             return redirect("index")
+        else :
+            messages.error(request,"Utilisateur non inscrit. .")
+            context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
+            return render(request, 'setup/test_gar.html', context)
 
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
