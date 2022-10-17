@@ -407,7 +407,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 
 
             with open("logs/output.txt", "a") as f:
-                print('Hi', file=f)
+                print(user, file=f)
+
+
+
+
+
+
+
 
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
