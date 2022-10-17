@@ -87,11 +87,6 @@ def end_of_contract() :
 
 def index(request):
 
-    if request.session.get("is_gar_check", None) :
-        with open("logs/output.txt", "a") as f:
-            print( " connexion GAR réussie : ", file=f)
-
-
 
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
