@@ -359,8 +359,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
     civilite = "Mme"
 
-    context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
-    return render(request, 'setup/test_gar.html', context)
+    # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
+    # return render(request, 'setup/test_gar.html', context)
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :  
      
