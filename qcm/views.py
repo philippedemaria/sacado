@@ -8432,8 +8432,10 @@ def export_knowledges_after_evaluation(request):
         response['Content-Disposition'] = 'attachment; filename="etablissement.xls"'
 
         wb = xlwt.Workbook(encoding='utf-8')
-        ws = wb.add_sheet(parcours.title)
-
+        ptitle = parcours.title
+        if  len(parcours.title) > 15:
+            ptitle = parcours.title[:15]
+        ws = wb.add_sheet(ptitle)
         # Sheet header, first row
         row_num = 0
 
