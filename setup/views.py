@@ -10,10 +10,10 @@ from django.core.exceptions import ValidationError
 from django.forms import BaseFormSet
 from django.utils import formats, timezone
 from django.contrib import messages
- 
+
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse , HttpResponseRedirect
 from django.core.mail import send_mail, EmailMessage
 
 import smtplib
@@ -520,15 +520,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
 
-    with open("logs/output.txt", "a") as f:
-        print( str(user_authenticated) + " connexion réussie : " + str(user.id) , file=f)
-
-
-
-
-
-
-    return index(request)
+    return HttpResponseRedirect(reverse(index))
  
 
 
