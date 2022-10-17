@@ -88,6 +88,12 @@ def end_of_contract() :
 def index(request):
 
 
+
+    with open("logs/output.txt", "a") as f:
+        print( str (request.user.is_authenticated ) , file=f)
+
+
+
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
 
@@ -191,10 +197,8 @@ def index(request):
         
         elif request.user.is_student:  ## student
 
-            if request.user.closure : 
-                if request.user.closure < today :
-                    messages.error(request,"Votre adhésion est terminée.")  
-                    return redirect("logout")
+            with open("logs/output.txt", "a") as f:
+                print( str (request.user.is_authenticated ) , file=f)
 
             template, context = student_dashboard(request, 0)
 
@@ -517,12 +521,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-
-
-    with open("logs/output.txt", "a") as f:
-        print( str (request.user.is_authenticated ) , file=f)
-
-
 
     return redirect('index') 
  
