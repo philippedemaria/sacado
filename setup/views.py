@@ -87,12 +87,8 @@ def end_of_contract() :
 
 def index(request):
 
-
-
-    with open("logs/output.txt", "a") as f:
-        print( str (request.user.is_authenticated ) , file=f)
-
-
+    # with open("logs/output.txt", "a") as f:
+    #     print( str (request.user.is_authenticated ) , file=f)
 
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
@@ -215,11 +211,6 @@ def index(request):
     else:  ## Anonymous
         #########
         ###################
-
-
-        with open("logs/output.txt", "a") as f:
-            print( "GAR : " + str (request.user ) +" " + str (request.user.is_authenticated ) , file=f)
-        
         form    = AuthenticationForm()
         u_form  = UserForm()
         t_form  = TeacherForm()
@@ -286,47 +277,6 @@ def index(request):
 #     return JsonResponse(data)
 
  
-
-
-def logout_view(request):
-
-    try :
-        is_gar_check = request.session.get("is_gar_check",None)
-        # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
-    except :
-        pass
-
-    form = AuthenticationForm()
-    u_form = UserForm()
-    t_form = TeacherForm()
-    s_form = StudentForm()
-    logout(request)
-    levels = Level.objects.all()
-    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie': False}
-    return render(request, 'home.html', context)
-
-
-def all_routes(request,adresse):
-    return redirect("index")
-
-
-def logout_academy(request):
-    logout(request)
-    return redirect("academy")
-
-
-
-def singleLogoutGar(request):
-
-    # création du dictionnaire qui avec les données du GAR  
-    data_xml = request.headers["X-Gar"]
-    gars = json.loads(data_xml)
-    dico_received = dict()
-    for gar in gars :
-        dico_received[gar['key']] = gar['values']
-    username   = dico_received["IDO"]
-    logout(request)
-
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
@@ -415,8 +365,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 except :
                     messages.error(request,"Les documents ne vous sont pas affectés.")
                 
- 
-
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
             code_levels = dico_received["P_MS4"] 
@@ -447,8 +395,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         teacher.levels.add(level)
                 except :
                     pass
-
-
 
                 try :    
                     groups = dico_received["DIV"]
@@ -522,7 +468,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
         if user_authenticated  :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            request.session["user_id"] = user.id
+            request.session["user_id"] = user_authenticated.id
+
+            with open("logs/output.txt", "a") as f:
+                print( "GAR :"  +  str (user_authenticated.is_student ) + "  " +  str (user_authenticated.id ) + "  " +str(request.session.get("user_id") )+ "  " +str(login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' ) )   , file=f)
+
+
+
+            return redirect('index')
         else : 
             messages.error(request,"Votre compte n'est pas connu par SACADO.")
 
@@ -531,6 +484,55 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     return redirect('index') 
  
+
+
+
+
+def logout_view(request):
+
+    try :
+        is_gar_check = request.session.get("is_gar_check",None)
+        # récupérer le nameId qui permet de récupérer l'IDO puis déconnecter avec l'IDO
+    except :
+        pass
+
+    form = AuthenticationForm()
+    u_form = UserForm()
+    t_form = TeacherForm()
+    s_form = StudentForm()
+    logout(request)
+    levels = Level.objects.all()
+    context = {'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'levels': levels, 'cookie': False}
+    return render(request, 'home.html', context)
+
+
+def all_routes(request,adresse):
+    return redirect("index")
+
+
+def logout_academy(request):
+    logout(request)
+    return redirect("academy")
+
+
+
+def singleLogoutGar(request):
+
+    # création du dictionnaire qui avec les données du GAR  
+    data_xml = request.headers["X-Gar"]
+    gars = json.loads(data_xml)
+    dico_received = dict()
+    for gar in gars :
+        dico_received[gar['key']] = gar['values']
+    username   = dico_received["IDO"]
+    logout(request)
+
+
+
+
+
+
+
 
 
 def send_message(request):
