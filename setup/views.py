@@ -87,6 +87,9 @@ def end_of_contract() :
 
 def index(request):
 
+    if request.session.get("is_gar_check", None) :
+        with open("logs/output.txt", "a") as f:
+            print( " connexion GAR réussie : ", file=f)
 
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
@@ -370,7 +373,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         user_authenticated = authenticate( username= username, password= "sacado_gar")
         if user_authenticated  :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            user  = User.objects.get_or_create(username = username)
+            user  = User.objects.get(username = username)
             request.session["user_id"] = user.id
             return redirect('index')
 
