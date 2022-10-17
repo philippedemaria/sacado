@@ -345,12 +345,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     groups = Group.objects.filter(school = school, name = name )
                     group  = groups.last()
                     group_is_exist = True
-
-                    user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
-                    student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                    for group in groups : 
-                        group.students.add(student)
-
+                    try :
+                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
+                        student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                        for group in groups : 
+                            group.students.add(student)
+                    except :
+                        created_s = False
+                        messages.error(request,"Le compte élève n'est pas créé, vérifiez que l'élève est inscrit.")
 
                         ### attribue les doc du groupe
                 except :
