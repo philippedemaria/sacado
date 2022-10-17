@@ -88,6 +88,18 @@ def end_of_contract() :
 def index(request):
 
 
+
+
+    with open("logs/output.txt", "a") as f:
+        print( 'is_auth : ' + str(request.user.is_authenticated) , file=f)
+        print( 'is_gar : ' + str(request.session.get("is_gar_check", None) ) , file=f)
+
+ 
+
+
+
+
+
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
 
@@ -363,14 +375,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
 
-        user_authenticated = authenticate( username= username, password= "sacado_gar")
-        with open("logs/output.txt", "a") as f:
-            print( 'user_authenticated : ' + str(user_authenticated) , file=f)
- 
-
-
-
-
 
         if user_authenticated  :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
@@ -532,14 +536,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
-
-
-
-    with open("logs/output.txt", "a") as f:
-        print( 'is_auth : ' + str(request.user.is_authenticated) , file=f)
-        print( 'is_gar : ' + str(request.session.get("is_gar_check", None) ) , file=f)
-
- 
 
 
     return redirect('index') 
