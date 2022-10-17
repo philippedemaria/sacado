@@ -198,7 +198,7 @@ def index(request):
         elif request.user.is_student:  ## student
 
             with open("logs/output.txt", "a") as f:
-                print( "GAR : " + str (request.user ) " " + str (request.user.is_authenticated ) , file=f)
+                print( "GAR : " + str (request.user ) +" " + str (request.user.is_authenticated ) , file=f)
 
             template, context = student_dashboard(request, 0)
 
