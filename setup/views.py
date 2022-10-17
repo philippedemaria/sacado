@@ -478,7 +478,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if user_authenticated  :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
             request.session["user_id"] = user_authenticated.id
-            return redirect('index')
+            return index(request) 
 
         else : 
             messages.error(request,"Votre compte n'est pas connu par SACADO.")
@@ -486,7 +486,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
-    return redirect('index') 
+    return index(request) 
  
 
 
