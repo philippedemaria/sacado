@@ -87,6 +87,13 @@ def end_of_contract() :
 
 def index(request):
 
+
+
+    with open("logs/output.txt", "a") as f:
+        print( str (request.user.is_authenticated ) , file=f)
+
+
+
     if request.user.is_authenticated :
         index_tdb = True  # Permet l'affichage des tutos Youtube dans le dashboard
 
@@ -190,8 +197,10 @@ def index(request):
         
         elif request.user.is_student:  ## student
 
-            with open("logs/output.txt", "a") as f:
-                print( "GAR : " + str (request.user ) +" " + str (request.user.is_authenticated ) , file=f)
+            if request.user.closure : 
+                if request.user.closure < today :
+                    messages.error(request,"Votre adhésion est terminée.")  
+                    return redirect("logout")
 
             template, context = student_dashboard(request, 0)
 
@@ -206,6 +215,11 @@ def index(request):
     else:  ## Anonymous
         #########
         ###################
+
+
+        with open("logs/output.txt", "a") as f:
+            print( "GAR : " + str (request.user ) +" " + str (request.user.is_authenticated ) , file=f)
+        
         form    = AuthenticationForm()
         u_form  = UserForm()
         t_form  = TeacherForm()
