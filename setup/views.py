@@ -405,21 +405,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 except :
                     messages.error(request,"Les documents ne vous sont pas affectés.")
                 
-
-            with open("logs/output.txt", "a") as f:
-                print(user.username, file=f)
-
-
-            user_authenticated = authenticate( username= user.username, password= "sacado_gar")
-     
-            if user_authenticated  :
-                with open("logs/output.txt", "a") as f:
-                    print( str(user_authenticated) + " Connecté" , file=f)
-                    login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-                    request.session["user_id"] = user.id
-                    return index(request)
-
-
+ 
 
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
@@ -532,6 +518,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     else :
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+
+
+    with open("logs/output.txt", "a") as f:
+        print( str(user_authenticated) + " connexion réussie : " + str(user.id) , file=f)
+
+
+
+
+
 
     return index(request)
  
