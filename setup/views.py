@@ -527,9 +527,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
 
-    if request.session.get("is_gar_check", None) :
-        with open("logs/output.txt", "a") as f:
-            print( 'is_auth : ' + str(request.user.is_authenticated) , file=f)
+
+    with open("logs/output.txt", "a") as f:
+        print( 'is_auth : ' + str(request.user.is_authenticated) , file=f)
+        print( 'is_gar : ' + str(request.session.get("is_gar_check", None) ) , file=f)
+
+ 
+
 
     return redirect('index') 
  
