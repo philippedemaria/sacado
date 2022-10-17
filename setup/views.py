@@ -520,8 +520,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
 
     with open("logs/output.txt", "a") as f:
-        print( str (user_authenticated ) , file=f)
-
+        print( str (request.user.is_authenticated ) , file=f)
 
 
 
