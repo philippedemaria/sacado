@@ -414,7 +414,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
      
             if user_authenticated  :
                 with open("logs/output.txt", "a") as f:
-                    print(user_authenticated , file=f)
+                    print(user_authenticated + " Connecté" , file=f)
                     login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
                     request.session["user_id"] = user.id
                     return index(request)
