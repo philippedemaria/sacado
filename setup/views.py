@@ -529,7 +529,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     if request.session.get("is_gar_check", None) :
         with open("logs/output.txt", "a") as f:
-            print( " connexion GAR réussie : redirect('index') ", file=f)
+            print( request.user.is_authenticated , file=f)
 
     return redirect('index') 
  
