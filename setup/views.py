@@ -371,7 +371,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         if user_authenticated :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
-            request.session["user_id"] = user_authenticated.id
+            user     = User.objects.get(username = username)
+            request.session["user_id"] = user.id
             return redirect("index")
 
 
