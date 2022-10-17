@@ -194,15 +194,12 @@ def index(request):
         
         elif request.user.is_student:  ## student
 
-            # if request.user.closure : 
-            #     if request.user.closure < today :
-            #         messages.error(request,"Votre adhésion est terminée.")  
-            #         return redirect("logout")
-            try :
-                template, context = student_dashboard(request, 0)
-            except :
-                messages.error(request,"Elève non reconnu. Connectez-vous à nouveau ou contactez l'équipe SacAdo.")
-                return redirect('index')
+            if request.user.closure : 
+                if request.user.closure < today :
+                    messages.error(request,"Votre adhésion est terminée.")  
+                    return redirect("logout")
+
+            template, context = student_dashboard(request, 0)
 
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)

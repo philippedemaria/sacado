@@ -262,7 +262,7 @@ def get_dataset_to_gar_by_link(request): # 0 on supprime le compte hors gar - 1 
 
 ########################################            AVATAR                   #########################################
 
-@login_required(login_url= 'index')
+#@user_is_parcours_teacher
 def create_avatar(request, id ):
  
     if not request.user.is_superuser : 
@@ -282,7 +282,7 @@ def create_avatar(request, id ):
 
 
  
-@login_required(login_url= 'index')
+
 def delete_avatar(request,id  ):
     if not request.user.is_superuser : 
         return redirect('index')
@@ -292,7 +292,7 @@ def delete_avatar(request,id  ):
     return redirect('list_avatars') 
 
 
-@login_required(login_url= 'index')
+
 def list_avatars(request) :
     
     if not request.user.is_superuser : 
@@ -305,10 +305,10 @@ def list_avatars(request) :
 
  
 
-@login_required(login_url= 'index')
+
 def avatar(request) :
 
-    user = request.user
+    user = User.objects.get(pk = request.user.id )
     avatar_form = AvatarUserForm(request.POST or None, request.FILES or None, instance = user  ) 
 
 
@@ -334,7 +334,7 @@ def avatar(request) :
 #####################################
 ########################################            BACKGROUND                   #########################################
 
-@login_required(login_url= 'index')
+#@user_is_parcours_teacher
 def create_background(request, id ):
  
     if not request.user.is_superuser : 
@@ -351,7 +351,7 @@ def create_background(request, id ):
 
     return render(request, 'account/background_admin_form.html', context)
 
-@login_required(login_url= 'index')
+
 def delete_background(request,id  ):
     if not request.user.is_superuser : 
         return redirect('index')
@@ -361,7 +361,7 @@ def delete_background(request,id  ):
     return redirect('list_backgrounds') 
 
 
-@login_required(login_url= 'index')
+
 def list_backgrounds(request) :
     
     if not request.user.is_superuser : 
@@ -374,10 +374,10 @@ def list_backgrounds(request) :
 
  
 
-@login_required(login_url= 'index')
+
 def background(request) :
 
-    user = request.user
+    user = User.objects.get(pk = request.user.id )
     background_form = BackgroundUserForm(request.POST or None, request.FILES or None, instance = user  ) 
 
 
@@ -398,11 +398,15 @@ def background(request) :
     return render(request, 'account/background_form.html', context)
 
 
-@login_required(login_url= 'index')
 def change_color_police(request,color):
 
     user = request.user
+
     User.objects.filter(pk=user.id).update(color=color)
+
+    us = User.objects.get(pk=user.id)
+
+    print(us.color)
 
     return redirect('index')
 
@@ -439,7 +443,8 @@ def message_to_teachers_sent(request):
 #########################################Student #####################################################################
 
 
-@login_required(login_url= 'index')
+#@can_register
+#@is_manager_of_this_school
 def register_student_from_admin(request):
     """"
     Enregistre un enseignant depuis la console admin d'un établissement
@@ -488,7 +493,7 @@ def register_student_from_admin(request):
 
 
 
-@login_required(login_url= 'index')
+
 def register_student(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -582,8 +587,6 @@ def update_student(request, id,idg=0):
                   {'user_form': user_form, 'form': student_form, 'student': student, 'communications' : [],  'idg': idg  , 'today' : today })
 
 
-
-@login_required(login_url= 'index')
 def switch_teacher_student(request,idg): #idg = group_id  
     """
     Updete par un admin d'un établissement
@@ -603,7 +606,6 @@ def switch_teacher_student(request,idg): #idg = group_id
     return redirect("index")
 
 
-@login_required(login_url= 'index')
 def switch_student_teacher(request): #idg = group_id  
     """
     Update par un admin d'un établissement
@@ -740,8 +742,6 @@ def knowledges_of_a_student(student, theme):
     return knowledges 
 
 
-
-@login_required(login_url= 'index')
 def sender_mail(request,form):
 
     if request.method == "POST" : 
@@ -796,7 +796,7 @@ def logged_user_has_permission_to_this_student(user_reader, student) :
 
  
 
-@login_required(login_url= 'index')
+ 
 def detail_student(request, id):
 
     student = Student.objects.get(user_id=id)
@@ -859,7 +859,7 @@ def detail_student(request, id):
 
 
 
-@login_required(login_url= 'index')
+#@who_can_read_details
 def detail_student_theme(request, id,idt):
     student = Student.objects.get(user_id=id)
     tracker_execute_exercise(False,student.user)
@@ -934,7 +934,7 @@ def detail_student_theme(request, id,idt):
     return render(request, 'account/detail_student_theme.html', context)
 
 
-@login_required(login_url= 'index')
+#@who_can_read_details
 def detail_student_parcours(request, id,idp):
 
     student = Student.objects.get(user_id=id)
@@ -980,7 +980,7 @@ def detail_student_parcours(request, id,idp):
 
 
 
-@login_required(login_url= 'index')
+#@user_can_read_details
 def detail_student_all_views(request, id):
 
     user = User.objects.get(pk=id)
@@ -1163,7 +1163,7 @@ def ebep(request,id,idg):
 ############################################################################################################## 
 
 
-@login_required(login_url= 'index')
+
 def response_from_mail(request,user_id):
  
     user = User.objects.get(pk=user_id)
@@ -1213,7 +1213,7 @@ def check_response_from_mail(request):
 ##
 ############################################################################################################## 
 
-@login_required(login_url= 'index')
+
 def close_my_account(request):
     if request.method == 'POST':
         user = request.user
@@ -1319,7 +1319,8 @@ def register_teacher(request):
 
 
 
-@login_required(login_url= 'index')
+#@can_register
+#@is_manager_of_this_school
 def update_teacher(request, pk):
 
     user = get_object_or_404(User, pk=pk)
@@ -1352,7 +1353,8 @@ def update_teacher(request, pk):
 
 
 
-@login_required(login_url= 'index')
+#@can_register
+#@is_manager_of_this_school
 def delete_teacher(request, id):
 
     teacher = get_object_or_404(Teacher, user_id=id)
@@ -1380,7 +1382,7 @@ def delete_teacher(request, id):
     else :
         return redirect('index') 
 
-@login_required(login_url= 'index')
+
 def dissociate_teacher(request, id):
 
     user = User.objects.get(pk=id)
@@ -1413,7 +1415,6 @@ def dissociate_teacher(request, id):
 
 #@can_register
 #@is_manager_of_this_school
-@login_required(login_url= 'index')
 def register_teacher_from_admin(request):
     """"
     Enregistre un enseignant depuis la console admin d'un établissement
@@ -1555,7 +1556,6 @@ def register_by_csv(request, key, idg=0):
 
 #@can_register
 #@is_manager_of_this_school
-@login_required(login_url= 'index')
 def register_users_by_csv(request,key):
     """
     Enregistrement par csv : key est le code du user_type : 0 pour student, 2 pour teacher
@@ -1645,7 +1645,7 @@ def register_users_by_csv(request,key):
   
 #########################################Lost password #################################################################
 
-@login_required(login_url= 'index')
+
 def updatepassword(request):
 
     today = time_zone_user(request.user)
@@ -1730,7 +1730,7 @@ def delete_parent(request, id):
 
 #####################################
 
-@login_required(login_url= 'index')
+
 def my_profile(request):
 
     if request.user.is_authenticated : 
@@ -2048,7 +2048,7 @@ def init_password_teacher(request, id ):
 
 
 
-@login_required(login_url= 'index')
+
 def aggregate_child(request):
 
     child_code = request.POST.get('child')
