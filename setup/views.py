@@ -362,8 +362,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
 
 
-    # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
-    # return render(request, 'setup/test_gar.html', context)
+    context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
+    return render(request, 'setup/test_gar.html', context)
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) :  
      
@@ -373,31 +373,27 @@ def ressource_sacado(request): #Protection saml pour le GAR
             name  = div.split("##")[0]
 
             if not school.is_primaire :
-                # try :
-                #     groups = Group.objects.filter(school = school, name = name )
-                #     group  = groups.last()
-                #     group_is_exist = True
-                #     try :
-                #         user, created     = User.objects.get_or_create(username = username, defaults = { "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country })
-                #         student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                #         for group in groups : 
-                #             group.students.add(student)                    
-                #     except :
-                #         created_s = False
-                #         messages.error(request,"Le compte élève n'est pas créé, vérifiez que l'élève est inscrit.")
+                try :
+                    groups = Group.objects.filter(school = school, name = name )
+                    group  = groups.last()
+                    group_is_exist = True
+                    try :
+                        user, created     = User.objects.get_or_create(username = username, defaults = { "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country })
+                        student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                        for group in groups : 
+                            group.students.add(student)                    
+                    except :
+                        created_s = False
+                        messages.error(request,"Le compte élève n'est pas créé, vérifiez que l'élève est inscrit.")
 
-                #         ### attribue les doc du groupe
-                # except :
-                #     group = None
-                #     messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
+                        ### attribue les doc du groupe
+                except :
+                    group = None
+                    messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
             
-                groups = Group.objects.filter(school = school, name = name )
-                group  = groups.last()
-                group_is_exist = True
-                user, created     = User.objects.get_or_create(username = username, defaults = { "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country })
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                for group in groups : 
-                    group.students.add(student)                    
+
+
+
 
             else :
                 level = Level.objects.get(pk=1)
