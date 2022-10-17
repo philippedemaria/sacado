@@ -363,8 +363,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
 
-
         user_authenticated = authenticate( username= username, password= "sacado_gar")
+        with open("logs/output.txt", "a") as f:
+            print( 'user_authenticated : ' + str(user_authenticated) , file=f)
+ 
+
+
+
+
+
         if user_authenticated  :
             login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
             user  = User.objects.get(username = username)
