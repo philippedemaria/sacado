@@ -366,7 +366,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         nb_user  = User.objects.filter(username = username)
         if nb_user  :
             user  = User.objects.get(username = username)
-            login(request, User,  backend='django.contrib.auth.backends.ModelBackend' )
+            login(request, User)
             if user.is_teacher :
                 teacher = user.teacher
             elif user.is_student :
@@ -376,7 +376,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
             request.session["user_id"] = user.id
 
             with open("logs/output.txt", "a") as f:
-                print( login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' ) , file=f)
+                print( login(request, user_authenticated ) , file=f)
 
             return redirect('index')
 
