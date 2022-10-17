@@ -365,8 +365,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         nb_user  = User.objects.filter(username = username)
         if nb_user  :
-            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
             user  = User.objects.get(username = username)
+            login(request, User,  backend='django.contrib.auth.backends.ModelBackend' )
             if user.is_teacher :
                 teacher = user.teacher
             elif user.is_student :
