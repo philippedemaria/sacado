@@ -142,14 +142,13 @@ def set_username_student_profile(name):
 
  
 
-
-@login_required(login_url= 'index')
 def student_dashboard(request,group_id):
 
     #######Groupes de l'élève. 
     # si plusieurs matières alors on envoi =e sur dashboard_group 
     # si une seule matière alors  sur dashboard
-    groups = student.students_to_group.all()
+    student = request.user.student
+    groups  = student.students_to_group.all()
 
     parcourses_on_fire = []
 
