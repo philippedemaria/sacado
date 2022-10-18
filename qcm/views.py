@@ -8136,11 +8136,11 @@ def export_notes_after_evaluation(request):
                     final_mark = math.ceil( coefficient *  final_mark)
                     final_mark_coeff =  float(data_student["score_real_coeff"]) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
                 except :
-                    final_mark = "NE" 
-                    final_mark_coeff = "NE"
+                    final_mark = "N.Not" 
+                    final_mark_coeff = "N.Not"
             else :
-                final_mark = "NE"
-                final_mark_coeff = "NE" 
+                final_mark = "N.Not"
+                final_mark_coeff = "N.Not" 
 
             writer.writerow( (str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() , data_student["total_nb_exo"] , data_student["nb_exo"],  data_student["percent"] ,  final_mark,  final_mark_coeff ) )
         return response
@@ -8197,11 +8197,11 @@ def export_notes_after_evaluation(request):
                     final_mark_coeff = float(data_student['score_real_coeff']) * (float(note_totale) - float(note_sacado)) + float(data_student["percent"]) * float(note_sacado)/100
 
                 except :
-                    final_mark = "NE" 
-                    final_mark_coeff = "NE"  
+                    final_mark = "N.Not" 
+                    final_mark_coeff = "N.Not"  
             else :
-                final_mark = "NE" 
-                final_mark_coeff = "NE"  
+                final_mark = "N.Not" 
+                final_mark_coeff = "N.Not"  
 
             data_s = [ str(student.user.last_name).lower().strip() , str(student.user.first_name).lower().strip() ,  data_student["total_nb_exo"] , data_student["nb_exo"],   data_student["percent"] ,  final_mark , final_mark_coeff  ]
 

@@ -1,11 +1,17 @@
-
 {% load widget_tweaks %}
 {% load static %}
 {% load item_tags %}
 
-<td style="position:relative; text-align:center;"> 
-    <input type="checkbox" name="selected_bibliotexs" value="{{ bibliotex.id}}"/>
-</td>  
+ 
+{% block out_of_folder %}
+<td>
+    {% if not quizz.is_archive %}
+    <input type="checkbox" name="selected_bibliotexs" value="{{ bibliotex.id}}" class ="these_items_to_be_selected{{list_folder.folder.id}}" />
+    {% endif  %}
+</td>
+{% endblock %}
+
+
 <td  style="width:20px;" >
     <span class="fa-stack selector_favorite" id="selector_favorite{{ bibliotex.id }}" data-fav="{% if bibliotex.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ bibliotex.id }}" style="cursor:pointer"  data-status="bibliotex">
         

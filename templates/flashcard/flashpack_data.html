@@ -2,9 +2,15 @@
 {% load static %}
 {% load item_tags %}
 
-<td style="width:20px;position:relative; text-align:center;"> 
-    <input type="checkbox" name="selected_flashpacks" value="{{ flashpack.id}}"/>
-</td>  
+ 
+{% block out_of_folder %}
+<td>
+    {% if not quizz.is_archive %}
+    <input type="checkbox" name="selected_flashpacks" value="{{ flashpack.id}}" class ="these_items_to_be_selected{{list_folder.folder.id}}" />
+    {% endif  %}
+</td>
+{% endblock %}
+
 <td  style="width:20px;" >
     <span class="fa-stack selector_favorite" id="selector_favorite{{ flashpack.id }}" data-fav="{% if flashpack.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ flashpack.id }}" style="cursor:pointer"  data-status="flashpack">
         

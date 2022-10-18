@@ -44,140 +44,117 @@
 {% if nb_base > 0 %}
 <form action="{% url 'actioner_pef' %}" method="POST" enctype='multipart/form-data'>
     {% csrf_token %}
-            <div class="row">
-                <div class="col-xs-6 col-md-3 ">
-                    <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
-                </div>
- 
-                <div class=" col-xs-6 col-md-9">
-                    <div class="form-group">
-                        <input type="search" id="accordion_search_bar" class="form-control" placeholder="Ecrire un mot comme 'numérique' proposera les dossiers le contenant.">
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-xs-6 col-md-3 ">
+            <h2 class="thin"><i class="fa fa-folder sacado_color_text"></i>  Dans les dossiers</h2>
+        </div>
+
+        <div class=" col-xs-6 col-md-9">
+            <div class="form-group">
+                <input type="search" id="accordion_search_bar" class="form-control" placeholder="Ecrire un mot comme 'numérique' proposera les dossiers le contenant.">
             </div>
+        </div>
+    </div>
 
-            {% for folder in folders|dictsortreversed:"is_favorite" %}
-            <div class="row">
-                <div class="col-md-12 col-xs-12">
-                    <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
-                            <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
-                                <h4 class="panel-title">
-                                <a role="button"  
-                                 class="actionner_accordion" 
-                                 data-toggle="collapse" 
-                                 data-parent="#accordion" 
-                                 data-loop ="{{ forloop.counter }}" 
-                                 href="#collapse{{ forloop.counter }}" 
-                                 aria-expanded="true" 
-                                 aria-controls="collapse{{ forloop.counter }}">
+    {% for folder in folders|dictsortreversed:"is_favorite" %}
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="panel-group_list" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default" id="collapse{{ forloop.counter }}_container">
+                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
+                        <h4 class="panel-title">
+                        <a role="button"  
+                         class="actionner_accordion" 
+                         data-toggle="collapse" 
+                         data-parent="#accordion" 
+                         data-loop ="{{ forloop.counter }}" 
+                         href="#collapse{{ forloop.counter }}" 
+                         aria-expanded="true" 
+                         aria-controls="collapse{{ forloop.counter }}">
+                         {% if folder.vignette %}
+                            <img src="{{ folder.vignette.url }}" width="50px" height="50px">
+                         {% else %}  
+                            <i class="fa fa-square" style="font-size: 2.4em; color:{{ folder.color }}"></i>
+                         {% endif %}  
+                         {{ folder.title }} <i class="fa fa-angle-down" id="collapser_angle{{ forloop.counter }}"></i>
+                            <span class="list_label list_subject">{{ folder.subject.shortname }}  </span>
+                            <span class="list_label">{{ folder.level.name }} </span>
+                        </a>
+                        </h4>
+                    </div>
+                    <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
+                        <div class="panel-body">         
+                            <table class="table table-sacado table-hovered standard_tab_10_not_first"  style="width:100%" >
+                                <thead> 
+                                    <tr> 
+                                        <th style="width:30px; text-align:center;"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{folder.id}}" /></th>
+                                        <th style="width:50px">Favori 
+                                        </th>
+                                        <th style="width:50px; ">
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
+                                            </span>
+                                        </th>            
+                                        <th style="width:300px">Nom</th>
+                                        <th></th>
+                                        <th style="width:200px">Groupe </th>
+                                        <th style="width:150px">Mutualisation</th>
+                                        <th>CoAnim.</th>
+                                        <th style="width:150px">Publication 
+                                            <span class="helper_tip"> 
+                                            <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
+                                            </span>
+                                        </th>                    
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    {% for parcours in folder.parcours.all %}
 
+                                        {% block evaluations  %} 
+                                            {% if not parcours.is_evaluation and not parcours.is_archive %}
+                                                <tr>
+                                                    {% include 'qcm/list_parcours_folder_data.html' %}
+                                                </tr>
+                                            {% endif %}  
+                                        {% endblock  %}
 
-                                 {% if folder.vignette %}
-                                    <img src="{{ folder.vignette.url }}" width="50px" height="50px">
-                                 {% else %}  
-                                    <i class="fa fa-square" style="font-size: 2.4em; color:{{ folder.color }}"></i>
-                                 {% endif %}  
+                                    {% endfor  %}
 
+                                 </tbody>
+                            </table>
 
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-sm-12 col-md-12">
+                                    {% block inside_folder_actions %}
+                                    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/parcours')"> 
+                                        <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
+                                    </button>
+                   
 
-                                 {{ folder.title }} <i class="fa fa-angle-down" id="collapser_angle{{ forloop.counter }}"></i>
-                                 
-                                 <span class="list_label list_subject">{{ folder.subject.shortname }}  </span>
-
-                                 <span class="list_label">{{ folder.level.name }} </span>
-
-
-
-
-                                </a>
-                                </h4>
-                            </div>
-                            <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
-                                <div class="panel-body">         
-                                    <table class="table table-sacado table-hovered standard_tab_10"  style="width:100%" >
-                                        <thead> 
-                                            <tr> 
-                                                <th style="width:20px"></th>
-                                                <th style="width:50px">Favori 
-                                                </th>
-                                                <th style="width:50px; ">
-                                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                                    <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-success"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
-                                                    </span>
-                                                </th>            
-                                                <th style="width:300px">Nom</th>
-                                                <th></th>
-                                                <th style="width:200px">Groupe </th>
-                                                <th style="width:150px">Mutualisation</th>
-                                                <th>CoAnim.</th>
-                                                <th style="width:150px">Publication 
-                                                    <span class="helper_tip"> 
-                                                    <i class="fa fa-question-circle"></i>
-                                                    <div class="helper_tip_text" >Publié signifie Accessible pour les élèves. </div>
-                                                    </span>
-                                                </th>                    
-                                            </tr> 
-                                        </thead>
-                                        <tbody>
-                                            {% for parcours in folder.parcours.all %}
-
-                                                {% block evaluations  %} 
-                                                    {% if not parcours.is_evaluation and not parcours.is_archive %}
-                                                        <tr>
-                                                            {% include 'qcm/list_parcours_folder_data.html' %}
-                                                        </tr>
-                                                    {% endif %}  
-                                                {% endblock  %}
-
-                                            {% endfor  %}
-
-                                         </tbody>
-                                    </table>
-
-                                    <div class="row" style="margin-top:10px">
-                                        <div class="col-sm-12 col-md-12">
-                                            {% block inside_folder_actions %}
-                                            <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers/parcours')"> 
-                                                <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
-                                            </button>
-                           
-
-                                            <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/parcours')"> 
-                                                <i class="fa fa-trash"> </i>   Supprimer la sélection
-                                            </button>
-                                            {% endblock  %}
-                                        </div>
-                                    </div>
-
+                                    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces dossiers/parcours')"> 
+                                        <i class="fa fa-trash"> </i>   Supprimer la sélection
+                                    </button>
+                                    {% endblock  %}
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
      
      
- 
-
-
-
-
-
-
-
-
-
-
-
 
     <div class="row">    
         <div class="col-sm-12 col-md-12">
-            <table class="table table-sacado table-hovered display_no_details100"  style="width:100%" >
+            <table class="table table-sacado table-hovered standard_tab_sort_not_first"  style="width:100%" >
                 <thead> 
                     <tr> 
-                        <th style="width:30px"></th> 
+                        <th style="width:30px"><input type="checkbox"  id="select_all_these_items" /></th> 
                         <th style="width:60px">Favori</th> 
                         <th style="width:50px">
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>

@@ -51,10 +51,11 @@
         {% if groups %}   
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <table class="table table-sacado  table-hover standard_tab_sort">
+                <table class="table table-sacado  table-hover standard_tab_sort_not_first">
                     <thead>
                         <tr>
-                            <td>Groupes</td>
+                            <td><input type="checkbox" name="group_ids" value="{{ group.id }}"  id ="select_all_these_items" /></td>
+                            <td> Groupes</td>
                             <td>Élèves </td>
                             <td style="width:40px"> </td>
                         </tr>
@@ -62,8 +63,9 @@
                     <tbody>
                         {% for group in groups %}
                             <tr>
-                                <td style="width:150px ; border-left:5px solid {{group.color}}">
-                                    <input type="checkbox" name="group_ids" value="{{ group.id }}" />
+                                <td style="width:30px ; border-left:5px solid {{group.color}}">
+                                    <input type="checkbox" name="group_ids" value="{{ group.id }}"  class ="items_to_be_selected" />
+                                </td><td>
                                     <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a>
                                     <span style="color:#CCC; font-size: 10px" class="pull-right tool_tip" >
                                     {% if group.lock %}

@@ -3,10 +3,7 @@
 {% load item_tags %}
  
     <td style="text-align:center; padding-bottom: 0px;"> 
-
-        <input type="checkbox" name="selected_parcours" value="{{ parcours.id}}"/>
-
-   
+        <input type="checkbox" name="selected_parcours" value="{{ parcours.id}}"  class ="these_items_to_be_selected{{folder.id}}" />
     </td>  
     <td style="text-align:center;" >
         <span class="fa-stack selector_favorite" id="selector_favorite{{ parcours.id }}" data-fav="{% if parcours.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ parcours.id }}" style="cursor:pointer"  data-status="parcours">

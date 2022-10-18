@@ -3,12 +3,13 @@
 {% load widget_tweaks %}
  
  
- 
+{% block out_of_folder %}
 <td>
     {% if not quizz.is_archive %}
-    <input type="checkbox" name="selected_quizz" value="{{ quizz.id}}"/> 
+    <input type="checkbox" name="selected_quizz" value="{{ quizz.id}}"   class ="these_items_to_be_selected{{list_folder.folder.id}}" />
     {% endif  %}
 </td>
+{% endblock %}
 <td>
     {% if quizz.vignette %}
         <img src="{{ quizz.vignette.url }}" width="60px" height="60px"  />

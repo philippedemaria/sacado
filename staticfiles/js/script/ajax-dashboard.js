@@ -1431,6 +1431,47 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 });
             });
 
+
+
+        // ==================================================================================================================  
+        // ==================================================================================================================             
+        // ============================================     Select tous     =================================================
+        // ================================================================================================================== 
+        // ==================================================================================================================
+
+
+ 
+            selected_all_checkbox( "#select_all_these_items" , $(".items_to_be_selected"));
+            
+            function selected_all_checkbox($toggle, $item) {
+                    $(document).on('change', $toggle ,  function (event) {
+                        if ($($toggle).is(":checked")) {
+                             $item.prop("checked", true);
+                        } else {
+                              $item.prop("checked", false);
+                        }
+                    });
+                }
+
+            class_selected_all_checkbox( ".class_select_all_these_items");
+
+            function class_selected_all_checkbox($toggle) {
+
+                    $(document).on('change', $toggle ,  function (event) { 
+
+                        var doc_id = $(this).data('document_id') ; 
+
+                        if ($($toggle).is(":checked")) {
+                            $(".these_items_to_be_selected"+doc_id).prop("checked", true); 
+                        } else {
+                            $(".these_items_to_be_selected"+doc_id).prop("checked", false);  
+                        }
+
+                    });
+                }
+                
+
+
         // ==================================================================================================================  
         // ==================================================================================================================             
         // ============================================   Date limite des tasks  ============================================ 

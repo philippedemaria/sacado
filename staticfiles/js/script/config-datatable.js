@@ -3,13 +3,19 @@ define(['jquery', 'datatables','datatables_bootstrap'], function ($) {
 
 
 
+
 $('.standard_tab_10').dataTable( {
     "pageLength": 10,
     "ordering": true,
     "info":     true
 } );
 
-
+$('.standard_tab_10_not_first').dataTable( {
+    "pageLength": 10,
+    'columnDefs' : [{ 'orderable': false, 'targets': 0 }],
+    'order': [[1, 'asc']],
+    "info":     true
+} );
 
 $('.standard_tab_1000').dataTable( {
     "pageLength": 1000,
@@ -37,7 +43,18 @@ $('.standard_tab_sort').dataTable( {
     "info":     false
 } );
 
- 
+
+$('.standard_tab_sort_not_first').dataTable( {
+
+    'columnDefs' : [{ 'orderable': false, 'targets': 0 }],
+    'order': [[1, 'asc']],
+    "pageLength": 50,
+    "info":     false
+} );
+
+
+
+
 
 $('.display_info').dataTable( {
     "order": [],
@@ -61,6 +78,19 @@ $('.standard_tab_sort300').dataTable( {
     "pageLength": 300,
     "info":     false
 } );
+
+
+
+$('.standard_tab_sort300_not_first').dataTable( {
+    'columnDefs' : [{ 'orderable': false, 'targets': 0 }],
+    'order': [[1, 'asc']],
+    "pageLength": 300,
+    "info":     false
+} );
+
+
+
+
 
 $('.standard_tab_sort300_no_paiement').dataTable( {
     "order": [],

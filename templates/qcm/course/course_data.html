@@ -2,7 +2,9 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
-
+    <td style="text-align:center; padding-bottom: 0px;"> 
+        <input type="checkbox" name="selected_parcours" value="{{ parcours.id}}"  class ="these_items_to_be_selected{{parcours_course.id}}" />
+    </td>  
   
     <td {% if course.is_folder %} style="padding-top:15px" {% endif %} >
 

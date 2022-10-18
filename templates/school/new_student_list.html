@@ -63,9 +63,10 @@
                </div>
                <div class="col-sm-12 col-md-6 content_list pull-right">
                 <h2>Elèves à choisir</h2>
-                <table class="table table-sacado  table-hover standard_tab_sort300">
+                <table class="table table-sacado  table-hover standard_tab_sort300_not_first">
                     <thead>
                         <tr>
+                            <td style="width:30px"><input type="checkbox" value="{{ student.user.id }}" id="select_all_these_items" /></td>
                             <td>Nom</td>
                             <td>Prénom </td>
                             <td>Classes </td>
@@ -75,8 +76,11 @@
                         {% for student in pending_students %}
                             <tr>
  
+                                 <td >
+                                     <input type="checkbox" value="{{ student.user.id }}" name ="student_ids" class ="items_to_be_selected"  />
+                                </td>
                                 <td >
-                                    <label>   <input type="checkbox" value="{{ student.user.id }}" name ="student_ids" /> {{ student.user.last_name }} </label>
+                                    <label>   {{ student.user.last_name }} </label>
                                 </td>
                                 <td>
                                    {{ student.user.first_name }} 

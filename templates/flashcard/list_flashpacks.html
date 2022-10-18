@@ -32,10 +32,10 @@
 
 
 {% block inside_folder %}          
-    <table class="table table-sacado table-hovered standard_tab_10"  style="width:100%" >
+    <table class="table table-sacado table-hovered standard_tab_10_not_first"  style="width:100%" >
         <thead> 
             <tr> 
-                <th style="width:10px;text-align: center"></th>
+                <th style="width:20px"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{list_folder.folder.id}}" /></th>
                 <th style="width:10px;text-align: center"></th>
                 <th style="width:200px">Titre</th>
                 <th></th>
@@ -76,23 +76,23 @@
  
 
 {% block outside_folder %}   
-    <table class="table table-sacado table_list table-hover display_no_details100">
+    <table class="table table-sacado table_list table-hover standard_tab_sort_not_first">
         <thead>
-        <tr>
-            <th style="width:30px;text-align: center"></th>
-            <th style="width:30px;text-align: center"></th>
-            <th>Titre</th>
-            <th></th>
-            <th>Parcours</th>
-            <th style="width:200px">Groupes</th>
-            <th>  </th>
-            <th></th>
-        </tr>
+            <tr> 
+                <th style="width:10px;text-align: center"><input type="checkbox"  id="select_all_these_items" /></th>
+                <th style="width:30px;text-align: center"></th>
+                <th>Titre</th>
+                <th></th>
+                <th>Parcours</th>
+                <th style="width:200px">Groupes</th>
+                <th>  </th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
             {% for flashpack in flashpacks %}            
                 <tr>
-                    {% include 'flashcard/flashpack_data.html' %}
+                    {% include 'flashcard/flashpack_data_out_of_folder.html' %}
                 </tr>
             {% endfor %} 
         </tbody>

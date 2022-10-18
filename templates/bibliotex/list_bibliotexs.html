@@ -31,9 +31,9 @@
 
 
 {% block inside_folder %}
-<table class="table table-sacado table-hovered standard_tab_10"  style="width:100%" >
+<table class="table table-sacado table-hovered standard_tab_10_not_first"  style="width:100%" >
     <thead> 
-        <th style="width:20px"></th>
+        <th style="width:20px"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{list_folder.folder.id}}" /></th>
         <th style="width:20px;">
             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
             <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-is_favorite"></i> Accessible<br/>depuis un dossier <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un dossier </div>
@@ -75,10 +75,10 @@
 
  
 {% block outside_folder %}
-    <table class="table table-sacado table_list table-hovered  display_no_details100"  style="width:100%" >
+    <table class="table table-sacado table_list table-hovered  standard_tab_sort_not_first"  style="width:100%" >
         <thead> 
             <tr> 
-                <th style="width:20px"></th>
+                <th style="width:10px;text-align: center"><input type="checkbox"  id="select_all_these_items" /></th>
                 <th style="width:20px;">
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                     <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-is_favorite"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
@@ -100,7 +100,7 @@
         <tbody>
         {% for bibliotex in bibliotexs|dictsortreversed:"is_favorite" %}
             <tr {% if not bibliotex.is_publish %} style="border-left-color:#cb2131; border-left-style: 3px solid" {% endif  %}>
-               {% include 'bibliotex/bibliotex_data.html' %}
+               {% include 'bibliotex/bibliotex_data_out_of_folder.html' %}
             </tr>
         {% endfor  %}
         </tbody>

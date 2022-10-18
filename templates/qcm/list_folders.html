@@ -44,10 +44,10 @@
     <div class="row">    
         <div class="col-sm-12 col-md-12">
             {% csrf_token %}
-            <table class="table table-sacado table-hovered table-striped  standard_tab_sort"  style="width:100%" >
+            <table class="table table-sacado table-hovered table-striped  standard_tab_sort_not_first"  style="width:100%" >
                 <thead> 
                     <tr> 
-                        <th style="width:20px"></th>
+                        <th style="width:30px; text-align:center;"><input type="checkbox"   id ="select_all_these_items"/></th>
                         <th style="width:50px">Favori 
                         </th>
                         <th style="width:50px; ">
@@ -73,8 +73,8 @@
                 <tbody>
                 {% for folder in folders|dictsortreversed:"is_favorite" %}
                     <tr style="height:60px;{% if not folder.is_publish %} border-left-color:#cb2131; border-left-style: 3px solid{% endif  %}"   id="tr{{ forloop.counter }}" >
-                        <td style="position:relative; text-align:center;"> 
-                            <input type="checkbox" name="selected_folders" value="{{ folder.id}}"/>
+                        <td  style="width:30px; text-align:center;"> 
+                            <input type="checkbox" name="selected_folders" value="{{ folder.id}}"  class ="items_to_be_selected"/>
                         </td>  
                         <td style="text-align:center;" >
                             <span class="fa-stack selector_favorite" id="selector_favorite{{ folder.id }}" data-fav="{% if folder.is_favorite %}1{% else  %}0{% endif  %}" data-target_id="{{ folder.id }}" style="cursor:pointer"  data-status="folder">
