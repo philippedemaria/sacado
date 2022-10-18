@@ -275,20 +275,9 @@ def module_style(elements):
 ####    statistiques
 #####################################################################################################################################
 #####################################################################################################################################
-
-
-def make_gar_group():
-
-    users = User.objects.filter(user_type=2, email__endswith='@sacado.xyz')
-    Group.objects.filter(teacher__user__in=users).update(is_gar=1)
-
-
-
-
 @user_passes_test(user_is_board)
 def statistiques(request):
 
-    make_gar_group()
 
     date_start = time_zone_user(request.user) - timedelta(days=7)
     date_stop  = time_zone_user(request.user)
