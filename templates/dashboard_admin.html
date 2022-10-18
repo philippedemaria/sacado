@@ -298,19 +298,24 @@
                             <div id="step2" >
                                 <label>Étape 2 : Mode de gestion des élèves{% if data.nbg > 0 %} <i class="fa fa-check text-success"></i> {% endif%}</label>
                                 <ul>
-                                    <form action="{% url 'choose_managing_school' %}" method="POST">        {% csrf_token %}
+                                    <form action="{% url 'choose_managing_school' %}" method="POST">        
+                                        {% csrf_token %}
                                         <li class="sanspuce">
-                                            <label><input name="authorize_managing" value="1" type="radio" {% if only_admin_can_manage  %}checked{% endif %} /> Gestion  par le compte Admin uniquement(Par défaut). <small>Seul l'administrateur SACADO pourra affecter des élèves.  </small></label>
-                                        </li>                                        
-                                        <li class="sanspuce">
-                                            <label><input name="authorize_managing" value="0" type="radio" {% if not only_admin_can_manage  %}checked{% endif %} /> Gestion par les enseignants. <small>Chaque enseignant pourra affecter ses élèves.  </small></label>
+                                            <label><input name="authorize_managing" value="1" type="radio" {% if school.is_managing == 1  %}checked{% endif %} /> Gestion par le compte Admin uniquement (Par défaut). <small>Seul l'administrateur SACADO peut créer des groupes et affecter des élèves.  </small></label>
                                         </li>
+                                        <li class="sanspuce">
+                                            <label><input name="authorize_managing" value="2" type="radio" {% if school.is_managing  == 2  %}checked{% endif %} /> Ajout d'élèves par les enseignants. <small>Chaque enseignant peut créer ses propres groupes mais sélectionne ses élèves parmi les élèves <b>déjà inscrits</b> sans un lien d'inscription.  </small></label>
+                                        </li>                                    
+                                        <li class="sanspuce">
+                                            <label><input name="authorize_managing" value="0" type="radio" {% if school.is_managing  == 0  %}checked{% endif %} /> Gestion complète par les enseignants. <small>Chaque enseignant peut créer ses groupes et ajoute ses élèves ou les sélectionne parmi les élèves déjà inscrits.  </small></label>
+                                        </li>
+
                                         <input value="Choisir" type="submit"  class="btn btn-xs btn-mastering" />
                                     </form>
                                 </ul>
  
                             </div>
-                            <div id="step3"   {% if not only_admin_can_manage %}       class="no_visu_on_load" {% endif%}>
+                            <div id="step3"   {% if school.is_managing != 1 %} class="no_visu_on_load" {% endif%}>
                                 <label>Étape 3 : Gestion  par l'Admin {% if data.nbs > 0 %} <i class="fa fa-check text-success"></i> {% endif%} 
                                     <br/><small>L’administrateur de l’établissement dispose de 3 moyens pour gérer les groupes et les élèves, à choisir selon l’effectif de l’établissement et le format de sa liste d’élèves.</small>
                                 </label> 
@@ -404,10 +409,18 @@
 
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-xs-12">
-                        {% if only_admin_can_manage  %}
-                            <div class="alert alert-sacado"><i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement</div>
+                        {% if school.is_managing == 1  %}
+                            <div class="alert alert-sacado">
+                                <i class="fa fa-user"></i> Gestion  par l'administrateur SACADO uniquement 
+                            </div>
+                        {% elif school.is_managing == 0  %}
+                            <div class="alert alert-danger">
+                                <i class="fa fa-user"></i> Gestion complète par les enseignants SACADO uniquement
+                            </div>
                         {% else %} 
-                            <div class="alert alert-danger"><i class="fa fa-users"></i>Gestion   par les enseignants </div>
+                            <div class="alert alert-danger">
+                                <i class="fa fa-plus"></i> Simple ajout d'élèves par les enseignants 
+                            </div>
                         {% endif%} 
                         </div>
                     </div>

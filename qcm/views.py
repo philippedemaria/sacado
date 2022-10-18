@@ -2982,8 +2982,8 @@ def ordering_number(parcours):
     #IA
     ################################################################
 
-    if parcours.is_ia :       
-        get_parcourses_to_parcours(parcours.id)
+    # if parcours.is_ia :       
+    #     get_parcourses_to_parcours(parcours.id)
 
     nb_exo_only, nb_exo_visible  = [] , []   
     i , j = 0, 0

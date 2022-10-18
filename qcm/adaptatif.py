@@ -113,24 +113,27 @@ def get_parcourses_to_parcours(p_id):
             aed['is_display']=1
         new_dico[aed['exo']] = aed['is_display']
 
-    list_to_display = list() 
-    others_exercise_id = set()  
+    list_to_display     = list()
+    list_to_not_display = list()
+    others_exercise_id  = set()  
     relationships = Relationship.objects.filter(parcours=parcours).order_by("ranking") 
     for relationship in relationships :
-        print("===================================================")
-        liste = list(Relationship.objects.values_list("exercise_id",flat=True).filter(exercise__knowledge=relationship.exercise.knowledge).distinct() )
-        print({'know' : relationship.exercise.knowledge.id, 'exo' : relationship.exercise.id , 'liste' : liste } )
         e_id = relationship.exercise.id 
         if (e_id in new_dico and new_dico[e_id] == 1) or (not e_id in new_dico) :
-            list_to_display.append( {'r_id' : relationship.id , 'is_display':1 } )
+            list_to_display.append(  relationship.id )
         else :
-            list_to_display.append( {'r_id' : relationship.id , 'is_display':0 } )
+            list_to_not_display.append( relationship.id )
    
 
     print("===================================================")
-    print(list_to_display)
+    print(list_to_display , list_to_not_display)
 
-    return list_to_display
+    msg = None
+    if len(list_to_not_display) == 0 :
+        msg = " Nous n'avons aucun autres exercices sur ces savoir faire à vous proposer."
+ 
+
+    return list_to_display , list_to_not_display , msg
 
 
 

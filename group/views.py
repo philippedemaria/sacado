@@ -541,10 +541,7 @@ def create_group(request):
     teacher = Teacher.objects.get(user_id=request.user.id)
     form = GroupTeacherForm(request.POST or None, teacher = teacher )
 
-    try :
-        is_managing = teacher.user.school.is_managing # permet de savoir si un admin gère les groupes. True si c'est l'admin
-    except:
-        is_managing = False
+    is_managing = teacher.user.school.is_managing  
 
     try :
         is_gar_check = request.session.get("is_gar_check",None)
@@ -1257,11 +1254,15 @@ def enroll(request, slug):
                 else :
                     student = Student.objects.get(user__last_name = user.last_name, user__first_name  = user.first_name , user__school = school, level=group.level )
                 try :
-                    group.students.add(student)
-                    # Affections des DOSSIERS ET parcours
-                    messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
-                    groups = [group]
-                    test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
+                    if not group.lock :
+                        group.students.add(student)
+                        # Affections des DOSSIERS ET parcours
+                        messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
+                        groups = [group]
+                        test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
+                    else :
+                        messages.error(request, "Le groupe est verrouillé. Prévenir votre enseignant.")
+                        return redirect ('enroll' , slug)
                 except :
                     messages.success(request, "Le groupe ou l'élève n'est pas reconnu. Vérifier le groupe ou l'élève")
                     return redirect ('enroll' , slug)
@@ -1310,14 +1311,21 @@ def enroll(request, slug):
             if user :
                 login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
                 request.session["user_id"] = request.user.id
-                group.students.add(user.student)
-                messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")  
-                groups = [group]
-                test = attribute_all_documents_of_groups_to_a_new_student(groups, user.student)             
-                if test :
-                    messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
+
+                if not group.lock :
+                    group.students.add(user.student)
+                    # Affections des DOSSIERS ET parcours
+                    messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
+                    groups = [group]
+                    test = attribute_all_documents_of_groups_to_a_new_student(groups, user.student) 
+                    if test :
+                        messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
+                    else :
+                        messages.error(request, "Les documents du groupe n'ont pas pu être attribué à {} {}.".format(user.first_name, user.last_name))
                 else :
-                    messages.error(request, "Les documents du groupe n'ont pas pu être attribué à {} {}.".format(user.first_name, user.last_name))
+                    messages.error(request, "Le groupe est verrouillé. Prévenir votre enseignant.")
+                    return redirect ('enroll' , slug)
+                    
             else :
                 messages.error(request,"Utilisateur inconnu")
 

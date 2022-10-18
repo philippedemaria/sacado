@@ -26,6 +26,8 @@ class Group(ModelWithCode):
     teachers       = models.ManyToManyField(Teacher, blank=True,   editable=False, through="Sharing_group", related_name="teacher_group")
     subject        = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.CASCADE, related_name="subject_group", verbose_name="Matière*")
     school         = models.ForeignKey(School, default = "" ,  editable=False, blank=True,  null=True, on_delete=models.CASCADE, related_name="school_group" ) 
+    is_gar         = models.BooleanField(default=0)
+
 
     class Meta:
         ordering = ['name']

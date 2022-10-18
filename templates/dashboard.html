@@ -123,10 +123,14 @@
                                 {% if request.user.is_authenticated %}
                                     {% if user.is_teacher %}
                                         <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span>                                   
-                                        {% if teacher.groups.count > 0 and teacher.user.username|length < 50 %} 
+                                        {% if teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing != 1 %} 
                                             <ul>
                                                 <li> <a href="{% url 'create_group'  %}" class="btn btn-new"  > Nouveau groupe</a> </li>  
-                                            </ul> 
+                                            </ul>
+                                        {% elif teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing == 1 %} 
+                                            <ul>
+                                                <li> <a href="#" class="btn btn-default" title="vous n'avez pas les droits pour créer un groupe"  > Nouveau groupe</a> </li>  
+                                            </ul>
                                         {% endif %}
                                         {% if webinaire %}
                                         <div class="webinaire_index">

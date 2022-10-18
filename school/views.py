@@ -988,6 +988,7 @@ def choose_managing_school(request):
 	authorize_managing = request.POST.get('authorize_managing',None)
 	# 0 si tout enseignant
 	# 1 si seulement l'Admin
+	# 2 si seulement l'ajout d'élèves déjà inscrit
 	School.objects.filter(pk=school.id).update(is_managing=authorize_managing)
 	return redirect('admin_tdb')
 
