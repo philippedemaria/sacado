@@ -235,15 +235,9 @@ def student_dashboard(request,group_id):
     for r in relationships:
         if r.type_id == 0 and  r not in exercise_tab:
             exercise_tab.append(r.exercise)
-    num = 0
-    for e in exercise_tab:
-        if Studentanswer.objects.filter(student=student, exercise=e).count() > 0:
-            num += 1
-
-
-    for c in customexercises :
-        if c.customexercise_custom_answer.filter(student=student).count() > 0:
-            num += 1
+    
+    som = student.answers.values_list("exercise_id",flat=True).filter( exercise_id__in =exercise_tab).distinct().count()  
+    som += student.student_custom_answer.filter(customexercise__in=customexercises).count()  
 
     try:
         ratio = int(num / (nb_relationships+nb_custom) * 100)
