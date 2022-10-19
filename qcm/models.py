@@ -2233,7 +2233,7 @@ class Correctionknowledgecustomexercise(models.Model): # Evaluation des savoir f
     class Meta:
         unique_together = ['student', 'customexercise','knowledge']
 
-class Exerciselocker(ModelWithCode):
+class Exerciselocker(models.Model):
 
     relationship = models.ForeignKey(Relationship,  on_delete=models.CASCADE, blank=True, null=True,  related_name='relationship_exerciselocker', editable=False) 
     customexercise = models.ForeignKey(Customexercise,  on_delete=models.CASCADE, blank=True, null=True,  related_name='customexercise_exerciselocker', editable=False) 
