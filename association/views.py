@@ -14,7 +14,7 @@ from templated_email import send_templated_mail
 from django.db.models import Q , Sum
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
-from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy , Customer
+from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy , Customer , Prospection
 from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm
 from account.models import User, Student, Teacher, Parent ,  Response , Connexion
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
@@ -289,7 +289,8 @@ def statistiques(request):
     nb_connexions   = Connexion.objects.filter(date__lte=date_stop,date__gt=date_start ).aggregate(nb = Sum('nb'))["nb"]
     nb_answers      = Studentanswer.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Customanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count() + Writtenanswerbystudent.objects.filter(date__lte= date_stop,date__gt=date_start).count()
 
-    nb_no_get_acces = nb_teachers - Group.objects.values_list("teacher__user__id").distinct().filter(teacher__user__in=inscriptions).count() 
+    nb_no_get_acces = Teacher.objects.values_list("user_id",flat=True).distinct().filter(user__date_joined__lte=date_stop,user__date_joined__gt=date_start , groups=None).count()
+
     #################################################################################################################################
     ##### Jour de la semaine étudiée
     #################################################################################################################################
@@ -3047,6 +3048,49 @@ def prospec_to_adhesions(request):
  
 
     return render(request, 'association/list_pending_adhesions.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def prospec_to_adhesions(request):
+
+    customers     = Customer.objects.filter(status=1)
+    context     = { 'customers': customers,  'prosp' : False     }
+
+ 
+
+    return render(request, 'association/list_pending_adhesions.html', context )
+
+
+
+@user_passes_test(user_is_board)
+def contact_prosp(request):
+
+
+    teachers    = Teacher.objects.filter(groups=None)
+    nb_teachers = teachers.count()
+    som = 0
+    if request.method == "POST":
+        teacher_ids = request.POST.getlist("teacher_ids", None)
+        for teacher_id in teacher_ids :
+                print(teacher_id)
+                user = User.objects.get(pk = teacher_id )
+                msg  = request.POST.get("message", None).replace("***","\n")
+                msg  = "Bonjour "+user.first_name+" " +user.last_name+",\n"+msg
+                print(msg)
+                objet = request.POST.get("objet", None)
+                send_mail( objet, msg , settings.DEFAULT_FROM_EMAIL , [ user.email ]  )
+                Prospection.objects.create(user=user)
+                som +=1
+
+
+
+    context     = { 'teachers': teachers, 'som' : som   }
+
+ 
+
+    return render(request, 'association/contact_prosp.html', context )
+
 
 
 

@@ -76,7 +76,7 @@ class Rate(models.Model):
     Modèle représentant les tarifs.
     """
     amount    = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, verbose_name="Tarif")
-    discount    = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, verbose_name="Réduction" )
+    discount  = models.DecimalField(default=0, blank=True , max_digits=10, decimal_places=2, verbose_name="Réduction" )
     quantity  = models.PositiveIntegerField(default=0,  verbose_name="Nombre d'élèves")
     year      = models.CharField(max_length=255, default='',  verbose_name="Année")
     is_active = models.BooleanField(default=0,  verbose_name="Année active")
@@ -142,7 +142,6 @@ class Voting(models.Model):
     def __str__(self):
         lname = self.associated.user.last_name.capitalize()
         fname = self.associated.user.first_name.capitalize()
-
         return "{} {}".format(choice)
 
     class Meta:
@@ -417,3 +416,16 @@ class Abonnement(models.Model):
 
     def __str__(self):
         return "{}".format(self.school.name)
+
+
+
+class Prospection(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    user = models.ForeignKey(User, blank=True, default=True, null=True,   related_name="prospections", verbose_name="Membre",  on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        lname = self.user.last_name.capitalize()
+        return "{} : {}".format(lname, self.date)

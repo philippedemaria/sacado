@@ -91,6 +91,10 @@ urlpatterns = [
     path('prospec_to_adhesions', prospec_to_adhesions, name='prospec_to_adhesions'),
     path('list_historic_schools', list_historic_schools, name='list_historic_schools'),
 
+    path('contact_prosp', contact_prosp, name='contact_prosp'),
+
+
+
     ### -------------------------  GAR
     path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
     path('delete_abonnement_gar/<slug:idg>', delete_abonnement_gar, name='delete_abonnement_gar'),

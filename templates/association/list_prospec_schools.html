@@ -13,7 +13,7 @@
 
 
 {% block page_title %}
-    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> {% if prosp %}Enseignants errants {% else %} Ex clients {%  endif %} 
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> {% if prosp %}Enseignants errants <a href="{% url 'contact_prosp' %}" class="btn btn-new">Contact</a> {% else %} Ex clients {%  endif %} 
 {% endblock %} 
 
 
