@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <label>Destinataires : </label><br/>
                         {% for teacher in teachers %}
-                            <label class="btn btn-{% if teacher.user.proposections.count %}new{% else %}sacado{% endif %}"><input type="checkbox" value="{{ teacher.user.id }}" name="teacher_ids">{{ teacher.user.last_name }}{{ teacher.user.first_name }}</label>
+                            <label class="btn btn-{% if teacher.user.prospections.count %}new{% else %}sacado{% endif %}"><input type="checkbox" value="{{ teacher.user.id }}" name="teacher_ids">{{ teacher.user.prospections.count}}. {{ teacher.user.last_name }}{{ teacher.user.first_name }}</label>
                         {% endfor %}
                     </div>
                 </div>
