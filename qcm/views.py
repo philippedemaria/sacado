@@ -5888,19 +5888,36 @@ def content_is_done(request, id ): #id  = id_content
 def ajax_search_exercise(request):
 
     code =  request.POST.get("search") 
-    knowledges = Knowledge.objects.filter(name__contains= code)
-
-    if request.user.user_type == 0 :
-        student = True
-    else :
-        student = False
-
-    relationship = Relationship.objects.filter(Q(exercise__knowledge__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code)).last()
+    knowledges = Knowledge.objects.values_list('id',flat=True).filter(name__contains= code).distinct()
     data = {}
-    html = render_to_string('qcm/search_exercises.html',{ 'relationship' : relationship ,  'student' : student })
- 
-    data['html'] = html       
+    too_much = 'no'
 
+    print(knowledges)
+
+    if (knowledges.count())>2:
+        too_much = 'yes'
+        html = ""
+
+    else :
+
+        if request.user.user_type == 0 :
+            student = True
+            parcourses = request.user.student.student_to_parcours.values_list('id',flat=True).filter(publish=1).distinct()
+
+        elif request.user.user_type == 2 :
+            student = False
+            parcourses = request.user.teacher.teacher_parcours.values_list('id',flat=True).distinct()
+
+        relationships = Relationship.objects.filter(Q(exercise__knowledge_id__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code) , parcours_id__in=parcourses)
+
+        if relationships.count() > 15 :
+            too_much = 'yes'
+            html = ""
+        else :
+            html = render_to_string('qcm/search_exercises.html',{ 'relationships' : relationships , 'parcourses' : parcourses , 'student' : student })
+     
+    data['html'] = html       
+    data['too_much'] = too_much
     return JsonResponse(data)
 
 

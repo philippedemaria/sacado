@@ -10,11 +10,12 @@
 <table class="table table-sacado  table-hover display100" style="width:100%">
     <thead> 
         <tr>
-            <td></td>
+            <td></td><td></td>
         </tr>
     </thead>
     <tbody>
-        {% if relationship  %} 
+
+        {% for relationship in relationships  %} 
         <tr>
             <td>
                 {% if student  %}
@@ -52,18 +53,15 @@
                 {% else %}
                 <a href="{% url  'show_this_exercise'   relationship.exercise.id   %}"  class="sublisting" target="_blank">
                 {% endif %}
-
-
-
-
                     <small>   
                     <i class="fa fa-fw fa-barcode"></i> {{ relationship.exercise.supportfile.code }}  {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                     <i class="fa fa-fw fa-clock-o"></i> {{ relationship.exercise.supportfile.duration }} minutes {% if relationship.exercise.supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                     <i class="fa fa-fw fa-save"></i> {{ relationship.exercise.supportfile.situation}} situation{{ relationship.exercise.supportfile.situation|pluralize}} minimum</small>
-                </a> 
+                </a>
             </td>
+            <td > Cet exercice est dans le parcours <b>{{ relationship.parcours.title }}</b></td>
         </tr>
-        {% else %} 
+        {% empty %} 
         <tr>
             <td>
                 <div class="alert alert-danger">
@@ -71,7 +69,7 @@
                 </div>    
             </td>
         </tr>
-        {% endif %} 
+        {% endfor %} 
     </tbody>
 
 </table>

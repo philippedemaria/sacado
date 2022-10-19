@@ -924,18 +924,19 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ====================================================================================================================
         // ====================================================================================================================
 
-        $('#search').on('keyup', function () {
+        $('#search').on('keyup', function () { 
 
 
-            let search =  $(this).val()  ;   
+            let search =  $(this).val()  ; 
+            if (search.length > 5)
+            { 
+
             let from =  $("#from").val()  ;             
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             if (from) { urlform = '../../qcm/ajax_search_exercise' ;}   else { urlform = 'qcm/ajax_search_exercise' ;} 
           
-            if (search.length > 5)
 
-            { 
                 $.ajax({
                     url: urlform ,
                     data: {
@@ -945,7 +946,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
-                        $("#search_result").html("").html(data["html"]);
+                        if (data.too_much == 'yes') 
+                            { alert("Votre recherche doit être affinée. Trop d'exercices possibles.") ; }
+                        else 
+                            { $("#search_result").html("").html(data["html"])  ;  }
+
+
                     }
                 });
             }

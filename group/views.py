@@ -731,7 +731,11 @@ def delete_all_groups(request) :
 def show_group(request, id ):
 
     group = Group.objects.get(id=id)
-    teacher = Teacher.objects.get(user=request.user)
+    try :
+        teacher = Teacher.objects.get(user=request.user)
+    except :
+        return redirect('index')
+        
     is_managing = False
     if request.user.school :
         is_managing = request.user.school.is_managing
