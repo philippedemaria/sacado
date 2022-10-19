@@ -5892,7 +5892,7 @@ def ajax_search_exercise(request):
     data = {}
     too_much = 'no'
 
-    print(knowledges)
+ 
 
     if (knowledges.count())>2:
         too_much = 'yes'
@@ -5902,7 +5902,7 @@ def ajax_search_exercise(request):
 
         if request.user.user_type == 0 :
             student = True
-            parcourses = request.user.student.student_to_parcours.values_list('id',flat=True).filter(publish=1).distinct()
+            parcourses = request.user.student.students_to_parcours.values_list('id',flat=True).filter(publish=1).distinct()
 
         elif request.user.user_type == 2 :
             student = False
