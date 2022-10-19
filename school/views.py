@@ -1177,7 +1177,14 @@ def ask_school_adhesion(request):
 			asking_gar = "Pas d'accès au GAR demandé."
 			if school.gar: # appel de la fonction qui valide le Web Service
 				asking_gar = "Accès au GAR demandé."
-				create_abonnement_gar(today, abonnement,request.user)
+				test, raison , header , decode , ida = create_abonnement_gar(today, abonnement,request.user)
+				if test :
+					fa.gar_abonnement_id = ida
+					abonnement.save()
+					messages.success(request,"Activation du GAR réussie")
+				else :
+					messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+				
 
 			send_mail("Demande d'abonnement à la version établissement",
 			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant "+ user.first_name +" "+ user.last_name +" : "+ user.email +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
@@ -1186,8 +1193,7 @@ def ask_school_adhesion(request):
 
 			send_mail("Demande d'abonnement à la version établissement",
 		              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school.name +"\n"+asking_gar+"\n\nCotisation : "+str(school.fee())+" €.\nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
-	               settings.DEFAULT_FROM_EMAIL,
-               [user.email])
+	               settings.DEFAULT_FROM_EMAIL,[user.email])
 
 			messages.success(request,"Demande d'abonnement envoyée. Vous recevrez rapidement l'IBAN de l'association à transmettre à votre DAF")
 		else :

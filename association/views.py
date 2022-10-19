@@ -497,6 +497,7 @@ def update_school_admin(request,id):
             test, raison , header , decode , ida = create_abonnement_gar( today , abonnement  , request.user )
             if test :
                 abonnement.gar_abonnement_id = ida
+                abonnement.save()
                 messages.success(request,"Activation du GAR réussie")
             else :
                 messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
@@ -1817,8 +1818,6 @@ def renew_accounting(request,ids):
                             messages.success(request,"Activation du GAR réussie")
                         else :
                             messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
-
-                    
                     fa.save()
         else :
             print(form.errors)
