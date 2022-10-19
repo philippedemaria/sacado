@@ -498,53 +498,59 @@ def register_student(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
-            if can_inscribe_students(request.user.school, 1) :
-                username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
-                user = user_form.save(commit=False)
-                user.username = username.strip()
-                user.user_type = User.STUDENT
-                password = request.POST.get("password1")
-                ######################### Choix du groupe  ###########################################
-                if request.POST.get("choose_alone"):  # groupe sans prof
-                    # l'élève rejoint le groupe par défaut sur le niveau choisi
-                    teacher = Teacher.objects.get(user_id=2)  # 2480
-                    group = Group.objects.get(teacher=teacher, level_id=int(request.POST.get("level_selector")))
-                    parcours = Parcours.objects.filter(teacher=teacher, level=group.level)
-                else:  # groupe du prof  de l'élève
-                    code_group = request.POST.get("group")
-                    if Group.objects.filter(code=code_group, lock = 0 ).exists():
-                        group = Group.objects.get(code=code_group)
-                        parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level,is_trash=0)
-                    else :
-                        parcours = []
-                        group = None
-                #######################################################################################
-                if group :
-                    try :
-                        user.school = group.teacher.user.school
-                    except :
-                        pass
-                    user.save()
-                    student = Student.objects.create(user=user, level=group.level)
-                    try :
-                        attribute_all_documents_of_groups_to_a_new_student([group], student)
-                    except :
-                        print("Attribution et création non établies")
+            username = user_form.cleaned_data['last_name'] + user_form.cleaned_data['first_name']
+            user = user_form.save(commit=False)
+            user.username = username.strip()
+            user.user_type = User.STUDENT
+            password = request.POST.get("password1")
+            ######################### Choix du groupe  ###########################################
+            if request.POST.get("choose_alone"):  # groupe sans prof
+                # l'élève rejoint le groupe par défaut sur le niveau choisi
+                teacher = Teacher.objects.get(user_id=2)  # 2480
+                group = Group.objects.get(teacher=teacher, level_id=int(request.POST.get("level_selector")))
+                parcours = Parcours.objects.filter(teacher=teacher, level=group.level)
+            else:  # groupe du prof  de l'élève
+                code_group = request.POST.get("group")
+                if Group.objects.filter(code=code_group, lock = 0 ).exists():
+                    group = Group.objects.get(code=code_group)
+                    parcours = Parcours.objects.filter(teacher=group.teacher, level=group.level,is_trash=0)
+                else :
+                    parcours = []
+                    group = None
+            #######################################################################################
+            if group :
+                try :
+                    school = group.teacher.user.school
+                    user.school = school
+                    if can_inscribe_students(school, 1) :
+                        user.save()
+                        student = Student.objects.create(user=user, level=group.level)
+                        try :
+                            attribute_all_documents_of_groups_to_a_new_student([group], student)
+                        except :
+                            pass
 
-                    user = authenticate(username=username, password=password)
-                    login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-                    request.session["user_id"] = request.user.id
-                    messages.success(request, "Inscription réalisée avec succès !")               
-                    if user_form.cleaned_data['email']:
-                        send_templated_mail(
-                            template_name="student_registration",
-                            from_email=settings.DEFAULT_FROM_EMAIL,
-                            recipient_list=[user_form.cleaned_data['email'], ],
-                            context={"student": user, }, )
-                else:
-                    messages.error(request, "Erreur lors de l'enregistrement. Vous devez spécifier un groupe...")     
-            else :
-                messages.error(request, "Erreur... Nombre d'élèves dépassé. Augmenter la capacité de votre établissement")
+                        user = authenticate(username=username, password=password)
+                        login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+                        request.session["user_id"] = 
+                        .user.id
+                        messages.success(request, "Inscription réalisée avec succès !")               
+                        if user_form.cleaned_data['email']:
+                            send_templated_mail(
+                                template_name="student_registration",
+                                from_email=settings.DEFAULT_FROM_EMAIL,
+                                recipient_list=[user_form.cleaned_data['email'], ],
+                                context={"student": user, }, )
+                    else :
+                        messages.error(request, "Erreur... Nombre d'élèves dépassé. Augmenter la capacité de votre établissement")
+                        return redirect('index')
+                except :
+                    messages.error(request, "Une erreur est survenue... Inscription échouée.")
+                    return redirect('index')
+
+            else:
+                messages.error(request, "Erreur lors de l'enregistrement. Vous devez spécifier un groupe...")     
+                
         else:
             messages.error(request, "Erreur lors de l'enregistrement. Reprendre l'inscription...")
     return redirect('index')
