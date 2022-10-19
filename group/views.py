@@ -231,16 +231,13 @@ def student_dashboard(request,group_id):
     nb_relationships =  relationships.count()
 
 
-    exercise_tab = []
-    for r in relationships:
-        if r.type_id == 0 and  r not in exercise_tab:
-            exercise_tab.append(r.exercise)
+    exercise_tab = Relationship.objects.values_list("exercise_id",flat=True).filter(Q(is_publish=1) | Q(start__lte=today)).filter(Q(parcours__in=parcourses_brut)| Q(parcours__in=sequences_brut)).filter(type_id = 0 , date_limit__gte=today)
     
-    som = student.answers.values_list("exercise_id",flat=True).filter( exercise_id__in =exercise_tab).distinct().count()  
+    som = student.answers.values_list("exercise_id",flat=True).filter( exercise__in =exercise_tab).distinct().count()  
     som += student.student_custom_answer.filter(customexercise__in=customexercises).count()  
 
     try:
-        ratio = int(num / (nb_relationships+nb_custom) * 100)
+        ratio = int(som / (nb_relationships+nb_custom) * 100)
     except:
         ratio = 0
 
