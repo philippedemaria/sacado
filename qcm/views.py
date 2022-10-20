@@ -8124,7 +8124,7 @@ def export_notes_after_evaluation(request):
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment;filename=Notes_exercice_{}.csv'.format(parcours.id)
-        #response.write(u'\ufeff'.encode('utf8'))
+        response.write(u'\ufeff'.encode('utf8'))
         writer = csv.writer(response)
         
         fieldnames = ("Nom", "Prénom", "Situations proposées", "Réponse juste", "Score rapporté aux meilleurs scores SACADO" , "Score rapporté à tous les exercices SACADO proposés" , "Note proposée"  )
