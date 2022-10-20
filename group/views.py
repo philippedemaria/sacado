@@ -153,7 +153,8 @@ def student_dashboard(request,group_id):
 
     if not request.user.student :
         messages.error(request,"Elève non identifié")
-        return redirect('index')
+        return "dashboard.html"  , {}
+
 
     student = request.user.student 
     groups = student.students_to_group.all()
@@ -165,7 +166,7 @@ def student_dashboard(request,group_id):
         template = "dashboard.html" 
         student_index = True
     else :
-        template =  "group/dashboard_group.html"  
+        template = "group/dashboard_group.html"  
 
     today = time_zone_user(request.user)        
     timer = today.time()
@@ -182,12 +183,8 @@ def student_dashboard(request,group_id):
         request.session["group_id"] = group_id 
 
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
-        
         bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
-
-
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
-
 
     else :
 
@@ -1286,8 +1283,6 @@ def enroll(request, slug):
                 messages.error(request, "Inscription abandonnée !")
                 return render(request, 'group/enroll.html', {"u_form": user_form, "slug": slug, "group": group, })    
         else :
-
-            username = request.POST.get("this_username")
             g_id = request.POST.get("group_id",None)
             if g_id :
                 group_id = int(g_id)
@@ -1296,23 +1291,19 @@ def enroll(request, slug):
                 messages.error(request,"Le groupe n'est pas reconnu.")
                 return redirect('index') 
 
+            username = request.POST.get("this_username")
             password = request.POST.get("this_password")
             try :
-                user = authenticate(username=username, password=password)
-            except :
-                messages.error(request, "L'utilisateur n'est pas connecté. Erreur d'authentification.")
-                return redirect('index' )
-
-            if user :
-                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-                request.session["user_id"] = request.user.id
-
-                if not group.lock :
-                    group.students.add(user.student)
+                if not group.lock :                
+                    user = authenticate(username=username, password=password)
+                    login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+                    request.session["user_id"] = request.user.id
+                    student = Student.objects.get(user_id=user.id)
+                    group.students.add(student)
                     # Affections des DOSSIERS ET parcours
                     messages.success(request, "Inscription réalisée avec succès ! Si vous avez renseigné votre email, vous avez reçu un mail de confirmation.")                
                     groups = [group]
-                    test = attribute_all_documents_of_groups_to_a_new_student(groups, user.student) 
+                    test = attribute_all_documents_of_groups_to_a_new_student(groups, student) 
                     if test :
                         messages.success(request, "Les documents du groupe ont été attribué à {} {}.".format(user.first_name, user.last_name))
                     else :
@@ -1320,9 +1311,10 @@ def enroll(request, slug):
                 else :
                     messages.error(request, "Le groupe est verrouillé. Prévenir votre enseignant.")
                     return redirect ('enroll' , slug)
-                    
-            else :
-                messages.error(request,"Utilisateur inconnu")
+
+            except :
+                messages.error(request, "L'utilisateur n'est pas connecté. Erreur d'authentification.")
+                return redirect('index' )
 
         return redirect('index') 
 
