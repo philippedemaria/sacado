@@ -2686,7 +2686,11 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
         coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
         ################################################
         lock_all_exercises_for_student(nf.stop,nf)
-        if is_sequence :
+
+
+        if nf.is_ia :
+            return redirect('create_parcours_ia', nf.id)
+        elif is_sequence :
             return redirect('show_parcours', 0 , nf.id)
         elif request.POST.get("save_and_choose") :
             return redirect('peuplate_parcours', nf.id)
@@ -2727,7 +2731,35 @@ def create_sequence(request,idf=0):
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
     return create_parcours_or_evaluation(request, False , False, idf , 1 )
 
-    
+ 
+
+
+@login_required(login_url= 'index')
+def create_parcours_ia(request,idp):
+    """ Envoie la liste des exercice pour un seul niveau """
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    parcours = Parcours.objects.get(pk=idp)   
+    level    = parcours.level
+    subject  = parcours.subject
+    exercises = Exercise.objects.filter(level  = level  , theme__subject = subject , supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge")
+
+
+    if request.method == "POST":
+        knowledge_ids = request.POST.getlist('knowledge_id')
+ 
+    context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level }
+ 
+    return render(request, 'qcm/list_knowledges_by_level.html', context) 
+
+
+
+
+
 #######################################################################################################################
 ###################  Modification
 #######################################################################################################################
@@ -5900,7 +5932,7 @@ def ajax_search_exercise(request):
 
         if request.user.user_type == 0 :
             student = True
-            parcourses = request.user.student.students_to_parcours.values_list('id',flat=True).filter(publish=1).distinct()
+            parcourses = request.user.student.students_to_parcours.values_list('id',flat=True).filter(is_publish=1).distinct()
 
         elif request.user.user_type == 2 :
             student = False
