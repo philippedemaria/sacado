@@ -2019,13 +2019,17 @@ def passwordResetConfirmView(request, code ):
             for u in users :
                 u.password = make_password(request.POST.get('password1'))
                 u.save()
-                cpt += 1
-            if cpt > 1 :
-                msg = "Bonjour, \n\n Plusieurs comptes sont associés à cette adresse email : "+ get_new_password.email +"\n\n Votre mot de passe " + request.POST.get('password1') + "\nest attribué à chaque compte associé à cette adresse mail.\n\n Ceci est un mail automatique, ne pas répondre."
-            else :
-                msg = "Bonjour, \n\n Votre mot de passe : " + request.POST.get('password1') + "\nest attribué.\n\n Ceci est un mail automatique, ne pas répondre."
+                msg = "Bonjour "+u.first_name+" "+u.last_name+", \n\nVotre identifiant est :"+u.username+"\n\nLe mot de passe est : " + request.POST.get('password1') + "\n\nSi cette adresse mail est attachée à plusieurs comptes, chaque identifiant recevra ce mot de passe et vous recevrez les mails correspondants.\n\nBonne utilisation de SACADO.\n\nCeci est un mail automatique, ne pas répondre."
+                send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[get_new_password.email])
+
+
+            #     cpt += 1
+            # if cpt > 1 :
+            #     msg = "Bonjour, \n\n Plusieurs comptes sont associés à cette adresse email : "+ get_new_password.email +"\n\n Votre mot de passe " + request.POST.get('password1') + "\nest attribué à chaque compte associé à cette adresse mail.\n\n Ceci est un mail automatique, ne pas répondre."
+            # else :
+            #     msg = "Bonjour, \n\n Votre mot de passe : " + request.POST.get('password1') + "\nest attribué.\n\n Ceci est un mail automatique, ne pas répondre."
  
-            send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[get_new_password.email, ])
+            # send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[get_new_password.email, ])
         return render(request, 'registration/password_reset_complete.html', { })
 
 
