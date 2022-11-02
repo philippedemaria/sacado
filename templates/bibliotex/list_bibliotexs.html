@@ -69,12 +69,12 @@
 
 
 {% block inside_folder_actions %}
-    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces évaluations')"> 
+    <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces biblioTex')"> 
         <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
     </button>
 
 
-    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces évaluations')"> 
+    <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces biblioTex')"> 
         <i class="fa fa-trash"> </i>   Supprimer la sélection
     </button>
 {% endblock %}
