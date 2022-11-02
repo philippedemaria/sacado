@@ -1041,7 +1041,7 @@ def show_bibliotex(request, id):
 
 
 
-def actioner(request):
+def bibliotex_actioner(request):
 
     teacher = request.user.teacher 
     idbs = request.POST.getlist("selected_bibliotexs")
@@ -1065,8 +1065,6 @@ def actioner(request):
             bibliotex.is_favorite = 0
             bibliotex.save()
 
- 
-  
     else : 
         for idb in idbs :
             bibliotex = Bibliotex.objects.get(id=idb) 

@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('bibliotexs', bibliotexs, name='bibliotexs'),
     path('my_bibliotexs', my_bibliotexs, name='my_bibliotexs'),
-    path('actioner', actioner, name='actioner'),
+    path('bibliotex_actioner', bibliotex_actioner, name='bibliotex_actioner'),
 
     path('create_bibliotex_sequence/<int:id>', create_bibliotex_sequence, name='create_bibliotex_sequence'),
 

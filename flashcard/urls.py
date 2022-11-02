@@ -32,7 +32,7 @@ urlpatterns = [
     path('ajax_results_flashpack', ajax_results_flashpack , name='ajax_results_flashpack'),
 
 
-    path('flashpack_actioner', actioner, name='actioner'),
+    path('flashpack_actioner', flashpack_actioner, name='flashpack_actioner'),
 
     path('create_flashcard/new', create_flashcard, name='create_flashcard'),
     path('update_flashcard/<int:id>', update_flashcard, name='update_flashcard'),

@@ -666,7 +666,7 @@ def ajax_results_flashpack(request):
     return JsonResponse(data)
 
 
-def actioner(request):
+def flashpack_actioner(request):
 
     teacher = request.user.teacher 
     idbs = request.POST.getlist("selected_flashpacks")
