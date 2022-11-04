@@ -239,16 +239,17 @@ def index(request):
 
         communications = Communication.objects.filter(active= 1).order_by("-today")
 
+        nb_parcours = Parcours.objects.filter(is_trash = 0).count()
 
 
         nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Customanswerbystudent.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
-        exercise_nb = exercises.count() - 1
+        nb_exercise = exercises.count() - 1
 
         nb_exotex = Exotex.objects.count() 
  
-        i = random.randrange(0, exercise_nb)
+        i = random.randrange(0, nb_exercise)
         exercise = exercises[i]
  
 
@@ -256,7 +257,7 @@ def index(request):
         cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
 
         context = { 'cookie_rgpd_accepted' : cookie_rgpd_accepted , 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                    'nb_exotex': nb_exotex, 'nb_exercise': exercise_nb, 'exercise': exercise,  'nb_student': nb_student, 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
+                    'nb_exotex': nb_exotex, 'nb_exercise': nb_exercise, 'exercise': exercise,  'nb_student': nb_student, 'nb_parcours' : nb_parcours , 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
 
         response = render(request, 'home.html', context)
         return response
@@ -1895,7 +1896,7 @@ def webinaire_register(request):
 
     today = time_zone_user(request.user) 
     webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
-    nb_places = 500 - webinaire.users.count()
+    nb_places = 100 - webinaire.users.count()
     return render(request, 'setup/form_webinaire_register.html', {'webinaire': webinaire , 'nb_places' : nb_places })
 
 
