@@ -11,8 +11,8 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
 
-from tool.models import Tool , Question  , Choice  , Quizz , Diaporama  , Slide ,Qrandom ,Variable , VariableImage , Answerplayer , Display_question ,  Videocopy #, Generate_quizz , Generate_qr
-from tool.forms import ToolForm ,  QuestionForm ,  ChoiceForm , QuizzForm,  DiaporamaForm , SlideForm, QrandomForm, VariableForm , AnswerplayerForm,  VideocopyForm
+from tool.models import * #, Generate_quizz , Generate_qr
+from tool.forms import *
 from group.models import Group 
 from socle.models import Level, Waiting , Theme , Knowledge
 from qcm.models import  Parcours, Exercise , Folder , Relationship
@@ -94,7 +94,39 @@ def all_datas(level):
  
 
 
+def all_datas_qia(level):
 
+    levels_dict = {}
+ 
+    themes = level.themes.order_by("id")
+    themes_tab =   []
+    for theme in themes :
+        themes_dict =  {}                
+        themes_dict["name"]=theme
+        waitings = theme.waitings.filter(level=level)
+        waitings_tab  =  []
+        for waiting in waitings :
+            qrs_counter = 0
+            waiting_dict  =   {} 
+            waiting_dict["name"]=waiting 
+            knowlegdes = waiting.knowledges.order_by("name")
+            knowledges_tab  =  []
+            for knowledge in knowlegdes :
+                knowledges_dict  =   {}  
+                knowledges_dict["name"]=knowledge 
+                questions = knowledge.question.all()
+                qrs_counter +=  questions.count()
+                knowledges_dict["questions"]=questions
+                knowledges_tab.append(knowledges_dict)
+            waiting_dict["knowledges"]=knowledges_tab
+            waiting_dict["qrs_counter"]=qrs_counter
+            waitings_tab.append(waiting_dict)
+        themes_dict["waitings"]=waitings_tab
+        themes_tab.append(themes_dict)
+    levels_dict["themes"]=themes_tab
+
+    return levels_dict 
+ 
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -751,6 +783,16 @@ def ajax_find_peuplate_sequence(request):
 
 
 
+def show_quizz_numeric(request,id,idp):
+    """ permet à un prof de voir son quizz """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk= id)
+    parcours = Parcours.objects.get(pk= idp)
+    questions =  quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , 'parcours' : parcours  , 'questions' : questions }
+
+    return render(request, 'tool/show_quizz_numeric.html', context)
 
 
 
@@ -797,12 +839,13 @@ def show_quizz_shared(request,id):
  
 
 
-def result_quizz(request,id):
+def result_quizz(request,id,idp):
     
+    parcours = Parcours.objects.get(pk=idp)  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     questions =  quizz.questions.filter(is_publish=1).order_by("ranking")
-    context = {  "quizz" : quizz  , 'questions' : questions }
+    context = {  "quizz" : quizz  , 'parcours' : parcours , 'questions' : questions }
 
     return render(request, 'tool/result_quizz.html', context)
 
@@ -857,7 +900,7 @@ def ajax_show_detail_question(request):
         percent_done = "0%"
 
 
-
+    total = quizz.questions.aggregate(Sum('point'))['point__sum']
     for student in student_set :
         student_dico = dict()
         student_dico["this"] = student
@@ -871,11 +914,12 @@ def ajax_show_detail_question(request):
                 answer = Answerplayer.objects.get(quizz = quizz , question = question , student = student)
                 student_dico["answer"] = answer
             except: student_dico["answer"] = None
+
         students.append(student_dico)
     
     students.sort(key = lambda d : d["this"].user.last_name  )
 
-    context = { "students" : students , "question" : question , "quizz" : quizz , 'percent' : percent  }
+    context = { "students" : students , "question" : question , "quizz" : quizz , 'percent' : percent , 'total' : total  }
 
 
     data['percent_done'] = percent_done
@@ -1692,29 +1736,45 @@ def ajax_show_my_result(request):
 
 
 
- 
 
 
 @login_required(login_url= 'index')
 def quizz_actioner(request):
+
     teacher = request.user.teacher 
-    idps = request.POST.getlist("selected_quizz") 
- 
-    if  request.POST.get("action") == "deleter" :  
-        for idp in idps :
-            quizz = Quizz.objects.get(id=idp) 
+    idqs = request.POST.getlist("selected_quizz")
+
+    if  request.POST.get("action") == "deleter" :
+        
+        for idq in idqs :
+            quizz = Quizz.objects.get(id=idq) 
             if quizz.teacher == teacher or request.user.is_superuser :
-                    quizz.delete()
-                    messages.success(request, "Quizz Supprimé.")
+                quizz.levels.clear()
+                quizz.themes.clear()  
+                quizz.folders.clear()
+                quizz.groups.clear()
+                quizz.parcours.clear()
+                quizz.questions.clear()
+                quizz.students.clear()
+                quizz.qrandoms.clear()
+                quizz.delete()
             else :
                 messages.error(request, "Vous ne pouvez pas supprimer ce quizz. Contacter le propriétaire.")
-    else: 
 
-        for idp in idps :
-            quizz = Quizz.objects.get(id=idp) 
+    elif  request.POST.get("action") == "archiver" :  
+        for idq in idqs :
+            quizz = Quizz.objects.get(id=idq) 
             quizz.is_archive = 1
+            quizz.is_favorite = 0
             quizz.save()
- 
+
+    else : 
+        for idq in idqs :
+            quizz = Quizz.objects.get(id=idq) 
+            quizz.is_archive = 0
+            quizz.is_favorite = 0
+            quizz.save()
+     
     return redirect('list_quizzes')
 
 
@@ -2009,6 +2069,18 @@ def remove_question(request,id,idq):
         quizz.questions.remove(question)
     return redirect ('create_question', idq, 0)
 
+
+
+
+@login_required(login_url= 'index')
+def remove_question_ia(request,id,idq):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk = idq)
+    if quizz.teacher == request.user.teacher :
+        question = Question.objects.get(pk = id)
+        quizz.questions.remove(question)
+    return redirect ('show_quizz_numeric', id )
 
 
  
@@ -2660,6 +2732,143 @@ def show_qrandom_admin(request,id):
     qrandom = Qrandom.objects.get(pk = id)
  
     return render(request, 'tool/show_qr.html', {'qrandom': qrandom      })
+
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    admin_question_ia
+#####################################################################################################################################
+#####################################################################################################################################
+
+def this_level(level_id):
+    if 1<level_id <13 :
+        level_id = level_id - 1
+    elif level_id == 1 :
+        level_id = 14
+    else :
+        level_id = 12
+    return level_id
+
+
+
+
+@login_required(login_url= 'index')
+def admin_question_ia(request,id_level):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    if request.user.is_superuser :
+ 
+        id_level = this_level(id_level)
+        level = Level.objects.get(pk = id_level)
+        data = all_datas_qia(level)
+        return render(request, 'tool/list_questions_ia.html', {'data': data ,'level': level   })
+    else :
+        return redirect('index')
+
+
+@login_required(login_url= 'index')
+def admin_create_question_ia(request,idk,qtype):
+
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    knowledge = Knowledge.objects.get(pk=idk)
+    form = QuestionKForm(request.POST or None, request.FILES or None, knowledge = knowledge)
+
+    qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
+
+    if qtype > 0 :   
+        qt = Qtype.objects.get(pk=qtype)
+    else :
+        qt = None
+
+    if qtype == 3 or  qtype == 4   or qtype == 12  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    elif   qtype == 13 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=1)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    elif qtype == 5 or qtype == 11 or qtype == 18  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+ 
+    elif qtype == 6 or qtype == 8 or qtype == 10 or qtype == 14   :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+        formSubset   = inlineformset_factory( Choice , Subchoice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_sub_ans = formSubset(request.POST or None,  request.FILES or None)
+
+
+    if request.method == "POST"  :
+        if form.is_valid():
+            nf           = form.save(commit=False) 
+            nf.teacher   = request.user.teacher
+            nf.qtype     = qtype
+            nf.knowledge = knowledge
+            nf.save()
+            form.save_m2m() 
+            if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 18 :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        form_answer.save()
+
+            elif qtype == 6 or qtype == 14  :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        fa = form_answer.save()
+                        form_sub_ans = formSubset(request.POST or None,  request.FILES or None, instance = fa)
+                        for form_sub in form_sub_ans :
+                            if form_sub.is_valid():
+                                form_sub.save()
+
+            id_level = this_level( knowledge.level.id + 1 )
+
+            return redirect('admin_question_ia' , id_level )
+
+        else :
+            print(form.errors)
+
+ 
+    bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
+    context = { 'knowledge': knowledge , 'form' : form, 'qtype' : qtype , "question" : None , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  }
+
+    if qtype == 0 :
+        context.update( {  'title_type_of_question' : "Choisir un type de question"   })
+        template = 'tool/choice_type_of_question.html'
+
+    elif   qtype == 6 or qtype == 14  :
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title , 'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, })
+        template = 'tool/'+qt.template+'.html'
+    
+    else : 
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title , 'form_ans' : form_ans ,   })      
+        template = 'tool/'+qt.template+'.html'
+
+    return render(request, template , context)
+
+
+
+
+
+
+@login_required(login_url= 'index')
+def admin_update_question_ia(request,idk,idq):
+    pass
+
+
+@login_required(login_url= 'index')
+def admin_delete_question_ia(request,idk,idq):
+    pass
+
+
+@login_required(login_url= 'index')
+def admin_show_question_ia(request,idk,idq):
+    pass
+
+
 
 
 #####################################################################################################################################

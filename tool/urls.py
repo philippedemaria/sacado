@@ -38,8 +38,6 @@ urlpatterns = [
 
     path('tools_to_exercise/<int:id>', tools_to_exercise, name='tools_to_exercise'), 
     path('ajax_attribute_this_tool_to_exercise', ajax_attribute_this_tool_to_exercise, name='ajax_attribute_this_tool_to_exercise'), 
-
-
     path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'), 
 
 
@@ -48,6 +46,7 @@ urlpatterns = [
     path('update_question/<int:id>/<int:idq>', update_question, name='update_question'),   
     path('delete_question/<int:id>/<int:idq>', delete_question  , name='delete_question'),
     path('clone_question/<int:id>/<int:idq>/<int:qtype>', clone_question  , name='clone_question'),
+ 
 
     path('quizz_actioner', quizz_actioner  , name='quizz_actioner'),
     path('quizz_archived', all_quizzes_archived  , name='all_quizzes_archived'),
@@ -72,7 +71,7 @@ urlpatterns = [
 
     path('show_quizz_parcours_student/<int:id>/<int:idp>', show_quizz_parcours_student, name='show_quizz_parcours_student'), 
 
-
+    path('result_quizz/<int:id>/<int:idp>', result_quizz, name='result_quizz'), 
 
     path('list_questions', list_questions, name='list_questions'),
  
@@ -81,7 +80,7 @@ urlpatterns = [
 
     path('remove_question/<int:id>/<int:idq>', remove_question, name='remove_question'), # from a quizz
     path('show_question/<int:id>', show_question, name='show_question'), 
-
+    path('remove_question_ia/<int:id>/<int:idq>', remove_question_ia, name='remove_question_ia'), # from a quizz
 
     ############## Ajax
     path('delete_my_tool', delete_my_tool, name='delete_my_tool'),
@@ -95,7 +94,7 @@ urlpatterns = [
     path('ajax_charge_parcours_without_folder', ajax_charge_parcours_without_folder, name='ajax_charge_parcours_without_folder'),
     path('ajax_charge_groups_level', ajax_charge_groups_level, name='ajax_charge_groups_level'),
  
-
+    path('quizz_actioner', quizz_actioner, name='quizz_actioner'),
 
     path('question_sorter', question_sorter, name='question_sorter'), 
 
@@ -121,9 +120,16 @@ urlpatterns = [
     path('show_qrandom_admin/<int:id>', show_qrandom_admin, name='show_qrandom_admin'),
     path('show_quizz_random/<int:id>', show_quizz_random, name='show_quizz_random'), 
 
+    ############## IA
+    path('admin_question_ia/<int:id_level>', admin_question_ia, name='admin_question_ia'),
+    path('admin_create_question_ia/<int:idk>/<int:qtype>', admin_create_question_ia, name='admin_create_question_ia'),
+    path('admin_update_question_ia/<int:idk>/<int:idq>', admin_update_question_ia, name='admin_update_question_ia'),
+    path('admin_delete_question_ia/<int:idk>/<int:idq>', admin_delete_question_ia, name='admin_delete_question_ia'),
+    path('admin_show_question_ia/<int:idk>/<int:idq>', admin_show_question_ia, name='admin_show_question_ia'),
 
+
+    ############## Quizz generated
     path('ajax_show_generated', ajax_show_generated, name='ajax_show_generated'),
-    path('result_quizz/<int:id>', result_quizz, name='result_quizz'), 
 
     path('delete_historic_quizz/<int:id>', delete_historic_quizz, name='delete_historic_quizz'), 
 
@@ -146,6 +152,9 @@ urlpatterns = [
     
     path('goto_quizz_numeric/<int:id>', goto_quizz_numeric, name='goto_quizz_numeric'),
     path('goto_quizz_student/<int:id>', goto_quizz_student, name='goto_quizz_student'),
+
+
+    path('show_quizz_numeric/<int:id>/<int:idp>', show_quizz_numeric, name='show_quizz_numeric'),
 
  
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),

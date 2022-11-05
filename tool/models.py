@@ -45,6 +45,12 @@ def videocopy_directory_path(instance, filename):
     return "tool/videocopy/{}/{}".format(instance.teacher.user.id,filename)
 
 
+def qtype_directory_path(instance, filename):
+    return "tool/qtype/{}".format(filename)
+
+
+
+
 class Tool(models.Model):
     """
     Modèle représentant un associé.
@@ -133,12 +139,33 @@ class VariableImage(models.Model):
         return self.variable.name 
 
 
+
+
+
+class Qtype(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    title     = models.TextField(max_length=255, default='',  blank=True, verbose_name="Type")
+    imagefile = models.ImageField(upload_to=qtype_directory_path, blank=True, default="", verbose_name="Image")
+    html      = models.TextField( default='',  blank=True, verbose_name="Html éventuel")
+    url       = models.CharField(max_length=255,  blank=True, default='', verbose_name="url") 
+    is_online = models.BooleanField(default=0, verbose_name="En ligne ?")
+    template  = models.CharField(max_length=255,  blank=True, default='', verbose_name="template") 
+    ranking   = models.PositiveIntegerField(default=0,   ) 
+
+    def __str__(self):
+        return self.title
+
+
+
+
 class Question(models.Model):
     """
     Modèle représentant un associé.
     """
+    title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Enoncé")
 
-    title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Réponse écrite")
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
     ####  type de question
@@ -151,22 +178,22 @@ class Question(models.Model):
     audio      = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
     video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
 
-    width         = models.PositiveIntegerField( verbose_name="Largeur",  blank=True, null = True )
-    height         = models.PositiveIntegerField(verbose_name="Hauteur", blank=True, null = True )
+    width      = models.PositiveIntegerField( verbose_name="Largeur",  blank=True, null = True )
+    height     = models.PositiveIntegerField(verbose_name="Hauteur", blank=True, null = True )
 
     is_publish = models.BooleanField(default=1, verbose_name="Publié ?")
     is_radio   = models.BooleanField(default=0, verbose_name="Type de réponse ?")
 
     is_correction = models.BooleanField(default=0, verbose_name="Correction ?")
     duration      = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
-    point         = models.PositiveIntegerField(default=1000, blank=True, verbose_name="Point")
+    point         = models.PositiveIntegerField(default=100, blank=True, verbose_name="Point")
 
- 
+    filltheblanks = RichTextUploadingField( default='',  blank=True, verbose_name="Texte à trous") 
     is_correct = models.BooleanField(default=1, verbose_name="Réponse correcte ?")
     ranking    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     students   = models.ManyToManyField(Student, blank=True, through="Answerplayer", related_name="questions",   editable=False)
 
-    size       = models.PositiveIntegerField(default=32, choices=POLICES,  verbose_name="Taille de police")
+    size       = models.PositiveIntegerField(default=32, choices=POLICES, blank=True,  verbose_name="Taille de police")
     theme      = models.BooleanField(default=1, verbose_name="Thème ?")
 
     def __str__(self):
@@ -237,8 +264,9 @@ class Question(models.Model):
  
         return percent
 
-
-
+######################################################################
+#####  type de réponse possible et choix pour les types de questions
+######################################################################
 class Choice(models.Model):
     """
     Modèle représentant un associé.
@@ -248,11 +276,35 @@ class Choice(models.Model):
     answer      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse écrite")
     retroaction = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Rétroaction")
 
+    imageanswerbis = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image par paire", default="")
+    answerbis      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse par paire")
+
+
     is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
     question    = models.ForeignKey(Question, related_name="choices", blank=True, null = True,  on_delete=models.CASCADE)
     def __str__(self):
         return self.answer 
 
+
+
+class Subchoice(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
+    answer      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse écrite")
+    retroaction = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Rétroaction")
+
+    is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
+    choice      = models.ForeignKey(Choice, related_name="subchoices", blank=True, null = True,  on_delete=models.CASCADE)
+    def __str__(self):
+        return self.answer 
+
+
+
+######################################################################
+#####  type de réponse possible et choix pour les types de questions
+######################################################################
 
 class Quizz(ModelWithCode):
     """
@@ -381,14 +433,14 @@ class Generate_qr(models.Model):
 
 class Answerplayer(models.Model):
 
-    quizz    = models.ForeignKey(Quizz,  related_name="answerplayer", default ="" ,  on_delete=models.CASCADE ) 
-    student  = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
-    question = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
-    qrandom  = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
-    answer   = models.CharField( max_length=255, null=True, blank=True,  verbose_name="Réponse")  
-    score    = models.PositiveIntegerField(default=0, editable=False)
-    timer    = models.CharField(max_length=255, editable=False)  
-    is_correct  = models.BooleanField(default=0, editable=False) 
+    quizz      = models.ForeignKey(Quizz,  related_name="answerplayer", default ="" ,  on_delete=models.CASCADE ) 
+    student    = models.ForeignKey(Student,  null=True, blank=True,   related_name='questions_player', on_delete=models.CASCADE,  editable= False)
+    question   = models.ForeignKey(Question,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
+    qrandom    = models.ForeignKey(Generate_qr,  null=True, blank=True, related_name='questions_player', on_delete=models.CASCADE, editable= False)
+    answer     = models.CharField( max_length=255, null=True, blank=True,  verbose_name="Réponse")  
+    score      = models.PositiveIntegerField(default=0, editable=False)
+    timer      = models.CharField(max_length=255, editable=False)  
+    is_correct = models.BooleanField(default=0, editable=False) 
 
     def __str__(self):
         return self.student.user.last_name

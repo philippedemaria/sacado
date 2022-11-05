@@ -5,30 +5,8 @@
 
 
 {% block page_title %}        
-
-
-        {% if parcours %}
-            <a href="{% url 'show_parcours' 0 parcours.id %}" style="color:parcours.color" > {{ parcours.title }} </a><img src="{% static 'img/angle-right.png' %}"/> 
-            {% if quizz %}
-                <a href="{% url 'update_quizz' quizz.id %}" title="Modifier le quizz"> Quizz </a>
-            {% else %}
-                Quizz
-            {% endif %}
-            <small>({{ quizz.duration|time_done }})</small> <img src="{% static 'img/angle-right.png' %}"/> Question
-        {% else %}
-            <a href="{% url 'index' %}" ><i class="fa fa-cubes"></i> </a>  
-
-            {% if quizz %}
-                <a href="{% url 'update_quizz' quizz.id %}" title="Modifier le quizz"> {{ quizz }} </a>
-            {% else %}
-                Les quizz
-            {% endif %}
-
-
-             <small>({{ quizz.duration|time_done }})</small><img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
-        {% endif %}
-        
-
+    Question
+    <img src="{% static 'img/angle-right.png' %}"/>  Forme de la question
 {% endblock %}
  
  
@@ -36,6 +14,7 @@
 
 
 {% block type_of_question %}
+    {% if quizz %}
         <div class="row">
             <div class="col-sm-12 col-md-6" align="center"> 
                 <a href="{% url 'create_question' quizz.id 1 %}" class="selector_question" >
@@ -79,4 +58,22 @@
                 </a>
             </div>  
         </div>
+    {% elif knowledge %}
+        <div class="row">
+        {% for qtype in qtypes %}
+
+            <div class="col-sm-6 col-md-3" align="center"> 
+                <a href="{% url 'admin_create_question_ia' knowledge.id qtype.id %}" class="selector_question" >
+                    <div class="card">
+                        <h1>{{qtype.title}}</h1>
+                        {{qtype.html|safe}}
+                    </div>
+                </a>
+            </div>      
+
+        {% endfor %}
+        </div>        
+    {% endif %}
+
+
 {% endblock %}

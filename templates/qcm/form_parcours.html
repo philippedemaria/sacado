@@ -211,15 +211,6 @@
                         <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_share.errors }}</td>
                     </tr>
-                    {% if request.user.is_superuser %}
-                    <tr>
-                        <td>{{ form.is_ia.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >Parmi les exercises choisis, les plus faciles* ne sont affichés que si l'élève trébuche sur ceux proposés, les plus difficiles* que si l'élève performe.<br/>*<small> D'après les résultats de la base de données, exercice par exercice<small> </div>
-                            </span></td>
-                        <td>{{ form.is_ia |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                        <td>{{ form.is_ia.errors }}</td>
-                    </tr>
-                    {% endif %}
                     <tr>
                         <td>{{ form.zoom.label_tag }}
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -250,6 +241,29 @@
                         <td>{{ form.is_achievement |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                         <td>{{ form.is_achievement.errors }}</td>
                     </tr> 
+                    
+                    {% if request.user.is_superuser %}
+                    <tr>
+                        <td>{{ form.is_ia.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" >Parmi les exercises choisis, les plus faciles* ne sont affichés que si l'élève trébuche sur ceux proposés, les plus difficiles* que si l'élève performe.<br/>*<small> D'après les résultats de la base de données, exercice par exercice<small> </div>
+                            </span></td>
+                        <td>{{ form.is_ia |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                        <td>{{ form.is_ia.errors }}</td>
+                    </tr>
+
+
+                    <tr id="explain_ia" class="no_visu_on_load">
+                        <td colspan='3'>
+                            <div class="alert alert-danger">Après l'enregistrement de ce parcours, vous devez choisir les savoir faire ciblés et les savoir faire pré-requis du parcours. Un test de positionnement vous est alors proposé, vous pourrez le modifier. A la suite, il est diffusé aux élèves de votre groupe. A l'issue de ce test de positionnement, l'IA décide des exercices à donner individuellement à chaque élève selon leurs résultats. Vous gardez le choix d'accepter ou de modifier la prédiction de SACADO.</div>
+                        </td>
+                    </tr>
+
+
+                    {% endif %}
+
+
+
+
                     
                 {% endblock %}
                     <tr>
@@ -284,7 +298,7 @@
         <div class="col-sm-12 col-md-6">
             <div class="form-group">
                 {% block save %}
-                <input value="Enregistrer {% if not  parcours.is_sequence %}et choisir les exercices{% endif %}" type="submit" name="save_and_choose" class="btn btn-primary"  />  
+                <span  id="save_and_choose_span" {% if  parcours.is_ia %}class="no_visu_on_load"{% endif %} ><input value="Enregistrer {% if not  parcours.is_sequence %}et choisir les exercices{% endif %}" type="submit" name="save_and_choose" class="btn btn-primary"  /></span>  
                 {% endblock %}
                 <input value="Enregistrer" type="submit" name="saver"  class="btn btn-info"  />
 

@@ -1,0 +1,46 @@
+{% extends 'tool/form_question.html' %} 
+
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+
+
+{% block title_type_of_question %} 
+    {{ title_type_of_question }} 
+{% endblock %} 
+
+{% block details %}
+{% endblock %}
+          
+
+
+{% block type_of_question %} 
+    <div class="row" >
+        <div class="col-sm-12 col-md-6" ><label>Enoncé</label><br/>  
+            {{ form.title|attr:"required"|add_class:"form-control"    }}
+        </div>
+
+
+
+        <div class="col-sm-12 col-md-6" > <label>{% block label %} Ecrire votre texte et utiliser la mise en gras pour signaler les anagrames à trouver.{% endblock %}</label><br/>
+            {{ form.filltheblanks|attr:"required"|add_class:"form-control"  }}
+        </div>
+    </div>
+    
+    <input type="hidden" name="text_to_set" id="text_to_set" value="Trouver les anagrammes qui ont un sens.">
+
+{% endblock %}
+
+
+
+
+{% block type_of_choices %}
+
+{% endblock %}
+
+
+{% block uploader %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% load item_tags %}
+
+
+   <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Paramètres <i class="fa fa-caret-down"></i></a>
+
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            <li> 
+                <a href="{% url 'update_quizz' quizz.id %}"  >
+                    <i class="bi bi-gear"></i> Configuration du quizz
+                </a>
+            </li> 
+            <li>             
+                {% if sacado_asso %}            
+                    <a href="{% url 'goto_quizz_numeric'  quizz.id   %}" target="_blank" title="Lire un quizz"><i class="bi bi-play"></i> Lire le quizz </a> 
+                {% else %}
+                    <a href="{% url 'goto_quizz_numeric'  quizz.id   %}" target="_blank" title="Lire un quizz"><i class="bi bi-play"></i> Lire le quizz </a> 
+                {% endif %}
+            </li>                
+            {% if parcours %}    
+            <li>
+                <a href="{% url 'show_quizz_numeric'  quizz.id   parcours.id %}"  >
+                   <i class="bi bi-eye"></i>  Visualiser le quizz 
+                </a>
+            </li>
+            <li class="divider"></li>            
+            <li>
+                <a href="{% url 'result_quizz'  quizz.id  parcours.id  %}"  >
+                   <i class="bi bi-trophy"></i>  Résultats du quizz 
+                </a>
+            </li>
+
+            <li class="divider"></li>
+ 
+            <li>
+                <a href="{% url 'create_parcours_after_results'  quizz.id  parcours.id  %}"    title="Créer un parcours d'apprentissage assisté par IA">
+                   <i class="bi bi-hdd-network"></i> Créer le parcours personnalisé
+                </a>
+            </li>  
+            {% endif %}
+        </ul>
+    </li> 
+
+    <a href="{% url 'list_quizzes' %}" class="btn btn-new">Mes quizz</a>   
+    {% if parcours and group %}
+    <a href="{% url 'show_parcours' group.id parcours.id %}" class="btn btn-default" style="background-color: {{parcours.color}};color:{{parcours.color|contrast_color}}">{{parcours.title}}</a> 
+    {% elif parcours %}
+    <a href="{% url 'show_parcours' 0 parcours.id %}" class="btn btn-default" style="background-color: {{parcours.color}};color:{{parcours.color|contrast_color}}">{{parcours.title}}</a>      
+    {% endif %}

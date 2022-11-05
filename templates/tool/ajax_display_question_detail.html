@@ -30,7 +30,7 @@
     <thead>
         <tr>
             <th>Nom</th>
-            <th>Score</th>
+            <th>Score /{{ total  }}</th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +38,7 @@
             <tr>
                 <td>{{ student.this }}</td>
  
-                <td style="text-align: center;">{% if student.answer %}<b>{{ student.answer  }}</b>{% endif %}</td>
+                <td style="text-align: center;"><b>{{ student.answer  }}</b></td>
             </tr>
         {% endfor %}
     </tbody>

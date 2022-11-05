@@ -4,7 +4,7 @@
 {% load widget_tweaks %}
  
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
         require(['script/ajax-quizz-complement']);
     </script> 
@@ -19,7 +19,8 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'list_quizzes' %}" class="btn btn-new pull-right">Mes quizz</a>  
+
+    {% include 'tool/submenu_quizz_ia.html' %} 
 {% endblock %}
 
 
@@ -56,11 +57,35 @@
                     </a>
                     <span class="pull-right" id="percent_done{{ question.id }}"></span> 
                 </h4>
-                {{ question.title|safe }} 
-                </div> 
+                {{ question.title|safe }}  
+                {% if question.imagefile %}
+                            <img src="{{ question.imagefile.url }}" class="imagefile" />
+                        {% endif %}
+                        {% if question.qtype == 2 %}<hr/>
+                            Réponse attendue : {{ question.answer}} 
+                        {% else %}
+                        <table class="table borderless">
+                            <tr>
+                            {% for c in question.choices.all %}
+                            <td>
+                                {% if c.imagefile %}
+                                    <img src="{{ c.imagefile.url }}" class="imagefile" />
+                                {% endif %}  
+                                    {{ c.answer }} 
+                                {% if c.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
+
+                                {% if question.qtype == 2 %}{{ question.answer}}<i class="fa fa-check text-success"></i>{% endif %}
+
+
+                            </td>
+                            {% endfor %}
+                            </tr>
+                        </table>
+                        {% endif %}
                 <div class="col-sm-12 col-md-12 no_visu_on_load" id="detail_div{{question.id}}">
 
                 </div>
+                </div> 
             </div>
             {% endfor %}
         </div>

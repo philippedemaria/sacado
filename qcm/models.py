@@ -959,6 +959,33 @@ class Parcours(ModelWithCode):
 
 
 
+class Testtraining(models.Model):
+
+    requires            = models.CharField(max_length=255, verbose_name="features")
+    targets             = models.CharField(max_length=255, verbose_name="labels", blank=True, null=True )
+    parcours            = models.OneToOneField(Parcours, related_name="testtraining", unique=True,  on_delete=models.CASCADE, default='',  verbose_name="parcours", blank=True, null=True )
+    questions_proposed  = models.CharField(max_length=255, verbose_name="proposition", blank=True, null=True )
+    questions_effective = models.CharField(max_length=255, verbose_name="test choisi", blank=True, null=True )
+    date_created        = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return "{}".format(self.parcours)
+
+
+
+class Testcreator(models.Model):
+
+    requires            = models.CharField(max_length=255, verbose_name="features")
+    targets             = models.CharField(max_length=255, verbose_name="labels")
+    questions_effective = models.CharField(max_length=255, verbose_name="test choisi")
+
+    def __str__(self):
+        return "{}".format(self.parcours)
+ 
+
+
+
+
 class Folder(models.Model):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -1766,9 +1793,6 @@ class Relationship(models.Model):
         nb_ans = Studentanswer.objects.filter(exercise = self.exercise, parcours = self.parcours,student__in=students).count()
         if nb_ans : test = True
         return test
-
-
-
 
 
 class Studentanswer(models.Model):

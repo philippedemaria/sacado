@@ -55,6 +55,21 @@ def no_table(arg):
 
 
 @register.filter
+def splitter(arg):
+    '''HTML entity decode'''
+    new= []
+    for a in arg.split('##') :
+        try :
+            new.append(int(a))
+        except :
+            pass
+    return new
+
+
+
+
+
+@register.filter
 def decode(arg):
     '''HTML entity decode'''
     string = html.unescape(arg)

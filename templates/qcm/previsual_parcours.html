@@ -1,0 +1,63 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-complement']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+    Prévisualisation du parcours assisté par IA</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ parcours.title}} 
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    {% include 'tool/submenu_quizz_ia.html' %} 
+{% endblock %}
+
+
+{% block body %} 
+<section class="content_main">
+
+
+    <form method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+            {% for data in dataset %}
+            <div class="card" style="margin-left:15px;padding:10px; width:96%">
+                <h4 ><b>{{ forloop.counter }}.</b> {{ data.knowledge }}</h4>
+                <hr/>
+                {% for f in data.features  %}                 
+                    <div class="row">  
+                        <div class="col-sm-3">
+
+                        {{ f.student }}<br/>
+                        {% for r in f.results %}
+                             {% if r.is_correct %}<span class="badge" style="background-color: #28a745">{{ r.timer }}s</span>{% else %}<span class="badge" style="background-color: #dc3545">{{ r.timer }}s</span>{% endif %}
+                        {% endfor %}
+                        </div>
+                        <div class="col-sm-9">
+                            {% for exercise in f.exercises %}
+                                <img src="{{ exercise.supportfile.imagefile.url }}" class = "smallimagefile" />
+                            {% endfor %}
+                        </div>     
+                    </div>                        
+                <hr/>                        
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    </form>
+</section>
+{% endblock %}  
+
+ 

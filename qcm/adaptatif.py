@@ -130,7 +130,7 @@ def get_parcourses_to_parcours(p_id):
 
     msg = None
     if len(list_to_not_display) == 0 :
-        msg = " Nous n'avons aucun autres exercices sur ces savoir faire à vous proposer."
+        msg = " Nous n'avons aucun autre exercice sur ces savoir faire à vous proposer."
  
 
     return list_to_display , list_to_not_display , msg

@@ -56,9 +56,8 @@ Intro Section -
                 <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
                 {% endif %}
                 <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
-                    <span class="exo">{{ nb_exercise }}</span> 
-                      exercice{{  nb_exercise|pluralize }}<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
-                              <div class="helper_tip_text" >Enoncés à variables didactiques aléatoires donc le nombre total d'exercices différents se compte en millions.</div>
+                    <span class="exo">{{ nb_parcours }}</span> parcours<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
+                              <div class="helper_tip_text" >créés par des enseignants. Un parcours est une séquence de cours, d'exercices (parmi {{ nb_exercise }}) à variables didactiques aléatoires, de quizz, flashcards et d'exercices personnalisés.</div>
                           </span> 
                 {% if not sacado_voyage %}
                 de <br/>
@@ -73,7 +72,7 @@ Intro Section -
                 
                 {% endcomment %}
                 <br/>
-                       interactif{{ nb_exercise|pluralize }} et corrigé{{  nb_exercise|pluralize }} de<br>  la Maternelle à la Terminale en apprentissage adaptatif.
+                       interactif{{ nb_parcours|pluralize }} et corrigé{{  nb_parcours|pluralize }} de<br>  la Maternelle à la Terminale en apprentissage adaptatif.
 
                 </div>
        

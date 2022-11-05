@@ -6,6 +6,7 @@
 
 
 {% block require %}
+
     {% if question %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common5.js' %}"></script>
     <script>
@@ -18,41 +19,58 @@
     </script> 
     {% endif %}
 
+    {% if quizz %}
     <script>
-        require(['script/ajax-quizz']);
-        require(['script/ajax-finder']);
+        require(['script/ajax-quizz','script/ajax-finder']);
+    </script>
+    {% else %}
+    <script>
+        require(['script/add-ckeditor']);
     </script> 
+    {% endif %}
+
 {% endblock %}
  
 
 {% block page_title %}
-   Créateur de quizz 
-   {% if quizz %}
+   Créateur de question 
+   {% if quizz %}pour quizz
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_quizz' quizz.id %}"> <small>{{ quizz.title }}  ({{ quizz.duration|time_done }}) </small></a>
    {% endif  %}
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
    <small> 
-     {{ title_type_of_question }} 
+     {{   qt.title  }} 
    </small>
 {% endblock %}
 
 
 {% block page_menu_right %}
 
-    {% if quizz.is_numeric %}
-    <a href="{% url 'goto_quizz_numeric' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
-    {% else  %}
-    <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
+    {% if quizz  %}
+        {% if quizz.is_numeric %}
+        <a href="{% url 'goto_quizz_numeric' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
+        {% else  %}
+        <a href="{% url 'show_quizz' quizz.id %}" target="_blank" class="btn btn-new">Lire le quizz</a>
+        {% endif %}
+
+        <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>
     {% endif %}
-    <a href="{% url 'list_quizzes'  %}" target="_blank" class="btn btn-new">Mes quizz</a>    
+
 {% endblock %}
 
 
 
+
+
+
+
 {% block body %}
+{% block uploader %}
 <link rel="stylesheet" href="{% static 'css/uploader.css' %}">
+{% endblock %}
 <section class="content_list"> 
     <div class="row">
+        {% if quizz  %}
         <div class="col-sm-12 col-md-2">
 
             {% if quizz.is_random  %}
@@ -94,19 +112,17 @@
  
 
             {% endif %}
-
-
-
         </div>
-
-        <div class="col-sm-12 col-md-10" >  
+        {% endif %}
+        <div class="col-sm-12 col-md-{% if quizz  %}10{% else %}12{% endif %}" >  
             <form action="#" method="POST" id="question_form"  enctype='multipart/form-data' >
             {% csrf_token %}    
-            <input type="hidden" name="quizz_id" id="quizz_id" value="{{ quizz.id }}" /> 
+            {% if quizz  %}<input type="hidden" name="quizz_id" id="quizz_id" value="{{ quizz.id }}" /> {% endif %}
             <input type="hidden" name="qtype" id="qtype" value="{{ qtype }}" /> 
                 <div id="body_question"> 
-                    {% block type_of_question %} 
 
+
+                    {% block type_of_question %} 
                             <div class="row" >
                                 <div class="col-sm-10 col-md-11" >  
                                     {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:3"|attr:"required"  }}
@@ -125,7 +141,7 @@
                                     </div>
                                     <div class="quizz_assets">
                                         <label>Point</label><br>
-                                        {{ form.point|add_class:"quizz_input"|attr:"min:200"|attr:"max:2000"|attr:"rows:1"|attr:"value:1000" }}  
+                                        {{ form.point|add_class:"quizz_input"|attr:"min:5"|attr:"max:100"|attr:"rows:1"|attr:"value:100"|attr:"step:5" }}  
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-2" align="center" > 
@@ -195,8 +211,6 @@
                                             </div>  
                                         </div>
                                 {% endif %}
-
-
                             </div>
                     {% endblock %}
 
@@ -204,29 +218,30 @@
 
                     {% if qtype > 0 %}
 
-
-                    {% block details %}
-
-                    <div style="height:30px"></div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">                       
-                                {{ form.knowledge|add_class:"form-control select2 quizz_box"  }} 
-                            </div>                            
+                        {% if qtype < 5 %}<div style="height:30px"></div>{% endif %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group"> <label> Savoir faire ciblé :</label>
+                                    {% if class_quizz_box %}                     
+                                        {{ form.knowledge|add_class:"form-control select2 quizz_box"  }}
+                                    {% else %} 
+                                        {{ form.knowledge|add_class:"form-control select2"  }}
+                                    {% endif %} 
+                                </div>                            
+                            </div>
                         </div>
-                    </div>
 
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">                       
-                                <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Coloré"|attr:"data-off:Blanc"}}
-                                <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
-                            </div>                            
+                        {% block details %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">                       
+                                    <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Coloré"|attr:"data-off:Blanc"}}
+                                    <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
+                                </div>                            
+                            </div>
                         </div>
-                    </div>
 
-                    {% endblock %}
+                        {% endblock %}
 
                     {% endif %} 
 
@@ -249,10 +264,15 @@
                     <div class="row" style="margin-top: 20px;" >
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group"> 
+                                {% if quizz %}
                                 <span data-toggle="modal" data-target="#overview" class="btn btn-info btn-lg"  id="this_question_display_overview" > <i class="fa fa-eye"></i> Aperçu de la question</span>
+                                {% endif %}
                                 <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
+                                {% if quizz %}
                                 <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
-     
+                                {% else %}
+                                <a href="{% url 'admin_create_question_ia'  knowledge.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
+                                {% endif %}
                             </div>                            
                         </div>
                     </div>
@@ -264,7 +284,7 @@
         </div>
     </div>
 </section>
-
+{% if quizz %}
 <div class="modal fade" id="question_choice" tabindex="-1" role="dialog" aria-labelledby="question_choice">
     <div class="modal-dialog" role="document" style="width: 100%;">
         <div class="modal-content" >
@@ -333,7 +353,7 @@
         </div>
     </div>
 </div> 
-
+{% endif %}
 
 {% endblock %} 
 

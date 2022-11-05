@@ -296,9 +296,6 @@ def attribute_all_documents_to_students(parcourses, students ):
     return test
 
  
-
-
-
 def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     """  assigner les documents   """
     # Assigne les dossiers et leurs contenus à partir d'un groupe
@@ -375,9 +372,6 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     return test
 
 
-
-
-
 def remove_all_documents_of_groups_to_a_student(group, student):
 
     try :
@@ -418,9 +412,6 @@ def remove_all_documents_of_groups_to_a_student(group, student):
         test = False
 
     return test
-
-
-
 
 
 def attribute_all_documents_of_groups_to_all_new_students(groups):
@@ -1012,11 +1003,6 @@ def migrate_all_documents_to_gar(init , target , is_delete) :
     if not is_test : this_raison += raison
 
     return test, this_raison
-
-
-
-
-
 
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML

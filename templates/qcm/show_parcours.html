@@ -138,63 +138,53 @@ body{
                         {% endif %}
                     </h1>
      
-                        <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
-                        {% for rc in relationships_customexercises %}
-                                {%  if rc.exercise.supportfile.is_title %}     
-                                    <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                        {% if rc.is_header_of_section  %}
-                                            <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
-                                                {% if  rc.exercise.supportfile.title %}  
-                                                    {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                                {% else %}
-                                                    {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                                {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                        {% else %}
+                    <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
+                    {% for rc in relationships_customexercises %}
+                            {%  if rc.exercise.supportfile.is_title %}     
+                                <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                    {% if rc.is_header_of_section  %}
+                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
                                             {% if  rc.exercise.supportfile.title %}  
                                                 {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                                             {% else %}
                                                 {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                            {% endif %}
-                                        {% endif %}
-                                    </h2>
-                                {%  elif rc.exercise.supportfile.is_subtitle %}
-                                    <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                        {% if rc.is_header_of_section %}
-                                            <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                    {% else %}
+                                        {% if  rc.exercise.supportfile.title %}  
+                                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
                                         {% else %}
-                                            {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
                                         {% endif %}
-                                    </h3>
-                                {% else %}  
-                                    {% include 'qcm/details_all_cards.html' %}            
-                                {% endif %}  
- 
-                        {% endfor %}
+                                    {% endif %}
+                                </h2>
+                            {%  elif rc.exercise.supportfile.is_subtitle %}
+                                <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
+                                    {% if rc.is_header_of_section %}
+                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
+                                    {% else %}
+                                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+                                    {% endif %}
+                                </h3>
+                            {% else %}  
+                                {% include 'qcm/details_all_cards.html' %}            
+                            {% endif %}  
 
-                        {% if relationships_customexercises|length > 0   %}
-                            <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="bi bi-cloud-plus-fill btn-create-group" ></i> 
-                                <div class="helper_tip_text" >Sélectionner des exercices.</div>
-                            </a>
-                            <a href="{% url 'parcours_create_custom_exercise' parcours.id 1 %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                                <div class="helper_tip_text" >Nouvel exercice personnalisé</div>
-                            </a>
-                        {% endif %}
-                   
+                    {% endfor %}
+
+                    {% if relationships_customexercises|length == 0   %}
+                        <a href="{% url 'parcours_create_custom_exercise' parcours.id 1 %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
+                            <div class="helper_tip_text_right" >Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</div>
+                        </a>                    
+                        <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="bi bi-cloud-plus-fill btn-create-group" ></i> 
+                            <div class="helper_tip_text_right" >Sélectionner des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</div>
+                        </a>
+                    {% endif %}                   
                    
                 </div>
                 {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
             </div>  
  
-            {% if relationships_customexercises|length == 0   %}
-            <div class="row">
-                <div class="col-sm-3 col-md-3" style="margin:40px">
-                <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-danger"> Associer des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-                </div> 
-                <div class="col-sm-3 col-md-3" style="margin:40px">
-                <a href="{% url 'parcours_create_custom_exercise' parcours.id 0  %}" class="btn btn-danger"> Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</a>  
-                </div> 
-            </div>  
-            {% endif %}
+
             {% if parcours.teacher == teacher %}
 
                 {% if parcours.course.count > 0  %}  

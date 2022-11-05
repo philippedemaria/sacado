@@ -103,8 +103,11 @@
 
         | <a href="{% url 'show_quizz' quizz.id  %}" > <i class="fa fa-edit fa-xs"></i><small> Papier</small></a>
 
-        | <small><a href="{% url 'result_quizz'  quizz.id  %}" class="quizz_action" title="voir ce quizz"  ><i class="fa fa-trophy fa-xs"></i> Résultats</a></small>
-        
+        | 
+            {% for p in quizz.parcours.all %}
+                <small><a href="{% url 'result_quizz'  quizz.id  p.id %}" class="quizz_action" title="voir ce quizz"  ><i class="fa fa-trophy fa-xs"></i> Résultats</a></small>
+                {% if not forloop.last %}, {% endif %} 
+            {% endfor %}
     </span>
     {% else %}
     <span  class="sanspuce historic_li"  style="border:1px solid ; border-radius:20px; width:70px;margin-right: 10px;">

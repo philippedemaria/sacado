@@ -1,0 +1,98 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-complement']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+    <a href="{% url 'list_quizzes' %}" ><i class="bi bi-hdd-network"></i> Quizz assisté par IA</a>  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ quizz.title}} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+    <small>{{ quizz.code}}</small>
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    {% include 'tool/submenu_quizz_ia.html' %} 
+{% endblock %}
+
+
+{% block body %} 
+<section class="content_main">
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+ 
+
+            {% for question in questions %}
+            <div class="row"> 
+                <div class="col-sm-12 col-md-12">   
+                    <div class="card" style="margin-left:15px;padding:10px; width:90%">
+                        <h4 >Question {{ forloop.counter }}. #{{ question.id}}. <a href="{% url 'remove_question_ia' quizz.id question.id %}" class="pull-right" title="Dissocier de ce quizz"><i class="fa fa-trash"></i></a>                 
+                            <b>
+                            {% if question.qtype == 1 %}
+                                Vrai/Faux
+                            {% elif question.qtype == 2 %}
+                                Réponse écrite
+                            {% elif question.qtype == 3 %}
+                                QCM
+                            {% elif question.qtype == 4 %} 
+                                QCS
+                            {% endif   %}  
+                            </b>
+                        </h4>
+                        {{ question.title|safe }} 
+                        {% if question.imagefile %}
+                            <img src="{{ question.imagefile.url }}" class="imagefile" />
+                        {% endif %}
+                        {% if question.qtype == 2 %}<hr/>
+                            Réponse attendue : {{ question.answer}} 
+                        {% else %}
+                        <table class="table borderless">
+                            <tr>
+                            {% for c in question.choices.all %}
+                            <td>
+                                {% if c.imagefile %}
+                                    <img src="{{ c.imagefile.url }}" class="imagefile" />
+                                {% endif %}  
+                                    {{ c.answer }} 
+                                {% if c.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
+
+                                {% if question.qtype == 2 %}{{ question.answer}}<i class="fa fa-check text-success"></i>{% endif %}
+
+
+                            </td>
+                            {% endfor %}
+                            </tr>
+                        </table>
+                        {% endif %}
+                    </div> 
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+ 
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <a href="{% url 'create_question' quizz.id 0 %}"  class="btn btn-sacado"> Ajouter une question</a>
+
+
+                <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}  
+
+ 

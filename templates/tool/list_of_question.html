@@ -9,7 +9,21 @@
 	<input type="hidden" value="{{ question.id }}" class="sorted_question_id"   />
     <div class="row"> 
         <div class="col-xs-12 col-md-12">
-            <label>{% if from_ajax %}{{ nbq }}{% else %}{{ forloop.counter }}{% endif %}. {{ question.title|truncatechars:"20"}} {% if question %}{% if not question.is_publish %} <i class="fa fa-eye-slash"></i> {% endif %}{% endif %}</label>
+            <label>{% if from_ajax %}{{ nbq }}{% else %}{{ forloop.counter }}{% endif %}.  
+                <b>
+            {% if question.qtype == 1 %}
+                Vrai/Faux
+            {% elif question.qtype == 2 %}
+                Réponse écrite
+            {% elif question.qtype == 3 %}
+                QCM
+            {% elif question.qtype == 4 %} 
+                QCS
+            {% endif   %}  </b>
+
+
+
+             {% if question %}{% if not question.is_publish %} <i class="fa fa-eye-slash"></i> {% endif %}{% endif %}</label>
         </div>
     </div>
     <div class="row"> 
@@ -22,15 +36,7 @@
 
         </div>
         <div class="col-xs-10 col-md-10">
-            {% if question.qtype == 1 %}
-                <img src="{% static 'img/quizz_vf.png' %}" width="90%" />
-            {% elif question.qtype == 2 %}
-                <img src="{% static 'img/quizz_typing.png' %}" width="90%" />
-            {% elif question.qtype == 3 %}
-                <img src="{% static 'img/quizz_qcm.png' %}" width="90%" />
-            {% elif question.qtype == 4 %} 
-                <img src="{% static 'img/quizz_qcs.png' %}" width="90%" />
-            {% endif   %}  
+            {{ question.title|truncatechars:"250"}}
         </div>
     </div>
 </li>

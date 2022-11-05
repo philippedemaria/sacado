@@ -18,6 +18,52 @@
             {% endif %}
         </div>
         
+        <span style="cursor:pointer" data-parcours_id="{{quizz.id }}" class="overlay_show white" >
+            <div class="{% if not quizz.is_publish %}
+                            disc_persistant
+                        {% else %}
+                            disc 
+                            {% if  quizz.is_evaluation %}disce{% endif %}
+                        {% endif %}
+                        disc{{quizz.id }}" style="background-color:{% if quizz.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                 <i class="fa fa-circle-o-notch"></i>
+            </div>
+        </span>
+
+
+        <div class="overlay  overlay_show{{quizz.id }} no_visu_on_load" > 
+            <div class="overlay_expand">
+                <a href="#" data-parcours_id="{{quizz.id }}" class="overlay_show pull-right">
+                    <i class="fa fa-times"></i>
+                </a>
+   
+ 
+                    <div class="btn-group"  style="padding:0px;margin:0px;">
+                        <span style="cursor:pointer" class="btn btn-default btn-publisher  publisher"  data-from="{% if 'sub' in request.path %}0{% else %}2{% endif %}" id="parcours_publisher{{quizz.id}}" 
+                            data-parcours_id="{{quizz.id}}" data-statut="{{quizz.is_publish }}">  
+                            <i class="fa fa-circle-o-notch"></i>
+                        </span><span class="legend-btn legend-btn-{% if not quizz.is_publish %}danger{% else  %}success{% endif  %} size15" id="parcours_statut{{quizz.id}}" style="cursor:auto" >  
+                          {% if quizz.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                        </span>
+                    </div>
+ 
+                    <input id="is_quizz" value="yes" type="hidden" />
+
+                {% if quizz.is_publish %}
+                <span class="text-success" id="accueil_text_color{{ quizz.id }}">  Ce quizz <span id="accueil_visible{{quizz.id }}">est</span> visible par vos élèves.</span>
+                {% else %}
+
+                <span class="text-danger" id="accueil_text_color{{ quizz.id }}"> Ce quizz <span id="accueil_visible{{quizz.id }}">n'est pas</span> visible par vos élèves.</span>
+                {% endif %}
+
+            </div>
+        </div>
+
+
+
+
+
+
 
 
     </div>
@@ -30,7 +76,7 @@
  
         <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
             <div class="col-xs-6 col-md-6 col-lg-6"> 
-                {{  quizz.questions.count }} questions {% if  quizz.is_video %}sur smatphone{% elif  quizz.is_numeric %}sur tablette{% else %}sur papier{% endif %}
+                {{  quizz.questions.count }} questions {% if  quizz.is_video %}sur smartphone{% elif  quizz.is_numeric %}sur poste{% else %}sur papier{% endif %}
             </div>
             <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
                 {{ quizz.duration|time_done}} 
@@ -41,18 +87,16 @@
 
 
          <div class="row">  
-            <div class="col-lg-6 col-xs-6">
-
+            <div class="col-lg-4 col-xs-4">
                 <a href="{% url 'update_quizz' quizz.id %}" class="edit" >
                     <i class="bi bi-gear"></i> <span class="label_icon">Configuration</span>
                 </a>
-
             </div>
-            <div class="col-lg-6 col-xs-6">
+            <div class="col-lg-4 col-xs-4">
                 {% if group %}
                     {% if sacado_asso %}
                         {% if  quizz.is_video %}
-                            <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="bi bi-controller"></i> <span class="label_icon"> Tablette </span>
+                            <a href="{% url 'play_quizz_teacher'  quizz.id  group.id  %}" target="_blank"  class="edit" title="En version à tester"><i class="bi bi-controller"></i> <span class="label_icon"> Smartphone </span>
                             </a>  
                         {% elif  quizz.is_numeric %}
                             <a href="{% url 'goto_quizz_numeric'  quizz.id   %}" target="_blank" class="edit" title="Lire un quizz"><i class="bi bi-play"></i> <span class="label_icon"> Lire</span>
@@ -71,19 +115,10 @@
                     {% endif %}
                 {% endif %}
             </div> 
-        </div>
-
-         <div class="row">  
- 
-            <div class="col-lg-6 col-xs-6">
-             
-                <a href="{% url 'create_question' quizz.id 0 %}" class="edit" title="Rajouter une question"><i class="bi bi-plus-circle-dotted"></i>  <span class="label_icon">Questions  </span></a> 
-            
-            </div>
-            <div class="col-lg-6 col-xs-6">
+            <div class="col-lg-4 col-xs-4">
                 {% if sacado_asso %}
                     {% if quizz.is_video or quizz.is_numeric %}
-                            <a href="{% url 'result_quizz'  quizz.id  %}"  class="edit" >
+                            <a href="{% url 'result_quizz'  quizz.id parcours.id  %}"  class="edit" >
                                <i class="bi bi-trophy"></i>  <span class="label_icon"> Résultats</span>
                             </a>
                     {% endif %}
@@ -91,10 +126,25 @@
             </div> 
         </div>
 
-
-
-
-
+         <div class="row">  
+            <div class="col-lg-4 col-xs-4">
+                <a href="{% url 'create_question' quizz.id 0 %}" class="edit" title="Rajouter une question"><i class="bi bi-plus-circle-dotted"></i>  <span class="label_icon">Questions  </span></a> 
+            </div>
+            {% if sacado_asso %}
+                {% if quizz.is_video or quizz.is_numeric %}
+                <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'show_quizz_numeric' quizz.id parcours.id %}" class="edit" >
+                        <i class="bi bi-eye"></i> <span class="label_icon">Visualiser</span>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-xs-4">
+                    <a href="{% url 'create_parcours_after_results'  quizz.id parcours.id %}"  class="edit" title="Créer un parcours d'apprentissage assisté par IA">
+                       <i class="bi bi-hdd-network"></i> <span class="label_icon">Appliquer IA</span>
+                    </a>
+                </div>  
+                {% endif %}
+            {% endif %}       
+        </div>
     </div>
 </div>    
            

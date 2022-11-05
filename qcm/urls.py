@@ -34,7 +34,6 @@ urlpatterns = [
     path('parcours_evaluation_update/<int:id>/<int:idg>/', update_evaluation, name='update_evaluation'),
     path('parcours_evaluation_show/<int:id>/', show_evaluation, name='show_evaluation'), 
 
-
     path('parcours_create_sequence/<int:idf>/', create_sequence, name='create_sequence'),
     path('parcours_sequence_update/<int:id>/<int:idg>/', update_sequence, name='update_sequence'),
  
@@ -105,9 +104,6 @@ urlpatterns = [
     path('ajax_individualise', ajax_individualise , name='ajax_individualise'),
     path('ajax_reset', ajax_reset , name='ajax_reset'),
 
-
-
-
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
     path('result_parcours_skill/<int:id>/', result_parcours_skill, name='result_parcours_skill'),#modif idp en id pour la sécurité
 
@@ -145,6 +141,17 @@ urlpatterns = [
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     ######################################################################################################################################################
+
+    ######################################################################################################################################################
+    #################################       IA        ####################################################################################################
+    ######################################################################################################################################################
+    path('get_target_ia/<int:idp>', get_target_ia, name='get_target_ia'),
+    path('create_test_ia/<int:idp>', create_test_ia, name='create_test_ia'),
+
+    ######################################################################################################################################################
+    ######################################################################################################################################################
+    ######################################################################################################################################################
+
 
     path('associate_parcours/<int:id>/', associate_parcours, name='associate_parcours'),  # id est l'id du groupe auquel le parcours est associé
  
@@ -296,9 +303,13 @@ urlpatterns = [
     path('parcours_delete_demand/<int:id>', delete_demand, name='delete_demand'),
     path('parcours_show_demand/<int:id>', show_demand, name='show_demand'),
 
+    ############################################# IA  #########################################################  
+    path('create_parcours_after_results/<int:idq>/<int:idp>', create_parcours_after_results , name='create_parcours_after_results'),
+    #path('create_dataset/<int:idq>/<int:idp>', create_dataset , name='create_parcours_after_results'),
+
+
+
     ############################################################################################################  
-
-
  
     path('advises', advises, name='advises'),   
 

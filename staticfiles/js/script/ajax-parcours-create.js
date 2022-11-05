@@ -150,16 +150,32 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
 
 
    // récupère l'url de l'image dans le form d'un parcours pour l'utiliser dans la base de données
-        $('body').on('click', '.selector_image_from_ajax' , function () {
+    $('body').on('click', '.selector_image_from_ajax' , function () {
 
-                let url_image = $(this).data("url_image");
+            let url_image = $(this).data("url_image");
 
-                $('#this_image_selected').val(url_image);
+            $('#this_image_selected').val(url_image);
 
-                $('.selector_image_from_ajax').addClass('opacity_selector_img');  
-                $(this).removeClass('opacity_selector_img'); 
+            $('.selector_image_from_ajax').addClass('opacity_selector_img');  
+            $(this).removeClass('opacity_selector_img'); 
+
+        });
+
+
+   // Parcours IA
+    $('body').on('change' , '#id_is_ia', function () {
+
+                if ($(this).is(":checked")) { 
+                    $("#save_and_choose_span").hide(500);
+                    $("#explain_ia").show(500)
+                } else {
+                    $("#save_and_choose_span").show(500);
+                    $("#explain_ia").hide(500)
+                }
 
             });
+
+
  
     });
 });

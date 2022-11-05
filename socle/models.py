@@ -221,9 +221,6 @@ class Vignette(models.Model):
 
 
 
-
-
-
 class Waiting(models.Model):
     name = models.CharField(max_length=500, verbose_name="Nom")
     theme  = models.ForeignKey(Theme, related_name="waitings",  on_delete=models.CASCADE, verbose_name="Thème")
@@ -270,6 +267,12 @@ class Waiting(models.Model):
         return Exercise.objects.filter(knowledge__waiting = self, supportfile__is_title=0).count()
 
 
+    def nb_questions(self):
+        Question = apps.get_model('tool', 'Question')
+        return Question.objects.filter(knowledge__waiting = self).count()
+
+
+
     def supportfile_counter(self):
         Supportfile = apps.get_model('qcm', 'Supportfile')
         return Supportfile.objects.filter(knowledge__waiting = self, is_title=0).count()
@@ -313,6 +316,9 @@ class Knowledge(models.Model):
     def nb_exercise(self):
         return self.exercises.count()
 
+
+    def nb_questions(self):
+        return self.question.count()
 
 
     def exercices_by_knowledge(self,student,group):

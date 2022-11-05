@@ -1620,6 +1620,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let from = $(this).attr("data-from");
 
+                if( $("#is_quizz").val() ) {  is_quizz = "yes" ; } else { is_quizz = "no" ; }
 
                 if( $is_folder) {  is_folder = "yes" ; } else { is_folder = "no" ; }
 
@@ -1640,6 +1641,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             'statut': statut,
                             'from': from,
                             'is_folder': is_folder,
+                            'is_quizz': is_quizz,
                             csrfmiddlewaretoken: csrf_token
                         },
                         url: url_from ,

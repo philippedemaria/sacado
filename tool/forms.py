@@ -72,6 +72,36 @@ class QuestionForm(forms.ModelForm):
 
 
 
+class QuestionKForm(forms.ModelForm):
+
+	class Meta:
+		model = Question
+		fields = '__all__'
+		widgets = {
+            'is_correct' : CheckboxInput(),  
+        }
+
+
+	def __init__(self, *args, **kwargs):
+		knowledge = kwargs.pop('knowledge')
+		super(QuestionKForm, self).__init__(*args, **kwargs)
+
+		self.fields['knowledge'].initial = knowledge
+
+
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)  
+		audio_ = self.cleaned_data['audio']
+		validation_file(audio_) 
+		video_ = self.cleaned_data['video']
+		validation_file(video_) 
+
+
+
+
+
+
 class QuizzForm(forms.ModelForm):
  
 	class Meta:
