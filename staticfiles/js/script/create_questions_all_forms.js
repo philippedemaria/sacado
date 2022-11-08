@@ -1,4 +1,4 @@
-define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle'], function ($) {
+define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'config_toggle'], function ($) {
     $(document).ready(function () {
 
 
@@ -41,7 +41,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
                     $('#subformsetZone').attr("id","subformsetZone"+totalForms)  ;
 
-                    items = $("subformsetZone"+totalForms+' .get_image') ; 
+                    items = $("#subformsetZone"+totalForms+' .get_image') ; 
                     var i = 0 ;
                     for( var item in items ){
                         var suf = totalForms+'-'+i ; 
@@ -135,12 +135,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle
 
 
 
-
-
-
-
-
-
+ 
 
 
 

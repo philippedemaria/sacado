@@ -398,83 +398,75 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
 
  
 
-        $("#support_image").on('click', function (event) {
+        // $("#support_image").on('click', function (event) {
 
-            get_the_target("#support_image","#drop_zone_image","#video_div","#audio_div")
+        //     get_the_target("#support_image","#drop_zone_image","#video_div","#audio_div")
 
-        })
-
-
-
-        $("#support_video").on('click', function (event) { 
-
-            get_the_target("#support_video","#video_div","#drop_zone_image","#audio_div")
-
-        })
+        // })
 
 
 
-        $("#support_audio").on('click', function (event) { 
+        // $("#support_video").on('click', function (event) { 
 
-            get_the_target("#support_audio","#audio_div","#drop_zone_image","#video_div")
+        //     get_the_target("#support_video","#video_div","#drop_zone_image","#audio_div")
 
-        })
-
-
-        $("#support_audio_image").on('click', function (event) { 
-
-            get_the_target_2("#support_audio_image","#drop_zone_image","#audio_div","#video_div")
-
-        })
+        // })
 
 
+
+        // $("#support_audio").on('click', function (event) { 
+
+        //     get_the_target("#support_audio","#audio_div","#drop_zone_image","#video_div")
+
+        // })
+
+
+        // $("#support_audio_image").on('click', function (event) { 
+
+        //     get_the_target_2("#support_audio_image","#drop_zone_image","#audio_div","#video_div")
+
+        // })
 
  
-        function get_the_target(target,cible,f1,f2){
+        // function get_the_target(target,cible,f1,f2){
 
-            $(f1).removeClass("allowed_display");
-            $(f2).removeClass("allowed_display");
-            $(f1).addClass("not_allowed_display");
-            $(f2).addClass("not_allowed_display");
+        //     $(f1).removeClass("allowed_display");
+        //     $(f2).removeClass("allowed_display");
+        //     $(f1).addClass("not_allowed_display");
+        //     $(f2).addClass("not_allowed_display");
 
-            if ($(cible).hasClass("not_allowed_display")) 
-            {
-                $(cible).removeClass("not_allowed_display");
-                $(cible).addClass("allowed_display");
-            } else {
-                $(cible).removeClass("allowed_display");                
-                $(cible).addClass("not_allowed_display");
-            }
-        }
+        //     if ($(cible).hasClass("not_allowed_display")) 
+        //     {
+        //         $(cible).removeClass("not_allowed_display");
+        //         $(cible).addClass("allowed_display");
+        //     } else {
+        //         $(cible).removeClass("allowed_display");                
+        //         $(cible).addClass("not_allowed_display");
+        //     }
+        // }
 
-        function get_the_target_2(target,cible,f1,f2){
+        // function get_the_target_2(target,cible,f1,f2){
 
-            $(f1).removeClass("allowed_display");
-            $(f2).removeClass("allowed_display");
-            $(f1).addClass("not_allowed_display");
-            $(f2).addClass("not_allowed_display");
+        //     $(f1).removeClass("allowed_display");
+        //     $(f2).removeClass("allowed_display");
+        //     $(f1).addClass("not_allowed_display");
+        //     $(f2).addClass("not_allowed_display");
 
-            if ($(cible).hasClass("not_allowed_display")) 
-            {
-                $(cible).removeClass("not_allowed_display");
-                $(cible).addClass("allowed_display");
-                $(f1).removeClass("not_allowed_display");
-                $(f1).addClass("allowed_display");
-            } else {
-                $(cible).removeClass("allowed_display");                
-                $(cible).addClass("not_allowed_display");
-                $(f1).removeClass("not_allowed_display");
-                $(f1).addClass("allowed_display");
-            }
-        }
-
-
-
- 
+        //     if ($(cible).hasClass("not_allowed_display")) 
+        //     {
+        //         $(cible).removeClass("not_allowed_display");
+        //         $(cible).addClass("allowed_display");
+        //         $(f1).removeClass("not_allowed_display");
+        //         $(f1).addClass("allowed_display");
+        //     } else {
+        //         $(cible).removeClass("allowed_display");                
+        //         $(cible).addClass("not_allowed_display");
+        //         $(f1).removeClass("not_allowed_display");
+        //         $(f1).addClass("allowed_display");
+        //     }
+        // }
 
 
-
- 
 
         function asnwerfontsize(choice) {
 
@@ -488,8 +480,6 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
         }
 
 
-
-
         // Chargement d'une image dans la réponse possible.
         $('body').on('click', '.automatic_insertion' , function (event) {  
  
@@ -497,13 +487,6 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
             $("#div_"+feed_back).toggle(500);
 
          });
-
-
-
-
-
-
-
 
  
     });

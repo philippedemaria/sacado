@@ -2781,7 +2781,7 @@ def admin_create_question_ia(request,idk,qtype):
     else :
         qt = None
 
-    if qtype == 3 or  qtype == 4   or qtype == 12  :
+    if qtype == 3 or  qtype == 4  or  qtype == 7  or qtype == 12 :
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
         form_ans = formSet(request.POST or None,  request.FILES or None)
 
@@ -2789,7 +2789,7 @@ def admin_create_question_ia(request,idk,qtype):
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=1)
         form_ans = formSet(request.POST or None,  request.FILES or None)
 
-    elif qtype == 5 or qtype == 11 or qtype == 18  :
+    elif qtype == 5 or qtype == 11  or qtype == 15 or qtype == 18  :
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=2)
         form_ans = formSet(request.POST or None,  request.FILES or None)
  
@@ -2808,7 +2808,7 @@ def admin_create_question_ia(request,idk,qtype):
             nf.knowledge = knowledge
             nf.save()
             form.save_m2m() 
-            if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 18 :
+            if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
                 form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
                 for form_answer in form_ans :
                     if form_answer.is_valid():
@@ -2841,6 +2841,10 @@ def admin_create_question_ia(request,idk,qtype):
 
     elif   qtype == 6 or qtype == 14  :
         context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title , 'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, })
+        template = 'tool/'+qt.template+'.html'
+    
+    elif   qtype == 7 or qtype == 9  :
+        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title   })
         template = 'tool/'+qt.template+'.html'
     
     else : 
