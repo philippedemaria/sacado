@@ -2743,6 +2743,8 @@ def show_qrandom_admin(request,id):
 def this_level(level_id):
     if 1<level_id <13 :
         level_id = level_id - 1
+    elif level_id == 14 :
+        level_id = 14
     elif level_id == 1 :
         level_id = 14
     else :
