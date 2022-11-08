@@ -2860,7 +2860,89 @@ def admin_create_question_ia(request,idk,qtype):
 
 @login_required(login_url= 'index')
 def admin_update_question_ia(request,idk,idq):
-    pass
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    question = Question.objects.get(pk=idq) 
+    qt  = Qtype.objects.get(pk=question.qtype)
+
+    knowledge = Knowledge.objects.get(pk=idk)
+    form = QuestionKForm(request.POST or None, request.FILES or None, instance = question, knowledge = knowledge)
+
+    qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
+   
+    qtype = question.qtype
+ 
+    if qtype == 3 or  qtype == 4  or  qtype == 7  or qtype == 12 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+
+    elif   qtype == 13 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=1)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+
+    elif qtype == 5 or qtype == 11  or qtype == 15 or qtype == 18  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+ 
+    elif qtype == 6 or qtype == 8 or qtype == 10 or qtype == 14   :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+        formSubset   = inlineformset_factory( Choice , Subchoice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_sub_ans = formSubset(request.POST or None,  request.FILES or None)
+
+
+    if request.method == "POST"  :
+        if form.is_valid():
+            nf           = form.save(commit=False) 
+            nf.teacher   = request.user.teacher
+            nf.qtype     = qtype
+            nf.knowledge = knowledge
+            nf.save()
+            form.save_m2m() 
+            if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        form_answer.save()
+
+            elif qtype == 6 or qtype == 14  :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        fa = form_answer.save()
+                        form_sub_ans = formSubset(request.POST or None,  request.FILES or None, instance = fa)
+                        for form_sub in form_sub_ans :
+                            if form_sub.is_valid():
+                                form_sub.save()
+
+            id_level = this_level( knowledge.level.id + 2 )
+
+            return redirect('admin_question_ia' , id_level )
+
+        else :
+            print(form.errors)
+
+ 
+    bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
+    context = { 'bgcolors' : bgcolors  , 'knowledge': knowledge , 'form' : form, 'qtype' : qtype , 'title_type_of_question' : qt.title , "question" : question , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qtype , "class_quizz_box" : False ,  }
+
+    if qtype == 0 :
+        template = 'tool/choice_type_of_question.html'
+
+    elif   qtype == 6 or qtype == 14  :
+        context.update( { 'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, })
+        template = 'tool/'+qt.template+'.html'
+    
+    elif   qtype == 7 or qtype == 9  :
+        template = 'tool/'+qt.template+'.html'
+    
+    else : 
+        if qtype > 2 :
+            context.update( { 'form_ans' : form_ans ,   })  
+
+        template = 'tool/'+qt.template+'.html'
+
+    return render(request, template , context)
+
 
 
 @login_required(login_url= 'index')

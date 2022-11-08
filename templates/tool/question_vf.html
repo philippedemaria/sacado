@@ -25,11 +25,11 @@
                 <h1 class="quizz_font30 quizz_answer white padding20"> VRAI</h1>
             </div>
             <div class="col-sm-2 col-md-2 checking_zone" id="vf_zone1"> 
-                <span class="noCheck" id="noCheck1">
+                <span class="noCheck" id="noCheck1"  data-qtype="vf" {% if question and question.is_correct %}style="display: none;"{% endif %}>
                     <i class="fa fa-circle fa-3x white"></i>
                 </span>
-                <span class="check" id="check1" data-qtype="vf">
-                    <i class="fa fa-check-circle fa-3x white"></i>
+                <span class="check {% if question and question.is_correct %}checked{% endif %}" id="check1" data-qtype="vf" {% if question and question.is_correct %}style="display: block;"{% endif %}>
+                    <i class="fa fa-check-circle fa-3x white"></i> 
                 </span>
             </div>
 
@@ -44,10 +44,10 @@
                 <h1 class="quizz_font30 quizz_answer white padding20"> FAUX</h1>
             </div>
             <div class="col-sm-2 col-md-2 checking_zone" id="vf_zone2"> 
-                <span class="noCheck" id="noCheck2" data-qtype="vf">
+                <span class="noCheck" id="noCheck2" data-qtype="vf"  {% if question and not question.is_correct %}style="display: none;"{% endif %}>
                     <i class="fa fa-circle fa-3x white"></i>
                 </span>
-                <span class="check" id="check2">
+                <span class="check {% if question and not question.is_correct %}checked{% endif %}" id="check2" data-qtype="vf" {% if question and not question.is_correct %}style="display: block;"{% endif %}>
                     <i class="fa fa-check-circle fa-3x white"></i>
                 </span>
             </div>
@@ -56,4 +56,7 @@
     </div>
  </div>
  {{ form.is_correct|attr:"style:display:none"}}
-{% endblock %} 
+{% endblock %}                 
+
+
+ 
