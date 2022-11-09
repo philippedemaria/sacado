@@ -30,8 +30,10 @@
         </div>
     </div>
     
-    <input type="hidden" name="text_to_set" id="text_to_set" value="Compléter le texte à trous">
 
+    {% if not question %}
+    <input type="hidden" name="text_to_set" id="text_to_set" value="Compléter le texte à trous">
+    {% endif %}
 {% endblock %}
 
 

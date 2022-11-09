@@ -68,7 +68,10 @@
             </div>
         </div>
     </div> 
+    {% if not question %}
     <input type="hidden" name="text_to_set" id="text_to_set" value="Positionner les éléments sur l'image">
+    {% endif %}
+
 {% endblock %}
 
 
