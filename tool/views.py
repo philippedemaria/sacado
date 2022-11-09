@@ -2965,6 +2965,17 @@ def admin_show_question_ia(request,idk,idq):
 
 
 
+@csrf_exempt 
+def ajax_is_ia(request): 
+
+    idq =  request.POST.get("idq")
+    data = {}
+    question = Question.objects.get(pk = idq)
+    if question.is_ia : question.is_ia = 0
+    else :  question.is_ia =1
+    question.save()
+
+    return JsonResponse(data)
 #####################################################################################################################################
 #####################################################################################################################################
 ####    Visiocopie

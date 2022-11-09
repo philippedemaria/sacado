@@ -34,7 +34,7 @@
                     <thead> 
                         <tr>
                             <td></td>
-                            <td></td>
+                            <td style="width:100px"></td>
                         </tr>
                     </thead> 
                     <tbody>
@@ -101,8 +101,9 @@
                                                     {% endif %}
                                                 </a>
                                             </td>
-                                            <td>                                           
+                                            <td>                                          
                                                 <a href="{% url 'admin_delete_question_ia' knowledge.name.id question.id  %}" onclick="return TestDelete('cette question')"><i class="fa fa-trash text-danger"></i></a>
+                                                <label><input type="checkbox" class="q_is_ia" name="q_is_ia" {% if question.is_ia %} checked {% endif %} data-id="{{ question.id }}" /> IA ? </label>
                                             </td>
                                         </tr> 
                                     {% endfor %}  

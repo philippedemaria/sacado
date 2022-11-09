@@ -242,7 +242,25 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('.q_is_ia').on('click', function (event) {
 
+            let idq = $(this).data("id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'idq': idq,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_is_ia" 
+                }
+            )
+        });
 
 
 

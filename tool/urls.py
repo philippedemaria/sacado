@@ -127,7 +127,8 @@ urlpatterns = [
     path('admin_delete_question_ia/<int:idk>/<int:idq>', admin_delete_question_ia, name='admin_delete_question_ia'),
     path('admin_show_question_ia/<int:idk>/<int:idq>', admin_show_question_ia, name='admin_show_question_ia'),
 
-
+    path('ajax_is_ia', ajax_is_ia, name='ajax_is_ia'),
+    
     ############## Quizz generated
     path('ajax_show_generated', ajax_show_generated, name='ajax_show_generated'),
 

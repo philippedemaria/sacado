@@ -196,6 +196,8 @@ class Question(models.Model):
     size       = models.PositiveIntegerField(default=32, choices=POLICES, blank=True,  verbose_name="Taille de police")
     theme      = models.BooleanField(default=1, verbose_name="Thème ?")
 
+    is_ia      = models.BooleanField(default=0, verbose_name="IA ?")
+
     def __str__(self):
         return self.title
 
