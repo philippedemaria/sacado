@@ -2826,7 +2826,7 @@ def admin_create_question_ia(request,idk,qtype):
                             if form_sub.is_valid():
                                 form_sub.save()
 
-            id_level = this_level( knowledge.level.id + 1 )
+            id_level = this_level( knowledge.level.id + 2 )
 
             return redirect('admin_question_ia' , id_level )
 
