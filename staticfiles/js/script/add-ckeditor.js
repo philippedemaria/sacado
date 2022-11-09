@@ -18,8 +18,10 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
                 ] ,
         });
 
-        text_to_set = $("#text_to_set").val() ; 
-        CKEDITOR.instances['id_title'].setData(text_to_set) ;
+        if ( $("#text_to_set").length > 0 )
+        { text_to_set = $("#text_to_set").val() ; 
+        CKEDITOR.instances['id_title'].setData(text_to_set) ; 
+        }
     
     }
 
@@ -33,8 +35,9 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
                 [  
                     { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Copy', 'Paste', 'PasteText' ] },
                     { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline'] },
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline','-','Table'] },
                     { name: 'others', groups: [ 'mode' ], items: [ 'Source'] },
+
                 ] ,
         });
     }
