@@ -62,23 +62,14 @@
                                             <td>
                                                 <a href="{% url 'admin_update_question_ia' knowledge.name.id question.id %}">
                                                     <b>
-                                                    {% if question.qtype == 1 %}
-                                                        Vrai/Faux
-                                                    {% elif question.qtype == 2 %}
-                                                        Réponse écrite
-                                                    {% elif question.qtype == 3 %}
-                                                        QCM
-                                                    {% elif question.qtype == 4 %} 
-                                                        QCS
-                                                    {% endif   %}  
+                                                        {{ question.qtype.title }}
                                                     </b>
-                                   
                                                     {{ question.title|safe }} 
                                                     {% if question.imagefile %}
                                                         <img src="{{ question.imagefile.url }}" class="imagefile" />
                                                     {% endif %}
-                                                    {% if question.qtype == 2 %}<hr/>
-                                                        Réponse attendue : {{ question.answer}} 
+                                                    {% if question.qtype == 2 %}<b>Réponse attendue : {{ question.answer}}</b> 
+                                                    {% elif question.qtype == 9 %}{{ question.filltheblanks|filltheblanks_safe|safe}} 
                                                     {% else %}
                                                     <table class="table borderless">
                                                         <tr>

@@ -68,6 +68,29 @@ def splitter(arg):
 
 
 
+@register.filter
+def filltheblanks_safe(arg):
+    '''HTML entity filltheblanks_safe'''
+    arg = arg.replace('<strong>','####')
+    arg = arg.replace('</strong>','####')
+    tab = arg.split('####')
+
+    print(tab)
+
+    string = ""
+    for i in range(len(tab)) :
+        if i%2==1:
+            if  int(len(tab[i]))  < 30 : ln = "30"
+            else : ln = str(int(len(tab[i])))
+            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value="+tab[i]+"  /> "
+        else :
+            st = tab[i] 
+        string += st
+
+    return string
+
+
+
 
 @register.filter
 def decode(arg):
