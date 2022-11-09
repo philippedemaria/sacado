@@ -91,8 +91,8 @@
                                                             {% if question.qtype == 3 or question.qtype == 4 %} 
                                                             {% if c.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
                                                             {% endif %}
-                                                            {% if question.qtype == 2 %}{{ question.answer}}<i class="fa fa-check text-success"></i>{% endif %}
-
+                                                            {% if question.qtype == 2 %}{{ question.answer}} <i class="fa fa-check text-success"></i> {% endif %}
+                                                            {% if question.qtype == 1 and question.iscorrect %} <span class="text-success">VRAI</span> {% else %} <span class="text-danger">FAUX</span> {% endif %}
 
                                                         </td>
                                                         {% endfor %}
