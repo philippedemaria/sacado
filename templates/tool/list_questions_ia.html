@@ -87,9 +87,10 @@
                                                             {% if c.imagefile %}
                                                                 <img src="{{ c.imagefile.url }}" class="imagefile" />
                                                             {% endif %}  
-                                                                {{ c.answer }} 
+                                                                {{ c.answer }}
+                                                            {% if question.qtype == 3 or question.qtype == 4 %} 
                                                             {% if c.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
-
+                                                            {% endif %}
                                                             {% if question.qtype == 2 %}{{ question.answer}}<i class="fa fa-check text-success"></i>{% endif %}
 
 
