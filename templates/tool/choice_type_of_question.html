@@ -64,7 +64,7 @@
 
             <div class="col-sm-6 col-md-3" align="center"> 
                 <a href="{% url 'admin_create_question_ia' knowledge.id qtype.id %}" class="selector_question" >
-                    <div class="card">
+                    <div class="card" style="width:150px;height:150px">
                         <h1>{{qtype.title}}</h1>
                         {{qtype.html|safe}}
                     </div>
