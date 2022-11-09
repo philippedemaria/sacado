@@ -38,8 +38,8 @@
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_quizz' quizz.id %}"> <small>{{ quizz.title }}  ({{ quizz.duration|time_done }}) </small></a>
    {% endif  %}
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
-   <small> 
-     {{   qt.title  }} 
+   <small> {{ knowledge.level.name }} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+     {{   title_type_of_question  }}  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ knowledge.name }} 
    </small>
 {% endblock %}
 
