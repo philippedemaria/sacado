@@ -75,14 +75,14 @@ def filltheblanks_safe(arg):
     arg = arg.replace('</strong>','####')
     tab = arg.split('####')
 
-    print(tab)
-
     string = ""
     for i in range(len(tab)) :
+        
         if i%2==1:
-            if  int(len(tab[i]))  < 30 : ln = "30"
-            else : ln = str(int(len(tab[i])))
-            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value="+tab[i]+"  /> "
+            if  int(len(tab[i]))  < 4 : ln = "30"
+            elif  int(len(tab[i]))  < 10 : ln = "100"
+            else : ln = str(int(len(tab[i]))*10)
+            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value='"+tab[i]+"'  /> "
         else :
             st = tab[i] 
         string += st
