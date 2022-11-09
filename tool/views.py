@@ -2807,7 +2807,8 @@ def admin_create_question_ia(request,idk,qtype):
             nf           = form.save(commit=False) 
             nf.teacher   = request.user.teacher
             nf.qtype     = qtype
-            nf.knowledge = knowledge
+            nf.knowledge = knowledge            
+            nf.is_ia     = 1
             nf.save()
             form.save_m2m() 
             if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
@@ -2903,6 +2904,7 @@ def admin_update_question_ia(request,idk,idq):
             nf.teacher   = request.user.teacher
             nf.qtype     = qtype
             nf.knowledge = knowledge
+            nf.is_ia     = 1
             nf.save()
             form.save_m2m() 
             if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
