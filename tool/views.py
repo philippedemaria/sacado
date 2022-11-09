@@ -2835,23 +2835,26 @@ def admin_create_question_ia(request,idk,qtype):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'knowledge': knowledge , 'form' : form, 'qtype' : qtype , "question" : None , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  }
+    context = { 'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title , 'knowledge': knowledge , 'form' : form, 'qtype' : qtype , "question" : None , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  }
 
     if qtype == 0 :
         context.update( {  'title_type_of_question' : "Choisir un type de question"   })
         template = 'tool/choice_type_of_question.html'
 
     elif   qtype == 6 or qtype == 14  :
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title , 'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, })
+        context.update( {  'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, })
         template = 'tool/'+qt.template+'.html'
     
     elif   qtype == 7 or qtype == 9  :
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title   })
         template = 'tool/'+qt.template+'.html'
     
+    
     else : 
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : qt.title , 'form_ans' : form_ans ,   })      
+        if qtype > 2 :
+            context.update( { 'form_ans' : form_ans ,   })  
+
         template = 'tool/'+qt.template+'.html'
+
 
     return render(request, template , context)
 
