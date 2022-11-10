@@ -117,6 +117,11 @@ urlpatterns = [
     path('parcours_peuplate_evaluation/<int:id>/', peuplate_parcours_evaluation, name='peuplate_parcours_evaluation'),
 
     path('parcours_stat_evaluation/<int:id>/', stat_evaluation, name='stat_evaluation'), 
+    path('stat_evaluation_group/<int:id>/<int:idg>', stat_evaluation_group, name='stat_evaluation_group'), 
+
+
+
+
 
     path('redo_evaluation', redo_evaluation, name='redo_evaluation'), 
 

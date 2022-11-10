@@ -2772,7 +2772,7 @@ def get_target_ia(request,idp):
         knowledge_ids = request.POST.getlist('knowledge_id')
         knowledges_str = convert_into_str(knowledge_ids)
 
-        Testtraining.objects.update_or_create(parcours = parcours , defaults = {'requires': "", 'targets' :  knowledges_str,   'test_proposed' : "", 'test_effective' : "" } )
+        Testtraining.objects.update_or_create(parcours = parcours , defaults = {'requires': "", 'targets' :  knowledges_str,   'questions_proposed' : "", 'questions_effective' : "" } )
 
         return redirect('create_test_ia', idp )
 
@@ -2834,9 +2834,12 @@ def create_test_ia(request,idp):
                         questions.add(q)
                         titles.append( q.title )
 
+        if Quizz.objects.filter(title = "Test Positionnement IA", parcours=parcours) :
+            created = False
+        else :
+            quizz = Quizz.objects.create(title = "Test Positionnement IA", teacher=teacher, color= parcours.color , subject =subject, is_numeric = 1, is_mark=1,is_ranking= 1 , is_shuffle= 1,is_publish=0 )
+            created = True
 
-        quizz , created = Quizz.objects.update_or_create(parcours=parcours, defaults = {'title' : "Test Positionnement IA", 'teacher': teacher, 'color': parcours.color , 'subject' :subject, 'is_numeric': 1, 'is_mark': 1,'is_ranking' : 1 , 'is_shuffle' : 1,'is_publish' : 0 })
-        
         if created :
             quizz.parcours.add( parcours ) 
             quizz.levels.add( level )
@@ -3996,6 +3999,14 @@ def stat_evaluation(request, id):
     context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
+
+
+
+@parcours_exists
+def stat_evaluation_group(request, id, idg):
+    request.session["group_id"] = idg
+    return redirect('stat_evaluation', id)
+
 
 
 
