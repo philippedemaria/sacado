@@ -3961,6 +3961,7 @@ def stat_evaluation(request, id):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
+
     stage = get_stage(teacher.user)
     parcours = Parcours.objects.get(id=id)
     skills = skills_in_parcours(request,parcours)
@@ -3989,7 +3990,6 @@ def stat_evaluation(request, id):
         students = students_from_p_or_g(request,parcours) 
 
     for s in students :
-
         student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
         stats.append(student)
 
@@ -4393,6 +4393,29 @@ def ajax_is_favorite(request):
             data["fav"] = 1     
 
     return JsonResponse(data) 
+
+
+
+
+@csrf_exempt # PublieDépublie un exercice depuis organize_parcours
+def ajax_is_active(request):  
+
+    target_id = int(request.POST.get("target_id",None))
+    data = {}
+    parcours = Parcours.objects.get(pk = target_id)
+    if parcours.is_active :
+        parcours.is_active = 0
+        data["html"] = "<i class='fa fa-thumbs-up text-default' ></i>"
+    else :
+        parcours.is_active = 1
+        data["html"] = "<i class='fa fa-thumbs-up text-is_favorite' ></i>"
+    parcours.save()   
+
+    return JsonResponse(data) 
+
+
+
+
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_course_sorter(request):  
@@ -10604,6 +10627,25 @@ def actioner_pef(request):
 
 
 
+
+
+
+def actioner_course(request):
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    idps = request.POST.getlist("selected_parcours")
+
+    for idp in idps :
+        course = Course.objects.get(id=idp) 
+        course.students.clear()
+        course.delete()
+ 
+    return redirect('parcours')
 
 
 

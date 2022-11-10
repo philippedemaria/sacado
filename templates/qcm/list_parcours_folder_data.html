@@ -27,7 +27,7 @@
 
         {% for f in  parcours.folders.all  %}
 
-            <a href="{% url 'show_parcours' f.id parcours.id %}" ><b><i class="bi bi-eye-fill"></i></b> </a>
+            <a href="{% url 'show_parcours' f.id parcours.id %}" title="{{ parcours.title }} dans le dossier {{ f.title }}"><b><i class="bi bi-eye-fill"></i></b> </a>
 
         {% endfor %}
 
@@ -111,23 +111,35 @@
  
     <td>
  
-            <div class="btn-group"  style="padding:0px;margin:0px;">
-                <a href="javascript:void();" class="btn btn-default btn-publisher publisher"  id="parcours_publisher{{parcours.id}}" 
-                    data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
-                    data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
-                    <i class="fa fa-circle-o-notch"></i>
-                </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
-                  {% if parcours.is_publish %} Publié  {% else %} Non publié {% endif  %} 
-                </span>
-            </div>
+        <span class="selector_active pull-right" 
+                title="A la Une" id="selector_active{{ parcours.id }}"
+                data-target_id="{{ parcours.id }}" 
+                style="cursor:pointer;padding-top: 5px;">
+            <i class="fa fa-thumbs-up {% if parcours.is_active %} text-is_favorite{% else  %} text-default{% endif  %}"></i>
+        </span>
+
+
+        <div class="btn-group"  style="padding:0px;margin:0px;">
+            <a href="javascript:void();" class="btn btn-default btn-publisher publisher"  id="parcours_publisher{{parcours.id}}" 
+                data-is_disabled="{% if parcours.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+                data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
+                <i class="fa fa-circle-o-notch"></i>
+            </a><span class="legend-btn  legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size13" id="parcours_statut{{parcours.id}}"  >  
+              {% if parcours.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+            </span>
+        </div>
  
         <span class="label_icon" style="color:{{ parcours.color   }};">
-            {% if parcours.is_evaluation %}
+            {% if parcours.is_evaluation and parcours.start %}
                 <br/>du {{  parcours.start|date:"d N Y H:i"  }}    
                 {% if parcours.stop %}
                 <br/>au {{  parcours.stop|date:"d N Y H:i"  }}     
                 {% endif %}                                
             {% endif %}
         </span>
+
+
+
+
     </td>
  

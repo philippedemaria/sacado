@@ -71,6 +71,10 @@ urlpatterns = [
 
     path('actioner_pef', actioner_pef, name='actioner_pef'), #archiver ou supprimer une sélection
 
+    path('actioner_course', actioner_course, name='actioner_course'), #archiver ou supprimer une sélection
+
+
+
     path('change_situations/<int:idf>/<int:idp>', change_situations_in_all_relationships , name='change_situations_in_all_relationships'),
     path('change_durations/<int:idf>/<int:idp>', change_durations_in_all_relationships , name='change_durations_in_all_relationships'),
     path('change_publications/<int:idf>/<int:idp>', change_publications_in_all_relationships , name='change_publications_in_all_relationships'),
@@ -332,6 +336,8 @@ urlpatterns = [
     path('ajax/course_sorter', ajax_course_sorter, name='ajax_course_sorter'),
     path('ajax/parcours_sorter', ajax_parcours_sorter, name='ajax_parcours_sorter'),
     path('ajax/folders_sorter', ajax_folders_sorter, name='ajax_folders_sorter'),
+
+    path('ajax_is_active', ajax_is_active, name='ajax_is_active'),
 
 
     path('parcours_show_student/<int:id>', show_parcours_student, name='show_parcours_student'), 

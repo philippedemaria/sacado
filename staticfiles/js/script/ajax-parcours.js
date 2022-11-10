@@ -436,6 +436,38 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+
+        // Met un parcours à la Une
+        $('.selector_active').on('click' ,function () {
+            
+            let target_id = $(this).data("target_id"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'target_id': target_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_is_active",
+                    success: function (data) {
+                        $('#selector_active'+target_id).html(data.html);    
+                    }
+                }
+            )
+        });
+
+
+
+
+
+
+
+
+
+
  
         $('body').on('click' , '.selector_e', function () {
 
