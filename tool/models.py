@@ -197,6 +197,11 @@ class Question(models.Model):
     theme      = models.BooleanField(default=1, verbose_name="Thème ?")
 
     is_ia      = models.BooleanField(default=0, verbose_name="IA ?")
+    ####  Cas spécifique axe gradué qtype =18
+    xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
+    xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
+    tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
+    precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision")  
 
     def __str__(self):
         return self.title

@@ -71,10 +71,25 @@
                                                     {% if question.qtype == 2 %}<b>Réponse attendue : {{ question.answer}}</b> 
                                                     {% elif question.qtype == 9 %}{{ question.filltheblanks|filltheblanks_safe|safe}}
                                                     {% elif question.qtype == 18 %} 
-                                                    <div style="width:100%;">
-                                                        <span style="width:3%;text-align: right"><b>{{ question.height }}</b></span>
-                                                        <span id="axe" style="position:relative;height:10px;width:94%;background-color: #CCC;"></span>
-                                                        <span style="width:3%;text-align: left;"><b>{{ question.width}}</span></b></span> 
+
+                                                        <table class="table borderless">
+                                                            <tr>
+                                                                <td>
+                                                                   <b>x min : </b>{{ question.xmin }}
+                                                                </td>
+                                                                <td>
+                                                                   <b>x max :</b>{{ question.xmax }}
+                                                                </td>
+                                                                <td>
+                                                                   <b>Incrément de la graduation : </b>{{ question.tick }}
+                                                                </td>
+                                                                <td>
+                                                                   <b>Incrément des réponses possibles :</b>{{ question.precision }}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+
                                                     </div>
                                                     {% elif question.qtype == 5 %} 
 

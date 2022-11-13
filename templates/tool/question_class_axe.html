@@ -49,11 +49,27 @@
         <div class="col-sm-6 col-md-3" > 
             <label>Graduation de l'axe :   
                 Mini :</label> 
-               {{ form.height|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+               {{ form.xmin|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
         </div>
         <div class="col-sm-4 col-md-2" > 
                 <label>Maxi : </label> 
-                {{ form.width|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+                {{ form.xmax|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+        </div>
+        <div class="col-sm-6 col-md-3" >  
+                <label>Pas : 
+                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Incrément de la graduation.</div>
+                    </span> 
+                </label> 
+               {{ form.tick|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+        </div>
+        <div class="col-sm-4 col-md-2" > 
+                <label>Précision : 
+                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Incrément des réponses possibles.</div>
+                    </span> 
+                </label> 
+                {{ form.precision|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
         </div>
     </div>
 
