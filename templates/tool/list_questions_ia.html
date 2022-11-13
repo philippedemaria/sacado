@@ -72,8 +72,9 @@
                                                     {% elif question.qtype == 9 %}{{ question.filltheblanks|filltheblanks_safe|safe}}
                                                     {% elif question.qtype == 18 %} 
                                                     <div style="width:100%;">
-                                                        <div style="height:30px;width:100%;"><b>{{ question.height }} <span class="pull-right">{{ question.width}}</span></b></div>
-                                                        <div id="axe" style="position:relative;height:10px;width:95%;background-color: #CCC;margin:15px"></div>
+                                                        <span style="width:3%;text-align: right"><b>{{ question.height }}</b></span>
+                                                        <span id="axe" style="position:relative;height:10px;width:94%;background-color: #CCC;margin:15px"></span>
+                                                        <span style="width:3%;text-align: left;"><b>{{ question.width}}</span></b></span> 
                                                     </div>
                                                     {% elif question.qtype == 5 %} 
 
