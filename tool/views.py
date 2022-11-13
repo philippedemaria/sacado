@@ -2787,14 +2787,18 @@ def admin_create_question_ia(request,idk,qtype):
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
         form_ans = formSet(request.POST or None,  request.FILES or None)
 
-    elif   qtype == 13 :
+    elif  qtype == 13 :
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=1)
         form_ans = formSet(request.POST or None,  request.FILES or None)
 
-    elif qtype == 5 or qtype == 11  or qtype == 15 or qtype == 18  :
+    elif qtype == 5 or qtype == 11  or qtype == 15  :
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=2)
         form_ans = formSet(request.POST or None,  request.FILES or None)
- 
+
+    elif qtype == 18  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=1)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
     elif qtype == 6 or qtype == 8 or qtype == 10 or qtype == 14   :
         formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
         form_ans = formSet(request.POST or None,  request.FILES or None)
@@ -2879,22 +2883,18 @@ def admin_update_question_ia(request,idk,idq):
    
     qtype = question.qtype
  
-    if qtype == 3 or  qtype == 4  or  qtype == 7  or qtype == 12 :
-        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
-        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
-
-    elif   qtype == 13 :
-        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=1)
+    if qtype == 3 or  qtype == 4  or  qtype == 7   or qtype == 12  or qtype == 13 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
 
     elif qtype == 5 or qtype == 11  or qtype == 15 or qtype == 18  :
-        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=2)
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
  
     elif qtype == 6 or qtype == 8 or qtype == 10 or qtype == 14   :
-        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
-        formSubset   = inlineformset_factory( Choice , Subchoice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        formSubset   = inlineformset_factory( Choice , Subchoice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
         form_sub_ans = formSubset(request.POST or None,  request.FILES or None)
 
 

@@ -69,7 +69,31 @@
                                                         <img src="{{ question.imagefile.url }}" class="imagefile" />
                                                     {% endif %}
                                                     {% if question.qtype == 2 %}<b>Réponse attendue : {{ question.answer}}</b> 
-                                                    {% elif question.qtype == 9 %}{{ question.filltheblanks|filltheblanks_safe|safe}} 
+                                                    {% elif question.qtype == 9 %}{{ question.filltheblanks|filltheblanks_safe|safe}}
+                                                    {% elif question.qtype == 18 %} 
+                                                    <div style="height:50px;width:100%;">
+                                                        <div style="height:30px;width:100%;"><b>{{ question.width}} <span class="pull-right">{{ question.height}}</span></b></div>
+                                                        <div id="axe" style="position:relative;height:10px;width:90%;background-color: #CCC;margin:60px"></div>
+                                                    </div>
+                                                    {% elif question.qtype == 5 %} 
+
+                                                    <table class="table borderless">
+                                                        <tr>
+                                                        {% for c in question.choices.all %}
+                                                        <td>
+                                                            {% if c.imagefile %}
+                                                                <img src="{{ c.imagefile.url }}" class="imagefile" />
+                                                            {% endif %}  
+                                                            {{ c.answer }}
+                                                            <i class="bi bi-arrow-left-right"></i>
+                                                            {% if c.imagefilebis %}
+                                                                <img src="{{ c.imagefilebis.url }}" class="imagefile" />
+                                                            {% endif %} 
+                                                            {{ c.answerbis }}
+                                                        </td>
+                                                        {% endfor %}
+                                                        </tr>
+                                                    </table>
                                                     {% else %}
                                                     <table class="table borderless">
                                                         <tr>
