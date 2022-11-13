@@ -2982,7 +2982,12 @@ def admin_duplicate_question_ia(request,idk,idq):
         knowledge = Knowledge.objects.get(pk=idk)
         question  = Question.objects.get(pk=idq)
         question.pk = None
-        for c in question.choices.all():
+        choices = question.choices.all()
+        for c in choices:
+            subchoices = c.subchoices.all()
+            for subchoice in subchoices : 
+                subchoice.pk = None
+                subchoice.save()
             c.pk = None
             c.save()
         question.save()
