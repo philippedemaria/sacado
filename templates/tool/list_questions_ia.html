@@ -71,7 +71,6 @@
                                                     {% if question.qtype == 2 %}<b>Réponse attendue : {{ question.answer}}</b> 
                                                     {% elif question.qtype == 9 %}{{ question.filltheblanks|filltheblanks_safe|safe}}
                                                     {% elif question.qtype == 18 %} 
-
                                                         <table class="table borderless">
                                                             <tr>
                                                                 <td>
@@ -86,6 +85,18 @@
                                                                 <td>
                                                                    <b>Incrément des réponses possibles :</b>{{ question.precision }}
                                                                 </td>
+                                                            </tr>
+                                                        </table>
+
+                                                        <table class="table borderless">
+                                                            <tr>
+                                                            {% for c in question.choices.all %}
+                                                            <td>
+                                                                {{ c.answer }}
+                                                                <i class="bi bi-arrow-left-right"></i>
+                                                                {{ c.answerbis }}
+                                                            </td>
+                                                            {% endfor %}
                                                             </tr>
                                                         </table>
 
