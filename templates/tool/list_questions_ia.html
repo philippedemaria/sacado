@@ -73,7 +73,7 @@
                                                     {% elif question.qtype == 18 %} 
                                                     <div style="width:100%;">
                                                         <span style="width:3%;text-align: right"><b>{{ question.height }}</b></span>
-                                                        <span id="axe" style="position:relative;height:10px;width:94%;background-color: #CCC;margin:15px"></span>
+                                                        <span id="axe" style="position:relative;height:10px;width:94%;background-color: #CCC;"></span>
                                                         <span style="width:3%;text-align: left;"><b>{{ question.width}}</span></b></span> 
                                                     </div>
                                                     {% elif question.qtype == 5 %} 
@@ -117,7 +117,8 @@
                                                     {% endif %}
                                                 </a>
                                             </td>
-                                            <td>                                          
+                                            <td>  
+                                                <a href="{% url 'admin_duplicate_question_ia' knowledge.name.id question.id  %}" title="Dupliquer"><i class="fa fa-copy"></i></a>
                                                 <a href="{% url 'admin_delete_question_ia' knowledge.name.id question.id  %}" onclick="return TestDelete('cette question')"><i class="fa fa-trash text-danger"></i></a>
                                                 <label><input type="checkbox" class="q_is_ia" name="q_is_ia" {% if question.is_ia %} checked {% endif %} data-id="{{ question.id }}" /> IA ? </label>
                                             </td>

@@ -2956,13 +2956,59 @@ def admin_update_question_ia(request,idk,idq):
 
 
 @login_required(login_url= 'index')
+def admin_duplicate_question_ia(request,idk,idq):
+
+
+    if request.user.is_superuser :
+        knowledge = Knowledge.objects.get(pk=idk)
+        question  = Question.objects.get(pk=idq)
+        qtype = question.qtype
+        qt = Qtype.objects.get(pk=qtype)
+        question.delete()
+
+        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+        data = all_datas_qia( knowledge.level )
+        return render(request, 'tool/list_questions_ia.html', {'data': data ,'level': knowledge.level   })
+    else :
+        return redirect('index')
+
+
+
+
+@login_required(login_url= 'index')
 def admin_delete_question_ia(request,idk,idq):
-    pass
+
+    if request.user.is_superuser :
+        knowledge = Knowledge.objects.get(pk=idk)
+        question  = Question.objects.get(pk=idq)
+        question.pk = None
+        for q in question.choices.all():
+            q.pk = None
+            q.save()
+        question.save()
+
+        request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+        data = all_datas_qia( knowledge.level )
+        return render(request, 'tool/list_questions_ia.html', {'data': data ,'level': knowledge.level   })
+    else :
+        return redirect('index')
+
 
 
 @login_required(login_url= 'index')
 def admin_show_question_ia(request,idk,idq):
     pass
+
+
+
+
+
+
+
+
+
+
+
 
 
 
