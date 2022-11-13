@@ -126,6 +126,10 @@ urlpatterns = [
     path('admin_update_question_ia/<int:idk>/<int:idq>', admin_update_question_ia, name='admin_update_question_ia'),
     path('admin_delete_question_ia/<int:idk>/<int:idq>', admin_delete_question_ia, name='admin_delete_question_ia'),
     path('admin_show_question_ia/<int:idk>/<int:idq>', admin_show_question_ia, name='admin_show_question_ia'),
+    path('admin_duplicate_question_ia/<int:idk>/<int:idq>', admin_duplicate_question_ia, name='admin_duplicate_question_ia'),
+
+
+
 
     path('ajax_is_ia', ajax_is_ia, name='ajax_is_ia'),
     
