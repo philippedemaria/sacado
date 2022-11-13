@@ -2982,9 +2982,9 @@ def admin_duplicate_question_ia(request,idk,idq):
         knowledge = Knowledge.objects.get(pk=idk)
         question  = Question.objects.get(pk=idq)
         question.pk = None
-        for q in question.choices.all():
-            q.pk = None
-            q.save()
+        for c in question.choices.all():
+            c.pk = None
+            c.save()
         question.save()
 
         request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
