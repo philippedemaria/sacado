@@ -2956,7 +2956,7 @@ def admin_update_question_ia(request,idk,idq):
 
 
 @login_required(login_url= 'index')
-def admin_duplicate_question_ia(request,idk,idq):
+def admin_delete_question_ia(request,idk,idq):
 
 
     if request.user.is_superuser :
@@ -2976,7 +2976,7 @@ def admin_duplicate_question_ia(request,idk,idq):
 
 
 @login_required(login_url= 'index')
-def admin_delete_question_ia(request,idk,idq):
+def admin_duplicate_question_ia(request,idk,idq):
 
     if request.user.is_superuser :
         knowledge = Knowledge.objects.get(pk=idk)
