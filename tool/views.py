@@ -2981,16 +2981,18 @@ def admin_duplicate_question_ia(request,idk,idq):
     if request.user.is_superuser :
         knowledge = Knowledge.objects.get(pk=idk)
         question  = Question.objects.get(pk=idq)
+        choices = question.choices.all()        
         question.pk = None
-        choices = question.choices.all()
+        question.save()
         for c in choices:
             subchoices = c.subchoices.all()
+            c.pk = None
+            c.question = question
+            c.save()            
             for subchoice in subchoices : 
                 subchoice.pk = None
+                subchoice.choice = c
                 subchoice.save()
-            c.pk = None
-            c.save()
-        question.save()
 
         request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
         data = all_datas_qia( knowledge.level )
