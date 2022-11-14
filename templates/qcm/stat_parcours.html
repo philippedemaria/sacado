@@ -35,27 +35,20 @@
 {% block page_menu_right %}
 
 
-    {% if parcours.groups.count %}
-
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn-new {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Stats par groupes <b class="caret"></b> </a>
-
-    <ul class="dropdown-menu clearfix pull-right" role="menu">
-        {% for g in parcours.groups.all %}
-        <li>
-            <a href="{% url 'stat_evaluation_group' parcours.id g.id %}" > {{ g.name }}   </a>   
+    {% if parcours.groups.count > 1 %}
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn-new {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Stats par groupes <b class="caret"></b> </a>
+            <ul class="dropdown-menu clearfix pull-right" role="menu">
+                {% for g in parcours.groups.all %}
+                <li>
+                    <a href="{% url 'stat_evaluation_group' parcours.id g.id %}" > {{ g.name }}   </a>   
+                </li>
+                {% endfor %}
+            </ul>
         </li>
-        {% endfor %}
-    </ul>
-</li>
-
-
-
-
-
     {% endif %}
   
-  {% include 'qcm/submenu_parcours.html' %}
+    {% include 'qcm/submenu_parcours.html' %}
  
 {% endblock %}
 

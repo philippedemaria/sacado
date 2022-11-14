@@ -1,16 +1,11 @@
 {% load static %}
 
  
-
-
 <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn-new {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Bilans et suivis <b class="caret"></b> </a>
 
     <ul   class="dropdown-menu clearfix pull-right" role="menu">
 
-
-
-        
         <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'stat_evaluation' parcours.id %}" > Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% elif parcours.is_sequence %} résultats de la séquence{% else %}stats du parcours{% endif %}   </a>   
         </li>
@@ -66,8 +61,6 @@
             </li>
             {% endif %}
         {% endif %}
-
-
 
     </ul>
 </li>
@@ -178,7 +171,21 @@
             {% else %}
             <a href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}" ><i class="bi bi-clock"></i> Gérer les durées</a> 
             {% endif %}
-        </li> 
+        </li>
+
+
+        {% if parcours.is_ia and parcours.is_testpos %}
+            <li class="divider"></li>
+            <li>
+                {% if folder %}
+                <a href="{% url 'show_parcours' folder.id  parcours.test_to_parcours.id   %}" ><b>IA</b> Parcours du Test</a> 
+                {% else %}
+                <a href="{% url 'show_parcours' 0  parcours.test_to_parcours.id  %}" ><b>IA</b> Parcours du Test</a>  
+                {% endif %}
+            </li>
+        {% endif %}
+
+
 
         {% else %}
         <li>
@@ -190,6 +197,15 @@
         <li>
             <a href="#" class="no_sacado_asso" ><i class="bi bi-clock"></i> Gérer les durées</a> 
         </li>
+
+            {% if parcours.is_ia and parcours.is_testpos %}
+            <li class="divider"></li>
+            <li>
+              <a  href="#" class="no_sacado_asso"><b>IA</b> Parcours du Test</a>  
+            </li>
+            {% endif %}
+
+
         {% endif %}
 
  

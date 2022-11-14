@@ -897,7 +897,7 @@ def ajax_populate(request):
         statut = 1
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
             try :
-                relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, maxexo = parcours.maxexo ,
+                relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, maxexo = parcours.maxexo, is_calculator = exercise.supportfile.calculator ,
                                                                                 situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
                 relation.skills.set(exercise.supportfile.skills.all())
                 students = parcours.students.all()
@@ -978,7 +978,7 @@ def peuplate_parcours(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -1050,7 +1050,7 @@ def peuplate_parcours_evaluation(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -1812,7 +1812,7 @@ def list_parcours_group(request,id):
 
     folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, is_archive=0, is_trash=0 ).distinct().order_by("ranking")
 
-    bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, folders = None, is_trash=0).distinct()
+    bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, folders = None, is_trash=0, is_testpos=0).distinct()
 
 
     evaluations = bases.filter( is_evaluation=1, is_sequence=0).order_by("ranking")
@@ -1852,7 +1852,7 @@ def list_sub_parcours_group(request,idg,idf):
     except :
         group = groupe
  
-    parcours_tab = folder.parcours.filter(is_archive=0 , is_sequence=0 , is_trash=0).order_by("is_evaluation", "ranking")
+    parcours_tab = folder.parcours.filter(is_archive=0 , is_sequence=0 , is_trash=0,is_testpos=0).order_by("is_evaluation", "ranking")
     sequences    = folder.parcours.filter(is_archive=0 , is_sequence=1 , is_trash=0).order_by("ranking")
     quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
     bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
@@ -2664,6 +2664,9 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
                     texte = "Un nouveau parcours"
                 sending_to_teachers(teacher , nf.level , nf.subject,texte)
 
+            if nf.is_ia :
+                nf.is_publish=0
+
             if request.POST.get("this_image_selected",None) : # récupération de la vignette précréée et insertion dans l'instance du parcours.
                 nf.vignette = request.POST.get("this_image_selected",None)
 
@@ -2743,7 +2746,7 @@ def convert_into_str(knowledge_ids):
     for knowledge_id in knowledge_ids :
         if i == len(knowledge_ids) : sep = ""
         else : sep = "##"
-        knowledges_str += knowledge_id + sep
+        knowledges_str += str(knowledge_id) + sep
         i+=1
     return knowledges_str
  
@@ -2784,6 +2787,99 @@ def get_target_ia(request,idp):
 
 
 
+# @login_required(login_url= 'index')
+# def create_test_ia(request,idp):
+#     """ Envoie la liste des exercice pour un seul niveau """
+#     try :
+#         teacher = request.user.teacher
+#     except :
+#         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+#         return redirect('index')
+
+#     parcours = Parcours.objects.get(pk=idp)
+#     if parcours.level.id < 13 : level_id = parcours.level.id - 1
+#     elif parcours.level.id == 17 : level_id = 12
+#     elif parcours.level.id == 14 : level_id = 14
+#     level = Level.objects.get(pk=level_id)
+
+#     subject  = parcours.subject
+#     exercises = Exercise.objects.filter(level  = level  , theme__subject = subject , supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge")
+    
+#     group_id = request.session.get("group_id", None)
+#     if group_id :
+#         group  = Group.objects.get(pk=group_id)
+#     else :
+#         group    = None
+
+#     if request.method == "POST":
+#         knowledge_ids = request.POST.getlist('knowledge_id')
+#         # knowledges_str = convert_into_str(knowledge_ids)
+
+#         # questions , titles = set() , list()
+#         # for knowledge_id in knowledge_ids :
+#         #     knowledge = Knowledge.objects.get(pk=knowledge_id)
+#         #     for q in knowledge.question.all():
+#         #         if q.title not in titles :
+#         #             questions.add(q)
+#         #             titles.append( q.title )
+
+#         # nbq = len(questions)
+
+#         # if nbq > 40:
+#         #     ratio =  40/nbq 
+#         #     questions , titles = set() , list()
+#         #     for knowledge_id in knowledge_ids :
+#         #         knowledge = Knowledge.objects.get(pk=knowledge_id)
+#         #         nb_this_question = int( knowledge.question.count()*ratio )
+#         #         ks = knowledge.question.all()[:nb_this_question]
+#         #         for q in ks :
+#         #             if q.title not in titles :
+#         #                 questions.add(q)
+#         #                 titles.append( q.title )
+
+#         # if Quizz.objects.filter(title = "Test Positionnement IA", parcours=parcours) :
+#         #     created = False
+#         # else :
+#         #     quizz = Quizz.objects.create(title = "Test Positionnement IA", teacher=teacher, color= parcours.color , subject =subject, is_numeric = 1, is_mark=1,is_ranking= 1 , is_shuffle= 1,is_publish=0 )
+#         #     created = True
+
+#         # if created :
+#         #     quizz.parcours.add( parcours ) 
+#         #     quizz.levels.add( level )
+
+#         #     if len( parcours.get_themes() ):
+#         #         quizz.themes.set( parcours.get_themes() )
+        
+#         # if len( parcours.groups.all() ):
+#         #     quizz.groups.set( parcours.groups.all() ) 
+
+#         # if parcours.folders.count() :  
+#         #     quizz.folders.set( parcours.folders.all() )
+
+#         # quizz.students.set( parcours.students.all() ) 
+#         # quizz.questions.set( questions ) 
+
+
+#         questions_str  = ""
+#         i=1 
+#         for question in questions :
+#             if i == len(questions) : sep = ""
+#             else : sep = "##"
+#             questions_str += str(question.id) + sep
+#             i+=1
+
+#         testtraining                = Testtraining.objects.get(parcours = parcours)
+#         testtraining.requires       = knowledges_str
+#         testtraining.quizz_proposed = questions_str
+#         testtraining.save()
+
+#         return redirect('show_quizz_numeric',quizz.id , idp )
+
+#     context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level , "group" : group  , "parcours" : parcours ,'get_target' : False  }
+ 
+#     return render(request, 'qcm/list_knowledges_by_level.html', context) 
+
+
 @login_required(login_url= 'index')
 def create_test_ia(request,idp):
     """ Envoie la liste des exercice pour un seul niveau """
@@ -2809,74 +2905,59 @@ def create_test_ia(request,idp):
         group    = None
 
     if request.method == "POST":
+
+        ########### Parcours cible
+        title    = parcours.title
+        p_id     = parcours.id
+        groups   = parcours.groups.all()
+        students = parcours.students.all()
+        ######################################################################################
+        # Création du parcours Test de positionnement
+        ######################################################################################
+        parcours.pk     = None
+        parcours.title = "TPo "+title
+        parcours.is_publish = 0        
+        parcours.code = str(uuid.uuid4())[:8] 
+        parcours.is_testpos = 1
+        parcours.maxexo = 1
+        parcours.is_testpos = 1
+        parcours.target_id = p_id
+        parcours.save()
+        parcours.groups.set(groups)
+        parcours.students.set(students)
         knowledge_ids = request.POST.getlist('knowledge_id')
-        knowledges_str = convert_into_str(knowledge_ids)
+        eid_for_rs = Exercise.objects.values_list("id",flat=True).filter(knowledge_id__in=knowledge_ids)
 
-        questions , titles = set() , list()
-        for knowledge_id in knowledge_ids :
-            knowledge = Knowledge.objects.get(pk=knowledge_id)
-            for q in knowledge.question.all():
-                if q.title not in titles :
-                    questions.add(q)
-                    titles.append( q.title )
-
-        nbq = len(questions)
-
-        if nbq > 40:
-            ratio =  40/nbq 
-            questions , titles = set() , list()
-            for knowledge_id in knowledge_ids :
-                knowledge = Knowledge.objects.get(pk=knowledge_id)
-                nb_this_question = int( knowledge.question.count()*ratio )
-                ks = knowledge.question.all()[:nb_this_question]
-                for q in ks :
-                    if q.title not in titles :
-                        questions.add(q)
-                        titles.append( q.title )
-
-        if Quizz.objects.filter(title = "Test Positionnement IA", parcours=parcours) :
-            created = False
-        else :
-            quizz = Quizz.objects.create(title = "Test Positionnement IA", teacher=teacher, color= parcours.color , subject =subject, is_numeric = 1, is_mark=1,is_ranking= 1 , is_shuffle= 1,is_publish=0 )
-            created = True
-
-        if created :
-            quizz.parcours.add( parcours ) 
-            quizz.levels.add( level )
-
-            if len( parcours.get_themes() ):
-                quizz.themes.set( parcours.get_themes() )
-        
-        if len( parcours.groups.all() ):
-            quizz.groups.set( parcours.groups.all() ) 
-
-        if parcours.folders.count() :  
-            quizz.folders.set( parcours.folders.all() )
-
-        quizz.students.set( parcours.students.all() ) 
-        quizz.questions.set( questions ) 
-
-
-        questions_str  = ""
+        e_str  = ""
         i=1 
-        for question in questions :
-            if i == len(questions) : sep = ""
+        for eid in eid_for_rs :
+            ######## Mise en place des exercices (relationships) #################################           
+            exercise = Exercise.objects.get(pk=eid)
+            relationship = Relationship.objects.create(exercise = exercise, parcours=parcours, maxexo=1, situation=2, duration=2, is_calculator = exercise.supportfile.calculator )
+            relationship.students.set(parcours.students.all())
+            relationship.skills.set(exercise.supportfile.skills.all())
+
+            if i == len(eid_for_rs) : sep = ""
             else : sep = "##"
-            questions_str += str(question.id) + sep
+            e_str += str(eid) + sep
             i+=1
 
-        testtraining                = Testtraining.objects.get(parcours = parcours)
-        testtraining.requires       = knowledges_str
-        testtraining.quizz_proposed = questions_str
+        knowledges_str = convert_into_str(knowledge_ids)
+
+        testtraining                    = Testtraining.objects.get(parcours_id = idp)
+        testtraining.requires           = knowledges_str
+        testtraining.questions_proposed = e_str
         testtraining.save()
 
-        return redirect('show_quizz_numeric',quizz.id , idp )
+
+        return redirect('show_parcours', 0 , parcours.id )
 
     context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level , "group" : group  , "parcours" : parcours ,'get_target' : False  }
  
     return render(request, 'qcm/list_knowledges_by_level.html', context) 
 
 
+ 
  
 
 def create_parcours_after_results(request,idq,idp):
@@ -3215,6 +3296,16 @@ def rcs_for_realtime(parcours):
 
 @login_required(login_url= 'index')
 def show_parcours(request, idf = 0, id=0):
+
+
+    for r in Relationship.objects.all() :
+        r.is_calculator = r.exercise.supportfile.calculator
+        r.save()
+
+
+
+
+
     """ show parcours coté prof """
     if idf > 0 :
         folder = Folder.objects.get(id=idf)
@@ -4075,7 +4166,7 @@ def add_exercice_in_a_parcours(request):
             except :
                 r = 0
 
-            relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
+            relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, is_calculator = exercise.supportfile.calculator, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
             relation.skills.set(exercise.supportfile.skills.all())   
             i +=1
 
@@ -4426,6 +4517,21 @@ def ajax_is_active(request):
 
 
 
+@csrf_exempt # Autorise ou pas la calculatrice dans une relationship
+def ajax_is_calculator(request):  
+
+    rc_id = int(request.POST.get("rc_id",None))
+    data = {}
+    relationship = Relationship.objects.get(pk = rc_id)
+    if relationship.is_calculator :
+        relationship.is_calculator = 0
+        data["html"] = '<img src="https://sacado.xyz/static/img/no_calculator.png" class="pull-right" width="35px" loading="lazy" title="Autoriser la calculatrice" />'
+    else :
+        relationship.is_calculator = 1
+        data["html"] = '<img src="https://sacado.xyz/static/img/calculator.png" class="pull-right" width="35px" loading="lazy" title="Interdire la calculatrice" />'
+    relationship.save()   
+
+    return JsonResponse(data) 
 
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
@@ -4590,6 +4696,13 @@ def ajax_publish_parcours(request):
     if is_quizz == "yes" :
         Quizz.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
     elif is_folder == "no" :
+        if statut == 1 :
+            pcs = Parcours.objects.get(pk = int(parcours_id))
+            if pcs.is_testpos :
+                exercise_ids = Relationship.objects.values_list("exercise_id",flat=True).filter(parcours=pcs, is_publish=1)
+                pcs_str = convert_into_str(exercise_ids)
+                Testtraining.objects.filter(parcours = pcs.target_id).update(questions_effective = pcs_str)
+
         Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
     else :
         Folder.objects.filter(pk = int(parcours_id)).update(is_publish = statut)

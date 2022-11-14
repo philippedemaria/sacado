@@ -23,11 +23,15 @@
               </div>
           </div>
           <span class="label_progress_bar" style="color:{{rc.parcours.color }}">{{ data.nb_done }}/{{ data.nb }}</span> 
-          {% if rc.exercise.supportfile.calculator %}
-            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" loading="lazy" />
+
+          <a href="#" data-rc_id="{{ rc.id }}" class="selector_calculator" id="selector_calculator{{ rc.id }}" />
+          {% if rc.is_calculator %}
+            <img src="{% static 'img/calculator.png' %}" class="pull-right" width="35px" loading="lazy" title="Interdire la calculatrice" />
           {% else %}
-            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" loading="lazy" />
+            <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" loading="lazy"  title="Autoriser la calculatrice"  />
           {% endif  %}
+          </a>
+
     </div>   
     <!-- Fin Entete de la card  -->
 

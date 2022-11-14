@@ -120,9 +120,6 @@ urlpatterns = [
     path('stat_evaluation_group/<int:id>/<int:idg>', stat_evaluation_group, name='stat_evaluation_group'), 
 
 
-
-
-
     path('redo_evaluation', redo_evaluation, name='redo_evaluation'), 
 
     path('getter_parcours_exercice_custom', ajax_getter_parcours_exercice_custom, name='ajax_getter_parcours_exercice_custom'),
@@ -140,7 +137,7 @@ urlpatterns = [
     path('ajax_individualise_this_exercise', ajax_individualise_this_exercise, name='ajax_individualise_this_exercise'),
     path('ajax_individualise_this_document', ajax_individualise_this_document, name='ajax_individualise_this_document'),
 
-
+    path('ajax_is_calculator', ajax_is_calculator, name='ajax_is_calculator'), 
 
     path('ajax_reset_this_exercise', ajax_reset_this_exercise, name='ajax_reset_this_exercise'),
 

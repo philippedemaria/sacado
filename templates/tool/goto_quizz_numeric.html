@@ -6,6 +6,12 @@
 
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+    {% if question.qtype == 18 %}
+        <script>require(['script/axe']);</script>
+    {% endif %}
+
+
 {% endblock %}
 
 
@@ -296,6 +302,21 @@
                 {% endfor %}
             </table>
         </div>
+    {% elif question.qtype == 18 %} 
+    
+        <input type="hidden" name="xmin" value="{{ question.xmin}}"  id="xmin"> 
+        <input type="hidden" name="xmax" value="{{ question.xmax}}"  id="xmax">
+        <input type="hidden" name="graduation" value="{{ question.graduation}}"  id="graduation">
+        <input type="hidden" name="precision" value="{{ question.precision}}"  id="precision">
+
+
+        <div id='tableau'>  
+        <div id="axe"></div>
+        {% for carte in question.choices.all %}
+          <div class="carte" id="carte{{ forloop.counter0 }}"><p>{{ carte }}</p><p id="valeur"></p></div>
+        {% endfor %}  
+        </div>
+
     {% endif %}
 
 <div style="height:40px"></div>

@@ -13,7 +13,7 @@
 
 
         <!-- Fenetre des options   -->
-        <div class="no_visu_on_load options" id="show_open_option{{ parcours.id}}">
+        <div class="no_visu_on_load {% if parcours.is_ia and not is_testpos %}ia_options{% else %}options{% endif %}" id="show_open_option{{ parcours.id}}">
             <div class="row extend" {% if parcours.is_evaluation  %} style="padding-top: 5px;" {% endif  %}> 
                 <div class="col-lg-4 col-xs-4">
                 {% if group and parcours.is_evaluation %}
@@ -143,7 +143,32 @@
                     </a> 
                 </div>
             </div>
-            {% endif %} 
+            {% endif %}
+            {% if parcours.is_ia and not parcours.is_testpos %}
+                {% if parcours.testpositionnement.id %}
+                <div class="row  ">    
+                    <div class="col-xs-12 col-md-12 col-lg-12">
+                            <a {% if folder %} href="{% url 'show_parcours' folder.id parcours.testpositionnement.id  %}"
+                                {% else %} href="{% url 'show_parcours' 0  parcours.testpositionnement.id  %}"
+                                {% endif %} class="edit"><b>IA</b> <span class="label_icon">Test de positionnement</span> 
+                            </a>
+                    </div> 
+                </div>
+                {% else %}
+                <div class="row  ">    
+                    <div class="col-xs-12 col-md-12 col-lg-12">
+                            <a {% if group %} href="{% url 'delete_parcours' parcours.id  group.id %}"
+                                {% else %} href="{% url 'delete_parcours'   parcours.id 0 %}"
+                                {% endif %} class="text-danger"><b>IA</b> <span class="label_icon">Supprimer ce parcours</span> 
+                            </a>
+                    </div> 
+                </div>
+                {% endif %}
+            {% endif %}
+
+
+
+
         </div>
 
         <!-- Fenetre des groupes -->

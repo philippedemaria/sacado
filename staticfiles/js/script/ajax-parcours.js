@@ -462,6 +462,27 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        // Met en favori un parcours
+        $('.selector_calculator').on('click' ,function () {
+
+            let rc_id = $(this).attr("data-rc_id"); 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'rc_id': rc_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../../ajax_is_calculator",
+                    success: function (data) {
+                        $('#selector_calculator'+rc_id).html(data.html);    
+                    }
+                }
+            )
+        });
 
 
 

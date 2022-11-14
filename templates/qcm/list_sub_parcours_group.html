@@ -55,7 +55,6 @@
  
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
-
         {% for parcours_sort in list_parcours %}  
             <div class="row {% if accordion or list_parcours|length > 1 %}  documents_div documents_div_shadow {% endif %}">
                 <div class="col-sm-12 col-md-12">

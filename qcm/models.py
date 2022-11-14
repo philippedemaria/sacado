@@ -423,6 +423,10 @@ class Parcours(ModelWithCode):
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
     is_sequence = models.BooleanField(default=0, verbose_name="Séquence d'apprentissage ?", editable=False)
 
+
+    is_testpos = models.BooleanField(default=0, verbose_name="Test de positionnement ?", editable=False)
+    target_id  = models.PositiveIntegerField( blank=True, null=True, editable=False , verbose_name="Parcours cible") 
+
     def __str__(self):
         flds = ""
         for f in self.folders.all():
@@ -438,7 +442,18 @@ class Parcours(ModelWithCode):
         except :
             return "{}".format(self.title)
 
- 
+
+    def testpositionnement(self):
+        parcours = Parcours.objects.get(target_id=self.pk)
+        return parcours
+
+
+
+    def test_to_parcours(self):
+        test = Parcours.objects.get(pk=self.target_id)
+        return test
+
+
     def contains_exercises(self):
         contains = False
         if self.parcours_relationship.count() > 0 :
@@ -964,8 +979,8 @@ class Testtraining(models.Model):
     requires            = models.CharField(max_length=255, verbose_name="features")
     targets             = models.CharField(max_length=255, verbose_name="labels", blank=True, null=True )
     parcours            = models.OneToOneField(Parcours, related_name="testtraining", unique=True,  on_delete=models.CASCADE, default='',  verbose_name="parcours", blank=True, null=True )
-    questions_proposed  = models.CharField(max_length=255, verbose_name="proposition", blank=True, null=True )
-    questions_effective = models.CharField(max_length=255, verbose_name="test choisi", blank=True, null=True )
+    questions_proposed  = models.TextField(verbose_name="proposition", blank=True, null=True )
+    questions_effective = models.TextField(verbose_name="test choisi", blank=True, null=True )
     date_created        = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
@@ -1408,6 +1423,7 @@ class Folder(models.Model):
  
 
 class Relationship(models.Model):
+
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
     parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
     ranking = models.PositiveIntegerField(default=0, editable=False)
@@ -1429,8 +1445,8 @@ class Relationship(models.Model):
     mark = models.CharField(max_length=3, default="", verbose_name="Sur ?")
     is_correction_visible = models.BooleanField(default=0, editable=False  )
 
-    coefficient = models.DecimalField(default=1,  max_digits=4, decimal_places=2, verbose_name="Coefficient")
-
+    coefficient   = models.DecimalField(default=1,  max_digits=4, decimal_places=2, verbose_name="Coefficient")
+    is_calculator = models.BooleanField(default=0, editable=False  )
 
     # document : type du doc et id du doc ( exercice = 0 , custom = 1 , cours = 2 , quizz= 3 , biblio = 4 , flash = 5)
     document_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)    
