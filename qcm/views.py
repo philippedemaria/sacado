@@ -3297,15 +3297,6 @@ def rcs_for_realtime(parcours):
 @login_required(login_url= 'index')
 def show_parcours(request, idf = 0, id=0):
 
-
-    for r in Relationship.objects.all() :
-        r.is_calculator = r.exercise.supportfile.calculator
-        r.save()
-
-
-
-
-
     """ show parcours coté prof """
     if idf > 0 :
         folder = Folder.objects.get(id=idf)
