@@ -9,7 +9,7 @@ from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
-from django.db.models import Q , Sum 
+from django.db.models import Q , Sum , Avg
 from django.core.mail import send_mail
 from django.http import JsonResponse 
 from django.core import serializers
@@ -3005,6 +3005,27 @@ def create_parcours_after_results(request,idq,idp):
     return render(request, 'qcm/previsual_parcours.html', context) 
 
 
+
+def create_parcours_ia_assisted(request,idf,idp):
+    '''Choix des exercices en fonction des résultats des élèves et des target du Testtraining'''
+    parcours      = Parcours.objects.get(pk=idp)
+    parcours_test = Parcours.objects.get(target_id=idp)
+    testtraining  = Testtraining.objects.get(parcours=parcours)
+    tab           = testtraining.target.split("##")# liste des knowledges cilés
+    exercises     = Exercise.objects.filter(knowledge__in=tab)
+
+    for exercise in exercises :
+        relationship = Relationship.objects.create(exercise = exercise, parcours=parcours, situation=5, duration=exercise.supportfile.duration, is_calculator = exercise.supportfile.calculator )
+        relationship.skills.set(exercise.supportfile.skills.all())
+
+
+    students = parcours.students.all()
+    for student in students :
+        data = student.studentanswers.filter(parcours=parcours_test) #(duration=Sum('secondes'), average_score=Avg('point'))
+
+    return redirect('show_parcours', idf , idp )
+
+
 #######################################################################################################################
 ###################  Modification
 #######################################################################################################################
@@ -3400,11 +3421,13 @@ def ordering_number_for_student(parcours,student):
 @login_required(login_url= 'index')
 def show_parcours_student(request, id):
 
- 
     folder = None
-    folder_id = request.session.get('folder_id', None)
-    if folder_id :
-        folder = Folder.objects.get(id=folder_id)
+    try :
+        folder_id = request.session.get('folder_id', None)
+        if folder_id :
+            folder = Folder.objects.get(id=folder_id)
+    except :
+        pass
 
     parcours = Parcours.objects.get(id=id)
 
