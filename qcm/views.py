@@ -323,6 +323,7 @@ def get_seconde_to_math_comp(request):
         parcours.is_archive = 0
         parcours.is_share = 0
         parcours.is_favorite = 1
+        parcours.target_id = None
         parcours.code = str(uuid.uuid4())[:8]  
         parcours.save()
         if parcours.is_folder :
@@ -2922,7 +2923,12 @@ def create_test_ia(request,idp):
         parcours.maxexo = 1
         parcours.is_testpos = 1
         parcours.target_id = p_id
-        parcours.save()
+        if Parcours.objects.filter(target_id = p_id).count()==0 :
+            parcours.save()
+        else :
+            messages.error(request,"Le test de positionnement ne peut pas être créé, il existe déjà un test de positionnement pour ce parcours.")
+            return redirect('show_parcours', 0 , idp )
+
         parcours.groups.set(groups)
         parcours.students.set(students)
         knowledge_ids = request.POST.getlist('knowledge_id')
@@ -3326,8 +3332,11 @@ def show_parcours(request, idf = 0, id=0):
     for rc in relationships_customexercises :
         try : 
             nb_point += rc.mark
+        except : pass
+        try : 
             nb_time += rc.duration
         except : pass
+
     if nb_point > 0 :
         nb_point = str(nb_point) + " points"
         nb_point_display = True
@@ -4184,6 +4193,7 @@ def clone_parcours(request, id, course_on ):
     parcours.is_archive = 0
     parcours.is_share = 0
     parcours.is_favorite = 1
+    parcours.target_id = None
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
 

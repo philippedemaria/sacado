@@ -524,6 +524,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
             parcours.is_share = 0
             parcours.is_favorite = 1
             parcours.is_sequence = is_sequence
+            parcours.target_id = None
             parcours.code = str(uuid.uuid4())[:8]
             parcours.save()
             parcours.students.add(student)
@@ -671,6 +672,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
         parcours.is_archive = 0
         parcours.is_share = 0
         parcours.is_favorite = 1
+        parcours.target_id = None
         parcours.is_sequence = is_sequence
         parcours.code = str(uuid.uuid4())[:8]
         parcours.save()
@@ -817,6 +819,7 @@ def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) 
         if not is_delete :
             parcours.pk      = None
         parcours.teacher = teacher
+        parcours.target_id = None
         parcours.code    = str(uuid.uuid4())[:8]
         parcours.save()
         if folder :

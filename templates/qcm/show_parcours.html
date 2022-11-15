@@ -30,8 +30,9 @@
     {% endif %} 
 
     {% if nb_point_display %}
-        <small>{{ nb_point }} - {{ nb_time|int_minutes }}</small> 
+        <small>{{ nb_point }}</small> 
     {% endif %} 
+    <small>{{ parcours.exercises.count }} ex.  [{{ nb_time|int_minutes }}]</small> 
 
 {% endblock %}
 
