@@ -496,7 +496,7 @@ def update_school_admin(request,id):
         if school.gar :
             abonnement.is_gar=1
             if not abonnement.gar_abonnement_id :
-                test, raison , header , decode , ida = create_abonnement_gar( today , abonnement  , request.user )
+                test, raison , header , decode , ida = create_abonnement_gar( today , abonnement.accounting  , request.user )
                 if test :
                     abonnement.gar_abonnement_id = ida
                     abonnement.save()
@@ -504,7 +504,7 @@ def update_school_admin(request,id):
                 else :
                     messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
             else :
-                test, raison , header , decode , ida = update_abonnement_gar(  today , abonnement  )
+                test, raison , header , decode , ida = update_abonnement_gar(  today , abonnement.accounting  )
                 if test :
                     abonnement.save()
                     messages.success(request,"Modification du GAR réussie")
@@ -1935,7 +1935,7 @@ def update_accounting(request, id,tp):
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
                         School.objects.filter(pk= school.id).update(gar=1)                    
                         if not id_a_gar :
-                            test, raison , header , decode ,ida   = create_abonnement_gar( today , fa  , request.user )
+                            test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
                             if test :
                                 fa.gar_abonnement_id = ida
                                 messages.success(request,"Activation du GAR réussie")
@@ -1943,7 +1943,7 @@ def update_accounting(request, id,tp):
                                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                         else :
-                            test, raison , header , decode , ida = update_abonnement_gar(  today , fa  )
+                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
                             if test :
                                 abonnement.save()
                                 messages.success(request,"Modification du GAR réussie")
