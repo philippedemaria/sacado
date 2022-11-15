@@ -504,8 +504,14 @@ def update_school_admin(request,id):
                 else :
                     messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
             else :
-                abonnement.save()
-                messages.info(request,"Activation du GAR réussie. Le compte GAR était déjà créé.")
+                test, raison , header , decode , ida = update_abonnement_gar(  today , abonnement  )
+                if test :
+                    abonnement.save()
+                    messages.success(request,"Modification du GAR réussie")
+                else :
+                    messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+
+
 
 
         return redirect('all_schools')
@@ -1691,7 +1697,12 @@ def create_accounting(request,tp):
                             else :
                                 messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
                         else :
-                            messages.info(request,"Activation du GAR réussie. Le compte GAR était déjà créé.") 
+                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                            if test :
+                                messages.success(request,"Modification du GAR réussie")
+                            else :
+                                messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+
                     fa.save() 
 
             if request.POST.get("validation_demande",None) and tp == 0 :
@@ -1826,7 +1837,11 @@ def renew_accounting(request,ids):
                             else :
                                 messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
                         else :
-                            messages.info(request,"Activation du GAR réussie. Le compte GAR était déjà créé.") 
+                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                            if test :
+                                messages.success(request,"Modification du GAR réussie")
+                            else :
+                                messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
                     fa.save() 
         else :
             print(form.errors)
@@ -1926,6 +1941,17 @@ def update_accounting(request, id,tp):
                                 messages.success(request,"Activation du GAR réussie")
                             else :
                                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+
+                        else :
+                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                            if test :
+                                abonnement.save()
+                                messages.success(request,"Modification du GAR réussie")
+                            else :
+                                messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+
+
+
 
                     fa.save()
                 else :

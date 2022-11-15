@@ -70,6 +70,27 @@ def create_abonnement_gar(today,abonnement ,user):
 
 
 
+def update_abonnement_gar(today,abonnement):
+    """Création d'un abonnement dans la base de données"""
+
+    #host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
+
+    id_abonnement = abonnement.gar_abonnement_id
+
+    host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi
+    directory = '/home/sacado/'
+
+    header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+
+    body      = web_abonnement_xml(abonnement,id_abonnement, today) 
+    r         = requests.post(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+
+    if r.status_code == 201 or r.status_code==200 :
+        return True , "ok" , "ok" , "ok"  , id_abonnement 
+    else :
+        return False, r.status_code , r.headers , r.content.decode('utf-8') , None
+
+
 
 
 def delete_gar_abonnement(id_abonnement):
@@ -108,4 +129,3 @@ def these_abonnements_gar():
     else :
         return False, r.status_code , r.headers , r.content.decode('utf-8')
 
- 
