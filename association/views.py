@@ -1935,7 +1935,7 @@ def update_accounting(request, id,tp):
                     if fa.is_gar: # appel de la fonction qui valide le Web Service
                         School.objects.filter(pk= school.id).update(gar=1)                    
                         if not id_a_gar :
-                            test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
+                            test, raison , header , decode ,ida   = create_abonnement_gar( today , fa  , request.user )
                             if test :
                                 fa.gar_abonnement_id = ida
                                 messages.success(request,"Activation du GAR réussie")
@@ -1943,15 +1943,12 @@ def update_accounting(request, id,tp):
                                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
                         else :
-                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                            test, raison , header , decode , ida = update_abonnement_gar(  today , fa  )
                             if test :
                                 abonnement.save()
                                 messages.success(request,"Modification du GAR réussie")
                             else :
                                 messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-
-
-
 
                     fa.save()
                 else :
