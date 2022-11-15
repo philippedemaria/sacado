@@ -147,11 +147,11 @@ def set_username_student_profile(name):
 def student_dashboard(request,group_id):
 
     #######Groupes de l'élève. 
-    # si plusieurs matières alors on envoi =e sur dashboard_group 
+    # si plusieurs matières alors on envoie sur dashboard_group 
     # si une seule matière alors  sur dashboard
 
 
-    if not request.user.student :
+    if not request.user.is_student :
         messages.error(request,"Elève non identifié")
         return "dashboard.html"  , {}
 
