@@ -45,6 +45,45 @@ def web_abonnement_xml(accounting,id_abonnement , today):
     return body
 
 
+
+def web_update_abonnement_xml(accounting,id_abonnement , today):
+    #Webservice du GAR
+    date_start, date_stop = date_abonnement(today)
+    body = "<?xml version='1.0' encoding='UTF-8'?>"
+    body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
+    body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
+    body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
+    body += "<idDistributeurCom>832020065_0000000000000000</idDistributeurCom>"
+    body += "<idRessource>ark:/46173/00001</idRessource>" #/46173/00001.p
+    body += "<typeIdRessource>ark</typeIdRessource>"
+    body += "<libelleRessource>SACADO</libelleRessource>"
+    body += "<debutValidite>"+date_start+"</debutValidite>"
+    body += "<finValidite>"+date_stop+"</finValidite>"
+    body += "<categorieAffectation>transferable</categorieAffectation>"
+    body += "<typeAffectation>INDIV</typeAffectation>"
+    body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
+    body += "<nbLicenceEleve>"+str(accounting.school.nbstudents)+"</nbLicenceEleve>"
+
+    if not accounting.school.is_primaire :
+        body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+        body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
+        body += "<publicCible>DOCUMENTALISTE</publicCible>"
+        body += "<publicCible>AUTRE PERSONNEL</publicCible>"
+        
+    body += "<publicCible>ENSEIGNANT</publicCible>"
+    body += "<publicCible>ELEVE</publicCible>"
+    
+    body += "</abonnement>"
+    return body
+
+
+
+
+
+
+
+
+
 def create_abonnement_gar(today,accounting ,user): 
     """Création d'un abonnement dans la base de données"""
 
@@ -82,7 +121,7 @@ def update_abonnement_gar(today,accounting):
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
-    body      = web_abonnement_xml(accounting,id_abonnement, today) 
+    body      = web_update_abonnement_xml(accounting,id_abonnement, today) 
     r         = requests.post(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
