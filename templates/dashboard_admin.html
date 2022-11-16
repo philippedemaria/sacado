@@ -466,7 +466,7 @@
 {% else %}
 
 
-
+    {% with school.get_data as data %}
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
             <h3 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}" style="font-size : 14px">Modifier</a></h3>
@@ -498,9 +498,6 @@
     </div>
 
 
-
-
-
     <div class="row" >
         <div class="col-lg-12 col-md-12 col-xs-12">
 
@@ -527,20 +524,6 @@
         </div>
       
 
-
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="small-box bg-{% if  data.nbg > 0 %}purple{% else %}danger{% endif %}">
-                <div class="inner">
-                     <span style="font-size: 35px">Groupes </span>
-                </div>
-                <div class="icon">
-                    {{ data.nbg }}
-                </div>
-                <a href="{% url 'school_groups_gar' %}" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i> Gestion des groupes </a>
-            </div>
-        </div>
-   
-      
         <div class="col-lg-3 col-md-4 col-xs-6">
             <div class="small-box bg-{% if  data.nbs > 0 %}purple{% elif  data.nbs > data.nbs_max %}warning{% else %}danger{% endif %}">
                 <div class="inner">
@@ -553,16 +536,8 @@
                 <a href="{% url 'school_students_gar' %}" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i> Gestion des élèves <small>[{{ data.nbs_max }}]</small></a>
             </div>
         </div>
-                 
-
-
-
-
-
-
-
     </div>
-
+    {% endwith %}
 
 
 {% endif %}

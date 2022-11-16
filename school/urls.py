@@ -21,8 +21,7 @@ urlpatterns = [
     path('students', school_students , name='school_students'),
     path('students_gar', school_students_gar , name='school_students_gar'),
     path('groups', school_groups, name='school_groups'),
-    path('groups_gar', school_groups_gar, name='school_groups_gar'),
-    
+
     path('level_groups', school_level_groups, name='school_level_groups'),
     
     path('get_the_teacher_profile/<int:idt>', get_the_teacher_profile, name='get_the_teacher_profile'),

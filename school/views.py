@@ -348,30 +348,6 @@ def school_groups(request):
 
 
 
-#@is_manager_of_this_school
-def school_groups_gar(request):
-
-	school = this_school_in_session(request)
-
-	teacher = Teacher.objects.get(user=request.user)
-
-	if not authorizing_access_school(teacher, school):
-		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
-		return redirect('index')
-		
-	users = school.users.filter(user_type=2).exclude(email__contains='@sacado.xyz')
-	groups = Group.objects.filter(teacher__user__in=users).order_by("level__ranking")
-
-	for g in groups :
-		g.school = school
-		g.save()
-
-	return render(request, 'school/list_groups.html', { 'communications' : [],'groups': groups, "school" : school })
-
-
-
-
-
 
 #@is_manager_of_this_school
 def school_level_groups(request):
