@@ -407,7 +407,7 @@ def school_students(request):
 	return render(request,'school/list_students.html', { 'communications' : [], 'users':users , 'school' : school , })
 
 
- def school_students_gar(request):
+def school_students_gar(request):
 
 	
 	school = this_school_in_session(request)
