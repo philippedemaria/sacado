@@ -714,11 +714,46 @@ def delete_selected_students(request):
 				pass
 			user = User.objects.get(pk=user_id)
 			user.delete()
-
-
-
-
 	return redirect('school_students')
+
+
+
+
+
+#@is_manager_of_this_school
+def delete_selected_students_gar(request):
+	
+	school = this_school_in_session(request)
+	teacher = Teacher.objects.get(user=request.user)
+
+	if not authorizing_access_school(teacher, school):
+		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
+		return redirect('index')
+
+
+	user_ids = request.POST.getlist("user_ids")
+	ebep = request.POST.get("ebep", None)
+
+	if ebep : 
+		for user_id in user_ids :
+			student = Student.objects.get(user_id=user_id)
+			if student.ebep :
+				Student.objects.filter(user_id=user_id).update(ebep = False)
+			else :
+				Student.objects.filter(user_id=user_id).update(ebep = True)
+	else :
+		for user_id in user_ids :
+			try :
+				student = Student.objects.get(user_id=user_id)
+				clear_detail_student(student)
+				student.delete()
+			except :
+				pass
+			user = User.objects.get(pk=user_id)
+			user.delete()
+	return redirect('school_students_gar')
+
+
 
 
 

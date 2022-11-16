@@ -59,11 +59,14 @@
  
  
 <section class="content_list"> 
-    <form action="{% url 'delete_selected_students' %}"  method="POST">            
+
+    {% if '_gar' in request.path %}
+    <form action="{% url 'delete_selected_students_gar' %}"  method="POST"> 
+    {% else %}
+    <form action="{% url 'delete_selected_students' %}"  method="POST"> 
+    {% endif %}
+
     {% csrf_token %}
-
-
-
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <table class="table table-sacado  table-hover standard_tab_sort">

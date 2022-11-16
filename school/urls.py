@@ -57,6 +57,9 @@ urlpatterns = [
     path('delete_school_students', delete_school_students , name='delete_school_students'),
     path('delete_selected_students', delete_selected_students , name='delete_selected_students'),
 
+    path('delete_selected_students_gar', delete_selected_students_gar , name='delete_selected_students_gar'),
+    
+
     path('delete_school_group_and_students', delete_school_group_and_students , name='delete_school_group_and_students'),
 
 
