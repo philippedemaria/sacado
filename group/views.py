@@ -511,8 +511,6 @@ def get_out_this_group(request, id):
 #####################################################################################################################################
 
 
-
-
 def dashboard_group(request, id):
     template, context = student_dashboard(request,id)
     return render(request, template , context )

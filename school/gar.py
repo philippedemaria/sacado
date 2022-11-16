@@ -79,11 +79,6 @@ def web_update_abonnement_xml(accounting,id_abonnement , today):
 
 
 
-
-
-
-
-
 def create_abonnement_gar(today,accounting ,user): 
     """Création d'un abonnement dans la base de données"""
 
