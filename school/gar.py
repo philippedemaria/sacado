@@ -48,7 +48,7 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 def web_update_abonnement_xml(accounting,id_abonnement , today):
     #Webservice du GAR
-    date_start, date_stop = date_abonnement(today)
+    date_start, date_stop = accounting.abonnement.date_start.isoformat().split("T"), accounting.abonnement.date_stop.isoformat().split("T") 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
@@ -57,8 +57,8 @@ def web_update_abonnement_xml(accounting,id_abonnement , today):
     body += "<idRessource>ark:/46173/00001</idRessource>" #/46173/00001.p
     body += "<typeIdRessource>ark</typeIdRessource>"
     body += "<libelleRessource>SACADO</libelleRessource>"
-    body += "<debutValidite>"+accounting.abonnement.date_start.isoformat()+"</debutValidite>"
-    body += "<finValidite>"+accounting.abonnement.date_stop.isoformat()+"</finValidite>"
+    body += "<debutValidite>"+date_start[0]+"</debutValidite>"
+    body += "<finValidite>"+date_stop[0]+"</finValidite>"
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
