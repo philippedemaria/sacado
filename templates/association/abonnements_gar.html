@@ -73,7 +73,7 @@ Etablissements accès au GAR
                                     {{ data.debutValidite }}
                                 </td>
                                 <td>
-                                    {{ data.finValidite }}
+                                    <input type="date" name="finValidite" value="{{ data.finValidite }}" class="form-control"/>
                                 </td>
                                 <td>
                                     {{ data.categorieAffectation }}
@@ -82,7 +82,7 @@ Etablissements accès au GAR
                                     {{ data.nbLicenceEnseignant }}
                                 </td>
                                 <td>
-                                    {{ data.nbLicenceEleve }}
+                                    <input type="number" name="nbLicenceEleve" value="{{ data.nbLicenceEleve }}" class="form-control"/>
                                 </td>
                                 <td>
                                     {{ data.nbLicenceAutrePersonnel }}
