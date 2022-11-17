@@ -46,7 +46,7 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 
 
-def web_update_abonnement_xml(accounting,id_abonnement , today):
+def web_update_abonnement_xml(accounting,id_abonnement):
     #Webservice du GAR
     date_start, date_stop = accounting.abonnement.date_start.isoformat().split("T"), accounting.abonnement.date_stop.isoformat().split("T") 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
@@ -116,7 +116,8 @@ def update_abonnement_gar(today,accounting):
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
-    body      = web_update_abonnement_xml(accounting,id_abonnement, today) 
+    body      = web_update_abonnement_xml(accounting,id_abonnement) 
+
     r         = requests.post(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :

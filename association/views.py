@@ -2123,7 +2123,7 @@ def delete_abonnement_gar(request,idg):
 
 
 @user_passes_test(user_is_board)
-def update_abonnement_gar(request):
+def direct_update_abonnement_gar(request):
 
 
   
