@@ -57,8 +57,8 @@ def web_update_abonnement_xml(accounting,id_abonnement , today):
     body += "<idRessource>ark:/46173/00001</idRessource>" #/46173/00001.p
     body += "<typeIdRessource>ark</typeIdRessource>"
     body += "<libelleRessource>SACADO</libelleRessource>"
-    body += "<debutValidite>"+str(accounting.abonnement.date_start)+"</debutValidite>"
-    body += "<finValidite>"+str(accounting.abonnement.date_stop)+"</finValidite>"
+    body += "<debutValidite>"+accounting.abonnement.date_start.isoformat()+"</debutValidite>"
+    body += "<finValidite>"+accounting.abonnement.date_stop.isoformat()+"</finValidite>"
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
