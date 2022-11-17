@@ -1,0 +1,129 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+
+    <script>
+        require(['script/ajax-parcours','script/ajax-inside_data_tab_export_result_parcours_exercises']);
+    </script> 
+{% endblock %} 
+
+
+ 
+
+{% block page_title %}
+<span style="color:{{ parcours.color }}">  
+    {% if parcours.is_sequence %}<i class="bi bi-ladder"></i> {% else %} <i class="fa fa-th"></i>{% endif %}
+</span>
+
+    {% include 'qcm/breadcrumb.html' %}
+
+    {% if nb_point_display %}
+        <small>{{ nb_point }}</small> 
+    {% endif %} 
+    <small>{{ parcours.exercises.count }} ex.  [{{ nb_time|int_minutes }} minutes]</small> 
+
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+
+    {% include 'qcm/submenu_parcours.html' %}
+
+{% endblock %}
+
+ 
+
+{% block body %}
+
+ 
+
+<form action="" methode="POST">      
+    <section class="content_list content_list_add" style="overflow-x: auto" >
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <table class="table table-sacado table-hovered standard_tab_sort" >
+                        <thead> 
+                            <tr>
+                                <th>Elèves</th>
+                                {% for relationship in relationships  %}
+                                    <th>
+                                        <img src='{{ relationship.exercise.supportfile.imagefile.url }}' class="smallimagefile" />
+                                        <small>{{ relationship.duration|int_minutes }}min.</small></label>
+                                    </th>
+                                {% endfor  %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in  listing  %}
+                                <tr>
+                                    <td>{{ data.student }}<br/><label><small>{{ data.global_time|time_done }}</small></label></td>
+                                    {% for datar in data.listing_r  %}
+                                        <td><label class="markdown {{ datar.css }}" style="color:white!important">{{ datar.point }}%</label> <label>{{ datar.secondes|time_done }}</label></td>
+                                    {% endfor  %}
+                                </tr>
+                            {% endfor  %}
+                         </tbody>
+                    </table>
+
+                </div>
+            </div>  
+    </section>
+</form>
+ 
+
+<div class="modal fade" id="export_marks" tabindex="-1" role="dialog" aria-labelledby="export_marks" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                
+                <h5 class="modal-title" >Exporter les scores</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'export_result_parcours_exercises' %}" method="POST" > 
+                    {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
+
+
+                    <div class="row">
+                        <div class="col-sm-12">  
+                            <label>Rapporter les résultats sur 20 ? <input type="checkbox" name="is_twenty" value="yes"/></label> <hr/>
+                        </div>
+                    </div>   
+
+
+                    <div class="row">
+                        <div class="col-sm-12">  
+
+                            {% if sacado_asso %} 
+                            <button type="submit" class="btn btn-primary" name="this_clic_notes" value="csv" id="sender_message"> Exporter en csv</button> 
+                            <button type="submit" class="btn btn-success" name="this_clic_notes" value="xls" > Exporter en tableur</button> 
+                            {% else %}
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en csv</span> 
+                            <span title="Version établissement requise" class="btn btn-default" style="cursor:not-allowed"> Exporter en tableur</span> 
+                            {% endif %} 
+
+
+
+                            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+                        </div>
+                    </div>     
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+ 
+ 
+ 
+ 

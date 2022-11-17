@@ -4,7 +4,23 @@
 <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn-new {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Bilans et suivis <b class="caret"></b> </a>
 
-    <ul   class="dropdown-menu clearfix pull-right" role="menu">
+    <ul class="dropdown-menu clearfix pull-right" role="menu">
+
+        <li {% if 'result_parcours_exercises' in request.path %} class="active" {% endif %}>
+        {% if sacado_asso %}
+            {% if folder %}
+            <a href="{% url 'result_parcours_exercises' folder.id parcours.id  %}" ><i class="bi bi-r-square" style="margin-right: 0px"></i> Lire les résultat par exercice</a> 
+            {% else %}
+            <a href="{% url 'result_parcours_exercises' 0 parcours.id  %}" ><i class="bi bi-r-square" style="margin-right: 0px"></i> Lire les résultat par exercice</a> 
+            {% endif %} 
+        {% else %}
+            <a href="#" class="no_sacado_asso" ><i class="bi bi-r-square"></i> Lire les résultat par exercice</a> 
+        {% endif %}
+        </li> 
+
+
+        <li class="divider"></li>
+
 
         <li {% if 'parcours_stat/' in request.path %} class="active" {% endif %}>
             <a href="{% url 'stat_evaluation' parcours.id %}" > Lire les {% if parcours.is_evaluation %}résultats de l'évaluation{% elif parcours.is_sequence %} résultats de la séquence{% else %}stats du parcours{% endif %}   </a>   
@@ -64,7 +80,6 @@
 
     </ul>
 </li>
- 
  
 
 {% if role  %}
@@ -174,16 +189,40 @@
         </li>
 
 
-        {% if parcours.is_ia and parcours.is_testpos %}
-            <li class="divider"></li>
-            <li>
-                {% if folder %}
-                <a href="{% url 'show_parcours' folder.id  parcours.test_to_parcours.id   %}" ><b>IA</b> Parcours du Test</a> 
-                {% else %}
-                <a href="{% url 'show_parcours' 0  parcours.test_to_parcours.id  %}" ><b>IA</b> Parcours du Test</a>  
+            {% if parcours.is_ia and parcours.is_testpos %}
+                <li class="divider"></li>
+
+                <li>
+                    {% if folder %}
+                    <a href="{% url 'show_parcours' folder.id  parcours.test_to_parcours.id   %}" ><b>IA</b> Voir le parcours lié à ce test</a> 
+                    {% else %}
+                    <a href="{% url 'show_parcours' 0  parcours.test_to_parcours.id  %}" ><b>IA</b> Voir le parcours lié à ce test</a>  
+                    {% endif %}
+                </li>
+
+                {% if parcours.test_to_parcours.exercises.count == 0 %}
+                <li>
+                    {% if folder %}
+                    <a href="{% url 'create_parcours_ia_assisted' folder.id  parcours.test_to_parcours.id  %}" ><i class="bi bi-grid-3x3-gap"></i> Créer le parcours lié à ce test avec l'IA</a>    
+                    {% else %}
+                    <a href="{% url 'create_parcours_ia_assisted' 0 parcours.test_to_parcours.id  %}" ><i class="bi bi-grid-3x3-gap"></i> Créer le parcours lié à ce test avec l'IA</a>  
+                    {% endif %}
+                </li>
                 {% endif %}
-            </li>
-        {% endif %}
+               
+            {% elif parcours.is_ia and not parcours.is_testpos %}
+                <li class="divider"></li>
+                <li>
+                    {% if folder %}
+                    <a href="{% url 'show_parcours' folder.id  parcours.testpositionnement.idd   %}" ><b>IA</b>  Voir le test de positionnement</a>  
+                    {% else %}
+                    <a href="{% url 'show_parcours' 0  parcours.testpositionnement.id  %}" ><b>IA</b>  Voir le test de positionnement</a>    
+                    {% endif %}
+                </li>
+               
+            {% endif %}
+
+
 
 
 
@@ -199,16 +238,24 @@
         </li>
 
             {% if parcours.is_ia and parcours.is_testpos %}
-            <li class="divider"></li>
-            <li>
-              <a  href="#" class="no_sacado_asso"><b>IA</b> Parcours du Test</a>  
-            </li>
+                <li class="divider"></li>
+                <li>
+                    <a  href="#" class="no_sacado_asso"><b>IA</b> Voir le parcours lié à ce test</a>  
+                </li>
+                <li>
+                    <a href="#" class="no_sacado_asso"><i class="bi bi-grid-3x3-gap"></i> Créer le parcours lié à ce test avec l'IA</a>    
+                </li> 
+            {% elif parcours.is_ia and not parcours.is_testpos %}
+                <li class="divider"></li>
+                <li>
+                    <a  href="#" class="no_sacado_asso"><b>IA</b> Voir le test de positionnement</a>  
+                </li>        
             {% endif %}
-
 
         {% endif %}
 
  
+
 
 
     </ul>

@@ -3005,24 +3005,86 @@ def create_parcours_after_results(request,idq,idp):
     return render(request, 'qcm/previsual_parcours.html', context) 
 
 
+# Permet de peupler les studentanswer
+#
+def peuplate_parcours_ia(idp) :
+
+    parcours = Parcours.objects.get(pk=idp)
+    students = parcours.students.all()
+    relationships = Relationship.objects.filter(parcours=parcours)
+    
+    for relationship in relationships :
+        point = 0 
+        
+        for student in students :        
+            if point>100 : point = 100
+            secondes = random.randint(45,300)
+            point += 5            
+            Studentanswer.objects.create(exercise = relationship.exercise, parcours=parcours, student=student, point=point, secondes = secondes )
+
+
+
+
+def parcours_ia_creator(student ,  knowledge_id ,  parcours ,  exercises, requires, global_duration, duration, average_score):
+
+    if duration < global_duration and int(average_score) > 90 : #niveau 5
+
+        for exercise in exercises :
+            relationship,create = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+            relationship.skills.set(exercise.supportfile.skills.all())
+            relationship.students.add(student)
+
+    elif duration < global_duration and int(average_score) > 65 : #niveau 3 
+
+        for exercise in exercises :
+            relationship,create = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+            relationship.skills.set(exercise.supportfile.skills.all())
+            relationship.students.add(student)
+
+
+    elif duration < global_duration and int(average_score) > 40 : #niveau 2
+        pass
+    elif duration < global_duration and int(average_score) <= 40 : #niveau 1
+        pass
+    elif duration > global_duration and int(average_score) > 85 : #niveau 4
+        pass
+    elif duration > global_duration and int(average_score) > 60 : #niveau 3
+        pass
+    elif duration > global_duration and int(average_score) > 40 : #niveau 2 
+        pass
+    elif duration > global_duration and int(average_score) <= 30 : #niveau 1 
+        pass
+
 
 def create_parcours_ia_assisted(request,idf,idp):
     '''Choix des exercices en fonction des résultats des élèves et des target du Testtraining'''
+
     parcours      = Parcours.objects.get(pk=idp)
     parcours_test = Parcours.objects.get(target_id=idp)
     testtraining  = Testtraining.objects.get(parcours=parcours)
-    tab           = testtraining.target.split("##")# liste des knowledges cilés
-    exercises     = Exercise.objects.filter(knowledge__in=tab)
+    tab_target    = testtraining.targets.split("##")# liste des knowledges ciblés
+    tab_requires  = testtraining.requires.split("##")# liste des knowledges ciblés
+    exercises     = Exercise.objects.filter(knowledge__in=tab_target)
+    requires      = Exercise.objects.filter(knowledge__in=tab_requires)
 
-    for exercise in exercises :
-        relationship = Relationship.objects.create(exercise = exercise, parcours=parcours, situation=5, duration=exercise.supportfile.duration, is_calculator = exercise.supportfile.calculator )
-        relationship.skills.set(exercise.supportfile.skills.all())
+    # for exercise in requires :
+    #     relationship,created = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+    #     relationship.skills.set(exercise.supportfile.skills.all())
 
+    # for exercise in exercises :
+    #     relationship,create = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+    #     relationship.skills.set(exercise.supportfile.skills.all())
+
+    timer = Relationship.objects.filter(parcours=parcours_test).aggregate(duration=Sum('duration'))
+    global_duration = timer['duration']
 
     students = parcours.students.all()
+    dataset = list()
     for student in students :
-        data = student.studentanswers.filter(parcours=parcours_test) #(duration=Sum('secondes'), average_score=Avg('point'))
-
+        for knowledge_id in tab_requires : 
+            studentanswers = student.answers.filter(parcours=parcours_test, exercise__knowledge__id = knowledge_id ).aggregate(duration=Avg('secondes'), average_score=Avg('point'))
+            parcours_ia_creator(student ,  knowledge_id ,  parcours ,exercises, requires, global_duration, studentanswers['duration'], studentanswers['average_score']  )
+        print("______________________________________")
     return redirect('show_parcours', idf , idp )
 
 
@@ -3032,8 +3094,8 @@ def create_parcours_ia_assisted(request,idf,idp):
 
 def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ): 
     """ 'parcours_is_folder' : False pour les vignettes et différencier si folder ou pas """
-    teacher = Teacher.objects.get(user_id=request.user.id)
-    levels = teacher.levels.order_by("ranking")
+    teacher  = Teacher.objects.get(user_id=request.user.id)
+    levels   = teacher.levels.order_by("ranking")
     parcours = Parcours.objects.get(id=id)
 
     images = [] 
@@ -3323,8 +3385,9 @@ def rcs_for_realtime(parcours):
 
 @login_required(login_url= 'index')
 def show_parcours(request, idf = 0, id=0):
-
     """ show parcours coté prof """
+    #peuplate_parcours_ia(id)
+    
     if idf > 0 :
         folder = Folder.objects.get(id=idf)
     else :
@@ -3378,6 +3441,69 @@ def show_parcours(request, idf = 0, id=0):
                'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
 
     return render(request, 'qcm/show_parcours.html', context) 
+
+
+
+
+@login_required(login_url= 'index')
+def result_parcours_exercises(request, idf = 0, id=0):
+
+    parcours = Parcours.objects.get(id=id)
+    try :
+        teacher = request.user.teacher
+    except :
+        return redirect ('index')
+
+    stage = get_stage(request.user)
+    
+    if idf > 0 :
+        folder = Folder.objects.get(id=idf)
+        role, group , group_id , access = get_complement(request, teacher, folder)
+        students = folder.only_students_folder() # liste des élèves d'un parcours donné
+    else :
+        folder = None
+        role, group , group_id , access = get_complement(request, teacher, parcours)
+        students =  parcours.only_students(group)
+
+    relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+    customexercises = parcours.parcours_customexercises.all() 
+
+    listing = []
+    nb_time = 0
+    global_time = 0
+    for student in students :
+        datastudent = {}
+        datastudent["student"] = student
+        listing_r = []
+        nb_time = 0
+        global_time = 0
+        base_studentanswer = Studentanswer.objects.filter(parcours=parcours,student=student)
+        for relationship in relationships :
+            nb_time += relationship.duration
+            data_r = dict()
+            studentanswer = base_studentanswer.filter(exercise=relationship.exercise).last()
+            if studentanswer :
+                global_time += int(studentanswer.secondes)
+                data_r["point"]    = studentanswer.point
+                data_r["secondes"] = studentanswer.secondes
+                if int(studentanswer.point) < stage['low'] :     css = 'red' 
+                elif int(studentanswer.point) < stage['medium']  :css = 'orange' 
+                elif int(studentanswer.point) < stage['up']  :    css = 'green'
+                else :                                         css = 'darkgreen'
+                data_r["css"] = css
+            else :
+                data_r["point"]    = "Non not."
+                data_r["secondes"] = ""
+                data_r["css"] = ""
+            listing_r.append(data_r)
+        datastudent["listing_r"] = listing_r
+        datastudent["global_time"] = global_time
+        listing.append(datastudent)
+
+
+    context= { 'role' : role, 'listing' : listing , 'nb_time':nb_time, 'parcours' : parcours, 'folder' : folder,'relationships':relationships, 'customexercises' : customexercises }
+
+    return render(request, 'qcm/result_parcours_exercises.html', context) 
 
 
 
@@ -4573,6 +4699,7 @@ def ajax_course_sorter(request):
     data = {}
     return JsonResponse(data) 
 
+
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_parcours_sorter(request):  
 
@@ -4679,6 +4806,8 @@ def ajax_publish(request):
         Customexercise.objects.filter(pk = int(customexercise_id)).update(is_publish = statut)    
     return JsonResponse(data) 
 
+
+
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_publish_parcours(request):  
 
@@ -4769,9 +4898,6 @@ def ajax_sharer_parcours(request):
         Folder.objects.filter(pk = int(parcours_id)).update(is_share = statut)
 
     return JsonResponse(data) 
-
-
-
 
 
 @csrf_exempt
@@ -5481,9 +5607,6 @@ def admin_list_associations_ebep(request,id):
 
 
 
-
-
-
 @user_passes_test(user_is_superuser)
 def gestion_supportfiles(request):
   
@@ -5499,6 +5622,8 @@ def gestion_supportfiles(request):
         lvls.append({ 'name' : level.name , 'nbknowlegde': nbk , 'exotot' : nbe , 'notexo' : nb }) 
 
     return render(request, 'qcm/gestion_supportfiles.html', {'lvls': lvls, 'parcours': None, 'relationships' : [] , 'communications' : [] })
+
+
 
 @user_passes_test(user_is_superuser)
 def ajax_update_association(request):
@@ -5560,6 +5685,7 @@ def parcours_exercises(request,id):
 
     return render(request, 'qcm/student_list_exercises.html', {'parcours': parcours  , 'relationships': relationships, })
 
+
 def exercises_level(request, id):
 
     level = Level.objects.get(pk=id)    
@@ -5618,6 +5744,8 @@ def create_supportfile(request):
     context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [], 'relationships': [],  'supportfiles': [],   'levels': [], 'parcours': None, 'supportfile': None, 'communications' : [] ,  }
 
     return render(request, 'qcm/form_supportfile.html', context)
+
+
 
 @user_passes_test(user_is_creator)
 def create_supportfile_knowledge(request,id):
@@ -8925,7 +9053,117 @@ def export_note(request,idg,idp):
     return response
 
 
+def export_result_parcours_exercises(request):
+ 
 
+    parcours_id = request.POST.get("parcours_id")  
+    is_twenty   = request.POST.get("is_twenty",None)  
+
+
+    parcours      = Parcours.objects.get(pk = parcours_id)  
+
+    relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+    customexercises = parcours.parcours_customexercises.all() 
+
+    this_clic = request.POST.get("this_clic_notes")
+
+    try : 
+        students = parcours.only_students(group)
+    except:
+        students = students_from_p_or_g(request,parcours) 
+
+    if this_clic == "csv" : 
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment;filename=resultat_parcours_{}.csv'.format(parcours.id)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
+        
+        label_in_export = ["Nom Prénom"]
+        i=1
+        for relationship in relationships :
+            label_in_export.append("Exercice " + str(i))
+            i+=1
+
+        writer.writerow(label_in_export)
+
+        for student in students :
+            listing = []
+            listing.append( str(student.user.last_name).capitalize().strip() +" " +str(student.user.first_name).capitalize().strip()  )
+
+
+            base_studentanswer = Studentanswer.objects.filter(parcours=parcours,student=student)
+            for relationship in relationships :
+                studentanswer      = base_studentanswer.filter(exercise=relationship.exercise).last()
+                if studentanswer :
+                    point    = studentanswer.point
+                    if is_twenty : point = int(point)//5
+                else :
+                    point    = "Non not."
+                listing.append( str(point))
+
+            writer.writerow( listing )
+        return response
+
+    else :
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="resultat_parcours_'+str(parcours_id)+'.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ptitle = parcours.title
+        if  len(parcours.title) > 15:
+            ptitle = parcours.title[:15]
+        ws = wb.add_sheet(ptitle)
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+
+        columns = ['Nom',  'Prénom'] 
+
+        i=1
+        for relationship in relationships :
+            columns.append("Exercice " + str(i))
+            i+=1
+
+        #ECRITURE DE LA LIGNE 0 : celle des labels
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+
+        students_detail = []
+        for student in students :
+            listing = []
+            listing.append(str(student.user.last_name).capitalize().strip())
+            listing.append(str(student.user.first_name).capitalize().strip() )
+     
+            base_studentanswer = Studentanswer.objects.filter(parcours=parcours,student=student)
+            for relationship in relationships :
+                studentanswer      = base_studentanswer.filter(exercise=relationship.exercise).last()
+                if studentanswer :
+                    point = studentanswer.point                    
+                    if is_twenty : point = int(point)//5
+                else :
+                    point = "Non not."
+                listing.append(  point )
+            students_detail.append(listing)
+        ############################################################################################## 
+
+        row_ns = 0
+        for i in range(len(students_detail)): ## full_content est le tableau final pour l'export.
+            row_ns += 1
+            for col_num in range(len(students_detail[i])):
+                ws.write(row_ns, col_num, students_detail[i][col_num] , font_style)
+        wb.save(response)
+        return response  
+ 
+ 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
 ##################    Course     

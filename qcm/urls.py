@@ -110,6 +110,7 @@ urlpatterns = [
 
     path('result_parcours_exercise_students/<int:id>/', result_parcours_exercise_students, name='result_parcours_exercise_students'),#modif idp en id pour la sécurité
     path('result_parcours_skill/<int:id>/', result_parcours_skill, name='result_parcours_skill'),#modif idp en id pour la sécurité
+    path('result_parcours_exercises/<int:idf>/<int:id>/', result_parcours_exercises, name='result_parcours_exercises'),#modif idp en id pour la sécurité
 
     path('remove_students_from_parcours', remove_students_from_parcours, name='remove_students_from_parcours'),
 
@@ -153,7 +154,7 @@ urlpatterns = [
     ######################################################################################################################################################
     path('get_target_ia/<int:idp>', get_target_ia, name='get_target_ia'),
     path('create_test_ia/<int:idp>', create_test_ia, name='create_test_ia'),
-
+    path('create_parcours_ia_assisted/<int:idf>/<int:idp>', create_parcours_ia_assisted, name='create_parcours_ia_assisted'),
     ######################################################################################################################################################
     ######################################################################################################################################################
     ######################################################################################################################################################
@@ -441,7 +442,7 @@ urlpatterns = [
     path('export_skills_after_evaluation', export_skills_after_evaluation, name='export_skills_after_evaluation'),
     path('export_results_after_evaluation', export_results_after_evaluation, name='export_results_after_evaluation'),
     path('export_knowledges_after_evaluation', export_knowledges_after_evaluation, name='export_knowledges_after_evaluation'),
-
+    path('export_result_parcours_exercises', export_result_parcours_exercises, name='export_result_parcours_exercises'),
 
     path('ajax/chargethemes_parcours', ajax_chargethemes_parcours, name='ajax_chargethemes_parcours'),
     path('ajax/chargethemes_exercise', ajax_chargethemes_exercise, name='ajax_chargethemes_exercise'),
