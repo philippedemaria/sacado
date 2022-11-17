@@ -63,7 +63,7 @@ Etablissements accès au GAR
                     <tbody>
                         {% for data in dataset %}
                             <tr>
-                                <form action="{% url 'update_abonnement_gar' %}" method="POST">
+                                <form action="{% url 'update_abonnement_gar' %}" method="POST"  enctype='multipart/form-data'>
                                 <td>
                                     {{ data.name }}
                                     <input type="hidden" name="idAbonnement" value="{{ data.idAbonnement }}"/>
