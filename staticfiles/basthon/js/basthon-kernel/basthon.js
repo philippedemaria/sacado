@@ -5,11 +5,10 @@
  */
 var Basthon = (function() {
     var that = {};
-
     /**
      * Where to find pyodide.js (private).
      */
-    that._pyodideUrl = "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/pyodide.js";
+    that._pyodideUrl = "https://cdn.jsdelivr.net/pyodide/v0.16.1/full/pyodide.js";
 
     /**
      * Dirname remove basename/filename from url.
@@ -178,8 +177,7 @@ var Basthon = (function() {
         that.packages.init();
         // reading basthon.py from same folder than current script
         return pyodide.runPythonAsync(
-            "import pyodide ; pyodide.eval_code(pyodide.open_url('"
-                + that.basthonRoot + "/basthon.py.js').getvalue(), globals())");
+            "import pyodide ; pyodide.eval_code( pyodide.open_url('"+ that.basthonRoot + "/basthon.py.js').getvalue(), globals())");
     };
 
     /**
@@ -211,11 +209,15 @@ var Basthon = (function() {
                 return that.loadScript(that._pyodideUrl);
             });
 
+
         return promise.then(function () {
             return languagePluginLoader.then(
                 that._onload,
                 function() { console.error("Can't load Python from Pyodide"); });
         }, function() { console.error("Can't load pyodide.js"); });
+
+
+
     })();
 
     /**
