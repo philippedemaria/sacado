@@ -62,8 +62,8 @@ Etablissements accès au GAR
                     </thead>
                     <tbody>
                         {% for data in dataset %}
-                        <form action="{% url 'update_abonnement_gar' %}" method="POST">
                             <tr>
+                                <form action="{% url 'update_abonnement_gar' %}" method="POST">
                                 <td>
                                     {{ data.name }}
                                     <input type="hidden" name="idAbonnement" value="{{ data.idAbonnement }}"/>
@@ -102,8 +102,9 @@ Etablissements accès au GAR
                                     <input type="submit" name="submit" class="btn btn-xs btn-primary" />
                                     {% endif %}
                                 </td>
+                                </form>                                
                             </tr>
-                        </form>
+
                         {% endfor %}
                     </tbody>
                 </table>
