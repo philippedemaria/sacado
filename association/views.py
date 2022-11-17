@@ -2041,7 +2041,6 @@ def get_the_string_between(content,sub1,sub2) :
     idx1 = content.index(sub1)
     idx2 = content.index(sub2)
 
-
     res = ''
     # getting elements in between
     for idx in range(idx1 + len(sub1) , idx2):
@@ -2123,7 +2122,50 @@ def delete_abonnement_gar(request,idg):
 
 
 
+@user_passes_test(user_is_board)
+def update_abonnement_gar(request):
 
+
+  
+    id_abonnement  = request.POST.get("idAbonnement")
+    debutValidite  = request.POST.get("debutValidite")
+    finValidite    = request.POST.get("finValidite")
+    nbLicenceEleve = request.POST.get("nbLicenceEleve")
+    is_primaire    = request.POST.get("is_primaire",None)
+
+    header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
+    body = "<?xml version='1.0' encoding='UTF-8'?>"
+    body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
+    body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
+    body += "<commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement>"
+    body += "<idDistributeurCom>832020065_0000000000000000</idDistributeurCom>"
+    body += "<idRessource>ark:/46173/00001</idRessource>" #/46173/00001.p
+    body += "<typeIdRessource>ark</typeIdRessource>"
+    body += "<libelleRessource>SACADO</libelleRessource>"
+    body += "<debutValidite>"+debutValidite+"</debutValidite>"
+    body += "<finValidite>"+finValidite+"</finValidite>"
+    body += "<categorieAffectation>transferable</categorieAffectation>"
+    body += "<typeAffectation>INDIV</typeAffectation>"
+    body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
+    body += "<nbLicenceEleve>"+nbLicenceEleve+"</nbLicenceEleve>"
+    if is_primaire :
+        body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
+        body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
+        body += "<publicCible>DOCUMENTALISTE</publicCible>"
+        body += "<publicCible>AUTRE PERSONNEL</publicCible>"
+    body += "<publicCible>ENSEIGNANT</publicCible>"
+    body += "<publicCible>ELEVE</publicCible>"
+    body += "</abonnement>"
+
+    host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi
+    directory = '/home/sacado/'
+    r   = requests.post(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
+
+    if r.status_code == 201 or r.status_code==200 :
+        messages.success(request,"Modification réussie") 
+    else :
+        messages.success(request,r.content.decode('utf-8'))
+    return redirect("abonnements_gar"  )
 
 
 

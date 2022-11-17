@@ -98,8 +98,7 @@ urlpatterns = [
     ### -------------------------  GAR
     path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
     path('delete_abonnement_gar/<slug:idg>', delete_abonnement_gar, name='delete_abonnement_gar'),
-
-
+    path('update_abonnement_gar', update_abonnement_gar, name='update_abonnement_gar'),
 
     ### -------------------------  to_clean_database
     path('to_clean_database/<int:idl>/<int:start>', to_clean_database, name='to_clean_database'),

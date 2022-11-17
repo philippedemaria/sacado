@@ -62,9 +62,13 @@ Etablissements accès au GAR
                     </thead>
                     <tbody>
                         {% for data in dataset %}
+                        <form action="{% url 'update_abonnement_gar' %}" method="POST">
                             <tr>
                                 <td>
                                     {{ data.name }}
+                                    <input type="hidden" name="idAbonnement" value="{{ data.idAbonnement }}"/>
+                                    <input type="hidden" name="debutValidite" value="{{ data.debutValidite }}"/>
+
                                 </td> 
                                 <td>
                                     {{ data.idAbonnement }}
@@ -93,9 +97,13 @@ Etablissements accès au GAR
                                 <td>
                                     {% if data.idAbonnement %}
                                     <a href="{% url 'delete_abonnement_gar'  data.idAbonnement  %}" class="btn btn-xs btn-danger"  onclick="return TestDelete(' cet abonnement ')"><i class="fa fa-trash"></i></a>
+
+                                    <label><input type="checkbox" name="is_primaire" value="1" />Primaire ?</label>
+                                    <input type="submit" name="submit" class="btn btn-xs btn-primary" />
                                     {% endif %}
                                 </td>
                             </tr>
+                        </form>
                         {% endfor %}
                     </tbody>
                 </table>
