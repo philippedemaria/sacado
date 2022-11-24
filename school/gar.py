@@ -105,7 +105,7 @@ def create_abonnement_gar(today,accounting ,user):
 
 
 def update_abonnement_gar(today,accounting):
-    """Création d'un abonnement dans la base de données"""
+    """update d'un abonnement dans la base de données"""
 
     #host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
 

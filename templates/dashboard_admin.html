@@ -524,6 +524,28 @@
         </div>
       
 
+
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                     <span style="font-size: 35px">Enseignants </span>
+                    
+                </div>
+
+
+
+                <div class="icon">
+                    {{ data.nbt }} 
+                </div>
+                <a href="{% url 'school_teachers' %}" class="small-box-footer"><i
+                        class="fa fa-arrow-circle-right"></i> Gestion des enseignants </a>
+            </div>
+        </div>
+
+
+
+
         <div class="col-lg-3 col-md-4 col-xs-6">
             <div class="small-box bg-{% if  data.nbs > 0 %}purple{% elif  data.nbs > data.nbs_max %}warning{% else %}danger{% endif %}">
                 <div class="inner">
@@ -536,6 +558,11 @@
                 <a href="{% url 'school_students_gar' %}" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i> Gestion des élèves <small>[{{ data.nbs_max }}]</small></a>
             </div>
         </div>
+
+
+
+
+
     </div>
     {% endwith %}
 
