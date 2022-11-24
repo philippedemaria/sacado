@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], function ($) {
+define(['jquery', 'bootstrap','mathjax'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS list_knowledge_by_level.js OK");
 

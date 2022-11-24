@@ -2101,7 +2101,7 @@ def print_list_ids(request, id):
     i = 1
     for student in group.students.exclude(user__username__contains= "_e-test").order_by("user__last_name") :
         
-        dataset.append((i, student.user.last_name.capitalize() , student.user.first_name.capitalize() , student.user.username))
+        dataset.append((i, student.user.last_name.capitalize().strip() , student.user.first_name.capitalize().strip() , student.user.username))
         i +=1
 
     table = Table(dataset, colWidths=[0.3*inch,2*inch,2*inch,2*inch], rowHeights=20)

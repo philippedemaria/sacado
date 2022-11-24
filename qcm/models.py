@@ -166,10 +166,8 @@ class Supportfile(models.Model):
 class Exercise(models.Model):
     level       = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
     theme       = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
-    knowledge   = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='exercises',
-                                  verbose_name="Savoir faire associé - Titre")
-    supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises",
-                                    on_delete=models.PROTECT, verbose_name="Fichier Géogebra")
+    knowledge   = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='exercises',verbose_name="Savoir faire associé - Titre")
+    supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises", on_delete=models.PROTECT, verbose_name="Fichier Géogebra")
     ranking     = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     audiofile   = models.FileField(upload_to=audio_directory_path, verbose_name="Fichier Audio", blank=True, default="" )
 
@@ -972,8 +970,11 @@ class Parcours(ModelWithCode):
 
         return data
 
-
-
+#############################################################################################################################################
+#############################################################################################################################################
+##############################               IA                             #################################################################
+#############################################################################################################################################
+#############################################################################################################################################
 class Testtraining(models.Model):
 
     requires            = models.CharField(max_length=255, verbose_name="features")
@@ -987,19 +988,48 @@ class Testtraining(models.Model):
         return "{}".format(self.parcours)
 
 
-
 class Testcreator(models.Model):
 
-    requires            = models.CharField(max_length=255, verbose_name="features")
-    targets             = models.CharField(max_length=255, verbose_name="labels")
-    questions_effective = models.CharField(max_length=255, verbose_name="test choisi")
+    requires  = models.CharField(max_length=255, verbose_name="features")
+    targets   = models.CharField(max_length=255, verbose_name="labels")
+    questions = models.CharField(max_length=255, verbose_name="test choisi")
 
     def __str__(self):
         return "{}".format(self.parcours)
  
 
+class Parcourscreator(models.Model):
+
+    knowledge   = models.ForeignKey(Knowledge, on_delete=models.CASCADE, related_name='parcourscreators', editable=False) # features
+    duration    = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)                        # features
+    score       = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)                        # features 
+    exercises   = models.TextField(blank=True, null=True, editable=False)                                                 # features 
+    parcours_id = models.PositiveIntegerField( default=0, blank=True, null=True,  editable= False) # discriminant pour la suppression ou l'ajout lors de l'individualisation
+    student_id  = models.PositiveIntegerField( default=0, blank=True, null=True,  editable=False)  # discriminant pour la suppression ou l'ajout lors de l'individualisation
+    effective   = models.TextField(blank=True, null=True, editable=False)                                                 # label 
+    def __str__(self):
+        return "{}".format(self.knowledge.name)
+
+#############################################################################################################################################
+#############################################################################################################################################
+#############################################################################################################################################
+#############################################################################################################################################
+class Knowledgegroup(models.Model):
+
+    title         = models.CharField(max_length=255, editable=False)
+    parcours      = models.ForeignKey(Parcours ,  blank=True, null=True, related_name="knowledge_groups", on_delete=models.CASCADE )  
+    students      = models.TextField(default= "" , blank=True, editable=False)
+    knowledges    = models.TextField(default= "" , blank=True, editable=False)
+    datetime      = models.DateTimeField(auto_now= True, editable=False)
+    is_heterogene = models.BooleanField(default=0, editable=False)
+    stamp         = models.CharField(max_length=255, default= "" , editable=False)
+
+    def __str__(self):
+        return "{}".format(self.title)
 
 
+
+   
 
 class Folder(models.Model):
 

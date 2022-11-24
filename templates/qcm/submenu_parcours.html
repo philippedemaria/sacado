@@ -89,19 +89,19 @@
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         {% if group_id %}
             {% if parcours.is_evaluation %}
-                <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id group_id  %}"><i class="bi bi-gear"></i> Modifier l'évaluation</a>   </li>
+                <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id group_id  %}"><i class="bi bi-gear"></i> Configurer l'évaluation</a>   </li>
             {% elif parcours.is_sequence %} 
-                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="bi bi-gear"></i> Modifier la séquence</a>   </li>
+                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="bi bi-gear"></i> Configurer la séquence</a>   </li>
             {% else %}
-                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="bi bi-gear"></i> Modifier le parcours</a>   </li>
+                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id group_id  %}"><i class="bi bi-gear"></i> Configurer le parcours</a>   </li>
             {% endif %} 
         {% else %}  
             {% if parcours.is_evaluation %}
-                <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id 0 %}"><i class="bi bi-gear"></i> Modifier l'évaluation</a>   </li>
+                <li {% if 'evaluation_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_evaluation' parcours.id 0 %}"><i class="bi bi-gear"></i> Configurer l'évaluation</a>   </li>
             {% elif parcours.is_sequence %} 
-                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="bi bi-gear"></i> Modifier la séquence</a>   </li>
+                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="bi bi-gear"></i> Configurer la séquence</a>   </li>
             {% else %}
-                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="bi bi-gear"></i> Modifier le parcours</a>   </li>
+                <li {% if 'parcours_update/' in request.path %} class="active" {% endif %}><a href="{% url 'update_parcours' parcours.id 0  %}"><i class="bi bi-gear"></i> Configurer le parcours</a>   </li>
             {% endif %} 
         {% endif %} 
 
@@ -128,6 +128,43 @@
             <a href="{% url 'individualise_parcours' parcours.id  %}" ><i class="bi bi-people"></i> Individualiser les exercices</a> 
         </li> 
 
+
+        {% if request.user.is_superuser %}
+        <li>
+            {% if folder %}
+            <a href="{% url 'recap_parcours' folder.id  parcours.id   %}" ><i class="bi bi-info-square"></i> Liste des exercices par élèves</a>  
+            {% else %}
+            <a href="{% url 'recap_parcours' 0  parcours.id  %}" ><i class="bi bi-info-square"></i> Liste des exercices par élèves</a>     
+            {% endif %}
+        </li>
+
+
+
+
+
+        {% if sacado_asso %}
+        <li {% if 'practice_group/' in request.path %} class="active" {% endif %}>
+            {% if folder %}
+            <a href="{% url 'practice_group' folder.id parcours.id  %}" ><i class="bi bi-people-fill"></i> Créer des groupes de besoins<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Le groupe est créé à partir <br/>des résultats actualisés.</div>
+                                </span></a> 
+            {% else %}
+            <a href="{% url 'practice_group' 0 parcours.id  %}" ><i class="bi bi-people-fill"></i> Créer des groupes de besoins<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Le groupe est créé à partir <br/>des résultats actualisés.</div>
+                                </span></a>  
+            {% endif %}
+             
+
+
+
+        </li>
+        {% else %}
+        <li >
+            <a href="#" class="no_sacado_asso" ><i class="bi bi-people-fill"></i> Créer des groupes de besoins</a>  
+        </li>
+        {% endif %}
+
+        {% endif %}
 
         <li class="divider"></li>
 
@@ -189,6 +226,7 @@
         </li>
 
 
+
             {% if parcours.is_ia and parcours.is_testpos %}
                 <li class="divider"></li>
 
@@ -214,12 +252,11 @@
                 <li class="divider"></li>
                 <li>
                     {% if folder %}
-                    <a href="{% url 'show_parcours' folder.id  parcours.testpositionnement.idd   %}" ><b>IA</b>  Voir le test de positionnement</a>  
+                    <a href="{% url 'show_parcours' folder.id  parcours.testpositionnement.id  %}" ><b>IA</b>  Voir le test de positionnement</a>  
                     {% else %}
                     <a href="{% url 'show_parcours' 0  parcours.testpositionnement.id  %}" ><b>IA</b>  Voir le test de positionnement</a>    
                     {% endif %}
                 </li>
-               
             {% endif %}
 
 

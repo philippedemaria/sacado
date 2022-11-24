@@ -1,0 +1,58 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+{% endblock %} 
+
+  
+
+{% block page_title %}
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="bi bi-info-square"></i>  {{ parcours }}  <img src="{% static 'img/angle-right.png' %}"/> Exercices par élèves</span>     
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+   {% include 'qcm/submenu_parcours.html' %}    
+
+{% endblock %}
+
+{% block body %}
+<section class="content_main">  
+ 
+ 
+
+<div class="row"> 
+    <div class="col-sm-12 col-md-12">
+        <table class="table table-sacado table-hover display" style="width:100%">
+            <thead> 
+                <tr>
+                    <th>ELèves</th><th>Exercices</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in dataset  %} 
+                <tr> 
+                    <td >   
+                        {{ data.student }} <small>[{{ data.length}} exercices]</small>
+                    </td>
+                    <td>
+                        {% for r in data.relationships.all %}
+                            <img src="{{ r.exercise.supportfile.imagefile.url }}" class="smallimagefile"/>
+                        {% endfor %}
+                    </td>
+                </tr>  
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div> 
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+</section>
+{% endblock %}

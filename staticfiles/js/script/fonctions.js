@@ -159,3 +159,18 @@ function get_data_to_gar(f) {
 
  }
 
+
+ 
+
+function check_checkboxes_ia()
+{ 
+  var c = document.getElementsByClassName('kid');
+  for (var i = 0; i < c.length; i++)
+  {
+    if (c[i].type == 'checkbox')
+    {
+       if (c[i].checked) {return true}
+    }
+  }
+   alert("Selectionnez au moins un savoir faire.") ; return false ;
+}

@@ -50,7 +50,7 @@ from django.http import  HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape , letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak , PageTemplate, Frame
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import yellow, red, black, white, blue
 from reportlab.pdfgen.canvas import Canvas
@@ -1103,6 +1103,48 @@ def individualise_parcours(request,id):
 
 
 
+
+def update_parcourscreator_ia(knowledge , parcours, student, exercise_id , action):
+
+    eid = str(exercise_id)
+    print(eid)
+    ex = Exercise.objects.get(pk=exercise_id)
+    print(ex.knowledge.id)    
+    if action == 1 :
+        pcrses = Parcourscreator.objects.filter(knowledge_id = knowledge.id ,  parcours_id = parcours.id )
+
+        for p in pcrses :
+            if eid in p.exercises :
+                idx = p.index( eid)
+                if idx > len(parcours):
+                    p = p[:idx]+"##"+eid
+                else :  
+                    p = p[:idx]+eid+"##"+p[idx:]
+                p.save()
+                print(p.id)
+                break
+    else :
+        print("else")
+        if Parcourscreator.objects.filter(knowledge_id = knowledge.id ,  student_id = student.user.id ,  parcours_id = parcours.id ).count() == 1 :
+            pcrs = Parcourscreator.objects.get(knowledge_id = knowledge.id ,  student_id = student.user.id ,  parcours_id = parcours.id )
+            print("else - ici")
+        else :
+            pcrs = Parcourscreator.objects.filter(knowledge_id = knowledge.id ,  student_id = student.user.id ,  parcours_id = parcours.id ).first()
+            print("else - là")
+        if pcrs and eid in pcrs.exercises :
+            print("ici") 
+            print(pcrs.exercises)
+            pcrs.exercises.replace("#"+eid+"#","")
+            pcrs.save()
+            print(pcrs.id)
+            print(pcrs.exercises)
+        elif pcrs :
+            print(pcrs.id)
+        else :
+            print("pcrs.exercises")
+
+
+
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_individualise(request):  
 
@@ -1244,6 +1286,8 @@ def ajax_individualise(request):
                             data["noclass"] = "btn btn-default"
                             data["alert"] = True
 
+                        update_parcourscreator_ia(relationship.exercise.knowledge , parcours, student, relationship.exercise.id , 0)
+
                     else:
                         relationship.students.add(student)
                         if Blacklist.objects.filter(relationship=relationship, student = student , customexercise = None   ).count()  > 0 :
@@ -1253,6 +1297,7 @@ def ajax_individualise(request):
                         data["noclass"] = "btn btn-default"
                         data["alert"] = False
 
+                        update_parcourscreator_ia(relationship.exercise.knowledge , parcours, relationship.exercise.id , student, 1)
 
             if relationship.students.count() != relationship.parcours.students.count() :
                 data["indiv_nb"]   = relationship.students.count()
@@ -1369,6 +1414,10 @@ def ajax_individualise(request):
                         data["class"] = "btn btn-success"
                         data["noclass"] = "btn btn-default"
                         data["alert"] = True
+
+
+                    update_parcourscreator_ia(relationship.exercise.knowledge , parcours, student, relationship.exercise.id , 0)
+
                 else:
                     relationship.students.add(student) 
                     if Blacklist.objects.filter(relationship=relationship, student = student ,customexercise = None ).count() > 0 :
@@ -1378,6 +1427,8 @@ def ajax_individualise(request):
                     data["class"] = "btn btn-success"
                     data["noclass"] = "btn btn-default"
                     data["alert"] = False
+                    update_parcourscreator_ia(relationship.exercise.knowledge , parcours, student, relationship.exercise.id , 1)
+
 
             if relationship.students.count() != relationship.parcours.students.count() :
                 data["indiv_nb"]   = relationship.students.count()
@@ -2752,6 +2803,337 @@ def convert_into_str(knowledge_ids):
     return knowledges_str
  
 
+
+def create_parcours_after_results(request,idq,idp):
+
+    quizz    = Quizz.objects.get(id=idq)
+    students = quizz.students.all()
+    parcours = Parcours.objects.get(id=idp)
+
+    knowledge_ids = quizz.questions.values_list("knowledge_id",flat=True).distinct()
+    dataset = list()
+
+    exercises = Exercise.objects.filter(knowledge__in= knowledge_ids)
+
+    for knowledge_id in knowledge_ids :
+        knowledge = Knowledge.objects.get(pk=knowledge_id)
+        data = {}
+        datas_list = list()
+        data['knowledge'] = knowledge
+        datas_list = list()
+        for student in students :
+            datas = {}
+            datas['student'] =  student.user.first_name.lower().capitalize()+" "+student.user.last_name.lower().capitalize()
+            datar_list = list()
+            for answerplayer in quizz.answerplayer.filter(student=student, question__knowledge = knowledge) :
+                adatas = dict()      
+                adatas['timer']        = answerplayer.timer
+                adatas['is_correct']   = answerplayer.is_correct
+                datar_list.append(adatas)     
+            datas['results']   = datar_list
+            datas['exercises'] = exercises
+
+
+            datas_list.append(datas)
+        data['features'] = datas_list   
+        dataset.append(data)
+ 
+    context = {'dataset': dataset,   'quizz': quizz, 'parcours': parcours, 'exercises' : exercises  }
+ 
+    return render(request, 'qcm/previsual_parcours.html', context) 
+
+
+
+def practice_group(request,idf,idp): 
+    '''Créer les groupes de besoins'''
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    stage = get_stage(request.user)
+    is_heterogene = None
+    parcours = Parcours.objects.get(pk=idp)
+    if idf > 0 :
+        folder = Folder.objects.get(id=idf)
+    else :
+        folder = None
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+    sfs = list()
+    for sf in parcours.exercises.values_list("knowledge_id",flat=True).distinct() :
+        sfs.append(Knowledge.objects.get(pk=sf))
+
+    groups, printable_groups = list() , ""
+    number , print_knowledges , nature = None , "" , ""
+    post_knowledges = list()
+    if request.method =="POST" :
+        students   = parcours.students.all()
+        nature     = request.POST.get('nature',None)
+        number     = request.POST.get('number',None)
+        if number : number = int(number)
+        knowledges = request.POST.getlist('knowledges')
+
+        print_knowledges = ""
+        for k in knowledges:
+            post_knowledges.append(int(k))
+            print_knowledges += k+ "##"
+        
+        all_students, printable_all_students = list() , list()
+        for student in students :
+            student_avg = dict()
+            stu_ans = Studentanswer.objects.filter(exercise__knowledge_id__in = knowledges, student = student).aggregate(average_score=Avg('point'))  
+            student_avg['student'] = student
+            if stu_ans['average_score'] : student_avg['avg'] = int(stu_ans['average_score'])
+            else : student_avg['avg'] = 0 
+            style = 'color:white;border-radius:2px;font-size:12px;padding:3px;'
+            if student_avg['avg'] < stage['low'] : student_avg['style'] = style + 'background-color: #b5322b'
+            elif student_avg['avg'] < stage['medium'] : student_avg['style'] = style + 'background-color: #b5a32b'
+            elif student_avg['avg'] < stage['up'] : student_avg['style'] = style + 'background-color: #62d85a'
+            else : student_avg['style'] = style +'background-color: #1d6718'
+
+            all_students.append(student_avg)
+            printable_all_students.append(student.user.id) 
+
+        if not number : number = len(all_students)
+        
+        all_students = sorted(all_students, key=lambda k: k["avg"])
+        
+
+        i = 0
+        while i < len(all_students):
+            if i%int(number)==0 : group, group_printable = list() , ""
+            if nature == "hetero" :
+                is_heterogene = 1
+                if i%2==0:k=i
+                else :k=len(all_students)-1-i
+            else :
+                is_heterogene = 0
+                k=i
+            group.append(all_students[k])
+            group_printable += str(printable_all_students[k]) + "##"
+            if len(group) == number or i+1 == len(all_students): 
+                gr_dict = dict()
+                gr_dict['students'] = group
+                groups.append(gr_dict)
+                printable_groups+= group_printable +"##"
+            i +=1
+
+    stamps = Knowledgegroup.objects.filter(parcours=parcours).values_list('stamp', flat=True).distinct()
+
+    kgroups_stamp = list()
+    for stamp in stamps :
+        stamp_dict = dict()
+        kgroups = Knowledgegroup.objects.filter(stamp=stamp)
+        stamp_dict['nb']            = kgroups.count()
+        stamp_dict['id']            = stamp
+        stamp_dict['is_heterogene'] = kgroups.first().is_heterogene
+        stamp_dict['date']          = kgroups.first().datetime
+        stamp_dict['stamp']         = stamp
+        try : 
+            knowledges_tab = kgroups.first().knowledges.split("##")
+            stamp_dict['nb_knowledges'] = len( knowledges_tab )
+            k_list = list()
+            for kid in knowledges_tab :
+                k_dict = dict()
+                knowledge = Knowledge.objects.get(pk=kid)
+                k_dict['name'] = knowledge.name
+                k_list.append(k_dict)
+            stamp_dict['k_list'] = k_list
+
+            k_group_list = list()
+            for kgroup in kgroups :
+                k_group = dict()
+                k_group['name'] = kgroup.title
+                students_tab = kgroup.students.split("##")
+                student_list = list()
+                for student in students_tab :
+                    student_dict = dict()
+                    student_dict['name'] = student
+                    if student != "" :
+                        student_list.append(student_dict)
+                k_group['students'] = student_list
+                k_group_list.append(k_group)
+            stamp_dict['k_group_list'] = k_group_list
+
+        except : stamp_dict['nb_knowledges'] = 0
+
+        kgroups_stamp.append(stamp_dict)
+
+    context = { 'parcours': parcours,  'sfs' : sfs , 'groups' : groups , 'post' : request.POST , 'post_knowledges' : post_knowledges , 'number' : number , 'role' : role ,  
+                'printable_groups' : printable_groups, 'print_knowledges' : print_knowledges, 'is_heterogene' : is_heterogene , 'kgroups_stamp' : kgroups_stamp }
+ 
+    return render(request, 'qcm/practice_group.html', context) 
+
+
+def print_practice_group(request): 
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=groupes_de_besoins.pdf'
+
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    groupe = ParagraphStyle('groupe',  fontSize=13, textColor=colors.HexColor("#000000"),) 
+    title = ParagraphStyle('title',  fontSize=11, textColor=colors.HexColor("#000000"),)                   
+
+    #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+    
+    elements = list()
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.1*inch))
+
+    is_heterogene    = request.POST.get('is_heterogene',None)
+    parcours_id      = request.POST.get('parcours_id',None)
+    these_knowledges = request.POST.get('these_knowledges',None)
+    printable        = request.POST.get('printable',None)
+    printable_tab    = printable.split("####")
+
+    frame1 = Frame(doc.leftMargin, doc.bottomMargin, doc.width/2-6, doc.height, id='col1')
+    frame2 = Frame(doc.leftMargin+doc.width/2+6, doc.bottomMargin, doc.width/2-6, doc.height, id='col2')    
+
+    doc.addPageTemplates([PageTemplate(id='TwoCol',frames=[frame1,frame2]), ])
+
+    i = 1
+    stamp =  str(uuid.uuid4())[:8]
+    for i in range(len(printable_tab))  :
+        ##########################################################################
+        #### Parcours
+        ##########################################################################
+        titlegroup = 'Groupe '+str(i+1)
+        paragraph = Paragraph( titlegroup , groupe )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.1*inch))
+        if printable_tab[i] != "" :
+            sid_tab = printable_tab[i].split("##")
+            stu_str , stu_str_p = "" , ""
+            j = 1
+            for sid in sid_tab :
+
+                student = Student.objects.get(user_id=sid)
+                stu_str += student.user.first_name.capitalize().strip()+ " "+student.user.last_name.capitalize().strip()+"<br/>"
+                stu_str_p += student.user.first_name.capitalize().strip()+ " "+student.user.last_name.capitalize().strip()+"##"
+                if j == len(sid_tab) : stu_str +="<br/>"
+                j +=1
+
+            if printable and these_knowledges and parcours_id :
+                kgroup , create = Knowledgegroup.objects.update_or_create(title = titlegroup , parcours_id = parcours_id, is_heterogene = is_heterogene , stamp = stamp,
+                                                                          knowledges=these_knowledges[:-2] , defaults = { 'students' : stu_str_p })
+            elements.append(  Paragraph( stu_str , title )  )
+        i+=1
+    doc.build(elements)
+    return response
+
+
+def print_kgroups(request,idf,idp,slug):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=groupes_de_besoins.pdf'
+
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    groupe = ParagraphStyle('groupe',  fontSize=13, textColor=colors.HexColor("#000000"),) 
+    title = ParagraphStyle('title',  fontSize=11, textColor=colors.HexColor("#000000"),)                   
+
+    #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+    
+    elements = list()
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.1*inch))
+
+    kgroups = Knowledgegroup.objects.filter(stamp = slug, parcours_id=idp)
+
+    frame1 = Frame(doc.leftMargin, doc.bottomMargin, doc.width/2-6, doc.height, id='col1')
+    frame2 = Frame(doc.leftMargin+doc.width/2+6, doc.bottomMargin, doc.width/2-6, doc.height, id='col2')    
+
+    doc.addPageTemplates([PageTemplate(id='TwoCol',frames=[frame1,frame2]), ])
+
+    for kgroup in kgroups  :
+        ##########################################################################
+        #### Parcours
+        ##########################################################################
+        paragraph = Paragraph( kgroup.title , groupe )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.1*inch))
+        stu_str = ""
+        j=1
+        sid_tab = kgroup.students.split('##')
+        for student in sid_tab :
+            stu_str += student.strip()+"<br/>"
+            if j == len(sid_tab) : stu_str +="<br/>"
+            j +=1
+
+        elements.append(  Paragraph( stu_str , title )  )
+
+    doc.build(elements)
+    return response
+
+ 
+
+
+
+def delete_kgroups(request,idf,idp,slug):
+    Knowledgegroup.objects.filter(stamp = slug, parcours_id=idp).delete()
+    return redirect('practice_group', idf,idp)
+
+
+
+
+def recap_parcours(request,idf,idp):
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    parcours      = Parcours.objects.get(pk=idp)
+    if idf > 0 :
+        folder = Folder.objects.get(id=idf)
+    else :
+        folder = None
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+
+    students = parcours.students.order_by("user__last_name")
+    dataset = list()
+    for student in students :
+        stu = dict()
+        stu['student'] = student
+        relations = Relationship.objects.filter(parcours=parcours, students=student)
+        stu['relationships'] = relations.order_by("ranking")
+        stu['length'] = relations.count()
+        dataset.append(stu)
+
+    context = {'dataset': dataset,  'parcours': parcours, 'role' : role }
+ 
+    return render(request, 'qcm/list_recap_parcours.html', context) 
+
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+##          IA
+########################################################################################################################################################################
+########################################################################################################################################################################
+
+
 @login_required(login_url= 'index')
 def get_target_ia(request,idp):
     """ Envoie la liste des exercice pour un seul niveau """
@@ -2781,7 +3163,7 @@ def get_target_ia(request,idp):
         return redirect('create_test_ia', idp )
 
 
-    context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level , "group" : group  , "parcours" : parcours ,'get_target' : True }
+    context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level , "group" : group  , "parcours" : parcours ,'get_target' : True  }
  
     return render(request, 'qcm/list_knowledges_by_level.html', context) 
 
@@ -2881,6 +3263,26 @@ def get_target_ia(request,idp):
 #     return render(request, 'qcm/list_knowledges_by_level.html', context) 
 
 
+def max_number_exercises(n, init_exercises , knowledge_ids):  
+    """ Nombre maximal d'exercices pour le test ,  n est le nombre maximal """
+    nbq = len(init_exercises)
+    if nbq > n :
+        ratio =  n/nbq 
+        eid_for_rs = set()
+        for knowledge_id in knowledge_ids :
+            knowledge = Knowledge.objects.get(pk=knowledge_id)
+            exo_k = knowledge.exercises.values_list("id",flat=True) 
+            init , nb_exercises = 0, int( exo_k.count()*ratio )
+            while init < nb_exercises :
+                index = random.randint(0, len(exo_k)-1)
+                eid_for_rs.add( exo_k[index] )  
+                init += 1
+    else :
+        eid_for_rs = init_exercises
+    return eid_for_rs
+
+
+
 @login_required(login_url= 'index')
 def create_test_ia(request,idp):
     """ Envoie la liste des exercice pour un seul niveau """
@@ -2904,6 +3306,11 @@ def create_test_ia(request,idp):
         group  = Group.objects.get(pk=group_id)
     else :
         group    = None
+
+
+    sfs = list()
+    for sf in Testtraining.objects.get(parcours_id = idp).targets.split('##') :
+        sfs.append(Knowledge.objects.get(pk=sf))
 
     if request.method == "POST":
 
@@ -2932,8 +3339,10 @@ def create_test_ia(request,idp):
         parcours.groups.set(groups)
         parcours.students.set(students)
         knowledge_ids = request.POST.getlist('knowledge_id')
-        eid_for_rs = Exercise.objects.values_list("id",flat=True).filter(knowledge_id__in=knowledge_ids)
+        init_exercises = Exercise.objects.values_list("id",flat=True).filter(knowledge_id__in=knowledge_ids)
 
+        eid_for_rs = max_number_exercises(30, init_exercises , knowledge_ids) # on choisit délibérément 30 exercices pour le test.
+  
         e_str  = ""
         i=1 
         for eid in eid_for_rs :
@@ -2955,58 +3364,16 @@ def create_test_ia(request,idp):
         testtraining.questions_proposed = e_str
         testtraining.save()
 
-
         return redirect('show_parcours', 0 , parcours.id )
 
-    context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level , "group" : group  , "parcours" : parcours ,'get_target' : False  }
+    context =  { 'exercises': exercises  , "teacher" : teacher , "level" : level , "group" : group  , "parcours" : parcours ,'get_target' : False , 'sfs' : sfs  }
  
     return render(request, 'qcm/list_knowledges_by_level.html', context) 
 
-
- 
- 
-
-def create_parcours_after_results(request,idq,idp):
-
-    quizz    = Quizz.objects.get(id=idq)
-    students = quizz.students.all()
-    parcours = Parcours.objects.get(id=idp)
-
-    knowledge_ids = quizz.questions.values_list("knowledge_id",flat=True).distinct()
-    dataset = list()
-
-    exercises = Exercise.objects.filter(knowledge__in= knowledge_ids)
-
-    for knowledge_id in knowledge_ids :
-        knowledge = Knowledge.objects.get(pk=knowledge_id)
-        data = {}
-        datas_list = list()
-        data['knowledge'] = knowledge
-        datas_list = list()
-        for student in students :
-            datas = {}
-            datas['student'] =  student.user.first_name.lower().capitalize()+" "+student.user.last_name.lower().capitalize()
-            datar_list = list()
-            for answerplayer in quizz.answerplayer.filter(student=student, question__knowledge = knowledge) :
-                adatas = dict()      
-                adatas['timer']        = answerplayer.timer
-                adatas['is_correct']   = answerplayer.is_correct
-                datar_list.append(adatas)     
-            datas['results']   = datar_list
-            datas['exercises'] = exercises
-
-
-            datas_list.append(datas)
-        data['features'] = datas_list   
-        dataset.append(data)
- 
-    context = {'dataset': dataset,   'quizz': quizz, 'parcours': parcours, 'exercises' : exercises  }
- 
-    return render(request, 'qcm/previsual_parcours.html', context) 
-
-
-# Permet de peupler les studentanswer
-#
+##############################################################################################################################################################################
+# Lorsque le test de positionnement est dépublié avec le scrit 'ajax_publish_parcours', le modèle Testtraining récupère les questions du test que les enseignants ont choisi
+##############################################################################################################################################################################
+# Permet de peupler les studentanswer pour faire des tests
 def peuplate_parcours_ia(idp) :
 
     parcours = Parcours.objects.get(pk=idp)
@@ -3023,37 +3390,89 @@ def peuplate_parcours_ia(idp) :
             Studentanswer.objects.create(exercise = relationship.exercise, parcours=parcours, student=student, point=point, secondes = secondes )
 
 
+def create_relationships(rt,parcours,exercises,student,label):  
+
+    label_score_list = list()
+    n=0
+    for e in exercises :
+        sc_label = dict()
+        if rt =='r' :
+            score_label = student.answers.filter(exercise = e ).aggregate(avg = Avg('point'))
+        else :
+            score_label = Studentanswer.objects.filter(exercise = e ).aggregate(avg = Avg('point'))
+        if score_label['avg'] : #  Si des exercices ne sont jamais faits, ils ne sont pas pris.
+            sc_label['e_id'] = e.id
+            sc_label['avg']  = score_label['avg']
+            label_score_list.append(sc_label)
+    sorted_list = sorted(label_score_list, key=lambda k: k["avg"])
+
+    if rt == 'r' :
+        if  label == 0 : maxi = 90
+        elif label == 1 :  maxi = 75
+        elif label == 2 :  maxi = 60
+        get_sorted_list = [ dico for dico in sorted_list if dico['avg'] < maxi ]
+        ranking = 0 # Permet de classer les pré requis avant.
+    else :
+        ranking = 100 # Permet de classer les pré requis avant.
+        l = len(sorted_list)
+        if  label == 0 : # les meilleurs
+            if l > 15:
+                n = l  - 15
+                get_sorted_list = sorted_list[n:]
+            else :
+                get_sorted_list = sorted_list
+
+        elif label == 1 : # la majorité (espérons)
+            if l > 15:            
+                n = l - 15
+                get_sorted_list = sorted_list[n//2:l-n//2] 
+            else :
+                get_sorted_list = sorted_list
+
+        elif label == 2 : # les  + faibles
+            if l > 15:            
+                n = l - 15
+                get_sorted_list = sorted_list[:l-n] 
+            else :
+                get_sorted_list = sorted_list
 
 
-def parcours_ia_creator(student ,  knowledge_id ,  parcours ,  exercises, requires, global_duration, duration, average_score):
-
-    if duration < global_duration and int(average_score) > 90 : #niveau 5
-
-        for exercise in exercises :
-            relationship,create = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+    exercises_str = ""
+    j = 0
+    for exercise_dict in get_sorted_list :
+        exercise = Exercise.objects.get(pk=exercise_dict['e_id'])
+        relationship,create = Relationship.objects.get_or_create(exercise  = exercise , parcours=parcours, defaults={ 'situation' : 5, 'ranking' : ranking , 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+        ranking +=1
+        if create :
             relationship.skills.set(exercise.supportfile.skills.all())
-            relationship.students.add(student)
+        relationship.students.add(student)
 
-    elif duration < global_duration and int(average_score) > 65 : #niveau 3 
-
-        for exercise in exercises :
-            relationship,create = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
-            relationship.skills.set(exercise.supportfile.skills.all())
-            relationship.students.add(student)
+        if j == len(get_sorted_list)-1 : sep = ""
+        else : sep = "##"
+        exercises_str += str(exercise.id) + sep
+        j+=1
 
 
-    elif duration < global_duration and int(average_score) > 40 : #niveau 2
-        pass
-    elif duration < global_duration and int(average_score) <= 40 : #niveau 1
-        pass
-    elif duration > global_duration and int(average_score) > 85 : #niveau 4
-        pass
-    elif duration > global_duration and int(average_score) > 60 : #niveau 3
-        pass
-    elif duration > global_duration and int(average_score) > 40 : #niveau 2 
-        pass
-    elif duration > global_duration and int(average_score) <= 30 : #niveau 1 
-        pass
+    return exercises_str
+
+
+
+def parcours_ia_creator(knowledge_id , student ,  parcours ,  exercises, requires, global_duration, duration, average_score, nb_k_required):
+
+    if duration < global_duration and int(average_score) >= 90 :  # les meilleurs
+        requires_str  =  create_relationships('r',parcours,requires,student,0)
+        exercises_str = create_relationships('t',parcours,exercises,student,0)
+    elif duration > global_duration and int(average_score) < 50 :    # les plus faibles
+        requires_str  =  create_relationships('r',parcours,requires,student,2)
+        exercises_str = create_relationships('t',parcours,exercises,student,2)
+    else :  
+        requires_str  =  create_relationships('r',parcours,requires,student,1)
+        exercises_str = create_relationships('t',parcours,exercises,student,1)
+
+    if nb_k_required : all_str = requires_str + '##' + exercises_str
+    else : all_str = exercises_str  
+
+    Parcourscreator.objects.create(knowledge_id = knowledge_id ,  student_id = student.user.id ,  parcours_id = parcours.id , duration = duration, score = average_score, exercises = all_str ) 
 
 
 def create_parcours_ia_assisted(request,idf,idp):
@@ -3064,27 +3483,28 @@ def create_parcours_ia_assisted(request,idf,idp):
     testtraining  = Testtraining.objects.get(parcours=parcours)
     tab_target    = testtraining.targets.split("##")# liste des knowledges ciblés
     tab_requires  = testtraining.requires.split("##")# liste des knowledges ciblés
-    exercises     = Exercise.objects.filter(knowledge__in=tab_target)
-    requires      = Exercise.objects.filter(knowledge__in=tab_requires)
 
-    # for exercise in requires :
-    #     relationship,created = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
-    #     relationship.skills.set(exercise.supportfile.skills.all())
-
-    # for exercise in exercises :
-    #     relationship,create = Relationship.objects.get_or_create(exercise = exercise, parcours=parcours, defaults={ 'situation' : 5, 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
-    #     relationship.skills.set(exercise.supportfile.skills.all())
+    if len(tab_requires) == 1 : nb_k_required = 1
+    else : nb_k_required = None
 
     timer = Relationship.objects.filter(parcours=parcours_test).aggregate(duration=Sum('duration'))
-    global_duration = timer['duration']
+    global_duration = timer['duration']*60 # Conversion en secondes
 
     students = parcours.students.all()
     dataset = list()
-    for student in students :
-        for knowledge_id in tab_requires : 
-            studentanswers = student.answers.filter(parcours=parcours_test, exercise__knowledge__id = knowledge_id ).aggregate(duration=Avg('secondes'), average_score=Avg('point'))
-            parcours_ia_creator(student ,  knowledge_id ,  parcours ,exercises, requires, global_duration, studentanswers['duration'], studentanswers['average_score']  )
-        print("______________________________________")
+    i = 1
+    for knowledge_id in tab_target :
+        for student in students :
+            requires       = Exercise.objects.filter(knowledge_id__in = tab_requires)
+            exercises      = Exercise.objects.filter(knowledge_id=knowledge_id)
+            studentanswers = student.answers.filter(parcours=parcours_test, exercise__knowledge__id__in = tab_requires ).aggregate(duration=Sum('secondes'), average_score=Avg('point'))
+            if  studentanswers['duration'] and studentanswers['average_score'] :
+                parcours_ia_creator(knowledge_id ,student ,  parcours , exercises, requires , global_duration, studentanswers['duration'], studentanswers['average_score'] , nb_k_required )
+            else :
+                if i == 1 : # Pour n'afficher le message qu'une seule fois par élève
+                    messages.error(request,"L'élève "+str(student)+" n'a pas fait le test de positionnement")
+        i+=1 
+
     return redirect('show_parcours', idf , idp )
 
 
@@ -4851,10 +5271,19 @@ def ajax_publish_parcours(request):
     elif is_folder == "no" :
         if statut == 1 :
             pcs = Parcours.objects.get(pk = int(parcours_id))
-            if pcs.is_testpos :
-                exercise_ids = Relationship.objects.values_list("exercise_id",flat=True).filter(parcours=pcs, is_publish=1)
+            exercise_ids = Relationship.objects.values_list("exercise_id",flat=True).filter(parcours=pcs, is_publish=1)
+            if pcs.is_testpos : # Training pour le test de positionnement
                 pcs_str = convert_into_str(exercise_ids)
                 Testtraining.objects.filter(parcours = pcs.target_id).update(questions_effective = pcs_str)
+            elif pcs.is_ia and not pcs.is_testpos : # Training pour le parcours IA
+                students  = pcs.students.all()
+                knowledge_ids = Parcourscreator.objects.filter(parcours_id = pcs.id).values_list('knowledge_id',flat=True).distinct()
+                for kid in knowledge_ids :
+                    for student in students :
+                        exercise_ids_std = Relationship.objects.values_list("exercise_id",flat=True).filter(parcours=pcs, is_publish=1,students=student)
+                        exercise_ids_std_str = convert_into_str(exercise_ids_std)
+                        Parcourscreator.objects.filter(parcours_id = pcs.id , knowledge_id = kid , student_id = student.user.id).update(effective = "")
+                        Parcourscreator.objects.filter(parcours_id = pcs.id , knowledge_id = kid , student_id = student.user.id).update(effective = exercise_ids_std_str)
 
         Parcours.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
     else :
@@ -4864,6 +5293,8 @@ def ajax_publish_parcours(request):
 
  
  
+
+
 
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_sharer_parcours(request):  

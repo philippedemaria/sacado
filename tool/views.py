@@ -3009,17 +3009,6 @@ def admin_show_question_ia(request,idk,idq):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 @csrf_exempt 
 def ajax_is_ia(request): 
 

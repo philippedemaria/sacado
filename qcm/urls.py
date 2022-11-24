@@ -148,7 +148,13 @@ urlpatterns = [
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
     ######################################################################################################################################################
+    path('practice_group/<int:idf>/<int:idp>', practice_group, name='practice_group'), # Groupe de besoins
+    path('recap_parcours/<int:idf>/<int:idp>', recap_parcours, name='recap_parcours'), # Listes de exercices donnés par élèves lors d'une individualisation ou d'un parcours IA
+    path('print_practice_group', print_practice_group, name='print_practice_group'), # Impression des groupes de besoins
 
+
+    path('print_kgroups/<int:idf>/<int:idp>/<slug:slug>', print_kgroups, name='print_kgroups'), # Impression des groupes de besoins
+    path('delete_kgroups/<int:idf>/<int:idp>/<slug:slug>', delete_kgroups, name='delete_kgroups'), # Suppression des groupes de besoins
     ######################################################################################################################################################
     #################################       IA        ####################################################################################################
     ######################################################################################################################################################

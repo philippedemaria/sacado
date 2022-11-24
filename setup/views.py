@@ -331,7 +331,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
             div   = dico_received["DIV"][0]
             name  = div.split("##")[0]
 
-
             if not school.is_primaire :
                 try :
                     groups = Group.objects.filter(school = school, name = name )

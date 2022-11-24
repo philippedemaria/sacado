@@ -156,7 +156,7 @@ div.carte {
     height:500px;
     border:2px solid; 
     resize:both ; 
-    overflow:auto'
+    overflow:auto;
 }
 #axe {
   width:80%;
@@ -166,4 +166,17 @@ div.carte {
   position:relative;
   top:70px;
   left:10%;
+}
+
+
+.draggable{
+  cursor: -webkit-grab; 
+  cursor: grab;
+}
+
+
+.draggable:hover{
+  cursor: -webkit-grab; 
+  cursor: grab;
+  font-weight: bold;
 }

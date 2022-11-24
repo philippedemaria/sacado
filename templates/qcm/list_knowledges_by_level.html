@@ -29,13 +29,21 @@
 
 {% block body %}
 <section class="content_main">
-
+    {% if not get_target %} 
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            Sélectionner les savoir faire {% if get_target %}<b>visés</b> par le{% else %}<b>pré-requis</b> pour bien démarrer ce{% endif %} parcours.
+            <div class="consigne">
+                <label>Savoir faire ciblés :</label>
+                {% for sf in sfs %}<li><label>{{ sf }}</label></li>{% endfor %}
+            </div>
         </div>
     </div>
-
+    {% endif %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <img src="{% static 'img/conseil.png' %}" height="35" /> Sélectionner les savoir faire {% if get_target %}<b>visés</b> par le{% else %}<b>pré-requis</b> pour bien démarrer ce{% endif %} parcours. {% if not get_target %}Le test de positionnement contient un maximum de 30 exercices pour une durée de 55 minutes. Si la durée des exercices par savoir faire excède 55 minutes, les exercices sont déterminés au prorata de savoir faire.{% else %} Le parcours contient <b>au maximum</b> 15 exercices par savoir faire cochés. 3 savoir faire cochés peut donc créer un parcours de 45 exercices. Plus de 3 savoir faire peut </small>être excessif.{% endif %}<a href="#" data-toggle='modal' data-target='#explain_ia'><i class="fa fa-question-circle"></i></a>
+        </div>
+    </div>
     <form method="POST">
         {% csrf_token %}
         <div class="row">
@@ -55,20 +63,20 @@
                         {% regroup theme.list by knowledge.waiting as waiting_list %} 
                         {% for waiting in waiting_list  %}
                             <tr  class="opener out subtitle_tr"  id="{{ waiting.grouper.id }}">
-                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}  {% if not get_target %} <small><b>{{  waiting.grouper.nb_questions }} question{{ waiting.grouper.nb_questions|pluralize  }}</b>  </small> {% endif %}</td> 
+                                <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.grouper.name}}  <small><b>{{  waiting.grouper.exercises_counter }} exercice{{ waiting.grouper.exercises_counter|pluralize  }}</b>  </small></td> 
                             </tr>  
                             {% regroup waiting.list by knowledge as knowledge_list %} 
                             {% for knowledge in knowledge_list  %}
                                 {% if knowledge_list|length > 0 %}
                                         <tr   class="opener_k opened{{ waiting.grouper.id }} out subsubtitle_tr"  id="{{ knowledge.grouper.id}}" >
                                             <td class="listingtd"> 
-                                               <label><input name="knowledge_id" type="checkbox" value="{{ knowledge.grouper.id }}" {% if knowledge.grouper.id in parcours.testtraining.targets|splitter or  knowledge.grouper.id in parcours.testtraining.requires|splitter %}checked{% endif %} /> {{ knowledge.grouper.name|capfirst }} {% if not get_target %}<b><small> {{  knowledge.grouper.nb_questions  }} question{{  knowledge.grouper.nb_questions|pluralize }} </small></b>{% endif %}</label>
+                                               <label><input name="knowledge_id" type="checkbox" value="{{ knowledge.grouper.id }}" {% if knowledge.grouper.id in parcours.testtraining.targets|splitter or  knowledge.grouper.id in parcours.testtraining.requires|splitter %}checked{% endif %} class="kid" /> {{ knowledge.grouper.name|capfirst }} <b><small> {{  knowledge.grouper.exercises|counting }} exercice{{  knowledge.grouper.exercises|counting|pluralize }} </small></b></label>
                                             </td>
                                         </tr>
                                 {% else %}
                                         <tr class="opener_k opened{{ waiting.name.id }} out"  id="{{ knowledge.name.id}}" >
                                             <td>
-                                                 {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
+                                                {{ knowledge.name }} <em class="text text-danger">Exercice en cours de création</em>
                                             </td>
                                         </tr>
                                 {% endif %}
@@ -82,10 +90,31 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <input value="{% if get_target %}Choisir les pré-requis{% else %}Créer le test de positionnement{% endif %}" type="submit"  class="btn btn-primary"  />
+                <input value="{% if get_target %}Choisir les pré-requis{% else %}Créer le test de positionnement{% endif %}" type="submit"  class="btn btn-primary" onclick="return check_checkboxes_ia()"  />
             </div>
         </div>
     </form>
 </section> 
+
+
+
+
+<div class="modal fade" id="explain_ia" tabindex="-1" role="dialog" aria-labelledby="explain_ia">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                 
+                <h2>Choix des exercices</h2>              
+            </div>
+            <div class="modal-body">
+               Le parcours assisté par IA contient :
+               <li>les exercices des savoir faire ciblés </li><li> les exercices dont le score est inférieur à 70% au test de positionnement.</li>  Vous pourrez évidemment modifier manuellement<sup>*</sup> les attributions d'exercices pour chaque élève lorsque le parcours assisté par IA sera créé.
+               <hr/><sup>*</sup> Malgré l'assistance par IA, nous souhaitons que l'enseignant reste maitre de ses choix.
+            </div>
+        </div>
+    </div> 
+</div>
 {% endblock %}
                                 

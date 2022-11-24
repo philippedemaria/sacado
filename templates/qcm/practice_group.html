@@ -1,0 +1,149 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+
+    <script>
+        require(['script/practice-group']);
+    </script> 
+{% endblock %} 
+
+  
+
+{% block page_title %}
+    <span style="color:{{ parcours.color|contrast_color_title }}"><i class="bi bi-people-fill"></i> {{ parcours }}  <img src="{% static 'img/angle-right.png' %}"/> Groupes de besoins </span>     
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+   {% include 'qcm/submenu_parcours.html' %}    
+
+{% endblock %}
+
+ 
+
+
+{% block body %}  
+<section class="content_main">
+
+    <form action="" method="POST" enctype='multipart/form-data'> 
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                <label>Sélectionner le/les savoir faire ciblé(s)</label>
+                {% for sf in sfs %}
+                    <li class="sanspuce"><label><input value="{{ sf.id }}" class="kid" type="checkbox" name="knowledges" {% if sf.id in post_knowledges %}checked{% endif %}> {{ sf }}</label></li>
+                {% endfor %}
+            </div>
+            <div class="col-sm-12 col-md-2">
+                <label>Nature des groupes</label><br/>
+                <li class="sanspuce"><label><input value="homo" type="radio" name="nature" class="nature" {% if 'homo' in post.nature %}checked{% endif %}> Homogène</label></li>
+                <li class="sanspuce"><label><input value="hetero" type="radio" name="nature" class="nature" {% if 'hetero' in post.nature %}checked{% endif %}> Hétérogène</label></li>
+            </div>
+            <div class="col-sm-12 col-md-2">
+                <label>Nombre d'élèves par groupe</label><br/>
+                <li class="sanspuce">  <input  type="number" name="number" step="1" min="1" max="10" class="form-control" value="{% if number %}{{ number }}{% else %}4{% endif %}"></li>
+                <hr/>
+                <input value="Créer les groupes" type="submit"  class="btn btn-primary"  />
+            </div>
+        </div>
+    </form> 
+    <hr/>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-{% if kgroups_stamp %}9{% else %}12{% endif %}">
+            <div class="row initial_group">
+            {% for g in groups %}
+                <div class="card droppable"  data-group='{{ forloop.counter }}' style="padding:10px"><b>Groupe {{ forloop.counter }}</b><br/>
+                    {% for s in g.students %}
+                        <li class="sanspuce draggable" data-student='{{ s.student.user.id }}' ><i class="bi bi-arrows-move" style="font-size:12px"></i> {{ s.student }} <span style="{{ s.style }}">[{{ s.avg }}%]</span></li>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+ 
+                <div class="col-sm-12">
+                    <form action="{% url 'print_practice_group' %}" method="POST" enctype='multipart/form-data'> 
+                        {% csrf_token %}
+                        <input type="hidden" id="printable" value="{{  printable_groups }}" name="printable"  />  
+                        <input type="hidden" value="{{  is_heterogene }}"  name="is_heterogene"  />  
+                        <input type="hidden" value="{{  print_knowledges }}"   name="these_knowledges"  />
+                        <input type="hidden" value="{{  parcours.id }}"  name="parcours_id"  />
+                        {% if printable_groups %}
+                        <button  type="submit" class="btn btn-primary" ><i class="bi bi-printer"></i> Imprimer ces groupes</button>
+                        {% endif %}
+                    </form> 
+                </div>
+            </div>
+
+            {% if kgroups_stamp %} 
+                {% for stamp in kgroups_stamp %} 
+                <div class="groups no_visu_on_load" id="kgroup{{ stamp.stamp }}" style="border-radius:5px;border:1px solid #CCC; padding:10px">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="consigne"><label>Savoir faire cible :</label><br/>
+                               {% for k in stamp.k_list %} 
+                                    <li class="sanspuce"><label>{{ k.name }}</label></li>
+                               {% endfor %}
+                            </div>
+                        </div> 
+                        <div class="col-sm-2">
+                            {% if folder %}
+                            <a href="{% url 'print_kgroups' folder.id parcours.id stamp.stamp  %}" class="btn btn-primary"><i class="bi bi-printer"></i></a>  
+                            <a href="{% url 'delete_kgroups'  folder.id parcours.id stamp.stamp  %}" class="btn btn-danger"  onclick="return TestDelete('ces groupes')" ><i class="bi bi-trash"></i></a>
+                            {% else %}
+                            <a href="{% url 'print_kgroups' 0 parcours.id stamp.stamp  %}" class="btn btn-primary"><i class="bi bi-printer"></i></a>  
+                            <a href="{% url 'delete_kgroups'  0 parcours.id stamp.stamp  %}" class="btn btn-danger"  onclick="return TestDelete('ces groupes')" ><i class="bi bi-trash"></i></a>
+                            {% endif %}
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% for group in stamp.k_group_list %}
+                            <div class="card droppable"  data-group='{{ forloop.counter }}' style="padding:10px"><b>{{ group.name }}</b><br/>
+                                {% for s in group.students %}
+                                    <li class="sanspuce">{{ s.name }} </span></li>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+
+
+        {% if kgroups_stamp %} 
+        <div class="col-sm-12 col-md-3">
+            <h4 class="thin">Groupes créés</h4><hr/>
+            {% for stamp in kgroups_stamp %}
+                <li class="sanspuce">
+                    <label>
+                        <a href="#" class="show_kgroup" data-stamp="{{ stamp.stamp }}" id="show_kgroup{{ stamp.stamp }}">{% if stamp.is_heterogene %}<i class="bi bi-people"></i>{% else %}<i class="bi bi-people-fill"></i>{% endif %}  {{ stamp.date|date:"d-m-Y" }}  :  {{ stamp.nb }} groupes {% if stamp.is_heterogene %}hétérogènes{% else %}homogènes{% endif %}, {{ stamp.nb_knowledges }} savoir faire cible </a>
+                    </label>
+                </li>
+            {% endfor %}
+        </div>
+        {% endif %}        
+    </div>
+
+
+</section>   
+
+
+
+
+
+{% endblock %}
+
+
+      
+ 
+ 
+ 
