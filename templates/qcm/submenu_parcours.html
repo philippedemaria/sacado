@@ -9,12 +9,12 @@
         <li {% if 'result_parcours_exercises' in request.path %} class="active" {% endif %}>
         {% if sacado_asso %}
             {% if folder %}
-            <a href="{% url 'result_parcours_exercises' folder.id parcours.id  %}" ><i class="bi bi-r-square" style="margin-right: 0px"></i> Lire les résultat par exercice</a> 
+            <a href="{% url 'result_parcours_exercises' folder.id parcours.id  %}" ><i class="bi bi-r-square" style="margin-right: 0px"></i> Lire les résultats par exercice</a> 
             {% else %}
-            <a href="{% url 'result_parcours_exercises' 0 parcours.id  %}" ><i class="bi bi-r-square" style="margin-right: 0px"></i> Lire les résultat par exercice</a> 
+            <a href="{% url 'result_parcours_exercises' 0 parcours.id  %}" ><i class="bi bi-r-square" style="margin-right: 0px"></i> Lire les résultats par exercice</a> 
             {% endif %} 
         {% else %}
-            <a href="#" class="no_sacado_asso" ><i class="bi bi-r-square"></i> Lire les résultat par exercice</a> 
+            <a href="#" class="no_sacado_asso" ><i class="bi bi-r-square"></i> Lire les résultats par exercice</a> 
         {% endif %}
         </li> 
 
