@@ -927,6 +927,11 @@
 {% endif %}
 
 
+
+
+
+
+
 {% comment %}
 {% if request.user.is_teacher %}
 <div class="notification-container-right-half-page dismissR-half-page" id="notification-helper">
@@ -989,9 +994,9 @@
         </div>
     </div>
     {%  endif  %}
-    {% if 'qcm/' in request.path and not 'qcm/show' in request.path and not 'create' in request.path and not 'update' in request.path %}
-        {% include 'qcm/order_list.html' %}
-    {%  endif  %}
+
+    {% include 'qcm/order_list.html' %}
+
 {%  endif  %}
 
 

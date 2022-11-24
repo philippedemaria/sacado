@@ -1090,10 +1090,11 @@ def individualise_parcours(request,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
         return redirect('index')
  
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours) 
 
     context = {'relationships': relationships, 'parcours': parcours,     'communications':[],  'form': None,  
                 'teacher': teacher, 'customexercises' : customexercises , 'nb_rc' : nb_rc ,
-                'exercises': None , 'folder' : folder ,
+                'exercises': None , 'folder' : folder , 'relationships_customexercises' : relationships_customexercises , 
                  'levels': None , 
                 'themes' : None ,
                 'user': request.user , 
@@ -2962,7 +2963,9 @@ def practice_group(request,idf,idp):
 
         kgroups_stamp.append(stamp_dict)
 
-    context = { 'parcours': parcours,  'sfs' : sfs , 'groups' : groups , 'post' : request.POST , 'post_knowledges' : post_knowledges , 'number' : number , 'role' : role ,  
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+
+    context = { 'parcours': parcours,  'sfs' : sfs , 'groups' : groups , 'post' : request.POST , 'post_knowledges' : post_knowledges , 'number' : number , 'role' : role ,  'relationships_customexercises' : relationships_customexercises,
                 'printable_groups' : printable_groups, 'print_knowledges' : print_knowledges, 'is_heterogene' : is_heterogene , 'kgroups_stamp' : kgroups_stamp }
  
     return render(request, 'qcm/practice_group.html', context) 
@@ -3110,7 +3113,7 @@ def recap_parcours(request,idf,idp):
         folder = None
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
-
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
     students = parcours.students.order_by("user__last_name")
     dataset = list()
@@ -3122,7 +3125,7 @@ def recap_parcours(request,idf,idp):
         stu['length'] = relations.count()
         dataset.append(stu)
 
-    context = {'dataset': dataset,  'parcours': parcours, 'role' : role }
+    context = {'dataset': dataset,  'parcours': parcours, 'role' : role , 'relationships_customexercises' : relationships_customexercises }
  
     return render(request, 'qcm/list_recap_parcours.html', context) 
 
@@ -5784,13 +5787,18 @@ def real_time(request,id):
     role, group , group_id , access = get_complement(request, teacher, parcours)
     connected_student_ids =  Tracker.objects.values_list("user_id",flat = True).filter(parcours = parcours ).distinct()
 
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+
+
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
 
     students = parcours.students.order_by("user__last_name").exclude(user__username__contains="_e-test")
     rcs      = rcs_for_realtime(parcours)
 
-    return render(request, 'qcm/real_time.html', { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access })
+    context = { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access  , 'relationships_customexercises': relationships_customexercises  }
+
+    return render(request, 'qcm/real_time.html', context )
 
 
 

@@ -31,7 +31,7 @@
     {% include 'qcm/breadcrumb.html' %}
 
      
-    {% if parcours %} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration </small> {% else %} Nouveau parcours {% endif %}
+    {% if parcours %}  <small> Configuration </small> {% else %} Nouveau parcours {% endif %}
 
     {% include 'modes.html' %}    
 
@@ -41,9 +41,15 @@
  
 
 {% block page_menu_right %}
+    <li> 
 
+            {% if folder %}
+            <a href="{% url 'show_parcours' folder.id parcours.id  %}" class="btn-new">Voir {% if parcours.is_sequence %}la séquence{% else %}le parcours{% endif %}</a> 
+            {% else %}
+            <a href="{% url 'show_parcours' 0 parcours.id  %}" class="btn-new" >Voir {% if parcours.is_sequence %}la séquence{% else %}le parcours{% endif %}</a> 
+            {% endif %} 
 
- 
+    </li>
 
 {% endblock %} 
 

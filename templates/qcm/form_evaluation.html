@@ -32,21 +32,28 @@
 {% block page_title %}
 
     <span style="color:{{ group.color }}"><i class="bi bi-trophy"></i>
-
     {% include 'qcm/breadcrumb.html' %}
-
- 
-
         {% if parcours %}
              Configuration 
         {% else %}
             Nouvelle évaluation
             {% include 'modes.html' %}
         {% endif %}
-
-
-
 {% endblock %}
+
+
+
+
+{% block page_menu_right %}
+    <li> 
+        <a href="{% url 'show_evaluation' folder.id parcours.id  %}" class="btn-new">Voir l'évaluation</a> 
+    </li>
+{% endblock %} 
+
+
+
+
+
 
 
 {% block info %} 
