@@ -158,7 +158,7 @@ def student_dashboard(request,group_id):
     try :
         student = request.user.student
     except :
-        messages.error(request,"Eleve non identifié")
+        messages.error(request,"Elève non identifié")
         return redirect("logout")
 
 
