@@ -249,11 +249,11 @@
 
                                 {% if data.score or data.score > -1 %}
                                     <span class="markdown
-                                            {% if data.score < 30 %}
+                                            {% if data.score < stage.low %}
                                              red 
-                                            {% elif data.score < 60 %}
+                                            {% elif data.score <  stage.medium %}
                                             orange
-                                            {% elif data.score < 80 %}
+                                            {% elif data.score <  stage.up %}
                                             green
                                             {% else %}
                                             darkgreen

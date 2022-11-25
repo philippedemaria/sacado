@@ -3983,6 +3983,8 @@ def show_parcours_student(request, id):
 
     parcours = Parcours.objects.get(id=id)
 
+    stage = get_stage(parcours.teacher.user)
+
     try :
         student = request.user.student
     except :
@@ -3995,8 +3997,7 @@ def show_parcours_student(request, id):
 
     user = request.user
     today = time_zone_user(user)
-    stage = get_stage(user)
-
+ 
     tracker_execute_exercise(True ,  user , id , None , 0)
 
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
