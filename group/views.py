@@ -155,6 +155,13 @@ def student_dashboard(request,group_id):
         messages.error(request,"Elève non identifié")
         return redirect("logout")
 
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Eleve non identifié")
+        return redirect("logout")
+
+
     groups = student.students_to_group.all()
 
     parcourses_on_fire = []
