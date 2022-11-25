@@ -198,15 +198,7 @@ def index(request):
                     messages.error(request,"Votre adhésion est terminée.")  
                     return redirect("logout")
 
-            try :
-                template, context = student_dashboard(request, 0)
-            except :
-                messages.error(request,"Elève non identifié")
-                return redirect("logout")
-
-
-
-            
+            template, context = student_dashboard(request, 0)
 
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
