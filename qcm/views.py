@@ -3388,9 +3388,12 @@ def peuplate_parcours_ia(idp) :
         
         for student in students :        
             if point>100 : point = 100
-            secondes = random.randint(45,300)
+            secondes = random.randint(45,180)
             point += 5            
             Studentanswer.objects.create(exercise = relationship.exercise, parcours=parcours, student=student, point=point, secondes = secondes )
+            Resultexercise.objects.get_or_create(exercise = relationship.exercise,  student=student, defaults = { 'point' : point} )
+
+
 
 
 def create_relationships(rt,parcours,exercises,student,label):  
