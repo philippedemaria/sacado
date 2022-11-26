@@ -11502,7 +11502,7 @@ def actioner_course(request):
         course.students.clear()
         course.delete()
  
-    return redirect('parcours')
+    return redirect('courses')
 
 
 
