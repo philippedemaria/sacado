@@ -44,29 +44,27 @@
     <div class="row search_bar">
 
         <div class="col-sm-12 col-md-4 col-lg-3">
-            <div class="form-group">
                 <select id="id_subject" name="subject" class="form-control select2">
                     {% for s in teacher.subjects.all %}
                         <option value="{{s.id}}">{{ s.name }}</option>
                     {% endfor %}
                 </select>
-            </div>
         </div>
         <div class="col-sm-12 col-md-4 col-lg-4">
-            <div class="form-group">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
-                    {% for l in teacher.levels.all|dictsort:"ranking" %}
-                        <option value="{{l.id}}">{{ l.name }}</option>
-                    {% endfor %}
+                    {% if group %}
+                        <option value="{{group.level.id}}">{{ group.level.name }}</option>
+                    {% else %}
+                        {% for l in teacher.levels.all|dictsort:"ranking" %}
+                            <option value="{{l.id}}">{{ l.name }}</option>
+                        {% endfor %}
+                    {% endif %}
                 </select>
-            </div>
-        </div>
+        </div>   
         <div class="col-sm-12 col-md-4 col-lg-5">
-            <div class="form-group">
                 <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
                 <input type="hidden" name="is_eval" id="is_eval"  value="{{ is_eval }}" />
-            </div>
         </div>
     </div>
 

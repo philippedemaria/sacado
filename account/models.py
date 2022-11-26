@@ -778,7 +778,6 @@ class Teacher(models.Model):
         return self.groups.all() | self.teacher_group.all()
         
 
-
     def nb_boolean_multi_subjects(self):
         nb = False
         if self.subjects.count() > 1 :

@@ -548,7 +548,9 @@ class Parcours(ModelWithCode):
         nba = self.parcours_customexercises.all().count()     
         return nb + nba
 
-
+    def has_groups_as_the_same_level(self):
+        groups = self.teacher.groups.filter(level=self.level,subject=self.subject)
+        return groups
 
 
 
@@ -1381,14 +1383,12 @@ class Folder(models.Model):
                 data["is_course_exists"] = True
                 break
 
-
         data["parcours"]       = parcours 
         data["evaluations"]    = evaluations
         data["nb_parcours"]    = nb_parcours
         data["nb_evaluations"] = nb_evaluations
         data["nb_parcours_published"]    = nb_parcours_published
         data["nb_evaluations_published"] = nb_evaluations_published
-
 
         data["quizzes"]      = quizzes 
         data["bibliotexs"]   = bibliotexs
@@ -1397,16 +1397,12 @@ class Folder(models.Model):
         data["nb_bibliotex"] = nb_bibliotex
         data["nb_flashpack"] = nb_flashpack
 
-
-
         if nb_parcours      :
             data["is_parcours_exists"]    = True
         if nb_evaluations   :
             data["is_evaluations_exists"] = True
         if len(all_students) > 0:
             data["is_students"]           = True 
-
-
         if nb_quizz      :
             data["is_quizz_exists"]     = True
         if nb_bibliotex   :
@@ -1422,7 +1418,6 @@ class Folder(models.Model):
             if nb_flashcards_to_validate > 0 :
                 to_validate = True
                 break
- 
         data["flashpack_to_validate"] = to_validate
  
         test = False
@@ -1431,12 +1426,8 @@ class Folder(models.Model):
                 test = True
                 break
         data["is_folder_courses_exists"] = test
-
-
         data["parcours_care"]    = ( nb_parcours == nb_parcours_published)
         data["evaluations_care"] =  ( nb_evaluations == nb_evaluations_published )
-
-
 
         today = timezone.now()
         tested = False
@@ -1448,9 +1439,15 @@ class Folder(models.Model):
                 break
 
         data["is_folder_task_exists"] = tested
-
         return data
  
+
+    def has_groups_as_the_same_level(self):
+        groups = self.teacher.groups.filter(level=self.level,subject=self.subject)
+        return groups
+
+
+
 
 class Relationship(models.Model):
 

@@ -76,7 +76,7 @@
                 </div>
            </div> 
         <hr style="padding:0px; margin:10px 0px"/><br>
-            {% for g in groups %}  
+            {% for g in folder.has_groups_as_the_same_level %}  
                   <label style="font-size:10px">
                   <input type="checkbox" name="affectation" data-group_id="{{g.id}}" data-status="parcours" value="{{parcours.id}}" class="prcrs_selector" {% if g in parcours.groups.all %} checked  {% endif %}  />
                   {{ g.name }} <span id="loader{{g.id}}"></span>

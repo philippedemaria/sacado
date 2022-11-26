@@ -2678,7 +2678,7 @@ def create_qrandom_admin(request,id_knowledge):
                     files = request.FILES.getlist("images-"+var.name)
                     for file in files :
                         VariableImage.objects.create(variable = var , image = file)
- 
+
                 return redirect('create_qrandom_admin' , id_knowledge)
 
         context = {  "form" : form , "form_var" : formSet ,'teacher' : teacher,'qrandom' : None , 'knowledge' : knowledge }
@@ -2776,6 +2776,9 @@ def admin_create_question_ia(request,idk,qtype):
     knowledge = Knowledge.objects.get(pk=idk)
     form = QuestionKForm(request.POST or None, request.FILES or None, knowledge = knowledge)
 
+    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','minimum','maximum', 'words') , extra=1)
+ 
+
     qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
 
     if qtype > 0 :   
@@ -2814,13 +2817,23 @@ def admin_create_question_ia(request,idk,qtype):
             nf.knowledge = knowledge            
             nf.is_ia     = 1
             nf.save()
+            form_var = formSetvar(request.POST or None,  instance = nf) 
+            for form_v in form_var :
+                if form_v.is_valid():
+                    var = form_v.save()
+                else :
+                    print(form_v.errors)
+                files = request.FILES.getlist("images-"+var.name)
+                for file in files :
+                    VariableqImage.objects.create(variable = var , image = file)
+
+
             form.save_m2m() 
             if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
                 form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
                 for form_answer in form_ans :
                     if form_answer.is_valid():
                         form_answer.save()
-
             elif qtype == 6 or qtype == 14  :
                 form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
                 for form_answer in form_ans :
@@ -2831,6 +2844,7 @@ def admin_create_question_ia(request,idk,qtype):
                             if form_sub.is_valid():
                                 form_sub.save()
 
+
             id_level = this_level( knowledge.level.id + 2 )
 
             return redirect('admin_question_ia' , id_level )
@@ -2840,7 +2854,8 @@ def admin_create_question_ia(request,idk,qtype):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'bgcolors' : bgcolors  ,    'knowledge': knowledge , 'form' : form, 'qtype' : qtype , "question" : None , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  }
+    context = { 'bgcolors' : bgcolors  ,    'knowledge': knowledge , 'form' : form, 'qtype' : qtype , "question" : None , 
+                "quizz" : None , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  'form_var' : formSetvar}
 
     if qtype == 0 :
         context.update( {  'title_type_of_question' : "Choisir un type de question"   })
@@ -2879,6 +2894,10 @@ def admin_update_question_ia(request,idk,idq):
     knowledge = Knowledge.objects.get(pk=idk)
     form = QuestionKForm(request.POST or None, request.FILES or None, instance = question, knowledge = knowledge)
 
+    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','minimum','maximum', 'words') , extra=0)
+    formset_var = formSetvar(request.POST or None,  instance = question)
+
+
     qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
    
     qtype = question.qtype
@@ -2906,7 +2925,16 @@ def admin_update_question_ia(request,idk,idq):
             nf.knowledge = knowledge
             nf.is_ia     = 1
             nf.save()
-            form.save_m2m() 
+            form.save_m2m()
+            for form_v in formset_var :
+                if form_v.is_valid():
+                    var = form_v.save()
+                else :
+                    print(form_v.errors)
+                files = request.FILES.getlist("images-"+var.name)
+                for file in files :
+                    VariableqImage.objects.create(variable = var , image = file)
+
             if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
                 for form_answer in form_ans :
                     if form_answer.is_valid():
@@ -2931,7 +2959,8 @@ def admin_update_question_ia(request,idk,idq):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'bgcolors' : bgcolors  , 'knowledge': knowledge , 'form' : form, 'qtype' : qtype ,  "question" : question , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qtype , "class_quizz_box" : False ,  }
+    context = { 'bgcolors' : bgcolors  , 'knowledge': knowledge , 'form' : form, 'qtype' : qtype ,  "question" : question , 
+                'form_var' : form_var  , "quizz" : None , 'qtypes' : qtypes ,  'qt' : qtype , "class_quizz_box" : False ,  }
 
     if qtype == 0 :
         context.update( { 'title_type_of_question' : qt.title , })

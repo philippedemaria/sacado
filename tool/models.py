@@ -201,7 +201,9 @@ class Question(models.Model):
     xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
     xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
     tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
-    precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision")  
+    precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision") 
+    ####  Pseudo aléatoire
+    pseudoalea_nb = models.PositiveIntegerField(default=0, blank=True, )
 
     def __str__(self):
         return self.title
@@ -271,6 +273,35 @@ class Question(models.Model):
  
         return percent
 
+
+
+
+
+
+
+            
+class Variableq(models.Model):
+
+    name  = models.CharField(max_length=50,  blank=True, verbose_name="variable")
+    question  = models.ForeignKey(Question, related_name="variableqs", blank=True, null = True,  on_delete=models.CASCADE)
+    ## Variable numérique
+    is_integer = models.BooleanField(default=1, verbose_name="Valeur entière ?")        
+    maximum = models.IntegerField(default=10)
+    minimum = models.IntegerField(default=0)
+    ## Variable littérale
+    words   = models.TextField(blank=True, verbose_name="Liste de valeurs")
+
+    def __str__(self):
+        return self.name 
+
+
+class VariableqImage(models.Model):
+
+    variable  = models.ForeignKey(Variableq, related_name="variableq_img", blank=True, null = True,  on_delete=models.CASCADE)
+    image  = models.ImageField(upload_to=variable_directory_path,   verbose_name="Image", default="")
+
+    def __str__(self):
+        return self.variable.name 
 ######################################################################
 #####  type de réponse possible et choix pour les types de questions
 ######################################################################

@@ -397,10 +397,6 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
 
 
  
-
-
- 
-
         $("#support_image").on('click', function (event) {
 
             get_the_target("#support_image","#drop_zone_image","#video_div","#audio_div")
@@ -492,5 +488,122 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
          });
 
  
+
+        $('body').on('click', '#show_randomize_zone' , function (event) { 
+            $('#pseudorandomize_zone').hide(500);
+            $('#randomize_zone').toggle(500);
+         });
+
+        $('body').on('click', '#show_pseudorandomize_zone' , function (event) { 
+            $('#randomize_zone').hide(500);
+            $('#pseudorandomize_zone').toggle(500);
+         });
+
+
+
+        $(document).on('click', '.add_more', function (event) {
+
+
+                var total_form = $('#id_variables-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ;
+
+                var thisClone = $('#rowToClone');
+                rowToClone = thisClone.html() ;
+
+                $('#formsetZone').append(rowToClone);
+
+                $('#duplicate').attr("id","duplicate"+totalForms) 
+                $('#cloningZone').attr("id","cloningZone"+totalForms) 
+
+                $('#duplicate'+totalForms).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" ><i class="fa fa-trash"></i></a>'); 
+                $('#duplicate'+totalForms).find("input[type='checkbox']").bootstrapToggle();
+
+                $("#duplicate"+totalForms+" input").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+                console.log(totalForms+1);
+                total_form.val(totalForms+1);
+            });
+
+
+
+        $(document).on('click', '.remove_more', function () {
+            var total_form = $('#id_variables-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
+
+            $('#duplicate'+totalForms).remove();
+            total_form.val(totalForms)
+        });
+
+
+ 
+
+        $(document).on('click', '.add_more_image', function (event) {
+
+
+            var total_form     = $('#id_variables-TOTAL_FORMS') ;
+            var totalForms     = parseInt(total_form.val())-1  ;
+            var variable       = $("#id_variables-"+totalForms+"-name").val();
+            var selector_image = $('#id_images-TOTAL'+totalForms) ;
+            var number_image   = parseInt(selector_image.val());
+            var thisClone      = $('#imageToClone') ;
+            var imageToClone   = thisClone.html() ;
+
+            if (variable=="") { alert("Nommer la variable"); return false;}
+
+            $('#cloningZone'+totalForms).append(imageToClone);
+            $('#duplicateImage').attr("id","duplicateImage"+number_image) 
+            $('#duplicateImage'+number_image).find('.delete_button_image').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_image" ><i class="fa fa-trash"></i></a>'); 
+            $('#duplicateImage'+number_image+" input").each(function(){ 
+                $(this).attr('id',$(this).attr('id').replace('__var__',variable));
+                $(this).attr('id',$(this).attr('id').replace('__nbr__',number_image));
+                $(this).attr('name',$(this).attr('name').replace('__var__',variable));
+                $(this).attr('name',$(this).attr('name').replace('__nbr__',number_image));
+            });
+
+            selector_image.val(number_image + 1);
+
+            });
+
+
+
+        $(document).on('click', '.remove_more_image', function () {
+            var total_form   = $('#id_variables-TOTAL_FORMS') ;
+            var totalForms   = parseInt(total_form.val())-1  ;
+            var selector_img = $('#id_images-TOTAL'+totalForms)  ;
+            var nbr_img      = selector_img.val();
+            var nbr_rmv_img  = parseInt(nbr_img)-1 ;
+
+            $('#duplicateImage'+nbr_rmv_img).remove();
+            selector_img.val(nbr_rmv_img) ;
+        });
+
+
+
+
+
+
+
+        $(document).on('click', '.onclic', function () {
+            var type = $(this).data('type');
+            var counter = $(this).data('counter');
+
+            console.log(type , counter)
+
+            $('.show_onclic').hide();
+            $('#show_'+type+counter).show();
+        });
+
+ 
+
+
+
+
+
+
+
+
     });
 });

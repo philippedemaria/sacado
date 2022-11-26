@@ -602,7 +602,8 @@ def bibliotexs(request):
  
     bibliotexs = Bibliotex.objects.all()
     teacher = request.user.teacher
-    return render(request, 'bibliotex/all_bibliotexs.html', {'bibliotexs': bibliotexs,'teacher': teacher,   })
+
+    return render(request, 'bibliotex/all_bibliotexs.html', {'bibliotexs': bibliotexs,'teacher': teacher, 'group':group  })
 
 
  

@@ -1642,6 +1642,7 @@ def list_folders(request):
  
     groups = teacher.has_groups()
 
+
     if request.session.has_key("group_id"):
         del request.session["group_id"]
     if request.session.has_key("folder_id"):
