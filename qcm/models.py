@@ -707,6 +707,16 @@ class Parcours(ModelWithCode):
 
 
  
+    def rgb_color(self):
+        """
+        Renvoie la couleur le triplet rgb
+        """
+        data = dict()
+        data['r'] = int(self.color[1:3],16)
+        data['g'] = int(self.color[3:5],16)
+        data['b'] = int(self.color[5:7],16)
+        return data  
+ 
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
