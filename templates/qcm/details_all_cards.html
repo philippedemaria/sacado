@@ -58,12 +58,17 @@
           {% get_only_students  parcours group as  only_real_student %}
           <!-- Exercice dissocié  -->  
           <div  style="position: absolute; left : 0px; top:80px;" title="Cet exercice est indiviualisé à certains élèves. Cliquez sur l'icone dans la barre d'outil pour modifier." id="individialise_id_student{{  rc.exercise.id }}"  {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
-            <span class="btn btn-warning" style="cursor:auto">
-              <i class="fa fa-users"></i><span id="nb_indiv_id_student{{  rc.exercise.id }}"> {{ data_rc.nb }} </span>  
-            </span>
- 
+            <a href = "#" data-toggle = 'modal'
+                data-target = '#individualisation_exercice'  
+                class = "individualiser btn btn-warning" 
+                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-relationship_id = "{{ rc.id }}"
+                data-group_id = "{{ group.id }}"   
+                data-custom = 0  title = "Individualiser cet exercice" 
+                style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
+                <i class="fa fa-users"></i><span id="nb_indiv_id_student{{  rc.exercise.id }}"> {{ data_rc.nb }} </span>  
+            </a>        
           </div>
-
         {% endif %}
 
           <!-- Publication  -->
@@ -515,10 +520,12 @@
 
                 <i class="fa fa-refresh"></i> 
             </a>
-
-            <a href = "#" data-toggle = 'modal'
+          {% if group %}
+            {% get_students_from_group_and_rc rc group as data_rc %}
+            {% get_only_students  parcours group as  only_real_student %}
+            <a href = "#" data-toggle = 'modal' 
                 data-target = '#individualisation_exercice'  
-                class = "individualiser horizontalmargin5" 
+                class = "individualiser horizontalmargin5  {% if  data_rc.nb != only_real_student.count  %} checkbox_no_display  {% endif %}"  
                 data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
                 data-relationship_id = "{{ rc.id }}"
                 data-group_id = "{{ group.id }}"   
@@ -527,7 +534,7 @@
 
                 <i class="fa fa-users"></i> 
             </a>
-
+            {% endif %}
 
 
             <!-- Suppression de l'exercice dans ce parcours  -->
