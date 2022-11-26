@@ -50,7 +50,7 @@ from django.http import  HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape , letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak , PageTemplate, Frame
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image , PageBreak , PageTemplate, Frame , FrameBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import yellow, red, black, white, blue
 from reportlab.pdfgen.canvas import Canvas
@@ -2972,6 +2972,9 @@ def practice_group(request,idf,idp):
     return render(request, 'qcm/practice_group.html', context) 
 
 
+
+
+
 def print_practice_group(request): 
 
     response = HttpResponse(content_type='application/pdf')
@@ -2985,16 +2988,8 @@ def print_practice_group(request):
 
     groupe = ParagraphStyle('groupe',  fontSize=13, textColor=colors.HexColor("#000000"),) 
     title = ParagraphStyle('title',  fontSize=11, textColor=colors.HexColor("#000000"),)                   
+    today = datetime.now().strftime("%d-%m-%Y")
 
-    #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
-    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "SACADO \nSuivi des acquisitions de savoir faire" ]]
-    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
-    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
-    
-    elements = list()
-    elements.append(logo_tab_tab)
-    elements.append(Spacer(0, 0.1*inch))
 
     is_heterogene    = request.POST.get('is_heterogene',None)
     parcours_id      = request.POST.get('parcours_id',None)
@@ -3002,10 +2997,41 @@ def print_practice_group(request):
     printable        = request.POST.get('printable',None)
     printable_tab    = printable.split("####")
 
-    frame1 = Frame(doc.leftMargin, doc.bottomMargin, doc.width/2-6, doc.height, id='col1')
-    frame2 = Frame(doc.leftMargin+doc.width/2+6, doc.bottomMargin, doc.width/2-6, doc.height, id='col2')    
+    parcours = Parcours.objects.get(pk=parcours_id)
 
-    doc.addPageTemplates([PageTemplate(id='TwoCol',frames=[frame1,frame2]), ])
+
+    #logo = Image('D:/uwamp/www/sacado/static/img/sacadoA1.png')
+    logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+    logo_tab = [[logo, parcours.title+"\nGroupes créés le "+str(today)+"\nDocument généré par SACADO"  ]]
+    logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+    logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+    
+    elements = list()
+    elements.append(logo_tab_tab)
+    elements.append(Spacer(0, 0.2*inch))
+
+    #title page frames
+    framesFirstPage = []
+    titleFrame = Frame(doc.leftMargin, doc.height-2*inch, doc.width , 2*inch  )
+    framesFirstPage.append(titleFrame)
+
+
+
+    elements.append(Paragraph( "Savoir faire" , groupe ))
+    elements.append(Spacer(0, 0.1*inch))
+    for knowledge_id in these_knowledges.split("##") :
+        if knowledge_id !="" : 
+            kname = Knowledge.objects.get(pk=knowledge_id).name
+            elements.append(Paragraph( "- " + kname , title ))
+    elements.append(Spacer(0, 0.1*inch))
+
+
+
+    elements.append(FrameBreak())
+    frame1 = Frame(doc.leftMargin, doc.bottomMargin, doc.width/2-6, doc.height-2.5*inch)
+    frame2 = Frame(doc.leftMargin+doc.width/2+6, doc.bottomMargin, doc.width/2-6, doc.height-2.5*inch)    
+
+    doc.addPageTemplates([PageTemplate(frames=[titleFrame, frame1,frame2]), ])
 
     i = 1
     stamp =  str(uuid.uuid4())[:8]
@@ -3013,6 +3039,7 @@ def print_practice_group(request):
         ##########################################################################
         #### Parcours
         ##########################################################################
+        if i==6: elements.append(FrameBreak())
         titlegroup = 'Groupe '+str(i+1)
         paragraph = Paragraph( titlegroup , groupe )
         elements.append(paragraph)

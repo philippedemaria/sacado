@@ -71,7 +71,7 @@
                         {% csrf_token %}
                         <input type="hidden" id="printable" value="{{  printable_groups }}" name="printable"  />  
                         <input type="hidden" value="{{  is_heterogene }}"  name="is_heterogene"  />  
-                        <input type="hidden" value="{{  print_knowledges }}"   name="these_knowledges"  />
+                        <input type="text" value="{{  print_knowledges }}"   name="these_knowledges"  />
                         <input type="hidden" value="{{  parcours.id }}"  name="parcours_id"  />
                         {% if printable_groups %}
                         <button  type="submit" class="btn btn-primary" ><i class="bi bi-printer"></i> Imprimer ces groupes</button>
