@@ -16,7 +16,7 @@
     {% else %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/add-ckeditor','script/ajax-quizz-complement','script/create_questions_all_forms']);
+        require(['script/add-only-ckeditor','script/ajax-quizz-complement','script/create_questions_all_forms']);
     </script> 
     {% endif %}
 
@@ -43,7 +43,7 @@
         </div>
     </div> 
     {% if not question %}
-    <input type="hidden" name="text_to_set" id="text_to_set" value="Placer les items proposés sur l'axe.">
+    <input type="hidden" name="text_to_set" id="text_to_set" value="Placer les étiquettes proposées sur l'axe.">
     {% endif %}
     <div class="row form-group">
         <div class="col-sm-6 col-md-3" > 

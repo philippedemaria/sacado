@@ -61,7 +61,7 @@ define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'config_toggle'], functio
                     $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
                     $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
                 });
-
+                $('#duplicate'+totalForms).find("input[type='checkbox']").bootstrapToggle();
  
                 $("#duplicate"+totalForms+" textarea").each(function(){ 
                     $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));

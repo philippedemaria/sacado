@@ -146,14 +146,14 @@
                                              
                                         </div>                                        
                                         <div class="col-sm-12 col-md-12 controls">
-                                            <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-info add_more" >+ variable</a></h4>
+                                            <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-info add_more_question" >+ variable</a></h4>
                                         </div>
 
                                     </div>
                                     {{ form_var.management_form }} 
 
-                                    <script id="rowToClone" type="text/template">
-                                        <div id="duplicate">  
+                                    <script id="rowToClone_question" type="text/template">
+                                        <div id="duplicate_question">  
                                             <div class="col-sm-12 col-md-6 qrandom">
                                                     <div class="col-sm-2 col-md-2"> 
                                                             <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }} 
@@ -176,18 +176,18 @@
                                                             {{ form_var.empty_form.maximum|add_class:"form-control" }} 
                                                     </div>
                                                     <div class="col-sm-1 col-md-2">
-                                                        <div class="delete_button"></div>
+                                                        <div class="delete_button_question"></div>
                                                     </div>                                 
                                             </div>
                                         </div>
                                     </script>                            
-                                    <div id="formsetZone">  
+                                    <div id="formsetZone_question">  
                                     </div>
                                 </div>  
 
                                 <div class="alert alert-danger">
                                     <div class="col-sm-12 col-md-12">
-                                        <i class="fa fa-warning"></i> N'utiliser pas dans votre énoncé ou réponse les noms de vos variables pour désigner autre chose que vos variables.  
+                                        <i class="fa fa-warning"></i> Ne pas utiliser dans votre énoncé et réponses les noms de vos variables pour désigner autre chose que vos variables.  
                                     </div>
                                 </div>
 
@@ -202,11 +202,12 @@
                                 <div class="col-sm-10 col-md-11" >  
                                     {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:3"|attr:"required"  }}
                                 </div>
+                                {% if not 'ia' in request.path %}
                                 <div class="col-sm-2 col-md-1" > 
                                         <label>Taille de police</label><br/>
                                     {{ form.size|add_class:"form-control select2"  }}
- 
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="row " >
                                 <div class="col-sm-6 col-md-2" align="center" >  
