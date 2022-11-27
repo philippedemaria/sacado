@@ -112,9 +112,29 @@
 }
 
 
+/***************************************************************************/
+/*********************       btn      **************************************/
+/***************************************************************************/
+.btn-secondary{
+  border-radius: 5px;
+  border : 1px solid #BBB;
+  background-color: #CCC;
+  color:white;
+  font-weight:100;
+  padding: 1px 7px;
+}
 
+.btn-sacado_active,.btn-sacado_active:hover, .btn-sacado_active:active,.btn-sacado_active:focus{
+  border-radius: 5px;
+  border : 1px solid #5d4391;
+  background-color: #5d4391;
+  color:white;
+}
 
-
+.qrandom{
+  min-height:100px;
+}
+ 
 
 /***************************************************************************/
 /*********************      quizz     **************************************/

@@ -274,20 +274,16 @@ class Question(models.Model):
         return percent
 
 
-
-
-
-
-
-            
+       
 class Variableq(models.Model):
 
     name  = models.CharField(max_length=50,  blank=True, verbose_name="variable")
     question  = models.ForeignKey(Question, related_name="variableqs", blank=True, null = True,  on_delete=models.CASCADE)
     ## Variable numérique
     is_integer = models.BooleanField(default=1, verbose_name="Valeur entière ?")        
-    maximum = models.IntegerField(default=10)
-    minimum = models.IntegerField(default=0)
+    maximum    = models.IntegerField(default=10)
+    minimum    = models.IntegerField(default=-10)
+    is_notnull = models.BooleanField(default=1, verbose_name="Exclure 0 ?")
     ## Variable littérale
     words   = models.TextField(blank=True, verbose_name="Liste de valeurs")
 

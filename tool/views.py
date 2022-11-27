@@ -2776,7 +2776,7 @@ def admin_create_question_ia(request,idk,qtype):
     knowledge = Knowledge.objects.get(pk=idk)
     form = QuestionKForm(request.POST or None, request.FILES or None, knowledge = knowledge)
 
-    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','minimum','maximum', 'words') , extra=1)
+    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','is_notnull','minimum','maximum', 'words') , extra=0)
  
 
     qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
@@ -2823,9 +2823,9 @@ def admin_create_question_ia(request,idk,qtype):
                     var = form_v.save()
                 else :
                     print(form_v.errors)
-                files = request.FILES.getlist("images-"+var.name)
-                for file in files :
-                    VariableqImage.objects.create(variable = var , image = file)
+                # files = request.FILES.getlist("images-"+var.name)
+                # for file in files :
+                #     VariableqImage.objects.create(variable = var , image = file)
 
 
             form.save_m2m() 
@@ -2894,7 +2894,7 @@ def admin_update_question_ia(request,idk,idq):
     knowledge = Knowledge.objects.get(pk=idk)
     form = QuestionKForm(request.POST or None, request.FILES or None, instance = question, knowledge = knowledge)
 
-    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','minimum','maximum', 'words') , extra=0)
+    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','is_notnull','minimum','maximum', 'words') , extra=0)
     formset_var = formSetvar(request.POST or None,  instance = question)
 
 
@@ -2931,9 +2931,9 @@ def admin_update_question_ia(request,idk,idq):
                     var = form_v.save()
                 else :
                     print(form_v.errors)
-                files = request.FILES.getlist("images-"+var.name)
-                for file in files :
-                    VariableqImage.objects.create(variable = var , image = file)
+                # files = request.FILES.getlist("images-"+var.name)
+                # for file in files :
+                #     VariableqImage.objects.create(variable = var , image = file)
 
             if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
                 for form_answer in form_ans :

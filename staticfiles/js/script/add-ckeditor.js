@@ -11,10 +11,9 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
             height: '200px',
             toolbar:    
                 [  
-                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Copy', 'Paste', 'PasteText' ] },
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Source', '-','Copy', 'Paste', 'PasteText' ] },
                     { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline'] },
-                    { name: 'others', groups: [ 'mode' ], items: [ 'Source'] },
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'FontSize'] },
                 ] ,
         });
 
@@ -30,13 +29,12 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
     if ( $("#id_filltheblanks").length > 0 ) {
 
         CKEDITOR.replace('id_filltheblanks', {
-            height: '300px',
+            height: '200px',
             toolbar:    
                 [  
-                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Copy', 'Paste', 'PasteText' ] },
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Source', '-', 'Copy', 'Paste', 'PasteText' ] },
                     { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline','-','Table'] },
-                    { name: 'others', groups: [ 'mode' ], items: [ 'Source'] },
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline','-','Table','-', 'FontSize','HorizontalRule'] },
 
                 ] ,
         });
@@ -504,7 +502,7 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
         $(document).on('click', '.add_more', function (event) {
 
 
-                var total_form = $('#id_variables-TOTAL_FORMS') ;
+                var total_form = $('#id_variableqs-TOTAL_FORMS') ;
                 var totalForms = parseInt(total_form.val())  ;
 
                 var thisClone = $('#rowToClone');
@@ -522,15 +520,26 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
                     $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
                     $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
                 });
+ 
+                $('#duplicate'+totalForms+" .onclic").attr('data-counter', totalForms);
+                $('#duplicate'+totalForms+" .onclic").addClass('onclic'+totalForms);
 
-                console.log(totalForms+1);
+                $('#duplicate'+totalForms+" .show_onclic").addClass('show_onclic'+totalForms);
+                $('#duplicate'+totalForms+" #show_variable").attr('id','show_variable'+totalForms);
+                $('#duplicate'+totalForms+" #show_numeric").attr('id','show_numeric'+totalForms);
+                $('#duplicate'+totalForms+" #show_textuel").attr('id','show_textuel'+totalForms);
+                $('#duplicate'+totalForms+" #show_image").attr('id','show_image'+totalForms);
+                // $('#id_images-TOTAL').attr('id','id_images-TOTAL'+totalForms);
+                // $('#id_images-TOTAL'+totalForms).val(totalForms);
+
                 total_form.val(totalForms+1);
+
             });
 
 
 
         $(document).on('click', '.remove_more', function () {
-            var total_form = $('#id_variables-TOTAL_FORMS') ;
+            var total_form = $('#id_variableqs-TOTAL_FORMS') ;
             var totalForms = parseInt(total_form.val())-1  ;
 
             $('#duplicate'+totalForms).remove();
@@ -540,60 +549,55 @@ define(['jquery',  'bootstrap', 'ckeditor'], function ($) {
 
  
 
-        $(document).on('click', '.add_more_image', function (event) {
+        // $(document).on('click', '.add_more_image', function (event) {
 
 
-            var total_form     = $('#id_variables-TOTAL_FORMS') ;
-            var totalForms     = parseInt(total_form.val())-1  ;
-            var variable       = $("#id_variables-"+totalForms+"-name").val();
-            var selector_image = $('#id_images-TOTAL'+totalForms) ;
-            var number_image   = parseInt(selector_image.val());
-            var thisClone      = $('#imageToClone') ;
-            var imageToClone   = thisClone.html() ;
+        //     var total_form     = $('#id_variableqs-TOTAL_FORMS') ;
+        //     var totalForms     = parseInt(total_form.val())-1  ;
+        //     var variable       = $("#id_variableqs-"+totalForms+"-name").val();
+        //     var selector_image = $('#id_images-TOTAL'+totalForms) ;
+        //     var number_image   = parseInt(selector_image.val());
+        //     var thisClone      = $('#imageToClone') ;
+        //     var imageToClone   = thisClone.html() ;
 
-            if (variable=="") { alert("Nommer la variable"); return false;}
+        //     if (variable=="") { alert("Nommer la variable"); return false;}
 
-            $('#cloningZone'+totalForms).append(imageToClone);
-            $('#duplicateImage').attr("id","duplicateImage"+number_image) 
-            $('#duplicateImage'+number_image).find('.delete_button_image').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_image" ><i class="fa fa-trash"></i></a>'); 
-            $('#duplicateImage'+number_image+" input").each(function(){ 
-                $(this).attr('id',$(this).attr('id').replace('__var__',variable));
-                $(this).attr('id',$(this).attr('id').replace('__nbr__',number_image));
-                $(this).attr('name',$(this).attr('name').replace('__var__',variable));
-                $(this).attr('name',$(this).attr('name').replace('__nbr__',number_image));
-            });
-
-            selector_image.val(number_image + 1);
-
-            });
+        //     $('#cloningZone'+totalForms).append(imageToClone);
+        //     $('#duplicateImage').attr("id","duplicateImage"+number_image) 
+        //     $('#duplicateImage'+number_image+" input").each(function(){ 
+        //         $(this).attr('id',$(this).attr('id').replace('__var__',variable));
+        //         $(this).attr('id',$(this).attr('id').replace('__nbr__',number_image));
+        //         $(this).attr('name',$(this).attr('name').replace('__var__',variable));
+        //         $(this).attr('name',$(this).attr('name').replace('__nbr__',number_image));
+        //     });
 
 
+        //     selector_image.val(number_image + 1);
 
-        $(document).on('click', '.remove_more_image', function () {
-            var total_form   = $('#id_variables-TOTAL_FORMS') ;
-            var totalForms   = parseInt(total_form.val())-1  ;
-            var selector_img = $('#id_images-TOTAL'+totalForms)  ;
-            var nbr_img      = selector_img.val();
-            var nbr_rmv_img  = parseInt(nbr_img)-1 ;
-
-            $('#duplicateImage'+nbr_rmv_img).remove();
-            selector_img.val(nbr_rmv_img) ;
-        });
+        //     });
 
 
 
+        // $(document).on('click', '.remove_more_image', function () {
+        //     $(this).parent().parent().remove();
+        // });
 
 
+
+ 
 
 
         $(document).on('click', '.onclic', function () {
             var type = $(this).data('type');
             var counter = $(this).data('counter');
 
-            console.log(type , counter)
-
-            $('.show_onclic').hide();
+            $('#show_variable'+counter).show();
+            $('.show_onclic'+counter).hide();
             $('#show_'+type+counter).show();
+
+
+            $('#duplicate'+counter+" .onclic").removeClass('btn-sacado_active').addClass('btn-secondary');
+            $(this).addClass('btn-sacado_active');
         });
 
  

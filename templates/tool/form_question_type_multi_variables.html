@@ -131,8 +131,8 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
                                     
-                                    <a href="#" id="show_randomize_zone" class="btn btn-sacado {% if qtype == 1 or qtype == 5 or qtype == 6 or qtype == 7 or qtype == 8 or qtype == 9 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 14   or qtype == 18 %} no_visu_on_load {% endif %}">
-                                        <label>Question à variables numériques aléatoires ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <a href="#" id="show_randomize_zone" class="btn btn-sacado {% if qtype == 5 or qtype == 6 or qtype == 7 or qtype == 8 or qtype == 9 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 14   or qtype == 18 %} no_visu_on_load {% endif %}">
+                                        <label>Question à variables aléatoires ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                                                     <div class="helper_tip_text" >Placer des variables aléatoires<br/> dans l'énoncé et les réponses.</div>
                                                                                 </span>
                                         </label>
@@ -152,42 +152,169 @@
                                     </div>
                                     {{ form_var.management_form }} 
 
+                                    <script id="imageToClone" type="text/template">
+                                        <div class="row" id="duplicateImage">
+                                            <div class="col-sm-1 col-md-1" >
+                                            </div>
+                                            <div class="col-sm-10 col-md-10" > 
+                                                <input type="file" name="images-__var__"  id="id_images-__var__-__nbr__"  accept="image/*" class="images btn btn-default" />
+                                            </div>
+                                            <div class="col-sm-1 col-md-1" > 
+                                                <div class="delete_button_image btn btn-danger remove_more_image"><i class="fa fa-trash"></i></div>
+                                            </div>
+                                        </div>
+                                    </script>  
+
                                     <script id="rowToClone" type="text/template">
                                         <div id="duplicate">  
                                             <div class="col-sm-12 col-md-6 qrandom">
-                                                    <div class="col-sm-2 col-md-2"> 
+                                                <div class="col-sm-2 col-md-2">
+                                                    <label>Nom : </label>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }}
+                                                </div>
+                                                <div class="col-sm-9 col-md-9">
+                                                    <a href="javascript:void();" class="onclic btn-secondary" data-type="numeric"  data-counter='{{ forloop.counter0}}' >Variable numérique ?</a>
+ 
+                                                    <a href="javascript:void();" class="onclic btn-secondary" data-type="textuel"  data-counter='{{ forloop.counter0}}' >Variable texte ?</a>
+       
+                                                    <a href="javascript:void();" class="onclic btn-secondary" data-type="image" data-counter='{{ forloop.counter0}}' >Variable image ?</a>
+                                                </div>
+
+
+                                                <div class="col-sm-1 col-md-1">
+                                                    <div class="delete_button"></div>
+                                                    <input type="hidden" value="0" id="id_images-TOTAL__prefix__"  name="images-TOTAL__prefix__" >
+                                                </div>
+
+
+
+                                                <div class="no_visu_on_load" id="show_variable">
+                                                    <div class="col-sm-4 col-md-2"> 
                                                             <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }} 
                                                     </div>
+                                                    <div class="col-sm-10 col-md-10"> 
+                                                        <div class="show_onclic no_visu_on_load" id="show_numeric">
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                    <label>Nbre entier ?</label> <br/>
+                                                                    {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                                            </div>
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                        <label>Exclure 0 ?</label> <br/> 
+                                                                        {{ form_var.empty_form.is_notnull|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                                            </div>
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                        <label>Min.</label> <br/> 
+                                                                        {{ form_var.empty_form.minimum|add_class:"form-control" }} 
+                                                            </div>
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                    <label>Max.</label>  <br/>
+                                                                    {{ form_var.empty_form.maximum|add_class:"form-control" }} 
+                                                            </div>
+                                                        </div>
 
-                                                    <div class="col-sm-3 col-md-2" > 
-                                                            <label>Nbre entier ?</label> <br/>
-                                                            {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+
+
+
+                                                        <div class="col-sm-12 col-md-12 show_onclic no_visu_on_load" id="show_image">
+                                                            <div class="col-sm-2 col-md-1" >
+                                                                <div class="form-group">
+                                                                    <a href="#"  class="btn btn-default add_more_image" >+ <i class="fa fa-image"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-10 col-md-11" >
+                                                                <div class="row" id="cloningZone">                            
+                                                                    <input type="hidden" value="0" id="id_images-TOTAL"  name="" >
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+
+
+                                                        <div class="col-sm-12 col-md-12 show_onclic no_visu_on_load" id="show_textuel" >
+                                                                <label>Liste de mots séparés par des ; </label>  <br/> 
+                                                                {{ form_var.empty_form.words|attr:"rows:2"|attr:"placeholder:chat;souris;fromage"|add_class:"form-control" }} 
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-2 col-md-2" > 
-                                                                <label>0 exclus ?</label> <br/> 
-                                                                {{ form_var.empty_form.is_notnull|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
-                                                    </div>
-                                                    <div class="col-sm-2 col-md-2" > 
-                                                                <label>Min.</label> <br/> 
-                                                                {{ form_var.empty_form.minimum|add_class:"form-control" }} 
-                                                    </div>
-                                                    <div class="col-sm-2 col-md-2" > 
-                                                            <label>Max.</label>  <br/>
-                                                            {{ form_var.empty_form.maximum|add_class:"form-control" }} 
-                                                    </div>
-                                                    <div class="col-sm-1 col-md-2">
-                                                        <div class="delete_button"></div>
-                                                    </div>                                 
+                                                </div>
                                             </div>
                                         </div>
                                     </script>                            
-                                    <div id="formsetZone">  
+                                    <div id="formsetZone">
+                                        {% for form in form_var %}
+                                        <div id="duplicate0">  
+                                            <div class="col-sm-12 col-md-6 qrandom">
+                                                <div class="col-sm-12 col-md-12">
+                     
+                                                    <label>Nom : </label>{{ form.name|add_class:"form-control"|attr:"placeholder:a" }} 
+                                              
+                                                    <a href="javascript:void();" class="onclic btn-secondary onclic{{ forloop.counter0}}" data-type="numeric"  data-counter='{{ forloop.counter0}}' >Variable numérique ?</a>
+ 
+                                                    <a href="javascript:void();" class="onclic btn-secondary onclic{{ forloop.counter0}}" data-type="textuel"  data-counter='{{ forloop.counter0}}' >Variable texte ?</a>
+       
+                                                    <a href="javascript:void();" class="onclic btn-secondary onclic{{ forloop.counter0}}" data-type="image" data-counter='{{ forloop.counter0}}' >Variable image ?</a>
+                                                </div>
+                                 
+                                                <div class="no_visu_on_load" id="show_variable{{ forloop.counter0}}">
+                                                    <div class="col-sm-12 col-md-12"> 
+                                                        <div class="show_onclic no_visu_on_load show_onclic{{ forloop.counter0}}" id="show_numeric{{ forloop.counter0}}">
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                <div class="form-group">
+                                                                    <label>Nbre entier ?</label> <br/>
+                                                                    {{ form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                                                </div> 
+                                                            </div>
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                    <div class="form-group">
+                                                                        <label>Exclure 0 ?</label> <br/> 
+                                                                        {{ form.is_notnull|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                                                    </div> 
+                                                            </div>
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                    <div class="form-group">
+                                                                        <label>Min.</label> <br/> 
+                                                                        {{ form.minimum|add_class:"form-control" }} 
+                                                                    </div> 
+                                                            </div>
+                                                            <div class="col-sm-4 col-md-3" > 
+                                                                <div class="form-group">
+                                                                    <label>Max.</label>  <br/>
+                                                                    {{ form.maximum|add_class:"form-control" }} 
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-12 col-md-12 show_onclic show_onclic{{ forloop.counter0}} no_visu_on_load" id="show_image{{ forloop.counter0}}">
+                                                            <div class="col-sm-2 col-md-1" >
+                                                                <div class="form-group">
+                                                                    <a href="#"  class="btn btn-default add_more_image" >+ <i class="fa fa-image"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-10 col-md-9" >
+                                                                <div class="row" id="cloningZone0">                            
+                                                                    <input type="hidden" value="0" id="id_images-TOTAL{{ forloop.counter0}}" name="" >
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+
+                                                        <div class="col-sm-12 col-md-12 show_onclic show_onclic{{ forloop.counter0}}  no_visu_on_load" id="show_textuel{{ forloop.counter0}}" >
+                                                            <div class="form-group">
+                                                                <label>Liste de mots séparés par des ; </label>  <br/> 
+                                                                {{ form.words|attr:"rows:2"|attr:"placeholder:chat;souris;fromage"|add_class:"form-control" }} 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+                                        {% endfor %}   
                                     </div>
                                 </div>  
 
                                 <div class="alert alert-danger">
                                     <div class="col-sm-12 col-md-12">
-                                        <i class="fa fa-warning"></i> N'utiliser pas dans votre énoncé ou réponse les noms de vos variables pour désigner autre chose que vos variables.  
+                                        Les variables aléatoires doivent être encadrées par # (1 dièse) lors de leurs utilisations dans le texte et/ou les questions. Exemple, la variable a est appelée par #a#.
                                     </div>
                                 </div>
 
@@ -318,8 +445,8 @@
 
                         {% endblock %}
                             <div class="row">
-                                <div class="col-sm-12 col-md-4"> 
-                                    <a href="#" id="show_pseudorandomize_zone" class="{% if qtype == 1 or qtype == 2 or qtype == 3 or qtype == 4 or qtype == 10 %} no_visu_on_load {% endif %}btn btn-sacado">
+                                <div class="col-sm-12 col-md-5"> 
+                                    <a href="#" id="show_pseudorandomize_zone" class="{% if qtype == 2 or qtype == 3 or qtype == 4 or qtype == 6 or qtype == 11 or qtype == 12 or qtype == 13 or  qtype == 18 %} no_visu_on_load {% endif %}btn btn-sacado">
                                         <label>Question pseudo-aléatoire ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                                                 <div class="helper_tip_text" >
                                                                                     Nombre de choix de réponses <br/>
@@ -337,30 +464,9 @@
 
                                     
                                 </div>
-                                <div class="col-sm-12 col-md-8">
+                                <div class="col-sm-12 col-md-6">
                                     <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
-                                        {% if qtype == 5 %}
-                                            <label> Nombre de paires proposées parmi les paires enregistrées ci-dessous </label>
-                                        {% elif qtype == 6 %}
-                                            <label> Nombre de correspondances proposées parmi les correspondances enregistrées ci-dessous </label>
-                                        {% elif qtype == 7 %}
-                                            <label> Nombre de locutions proposées parmi les locutions/textes séparés par une ligne horizontale (dernier bouton)</label>
-                                        {% elif qtype == 8 %}
-                                            <label> Nombre d'items à classer parmi les items enregistrés ci-dessous. Garder l'ordre de classement.</label>
-                                        {% elif qtype == 9 %}
-                                            <label> Nombre de locutions proposées parmi les locutions/textes séparés par une ligne horizontale (dernier bouton)</label>
-                                        {% elif qtype == 11 or qtype == 12 or qtype == 13  %}
-                                            <label> Nombre de mots proposés parmi les mots enregistrés ci-dessous </label>
-                                        {% elif qtype == 14 %}
-                                            <label> Nombre de thèmes proposés parmi les thèmes enregistrés ci-dessous </label>
-                                        {% elif qtype == 15 %}
-                                            <label> Nombre d'éléments à positionner parmi les éléments enregistrés ci-dessous </label>
-
-                                        {% elif qtype == 18 %}
-                                            <label> Nombre d'étiquettes à placer parmi les étiquettes enregistrées ci-dessous </label>
-                                        {% endif %}
-
-                                             {{ form.pseudoalea_nb }}
+                                            <label> Nombre de réponses :</label> {{ form.pseudoalea_nb }}
                                     </span>                                    
                                 </div>
                             </div>
