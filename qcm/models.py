@@ -184,7 +184,7 @@ class Exercise(models.Model):
             r = Resultexercise.objects.get(student=student, exercise=self)
             return int(r.point)
         except:
-            return ""
+            return -1
 
     # #############################################
     # # non utilisée ?????? 
@@ -1531,6 +1531,8 @@ class Relationship(models.Model):
     def score_student_for_this(self,student):
         studentanswer = Studentanswer.objects.filter(student=student, parcours= self.parcours , exercise = self.exercise ).last()
         return studentanswer
+
+
 
     def is_done(self,student):
         done = False
