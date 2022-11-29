@@ -128,6 +128,7 @@
                             <!-- ============== Gestion du randomize dans les questions ======================-->
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
+                            {% if request.user.is_superuser %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
                                     
@@ -139,6 +140,7 @@
                                     </a>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="row no_visu_on_load" id="randomize_zone">
                                 <div class="col-sm-12 col-md-12 alert alert-sacado">
                                     <div class="row">
@@ -317,7 +319,8 @@
                             </div>
                         </div>
 
-                        {% endblock %}
+                        {% endblock %}                            
+                        {% if request.user.is_superuser %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-4"> 
                                     <a href="#" id="show_pseudorandomize_zone" class="{% if qtype == 1 or qtype == 2 or qtype == 3 or qtype == 4 or qtype == 10 %} no_visu_on_load {% endif %}btn btn-sacado">
@@ -365,6 +368,7 @@
                                     </span>                                    
                                 </div>
                             </div>
+                        {% endif %}
                     {% endif %} 
 
 
