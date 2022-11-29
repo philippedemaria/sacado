@@ -1927,8 +1927,8 @@ def list_sub_parcours_group(request,idg,idf):
 @login_required(login_url= 'index')
 def list_sub_parcours_group_student(request,idg,idf):
 
- 
- 
+    rq_user = request.user
+
     student = rq_user.student
     today   = time_zone_user(rq_user)
     folder  = Folder.objects.get(pk = idf) 
@@ -1950,7 +1950,6 @@ def list_sub_parcours_group_student(request,idg,idf):
 
     return render(request, 'qcm/list_sub_parcours_group_student.html', context )
     
- 
 
 
 
