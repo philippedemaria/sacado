@@ -1927,9 +1927,7 @@ def list_sub_parcours_group(request,idg,idf):
 @login_required(login_url= 'index')
 def list_sub_parcours_group_student(request,idg,idf):
 
-    rq_user = request.user
-
-    student = rq_user.student
+    student = request.user.student
     today   = time_zone_user(rq_user)
     folder  = Folder.objects.get(pk = idf) 
     group   = Group.objects.get(pk = idg)
