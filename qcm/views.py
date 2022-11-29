@@ -1928,7 +1928,7 @@ def list_sub_parcours_group(request,idg,idf):
 def list_sub_parcours_group_student(request,idg,idf):
 
     student = request.user.student
-    today   = time_zone_user(rq_user)
+    today   = time_zone_user(request.user)
     folder  = Folder.objects.get(pk = idf) 
     group   = Group.objects.get(pk = idg)
     request.session["folder_id"] = folder.id 
