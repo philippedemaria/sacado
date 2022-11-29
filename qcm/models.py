@@ -711,10 +711,13 @@ class Parcours(ModelWithCode):
         """
         Renvoie la couleur le triplet rgb
         """
-        data = dict()
-        data['r'] = int(self.color[1:3],16)
-        data['g'] = int(self.color[3:5],16)
-        data['b'] = int(self.color[5:7],16)
+        try :
+            data = dict()
+            data['r'] = int(self.color[1:3],16)
+            data['g'] = int(self.color[3:5],16)
+            data['b'] = int(self.color[5:7],16)
+        except :
+            data['r'] = None
         return data  
  
 

@@ -11,7 +11,7 @@
          {% include 'qcm/evaluation_tag_student_badge_and_trophy.html'  %} 
     </div>
     {% if parcours.vignette %}
-    <div style="width:100%; height:130px;  position: absolute;top:170px; background: linear-gradient(0deg, {{parcours.color }} 0%, rgba({{parcours.rgb_color.r }},{{parcours.rgb_color.g }},{{parcours.rgb_color.b }},0.4797269249496674) 90%);"></div>
+    <div style="width:100%; height:130px;  position: absolute;top:170px; {% if parcours.rgb_color.r %}background: linear-gradient(0deg, {{parcours.color }} 0%, rgba({{parcours.rgb_color.r }},{{parcours.rgb_color.g }},{{parcours.rgb_color.b }},0.4797269249496674) 90%);{% endif %}"></div>
     {% endif  %}
 
     <!-- box-footer DES FONCTIONNALITES  -->
