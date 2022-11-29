@@ -356,7 +356,7 @@ def show_discussion(request,idd):
 				new_f.discussion = discussion
 				new_f.save()
 				try :				
-					dest = []
+					dest = ['sacado.asso@gmail.com']
 					for e in discussion.discussion_message.values_list("user__email",flat=True).distinct():
 						dest.append(e)
  
