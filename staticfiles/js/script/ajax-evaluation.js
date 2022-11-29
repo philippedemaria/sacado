@@ -35,7 +35,7 @@ define(['jquery','bootstrap'], function ($) {
             let is_update = $("#is_update").val();
 
             if (is_update=="1") {
-                    url_ = "../../../../ajax/chargethemes" ;
+                    url_ = "../../../../../ajax/chargethemes" ;
             } 
             else {
                     url_ = "../../ajax/chargethemes" ;
