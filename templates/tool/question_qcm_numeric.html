@@ -29,14 +29,16 @@
 
     {% if quizz %}
     <script>
-        require(['script/ajax-quizz_numeric','script/ajax-finder']);
+        require(['script/ajax-quizz_numeric');
     </script>
     {% else %}
     <script>
         require(['script/add-only-ckeditor','script/qcm_numeric','script/create_questions_all_forms']);
     </script> 
     {% endif %}
-
+    <script>
+        require(['script/ajax-finder']);
+    </script> 
 {% endblock %}
 
 
