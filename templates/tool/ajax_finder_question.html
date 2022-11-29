@@ -2,6 +2,7 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 <div id="small_loader"></div>
+
 {% for question in all_questions %}
     <div class="card" style="width:300px;height:300px;margin:15px;overflow: hidden;padding: 10px;">
         <div class="card_title">
@@ -40,5 +41,21 @@
 
         </div>
     </div>
+{% empty %}
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="alert alert-danger">
+                Aucune question ne correspond à cette recherche.
+            </div>
+        </div>
+    </div>
+
 {% endfor %}
+
+
+
+
+
+
 <div style="clear:both"></div>

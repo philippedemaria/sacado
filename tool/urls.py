@@ -162,6 +162,7 @@ urlpatterns = [
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
 
 
+    path('ajax_find_question_waiting', ajax_find_question_waiting, name='ajax_find_question_waiting'),
     path('ajax_find_question', ajax_find_question, name='ajax_find_question'),
     path('get_this_question/<int:id>/<int:idquizz>', get_this_question, name='get_this_question'),
 

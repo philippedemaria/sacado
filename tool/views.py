@@ -1917,8 +1917,18 @@ def create_question(request,idq,qtype):
         parcours = None
  
     form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
-    all_questions = Question.objects.filter(is_publish=1)
-    
+    #all_questions = Question.objects.filter(is_publish=1)
+    ######## Attendus pour la Banque de questions
+    themes   = quizz.themes.all()
+    levels   = quizz.levels.all()
+    subjects = quizz.teacher.subjects.all()
+    if themes.count() and levels.count():
+        waitings = Waiting.objects.filter(theme__subject__in=subjects , theme__in=quizz.themes.all(), level__in=quizz.levels.all())
+    elif levels.count():
+        waitings = Waiting.objects.filter(theme__subject__in=subjects ,level__in=quizz.levels.all())
+    elif themes.count():
+        waitings = Waiting.objects.filter(theme__subject__in=subjects ,theme__in=quizz.themes.all())
+
     if qtype > 2 :
         if quizz.is_numeric :
             extra = 2
@@ -1944,7 +1954,7 @@ def create_question(request,idq,qtype):
 
  
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'all_questions' : all_questions , "quizz_id" : quizz.id , "question" : None  , "parcours" : parcours   }
+    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'waitings' : waitings , "quizz_id" : quizz.id , "question" : None  , "parcours" : parcours   }
 
 
     if quizz.is_random :
@@ -2112,6 +2122,28 @@ def ajax_find_question(request):
 
     data['html'] = render_to_string('tool/ajax_finder_question.html', {'all_questions' : questions , "quizz_id" : quizz_id })
     return JsonResponse(data)
+
+
+
+ 
+@csrf_exempt 
+def ajax_find_question_waiting(request): 
+
+    data = {}
+    waiting_id = request.POST.get('waiting_id',None)
+    quizz_id   = request.POST.get('quizz_id',None)
+
+    if waiting_id and quizz_id : 
+        waiting = Waiting.objects.get(pk=waiting_id)
+        knowledges = waiting.knowledges.all()
+     
+        questions=Question.objects.filter(  knowledge__in= knowledges , is_publish=1  ) 
+
+        data['html'] = render_to_string('tool/ajax_finder_question.html', {'all_questions' : questions , "quizz_id" : quizz_id })
+    else :
+        data['html'] = render_to_string('tool/ajax_finder_question.html', {'all_questions' : [] })
+    return JsonResponse(data)
+
 
 
 

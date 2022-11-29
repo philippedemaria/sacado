@@ -18,19 +18,19 @@
         require(['script/ajax-quizz-complement']);
     </script> 
     {% endif %}
-
     {% if quizz %}
     <script>
-        require(['script/ajax-quizz','script/ajax-finder']);
+        require(['script/ajax-quizz']);
     </script>
     {% else %}
     <script>
         require(['script/add-ckeditor']);
     </script> 
     {% endif %}
-
 {% endblock %}
  
+ 
+
 
 {% block page_title %}
    Créateur de question 
@@ -128,7 +128,7 @@
                             <!-- ============== Gestion du randomize dans les questions ======================-->
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
-                            {% if request.user.is_superuser %}
+                            {% if request.user.is_superuser and quizz.is_numeric %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
                                     
@@ -320,7 +320,7 @@
                         </div>
 
                         {% endblock %}                            
-                        {% if request.user.is_superuser %}
+                        {% if request.user.is_superuser and quizz.is_numeric %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-4"> 
                                     <a href="#" id="show_pseudorandomize_zone" class="{% if qtype == 1 or qtype == 2 or qtype == 3 or qtype == 4 or qtype == 10 %} no_visu_on_load {% endif %}btn btn-sacado">
@@ -418,16 +418,31 @@
     <div class="modal-dialog" role="document" style="width: 100%;">
         <div class="modal-content" >
             <div class="modal-header"  style="background-color: #F0F0F0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <div class="col-sm-12 col-md-4">
-                  <input name="search_question" id="search_question" placeholder="Recherche par mot clé"  class="form-control" />
-                </div>
+                <form action="#" method="POST" enctype='multipart/form-data' >
+                    {% csrf_token %} 
+                    <div class="col-sm-12 col-md-2">
+                        <input name="search_question" id="search_question" placeholder="mots clés de 3 lettres min."  class="form-control" />
+                        <input type="hidden" name="quizz_id" id="quizz_id" value="{{ quizz.id }}" /> 
+
+                    </div>
+                    <div class="col-sm-12 col-md-9">
+                        <select name="search_question_waiting" id="search_question_waiting" class="form-control">
+                            <option value="">Sélectionner un attendu</option>
+                            {% for w in waitings %}
+                                <option value="{{ w.id }}">{{ w.name }}</option>
+                            {% endfor %}
+                        </select>  
+                    </div>
+                    <div class="col-sm-12 col-md-1">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> 
+                    </div>
+                </form>
             </div>
+
             <div class="modal-body" id='questions_finder'>
- 
-                {% include 'tool/ajax_finder_question.html' %}
+
             </div>
         </div>
     </div>
