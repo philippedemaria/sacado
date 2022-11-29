@@ -45,9 +45,11 @@
 
 
 {% block page_menu_right %}
+    {% if folder and parcours %}
     <li> 
         <a href="{% url 'show_evaluation' folder.id parcours.id  %}" class="btn-new">Voir l'évaluation</a> 
     </li>
+    {% endif %}
 {% endblock %} 
 
 
