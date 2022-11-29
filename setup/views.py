@@ -343,7 +343,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                             group.students.add(student)
                     except :
                         created_s = False
-                        messages.error(request,"Le compte élève n'est pas créé, vérifiez que l'élève est inscrit.")
 
                         ### attribue les doc du groupe
                 except :
