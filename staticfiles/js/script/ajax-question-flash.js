@@ -7,8 +7,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('.opener_k').hide() ;
         $('.opener_e').hide() ;
  
-
-        $('.opener').on('click' ,function () { 
+        $('body').on('click', '.opener' , function () { 
             $('.opener_k').hide() ;
 
             if( $(this).hasClass("out") )
@@ -30,8 +29,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('body').on('change', '#is_questions_quizz' , function (event) {  
 
             let subject_id = $("#id_subject").val();
-            let is_questions_quizz = $("#is_questions_quizz").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            if ($("#is_questions_quizz").is(":checked")) {
+                            is_quizz = true ;
+                        } else {
+                            is_quizz = false ;
+                        }
+ 
+
+            console.log(is_quizz) ;
 
             $.ajax(
                 {
@@ -39,7 +45,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     dataType: "json",
                     data: {
                         'subject_id'        : subject_id,
-                        'is_questions_quizz': is_questions_quizz,
+                        'is_questions_quizz': is_quizz,
                         csrfmiddlewaretoken: csrf_token
                     },
                     url: "../ajax_select_style_questions",

@@ -3128,8 +3128,9 @@ def create_questions_flash(request,id):
         return redirect('create_question' , nf.pk , 0 )
     else:
         print(form.errors)
-
-    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group   }
+    mentals = Mental.objects.filter(mentaltitle__subject__id = 1 ).order_by("mentaltitle")
+    
+    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group , 'mentals' : mentals   }
     return render(request, 'tool/form_question_flash.html', context)
 
 
@@ -3146,15 +3147,17 @@ def ajax_select_style_questions(request):
     subject_id         = request.POST.get('subject_id',None)
     is_questions_quizz = request.POST.get('is_questions_quizz',None)
     data = {}
-    print(subject_id)
-    if is_questions_quizz :
+ 
+    if is_questions_quizz == "true" :
+        is_quizz = True
         mentals = Mental.objects.filter(mentaltitle__subject__id = subject_id ).order_by("mentaltitle")
-        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_questions_quizz' : True  })
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
     else :
+        is_quizz = False
         mentals = Mental.objects.filter(mentaltitle__subject__id = subject_id ).order_by("mentaltitle")
-        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_questions_quizz' : False  })
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
 
-    print(mentals)
+    print(is_quizz)
     return JsonResponse(data)
 
 
