@@ -26,7 +26,6 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('#id_is_back').prop('checked', false);
         $('#id_is_result').prop('checked', false);
 
-
         $('.div_is_mark').hide() ; 
         $(".div_is_ranking").hide(); 
         $(".div_time").hide(); 
@@ -34,24 +33,35 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('#is_result_final').hide() ; 
 
         $('#id_is_numeric').on('change', function (event) {
-            $('.div_is_mark').toggle(300) ; 
+            $('.div_is_mark').toggle(300) ;
+            $('#is_video_div').toggle(300) ;
         });
+
         $('#id_is_result').on('change', function (event) {
 
              $('#is_result_final').toggle(300) ;  
 
         });
 
-
-
-
         $('#id_is_video').on('change', function (event) {
-            $('.div_is_ranking').toggle(300) ;
-            $('.div_interslide').toggle(300) ; 
+            $('.div_interslide').toggle(300) ;
         });
+
         $('#id_is_publish').on('change', function (event) {
             $('.div_time').toggle(300) ; 
         });
+
+ 
+
+
+
+
+
+
+
+
+
+
 
         $("#id_choices-0-is_correct").prop("checked", false); 
         $("#id_choices-1-is_correct").prop("checked", false); 

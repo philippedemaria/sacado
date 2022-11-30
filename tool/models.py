@@ -143,9 +143,7 @@ class VariableImage(models.Model):
 
 
 class Qtype(models.Model):
-    """
-    Modèle représentant un associé.
-    """
+    """ Modèle représentant un associé. """
     title     = models.TextField(max_length=255, default='',  blank=True, verbose_name="Type")
     imagefile = models.ImageField(upload_to=qtype_directory_path, blank=True, default="", verbose_name="Image")
     html      = models.TextField( default='',  blank=True, verbose_name="Html éventuel")
@@ -159,11 +157,34 @@ class Qtype(models.Model):
 
 
 
+class Mentaltitle(models.Model):
+    """ Modèle représentant un associé. """
+    title      = models.TextField(max_length=255,   verbose_name="Titre")
+    subject    = models.ForeignKey(Subject, related_name="mentaltitles", blank=True, null = True,  on_delete=models.CASCADE) 
+    ranking    = models.PositiveIntegerField(default=0,   ) 
+    is_display = models.BooleanField(default=0, verbose_name="En ligne ?")
+
+    def __str__(self):
+        return self.title
+
+
+class Mental(models.Model):
+    """ Modèle représentant un associé. """
+    content     = models.TextField(max_length=255,   verbose_name="Contenu")
+    html        = models.TextField(blank=True, null = True,  verbose_name="Html éventuel")
+    script      = models.TextField(max_length=255,  blank=True, null = True,  verbose_name="script éventuel")
+    is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
+    mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
+    ranking    = models.PositiveIntegerField(default=0,   ) 
+
+    def __str__(self):
+        return self.content
+
+
+
 
 class Question(models.Model):
-    """
-    Modèle représentant un associé.
-    """
+    """ Modèle représentant un associé. """
     title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Enoncé")
 
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
@@ -362,9 +383,10 @@ class Quizz(ModelWithCode):
     is_numeric   = models.BooleanField(default=0, verbose_name="Type de passation" )    # réponse sur papier ou sur smartphone
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
-    is_random    = models.BooleanField(default=0, verbose_name="Aléatoire ?") 
-    nb_slide     = models.PositiveIntegerField(default=0, editable=False)  # Nombre de diapositive si le quizz est randomisé
-    is_video     = models.BooleanField(default=0, verbose_name="Type de passation")  # Vidéo projection
+    is_random    = models.BooleanField(default=0, editable=False) # question flash
+    nb_slide     = models.PositiveIntegerField(default=5)  # Nombre de diapositive si le quizz est randomisé
+    is_video     = models.BooleanField(default=0, verbose_name="Support de passation")  # Vidéo projection
+    # si is_numeric et is_video en même temps alors c'est un jeu
 
     is_back      = models.BooleanField(default=0, verbose_name="Retour arrière ?")  
     is_ranking   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des questions ?")  

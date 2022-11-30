@@ -1,0 +1,31 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% if is_questions_quizz %}
+<div class="alert alert-info">
+    Les questions sont choisies parmi les quizz déjà créés depuis le début de l'année.
+</div>
+{% else %}     
+<table class="table table-hover borderless display1000" style="width:100%;" >
+    <thead> 
+        <tr>
+            <th></th>
+        </tr>
+    </thead> 
+    <tbody>
+        {% regroup mentals by mentaltitle as title_list %} 
+        {% for title in title_list %}
+            <tr style="background:#5d4391; cursor: pointer;color:white" class="opener out"   id="{{ title.grouper.id }}">
+                <td style="width:85%"><i class="fa fa-caret-right"></i> {{ title.grouper.title }}</td> 
+            </tr> 
+            {% for m in title.list %}
+                <tr style="background:white; cursor: pointer;" class="opener_k opened{{ title.grouper.id }} out no_visu_on_load" >
+                    <td ><label> <input type="checkbox" value="{{m.id }}" name="mentals" /> {{ m.content }} </label></td> 
+                </tr>  
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table> 
+{% endif %}

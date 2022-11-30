@@ -119,8 +119,9 @@ urlpatterns = [
     path('update_qrandom_admin/<int:id_knowledge>/<int:id>', update_qrandom_admin, name='update_qrandom_admin'),
     path('show_qrandom_admin/<int:id>', show_qrandom_admin, name='show_qrandom_admin'),
     path('show_quizz_random/<int:id>', show_quizz_random, name='show_quizz_random'), 
-
+    ################################################################################################################ 
     ############## IA
+    ################################################################################################################ 
     path('admin_question_ia/<int:id_level>', admin_question_ia, name='admin_question_ia'),
     path('admin_create_question_ia/<int:idk>/<int:qtype>', admin_create_question_ia, name='admin_create_question_ia'),
     path('admin_update_question_ia/<int:idk>/<int:idq>', admin_update_question_ia, name='admin_update_question_ia'),
@@ -129,59 +130,53 @@ urlpatterns = [
     path('admin_duplicate_question_ia/<int:idk>/<int:idq>', admin_duplicate_question_ia, name='admin_duplicate_question_ia'),
 
     path('ajax_is_ia', ajax_is_ia, name='ajax_is_ia'),
-    
+    ################################################################################################################ 
     ############## Quizz generated
+    ################################################################################################################ 
     path('ajax_show_generated', ajax_show_generated, name='ajax_show_generated'),
 
     path('delete_historic_quizz/<int:id>', delete_historic_quizz, name='delete_historic_quizz'), 
+    ################################################################################################################ 
+    ############## Questions flash
+    ################################################################################################################ 
+    path('list_questions_flash', list_questions_flash, name='list_questions_flash'), 
+    path('create_questions_flash/<int:id>', create_questions_flash, name='create_questions_flash'),
+    path('update_questions_flash/<int:id>', update_questions_flash, name='update_questions_flash'),
+    path('delete_questions_flash/<int:id>', delete_questions_flash, name='delete_questions_flash'),
+    path('ajax_select_style_questions', ajax_select_style_questions, name='ajax_select_style_questions'), 
 
- 
-
+    ################################################################################################################ 
     ############## Play
+    ################################################################################################################ 
     path('play_printing_teacher/<int:id>', play_printing_teacher, name='play_printing_teacher'), 
     path('play_quizz_teacher/<int:id>/<int:idg>', play_quizz_teacher, name='play_quizz_teacher'),
 
     path('launch_play_quizz', launch_play_quizz, name='launch_play_quizz'),
     path('ajax_quizz_show_result', ajax_quizz_show_result, name='ajax_quizz_show_result'),
-
-
     path('play_quizz_student', play_quizz_student, name='play_quizz_student'),
     path('ajax_display_question_to_student', ajax_display_question_to_student, name='ajax_display_question_to_student'),   
     path('ajax_display_question_for_student', ajax_display_question_for_student, name='ajax_display_question_for_student'),   
     path('store_student_answer', store_student_answer, name='store_student_answer'),
-
     path('list_quizz_student', list_quizz_student, name='list_quizz_student'),
-    
     path('goto_quizz_numeric/<int:id>', goto_quizz_numeric, name='goto_quizz_numeric'),
     path('goto_quizz_student/<int:id>', goto_quizz_student, name='goto_quizz_student'),
-
-
     path('show_quizz_numeric/<int:id>/<int:idp>', show_quizz_numeric, name='show_quizz_numeric'),
-
- 
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
-
-
     path('ajax_find_question_waiting', ajax_find_question_waiting, name='ajax_find_question_waiting'),
     path('ajax_find_question', ajax_find_question, name='ajax_find_question'),
     path('get_this_question/<int:id>/<int:idquizz>', get_this_question, name='get_this_question'),
 
-
-
     path('ajax_show_detail_question', ajax_show_detail_question, name='ajax_show_detail_question'),
- 
     path('ajax_show_retroaction', ajax_show_retroaction, name='ajax_show_retroaction'),
  
-
-
+    ################################################################################################################ 
     ############## Visiocopie
+    ################################################################################################################ 
     path('list_visiocopie', list_visiocopie, name='list_visiocopie'),
     path('cv<int:code>', create_visiocopie, name='create_visiocopie'),   
     path('cv', create_visiocopie, name='create_visiocopie_vierge'),   
     
     path('delete_visiocopie/<int:id>', delete_visiocopie, name='delete_visiocopie'),
-
-
-
     path('show_quizz_student/<int:idgq>', show_quizz_student, name='show_quizz_student'), 
+
 ] 

@@ -1,0 +1,69 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class="bi bi-lightning"></i> Mes questions flash 
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+
+             <a href="{% url 'create_questions_flash' 0 %}" class="btn btn-new pull-right">Nouvelles questions flash</a>  
+
+{% endblock %}
+
+ 
+
+{% block body %}
+
+<section class="content_main"> 
+    <table class="table table-sacado table-hovered standard_tab_1000"  style="width:100%" >
+        <thead> 
+            <tr> 
+                <th style="width:200px">Titre</th>
+                <th style="width:100px;">Niveaux</th>
+                <th>Nb questions</th>
+                <th style="width:200px">Mode</th>
+                <th style="width:150px;"></th>
+            </tr> 
+        </thead>
+        <tbody>
+            {% for q in quizzes %}
+            <tr> 
+                <th style="width:200px">{{ q.title }}</th>
+                <th style="width:100px;">{% for l in q.levels.all %}{{ l.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</th>
+                <th>{{ q.nb_slide }} questions</th>
+                <th style="width:200px">{{ q.mode }}</th>
+                <th style="width:150px;"></th>
+            </tr> 
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
+
+
+ 
+
+     
+ 
+
+
+ 
+{% block modale %}
+ 
+
+{% endblock %}

@@ -3081,6 +3081,83 @@ def ajax_is_ia(request):
     question.save()
 
     return JsonResponse(data)
+
+#####################################################################################################################################
+#####################################################################################################################################
+####    Question flash
+#####################################################################################################################################
+#####################################################################################################################################
+@login_required(login_url= 'index')
+def list_questions_flash(request):
+    request.session["parcours_id"] = False
+    teacher = request.user.teacher 
+    quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, folders=None).order_by("levels") # non inclus dans un dossier
+    delete_session_key(request, "quizz_id")
+    return render(request, 'tool/list_questions_flash.html', { 'quizzes': quizzes , 'teacher': teacher })
+
+
+
+
+
+@login_required(login_url= 'index')
+def create_questions_flash(request,id):
+    teacher = request.user.teacher
+    group_id   = request.session.get("group_id",None)
+    folder_id  = request.session.get("folder_id",None)
+    if group_id : group = Group.objects.get(pk=group_id )
+    else : group = None
+
+    if folder_id : folder = Folder.objects.get(pk=folder_id )
+    else : folder = None
+
+    if teacher.subjects.count() == 1 :
+        subject = teacher.subjects.first()
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
+    else :
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+ 
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.is_questions = 1
+        nf.is_random = 1
+        nf.save()
+        form.save_m2m()
+        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
+        return redirect('create_question' , nf.pk , 0 )
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group   }
+    return render(request, 'tool/form_question_flash.html', context)
+
+
+@login_required(login_url= 'index')
+def update_questions_flash(request):
+    pass
+
+@login_required(login_url= 'index')
+def delete_questions_flash(request):
+    pass
+
+
+def ajax_select_style_questions(request):
+    subject_id         = request.POST.get('subject_id',None)
+    is_questions_quizz = request.POST.get('is_questions_quizz',None)
+    data = {}
+    print(subject_id)
+    if is_questions_quizz :
+        mentals = Mental.objects.filter(mentaltitle__subject__id = subject_id ).order_by("mentaltitle")
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_questions_quizz' : True  })
+    else :
+        mentals = Mental.objects.filter(mentaltitle__subject__id = subject_id ).order_by("mentaltitle")
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_questions_quizz' : False  })
+
+    print(mentals)
+    return JsonResponse(data)
+
+
 #####################################################################################################################################
 #####################################################################################################################################
 ####    Visiocopie
