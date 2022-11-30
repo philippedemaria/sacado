@@ -42,11 +42,11 @@
         <tbody>
             {% for q in quizzes %}
             <tr> 
-                <th style="width:200px">{{ q.title }}</th>
-                <th style="width:100px;">{% for l in q.levels.all %}{{ l.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</th>
-                <th>{{ q.nb_slide }} questions</th>
-                <th style="width:200px">{{ q.mode }}</th>
-                <th style="width:150px;"></th>
+                <td style="width:200px">{{ q.title }}</td>
+                <td style="width:100px;">{% for l in q.levels.all %}{{ l.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                <td>{{ q.nb_slide }} questions</td>
+                <td style="width:200px">{{ q.mode }}</td>
+                <td style="width:150px;"></td>
             </tr> 
             {% endfor %}
         </tbody>

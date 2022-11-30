@@ -61,37 +61,28 @@
         <div class="row">
             <div class="col-sm-12 col-md-4 form_card">
                 <div class="row">
-                    <div class="col-sm-7 col-md-8 col-lg-9">
+                    <div class="col-sm-7 col-md-7 col-lg-7">
                         <label>Titre des questions flash</label>
                         {{ form.title |add_class:"form-control"|attr:"value:Questions flash" }}
                         {{ form.title.errors }}
                     </div>
-                    <div class="col-sm-5  col-md-4 col-lg-3 no_visu">                    
-                        {{ form.color.label_tag }}      
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
-                        </span>
-                        <div id="color-picker-component" class="input-group colorpicker-component">
-                        {{ form.color.as_hidden }}
-                        <span class="input-group-addon"><i></i></span>
-                        </div>
+                    <div class="col-sm-5  col-md-5 col-lg-5">                                 
+                       <br/> <input type="checkbox" name="is_questions_quizz" id="is_questions_quizz" value="1" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Questions de quizz" data-off="Activités mentales" data-width="180" />
                     </div>
                 </div>
                 <div class="row">
 
-                    <div class="col-sm-5 col-md-5 col-lg-5 form-group">
+                    <div class="col-sm-6 col-md-6 col-lg-6 form-group">
                         <label>Enseignement</label>
                         {{ form.subject|add_class:"form-control select2" }}
                         {{ form.subject.errors }}
                     </div>
-                    <div class="col-sm-5  col-md-7 col-lg-7 form-group">                    
-                       <br/> <input type="checkbox" name="is_questions_quizz" id="is_questions_quizz" value="1" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Questions de quizz" data-off="Activités mentales" data-width="180" />
+                    <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                        <label>Niveaux</label>
+                        {{ form.levels|add_class:"form-control select2" }}
+                        {{ form.levels.errors }}
                     </div>
                 </div>
-
-
-
-
                 <div class="row div_is_mark div_is_ranking">
                     <div class="col-sm-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;">
                         <label>Attribuer aux groupes proposés</label> 

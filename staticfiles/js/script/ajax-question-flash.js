@@ -36,8 +36,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             is_quizz = false ;
                         }
  
-
-            console.log(is_quizz) ;
+            if(subject_id==''){ alert("Renseigner l'enseignement"); $('#is_questions_quizz').prop('checked', false); }
 
             $.ajax(
                 {

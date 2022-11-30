@@ -3124,12 +3124,15 @@ def create_questions_flash(request,id):
         nf.is_random = 1
         nf.save()
         form.save_m2m()
-        attribute_student(nf, request.POST.getlist("groups") , request.POST.getlist("parcours") ) 
-        return redirect('create_question' , nf.pk , 0 )
+        for group_id in request.POST.getlist("groups") :
+            group = Group.objects.get(pk=group_id)
+            nf.students.set(group.students.all())
+
+        return redirect('list_questions_flash')
     else:
         print(form.errors)
     mentals = Mental.objects.filter(mentaltitle__subject__id = 1 ).order_by("mentaltitle")
-    
+
     context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group , 'mentals' : mentals   }
     return render(request, 'tool/form_question_flash.html', context)
 
