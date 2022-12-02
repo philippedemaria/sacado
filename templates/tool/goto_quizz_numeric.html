@@ -93,7 +93,14 @@
     </div> 
     <div class="row" align="center"  style="width:80%;padding:10px ; margin-right: auto; margin-left:auto; background-color: #f1eef7 ;">  
         <div class="col-sm-12 col-md-12"align="center">
-            <h1 style="font-size:2.5em"  >  {{ question.title }}  </h1>
+            {% if quizz.is_numeric and quizz.is_random %}
+                {% with d=question.mental.alea_content_creator %}
+                    <h1 style="font-size:2.5em"  > {{ d.t }} </h1>
+                    <input type="hidden" name="answer_type" id="answer_type" required   value="{{ d.a }}" >
+                {% endwith %}
+            {% else %}
+            <h1 style="font-size:2.5em"  > {{ question.title }}   </h1>
+            {% endif %}
         </div>
     </div>
     {% if question.imagefile %}
@@ -113,7 +120,6 @@
         </div> 
     {% endif %}
 
-    
     {% if question.qtype == 1 %} 
  
         <div class="row"> 
@@ -154,7 +160,6 @@
             </div> 
         {% endfor %}
         {% resetcycle %}
-
     {% elif question.qtype == 5 %}  
         <div class="zuordnungs-quiz">
             <h2 id="zuordnungs-quiz">Affectation par paire</h2>
@@ -225,7 +230,7 @@
             Créateur des trous = strong
             Séparateur des possibilité = |
         </div>
-    {% elif question.qtype == 10 %}  
+    {% elif question.qtype == 10 %} 
         <div class="lueckentext-quiz">
             <h2 id="bilderpuzzle">Puzzle</h2>
             {{ question.title|safe }}<hr/> 
@@ -240,7 +245,7 @@
                 {% endfor %}
             </table>
         </div>
-    {% elif question.qtype == 11 %}  
+    {% elif question.qtype == 11 %} 
         <div class="kreuzwort-quiz">
             <h2 id="kreuzwort-quiz">Mots croisés</h2>
             <p class="rquiz-screen">{{ question.title|safe }}</p>
@@ -256,7 +261,7 @@
                 {% endfor %}
             </table>
         </div>
-    {% elif question.qtype == 12 %}  
+    {% elif question.qtype == 12 %} 
         <div class="suchsel-quiz">
             <h2 id="suchsel-quiz">Mots mélés</h2>
             {{ question.title|safe }}<hr/> 
@@ -270,7 +275,7 @@
                 {% endfor %}
             </table>
         </div>
-    {% elif question.qtype == 13 %}  
+    {% elif question.qtype == 13 %} 
         <div class="buchstabenraten-quiz">
             <h2 id="buchstabenraten-quiz">Le pendu</h2>
             {{ question.title|safe }}<hr/> 
@@ -285,7 +290,7 @@
                 {% endfor %}
             </table>
         </div>
-    {% elif question.qtype == 14 %}  
+    {% elif question.qtype == 14 %} 
         <div class="memo-quiz">
             <h2 id="memo-quiz">Memo-Quiz</h2>
             {{ question.title|safe }}<hr/> 
@@ -308,52 +313,49 @@
         <input type="hidden" name="xmax" value="{{ question.xmax}}"  id="xmax">
         <input type="hidden" name="graduation" value="{{ question.graduation}}"  id="graduation">
         <input type="hidden" name="precision" value="{{ question.precision}}"  id="precision">
-
-
         <div id='tableau'>  
         <div id="axe"></div>
         {% for carte in question.choices.all %}
           <div class="carte" id="carte{{ forloop.counter0 }}"><p>{{ carte }}</p><p id="valeur"></p></div>
         {% endfor %}  
         </div>
-
     {% endif %}
+    <div style="height:40px"></div>
+    <div class="row" align="center" > 
+        <div class="col-sm-6 col-md-9" align="center"  ></div>
+        <div class="col-sm-6 col-md-3" align="center"  >
+            {% if quizz.is_back and quizz_nav_prev > 0 %}
+                <a href="{% url 'goto_quizz_numeric' quizz.id %}" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</a>
+            {% endif %}  
+        </div>
+    </div> 
+    <div class="row" > 
+        <div class="col-sm-12 col-md-12" >
+            <button type="submit" class="btn btn-primary"><i class="fa fa-caret-right"></i> Enregistrement de la réponse</button>
+        </div>
+    </div> 
 
-<div style="height:40px"></div>
 
-<div class="row" align="center" > 
-    <div class="col-sm-6 col-md-9" align="center"  ></div>
-    <div class="col-sm-6 col-md-3" align="center"  >
-        {% if quizz.is_back and quizz_nav_prev > 0 %}
-            <a href="{% url 'goto_quizz_numeric' quizz.id %}" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</a>
-        {% endif %}  
-    </div>
-</div> 
-<div class="row" > 
-    <div class="col-sm-12 col-md-12" >
-        <button type="submit" class="btn btn-primary"><i class="fa fa-caret-right"></i> Enregistrement de la réponse</button>
-    </div>
-</div> 
+
 {% else %}
-
-    <div class="row consigne_diapo"  align="center">  
+    <div class="row consigne_diapo" align="center">  
         <div class="col-sm-12 col-md-12">
             <h1 style="font-size:4em" class="thin">
                 <br/><br/>
                 <b> -- FIN -- </b>
                 <br/><br/>
             </h1>
-
+            {% if fl %}
+            <a href="javascript:window.close()" class="btn btn-default">Fermer</a>
+            {% else  %}
             <a href="{% url 'list_quizzes' %}" class="btn btn-default">Retour vers mes quizz</a>
-
+            {% endif  %}
         </div>
     </div> 
-
-
 {% endif %}
 
 
-
+ 
  
 </form>  
 </section>

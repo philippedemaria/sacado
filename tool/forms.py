@@ -139,12 +139,35 @@ class QuizzForm(forms.ModelForm):
 		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
 		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset = all_folders.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
  
-
-
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
 		validation_file(content) 
 
+
+
+
+class QFlashForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Quizz
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		super(QFlashForm, self).__init__(*args, **kwargs)
+
+		groups =  teacher.groups.all() 
+		teacher_groups = teacher.teacher_group.all() 
+		all_groups = groups|teacher_groups
+
+		if teacher.subjects.count() == 1 :
+			self.fields['subject'].initial  = teacher.subjects.first()
+		else :
+			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
+
+		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.order_by("ranking"), required=False)
+		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=False)
+ 
 
 
 
@@ -157,8 +180,6 @@ class ChoiceForm(forms.ModelForm):
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
 		validation_file(content) 
-
-
 
 
 

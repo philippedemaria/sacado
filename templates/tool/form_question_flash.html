@@ -10,19 +10,7 @@
     <script>
         require(['script/ajax-quizz-create','script/ajax-question-flash']);
     </script>  
-    {% if not quizz %}
-        <script>
-            require(['script/ajax-quizz-complement']);
-        </script> 
-    {% elif  quizz.is_numeric %}
-        <script>
-            require(['script/ajax-quizz-complement_is_numeric']);
-        </script>
-    {% else %}
-        <script>
-            require(['script/ajax-quizz-complement']);
-        </script> 
-    {% endif %}
+ 
 {% endblock %}
 
  
@@ -37,7 +25,10 @@
 {% endblock %}
 
 
+
 {% block page_menu_right %}
+
+    <a href="{% url 'list_questions_flash'   %}" class="btn btn-new pull-right">Mes questions flash</a>  
 
 {% endblock %}
 
@@ -56,31 +47,31 @@
 }
 </style>
 <section class="content_main"> 
-    <form action="#" method="POST"  enctype='multipart/form-data'>
+    <form action="" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
         <div class="row">
             <div class="col-sm-12 col-md-4 form_card">
                 <div class="row">
-                    <div class="col-sm-7 col-md-7 col-lg-7">
+                    <div class="col-sm-6">
                         <label>Titre des questions flash</label>
                         {{ form.title |add_class:"form-control"|attr:"value:Questions flash" }}
                         {{ form.title.errors }}
                     </div>
-                    <div class="col-sm-5  col-md-5 col-lg-5">                                 
-                       <br/> <input type="checkbox" name="is_questions_quizz" id="is_questions_quizz" value="1" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Questions de quizz" data-off="Activités mentales" data-width="180" />
-                    </div>
-                </div>
-                <div class="row">
-
-                    <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                    <div class="col-sm-6">
                         <label>Enseignement</label>
                         {{ form.subject|add_class:"form-control select2" }}
                         {{ form.subject.errors }}
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                    <input name="color" type="hidden" value="#5d4391" />
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
                         <label>Niveaux</label>
                         {{ form.levels|add_class:"form-control select2" }}
                         {{ form.levels.errors }}
+                    </div>                    
+                    <div class="col-sm-6 form-group">                                 
+                       <br/> <input type="checkbox" name="is_questions_quizz" id="is_questions_quizz" value="1" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Questions de quizz" data-off="Activités mentales" data-width="180" />
                     </div>
                 </div>
                 <div class="row div_is_mark div_is_ranking">
@@ -111,26 +102,6 @@
                                 </td>
                                 <td></td>
                             </tr> 
-
-                            <tr class="div_is_mark div_is_ranking">
-                                <td class="no_border">{{ form.is_ranking.label_tag }} </td>
-                                <td>{{ form.is_ranking|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                <td></td>
-                            </tr>
-                            <tr class="div_is_mark div_is_ranking">
-                                <td class="no_border">{{ form.is_shuffle.label_tag }}  </td>
-                                <td>{{ form.is_shuffle|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                <td></td>
-                            </tr>
-                            <tr class="div_is_mark div_is_ranking">
-                                <td class="no_border">{{ form.is_back.label_tag }} 
-                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                     <div class="helper_tip_text" >Permet de revenir sur les questions en arrière dans le quizz.</div>
-                                    </span> 
-                                </td>
-                                <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                <td></td>
-                            </tr>
                             <tr id="is_video_div">
                                 <td class="no_border">{{ form.is_video.label_tag }}</td>
                                 <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}</td>

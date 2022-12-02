@@ -59,29 +59,33 @@
                 </h4>
                 {{ question.title|safe }}  
                 {% if question.imagefile %}
-                            <img src="{{ question.imagefile.url }}" class="imagefile" />
-                        {% endif %}
-                        {% if question.qtype == 2 %}<hr/>
-                            Réponse attendue : {{ question.answer}} 
-                        {% else %}
-                        <table class="table borderless">
-                            <tr>
-                            {% for c in question.choices.all %}
-                            <td>
-                                {% if c.imagefile %}
-                                    <img src="{{ c.imagefile.url }}" class="imagefile" />
-                                {% endif %}  
-                                    {{ c.answer }} 
-                                {% if c.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
+                    <img src="{{ question.imagefile.url }}" class="imagefile" />
+                {% endif %}
+                {% if question.qtype == 2 %}<hr/>
+                    {% if quizz.is_random %}
+                        {{ question.mental.title }}
+                    {% else %}
+                        Réponse attendue : {{ question.answer}} 
+                    {% endif %}
+                {% else %}
+                <table class="table borderless">
+                    <tr>
+                    {% for c in question.choices.all %}
+                    <td>
+                        {% if c.imagefile %}
+                            <img src="{{ c.imagefile.url }}" class="imagefile" />
+                        {% endif %}  
+                            {{ c.answer }} 
+                        {% if c.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
 
-                                {% if question.qtype == 2 %}{{ question.answer}}<i class="fa fa-check text-success"></i>{% endif %}
+                        {% if question.qtype == 2 %}{{ question.answer}}<i class="fa fa-check text-success"></i>{% endif %}
 
 
-                            </td>
-                            {% endfor %}
-                            </tr>
-                        </table>
-                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    </tr>
+                </table>
+                {% endif %}
                 <div class="col-sm-12 col-md-12 no_visu_on_load" id="detail_div{{question.id}}">
 
                 </div>

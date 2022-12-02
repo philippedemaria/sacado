@@ -33,20 +33,53 @@
         <thead> 
             <tr> 
                 <th style="width:200px">Titre</th>
-                <th style="width:100px;">Niveaux</th>
+                <th>Thèmes</th>
                 <th>Nb questions</th>
-                <th style="width:200px">Mode</th>
+                <th style="width:200px">Support</th>
                 <th style="width:150px;"></th>
+                <th></th>
             </tr> 
         </thead>
         <tbody>
             {% for q in quizzes %}
             <tr> 
-                <td style="width:200px">{{ q.title }}</td>
-                <td style="width:100px;">{% for l in q.levels.all %}{{ l.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-                <td>{{ q.nb_slide }} questions</td>
-                <td style="width:200px">{{ q.mode }}</td>
-                <td style="width:150px;"></td>
+                <td style="width:200px"><a href="{% url 'update_questions_flash' q.id %}" title="Dupliquer le format de ces questions">{{ q.title }}</a>
+                    <a href="{% url 'duplicate_questions_flash' q.id %}" title="Dupliquer le format de ces questions"><i class="bi bi-clipboard-plus"></i></a></td>
+                <td>{% for ma in q.mental_activities %}{{ ma }}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
+                <td>{{ q.nb_slide }} questions</td> 
+                <td style="width:200px">
+                    {% if q.is_video %}<a href="{% url 'show_questions_flash' q.id %}" title="Projeter les questions"><i class="bi bi-webcam"></i></a>
+                        {% if q.is_numeric %}<i class="bi bi-phone"></i>{% else %}<i class="bi bi-pencil"></i>{% endif %} 
+                    {% else %}
+                        <a href="{% url 'goto_quizz_numeric' q.id %}" target='_blank' title="Voir le test - Nouvel onglet"><i class="bi bi-laptop"></i></a>
+                        {% if q.students.count %}
+                        <span class="helper_tip"><i class="bi bi-people"></i>{{q.students.count}}
+                            <div class="helper_tip_text" >{% for s in q.students.all %}{{ s }}<br/>{% endfor %}</div>
+                        </span> 
+                        {% else %}
+                        <i class="bi bi-people"></i><small>0 </small>
+                        {% endif %} 
+                    {% endif %}   
+                </td>
+                <td style="width:150px;">
+                    <a href="{% url 'result_quizz' q.id 0 %}" title="Résultats des questions"><i class="fa fa-trophy"></i></a>
+
+                    <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('Ces questios flash')"><i class="bi bi-trash"></i></a>
+                </td>
+                <td>
+                    <form action="" method="POST" enctype='multipart/form-data'>     
+                        {% csrf_token %}
+                        <div class="btn-group no_padding_margin" >
+
+                            <a href="#" class="btn btn-default qpublisher" id="qpublisher{{q.id}}" data-quizz_id="{{q.id}}">  
+                                <i class="fa fa-circle-o-notch"></i>
+                            </a><span class="btn btn-{% if  q.is_publish %}success{% else  %}danger{% endif  %}" id="quizz{{q.id}}" style="cursor:auto;display:inline;padding:3px 6px"  >  
+                              {% if q.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+                            </span>
+
+                        </div>
+                    </form>
+                </td>
             </tr> 
             {% endfor %}
         </tbody>

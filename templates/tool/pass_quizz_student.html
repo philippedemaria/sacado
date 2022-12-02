@@ -90,10 +90,15 @@
     </div> 
     <div class="row" align="center"  style="width:80%;padding:10px ; margin-right: auto; margin-left:auto; background-color: #f1eef7 ;">  
         <div class="col-sm-12 col-md-12"align="center">
-            <h1 style="font-size:2.5em"  >  {{ question.title }}  </h1>
+            {% if quizz.is_numeric and quizz.is_random %}
+                {% with d=question.mental.alea_content_creator %}
+                    <h1 style="font-size:2.5em"  > {{ d.t }} </h1>
+                    <input type="hidden" name="answer_type" id="answer_type" required   value="{{ d.a }}" >
+                {% endwith %}
+            {% else %}
+            <h1 style="font-size:2.5em"  > {{ question.title }}   </h1>
+            {% endif %}
         </div>
-
- 
     {% include 'tool/kind_of_question.html' %}
     </div>    
     <hr/> 
@@ -124,7 +129,7 @@
         {% get_ans_for_this_question quizz question student as this_answer %}
         <div class="row"> 
             <div class="col-sm-12 col-md-12"  align="center" style="border-radius : 10px ">
-                <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer.answer }}" >
+                <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer.answer }}" />
             </div> 
         </div> 
     {% elif question.qtype > 2 %}   
@@ -169,6 +174,10 @@
         {% endif %}
     </div>
 </div> 
+
+
+
+
 {% else %}
 
     <div class="row consigne_diapo"  align="center">  
@@ -190,12 +199,11 @@
         </div>
     </div> 
 
-
 {% endif %}
 
 
 
- 
+
 </form>  
 </section>
  

@@ -11,8 +11,9 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.core.mail import send_mail
 
-from tool.models import * #, Generate_quizz , Generate_qr
+from tool.models import * # Generate_quizz , Generate_qr
 from tool.forms import *
+from tool.random_questions import *
 from group.models import Group 
 from socle.models import Level, Waiting , Theme , Knowledge
 from qcm.models import  Parcours, Exercise , Folder , Relationship
@@ -55,7 +56,8 @@ from datetime import datetime , timedelta
 from general_fonctions import *
 from qcm.views import tracker_execute_exercise
 import subprocess
-
+from cryptography.fernet import Fernet
+from tool.random_questions import *
 #################################################################################
 #   Fonctions
 #################################################################################
@@ -89,7 +91,6 @@ def all_datas(level):
         themes_dict["waitings"]=waitings_tab
         themes_tab.append(themes_dict)
     levels_dict["themes"]=themes_tab
-
     return levels_dict 
  
 
@@ -839,9 +840,12 @@ def show_quizz_shared(request,id):
  
 
 
-def result_quizz(request,id,idp):
+def result_quizz(request,id,idp=0):
     
-    parcours = Parcours.objects.get(pk=idp)  
+    if idp :
+        parcours = Parcours.objects.get(pk=idp)
+    else :
+        parcours = None 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     questions =  quizz.questions.filter(is_publish=1).order_by("ranking")
@@ -1491,7 +1495,7 @@ def list_quizz_student(request):
 
 
  
-def store_quizz_solution( quizz_id,student,q_id, solutions,t):
+def store_quizz_solution( quizz_id,student,q_id, solutions,t,hashed):
     """ Enregistrement des solutions postées 
     par les id des choices proposés"""
     answer,sep = "" , ","
@@ -1504,11 +1508,24 @@ def store_quizz_solution( quizz_id,student,q_id, solutions,t):
                 is_correct = 1
                 score      = question.point
         elif question.qtype == 2 :
-            choices = question.choices.all()
-            for choice in choices :
-                if ans == choice.answer :
+            # choices = question.choices.all()
+            # for choice in choices :
+            #     if ans == choice.answer :
+            #         is_correct = 1
+            #         score      = question.point
+            quizz = Quizz.objects.get(pk=quizz_id)
+            if quizz.is_random : 
+                ans = hash(str(ans))
+                if ans == hashed :
                     is_correct = 1
                     score      = question.point
+
+            else :
+                ans_tab = question.answer.split('____')
+                if ans in ans_tab :
+                    is_correct = 1
+                    score      = question.point
+                    break
         else :
             choices  = question.choices.values_list('id',flat=True).filter(is_correct=1)
             corrects = 0
@@ -1518,7 +1535,6 @@ def store_quizz_solution( quizz_id,student,q_id, solutions,t):
             if corrects == len(choices):
                 is_correct = 1
                 score      = question.point 
-
         if i == len(solutions):
             sep = ""
         answer += str(escape_chevron(ans))+sep
@@ -1537,11 +1553,9 @@ def store_quizz_solution( quizz_id,student,q_id, solutions,t):
 
 def goto_quizz_numeric(request,id):
     """ participation à un quizz sur poste"""
-
- 
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
-
+    fl = False
     #Génération des questions
     question_ids = list(quizz.questions.values_list("id",flat=True).order_by("ranking"))
     quizz_id     = request.session.get("quizz_id",None) 
@@ -1593,7 +1607,13 @@ def goto_quizz_numeric(request,id):
     if quizz_nav == len(question_ids) :
         end_of_quizz = True
         question = None
-        request.POST["quizz_id"] = None 
+        if quizz.is_random : fl=True
+        else : fl = False
+        ##request.POST["quizz_id"] = None : Plante avec les quetsions flash
+        try :
+            del request.session["quizz_id"] 
+        except :
+            pass
 
     elif quizz_nav > -1 : 
         question_id = question_ids[quizz_nav]
@@ -1602,12 +1622,11 @@ def goto_quizz_numeric(request,id):
     else :
         question = None
 
-
     quizz_nav += 1
     quizz_nav_prev = quizz_nav - 1
 
 
-    context = {  "quizz" : quizz , "question" : question , 'duration' : duration , "quizz_nav" : quizz_nav, "quizz_nav_prev" : quizz_nav_prev ,"end_of_quizz" : end_of_quizz ,"stop_time" : stop_time  }
+    context = {  "quizz" : quizz , "question" : question , 'duration' : duration , "quizz_nav" : quizz_nav, "quizz_nav_prev" : quizz_nav_prev ,"end_of_quizz" : end_of_quizz ,"stop_time" : stop_time , 'fl' : fl }
 
     return render(request, 'tool/goto_quizz_numeric.html', context)
 
@@ -1670,15 +1689,16 @@ def goto_quizz_student(request,id):
         timer =  stop_time - start_time
         today = time_zone_user(quizz.teacher.user)
 
-        if quizz.stop and quizz.start :
-            if quizz.stop > today and quizz.start < today :
-                store_quizz_solution(quizz_id,student,q_id, solutions,timer)
-        elif quizz.stop :
-            if quizz.stop > today  :
-                store_quizz_solution(quizz_id,student,q_id, solutions,timer)
-        else :
-            store_quizz_solution(quizz_id,student,q_id, solutions,timer)
-
+        # if quizz.stop and quizz.start :
+        #     if quizz.stop > today and quizz.start < today :
+        #         store_quizz_solution(quizz_id,student,q_id, solutions,timer)
+        # elif quizz.stop :
+        #     if quizz.stop > today  :
+        #         store_quizz_solution(quizz_id,student,q_id, solutions,timer)
+        # else :
+        #     store_quizz_solution(quizz_id,student,q_id, solutions,timer)
+        hashed = request.POST.get("answer_type", None)
+        store_quizz_solution(quizz_id,student,q_id, solutions,timer,hashed)
 
     if quizz_nav == len(question_ids) :
         end_of_quizz = True
@@ -3091,7 +3111,7 @@ def ajax_is_ia(request):
 def list_questions_flash(request):
     request.session["parcours_id"] = False
     teacher = request.user.teacher 
-    quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, folders=None).order_by("levels") # non inclus dans un dossier
+    quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, folders=None).order_by("levels","-id") # non inclus dans un dossier, 
     delete_session_key(request, "quizz_id")
     return render(request, 'tool/list_questions_flash.html', { 'quizzes': quizzes , 'teacher': teacher })
 
@@ -3102,65 +3122,138 @@ def list_questions_flash(request):
 @login_required(login_url= 'index')
 def create_questions_flash(request,id):
     teacher = request.user.teacher
-    group_id   = request.session.get("group_id",None)
-    folder_id  = request.session.get("folder_id",None)
-    if group_id : group = Group.objects.get(pk=group_id )
-    else : group = None
 
-    if folder_id : folder = Folder.objects.get(pk=folder_id )
-    else : folder = None
-
-    if teacher.subjects.count() == 1 :
-        subject = teacher.subjects.first()
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
-    else :
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
-    if form.is_valid():
-        nf = form.save(commit = False)
-        nf.teacher = teacher
-        nf.is_questions = 1
-        nf.is_random = 1
-        nf.save()
-        form.save_m2m()
-        for group_id in request.POST.getlist("groups") :
-            group = Group.objects.get(pk=group_id)
-            nf.students.set(group.students.all())
 
-        return redirect('list_questions_flash')
-    else:
-        print(form.errors)
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.teacher = teacher
+            nf.is_questions = 1
+            nf.is_random = 1
+            if nf.is_video == 0 : nf.is_numeric = 1
+            nf.is_archive = 0
+            nf.save()
+            form.save_m2m()
+            for group_id in request.POST.getlist("groups") :
+                group = Group.objects.get(pk=group_id)
+                nf.students.set(group.students.all())
+
+            mental_ids = request.POST.getlist("mental_ids",None)
+            if len(mental_ids) :
+                create_questions_flash_random_variable(mental_ids, nf)
+                    
+            return redirect('list_questions_flash')
+        else:
+            print(form.errors)
+
+
     mentals = Mental.objects.filter(mentaltitle__subject__id = 1 ).order_by("mentaltitle")
+    context = {'form': form, 'teacher': teacher,  'mentals' : mentals   }
 
-    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group , 'mentals' : mentals   }
     return render(request, 'tool/form_question_flash.html', context)
 
 
+
 @login_required(login_url= 'index')
-def update_questions_flash(request):
+def update_questions_flash(request,id):
+    teacher = request.user.teacher
+    quizz   = Quizz.objects.get(pk=id)
+
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , instance = quizz)
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.teacher = teacher
+            nf.is_questions = 1
+            nf.is_random = 1
+            if nf.is_video == 0 : nf.is_numeric = 1
+            nf.is_archive = 0
+            nf.save()
+            form.save_m2m()
+            for group_id in request.POST.getlist("groups") :
+                group = Group.objects.get(pk=group_id)
+                nf.students.set(group.students.all())
+
+            mental_ids = request.POST.getlist("mental_ids",None)
+            if len(mental_ids) :
+                create_questions_flash_random_variable(mental_ids, nf)
+                    
+            return redirect('list_questions_flash')
+        else:
+            print(form.errors)
+
+
+    mentals = Mental.objects.filter(mentaltitle__subject__id = 1 ).order_by("mentaltitle")
+    context = {'form': form, 'teacher': teacher,  'mentals' : mentals   }
+
+    return render(request, 'tool/form_question_flash.html', context)
+
+
+
+@login_required(login_url= 'index')
+def duplicate_questions_flash(request,id):
+    quizz      = Quizz.objects.get(pk=id)
+    mental_ids = quizz.questions.values_list("mental_id",flat=True).distinct()
+    quizz.pk   = None
+    quizz.code = str(uuid.uuid4())[:8]
+    quizz.save()
+    if len(mental_ids) :
+        create_questions_flash_random_variable(mental_ids, quizz)
+    return redirect('list_questions_flash')
+
+
+@login_required(login_url= 'index')
+def show_questions_flash(request,id):
     pass
 
 @login_required(login_url= 'index')
-def delete_questions_flash(request):
+def goto_questions_flash(request,id):
     pass
+
+@login_required(login_url= 'index')
+def delete_questions_flash(request,id):
+    quizz = Quizz.objects.get(pk = id)
+    questions = quizz.questions.all()
+    for question in questions :
+        if question.quizz.count()==1:
+            question.delete()
+    quizz.delete()
+    return redirect('list_questions_flash')
+
 
 
 def ajax_select_style_questions(request):
-    subject_id         = request.POST.get('subject_id',None)
+
+    subject_id = request.POST.get('subject_id',None)
+    level_ids  = request.POST.getlist('level_ids',None)
     is_questions_quizz = request.POST.get('is_questions_quizz',None)
     data = {}
  
     if is_questions_quizz == "true" :
         is_quizz = True
-        mentals = Mental.objects.filter(mentaltitle__subject__id = subject_id ).order_by("mentaltitle")
-        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
+        teacher = request.user.teacher
+        quizzes = set()
+        for level_id in level_ids :
+            level = Level.objects.get(pk=level_id)
+            quizzes.update( teacher.teacher_quizz.filter(subject_id = subject_id, levels = level,is_random=0) )
+        all_questions = set()
+        for quizz in quizzes:
+            if quizz.questions.count() :
+                all_questions.update(quizz.questions.all())
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_questions' : all_questions , 'is_quizz' : is_quizz  })
     else :
         is_quizz = False
-        mentals = Mental.objects.filter(mentaltitle__subject__id = subject_id ).order_by("mentaltitle")
+        mentals = set()
+        for level_id in level_ids :
+            level = Level.objects.get(pk=level_id)
+            mentals.update( Mental.objects.filter(mentaltitle__subject__id = subject_id,mentaltitle__levels = level ).order_by("mentaltitle","ranking") ) 
+
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
 
-    print(is_quizz)
     return JsonResponse(data)
 
 

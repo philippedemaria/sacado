@@ -2,6 +2,45 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-question-flash.js OK --");
 
+        $('.div_is_mark').hide() ; 
+        $(".div_is_ranking").hide(); 
+        $(".div_time").hide(); 
+        $('.div_interslide').hide() ; 
+        $('#is_result_final').hide() ; 
+
+        $('#id_is_publish').prop('checked', true); 
+        $('#id_is_numeric').prop('checked', false); 
+        $('#id_is_video').prop('checked', false); 
+        $('#id_is_archive').prop('checked', false); 
+        $('#id_is_mark').prop('checked', false); 
+        $('#id_is_random').prop('checked', false); 
+        $('#id_is_ranking').prop('checked', false); 
+        $('#id_is_shuffle').prop('checked', false); 
+        $('#id_is_back').prop('checked', false);
+        $('#id_is_result').prop('checked', false);
+
+        
+        $('#id_is_numeric').on('change', function (event) {
+            $('.div_is_mark').toggle(300) ;
+            $('#is_video_div').toggle(300) ;
+        });
+
+        $('#id_is_result').on('change', function (event) {
+
+             $('#is_result_final').toggle(300) ;  
+
+        });
+
+        $('#id_is_video').on('change', function (event) {
+            $('.div_interslide').toggle(300) ;
+        });
+
+        $('#id_is_publish').on('change', function (event) {
+            $('.div_time').toggle(300) ; 
+        });
+
+ 
+
 
 
         $('.opener_k').hide() ;
@@ -29,7 +68,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('body').on('change', '#is_questions_quizz' , function (event) {  
 
             let subject_id = $("#id_subject").val();
+            let level_ids  = $("#id_levels").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
             if ($("#is_questions_quizz").is(":checked")) {
                             is_quizz = true ;
                         } else {
@@ -41,9 +82,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             $.ajax(
                 {
                     type: "POST",
-                    dataType: "json",
+                    dataType: "json",                    
+                    traditional: true, // Permet d'envoyer une liste.
                     data: {
                         'subject_id'        : subject_id,
+                        'level_ids'         : level_ids,
                         'is_questions_quizz': is_quizz,
                         csrfmiddlewaretoken: csrf_token
                     },

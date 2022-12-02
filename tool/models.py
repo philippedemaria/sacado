@@ -11,6 +11,7 @@ from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
 from time import strftime
+from tool.random_questions import *
 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
@@ -23,7 +24,6 @@ POLICES = (
         (48, '48'),
         (56, '56'),
     )
-
 
 
 def choice_directory_path(instance, filename):
@@ -163,6 +163,7 @@ class Mentaltitle(models.Model):
     subject    = models.ForeignKey(Subject, related_name="mentaltitles", blank=True, null = True,  on_delete=models.CASCADE) 
     ranking    = models.PositiveIntegerField(default=0,   ) 
     is_display = models.BooleanField(default=0, verbose_name="En ligne ?")
+    levels     = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
 
     def __str__(self):
         return self.title
@@ -175,12 +176,17 @@ class Mental(models.Model):
     script      = models.TextField(max_length=255,  blank=True, null = True,  verbose_name="script éventuel")
     is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
     mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
-    ranking    = models.PositiveIntegerField(default=0,   ) 
+    ranking     = models.PositiveIntegerField(default=0,   ) 
 
     def __str__(self):
         return self.content
 
-
+    def alea_content_creator(self):
+        data = dict()
+        t,a = alea_content(self.pk)
+        ca  = hash(str(a))
+        data['t'] , data['a'] = t, ca
+        return data
 
 
 class Question(models.Model):
@@ -194,6 +200,9 @@ class Question(models.Model):
     answer        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Réponse attendu")
 
     knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
+
+    mental     = models.ForeignKey(Mental, related_name="questions", blank=True, null = True,  on_delete=models.CASCADE,editable=True)
+
 
     imagefile  = models.ImageField(upload_to=question_directory_path, blank=True, verbose_name="Image", default="")
     audio      = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
@@ -384,7 +393,7 @@ class Quizz(ModelWithCode):
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
     is_random    = models.BooleanField(default=0, editable=False) # question flash
-    nb_slide     = models.PositiveIntegerField(default=5)  # Nombre de diapositive si le quizz est randomisé
+    nb_slide     = models.PositiveIntegerField(default=5, blank=True)  # Nombre de diapositive si le quizz est randomisé
     is_video     = models.BooleanField(default=0, verbose_name="Support de passation")  # Vidéo projection
     # si is_numeric et is_video en même temps alors c'est un jeu
 
@@ -406,6 +415,8 @@ class Quizz(ModelWithCode):
     folders      = models.ManyToManyField(Folder, blank=True, related_name="quizz"  ) 
     
     students     = models.ManyToManyField(Student, blank=True,  related_name="quizz",   editable=False)
+
+
 
     def __str__(self):
         return self.title 
@@ -441,6 +452,16 @@ class Quizz(ModelWithCode):
 
     def type_of_document(self):
         return 3
+
+
+    def mental_activities(self):
+        s = set()
+        for question in self.questions.all():
+            s.add(question.mental)
+        return s
+
+
+
 
 
 

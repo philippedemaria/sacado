@@ -22,7 +22,7 @@
             {% endif %}
             <a href="{% url 'get_this_question'  question.id quizz_id  %}"  style="font-size: 12px">Récupérer cette question</a> 
             <br/>
-            <div>{{ question|safe }}</div>                        
+            <div>{{ question.title|safe }}</div>                        
         </div>
 
         <div class="card_body">

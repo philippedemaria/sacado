@@ -5,11 +5,19 @@
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Paramètres <i class="fa fa-caret-down"></i></a>
 
         <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            {% if quizz%}            
             <li> 
-                <a href="{% url 'update_quizz' quizz.id %}"  >
-                    <i class="bi bi-gear"></i> Configuration du quizz
-                </a>
+                {% if quizz.is_random %}
+                    <a href="{% url 'update_questions_flash' quizz.id %}"  >
+                        <i class="bi bi-gear"></i> Configuration des questions flash
+                    </a>
+                {% else %}
+                    <a href="{% url 'update_quizz' quizz.id %}"  >
+                        <i class="bi bi-gear"></i> Configuration du quizz
+                    </a>
+                {% endif %}
             </li> 
+            {% endif %}
             <li>             
                 {% if sacado_asso %}            
                     <a href="{% url 'goto_quizz_numeric'  quizz.id   %}" target="_blank" title="Lire un quizz"><i class="bi bi-play"></i> Lire le quizz </a> 
@@ -41,7 +49,13 @@
         </ul>
     </li> 
 
-    <a href="{% url 'list_quizzes' %}" class="btn btn-new">Mes quizz</a>   
+    {% if quizz%}
+        {% if quizz.is_random %}
+        <a href="{% url 'list_questions_flash' %}" class="btn btn-new">Mes questions flash</a>  
+        {% else %}
+        <a href="{% url 'list_quizzes' %}" class="btn btn-new">Mes quizz</a>  
+        {% endif %}
+    {% endif %}
     {% if parcours and group %}
     <a href="{% url 'show_parcours' group.id parcours.id %}" class="btn btn-default" style="background-color: {{parcours.color}};color:{{parcours.color|contrast_color}}">{{parcours.title}}</a> 
     {% elif parcours %}

@@ -4,9 +4,59 @@
 
 
 {% if is_quizz %}
-<div class="alert alert-info">
-    Les questions sont choisies parmi les quizz déjà créés depuis le début de l'année.
-</div>
+
+     
+    {% for question in all_questions %}
+        <div class="card" style="width:300px;height:300px;margin:15px;overflow: hidden;padding: 10px;">
+            <div class="card_title">
+                {% if question.calculator  %}                            
+                <img src="{% static 'img/calculator.png' %}" width ="20px" class="pull-right" />  
+                {% else %}
+                <img src="{% static 'img/no_calculator.png' %}" width ="20px" class="pull-right" /> 
+                {% endif %}                              
+                {% if question.qtype == 1  %}
+                    <label>{% if question.is_correct %}<b>Vrai</b>/faux{% else %}Vrai/<b>faux</b>{% endif %}. </label>
+                {% elif question.qtype == 2  %}
+                     <label>    Réponse rédigée </label> 
+                {% elif question.qtype == 3  %}
+                       <label> QCM. </label> 
+                {% else %} 
+                      <label>  QCS. </label>
+                {% endif %}
+                <label class="btn btn-xs btn-sacado"><input type="checkbox" value="{{ question.id}}" name="question_ids" />Récupérer cette question</label> 
+                <br/>
+                <div>{{ question.title|safe }}</div>                        
+            </div>
+
+            <div class="card_body">
+
+                <br/>
+                {% if question.imagefile %}
+                    <p style="text-align:center">
+                        <img src="{{ question.imagefile.url }}" width ="200px" />
+                    </p>
+                {% endif %}
+                <br/>
+                {% for c in question.choices.all %}
+                    <label>{{ c }}</label> {% if not forloop.last%}ou{% endif %}
+
+                {% endfor  %}
+
+            </div>
+        </div>
+    {% empty %}
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="alert alert-danger">
+                    Aucune question ne correspond à cette recherche.
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+ 
+
 {% else %}     
 <table class="table table-hover borderless display1000" style="width:100%;" >
     <thead> 
@@ -22,7 +72,7 @@
             </tr> 
             {% for m in title.list %}
                 <tr style="background:white; cursor: pointer;" class="opener_k opened{{ title.grouper.id }} out no_visu_on_load" >
-                    <td ><label> <input type="checkbox" value="{{m.id }}" name="mentals" /> {{ m.content }} </label></td> 
+                    <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
                 </tr>  
             {% endfor %}
         {% endfor %}
