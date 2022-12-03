@@ -301,16 +301,16 @@
 
             </a>
 
-
             {% if parcours.isnot_shared  %}
-            <span class="shared helper_tip" style="color:{{ parcours.color }};">Parcours partagé entre plusieurs groupes <i class="fa fa-question-circle"></i>
-                <div class="helper_tip_text" >
+            <span class="shared helper_tip" style="color:{{ parcours.color|contrast_color }};">Parcours partagé  <i class="fa fa-question-circle"></i>
+                <div class="helper_tip_text" >entre plusieurs groupes<br/>
                     {% for g in parcours.groups.all %}
                         {{ g }}{% if not forloop.last %}, {% endif%}
                     {% endfor %}
                 </div>
             </span>
             {% endif %} 
+
         </div>
     </div>
 
