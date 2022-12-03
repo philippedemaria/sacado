@@ -1,0 +1,110 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-create','script/ajax-question-flash']);
+    </script>  
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span class="sacado_color_text"><i class="bi bi-lightning"></i></span>  
+       Les questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/> {{level.name}}
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+
+     <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Niveau <i class="fa fa-caret-down"></i></a>
+
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            {% for l in levels %}       
+            <li> 
+                <a href="{% url 'admin_mentals' l.id  %}">{{ l.name }}</a>
+            </li> 
+            {% endfor %}   
+        </ul>
+    </li> 
+
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<style type="text/css">
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0px;
+}
+</style>
+<section class="content_main"> 
+    <h4 class="thin">Savoir faire </h4>
+    <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <label>Titre</label>
+                {{ form.content|add_class:"form-control" }}
+                {{ form.content.errors }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-11 form-group">
+                <label>Thème</label>
+                {{ form.mentaltitle|add_class:"form-control select2" }}
+                {{ form.mentaltitle.errors }}
+            </div>
+            <div class="col-sm-1 form-group">
+                {% if mental %}<a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}"><i class="bi bi-pencil"></i></a> {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label>Ordre</label>
+                {{ form.ranking|add_class:"form-control"  }}
+                {{ form.ranking.errors }}
+            </div>
+            <div class="col-sm-6 form-group">
+                <label>En ligne ?</label>
+                {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                {{ form.is_display.errors }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label>html</label> 
+                {{ form.html|add_class:"form-control"  }}
+                {{ form.html.errors }}
+            </div>
+            <div class="col-sm-6 form-group">
+                <label>Script</label>
+                {{ form.script|add_class:"form-control"  }}
+                {{ form.script.errors }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <div class="form-group">
+                    <input value="Créer" type="submit" class="btn btn-primary" name="mental" value="ok" />
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                </div>
+            </div>
+        </div>
+    </form> 
+</section>
+{% endblock %} 

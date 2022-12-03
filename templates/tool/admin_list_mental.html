@@ -1,0 +1,107 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-create','script/ajax-question-flash']);
+    </script>  
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span class="sacado_color_text"><i class="bi bi-lightning"></i></span>  
+       Les questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/> {{level.name}}
+
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    <a href="{% url 'admin_create_update_mentaltitle' 0   %}" class="btn btn-new pull-right">+ Thème de savoir faire</a> 
+    <a href="{% url 'admin_create_update_mental' 0  %}" class="btn btn-new pull-right">+ Savoir faire de QF</a>  
+
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<style type="text/css">
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0px;
+}
+</style>
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12 form_card">
+            <table class="table table-sacado  table-hover standard_tab_sort2000" style="width:100%">
+              <thead>
+                  <tr>
+                    <th>Contenu</th>
+                    <th>Thème</th> 
+                    <th>Enseignement</th>           
+                    <th>Niveaux</th> 
+                    <th>En ligne ?</th>
+                    <th>Ordre</th>
+                  </tr>
+              </thead>
+              <tbody>
+                    {% regroup mentals by mentaltitle as mental_list %}
+
+                    {% for mt in mental_list %}
+                    <tr class="opener out" id ="{{mt.grouper.id}}">
+                        <td style="color:white;background-color: #5d4391"><i class="fa fa-caret-right"></i> {{ mt.grouper.title }}</td>
+                        <td style="color:white;background-color: #5d4391"> </td> 
+                        <td style="color:white;background-color: #5d4391"> </td>           
+                        <td style="color:white;background-color: #5d4391"> </td> 
+                        <td style="color:white;background-color: #5d4391"> </td>
+                        <td style="color:white;background-color: #5d4391"> </td>
+                    </tr>
+
+                        {% for mental in mt.list %}
+                        <tr id="{{mt.grouper.id}}" class="opener_k opened{{ mt.grouper.id }} out"  id="{{ mental.id}}">
+                          <td>
+                                <a href="{% url 'admin_create_update_mental' mental.id %}">{{ mental.content }}</a>
+                                <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right"  onclick="return TestDelete('ce thème')"></a> 
+                          </td>
+                          <td>
+                                <a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}">{{ mental.mentaltitle.title }}</a> 
+                                <a href="{%  url 'admin_delete_mentaltitle' mental.mentaltitle.id %}" class="pull-right"   onclick="return TestDelete('ce thème')"></a>
+                          </td>
+                          <td>
+                                {{ mental.mentaltitle.subject.title }} 
+                          </td>
+                          <td>     
+                                {% for l in mental.mentaltitle.levels.all %}                 
+                                    {{ l.shortname  }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %} 
+                          </td> 
+                          <td>
+                                {% if mental.is_display %}En ligne{% else %}En attente{% endif %} 
+                          </td>
+                          <td>
+                                {{ mental.ranking }} 
+                          </td>
+                        </tr>                    
+                        {% endfor %}
+                    {% endfor %}
+              </tbody>
+        </table>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %} 

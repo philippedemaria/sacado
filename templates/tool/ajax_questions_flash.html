@@ -65,16 +65,30 @@
         </tr>
     </thead> 
     <tbody>
-        {% regroup mentals by mentaltitle as title_list %} 
-        {% for title in title_list %}
-            <tr style="background:#5d4391; cursor: pointer;color:white" class="opener out"   id="{{ title.grouper.id }}">
-                <td style="width:85%"><i class="fa fa-caret-right"></i> {{ title.grouper.title }}</td> 
+        {% regroup mentals by mentaltitle as mt_list %}
+        {% for mentaltitle  in mt_list %}
+
+            <tr style="background:#5d4391; cursor: pointer;color:white" class="opener out"   id="{{ mentaltitle.grouper.id }}">
+                <td style="width:85%"><i class="fa fa-caret-right"></i> {{ mentaltitle.grouper.title }}</td> 
             </tr> 
-            {% for m in title.list %}
-                <tr style="background:white; cursor: pointer;" class="opener_k opened{{ title.grouper.id }} out no_visu_on_load" >
+            {% for m in mentaltitle.list %}
+                <tr style="background:white; cursor: pointer;" class="opener_k opened{{ mentaltitle.grouper.id }} out no_visu_on_load" >
                     <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
                 </tr>  
             {% endfor %}
+
+    
+
+        {% empty %}
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="alert alert-danger">
+                        Aucune question ne correspond à cette recherche.
+                    </div>
+                </div>
+            </div>
+
         {% endfor %}
     </tbody>
 </table> 

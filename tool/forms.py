@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from .models import Tool , Question  , Choice  , Quizz , Diaporama , Slide , Qrandom ,Variable , Answerplayer, Videocopy
+from .models import *
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
@@ -144,6 +144,21 @@ class QuizzForm(forms.ModelForm):
 		validation_file(content) 
 
 
+
+
+class MentaltitleForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Mentaltitle
+		fields = '__all__'
+
+
+
+class MentalForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Mental
+		fields = '__all__'
 
 
 class QFlashForm(forms.ModelForm):

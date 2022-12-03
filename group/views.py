@@ -1085,7 +1085,7 @@ def stat_group(request, id):
         parcours = Parcours.objects.filter(students=s,is_publish=1,is_trash=0)
         nb_exo_total = 0
         for p in parcours :
-            nb_exo_total += Relationship.objects.filter(parcours=p,is_publish=1).count()
+            nb_exo_total += Relationship.objects.filter(parcours=p,is_publish=1,exercise__supportfile__is_title=0).count()
         student["parcours"] = parcours 
         studentanswers = Studentanswer.objects.filter(parcours__in = parcours, student=s)
         nb_exo_done = 0

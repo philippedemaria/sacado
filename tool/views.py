@@ -3107,6 +3107,67 @@ def ajax_is_ia(request):
 ####    Question flash
 #####################################################################################################################################
 #####################################################################################################################################
+ 
+
+@login_required(login_url= 'index')
+def admin_mentals(request,idl):
+    request.session["parcours_id"] = False 
+    request.session["admin_create_qf_level_id"] = idl 
+    level = Level.objects.get(pk=idl)
+    mentals = Mental.objects.filter(mentaltitle__levels=level).order_by("mentaltitle","ranking")
+    return render(request, 'tool/admin_list_mental.html', { 'mentals': mentals ,'level' : level   })
+
+
+@login_required(login_url= 'index')
+def admin_create_update_mental(request,idm):
+    levels = Level.objects.exclude(pk=13).order_by("ranking")
+    idl    = request.session.get("admin_create_qf_level_id",1)
+    level = Level.objects.get(pk=idl)
+    if idm :
+        mental = Mental.objects.get(pk=idm)
+        form  = MentalForm(request.POST or None,instance = mental)
+    else :
+        form  = MentalForm(request.POST or None)
+        mental = None
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save() 
+            return redirect('admin_mentals', )
+    return render(request, 'tool/admin_form_mental.html', {  'form': form , 'mental' : mental , 'levels' : levels, 'idl' : idl , 'level' : level })
+
+
+
+@login_required(login_url= 'index')
+def admin_create_update_mentaltitle(request,idm):
+    levels = Level.objects.exclude(pk=13).order_by("ranking")    
+    idl    = request.session.get("admin_create_qf_level_id",1)    
+    level = Level.objects.get(pk=idl)
+    if idm :
+        mentaltitle = Mentaltitle.objects.get(pk=idm)
+        form  = MentaltitleForm(request.POST or None,instance = mentaltitle)
+    else :
+        mentaltitle = None
+        form  = MentaltitleForm(request.POST or None )
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save() 
+    return render(request, 'tool/admin_form_mentaltitle.html', {  'form': form , 'mentaltitle' : mentaltitle , 'levels' : levels, 'idl' : idl  , 'level' : level })
+
+
+
+@login_required(login_url= 'index')
+def admin_delete_mental(request,idm):
+    Mental.objects.filter(pk=idm).delete() 
+    return redirect('admin_mentals')
+
+
+@login_required(login_url= 'index')
+def admin_delete_mentaltitle(request,idm):
+    Mentaltitle.objects.filter(pk=idm).delete() 
+    return redirect('admin_mentals')
+
+
+
 @login_required(login_url= 'index')
 def list_questions_flash(request):
     request.session["parcours_id"] = False
@@ -3117,12 +3178,9 @@ def list_questions_flash(request):
 
 
 
-
-
 @login_required(login_url= 'index')
 def create_questions_flash(request,id):
     teacher = request.user.teacher
-
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
 
@@ -3229,11 +3287,11 @@ def delete_questions_flash(request,id):
 def ajax_select_style_questions(request):
 
     subject_id = request.POST.get('subject_id',None)
-    level_ids  = request.POST.getlist('level_ids',None)
+    level_ids  = request.POST.getlist('level_ids',[])
     is_questions_quizz = request.POST.get('is_questions_quizz',None)
     data = {}
  
-    if is_questions_quizz == "true" :
+    if is_questions_quizz and level_ids and is_questions_quizz == "true" :
         is_quizz = True
         teacher = request.user.teacher
         quizzes = set()
@@ -3250,8 +3308,7 @@ def ajax_select_style_questions(request):
         mentals = set()
         for level_id in level_ids :
             level = Level.objects.get(pk=level_id)
-            mentals.update( Mental.objects.filter(mentaltitle__subject__id = subject_id,mentaltitle__levels = level ).order_by("mentaltitle","ranking") ) 
-
+            mentals.update( Mental.objects.filter(mentaltitle__subject__id = subject_id,mentaltitle__levels = level,is_display=1 ).order_by("mentaltitle__ranking","ranking") ) 
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
 
     return JsonResponse(data)

@@ -41,7 +41,7 @@ from general_fonctions import *
 from school.views import this_school_in_session
 from qcm.views import tracker_execute_exercise
 import uuid
-
+from ipware import get_client_ip
 
 
 def logout_view(request):
@@ -106,6 +106,11 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
                 Relationship.objects.filter(id=r.id).update(is_publish = 1)
 
             if self.request.user.is_teacher:  # Teacher
+
+                ip, is_routable = get_client_ip(request)
+                f=open("/var/www/sacado/logs/connexions.log",'a')
+                print(ip," ",datetime.now(),",",teacher.user.username, ",",teacher.user.first_name,",", teacher.user.last_name, file=f)
+                f.close()
 
                 teacher = Teacher.objects.get(user=self.request.user.id)
 

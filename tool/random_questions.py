@@ -100,6 +100,7 @@ def alea_content(mental_id):
 
 	elif mental_id == 5 :#5) Calculer mentalement des sommes de deux nombres de dizaines et unités, sans retenue, et au résultat plus petit que 100
 		pass
+		
 	elif mental_id == 6 :#6) Additionner 2 nombres à 1 chiffre avec 1 nombre à 2 chiffres
 		n = randint(1,9)
 		m = randint(1,9)

@@ -139,6 +139,13 @@ urlpatterns = [
     ################################################################################################################ 
     ############## Questions flash
     ################################################################################################################ 
+    path('admin_mentals/<int:idl>', admin_mentals, name='admin_mentals'),
+    path('admin_create_update_mental/<int:idm>', admin_create_update_mental, name='admin_create_update_mental'),
+    path('admin_delete_mental/<int:idm>', admin_delete_mental, name='admin_delete_mental'),
+    path('admin_create_update_mentaltitle/<int:idm>', admin_create_update_mentaltitle, name='admin_create_update_mentaltitle'),
+    path('admin_delete_mentaltitle/<int:idm>', admin_delete_mentaltitle, name='admin_delete_mentaltitle'),
+
+
     path('list_questions_flash', list_questions_flash, name='list_questions_flash'), 
     path('create_questions_flash/<int:id>', create_questions_flash, name='create_questions_flash'),
     path('duplicate_questions_flash/<int:id>', duplicate_questions_flash, name='duplicate_questions_flash'),
@@ -146,7 +153,7 @@ urlpatterns = [
     path('delete_questions_flash/<int:id>', delete_questions_flash, name='delete_questions_flash'),
     path('show_questions_flash/<int:id>', show_questions_flash, name='show_questions_flash'),
     path('ajax_select_style_questions', ajax_select_style_questions, name='ajax_select_style_questions'), 
-
+ 
 
     ################################################################################################################ 
     ############## Play

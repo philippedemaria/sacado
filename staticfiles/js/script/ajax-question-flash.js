@@ -100,7 +100,41 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             )
          });
 
+ 
+        $('body').on('change', '#id_levels' , function (event) {  
 
+            let subject_id = $("#id_subject").val();
+            let level_ids  = $("#id_levels").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if ($("#is_questions_quizz").is(":checked")) {
+                            is_quizz = true ;
+                        } else {
+                            is_quizz = false ;
+                        }
+ 
+            if(subject_id==''){ alert("Renseigner l'enseignement"); $('#is_questions_quizz').prop('checked', false); }
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",                    
+                    traditional: true, // Permet d'envoyer une liste.
+                    data: {
+                        'subject_id'        : subject_id,
+                        'level_ids'         : level_ids,
+                        'is_questions_quizz': is_quizz,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_select_style_questions",
+                    success: function (data) {
+
+                        $('#question_choice_style').html(data.html);
+ 
+                    }
+                }
+            )
+         });
 
 
 
