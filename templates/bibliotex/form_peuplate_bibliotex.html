@@ -33,7 +33,7 @@
         <form action="" method="POST" enctype='multipart/form-data'> 
             {% csrf_token %}
             <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
-            <div class="row search_bar">
+            <div class="row search_bar" style="padding-top:0px">
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                         <select id="id_subject" name="subject" class="form-control select2">
@@ -43,9 +43,6 @@
                         </select>
                     </div>
                 </div>
-
-
-
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                         <select id="id_level" name="level" class="form-control select2" >
@@ -56,18 +53,12 @@
                         </select>
                     </div>
                 </div>
-
-
-
-
                 <div class="col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
                         <select id="id_theme" name="theme" class="form-control select2" multiple>
                         </select>
                     </div>
                 </div>
-
-
                 <div class="col-sm-9 col-md-3 col-lg-3">
                     <div class="form-group">
                         <select id="id_skill" name="skill" class="form-control select2">
@@ -78,18 +69,12 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="col-sm-3 col-md-1 col-lg-1">
                     <div class="form-group">
                         <input name="keyword" id="keyword" class="form-control" placeholder="Mot clé" />
                     </div>
                 </div>
             </div> 
-
-
-
-
-
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div id="loader">
@@ -105,9 +90,6 @@
                     </div>
                 </div>
             </div> 
-
-
-
         </form>
     </div>
 </section>  
