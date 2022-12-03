@@ -1,6 +1,6 @@
 <form action="" method="POST" enctype='multipart/form-data' style="font-size:20px">  {% csrf_token %}  
 <li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Paramètres <b class="caret"></b> </a>
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Paramètres <b class="caret"></b> </a>
         <ul class="dropdown-menu clearfix pull-right" role="menu">
             <li>
                 <a href="{% url 'create_bibliotex' 0 %}" > Créer une nouvelle BiblioTex </a> 
