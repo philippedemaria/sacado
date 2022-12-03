@@ -1204,7 +1204,7 @@ def ajax_level_exotex(request):
         data['knowledges']       =  None
         data['knowledges_level'] =  None
 
-        base = Exotex.objects.filter(Q(author__user__school = teacher.user.school)| Q(author__user_id = teacher.user.id)|Q(author__user_id=teacher_id), theme__subject_id = subject_id).exclude(bibliotexs=bibliotex)
+        base = Exotex.objects.filter(theme__subject_id = subject_id).exclude(bibliotexs=bibliotex) #Q(author__user__school = teacher.user.school)| Q(author__user_id = teacher.user.id)|Q(author__user_id=teacher_id), 
  
         if theme_ids : 
             if level_id and theme_ids[0] != "" and skill_id  : 
