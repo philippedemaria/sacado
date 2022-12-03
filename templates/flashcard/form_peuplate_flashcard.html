@@ -59,7 +59,7 @@
             <form action="" method="POST" enctype='multipart/form-data'> 
                 {% csrf_token %}
                 <input id="flashpack_id" value="{{ flashpack.id }}" type="hidden"/>
-                <div class="row search_bar">
+                <div class="row search_bar" style="padding-top:0px">
                     <div class="col-sm-12 col-md-2 col-lg-2">
                         <div class="form-group">
                             <select id="id_subject" name="subject" class="form-control select2">
