@@ -52,6 +52,7 @@
 <form method="POST"> 
     <div class="row search_bar" style="padding-top: 0px;" >
         <input type="hidden" id="search_list" name="search_list" value="{% if parcours %}yes{% else %}no{% endif %}" />
+        <input type="hidden" id="this_url" name="this_url" {% if 'all_courses' in request.path %} value="all" {% else %}  value="this" {% endif %}  />
         <div class="col-sm-12 col-md-4 col-lg-3">
             <div class="form-group">
                 <select id="id_subject" name="subject" class="form-control select2">
@@ -97,101 +98,87 @@
 
     <div  style="height:35px"></div>
 
-
-
     <div class="row" id="courses_details">
-        <div class="col-sm-12 col-md-12">
- 
 
-            {% regroup courses by parcours as parcours_list  %}
-            {% for pcs in parcours_list  %}
- 
-                <div  class="box_shared box-widget widget-user-2" 
-                    style="{% if pcs.grouper.vignette %}background-image: url('{{ pcs.grouper.vignette.url }}'); background-size: 100%;{% endif %}; background-color:{{pcs.grouper.color }}">
+        {% comment %}
+            <div class="col-sm-12 col-md-12">
+     
 
-
-                    <div class="handler widget-user-header">
-
-                        <div class="disc_course">
-
-                        {% if parcours %}
-                            <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course" style="color:white;"
-                                onclick="return get_this_confirmation('tous les cours')"  title="Récupérer tous les cours"  >
-                                <i class="fa fa-clone"></i></a>
-                        {% else %} 
-                            <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit" title="Récupérer tous les cours" >
-                                <i class="fa fa-clone"></i>
-                            </a>
-                        {% endif %}
-                        </div>
+                {% regroup courses by parcours as parcours_list  %}
+                {% for pcs in parcours_list  %}
+     
+                    <div  class="box_shared box-widget widget-user-2" 
+                        style="{% if pcs.grouper.vignette %}background-image: url('{{ pcs.grouper.vignette.url }}'); background-size: 100%;{% endif %}; background-color:{{pcs.grouper.color }}">
 
 
-                        {% if pcs.grouper.vignette %}                
-                            <div class="box_title_underlay_vignette" style="background-color:{{ pcs.grouper.color }};">
-                            </div> 
-                        {% endif  %}
-                        <div class="box_title_vignette"> 
-                            <a href="{% url 'show_parcours_visual'  pcs.grouper.id  %}" style="color:{{ pcs.grouper.color|contrast_color }};">
-                                {{ pcs.grouper.title|truncatechars:"28" }}
-                            </a>
-                        </div>
-                    </div>
+                        <div class="handler widget-user-header">
 
+                            <div class="disc_course">
 
-                    <div class="course_body_shared" style="background: white;padding:10px">
-                    {% for course in pcs.list  %}
-                        <li class="course_section">
-                            {% if course.title|length > 32 %} 
-                              <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
+                            {% if parcours %}
+                                <a href="{% url 'get_this_course_for_this_parcours' 0 parcours.id pcs.grouper.id %}" class="pull-right getter_course" style="color:white;"
+                                    onclick="return get_this_confirmation('tous les cours')"  title="Récupérer tous les cours"  >
+                                    <i class="bi bi-plus-circle" style="font-size:30px"></i>
                             {% else %} 
-                                {{ course.title }} 
+                                <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id =0 data-parcours_id = '{{ pcs.grouper.id  }}' class="pull-right getter_course edit" title="Récupérer tous les cours" >
+                                    <i class="bi bi-plus-circle" style="font-size:30px"></i> 
+                                </a>
                             {% endif %}
+                            </div>
 
 
-                            {% if parcours %} 
-                                <a href="{% url 'get_this_course_for_this_parcours' 1 parcours.id course.id %}" title="Récupérer ce cours"  
-                                    onclick="return get_this_confirmation('ce cours : {{ course.title }}')"  class="pull-right  getter_course edit"><i class="fa fa-clone fa-xs"></i></a>
-                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_this_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                            {% else %} 
-                                <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit" title="Récupérer ce cours" >
-                                    <i class="fa fa-clone fa-xs"></i></a>
-                                <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
-                            {% endif %}
-                                
-
-                        </li> 
-                    {% endfor %}
-                    </div>
-                    <div  style="background: white;padding:10px;height:35px;">
-
-                        <div class="col-sm-6 col-md-6">
-                        <label>{{ pcs.grouper.course.count }} chapitres</label>
+                            {% if pcs.grouper.vignette %}                
+                                <div class="box_title_underlay_vignette" style="background-color:{{ pcs.grouper.color }};">
+                                </div> 
+                            {% endif  %}
+                            <div class="box_title_vignette"> 
+                                <a href="{% url 'show_parcours_visual'  pcs.grouper.id  %}" style="color:{{ pcs.grouper.color|contrast_color }};">
+                                    {{ pcs.grouper.title|truncatechars:"28" }}
+                                </a>
+                            </div>
                         </div>
 
-                        <div class="col-sm-6 col-md-6">
-                        <label>{{ pcs.grouper.teacher|truncatechars:"14" }}</label>
+
+                        <div class="course_body_shared" style="background: white;padding:10px">
+                        {% for course in pcs.list  %}
+                            <li class="course_section">
+                                {% if course.title|length > 32 %} 
+                                  <span title="{{ course.title }}" style="cursor: help">{{ course.title|truncatechars:32 }} </span>
+                                {% else %} 
+                                    {{ course.title }} 
+                                {% endif %}
+
+
+                                {% if parcours %} 
+                                    <a href="{% url 'get_this_course_for_this_parcours' 1 parcours.id course.id %}" title="Récupérer ce cours"  
+                                        onclick="return get_this_confirmation('ce cours : {{ course.title }}')"  class="pull-right  getter_course edit"><i class="fa fa-clone fa-xs"></i></a>
+                                    <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_this_course edit"><i class="fa fa-eye fa-xs"></i></a>
+                                {% else %} 
+                                    <a href="#" data-toggle='modal' data-target='#clone_course' data-course_id = '{{ course.id }}' data-parcours_id =0  class="pull-right  getter_course edit" title="Récupérer ce cours" >
+                                        <i class="fa fa-clone fa-xs"></i></a>
+                                    <a href="#" data-toggle='modal' data-target='#get_course' data-course_id = '{{ course.id }}'  data-parcours_id =0 class="pull-right shower_course edit"><i class="fa fa-eye fa-xs"></i></a>
+                                {% endif %}
+                                    
+
+                            </li> 
+                        {% endfor %}
+                        </div>
+                        <div  style="background: white;padding:10px;height:35px;">
+
+                            <div class="col-sm-6 col-md-6">
+                            <label>{{ pcs.grouper.course.count }} chapitres</label>
+                            </div>
+
+                            <div class="col-sm-6 col-md-6">
+                            <label>{{ pcs.grouper.teacher|truncatechars:"14" }}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %} 
-        </div>
+                {% endfor %} 
+            </div>
+
+        {% endcomment %}
     </div>
-
-
- 
-
-
-
-
-
-
-
- 
-        
-               
-
-
-
 
 </form>     
 </section>

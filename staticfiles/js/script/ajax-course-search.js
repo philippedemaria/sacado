@@ -163,7 +163,12 @@ define(['jquery', 'bootstrap'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let parcours_id = $(this).attr("data-parcours_id");
             let checkbox_value = "";
-            let all_parcours = $(this).attr("data-all_parcours"); 
+            let all_parcours = $(this).attr("data-all_parcours");
+            let this_url = $("#this_url").val();
+
+            if (this_url == "all") { url = "parcours_get_course"} 
+            else { url = "../parcours_get_course"}
+
 
             $.ajax(
                 {
@@ -174,7 +179,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'parcours_id': parcours_id,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../parcours_get_course",
+                    url: url ,
                     success: function (data) {
 
                         $('#get_course_result').html(data.html);
