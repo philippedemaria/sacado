@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
+define(['jquery', 'bootstrap', 'ckeditor'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-question-flash.js OK --");
 
