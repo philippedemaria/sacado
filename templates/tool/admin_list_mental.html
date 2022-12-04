@@ -50,7 +50,6 @@
               <thead>
                   <tr>
                     <th>Contenu</th>
-                    <th>Thème</th> 
                     <th>Enseignement</th>           
                     <th>Niveaux</th> 
                     <th>Ordre</th>
@@ -61,12 +60,14 @@
 
                     {% for mt in mental_list %}
                     <tr class="opener out" id ="{{mt.grouper.id}}">
-                        <td style="color:white;background-color: #5d4391"><i class="fa fa-caret-right"></i> {{ mt.grouper.title }}</td>
+                        <td style="color:white;background-color: #5d4391"><i class="fa fa-caret-right"></i> {{ mt.grouper.title }}
+                          <small><a href="{%  url 'admin_delete_mentaltitle' mt.grouper.id %}" class="pull-right" style="color:white"  onclick="return TestDelete('ce thème')"><i class="fa fa-trash"></i></a></small>                           
+                          <small><a href="{%  url 'admin_create_update_mentaltitle' mt.grouper.id %}" class="pull-right"  style="color:white;padding-right:20px" ><i class="bi bi-pencil"></i></a></small>
+
+                        </td>
                         <td style="color:white;background-color: #5d4391"> </td> 
                         <td style="color:white;background-color: #5d4391"> </td>           
                         <td style="color:white;background-color: #5d4391"> </td> 
-                        <td style="color:white;background-color: #5d4391"> </td>
-                        <td style="color:white;background-color: #5d4391"> </td>
                     </tr>
 
                         {% for mental in mt.list %}
@@ -74,11 +75,8 @@
                           <td {% if not mental.is_display %} style='border-left:5px solid red'{% endif %}>
                                 <a href="{% url 'admin_create_update_mental' mental.id %}">{{ mental.content }}</a>
 
-                                <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right"  onclick="return TestDelete('ce thème')"></a> 
-                          </td>
-                          <td>
-                                <a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}">{{ mental.mentaltitle.title }}</a> 
-                                <a href="{%  url 'admin_delete_mentaltitle' mental.mentaltitle.id %}" class="pull-right"   onclick="return TestDelete('ce thème')"></a>
+                                <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right"  onclick="return TestDelete('ce savoir faire')"><i class="fa fa-trash"></i></a>
+                                <a href="{%  url 'admin_duplicate_mental' mental.id %}" class="pull-right" style="padding-right:10px" ><i class="bi bi-clipboard-plus"></i></a>
                           </td>
                           <td>
                                 {{ mental.mentaltitle.subject.shortname }} 

@@ -3173,6 +3173,20 @@ def admin_delete_mentaltitle(request,idm):
 
 
 @login_required(login_url= 'index')
+def admin_duplicate_mental(request,id):
+    idl    = request.session.get("admin_create_qf_level_id",1)
+    level = Level.objects.get(pk=idl)
+    mental      = Mental.objects.get(pk=id)
+    mental.pk   = None
+    mental.save()
+    return redirect('admin_mentals', level.id )
+
+
+
+
+
+
+@login_required(login_url= 'index')
 def list_questions_flash(request):
     request.session["parcours_id"] = False
     teacher = request.user.teacher 
