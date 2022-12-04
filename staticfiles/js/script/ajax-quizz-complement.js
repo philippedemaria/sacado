@@ -298,6 +298,8 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                         $("#questions_finder").html("").html(data.html); 
                         $("#loading").hide(500); 
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
                     }
                 }
             )
