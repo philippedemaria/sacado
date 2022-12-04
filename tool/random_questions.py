@@ -531,11 +531,13 @@ def create_questions_flash_random_variable(m_ids,quizz) :
 
 
 	for mental_id in list_of_ids :
-		title, answer = alea_content(mental_id)
-
-		question = Question.objects.create(title = title, answer = answer, mental_id = mental_id,qtype=2)
-
- 
+		mental = Mental.objects.get(pk=mental_id)
+		#title, answer = mental.script alea_content(mental_id)
+		loc  = dict()
+		exec(mental.script,globals(),loc)
+		title  = loc['title']
+		answer = loc['answer']
+		question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48)
 		quizz.questions.add(question)
 
 

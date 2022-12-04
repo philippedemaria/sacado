@@ -3268,9 +3268,17 @@ def duplicate_questions_flash(request,id):
     return redirect('list_questions_flash')
 
 
-@login_required(login_url= 'index')
+@login_required(login_url= 'index') 
 def show_questions_flash(request,id):
-    pass
+    """ permet à un prof de voir son quizz """
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk= id)
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions }
+
+    return render(request, 'tool/show_question_flash.html', context)
+
 
 @login_required(login_url= 'index')
 def goto_questions_flash(request,id):

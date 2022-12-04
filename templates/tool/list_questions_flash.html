@@ -48,8 +48,8 @@
                 <td>{% for ma in q.mental_activities %}{{ ma }}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
                 <td>{{ q.nb_slide }} questions</td> 
                 <td style="width:200px">
-                    {% if q.is_video %}<a href="{% url 'show_questions_flash' q.id %}" title="Projeter les questions"><i class="bi bi-webcam"></i></a>
-                        {% if q.is_numeric %}<i class="bi bi-phone"></i>{% else %}<i class="bi bi-pencil"></i>{% endif %} 
+                    {% if q.is_numeric %}<a href="{% url 'show_questions_flash' q.id %}" title="Projeter les questions"><i class="bi bi-webcam"></i></a>
+                        <small>{% if q.is_video %}<i class="bi bi-phone"></i>{% else %}<i class="bi bi-pencil"></i>{% endif %} </small>
                     {% else %}
                         <a href="{% url 'goto_quizz_numeric' q.id %}" target='_blank' title="Voir le test - Nouvel onglet"><i class="bi bi-laptop"></i></a>
                         {% if q.students.count %}
@@ -62,7 +62,9 @@
                     {% endif %}   
                 </td>
                 <td style="width:150px;">
+                    {% if q.is_video %}
                     <a href="{% url 'result_quizz' q.id 0 %}" title="Résultats des questions"><i class="fa fa-trophy"></i></a>
+                    {% endif %} 
 
                     <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('Ces questios flash')"><i class="bi bi-trash"></i></a>
                 </td>

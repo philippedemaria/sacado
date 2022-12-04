@@ -1,0 +1,40 @@
+{% extends 'tool/show_quizz.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+ 
+
+
+
+{% block page_title %}
+   <a href="{% url 'list_questions_flash' %}" ><i class="bi bi-lightning"></i> </a> Outils pédagogiques 
+   <img width="25px" src="{% static 'img/angle-right.png' %}"/> Questions flash 
+ 
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+    {% if request.user.user_type == 2 %}
+    <a href="{% url 'list_questions_flash' %}" class="btn btn-new">Mes questions flash </a>
+    {% else %}
+    <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
+    {% endif %}
+
+{% endblock %}
+
+
+{% block title_quizz %} 
+    <h1 style="font-size:3em;padding-top:100px;line-height: 100px;"> 
+    {% for ma in quizz.mental_activities %}
+        <li class="sanspuce">{{ ma }}</li> 
+    {% endfor %}
+    </h1>
+{% endblock %}
+
+
+{% block question_title %}
+    <h1 style="font-size:4em;padding-top:100px" class="thin"> {{ question.title }} </h1>
+{% endblock %}

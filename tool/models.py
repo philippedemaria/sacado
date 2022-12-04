@@ -11,7 +11,6 @@ from django.db.models import Q
 from random import uniform , randint
 from sacado.settings import MEDIA_ROOT
 from time import strftime
-from tool.random_questions import *
 
 # Pour créer un superuser, il faut depuis le shell taper :
 # from account.models import User
@@ -183,7 +182,7 @@ class Mental(models.Model):
 
     def alea_content_creator(self):
         data = dict()
-        t,a = alea_content(self.pk)
+        t,a = exec(self.script)#alea_content(self.pk)
         ca  = hash(str(a))
         data['t'] , data['a'] = t, ca
         return data
@@ -403,7 +402,7 @@ class Quizz(ModelWithCode):
     is_result    = models.BooleanField(default=0, verbose_name="Afficher les réponses ?")
     is_result_final = models.BooleanField(default=0, verbose_name="Position des réponses ?")
     is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
-    interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Temps entre les questions")
+    interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Transition entre questions")
 
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")

@@ -5,12 +5,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#id_is_display').prop('checked', false); 
         $('.div_is_mark').hide() ; 
         $(".div_is_ranking").hide(); 
-        $(".div_time").hide(); 
-        $('.div_interslide').hide() ; 
+        $(".div_time").hide();  
         $('#is_result_final').hide() ; 
 
         $('#id_is_publish').prop('checked', true); 
-        $('#id_is_numeric').prop('checked', false); 
         $('#id_is_video').prop('checked', false); 
         $('#id_is_archive').prop('checked', false); 
         $('#id_is_mark').prop('checked', false); 

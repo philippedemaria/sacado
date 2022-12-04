@@ -98,7 +98,7 @@
                                                 <div class="helper_tip_text" >Vidéoprojection si réponse sur feuille papier, Numérique si réponse avec smartphone, tablette, ordinateur.</div>
                                             </span> 
                                 </td>
-                                <td>{{ form.is_numeric|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Sur terminal"|attr:"data-off:Vidéoprojection"|attr:"data-width:130" }}
+                                <td>{{ form.is_numeric|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Vidéoprojection"|attr:"data-off:Sur terminal"|attr:"data-width:130" }}
                                 </td>
                                 <td></td>
                             </tr> 
@@ -108,9 +108,11 @@
                                 <td></td>
                             </tr>
                             <tr class="div_interslide">
-                                <td class="no_border">{{ form.interslide.label_tag }}</td>
+                                <td class="no_border"> {{ form.interslide.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                <div class="helper_tip_text" >Pour les transitions automatisées, en mode auto.</div>
+                                            </span> </td>
                                 <td style="width:80px">{{ form.interslide|add_class:"form-control" }}</td>
-                                <td><small>secondes</small></td>
+                                <td><small>sec.</small></td>
                             </tr>
     
                         
