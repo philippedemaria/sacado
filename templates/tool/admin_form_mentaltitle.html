@@ -68,12 +68,7 @@
                 <label>Enseignement</label>
                 {{ form.subject|add_class:"form-control select2" }}
                 {{ form.subject.errors }}
-            </div>
-            <div class="col-sm-3 form-group">
-                <label>Niveaux</label>
-                {{ form.levels|add_class:"form-control select2" }}
-                {{ form.levels.errors }}
-            </div>  
+            </div> 
             <div class="col-sm-3 form-group">
                 <label>En ligne ?</label><br/>
                 {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}

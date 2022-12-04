@@ -3114,7 +3114,7 @@ def admin_mentals(request,idl):
     request.session["parcours_id"] = False 
     request.session["admin_create_qf_level_id"] = idl 
     level = Level.objects.get(pk=idl)
-    mentals = Mental.objects.filter(mentaltitle__levels=level).order_by("mentaltitle","ranking")
+    mentals = Mental.objects.order_by("mentaltitle","ranking")#filter(levels=level)
     return render(request, 'tool/admin_list_mental.html', { 'mentals': mentals ,'level' : level   })
 
 

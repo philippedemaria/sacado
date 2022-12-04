@@ -162,7 +162,7 @@ class Mentaltitle(models.Model):
     subject    = models.ForeignKey(Subject, related_name="mentaltitles", blank=True, null = True,  on_delete=models.CASCADE) 
     ranking    = models.PositiveIntegerField(default=0,   ) 
     is_display = models.BooleanField(default=0, verbose_name="En ligne ?")
-    levels     = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
+
 
     def __str__(self):
         return self.title
@@ -176,6 +176,7 @@ class Mental(models.Model):
     is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
     mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
     ranking     = models.PositiveIntegerField(default=0,   ) 
+    levels     = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
 
     def __str__(self):
         return self.content

@@ -87,7 +87,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-11 col-md-6 form-group">
+            <div class="col-sm-6 col-md-3 form-group">
+                <label>Niveaux</label>
+                {{ form.levels|add_class:"form-control select2" }}
+                {{ form.levels.errors }}
+            </div> 
+            <div class="col-sm-6 col-md-6 form-group">
                 <label>Thème </label>
                 {% if mental %} 
                     <a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}"><i class="bi bi-pencil"></i></a> 
@@ -97,12 +102,12 @@
                 {{ form.mentaltitle|add_class:"form-control select2" }}
                 {{ form.mentaltitle.errors }}
             </div>
-            <div class="col-sm-6 col-md-3 form-group">
+            <div class="col-sm-6 col-md-2 form-group">
                 <label>Ordre</label>
                 {{ form.ranking|add_class:"form-control"  }}
                 {{ form.ranking.errors }}
             </div>
-            <div class="col-sm-6 col-md-3 form-group">
+            <div class="col-sm-6 col-md-1 form-group">
                 <label>En ligne ?</label><br/>
                 {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                 {{ form.is_display.errors }}
