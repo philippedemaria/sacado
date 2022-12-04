@@ -54,15 +54,14 @@
 </style>
 <section class="content_main"> 
     <h4 class="thin">Thèmes </h4>
-    <div class="row">
-        <div class="col-sm-12">
-            <a href="{%  url 'admin_create_update_mentaltitle' 0 %}" ><i class="bi bi-plus-circle"></i> Nouveau thème</a>
-        </div>
-    </div>
+
     <div class="row">
         <div class="col-sm-6">
             <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
-                {% csrf_token %}
+               {% csrf_token %}
+                <div class="col-sm-12">
+                    <a href="{%  url 'admin_create_update_mentaltitle' 0 %}" ><i class="bi bi-plus-circle"></i> Nouveau thème</a>
+                </div>
                 <div class="row">
                     <div class="col-sm-12 form-group">
                         <label>Titre </label>
