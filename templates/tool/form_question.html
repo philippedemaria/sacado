@@ -425,12 +425,17 @@
                         <input type="hidden" name="quizz_id" id="quizz_id" value="{{ quizz.id }}" /> 
 
                     </div>
-                    <div class="col-sm-12 col-md-9">
+                    <div class="col-sm-12 col-md-4">
                         <select name="search_question_waiting" id="search_question_waiting" class="form-control">
                             <option value="">Sélectionner un attendu</option>
                             {% for w in waitings %}
                                 <option value="{{ w.id }}">{{ w.name }}</option>
                             {% endfor %}
+                        </select>  
+                    </div>
+                    <div class="col-sm-12 col-md-5">
+                        <select name="search_question_knowledge" id="search_question_knowledge" class="form-control">
+                            <option value="">Sélectionner un attendu</option>
                         </select>  
                     </div>
                     <div class="col-sm-12 col-md-1">

@@ -2147,17 +2147,14 @@ def ajax_find_question(request):
 
  
 @csrf_exempt 
-def ajax_find_question_waiting(request): 
+def ajax_find_question_knowledge(request): 
 
     data = {}
-    waiting_id = request.POST.get('waiting_id',None)
-    quizz_id   = request.POST.get('quizz_id',None)
+    id_knowledge = request.POST.get('id_knowledge',None)
+    quizz_id     = request.POST.get('quizz_id',None)
 
-    if waiting_id and quizz_id : 
-        waiting = Waiting.objects.get(pk=waiting_id)
-        knowledges = waiting.knowledges.all()
-     
-        questions=Question.objects.filter(  knowledge__in= knowledges , is_publish=1  ) 
+    if id_knowledge and quizz_id : 
+        questions=Question.objects.filter(  knowledge__id= id_knowledge , is_publish=1  ) 
 
         data['html'] = render_to_string('tool/ajax_finder_question.html', {'all_questions' : questions , "quizz_id" : quizz_id })
     else :
@@ -2167,9 +2164,10 @@ def ajax_find_question_waiting(request):
 
 
 
+
+
 def get_this_question(request,id,idquizz):
     
-
     question = Question.objects.get(pk = id)
     choices  = Choice.objects.filter(question = question)    
     question.pk = None
@@ -2177,11 +2175,12 @@ def get_this_question(request,id,idquizz):
 
     for c in choices :
         c.pk = None
+        c.question = question
         c.save()
-        print(c)
 
     quizz    = Quizz.objects.get(pk = idquizz)
     quizz.questions.add(question)
+    messages.success(request,'Question ajoutée à ce quizz')
 
     return redirect('create_question' , quizz.id , 0) 
 

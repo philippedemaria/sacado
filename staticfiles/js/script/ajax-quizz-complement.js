@@ -56,13 +56,6 @@ define(['jquery',  'bootstrap' ], function ($) {
 
 
 
-
-
-
-
-
-
-
         $("#id_choices-0-is_correct").prop("checked", false); 
         $("#id_choices-1-is_correct").prop("checked", false); 
         $("#id_choices-2-is_correct").prop("checked", false); 
@@ -101,7 +94,6 @@ define(['jquery',  'bootstrap' ], function ($) {
 
                         { for (let i = 0; i < themes.length; i++) {
                                     
-
                                     console.log(themes[i]);
                                     let themes_id = themes[i][0];
                                     let themes_name =  themes[i][1]  ;
@@ -238,8 +230,78 @@ define(['jquery',  'bootstrap' ], function ($) {
             }
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('body').on('change', '#search_question_waiting' , function (event) {
+            let id_waiting = $(this).val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+            $("#loading").show(); 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'id_waiting': id_waiting,                       
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../../ajax_chargeknowledges",
+                    success: function (data) {
+
+                        knowledges = data["knowledges"];
+                        $('select[name=search_question_knowledge]').empty("");
+                        if (knowledges.length >0)
+
+                        { for (let i = 0; i < knowledges.length; i++) {
+                                    
+                                    let knowledge_id = knowledges[i][0];
+                                    let knowledge_name =  knowledges[i][1]  ;
+                                    let option = $("<option>", {
+                                        'value': Number(knowledge_id),
+                                        'html': knowledge_name
+                                    });
+                                    $('select[name=search_question_knowledge]').append(option);
+                                }
+                        }
+                        else
+                        {
+                            let option = $("<option>", {
+                                'value': 0,
+                                'html': "Aucun contenu disponible"
+                            });
+                            $('select[name=search_question_knowledge]').append(option);
+                        }
+                        $("#loading").hide(500); 
+                    }
+                }
+            )
+        });
 
 
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('body').on('change', '#search_question_knowledge' , function (event) {
+            let id_knowledge = $(this).val();
+            let quizz_id     = $("#quizz_id").val();
+            let csrf_token   = $("input[name='csrfmiddlewaretoken']").val();
+            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+            $("#loading").show(); 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'quizz_id' : quizz_id ,
+                        'id_knowledge': id_knowledge,                       
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../../ajax_find_question_knowledge",
+                    success: function (data) {
+
+                        $("#questions_finder").html("").html(data.html); 
+                        $("#loading").hide(500); 
+                    }
+                }
+            )
+        });
  
     });
 });
