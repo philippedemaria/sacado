@@ -4,7 +4,7 @@
 <div id="small_loader"></div>
 
 {% for question in all_questions %}
-    <div class="card" style="width:300px;height:300px;margin:15px;overflow: hidden;padding: 10px;">
+    <div class="card" style="width:300px;height:300px;margin:15px;overflow: hidden;padding: 10px;" id="this_question{{question.id}}">
         <div class="card_title">
             {% if question.calculator  %}                            
             <img src="{% static 'img/calculator.png' %}" width ="20px" class="pull-right" />  
@@ -20,7 +20,11 @@
             {% else %} 
                   <label>  QCS. </label>
             {% endif %}
-            <a href="{% url 'get_this_question'  question.id quizz_id  %}"  style="font-size: 12px">Récupérer cette question</a> 
+
+
+            <a href="javascript:void()" class="get_question" data-question_id="{{question.id}}" data-quizz_id="{{quizz_id}}" style="font-size: 12px">Récupérer cette question</a>
+
+
             <br/>
             <div>{{ question.title|safe }}</div>                        
         </div>

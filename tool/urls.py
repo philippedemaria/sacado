@@ -175,7 +175,7 @@ urlpatterns = [
     path('ajax_show_my_result', ajax_show_my_result, name='ajax_show_my_result'),
     path('ajax_find_question_knowledge', ajax_find_question_knowledge, name='ajax_find_question_knowledge'),
     path('ajax_find_question', ajax_find_question, name='ajax_find_question'),
-    path('get_this_question/<int:id>/<int:idquizz>', get_this_question, name='get_this_question'),
+    path('get_this_question', get_this_question, name='get_this_question'),
 
     path('ajax_show_detail_question', ajax_show_detail_question, name='ajax_show_detail_question'),
     path('ajax_show_retroaction', ajax_show_retroaction, name='ajax_show_retroaction'),

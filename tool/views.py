@@ -2166,10 +2166,12 @@ def ajax_find_question_knowledge(request):
 
 
 
-def get_this_question(request,id,idquizz):
-    
-    question = Question.objects.get(pk = id)
-    choices  = Choice.objects.filter(question = question)    
+def get_this_question(request):
+
+    question_id = request.POST.get('question_id')
+    idquizz     = request.POST.get('quizz_id')
+    question    = Question.objects.get(pk = question_id)
+    choices     = Choice.objects.filter(question = question)    
     question.pk = None
     question.save()
 
@@ -2180,9 +2182,9 @@ def get_this_question(request,id,idquizz):
 
     quizz    = Quizz.objects.get(pk = idquizz)
     quizz.questions.add(question)
-    messages.success(request,'Question ajoutée à ce quizz')
+    data = dict() 
 
-    return redirect('create_question' , quizz.id , 0) 
+    return JsonResponse(data)
 
 
 def clone_question(request,id,idq,qtype):

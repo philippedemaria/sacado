@@ -302,6 +302,36 @@ define(['jquery',  'bootstrap' ], function ($) {
                 }
             )
         });
+
+
+
+        // Affiche dans la modal la liste des élèves du groupe sélectionné
+        $('body').on('click', '.get_question' , function (event) {
+
+            let question_id = $(this).data('question_id');
+            let quizz_id     = $(this).data('quizz_id');
+            let csrf_token   = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'quizz_id' : quizz_id ,
+                        'question_id': question_id,                       
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../../get_this_question",
+                    success: function (data) {
+
+                        $("#this_question"+question_id).remove();  
+                        alert("Question ajoutée au quizz");
+                    }
+                }
+            )
+        });
+
+
+
  
     });
 });
