@@ -53,7 +53,6 @@
                     <th>Thème</th> 
                     <th>Enseignement</th>           
                     <th>Niveaux</th> 
-                    <th>En ligne ?</th>
                     <th>Ordre</th>
                   </tr>
               </thead>
@@ -72,8 +71,9 @@
 
                         {% for mental in mt.list %}
                         <tr id="{{mt.grouper.id}}" class="opener_k opened{{ mt.grouper.id }} out"  id="{{ mental.id}}">
-                          <td>
+                          <td {% if not mental.is_display %} style='border-left:5px solid red'{% endif %}>
                                 <a href="{% url 'admin_create_update_mental' mental.id %}">{{ mental.content }}</a>
+
                                 <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right"  onclick="return TestDelete('ce thème')"></a> 
                           </td>
                           <td>
@@ -81,16 +81,13 @@
                                 <a href="{%  url 'admin_delete_mentaltitle' mental.mentaltitle.id %}" class="pull-right"   onclick="return TestDelete('ce thème')"></a>
                           </td>
                           <td>
-                                {{ mental.mentaltitle.subject.title }} 
+                                {{ mental.mentaltitle.subject.shortname }} 
                           </td>
                           <td>     
                                 {% for l in mental.mentaltitle.levels.all %}                 
                                     {{ l.shortname  }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %} 
                           </td> 
-                          <td>
-                                {% if mental.is_display %}En ligne{% else %}En attente{% endif %} 
-                          </td>
                           <td>
                                 {{ mental.ranking }} 
                           </td>
