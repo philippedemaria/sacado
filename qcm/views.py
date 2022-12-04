@@ -2368,7 +2368,7 @@ def clone_folder(request, id ):
     prcs   = folder.parcours.all()
  
     #################################################
-    # clone le parcours
+    # clone le dossier
     #################################################
     folder.pk = None
     folder.teacher = teacher
@@ -2391,8 +2391,10 @@ def clone_folder(request, id ):
         folder.groups.add(group)
         students = group.students.all()
         folder.students.set(students)
+
+    i = 0
     for p in prcs :
-        folder_id_tab.append(p.id) # liste des parcours du dossiers
+        courses = p.course.all()
         p.pk = None
         p.code = str(uuid.uuid4())[:8] 
         p.teacher = teacher
@@ -2409,10 +2411,7 @@ def clone_folder(request, id ):
         new_folder_id_tab.append(p.id)
         folder.parcours.add(p)
 
-    i = 0
-    for pid in folder_id_tab : # liste des parcours du dossiers
-        pc = Parcours.objects.get(pk = pid)
-        for course in pc.course.all() :
+        for course in courses :
             old_relationships = course.relationships.all()
             # clone le cours associé au parcours
             course.pk = None
@@ -2432,7 +2431,7 @@ def clone_folder(request, id ):
         #################################################
         # clone tous les exercices rattachés au parcours 
         #################################################
-        for relationship in pc.parcours_relationship.all()  :
+        for relationship in p.parcours_relationship.all()  :
             skills = relationship.skills.all()
             try :
                 relationship.pk = None
@@ -3710,6 +3709,10 @@ def delete_parcours(request, id, idg=0):
     parcours = Parcours.objects.get(id=id)
     parcours_is_evaluation = parcours.is_evaluation
     parcours.students.clear()
+
+    if parcours.teacher.id == 2480 :
+        messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
+        return redirect('index')
 
     try :
         teacher = request.user.teacher
@@ -9944,6 +9947,9 @@ def delete_course(request, idc , id  ):
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
+
+
+
     try :
         teacher = request.user.teacher
     except :
@@ -11286,7 +11292,11 @@ def delete_folder(request,id,idg):
         return redirect('index')
 
     folder  = Folder.objects.get(id=id)
- 
+    if folder.teacher.id == 2480 :
+        messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
+        return redirect('index')
+
+
     if folder.teacher == teacher or request.user.is_superuser :
         if folder.parcours.count() == 0 :
             Folder.objects.filter(pk=folder.id).update(is_trash=1)
@@ -11334,6 +11344,10 @@ def delete_folder_and_contents(request,id,idg):
         return redirect('index')
 
     folder = Folder.objects.get(id=id)
+
+    if folder.teacher.id == 2480 :
+        messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
+        return redirect('index')
 
     if not authorizing_access(teacher,parcours, True ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
