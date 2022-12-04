@@ -5,12 +5,26 @@
 
 
 
+{% block python %}
+
+ 
+<script src="{% static 'basthon/ace/ace.js' %}"></script>
+<script src="{% static 'basthon/ace/ext-language_tools.js' %}"></script>
+{% endblock %}
+
+
+
+
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
         require(['script/ajax-quizz-create','script/ajax-question-flash']);
-    </script>  
- 
+    </script>
+    {% if mental %} 
+    <script>
+        require(['script/ajax-question-flash_update-ace']);
+    </script>
+    {% endif %}
 {% endblock %}
 
  
@@ -23,7 +37,6 @@
 
 
 {% block page_menu_right %}
-
      <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Niveau <i class="fa fa-caret-down"></i></a>
 
@@ -35,7 +48,6 @@
             {% endfor %}   
         </ul>
     </li> 
-
 {% endblock %}
 
  
@@ -50,6 +62,17 @@
     width: 100%;
     max-width: 100%;
     margin-bottom: 0px;
+}
+#id_div_script {
+    float:none;
+    width: 100%;
+    height: 50vh;
+    border-radius: 0.6vw;
+    margin: 0px;
+    padding-top: 0px;
+}
+#id_script {
+    display:none;
 }
 </style>
 <section class="content_main"> 
@@ -87,20 +110,21 @@
         </div>
         <div class="row">
             <div class="col-sm-6 form-group">
-                <label>html</label> 
-                {{ form.html|add_class:"form-control"  }}
+                <label>html</label>                 
+                {{ form.html }}
                 {{ form.html.errors }}
             </div>
             <div class="col-sm-6 form-group">
-                <label>Script</label>
-                {{ form.script|add_class:"form-control"  }}
+                <label>Script</label>                
+                <div id="id_div_script"></div>
+                {{ form.script }}
                 {{ form.script.errors }}
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 form-group">
                 <div class="form-group">
-                    <input value="Créer" type="submit" class="btn btn-primary" name="mental" value="ok" />
+                    <input value="Créer" type="submit" id="on_submit" class="btn btn-primary" name="mental"   />
                     <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                 </div>
             </div>

@@ -3132,7 +3132,7 @@ def admin_create_update_mental(request,idm):
     if request.method == "POST" :
         if form.is_valid():
             form.save() 
-            return redirect('admin_mentals', )
+            return redirect('admin_mentals', level.id )
     return render(request, 'tool/admin_form_mental.html', {  'form': form , 'mental' : mental , 'levels' : levels, 'idl' : idl , 'level' : level })
 
 
@@ -3157,14 +3157,18 @@ def admin_create_update_mentaltitle(request,idm):
 
 @login_required(login_url= 'index')
 def admin_delete_mental(request,idm):
+    idl    = request.session.get("admin_create_qf_level_id",1)
+    level = Level.objects.get(pk=idl)
     Mental.objects.filter(pk=idm).delete() 
-    return redirect('admin_mentals')
+    return redirect('admin_mentals', level.id )
 
 
 @login_required(login_url= 'index')
 def admin_delete_mentaltitle(request,idm):
+    idl    = request.session.get("admin_create_qf_level_id",1)
+    level = Level.objects.get(pk=idl)
     Mentaltitle.objects.filter(pk=idm).delete() 
-    return redirect('admin_mentals')
+    return redirect('admin_mentals', level.id )
 
 
 
