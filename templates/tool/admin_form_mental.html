@@ -18,7 +18,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz-create','script/ajax-question-flash']);
+        require(['script/ajax-quizz-create','script/ajax-question-flash','script/question_flash_ace-ckeditor']);
     </script>
     {% if mental %} 
     <script>
@@ -38,7 +38,7 @@
 
 {% block page_menu_right %}
      <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Niveau <i class="fa fa-caret-down"></i></a>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Questions flash <i class="fa fa-caret-down"></i></a>
 
         <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
             {% for l in levels %}       
@@ -87,35 +87,35 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-11 form-group">
-                <label>Thème</label>
+            <div class="col-sm-11 col-md-6 form-group">
+                <label>Thème </label>
+                {% if mental %} 
+                    <a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}"><i class="bi bi-pencil"></i></a> 
+                {% else %}
+                    <a href="{%  url 'admin_create_update_mentaltitle' 0 %}"><i class="bi bi-plus-circle"></i></a> 
+                {% endif %}
                 {{ form.mentaltitle|add_class:"form-control select2" }}
                 {{ form.mentaltitle.errors }}
             </div>
-            <div class="col-sm-1 form-group">
-                {% if mental %}<a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}"><i class="bi bi-pencil"></i></a> {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 form-group">
+            <div class="col-sm-6 col-md-3 form-group">
                 <label>Ordre</label>
                 {{ form.ranking|add_class:"form-control"  }}
                 {{ form.ranking.errors }}
             </div>
-            <div class="col-sm-6 form-group">
-                <label>En ligne ?</label>
+            <div class="col-sm-6 col-md-3 form-group">
+                <label>En ligne ?</label><br/>
                 {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                 {{ form.is_display.errors }}
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 form-group">
-                <label>html</label>                 
+                <label>Code html</label>                 
                 {{ form.html }}
                 {{ form.html.errors }}
             </div>
             <div class="col-sm-6 form-group">
-                <label>Script</label>                
+                <label>Code Python</label>                
                 <div id="id_div_script"></div>
                 {{ form.script }}
                 {{ form.script.errors }}
