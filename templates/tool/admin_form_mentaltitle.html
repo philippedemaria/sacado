@@ -17,7 +17,7 @@
 
 {% block page_title %}
     <span class="sacado_color_text"><i class="bi bi-lightning"></i></span>  
-       Les Thèmes des questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/> {{level.name}}
+       Les thèmes des questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/>
 {% endblock %}
 
 
@@ -54,40 +54,73 @@
 </style>
 <section class="content_main"> 
     <h4 class="thin">Thèmes </h4>
-    <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
-        {% csrf_token %}
-        <div class="row">
-            <div class="col-sm-12 form-group">
-                <label>Titre </label>
-                {{ form.title |add_class:"form-control"  }}
-                {{ form.title.errors }}
-            </div>
-        </div>    
-        <div class="row">
-            <div class="col-sm-4 form-group">
-                <label>Enseignement</label>
-                {{ form.subject|add_class:"form-control select2" }}
-                {{ form.subject.errors }}
-            </div> 
-            <div class="col-sm-3 form-group">
-                <label>En ligne ?</label><br/>
-                {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                {{ form.is_display.errors }}
-            </div>                                      
-            <div class="col-sm-2 form-group">
-                <label>Ordre</label>
-                {{ form.ranking |add_class:"form-control"  }}
-                {{ form.ranking.errors }}
-            </div>
-        </div>    
-        <div class="row">
-            <div class="col-sm-12 form-group">
-                <div class="form-group">
-                    <input value="Créer" type="submit" class="btn btn-primary" name="mental" value="no" />
+    <div class="row">
+        <div class="col-sm-6">
+            <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label>Titre </label>
+                        {{ form.title |add_class:"form-control"  }}
+                        {{ form.title.errors }}
+                    </div>
+                </div>    
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label>Enseignement</label>
+                        {{ form.subject|add_class:"form-control select2" }}
+                        {{ form.subject.errors }}
+                    </div> 
+                    <div class="col-sm-3 form-group">
+                        <label>En ligne ?</label><br/>
+                        {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        {{ form.is_display.errors }}
+                    </div>                                      
+                    <div class="col-sm-2 form-group">
+                        <label>Ordre</label>
+                        {{ form.ranking |add_class:"form-control"  }}
+                        {{ form.ranking.errors }}
+                    </div>
+                </div>    
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <div class="form-group">
+                            <input value="Créer" type="submit" class="btn btn-primary" name="mental" value="no" />
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form> 
         </div>
-    </form> 
- 
+        <div class="col-sm-6">
+            <table class="table table-sacado table-hovered standard_tab_1000"  style="width:100%" >
+                <thead> 
+                    <tr> 
+                        <th>Titre</th>
+                        <th>Enseignement</th>
+                        <th>Ordre</th>
+                        <th></th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {% for m in mentaltitles %}
+                    <tr> 
+                        <td {% if not m.is_display %} style='border-left:5px solid red'{% endif %}>
+                            {{ m.title }}
+                        </td>
+                        <td>
+                            {{ m.subject.name }}
+                        </td>
+                        <td>
+                            {{ m.ranking }} 
+                        </td>
+                        <td>
+                            <a href="{%  url 'admin_create_update_mentaltitle' m.id %}" ><i class="bi bi-pencil"></i></a>
+                            <a href="{%  url 'admin_delete_mentaltitle' m.id %}"  onclick="return TestDelete('ce thème')"><i class="bi bi-trash"></i></a>                        
+                        </td>
+                    </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 </section>
 {% endblock %} 

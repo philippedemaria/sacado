@@ -3143,17 +3143,17 @@ def admin_create_update_mentaltitle(request,idm):
     levels = Level.objects.exclude(pk=13).order_by("ranking")    
     idl    = request.session.get("admin_create_qf_level_id",1)    
     level = Level.objects.get(pk=idl)
+    mentaltitles = Mentaltitle.objects.order_by("ranking")
     if idm :
         mentaltitle = Mentaltitle.objects.get(pk=idm)
         form  = MentaltitleForm(request.POST or None,instance = mentaltitle)
     else :
         mentaltitle = None
-        form  = MentaltitleForm(request.POST or None )
+        form  = MentaltitleForm(request.POST or None )    
     if request.method == "POST" :
         if form.is_valid():
-            form.save() 
-            return redirect('admin_mentals', level.id )
-    return render(request, 'tool/admin_form_mentaltitle.html', {  'form': form , 'mentaltitle' : mentaltitle , 'levels' : levels, 'idl' : idl  , 'level' : level })
+            form.save()
+    return render(request, 'tool/admin_form_mentaltitle.html', {  'form': form , 'mentaltitle' : mentaltitle , 'levels' : levels, 'idl' : idl  , 'level' : level , 'mentaltitles' : mentaltitles })
 
 
 
