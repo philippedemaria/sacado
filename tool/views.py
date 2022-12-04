@@ -3152,6 +3152,7 @@ def admin_create_update_mentaltitle(request,idm):
     if request.method == "POST" :
         if form.is_valid():
             form.save() 
+            return redirect('admin_mentals', level.id )
     return render(request, 'tool/admin_form_mentaltitle.html', {  'form': form , 'mentaltitle' : mentaltitle , 'levels' : levels, 'idl' : idl  , 'level' : level })
 
 
