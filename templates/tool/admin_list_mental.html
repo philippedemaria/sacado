@@ -82,7 +82,7 @@
                                 {{ mental.mentaltitle.subject.shortname }} 
                           </td>
                           <td>     
-                                {% for l in mental.mentaltitle.levels.all %}                 
+                                {% for l in mental.levels.all %}                 
                                     {{ l.shortname  }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %} 
                           </td> 
