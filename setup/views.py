@@ -329,11 +329,12 @@ def ressource_sacado(request): #Protection saml pour le GAR
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
             div_name   = dico_received["DIV"][0]
-            div_names  = div_name.split("##")[0]
-
+            div_names  = div_name.split("##")[0] # Il faudra mettre  split("##")[1] pour 2023 -> Voir image Zellmeyer dans le dossier GAR
             try :
-                div_gro    = dico_received["GRO"][0]
-                gro_names  = div_gro.split("##") 
+                gro_names = []
+                div_gros  = dico_received["GRO"]
+                for dg in div_gros :
+                    gro_names.append( dg.split("##")[1] )
             except :
                 gro_names = []
 
