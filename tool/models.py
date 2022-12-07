@@ -172,7 +172,7 @@ class Mental(models.Model):
     """ Modèle représentant un associé. """
     content     = models.CharField(max_length=255,   verbose_name="Contenu")
     html        = models.TextField(blank=True, null = True,  verbose_name="Html éventuel")
-    script      = models.TextField(max_length=255,  blank=True, null = True,  verbose_name="script éventuel")
+    script      = models.TextField( blank=True, null = True,  verbose_name="script éventuel")
     is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
     mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
     ranking     = models.PositiveIntegerField(default=0,   ) 
