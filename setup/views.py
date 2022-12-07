@@ -278,19 +278,6 @@ def index(request):
 #     return JsonResponse(data)
 
  
-def div_gro(div_name , div_gros):
-
-    div_names = div_name.split("##")[0] # Il faudra mettre  split("##")[1] pour 2023 -> Voir image Zellmeyer dans le dossier GAR
-    gro_names = []
-    try :
-        for dg in div_gros :
-            gro_names.append( dg.split("##")[1] )
-    except :
-        gro_names = []
-    liste_div_gro = div_names + gro_names
-    return liste_div_gro
-
-
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
@@ -338,34 +325,30 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
  
-        div_name = dico_received["DIV"][0]
-        div_gros = dico_received["GRO"]
-        names = div_gro(div_name , div_gros)
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
-            if not school.is_primaire :
+            div   = dico_received["DIV"][0]
+            name  = div.split("##")[0]
 
+            if not school.is_primaire :
                 try :
-                    for name in names :
-                        groups = Group.objects.filter(school = school, name = name )
-                        group  = groups.last()
-                        group_is_exist = True
-                        try :
-                            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
-                            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                            for group in groups : 
-                                group.students.add(student)
-                        except :
-                            created_s = False
+                    groups = Group.objects.filter(school = school, name = name )
+                    group  = groups.last()
+                    group_is_exist = True
+                    try :
+                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
+                        student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                        for group in groups : 
+                            group.students.add(student)
+                    except :
+                        created_s = False
 
                         ### attribue les doc du groupe
                 except :
                     created_s = None
                     group     = None
                     messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
-
-
             else :
                 level = Level.objects.get(pk=1)
                 group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level , 'is_gar' : 1 }  )
@@ -384,7 +367,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
-
+            code_levels = dico_received["P_MS4"] 
             if "P_MEL" in dico_received.keys() : 
                 email = dico_received["P_MEL"][0]
                 if not email :
@@ -401,30 +384,30 @@ def ressource_sacado(request): #Protection saml pour le GAR
             if not school.is_primaire :
 
                 try :
-                    code_levels = dico_received["P_MS4"] 
-                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   ,  '2213': 12  }
+                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
                     for code_level in code_levels  : 
-                        level_id = dico_level[str(code_level)]
+                        if str(code_level) not in dico_level :
+                            level_id = 12
+                        else :
+                            level_id = dico_level[str(code_level)]
+
                         level = Level.objects.get(pk=level_id)
                         teacher.levels.add(level)
                 except :
                     pass
 
-                try :  
-
-                    for name in names :
+                try :    
+                    groups = dico_received["DIV"]
+                    for group in groups :
+                        name = group.split("##")[0]
                         try :
                             level = name.split("~")[1]
-                            if str(level[0]) == '10445' : level_id = 10
-                            else :
-                                if '1' <= str(level[0]) <= '6' : level_id = 12 - int(level[0])
-                                else : level_id = 12
+                            if '1' <= str(level[0]) <= '6' : level_id = 12 - int(level[0])
+                            else : level_id = 12
                         except :
-                            try :
-                                level_id = str(name[0])  
-                                level = Level.objects.get(pk=level_id)
-                            except : 
-                                level = Level.objects.get(pk=12)
+                            if '1' <= str(name[0]) <= '6' : level_id = 12 - int(name[0])
+                            else : level_id = 12
+                            level = Level.objects.get(pk=level_id)
                         try :
                             teacher.levels.add(level)
                         except :
