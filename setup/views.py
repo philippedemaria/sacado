@@ -264,20 +264,8 @@ def index(request):
  
 
  
-# def ajax_reponse_to_rgpd(request) :
 
-#     data     = {}
-#     context  = {}
-#     response = render(request, 'home.html', context)
-#     if request.POST.get("response") == "yes" :
-#         date = datetime.now()+timedelta(days=180)
-#     else :
-#         date = datetime.now()+timedelta(days=181)
-    
-#     response.set_cookie('bandeau_rgpd', date )
-#     return JsonResponse(data)
-
- def div_gro(divs , gros):
+def div_gro(divs , gros):
     liste_div_gro = [] 
     try :
         for div in divs :
@@ -346,9 +334,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
-            #div   = dico_received["DIV"][0]
-            #name  = div.split("##")[0]
-
             if not school.is_primaire :
                 try :
                     for name in liste_div_gro : 
@@ -362,12 +347,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
                                 group.students.add(student)
                         except :
                             created_s = False
-
-                        ### attribue les doc du groupe
                 except :
                     created_s = None
                     group     = None
-                    messages.error(request,"Le compte élève n'est pas créé, vérifiez que le nom du groupe existe.")
+
             else :
                 level = Level.objects.get(pk=1)
                 group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level , 'is_gar' : 1 }  )
