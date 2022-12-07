@@ -277,7 +277,20 @@ def index(request):
 #     response.set_cookie('bandeau_rgpd', date )
 #     return JsonResponse(data)
 
- 
+ def div_gro(divs , gros):
+    liste_div_gro = [] 
+    try :
+        for div in divs :
+            liste_div_gro.append( div.split("##")[0] )   # Il faudra mettre  split("##")[1] pour 2023 -> Voir image Zellmeyer dans le dossier GAR
+    except :
+        pass
+    try :
+        for gro in gros :
+            liste_div_gro.append( gro.split("##")[1] )
+    except :
+        pass
+    return liste_div_gro 
+
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
@@ -322,27 +335,33 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
     # return render(request, 'setup/test_gar.html', context)
- 
+
+
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
- 
+
+        divs = dico_received["DIV"]
+        gros = dico_received["GRO"]
+
+        liste_div_gro = div_gro(divs , gros)
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
-            div   = dico_received["DIV"][0]
-            name  = div.split("##")[0]
+            #div   = dico_received["DIV"][0]
+            #name  = div.split("##")[0]
 
             if not school.is_primaire :
                 try :
-                    groups = Group.objects.filter(school = school, name = name )
-                    group  = groups.last()
-                    group_is_exist = True
-                    try :
-                        user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
-                        student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                        for group in groups : 
-                            group.students.add(student)
-                    except :
-                        created_s = False
+                    for name in liste_div_gro : 
+                        groups = Group.objects.filter(school = school, name = name )
+                        group  = groups.last()
+                        group_is_exist = True
+                        try :
+                            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
+                            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                            for group in groups : 
+                                group.students.add(student)
+                        except :
+                            created_s = False
 
                         ### attribue les doc du groupe
                 except :
@@ -355,19 +374,12 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,   "country" : country , })
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
                 group.students.add(student)
-                groups = [group]
-                    
-            if created_s : 
-                try :
-                    test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
-                    if not test :
-                        messages.error(request,"Les documents de votre enseignant ne vous sont pas affectés.") 
-                except :
-                    messages.error(request,"Les documents ne vous sont pas affectés.")
+                groups = [group]     
+            test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
                 
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2    
-            code_levels = dico_received["P_MS4"] 
+            
             if "P_MEL" in dico_received.keys() : 
                 email = dico_received["P_MEL"][0]
                 if not email :
@@ -375,75 +387,84 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
             user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+            
             try :
-                subject = Subject.objects.get(pk=1)
-                teacher.subjects.add(subject)
+                mats = dico_received["P_MAT"]
+                for mat in mats :
+                    ensei = mat.split("##")[1]
+                    if   'NUME' in ensei : pk = 3
+                    elif 'PHY'  in ensei : pk = 2
+                    elif 'MATH' in ensei : pk = 1
+                    subject = Subject.objects.get(pk=pk)
+                    teacher.subjects.add(subject)
             except :
                 pass
-            
+
+             
             if not school.is_primaire :
 
-                try :
-                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
-                    for code_level in code_levels  : 
-                        if str(code_level) not in dico_level :
-                            level_id = 12
-                        else :
-                            level_id = dico_level[str(code_level)]
-
-                        level = Level.objects.get(pk=level_id)
-                        teacher.levels.add(level)
-                except :
-                    pass
-
-                try :    
-                    groups = dico_received["DIV"]
-                    for group in groups :
-                        name = group.split("##")[0]
-                        try :
-                            level = name.split("~")[1]
-                            if '1' <= str(level[0]) <= '6' : level_id = 12 - int(level[0])
-                            else : level_id = 12
-                        except :
-                            if '1' <= str(name[0]) <= '6' : level_id = 12 - int(name[0])
-                            else : level_id = 12
-                            level = Level.objects.get(pk=level_id)
-                        try :
-                            teacher.levels.add(level)
-                        except :
-                            pass
-
-                        if  school.is_primaire :
-                            nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
-                            if nb_group == 1 :
-                                username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
-                                password = make_password("sacado2020") 
-                                user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
-                                this_student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                if not created_t :
+                    code_levels = dico_received["P_MS4"]
+                    try :
+                        dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
+                        for code_level in code_levels  : 
+                            if str(code_level) not in dico_level :
+                                level_id = 12
                             else :
-                                this_student = None
+                                level_id = dico_level[str(code_level)]
 
-                            grp, creat = Group.objects.get_or_create(name = name ,  school = school , defaults = {  'subject_id' : 1 ,  'teacher' : teacher ,  'level_id' : level_id , "lock" : 0 , "is_gar" : 1 })
-                            try :  # Profil élève
-                                if this_student :
-                                    grp.students.add(this_student)
+                            level = Level.objects.get(pk=level_id)
+                            teacher.levels.add(level)
+                    except :
+                        pass
+
+ 
+                    try :    
+                        for name in liste_div_gro :
+                            name.split("~")[1]
+                            try :
+                                level = name.split("~")[1]
+                                if '1' <= str(level[0]) <= '6' : level_id = 12 - int(level[0])
+                                else : level_id = 12
                             except :
-                                pass
+                                if '1' <= str(name[0]) <= '6' : level_id = 12 - int(name[0])
+                                else : level_id = 12
+                            level = Level.objects.get(pk=level_id)
+                            teacher.levels.add(level)
+                    except :
+                        pass
 
-                        else :
-                            grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 ,      'level_id' : level_id , "lock" : 0 , "is_gar" : 1   })
-                            try :  # Profil élève
-                                if creat :
-                                    username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
-                                    password = make_password("sacado2020") 
-                                    user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
-                                    student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
-                                    grp.students.add(student)
-                            except :
-                                pass
+                else :
+                    grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 ,      'level_id' : level_id , "lock" : 0 , "is_gar" : 1   })
+                    try :  # Profil élève
+                        if creat :
+                            username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                            password = make_password("sacado2020") 
+                            user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                            student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                            grp.students.add(student)
+                    except :
+                        pass
 
+
+            else :
+                nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
+                if nb_group == 1 :
+                    username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                    password = make_password("sacado2020") 
+                    user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                    this_student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                else :
+                    this_student = None
+
+                grp, creat = Group.objects.get_or_create(name = name ,  school = school , defaults = {  'subject_id' : 1 ,  'teacher' : teacher ,  'level_id' : level_id , "lock" : 0 , "is_gar" : 1 })
+                try :  # Profil élève
+                    if this_student :
+                        grp.students.add(this_student)
                 except :
                     pass
+
+
 
 
         elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
