@@ -278,6 +278,19 @@ def index(request):
 #     return JsonResponse(data)
 
  
+def div_gro(div_name , div_gros):
+
+    div_names = div_name.split("##")[0] # Il faudra mettre  split("##")[1] pour 2023 -> Voir image Zellmeyer dans le dossier GAR
+    gro_names = []
+    try :
+        for dg in div_gros :
+            gro_names.append( dg.split("##")[1] )
+    except :
+        gro_names = []
+    liste_div_gro = div_names + gro_names
+    return liste_div_gro
+
+
 
 def ressource_sacado(request): #Protection saml pour le GAR
 
@@ -325,20 +338,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
  
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
  
+        div_name = dico_received["DIV"][0]
+        div_gros = dico_received["GRO"]
+        names = div_gro(div_name , div_gros)
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
-
-            div_name   = dico_received["DIV"][0]
-            div_names  = div_name.split("##")[0] # Il faudra mettre  split("##")[1] pour 2023 -> Voir image Zellmeyer dans le dossier GAR
-            try :
-                gro_names = []
-                div_gros  = dico_received["GRO"]
-                for dg in div_gros :
-                    gro_names.append( dg.split("##")[1] )
-            except :
-                gro_names = []
-
-            names = div_names + gro_names
 
             if not school.is_primaire :
 
@@ -408,19 +412,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
                 try :  
 
-                    div_name   = dico_received["DIV"][0]
-                    div_names  = div_name.split("##")[0] # Il faudra mettre  split("##")[1] pour 2023 -> Voir image Zellmeyer dans le dossier GAR
-                    try :
-                        gro_names = []
-                        div_gros  = dico_received["GRO"]
-                        for dg in div_gros :
-                            gro_names.append( dg.split("##")[1] )
-                    except :
-                        gro_names = []
-
-                    groups = div_names + gro_names
-
-                    for name in groups :
+                    for name in names :
                         try :
                             level = name.split("~")[1]
                             if str(level[0]) == '10445' : level_id = 10
