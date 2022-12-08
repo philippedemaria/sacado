@@ -538,8 +538,8 @@ def create_questions_flash_random_variable(m_ids,quizz) :
 		exec(mental.script,globals(),loc)
 		title  = loc['title']
 		answer = loc['answer']
-		question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48)
-		print(question, mental_id, question.mental_id)
+		wanswer = loc['wans']
+		question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer)
 		quizz.questions.add(question)
 
 

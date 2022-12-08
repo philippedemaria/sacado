@@ -14,7 +14,7 @@
 
 <script>
 MathJax = {
-  tex: {packages: {'[+]': ['input']}},
+  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
   startup: {
     ready() {
       const Configuration = MathJax._.input.tex.Configuration.Configuration;

@@ -33,7 +33,7 @@
 
 <script>
 MathJax = {
-  tex: {packages: {'[+]': ['input']}},
+  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
   startup: {
     ready() {
       const Configuration = MathJax._.input.tex.Configuration.Configuration;
@@ -82,7 +82,7 @@ MathJax = {
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'update_quizz' quizz.id %}"> <small>{{ quizz.title }}  ({{ quizz.duration|time_done }}) </small></a>
    {% endif  %}
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
-   <small> {{ knowledge.level.name }} <img width="25px" src="{% static 'img/angle-right.png' %}"/> 
+   {% if knowledge %}<small> {{ knowledge.level.name }} <img width="25px" src="{% static 'img/angle-right.png' %}"/> {% endif %}
      {{   title_type_of_question  }}  <img width="25px" src="{% static 'img/angle-right.png' %}"/> {{ knowledge.name }} 
    </small>
 {% endblock %}
@@ -171,7 +171,7 @@ MathJax = {
                             {% if request.user.is_superuser and quizz.is_numeric %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
-                                    
+                                    <label>Enoncé</label>
                                     <a href="#" id="show_randomize_zone" class="btn btn-sacado {% if qtype == 1 or qtype == 5 or qtype == 6 or qtype == 7 or qtype == 8 or qtype == 9 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 14   or qtype == 18 %} no_visu_on_load {% endif %}">
                                         <label>Question à variables numériques aléatoires ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                                                     <div class="helper_tip_text" >Placer des variables aléatoires<br/> dans l'énoncé et les réponses.</div>
@@ -253,30 +253,23 @@ MathJax = {
                             </div>
 
                             {% if quizz.is_numeric %}
-
-                            <div class="row" > 
-                                <div class="col-sm-12 col-md-12 form-group">
-                                    <label>Ecriture mathématique de la question par formule Latex ? <input type="checkbox" id="show_latex_formula"/> </label>  
-                                </div>
-                            </div> 
-
-                            <div class="row" id="latex_formula" > 
-                                <div class="col-sm-12 col-md-12">
-                                    <span style="line-height: 1.7em">Utiliser 
-                                        <span class="formula">\input[name][1em]{valeur par défaut}</span> 
-                                        pour placer le champ à compléter. 
-                                        <span class="formula">\$\$ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} \$\$</span> 
-                                        affiche : $$ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} $$
-                                        {{ form.formula|add_class:"quizz_box quizz_font30" |attr:"placeholder: $$ \frac{ \input[num1][1em]{} }{ \input[deno1][1em]{} } $$" |attr:"rows:1"  }}
-                                        
-                                        <hr/>
-                                        Pour les réponses attendues de chaque champ, écrire dans le champ réponses attendues (ci-dessous) ci-dessous les réponses séparées par 
-                                        <span class="formula">_##_</span>.  <br/><span class="formula">4_\$\$_-5</span> signifie que la réponse du premier champ est 4 et la réponse du second champ est -5.</span>
-                                </div>
-                            </div>  
+                                <div class="row" > 
+                                    <div class="col-sm-12 col-md-12 form-group">
+                                        <a href="#" id="show_latex_formula" class="btn btn-sacado"><label> Ecriture de la question par formule <img src="{% static 'img/tex.png' %}" width="15px" /> ? </label> </a> 
+                                    </div>
+                                </div> 
+                                <div class="row no_visu_on_load" id="latex_formula" > 
+                                    <div class="col-sm-12 col-md-12">
+                                        <span style="line-height: 1.7em">Utiliser 
+                                            <span class="formula">\input[name][1em]{valeur par défaut}</span> 
+                                            pour placer le champ à compléter. <br/>
+                                            <span class="formula">\$ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} \$</span> 
+                                            affiche : $ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} $
+                                            <hr/>
+                                            Pour la réponse attendue par champ, écrire dans l'emplacement "réponse.s attendue.s" (ci-dessous) les réponses au format <span class="formula_answer">name=reponse</span> séparées par <span class="formula">_##_</span>.  <span class="formula">num=4_##_deno=-5</span> signifie que la réponse du champ <span class="formula_answer">num</span> est 4 et la réponse du champ <span class="formula_answer">deno</span> est $-5$.</span>
+                                    </div>
+                                </div>  
                             {% endif  %}
-
-
                             <div class="row " >
                                 <div class="col-sm-6 col-md-2" align="center" >  
                                     {% if not quizz.is_numeric %}
@@ -285,10 +278,12 @@ MathJax = {
                                         {{ form.duration|add_class:"quizz_input quizz_input50" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"value:20" }}<label>s. </label>
                                     </div>
                                     {% endif %}
+                                    {% if quizz.is_numeric %}
                                     <div class="quizz_assets">
                                         <label>Point</label><br>
                                         {{ form.point|add_class:"quizz_input"|attr:"min:5"|attr:"max:100"|attr:"rows:1"|attr:"value:100"|attr:"step:5" }}  
                                     </div>
+                                    {% endif %}
                                 </div>
                                 <div class="col-sm-6 col-md-2" align="center" > 
                                     <div class="quizz_assets" id="check_calculator">
@@ -444,10 +439,11 @@ MathJax = {
                             <div class="row" > 
                                 <div class="col-sm-6 col-md-6 form-group">  
                                         {{ form.answer|add_class:"quizz_box quizz_font30" |attr:"placeholder:Réponse.s attendue.s" |attr:"rows:1"  }}
-                                        <small><em>Si plusieurs réponses, le séparateur est ____ (4 tirets - underscore) sans espace entre les réponses. Exemple :</em> motA____motB____motC <em>sont trois réponses possibles.</em></small>
+                                        <small>Si plusieurs réponses, le séparateur est ____ (4 tirets du bas) sans espace entre les réponses. Exemple : motA____motB____motC sont trois réponses possibles.</small>
                                 </div>
                                 <div class="col-sm-6 col-md-6 form-group">  
                                     {{ form.writinganswer|add_class:"quizz_box quizz_font30" |attr:"placeholder:Rédaction de la réponse affichée" |attr:"rows:1"  }}
+                                    <small><img src="{% static 'img/tex.png' %}" width="20px" /> Utiliser le dollar $ comme intégrateur de formule.</small>
                                 </div>
                             </div>
                             {% else %} 

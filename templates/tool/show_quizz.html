@@ -316,48 +316,41 @@
                  
 
                                 {% if question.qtype == 1 %}   
-                           
-                                        <div class="col-sm-12 col-md-6 {% if   question.theme %}bgcolorBlue white{% endif %}"  align="center" style="border-radius : 10px ">
-                                            <span style="font-size:1.5em" class="thin">VRAI {% if question.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>   {% endif %}</span>  
-                                        </div> 
+                                    <div class="col-sm-12 col-md-6 {% if   question.theme %}bgcolorBlue white{% endif %}"  align="center" style="border-radius : 10px ">
+                                        <span style="font-size:1.5em" class="thin">VRAI {% if question.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>   {% endif %}</span>  
+                                    </div> 
 
-                                        <div class="col-sm-12 col-md-6 {% if   question.theme %}bgcolorRed white{% endif %}"  align="center" style="border-radius : 10px ">
-                                            <span style="font-size:1.5em" class="thin">FAUX {% if not question.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>   {% endif %} </span>  
-                                        </div> 
-
+                                    <div class="col-sm-12 col-md-6 {% if   question.theme %}bgcolorRed white{% endif %}"  align="center" style="border-radius : 10px ">
+                                        <span style="font-size:1.5em" class="thin">FAUX {% if not question.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>   {% endif %} </span>  
+                                    </div> 
                                 {%  elif question.qtype == 2 %} 
-
-                                        <div class="col-sm-12 col-md-12" align="center">
-                                            <span style="font-size:1.5em" class="thin"> {{ question.answer }}</span>  
-                                        </div> 
-
-                                   
+                                    <div class="col-sm-12 col-md-12" align="center">
+                                        <span style="font-size:1.5em" class="thin">{{ question.writinganswer }}</span>  
+                                    </div> 
                                 {%  elif question.qtype > 2 %} 
+                                    {% for choice in question.choices.all %}
+                                        {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
+                                        {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
+                                        <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
+                                            <div class="row" >
+                                                <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
+                                                    <span style="font-size:1.5em">{{ choice_letter }} </span>    
+                                                </div>
 
-                                        {% for choice in question.choices.all %}
-                                            {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
-                                            {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                                            <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
-                                                <div class="row" >
-                                                    <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
-                                                        <span style="font-size:1.5em">{{ choice_letter }} </span>    
-                                                    </div>
+                                                <div class="col-sm-10 col-md-11 {% if question.theme %}{{ rowcolor }}{% endif %}" align="center" style="{% if question.theme %}color:#FFF;{% endif %} font-size:{% if choice.answer|length > 50 %}1.2{% else  %}2{% endif %}em; border-radius : 0px 10px  10px 0px">
+                                                {% if choice.imageanswer %}
+                                                    <img src="{{ choice.imageanswer.url }}" height="90px" />
+                                                {% else %}
+                                                    {{ choice.answer }}
+                                                {% endif %}
+                                                {% if choice.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>  {% endif %}                                              
+                                                </div>
 
-                                                    <div class="col-sm-10 col-md-11 {% if question.theme %}{{ rowcolor }}{% endif %}" align="center" style="{% if question.theme %}color:#FFF;{% endif %} font-size:{% if choice.answer|length > 50 %}1.2{% else  %}2{% endif %}em; border-radius : 0px 10px  10px 0px">
-                                                    {% if choice.imageanswer %}
-                                                        <img src="{{ choice.imageanswer.url }}" height="90px" />
-                                                    {% else %}
-                                                        {{ choice.answer }}
-                                                    {% endif %}
-                                                    {% if choice.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>  {% endif %}                                              
-                                                    </div>
-
-                                                </div>  
-                                            </div> 
-                                        {% endfor %}
-                                        {% resetcycle %}
-                                        {% resetcycle %}
-
+                                            </div>  
+                                        </div> 
+                                    {% endfor %}
+                                    {% resetcycle %}
+                                    {% resetcycle %}
                                 {% endif %}
                         {% endfor %}
                     </li>

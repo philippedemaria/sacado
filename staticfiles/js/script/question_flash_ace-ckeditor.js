@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap', 'ckeditor'], function ($) {
         
 
         CKEDITOR.replace('id_html', {
-            height: '350px',
+            height: '260px',
             width: '100%',
             toolbar:    
                 [  

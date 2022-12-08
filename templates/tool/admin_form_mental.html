@@ -18,11 +18,15 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz-create','script/ajax-question-flash','script/question_flash_ace-ckeditor']);
+        require(['script/ajax-quizz-create']);
     </script>
     {% if mental %} 
     <script>
         require(['script/ajax-question-flash_update-ace']);
+    </script>
+    {% else %}
+    <script>
+        require(['script/ajax-question-flash', 'script/question_flash_ace-ckeditor']);
     </script>
     {% endif %}
 {% endblock %}
@@ -66,7 +70,7 @@
 #id_div_script {
     float:none;
     width: 100%;
-    height: 50vh;
+    height: 40vh;
     border-radius: 0.6vw;
     margin: 0px;
     padding-top: 0px;
@@ -115,15 +119,17 @@
         </div>
         <div class="row">
             <div class="col-sm-6 form-group">
-                <label>Code html</label>                 
+                <label>Code html : </label>                 
                 {{ form.html }}
                 {{ form.html.errors }}
+                <span class="formula">\$ \input[name][1em]{valeur par défaut} \$</span> <small>pour utiliser des input dans les formules LaTeX</small>
             </div>
             <div class="col-sm-6 form-group">
-                <label>Code Python</label>                
+                <label>Code Python : </label>                
                 <div id="id_div_script"></div>
                 {{ form.script }}
                 {{ form.script.errors }}
+                <small>3 variables obligatoires => <span class="formula_answer">title(str)</span>= énoncé | <span class="formula_answer">answer(int/str)</span>= réponse attendue | <span class="formula_answer">wans(str)</span>= rédaction de la réponse</small>
             </div>
         </div>
         <div class="row">

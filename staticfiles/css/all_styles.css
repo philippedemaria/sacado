@@ -213,13 +213,11 @@ li.sorted_list {
 #latex_formula{
 
     float: left;
-    margin: 25px;
-    -webkit-box-shadow: 2px 2px 6px rgb(0 0 0 / 26%);
-    box-shadow: 2px 2px 6px rgb(79 73 66 / 26%);
+    margin: 0px;
     position: relative;
     border: 1px solid #e6e2dd; 
     background-color: white;
-    padding: 20px;
+    padding: 15px;
 }
 
 
@@ -234,6 +232,10 @@ li.sorted_list {
 
 .quizz_assets {
     background-color: white;
+}
+
+.formula_answer{
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 /*********************************************************************************/

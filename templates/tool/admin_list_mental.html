@@ -75,12 +75,14 @@
                           <td {% if not mental.is_display %} style='border-left:5px solid red'{% endif %}>
                                 <a href="{% url 'admin_create_update_mental' mental.id %}">
                                 {% if mental.script == "" %}<img src="{% static 'img/python_logo.png' %}" style='width:15px' /> {% endif %}
+                                {% if not mental.html  %}<img src="{% static 'img/html.png' %}" style='width:15px' /> {% endif %}
                                 {{ mental.content }}
                                 </a>
 
                                 <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right"  onclick="return TestDelete('ce savoir faire')"><i class="fa fa-trash"></i></a>
                                 <a href="{%  url 'admin_duplicate_mental' mental.id %}" class="pull-right" style="padding-right:10px" ><i class="bi bi-clipboard-plus"></i></a>
                                 {% if mental.script != "" %}<span class="pull-right" style="padding-right:10px"><img src="{% static 'img/python_logo.png' %}" style='width:15px' /></span>{% endif %}
+                                {% if mental.html  %}<span class="pull-right" style="padding-right:10px"><img src="{% static 'img/html.png' %}" style='width:15px' /></span>{% endif %}
                           </td>
                           <td>
                                 {{ mental.mentaltitle.subject.shortname }} 
