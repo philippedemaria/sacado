@@ -26,7 +26,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         editor.setValue(code);  
 
 
+        $('body').on('click', '#on_submit' , function (event) {
+            var code = editor.getValue();   
+            $('#id_script').val(code);    
 
+         });
   
 
         CKEDITOR.replace('id_html', {
