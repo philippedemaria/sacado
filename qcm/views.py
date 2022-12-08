@@ -608,7 +608,7 @@ def teacher_has_permisson_to_parcourses(request,teacher,parcours):
     elif request.user.is_superuser or request.user.is_creator or request.user.is_testeur :
         has_permisson = True
     else :
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         has_permisson = False
     return has_permisson 
 
@@ -938,7 +938,7 @@ def peuplate_parcours(request,id):
 
 
     if not authorizing_access(teacher,parcours, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher , folder = None ,   group = group)
@@ -1008,7 +1008,7 @@ def peuplate_parcours_evaluation(request,id):
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not authorizing_access(teacher,parcours, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
 
@@ -1087,7 +1087,7 @@ def individualise_parcours(request,id):
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
     if not authorizing_access(teacher,parcours, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
  
     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours) 
@@ -1161,7 +1161,7 @@ def ajax_individualise(request):
 
 
     if not authorizing_access(teacher,parcours , True ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     custom = int(request.POST.get("custom") )
@@ -1527,7 +1527,7 @@ def ajax_reset(request):
     parcours    = Parcours.objects.get(pk = parcours_id)
 
     if not authorizing_access(teacher,parcours , True ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     data = {}
@@ -1858,7 +1858,7 @@ def list_parcours_group(request,id):
     group = Group.objects.get(pk = id) 
 
     if not authorizing_access(teacher,group, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     #On sort du dossier donc on enlève sa clé de la session
@@ -2061,7 +2061,7 @@ def parcours_progression(request,id,idg):
  
 
     if not authorizing_access(teacher,parcours, True ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
     if idg :
         group = Group.objects.get(id = idg) 
@@ -3583,7 +3583,7 @@ def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ):
     sharing = len(share_groups) > 0
  
     if not authorizing_access(teacher, parcours, sharing ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     if request.method == "POST":
@@ -3721,7 +3721,7 @@ def delete_parcours(request, id, idg=0):
         return redirect('index')
 
     if not authorizing_access(teacher, parcours, False ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
  
@@ -4676,7 +4676,7 @@ def stat_evaluation(request, id):
 
 
     if not authorizing_access(teacher, parcours,access):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     try : 
@@ -7743,7 +7743,7 @@ def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exerci
     if id == 0 :
 
         if not authorizing_access(teacher, custom ,True):
-            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
             return redirect('index')
 
         ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
@@ -7866,7 +7866,7 @@ def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exerci
 
 
     if not authorizing_access(teacher, custom,True):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     if id == 0 :   
@@ -9993,7 +9993,7 @@ def peuplate_course_parcours(request,idp):
 
 
     if not authorizing_access(teacher,parcours, access ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     
@@ -11350,7 +11350,7 @@ def delete_folder_and_contents(request,id,idg):
         return redirect('index')
 
     if not authorizing_access(teacher,parcours, True ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
     if parcours.teacher == teacher or request.user.is_superuser :
@@ -11396,7 +11396,7 @@ def actioner_pef(request):
             parcours.students.clear()
 
             if not authorizing_access(teacher, parcours, False ):
-                messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+                messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
                 return redirect('index')
 
             for r in parcours.parcours_relationship.all() :
@@ -11424,7 +11424,7 @@ def actioner_pef(request):
                 parcours.students.clear()
 
                 if not authorizing_access(teacher, parcours, False ):
-                    messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+                    messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
                     return redirect('index')
 
                 for r in parcours.parcours_relationship.all() :
