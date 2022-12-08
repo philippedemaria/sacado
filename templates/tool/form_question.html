@@ -18,15 +18,59 @@
         require(['script/ajax-quizz-complement']);
     </script> 
     {% endif %}
-    {% if quizz %}
+
+
+    {% if quizz.is_numeric %}
     <script>
-        require(['script/ajax-quizz']);
+       require(['script/add-ckeditor']); 
     </script>
     {% else %}
     <script>
-        require(['script/add-ckeditor']);
+       require(['script/ajax-quizz']); 
     </script> 
     {% endif %}
+
+
+<script>
+MathJax = {
+  tex: {packages: {'[+]': ['input']}},
+  startup: {
+    ready() {
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
+      
+      new CommandMap('input', {input: 'Input'}, {
+        Input(parser, name) {
+          const xml = parser.create('node', 'XML');
+          const id = parser.GetBrackets(name, '');
+          const w = parser.GetBrackets(name, '5em');
+          const value = parser.GetArgument(name);
+          xml.setXML(MathJax.startup.adaptor.node('input', {
+            id: id, name: id, value: value, style: {width: w}, xmlns: 'http://www.w3.org/1999/xhtml'
+          }), MathJax.startup.adaptor);
+          xml.getSerializedXML = function () {
+            return this.adaptor.outerHTML(this.xml) + '</input>';
+          }
+          parser.Push(
+            parser.create('node', 'TeXAtom', [
+              parser.create('node', 'semantics', [
+                parser.create('node', 'annotation-xml', [
+                  xml
+                ], {encoding: 'application/xhtml+xml'})
+              ])
+            ], {texClass: TEXCLASS.ORD})
+          );
+        }
+      });
+      Configuration.create('input', {handler: {macro: ['input']}});
+
+      MathJax.startup.defaultReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 {% endblock %}
  
  
@@ -72,7 +116,6 @@
     <div class="row">
         {% if quizz  %}
         <div class="col-sm-12 col-md-2">
-
             {% if quizz.is_random  %}
 
                 <div class="form-group">
@@ -84,7 +127,6 @@
                  <div class="form-group">
                     {% for t in quizz.themes.all %} <li class="sanspuce">{{ t.name }}</li> {% endfor %}   
                 </div>
-
             {% else  %}
                 <form action="#" method="POST" >
                     <div class="quizz_list_question">
@@ -109,8 +151,6 @@
                     </a> 
                 </div>
                 {% endif %} 
- 
-
             {% endif %}
         </div>
         {% endif %}
@@ -204,19 +244,47 @@
                                 <div class="col-sm-10 col-md-11" >  
                                     {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:3"|attr:"required"  }}
                                 </div>
-                                {% if not 'ia' in request.path %}
+                                {% if not quizz.is_numeric %}
                                 <div class="col-sm-2 col-md-1" > 
                                         <label>Taille de police</label><br/>
                                     {{ form.size|add_class:"form-control select2"  }}
                                 </div>
                                 {% endif %}
                             </div>
+
+                            {% if quizz.is_numeric %}
+
+                            <div class="row" > 
+                                <div class="col-sm-12 col-md-12 form-group">
+                                    <label>Ecriture mathématique de la question par formule Latex ? <input type="checkbox" id="show_latex_formula"/> </label>  
+                                </div>
+                            </div> 
+
+                            <div class="row" id="latex_formula" > 
+                                <div class="col-sm-12 col-md-12">
+                                    <span style="line-height: 1.7em">Utiliser 
+                                        <span class="formula">\input[name][1em]{valeur par défaut}</span> 
+                                        pour placer le champ à compléter. 
+                                        <span class="formula">\$\$ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} \$\$</span> 
+                                        affiche : $$ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} $$
+                                        {{ form.formula|add_class:"quizz_box quizz_font30" |attr:"placeholder: $$ \frac{ \input[num1][1em]{} }{ \input[deno1][1em]{} } $$" |attr:"rows:1"  }}
+                                        
+                                        <hr/>
+                                        Pour les réponses attendues de chaque champ, écrire dans le champ réponses attendues (ci-dessous) ci-dessous les réponses séparées par 
+                                        <span class="formula">_##_</span>.  <br/><span class="formula">4_\$\$_-5</span> signifie que la réponse du premier champ est 4 et la réponse du second champ est -5.</span>
+                                </div>
+                            </div>  
+                            {% endif  %}
+
+
                             <div class="row " >
                                 <div class="col-sm-6 col-md-2" align="center" >  
+                                    {% if not quizz.is_numeric %}
                                     <div class="quizz_assets">
                                         <label>Durée</label><br/>
                                         {{ form.duration|add_class:"quizz_input quizz_input50" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"value:20" }}<label>s. </label>
                                     </div>
+                                    {% endif %}
                                     <div class="quizz_assets">
                                         <label>Point</label><br>
                                         {{ form.point|add_class:"quizz_input"|attr:"min:5"|attr:"max:100"|attr:"rows:1"|attr:"value:100"|attr:"step:5" }}  
@@ -300,25 +368,22 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group"> <label> Savoir faire ciblé :</label>
-                                    {% if class_quizz_box %}                     
-                                        {{ form.knowledge|add_class:"form-control select2 quizz_box"  }}
-                                    {% else %} 
-                                        {{ form.knowledge|add_class:"form-control select2"  }}
-                                    {% endif %} 
+                                    {{ form.knowledge|add_class:"form-control select2"  }}
                                 </div>                            
                             </div>
                         </div>
 
                         {% block details %}
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group">                       
-                                    <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Coloré"|attr:"data-off:Blanc"}}
-                                    <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
-                                </div>                            
+                            {% if qtype != 2 %} 
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">                       
+                                        <label><em>Couleur de fond des choix possibles</em></label> {{ form.theme |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Coloré"|attr:"data-off:Blanc"}}
+                                        <label><em>Lors de la création des choix de réponse, le fond reste coloré.</em></label>
+                                    </div>                            
+                                </div>
                             </div>
-                        </div>
-
+                            {% endif %}
                         {% endblock %}                            
                         {% if request.user.is_superuser and quizz.is_numeric %}
                             <div class="row">
@@ -338,8 +403,6 @@
                                                                             </span>
                                         </label>
                                     </a>
-
-                                    
                                 </div>
                                 <div class="col-sm-12 col-md-8">
                                     <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
@@ -375,13 +438,26 @@
 
 
                     {% block type_of_choices %}
-                        {% if qtype > 0 %}
+                        {% if qtype == 2 %} 
+
+                            {% if quizz.is_result %}
                             <div class="row" > 
-                                <div class="col-sm-12 col-md-12">  
-                                        {{ form.answer|add_class:"quizz_box quizz_font40" |attr:"placeholder:Réponse.s attendue.s" |attr:"rows:1"  }}
+                                <div class="col-sm-6 col-md-6 form-group">  
+                                        {{ form.answer|add_class:"quizz_box quizz_font30" |attr:"placeholder:Réponse.s attendue.s" |attr:"rows:1"  }}
+                                        <small><em>Si plusieurs réponses, le séparateur est ____ (4 tirets - underscore) sans espace entre les réponses. Exemple :</em> motA____motB____motC <em>sont trois réponses possibles.</em></small>
+                                </div>
+                                <div class="col-sm-6 col-md-6 form-group">  
+                                    {{ form.writinganswer|add_class:"quizz_box quizz_font30" |attr:"placeholder:Rédaction de la réponse affichée" |attr:"rows:1"  }}
+                                </div>
+                            </div>
+                            {% else %} 
+                            <div class="row" > 
+                                <div class="col-sm-12 col-md-12 form-group">  
+                                        {{ form.answer|add_class:"quizz_box quizz_font30" |attr:"placeholder:Réponse.s attendue.s" |attr:"rows:1"  }}
                                         <small><em>Si plusieurs réponses, le séparateur est ____ (4 tirets - underscore) sans espace entre les réponses. Exemple :</em> motA____motB____motC <em>sont trois réponses possibles.</em></small>
                                 </div>
                             </div>
+                            {% endif %} 
                         {% endif %}  
                     {% endblock %}
 

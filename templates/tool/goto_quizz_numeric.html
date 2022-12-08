@@ -5,11 +5,54 @@
 
 
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_mathjax_input.js' %}"></script>
 
     {% if question.qtype == 18 %}
         <script>require(['script/axe']);</script>
     {% endif %}
+
+
+<script>
+MathJax = {
+  tex: {packages: {'[+]': ['input']}},
+  startup: {
+    ready() {
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
+      
+      new CommandMap('input', {input: 'Input'}, {
+        Input(parser, name) {
+          const xml = parser.create('node', 'XML');
+          const id = parser.GetBrackets(name, '');
+          const w = parser.GetBrackets(name, '5em');
+          const value = parser.GetArgument(name);
+          xml.setXML(MathJax.startup.adaptor.node('input', {
+            id: id, name: id, value: value, style: {width: w}, xmlns: 'http://www.w3.org/1999/xhtml'
+          }), MathJax.startup.adaptor);
+          xml.getSerializedXML = function () {
+            return this.adaptor.outerHTML(this.xml) + '</input>';
+          }
+          parser.Push(
+            parser.create('node', 'TeXAtom', [
+              parser.create('node', 'semantics', [
+                parser.create('node', 'annotation-xml', [
+                  xml
+                ], {encoding: 'application/xhtml+xml'})
+              ])
+            ], {texClass: TEXCLASS.ORD})
+          );
+        }
+      });
+      Configuration.create('input', {handler: {macro: ['input']}});
+
+      MathJax.startup.defaultReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
 
 
 {% endblock %}
@@ -136,8 +179,14 @@
     {% elif question.qtype == 2 %}
  
         <div class="row"> 
-            <div class="col-sm-12 col-md-12"  align="center" style="border-radius : 10px ">
-                <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer.answer }}" >
+            <div class="col-sm-12 col-md-12"  align="center">
+                {% if question.mental and question.mental.html %}
+                    {{ question.mental.html|safe }}  
+                {% elif question.formula %}
+                    {{ question.formula }}
+                {% else %}
+                    <input type="text" name="solution" id="solution" required class="quizz_box_answer" placeholder="Répondre ici"  value="{{ this_answer.answer }}" style="width:10em" >
+                {% endif %} 
             </div> 
         </div> 
     {% elif question.qtype == 3 or question.qtype == 4 %}   

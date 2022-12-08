@@ -89,10 +89,23 @@
   color: black;
 }
 
-
 .select2-container--default .select2-selection--single {
-    background-color: #fff;
-    border: 1px solid #fff; 
+    background-color: #fff; 
+    width: 100%;
+    text-align: center;
+    color: #666;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    resize: none;
+    align-items: center;
+    border-radius: 5px;
+    line-height : 70px;
+    border : 1px solid #ccc ;
+}
+
+
+/*.select2-container--default .select2-selection--single {
     width: 100%;
     overflow: hidden;
     text-align: center;
@@ -110,4 +123,4 @@
     align-items: center;
     line-height : 50px;
     border : 1px solid #F0F0F0 ;
-}
+}*/

@@ -191,13 +191,16 @@ class Mental(models.Model):
 
 class Question(models.Model):
     """ Modèle représentant un associé. """
-    title         = models.TextField(max_length=255, default='',  blank=True, verbose_name="Enoncé")
+    title         = models.TextField(  default='',  blank=True, verbose_name="Enoncé")
 
     calculator    = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     date_modified = models.DateTimeField(auto_now=True)
     ####  type de question
-    qtype         = models.PositiveIntegerField(default=3, editable=False)
-    answer        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Réponse attendu")
+    qtype   = models.PositiveIntegerField(default=3, editable=False)
+    
+    answer         = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Réponse attendue")
+    writinganswer  = models.TextField( null = True,   blank=True, verbose_name="Réponse rédigée")
+    formula        = models.CharField(max_length=255, null = True,   blank=True, verbose_name="Formule Tex $$ ..... $$ à afficher")
 
     knowledge  = models.ForeignKey(Knowledge, related_name="question", blank=True, null = True,  on_delete=models.CASCADE) 
 

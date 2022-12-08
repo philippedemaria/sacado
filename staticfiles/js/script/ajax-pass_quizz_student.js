@@ -1,7 +1,7 @@
 define(['jquery',  'bootstrap', 'ui' , 'ui_sortable' , 'uploader','config_toggle'], function ($) {
     $(document).ready(function () {
 
-        console.log(" ajax-ajax-pass_quizz_student chargé ");
+        console.log(" ajax-pass_quizz_student chargé ");
 
 
         $("#show_retroaction").on('click', function (event) {

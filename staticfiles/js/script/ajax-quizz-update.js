@@ -5,7 +5,12 @@ define(['jquery',  'bootstrap' ], function ($) {
     console.log(" ajax-quizz-update chargé ");
  
     qtype = $("#qtype").val() ;
- 
+
+
+    $('#latex_formula').hide() ;
+    $('#show_latex_formula').on('click', function (event) {
+        $('#latex_formula').toggle(300) ;
+    });
  
 
 function is_cheched_update(nb){

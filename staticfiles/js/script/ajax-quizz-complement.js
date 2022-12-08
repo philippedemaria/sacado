@@ -37,6 +37,14 @@ define(['jquery',  'bootstrap' ], function ($) {
             $('#is_video_div').toggle(300) ;
         });
 
+        $('#latex_formula').hide() ;
+        $('#show_latex_formula').on('click', function (event) {
+            $('#latex_formula').toggle(300) ;
+        });
+
+
+
+
         $('#id_is_result').on('change', function (event) {
 
              $('#is_result_final').toggle(300) ;  

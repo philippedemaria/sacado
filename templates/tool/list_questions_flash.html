@@ -43,7 +43,7 @@
         <tbody>
             {% for q in quizzes %}
             <tr> 
-                <td style="width:200px"><a href="{% url 'update_questions_flash' q.id %}" title="Dupliquer le format de ces questions">{{ q.title }}</a>
+                <td style="width:200px"><a href="{% url 'update_questions_flash' q.id %}" title="Modifier la configuration">{{ q.title }}</a>
                     <a href="{% url 'duplicate_questions_flash' q.id %}" title="Dupliquer le format de ces questions"><i class="bi bi-clipboard-plus"></i></a></td>
                 <td>{% for ma in q.mental_activities %}{{ ma }}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</td>
                 <td>{{ q.nb_slide }} questions</td> 
