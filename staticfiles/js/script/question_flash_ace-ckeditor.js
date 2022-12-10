@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap', 'ckeditor'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-question-flash.js OK --");
+        console.log("chargement JS ajax-question-flash_ace-ckeditor.js OK --");
 
 
         
@@ -14,14 +14,41 @@ define(['jquery', 'bootstrap', 'ckeditor'], function ($) {
             'fontSize': '12pt',
         });
        
+        code = 'n = randint(0,9)\ntitle = ""  \nanswer =   \nwans =  ""  '
+        editor.setValue(code); 
+
 
         $('body').on('click', '#on_submit' , function (event) {
             var code = editor.getValue();   
             $('#id_script').val(code);    
 
          });
-        
 
+        //
+        // 
+        // Donne la forme de wans 
+        //
+        //        
+        // $('body').on('blur', '#id_html' , function (event) {
+
+        //     var myString = CKEDITOR.instances['html'].getData();
+
+        //     alert(myString) ; 
+
+        //     if ( myString.indexOf('input') > -1 ){
+
+        //         var idx = myString.indexOf('input')+6;
+        //         var newString = myString.substring(idx,myString.indexOf(']'));
+        //         var code_html = "Voici une aide à la déclaration de variable à mettre dans le code Python :\n\n"+ newString + "=......_##_" ;
+
+        //         alert(code_html); 
+
+        //     }
+        //  });
+
+
+
+    
         CKEDITOR.replace('id_html', {
             height: '260px',
             width: '100%',

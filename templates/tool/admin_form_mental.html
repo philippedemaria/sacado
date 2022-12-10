@@ -119,17 +119,17 @@
         </div>
         <div class="row">
             <div class="col-sm-6 form-group">
-                <label>Code html : </label>                 
+                <label>Code html/TeX :  </label>                 
                 {{ form.html }}
                 {{ form.html.errors }}
-                <span class="formula">\$ \input[name][1em]{valeur par défaut} \$</span> <small>pour utiliser des input dans les formules LaTeX</small>
+                <span class="formula">\$ \input[name][1em]{valeur par défaut} \$</span> <small>pour utiliser des input dans les formules LaTeX. Utiliser le séparateur de variable _##_ dans le code Python</small>
             </div>
             <div class="col-sm-6 form-group">
-                <label>Code Python : </label>                
+                <label>Code Python : <small><span class="formula_answer">answer</span> en fonction des variables utilisées dans le code html/TeX. Séparateur de variable : _##_ </small></label>                
                 <div id="id_div_script"></div>
                 {{ form.script }}
                 {{ form.script.errors }}
-                <small>3 variables obligatoires => <span class="formula_answer">title(str)</span>= énoncé | <span class="formula_answer">answer(int/str)</span>= réponse attendue | <span class="formula_answer">wans(str)</span>= rédaction de la réponse</small>
+                <small class="text-danger">3 variables obligatoires => <span class="formula_answer">title(str)</span>= énoncé | <span class="formula_answer">answer(int/str)</span>= réponse attendue <br/> <span class="formula_answer">wans(str)</span>= rédaction de la réponse</small>
             </div>
         </div>
         <div class="row">
