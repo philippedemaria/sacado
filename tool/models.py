@@ -189,18 +189,6 @@ class Mental(models.Model):
         return data
 
 
-    def test(self):
-        alerte = False
-        if self.script :
-            script = self.script.split(" ")
-            if not 'wans' in script : alerte = True
-            elif not 'answer' in script : alerte = True
-            elif not 'title' in script : alerte = True
-            elif '_##_' in script and not self.html : alerte = True
-        return alerte
-
-
-
 class Question(models.Model):
     """ Modèle représentant un associé. """
     title         = models.TextField(  default='',  blank=True, verbose_name="Enoncé")
