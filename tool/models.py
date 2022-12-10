@@ -172,6 +172,7 @@ class Mental(models.Model):
     """ Modèle représentant un associé. """
     content     = models.CharField(max_length=255,   verbose_name="Contenu")
     html        = models.TextField(blank=True, null = True,  verbose_name="Html éventuel")
+    variables   = models.CharField(max_length=255, blank=True, null = True,  verbose_name="Variables")
     script      = models.TextField( blank=True, null = True,  verbose_name="script éventuel")
     is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
     mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
@@ -183,9 +184,13 @@ class Mental(models.Model):
 
     def alea_content_creator(self):
         data = dict()
-        t,a = exec(self.script)#alea_content(self.pk)
-        ca  = hash(str(a))
-        data['t'] , data['a'] = t, ca
+        variables  = dict()
+        exec(self.script,globals(),variables)
+        title  = variables['title']
+        answer = variables['answer']
+        wans   = variables['wans']
+        ca     = hash(str(answer))
+        data['t'] , data['a'], data['w'] = title, ca, wans 
         return data
 
 

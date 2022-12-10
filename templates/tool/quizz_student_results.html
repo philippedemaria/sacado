@@ -3,92 +3,112 @@
 {% load item_tags %}
 
 <table class="table table-sacado  table-hover standard_tab_1000" style="width:100%">
-    <thead> 
-        <tr>
-            <th>Question</th>
-            {% if quizz.is_result %} 
-            <th>Choix et solution</th>
-            {% endif  %} 
-            {% if score %} 
-            <th>Réponse proposée</th>
-            {% endif  %} 
-        </tr>
-    </thead> 
-    <tbody>
-
-        {% for question in  questions  %} 
+    {% if quizz.is_random %}
+        <thead> 
             <tr>
-                <td>{{ question.title|safe}}
-                    {% if question.imagefile %}
-                        <img src="{{ question.imagefile.url }}" width="150px">
-                    {% endif %}
-                    {% if question.audio %}
-                        <div class="col-sm-12 col-md-12" align="center"> 
-                            <audio controls>
-                                <source src="{{ question.audio.url }}" type="audio/mpeg">
-                                <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
-                            </audio>
-                        </div>
-                    {% endif %}
-                    {% if question.video %}
-                        <div class="row">  
-                            <div class="col-sm-12 col-md-12" align="center"> 
-                                 {{ question.video|safe }}
-                            </div>
-                        </div>
-                    {% endif %}
-                </td>
-                {% if quizz.is_result %} 
-                <td>
-
-                    {% if question.qtype == 1 %}
-                        {% if  question.is_correct %}
-                            <span class="btn btn-default">VRAI <i class="fa fa-check text-success"></i> </span>  <span class="btn btn-default">FAUX <i class="fa fa-times text-danger"></i></span>
-                        {% else %} 
-                            <span class="btn btn-default">VRAI <i class="fa fa-check text-danger"></i> </span>  <span class="btn btn-default">FAUX <i class="fa fa-times text-success"></i> </span>
-                        {% endif %}
-                    {% else %}
-                        {% for c in question.choices.all %}
-                            <span class="btn btn-default">{{ c.answer }}
-                            {% if c.is_correct %}
-                                <i class="fa fa-check text-success"></i>
-                            {% else %}
-                                <i class="fa fa-times text-danger"></i>
-                            {% endif %}
-
-                            {% if c.imagefile %}
-                                <img src="{{ c.imagefile.url }}" width="150px">
-                            {% endif %}
-                            </span>
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                {% endif %}
-                {% if score %} 
-                <td>
-                    {% get_real_ans_for_this_question  question  quizz  student as dict_answer %}  
-
-                    {% if question.qtype < 3 %} 
-                        {{ dict_answer.answer }} 
-                            {% if quizz.is_result %}
-                                {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
-                            {% endif %}
-                    {% else %}
-                        {% for a in dict_answer.answer %}
-                            {{ a }}  
-                            {% if not forloop.last %}<br/>{% endif %}
-                        {% endfor %}
-                            {% if quizz.is_result %}
-                            <small> {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
-                            {% endif %}
-                    {% endif %}
-
-                </td>
-                {% endif %} 
+                <th>Question et réponses proposées</th>
+                <th>Timer</th>
             </tr>
-        {% endfor %}
+        </thead> 
+        <tbody>
+            {% for a in  answers  %} 
+                <tr>
+                    <td>
+                        {{ a.answer|safe}} {% if a.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %}
+                    </td>
+                    <td>
+                        {{ a.timer|time_done}} 
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    {% else %} 
+        <thead> 
+            <tr>
+                <th>Question</th>
+                {% if quizz.is_result %} 
+                <th>Choix et solution</th>
+                {% endif  %} 
+                {% if score %} 
+                <th>Réponse proposée</th>
+                {% endif  %} 
+            </tr>
+        </thead> 
+        <tbody>
+            {% for question in  questions  %} 
+                <tr>
+                    <td>{{ question.title|safe}}
+                        {% if question.imagefile %}
+                            <img src="{{ question.imagefile.url }}" width="150px">
+                        {% endif %}
+                        {% if question.audio %}
+                            <div class="col-sm-12 col-md-12" align="center"> 
+                                <audio controls>
+                                    <source src="{{ question.audio.url }}" type="audio/mpeg">
+                                    <span class="text-danger">Votre navigateur ne lit pas l'audio.</span>
+                                </audio>
+                            </div>
+                        {% endif %}
+                        {% if question.video %}
+                            <div class="row">  
+                                <div class="col-sm-12 col-md-12" align="center"> 
+                                     {{ question.video|safe }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% if quizz.is_result %} 
+                    <td>
 
-    </tbody>
+                        {% if question.qtype == 1 %}
+                            {% if  question.is_correct %}
+                                <span class="btn btn-default">VRAI <i class="fa fa-check text-success"></i> </span>  <span class="btn btn-default">FAUX <i class="fa fa-times text-danger"></i></span>
+                            {% else %} 
+                                <span class="btn btn-default">VRAI <i class="fa fa-check text-danger"></i> </span>  <span class="btn btn-default">FAUX <i class="fa fa-times text-success"></i> </span>
+                            {% endif %}
+                        {% else %}
+                            {% for c in question.choices.all %}
+                                <span class="btn btn-default">{{ c.answer }}
+                                {% if c.is_correct %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% else %}
+                                    <i class="fa fa-times text-danger"></i>
+                                {% endif %}
+
+                                {% if c.imagefile %}
+                                    <img src="{{ c.imagefile.url }}" width="150px">
+                                {% endif %}
+                                </span>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                    {% if score %} 
+                    <td>
+                        {% get_real_ans_for_this_question  question  quizz  student as dict_answer %}  
+
+                        {% if question.qtype < 3 %} 
+                            {{ dict_answer.answer }} 
+                                {% if quizz.is_result %}
+                                    {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
+                                {% endif %}
+                        {% else %}
+                            {% for a in dict_answer.answer %}
+                                {{ a }}  
+                                {% if not forloop.last %}<br/>{% endif %}
+                            {% endfor %}
+                                {% if quizz.is_result %}
+                                <small> {% if dict_answer.is_correct %}<i class="fa fa-check text-success"></i>{% else %}<i class="fa fa-times text-danger"></i>{% endif %} </small>
+                                {% endif %}
+                        {% endif %}
+
+                    </td>
+                    {% endif %} 
+                </tr>
+            {% endfor %}
+        </tbody>
+    {% endif %}
+
 </table>
 {% if quizz.is_result %}
     <div class="row" align="center">

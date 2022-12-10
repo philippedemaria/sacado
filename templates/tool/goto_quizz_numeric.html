@@ -5,7 +5,7 @@
 
 
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_mathjax_input.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
 
     {% if question.qtype == 18 %}
         <script>require(['script/axe']);</script>

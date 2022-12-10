@@ -5,7 +5,7 @@
 
 
 {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_mathjax_input.js' %}"></script>
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
         require(['script/ajax-pass_quizz_student']);
     </script> 
@@ -23,11 +23,11 @@ MathJax = {
       new CommandMap('input', {input: 'Input'}, {
         Input(parser, name) {
           const xml = parser.create('node', 'XML');
-          const id = parser.GetBrackets(name, '');
-          const w = parser.GetBrackets(name, '5em');
-          const value = parser.GetArgument(name);
+          const id  = parser.GetBrackets(name, '');
+          const w   = parser.GetBrackets(name, '5em');
+          const val = parser.GetArgument(name);
           xml.setXML(MathJax.startup.adaptor.node('input', {
-            id: id, name: id, value: value, style: {width: w}, xmlns: 'http://www.w3.org/1999/xhtml'
+            id: id, name: id, value: val , style: {width: w}
           }), MathJax.startup.adaptor);
           xml.getSerializedXML = function () {
             return this.adaptor.outerHTML(this.xml) + '</input>';
@@ -49,6 +49,7 @@ MathJax = {
     }
   }
 };
+
 </script>
 <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
@@ -87,6 +88,7 @@ MathJax = {
 <input type="hidden" name="quizz_nav"  value="{{ quizz_nav }}" />   
 <input type="hidden" name="start_time"  value="{{ stop_time }}" />   
 <input type="hidden" id="question_id"  name="question_id"  value="{{ question.id }}"  >
+
 {% if  quizz_nav == 0 %}
     <div class="row consigne_diapo"  align="center">  
         <div class="col-sm-12 col-md-12">
@@ -140,6 +142,7 @@ MathJax = {
             {% if quizz.is_numeric and quizz.is_random %}
                 {% with d=question.mental.alea_content_creator %}
                     <h1 style="font-size:2.5em"  > {{ d.t }} </h1>
+                    <input type="hidden" name="title" id="title" required   value="{{ d.t }}" >
                     <input type="hidden" name="answer_type" id="answer_type" required   value="{{ d.a }}" >
                 {% endwith %}
             {% else %}
@@ -173,11 +176,17 @@ MathJax = {
             </div> 
         </div> 
     {% elif question.qtype == 2 %}
-        {% get_ans_for_this_question quizz question student as this_answer %}
         <div class="row"> 
-            <div class="col-sm-12 col-md-12"  align="center" style="border-radius : 10px ">
-                <input type="text" name="solution" id="solution" required class="quizz_box_answer quizz_font40"  value="{{ this_answer.answer }}" />
-            </div> 
+            <div class="col-sm-12 col-md-12"align="center">
+                {% if question.mental and question.mental.html %}
+                    {{ question.mental.html|safe }} 
+                {% elif question.formula %}
+                    {{ question.formula }}
+                {% else %}
+                    {% get_ans_for_this_question quizz question student as this_answer %}
+                    <input type="text" name="solution" id="solution" required class="quizz_box_answer" placeholder="Répondre ici"  value="{{ this_answer.answer }}" style="width:10em" >
+                {% endif %} 
+            </div>
         </div> 
     {% elif question.qtype > 2 %}   
         {% for choice in question.choices.all %}

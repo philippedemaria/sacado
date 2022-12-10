@@ -74,9 +74,9 @@
                             {% endif %} 
                         </td>
                         <td>
-                            {% if quizz.is_result and not restart_gquizz %}
+                            {% if quizz.is_result and not quizz.is_random %}
                                 <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Lire</a></small>
-                            {% else %}
+                            {% elif not quizz.is_random %}
                                 <small class="text-danger">Votre enseignant n'a pas encore<br/> publié les réponses</small>
                             {% endif %}
                         </td>

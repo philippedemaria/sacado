@@ -1593,10 +1593,9 @@ def goto_quizz_numeric(request,id):
     quizz_nav      = int(request.POST.get("quizz_nav",-1))
     quizz_nav_prev = int(request.POST.get("quizz_nav_prev",0))
     end_of_quizz   = False
-
-    solutions  = request.POST.getlist("solution", None)
- 
     stop_time  = time.time()
+    solutions  = request.POST.getlist("solution", None)
+
     if solutions and len(solutions) > 0 :
         q_id    = request.POST.get("question_id")
         start_time_tab = request.POST.get("start_time").split(",")
@@ -1681,23 +1680,65 @@ def goto_quizz_student(request,id):
 
     solutions  = request.POST.getlist("solution", None)
  
+    #### Gestion du timer
     stop_time  = time.time()
-    if solutions and len(solutions) > 0 :
-        q_id    = request.POST.get("question_id")
-        start_time_tab = request.POST.get("start_time").split(",")
-        start_time =  int(start_time_tab[0])
-        timer =  stop_time - start_time
-        today = time_zone_user(quizz.teacher.user)
+    timer          =  stop_time
+    start_time = request.POST.get("start_time",None)
+    if start_time : 
+        start_time_tab = start_time.split(",")
+        start_time     =  int(start_time_tab[0])
+        timer          =  stop_time - start_time
 
-        # if quizz.stop and quizz.start :
-        #     if quizz.stop > today and quizz.start < today :
-        #         store_quizz_solution(quizz_id,student,q_id, solutions,timer)
-        # elif quizz.stop :
-        #     if quizz.stop > today  :
-        #         store_quizz_solution(quizz_id,student,q_id, solutions,timer)
-        # else :
-        #     store_quizz_solution(quizz_id,student,q_id, solutions,timer)
-        hashed = request.POST.get("answer_type", None)
+    q_id     = request.POST.get("question_id", None)
+    if q_id :
+        question = Question.objects.get(pk=q_id)
+    hashed = request.POST.get("answer_type", None)
+    title  = request.POST.get("title", None)
+
+    if q_id and question.qtype == 2 :
+        is_correct , score = 0 , 0
+        if quizz.is_random  :
+            if question.mental.html : 
+                # on crée la chaine de caractère de la réponse
+                variables = question.mental.variables.split(';')
+                rep, loop , ans_stu = "" , 1 , ""
+                for variable in variables :
+                    if loop < len(variables)  : sep, sepa = "_##_" , " ; "
+                    else : sep, sepa = "" , ""
+                    value = request.POST.getlist(variable)
+                    new_val = value[0].replace(" ","")
+                    rep += "{}={}{}".format(variable,new_val,sep)
+                    ans_stu += "${}${}".format(new_val,sepa)
+                    loop += 1
+                ############ on la hashe
+                reps_hash = str(hash(str(rep)))
+            # et on la compare 
+            else :
+                rep = solutions[0] 
+                reps_hash = str(hash(solutions[0]))
+    
+            if reps_hash == hashed :
+                is_correct = 1
+                score      = question.point
+
+            rep = title +"<br/>"+ans_stu 
+
+        else :
+            ans_tab = question.answer.split('____')
+            if len(solutions) :
+                rep = solutions[0]
+                if rep  in ans_tab :
+                    is_correct = 1
+                    score      = question.point
+
+
+        timer = int(timer)
+        answ, create_ans = Answerplayer.objects.get_or_create(quizz_id  = quizz_id , student=student,question = question, qrandom_id = None, defaults={ "answer"  : rep , "score"  : score ,"timer"  : timer , "is_correct" : is_correct} )
+        if not create_ans :
+            Answerplayer.objects.filter(quizz_id = quizz_id , student=student,question = question, qrandom_id = None).update( answer = rep , is_correct = is_correct, score = score , timer = timer )
+
+    elif solutions and len(solutions) > 0 :
+        today = time_zone_user(quizz.teacher.user)
         store_quizz_solution(quizz_id,student,q_id, solutions,timer,hashed)
 
     if quizz_nav == len(question_ids) :
@@ -1740,17 +1781,18 @@ def ajax_show_my_result(request):
 
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
 
-    score, total = 0 , 0
+    score, total , answers = 0 , 0 , []
     for question in questions :
         try :
             a = Answerplayer.objects.get(quizz=quizz,question=question,student = request.user.student)
             score += a.score
             total += a.question.point
+            answers.append(a)
         except :
             score = False
 
     data = {}
-    data['html'] = render_to_string('tool/quizz_student_results.html', {'questions' : questions, 'quizz' : quizz , 'total' : total, 'score' : score, 'student' : student })
+    data['html'] = render_to_string('tool/quizz_student_results.html', {'questions' : questions, 'quizz' : quizz , 'total' : total, 'score' : score, 'student' : student , 'answers' : answers })
  
     return JsonResponse(data)
 
