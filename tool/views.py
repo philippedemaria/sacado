@@ -3486,9 +3486,11 @@ def ajax_select_style_questions(request):
     else :
         is_quizz = False
         mentals = set()
+        mentaltitles = Mentaltitle.objects.filter(subject__id = subject_id, is_display=1)
         for level_id in level_ids :
             level = Level.objects.get(pk=level_id)
-            mentals.update( Mental.objects.filter(mentaltitle__subject__id = subject_id, levels = level,is_display=1 ).order_by("mentaltitle") ) 
+            for mentaltitle in mentaltitles :
+                mentals.update( Mental.objects.filter(mentaltitle  = mentaltitle, levels = level,is_display=1 ).order_by("ranking") ) 
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
 
     return JsonResponse(data)
