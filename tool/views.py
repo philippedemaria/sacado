@@ -3485,13 +3485,23 @@ def ajax_select_style_questions(request):
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_questions' : all_questions , 'is_quizz' : is_quizz  })
     else :
         is_quizz = False
-        mentals = set()
-        mentaltitles = Mentaltitle.objects.filter(subject__id = subject_id, is_display=1)
+        all_mentals = list()
+        mentaltitles = Mentaltitle.objects.filter(subject__id = subject_id, is_display=1).order_by("ranking")
         for level_id in level_ids :
+            level_dict = dict()
             level = Level.objects.get(pk=level_id)
+            level_dict["level"] = level 
+            list_mentals = list()
             for mentaltitle in mentaltitles :
-                mentals.update( Mental.objects.filter(mentaltitle  = mentaltitle, levels = level,is_display=1 ).order_by("ranking") ) 
-        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
+                dict_mentals = dict()
+                dict_mentals["mentaltitle"] = mentaltitle 
+                mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking") 
+                dict_mentals["mentals"] = mentals
+                list_mentals.append(dict_mentals)
+            level_dict["sub"] = list_mentals
+        all_mentals.append(level_dict)
+
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  })
 
     return JsonResponse(data)
 

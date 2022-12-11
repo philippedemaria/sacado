@@ -56,7 +56,7 @@
     {% endfor %}
  
 
-{% else %}     
+{% else %}      
 <table class="table table-hover borderless display1000" style="width:100%;" >
     <thead> 
         <tr>
@@ -64,22 +64,24 @@
         </tr>
     </thead> 
     <tbody>
-        {% regroup mentals by mentaltitle as mt_list %}
-        {% for mentaltitle  in mt_list %}
 
-            <tr style="background:#5d4391; cursor: pointer;color:white" class="opener out"   id="{{ mentaltitle.grouper.id }}">
-                <td style="width:85%"><i class="fa fa-caret-right"></i> {{ mentaltitle.grouper.title }}</td> 
-            </tr> 
-            {% for m in mentaltitle.list %}
-                <tr style="background:white; cursor: pointer;" class="opener_k opened{{ mentaltitle.grouper.id }} out no_visu_on_load" >
-                    <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
-                </tr>  
+        {% for all_mental  in all_mentals %}   
+
+
+            <tr class="title_tr">
+                <td style="width:85%"> {{ all_mental.level.name  }}</td> 
+            </tr>
+            {% for all_mental_sub  in all_mental.sub %} 
+                <tr class="subtitle_tr opener out"   id="{{ all_mental_sub.mentaltitle.id }}">
+                    <td style="width:85%"><i class="fa fa-caret-right"></i> {{ all_mental_sub.mentaltitle.title }}</td> 
+                </tr> 
+                {% for m in all_mental_sub.mentaltitle.mentals.all %}
+                    <tr style="background:white; cursor: pointer;" class="opener_k opened{{ all_mental_sub.mentaltitle.id }} out no_visu_on_load" >
+                        <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
+                    </tr>  
+                {% endfor %}
             {% endfor %}
-
-    
-
         {% empty %}
-
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="alert alert-danger">
@@ -87,7 +89,6 @@
                     </div>
                 </div>
             </div>
-
         {% endfor %}
     </tbody>
 </table> 
