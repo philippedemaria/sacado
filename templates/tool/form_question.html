@@ -1,3 +1,4 @@
+
 {% extends 'dashboard.html' %}
 {% load static %}
 {% load widget_tweaks %}
@@ -29,48 +30,6 @@
        require(['script/ajax-quizz']); 
     </script> 
     {% endif %}
-
-
-<script>
-MathJax = {
-  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
-  startup: {
-    ready() {
-      const Configuration = MathJax._.input.tex.Configuration.Configuration;
-      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
-      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
-      
-      new CommandMap('input', {input: 'Input'}, {
-        Input(parser, name) {
-          const xml = parser.create('node', 'XML');
-          const id = parser.GetBrackets(name, '');
-          const w = parser.GetBrackets(name, '5em');
-          const value = parser.GetArgument(name);
-          xml.setXML(MathJax.startup.adaptor.node('input', {
-            id: id, name: id, value: value, style: {width: w}, xmlns: 'http://www.w3.org/1999/xhtml'
-          }), MathJax.startup.adaptor);
-          xml.getSerializedXML = function () {
-            return this.adaptor.outerHTML(this.xml) + '</input>';
-          }
-          parser.Push(
-            parser.create('node', 'TeXAtom', [
-              parser.create('node', 'semantics', [
-                parser.create('node', 'annotation-xml', [
-                  xml
-                ], {encoding: 'application/xhtml+xml'})
-              ])
-            ], {texClass: TEXCLASS.ORD})
-          );
-        }
-      });
-      Configuration.create('input', {handler: {macro: ['input']}});
-
-      MathJax.startup.defaultReady();
-    }
-  }
-};
-</script>
-<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 {% endblock %}
  
  
@@ -161,7 +120,6 @@ MathJax = {
             <input type="hidden" name="qtype" id="qtype" value="{{ qtype }}" /> 
                 <div id="body_question"> 
 
-
                     {% block type_of_question %} 
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
@@ -202,7 +160,7 @@ MathJax = {
                                                     </div>
 
                                                     <div class="col-sm-3 col-md-2" > 
-                                                            <label>Nbre entier ?</label> <br/>
+                                                            <label>Nb entier ?</label> <br/>
                                                             {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
                                                     </div>
                                                     <div class="col-sm-2 col-md-2" > 
@@ -244,12 +202,10 @@ MathJax = {
                                 <div class="col-sm-10 col-md-11" >  
                                     {{ form.title|add_class:"quizz_box quizz_font40" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:3"|attr:"required"  }}
                                 </div>
-                                {% if not quizz.is_numeric %}
                                 <div class="col-sm-2 col-md-1" > 
                                         <label>Taille de police</label><br/>
                                     {{ form.size|add_class:"form-control select2"  }}
                                 </div>
-                                {% endif %}
                             </div>
 
                             {% if quizz.is_numeric %}
@@ -261,10 +217,10 @@ MathJax = {
                                 <div class="row no_visu_on_load" id="latex_formula" > 
                                     <div class="col-sm-12 col-md-12">
                                         <span style="line-height: 1.7em">Utiliser 
-                                            <span class="formula">\input[name][1em]{valeur par défaut}</span> 
+                                            <span class="formula">\input[name][3em]{valeur par défaut}</span> 
                                             pour placer le champ à compléter. <br/>
                                             <span class="formula">\$ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} \$</span> 
-                                            affiche : $ \frac{\input[num1][1em]{}}{\input[deno1][1em]{2}} $
+                                            affiche :  <img src="{% static 'img/formula.png' %}"/>
                                             <hr/>
                                             Pour la réponse attendue par champ, écrire dans l'emplacement "réponse.s attendue.s" (ci-dessous) les réponses au format <span class="formula_answer">name=reponse</span> séparées par <span class="formula">_##_</span>.  <span class="formula">num=4_##_deno=-5</span> signifie que la réponse du champ <span class="formula_answer">num</span> est 4 et la réponse du champ <span class="formula_answer">deno</span> est $-5$.</span>
                                     </div>

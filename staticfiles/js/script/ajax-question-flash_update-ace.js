@@ -40,7 +40,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 [  
                     { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Source', '-','Copy', 'Paste', 'PasteText' ] },
                     { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'FontSize'] },
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline'] },
                 ] ,
         });
 

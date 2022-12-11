@@ -36,7 +36,7 @@
 
         </div>
         <div class="col-xs-10 col-md-10">
-            {{ question.title|truncatechars:"250"}}
+            {{ question.title|truncatechars_html:"250"|safe }}
         </div>
     </div>
 </li>

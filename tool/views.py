@@ -1956,13 +1956,13 @@ def print_quizz_to_pdf(request):
 ########## Question
 ############################################################################################################
 ############################################################################################################
-
-
 def list_questions(request):
     
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     questions = Question.objects.all()
     return render(request, 'tool/list_question.html', {'questions': questions  })
+
+
 
 
 @login_required(login_url= 'index')
@@ -1979,8 +1979,13 @@ def create_question(request,idq,qtype):
         parcours = None
  
     form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
-    #all_questions = Question.objects.filter(is_publish=1)
+    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','is_notnull','minimum','maximum', 'words') , extra=0)
+ 
+    form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
+
+    ########################################################################################################################################
     ######## Attendus pour la Banque de questions
+    ########################################################################################################################################
     themes   = quizz.themes.all()
     levels   = quizz.levels.all()
     subjects = quizz.teacher.subjects.all()
@@ -1990,74 +1995,121 @@ def create_question(request,idq,qtype):
         waitings = Waiting.objects.filter(theme__subject__in=subjects ,level__in=quizz.levels.all())
     elif themes.count():
         waitings = Waiting.objects.filter(theme__subject__in=subjects ,theme__in=quizz.themes.all())
+    ########################################################################################################################################
+    ########################################################################################################################################
+    qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
 
-    if qtype > 2 :
-        if quizz.is_numeric :
-            extra = 2
-        else :
-            extra = 4
-        formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=extra)
+    if qtype > 0 :   
+        qt = Qtype.objects.get(pk=qtype)
+    else :
+        qt = None
+
+    if qtype == 3 or  qtype == 4  :
+        if quizz.is_numeric : extra = 2
+        else : extra = 4
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=extra)
         form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    elif  qtype == 13 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=1)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    elif qtype == 5 or qtype == 11  or qtype == 15  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    if qtype == 7  or qtype == 12 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    elif qtype == 18  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=1)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+
+    elif qtype == 6 or qtype == 8 or qtype == 10 or qtype == 14   :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_ans = formSet(request.POST or None,  request.FILES or None)
+        formSubset   = inlineformset_factory( Choice , Subchoice , fields=('answer','imageanswer','is_correct','retroaction') , extra=2)
+        form_sub_ans = formSubset(request.POST or None,  request.FILES or None)
+
+
     if request.method == "POST"  :
         if form.is_valid():
-            nf         = form.save(commit=False) 
-            nf.teacher = request.user.teacher
-            nf.qtype   = qtype
+            nf           = form.save(commit=False) 
+            nf.teacher   = request.user.teacher
+            nf.qtype     = qtype          
             nf.save()
-            form.save_m2m() 
             quizz.questions.add(nf)
-            if qtype > 2 :
+            form_var = formSetvar(request.POST or None,  instance = nf) 
+            for form_v in form_var :
+                if form_v.is_valid():
+                    var = form_v.save()
+                else :
+                    print(form_v.errors)
+            form.save_m2m() 
+            if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
                 form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
                 for form_answer in form_ans :
                     if form_answer.is_valid():
                         form_answer.save()
+            elif qtype == 6 or qtype == 14  :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        fa = form_answer.save()
+                        form_sub_ans = formSubset(request.POST or None,  request.FILES or None, instance = fa)
+                        for form_sub in form_sub_ans :
+                            if form_sub.is_valid():
+                                form_sub.save()
 
             return redirect('create_question' , idq,0)
 
- 
+        else :
+            print(form.errors)
+
     bgcolors = ["bgcolorRed", "bgcolorBlue","bgcolorOrange", "bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , 'waitings' : waitings , "quizz_id" : quizz.id , "question" : None  , "parcours" : parcours   }
+    context = { 'bgcolors' : bgcolors , "parcours" : parcours ,  'form' : form, 'qtype' : qtype , "question" : None ,   'questions': questions,  'waitings' : waitings , "quizz_id" : quizz.id ,
+                "quizz" : quizz , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  'form_var' : formSetvar}
 
-
+    
     if quizz.is_random :
         knowledges = Knowledge.objects.filter(theme__subject=quizz.subject ,theme__in=quizz.themes.all() , level__in =quizz.levels.all())
         context.update( {  'title_type_of_question' : "Questions aléatoires" , "knowledges" : knowledges  })
         template = 'tool/quizz_random.html'
- 
-    #Choix des questions
+
     elif qtype == 0 :
         context.update( {  'title_type_of_question' : "Choisir un type de question"   })
         template = 'tool/choice_type_of_question.html'
 
-    #Vrai/Faux
-    elif qtype == 1 :
-        context.update( {   'title_type_of_question' : "Vrai / faux"   })
-        template = 'tool/question_vf.html'
-
-    #Réponse rédigée
-    elif qtype == 2 :
-        context.update( {    'title_type_of_question' : "Réponse rédigée"   })
-        template = 'tool/form_question.html'
+    elif qtype == 1 or qtype == 2 or qtype == 7 or qtype == 9  :
+        context.update( {  'title_type_of_question' : qt.title , })
+        template = 'tool/'+qt.template+'.html'
 
     #QCM ou QCS
     elif qtype == 3 or qtype == 4  :
- 
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
+        context.update( {  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
         if quizz.is_numeric :
             template = 'tool/question_qcm_numeric.html'
         else :
             template = 'tool/question_qcm.html'
 
+    elif qtype == 6 or qtype == 14  :
+        context.update( {  'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, 'title_type_of_question' : qt.title , })
+        template = 'tool/'+qt.template+'.html'
+
+    else : 
+        context.update( { 'form_ans' : form_ans, 'title_type_of_question' : qt.title , })
+        template = 'tool/'+qt.template+'.html'
 
     return render(request, template , context)
+
+
+
+
 
 @login_required(login_url= 'index')
 def update_question(request,id,idq,qtype):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz = Quizz.objects.get(pk = idq)
-    questions = quizz.questions.order_by("ranking")
-
     question = Question.objects.get(pk = id)
     form = QuestionForm(request.POST or None, request.FILES or None, instance = question,  quizz = quizz)
 
@@ -2071,47 +2123,108 @@ def update_question(request,id,idq,qtype):
         formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
 
-    if request.method == "POST"  :  
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk = idq)
+    questions = quizz.questions.order_by("ranking")
+    question = Question.objects.get(pk=id) 
+    qt  = Qtype.objects.get(pk=question.qtype)
+
+    parcours_id = request.session.get("parcours_id", None)
+    if parcours_id :
+        parcours = Parcours.objects.values('id', 'title', 'color').get(pk = parcours_id)
+    else :
+        parcours = None
+
+    formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','is_notnull','minimum','maximum', 'words') , extra=0)
+    formset_var = formSetvar(request.POST or None,  instance = question)
+
+    qtypes = Qtype.objects.filter(is_online=1).order_by("ranking") 
+   
+    qtype = question.qtype
+ 
+    if qtype == 3 or  qtype == 4  or  qtype == 7   or qtype == 12  or qtype == 13 :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+
+    elif qtype == 5 or qtype == 11  or qtype == 15 or qtype == 18  :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , extra=0)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+ 
+    elif qtype == 6 or qtype == 8 or qtype == 10 or qtype == 14   :
+        formSet  = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
+        form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
+        formSubset   = inlineformset_factory( Choice , Subchoice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
+        form_sub_ans = formSubset(request.POST or None,  request.FILES or None)
+
+
+    if request.method == "POST"  :
         if form.is_valid():
-            nf         = form.save(commit=False) 
-            nf.teacher = request.user.teacher
-            nf.qtype   = qtype
+            nf           = form.save(commit=False) 
+            nf.teacher   = request.user.teacher
+            nf.qtype     = qtype
+            nf.knowledge = knowledge
+            nf.is_ia     = 1
             nf.save()
-            form.save_m2m() 
-            if qtype > 2 :
+            form.save_m2m()
+            for form_v in formset_var :
+                if form_v.is_valid():
+                    var = form_v.save()
+                else :
+                    print(form_v.errors)
+
+            if qtype == 3 or qtype == 4 or qtype == 5 or qtype == 10  or  qtype == 8 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 15 or qtype == 18 :
                 for form_answer in form_ans :
                     if form_answer.is_valid():
                         form_answer.save()
 
+            elif qtype == 6 or qtype == 14  :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        fa = form_answer.save()
+                        form_sub_ans = formSubset(request.POST or None,  request.FILES or None, instance = fa)
+                        for form_sub in form_sub_ans :
+                            if form_sub.is_valid():
+                                form_sub.save()
+
             return redirect('create_question' , idq,0)
 
+        else :
+            print(form.errors)
  
     bgcolors = ["bgcolorRed","bgcolorBlue","bgcolorOrange","bgcolorGreen"] 
-    context = { 'quizz': quizz, 'questions': questions,  'form' : form, 'qtype' : qtype , "question" : question , "parcours" : parcours   }
+    context = { 'bgcolors' : bgcolors , "parcours" : parcours ,  'form' : form, 'qtype' : qtype , "question" : question ,   'questions': questions,  'waitings' : waitings , "quizz_id" : quizz.id ,
+                "quizz" : quizz , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  'form_var' : formSetvar}
 
-    #Choix des questions
-    if qtype == 0 :
+    if quizz.is_random :
+        knowledges = Knowledge.objects.filter(theme__subject=quizz.subject ,theme__in=quizz.themes.all() , level__in =quizz.levels.all())
+        context.update( {  'title_type_of_question' : "Questions aléatoires" , "knowledges" : knowledges  })
+        template = 'tool/quizz_random.html'
+
+    elif qtype == 0 :
         context.update( {  'title_type_of_question' : "Choisir un type de question"   })
         template = 'tool/choice_type_of_question.html'
 
-    #Vrai/Faux
-    elif qtype == 1 :
-        context.update( {   'title_type_of_question' : "Vrai / faux"   })
-        template = 'tool/question_vf.html'
-
-    #Réponse rédigée
-    elif qtype == 2 :
-        context.update( {    'title_type_of_question' : "Réponse rédigée"   })
-        template = 'tool/form_question.html'
+    elif qtype == 1 or qtype == 2 or qtype == 7 or qtype == 9  :
+        context.update( {  'title_type_of_question' : qt.title , })
+        template = 'tool/'+qt.template+'.html'
 
     #QCM ou QCS
     elif qtype == 3 or qtype == 4  :
- 
-        context.update( {  'bgcolors' : bgcolors  ,  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
+        context.update( {  'title_type_of_question' : "QCM" , 'form_ans' : form_ans   })
         if quizz.is_numeric :
             template = 'tool/question_qcm_numeric.html'
         else :
             template = 'tool/question_qcm.html'
+
+    elif qtype == 6 or qtype == 14  :
+        context.update( {  'form_ans' : form_ans,'form_sub_ans' : form_sub_ans, 'title_type_of_question' : qt.title , })
+        template = 'tool/'+qt.template+'.html'
+
+    else : 
+        context.update( { 'form_ans' : form_ans, 'title_type_of_question' : qt.title , })
+        template = 'tool/'+qt.template+'.html'
 
     return render(request, template , context)
 
@@ -2975,10 +3088,6 @@ def admin_create_question_ia(request,idk,qtype):
     return render(request, template , context)
 
 
-
-
-
-
 @login_required(login_url= 'index')
 def admin_update_question_ia(request,idk,idq):
 
@@ -3379,7 +3488,7 @@ def ajax_select_style_questions(request):
         mentals = set()
         for level_id in level_ids :
             level = Level.objects.get(pk=level_id)
-            mentals.update( Mental.objects.filter(mentaltitle__subject__id = subject_id, levels = level,is_display=1 ).order_by("mentaltitle__ranking","ranking") ) 
+            mentals.update( Mental.objects.filter(mentaltitle__subject__id = subject_id, levels = level,is_display=1 ).order_by("mentaltitle","mentaltitle__ranking","ranking") ) 
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'mentals' : mentals , 'is_quizz' : is_quizz  })
 
     return JsonResponse(data)

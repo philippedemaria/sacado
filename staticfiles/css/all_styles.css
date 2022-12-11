@@ -181,7 +181,7 @@ li.sorted_list {
     border-radius: 5px;
 }
 
-.quizz_box_answer{
+.quizz_box_answer_numeric{
   background-color: white;
   border: 1px solid #5c5c5c;
   font-size: 40px;
