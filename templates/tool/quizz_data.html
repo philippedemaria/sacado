@@ -147,6 +147,8 @@
         {% else  %}
         <div class="alert-danger" style="padding:5px;border-radius:5px;"><i class="fa fa-ban"></i> Aucune question actuellement</div> 
         {% endif  %}
+    {% elif not quizz.is_numeric and  quizz.is_video %}
+        <div class="text-primary" style="margin-bottom: 10px;font-size:14px"><i class="bi bi-webcam"></i> Vidéoprojection {% if  quizz.is_random %}à questions aléatoires{% endif %} </div>
     {% else  %}
         <div class="text-{% if  quizz.is_random %}maroon{% else %}warning{% endif %}" style="margin-bottom: 10px;font-size:14px"><i class="fa fa-desktop"></i> Version numérique {% if  quizz.is_random %}à questions aléatoires{% endif %} </div> 
     {% endif  %}
