@@ -7411,6 +7411,34 @@ overflow-y: auto;
   box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
 }
 
+.helper_tip .helper_tip_no_width {
+  visibility: hidden;
+  width: 500px;
+  background-color: #FFF;
+  color:  #222;
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  font-size: 14px;
+  /* Position the tooltip */
+  top: 100%;
+  left: 0;
+  z-index: 9999999;
+}
+
+.helper_tip:hover .helper_tip_no_width {
+  visibility: visible;
+  position: absolute;
+  box-shadow: 0px 2px 50px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+
 
 
 .helper_tip .helper_tip_card_flex {

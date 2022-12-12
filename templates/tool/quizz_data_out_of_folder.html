@@ -5,7 +5,7 @@
  
  
 {% block out_of_folder %}
-<td>
+<td style="width:30px;text-align: center">
     {% if not quizz.is_archive %}
     <input type="checkbox"  class ="items_to_be_selected" name="selected_quizz" value="{{ quizz.id}}"  />
     {% endif  %}

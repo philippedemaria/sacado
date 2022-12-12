@@ -400,7 +400,7 @@ class Quizz(ModelWithCode):
     is_numeric   = models.BooleanField(default=0, verbose_name="Type de passation" )    # réponse sur papier ou sur smartphone
     is_mark      = models.BooleanField(default=0, verbose_name="Récupérer les réponses ?") 
     is_lock      = models.BooleanField(default=0, verbose_name="Verrouiller ?") 
-    is_random    = models.BooleanField(default=0, editable=False) # question flash
+    is_random    = models.BooleanField(default=0, verbose_name="Type de quizz" ) # question flash
     nb_slide     = models.PositiveIntegerField(default=5, blank=True)  # Nombre de diapositive si le quizz est randomisé
     is_video     = models.BooleanField(default=0, verbose_name="Support de passation")  # Vidéo projection
     # si is_numeric et is_video en même temps alors c'est un jeu
@@ -411,7 +411,7 @@ class Quizz(ModelWithCode):
     is_result    = models.BooleanField(default=0, verbose_name="Afficher les réponses ?")
     is_result_final = models.BooleanField(default=0, verbose_name="Position des réponses ?")
     is_archive   = models.BooleanField(default=0, verbose_name="Archivé ?")
-    interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Transition entre questions")
+    interslide   = models.PositiveIntegerField(default=10, blank=True, verbose_name="Transition")
 
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Verrouillé dès le")

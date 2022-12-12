@@ -21,13 +21,13 @@
     {% endif %}
 
 
-    {% if quizz.is_numeric %}
+    {% if quizz.is_video %}
     <script>
-       require(['script/add-ckeditor']); 
+       require(['script/ajax-quizz']);
     </script>
     {% else %}
     <script>
-       require(['script/ajax-quizz']); 
+        require(['script/add-ckeditor']); 
     </script> 
     {% endif %}
 {% endblock %}
@@ -126,7 +126,7 @@
                             <!-- ============== Gestion du randomize dans les questions ======================-->
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
-                            {% if request.user.is_superuser and quizz.is_numeric %}
+                            {% if request.user.is_superuser and not quizz.is_video %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
                                     <label>Enoncé</label>
@@ -208,7 +208,7 @@
                                 </div>
                             </div>
 
-                            {% if quizz.is_numeric %}
+                            {% if not quizz.is_video %}
                                 <div class="row" > 
                                     <div class="col-sm-12 col-md-12 form-group">
                                         <a href="#" id="show_latex_formula" class="btn btn-sacado"><label> Ecriture de la question par formule <img src="{% static 'img/tex.png' %}" width="15px" /> ? </label> </a> 
@@ -228,13 +228,13 @@
                             {% endif  %}
                             <div class="row " >
                                 <div class="col-sm-6 col-md-2" align="center" >  
-                                    {% if not quizz.is_numeric %}
+                                    {% if quizz.is_video %}
                                     <div class="quizz_assets">
                                         <label>Durée</label><br/>
                                         {{ form.duration|add_class:"quizz_input quizz_input50" |attr:"placeholder:Ecrire votre question ici" |attr:"rows:1"|attr:"value:20" }}<label>s. </label>
                                     </div>
                                     {% endif %}
-                                    {% if quizz.is_numeric %}
+                                    {% if not quizz.is_video %}
                                     <div class="quizz_assets">
                                         <label>Point</label><br>
                                         {{ form.point|add_class:"quizz_input"|attr:"min:5"|attr:"max:100"|attr:"rows:1"|attr:"value:100"|attr:"step:5" }}  
@@ -336,7 +336,7 @@
                             </div>
                             {% endif %}
                         {% endblock %}                            
-                        {% if request.user.is_superuser and quizz.is_numeric %}
+                        {% if request.user.is_superuser and not quizz.is_video %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-4"> 
                                     <a href="#" id="show_pseudorandomize_zone" class="{% if qtype == 1 or qtype == 2 or qtype == 3 or qtype == 4 or qtype == 10 %} no_visu_on_load {% endif %}btn btn-sacado">

@@ -526,7 +526,6 @@ def attribute_student(nf, group_ids, parcours_ids):
     if cpt == 0 :
         nf.students.set(  students_g   ) 
     else :
-        print( students_p )
         nf.students.set(  students_p )  
 
     return
@@ -565,9 +564,10 @@ def create_quizz(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group }
+    context = {'form': form, 'teacher': teacher, 'group_id' : group_id , 'group' : group , 'folder' : folder }
 
     return render(request, 'tool/form_quizz.html', context)
+
 
 
 @login_required(login_url= 'index')
@@ -2073,8 +2073,25 @@ def create_question(request,idq,qtype):
 
     
     if quizz.is_random :
-        knowledges = Knowledge.objects.filter(theme__subject=quizz.subject ,theme__in=quizz.themes.all() , level__in =quizz.levels.all())
-        context.update( {  'title_type_of_question' : "Questions aléatoires" , "knowledges" : knowledges  })
+
+        all_mentals = list()
+        mentaltitles = Mentaltitle.objects.filter(subject = quizz.subject, is_display=1).order_by("ranking")
+        if quizz.levels.count() : levels = quizz.levels.all()
+        else : levels = quizz.teacher.levels.all()
+        for level  in levels :
+            level_dict = dict()
+            level_dict["level"] = level 
+            list_mentals = list()
+            for mentaltitle in mentaltitles :
+                dict_mentals = dict()
+                dict_mentals["mentaltitle"] = mentaltitle 
+                mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking") 
+                dict_mentals["mentals"] = mentals
+                list_mentals.append(dict_mentals)
+            level_dict["sub"] = list_mentals
+        all_mentals.append(level_dict)
+
+        context.update( {  'title_type_of_question' : "Questions aléatoires" , "all_mentals" : all_mentals  })
         template = 'tool/quizz_random.html'
 
     elif qtype == 0 :
@@ -2110,9 +2127,26 @@ def create_question(request,idq,qtype):
 @login_required(login_url= 'index')
 def update_question(request,id,idq,qtype):
     
-    question = Question.objects.get(pk = id)
-    form = QuestionForm(request.POST or None, request.FILES or None, instance = question,  quizz = quizz)
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk = idq)
+    questions = quizz.questions.order_by("ranking")
+    question = Question.objects.get(pk=id) 
+    qt  = Qtype.objects.get(pk=question.qtype)
 
+    ########################################################################################################################################
+    ######## Attendus pour la Banque de questions
+    ########################################################################################################################################
+    themes   = quizz.themes.all()
+    levels   = quizz.levels.all()
+    subjects = quizz.teacher.subjects.all()
+    if themes.count() and levels.count():
+        waitings = Waiting.objects.filter(theme__subject__in=subjects , theme__in=quizz.themes.all(), level__in=quizz.levels.all())
+    elif levels.count():
+        waitings = Waiting.objects.filter(theme__subject__in=subjects ,level__in=quizz.levels.all())
+    elif themes.count():
+        waitings = Waiting.objects.filter(theme__subject__in=subjects ,theme__in=quizz.themes.all())
+    ########################################################################################################################################
+    ########################################################################################################################################
     parcours_id = request.session.get("parcours_id", None)
     if parcours_id :
         parcours = Parcours.objects.values('id', 'title', 'color').get(pk = parcours_id)
@@ -2123,12 +2157,7 @@ def update_question(request,id,idq,qtype):
         formSet = inlineformset_factory( Question , Choice , fields=('answer','imageanswer','is_correct','retroaction') , extra=0)
         form_ans = formSet(request.POST or None,  request.FILES or None, instance = question)
 
-
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz = Quizz.objects.get(pk = idq)
-    questions = quizz.questions.order_by("ranking")
-    question = Question.objects.get(pk=id) 
-    qt  = Qtype.objects.get(pk=question.qtype)
+    form = QuestionForm(request.POST or None, request.FILES or None, instance = question,  quizz = quizz)    
 
     parcours_id = request.session.get("parcours_id", None)
     if parcours_id :
@@ -2198,8 +2227,24 @@ def update_question(request,id,idq,qtype):
                 "quizz" : quizz , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  'form_var' : formSetvar}
 
     if quizz.is_random :
-        knowledges = Knowledge.objects.filter(theme__subject=quizz.subject ,theme__in=quizz.themes.all() , level__in =quizz.levels.all())
-        context.update( {  'title_type_of_question' : "Questions aléatoires" , "knowledges" : knowledges  })
+
+        all_mentals = list()
+        mentaltitles = Mentaltitle.objects.filter(subject = quizz.subject, is_display=1).order_by("ranking")
+        for level  in levels :
+            level_dict = dict()
+            level_dict["level"] = level 
+            list_mentals = list()
+            for mentaltitle in mentaltitles :
+                dict_mentals = dict()
+                dict_mentals["mentaltitle"] = mentaltitle 
+                mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking") 
+                dict_mentals["mentals"] = mentals
+                list_mentals.append(dict_mentals)
+            level_dict["sub"] = list_mentals
+        all_mentals.append(level_dict)
+
+
+        context.update( {  'title_type_of_question' : "Questions aléatoires" , "all_mentals" : all_mentals  })
         template = 'tool/quizz_random.html'
 
     elif qtype == 0 :
@@ -2712,7 +2757,52 @@ def ajax_chargeknowledges(request):
 ########## Question Random
 ############################################################################################################
 ############################################################################################################
+def create_questions_flash_random_variable(m_ids,quizz,noq) :
 
+    list_of_ids = [0]*noq
+    length = len(m_ids)
+    i , j = 0 , 0
+    while i < noq :
+        for j in range (length) :
+            list_of_ids[i] = int(m_ids[j])
+            i+=1
+            if i == noq  : break
+                
+    shuffle(list_of_ids) # la liste des ids des questions flash
+
+    for mental_id in list_of_ids :
+        mental = Mental.objects.get(pk=mental_id)
+        #title, answer = mental.script alea_content(mental_id)
+        variables  = dict()
+        exec(mental.script,globals(),variables)
+        title    = variables['title']
+        answer   = variables['answer']
+        wanswer  = variables['wans']
+        question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer)
+        quizz.questions.add(question)
+
+
+
+def create_quizz_random(request,id):
+    
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    quizz = Quizz.objects.get(pk= id)
+    noq = int(request.POST.get('noq',quizz.nb_slide)) 
+
+    mental_ids = request.POST.getlist("mental_ids",None)
+    if len(mental_ids) :
+        create_questions_flash_random_variable(mental_ids, quizz,noq)
+
+    Quizz.objects.filter(pk=quizz.id).update(nb_slide = noq )
+    return redirect('list_quizzes' )
+
+
+
+############################################################################################################
+############################################################################################################
+########## Définitions Random    A EFFACER avec leur url
+############################################################################################################
+############################################################################################################
 
 
 def show_quizz_random(request,id):
@@ -2727,7 +2817,6 @@ def show_quizz_random(request,id):
     return render(request, 'tool/show_quizz_random.html', context)
 
 
-
 def show_quizz_random_group(request,id,idg):
     """ Vue pour le groupe en vidéo projection """
     
@@ -2740,26 +2829,8 @@ def show_quizz_random_group(request,id,idg):
     return render(request, 'tool/show_quizz_random.html', context)
 
 
-
-
-def create_quizz_random(request,id):
-    
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
-    quizz = Quizz.objects.get(pk= id)
-    noq = int(request.POST.get('noq',1)) 
-    knowledge_ids = request.POST.getlist('knowledges')
-    qrandoms_list = list(Qrandom.objects.filter(knowledge_id__in = knowledge_ids))
-    lenq = len(qrandoms_list) 
-    for i in range(lenq) :
-        quizz.qrandoms.add(qrandoms_list[i])
-    Quizz.objects.filter(pk=quizz.id).update(nb_slide = noq )
- 
-    return redirect('list_quizzes' )
- 
-
 @login_required(login_url= 'index')
 def list_qrandom(request):
-    
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     if request.user.is_superuser :
         qrandoms = Qrandom.objects.all()
@@ -2800,9 +2871,6 @@ def create_qrandom(request):
 
     else :
         return redirect('index')
-
-    
- 
 
 @login_required(login_url= 'index')
 def update_qrandom(request,id):
@@ -2846,8 +2914,6 @@ def delete_qrandom(request,id):
  
     return redirect("list_qrandom")
 
- 
- 
 
 @login_required(login_url= 'index')
 def admin_qrandom(request,id_level):
@@ -2894,8 +2960,6 @@ def create_qrandom_admin(request,id_knowledge):
 
     else :
         return redirect('index')
-
-
 
 
 @login_required(login_url= 'index')
@@ -3371,7 +3435,7 @@ def create_questions_flash(request,id):
 
             mental_ids = request.POST.getlist("mental_ids",None)
             if len(mental_ids) :
-                create_questions_flash_random_variable(mental_ids, nf)
+                create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
                     
             return redirect('list_questions_flash')
         else:
@@ -3409,7 +3473,7 @@ def update_questions_flash(request,id):
 
             mental_ids = request.POST.getlist("mental_ids",None)
             if len(mental_ids) :
-                create_questions_flash_random_variable(mental_ids, nf)
+                create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide )
                     
             return redirect('list_questions_flash')
         else:
@@ -3431,7 +3495,7 @@ def duplicate_questions_flash(request,id):
     quizz.code = str(uuid.uuid4())[:8]
     quizz.save()
     if len(mental_ids) :
-        create_questions_flash_random_variable(mental_ids, quizz)
+        create_questions_flash_random_variable(mental_ids, quizz, quizz.nb_slide)
     return redirect('list_questions_flash')
 
 

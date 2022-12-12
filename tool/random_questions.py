@@ -74,32 +74,4 @@ def fraction_irreductible(n,m,p,q=0,e=0):
 
 
 
-def create_questions_flash_random_variable(m_ids,quizz) :
-
-	nb_slide    = quizz.nb_slide
-	list_of_ids = [0]*nb_slide
-	length = len(m_ids)
-	i , j = 0 , 0
-	while i < nb_slide :
-		for j in range (length) :
-			list_of_ids[i] = int(m_ids[j])
-			i+=1
-			if i == nb_slide  : break
-				
-	shuffle(list_of_ids) # la liste des ids des questions flash
-
-	for mental_id in list_of_ids :
-		mental = Mental.objects.get(pk=mental_id)
-		#title, answer = mental.script alea_content(mental_id)
-		variables  = dict()
-		exec(mental.script,globals(),variables)
-		title    = variables['title']
-		answer   = variables['answer']
-		wanswer  = variables['wans']
-		question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer)
-		quizz.questions.add(question)
-
-
- 
-
 

@@ -9,14 +9,14 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/quizz-random']);
-    </script> 
+        require(['script/ajax-quizz-create','script/ajax-question-flash']);
+    </script>  
 {% endblock %}
 
 
 
 {% block page_title %}
-        <a href="{% url 'index' %}" ><i class="bi bi-aspect-ratio"></i> </a>  Les quizz <img src="{% static 'img/angle-right.png' %}"/>  {{ title_type_of_question }}
+        <a href="{% url 'index' %}" ><i class="bi bi-aspect-ratio"></i> </a> {{ quizz }} <img src="{% static 'img/angle-right.png' %}"/>  {{ title_type_of_question }}
 {% endblock %}
 
 {% block page_menu_right %}
@@ -34,51 +34,64 @@
     {% csrf_token %}    
     <div class="row">
         <div class="col-sm-12 col-md-2">
-            <div class="form-group">
+            <div style="background-color: white;border-radius: 10px;padding:10px;font-size: 15px;font-weight: 500">
                 <h3>{{ quizz.subject}}  </h3> 
+                <div class="form-group">
+                    {% for l in quizz.levels.all %} <li class="sanspuce">{{ l.name }}</li> {% endfor %}   
+                </div>
+                <div class="form-group">
+                    {% for g in quizz.groups.all %} <li class="sanspuce">{{ g.name }} [{{ g.students.count }}  élèves]</li> {% endfor %}   
+                </div>
+                <div class="form-group">
+                    {% for f in quizz.folders.all %} <li class="sanspuce">{{ f  }}</li> {% endfor %}   
+                </div>
+                <div class="form-group">
+                    {% for p in quizz.parcours.all %} <li class="sanspuce">{{ p }}</li> {% endfor %}   
+                </div>
+                <div class="form-group">
+                    {% for t in quizz.themes.all %} <li class="sanspuce">{{ t.name }}</li> {% endfor %}   
+                </div>
             </div>
-             <div class="form-group">
-                {% for l in quizz.levels.all %} <li class="sanspuce">{{ l.name }}</li> {% endfor %}   
-            </div>
-             <div class="form-group">
-                {% for t in quizz.themes.all %} <li class="sanspuce">{{ t.name }}</li> {% endfor %}   
-            </div>
-            <div class="form-group">
-                <label>Nombre de questions souhaitées</label>
+            <div style="background-color: white;border-radius: 10px;padding:10px;font-size: 15px;font-weight: 500;margin-top:20px">
+                <label>Nombre de questions</label>
                 <input type="number" name="noq" min=0 step=1  class="form-control" value="{% if quizz.nb_slide %}{{ quizz.nb_slide }}{% else %}1{% endif %}" />
             </div>
         </div>
         <div class="col-sm-12 col-md-10" >  
             <div class="row" >
                 <div class="col-sm-12 col-md-12" > 
-                    <div class="form-group">
-                        <p>Choisir les attendus et/ou savoir faire des questions</p>
-                        {%  regroup knowledges by waiting as waiting_list %}
-                        <table class="table table-sacado  table-hover display1000" style="width:100%">
-                            <thead>
-                                <tr><td></td></tr>
-                            </thead>
-                            <tbody> 
-                                {% for waiting in  waiting_list %}
-                                    <tr style="background:#aa98cd; cursor: pointer" class="opener out">
-                                        <td><label><input type="checkbox" id="id_waiting{{ waiting.grouper.id }}" class="selector_w"   data-id="{{ waiting.grouper.id }}" /> {{ waiting.grouper.name }} </label></td>
-                                    </tr>
-                                    {% for knowledge in  waiting.list  %}   
-                                        <tr style="cursor: pointer" class="open w{{  waiting.grouper.id  }}"  id="{{ knowledge.name.id}}">
-                                            <td> 
-                                                <label>
-                                                    {% if knowledge.qrandom.count > 0 %}
-                                                    <input type="checkbox" id="id_knowledge{{knowledge.id}}"  class="open kw{{  waiting.grouper.id  }}"  name="knowledges" value="{{ knowledge.id }}"/>
-                                                    {% endif %}
-                                                    {{ knowledge.name }} <small><b>[{{ knowledge.qrandom.count }} quest. aléa.]</b></small>
-                                                </label>
-                                            </td>
-                                        </tr>
+                     <table class="table table-hover borderless display1000" style="width:100%;" >
+                        <thead> 
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            {% for all_mental  in all_mentals %}   
+                                <tr class="title_tr">
+                                    <td style="width:85%"> {{ all_mental.level.name  }}</td> 
+                                </tr>
+                                {% for all_mental_sub  in all_mental.sub %} 
+                                    <tr class="subtitle_tr opener out"   id="{{ all_mental_sub.mentaltitle.id }}">
+                                        <td style="width:85%"><i class="fa fa-caret-right"></i> {{ all_mental_sub.mentaltitle.title }}</td> 
+                                    </tr> 
+                                    {% for m in all_mental_sub.mentaltitle.mentals.all %}
+                                        <tr style="background:white; cursor: pointer;" class="opener_k opened{{ all_mental_sub.mentaltitle.id }} out no_visu_on_load" >
+                                            <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
+                                        </tr>  
                                     {% endfor %}
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                            {% empty %}
+                                <tr>
+                                    <td>
+                                        <div class="alert alert-danger">
+                                            Aucune question ne correspond à cette recherche.
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
                 </div>
             </div>
             <div class="row" >

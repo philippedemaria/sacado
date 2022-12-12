@@ -105,8 +105,9 @@ urlpatterns = [
     #path('send_slide', send_slide, name='send_slide'), 
     path('slide_sorter', slide_sorter, name='slide_sorter'),
 
-
+    ################################################################################################################ 
     ############## Random_quizz
+    ################################################################################################################ 
     path('create_quizz_random/<int:id>', create_quizz_random, name='create_quizz_random'),
 
     path('list_qrandom', list_qrandom, name='list_qrandom'),

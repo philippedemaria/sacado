@@ -17,7 +17,6 @@ define(['jquery',  'bootstrap' ], function ($) {
 
         $('#id_is_publish').prop('checked', true); 
         $('#id_is_numeric').prop('checked', false); 
-        $('#id_is_video').prop('checked', false); 
         $('#id_is_archive').prop('checked', false); 
         $('#id_is_mark').prop('checked', false); 
         $('#id_is_random').prop('checked', false); 
@@ -29,12 +28,15 @@ define(['jquery',  'bootstrap' ], function ($) {
         $('.div_is_mark').hide() ; 
         $(".div_is_ranking").hide(); 
         $(".div_time").hide(); 
-        $('.div_interslide').hide() ; 
         $('#is_result_final').hide() ; 
 
         $('#id_is_numeric').on('change', function (event) {
-            $('.div_is_mark').toggle(300) ;
-            $('#is_video_div').toggle(300) ;
+            if  (!$('#id_is_video').is(":checked"))
+            {
+                $('.div_is_mark').toggle(300) ;
+                $('#is_video_div').toggle(300) ;
+            }
+
         });
 
         $('#latex_formula').hide() ;
@@ -43,16 +45,32 @@ define(['jquery',  'bootstrap' ], function ($) {
         });
 
 
+        $('.is_random_div').hide() ; 
+        $('#id_is_random').on('change', function (event) {
+            $('.is_random_div').toggle(300) ;
+
+            if  ($('#id_is_random').is(":checked"))
+            {
+                $('#on_submit_button').val("Enregistrer et choisir les thèmes des questions") ;
+            }
+            else
+            {
+                $('#on_submit_button').val("Enregistrer et créer les questions") ;
+            }
+            
+ 
+
+        });
 
 
         $('#id_is_result').on('change', function (event) {
-
              $('#is_result_final').toggle(300) ;  
-
         });
 
         $('#id_is_video').on('change', function (event) {
             $('.div_interslide').toggle(300) ;
+            $('.div_is_mark').toggle(300) ;
+            $('#is_video_div').toggle(300) ;
         });
 
         $('#id_is_publish').on('change', function (event) {

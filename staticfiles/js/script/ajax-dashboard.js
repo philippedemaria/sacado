@@ -134,9 +134,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             $('.no_visu').toggle(500);
             if (i_display%2==0)
-                { $('#more_options').html("<i class='fa fa-angle-right'></i> Mode basique <i class='bi bi-dash-circle-dotted'></i> d'options</a>") ; }
+                { $('#more_options').html("<i class='fa fa-angle-right'></i> Mode basique <i class='bi bi-dash-circle-dotted'></i> d'options</a>") ; 
+                  $('#position_group_folder').hide();  
+            }
             else
-                { $('#more_options').html("<i class='fa fa-angle-right'></i> Mode expert <i class='bi bi-plus-circle-dotted'></i> d'options") ; }
+                { $('#more_options').html("<i class='fa fa-angle-right'></i> Mode expert <i class='bi bi-plus-circle-dotted'></i> d'options") ; 
+                  $('#position_group_folder').show();
+            }
             
             i_display++;
         });
