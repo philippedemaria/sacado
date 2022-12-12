@@ -16,7 +16,8 @@
         <img src="{{ quizz.vignette.url }}" width="60px" height="60px"  />
     {% else %} 
         <i class="fa fa-square fa-3x" style="color:{{ quizz.color }}"></i>
-    {% endif %}
+    {% endif %}<br/>
+    <small>{{ quizz.date_modified|date:"d N Y"}}</small>
 </td>
 <td>
     {{ quizz.title }}     
