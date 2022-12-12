@@ -58,6 +58,7 @@
             </div>
         </div>
         <div class="col-sm-12 col-md-10" >  
+            {{ all_mentals }}
             <div class="row" >
                 <div class="col-sm-12 col-md-12" > 
                      <table class="table table-hover borderless display1000" style="width:100%;" >
@@ -72,14 +73,16 @@
                                     <td style="width:85%"> {{ all_mental.level.name  }}</td> 
                                 </tr>
                                 {% for all_mental_sub  in all_mental.sub %} 
+                                    {% if all_mental_sub.mentals.count > 0 %}
                                     <tr class="subtitle_tr opener out"   id="{{ all_mental_sub.mentaltitle.id }}">
                                         <td style="width:85%"><i class="fa fa-caret-right"></i> {{ all_mental_sub.mentaltitle.title }}</td> 
                                     </tr> 
-                                    {% for m in all_mental_sub.mentaltitle.mentals.all %}
+                                    {% for m in all_mental_sub.mentals.all %}
                                         <tr style="background:white; cursor: pointer;" class="opener_k opened{{ all_mental_sub.mentaltitle.id }} out no_visu_on_load" >
                                             <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
                                         </tr>  
                                     {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
                             {% empty %}
                                 <tr>
