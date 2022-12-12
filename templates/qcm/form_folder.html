@@ -104,37 +104,62 @@
                     </div> 
                 </div> 
             {% endif %}
-
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <label>Attribuer aux groupes
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                    </label>
+                        {% if teacher.nb_boolean_multi_subjects %}
+                            <div class="alert alert-sacado" id="grplist">
+                                <small>Choisir au moins un enseignement et un niveau.</small>
+                            </div>
+                        {% else %} 
+                            <div class="alert alert-sacado">        
+                            {{ form.groups  }}
+                            {{ form.groups.errors }}
+                            </div>
+                        {% endif %} 
+                </div> 
+                <div class="col-sm-6  col-md-6">
+                    <div class="form-group">  
+                        <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
+                            <small><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.<br/>
+                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le parcours créé.<br/>
+                            </small>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
 
 
             <div class="row">
                 <div class="col-sm-12 col-md-6 {% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
-                    <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <label>Attribuer aux groupes </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
                     </span> 
                     {% if group or folder %}
                         {{ form.groups  }}
                         {{ form.groups.errors }}
                     {% else %}
-                        {% if teacher.nb_boolean_multi_subjects %}
-                            <div class="form-group" id="grplist">
-                                <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un enseignement et un niveau.</label>
-                            </div>
-                        {% else %} 
-                            <div class="form-group" id="grplist">         
+                        <div class="form-group" id="grplist">
+                            {% if teacher.nb_boolean_multi_subjects %}
+                                <label class="text-danger"><i class="fa fa-warning"></i> Choisir un enseignement et un niveau.</label>
+                            {% else %}        
                                 <label>Affecter à mes groupes :</label> {% if group %}
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                            <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
-                                        </span> {% endif %}
-                                    {{ form.groups  }}
-                                    {{ form.groups.errors }}
-                            </div>
-                        {% endif %} 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                </span> {% endif %}
+                                {{ form.groups  }}
+                                {{ form.groups.errors }}
+                            {% endif %} 
+                        </div>                        
                     {% endif %}
                 </div>  
                 {% if group or folder %}
-                <div class="col-sm-12 col-md-6 no_visu" style="overflow-y: auto;height: 230px;">
+                <div class="col-sm-12 col-md-6 no_visu" style="overflow-y: auto;height: 150px;">
                     <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span> 
@@ -153,19 +178,6 @@
                     </div>
                 </div>
                 {% endif %}
-            </div>
-            <div class="row no_visu">
-
-
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group">  
-                        <div class="alert alert-sacado">
-                            <p style="font-size:12px"><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le dossier est partagé entre ces groupes.</p>
-                        </div>
-                    </div>
-                </div> 
-
-
             </div>
         </div>
 

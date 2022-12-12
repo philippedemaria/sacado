@@ -69,16 +69,19 @@
                                             <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                 <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
                                             </span> {% endif %}
+                                    <div class="alert alert-sacado">
                                     {{ form.groups|add_class:"select_all" }}
                                     {{ form.groups.errors }}
+                                    </div>
                                 </div>
                             </div>                            
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">  
                                     <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
-                                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
-                                        <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
-                                        
+                                        <small>   
+                                            <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
+                                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
+                                        </small>
                                     </label>
                                 </div>
                             </div>
@@ -91,7 +94,7 @@
                                     <label>Inclure dans les dossiers</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                                     </span>
-                                    <div class="form-group" style="overflow-y: auto;height: 230px;" id="cblist">   
+                                    <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;" id="cblist">   
                                         {{ form.folders|add_class:"select_all" }}
                                         {{ form.folders.errors }}
                                     </div>
@@ -100,7 +103,7 @@
                                     <label>Inclure dans les dossiers</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                                     </span> 
-                                    <div class="form-group" id="cblist">
+                                    <div class="alert alert-sacado form-group" id="cblist" style="overflow-y: auto;height: 200px;">
                                         <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
                                     </div>
 
@@ -113,12 +116,12 @@
                                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                                     </span>                                          
                                     {% if bibliotex  or folder  %}
-                                        <div style="overflow-y: auto;height: 230px;" id="pclist">
+                                        <div class="alert alert-sacado form-group"  style="overflow-y: auto;height: 200px;" id="pclist">
                                                 {{ form.parcours|add_class:"select_all_parcours" }}
                                                 {{ form.parcours.errors }} 
                                         </div>
                                     {% else %}
-                                        <div class="form-group" id="pclist">
+                                        <div class="alert alert-sacado form-group" id="pclist" style="overflow-y: auto;height: 200px;">
                                             <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un dossier.</label>
                                         </div>
                                     {% endif %}

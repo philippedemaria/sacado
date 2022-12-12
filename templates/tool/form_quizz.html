@@ -88,18 +88,13 @@
                 </div>
                 {% endif %}
                 <div class="row {% if group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;overflow-x: hidden;height: 150px;margin-bottom:20px;border-top: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;padding : 5px 0px;background-color: #f7F7F7">
-                        <label>Attribuer aux groupes proposés ?</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <div class="col-sm-12 col-md-6"  >
+                        <label>Attribuer aux groupes ?</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
-                        <div class="form-group" id="grplist">                          
-                        {% if quizz or group %} 
+                        <div class="alert alert-sacado form-group" id="grplist">                          
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
-                        {% else %} 
-                            {{ form.groups|add_class:"select_all"   }}
-                            {{ form.groups.errors }}
-                        {% endif %}
                         </div>
 	                </div>	
                     <div class="col-sm-12 col-md-6">
@@ -108,11 +103,11 @@
                     </div> 
                 </div>
                 <div class="row no_visu">
-                    <div class="col-sm-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;border-top: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;padding : 5px 0px;background-color: #f7F7F7">
-                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <div class="col-sm-12 col-md-12">
+                        <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
-                        <div class="form-group" id="cblist">
+                        <div class="alert alert-sacado form-group" id="cblist">
                             {% if quizz or folder or group %}
                                 {{ form.folders|add_class:"select_folders" }}
                                 {{ form.folders.errors }}
@@ -123,11 +118,11 @@
                     </div>
                 </div>
                 <div class="row no_visu">
-                    <div class="col-sm-12 col-md-12 form-group" style="overflow-y: auto;overflow-x: hidden;height: 150px;border-top: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;padding : 5px 0px;background-color: #f7F7F7">
-                        <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <div class="col-sm-12 col-md-12 form-group" >
+                        <label>Associer aux parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text_right" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
-                        <div class="form-group" id="pclist">
+                        <div class=" alert alert-sacado form-group" id="pclist">
                             {% if quizz or folder  %}
                                     {{ form.parcours|add_class:"select_all_parcours" }}
                                     {{ form.parcours.errors }} 

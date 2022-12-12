@@ -86,7 +86,7 @@
                     <div class="form-group">
                         <label>Enseignement <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_text" >Renseigner la matière  liée à ce parcours. Il vous sera cependant possible de choisir des exercices d'une autre matière. Par exemple, un enseignant de SPC doit renseigner ici SPC et pourra choisir des exercices de Maths plus tard dans ce parcours de SPC. </div>
-                                </span> :
+                                </span>
                         </label>
                         {{ form.subject |add_class:"form-control select2"|attr:"required" }}
                         {{ form.subject.errors }}
@@ -102,77 +102,47 @@
                 {% endif %}
             </div>
             <div class="row">
-                {% if parcours or group %}
-                    <div class="col-sm-12 col-md-6 no_visu" style="overflow-y: auto;height: 150px;">
-                        <div class="form-group"> 
-                        <label>Attribuer aux groupes proposés
-                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                            </span> 
-                        </label>
-                        
-                        {{ form.groups|add_class:"select_all"  }}
-                        {{ form.groups.errors }}
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
-                        <div class="form-group"> 
-                        <label>Attribuer aux groupes proposés
-                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                            </span> 
-                        </label>
-                            {% if teacher.nb_boolean_multi_subjects %}
-                                <div class="alert alert-sacado" id="grplist">
-                                    <p style="font-size:12px">Choisir au moins un enseignement et un niveau.</p>
-                                </div>
-                            {% else %} 
-                                        
-                                {{ form.groups  }}
-                                {{ form.groups.errors }}
-                           
-                            {% endif %} 
-                        </div>
-                    </div> 
-                {% endif %}
-
-                {% if parcours or group  or folder %}
-                <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">                    
-                    <div class="form-group">
-                        <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                        </span> 
-                        <div id="flist">
-                            {{ form.folders|add_class:"select_all_parcours" }}
-                            {{ form.folders.errors }} 
-                        </div>
-                    </div>
-                </div>
-                {% else %}
                 <div class="col-sm-12 col-md-6">
-                    <div class="form-group">
-                        <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                    <label>Attribuer aux groupes
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
-                        <div class="alert alert-sacado" id="flist">
-                            <p style="font-size:12px">Choisir au moins un groupe.</p>
-                        </div>
+                    </label>
+                    <div class="alert alert-sacado" id="grplist" style="overflow-y: auto;height: 150px;">
+                        {% if teacher.nb_boolean_multi_subjects %}
+                            <small>Choisir un enseignement et un niveau.</small>
+                        {% else %}        
+                            {{ form.groups  }}
+                            {{ form.groups.errors }}
+                        {% endif %} 
                     </div>
-                </div>
-                {% endif %}
-            </div>
-            <div class="row no_visu">
-                <div class="col-sm-12  col-md-12">
+                </div> 
+                <div class="col-sm-6  col-md-6">
                     <div class="form-group">  
                         <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
-                            <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.<br/>
+                            <small><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.<br/>
                             <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le parcours créé.<br/>
-                            
+                            </small>
                         </label>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">                    
+                        <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="alert alert-sacado" id="flist" style="overflow-y: auto;height: 150px;">                
+                        {% if parcours or group  or folder %}
+                            {{ form.folders|add_class:"select_all_parcours" }}
+                            {{ form.folders.errors }} 
+                        {% else %}
+                            <small>Choisir au moins un groupe.</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="col-sm-12 col-md-4 no_visu ">
             <div class="col-sm-12 col-md-12 form_card">

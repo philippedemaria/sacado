@@ -110,38 +110,38 @@
                     </div>
                 </div>
                 <div class="row {% if flashpack or group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 150px;">
+                    <div class="col-sm-12 col-md-6">
                         <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
-                        <div class="form-group" id="grplist">                          
-                        {% if flashpack or group %} 
-                            {{ form.groups|add_class:"select_all"   }}
-                            {{ form.groups.errors }}
-                        {% elif teacher.nb_boolean_multi_subjects %}
-                            <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un enseignement.</label>
-                        {% else %} 
-                            {{ form.groups|add_class:"select_all"   }}
-                            {{ form.groups.errors }}
-                        {% endif %}
+                        <div class="alert alert-sacado form-group" id="grplist"  style="overflow-y: auto;height: 150px;">                          
+                            {% if flashpack or group %} 
+                                {{ form.groups|add_class:"select_all"   }}
+                                {{ form.groups.errors }}
+                            {% elif teacher.nb_boolean_multi_subjects %}
+                                <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un enseignement.</label>
+                            {% else %} 
+                                {{ form.groups|add_class:"select_all"   }}
+                                {{ form.groups.errors }}
+                            {% endif %}
                         </div>
 	                </div>	
                     <div class="col-sm-12 col-md-6">
                         <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
                             Cocher, décocher les groupes pour choisir les dossiers.<br/>
                             <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
-                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
+                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le flashpack créé.
                             
                         </label>
                     </div> 
                 </div>
                 {% if not flashpack.is_global %}
                 <div class="row {% if flashpack or group %}no_visu{% endif %}"  id="folders_is_global">
-                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;height: 230px;">
+                    <div class="col-sm-12 col-md-6">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
-                        <div class="form-group" id="cblist">
+                        <div class="alert alert-sacado form-group" id="cblist"  style="margin-top:10px;overflow-y: auto;height: 200px;">
                             {% if flashpack or folder or group %}
                                 {{ form.folders|add_class:"select_folders" }}
                                 {{ form.folders.errors }}
@@ -150,14 +150,14 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6" style="margin-top:10px;overflow-y: auto;height: 230px;">
+                    <div class="col-sm-12 col-md-6">
                         <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
-                        <div class="form-group" id="pclist">
+                        <div class="alert alert-sacado form-group" id="pclist" style="margin-top:10px;overflow-y: auto;height: 200px;">
                             {% if flashpack or folder  %}
-                                    {{ form.parcours|add_class:"select_all_parcours" }}
-                                    {{ form.parcours.errors }} 
+                                {{ form.parcours|add_class:"select_all_parcours" }}
+                                {{ form.parcours.errors }} 
                             {% else %}
                                 <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un dossier.</label>
                             {% endif %}
