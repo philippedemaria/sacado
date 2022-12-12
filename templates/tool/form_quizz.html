@@ -77,18 +77,18 @@
                 {% if group %}
                     {{ form.subject.as_hidden}}
                 {% else %}
-                <div class="form-group">
-		            <label>Enseignement</label>
-		            {{ form.subject|add_class:"form-control select2" }}
-                    {{ form.subject.errors }}
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+        		            <label>Enseignement</label>
+        		            {{ form.subject|add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                        </div>
+                    </div>
                 </div>
                 {% endif %}
-                <div class="row no_visu">
-                    <div class="col-sm-12 col-md-12 form-group">
-                        <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils : <br/>Cocher, décocher les groupes pour affiner les dossiers.<br/>
-                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le quizz est partagé entre ces groupes.</label>
-                    </div> 
-                    <div class="col-sm-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;margin-bottom:20px;border-top: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;padding : 5px 0px;background-color: #f7F7F7">
+                <div class="row {% if group %}no_visu{% endif %}">
+                    <div class="col-sm-12 col-md-6" style="overflow-y: auto;overflow-x: hidden;height: 150px;margin-bottom:20px;border-top: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;padding : 5px 0px;background-color: #f7F7F7">
                         <label>Attribuer aux groupes proposés ?</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
@@ -96,14 +96,16 @@
                         {% if quizz or group %} 
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
-                        {% elif teacher.nb_boolean_multi_subjects %}
-                            <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un enseignement.</label>
                         {% else %} 
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
                         {% endif %}
                         </div>
 	                </div>	
+                    <div class="col-sm-12 col-md-6">
+                        <label><img src="{% static 'img/conseil.png' %}" width="25px"/> <small>Aides et conseils : <br/>Cocher, décocher les groupes pour affiner les dossiers.<br/>
+                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le quizz est partagé entre ces groupes.</small></label>
+                    </div> 
                 </div>
                 <div class="row no_visu">
                     <div class="col-sm-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;border-top: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;padding : 5px 0px;background-color: #f7F7F7">
@@ -137,7 +139,7 @@
                 </div>
 
                 <div id="position_group_folder" class="form-group">
-                    <label>Ce quizz est attribué au groupe : {{ group }}</label> 
+                    {% if group %}<label>Ce quizz est attribué au groupe : {{ group }}</label>{% endif %}
                     {% if folder %}<li class="sanspuce"><label>dans le  dossier  {{ folder }}</label></li>{% endif %}
                     {% if parcours %}<li class="sanspuce"><label>pour le parcours {{ parcours }}</label></li>{% endif %}
                 </div>
