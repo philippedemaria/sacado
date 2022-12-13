@@ -15,7 +15,7 @@ from django.db.models import Q , Sum
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
 from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy , Customer , Prospection
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm
+from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm  
 from account.models import User, Student, Teacher, Parent ,  Response , Connexion
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
@@ -436,8 +436,19 @@ def delete_formule(request, id):
 #         if not school in liste :
 #             liste.append(school)
 #             Customer.objects.create(school_id = school[0],status=3 )
-
+@user_passes_test(user_is_board)
+def new_customer(request):
  
+
+    if request.method == 'POST' :
+        rne = request.POST.get('rne',None)
+        if rne :
+            school = School.objects.filter(code_acad=rne).first()
+            Customer.objects.get_or_create(school=school, defaults={ 'name' : school.name , 'address' : school.address, 'complement' : school.complement, 'town' : school.town, 'country' : school.country, 'status': 3} )
+            return redirect('all_schools')
+    context = { }
+
+    return render(request, 'association/new_customer.html', context ) 
 
 
 @user_passes_test(user_is_board)

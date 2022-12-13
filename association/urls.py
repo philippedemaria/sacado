@@ -35,7 +35,8 @@ urlpatterns = [
     path('create_accountancy', create_accountancy, name='create_accountancy'),
     path('print_bank_bilan', print_bank_bilan, name='print_bank_bilan'),
 
-
+    path('new_customer', new_customer, name='new_customer'),
+    
     path('new_voting/<int:id>/', create_voting, name='create_voting'),
  
  

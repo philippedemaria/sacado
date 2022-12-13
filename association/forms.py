@@ -28,6 +28,10 @@ class AccountancyForm(forms.ModelForm):
         fields = '__all__' 
 
 
+ 
+ 
+
+
 
 class DetailForm(forms.ModelForm):
     class Meta:

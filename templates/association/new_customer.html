@@ -1,0 +1,47 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_withoutMathJax.js' %}"></script>
+{% endblock %} 
+
+
+{% block page_title %}
+    <a href="{% url 'association_index' %}" ><i class="fa fa-bank"></i> </a> Nouvel établissement client France 
+{% endblock %} 
+
+{% block page_menu_right %}
+    {% include 'association/menubar.html' %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    {% if request.user.is_board %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group"><label>Renseigner le code RNE</label>
+                    <input type="text" name="rne" id="rne" class="form-control" maxlength="10" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group"> 
+  
+                    <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+    
+                </div>
+            </div>
+        </div>
+    </form>
+    {% endif %} 
+</section> 
+{% endblock %}
