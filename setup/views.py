@@ -412,20 +412,22 @@ def ressource_sacado(request): #Protection saml pour le GAR
                             else : level_id = 12
                         level = Level.objects.get(pk=level_id)
                         teacher.levels.add(level)
+
+                        grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 , 'level_id' : level_id , "lock" : 0 , "is_gar" : 1   })
+                        try :  # Profil élève
+                            if creat :
+                                username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                                password = make_password("sacado2020") 
+                                user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                                student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                                grp.students.add(student)
+                        except :
+                            pass
+
                 except :
                     pass
+ 
 
-
-                grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 , 'level_id' : level_id , "lock" : 0 , "is_gar" : 1   })
-                try :  # Profil élève
-                    if creat :
-                        username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
-                        password = make_password("sacado2020") 
-                        user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
-                        student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
-                        grp.students.add(student)
-                except :
-                    pass
 
 
             else :
