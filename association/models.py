@@ -338,6 +338,7 @@ class Accountancy(models.Model):
         ("par virement bancaire", "Virement bancaire"),
         ("en espèces", "Espèces"),
         ("par mandatement administratif", "Mandatement administratif"),
+        ("Diffusion Pédagogique", "Diffusion Pédagogique"),
     )
 
     FORMES = (
