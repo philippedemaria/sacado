@@ -470,6 +470,14 @@ def ajax_customer(request):
 
     return JsonResponse(data)
 
+@csrf_exempt
+def ajax_new_customer(request):
+
+    rne =  request.POST.get("rne")
+    school = School.objects.filter(code_acad=rne).first()
+    data = {}
+    data["html"] = school.name + ", "+school.town+ ", "+school.country.name
+    return JsonResponse(data)
 
 
 @user_passes_test(user_is_board) 

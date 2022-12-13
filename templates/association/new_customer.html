@@ -7,11 +7,14 @@
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_withoutMathJax.js' %}"></script>
+    <script>
+        require(['script/ajax-new-customer']);
+    </script>
 {% endblock %} 
 
 
 {% block page_title %}
-    <a href="{% url 'association_index' %}" ><i class="fa fa-bank"></i> </a> Nouvel établissement client France 
+    <a href="{% url 'association_index' %}" ><i class="fa fa-bank"></i> </a> Nouvel établissement client
 {% endblock %} 
 
 {% block page_menu_right %}
@@ -30,7 +33,22 @@
                     <input type="text" name="rne" id="rne" class="form-control" maxlength="10" />
                 </div>
             </div>
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group"><br/>
+                    <a href='#' class="btn btn-sacado" >Identifier l'établissement</a>
+                </div>
+            </div>
+
         </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+              <div class="form-group">
+                  <div id="id_school">
+                  </div>
+              </div>
+          </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div class="form-group"> 
