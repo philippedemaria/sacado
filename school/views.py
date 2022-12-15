@@ -119,7 +119,10 @@ def sharing_teachers(request,group, teachers):
 		c_tab = c.split("-")
 		teacher = Teacher.objects.get(user_id = c_tab[1])
 		role =  int(c_tab[0])
-		Sharing_group.objects.create(group = group ,teacher = teacher, role = role  )
+		sh , cre = Sharing_group.objects.get_or_create(group = group ,teacher = teacher , defaults = { 'role' : role }   )
+		if not cre :
+			sh.role = role
+			sh.save()
 
 		parcourses = group_has_overall_parcourses(group)
 		for parcours in parcourses :
