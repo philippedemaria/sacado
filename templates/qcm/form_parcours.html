@@ -108,13 +108,9 @@
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
                     </label>
-                    <div class="alert alert-sacado" id="grplist" style="overflow-y: auto;height: 150px;">
-                        {% if teacher.nb_boolean_multi_subjects %}
-                            <small>Choisir un enseignement et un niveau.</small>
-                        {% else %}        
-                            {{ form.groups  }}
-                            {{ form.groups.errors }}
-                        {% endif %} 
+                    <div class="alert alert-sacado" id="grplist" style="overflow-y: auto;height: 150px;">       
+                        {{ form.groups  }}
+                        {{ form.groups.errors }}
                     </div>
                 </div> 
                 <div class="col-sm-6  col-md-6">
@@ -142,7 +138,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="col-sm-12 col-md-4 no_visu ">
             <div class="col-sm-12 col-md-12 form_card">
