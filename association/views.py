@@ -202,7 +202,7 @@ def module_bas_de_page(elements, nb_inches,bas_de_page):
 
 def module_logo(elements):
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nsacado.asso@gmail.com" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
     elements.append(logo_tab_tab)
     return elements
@@ -947,7 +947,7 @@ def print_bank_bilan(request):
     ### Logo Sacado
     #########################################################################################
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nsacado.asso@gmail.com" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
     elements.append(logo_tab_tab)
     #########################################################################################
@@ -1158,7 +1158,7 @@ def print_balance(request):
     ### Logo Sacado
     #########################################################################################
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nsacado.asso@gmail.com" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
     elements.append(logo_tab_tab)
     #########################################################################################
@@ -1344,7 +1344,7 @@ def print_big_book(request):
     ### Logo Sacado
     #########################################################################################
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz" ]]
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nsacado.asso@gmail.com" ]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch ])
     elements.append(logo_tab_tab)
     #########################################################################################
@@ -2332,7 +2332,7 @@ def print_accounting(request, id ):
     #########################################################################################
     dateur = "Date : " + accounting.date.strftime("%d-%m-%Y")
     logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
-    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nassociation@sacado.xyz", dateur]]
+    logo_tab = [[logo, "Association SacAdo\nhttps://sacado.xyz \nsacado.asso@gmail.com", dateur]]
     logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5.2*inch,inch])
     elements.append(logo_tab_tab)
     #########################################################################################

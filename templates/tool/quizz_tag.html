@@ -117,10 +117,10 @@
             </div> 
             <div class="col-lg-4 col-xs-4">
                 {% if sacado_asso %}
-                    {% if quizz.is_video or quizz.is_numeric and parcours %}
-                            <a href="{% url 'result_quizz'  quizz.id parcours.id  %}"  class="edit" >
-                               <i class="bi bi-trophy"></i>  <span class="label_icon"> Résultats</span>
-                            </a>
+                    {% if parcours and quizz.is_video or quizz.is_numeric  %}
+                        <a href="{% url 'result_quizz' quizz.id  parcours.id  %}"  class="edit" >
+                           <i class="bi bi-trophy"></i>  <span class="label_icon"> Résultats</span>
+                        </a>
                     {% endif %}
                 {% endif %}
             </div> 
@@ -131,14 +131,14 @@
                 <a href="{% url 'create_question' quizz.id 0 %}" class="edit" title="Rajouter une question"><i class="bi bi-plus-circle-dotted"></i>  <span class="label_icon">Questions  </span></a> 
             </div>
             {% if sacado_asso %}
-                {% if quizz.is_video or quizz.is_numeric and parcours %}
+                {% if parcours and quizz.is_video or quizz.is_numeric  %}
                 <div class="col-lg-4 col-xs-4">
                     <a href="{% url 'show_quizz_numeric' quizz.id parcours.id %}" class="edit" >
                         <i class="bi bi-eye"></i> <span class="label_icon">Visualiser</span>
                     </a>
                 </div>
                 <div class="col-lg-4 col-xs-4">
-                    <a href="{% url 'create_parcours_after_results'  quizz.id parcours.id %}"  class="edit" title="Créer un parcours d'apprentissage assisté par IA">
+                    <a href="{% url 'create_parcours_after_results' quizz.id parcours.id %}"  class="edit" title="Créer un parcours d'apprentissage assisté par IA">
                        <i class="bi bi-hdd-network"></i> <span class="label_icon">Appliquer IA</span>
                     </a>
                 </div>  

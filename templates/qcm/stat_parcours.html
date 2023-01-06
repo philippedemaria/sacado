@@ -145,7 +145,9 @@ body{
                                                 {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
                                             {{ s.point }}
                                             <div class="helper_tip_text_center" >
+                                                {% if s.exercise.supportfile.imagefile %}
                                                 <img src="{{ s.exercise.supportfile.imagefile.url }}" width="350px"/>
+                                                {% endif %}
                                             </div>
                                         </span>
                                     {% endfor %}
@@ -154,7 +156,11 @@ body{
                                         <span class="helper_tip btn btn-{% if s.point < stage.low %}danger{% elif s.point < stage.medium %}warning{% else %}success{% endif %}" 
                                                 {% if s.point < stage.up and  stage.medium < s.point %}  style="background-color: #62d85a" {% endif %} >
                                             {{ s.point }}
-                                            <div class="helper_tip_text_center" ><img src="{{ s.imagefile.url }}" width="350px"/></div>
+                                            <div class="helper_tip_text_center" >                                                
+                                                {% if s.imagefile %}
+                                                    <img src="{{ s.imagefile.url }}" width="350px"/>
+                                                {% endif %}
+                                            </div>
                                         </span>
                                     {% endfor %}
                                     <br/> 

@@ -1,0 +1,170 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-list_my_customexercise']);
+    </script>    
+{% endblock %} 
+
+  
+{% block page_title %}
+    <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %}  Mes 20 derniers exercices  
+    <a href="#" id="show_exercises_search_div" class="btn btn-new"> <i class="bi bi-search"></i> </a>
+    <span class="btn btn-new" style="margin-left:20px"> Nouvel exercice <i class="bi bi-arrow-bar-right"></i></span>
+{% endblock %}
+
+
+
+
+{% block page_menu_right %}
+
+    {% for qt in qtypes %}
+
+    <div class="col-xs-2 col-sm-1 col-md-1" align='center' style="margin-bottom:5px"> 
+        <a href="{% url 'create_supportfile' qt.id 0  %}">
+            <div style="font-size:{% if qt.id == 1 %}0.25{% elif qt.id == 3 or qt.id  == 4 %}0.2{% else %}0.3{% endif %}em" 
+                 class="qtypes_logo {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %} {% if qt.id ==  qtype  %}qtypes_logo_active{% endif %}" title="{{ qt.title}} {% if qt.id == 19 or qt.id == 20  %}à correction manuelle sur l'interface SACADO{% else %}auto-correctif{% endif %} "   >
+                {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="20px" /> {% else %}{{ qt.html|safe }}{% endif %}
+            </div>
+        </a>               
+    </div>
+    {% endfor %}  
+ 
+
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main">
+<form method="POST"> 
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row no_visu_on_load" id="exercises_search_div" >
+                <div class="col-sm-12 col-md-4">
+                    <div class="form_card">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <label>Enseignements : </label> 
+                                <select name="subjects" multiple class="form-control select2 subjects_levels" id="id_subjects" required>
+                                    {% for s in subjects %}
+                                    <option value="{{ s.id }}">{{ s.shortname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label>Niveaux concernés : </label>
+                                <select name="levels" multiple class="form-control select2 subjects_levels" id="id_levels">
+                                    {% for l in levels %}
+                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label>Compétences évaluées :</label><br>
+                                    <select name="skills" multiple class="form-control select2" id="id_skills">
+                                        {% for s in skills %}
+                                        <option value="{{ s.id }}">{{ s.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-sm-12 col-md-8">
+                    <div class="form_card">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label>Thèmes ciblés : </label>
+                                <select name="themes" multiple class="form-control select2 all_discriminants" id="id_themes">
+                                    {% for t in themes %}
+                                    <option value="{{ t.id }}">{{ t.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-group">
+                                    <label>Savoir faire évalués : </label>
+                                    <select name="knowledges" multiple class="form-control select2 all_discriminants" id="id_knowledges">
+                                        {% for k in knowledges %}
+                                        <option value="{{ k.id }}">{{ k.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="loading_spin"></div>
+
+
+
+    <div id="result_div">
+
+        {% include 'qcm/ajax_list_customexercises.html' %}
+    </div>
+
+</form>     
+</section>
+
+
+
+
+
+<script>
+MathJax = {
+  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
+  startup: {
+    ready() {
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
+      
+      new CommandMap('input', {input: 'Input'}, {
+        Input(parser, name) {
+          const xml = parser.create('node', 'XML');
+          const id = parser.GetBrackets(name, '');
+          const w = parser.GetBrackets(name, '5em');
+          const classe = parser.GetBrackets(name, 'input_latex');
+          const value = parser.GetArgument(name);
+          xml.setXML(MathJax.startup.adaptor.node('input', {
+            id: id, name: id, value: value, class: classe , style: {width: w}
+             }), MathJax.startup.adaptor);
+          xml.getSerializedXML = function () {
+            return this.adaptor.outerHTML(this.xml) + '</input>';
+          }
+          parser.Push(
+            parser.create('node', 'TeXAtom', [
+              parser.create('node', 'semantics', [
+                parser.create('node', 'annotation-xml', [
+                  xml
+                ], {encoding: 'application/xhtml+xml'})
+              ])
+            ], {texClass: TEXCLASS.ORD})
+          );
+        }
+      });
+      Configuration.create('input', {handler: {macro: ['input']}});
+
+      MathJax.startup.defaultReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+{% endblock %}
+ 

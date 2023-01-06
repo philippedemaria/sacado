@@ -175,22 +175,23 @@
                                                         class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=0 
                                                         data-exercise_id="{{ rc.id}}">
                                             <b> Voir ma copie</b>
-                                        </a>   
-                                        <label  style="font-size: 10px;font-weight: 600">Compétences 
-                                           
-                                        </label>
-                                          {% for d in noggb_data.skills.all %} 
-                                            <li class="sanspuce" style="font-size: 10px;">{{d.skill.name }}  <i class="fa fa-square
-                                                {% if d.point < stage.low %}
-                                                 text-danger 
-                                                {% elif d.point < stage.medium  %}
-                                                 text-warning 
-                                                {% elif d.point < stage.up  %}
-                                                 text-success 
-                                                {% else %}
-                                                 text-primary 
-                                                {% endif %}"></i>  </li>
-                                          {% endfor %}
+                                        </a> 
+                                        {% if noggb_data.is_corrected %}
+                                            <label  style="font-size: 10px;font-weight: 600">Compétences </label>
+                                            {% for d in noggb_data.skills %}
+                                                <li class="sanspuce" style="font-size: 12px;">{{d.skill.name }}  
+                                                    <i class="fa fa-square
+                                                    {% if d.level == 1 %}
+                                                     text-danger 
+                                                    {% elif d.level == 2 %}
+                                                     text-warning 
+                                                    {% elif d.level == 3  %}
+                                                     text-success 
+                                                    {% else %}
+                                                     text-ultrasuccess 
+                                                    {% endif %}"></i>  </li>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 </div>
                         </div>                           
@@ -278,42 +279,36 @@
                         </div>                    
                         <div class="card-image"   {% if data.score > -1 %} style="opacity:0.8" {% endif %}>
                             {% if student %}
-
-
-
                                 {% if rc.relationship_mastering.all|length > 0  and data.score  %}
                                 <a href="{% url 'mastering_student_show' rc.id %}" target="_blank" class="btn btn-danger" style="position: absolute; z-index:9; right:0px;top:150px;background-color:{{ parcours.color }}">
                                     Parcours de maîtrise proposé<br/><i class="fa fa-sitemap"></i>
                                 </a>
                                 {% endif  %}
 
-
                                 {% get_this_exercise_is_locked  student rc rc.parcours 0 today as is_blck %}
-
                                 {% get_available rc student  as available %} 
                                 {% get_parcours_available parcours student rc.exercise as parcours_available %}
 
-                                {% if rc.exercise.supportfile.is_ggbfile %}    
                                     {% if is_blck %}
                                         <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
                                             <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ rc.lock|date:"d-m-Y à H:i" }}</span>
                                         </div>
                        
-                                        <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
-                               
+                                        {% include 'qcm/_imagefile_displayer.html' %}
+ 
                                     {% else %}  
                                         {% if parcours_available.is_ok %} 
 
                                             {% if parcours.is_next and not available.is_ok %} 
                                                 <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                                      <i class="fa fa-lock"></i>  Vous devez passer à un autre exercice  
+                                                      <i class="fa fa-lock"></i>  Vous devez passer à l'exercice suivant 
                                                 </div>
                                      
-                                                    <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
+                                                {% include 'qcm/_imagefile_displayer.html' %}
                                     
                                             {% else %}
                                                 <a href="{% if not is_lock %}{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}{% endif %}">  
-                                                    <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}>
+                                                    {% include 'qcm/_imagefile_displayer.html' %}
                                                 </a>
                                             {% endif %}
 
@@ -323,42 +318,14 @@
                                                   <i class="fa fa-lock"></i>   Vous devez passer à un autre exercice  
                                             </div>
                                  
-                                                <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
+                                            {% include 'qcm/_imagefile_displayer.html' %}
                                 
 
                                         {% endif  %}
 
                                     {% endif  %}
 
-                                {% else %}
-                                    
-                                    {% if is_blck %}
-
-                                        <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                              <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ rc.lock|date:"d-m-Y à H:i" }}</span>
-                                        </div>
-                                        <a href="#"> 
-                                            <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
-                                        </a>
-                                    {% else %}
-
-
-                                            {% if parcours.is_next and not available.is_ok %} 
-                                                <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                                      <i class="fa fa-lock"></i>  Vous devez passer à l'exerice suivant
-                                                </div>
-                                     
-                                                <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
-                                    
-                                            {% else %}
-                                                <a href="{% url 'write_exercise'  rc.id   %}"> 
-                                                    <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not rc.is_publish %} style="opacity:0.8" {% endif %}  >
-                                                </a>
-                                            {% endif %}
-
-                                    {% endif  %}
-
-                                {% endif  %}
+                                 
                             
                             {% else %}
                                 <a href="#" class="detail_parcours"      data-exercise_id="{{ rc.exercise.id }}"  
@@ -377,8 +344,11 @@
                             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                                 <i class="fa fa-fw fa-barcode"></i> {{ rc.exercise.supportfile.code }}
                                 <i class="fa fa-fw fa-clock-o"></i> {{ rc.duration }} min.
-                                <i class="fa fa-fw fa-save"></i> {{ rc.situation}}
-                                
+
+                                {% if  rc.exercise.supportfile.qtype < 19 or rc.exercise.supportfile.qtype == 100 %}
+                                    <i class="fa fa-fw fa-save"></i> {{ rc.situation}}  
+                                {% endif %} 
+
                                 {% if not rc.parcours.is_evaluation %}
                                 {% if rc.relationships_courses.all|length > 0 %}  
                                     <i class="fa fa-fw fa-desktop"></i>
@@ -394,7 +364,7 @@
                                 {% else %}
                                     {% if submitter %}
                                         {% if not rc.exercise.supportfile.is_ggbfile %}  
-                                        <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-copy" style="color:{{ parcours.color|contrast_color }}"></i></span>
+                                            <span class="pull-right selector_div_result" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-copy" style="color:{{ parcours.color|contrast_color }}"></i></span>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -641,6 +611,46 @@
 </div>
 
 
+<script>
+MathJax = {
+  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
+  startup: {
+    ready() {
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
+      
+      new CommandMap('input', {input: 'Input'}, {
+        Input(parser, name) {
+          const xml = parser.create('node', 'XML');
+          const id = parser.GetBrackets(name, '');
+          const w = parser.GetBrackets(name, '5em');
+          const value = parser.GetArgument(name);
+          xml.setXML(MathJax.startup.adaptor.node('input', {
+            id: id, name: id, value: value, style: {width: w}, xmlns: 'http://www.w3.org/1999/xhtml'
+          }), MathJax.startup.adaptor);
+          xml.getSerializedXML = function () {
+            return this.adaptor.outerHTML(this.xml) + '</input>';
+          }
+          parser.Push(
+            parser.create('node', 'TeXAtom', [
+              parser.create('node', 'semantics', [
+                parser.create('node', 'annotation-xml', [
+                  xml
+                ], {encoding: 'application/xhtml+xml'})
+              ])
+            ], {texClass: TEXCLASS.ORD})
+          );
+        }
+      });
+      Configuration.create('input', {handler: {macro: ['input']}});
+
+      MathJax.startup.defaultReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
 {% endblock %}
 

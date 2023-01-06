@@ -57,7 +57,9 @@ Livret de compétences par exercices proposés
                                     {% for r in  data.relationships  %}
                                         {% get_used_in_group r group as used %}
                                         <div style="float: left;position: relative;height:20px;width:30px;">
+                                            {% if r.exercise.supportfile.imagefile %}
                                             <img src="{{ r.exercise.supportfile.imagefile.url }}" height="20px" style="position: absolute;{% if not used %}opacity: 0.3{% endif %}"/>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </td>
@@ -73,7 +75,9 @@ Livret de compétences par exercices proposés
                                             {% for r in data.relationships  %}
                                                 {% get_used_in_group r group as is_used %}
                                                 <div style="float: left;position: relative;height:35px;width:48px;">
-                                                    <img src="{{ r.exercise.supportfile.imagefile.url }}" height="35px" style="position: absolute;{% if not is_used %}opacity: 0.3{% endif %}"/>
+                                                    {% if r.exercise.supportfile.imagefile %}
+                                                    <img src="{{ r.exercise.supportfile.imagefile.url }}" height="35px" style="position: absolute;{% if not used %}opacity: 0.3{% endif %}"/>
+                                                    {% endif %}
                                                 </div>
                                             {% endfor %}
                                         </td>

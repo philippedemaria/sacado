@@ -1,10 +1,6 @@
 define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-question-flash_update-ace.js OK --");
- 
-
-  
-
 
 
         var editor = ace.edit("id_div_script");

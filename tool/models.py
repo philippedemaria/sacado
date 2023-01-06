@@ -138,9 +138,6 @@ class VariableImage(models.Model):
         return self.variable.name 
 
 
-
-
-
 class Qtype(models.Model):
     """ Modèle représentant un associé. """
     title     = models.TextField(max_length=255, default='',  blank=True, verbose_name="Type")
@@ -150,6 +147,12 @@ class Qtype(models.Model):
     is_online = models.BooleanField(default=0, verbose_name="En ligne ?")
     template  = models.CharField(max_length=255,  blank=True, default='', verbose_name="template") 
     ranking   = models.PositiveIntegerField(default=0,   ) 
+    custom    = models.CharField(max_length=255,  null = True,   blank=True, default='', verbose_name="template pour les exos")
+    is_sub    = models.BooleanField(default=0 ) # subchoices required
+    is_alea   = models.BooleanField(default=0 ) # subchoices required
+    extra     = models.PositiveIntegerField(default=0,   ) # Nombre d'extra pour le inline formset
+    is_pseudo = models.BooleanField(default=0 ) 
+    is_insert = models.BooleanField(default=0 ) 
 
     def __str__(self):
         return self.title

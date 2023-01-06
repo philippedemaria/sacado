@@ -18,7 +18,7 @@ import re
 @user_is_superuser
 def list_themes(request):
  
-    themes = Theme.objects.all()
+    themes = Theme.objects.order_by('subject')
 
     return render(request, 'socle/list_themes.html', {'themes': themes, 'communications' : [] , })
 

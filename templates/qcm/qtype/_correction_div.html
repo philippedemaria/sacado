@@ -1,0 +1,20 @@
+
+
+<div class="show_correction no_visu_on_load" id="show_correction{{ forloop.counter }}" align='left'>
+    <p id='message_correction{{ forloop.counter }}' ></p>
+
+	{% if supportfile.correction %}
+
+    	<label class="this_correction_label">Correction ou éléments de correction</label>
+		<div class="this_correction_text">	
+			{% if choice.retroaction %}
+					<div style="margin-bottom: 20px;">
+					{{ choice.retroaction }}
+					</div> 
+			{% endif %}
+			<div id="this_correction_text{{ forloop.counter }}"></div>
+		</div>
+
+	{% endif %}
+	<a href="#" class="nav_start btn btn-primary" data-dismiss="modal" aria-label="Close"><i class="fa fa-caret-right"></i> Suivant</a>
+</div>

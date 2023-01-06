@@ -35,7 +35,6 @@
 {% block body %}
 <section class="content_main"> 
 
- 
 
     <form action="" method="POST" enctype='multipart/form-data'>
 
@@ -44,7 +43,20 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-8">
                 {% if relationship.instruction or relationship.exercise.supportfile.annoncement  %}  
-                    <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a><br/>
+                    <a href="#" id='show_consigne_div' class="btn btn-sacado">Lire la consigne <i class="fa fa-caret-down"></i></a> 
+
+                    <div id="consigne_div" class="consigne no_visu_on_load">
+                        <div class="row">
+                            <div class="col-lg-12 col-xs-12">   
+                               {% if relationship.instruction   %}  
+                                    {{ relationship.instruction|safe }}  
+                               {% else %} 
+                                    {{ relationship.exercise.supportfile.annoncement|safe }} 
+                               {% endif %}                    
+                           </div>   
+                        </div> 
+                    </div>
+
                 {% endif  %}
 
                 {% if relationship.exercise.supportfile.is_correction_visible  %}  
@@ -73,22 +85,23 @@
 
             <hr>
                 {% if relationship.exercise.supportfile.is_image   or   relationship.exercise.supportfile.is_file  %}   
- 
                 <div class="form-group">
-                    {{ form.imagefile.label_tag }}  <br>
+                    <label>
+                        {% if relationship.exercise.supportfile.is_image   and   relationship.exercise.supportfile.is_file  %} Fichier, image (PNG/JPG) ou image scannée
+                        {% elif relationship.exercise.supportfile.is_image %} Image (PNG/JPG) ou image scannée
+                        {% elif relationship.exercise.supportfile.is_file %} Fichier {% endif %}
+                    </label><br>
                     {{ form.imagefile|add_class:"btn btn-default"   }}
                     {{ form.imagefile.errors }} <br>
                 </div> 
                 {% endif %}
-
+ 
                 {% if relationship.exercise.supportfile.is_text   %} 
-
                 <div class="form-group">
                     <label>Zone pour écrire</label><br>
                     {{ form.answer }}
                     {{ form.answer.errors }} <br>
                 </div>
-
                 {% endif %}
 
                 <div class="row">
@@ -134,34 +147,6 @@
         </div>
     </form>  
 </section>
-
-
-
-<div class="modal fade" id="consigne" tabindex="-1" role="dialog" aria-labelledby="consigne">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="padding-top :0px;">
-            <div class="modal-header">
-                <h3> Consigne :     
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                </h3>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12 col-xs-12">   
-                       {% if relationship.instruction   %}  
-                            {{ relationship.instruction|insert_tags:45|safe }}  
-                       {% else %} 
-                            {{ relationship.exercise.supportfile.annoncement|insert_tags:45|safe }} 
-                       {% endif %}                    
-                   </div>   
-                </div> 
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <div class="modal fade" id="correction" tabindex="-1" role="dialog" aria-labelledby="correction">
     <div class="modal-dialog" role="document">

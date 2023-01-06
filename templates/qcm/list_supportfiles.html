@@ -33,7 +33,7 @@
 <form method="POST">
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table class="table table-hover display1000" style="width:100%;background-color: #d4cdc4" >
+            <table class="table table-hover display1000" style="width:100%;" >
                 <thead> 
                     <tr>
                         <th></th>
@@ -70,7 +70,7 @@
                                 {% if knowledge.supportfile_counter > 0 %}
 
                                     {% for supportfile in knowledge.supportfiles|not_title|dictsort:"ranking"  %} 
-                                        <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
+                                        <tr class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td> 
                                                 <input type="hidden" value="{{ supportfile.id }}" name="this_supportfile_id" ><!--  sert à classer les thèmes  -->   
                                                 <div class="pull-right" > 
@@ -89,8 +89,6 @@
                                                         <img src="{% static 'img/missing_img.png' %}" class="imagefile">
                                                     {% endif  %} 
                                                     </a>
-
-
                                                     <a href="{% url 'update_supportfile'  supportfile.id   %}" class="listing" style="font-size: 18px">
                                                                 {% if supportfile.title %}  
                                                                     {{ supportfile.title|cleanhtml|capfirst }}  
@@ -98,17 +96,14 @@
                                                                     {{ supportfile.annoncement|cleanhtml|capfirst }} 
                                                                 {% endif %}
                                                     </a>  
-
-
                                                     {% if supportfile.calculator %}
                                                       <img src="{% static 'img/calculator.png' %}" width="30px" />
                                                     {% else %}
                                                       <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                                     {% endif  %}
 
-
-                                                     <br>
-                                                    <small>   
+                                                    <br>
+                                                    <small> <label><b>{{ supportfile.qtype_title }}</b></label>  
                                                         <i class="fa fa-fw fa-barcode"></i> {{ supportfile.code }}  {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                         <i class="fa fa-fw fa-clock-o"></i> {{ supportfile.duration }} minutes {% if supportfile.annoncement|make_list|length < 120 %}<br>{% endif %}
                                                         {% if supportfile.is_ggbfile %}<i class="fa fa-fw fa-save"></i> {{ supportfile.situation}} situation{{ supportfile.situation|pluralize}} minimum{% endif %}<br>
@@ -120,7 +115,7 @@
                                                     	{% else %}
                                                       		<small>compétence non renseignée</small>
                                                     	{% endif  %}
-                                                    </small>   
+                                                    </small> 
                                            </td>
                                         </tr>
                                     {% endfor %} 

@@ -39,7 +39,12 @@
 					            darkgreen
 					            {% endif %}" style="cursor: help" >
 					         {{ r.point }}
-					        <span class="helper_tip_text_flex"> <img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" /></span>
+					        <span class="helper_tip_text_flex"> 
+					        	{% if looper.exercise.supportfile.imagefile %}
+					        	<img src="{{ looper.exercise.supportfile.imagefile.url }}" width="400px" />
+					        	{% endif  %}
+
+					        </span>
 					    </a>
  
 					{% endif %} 

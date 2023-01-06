@@ -8,7 +8,7 @@ from sendmail.models import Email, Message
 from socle.models import Level
 from school.models import School
 from group.models import Group
-from tool.models import Tool
+from tool.models import Tool,Qtype
 from datetime import datetime 
 
 ##############################################################################################################################################
@@ -79,8 +79,8 @@ def menu(request):
                 url_helper = "helpers/" + dico_helper[helper_key] + ".html"
             except :
                 url_helper = "helpers/no_helper.html"
- 
-
+            
+            qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by('ranking')
             teacher = request.user.teacher
 
             nb_groups = teacher.groups.count()
@@ -112,7 +112,7 @@ def menu(request):
                     renew_hidden = True
                     request.session["renewal"] = renew_hidden
             
-            return { 'url_helper' : url_helper ,  'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+            return { 'url_helper' : url_helper , 'qtypes':qtypes, 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             

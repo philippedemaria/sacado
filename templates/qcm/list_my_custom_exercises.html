@@ -8,49 +8,26 @@
    
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/ajax-list_my_customexercise']);
+    </script>    
 {% endblock %} 
 
   
 {% block page_title %}
-    <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %} Mes exercices personnels
+    <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %} {% if is_mine %}Mes 20 derniers exercices perso {% else %}Exercices perso mutualisés{% endif %}
 
-
-    <ul>
-        <li class="dropdown">
-
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Nouvel exercice perso </a>
-
-            <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-                <li class="dropdown"><a href="{% url 'create_custom_exercise' %}" >Créer un exercice </a> </li>  
-                <li>
-                    {% if sacado_asso %}
-                        <a href="{% url 'exercise_custom_show_shared' %}"> Récupérer un exercice perso mutualisé</a> 
-                    {% else %}
-                        <a href="#" class="no_sacado_asso" title="Version établissement requise"> Récupérer un exercice perso mutualisé</a>
-                    {% endif %}
-                    {% if not parcours %} 
-                        <span class="helper_tip"> 
-                                <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text" >
-                                    <i class="fa fa-warning text-danger"></i> Préférer cloner depuis un <br/>parcours. L'exercice sera <br/>directement affecté à votre<br/> parcours.   
-                                </div>
-                        </span>
-                    {% endif %} 
-                </li> 
-            </ul>
-        </li>  
-    </ul>
-
+    <a href="{% url 'create_supportfile' 0 %}" class="btn btn-new"> Nouvel exercice </a>
 {% endblock %}
 
 
 
 
 {% block page_menu_right %}
+ 
+    {% if not is_mine %}<a href="{% url 'my_custom_exercises'%}" class="btn btn-sacado"> Mes 20 derniers exercices perso </a> {% endif %}
 
-    {% if request.user.is_superuser and  '/admin' in request.path %}
-    <li ><a href="{% url 'create_supportfile' %}"   class="btn btn-new"><i class="fa fa-plus"></i> Nouveau support GGB </a> </li> 
-    {% endif  %}
+
 {% endblock %}
 
 
@@ -59,77 +36,116 @@
 <form method="POST"> 
     {% csrf_token %}
     <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <table class="table table-sacado  table-hover display100">
-                <thead> 
-                    <tr>
-                        <td>Enoncé</td>
-                        <td>Option</td>
-                        <td>Matière</td>
-                        <td>Compétences</td>
-                        <td>Savoir faire</td>
-                        <td>Parcours</td>
-                    </tr>
-                </thead> 
-                <tbody>
-                    {% for customexercise in customexercises  %} 
-                        <tr> 
-                            <td>
-                                {% if customexercise.text_cor != "" %}
-                                    <i class="fa fa-copyright text-danger" style="font-size:18px;cursor:help" title="Avec corrigé"></i> 
-                                {% endif  %} 
-                                <a href="{% url 'parcours_update_custom_exercise' customexercise.id 0 %}"><i class="bi bi-gear"></i> </a>
-                                {{ customexercise.instruction|safe }}
-                            </td>
-                            <td>
-                                {% if customexercise.is_python %}
-                                      <img src="{% static 'img/is_python.png' %}" width="20px" />
-                                    {% else %}
-                                      <img src="{% static 'img/is_no_python.png' %}"  width="20px" />
-                                {% endif  %}
-                                {% if customexercise.is_scratch %}
-                                      <img src="{% static 'img/is_scratch.png' %}" width="20px" />
-                                    {% else %}
-                                      <img src="{% static 'img/is_no_scratch.png' %}"  width="20px" />
-                                {% endif  %}                               
-                                {% if customexercise.calculator %}
-                                  <img src="{% static 'img/calculator.png' %}" width="20px" />
-                                {% else %}
-                                  <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
-                                {% endif  %}
-                            </td>
-                            <td>
-                               {% for subject in customexercise.subjects %} 
-                                {{ subject.shortname }}{% if not forloop.last %}<br>{% endif %}
-                               {% endfor %} 
-                            </td>
-                            <td style="font-size:12px">
-                               {% for s in customexercise.skills.all %} 
-                                {{ forloop.counter }}. {{ s }}{% if not forloop.last %}<br>{% endif %}
-                               {% endfor %} 
-                            </td>
-                            <td style="font-size:12px">
-                               {% for k in customexercise.knowledges.all %} 
-                                    {{ forloop.counter }}. {{ k }}{% if not forloop.last %}<br>{% endif %}
-                               {% endfor %} 
-                            </td>
-                            <td>
-                                {% for p in customexercise.parcourses.all %} 
-                                    <span class="btn btn-default" style="font-size:12px">{{ p }} {{ p.level.name}}</span> 
-                                {% endfor %} 
-                            </td>
-                        </tr>            
-                    {% endfor %} 
-                </tbody>
-            </table>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form_card">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <label>Enseignements : </label> 
+                                <select name="subjects" multiple class="form-control select2 subjects_levels" id="id_subjects" required>
+                                    {% for s in subjects %}
+                                    <option value="{{ s.id }}">{{ s.shortname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label>Niveaux concernés : </label>
+                                <select name="levels" multiple class="form-control select2 subjects_levels" id="id_levels">
+                                    {% for l in levels %}
+                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label>Compétences évaluées :</label><br>
+                                    <select name="skills" multiple class="form-control select2" id="id_skills">
+                                        {% for s in skills %}
+                                        <option value="{{ s.id }}">{{ s.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-sm-12 col-md-8">
+                    <div class="form_card">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label>Thèmes ciblés : </label>
+                                <select name="themes" multiple class="form-control select2 all_discriminants" id="id_themes">
+                                    {% for t in themes %}
+                                    <option value="{{ t.id }}">{{ t.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-group">
+                                    <label>Savoir faire évalués : </label>
+                                    <select name="knowledges" multiple class="form-control select2 all_discriminants" id="id_knowledges">
+                                        {% for k in knowledges %}
+                                        <option value="{{ k.id }}">{{ k.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div id="result_div">
+        {% include 'qcm/ajax_list_customexercises.html' %}
+    </div>
+
 </form>     
 </section>
 
- 
 
+<script>
+MathJax = {
+  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
+  startup: {
+    ready() {
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
+      
+      new CommandMap('input', {input: 'Input'}, {
+        Input(parser, name) {
+          const xml = parser.create('node', 'XML');
+          const id = parser.GetBrackets(name, '');
+          const w = parser.GetBrackets(name, '5em');
+          const classe = parser.GetBrackets(name, 'input_latex');
+          const value = parser.GetArgument(name);
+          xml.setXML(MathJax.startup.adaptor.node('input', {
+            id: id, name: id, value: value,  style: {width: w}
+             }), MathJax.startup.adaptor);
+          xml.getSerializedXML = function () {
+            return this.adaptor.outerHTML(this.xml) + '</input>';
+          }
+          parser.Push(
+            parser.create('node', 'TeXAtom', [
+              parser.create('node', 'semantics', [
+                parser.create('node', 'annotation-xml', [
+                  xml
+                ], {encoding: 'application/xhtml+xml'})
+              ])
+            ], {texClass: TEXCLASS.ORD})
+          );
+        }
+      });
+      Configuration.create('input', {handler: {macro: ['input']}});
 
-
+      MathJax.startup.defaultReady();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 {% endblock %}
-
+ 

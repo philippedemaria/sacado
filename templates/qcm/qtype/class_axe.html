@@ -1,0 +1,522 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <div class="form_card" style="margin-top:20px;">
+            <label>Enoncé :</label>
+            <a href="javascript:void();" id="show_randomize_zone" class="btn btn-sacado">
+                <label>Question à variables numériques aléatoires ? 
+                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Placer des variables aléatoires<br/> dans l'énoncé et les réponses.</div>
+                    </span>
+                </label>
+            </a>
+            <div class="row no_visu_on_load" id="randomize_zone">
+                <div class="col-sm-12 col-md-12 alert alert-sacado">
+                    <div class="row">
+                        <div class="col-sm-11 col-md-11">
+                             
+                        </div>                                        
+                        <div class="col-sm-12 col-md-12 controls">
+                            <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-sacado add_more_question" >+ variable</a></h4>
+                        </div>
+                    </div>
+                    {{ form_var.management_form }} 
+                    <script id="rowToClone_question" type="text/template">
+                        <div id="duplicate_variables">  
+                            <div class="col-sm-12 col-md-6 qrandom">
+                                    <div class="col-sm-4 col-md-4"> 
+                                            <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }} 
+                                    </div>
+
+                                    <div class="col-sm-4 col-md-4" > 
+                                            <label>Nb entier ?</label> <br/>
+                                            {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                    </div>
+                                    <div class="col-sm-4 col-md-4" > 
+                                                <label>0 exclus ?</label> <br/> 
+                                                {{ form_var.empty_form.is_notnull|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                    </div>
+                                    <div class="col-sm-4 col-md-4" > 
+                                                <label>Min.</label> <br/> 
+                                                {{ form_var.empty_form.minimum|add_class:"form-control" }} 
+                                    </div>
+                                    <div class="col-sm-4 col-md-4" > 
+                                            <label>Max.</label>  <br/>
+                                            {{ form_var.empty_form.maximum|add_class:"form-control" }} 
+                                    </div>
+                                    <div class="col-sm-4 col-md-4"><br/>
+                                        <div class="delete_button_question"></div>
+                                    </div>                                 
+                            </div>
+                        </div>
+                    </script>                            
+                    <div id="formsetZone_variables">  
+                    </div>
+                </div>  
+                <div class="alert alert-danger">
+                    <div class="col-sm-12 col-md-12">
+                        <small><i class="fa fa-warning"></i> Ne pas utiliser dans votre énoncé et réponses les noms de vos variables pour désigner autre chose que vos variables. Isoler les variables : $ a $ oui / $a$ non.  </small>
+                    </div>
+                </div>
+            </div> 
+
+            {{ form.instruction |add_class:"form-control"|attr:"rows:3" }}
+            {{ form.instruction.errors }}<br/>
+            <img src="{% static 'img/tex.png' %}" height="15px"/> <small>Pour inclure une formule, utiliser les délimiteurs dollar $ et pour une figure, utiliser TiKZ</small>
+        
+            <div class="row form-group">
+                <div class="col-sm-12 col-md-12" > 
+                    <label>Graduation de l'axe :</label>    
+                </div>
+                <div class="col-sm-4 col-md-2" > 
+                    <label>Mini :</label> 
+                       {{ form.xmin|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+                </div>
+                <div class="col-sm-4 col-md-2" > 
+                        <label>Maxi : </label> 
+                        {{ form.xmax|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+                </div>
+                <div class="col-sm-6 col-md-2" >  
+                        <label>Pas : 
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                <div class="helper_tip_text" >Incrément de la graduation.</div>
+                            </span> 
+                        </label> 
+                       {{ form.tick|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+                </div>
+                <div class="col-sm-4 col-md-2" > 
+                        <label>Précision : 
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                <div class="helper_tip_text" >Incrément des réponses possibles.</div>
+                            </span> 
+                        </label> 
+                        {{ form.precision|add_class:"multiple_quizz_box_answer"|attr:"style:width:100px;padding:10px"   }}  
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <div class="row" style="margin-top:20px">    
+            <div class="col-sm-12 col-md-12">
+                {% include 'modes.html' %}
+            </div>
+        </div>
+
+ 
+        <div class="row"> 
+            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+                {% include 'qcm/qtype/0_config_middle.html' %}
+            </div>
+            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+                {% include 'qcm/qtype/0_config_right.html' %}
+            </div>
+        </div>
+    </div>       
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="form_card" style="margin-top:20px;">
+ 
+            <div class="row" style="margin-bottom:20px;">
+                <div class="col-sm-5 col-md-3"> <label>Les étiquettes et leur position sur l'axe  </label>
+                    <a href="javascript:void();" id="show_pseudorandomize_zone" class="btn btn-sacado">
+                        <label>Question pseudo-aléatoire ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                                <div class="helper_tip_text" >
+                                                                    Nombre de choix de réponses <br/>
+                                                                    proposées parmi les réponses<br/> 
+                                                                    enregistrées. Ex : Si vous<br/> 
+                                                                    enregistrez 20 réponses<br/>
+                                                                    possibles et que vous<br/>
+                                                                    inscrivez 5, 5 réponses<br/> 
+                                                                    seront aléatoirement choisies<br/>
+                                                                    parmi les 20. <br/>
+                                                                    Dans le cas d'un QCM/QCS,<br/> au moins une sera valide.</div>
+                                                            </span>
+                        </label>
+                    </a>
+                </div>
+                <div class="col-sm-7 col-md-9">
+                    <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
+                        {{ form.pseudoalea_nb }} <label>étiquettes à proposer parmi les <span id="nb_pseudo_aleatoire">2</span> enregistrées ci-dessous. Si 0, les étiquettes sont toutes proposées.</label>
+                    </span>                                    
+                </div>
+            </div>  
+
+
+            <script id="rowToClone" type="text/template">
+                <div id="duplicate">
+                    <div class="col-sm-6">
+                        <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
+                            <div class="col-sm-6">
+                                <div class="row ">
+                                    <div class="col-sm-4 col-md-2 get_image"  align="center" id="imager"> 
+                                        <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-image"></i>
+                                        {{ form_ans.empty_form.imageanswer|add_class:"choose_imageanswer" }}
+                                        <img src="{% if form.imageanswer.url %}{{ form.imageanswer.url }}{% endif %}" height="90px" 
+                                             class="choose_imageanswer preview" id="preview"> 
+                                    </div>
+                                    <div class="col-sm-8 col-md-10" > <a href="javascript:void()" id="delete_img" class="preview delete_img"><i class="fa fa-trash"></i></a>
+                                        {{ form_ans.empty_form.answer|attr:"placeholder:Etiquette"|add_class:"quizz_font30 quizz_answer"  }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="row ">
+                                    <div class="col-sm-9 col-md-10" >  
+                                        {{ form_ans.empty_form.answerbis|attr:"placeholder:Abscisse sur l'axe (nombre, position,...)"|add_class:"quizz_font30 quizz_answer"  }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="input-group-addon input-group-addon-right remove_more"><i class="bi bi-trash"></i></span>
+                            </div>            
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12" >
+                                    <a href="javascript:void()" class="automatic_insertion" id="feed_back"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
+                                    <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
+                                    {{ form_ans.empty_form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
+                                    </div>
+                                </div>
+                            </div>      
+
+                        </div>
+                        <div class="row" id="cloningZone">                            
+
+                        </div>
+                    </div>
+                </div>
+            </script> 
+             
+            
+                {{ form_ans.management_form }}
+                <div id="formsetZone">
+                <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
+                {% for form in form_ans %} 
+                    {{ form.id }}
+                    <div class="col-sm-6">
+                        <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
+                            <div class="col-sm-6">
+                                <div class="row ">
+                                    <div class="col-sm-4 col-md-2 get_image"  align="center" id="imager{{ forloop.counter0 }}"> 
+                                        <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-image{{ forloop.counter0 }}"></i>
+                                        {{ form.imageanswer|add_class:"choose_imageanswer" }}
+                                        <img src="{% if form.imageanswer.url %}{{ form.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswer preview" id="preview{{ forloop.counter0 }}"> 
+                                        
+                                    </div>
+                                    <div class="col-sm-8 col-md-10" > <a href="#" id="delete_img{{ forloop.counter0 }}" class="preview delete_img"><i class="fa fa-trash"></i></a>
+                                        {{ form.answer|attr:"placeholder:Etiquette"|add_class:"quizz_font30 quizz_answer"  }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row ">
+                                    <div class="col-sm-10 col-md-10" >  
+                                        {{ form.answerbis|attr:"placeholder:Abscisse sur l'axe (nombre, position,...)"|add_class:"quizz_font30 quizz_answer"  }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12" >
+                                    <a href="javascript:void()" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
+                                    <div id="div_feed_back{{ forloop.counter0 }}" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
+                                    {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12" >
+                    <a href="javascript:void();"  class="add_more btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter une étiquette</a><br/><br/>
+                </div>                            
+            </div>
+        </div>                                                         
+    </div>
+</div>
+
+
+{% if not form_template %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>  
+<script>
+    CKEDITOR.replace('instruction', {
+            height: '200px',
+            width : '700px',
+            toolbar:    
+                [  
+                    { name: 'clipboard',  items: [ 'Source', '-','Copy', 'Paste', 'PasteText' ] },
+                    { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                    { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline',  ] },
+                    { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
+                ] ,
+        });
+
+        //*************************************************************************************************************  
+        // Gestion des variables dynamiques
+        //************************************************************************************************************* 
+
+        $(document).on('click', '.add_more_question', function (event) { 
+
+                var total_form = $('#id_customvariables-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ;
+
+                var thisClone = $('#rowToClone_question');
+                rowToClone = thisClone.html() ;
+
+                $('#formsetZone_variables').append(rowToClone);
+                $('#duplicate_variables').attr("id","duplicate_variables"+totalForms) 
+                //$('#cloningZone').attr("id","cloningZone"+totalForms) 
+
+                $('#duplicate_variables'+totalForms).find('.delete_button_question').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_question" ><i class="fa fa-trash"></i></a>'); 
+                $('#duplicate_variables'+totalForms).find("input[type='checkbox']").bootstrapToggle();
+
+                $("#duplicate_variables"+totalForms+" input").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+                total_form.val(totalForms+1);
+
+            });
+
+
+        $(document).on('click', '.remove_more_question', function () {
+            var total_form = $('#id_customvariables-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
+
+            $('#duplicate_variables'+totalForms).remove();
+            total_form.val(totalForms)
+        });
+
+        $(document).on('focusout', '.quizz_answer', function () {
+
+            this_id = $(this).attr('id');
+            new_id  = this_id+'bis' ;
+            $('#'+new_id).val( $(this).val() );
+ 
+        });
+        $(document).on('keyup', '.quizz_answer', function () {
+
+            this_id = $(this).attr('id');
+            new_id  = this_id+'bis' ;
+            $('#'+new_id).val( $(this).val() );
+ 
+        });
+
+        $(document).on('click', '.automatic_insertion' , function (event) {  
+            var feed_back = $(this).attr('id');
+            $("#div_"+feed_back).toggle(500);
+         });
+
+
+        //*************************************************************************************************************  
+        // Gestion des items
+        //************************************************************************************************************* 
+
+        $(document).on('click', '.add_more', function (event) {
+
+
+                var total_form = $('#id_customchoices-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ;
+
+                $("#nb_pseudo_aleatoire").html("").html(totalForms+1);
+
+                var thisClone = $('#rowToClone');
+                rowToClone = thisClone.html() ;
+
+                $('#formsetZone').append(rowToClone);
+
+                $('#duplicate').attr("id","duplicate"+totalForms) ;
+                $('#cloningZone').attr("id","cloningZone"+totalForms) ;
+                $('#imager').attr("id","imager"+totalForms) ;
+                $('#file-image').attr("id","file-image"+totalForms) ;
+                $('#feed_back').attr("id","feed_back"+totalForms)  ;       
+                $('#div_feed_back').attr("id","div_feed_back"+totalForms)  ;
+                $('#delete_img').attr("id","delete_img"+totalForms)  ;
+                $('#data_loop').attr("data_loop", totalForms)  ;
+                $('#data_loop').attr("id","data_loop"+totalForms)  ;
+
+
+                if( $('#imagerbis').length ) { 
+
+                    $('#imagerbis').attr("id","imagerbis"+totalForms) ; 
+                    $('#file-imagebis').attr("id","file-imagebis"+totalForms) ;
+                    $('#preview_bis').attr("id","preview_bis"+totalForms) ;
+                    $('#delete_imgbis').attr("id","delete_imgbis"+totalForms)  ;
+                } 
+
+
+                if( $('#imagersub').length ) { 
+
+                    $('#subformsetZone').attr("id","subformsetZone"+totalForms)  ;
+
+                    l_items = $("#subformsetZone"+totalForms+" .get_image").length ; 
+                    for(var i = 0;i<l_items;i++ ){
+                        var suf = totalForms+'-'+i ; 
+                        $('#imagersub').attr("id","imagersub"+suf) ;
+                        $('#file-imagesub').attr("id","file-imagesub"+suf) ;
+                        $('#previewsub').attr("id","previewsub"+suf) ;
+                        $('#delete_subimg').attr("id","delete_subimg"+suf)  ;
+
+                        this_selector = $("#subformsetZone"+totalForms+" #id_customsubchoices-"+i+"-imageanswer"); 
+                        new_attr_id = this_selector.attr("id")+suf  ;
+                        this_selector.attr("data-loop",suf);                        
+                        this_selector.attr("id",new_attr_id);
+                    }
+ 
+                } 
+
+
+                
+                $("#customchoices-"+totalForms+"-is_correct").prop("checked", false); 
+                $("#duplicate"+totalForms+" input").each(function(index){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+                $('#duplicate'+totalForms).find("input[type='checkbox']").bootstrapToggle();
+ 
+                $("#duplicate"+totalForms+" textarea").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+ 
+
+                $('#spanner').attr("id","spanner"+totalForms) ;
+                $('#preview').attr("id","preview"+totalForms) ;
+                total_form.val(totalForms+1);
+            });
+
+
+
+        $(document).on('click', '.remove_more', function () {
+            var total_form = $('#id_customchoices-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
+
+            $('#duplicate'+totalForms).remove();
+            total_form.val(totalForms);
+            $("#nb_pseudo_aleatoire").html("").html(totalForms);
+        });
+
+
+        //*************************************************************************************************************  
+        // Gestion des images des thèmes
+        //************************************************************************************************************* 
+
+        $('body').on('change', '.choose_imageanswer' , function (event) {
+            var suffix = this.id.match(/\d+/); 
+            previewFile(suffix) ;
+         });  
+
+
+        $('body').on('click', '.delete_img' , function (event) { 
+                var suffix = this.id.match(/\d+/); 
+                noPreviewFile(suffix) ;
+                $(this).remove(); 
+            });  
+
+
+        function noPreviewFile(nb) {  
+            $("#id_customchoices-"+nb+"-imageanswer").attr("src", "" );
+            $("#preview"+nb).val("") ;  
+            $("#file-image"+nb).removeClass("preview") ;
+            $("#preview"+nb).addClass("preview") ; 
+            $("#id_customchoices"+nb+"-imageanswer").removeClass("preview") ;
+            $("#id_customchoices-"+nb+"-answer").removeClass("preview") ;
+            $("#imager"+nb).addClass("col-sm-4 col-md-2").removeClass("col-sm-8 col-md-10");
+            $("#imager"+nb).next().addClass("col-sm-8 col-md-10").removeClass("col-sm-4 col-md-2");
+
+          }
+
+        function previewFile(nb) {
+
+            const preview = $('#preview'+nb);
+            const file = $('#id_customchoices-'+nb+'-imageanswer')[0].files[0];
+            const reader = new FileReader();
+            $("#file-image"+nb).addClass("preview") ;
+            $("#preview"+nb).val("") ;  
+            $("#id_customchoices-"+nb+"-answer").addClass("preview") ;
+            $("#preview"+nb).removeClass("preview") ; 
+            $("#delete_img"+nb).removeClass("preview") ; 
+            $("#imager"+nb).removeClass("col-sm-4 col-md-2").addClass("col-sm-8 col-md-10");
+            $("#imager"+nb).next().removeClass("col-sm-8 col-md-10").addClass("col-sm-4 col-md-2");
+
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#preview"+nb).attr("src", image );
+                                            }) ;
+
+            if (file) { reader.readAsDataURL(file);}            
+
+          }
+
+        //*************************************************************************************************************  
+        //************************************************************************************************************* 
+
+    $('.no_visu').hide();
+    $('[type=checkbox]').prop('checked', false);            
+    $('#selector_student').prop('checked', true);
+    $('.selected_student').prop('checked', true);
+    $('#id_is_publish').prop('checked', true);
+    $('#id_is_ggbfile').prop('checked', true); 
+    $('#on_mark').hide(); 
+    $("#publication_div").hide(); 
+    $('body').find("input[type='checkbox']").bootstrapToggle();
+    // Gère l'affichage de la div des notes.
+    if ($("#id_is_mark").is(":checked")) {$("#on_mark").show();} else { $("#on_mark").hide(); } 
+
+    clickDivAppear( "#show_latex_formula" , $("#latex_formula"));
+ 
+
+    function clickDivAppear(toggle, $item) {
+        $(document).on('click', toggle , function () {
+                    $(".no_display").hide();        
+                    $item.toggle(500);
+            });
+        }
+
+    $(document).on('click', "#support_audio_image" , function () {
+                    $(".no_display").hide();
+                    $("#drop_zone_image").toggle(500);
+                    $("#audio_div").toggle(500);            
+                });
+
+
+    makeDivDisappear( "#id_is_publish" , $("#publication_div"));
+    makeDivAppear( "#id_is_mark" , $("#on_mark"));
+    function makeDivAppear(toggle, $item) {
+        $(document).on('change', toggle , function () {
+                if ($(toggle).is(":checked")) {
+                    $item.show(500);
+                } else {
+                    $item.hide(500);
+                }
+            });
+        }
+    function makeDivDisappear(toggle, $item) {
+        $(document).on('change', toggle , function () {
+                if ($(toggle).is(":checked")) {
+                    $item.hide(500);
+                } else {
+                    $item.show(500);
+                }
+            });
+        }
+
+    $('.datetimepicker').datetimepicker({
+            language: "fr",
+            todayHighlight: true,
+            format: "yyyy-mm-dd hh:ii"
+         });
+
+</script>   
+{% endif %}
+
+
+                
+ 

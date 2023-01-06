@@ -447,7 +447,7 @@ def get_complement(request, teacher, parcours_or_group):
             group = None   
 
         if Sharing_group.objects.filter(group = group  , teacher = teacher).exists() :
-            sh_group = Sharing_group.objects.get(group = group , teacher = teacher)
+            sh_group = Sharing_group.objects.filter(group = group , teacher = teacher).last()
             role = sh_group.role
             access = True
         else :

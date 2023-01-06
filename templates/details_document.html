@@ -353,7 +353,7 @@
               title="{% if rc.exercise.supportfile.title %}{{ rc.exercise.supportfile.title|cleanhtml|safe }}{% else %}{{ rc.exercise.supportfile.annoncement|cleanhtml|safe }}{% endif %}"
              data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" data-parcours_id="{{ parcours.id }}" data-custom=0 > 
 
-               <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours_order" loading="lazy" >   
+                 {% include 'qcm/_imagefile_displayer.html' %}  
           </a> 
 
            <!-- ######################################################################################################## 
@@ -372,7 +372,9 @@
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
                   {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
+                  {% if rc.exercise.supportfile.imagefile %}
                   <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" loading="lazy" />
+                  {% endif %} 
                 </span>
             </a>
             {% endif %}

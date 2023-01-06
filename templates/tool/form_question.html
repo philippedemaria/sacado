@@ -138,13 +138,11 @@
                                     </a>
                                 </div>
                             </div>
-                            {% endif %}
+
                             <div class="row no_visu_on_load" id="randomize_zone">
                                 <div class="col-sm-12 col-md-12 alert alert-sacado">
                                     <div class="row">
-                                        <div class="col-sm-11 col-md-11">
-                                             
-                                        </div>                                        
+                                     
                                         <div class="col-sm-12 col-md-12 controls">
                                             <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-info add_more_question" >+ variable</a></h4>
                                         </div>
@@ -192,7 +190,7 @@
                                 </div>
 
                             </div> 
-                            
+                            {% endif %}                            
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
                             <!-- ==========  Fin de la gestion du randomize dans les questions  ============= -->
@@ -208,7 +206,7 @@
                                 </div>
                             </div>
 
-                            {% if not quizz.is_video %}
+<!--                             {% if not quizz.is_video %}
                                 <div class="row" > 
                                     <div class="col-sm-12 col-md-12 form-group">
                                         <a href="#" id="show_latex_formula" class="btn btn-sacado"><label> Ecriture de la question par formule <img src="{% static 'img/tex.png' %}" width="15px" /> ? </label> </a> 
@@ -225,7 +223,7 @@
                                             Pour la réponse attendue par champ, écrire dans l'emplacement "réponse.s attendue.s" (ci-dessous) les réponses au format <span class="formula_answer">name=reponse</span> séparées par <span class="formula">_##_</span>.  <span class="formula">num=4_##_deno=-5</span> signifie que la réponse du champ <span class="formula_answer">num</span> est 4 et la réponse du champ <span class="formula_answer">deno</span> est $-5$.</span>
                                     </div>
                                 </div>  
-                            {% endif  %}
+                            {% endif  %} -->
                             <div class="row " >
                                 <div class="col-sm-6 col-md-2" align="center" >  
                                     {% if quizz.is_video %}

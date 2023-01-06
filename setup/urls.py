@@ -32,7 +32,7 @@ urlpatterns = [
     #######  GAR
     ############################################################################################
     path('sacado', ressource_sacado , name='ressource_sacado'),
-
+    path('sacado_test', ressource_sacado_test , name='ressource_sacado_test'),
     path('saml/SingleLogout', singleLogoutGar , name='saml/SingleLogout'),
 
 

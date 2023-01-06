@@ -1219,6 +1219,16 @@ label {
   margin-bottom: 10px ;
 }
 
+.consignecustomexercise{
+  font-size:15px;
+  background-color: #e6e2dd ;
+  color : #a81d1c ;
+  border-radius: 10px 0px 0px 0px;
+  padding: 10px;
+  margin-bottom: 10px ;
+}
+
+
 .fontsize12{
   font-size : 12px;
 }
@@ -3987,65 +3997,7 @@ table.table-bordered.dataTable {
   border-radius: 3px;
 }
 
-.getter_course, .shower_course, .shower_this_course{
-  padding-top: 3px;
-  padding-left: 5px;
-}
-
-
-
-.course_body{
-  overflow: auto;
-  height : 170px;
-}
-
-
-
-.course_body_shared{
-  overflow: auto;
-  height : 100px;
-}
-
-
-
- .course_body_shared::-webkit-scrollbar {
-  height: 10px;
-  width: 5px;
-}
-.course_body_shared::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0);
-  border-radius: 10px;
-}
-.course_body_shared::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-
-
-/* width */
-.card_course ::-webkit-scrollbar {
-  width: 2px;
-}
-
-/* Track */
-.card_course ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-}
  
-/* Handle */
-.card_course ::-webkit-scrollbar-thumb {
-  background: #CCC; 
-}
-
-/* Handle on hover */
-.card_course ::-webkit-scrollbar-thumb:hover {
-  background: #f1f1f1; 
-}
-.shower_course{
-  padding-right: 5px;
-  padding-left: 5px;
-}
 
 /*--------------------------------------------------------------
 # Parcours
@@ -4211,78 +4163,7 @@ table.table-bordered.dataTable {
     font-size: 10px;
 }
 
-
-.card-score{
-  position:absolute;
-  margin-left: 26%;
-  margin-right: auto;
-  width:54%;
-  top:10px;
-}
-
-.card-score-student{
-  position:absolute;
-  margin-left: 40%;
-  margin-right: auto;
-  width:80px;
-  top:1px;
-}
-
-
-
-.card-image{
-  margin: 0px;
-  padding:0px;
-}
-
-.image_parcours_order{
-  float:left;
-  width:288px; 
-  height: 195px; 
-}
-.image_parcours{
-  float:left;
-  width:288px; 
-  height: 199px; 
-}
-
-.details_relation{
-  width:40px;
-  border:1px solid #CCC; 
-  border-radius: 2px; 
-  font-size: 16px;
-}
-
-.maxexo{
-  width:40px;
-  border:1px solid #CCC; 
-  border-radius: 2px; 
-  font-size: 16px;
-}
-.coefficient{
-  width:60px;
-  border:1px solid #CCC; 
-  border-radius: 2px; 
-  font-size: 16px;
-}
-
-.available{
-  width:60px;
-  height:60px;
-  border-radius: 50%;
-  border : 2px solid #F0F0F0 ;
-  font-size : 30px ;
-  padding: 10px;
-  margin: auto;
-}
-.available_infinite{
-  width:60px;
-  height:60px;
-  border-radius: 50%;
-  border : 2px solid #F0F0F0 ;
-  font-size : 36px ;
-  padding: 2px;
-}
+ 
 
 @media (max-width:660px){
  

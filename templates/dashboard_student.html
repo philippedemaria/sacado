@@ -139,7 +139,7 @@
                             </div>                    
                             <div class="card-image">
 
-                                <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+                                <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  {% include 'qcm/_imagefile_displayer.html' %}</a>
 
                                 {% if  relation.date_limit %}
                                     {% get_done relation student as result   %} 
@@ -180,7 +180,7 @@
                             </div>                    
                             <div class="card-image">
               
-                                <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  <img src="{{ relation.exercise.supportfile.imagefile.url }}"  class="image_parcours" {% if not relation.is_publish %} style="opacity:0.3" {% endif %}    ></a>
+                                <a href="{% url 'execute_exercise'  relation.parcours.id  relation.exercise.id   %}">  {% include 'qcm/_imagefile_displayer.html' %}</a>
 
 
 

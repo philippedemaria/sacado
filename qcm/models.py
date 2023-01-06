@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from datetime import date, datetime, timedelta
-
+ 
 from group.models import  Group
 from django.utils import timezone
 from account.models import Student, Teacher, ModelWithCode, generate_code, User
@@ -11,6 +11,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import Q, Min, Max
 import os.path
 from django.utils import timezone
+from qcm.grid_letters_creator import *
 from general_fonctions import *
 from math import ceil
 # Pour créer un superuser, il faut depuis le shell taper :
@@ -30,6 +31,8 @@ def image_directory_path(instance, filename):
 def vignette_directory_path(instance, filename):
     return "vignettes/{}/{}".format(instance.teacher.user.id, filename)
 
+def custom_directory_path(instance, filename):
+    return "customexercises/{}/{}".format(instance.teacher.user.id, filename)
 
 def file_directory_path(instance, filename):
     return "files/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
@@ -58,9 +61,6 @@ def file_directory_to_student(instance, filename):
 def audio_directory_path(instance,filename):
     return "audio/{}/{}".format(instance.id,filename)
 
-
-
-
 def convert_time(duree) :
     try :
         d = int(duree)
@@ -74,8 +74,22 @@ def convert_time(duree) :
             return  "td" #temps dépassé
     except :
         return ""
+########################################################################################################
+########################################################################################################
+class Criterion(models.Model):
+    label     = models.TextField( verbose_name="Critère") 
+    subject   = models.ForeignKey(Subject, related_name="criterions", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Enseignement")
+    level     = models.ForeignKey(Level, related_name="criterions", default="", blank=True, null=True, on_delete=models.CASCADE, verbose_name="Niveau")
+    knowledge = models.ForeignKey(Knowledge, related_name="criterions", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Thème")
+    skill     = models.ForeignKey(Skill, related_name="criterions", default="", on_delete=models.CASCADE, blank=True, null=True, verbose_name="Compétences")
+    def __str__(self):       
+        return "{}".format(self.label)
 
+    def results( self , customexercise, parcours , student):
+        autoposition = self.autopositions.filter(customexercise = customexercise, parcours = parcours, student = student).last()
+        return autoposition.position
 
+ 
 ########################################################################################################
 ########################################################################################################
 class Supportfile(models.Model):
@@ -83,27 +97,25 @@ class Supportfile(models.Model):
 
     title = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
     knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='supportfiles', verbose_name="Savoir faire associé")
-    annoncement = RichTextUploadingField( verbose_name="Précision sur le savoir faire")
+    annoncement = models.TextField( default = "" , blank=True, verbose_name="Consigne")
     author = models.ForeignKey(Teacher, related_name="supportfiles", on_delete=models.PROTECT, editable=False)
 
- 
     code = models.CharField(max_length=100, unique=True, blank=True, default='', verbose_name="Code*")
     #### pour validation si le qcm est noté
 
-    situation = models.PositiveIntegerField(default=10, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")
+    situation = models.PositiveIntegerField(default=5, blank=True, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
-    #### pour donner une date de remise
- 
+    #### 
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
 
     level = models.ForeignKey(Level, related_name="supportfiles", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="supportfiles", on_delete=models.PROTECT, verbose_name="Thème")
 
-    width = models.PositiveIntegerField(default=750, verbose_name="Largeur")
-    height = models.PositiveIntegerField(default=550, verbose_name="Hauteur")
+    width = models.PositiveIntegerField(default=750,  blank=True,verbose_name="Largeur")
+    height = models.PositiveIntegerField(default=550,  blank=True,verbose_name="Hauteur")
     ggbfile = models.FileField(upload_to=quiz_directory_path, verbose_name="Fichier ggb",blank=True, default="" )
-    imagefile = models.ImageField(upload_to=image_directory_path, verbose_name="Vignette d'accueil", default="")
+    imagefile = models.ImageField(upload_to=image_directory_path, verbose_name="Vignette d'accueil", blank=True, default="qtype_img/underlayer.png")
 
     toolBar = models.BooleanField(default=0, verbose_name="Barre des outils ?")
     menuBar = models.BooleanField(default=0, verbose_name="Barre de menu ?")
@@ -115,29 +127,95 @@ class Supportfile(models.Model):
     is_subtitle = models.BooleanField(default=0 , verbose_name="sous-titre pour l'organisation des parcours")
     attach_file = models.FileField(upload_to=file_attach_path, blank=True,  verbose_name="Fichier pdf attaché", default="")
 
-    duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
+    duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_supportfile', verbose_name="Compétences ciblées")
 
     is_ggbfile = models.BooleanField(default=1, verbose_name="Type de support")
-    is_python = models.BooleanField(default=0, verbose_name="Python ?")
+    is_python  = models.BooleanField(default=0, verbose_name="Python ?")
     is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
-    is_file = models.BooleanField(default=0, verbose_name="Fichier ?")
-    is_image = models.BooleanField(default=0, verbose_name="Iage/Scan ?")
-    is_text = models.BooleanField(default=0, verbose_name="Texte ?")
+    is_file    = models.BooleanField(default=0, verbose_name="Fichier ?")
+    is_image   = models.BooleanField(default=0, verbose_name="Iage/Scan ?")
+    is_text    = models.BooleanField(default=0, verbose_name="Texte ?")
 
-    correction = RichTextUploadingField( blank=True, default="", null=True, verbose_name="Corrigé")
+    ####  Notation
+    is_mark = models.BooleanField(default=0,  verbose_name="Notation ?")
+    mark    = models.PositiveIntegerField(default=0, blank=True,verbose_name="Sur ?")
+    ####  Partage
+    is_share    = models.BooleanField(default=1, verbose_name="Mutualisé ?")
+    is_realtime = models.BooleanField(default=0, verbose_name="Temps réel ?")
+
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    ####  Corrigé
+    correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
+    criterions = models.ManyToManyField(Criterion, blank=True, related_name='supportfiles' )
+    ####################################################################################################################################
+    #### Pour rattacher les exercices non GGB
+    ####################################################################################################################################
+    ####  Format de l'exercice
+    qtype         = models.PositiveIntegerField(default=100)    
+    canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")     
+    ####  Cas spécifique axe gradué qtype = 18 
+    xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
+    xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
+    tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
+    precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision") 
+
+
 
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
 
+
+
+    def qtype_title(self):
+        Qtype = apps.get_model('tool', 'Qtype')
+        qt = Qtype.objects.get(pk=self.qtype)
+        return qt.title
+
+
+    def qtype_logo(self):        
+        Qtype = apps.get_model('tool', 'Qtype')
+        logo = Qtype.objects.get(pk=self.qtype).html
+        return logo
+
+
+
+
+    def this_template(self):
+        Qtype = apps.get_model('tool', 'Qtype')
+        qt = Qtype.objects.get(pk=self.qtype)
+        return 'qcm/qtype/ans_'+qt.custom+'.html'
+
+
+
+    def grid(self):
+
+        supportchoices = list()
+        for choice in self.supportchoices.all():
+            supportchoices.append(choice.answer)
+        return create_string_table(supportchoices) 
+
+
+    def element_is_display(self):
+        data = dict()
+        scores        = [0,True,True,True,True,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,False]
+        visus         = [0,True,True,False,False,True,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False]
+        data["score"] = scores[self.qtype]
+        data["visu"]  = visus[self.qtype] 
+        return data 
+
     def levels_used(self):
         return self.exercises.select_related('level')
 
 
+    def all_parcourses(self):
+        exercises =  self.exercises.all()
+        parcourses = Relationship.objects.values_list("parcours").filter(exercise__in=exercises)
+        return parcourses
 
- 
+
+
     def in_folder(self) :
 
         folder_path = "/home/c1398844c/sacado/media/"
@@ -155,19 +233,83 @@ class Supportfile(models.Model):
             data["image_in_folder"] = False
         return data
 
-
-
     def used_in_parcours(self, teacher):
         exercises = self.exercises.all()
         parcours = Parcours.objects.filter(exercises__in= exercises, author=teacher)
         return parcours
 
 
+
+class Supportvariable(models.Model):
+
+    name       = models.CharField(max_length=50,  blank=True, verbose_name="variable")
+    supporfile = models.ForeignKey(Supportfile, related_name="supportvariables", blank=True, null = True,  on_delete=models.CASCADE)
+    ## Variable numérique
+    is_integer = models.BooleanField(default=1, verbose_name="Valeur entière ?") 
+    is_notnull = models.BooleanField(default=1, verbose_name="Exclure 0 ?")       
+    maximum    = models.IntegerField(default=10)
+    minimum    = models.IntegerField(default=0)
+    ## Variable littérale
+    words      = models.CharField(max_length=255,  blank=True, verbose_name="Liste de valeurs")
+
+    def __str__(self):
+        return self.name 
+ 
+
+class SupportvariableImage(models.Model):
+
+    variable = models.ForeignKey(Supportvariable, related_name="supportvariables_img", blank=True, null = True,  on_delete=models.CASCADE)
+    image    = models.ImageField(upload_to=vignette_directory_path,   verbose_name="Image", default="")
+
+    def __str__(self):
+        return self.variable.name 
+
+
+
+######################################################################
+#####  type de réponse possible et choix pour les types de questions
+######################################################################
+class Supportchoice(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    imageanswer = models.ImageField(upload_to=vignette_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
+    answer      = models.TextField(default='', null=True,  blank=True, verbose_name="Réponse écrite")
+    retroaction = models.TextField(default='', null=True,  blank=True, verbose_name="Rétroaction")
+
+    imageanswerbis = models.ImageField(upload_to=vignette_directory_path,  null=True,  blank=True, verbose_name="Image par paire", default="")
+    answerbis      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse par paire")
+
+    is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
+    supportfile = models.ForeignKey(Supportfile, related_name="supportchoices", blank=True, null = True,  on_delete=models.CASCADE)
+    def __str__(self):
+        return self.answer 
+
+
+
+class Supportsubchoice(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    imageanswer   = models.ImageField(upload_to=vignette_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
+    answer        = models.TextField(default='', null=True,  blank=True, verbose_name="Réponse écrite")
+    retroaction   = models.TextField(default='', null=True,  blank=True, verbose_name="Rétroaction")
+    label         = models.CharField(max_length=255, default='', null=True,  blank=True, verbose_name="Label")#pour les position sur images
+    is_correct    = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
+    supportchoice = models.ForeignKey(Supportchoice, related_name="supportsubchoices", blank=True, null = True,  on_delete=models.CASCADE)
+    def __str__(self):
+        return self.answer 
+
+
+
+
+
+
 class Exercise(models.Model):
     level       = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
     theme       = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
     knowledge   = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='exercises',verbose_name="Savoir faire associé - Titre")
-    supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises", on_delete=models.PROTECT, verbose_name="Fichier Géogebra")
+    supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises", on_delete=models.CASCADE, verbose_name="Fichier Géogebra")
     ranking     = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     audiofile   = models.FileField(upload_to=audio_directory_path, verbose_name="Fichier Audio", blank=True, default="" )
 
@@ -296,8 +438,15 @@ class Exercise(models.Model):
         return relationship
 
     def used_in_parcours(self, teacher):
-        parcours = Parcours.objects.filter(exercises=self, author=teacher)
+        parcours = Parcours.objects.filter(exercises=self, teacher=teacher,is_trash=0,is_archive=0).order_by("title")
         return parcours
+
+
+    def parcourses_from_level(self, teacher):
+        parcours = Parcours.objects.filter(level=self.level, teacher=teacher,is_trash=0,is_archive=0).order_by("title")
+        return parcours
+
+
 
     def is_used(self):
         '''
@@ -373,6 +522,8 @@ class Exercise(models.Model):
     def remediations():
         remediations = Remediation.objects.filter(relationship__exercise=self)
         return remediations
+
+
 
 
 class Parcours(ModelWithCode):
@@ -1043,9 +1194,6 @@ class Knowledgegroup(models.Model):
         return "{}".format(self.title)
 
 
-
-   
-
 class Folder(models.Model):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -1460,8 +1608,6 @@ class Folder(models.Model):
         return groups
 
 
-
-
 class Relationship(models.Model):
 
     exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
@@ -1570,6 +1716,10 @@ class Relationship(models.Model):
         return scores_times_tab
 
 
+    def qtype_logo(self):        
+        Qtype = apps.get_model('tool', 'Qtype')
+        logo = Qtype.objects.get(pk=self.exercise.supportfile.qtype).html
+        return logo
 
 
 
@@ -1607,7 +1757,7 @@ class Relationship(models.Model):
         students          = self.students.filter( students_to_group = group).exclude(user__username__contains="_e-test")
         nb_student        = len(students)
         try :
-            if self.exercise.supportfile.is_ggbfile :
+            if not self.exercise.supportfile.qtype in [19,20] :
                 nb_exercise_done = Studentanswer.objects.filter(student__in= students, parcours= parcours, exercise = self.exercise).values_list("student",flat= True).order_by("student").distinct().count()
             else :
                 nb_exercise_done = Writtenanswerbystudent.objects.filter(relationship= self, student__in= students ).values_list("student",flat= True).order_by("student").distinct().count()        
@@ -1634,12 +1784,74 @@ class Relationship(models.Model):
             submit = True          
         return submit
 
-    def noggb_data(self,student):
+
+    def result_skill(self,skill,student):
+        Stage = apps.get_model('school', 'Stage')
         try :
-            data =  self.relationship_written_answer.get(student = student)   
+            studentanswer = Resultggbskill.objects.get(student=student, relationship= self,skill = skill )
+            point = studentanswer.point
+            if student.user.school :
+                try :
+                    school = student.user.school
+                    stage = Stage.objects.get(school = school)
+                    if point > stage.up :
+                        level = 4
+                    elif point > stage.medium :
+                        level = 3
+                    elif point > stage.low :
+                        level = 2
+                    elif point > -1 :
+                        level = 1
+                    else :
+                        level = 0
+                except :
+                    stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+                    if point > stage["up"] :
+                        level = 4
+                    elif point > stage["medium"] :
+                        level = 3
+                    elif point > stage["low"] :
+                        level = 2
+                    elif point > -1 :
+                        level = 1
+                    else :
+                        level = 0
+            else : 
+                stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
+ 
+                if point > stage["up"] :
+                    level = 4
+                elif point > stage["medium"] :
+                    level = 3
+                elif point > stage["low"] :
+                    level = 2
+                elif point > -1 :
+                    level = 1
+                else :
+                    level = 0
         except :
-            data = {'is_corrected' : False , 'skills' : [] , 'comment' : "" , }     
-        return data
+            level = 0
+        return level
+
+
+
+
+    def noggb_data(self,student):
+
+        try :
+            data =  self.relationship_written_answer.get(student = student) 
+            if self.skills.count() : skills = self.skills.all()
+            else : skills = self.exercise.supportfile.skills.all()
+
+            skills_list = list()
+            for skill in skills :  
+                level = self.result_skill(skill,student)
+                skills_list.append( {'skill' : skill , 'level' : level } )
+            dataset = {'is_corrected' : data.is_corrected , 'skills' : skills_list, 'comment' :  data.comment ,  'audio' : data.audio }
+        except :
+            dataset = {'is_corrected' : False , 'skills' : [] , 'comment' : "" ,  'audio' : "" }
+
+        return dataset
 
     def is_pending_correction(self):
         submit = False
@@ -1697,54 +1909,6 @@ class Relationship(models.Model):
             else :
                 level = 0
 
-        return level
-
-    def result_skill(self,skill,student):
-        Stage = apps.get_model('school', 'Stage')
-        try :
-            studentanswer = Resultggbskill.objects.get(student=student, relationship= self,skill = skill )
-            point = studentanswer.point
-            if student.user.school :
-                try :
-                    school = student.user.school
-                    stage = Stage.objects.get(school = school)
-                    if point > stage.up :
-                        level = 4
-                    elif point > stage.medium :
-                        level = 3
-                    elif point > stage.low :
-                        level = 2
-                    elif point > -1 :
-                        level = 1
-                    else :
-                        level = 0
-                except :
-                    stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
-                    if point > stage["up"] :
-                        level = 4
-                    elif point > stage["medium"] :
-                        level = 3
-                    elif point > stage["low"] :
-                        level = 2
-                    elif point > -1 :
-                        level = 1
-                    else :
-                        level = 0
-            else : 
-                stage = { "low" : 50 ,  "medium" : 70 ,  "up" : 85  }
- 
-                if point > stage["up"] :
-                    level = 4
-                elif point > stage["medium"] :
-                    level = 3
-                elif point > stage["low"] :
-                    level = 2
-                elif point > -1 :
-                    level = 1
-                else :
-                    level = 0
-        except :
-            level = 0
         return level
 
 
@@ -1914,23 +2078,11 @@ class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non
 ############################################################ Exercice customisé ###########################################################
 ########################################################################################################################################### 
 ########################################################################################################################################### 
-class Criterion(models.Model):
-    label     = models.TextField( verbose_name="Critère") 
-    subject   = models.ForeignKey(Subject, related_name="criterions", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Enseignement")
-    level     = models.ForeignKey(Level, related_name="criterions", default="", blank=True, null=True, on_delete=models.CASCADE, verbose_name="Niveau")
-    knowledge = models.ForeignKey(Knowledge, related_name="criterions", on_delete=models.CASCADE, default='', blank=True, null=True, verbose_name="Thème")
-    skill     = models.ForeignKey(Skill, related_name="criterions", default="", on_delete=models.CASCADE, blank=True, null=True, verbose_name="Compétences")
-    def __str__(self):       
-        return "{}".format(self.label)
 
-    def results( self , customexercise, parcours , student):
-        autoposition = self.autopositions.filter(customexercise = customexercise, parcours = parcours, student = student).last()
-        return autoposition.position
-
-
+ 
 class Customexercise(ModelWithCode):
 
-    instruction = RichTextUploadingField( verbose_name="Consigne*") 
+    instruction = RichTextUploadingField( default="", verbose_name="Consigne*") 
     teacher = models.ForeignKey(Teacher, related_name="teacher_customexercises", blank=True, on_delete=models.CASCADE)
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
  
@@ -1972,7 +2124,7 @@ class Customexercise(ModelWithCode):
     file_cor = models.ImageField(upload_to=vignette_directory_path, blank=True, verbose_name="Fichier de correction", default="")
     video_cor = models.CharField(max_length = 100, blank=True, verbose_name="Code de la vidéo Youtube", default="")
     is_publish_cor = models.BooleanField(default=0, verbose_name="Publié ?")    
-
+ 
     def __str__(self):       
         return "{}".format(self.instruction)
  

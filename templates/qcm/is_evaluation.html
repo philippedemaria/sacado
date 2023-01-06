@@ -21,7 +21,8 @@
 		{% endif %}
 {% else %}
 
-    <input  class="btn btn-primary"   type="submit" id="submit_button_relation"  value="Enregistrer le résultat"  />
+    <input  class="btn btn-primary {% if supportfile.qtype == 5 or supportfile.qtype == 6 or supportfile.qtype == 8 or supportfile.qtype == 9  %}no_visu_on_load{% endif %}"   
+    		type="submit"  id="submit_button_relation"  value="Enregistrer l'exercice"  />
     
 {% endif %}
 

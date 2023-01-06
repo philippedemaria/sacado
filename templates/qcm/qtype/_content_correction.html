@@ -1,0 +1,20 @@
+{% if supportfile and supportfile.correction %}
+<div class="row">
+                      
+        {{ form.correction.label_tag }}<br/>                        
+        {{ form.correction }}
+        {{ form.correction.errors }}
+ 
+</div>
+{% else %}
+<div class="row">
+    <label>
+    	<a href="javascript:void()" id="enable_correction" class="btn btn-sacado">Ajouter un corrigé <small>(Falcultatif mais très conseillé)</small></a>    
+    </label>
+    <div id="enable_correction_div">                      
+        {{ form.correction.label_tag }}<br/>                        
+        {{ form.correction }}
+        {{ form.correction.errors }}
+    </div>
+</div>
+{% endif %}

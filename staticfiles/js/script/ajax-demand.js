@@ -81,7 +81,7 @@ define(['jquery','bootstrap'], function ($) {
                         if (knowledges.length >0)
                         { 
                             for (let i = 0; i < knowledges.length; i++) {
-                                    console.log(knowledges[i]);
+                             
                                     let knowledges_id = knowledges[i][0];
                                     let knowledges_name =  knowledges[i][1]  ;
                                     let option = $("<option>", {

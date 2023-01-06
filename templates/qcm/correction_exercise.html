@@ -73,11 +73,11 @@
 
         {% if folder_id %}
             <a href="{% url 'show_parcours' folder_id parcours.id %}">
-                <input type="button" value="Retour au parcours" class="btn btn-default "/>
+                <input type="button" value="Retour au parcours" class="btn btn-default" style="background-color: {{ relationship.parcours.color }}; color:{{ relationship.parcours.color|contrast_color }};"/>
             </a>
         {% else %}
             <a href="{% url 'show_parcours' 0 parcours.id %}">
-                <input type="button" value="Retour au parcours" class="btn btn-default "/>
+                <input type="button" value="Retour au parcours" class="btn btn-default" style="background-color: {{ relationship.parcours.color }}; color:{{ relationship.parcours.color|contrast_color }};" />
             </a>
         {% endif %}
     {% endif %}

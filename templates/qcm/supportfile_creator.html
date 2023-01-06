@@ -1,0 +1,82 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
+    <script>
+        require(['script/ajax-exercise','script/ajax-exercise_form']);
+    </script>     
+    {% if   supportfile %}
+        {% if supportfile.qtype == 7 or  supportfile.qtype == 9 %}
+        <script>
+            require(['script/add-ckeditor_update_customexercise']);
+        </script> 
+        {% else %}
+        <script>
+            require(['script/update_customexercises']);
+        </script> 
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+
+{% block page_title %}
+<div id="new_style"><i class="bi bi-explicit-fill sacado_color_text"></i> 
+    <small> 
+    {% if supportfile %}  
+        {{ supportfile.qtype_title }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <b>{{ qt.title}}</b>
+    {% else %} 
+        Création d'exercice  <img src="{% static 'img/angle-right.png' %}" width="25px"/> <b>{{ qt.title}}</b>
+    {% endif %}
+    {% if knowledge  %}
+        {{ knowledge.level.shortname }}, {{ knowledge.theme.name }},  {{ knowledge.name|truncatechars:"80" }}
+    {% endif %}     
+    </small>  
+</div>
+{% endblock %}
+
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+{% block body %}
+<style>
+ul#id_skills li{
+    list-style: none;
+}
+</style>
+
+<div class="content_main">
+
+    <div class="col-sm-12 col-md-12 form_card" id="full_kind_exercise_div">
+        <div class="form_card" id="kind_exercise_div" style="padding:5px">
+            <p>Type de support <span id="title_qtype"></span><a href="#"  id="up_and_down_kind_exercise_div" class="btn btn-sacado pull-right"><i class="fa fa-caret-up"></i></a></p>
+            <div class="row">
+
+
+                {% for qt in qtypes %}
+
+                <div class="col-xs-2 col-sm-1 col-md-1" align='center' style="margin-bottom:5px"> 
+                    <a href="{% url 'create_supportfile' qt.id 0  %}">
+                        <div class="qtypes_choice {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %}" title="{{ qt.title}}" id="qtypes_choice{{ qt.id}}" >
+                            {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="25px" /> {% else %}{{ qt.html|safe }}{% endif %}
+                        </div>
+                    </a>               
+                </div>
+                {% endfor %}             
+
+
+            </div>    
+        </div>
+    </div>
+
+
+
+
+ 
+</div>
+{% endblock %}

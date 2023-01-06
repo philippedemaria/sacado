@@ -5,8 +5,6 @@
 
 
 {% block python %}
-
-
 <link rel="stylesheet" href="{% static 'basthon/fontawesome/css/all.min.css' %}">
 <link rel="stylesheet" href="{% static 'basthon/css/style.css' %}">
 <script src="{% static 'basthon/js/basthon-kernel/basthon.js' %}"></script>
@@ -20,12 +18,12 @@
 
 
 {% block page_title %}<i class="fab fa-python"></i>       {% include 'breadcrumb_student.html' %}  <img src="{% static 'img/angle-right.png' %}"/>
-   <a href="{% url 'show_parcours_student' relationship.parcours.id %}" style="color:{{ relationship.parcours.color }}"> {{ relationship.parcours }}</a>
+  
 {% endblock %}
  
  
 {% block page_menu_right %}
-  <small>Avec l'aimable autorisation de <a href="https://python.infobrisson.fr/" target="_blank">Romain Casati</a></small>
+{% include 'qcm/signal_exercise_peda_live.html' %}
 {% endblock %}
  
 
@@ -38,24 +36,17 @@
       <div class="row">
           <div class="col-xs-12 col-md-7 consigne" >  
 
-
-           
             <b>{{ relationship.exercise.supportfile.title }}</b><br/> 
          
              <label>Enoncé : </label>
 
               {% if relationship.instruction   %} 
-
                   {{ relationship.instruction|safe }}<br/>   
-
               {% elif relationship.exercise.supportfile.annoncement %} 
-
                   {{ relationship.exercise.supportfile.annoncement|safe }} <br/>
-
               {% endif %}
  
 
- 
               {% for remediation in relationship.relationship_remediation.all %}
                   {% if remediation.consigne %}
                   <audio controls>
@@ -107,18 +98,18 @@
           </a>
         </div>
 
-      {% if   'write_exercise' in request.path %}
+ 
        <div style="clear:both; margin-top: 20px"> 
-        {% get_is_lock parcours today as is_lock %}
-        {% if  is_lock or  relationship.is_lock  %}  
+        {% get_is_lock parcours today as is_lock %} 
+        {% if  is_lock or  relationship.is_lock  %}    
         <button  class="btn btn-primary" disabled="" >Exercice verrouillé</button>   <br/> 
         {% else  %} 
-        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" onclick="return control_script()"  >Envoyer  le script </button>   
+        <button type="submit" name="submit_code"   id="submit_code" class="btn btn-primary" onclick="return control_script_RT()"  >Envoyer  le script </button>   
         {% endif %}
         <a href="javascript:history.back()"><input type="button" value="Annuler"
                                                                    class="btn btn-default "/></a>
         </div>
-      {% endif %}
+ 
 
 
       </div>
@@ -153,7 +144,7 @@
     </div>
 </form>
 
-{% include 'qcm/signal_exercise_peda_live.html' %}
+
 
 <div class="modal fade" id="copy_viewer" tabindex="-1" role="dialog" aria-labelledby="copy_viewer">
     <div class="modal-dialog modal-lg" role="document">

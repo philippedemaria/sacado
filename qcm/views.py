@@ -13,6 +13,7 @@ from django.db.models import Q , Sum , Avg
 from django.core.mail import send_mail
 from django.http import JsonResponse 
 from django.core import serializers
+from django.core.files.storage import FileSystemStorage
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -27,11 +28,12 @@ from group.models import Group , Sharing_group
 from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course, student_can_show_this_course , user_is_relationship_teacher, user_is_customexercice_teacher , parcours_exists , folder_exists
 from qcm.models import *
 from qcm.forms import * 
+from qcm.grid_letters_creator import * 
 from school.models import Stage, School
 from sendmail.forms import  EmailForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from tool.consumers import *
-from tool.models import Quizz , Answerplayer
+from tool.models import Quizz , Answerplayer , Qtype
 from tool.forms import QuizzForm
 
 import uuid
@@ -81,7 +83,17 @@ import xlwt
 
 
 
-
+def is_sacado_asso(this_user, today):
+    is_sacado = False
+    is_active = False
+    try :
+        abonnement = this_user.school.abonnement.last()
+        if today < abonnement.date_stop and abonnement.is_active :
+            is_sacado = True
+            is_active = True
+    except :
+        pass
+    return is_sacado, is_active
 
 
 #################################################################
@@ -1918,7 +1930,8 @@ def list_sub_parcours_group(request,idg,idf):
     clear_realtime(parcours_tab , today.now() ,  1800 )
 
 
-    context = {'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'sequences' : sequences ,  'quizzes' : quizzes ,  'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,    'role' : role , 'today' : today , 'accordion' : accordion  }
+    context = { 'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'sequences' : sequences ,  'quizzes' : quizzes ,  
+                'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,    'role' : role , 'today' : today , 'accordion' : accordion  }
 
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 
@@ -3708,7 +3721,6 @@ def delete_parcours(request, id, idg=0):
 
     parcours = Parcours.objects.get(id=id)
     parcours_is_evaluation = parcours.is_evaluation
-    parcours.students.clear()
 
     if parcours.teacher.id == 2480 :
         messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
@@ -3724,25 +3736,13 @@ def delete_parcours(request, id, idg=0):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
- 
-    for r in parcours.parcours_relationship.all() :
-        r.students.clear()
-        r.skills.clear()
-        ls = r.relationship_exerciselocker.all()
-        for l in ls :
-            l.delete()
-        r.delete()
-
-    for c in parcours.course.all() :
-        c.students.clear()
-        c.creators.clear()
-        c.delete()
 
     studentanswers = Studentanswer.objects.filter(parcours = parcours)
     for s in studentanswers :
         s.delete()
  
-    parcours.delete()
+    parcours.is_trash=1
+    parcours.save()
 
     if idg == 99999999999:
         return redirect('index')
@@ -4532,12 +4532,18 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     student.update({"total_note":"", "details_note":"" ,  "detail_skill":"" ,  "detail_knowledge":"" , "ajust":"" , "tab_title_exo":"" , })
     student["name"] = s
 
-    studentanswer_ids =  Studentanswer.objects.values_list("id",flat=True).distinct().filter(student=s,  exercise__in = exercises , parcours=parcours).order_by("-date")
+    exercise_ids =  set(Studentanswer.objects.values_list("exercise",flat=True).filter(student=s, parcours=parcours).order_by("-point"))
+    studentanswer_ids = set()
+    for exercise_id  in exercise_ids :
+        studentanswer_ids.add( Studentanswer.objects.values_list("id",flat=True).filter(student=s, parcours=parcours, exercise_id = exercise_id).order_by("-point").first() ) 
+
+    #studentanswer_ids =  Studentanswer.objects.values_list("id",flat=True).filter(student=s, parcours=parcours).order_by("-date") [obsolète]
+    #studentanswer_ids est la liste des studentanswers dont le nombre de points est maximal.
 
     #nb_exo_w = s.student_written_answer.filter(relationship__exercise__in = studentanswer_tab, relationship__parcours = parcours, relationship__is_publish = 1 ).count()
     nb_exo_ce = s.student_custom_answer.filter(parcours = parcours, customexercise__is_publish = 1 ).count()
     #nb_exo  = len(studentanswer_tab) + nb_exo_w + nb_exo_ce
-    nb_exo  = studentanswer_ids.count()  +  nb_exo_ce
+    nb_exo  = len(studentanswer_ids)  +  nb_exo_ce
     student["nb_exo"] = nb_exo
     duration, score, total_numexo, good_answer = 0, 0, 0, 0
     tab, tab_date  , tab_title_exo , student_tab  = [], [], [] , []
@@ -4915,26 +4921,6 @@ def parcours_clone_exercise_custom(request):
     data = {}  
     return JsonResponse(data)
 
-def exercise_custom_show_shared(request):
-    
-    user = request.user
-    if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user) 
-        customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
-        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, })
-    else :
-        return redirect('index')   
- 
-
-def customexercise_shared_inside_parcours(request,idp):
-    parcours = Parcours.objects.get(pk=idp)
-    user = request.user
-    if user.is_teacher:  # teacher
-        teacher = Teacher.objects.get(user=user) 
-        customexercises = Customexercise.objects.filter(is_share = 1).exclude(parcourses = parcours)
-        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': parcours,   })
-    else :
-        return redirect('index')   
  
  
  
@@ -5451,7 +5437,7 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                 sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , settings.DEFAULT_FROM_EMAIL , rec ) 
                 sending_mail("SacAdo. Annulation de tâche à effectuer",  msg , settings.DEFAULT_FROM_EMAIL , [r.parcours.teacher.user.email] ) 
 
-        else :
+        else :            
             if custom == "0" :
                 Relationship.objects.filter(pk = int(relationship_id)).update(start = date)
                 r = Relationship.objects.get(pk = int(relationship_id))
@@ -5478,8 +5464,10 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
 
             data["dateur"] = date  
 
-    except :
+    except :        
+        
         try :
+ 
             duration =  request.POST.get("duration") 
             if custom == "0" :
                 Relationship.objects.filter(pk = int(relationship_id)).update(duration = duration)
@@ -5489,20 +5477,12 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
             try :
                 situation =  request.POST.get("situation")
                 rel = Relationship.objects.get(pk = int(relationship_id))
+                Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
+                data["save"] = "<i class='fa fa-save'></i> "+str(situation)
+                data["situation"] = "<i class='fa fa-save'></i> "+str(situation)
+                data["annonce"] = ""
+                data["annoncement"]   = False
 
-                if rel.exercise.supportfile.is_ggbfile :
-                    Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
-                    data["save"] = "<i class='fa fa-save'></i> "+str(situation)
-                    data["situation"] = "<i class='fa fa-save'></i> "+str(situation)
-                    data["annonce"] = ""
-                    data["annoncement"]   = False
-
-                else :
-                    Relationship.objects.filter(pk = int(relationship_id)).update(instruction = situation)  
-                    data["save"] = False
-                    data["duration"] = ""
-                    data["annonce"] = situation
-                    data["annoncement"]   = True
             except : 
                 pass
 
@@ -5510,16 +5490,10 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
             try :
                 situation =  request.POST.get("situation") 
                 rel = Relationship.objects.get(pk = int(relationship_id))
-                if rel.exercise.supportfile.is_ggbfile :
-                    Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
-                    data["save"] = "<i class='fa fa-save'></i> "+str(situation) 
-                    data["annonce"] = "" 
-                    data["annoncement"]   = False                                 
-                else :
-                    Relationship.objects.filter(pk = int(relationship_id)).update(instruction = situation)   
-                    data["save"] = False
-                    data["annonce"] = situation
-                    data["annoncement"]   = True
+                Relationship.objects.filter(pk = int(relationship_id)).update(situation = situation)
+                data["save"] = "<i class='fa fa-save'></i> "+str(situation) 
+                data["annonce"] = "" 
+                data["annoncement"]   = False                                 
                 try :
                     duration =  request.POST.get("duration") 
                     if custom == "0" :
@@ -6176,87 +6150,189 @@ def exercises_level_subject(request, id, subject_id):
     s_form = StudentForm()
     return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
 
+############################################################################################################################################################################
+########################## Début de gestion des supportfiles 
+############################################################################################################################################################################
 
+def supportfile_creator(request,idq=0) :
+    if request.user.is_superuser :
+        qtypes = Qtype.objects.filter(is_online=1).order_by("ranking")
+    else :
+        qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by("ranking")
+    context = {  'qtypes': qtypes,  }
 
-@user_passes_test(user_is_creator)
-def create_supportfile(request):
-
-    code = str(uuid.uuid4())[:8]
-    try :
-        teacher = request.user.teacher
-    except :
-        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
-        return redirect('index')
-
-    form = SupportfileForm(request.POST or None,request.FILES or None,teacher = teaher)
-    is_ggbfile = request.POST.get("is_ggbfile")
-    if request.user.is_superuser or request.user.is_extra :
-        if form.is_valid():
-            nf =  form.save(commit = False)
-            nf.code = code
-            nf.author = teacher
-            if is_ggbfile :
-                nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
-            try :   
-                sending_to_teachers(teacher , nf.level,nf.theme.subject,"Un nouvel exercice")
-            except:
-                pass      
-            nf.save()
-            form.save_m2m()
-            # le supprot GGB est placé comme exercice par défaut.
-            Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
-
-
-            return redirect('admin_supportfiles' , nf.level.id )
-
-    context = {'form': form,   'teacher': teacher, 'knowledge': None,  'knowledges': [], 'relationships': [],  'supportfiles': [],   'levels': [], 'parcours': None, 'supportfile': None, 'communications' : [] ,  }
-
-    return render(request, 'qcm/form_supportfile.html', context)
-
+    return render(request, 'qcm/supportfile_creator.html', context)
 
 
 @user_passes_test(user_is_creator)
 def create_supportfile_knowledge(request,id):
-
-    code = str(uuid.uuid4())[:8]
     knowledge = Knowledge.objects.get(id = id)
+    request.session['exo_knowledge_id'] = knowledge.id
+    qtypes = Qtype.objects.filter(is_online=1).order_by("ranking")
+    context = {  'qtypes': qtypes, 'knowledge': knowledge, }
+    return render(request, 'qcm/supportfile_creator.html', context)
+
+
+
+def clean_form(fa,dico):
+    subfields = ('answer','imageanswer','label','is_correct','retroaction')
+    nd={}
+    nb_loop = int(dico['customchoices-TOTAL_FORMS'][0])
+    for key,value in dico.items() :
+        if "customsubchoices" in key   :
+            try :
+                if key.split("-")[2] in subfields :
+                    nd[key.split("-")[2]+"-"+key.split("-")[3]]=value[0]
+            except :
+                pass
+    dataset=[]
+    for i in range(nb_loop) :
+        for subloop in range(int(dico['subloop'+str(i)][0])):
+            data  = {'customchoice':fa}
+            for sf in subfields :
+                try :
+                    sf_key = sf+"-"+str(i)+"_"+str(subloop)
+                    data[sf]=nd[sf_key]
+                except :
+                    sf_key = None
+
+                if sf == 'imageanswer' and request.FILES[sf_key] :
+                    upload = request.FILES[sf_key]
+                    fss = FileSystemStorage()
+                    file = fss.save(upload.name, upload)
+                    file_url = fss.url(file)
+
+                if 'answer' in data or 'imageanswer' in data or 'label' in data  :
+                    dataset.append(data)
+    return dataset
+
+def create_supportfile(request,qtype,ids):
+    """ Création d'un supportfile"""
+    code = str(uuid.uuid4())[:8]
     try :
         teacher = request.user.teacher
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
-    form = SupportfileKForm(request.POST or None,request.FILES or None, knowledge = knowledge )
-    levels = Level.objects.all()
-    supportfiles = Supportfile.objects.filter(is_title=0).order_by("level","theme","knowledge__waiting","knowledge","ranking")
-    knowledges = Knowledge.objects.all().order_by("level")
+    if request.user.is_superuser :
+        qtypes = Qtype.objects.filter(is_online=1).order_by("ranking")
+    else :
+        qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by("ranking")
 
-    is_ggbfile = request.POST.get("is_ggbfile")
+    qt = Qtype.objects.get(pk=qtype)
 
-    if request.user.is_superuser or request.user.is_extra : 
-        if form.is_valid():
-            nf =  form.save(commit = False)
+    knowledge_id = request.session.get('exo_knowledge_id',None)
+    knowledge = None
+    if knowledge_id :
+        knowledge = Knowledge.objects.get(pk=knowledge_id)    
+
+    form       = SupportfileForm(request.POST or None,request.FILES or None,teacher = teacher)
+    form_c     = CriterionOnlyForm(teacher = teacher) 
+    subjects   = teacher.subjects.all()
+    formSetvar = inlineformset_factory( Supportfile , Supportvariable , fields=('name','is_integer','is_notnull','minimum','maximum', 'words') , extra=0  )
+
+    today      = time_zone_user(request.user)
+    sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
+
+    extra    = qt.extra
+    form_sub_ans = None
+    formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra = extra)
+    form_ans = formSet()
+
+    if request.method == "POST" :
+        if form.is_valid() :
+            nf = form.save(commit=False)
+            nf.teacher = teacher
+            if nf.qtype == 19 : nf.is_python = True
+            elif nf.qtype == 100: nf.is_ggbfile = True
+            elif nf.is_scratch  : nf.is_image = True
             nf.code = code
             nf.author = teacher
-            nf.knowledge = knowledge
-            if is_ggbfile :
+            if nf.imagefile != "" :  
+                nf.imagefile = 'qtype_img/underlayer.png'
+            if nf.is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
+
             try :
                 sending_to_teachers(teacher , nf.level,nf.theme.subject,"Un nouvel exercice")   
             except :
-                pass 
+                pass   
+                          
             nf.save()
             form.save_m2m()
-            # le support GGB est placé comme exercice par défaut.
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
-            return redirect('admin_supportfiles' , nf.level.id )
+
+            qtype  = nf.qtype
+            qto    = Qtype.objects.get(pk=qtype) 
+            is_sub = qto.is_sub
+            extra  = qto.extra
+
+            if qto.is_alea :
+                form_var = formSetvar(request.POST or None,  instance = nf) 
+                for form_v in form_var :
+                    if form_v.is_valid():
+                        var = form_v.save()
+                    else :
+                        print(form_v.errors)
+
+            formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra=extra)
+            form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+
+            if qtype < 19:
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        fa = form_answer.save()
+
+                        if nf.qtype==10:
+                            ##### A tester lors de la création
+                            name, ext = os.path.splitext(fa.imageanswer)
+                            img = Image.open(os.path.join(dir_in, filename))
+                            w, h = img.size
+                            
+                            grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
+                            for i, j in grid:
+                                box = (j, i, j+d, i+d)
+                                out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
+                                img.crop(box).save(out)
+
+                                my_c = Customsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'customchoice' : fa , 'label' : 0 } )
+                                my_c.save()
+                            ####################################
+                        if is_sub > 0  :
+                            dico_post = request.POST
+                            list_dico = clean_form(fa,dico_post)
+                            for dico in list_dico :
+                                print(dico)
+                                c = Customsubchoice(**dico)
+                                c.save()
+            try :
+                msg = "Bonjour l'équipe,\n\n Un exercice vient d'être posté.\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+nf.id+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                if user.email :
+                    send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
+            except :
+                pass
+            return redirect('my_own_exercises' )
         else :
             print(form.errors)
 
+    template = "qcm/qtype/"+qt.custom+".html"
+    context = { 'form_c' : form_c, 'sacado_asso' : sacado_asso , 'form_var' : formSetvar ,  'form_ans' : form_ans ,  'qt' : qt , 'qtype' : qtype , 'form': form, 'subjects' : subjects , 
+                'teacher': teacher,  'knowledge': knowledge,  'supportfile': None,  'form_template' : False ,  'parcours': None, 'qtypes': qtypes,  }
+    
+    if qt.is_sub > 0 :
+        formSubset   = inlineformset_factory( Supportchoice , Supportsubchoice , fields=('answer','imageanswer','label','is_correct','retroaction') , extra=extra)
+        form_sub_ans = formSubset()
+        context.update(  { 'form_sub_ans' : form_sub_ans,  } )
 
-    context = {'form': form,   'teacher': teacher,  'knowledges': knowledges, 'relationships': [],  'knowledge': knowledge,  'supportfile': None,  'supportfiles': supportfiles,   'levels': levels , 'parcours': None, 'communications' : [] ,  }
 
-    return render(request, 'qcm/form_supportfile.html', context)
+    return render(request, template , context)
+
+
+
+
+
+
 
 @user_passes_test(user_is_creator)
 def update_supportfile(request, id, redirection=0):
@@ -6267,45 +6343,125 @@ def update_supportfile(request, id, redirection=0):
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
-    if request.user.is_superuser or request.user.is_extra :
-        supportfile = Supportfile.objects.get(id=id)
-        knowledge = supportfile.knowledge
-        supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
-        levels = Level.objects.all()
-        supportfiles = Supportfile.objects.filter(is_title=0).order_by("level","theme","knowledge__waiting","knowledge","ranking")
-        knowledges = Knowledge.objects.all().order_by("level")
-        is_ggbfile = request.POST.get("is_ggbfile")
-        if request.method == "POST":
-            if supportfile_form.is_valid():
-                nf = supportfile_form.save(commit=False)
-                nf.code = supportfile.code
-                if is_ggbfile :
-                    nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
-                nf.save()
-                supportfile_form.save_m2m()
-                messages.success(request, "L'exercice a été modifié avec succès !")
+    subjects = teacher.subjects.all()
+    supportfile   = Supportfile.objects.get(id=id)
+    form_template = "qcm/qtype/"+Qtype.objects.get(pk=supportfile.qtype).custom+".html"
 
+    knowledge = supportfile.knowledge
+    supportfile_form = UpdateSupportfileForm(request.POST or None, request.FILES or None, instance=supportfile, knowledge = knowledge)
+    levels = Level.objects.all()
+    supportfiles = Supportfile.objects.filter(is_title=0).order_by("level","theme","knowledge__waiting","knowledge","ranking")
+    knowledges = Knowledge.objects.all().order_by("level")
+
+
+    form_c     = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher,instance = supportfile) 
+    formSetvar = inlineformset_factory( Supportfile , Supportvariable , fields=('name','is_integer','is_notnull','minimum','maximum', 'words') , extra=0 )
+    form_var   = formSetvar(request.POST or None,  instance = supportfile) 
+    qtype      = supportfile.qtype
+
+    formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra = 0)
+    form_ans = formSet(request.POST or None, request.FILES or None , instance = supportfile)
+    qto      = Qtype.objects.get(pk=supportfile.qtype)
+
+    if request.method == "POST" :
+
+        if supportfile_form.is_valid() :
+            nf = supportfile_form.save(commit=False)
+            nf.code = supportfile.code
+            if nf.is_ggbfile :
+                nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
+            nf.teacher = teacher
+            if nf.qtype == 19    : nf.is_python  = True
+            elif nf.qtype == 100 : nf.is_ggbfile = True
+            elif nf.is_scratch   : nf.is_image   = True
+            nf.save()
+            supportfile_form.save_m2m()  
+                       
+            qtype  = nf.qtype
+            qto    = Qtype.objects.get(pk=qtype) 
+            is_sub = qto.is_sub
+            extra  = qto.extra
+            if qto.is_alea :
+                for form_v in form_var :
+                    if form_v.is_valid():
+                        var = form_v.save()
+                    else :
+                        print(form_v.errors)
+
+            formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra=extra)
+            form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+
+            if qtype < 19:
+                for form_answer in form_ans :
+                    if form_answer.is_valid():
+                        fa = form_answer.save()
+
+                        if nf.qtype==10:
+                            ##### A tester lors de la création
+                            name, ext = os.path.splitext(fa.imageanswer)
+                            img = Image.open(os.path.join(dir_in, filename))
+                            w, h = img.size
+                            
+                            grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
+                            for i, j in grid:
+                                box = (j, i, j+d, i+d)
+                                out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
+                                img.crop(box).save(out)
+
+                                my_c = Customsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'customchoice' : fa , 'label' : 0 } )
+                                my_c.save()
+                            ####################################
+
+                        if is_sub > 0  :
+                            dico_post = request.POST
+                            list_dico = clean_form(fa,dico_post)
+                            for dico in list_dico :
+                                print(dico)
+                                c = Customsubchoice(**dico)
+                                c.save()
+
+            try :
+                msg = "Bonjour l'équipe,\n\n Un exercice vient d'être modifié.\n\nPour le visualiser : https://sacado.xyz/qcm/show_this_supportfile/"+nf.id+"/ .\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                if user.email :
+                    send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
+            except :
+                pass
+
+            messages.success(request, "L'exercice a été modifié avec succès !")
+            if request.session.get('my_own_exercises') :
+                return redirect('my_own_exercises')
+            else :
                 return redirect('admin_supportfiles', supportfile.level.id)
 
-        context = {'form': supportfile_form, 'teacher': teacher, 'supportfile': supportfile, 'knowledges': knowledges, 'relationships': [] ,
-                   'supportfiles': supportfiles, 'levels': levels, 'parcours': None, 'communications' : [] , 'knowledge' : knowledge ,   }
+ 
+    context = {'form': supportfile_form,  'form_ans' : form_ans, 'form_c' : form_c,  'form_var' : form_var , 'qtype' : qtype  , 'teacher': teacher, 'supportfile': supportfile, 
+                'knowledges': knowledges,  'subjects' : subjects , 'qt' : qto ,
+               'supportfiles': supportfiles, 'levels': levels,   'communications' : [] , 'knowledge' : knowledge ,    }
 
-        return render(request, 'qcm/form_supportfile.html', context)
+
+    return render(request, form_template , context)
 
 
 
 @user_passes_test(user_is_superuser)
 def delete_supportfile(request, id):
-    if request.user.is_superuser:
-        supportfile = Supportfile.objects.get(id=id)
+    supportfile = Supportfile.objects.get(id=id)
+    level_id = supportfile.level.id
+
+    if request.user.is_superuser or supportfile.author.user.id == request.user.id :
+        
         if Relationship.objects.filter(exercise__supportfile=supportfile).count() == 0:
             supportfile.delete()
-            messages.success(request, "Le support GGB a été supprimé avec succès !")
+            messages.success(request, "Le support a été supprimé avec succès !")
         else:
-            messages.error(request, " Des parcours utilisent ce support GGB. Il n'est pas possible de le supprimer.")
+            messages.error(request, " Des parcours utilisent cet exercice. Il n'est pas possible de le supprimer.")
 
-    return redirect('admin_supportfiles', supportfile.level.id)
+    my_own_exercises = request.session.get('my_own_exercises', None)
 
+    if request.user.is_superuser and not my_own_exercises:
+        return redirect('admin_supportfiles', level_id ) 
+    else :
+        return redirect('my_own_exercises') 
 
 
 @user_passes_test(user_is_testeur)
@@ -6339,24 +6495,301 @@ def show_this_supportfile(request, id):
 
 
 
+@login_required(login_url= 'index') 
+def my_own_exercises(request): # Modification d'un exercice non autocorrigé dans un parcours
+    
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    exercises = Exercise.objects.filter(supportfile__author=teacher,supportfile__qtype__lt=100)
+    if exercises.count()>20 :
+        exercises = exercises.order_by("-id")[:20]
+
+    subjects = teacher.subjects.all()
+    levels   = teacher.levels.all()
+
+    request.session['my_own_exercises'] = True
+    try :
+        del request.session['exo_knowledge_id']
+    except :
+        pass
+
+    if request.user.is_superuser :
+        qtypes = Qtype.objects.filter(is_online=1).order_by("ranking")
+    else :
+        qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by("ranking")
+ 
+    context = { 'qtypes': qtypes, 'exercises' : exercises, 'subjects' : subjects, 'levels' : levels , 'is_mathJax' : False ,  'teacher' : teacher ,  }
+
+    ############################################################################################################
+    ############################################################################################################
+    ## Permet la mise à jour des custom exercise en Supportfile
+    for custom in Customexercise.objects.all() :
+        instruction = custom.instruction
+        teacher     = custom.teacher
+        calculator  = custom.calculator
+        date_created  = custom.date_created
+        date_modified = custom.date_modified
+        #### pour donner une date de remise - Tache     
+        start  = custom.start  
+        date_limit  = custom.date_limit 
+        lock  = custom.lock
+        if custom.imagefile : 
+            imagefile  = custom.imagefile
+        else :
+            imagefile  = 'qtype_img/underlayer.png'
+        duration  = custom.duration 
+        skills  = custom.skills.all() 
+        knowledges  = custom.knowledges.all()
+        parcourses  = custom.parcourses.all()  
+        students  = custom.students.all()  
+        is_share  = custom.is_share  
+        is_realtime  = custom.is_realtime 
+        is_python  = custom.is_python 
+        is_scratch  = custom.is_scratch 
+        is_file  = custom.is_file 
+        is_image  = custom.is_image 
+        is_text  = custom.is_text 
+        is_mark  = custom.is_mark 
+        is_collaborative  = custom.is_collaborative 
+        is_autocorrection  = custom.is_autocorrection 
+        criterions  = custom.criterions.all()     
+        mark  = custom.mark 
+        is_publish  = custom.is_publish 
+        ranking  = custom.ranking 
+        text_cor  = custom.text_cor 
+        file_cor  = custom.file_cor 
+        video_cor  = custom.video_cor 
+        is_publish_cor  = custom.is_publish_cor 
+
+        if is_python : 
+            title = "Coder en Python"
+            imagefile = 'qtype_img/underlayer.png'
+            qtype = 19
+        else : 
+            title = "Remise de devoir"
+            qtype = 20
+            imagefile = 'qtype_img/underlayer.png'
+
+        for knowledge in knowledges :
+            code = code = str(uuid.uuid4())[:8]
+            data = { 
+            'title'       : title  ,
+            'knowledge'   : knowledge ,
+            'annoncement' : instruction   ,
+            'author'      : teacher   ,
+            'code'        : code ,
+            #### pour validation si le qcm est noté
+            'situation'   : 1  ,
+            'calculator'  : calculator  ,
+            #### 
+            'date_created'  :  date_created   ,
+            'date_modified' :  date_modified   ,
+            'level'      :  knowledge.level   ,
+            'theme'      :  knowledge.theme    , 
+            'width'      :  750   ,'height' :  550   , 'ggbfile' :  ""   , 'imagefile' : imagefile  ,
+            'toolBar'    :  0   ,'menuBar'     :   0  ,'algebraInput' : 0    ,'resetIcon'   :  0   ,'dragZoom'    : 0    ,
+            'is_title'   :  0   ,'is_subtitle' :  0  ,'attach_file' :  0   ,
+            'duration'   :  duration,
+            'is_ggbfile' :   0  ,
+            'is_python'  :  is_python   ,
+            'is_scratch' :  is_scratch  ,
+            'is_file'    :  is_file  ,
+            'is_image'   :  is_image  ,
+            'is_text'    :  is_text   ,
+            'is_mark'     : is_mark  ,
+            'mark'        : mark   ,
+            'is_share'    : 0  ,
+            'is_realtime' : 0   ,
+            'ranking'     : 10 , 
+            'correction'  : text_cor   ,
+            'qtype'       : qtype }
+
+            s = Supportfile(**data)
+            s.save()
+            s.skills.set(skills)
+
+            exercise = Exercise.objects.create(supportfile = s, knowledge = knowledge, level = knowledge.level, theme = knowledge.theme )
+            
+            for parcours in parcourses :
+                relation = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration=  duration, situation=  1 ) 
+                
+                students = parcours.students.all()
+                relation.students.set(students)
+                relation.skills.set(skills)
+    ############################################################################################################
+    ############################################################################################################
+    return render(request, 'qcm/list_my_own_exercises.html', context)
+
+
 
 @csrf_exempt
 def ajax_sort_supportfile(request):
     """ tri des supportfiles""" 
-
-
     exercise_ids = request.POST.get("valeurs")
     exercise_tab = exercise_ids.split("-") 
     for i in range(len(exercise_tab)-1):
         Supportfile.objects.filter( pk = exercise_tab[i]).update(ranking = i)
-
-
-
     data = {}
     return JsonResponse(data) 
+############################################################################################################################################################################
+########################## Def des custom files amener à disparaitre 
+############################################################################################################################################################################
+@login_required(login_url= 'index') 
+def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
+
+    parcours = Parcours.objects.get(pk=id)
+    teacher = Teacher.objects.get(user= request.user)
+    stage = get_stage(teacher.user)
+
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+        return redirect('index')
+
+    ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
+    form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
+
+    if request.method == "POST" :
+        if ceForm.is_valid() :
+            nf = ceForm.save(commit=False)
+            nf.teacher = teacher
+            if nf.is_scratch :
+                nf.is_image = True
+            nf.save()
+            ceForm.save_m2m()
+            nf.parcourses.add(parcours)  
+            nf.students.set( parcours.students.all() )     
+        else :
+            print(ceForm.errors)
+        return redirect('show_parcours', 0 , parcours.id  )
+ 
+    context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
+
+    return render(request, 'qcm/form_exercise_custom.html', context)
 
 
 
+
+
+
+@login_required(login_url= 'index') 
+def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
+
+    custom = Customexercise.objects.get(pk=idcc)
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    stage   = get_stage(request.user)
+
+    if id == 0 :
+
+        if not authorizing_access(teacher, custom ,True):
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
+            return redirect('index')
+
+        ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
+        form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher )
+
+        if request.method == "POST" :
+            if ceForm.is_valid() :
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
+                nf.save()
+                ceForm.save_m2m()
+            else :
+                print(ceForm.errors)
+            return redirect('my_own_exercises' )
+     
+        context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : custom ,'parcours': None, }
+
+    else :
+ 
+        parcours = Parcours.objects.get(pk=id)
+        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            return redirect('index')
+
+        ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
+
+        if request.method == "POST" :
+            if ceForm.is_valid() :
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
+                nf.save()
+                ceForm.save_m2m()
+                nf.parcourses.add(parcours)
+                nf.students.set( parcours.students.all() )  
+            else :
+                print(ceForm.errors)
+            return redirect('show_parcours', 0, parcours.id )
+     
+        context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom }
+
+    return render(request, 'qcm/form_exercise_custom.html', context)
+
+
+
+
+@login_required(login_url= 'index') 
+def exercise_custom_show_shared(request): # Modification d'un exercice non autocorrigé dans un parcours
+    
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    customexercises = set()
+    subjects = teacher.subjects.all()    
+    levels   = teacher.levels.all()
+    for subject in subjects :
+        for level in levels :
+            customexercises.update(subject.customexercises.filter(is_share=1,levels=level))
+
+    context = { 'customexercises' : customexercises, 'subjects' : subjects, 'levels' : levels , 'is_mine' : False } 
+
+    return render(request, 'qcm/list_my_custom_exercises.html', context)
+
+
+
+
+# def exercise_custom_show_shared(request):
+    
+#     user = request.user
+#     if user.is_teacher:  # teacher
+#         teacher = Teacher.objects.get(user=user) 
+#         customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
+#         return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, })
+#     else :
+#         return redirect('index')   
+ 
+
+def customexercise_shared_inside_parcours(request,idp):
+    parcours = Parcours.objects.get(pk=idp)
+    user = request.user
+    if user.is_teacher:  # teacher
+        teacher = Teacher.objects.get(user=user) 
+        customexercises = Customexercise.objects.filter(is_share = 1).exclude(parcourses = parcours)
+        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': parcours,   })
+    else :
+        return redirect('index')   
+
+
+
+############################################################################################################################################################################
+########################## Fin de gestion des supportfiles 
+############################################################################################################################################################################
 @user_passes_test(user_is_creator)
 def create_exercise(request, supportfile_id):
  
@@ -6398,6 +6831,7 @@ def create_exercise(request, supportfile_id):
     return render(request, 'qcm/form_exercise.html', context)
 
 
+
 @user_passes_test(user_is_creator)
 def ajax_load_modal(request):
     """ crée la modale pour changer les savoir faire"""
@@ -6433,9 +6867,6 @@ def change_knowledge(request):
 @csrf_exempt
 def ajax_sort_exercise_from_admin(request):
     """ tri des exercices""" 
-
-
-
     exercise_ids = request.POST.get("valeurs")
     exercise_tab = exercise_ids.split("-") 
 
@@ -6517,9 +6948,322 @@ def show_this_exercise(request, id):
     return render(request, url, context)
 
 
+
+def show_all_type_exercise(request,ids): # vue coté prof de l'exercice autocorrigé  du customexercise
+    """vue de tous les types d'exercices depuis un supportfile """
+    supportfile = Supportfile.objects.get(pk = ids)
+    today = timezone.now()
+    #1 , 2 , 12 n'utilisent pas ces conditions
+    loops = [0]*supportfile.situation
+    context = { 'supportfile' : supportfile, 'today' : today , 'loops' : loops,  'student' : None, 'only_show' : False}
+
+    context.update ( define_all_type( supportfile.situation , supportfile) ) 
+
+ 
+    if supportfile.is_python :
+        url = "basthon/index_supportfile.html" 
+    else :
+        url = "qcm/qtype/form_answer_all_types.html" 
+
+    return render(request, url , context)
+
+
+
+######################################################################################################################################################################
+#########################################       Gestion des Exercices coté élèves      ###############################################################################
+######################################################################################################################################################################
+def get_list_values_if_variables_alea(n, supportfile):
+    """ Renvoie une liste de liste des variables de chaque situation 
+        Chaque variable a un nom, une variable et un loop qui définit la situation actuelle parmi les situations proposées"""
+    supportvariables = supportfile.supportvariables.all()
+    if supportvariables.count():
+        liste_v = list() 
+        for i in  range(n) :
+            liste = []
+            for variable in supportvariables :
+                dico = dict() 
+                number , is_integer , mini , maxi = 0 , variable.is_integer , variable.minimum , variable.maximum 
+                if variable.is_notnull :
+                    while number == 0 :
+                        if is_integer :
+                            number = random.randint(mini ,  maxi )
+                        else :
+                            number = mini + random()*(maxi-mini)
+                else :
+                    if is_integer :
+                        number = random.randint(mini ,  maxi )
+                    else :
+                        number = mini + random()*(maxi-mini)
+                dico['name'] = variable.name                    
+                dico['val']  = number
+                dico['loop'] = i+1
+                liste.append(dico)
+            liste_v.append(liste)
+    else :
+        liste_v = None
+    return liste_v
+
+
+
+def replace_bloc(texte,vars_list,i):
+    """remplace les variables littérales par leur valeur et calcule éventuellement la partie à calculer.
+    i représente le ième loop """
+    tabs = texte.split('$')
+    blocs = [ tab for tab in tabs]
+    new = ""
+    j = 0
+    for bloc in blocs :
+        varias = vars_list[i]
+        if bloc != "" and j%2==1:
+            for v in varias:
+                bloc = bloc.replace('{'+v['name']+'}',str(v['val']) )
+            new += '$'+bloc+'$'
+        j += 1
+    if '?!' in new :
+        renew = ""
+        calcs = new.split('?!')
+        k=0
+        for calc in calcs :
+            if calcs != "" and k%2==1:
+                calc = eval(calc) 
+            k+=1
+            renew += str(calc)
+    else :
+        renew = new
+    return renew
+
+
+def alea_annoncements(n,supportfile) :
+    annoncements , corrections =  list() , list()
+    vars_list = get_list_values_if_variables_alea(n,supportfile)
+
+    shufflechoices = list()
+    s_choices = supportfile.supportchoices.all()
+    
+
+    if not vars_list : 
+        su_choices = list(s_choices)
+        random.shuffle(su_choices)
+        n = min(n, s_choices.count())
+        s_choices = su_choices[0:n]
+
+
+
+    for i in range (n) :
+        enonce  = supportfile.annoncement
+        corrige = supportfile.correction          
+        if 'input' in enonce :
+            if vars_list :
+                new = replace_bloc(enonce,vars_list,i)
+                annoncements.append(new)
+            else :
+               annoncements.append(enonce) 
+        else :
+            annoncements.append(enonce)
+
+        if '?!' in corrige :
+            if vars_list :
+                cor = replace_bloc(corrige,vars_list,i)
+            corrections.append(cor)
+        else :
+            corrections.append(corrige)
+ 
+
+        if 2<supportfile.qtype<5 and vars_list :
+            this_liste = list()
+            for this_choice in s_choices : 
+                new    = replace_bloc(this_choice.answer,vars_list,i)
+                newbis = replace_bloc(this_choice.answerbis,vars_list,i)
+                retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
+                data = { 'id' : this_choice.id , 'answer' : new , 'newbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
+                this_liste.append(data)
+            random.shuffle(this_liste)
+            shufflechoices.append(this_liste)
+
+        elif 2<supportfile.qtype<5 :
+            this_liste = list()
+            for choice in supportfile.supportchoices.all() : 
+                this_liste.append(choice)
+            random.shuffle(this_liste)
+            shufflechoices.append(this_liste)
+
+        elif supportfile.qtype<3 and vars_list :
+            this_choice = s_choices[0]
+            new    = replace_bloc(this_choice.answer,vars_list,i)
+            newbis = replace_bloc(this_choice.answerbis,vars_list,i)
+        elif supportfile.qtype<3 : 
+            this_choice = s_choices[i]
+            new    = this_choice.answer 
+            newbis = this_choice.answerbis
+
+
+
+
+
+        else : 
+            this_choice = s_choices[i]
+            new    = this_choice.answer 
+            newbis = this_choice.answerbis
+ 
+        if supportfile.qtype<3 :
+            data = { 'id' : this_choice.id , 'answer' : new , 'newbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : this_choice.retroaction , 'is_correct' : this_choice.is_correct   } 
+            shufflechoices.append(data)
+
+
+
+    #shufflesubchoices = list()
+    # m=0
+    # for subchoice in choice.supportsubchoices.all():
+    #     answer    = choice.answer 
+    #     answerbis = choice.answerbis 
+    #     new    = replace_bloc(answer,vars_list,k)
+    #     newbis = replace_bloc(answerbis,vars_list,k)
+    #     m+=1
+
+    #     ######Refaire la fonction replace_bloc en incluaunt un module de calcul si calc:. Problème avec les $
+    #     shufflechoices.append(choice)
+    # random.shuffle(shufflesubchoices)
+    shufflesubchoices = list()
+    return vars_list , annoncements , shufflechoices , shufflesubchoices, corrections
+
+
+
+
+def define_all_type(n, supportfile):
+
+    if  supportfile.qtype==1 :  # VF
+
+        vars_list , annoncements ,  shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , 'shufflesubchoices' : shufflesubchoices }
+
+    elif  supportfile.qtype==2 :  # Réponse à compléter
+
+        vars_list , annoncements ,  shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , }
+
+    elif  supportfile.qtype==3 or supportfile.qtype==4 :  # QCS et QCM
+ 
+        vars_list , annoncements ,  shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , 'shufflesubchoices' : shufflesubchoices }
+        
+
+    elif supportfile.qtype==5 : # paires
+
+        choices = list()
+        shufflechoices = list()
+        for choice in supportfile.supportchoices.all():
+                shufflechoices.append(choice)
+                choices.append(choice)
+
+        random.shuffle(shufflechoices)
+        random.shuffle(choices)
+        context = { 'choices' : choices , 'shufflechoices' : shufflechoices }  
+
+    elif supportfile.qtype==6 : # correspondances
+        subchoices = list()
+        for choice in supportfile.supportchoices.all():
+            for subchoice in choice.supportsubchoices.all():
+                subchoices.append(subchoice)
+        random.shuffle(subchoices)
+        context = {  'subchoices' : subchoices  }  
+
+    elif supportfile.qtype==7 : # anagrammes 
+
+        choices = list()
+        for choice in supportfile.supportchoices.all():
+            dico = {'id' : choice.id , 'word' : shuffle_word(choice.answer) }
+            choices.append(dico)
+
+        context = { 'choices' : choices  }  
+
+    elif supportfile.qtype==8 : # anagrammes
+
+        shufflechoices = list()
+        for choice in supportfile.supportchoices.all():
+            shufflechoices.append(choice)
+        random.shuffle(shufflechoices)
+        context = { 'shufflechoices' : shufflechoices  }  
+
+    elif supportfile.qtype==9 : # texte à trous
+
+        words = list()
+        mystr = supportfile.filltheblanks
+        mystr = mystr.replace('<strong>','####')
+        mystr = mystr.replace('</strong>','####')
+        tab   = mystr.split('####')
+
+        string = ""
+        for i in range(len(tab)) :
+            if i%2==1:
+                words.append(tab[i])  
+
+        context = { 'supportfile' : supportfile, 'words' : words } 
+ 
+    elif supportfile.qtype==10 : # puzzles
+
+        shufflechoices = list()
+        for supportchoice in supportfile.supportchoices.all():
+            shufflesubchoices = list()
+            for subchoice in supportchoice.supportsubchoices.all():
+                shufflesubchoices.append(subchoice)
+            random.shuffle(shufflesubchoices)
+            puzzle = { 'supportchoice' : supportchoice , 'shufflesubchoices' : shufflesubchoices }
+            shufflechoices.append(puzzle)
+        context = {  'shufflechoices' : shufflechoices  }  
+
+    elif supportfile.qtype==13 : #mots secrets : c 
+
+        shufflechoices =list() 
+        for choice in supportfile.supportchoices.values('id','answer').all():
+            shufflechoices.append(choice)
+        random.shuffle(shufflechoices)
+        secretword = shufflechoices[0]
+        shuffle_ids = ""
+        i = 1
+        for s in shufflechoices :
+            if i == len(shufflechoices) : sep = ""
+            else : sep = "-"
+            shuffle_ids += str(s["id"])+sep
+            i+=1
+        context = {  'shufflechoices' : shufflechoices, 'secretword' : secretword, 'shuffle_ids' : shuffle_ids  } 
+
+    elif supportfile.qtype==14 :
+
+        subchoices = list()
+        for choice in supportfile.supportchoices.all():
+            for subchoice in choice.supportsubchoices.all():
+                subchoices.append(subchoice)
+        random.shuffle(subchoices)
+
+        length = 0
+        supportchoice = supportfile.supportchoices.first()
+        length = supportchoice.supportsubchoices.count()
+
+        context = {  'subchoices' : subchoices , 'length' : length , } 
+
+    elif supportfile.qtype==19 :
+
+        context = {  'supportfile' : supportfile ,   }
+
+    return context
+
+
+
+
+
+def all_type_exercises_creator(supportfile, relation) :
+    """ Créateur de tous les exercices pour les templates"""
+
+    n = relation.situation
+
+    context = define_all_type( n , supportfile)
+
+    return context
+
+
 @login_required(login_url= 'index')
 def execute_exercise(request, idp,ide):
-
+    """ Vue d'un exercice depuis un parcours -- Template de réponse """ 
     if not request.user.is_authenticated :
         messages.error(request,"Utilisateur non authentifié")
         return redirect("index")
@@ -6532,6 +7276,8 @@ def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
+
+
     if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
         messages.error(request,"Cet exercercice n'est plus disponible.")
         return redirect("index")
@@ -6548,9 +7294,509 @@ def execute_exercise(request, idp,ide):
     except :
         pass
 
-    context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
-    return render(request, 'qcm/show_relation.html', context)
+    if exercise.supportfile.qtype != 100 :
+        return show_supportfile_student(request,relation  )
 
+    else :
+        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
+        return render(request, 'qcm/show_relation.html', context)
+
+
+
+
+def show_supportfile_student(request,relation): 
+    """ Fonction de lecture d'un exercice depuis un parcours pour la def précédente""" 
+
+    student = request.user.student
+    today = timezone.now()
+    #1 , 2 , 12 n'utilisent pas ces conditions
+    loops = [0]*relation.situation
+    supportfile = relation.exercise.supportfile
+
+    start_time = time.time()
+    context = {'supportfile' : supportfile,  'relation' : relation,   'today' : today , 'loops' : loops,  'student' : student , 'only_show' : False, 'start_time' : start_time}
+
+    if supportfile.is_python or supportfile.qtype == 20 :
+        return write_exercise(request,relation.id)
+    else :
+        context.update( all_type_exercises_creator(supportfile, relation) ) # création du contexte de tous les exercices        
+        url = "qcm/qtype/form_answer_all_types.html" 
+
+    return render(request, url , context)
+
+
+##### Création du template pour les exercices de type 19 et 20
+@login_required(login_url= 'index') 
+def write_exercise(request,id): # Coté élève
+    """ Enregistrement des réponses des élèves """ 
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
+    relationship = Relationship.objects.get(pk = id)
+
+    tracker_execute_exercise(True ,  student.user , relationship.parcours.id  , relationship.exercise.id , 0)
+
+    today = time_zone_user(student.user)
+    if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
+        w_a = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None, instance = w_a )  
+    else :
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None ) 
+        w_a = False
+
+    if request.method == "POST":
+        if wForm.is_valid():
+            w_f = wForm.save(commit=False)
+            w_f.relationship = relationship
+            w_f.student = student
+            w_f.answer =  wForm.cleaned_data['answer']
+            w_f.is_corrected = 0  # si l'élève soumets une production alors elle n'est pas corrigée 
+            w_f.save()
+
+            ### Envoi de mail à l'enseignant
+            msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
+            if relationship.parcours.teacher.notification :
+                sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [relationship.parcours.teacher.user.email] )
+                pass
+
+            return redirect('show_parcours_student' , relationship.parcours.id )
+
+    context = {'relationship': relationship, 'communications' : [] , 'w_a' : w_a , 'parcours' : relationship.parcours ,  'form' : wForm, 'today' : today  }
+
+    if relationship.exercise.supportfile.is_python :
+        url = "basthon/answer_interface.html" 
+    else :
+        url = "qcm/form_writing.html" 
+
+    return render(request, url , context)
+
+
+######################################################################################################################################################################
+###############################             Checking des réponses via ajax                      ######################################################################
+######################################################################################################################################################################
+def shuffle_word(string):
+
+    ls = len(string)
+    strg = ""
+    while ls > 0 :
+        idx = random.randint(0,ls-1)
+        strg += string[idx]
+        string = string[0:idx]+string[idx+1:len(string)]
+        ls = len(string)      
+    return strg
+
+def message_correction(score,old_score):
+    if str(old_score) == str(score) :
+        msg = "<i class='fa fa-times text-danger'></i> Tu as commis une erreur. Regarde attentivement la correction."
+    else :
+        msg = "<i class='fa fa-check text-success'></i> C'est bien. Ta réponse est juste. Continue."
+    return msg
+
+
+def check_solution_vf(request):
+
+    choice_id      = request.POST.get('choice_ids',None)
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    is_correct     = int(request.POST.get('is_correct',0))
+    old_score      = score
+
+    data = {}  
+    supportfile   = Supportfile.objects.get(pk=supportfile_id) 
+    supportchoice = Supportchoice.objects.get(pk=choice_id) 
+ 
+    if int(supportchoice.is_correct) == is_correct : 
+        numexo += 1
+        score  += 1
+
+    else : numexo += 1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+
+    data['this_correction_text']  =  supportfile.correction
+    data['msg'] = message_correction(score,old_score)
+ 
+
+    return JsonResponse(data)
+
+
+def calculate(this_item):
+    tab_calculus = this_item.split('?!')
+    calculate_value = eval(tab_calculus[1])
+    return calculate_value
+
+
+
+
+def calculate_str(this_item):
+    renew = ""
+    calcs = this_item.split('?!')
+    k=0
+    for calc in calcs :
+        if calcs != "" and k%2==1:
+            calc = eval(calc) 
+        k+=1
+        renew += str(calc)
+    return renew
+
+
+
+
+def check_solution_answers(request):
+
+    supportfile_id = request.POST.get("supportfile_id")
+    loop           = request.POST.get("loop")
+    situation      = request.POST.get("situation")
+    parcours_id    = request.POST.get("parcours_id")
+    relation_id    = request.POST.get("relation_id")
+    numexo         = int(request.POST.get('numexo',0)) 
+    score          = int(request.POST.get('score',0))
+    answers        = request.POST.getlist("answers")
+    choice_id      = request.POST.get("choice_id")
+    old_score      = score
+ 
+    data = {}
+
+    supportfile    = Supportfile.objects.get(pk=supportfile_id) 
+    alea_variables = supportfile.supportvariables.all()
+
+    index = int(loop)-1
+    idx = 2*(index)
+    this_score = 0
+    choices = supportfile.supportchoices.all()
+
+    if choice_id == "0" :  # réponse avec 'input' dans l'énoncé
+        for choice in choices :
+            numexo += 1
+            variable  = choice.answer
+            calculus  = choice.answerbis 
+            retroaction = choice.retroaction
+            this_value = request.POST.getlist(variable)[idx]
+            if '?!' in calculus :
+                for alea_variable in alea_variables : 
+                    alea_variable = str(alea_variable) 
+                    var = request.POST.getlist(alea_variable)[index]
+                    variable    = variable.replace("{"+alea_variable+"}",var)
+                    calculus    = calculus.replace("{"+alea_variable+"}",var)
+                    retroaction = retroaction.replace("{"+alea_variable+"}",var)
+                calculus    = calculate(calculus) 
+                retroaction = calculate_str(retroaction)       
+            if str( this_value ) ==  str(calculus):
+                score  += 1
+ 
+    elif 'customvars' in request.POST : # réponse avec variable aléatoire
+        choice = Supportchoice.objects.get(pk=choice_id)
+        numexo += 1
+        variable    = choice.answer
+        calculus    = choice.answerbis
+        retroaction = choice.retroaction
+        for customvars in request.POST.getlist('customvars') :
+            value = request.POST.getlist(customvars)[index]
+            variable     = variable.replace("{"+customvars+"}",value)
+            calculus     = calculus.replace("{"+customvars+"}",value)
+            retroaction  = retroaction.replace("{"+customvars+"}",value)
+ 
+        calc_calculus = calculate(calculus) 
+        if str(answers[index]) == str(calc_calculus) :
+            score  += 1
+        retroaction   = calculate_str(retroaction)         
+
+    else : # réponse sans variable
+        choice      = Supportchoice.objects.get(pk=choice_id)
+        retroaction = choice.retroaction 
+        if str(answers[index]) in choice.answerbis.split("_|_") :
+            numexo += 1
+            score  += 1
+        else  : numexo += 1
+        if supportfile.correction :
+            correction = "<hr/>" + supportfile.correction
+
+    data['numexo'] = numexo  
+    data['score']  = score
+
+    data['this_correction_text']  =  retroaction+"<br/><br/>"+supportfile.correction
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data)
+
+
+def check_solution_qcm_numeric(request):
+
+    solutions      = request.POST.getlist('choice_ids',None)
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    old_score      = score
+    data = {}
+    supportfile       = Supportfile.objects.get(pk=supportfile_id) 
+    supportchoice_ids = Supportchoice.objects.values_list('id',flat=True).filter(supportfile = supportfile,is_correct=1)
+        
+    solutions_int = list()
+    for s  in solutions:
+        solutions_int.append( int(s) )
+
+    if set(solutions_int) == set(supportchoice_ids) : 
+        numexo += 1
+        score  += 1
+
+    else : numexo += 1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+
+    data['this_correction_text']  =  supportfile.correction
+    data['msg'] = message_correction(score,old_score)
+
+    return JsonResponse(data) 
+
+
+
+
+
+
+
+
+def ajax_secret_letter(request):
+
+    secret_letter = request.POST.get('secret_letter',None)
+    used_letter   = request.POST.get('used_letter',"")    
+    index         = request.POST.get('index',None)
+    nb_tries      = request.POST.get('nb_tries',None)
+    word_id       = request.POST.get('word_id',None)
+    word_id_used  = request.POST.get('word_id_used',"")
+    position      = request.POST.get('position',None)
+    shuffle_ids   = request.POST.get('shuffle_ids',None)
+
+    data = {}
+    word = Supportchoice.objects.get(pk=word_id).answer
+    word_length   = request.POST.get('word_length',len(word))
+    response , win = "false", "false"
+    input_idx = 0
+ 
+    if secret_letter == '2'   : secret_letter = 'é'
+    elif secret_letter == '7' : secret_letter = 'è' 
+    elif secret_letter == '9' : secret_letter = 'ç'
+    elif secret_letter == 'ù' : secret_letter = 'ù'
+
+ 
+    new_string_word = ""
+    if secret_letter.lower() == word[int(index)]   :
+        response = "true"
+        word_length   = int(word_length) - 1
+        if word_length == 0 :
+            win = "true"
+            tabs = shuffle_ids.split("-")
+            word_idx = tabs.index(str(word_id))+1
+            i = len(word_id_used.split("-")) 
+            input_idx = "answer"+str(i)
+            try :        
+                shuffle_id = tabs[word_idx]
+                next_word = Supportchoice.objects.get(pk=shuffle_id).answer
+                word_id_used += word_id+"-"
+                ind = 0               
+                for c in next_word :
+                    new_string_word +='<input class="secret_letter" id="secret_letter'+str(ind)+'" data-word_id="'+str(tabs[word_idx])+'" data-index="'+str(ind)+'" style="margin-left:5px"  />'
+                    ind +=1
+                data['length_i'] = ind
+                word_length = ind
+            except :
+                new_string_word = "<span class='text-success'>BRAVO ! Vous avez trouvé tous les mots. Cliquer sur le bouton Enregistrer.</span>"
+            data['nb'] = len(tabs)-i 
+
+    data['used_letter'] = used_letter + secret_letter +" "
+    data["new_word"] = new_string_word
+    data["word"]     = word  
+    data["length"]   = word_length       
+    data["win"]      = win
+    data["response"] = response              
+    data["word_id_used"] = word_id_used
+    data['input']    = input_idx   
+
+    return JsonResponse(data)  
+
+
+def ajax_memo(request):
+
+    subchoice_ids = request.POST.getlist('liste',None)
+    length        = request.POST.get('length',0)
+    data = {}
+    supportsubchoice = Supportsubchoice.objects.get(pk=subchoice_ids[0])
+    solutions        = supportsubchoice.supportchoice.supportsubchoices.values_list('id',flat=True)
+
+    solutions_str = list()
+    for s  in solutions:
+        solutions_str.append( str(s) )
+
+    if set(solutions_str) == set(subchoice_ids) : 
+        test = "yes"
+        length = int(length)-1
+    else : test = "no"
+
+    data['test']   = test  
+    data['length'] = length
+
+    return JsonResponse(data)  
+
+
+
+######################## A remettre comme sur sacado.xyz
+def show_customexercise(request,idc): # vue coté prof de l'exercice autocorrigé  du customexercise
+
+    customexercise = Customexercise.objects.get(pk = idc)
+    today = timezone.now()
+    #1 , 2 , 12 n'utilisent pas ces conditions
+    loops = [0]*customexercise.pseudoalea_nb
+    context = { 'customexercise' : customexercise, 'today' : today , 'loops' : loops,  'student' : None, 'only_show' : False}
+
+
+    if  customexercise.qtype==3 or customexercise.qtype==4 :  # QCS et QCM
+
+        shufflechoices = list()
+        for choice in customexercise.customchoices.all():
+            shufflechoices.append(choice)
+            random.shuffle(shufflechoices)
+        context.update( { 'shufflechoices' : shufflechoices } )
+
+    elif customexercise.qtype==5 : # paires
+
+        choices = list()
+        shufflechoices = list()
+        for choice in customexercise.customchoices.all():
+                shufflechoices.append(choice)
+                choices.append(choice)
+        random.shuffle(shufflechoices)
+        random.shuffle(choices)
+        context.update( { 'choices' : choices , 'shufflechoices' : shufflechoices } )
+
+    elif customexercise.qtype==6 : # correspondances
+        subchoices = list()
+        for choice in customexercise.customchoices.all():
+            for subchoice in choice.customsubchoices.all():
+                subchoices.append(subchoice)
+        random.shuffle(subchoices)
+        context.update( { 'subchoices' : subchoices  } )
+
+    elif customexercise.qtype==7 : # anagrammes 
+
+        choices = list()
+        for choice in customexercise.customchoices.all():
+            dico = {'id' : choice.id , 'word' : shuffle_word(choice.answer) }
+            choices.append(dico)
+
+        context.update( { 'choices' : choices  } )
+
+    elif customexercise.qtype==8 : # anagrammes
+
+        shufflechoices = list()
+        for choice in customexercise.customchoices.all():
+            shufflechoices.append(choice)
+        random.shuffle(shufflechoices)
+        context.update( { 'shufflechoices' : shufflechoices  } )
+
+    elif customexercise.qtype==9 : # texte à trous
+
+        words = list()
+        mystr = customexercise.filltheblanks
+        mystr = mystr.replace('<strong>','####')
+        mystr = mystr.replace('</strong>','####')
+        tab   = mystr.split('####')
+
+        string = ""
+        for i in range(len(tab)) :
+            if i%2==1:
+                words.append(tab[i])  
+
+        context.update({'customexercise' : customexercise, 'words' : words })
+ 
+    elif customexercise.qtype==10 : # puzzles
+
+        shufflechoices = list()
+        for customchoice in customexercise.customchoices.all():
+            shufflesubchoices = list()
+            for subchoice in customchoice.customsubchoices.all():
+                shufflesubchoices.append(subchoice)
+            random.shuffle(shufflesubchoices)
+            puzzle = { 'customchoice' : customchoice , 'shufflesubchoices' : shufflesubchoices }
+            shufflechoices.append(puzzle)
+        context.update( { 'shufflechoices' : shufflechoices  } )
+
+    elif customexercise.qtype==13 : #mots secrets : c 
+
+        shufflechoices =list() 
+        for choice in customexercise.customchoices.values('id','answer').all():
+            shufflechoices.append(choice)
+        random.shuffle(shufflechoices)
+        secretword = shufflechoices[0]
+        shuffle_ids = ""
+        i = 1
+        for s in shufflechoices :
+            if i == len(shufflechoices) : sep = ""
+            else : sep = "-"
+            shuffle_ids += str(s["id"])+sep
+            i+=1
+        context.update({ 'shufflechoices' : shufflechoices, 'secretword' : secretword, 'shuffle_ids' : shuffle_ids  })
+
+    elif customexercise.qtype==14 :
+
+        subchoices = list()
+        for choice in customexercise.customchoices.all():
+            for subchoice in choice.customsubchoices.all():
+                subchoices.append(subchoice)
+        random.shuffle(subchoices)
+
+        length = 0
+        customchoice = customexercise.customchoices.first()
+        length = customchoice.customsubchoices.count()
+
+        context.update( { 'subchoices' : subchoices , 'length' : length , } )
+ 
+
+    if customexercise.is_python :
+        url = "basthon/index_custom.html" 
+    else :
+        url = "qcm/qtype/form_answer_all_types.html" 
+
+    return render(request, url , context)
+
+
+######################################################################################################################################################################
+#########################################     Enregistrement des réultats     ########################################################################################
+######################################################################################################################################################################
+def get_the_score(request,supportfile,answer) :
+
+    score , numexo  = 0 , 1
+
+    list_vars = list()
+    supportchoices = supportfile.supportchoices.all()
+
+    for supportchoice in supportchoices :
+        if 'input' in supportfile.annoncement :
+            list_vars = supportchoice.answer.split('____')
+            for list_var in list_vars : 
+                var,  val = list_var.split('=')
+                value = request.POST.getlist(var)[0]
+                if str(val) == str(value) :
+                    score += 1
+        else :
+            list_vars = supportchoice.answer.split('____')
+            if answer in list_vars :
+                score += 1
+
+    return round(score/supportchoices.count(),2)*100 
+
+
+def get_the_timer(time_begin) : 
+    if time_begin :
+        this_time = time_begin.split(",")[0]
+        end_time  =  str(time.time()).split(".")[0]
+        timer =  int(end_time) - int(this_time)
+    else : 
+        timer = 0
+    return timer
 
 
 @csrf_exempt    
@@ -6562,17 +7808,14 @@ def store_the_score_relation_ajax(request):
     else :
         messages.error(request, "Score non enregistré. Le parcours n'est pas reconnu.")
         return redirect('index')
-    try :
+ 
+    try:
         time_begin = request.POST.get("start_time",None)
+        timer      = get_the_timer(time_begin)
 
-        if time_begin :
-            this_time = request.POST.get("start_time").split(",")[0]
-            end_time  =  str(time.time()).split(".")[0]
-            timer =  int(end_time) - int(this_time)
-        else : 
-            timer = 0
+        numexo = request.POST.get("numexo",None)    
+        answer = request.POST.get("answer",None) 
 
-        numexo = int(request.POST.get("numexo"))-1    
         relation_id = int(request.POST.get("relation_id"))
         relation = Relationship.objects.get(pk = relation_id)
         data = {}
@@ -6580,19 +7823,39 @@ def store_the_score_relation_ajax(request):
         student = Student.objects.get(user=request.user)
 
         if request.method == 'POST':
-            score = round(float(request.POST.get("score")),2)*100
-            if score > 100 :
-                score = 100
-            multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student)
-            if multi_studentanswer.count() > 0 :
-                this_studentanswer = multi_studentanswer.last()
-                multi_studentanswer.filter(pk=this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
+            score = request.POST.get("score",None)
+            if score :
+                if relation.exercise.supportfile.qtype != 100 and score: # cas des exercices non GGB
+                    if numexo and  int(numexo) > 0: 
+                        score = round(float(int(score)/int(numexo)),2)*100 
+                    else : 
+                        score = 0
+                elif relation.exercise.supportfile.qtype == 100 :   # cas des exercices  GGB      
+                    if numexo : numexo = int(numexo)-1   
+                    score = round(float(request.POST.get("score")),2)*100 
+                else :
+                    score = 0
+                if score > 100 :
+                    score = 100
             else :
-                try :
-                    this_studentanswer = Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
-                except :
-                    pass
+                score = get_the_score(request,relation.exercise.supportfile,answer)            
 
+            # multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student)
+            # if multi_studentanswer.count() > 0 :
+            #     this_studentanswer = multi_studentanswer.last()
+            #     multi_studentanswer.filter(pk=this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
+            # else :
+            #     try :
+            #         this_studentanswer = Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
+            #     except :
+            #         pass
+
+            #multi_studentanswer, create = Studentanswer.objects.update_or_create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , defaults={'numexo' : numexo,  'point': score, 'secondes': timer} )
+            #if not create :
+            #    Studentanswer.objects.filter(pk=multi_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
+
+
+            Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
             ##########################################################
 
             result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
@@ -6716,22 +7979,237 @@ def store_the_score_relation_ajax(request):
         return redirect('show_parcours_student' , parcours_id )
 
 
-def ajax_theme_exercice(request):
-    level_id = request.POST.get('level_id', None)
+ 
+######################################################################################################################################################################
+#########################################   Fin de gestion des supportfiles   ########################################################################################
+######################################################################################################################################################################
+def ajax_assign_exercise_to_parcours(request):
 
-    if level_id.isdigit():
-        level = Level.objects.get(id=level_id)
-        themes = level.themes.all()
-        data = {'themes': serializers.serialize('json', themes)}
-    else:
-        data = {}
+    teacher = request.user.teacher
+    exercise_id = request.POST.get('exercise_id', None)
+    parcours_id = request.POST.get('parcours_id', None)
+
+    data = {}
+    parcours = Parcours.objects.get(pk = parcours_id)
+    exercise    = Exercise.objects.get(pk=exercise_id)
+    supportfile = exercise.supportfile
+    skills      = supportfile.skills.all()
+    relation    = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration= supportfile.duration, situation= supportfile.situation ) 
+    
+    students = parcours.students.all()
+    relation.students.set(students)
+    relation.skills.set(skills)
 
     return JsonResponse(data)
 
 
+
+def ajax_customexercises_subjects_levels(request):
+
+    teacher = request.user.teacher
+    subject_ids   = request.POST.getlist('subject_ids', None)
+    level_ids     = request.POST.getlist('level_ids', None)
+
+    data = {}
+
+    exercises  = Exercise.objects.filter(supportfile__author=teacher,supportfile__qtype__lt=100,knowledge__theme__subject_id__in=subject_ids)
+    themes     = Theme.objects.filter(subject_id__in=subject_ids)
+    knowledges = Knowledge.objects.filter(theme__subject_id__in=subject_ids)
+
+    for level_id in level_ids :
+
+        level = Level.objects.get(pk = level_id)
+        customs_levels = list( level.exercises.filter(supportfile__author=teacher,knowledge__theme__subject_id__in=subject_ids) )   
+        exercises = [ c for c in list(customs_levels) if c in list(exercises)]
+
+        themes_levels = list( level.themes.filter(subject_id__in=subject_ids) )  
+        themes = [ t for t in list(themes_levels) if t in list(themes)]
+
+    if level_ids: 
+        knowledges = Knowledge.objects.filter(theme__subject_id__in=subject_ids, level__id__in=level_ids)
+
+    skills = Skill.objects.filter(subject_id__in=subject_ids)
+
+    data['themes']          = serializers.serialize('json', set(themes)) 
+    data['knowledges']      = serializers.serialize('json', knowledges )
+    data['skills']          = serializers.serialize('json', skills)  
+
+
+    context = {     'teacher' : teacher , 'exercises': set(exercises) , 'is_mathJax' : True ,   }
+    data['customexercises'] = render_to_string('qcm/ajax_list_customexercises.html', context)
+
+    return JsonResponse(data)
+
+
+def ajax_customexercises_skills(request):
+
+    teacher = request.user.teacher
+    subject_ids   = request.POST.getlist('subject_ids', None)
+    skill_ids     = request.POST.getlist('skill_ids', None)
+    level_ids     = request.POST.getlist('level_ids', None)
+    theme_ids     = request.POST.getlist('theme_ids', None)
+    knowledge_ids = request.POST.getlist('knowledge_ids', None)
+
+    customs = set()
+    for level_id in level_ids :
+        level = Level.objects.get(pk = level_id)
+        customs.update(level.exercises.filter(supportfile__qtype__lt = 100 , supportfile__author = teacher , supportfile__theme__subject_id__in=subject_ids) )
+
+    customs_skills = set()
+    for skill_id in skill_ids :
+        skill = Skill.objects.get(pk = skill_id)
+        customs_skills.update(   Exercise.objects.filter(supportfile__qtype__lt = 100 ,supportfile__author = teacher ,supportfile__skills=skill)    )
+ 
+    customs = [ c for c in list( customs_skills ) if c in list(customs) ]
+
+    if theme_ids :
+        customs_themes = set()
+        for theme_id in theme_ids :
+            theme = Theme.objects.get(pk = theme_id)
+            customs_themes.update( theme.exercises.filter(supportfile__qtype__lt = 100 ,supportfile__author = teacher ) )
+
+        customs = [ c for c in list( customs_themes ) if c in list(customs) ]    
+
+    if knowledge_ids :
+        customs_knowledges = set()
+        for knowledge_id in knowledge_ids :
+            knowledge = Knowledge.objects.get(pk = knowledge_id)
+            customs_knowledges.update( knowledge.exercises.filter(supportfile__qtype__lt = 100 ,supportfile__author = teacher  ) )
+            
+        customs = [ c for c in list( customs_knowledges ) if c in list(customs) ]    
+
+    data = {}
+    context = {     'teacher' : teacher , 'exercises': set(customs) , 'is_mathJax' : True ,   }
+    data['customexercises'] = render_to_string('qcm/ajax_list_customexercises.html', context)
+
+    return JsonResponse(data)
+
+
+
+def ajax_customexercises_themes(request):
+
+    teacher = request.user.teacher
+    subject_ids   = request.POST.getlist('subject_ids', None)
+    skill_ids     = request.POST.getlist('skill_ids', None)
+    level_ids     = request.POST.getlist('level_ids', None)
+    theme_ids     = request.POST.getlist('theme_ids', None)
+    knowledge_ids = request.POST.getlist('knowledge_ids', None)
+    data = {}
+    data["knowledges"] = None
+    customs = set()
+    for level_id in level_ids :
+        level = Level.objects.get(pk = level_id)
+        customs.update(level.exercises.filter(supportfile__qtype__lt = 100 , supportfile__author = teacher , supportfile__theme__subject_id__in=subject_ids) )
+
+    if theme_ids :
+        customs_themes = set()
+        for theme_id in theme_ids :
+            theme = Theme.objects.get(pk = theme_id)
+            customs_themes.update( theme.exercises.filter(supportfile__qtype__lt = 100 ,supportfile__author = teacher ) )
+
+        customs = [ c for c in list( customs_themes ) if c in list(customs) ]    
+
+
+    if skill_ids :
+        customs_skills = set()
+        for skill_id in skill_ids :
+            skill = Skill.objects.get(pk = skill_id)
+            customs_skills.update(   Exercise.objects.filter(supportfile__qtype__lt = 100 ,supportfile__author = teacher ,supportfile__skills=skill)    )
+
+        customs = [ c for c in list( customs_skills ) if c in list(customs) ]  
+
+
+    if knowledge_ids :
+        customs_knowledges = set()
+        for knowledge_id in knowledge_ids :
+            knowledge = Knowledge.objects.get(pk = knowledge_id)
+            customs_knowledges.update( knowledge.exercises.filter(supportfile__qtype__lt = 100 ,supportfile__author = teacher  ) )
+            
+        customs = [ c for c in list( customs_knowledges ) if c in list(customs) ] 
+    else :
+
+        knowledges = Knowledge.objects.filter(theme_id__in=theme_ids, level__in=level_ids)
+        data['knowledges']  = serializers.serialize('json', set(knowledges) ) 
+
+
+ 
+    context = {     'teacher' : teacher , 'exercises': set(customs) , 'is_mathJax' : True ,   }
+    data['customexercises'] = render_to_string('qcm/ajax_list_customexercises.html', context)
+
+    return JsonResponse(data)
+
+
+def ajax_customexercises_knowledges(request):
+
+    teacher = request.user.teacher
+    subject_ids   = request.POST.getlist('subject_ids', None)
+    skill_ids     = request.POST.getlist('skill_ids', None)
+    level_ids     = request.POST.getlist('level_ids', None)
+    theme_ids     = request.POST.getlist('theme_ids', None)
+    knowledge_ids = request.POST.getlist('knowledge_ids', None)
+    data = {}
+
+    customs = set()
+    for knowledge_id in knowledge_ids :
+        knowledge = Knowledge.objects.get(pk = knowledge_id)
+        customs.update( knowledge.knowledge_customexercises.filter(teacher=teacher) )
+            
+    if skill_ids :
+        customs_skills = set()
+        for skill_id in skill_ids :
+            skill = Skill.objects.get(pk = skill_id)
+            customs_skills.update( skill.skill_customexercises.filter(teacher=teacher) )
+        customs = [ c for c in list( customs_skills ) if c in list(customs) ]  
+
+    data['customexercises'] = render_to_string('qcm/ajax_list_customexercises.html', { 'exercises': set(customs) , 'teacher' : teacher })
+
+    return JsonResponse(data)
+
+
+def ajax_get_skills(request):
+    subject_id = request.POST.get('subject_id', None)
+    data = {}
+    if subject_id.isdigit():
+        subject = Subject.objects.get(id=subject_id)
+        skills = subject.skill.values_list('id', 'name')
+        data['skills'] = list(skills)
+
+    return JsonResponse(data)
+ 
+ 
+def ajax_theme_exercice(request):
+
+    level_id   = request.POST.get('level_id', None)
+    subject_id = request.POST.get('subject_id', None)
+    if level_id.isdigit():
+        level      = Level.objects.get(id=level_id)
+        themes     = level.themes.filter(subject_id = subject_id)
+        knowledges = level.knowledges.filter(theme__in = themes)
+        data = {'themes': serializers.serialize('json', themes), 'knowledges': serializers.serialize('json', knowledges) }
+    else:
+        data = {}
+    return JsonResponse(data)
+
+
+def ajax_theme_subject_levels(request):
+
+    level_ids  = request.POST.getlist('level_ids', None)
+    subject_id = request.POST.get('subject_id', None)
+
+    data = {}
+    themes = set()
+    if subject_id and level_ids[0]!="" :
+        for level_id in level_ids :
+            level = Level.objects.get(id=level_id)
+            lvls = level.themes.filter(subject_id=subject_id)
+            themes.update( lvls )
+        data = {'themes': serializers.serialize('json', themes)}  
+    return JsonResponse(data)
+
+
+
+
 def ajax_level_exercise(request):
-
-
     teacher = Teacher.objects.get(user= request.user)
     data = {} 
     level_id = request.POST.get('level_id', None)
@@ -6748,9 +8226,7 @@ def ajax_level_exercise(request):
         parcours_id = None
 
     if level_id and theme_ids and theme_ids[0] != "" : 
-        exercises = Exercise.objects.filter(level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
- 
-     
+        exercises = Exercise.objects.filter(Q(supportfile__is_share=1)|Q(supportfile__author_id=teacher.user.id), level_id = level_id , theme_id__in= theme_ids ,  supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
         data['html'] = render_to_string('qcm/ajax_list_exercises.html', { 'exercises': exercises , "parcours" : parcours, "ajax" : ajax, "teacher" : teacher , 'parcours_id' : parcours_id })
  
     return JsonResponse(data)
@@ -6768,7 +8244,30 @@ def ajax_knowledge_exercise(request):
 
     return JsonResponse(data)
 
- 
+
+
+def ajax_knowledge_skills_subject_levels(request):
+    subject_id = request.POST.get('subject_id', None)
+    level_ids  = request.POST.getlist('level_ids', None)
+    theme_ids  = request.POST.getlist('theme_ids', None)
+    data = {}
+
+    if subject_id and  level_ids[0]!="" and theme_ids[0]!="" :
+        knowledges = Knowledge.objects.filter(theme__subject__id=subject_id,level_id__in=level_ids,theme_id__in=theme_ids )
+        skills     = Skill.objects.filter(subject_id=subject_id)
+        data = {'knowledges': serializers.serialize('json', knowledges) , 'skills': serializers.serialize('json', skills) }
+
+    elif subject_id and  level_ids[0]!=""  :
+        knowledges = Knowledge.objects.filter(theme__subject__id=subject_id,level_id__in=level_ids  )
+        skills     = Skill.objects.filter(subject_id=subject_id)
+        data = {'knowledges': serializers.serialize('json', knowledges) , 'skills': serializers.serialize('json', skills) }
+
+    return JsonResponse(data)
+
+
+
+
+
 @csrf_exempt
 def ajax_create_title_parcours(request):
     ''' Création d'une section ou d'une sous-section dans un parcours '''
@@ -7575,7 +9074,7 @@ def ajax_read_my_production(request): # Propose à un élève de lire sa copie d
     data['html'] = html    
             
 
-    return JsonResponse(data)  
+    return JsonResponse(data) 
 
  
 ###################################################################
@@ -7636,178 +9135,6 @@ def ajax_remove_my_appreciation(request):
 #####################################################################################################################################
 
 
-def create_accounting(request,tp):
- 
-    form     = AccountingForm(request.POST or None )
-    form_abo = AbonnementForm(request.POST or None )
-    formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
-    form_ds  = formSet(request.POST or None)
-    today    = datetime.now()
-
-    if request.method == "POST":
-        if form.is_valid():
-            nf = form.save(commit = False)
-            nf.save()
-            form_ds = formSet(request.POST or None, instance = nf)
-            for form_d in form_ds :
-                if form_d.is_valid():
-                    form_d.save()
-
-
-            if nf.is_abonnement :
-                if form_abo.is_valid():
-
-                    if nf.date_payment:
-                        fa.active = 1
-                    fa.save()
-
-
-
-@login_required(login_url= 'index') 
-def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
-
-    parcours = Parcours.objects.get(pk=id)
-    teacher = Teacher.objects.get(user= request.user)
-    stage = get_stage(teacher.user)
-
-
-    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
-        return redirect('index')
-
-    ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
-    form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
-
-    if request.method == "POST" :
-        if ceForm.is_valid() :
-            nf = ceForm.save(commit=False)
-            nf.teacher = teacher
-            if nf.is_scratch :
-                nf.is_image = True
-            nf.save()
-            ceForm.save_m2m()
-            nf.parcourses.add(parcours)  
-            nf.students.set( parcours.students.all() )     
-        else :
-            print(ceForm.errors)
-        return redirect('show_parcours', 0 , parcours.id  )
- 
-    context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
-
-    return render(request, 'qcm/form_exercise_custom.html', context)
-
-
-
-@login_required(login_url= 'index') 
-def create_custom_exercise(request): #Création d'un exercice non autocorrigé dans un parcours
-
-    teacher = Teacher.objects.get(user= request.user)
-
-    ceForm = CustomexerciseOnlyForm(request.POST or None, request.FILES or None , teacher = teacher ) 
-    form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher) 
-
-    if request.method == "POST" :
-        if ceForm.is_valid() :
-            nf = ceForm.save(commit=False)
-            nf.teacher = teacher
-            if nf.is_scratch :
-                nf.is_image = True
-            nf.save()
-            ceForm.save_m2m()    
-        else :
-            print(ceForm.errors)
-        return redirect('my_custom_exercises' )
- 
-    context = { 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
-
-    return render(request, 'qcm/form_exercise_custom.html', context)
-
-
-
-
-
-
-
-@login_required(login_url= 'index') 
-def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
-
-    custom = Customexercise.objects.get(pk=idcc)
-
-    try :
-        teacher = request.user.teacher
-    except :
-        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
-        return redirect('index')
-
-    stage   = get_stage(request.user)
-
-    if id == 0 :
-
-        if not authorizing_access(teacher, custom ,True):
-            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
-            return redirect('index')
-
-        ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
-        form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher )
-
-        if request.method == "POST" :
-            if ceForm.is_valid() :
-                nf = ceForm.save(commit=False)
-                nf.teacher = teacher
-                if nf.is_scratch :
-                    nf.is_image = True
-                nf.save()
-                ceForm.save_m2m()
-            else :
-                print(ceForm.errors)
-            return redirect('my_custom_exercises' )
-     
-        context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : custom ,'parcours': None, }
-
-    else :
- 
-        parcours = Parcours.objects.get(pk=id)
-        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
-            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-            return redirect('index')
-
-        ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
-
-        if request.method == "POST" :
-            if ceForm.is_valid() :
-                nf = ceForm.save(commit=False)
-                nf.teacher = teacher
-                if nf.is_scratch :
-                    nf.is_image = True
-                nf.save()
-                ceForm.save_m2m()
-                nf.parcourses.add(parcours)
-                nf.students.set( parcours.students.all() )  
-            else :
-                print(ceForm.errors)
-            return redirect('show_parcours', 0, parcours.id )
-     
-        context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom }
-
-    return render(request, 'qcm/form_exercise_custom.html', context)
-
-
-
-@login_required(login_url= 'index') 
-def my_custom_exercises(request): # Modification d'un exercice non autocorrigé dans un parcours
-    
-    try :
-        teacher = request.user.teacher
-    except :
-        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
-        return redirect('index')
-    customexercises = Customexercise.objects.filter(teacher=teacher)
-
-    context = { 'customexercises' : customexercises } 
-
-    return render(request, 'qcm/list_my_custom_exercises.html', context)
-
-
-
 
 
 
@@ -7833,8 +9160,6 @@ def ajax_add_criterion(request):
     return JsonResponse(data)  
 
 
-
-
 def ajax_auto_evaluation(request):
     data      = {}
     customexercise_id     = request.POST.get("customexercise_id")
@@ -7842,11 +9167,7 @@ def ajax_auto_evaluation(request):
     student_id = request.POST.get("student_id")
     criterion_id    = request.POST.get("criterion_id")
     position     = request.POST.get("position")
-
-    print(customexercise_id , parcours_id , student_id , criterion_id , position)
-
     auto , created = Autoposition.objects.get_or_create( customexercise_id=customexercise_id, parcours_id=parcours_id,  student_id=student_id ,  criterion_id=criterion_id , defaults={  'position' : position }  )
-
     return JsonResponse(data)  
 
 
@@ -7879,54 +9200,6 @@ def parcours_delete_custom_exercise(request,idcc,id ): # Suppression d'un exerci
         return redirect('show_parcours', folder_id , id )
  
 
-@login_required(login_url= 'index') 
-def write_exercise(request,id): # Coté élève
- 
-    try :
-        student = request.user.student
-    except :
-        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
-        return redirect('index')
-
-    relationship = Relationship.objects.get(pk = id)
-
-    tracker_execute_exercise(True ,  student.user , relationship.parcours.id  , relationship.exercise.id , 0)
-
-    today = time_zone_user(student.user)
-    if Writtenanswerbystudent.objects.filter(student = student, relationship = relationship ).exists() : 
-        w_a = Writtenanswerbystudent.objects.get(student = student, relationship = relationship )
-        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None, instance = w_a )  
-    else :
-        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None ) 
-        w_a = False
-
-
-
-    if request.method == "POST":
-        if wForm.is_valid():
-            w_f = wForm.save(commit=False)
-            w_f.relationship = relationship
-            w_f.student = student
-            w_f.answer = escape_chevron(wForm.cleaned_data['answer'])
-            w_f.is_corrected = 0  # si l'élève soumets une production alors elle n'est pas corrigée 
-            w_f.save()
-
-            ### Envoi de mail à l'enseignant
-            msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
-            if relationship.parcours.teacher.notification :
-                sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [relationship.parcours.teacher.user.email] )
-                pass
-
-            return redirect('show_parcours_student' , relationship.parcours.id )
-
-    context = {'relationship': relationship, 'communications' : [] , 'w_a' : w_a , 'parcours' : relationship.parcours ,  'form' : wForm, 'today' : today  }
-
-    if relationship.exercise.supportfile.is_python :
-        url = "basthon/index.html" 
-    else :
-        url = "qcm/form_writing.html" 
-
-    return render(request, url , context)
 
 
 
@@ -8054,10 +9327,6 @@ def ajax_save_canvas(request):
     return JsonResponse(data)
  
 
-
-
-
-
 def ajax_delete_custom_answer_image(request):
     data = {}
     custom = request.POST.get("custom")
@@ -8066,7 +9335,6 @@ def ajax_delete_custom_answer_image(request):
     return JsonResponse(data)  
 
 
- 
 
 @login_required(login_url= 'index') 
 def asking_parcours_sacado(request,pk):
@@ -8119,8 +9387,10 @@ def show_write_exercise(request,id): # vue pour le prof de l'exercice non autoco
 
     if relationship.exercise.supportfile.is_python :
         url = "basthon/index.html" 
+    elif relationship.exercise.supportfile.qtype == 20  :
+        url = "qcm/form_writing.html"
     else :
-        url = "qcm/form_writing.html" 
+        return show_all_type_exercise(request,relationship.exercise.supportfile.id) 
 
     return render(request, url , context)
 
@@ -8139,7 +9409,6 @@ def show_custom_exercise(request,id,idp): # vue pour le prof de l'exercice non a
         url = "qcm/form_writing_custom.html" 
 
     return render(request, url , context)
-
 
 
 def show_custom_sequence(request,idc): # vue pour le prof de l'exercice non autocorrigé par le prof
@@ -11356,8 +12625,10 @@ def delete_folder_and_contents(request,id,idg):
     if parcours.teacher == teacher or request.user.is_superuser :
         for p in folder.parcours.all()  :
             if p.teacher == teacher or request.user.is_superuser :
-                p.delete()
-        parcours.delete()
+                p.is_trash=1
+                p.save()
+        parcours.is_trash=1
+        parcours.save()
         messages.success(request, "Le dossier "+ parcours.title +" et les parcours associés sont supprimés.")
     
     else :
@@ -11399,23 +12670,12 @@ def actioner_pef(request):
                 messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
                 return redirect('index')
 
-            for r in parcours.parcours_relationship.all() :
-                r.students.clear()
-                r.skills.clear()
-                ls = r.relationship_exerciselocker.all()
-                for l in ls :
-                    l.delete()
-                r.delete()
-
-            for c in parcours.course.all() :
-                c.students.clear()
-                c.creators.clear()
-                c.delete()
 
             studentanswers = Studentanswer.objects.filter(parcours = parcours)
             for s in studentanswers :
                 s.delete()
-            parcours.delete()
+            parcours.is_trash=1
+            parcours.save()
  
 
         for idf in idfs :
@@ -11427,23 +12687,11 @@ def actioner_pef(request):
                     messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
                     return redirect('index')
 
-                for r in parcours.parcours_relationship.all() :
-                    r.students.clear()
-                    r.skills.clear()
-                    ls = r.relationship_exerciselocker.all()
-                    for l in ls :
-                        l.delete()
-                    r.delete()
-
-                for c in parcours.course.all() :
-                    c.students.clear()
-                    c.creators.clear()
-                    c.delete()
-
                 studentanswers = Studentanswer.objects.filter(parcours = parcours)
                 for s in studentanswers :
                     s.delete()
-                parcours.delete()
+                parcours.is_trash=1
+                parcours.save()
             folder.delete()
 
  

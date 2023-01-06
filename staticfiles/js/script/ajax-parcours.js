@@ -1421,10 +1421,26 @@ define(['jquery','bootstrap'], function ($) {
         //     )
         // });
 
-
-
         // Permet d'avoir les vignettes de cours plus jolies
         $(".display_annoncement_for_courses").find("*").css("font-size","12px");
         $('.display_annoncement_for_courses').find("table").css("width","0px");
+
+
+        var nb_show_consigne_div = 0 ;
+        $(document).on('click', '#show_consigne_div' , function (event) {
+            $("#consigne_div").toggle(500);
+            if ( nb_show_consigne_div%2 == 0 ) {
+                $("#show_consigne_div").css("border-radius",'5px 5px 5px 0px')   ;
+            }
+            else {
+                $("#show_consigne_div").css("border-radius",'5px')   ;
+            }
+            nb_show_consigne_div ++; 
+
+        }); 
+
+
+
+
     });
 });

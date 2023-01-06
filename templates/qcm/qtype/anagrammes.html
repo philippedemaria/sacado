@@ -1,0 +1,327 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <div class="form_card" style="margin-top:20px;">
+            <label>Titre </label>
+            {{ form.title|add_class:"form-control"   }}
+            {{ form.title.errors }}
+            <div class="form-group">
+            <label>Enoncé :</label>
+            {{ form.instruction |add_class:"form-control"|attr:"rows:3" }}
+            {{ form.instruction.errors }}
+            </div>            
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <div class="row" style="margin-top:20px">    
+            <div class="col-sm-12 col-md-12">
+                {% include 'modes.html' %}
+            </div>
+        </div>
+
+ 
+        <div class="row"> 
+            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+                {% include 'qcm/qtype/0_config_middle.html' %}
+            </div>
+            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+                <div class="form_card">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8">
+                                <label>Publié ?</label>  
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                                {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_publish.errors }}
+                        </div>
+                    </div>
+                    <div class="row" id="publication_div">
+                        <div class="col-sm-12 col-md-8">
+                            <label><br/>Date de publication                            
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                        <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                    </div>
+                                </span>
+                            </label>  
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                {{ form.start|add_class:"form-control datetimepicker"}}
+                                {{ form.start.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8">
+                            <div class="form-group">
+                                <label>Mutualisé ?</label>    
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                {{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_share.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8">                    
+                                <label>Notation ?</label>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                                {{ form.is_mark |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_mark.errors }}
+                        </div>
+                    </div>
+                    <input type="hidden" name="is_correct" id ="id_is_correct" />
+                    <div class="row" id="on_mark">
+                        <div class="col-sm-12 col-md-8">
+                            <div class="form-group">
+                            <label>Sur ?</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                            {{ form.mark |add_class:"form-control" }}
+                            {{ form.mark.errors }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
+</div>
+
+ 
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="form_card" style="margin-top:20px;">
+            <div class="row" style="margin-bottom:20px;">
+                <div class="col-sm-5 col-md-4"> 
+                    <label>Les anagrammes <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                                <div class="helper_tip_text" >
+                                                                    Les anagrammes peuvent<br/>
+                                                                     être contextualisés<br/>
+                                                                     dans une phrase, un texte. 
+                                                                    </div>
+                                            </span>
+                    </label>
+                    <a href="javascript:void();" id="show_pseudorandomize_zone" class="btn btn-sacado">
+                                    <label>Exercice pseudo-aléatoire ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                                <div class="helper_tip_text" >
+                                                                    Nombre de mots <br/>
+                                                                    proposés parmi les mots<br/> 
+                                                                    enregistrés. Ex : Si vous<br/> 
+                                                                    enregistrez 20 mots<br/>
+                                                                    possibles et que vous<br/>
+                                                                    inscrivez 5, 5 mots<br/> 
+                                                                    seront aléatoirement choisis<br/>
+                                                                    parmi les 20.
+                                                                    </div>
+                                                            </span>
+                        </label>
+                    </a>
+                </div>
+                <div class="col-sm-7 col-md-8">
+                    <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
+                        {{ form.pseudoalea_nb }} <label>mots/textes à proposer parmi le(s) <span id="nb_pseudo_aleatoire">1</span> enregistré(s) ci-dessous. Si 0, les mots/textes sont tous proposés.</label>
+                    </span>                                
+                </div>
+            </div>  
+            <script id="rowToClone" type="text/template">
+                <div id="duplicate">
+                    <div class="col-sm-6"> 
+                        <div class="col-sm-11 col-md-11"> <br/>
+                        {{ form_ans.empty_form.answer|attr:"required"|add_class:"form-control this_text"  }}
+                        </div
+                        <div class="col-sm-1 col-md-1"><br/><br/>
+                            <span class="btn btn-danger remove_more"><i class="bi bi-trash"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </script> 
+             
+
+                {{ form_ans.management_form }}
+                <div id="formsetZone">
+                    <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
+                    <div class="row">
+                    {% for form in form_ans %} 
+                        {{ form.id }}
+                        <div class="col-sm-12 col-md-6">
+                                <label>Utiliser la mise en gras pour signaler les mots à remplacer par leur anagramme.</label><br/>
+                                {{ form.answer|attr:"required"|add_class:"form-control this_text"  }}
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-sm-12 col-md-12" >
+                        <a href="javascript:void();"  class="add_more btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un mot </a><br/><br/>
+                    </div>                            
+                </div>
+        </div>     
+    </div>       
+</div>
+
+ 
+
+
+{% if not form_template %}
+<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script> 
+
+<script>
+        CKEDITOR.replace('instruction', {
+                height: '100px',
+                width : '700px',
+                toolbar:    
+                    [  
+                        { name: 'clipboard',  items: [ 'Source', '-','Copy', 'Paste', 'PasteText' ] },
+                        { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                        { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline',  ] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']},
+                    ] ,
+            });
+        CKEDITOR.replace("customchoices-0-answer", {
+                height: '50px',
+                toolbar:    
+                    [  
+                        { name: 'clipboard',  items: [ 'Source', '-','Bold','-','Copy', 'Paste', 'PasteText' ] },
+                        { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                        { name: 'basicstyles',  items: [  'Italic', 'Underline',  ] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']},
+                    ] ,
+            });
+
+ 
+
+        //*************************************************************************************************************  
+        // Gestion des items
+        //************************************************************************************************************* 
+
+        $(document).on('click', '.add_more', function (event) {
+
+
+                var total_form = $('#id_customchoices-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ;
+
+                $("#nb_pseudo_aleatoire").html("").html(totalForms+1);
+
+                var thisClone = $('#rowToClone');
+                rowToClone = thisClone.html() ;
+
+                $('#formsetZone').append(rowToClone);
+                $('#duplicate').attr("id","duplicate"+totalForms) ;
+
+                $("#duplicate"+totalForms+" input").each(function(index){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+                $('#duplicate'+totalForms).find("input[type='checkbox']").bootstrapToggle();
+ 
+                $("#duplicate"+totalForms+" textarea").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+                CKEDITOR.replace("customchoices-"+totalForms+"-answer", {
+                    height: '50px',
+                    toolbar:    
+                        [  
+                            { name: 'clipboard',  items: [ 'Source', '-','Bold','-','Copy', 'Paste', 'PasteText' ] },
+                            { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                            { name: 'basicstyles',  items: [ 'Italic', 'Underline',  ] },
+                            { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar' ]},
+                        ] ,
+                });
+
+ 
+                total_form.val(totalForms+1);
+            });
+
+
+
+        $(document).on('click', '.remove_more', function () {
+            var total_form = $('#id_customchoices-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
+
+            $('#duplicate'+totalForms).remove();
+            total_form.val(totalForms);
+            $("#nb_pseudo_aleatoire").html("").html(totalForms);
+        });
+
+ 
+
+    $('.no_visu').hide();
+    $('[type=checkbox]').prop('checked', false);            
+    $('#selector_student').prop('checked', true);
+    $('.selected_student').prop('checked', true);
+    $('#id_is_publish').prop('checked', true);
+    $('#id_is_ggbfile').prop('checked', true); 
+    $('#on_mark').hide(); 
+    $("#publication_div").hide(); 
+    $('body').find("input[type='checkbox']").bootstrapToggle();
+    // Gère l'affichage de la div des notes.
+    if ($("#id_is_mark").is(":checked")) {$("#on_mark").show();} else { $("#on_mark").hide(); } 
+
+    clickDivAppear( "#show_latex_formula" , $("#latex_formula"));
+ 
+
+    function clickDivAppear(toggle, $item) {
+        $(document).on('click', toggle , function () {
+                    $(".no_display").hide();        
+                    $item.toggle(500);
+            });
+        }
+
+    $(document).on('click', "#support_audio_image" , function () {
+                    $(".no_display").hide();
+                    $("#drop_zone_image").toggle(500);
+                    $("#audio_div").toggle(500);            
+                });
+
+
+    makeDivDisappear( "#id_is_publish" , $("#publication_div"));
+    makeDivAppear( "#id_is_mark" , $("#on_mark"));
+    function makeDivAppear(toggle, $item) {
+        $(document).on('change', toggle , function () {
+                if ($(toggle).is(":checked")) {
+                    $item.show(500);
+                } else {
+                    $item.hide(500);
+                }
+            });
+        }
+    function makeDivDisappear(toggle, $item) {
+        $(document).on('change', toggle , function () {
+                if ($(toggle).is(":checked")) {
+                    $item.hide(500);
+                } else {
+                    $item.show(500);
+                }
+            });
+        }
+
+    $('.datetimepicker').datetimepicker({
+            language: "fr",
+            todayHighlight: true,
+            format: "yyyy-mm-dd hh:ii"
+         });
+
+</script>   
+
+{% endif %}
+
+                
+ 

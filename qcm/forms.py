@@ -41,7 +41,8 @@ class ParcoursForm(forms.ModelForm):
 		if teacher:
 
 			try : 
-				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level, subject = group.subject)
+				#shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level, subject = group.subject)
+				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level)
 			except :
 				shared_groups = teacher.teacher_group.all()
 			
@@ -220,7 +221,8 @@ class SupportfileForm(forms.ModelForm):
 		subjects = teacher.subjects.all()
 		knowledges = Knowledge.objects.filter(theme__subject__in= subjects)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
+		self.fields['skills']    =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject__in= subjects))
+		self.fields['level']     =  forms.ModelChoiceField(queryset= teacher.levels.exclude(pk= 13))
 
 class SupportfileKForm(forms.ModelForm):
 	class Meta:
@@ -234,7 +236,8 @@ class SupportfileKForm(forms.ModelForm):
 		subject = knowledge.theme.subject 
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
-		self.fields['skills']  =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject), required=False)
+		self.fields['skills']    =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject))
+ 
 
 class UpdateSupportfileForm(forms.ModelForm):
 
@@ -355,6 +358,7 @@ class CustomanswerimageForm (forms.ModelForm):
 		content = self.cleaned_data['image']
 		validation_file(content)
 
+
 class CustomexerciseForm (forms.ModelForm):
 	
 	class Meta:
@@ -400,9 +404,6 @@ class CustomexerciseNPForm (forms.ModelForm):
 		self.fields['students'] = forms.ModelMultipleChoiceField(queryset=students, widget=forms.CheckboxSelectMultiple,   required=False )
 		
 
-
-  
-
 class CustomexerciseOnlyForm (forms.ModelForm):
 
 	class Meta:
@@ -412,14 +413,17 @@ class CustomexerciseOnlyForm (forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		super(CustomexerciseOnlyForm, self).__init__(*args, **kwargs)
-		skills = Skill.objects.filter(subject__in = teacher.subjects.all())
-		knowledges = Knowledge.objects.filter(theme__subject__in = teacher.subjects.all(), level__in = teacher.levels.exclude(pk=13)) 
+		subjects   = teacher.subjects.all()
+		skills     = Skill.objects.filter(subject__in = subjects )
+		knowledges = Knowledge.objects.filter(theme__subject__in = subjects , level__in = teacher.levels.exclude(pk=13)) 
 		parcourses = teacher.teacher_parcours.order_by("subject","level")
-		self.fields['skills']     = forms.ModelMultipleChoiceField(queryset=skills,    required=False )
-		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False ) 
+
+		self.fields['subject']    = forms.ModelChoiceField(queryset=subjects,    required=True )
+		self.fields['levels']     = forms.ModelMultipleChoiceField(queryset=teacher.levels.exclude(pk=13), required=True )
+		self.fields['skills']     = forms.ModelMultipleChoiceField(queryset=skills,    required=True )
+		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True ) 
 		self.fields['parcourses'] = forms.ModelMultipleChoiceField(queryset=parcourses,  required=False ) 
 		
-
 
 
 class WAnswerAudioForm (forms.ModelForm):

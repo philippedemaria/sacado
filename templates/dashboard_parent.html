@@ -84,7 +84,7 @@
                 <tr>
                     <td> 
                         <a href="{% url 'show_this_exercise'  r.grouper.id   %}" >  
-                            <img src="{{ r.grouper.supportfile.imagefile.url }}" class="imagefile">
+                            {% include 'qcm/_imagefile_displayer_class.html' %}
                         </a>
                     </td>
                     <td style="width:75%"><a href="{% url 'show_this_exercise' r.grouper.id %}">{{ r.grouper }}</a></td>

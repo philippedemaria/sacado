@@ -1980,8 +1980,6 @@ def create_question(request,idq,qtype):
  
     form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
     formSetvar = inlineformset_factory( Question , Variableq , fields=('name','question', 'is_integer','is_notnull','minimum','maximum', 'words') , extra=0)
- 
-    form = QuestionForm(request.POST or None, request.FILES or None, quizz = quizz)
 
     ########################################################################################################################################
     ######## Attendus pour la Banque de questions
@@ -2076,7 +2074,7 @@ def create_question(request,idq,qtype):
 
         all_mentals = list()
         mentaltitles = Mentaltitle.objects.filter(subject = quizz.subject, is_display=1).order_by("ranking")
-        if quizz.levels.count() : levels = quizz.levels.all()
+        if quizz.levels.count()==1 : levels = quizz.levels.all()
         else : levels = quizz.teacher.levels.all()
         for level  in levels :
             level_dict = dict()
@@ -2089,7 +2087,9 @@ def create_question(request,idq,qtype):
                 dict_mentals["mentals"] = mentals
                 list_mentals.append(dict_mentals)
             level_dict["sub"] = list_mentals
+            print(level ,  level_dict )
         all_mentals.append(level_dict)
+ 
 
         context.update( {  'title_type_of_question' : "Questions aléatoires" , "all_mentals" : all_mentals  })
         template = 'tool/quizz_random.html'

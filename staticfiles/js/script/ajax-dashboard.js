@@ -130,7 +130,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
  
         $('.no_visu').hide();
         var i_display = 0
-        $('#more_options').on('click', function (event) {
+        $(document).on('click', '#more_options' , function (event) {
 
             $('.no_visu').toggle(500);
             if (i_display%2==0)

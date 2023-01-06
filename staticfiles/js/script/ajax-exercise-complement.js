@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-exercise.js OK");
+        console.log("chargement JS ajax-exercise-complement.js OK");
 
 
  
@@ -12,12 +12,8 @@ define(['jquery', 'bootstrap'], function ($) {
         $('#id_is_publish').prop('checked', true);
 
         $('#id_is_ggbfile').prop('checked', true); 
-
-
         $('#on_mark').hide(); 
 
-
- 
         $("#click_button").on('click', function (){ 
 
             if (!$('#id_is_ggbfile').is(":checked")){

@@ -34,7 +34,8 @@
                       <tr>
                         <th>Enseignement</th>
                         <th>Nom</th>                  
-                        <th>Niveau</th> 
+                        <th>Niveau</th>
+                        <th>Image</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -52,6 +53,11 @@
                                  {{ l.name  }}{% if not forloop.last %}, {% endif %}
                                {% endfor %} 
                           </td> 
+                          <td>
+                              {% if theme.image %}  
+                                <img src="{{ theme.image.url }}" height="50px"/>
+                              {% endif %}
+                          </td>
                         </tr>
                         {% endfor %}
                   </tbody>

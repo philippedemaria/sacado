@@ -2,8 +2,7 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
-
-
+ 
 
 {% if rc.exercise %}
 <div class="card_freeze" style="{% if not rc.is_publish %}background-color: #F5F5F5{% else %}background:#FFF{% endif %}" id="card{{rc.id}}">
@@ -16,7 +15,6 @@
                        
           <div class="card-score">
               {%  get_percent_student_done_parcours_exercice_group   rc   parcours group  as    data %}
- 
  
               <div class="progress">
                 <div class="progress-bar bg-success" role="progressbar" style="width: {{ data.percent }}%;{% if not rc.is_publish %}color: #F5F5F5{% endif %};background-color: {{rc.parcours.color }};" aria-valuenow="{{ data.percent }}" aria-valuemin="0" aria-valuemax="100">{{ data.percent }}%</div>
@@ -31,28 +29,16 @@
             <img src="{% static 'img/no_calculator.png' %}" class="pull-right" width="35px" loading="lazy"  title="Autoriser la calculatrice"  />
           {% endif  %}
           </a>
-
     </div>   
     <!-- Fin Entete de la card  -->
 
     <!-- Partie sur laquelle est posée l'image  -->                  
     <div class="card-image">
-          {% if rc.is_lock  %}
-                  <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                      <i class="fa fa-lock"></i> <span class="hidden_lock"></span>
-                  </div>
-          {% endif %}
-          
-
-
-        {% if not rc.exercise.supportfile.is_ggbfile %}
-          <div style="position: absolute; left : 30px; top:41px;" id="annoncement{{rc.id}}">   
-              <span class="helper_tip btn btn-default">Consigne
-                <div class="helper_tip_text_right"> {% if rc.instruction %}    {{rc.instruction|safe|truncatechars_html:45}}    {% else %}      {{ rc.exercise.supportfile.annoncement|safe }}  {% endif %}</div> 
-              </span>
-          </div>
+        {% if rc.is_lock  %}
+            <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                <i class="fa fa-lock"></i> <span class="hidden_lock"></span>
+            </div>
         {% endif %}
- 
         {% if group %}
           {% get_students_from_group_and_rc rc group as data_rc %}
           {% get_only_students  parcours group as  only_real_student %}
@@ -72,18 +58,18 @@
         {% endif %}
 
           <!-- Publication  -->
-          <div href="#card{{rc.id}}" class="action_content {% if  rc.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{rc.id}}"  data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" data-custom="0" title="Publier l'exercice" >   
+          <div href="#card{{rc.id}}" class="action_content {% if  rc.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute;z-index:10; right : 0px; top:90px;" id="publisher{{rc.id}}"  data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" data-custom="0" title="Publier l'exercice" >   
               {% if  rc.is_publish %}Publié{% elif rc.start %}{{ rc.start|date:"d N Y" }}{% else %}Dépublié{% endif %}
           </div>
 
           <!-- Tache  -->
-          <div href="#card{{rc.id}}" class="btn btn-{% if  rc.date_limit %}success{% else %}default{% endif %} select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{rc.id}}" data-relationship_id="{{rc.id}}" data-statut="{{rc.is_task }}"  title="Proposer une tâche pour le" data-custom="0"  >   
+          <div href="#card{{rc.id}}" class="btn btn-{% if  rc.date_limit %}success{% else %}default{% endif %} select_task"  style="position: absolute; z-index:10;right : 0px; top:120px;" id="pub_task{{rc.id}}" data-relationship_id="{{rc.id}}" data-statut="{{rc.is_task }}"  title="Proposer une tâche pour le" data-custom="0"  >   
               <span id="loading{{ rc.id }}"></span>{% if  rc.date_limit %}{{rc.date_limit|date:"d N Y" }}{% else %}Tâche ?{% endif %}
           </div>
 
           <!-- Constraint  -->
           <div class="btn btn-{% if  rc.relationship_constraint.all|length > 0 %}danger{% else %}default{% endif %} select_constraint"  
-                style="position: absolute; right : 0px; top:150px;" 
+                style="position: absolute; z-index:10;right : 0px; top:150px;" 
                 id="constraint{{rc.id}}"  title="Ajouter une contrainte pour afficher l'exercice" 
                 data-relationship_id="{{rc.id}}">   
               <i class="fa fa-minus-circle"></i>
@@ -107,7 +93,6 @@
                 <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
                 <input type="type" name="dateur" data-relationship_id="{{rc.id}}" data-type ="1" data-custom ="0" value='{{ rc.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
           </div>
-
           <!-- Pop up de la date de publication d'un exercice  -->
           <div id="detail_pub{{rc.id}}" class="card-dateur no_visu_on_load"  >
               <div class="row">
@@ -198,7 +183,6 @@
                 {% endif %}   
                </div>
           </div>
-
            <!--  
           =============================================================================================================
           =============================================================================================================
@@ -219,28 +203,24 @@
                         <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
                         <input type="number" name="duration" min="1" max="120" step="1" data-relationship_id="{{rc.id}}" id="duration{{rc.id}}"  data-type ="2" data-custom=0  value="{{ rc.duration }}" class="details_relation" /> min.
                     </div>
-                    {% if rc.exercise.supportfile.is_ggbfile %}
-                    <div class="col-sm-6 col-md-7">
-                        <label  style="font-size: 12px;"><i class="fa fa-save"></i> Situations </label><br>
-                        <label  style="font-size: 10px;">
-                        <input type="number" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" min="1" max="10" step="1"  data-type ="2" data-custom=0  value="{{ rc.situation  }}" class="details_relation" /> Nbre mini requis</label><br>
-
-                        {% if parcours.is_evaluation %}  
-                        <label  style="font-size: 12px;">Tentatives</label><br>
-                        <input type="number" name="maxexo" min="1" max="10" step="1" data-relationship_id="{{rc.id}}" id="maxexo{{rc.id}}"   data-type ="2" data-custom=0  value="{{ rc.maxexo  }}" class="maxexo" />
- 
-  
-                        <span class="helper_tip"> <label  style="font-size: 10px;"> Nbre maxi </label><i class="fa fa-question-circle"></i>
-                            <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. <br/> Laisser -1 pour ne pas définir le nombre d'essai.</div>
-                        </span>
-                        {% endif %}   
-
-                    </div>
-                    {% else %}
-                    <div class="col-sm-6 col-md-6">
-                        <label  style="font-size: 12px;">Nouvelle consigne </label><br>
-                        <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" data-custom=0    data-type ="2"  class="details_relation form-control">{% if rc.instruction %}{{ rc.instruction|safe|truncatechars_html:45  }}{% endif %}</textarea>
-                    </div>
+                    {% if rc.exercise.supportfile.qtype == 19 or  rc.exercise.supportfile.qtype == 20 %}
+                        <div class="col-sm-6 col-md-6">
+                            <label  style="font-size: 12px;">Nouvelle consigne </label><br>
+                            <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" data-custom=0    data-type ="2"  class="details_relation form-control">{% if rc.instruction %}{{ rc.instruction|safe|truncatechars_html:45  }}{% endif %}</textarea>
+                        </div>
+                    {% else %}                    
+                        <div class="col-sm-6 col-md-7">
+                            <label  style="font-size: 12px;"><i class="fa fa-save"></i> Situations </label><br>
+                            <label  style="font-size: 10px;">
+                            <input type="number" name="situation" data-relationship_id="{{rc.id}}" id="situation{{rc.id}}" min="1" max="10" step="1"  data-type ="2" data-custom=0  value="{{ rc.situation  }}" class="details_relation" /> Nbre mini requis</label><br>
+                            {% if parcours.is_evaluation %}  
+                            <label  style="font-size: 12px;">Tentatives</label><br>
+                            <input type="number" name="maxexo" min="1" max="10" step="1" data-relationship_id="{{rc.id}}" id="maxexo{{rc.id}}"   data-type ="2" data-custom=0  value="{{ rc.maxexo  }}" class="maxexo" />
+                            <span class="helper_tip"> <label  style="font-size: 10px;"> Nbre maxi </label><i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text red" >Ce nombre détermine le nombre maximum de fois que chaque exercice peut être fait. <br/> Laisser -1 pour ne pas définir le nombre d'essai.</div>
+                            </span>
+                            {% endif %}   
+                        </div>
                     {% endif %}
                 </div> 
                 <div class="row">
@@ -262,10 +242,13 @@
                          Redirections & Liens
                     </div>
                </div> 
-              <hr style="padding:0px; margin:10px 0px"/><br>
+              <hr style="padding:0px; margin:10px 0px"/>
+                {% if rc.exercise.supportfile.author == request.user.teacher %}
+                <a href="{% url 'update_supportfile' rc.exercise.supportfile.id %}" target="_blank" style="font-size:14px"><i class='bi bi-gear'></i> Configurer l'exercice</a>
+                {% endif %}
+                <br><br>
                 {% if rc.exercise.supportfile.is_ggbfile %}
                 <a href="{% url 'show_this_exercise' rc.exercise.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice <i class="fa fa-barcode"></i> {{ rc.exercise.supportfile.code }}
-
                 </a>
                 {% else %}
                 <a href="{% url 'show_write_exercise' rc.id %}" target="_blank" style="font-size:14px"><i class="fa fa-share-square fa-fw"></i> Vers l'exercice <i class="fa fa-barcode"></i> {{ rc.exercise.supportfile.code }}</a>
@@ -331,7 +314,6 @@
                         <span class="select_coefficient_close btn btn-xs btn-primary" data-relationship_id="{{rc.id}}">Valider</span>
                     </div>
                 </div>
-
           </div>
            <!--  
           =============================================================================================================
@@ -339,10 +321,7 @@
               Pop up des notes
           =============================================================================================================
           =============================================================================================================-->
-
-
-
-          {% if not rc.exercise.supportfile.is_ggbfile %}
+          {% if rc.exercise.supportfile.qtype == 19 or rc.exercise.supportfile.qtype == 20  %}
           <div id="select_note{{ rc.id }}"  class="card-dateur no_visu_on_load"  >  
               <div class="row">
                     <div class="col-sm-12 col-md-12 title">
@@ -386,9 +365,24 @@
           ##############################################################################################################-->
           <a href="#card{{rc.id}}" class="detail_parcours"  data-exercise_id="{{ rc.exercise.id }}" 
               title="{% if rc.exercise.supportfile.title %}{{ rc.exercise.supportfile.title|cleanhtml|safe }}{% else %}{{ rc.exercise.supportfile.annoncement|cleanhtml|safe }}{% endif %}"
-             data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" data-parcours_id="{{ parcours.id }}" data-custom=0 > 
+              data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+              data-parcours_id="{{ parcours.id }}" data-custom=0 > 
+              <div style="position:relative; height:195px;overflow-y:hidden;width:100%;padding-top:5px; ">
+                {% if rc.exercise.supportfile.imagefile %}
+                <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours"  style="position:absolute;{% if not rc.is_publish %}opacity:0.8{% endif %}" >
+                {% endif %} 
 
-               <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours_order" loading="lazy" >   
+                <div style="width:100%; border: thick double  {{parcours.subject.color}};padding:10px;font-size: 14px; height:180px">
+                  <label class="qtype_logo" 
+                         style="font-size:{% if rc.exercise.supportfile.qtype == 1 %}0.35{% elif rc.exercise.supportfile.qtype == 3 or rc.exercise.supportfile.qtype  == 4 %}0.3{% else %}0.4{% endif %}em">{{ rc.qtype_logo|safe }}
+                  </label> 
+                  {% if rc.instruction %}    
+                    {{rc.instruction|safe|truncatechars_html:45}}    
+                  {% else %}      
+                    {{ rc.exercise.supportfile.annoncement|safe }}  
+                  {% endif %}
+                </div>
+              </div>
           </a> 
 
            <!-- ######################################################################################################## 
@@ -397,7 +391,6 @@
               Barre d'outil de la card
           ##############################################################################################################
           ##############################################################################################################-->
-
         <div class="card-text" style="background-color:{{ parcours.color }}; text-align:center;color:{{ parcours.color|contrast_color }}">
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
@@ -407,7 +400,9 @@
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
                   {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
+                  {% if rc.exercise.supportfile.imagefile %}
                   <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" loading="lazy" />
+                  {% endif %}
                 </span>
             </a>
             {% endif %}
@@ -468,24 +463,12 @@
                 {% endif %}
             
 
-            {% if rc.exercise.supportfile.is_ggbfile %}
-            <!-- Appel des situations et durée -->
-            <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
-                <!-- <i class="fa fa-clock-o"></i> --><span style="font-size:9px">{{ rc.duration }} min.</span> 
-            </span>
-            <!-- Appel des situations -->
-            <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier le nombre de situations"><!-- l'id permet de modifier après ajax le nombre de situation -->
-                <font style="font-size:9px">{{ rc.situation}}  </font><i class="fa fa-save"></i> 
-            </span>
-            {% else %}
+            {% if rc.exercise.supportfile.qtype == 19 or rc.exercise.supportfile.qtype == 20 %}
             <!-- Appel des durées -->
             <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
                  <font style="font-size:9px">{{ rc.duration }} min.</font>
             </span>
-            <!-- Appel des situations -->
-            <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier la consigne"><!-- l'id permet de modifier après ajax le nombre de situation -->
-                <i class="fa fa-pencil-square" style="font-size:14px"></i> 
-            </span>
+ 
             <!-- Appel des notes -->
             <span class="select_note"  data-relationship_id="{{ rc.id }}" id="marker{{rc.id}}"  title="Noter cet exercice"><!-- l'id permet de modifier après ajax le temps -->
                 <span style="font-size:8px; font-weight: 800" class="no_new_mark" id="no_new_mark{{ rc.id }}">
@@ -498,12 +481,23 @@
             <!-- Appel des copies à corriger  -->
             <span class="select_details horizontalmargin5" style="width:40px">
                 {% if rc.is_pending_correction %}              
-                <a href="{% url 'correction_exercise'  rc.id 0 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-cc text-warning"></i></a>  
+                <a href="{% url 'correction_exercise'  rc.id 0 0 %}" title="Copies à corriger" style="font-weight:bold; font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-pencil-square text-warning" style="font-size:14px"></i> </a>  
                 {% else %}
-                <a href="{% url 'correction_exercise'  rc.id 0 0 %}" title="Voir les copies corrigées" style="font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-copyright"></i></a> 
+                <a href="{% url 'correction_exercise'  rc.id 0 0 %}" title="Voir les copies corrigées" style="font-size:16px;color:{{ parcours.color|contrast_color }}" ><i class="fa fa-pencil-square"></i></a> 
                 {% endif %}
             </span>
-            {% endif %}
+           {% else %}
+            <!-- Appel des situations et durée -->
+            <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="clock{{rc.id}}"  title="Modifier le temps"><!-- l'id permet de modifier après ajax le temps -->
+                <!-- <i class="fa fa-clock-o"></i> --><span style="font-size:9px">{{ rc.duration }} min.</span> 
+            </span>
+            <!-- Appel des situations -->
+            <span class="select_details horizontalmargin5"  data-relationship_id="{{ rc.id }}" id="save{{rc.id}}" title="Modifier le nombre de situations"><!-- l'id permet de modifier après ajax le nombre de situation -->
+                <font style="font-size:9px">{{ rc.situation}}  </font><i class="fa fa-save"></i> 
+            </span>
+            {% endif %} 
+
+
             <!-- Appel de partage  -->
             <span  class="sharered horizontalmargin5" data-relationship_id="{{ rc.id }}"  title="Accéder à cet exercice" style="cursor:pointer">
                <i class="fa fa-share-square"></i>
@@ -520,20 +514,20 @@
 
                 <i class="fa fa-refresh"></i> 
             </a>
-          {% if group %}
-            {% get_students_from_group_and_rc rc group as data_rc %}
-            {% get_only_students  parcours group as  only_real_student %}
-            <a href = "#" data-toggle = 'modal' 
-                data-target = '#individualisation_exercice'  
-                class = "individualiser horizontalmargin5  {% if  data_rc.nb != only_real_student.count  %} checkbox_no_display  {% endif %}"  
-                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
-                data-relationship_id = "{{ rc.id }}"
-                data-group_id = "{{ group.id }}"   
-                data-custom = 0  title = "Individualiser cet exercice" 
-                style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
+            {% if group %}
+                {% get_students_from_group_and_rc rc group as data_rc %}
+                {% get_only_students  parcours group as  only_real_student %}
+                <a href = "#" data-toggle = 'modal' 
+                    data-target = '#individualisation_exercice'  
+                    class = "individualiser horizontalmargin5  {% if  data_rc.nb != only_real_student.count  %} checkbox_no_display  {% endif %}"  
+                    data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                    data-relationship_id = "{{ rc.id }}"
+                    data-group_id = "{{ group.id }}"   
+                    data-custom = 0  title = "Individualiser cet exercice" 
+                    style = "font-size:14px;color:{{ parcours.color|contrast_color }}">
 
-                <i class="fa fa-users"></i> 
-            </a>
+                    <i class="fa fa-users"></i> 
+                </a>
             {% endif %}
 
 
@@ -622,12 +616,12 @@
 
           <!-- Pour ces deux actions, on ne modifie pas relationship_id en customexercise_id pour utiliser la même fonction Jquery dans dashboard.js  -->
           <!-- Publication  -->
-          <div href="#customcard{{rc.id}}" class="action_content {% if  rc.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="position: absolute; right : 0px; top:90px;" id="publisher{{rc.id}}"  data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" data-custom="1" title="Publier l'exercice" >   
+          <div href="#customcard{{rc.id}}" class="action_content {% if  rc.is_publish %}btn btn-success{% else %}btn btn-danger{% endif %}"  style="z-index:10; position: absolute; right : 0px; top:90px;" id="publisher{{rc.id}}"  data-relationship_id="{{rc.id}}" data-statut="{{rc.is_publish }}" data-custom="1" title="Publier l'exercice" >   
               {% if  rc.is_publish %}Publié{% elif rc.start %}{{ rc.start|date:"d N Y" }}{% else %}Dépublié{% endif %}
           </div>
 
           <!-- Tache  -->
-          <div href="#customcard{{rc.id}}" class="btn btn-{% if  rc.date_limit %}success{% else %}default{% endif %} custom_select_task"  style="position: absolute; right : 0px; top:120px;" id="pub_task{{rc.id}}" data-relationship_id="{{rc.id}}" data-statut="{{rc.is_task }}" data-custom="1"  title="Proposer une tâche pour le" >   
+          <div href="#customcard{{rc.id}}" class="btn btn-{% if  rc.date_limit %}success{% else %}default{% endif %} custom_select_task"  style="z-index:10; position: absolute; right : 0px; top:120px;" id="pub_task{{rc.id}}" data-relationship_id="{{rc.id}}" data-statut="{{rc.is_task }}" data-custom="1"  title="Proposer une tâche pour le" >   
               <span id="loading{{ rc.id }}"></span>{% if  rc.date_limit %}{{rc.date_limit|date:"d N Y" }}{% else %}Tâche ?{% endif %}
           </div>
  

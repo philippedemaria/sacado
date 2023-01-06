@@ -33,6 +33,8 @@ def level_name(level):
 def directory_path(instance, filename):
     return "subject_images/{}".format(filename)
 
+def image_directory_path(instance, filename):
+    return "theme_images/{}".format(filename)
 
 
 class Subject(models.Model):
@@ -66,9 +68,10 @@ class Subject(models.Model):
 
 
 class Theme(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Nom")
-    slug = models.CharField(max_length=255, default ="" , editable=False)
-    subject  = models.ForeignKey(Subject, related_name="theme", default="",  null = True , on_delete=models.PROTECT, verbose_name="Enseignement")
+    name    = models.CharField(max_length=255, verbose_name="Nom")
+    slug    = models.CharField(max_length=255, default ="" , editable=False)
+    subject = models.ForeignKey(Subject, related_name="theme", default="",  null = True , on_delete=models.PROTECT, verbose_name="Enseignement")
+    image   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image", default="") 
 
     def __str__(self):
         return "{} : {}".format(self.subject,self.name)

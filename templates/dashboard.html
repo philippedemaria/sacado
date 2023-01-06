@@ -42,14 +42,6 @@
     <link rel="stylesheet" href="{% static 'css/all_styles.css' %}">
 
  
-
-    <!-- fichier personel CSS 
-    <link rel="stylesheet" href="{% static 'css/Admin_violet.css' %}"> 
-    <link rel="stylesheet" href="{% static 'css/navbar_violet.css' %}">
-      fichier personel CSS -->
-
-
-
     <link rel="stylesheet" href="{% static 'css/slide_menu.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
           integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
@@ -202,7 +194,6 @@
     </div>
 <div class="content-wrapper">
 
-        
     {%  block body %}
         <div class="content_list" id="search_result">
         {% if request.user.is_authenticated %}
@@ -242,7 +233,8 @@
             {% endif %}
         {% endif %}
         </div>
-    {% endblock %}
+    {% endblock %} 
+
 </div>
 
 
@@ -695,11 +687,10 @@
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
-            <a href="{% url 'my_custom_exercises' %}"><i class="bi bi-explicit-fill"></i> Exercices personnels </a> 
+            <a href="{% url 'my_own_exercises' %}"><i class="bi bi-explicit-fill"></i> Mes exercices </a> 
             
             <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
-            <a href="{% url 'exercise_custom_show_shared' %}" class="inside_volet pull-right" title="Récupérer une exercice mutualisé"><i class="bi bi-cloud text-danger"></i></a>
-            <a href="{% url 'create_custom_exercise'  %}" class="inside_volet pull-right" title="Créer une nouvel exercice perso"><i class="bi bi-plus-circle"></i></a>
+            <a href="{% url 'supportfile_creator' 0  %}" class="inside_volet pull-right" title="Créer une nouvel exercice perso"><i class="bi bi-plus-circle"></i></a>
 
 
         </div>
@@ -1084,8 +1075,14 @@
 
 <div class="no_visu_on_load" id="helper_custom_exercises_text">
     <div class="alert">
-        <p>Les exercices personnalisés sont des exercices que vous crééz vous même.</p>
-        <p>Ces exercices se corrigent via une interface numérique. Ils sont de différents types : Python, manuscript, tapuscrit avec un rendu en ligne ou directement en classe</p> 
+        <p>Sacado vous propose de créer vos propres exercices. Il existe actuellement <b>{{ qtypes.count }}</b> types d'exercices : 
+            {% for q in qtypes %}<b>{{  q.title }}</b>{% if not forloop.last %}, {% endif %}{% endfor %}.
+        </p>
+        <p>Ces exercices peuvent être à variables aléatoires ou pseudo aléatoires.</p>
+        <p><b>Les variables numériques aléatoires</b>. Il faut déclarer ces variables pour les utliser dans les énoncés et réponses.  Attention, les réponses doivent être écrites sous format littéral et en Latex. Ces types d'exerices sont plutot utilisés en Sciences.</p>
+        <p><b>Les exercices pseudo aléatoires</b>. Il faut créer plusieurs items dans l'exercice et en spécifier un nombre voulu parmi ces créés. Sacado vous renvoie aléatoirement le nombre d'items renseignés, dans un ordre aléatoire.</p>
+
+
     </div>
 </div>
 

@@ -59,7 +59,15 @@
                   </div>
               </div>
 
-
+              <div class="row">
+                  <div class="col-sm-12 col-md-8">
+                      <div class="form-group">
+                          <label>{{ form.image.label_tag }}</label>
+                          {{ form.image |add_class:"btn btn-default" }}
+                          {{ form.image.errors }}
+                      </div>
+                  </div>
+              </div>
 
 
 

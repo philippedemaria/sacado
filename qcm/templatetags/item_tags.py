@@ -82,15 +82,43 @@ def filltheblanks_safe(arg):
             if  int(len(tab[i]))  < 4 : ln = "30"
             elif  int(len(tab[i]))  < 10 : ln = "100"
             else : ln = str(int(len(tab[i]))*10)
-            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value='"+tab[i]+"'  /> "
+            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value='"+tab[i]+"'   /> "
         else :
             st = tab[i] 
         string += st
-
     return string
 
 
 
+
+@register.filter
+def insert_input(arg):
+    '''HTML entity filltheblanks_safe'''
+    arg = arg.replace('<strong>','####')
+    arg = arg.replace('</strong>','####')
+    tab = arg.split('####')
+
+    string = ""
+    for i in range(len(tab)) :
+        
+        if i%2==1:
+            if  int(len(tab[i]))  < 4 : ln = "30"
+            elif  int(len(tab[i]))  < 10 : ln = "100"
+            else : ln = str(int(len(tab[i]))*10)
+            st = "<input type='hidden' name='answers' class='loop"+str(i)+"' /><div class='input_droppable' data-loop='loop"+str(i)+"'></div> "
+        else :
+            st = tab[i] 
+        string += st
+    return string
+
+
+@register.filter
+def shuffle(arg):
+    my_list = list(arg)
+    random.shuffle(my_list)
+    return my_list   
+ 
+ 
 
 @register.filter
 def decode(arg):
@@ -545,6 +573,11 @@ def get_relationship(obj,parcours):
 @register.simple_tag  
 def get_used_in_parcours(obj,teacher): 
     return obj.used_in_parcours(teacher) 
+
+@register.simple_tag  
+def get_parcourses_from_level(obj,teacher): 
+    return obj.parcourses_from_level(teacher) 
+
 
  
 @register.simple_tag  

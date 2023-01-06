@@ -2,7 +2,7 @@
 
  
 
-function control_script() {
+function control_script() {  
     
     document.getElementsByName('answer')[0].value = editor.getValue();
     var script = document.getElementsByName('answer')[0].value;

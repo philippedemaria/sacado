@@ -167,7 +167,6 @@ urlpatterns = [
 
 
     path('associate_parcours/<int:id>/', associate_parcours, name='associate_parcours'),  # id est l'id du groupe auquel le parcours est associé
- 
     path('parcours_aggregate',  aggregate_parcours, name='aggregate_parcours'), 
     path('ajax_parcoursinfo/', ajax_parcoursinfo, name='ajax_parcoursinfo'),    
     path('exercises', list_exercises, name='exercises'),
@@ -183,25 +182,53 @@ urlpatterns = [
     path('admin_associations_ebep/<int:id>', admin_list_associations_ebep, name='admin_associations_ebep'),
     path('gestion_supportfiles', gestion_supportfiles, name='gestion_supportfiles'),
 
-
-    
     path('ajax_update_association', ajax_update_association, name='ajax_update_association'),
-    path('create_supportfile', create_supportfile, name='create_supportfile'),
+
+    ######################################################################################################################################################
+    #################################       Supportfile        ###########################################################################################
+    ######################################################################################################################################################
+    path('create_supportfile/<int:qtype>/<int:ids>', create_supportfile, name='create_supportfile'),
     path('admin/<int:id>', create_supportfile_knowledge, name='create_supportfile_knowledge'),
     path('update_supportfile/<int:id>/', update_supportfile, name='update_supportfile'),
     path('delete_supportfile/<int:id>/', delete_supportfile, name='delete_supportfile'), 
-    path('show_this_supportfile/<int:id>/', show_this_supportfile, name='show_this_supportfile'),  #from dashboard 
 
+    path('supportfile_creator/<int:idq>', supportfile_creator, name='supportfile_creator'), 
+
+    path('show_this_supportfile/<int:id>/', show_this_supportfile, name='show_this_supportfile'),  #from dashboard 
     path('create_exercise/<int:supportfile_id>/', create_exercise, name='create_exercise'), 
 
+    path('my_own_exercises', my_own_exercises, name='my_own_exercises'), 
+    path('ajax_assign_exercise_to_parcours', ajax_assign_exercise_to_parcours, name='ajax_assign_exercise_to_parcours'), 
+
+    path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 
+    #################################   Autre type de supportfile        
+    path('ajax_knowledge_skills_subject_levels', ajax_knowledge_skills_subject_levels, name='ajax_knowledge_skills_subject_levels'),
+    path('ajax_get_skills', ajax_get_skills, name='ajax_get_skills'),
+    path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),
+    path('ajax_theme_subject_levels', ajax_theme_subject_levels, name='ajax_theme_subject_levels'),
+    path('ajax_secret_letter', ajax_secret_letter, name='ajax_secret_letter'),
+    path('ajax_memo', ajax_memo, name='ajax_memo'),
     path('ajax_load_modal', ajax_load_modal, name='ajax_load_modal'), 
+
+    #################################   Gestion des solutions par type d'exercice
+    path('check_solution_vf', check_solution_vf, name='check_solution_vf'),
+    path('check_solution_answers', check_solution_answers, name='check_solution_answers'),
+    path('check_solution_qcm_numeric', check_solution_qcm_numeric, name='check_solution_qcm_numeric'),
+
+    #################################  Enregistrement des solutions par type d'exercice
+    path('store_the_score_relation_ajax/', store_the_score_relation_ajax, name='store_the_score_relation_ajax'),
+    ######################################################################################################################################################
+    #################################           Autre          ###########################################################################################
+    ######################################################################################################################################################
+
+    path('ajax_customexercises_subjects_levels', ajax_customexercises_subjects_levels, name='ajax_customexercises_subjects_levels'),
+    path('ajax_customexercises_skills', ajax_customexercises_skills, name='ajax_customexercises_skills'),
+    path('ajax_customexercises_themes', ajax_customexercises_themes, name='ajax_customexercises_themes'),
+    path('ajax_customexercises_knowledges', ajax_customexercises_knowledges, name='ajax_customexercises_knowledges'),
 
     path('change_knowledge', change_knowledge, name='change_knowledge'), 
 
-
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
-
-    path('parcours_show_write_exercise/<int:id>/', show_write_exercise, name='show_write_exercise'), 
 
     path('show_custom_sequence/<int:idc>/', show_custom_sequence, name='show_custom_sequence'),
 
@@ -209,6 +236,9 @@ urlpatterns = [
     path('exercises_level/<int:id>/', exercises_level , name='exercises_level'), 
     path('content_is_done/<int:id>/', content_is_done , name='content_is_done'), 
     path('relation_is_done/<int:id>/', relation_is_done , name='relation_is_done'), 
+
+    path('show_all_type_exercise/<int:ids>/', show_all_type_exercise, name='show_all_type_exercise'),
+
 
     path('exercises_level_subject/<int:id>/<int:subject_id>', exercises_level_subject , name='exercises_level_subject'), 
 
@@ -244,10 +274,6 @@ urlpatterns = [
 
     path('create_course_sequence/<int:id>', create_course_sequence, name='create_course_sequence'),
     path('create_custom_sequence/<int:id>', create_custom_sequence, name='create_custom_sequence'),
-
-
-
-
 
     path('clone_course_sequence/<int:idc>', clone_course_sequence, name='clone_course_sequence'),
 
@@ -331,8 +357,8 @@ urlpatterns = [
     path('ajax_detail_parcours/', ajax_detail_parcours , name='ajax_detail_parcours'),
     path('add_exercice_in_a_parcours', add_exercice_in_a_parcours, name='add_exercice_in_a_parcours'),  
     path('show_remediation/<int:id>/', show_remediation, name='show_remediation'),       #from index   
-    path('store_the_score_relation_ajax/', store_the_score_relation_ajax, name='store_the_score_relation_ajax'),
-    #path('store_the_score_ajax/', store_the_score_ajax, name='store_the_score_ajax'),
+
+
     path('ajax/demand_done', ajax_demand_done, name='ajax_demand_done'),
 
     path('ajax/create_title_parcours', ajax_create_title_parcours, name='ajax_create_title_parcours'),
@@ -358,14 +384,14 @@ urlpatterns = [
 
     path('ajax_search_exercise', ajax_search_exercise, name='ajax_search_exercise'),
     path('ajax_knowledge_exercise', ajax_knowledge_exercise, name='ajax_knowledge_exercise'),
-    path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),
+
+
     path('ajax_level_exercise', ajax_level_exercise, name='ajax_level_exercise'),
     path('ajax/sort_exercise', ajax_sort_exercise, name='ajax_sort_exercise'),
     path('ajax/sort_sequence', ajax_sort_sequence, name='ajax_sort_sequence'),
     path('ajax/publish', ajax_publish, name='ajax_publish'),  
     path('ajax/publish_parcours', ajax_publish_parcours, name='ajax_publish_parcours'),
     path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'),
-
 
     path('ajax_publish_course', ajax_publish_course, name='ajax_publish_course'),
     path('ajax_sharer_course', ajax_sharer_course, name='ajax_sharer_course'),
@@ -403,9 +429,9 @@ urlpatterns = [
     path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
     path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
     path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
-    path('create_custom_exercise', create_custom_exercise, name='create_custom_exercise'),
-    path('my_custom_exercises', my_custom_exercises, name='my_custom_exercises'), 
-    
+ 
+ 
+
  
     path('simulator', simulator, name='simulator'),
     #####################################################################################################################################
