@@ -525,8 +525,11 @@
         				<img src="{% static 'img/finish.jpg' %}" />
 
 	                    <div class="col-sm-12 col-md-12" align="left" style="margin:10px 60px">
+	                    	{% if supportfile.supportvariables.count %}
 	               			<a href="javascript:window.close();" class="btn btn-default">Retour</a>
-
+	                    	{% else %}
+	               			<a href="javascript:history.back()" class="btn btn-default">Retour</a>
+	                    	{% endif %}
 	                    </div>
                   {% endif %}
                 </div>
