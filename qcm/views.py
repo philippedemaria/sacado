@@ -6528,99 +6528,99 @@ def my_own_exercises(request): # Modification d'un exercice non autocorrigé dan
     ############################################################################################################
     ############################################################################################################
     ## Permet la mise à jour des custom exercise en Supportfile
-    for custom in Customexercise.objects.all() :
-        instruction = custom.instruction
-        teacher     = custom.teacher
-        calculator  = custom.calculator
-        date_created  = custom.date_created
-        date_modified = custom.date_modified
-        #### pour donner une date de remise - Tache     
-        start  = custom.start  
-        date_limit  = custom.date_limit 
-        lock  = custom.lock
-        if custom.imagefile : 
-            imagefile  = custom.imagefile
-        else :
-            imagefile  = 'qtype_img/underlayer.png'
-        duration  = custom.duration 
-        skills  = custom.skills.all() 
-        knowledges  = custom.knowledges.all()
-        parcourses  = custom.parcourses.all()  
-        students  = custom.students.all()  
-        is_share  = custom.is_share  
-        is_realtime  = custom.is_realtime 
-        is_python  = custom.is_python 
-        is_scratch  = custom.is_scratch 
-        is_file  = custom.is_file 
-        is_image  = custom.is_image 
-        is_text  = custom.is_text 
-        is_mark  = custom.is_mark 
-        is_collaborative  = custom.is_collaborative 
-        is_autocorrection  = custom.is_autocorrection 
-        criterions  = custom.criterions.all()     
-        mark  = custom.mark 
-        is_publish  = custom.is_publish 
-        ranking  = custom.ranking 
-        text_cor  = custom.text_cor 
-        file_cor  = custom.file_cor 
-        video_cor  = custom.video_cor 
-        is_publish_cor  = custom.is_publish_cor 
+    # for custom in Customexercise.objects.all() :
+    #     instruction = custom.instruction
+    #     teacher     = custom.teacher
+    #     calculator  = custom.calculator
+    #     date_created  = custom.date_created
+    #     date_modified = custom.date_modified
+    #     #### pour donner une date de remise - Tache     
+    #     start  = custom.start  
+    #     date_limit  = custom.date_limit 
+    #     lock  = custom.lock
+    #     if custom.imagefile : 
+    #         imagefile  = custom.imagefile
+    #     else :
+    #         imagefile  = 'qtype_img/underlayer.png'
+    #     duration  = custom.duration 
+    #     skills  = custom.skills.all() 
+    #     knowledges  = custom.knowledges.all()
+    #     parcourses  = custom.parcourses.all()  
+    #     students  = custom.students.all()  
+    #     is_share  = custom.is_share  
+    #     is_realtime  = custom.is_realtime 
+    #     is_python  = custom.is_python 
+    #     is_scratch  = custom.is_scratch 
+    #     is_file  = custom.is_file 
+    #     is_image  = custom.is_image 
+    #     is_text  = custom.is_text 
+    #     is_mark  = custom.is_mark 
+    #     is_collaborative  = custom.is_collaborative 
+    #     is_autocorrection  = custom.is_autocorrection 
+    #     criterions  = custom.criterions.all()     
+    #     mark  = custom.mark 
+    #     is_publish  = custom.is_publish 
+    #     ranking  = custom.ranking 
+    #     text_cor  = custom.text_cor 
+    #     file_cor  = custom.file_cor 
+    #     video_cor  = custom.video_cor 
+    #     is_publish_cor  = custom.is_publish_cor 
 
-        if is_python : 
-            title = "Coder en Python"
-            imagefile = 'qtype_img/underlayer.png'
-            qtype = 19
-        else : 
-            title = "Remise de devoir"
-            qtype = 20
-            imagefile = 'qtype_img/underlayer.png'
+    #     if is_python : 
+    #         title = "Coder en Python"
+    #         imagefile = 'qtype_img/underlayer.png'
+    #         qtype = 19
+    #     else : 
+    #         title = "Remise de devoir"
+    #         qtype = 20
+    #         imagefile = 'qtype_img/underlayer.png'
 
-        for knowledge in knowledges :
-            code = code = str(uuid.uuid4())[:8]
-            data = { 
-            'title'       : title  ,
-            'knowledge'   : knowledge ,
-            'annoncement' : instruction   ,
-            'author'      : teacher   ,
-            'code'        : code ,
-            #### pour validation si le qcm est noté
-            'situation'   : 1  ,
-            'calculator'  : calculator  ,
-            #### 
-            'date_created'  :  date_created   ,
-            'date_modified' :  date_modified   ,
-            'level'      :  knowledge.level   ,
-            'theme'      :  knowledge.theme    , 
-            'width'      :  750   ,'height' :  550   , 'ggbfile' :  ""   , 'imagefile' : imagefile  ,
-            'toolBar'    :  0   ,'menuBar'     :   0  ,'algebraInput' : 0    ,'resetIcon'   :  0   ,'dragZoom'    : 0    ,
-            'is_title'   :  0   ,'is_subtitle' :  0  ,'attach_file' :  0   ,
-            'duration'   :  duration,
-            'is_ggbfile' :   0  ,
-            'is_python'  :  is_python   ,
-            'is_scratch' :  is_scratch  ,
-            'is_file'    :  is_file  ,
-            'is_image'   :  is_image  ,
-            'is_text'    :  is_text   ,
-            'is_mark'     : is_mark  ,
-            'mark'        : mark   ,
-            'is_share'    : 0  ,
-            'is_realtime' : 0   ,
-            'ranking'     : 10 , 
-            'correction'  : text_cor   ,
-            'qtype'       : qtype }
+    #     for knowledge in knowledges :
+    #         code = code = str(uuid.uuid4())[:8]
+    #         data = { 
+    #         'title'       : title  ,
+    #         'knowledge'   : knowledge ,
+    #         'annoncement' : instruction   ,
+    #         'author'      : teacher   ,
+    #         'code'        : code ,
+    #         #### pour validation si le qcm est noté
+    #         'situation'   : 1  ,
+    #         'calculator'  : calculator  ,
+    #         #### 
+    #         'date_created'  :  date_created   ,
+    #         'date_modified' :  date_modified   ,
+    #         'level'      :  knowledge.level   ,
+    #         'theme'      :  knowledge.theme    , 
+    #         'width'      :  750   ,'height' :  550   , 'ggbfile' :  ""   , 'imagefile' : imagefile  ,
+    #         'toolBar'    :  0   ,'menuBar'     :   0  ,'algebraInput' : 0    ,'resetIcon'   :  0   ,'dragZoom'    : 0    ,
+    #         'is_title'   :  0   ,'is_subtitle' :  0  ,'attach_file' :  0   ,
+    #         'duration'   :  duration,
+    #         'is_ggbfile' :   0  ,
+    #         'is_python'  :  is_python   ,
+    #         'is_scratch' :  is_scratch  ,
+    #         'is_file'    :  is_file  ,
+    #         'is_image'   :  is_image  ,
+    #         'is_text'    :  is_text   ,
+    #         'is_mark'     : is_mark  ,
+    #         'mark'        : mark   ,
+    #         'is_share'    : 0  ,
+    #         'is_realtime' : 0   ,
+    #         'ranking'     : 10 , 
+    #         'correction'  : text_cor   ,
+    #         'qtype'       : qtype }
 
-            s = Supportfile(**data)
-            s.save()
-            s.skills.set(skills)
+    #         s = Supportfile(**data)
+    #         s.save()
+    #         s.skills.set(skills)
 
-            exercise = Exercise.objects.create(supportfile = s, knowledge = knowledge, level = knowledge.level, theme = knowledge.theme )
+    #         exercise = Exercise.objects.create(supportfile = s, knowledge = knowledge, level = knowledge.level, theme = knowledge.theme )
             
-            for parcours in parcourses :
-                relation = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration=  duration, situation=  1 ) 
+    #         for parcours in parcourses :
+    #             relation = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration=  duration, situation=  1 ) 
                 
-                students = parcours.students.all()
-                relation.students.set(students)
-                relation.skills.set(skills)
+    #             students = parcours.students.all()
+    #             relation.students.set(students)
+    #             relation.skills.set(skills)
     ############################################################################################################
     ############################################################################################################
     return render(request, 'qcm/list_my_own_exercises.html', context)
