@@ -1006,6 +1006,7 @@ li.this_slide{
     padding: 20px;
     position: relative;
     z-index: 1;
+    background-image: url('/static/img/fond_search.png')
   }
 
 .this_slide .this_consigne{
