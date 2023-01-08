@@ -398,6 +398,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 appear_panel('account');
         });
 
+        $('#exercises').click(function(event) {
+                appear_panel('exercises')
+        });
 
         function appear_panel(target) {
           if ($('#notification-'+target).hasClass('dismiss')) {

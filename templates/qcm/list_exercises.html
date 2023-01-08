@@ -19,12 +19,10 @@
 
 {% block page_menu_right %}
 
-    {% if sacado_asso %}
 
-    <li> <a href="{% url 'exercise_custom_show_shared' %}" class="btn btn-new"> Exercices personnels mutualisés</a> </li>
-    {% else %}
-    <li> <a href="#" class="btn btn-new no_sacado_asso" title="Version établissement requise"> Exercices personnels mutualisés</a> </li>
-    {% endif %}
+
+    <li> <a href="{% url 'my_own_exercises' %}" class="btn btn-new"> Mes exercices</a> </li>
+
 
     {% if request.user.is_superuser and  '/admin' in request.path %}
     <li ><a href="{% url 'create_supportfile' 0 %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB </a> </li> 
@@ -40,21 +38,18 @@
         {% include 'searching_bar.html' %}
 
         <div id="content_exercises">
-
-
             <div class="alert alert-sacado" style="margin-top:20px;">
+                {% if teacher.levels.count == 0 %} 
                 <div class="row">
                     <div class="col-xs-2 col-md-1" align="center">
                         <i class="fa fa-warning fa-3x text-warning"></i>
                     </div>
                     <div class="col-xs-10 col-md-11">
-                        Cette page vous permet <b>seulement</b> de consulter les exercices proposés par niveau et par thème. <br/>Pour les proposer à vos élèves, vous devez les insérer dans des <b>parcours</b> d'apprentissage.
-
-                        {% if teacher.levels.count == 0 %} 
-                        <br/>Si aucun niveau n'apparait, vous devez sélectionner vos niveaux d'enseignement <a href="{% url 'profile' %}" class="btn btn-sacado">Sélectionner mes niveaux d'enseignement</a>{% endif %}
+                        
+                        <br/>Si aucun niveau n'apparait, vous devez sélectionner vos niveaux d'enseignement <a href="{% url 'profile' %}" class="btn btn-sacado">Sélectionner mes niveaux d'enseignement</a>
                     </div>
                 </div>
-
+                {% endif %}
                 <div class="row"> 
                     <div class="col-sm-12 col-md-12">
                         <div class="row">
@@ -63,32 +58,47 @@
                             </div>
                         </div>  
                         <div class="row">
-                            <div class="col-xs-12 col-md-4">
+                            <div class="col-xs-6 col-md-2">
                                 <a href="{% url 'create_group' %}" class="no_decoration">  
                                     <div  class="round-border" style="margin-top: 40px;margin-bottom: 40px;"> 
                                         1.<br/>  
-                                        Créer un  <br/>  
+                                        Créer <br> un  <br/>  
                                         groupe 
                                     </div>                                        
                                 </a>
                             </div>
-                            <div class="col-xs-12 col-md-4">
+                            <div class="col-xs-6 col-md-2">
                                 <a href="{% url 'create_folder' 0 %}" class="no_decoration">
                                     <div  class="round-border" style="margin-top: 40px;margin-bottom: 40px;"> 
                                         2.<br/> 
-                                        Créer un<br/> 
+                                        Créer <br> un<br/> 
                                         dossier<br/> 
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-xs-12 col-md-4">
+                            <div class="col-xs-6 col-md-2">
                                 <a href="{% url 'create_parcours' 0 %}" class="no_decoration">
                                     <div class="round-border" style="margin-top: 40px;margin-bottom: 40px;"> 
                                         3.<br> 
-                                        Créer un <br/> 
+                                        Inclure <br> un <br/> 
                                         parcours <br/>  
                                     </div>                                    
                                 </a>
+                            </div>
+                            <div class="col-xs-6 col-md-2">
+                                <a href="#" class="no_decoration">
+                                    <div class="round-border" style="margin-top: 40px;margin-bottom: 40px; background-color: #efe9ff;" title="vos ne pouvez pas y accéder directement depuis ce lien."> 
+                                        4.<br> 
+                                        Choisir <br/> les <br/> 
+                                        exercices <br/>  
+                                    </div>                                    
+                                </a>
+                            </div>
+                            <div class="col-xs-12 col-md-4" style="font-size:24px;">
+                            
+                                        <b>Mais aussi</b>, créer
+                                        des exercices,  créer des quizz, des bibliotex, des flashpacks et les inclure dans vos parcours.
+     
                             </div>
                         </div>  
 

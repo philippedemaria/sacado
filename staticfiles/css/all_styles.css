@@ -21,6 +21,15 @@
   height:70px;
 }
 
+@media (max-width:991px){
+  
+.search_bar{
+  height:100px;
+}
+
+}
+
+
 
 .widget-user-header .shared {
     position: absolute;
@@ -292,7 +301,7 @@ table.puzzle td {
     height: 150px;
     color : #5d4391;
     font-weight: 800;
-    font-size : 30px;
+    font-size : 26px;
 }
 
 .round-border:hover{
