@@ -92,9 +92,6 @@
                             </div>
                     </div>
                 </div> 
-
-
-
                 <div class="row"> 
                     <div class="form-group">
                         {% if sacado_asso %}
@@ -117,171 +114,185 @@
                             </label> <br>
                             {{ form.lock  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         </div>
+
+
+                        {% if is_gar_check %}
+                        <div class="col-sm-12 col-md-4">
+                           <label>Masquer ?  
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" > Masque un groupe non souhaité. </div>
+                                </span>
+                            </label> <br>
+                            {{ form.is_hidden  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        </div>
+                        {% endif   %}
+
+
  
                     </div> 
                 </div>
-                    {% if sacado_asso %}            
-                            <div class="row">
-                                <hr>
-                                <div class="col-sm-8 col-md-10">
-                                    <label>L'équipe SACADO vous propose ses dossiers incluant les parcours et les cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveaux et enseignements choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
-                                </div>
-                                <div class="col-sm-4 col-md-2">
-                                    {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                                </div>
-                            </div>
-                                
-                            <div class="row" id="choosen_parcours_for_this_level_and_subject">
-                                <hr>
-                                <div class="col-sm-12 col-md-12">
-                                    <label>Sélectionner les dossiers proposés.</label>
-                                </div>
-                            </div>
-                            <div id="choosen_parcours_by_this_level_and_subject">
-                            </div>
-                    {% else %}
-                            <hr/>
-                            <div class="col-sm-12 col-md-12 alert alert-sacado">
-                                <label>Avec la version établissement, l'équipe SACADO vous propose ses dossiers, ses parcours et ses cours déjà créés et testés en classe. Pensez à la version ETABLISSEMENT. 
-                                    <a href="{% url 'get_first_adhesion' %}" target="_blank" style="font-size:10px">Adhérer</a>
-                                </label>
-                            </div>
-                    {% endif %}
-
-
-                    {% if not is_gar_check %}
-                        {% if not sacado_asso  %}
+                {% if sacado_asso %}            
+                        <div class="row">
                             <hr>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
-                                         <ul>
-                                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.</label>  </li>
-                                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> 
-                                               {% if group %}Je veux lire le {% else %} Je veux inscrire mes élèves plus tard et générer un{% endif  %}   lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div class="col-sm-8 col-md-10">
+                                <label>L'équipe SACADO vous propose ses dossiers incluant les parcours et les cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveaux et enseignements choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
                             </div>
-                            <div class="row recording" id="teacher_record">
-                                <div class="col-sm-12 col-md-12"><hr>
-                                    <div class="form-group">
-                                        <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
-                                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
-
-                                         <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</small></label>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div class="row recording" id="auto_record">
-                                <div class="col-sm-12 col-md-12"> 
-                                    <div class="form-group">
-
-                                        {% if not group %}
-                                        
-                                        <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
-                                        </label>
-                                        {% endif  %}
-
-                                    </div>
-                                </div>
-                            </div>  
-                        {% elif is_managing == 0  %}
+                            <div class="col-sm-4 col-md-2">
+                                {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            </div>
+                        </div>
+                            
+                        <div class="row" id="choosen_parcours_for_this_level_and_subject">
                             <hr>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
-                                         <ul>
-                                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.</label></li>
-                                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> {% if group %}Je veux lire le {% else %} Je veux inscrire mes élèves plus tard et générer un{% endif  %}  lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
-                                            {% if group %}
-                                            <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_add" /> Sélectionner des élèves déjà inscrits sur ce niveau dans l'établissement</label></li>
-                                            {% else %}
-                                            <li class="sans_puce"><label><input type="radio" disabled /> Pour sélectionner des élèves, le groupe doit être déjà créé. Créer-le et revenir.</label></li>
-                                            {% endif %}
-                                        </ul>
-                                    </div>
+                            <div class="col-sm-12 col-md-12">
+                                <label>Sélectionner les dossiers proposés.</label>
+                            </div>
+                        </div>
+                        <div id="choosen_parcours_by_this_level_and_subject">
+                        </div>
+                {% else %}
+                        <hr/>
+                        <div class="col-sm-12 col-md-12 alert alert-sacado">
+                            <label>Avec la version établissement, l'équipe SACADO vous propose ses dossiers, ses parcours et ses cours déjà créés et testés en classe. Pensez à la version ETABLISSEMENT. 
+                                <a href="{% url 'get_first_adhesion' %}" target="_blank" style="font-size:10px">Adhérer</a>
+                            </label>
+                        </div>
+                {% endif %}
+
+
+                {% if not is_gar_check %}
+                    {% if not sacado_asso  %}
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
+                                     <ul>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.</label>  </li>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> 
+                                           {% if group %}Je veux lire le {% else %} Je veux inscrire mes élèves plus tard et générer un{% endif  %}   lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="row recording" id="teacher_record">
-                                <div class="col-sm-12 col-md-12"><hr>
-                                    <div class="form-group">
-                                        <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
-                                        <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
+                        </div>
+                        <div class="row recording" id="teacher_record">
+                            <div class="col-sm-12 col-md-12"><hr>
+                                <div class="form-group">
+                                    <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
+                                    <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
 
-                                         <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</small></label>
-                                    </div>
+                                     <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</small></label>
                                 </div>
-                            </div> 
-                            <div class="row recording" id="auto_record">
-                                <div class="col-sm-12 col-md-12"><hr>
-                                    <div class="form-group">
+                            </div>
+                        </div> 
+                        <div class="row recording" id="auto_record">
+                            <div class="col-sm-12 col-md-12"> 
+                                <div class="form-group">
+
+                                    {% if not group %}
+                                    
+                                    <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
+                                    </label>
+                                    {% endif  %}
+
+                                </div>
+                            </div>
+                        </div>  
+                    {% elif is_managing == 0  %}
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
+                                     <ul>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.</label></li>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> {% if group %}Je veux lire le {% else %} Je veux inscrire mes élèves plus tard et générer un{% endif  %}  lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
                                         {% if group %}
-                                        <div class="alert alert-warning">
-                                            <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
-                                                Les élèves peuvent aussi rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire en utilisant le code suivant : <strong>{{ group.code }}</strong>
-                                            </div>
-                                        </div>
+                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_add" /> Sélectionner des élèves déjà inscrits sur ce niveau dans l'établissement</label></li>
                                         {% else %}
-                                        <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
-                                        </label>
-                                        {% endif  %}
+                                        <li class="sans_puce"><label><input type="radio" disabled /> Pour sélectionner des élèves, le groupe doit être déjà créé. Créer-le et revenir.</label></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row recording" id="teacher_record">
+                            <div class="col-sm-12 col-md-12"><hr>
+                                <div class="form-group">
+                                    <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
+                                    <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
+
+                                     <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</small></label>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row recording" id="auto_record">
+                            <div class="col-sm-12 col-md-12"><hr>
+                                <div class="form-group">
+                                    {% if group %}
+                                    <div class="alert alert-warning">
+                                        <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
+                                            Les élèves peuvent aussi rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire en utilisant le code suivant : <strong>{{ group.code }}</strong>
+                                        </div>
                                     </div>
+                                    {% else %}
+                                    <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
+                                    </label>
+                                    {% endif  %}
                                 </div>
                             </div>
-                        {% else %}
-                            {% if not group %}
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                        <div class="alert alert-danger"><label>Vous pourrez ajouter des élèves après la création du groupe. Créer-le et revenir.</label></div>
-                                </div>
+                        </div>
+                    {% else %}
+                        {% if not group %}
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                    <div class="alert alert-danger"><label>Vous pourrez ajouter des élèves après la création du groupe. Créer-le et revenir.</label></div>
                             </div>
-                            {% endif %}
+                        </div>
                         {% endif %}
                     {% endif %}
+                {% endif %}
 
-                    {% if group %}
-                        <hr> 
-                        {% if is_managing == 2  %}
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <h5><i class="fa fa-users"></i> Ajouter des élèves parmis les élèves proposés ci-dessous</h5>
-                                </div>
+                {% if group %}
+                    <hr> 
+                    {% if is_managing == 2  %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <h5><i class="fa fa-users"></i> Ajouter des élèves parmis les élèves proposés ci-dessous</h5>
                             </div>
-                            <div class="row" >
-                                <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">                           
-                                    <table  class="table table-sacado table-hover standard_tab_sort2000" id='table_o'>
-                                        <thead>
-                                        <tr>
-                                            <td></td>
-                                            <td>Nom</td>
-                                            <td>Prénom</td>
-                                            <td>Groupes</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for student in all_students %}
-                                                <tr id="tr{{student.user.id}}">
-                                                    <td>
-                                                         <input type="checkbox" class="student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" id="std{{student.user.id}}" /> 
-                                                    </td>
-                                                    <td>
-                                                       <label for="std{{student.user.id}}">{{ student.user.last_name|lower|capfirst }}  </label>
-                                                    </td>
-                                                    <td>
-                                                        {{ student.user.first_name|lower|capfirst }} 
-                                                    </td>
-                                                    <td>
-                                                        {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div> 
-                    {% else %}
+                        </div>
+                        <div class="row" >
+                            <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">                           
+                                <table  class="table table-sacado table-hover standard_tab_sort2000" id='table_o'>
+                                    <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Nom</td>
+                                        <td>Prénom</td>
+                                        <td>Groupes</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for student in all_students %}
+                                            <tr id="tr{{student.user.id}}">
+                                                <td>
+                                                     <input type="checkbox" class="student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" id="std{{student.user.id}}" /> 
+                                                </td>
+                                                <td>
+                                                   <label for="std{{student.user.id}}">{{ student.user.last_name|lower|capfirst }}  </label>
+                                                </td>
+                                                <td>
+                                                    {{ student.user.first_name|lower|capfirst }} 
+                                                </td>
+                                                <td>
+                                                    {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                        {% else %}
                         <div class="row collapse" id="collapsed"  >
                             <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
                                 {% if not group.lock %}                            
@@ -330,7 +341,7 @@
                             </div>
                         </div>
                     {%  elif not group  %}
-                        <hr>
+                        <hr/>
                         <div class="form-group">
                             <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.</label>
                         </div>

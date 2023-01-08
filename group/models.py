@@ -27,7 +27,7 @@ class Group(ModelWithCode):
     subject        = models.ForeignKey(Subject, default = "" ,  null=True, on_delete=models.CASCADE, related_name="subject_group", verbose_name="Matière*")
     school         = models.ForeignKey(School, default = "" ,  editable=False, blank=True,  null=True, on_delete=models.CASCADE, related_name="school_group" ) 
     is_gar         = models.BooleanField(default=0)
-
+    is_hidden      = models.BooleanField(default=0)
 
     class Meta:
         ordering = ['name']
