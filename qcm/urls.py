@@ -425,10 +425,10 @@ urlpatterns = [
     path('parcours_show_bibliotex_student/<int:idp>/<int:id>', parcours_show_bibliotex_student, name='parcours_show_bibliotex_student'),
 
     # page de création d'un exercice non auto-corrigé dans un parcours - l'id est celui du parcours.
-    #path('parcours_create_custom_exercise/<int:id>/<int:typ>', parcours_create_custom_exercise, name='parcours_create_custom_exercise'), 
-    #path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
-    #path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
-    #path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
+    path('parcours_create_custom_exercise/<int:id>/<int:typ>', parcours_create_custom_exercise, name='parcours_create_custom_exercise'), 
+    path('parcours_update_custom_exercise/<int:idcc>/<int:id>', parcours_update_custom_exercise, name='parcours_update_custom_exercise'), 
+    path('parcours_delete_custom_exercise/<int:idcc>/<int:id>', parcours_delete_custom_exercise, name='parcours_delete_custom_exercise'), 
+    path('parcours_show_custom_exercise/<int:id>/<int:idp>',  show_custom_exercise, name='show_custom_exercise'), # vue enseignant de l'exercice
  
  
 

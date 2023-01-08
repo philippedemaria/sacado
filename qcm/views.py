@@ -6639,152 +6639,152 @@ def ajax_sort_supportfile(request):
 ############################################################################################################################################################################
 ########################## Def des custom files amener à disparaitre 
 ############################################################################################################################################################################
-# @login_required(login_url= 'index') 
-# def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
+@login_required(login_url= 'index') 
+def parcours_create_custom_exercise(request,id,typ): #Création d'un exercice non autocorrigé dans un parcours
 
-#     parcours = Parcours.objects.get(pk=id)
-#     teacher = Teacher.objects.get(user= request.user)
-#     stage = get_stage(teacher.user)
+    parcours = Parcours.objects.get(pk=id)
+    teacher = Teacher.objects.get(user= request.user)
+    stage = get_stage(teacher.user)
 
 
-#     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
-#         return redirect('index')
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+        return redirect('index')
 
-#     ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
-#     form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
+    ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
+    form_c = CriterionForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours) 
 
-#     if request.method == "POST" :
-#         if ceForm.is_valid() :
-#             nf = ceForm.save(commit=False)
-#             nf.teacher = teacher
-#             if nf.is_scratch :
-#                 nf.is_image = True
-#             nf.save()
-#             ceForm.save_m2m()
-#             nf.parcourses.add(parcours)  
-#             nf.students.set( parcours.students.all() )     
-#         else :
-#             print(ceForm.errors)
-#         return redirect('show_parcours', 0 , parcours.id  )
+    if request.method == "POST" :
+        if ceForm.is_valid() :
+            nf = ceForm.save(commit=False)
+            nf.teacher = teacher
+            if nf.is_scratch :
+                nf.is_image = True
+            nf.save()
+            ceForm.save_m2m()
+            nf.parcourses.add(parcours)  
+            nf.students.set( parcours.students.all() )     
+        else :
+            print(ceForm.errors)
+        return redirect('show_parcours', 0 , parcours.id  )
  
-#     context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
+    context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : False }
 
-#     return render(request, 'qcm/form_exercise_custom.html', context)
-
-
+    return render(request, 'qcm/form_exercise_custom.html', context)
 
 
 
 
-# @login_required(login_url= 'index') 
-# def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
-#     custom = Customexercise.objects.get(pk=idcc)
 
-#     try :
-#         teacher = request.user.teacher
-#     except :
-#         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
-#         return redirect('index')
+@login_required(login_url= 'index') 
+def parcours_update_custom_exercise(request,idcc,id): # Modification d'un exercice non autocorrigé dans un parcours
 
-#     stage   = get_stage(request.user)
+    custom = Customexercise.objects.get(pk=idcc)
 
-#     if id == 0 :
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
-#         if not authorizing_access(teacher, custom ,True):
-#             messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
-#             return redirect('index')
+    stage   = get_stage(request.user)
 
-#         ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
-#         form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher )
+    if id == 0 :
 
-#         if request.method == "POST" :
-#             if ceForm.is_valid() :
-#                 nf = ceForm.save(commit=False)
-#                 nf.teacher = teacher
-#                 if nf.is_scratch :
-#                     nf.is_image = True
-#                 nf.save()
-#                 ceForm.save_m2m()
-#             else :
-#                 print(ceForm.errors)
-#             return redirect('my_own_exercises' )
+        if not authorizing_access(teacher, custom ,True):
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
+            return redirect('index')
+
+        ceForm = CustomexerciseNPForm(request.POST or None, request.FILES or None , teacher = teacher ,  custom = custom, instance = custom ) 
+        form_c = CriterionOnlyForm(request.POST or None, request.FILES or None , teacher = teacher )
+
+        if request.method == "POST" :
+            if ceForm.is_valid() :
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
+                nf.save()
+                ceForm.save_m2m()
+            else :
+                print(ceForm.errors)
+            return redirect('my_own_exercises' )
      
-#         context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : custom ,'parcours': None, }
+        context = {  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'form_c':form_c , 'customexercise' : custom ,'parcours': None, }
 
-#     else :
+    else :
  
-#         parcours = Parcours.objects.get(pk=id)
-#         if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
-#             messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
-#             return redirect('index')
+        parcours = Parcours.objects.get(pk=id)
+        if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+            messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès.")
+            return redirect('index')
 
-#         ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
+        ceForm = CustomexerciseForm(request.POST or None, request.FILES or None , teacher = teacher , parcours = parcours, instance = custom ) 
 
-#         if request.method == "POST" :
-#             if ceForm.is_valid() :
-#                 nf = ceForm.save(commit=False)
-#                 nf.teacher = teacher
-#                 if nf.is_scratch :
-#                     nf.is_image = True
-#                 nf.save()
-#                 ceForm.save_m2m()
-#                 nf.parcourses.add(parcours)
-#                 nf.students.set( parcours.students.all() )  
-#             else :
-#                 print(ceForm.errors)
-#             return redirect('show_parcours', 0, parcours.id )
+        if request.method == "POST" :
+            if ceForm.is_valid() :
+                nf = ceForm.save(commit=False)
+                nf.teacher = teacher
+                if nf.is_scratch :
+                    nf.is_image = True
+                nf.save()
+                ceForm.save_m2m()
+                nf.parcourses.add(parcours)
+                nf.students.set( parcours.students.all() )  
+            else :
+                print(ceForm.errors)
+            return redirect('show_parcours', 0, parcours.id )
      
-#         context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom }
+        context = {'parcours': parcours,  'teacher': teacher, 'stage' : stage ,  'communications' : [] , 'form' : ceForm , 'customexercise' : custom }
 
-#     return render(request, 'qcm/form_exercise_custom.html', context)
-
-
+    return render(request, 'qcm/form_exercise_custom.html', context)
 
 
-# @login_required(login_url= 'index') 
-# def exercise_custom_show_shared(request): # Modification d'un exercice non autocorrigé dans un parcours
+
+
+@login_required(login_url= 'index') 
+def exercise_custom_show_shared(request): # Modification d'un exercice non autocorrigé dans un parcours
     
-#     try :
-#         teacher = request.user.teacher
-#     except :
-#         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
-#         return redirect('index')
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
-#     customexercises = set()
-#     subjects = teacher.subjects.all()    
-#     levels   = teacher.levels.all()
-#     for subject in subjects :
-#         for level in levels :
-#             customexercises.update(subject.customexercises.filter(is_share=1,levels=level))
+    customexercises = set()
+    subjects = teacher.subjects.all()    
+    levels   = teacher.levels.all()
+    for subject in subjects :
+        for level in levels :
+            customexercises.update(subject.customexercises.filter(is_share=1,levels=level))
 
-#     context = { 'customexercises' : customexercises, 'subjects' : subjects, 'levels' : levels , 'is_mine' : False } 
+    context = { 'customexercises' : customexercises, 'subjects' : subjects, 'levels' : levels , 'is_mine' : False } 
 
-#     return render(request, 'qcm/list_my_custom_exercises.html', context)
-
-
+    return render(request, 'qcm/list_my_custom_exercises.html', context)
 
 
-# # def exercise_custom_show_shared(request):
+
+
+# def exercise_custom_show_shared(request):
     
-# #     user = request.user
-# #     if user.is_teacher:  # teacher
-# #         teacher = Teacher.objects.get(user=user) 
-# #         customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
-# #         return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, })
-# #     else :
-# #         return redirect('index')   
- 
-
-# def customexercise_shared_inside_parcours(request,idp):
-#     parcours = Parcours.objects.get(pk=idp)
 #     user = request.user
 #     if user.is_teacher:  # teacher
 #         teacher = Teacher.objects.get(user=user) 
-#         customexercises = Customexercise.objects.filter(is_share = 1).exclude(parcourses = parcours)
-#         return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': parcours,   })
+#         customexercises = Customexercise.objects.filter(is_share = 1).exclude(teacher = teacher)
+#         return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': None, })
 #     else :
 #         return redirect('index')   
+ 
+
+def customexercise_shared_inside_parcours(request,idp):
+    parcours = Parcours.objects.get(pk=idp)
+    user = request.user
+    if user.is_teacher:  # teacher
+        teacher = Teacher.objects.get(user=user) 
+        customexercises = Customexercise.objects.filter(is_share = 1).exclude(parcourses = parcours)
+        return render(request, 'qcm/list_custom_exercises.html', {  'teacher': teacher , 'customexercises':customexercises, 'parcours': parcours,   })
+    else :
+        return redirect('index')   
 
 
 
