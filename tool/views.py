@@ -1889,7 +1889,7 @@ def print_quizz_to_pdf(request):
 
     question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
     if not quizz.is_ranking : random.shuffle(question_ids)
-
+    elements += r"\\"
     i=1
     letters = ["A","B","C","D","E","F","G","H","I","J","K"]
     for question_id in question_ids :
@@ -1914,20 +1914,23 @@ def print_quizz_to_pdf(request):
                     elements += r" \item[\quad "+letters[j]+".] " +  choice.answer
                 j+=1  
             elements += r"\end{description}"
+            elements += r"\vspace{0,2cm}\\"
+            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
         elif  question.qtype == 2 :
             elements += r"\textit{Vous devez répondre à la question posée.}"
-            elements += r"\vspace{0,4cm}\\"
+            elements += r"\vspace{0,2cm}\\"
             elements += r" \hrule  "
-            elements += r"\vspace{0,4cm}\\"
-            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
         else :
             elements += r"\textit{Vous devez cocher la réponse qui vous semble bonne.}"
             elements += r"\begin{description}"
             elements += r" \item[\quad  VRAI] " 
             elements += r" \item[\quad  FAUX] " 
-            elements += r"\end{description}"  
-
-
+            elements += r"\end{description}" 
+            elements += r"\vspace{0,2cm}\\"
+            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
         i+=1
     elements += r"\vspace{0,4cm}\\"
     elements += r"\end{document}"
