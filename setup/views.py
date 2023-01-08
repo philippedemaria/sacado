@@ -158,6 +158,9 @@ def index(request):
             # for sg_id in shared_grps_id :
             #     grp = Group.objects.get(pk=sg_id)
             #     sgps.append(grp)
+            hh_groups = teacher.groups.filter(is_hidden=1)
+            h_groups = teacher.groups.filter(pk__in=shared_grps_id,is_hidden=1)
+            hidden_groups = h_groups | hh_groups
 
             sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
             groupes =  grps | sgps
@@ -188,7 +191,7 @@ def index(request):
             template = 'dashboard.html'
             context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 'nbss' : nbss , 'nbsa': nbsa ,
                        'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check ,
-                       'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,  'over_students' : over_students  #'parcourses': parcourses
+                       'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,  'over_students' : over_students ,  'hidden_groups' : hidden_groups #'parcourses': parcourses
                        }
         
         elif request.user.is_student:  ## student
