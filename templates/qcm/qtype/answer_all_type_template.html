@@ -517,9 +517,17 @@
                                 </div>
                               {% endif %}
                           {% endif %}
-
-
                     </div>
+                  {% elif request.user.is_teacher %}
+
+        				Tu as fini toutes les situations. Enregistre tes résultats.
+
+        				<img src="{% static 'img/finish.jpg' %}" />
+
+	                    <div class="col-sm-12 col-md-12" align="left" style="margin:10px 60px">
+	               			<a href="javascript:window.close();" class="btn btn-default">Retour</a>
+
+	                    </div>
                   {% endif %}
                 </div>
         	</li>
