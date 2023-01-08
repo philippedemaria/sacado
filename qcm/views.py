@@ -6958,7 +6958,7 @@ def show_all_type_exercise(request,ids): # vue coté prof de l'exercice autocorr
     loops = [0]*supportfile.situation
     context = { 'supportfile' : supportfile, 'today' : today , 'loops' : loops,  'student' : None, 'only_show' : False}
 
-    context.update ( define_all_type( supportfile.situation , supportfile) ) 
+    context.update ( define_all_types( supportfile.situation , supportfile) ) 
 
  
     if supportfile.is_python :
