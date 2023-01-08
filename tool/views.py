@@ -2791,7 +2791,7 @@ def create_quizz_random(request,id):
 
     mental_ids = request.POST.getlist("mental_ids",None)
     if len(mental_ids) :
-        create_questions_flash_random_variable(mental_ids, quizz,noq)
+        create_questions_flash_random_variable(mental_ids, quizz, noq)
 
     Quizz.objects.filter(pk=quizz.id).update(nb_slide = noq )
     return redirect('list_quizzes' )
