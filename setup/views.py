@@ -152,7 +152,7 @@ def index(request):
                     messages.error(request,"Erreur...Vous avez dépassé le nombre maximal d'élèves inscrits. Veuillez augmenter votre capacité.")
 
             teacher = request.user.teacher
-            grps = teacher.groups.all() 
+            grps = teacher.groups.filter(is_hidden=0)
             shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
             # sgps = []
             # for sg_id in shared_grps_id :
