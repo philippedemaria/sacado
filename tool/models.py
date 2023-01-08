@@ -145,7 +145,7 @@ class Qtype(models.Model):
     html      = models.TextField( default='',  blank=True, verbose_name="Html éventuel")
     url       = models.CharField(max_length=255,  blank=True, default='', verbose_name="url") 
     is_online = models.BooleanField(default=0, verbose_name="En ligne ?")
-    template  = models.CharField(max_length=255,  blank=True, default='', verbose_name="template") 
+    template  = models.CharField(max_length=255,  blank=True, default='', verbose_name="template de quizz") 
     ranking   = models.PositiveIntegerField(default=0,   ) 
     custom    = models.CharField(max_length=255,  null = True,   blank=True, default='', verbose_name="template pour les exos")
     is_sub    = models.BooleanField(default=0 ) # subchoices required

@@ -38,7 +38,7 @@ from school.models import Stage , School, Country , Town
 from school.forms import  SchoolForm, SchoolUpdateForm  
 from school.gar import *
 from socle.models import Level, Subject 
-from tool.models import Quizz, Question, Choice
+from tool.models import Quizz, Question, Choice , Qtype
 from bibliotex.models import Exotex
 from datetime import date, datetime , timedelta
 
@@ -252,12 +252,12 @@ def index(request):
         i = random.randrange(0, nb_exercise)
         exercise = exercises[i]
  
-
         cookie_rgpd_accepted = request.COOKIES.get('cookie_rgpd_accepted',None)
         cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
 
         context = { 'cookie_rgpd_accepted' : cookie_rgpd_accepted , 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 'nb_student_answers': nb_student_answers,  'communications': communications,
-                    'nb_exotex': nb_exotex, 'nb_exercise': nb_exercise, 'exercise': exercise,  'nb_student': nb_student, 'nb_parcours' : nb_parcours , 'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
+                    'nb_exotex': nb_exotex, 'nb_exercise': nb_exercise, 'exercise': exercise,  'nb_student': nb_student, 'nb_parcours' : nb_parcours , 
+                    'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
 
         response = render(request, 'home.html', context)
         return response

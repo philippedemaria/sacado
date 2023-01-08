@@ -48,22 +48,14 @@
     <header id="header">
         <div class="container">
             <div class="logo float-left">
-                <a class="navbar-brand sacado" href="{% url 'index' %}#intro"><img src="{% static 'img/sacadoA1.png' %}"/>
-                    SACADO </a>
+                <a class="navbar-brand sacado" href="{% url 'index' %}#intro"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO</a><img src="{% static 'img/approche_gar.png' %}" />
+ 
             </div>
             <nav class="main-nav float-right d-none d-lg-block">
                 <ul>
-                    <li><a href="#" data-toggle='modal' data-target='#inscription' >S'inscrire</a></li>
-                    {% comment %}
-                    <li><a href="#exercises">Exercices</a></li>
-                    <li><a href="#teachers">Enseignants</a></li>
-                    <li><a href="#students">Élèves</a></li>
-                    <li><a href="#parents">Parents</a></li>
-
-
-
-                    {% endcomment %} 
-                    <li><a href="{% url 'index' %}#footer">Contact</a></li>
+                    <li><a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-intro_sacado">Connexion</a></li>
+                    <li><a href="#" data-toggle='modal' data-target='#inscription'  class="btn btn-intro_sacado">S'inscrire</a></li>
+                    <li><a href="{% url 'index' %}#footer" class="btn btn-intro_sacado">Contact</a></li>
 
                 </ul>
             </nav><!-- .main-nav -->
@@ -117,15 +109,9 @@
                             </div>        
                         </div>
                     </div>
-                    {% if 'academy' in request.path %}
-                    <div class="row">
-                        <div class="col-xs-12">  
-                            <div class="form-group">   
-                                <a href="{% url 'student_to_association' %}" >Nouvelle inscription</a>  
-                            </div>        
-                        </div>
-                    </div>
-                    {% endif %}
+
+
+
                 </form> 
             </div>
         </div>

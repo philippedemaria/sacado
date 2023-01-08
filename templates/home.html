@@ -43,36 +43,34 @@ Intro Section -
 <section id="intro" class="clearfix">
     <div class="container h-100">
 
-        <div class="col-xs-12" >
-          <a href="#" data-toggle='modal' data-target='#sacadopopup'  class="btn btn-index"> <span class="sacado">SACADO </span><br>Établissement <img src="{% static 'img/approche_gar.png' %}" width="90px"/> </a>
 
-        </div>
+
  
 
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
-            <div class="col-xs-12 col-md-12 col-lg-6">
 
+                   
+
+            <div class="col-xs-12 alert alert-sacado on_index"  style="font-size:18px" >
+                <span style="font-size: 30px"><span class="sacado">SACADO</span> évolue.</span><br/> En plus de nos exercices mutualisés, <span class="sacado bigsize">SACADO</span> vous permet de <b>créer vos propres exercises à variables aléatoires dynamiques</b> ou pseudo-aléatoires<span class="helper_tip"> <i class="fa fa-question-circle"></i> <div class="helper_tip_text" > Parmi n propositions enregistrées, sacado en affiche m, inférieur à n. </div></span>. <span class="sacado bigsize">SACADO</span> devient peu à peu compatible avec toutes les matières.                     
+            </div>
+
+
+            <div class="col-xs-12 col-md-12 col-lg-5">
+ 
+
+      
+   
                 {% if sacado_voyage %}
                 <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
                 {% endif %}
                 <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
-                    <span class="exo">{{ nb_parcours }}</span> parcours<span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
-                              <div class="helper_tip_text" >créés par des enseignants. Un parcours est une séquence de cours, d'exercices (parmi {{ nb_exercise }}) à variables didactiques aléatoires, de quizz, flashcards et d'exercices personnalisés.</div>
-                          </span> 
-                {% if not sacado_voyage %}
-                de <br/>
-                {% endif %}
+                    <span class="exo">{{ nb_parcours }}</span> parcours de 
                     {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}
-
-                {% comment %}                      
-
-                        <span class="helper_tip"> <sup style="top:-1.5em"> <i class="fa fa-question-circle text-danger"></i> </sup>
-                              <div class="helper_tip_text" >Les exercices de Sciences Physiques et Chimiques, Numériques et Sciences de l'Informatique.</div>
-                          </span>
-                
-                {% endcomment %}
-                <br/>
-                       interactif{{ nb_parcours|pluralize }} et corrigé{{  nb_parcours|pluralize }} de<br>  la Maternelle à la Terminale en apprentissage adaptatif.
+                    <span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
+                          <div class="helper_tip_text" >créés par des enseignants. Un parcours est une séquence de cours, d'exercices (parmi {{ nb_exercise }}) à variables didactiques aléatoires, de quizz, flashcards et d'exercices personnalisés.</div>
+                    </span> 
+                    interactif{{ nb_parcours|pluralize }} et corrigé{{  nb_parcours|pluralize }} de   la Maternelle à la Terminale en apprentissage adaptatif.
 
                 </div>
        
@@ -85,27 +83,10 @@ Intro Section -
                 {% endcomment %}
 
 
-                <div class="row" style="margin-top: 10px; margin-bottom: 20px">
-                    <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-primary">
-                            Se connecter
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-md-12 col-lg-6">
-                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
-                            Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
-                                                   style="margin-left: 5px; vertical-align: baseline"/>
-                        </a>
-                    </div>
-                </div>
 
 
 
                 <div style="margin: 0px 0px 30px 0px;">
-                    <img src="{% static 'img/edge.png' %}" width="35px"/>
-                    <img src="{% static 'img/chrome.png' %}" width="35px"/>
-                    <img src="{% static 'img/firefox.png' %}" width="35px"/>                    
-                    <img src="{% static 'img/safari.png' %}" width="35px"/>
                     <i class="fa fa-apple"></i>
                     <a href="https://java.com/fr/download/help/mac_install.xml"
                        target="_blank" >
@@ -155,31 +136,23 @@ Intro Section -
                 </div>
 
                 {% endcomment %}
-
-
-
-
-
             </div>
 
 
 
 
-
-
-
-            <div class="col-xs-12 col-md-12 col-lg-6 no_mobile_exercises" >
+            <div class="col-xs-12 col-md-12 col-lg-7 no_mobile_exercises" >
                 <small style="margin-left:150px">Cliquez sur l'écran pour tester l'exercice en cours.</small>
                 <div style="position: relative;text-align:center">
                     <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
-                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400"
-                             style="position: absolute; top :40px; left:133px;z-index:-1"/>
-
                         {% if exercise.id|divisibleby:"3" %}
+                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400" class="image_mains_ip_base"/>
                         <img src="{% static 'img/mains_ip.png' %}" height="490" width="610" style=" z-index: 999"/>
                         {% elif exercise.id|divisibleby:"4" %}
+                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400" class="image_index_base" />
                         <img src="{% static 'img/ordinateur.png' %}" height="490" style=" z-index: 999"/>
                         {% else %}
+                        <img src="{{ exercise.supportfile.imagefile.url }}" width="400" class="image_index_base" />
                         <img src="{% static 'img/ordi_portable.png' %}" height="490" style="  z-index: 999"/>
                         {% endif %}
 
@@ -390,7 +363,7 @@ Intro Section -
                     <p>SACADO est un créateur de parcours d'apprentissage construits à partir d'exercices à variables aléatoires. <br>Les élèves travaillent leurs savoir faire scientifiques en totale autonomie ou sous la supervision de leur enseignant. <br>Les enseignants suivent les acquisitions de leurs élèves. Les résultats s'exportent au format CSV, selon condition.<br>Les parents peuvent accéder aux résultats de leurs enfants.  </p>
                   </div>
 
-                    <h4> <a href="{% url 'rgpd' %}"  style="color:#535074" >RGPD</a> - <a href="{% url 'cgv' %}"  style="color:#535074" >CGV</a> - <a href="{% url 'mentions' %}"  style="color:#535074" >Mentions Légales</a> </h4>
+                    <h4> <a href="{% url 'rgpd' %}">RGPD</a> - <a href="{% url 'cgv' %}" >CGV</a> - <a href="{% url 'mentions' %}" >Mentions Légales</a> </h4>
                     
                     
                     <h4>L'Équipe SACADO</h4>
@@ -446,10 +419,10 @@ Intro Section -
         <div class="row">
 
             <div class="col-sm-4" align="center">
-                <a href="https://www.geogebra.org/?lang=fr"  style="color:#535074;font-size: 30px" target="_blank"><img src="{% static 'img/ggb.png' %}"> GEOGEBRA</a>
+                <a href="https://www.geogebra.org/?lang=fr"  style="color:white;font-size: 30px" target="_blank"><img src="{% static 'img/ggb.png' %}"> GEOGEBRA</a>
             </div>
             <div class="col-sm-4" align="center">
-                <a href="https://www.lws.fr/"  style="color:#535074" target="_blank"><img src="{% static 'img/lws_gris.png' %}"></a>
+                <a href="https://www.lws.fr/"  style="color:white" target="_blank"><img src="{% static 'img/lws_gris.png' %}"></a>
             </div>
             <div class="col-sm-4" align="center">
                 <a href="{% url 'tweeters_public' %}" style="margin-right:40px"><img src="{% static 'img/twitter.png' %}" ></a>

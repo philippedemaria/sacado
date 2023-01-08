@@ -279,7 +279,31 @@ table.puzzle td {
   font-size: 15px;
 }
 
+.round-border {
+    margin-top: 150px;
+    margin-bottom: 150px;
+    border-radius: 50%;
+    border:5px solid #5d4391;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+    width: 150px;
+    height: 150px;
+    color : #5d4391;
+    font-weight: 800;
+    font-size : 30px;
+}
 
+.round-border:hover{
+    border:5px solid #f1eef7;
+    color:white;
+    background-color:  #5d4391;
+}
+
+a.no_decoration:hover{
+    text-decoration: none;
+}
 /***************************************************************************/
 /*********************   pop up tag   **************************************/
 /***************************************************************************/

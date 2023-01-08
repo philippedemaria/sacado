@@ -631,6 +631,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             revert : true,
         });
 
+
     $( ".input_droppable" ).droppable({
             drop: function( event, ui ) {
 
@@ -654,82 +655,75 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
     $(document).on('keyup','.secret_letter', function(e) { 
          
-                  if (e.which == 32 || (65 <= e.which && e.which <= 65 + 25)
-                                    || (97 <= e.which && e.which <= 97 + 25)
-                                    || (192 == e.which) || (55 == e.which) || (50 == e.which)|| (57 == e.which) ) 
-                    { 
-                    
-                        var c = String.fromCharCode(e.which) ;   
-                        let csrf_token    = $("input[name='csrfmiddlewaretoken']").val();
-                        let secret_letter = c ;
-                        let nb_tries      = $("#nb_tries").val();
-                        let index         = $(this).data('index');
-                        let word_id       = $(this).data("word_id");
-                        let word_id_used  =  $("#word_id_used").val();
-                        let position      =  $("#position").val();
-                        let word_length   =  $("#word_length").val();
-                        let word_length_i =  $("#word_length_i").val();
-                        let shuffle_ids   =  $("#shuffle_ids").val();
-                        let used_letter   =  $("#used_letter").text(); 
+          if (e.which == 32 || (65 <= e.which && e.which <= 65 + 25)
+                            || (97 <= e.which && e.which <= 97 + 25)
+                            || (192 == e.which) || (55 == e.which) || (50 == e.which)|| (57 == e.which) ) 
+            {   
+                let csrf_token    = $("input[name='csrfmiddlewaretoken']").val();
+                let secret_letter = String.fromCharCode(e.which) ;
+                let nb_tries      = $("#nb_tries").val();
+                let index         = $(this).data('index');
+                let word_id       = $(this).data("word_id");
+                let word_id_used  =  $("#word_id_used").val();
+                let position      =  $("#position").val();
+                let word_length   =  $("#word_length").val();
+                let word_length_i =  $("#word_length_i").val();
+                let shuffle_ids   =  $("#shuffle_ids").val();
+                let used_letter   =  $("#used_letter").text(); 
 
-                        $.ajax({
-                                type: "POST",
-                                dataType: "json",
-                                data: {
-                                    'secret_letter': secret_letter,
-                                    'nb_tries'     : nb_tries,
-                                    'word_id'      : word_id,
-                                    'word_id_used' : word_id_used,
-                                    'index'        : index,
-                                    'position'     : position,
-                                    'word_length'  : word_length,
-                                    'shuffle_ids'  : shuffle_ids,
-                                    'used_letter'  : used_letter,
-                                    csrfmiddlewaretoken: csrf_token,
-                                },
-                                url: "../../ajax_secret_letter",
-                                success: function (data) {
-             
+                $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'secret_letter': secret_letter,
+                            'nb_tries'     : nb_tries,
+                            'word_id'      : word_id,
+                            'word_id_used' : word_id_used,
+                            'index'        : index,
+                            'position'     : position,
+                            'word_length'  : word_length,
+                            'shuffle_ids'  : shuffle_ids,
+                            'used_letter'  : used_letter,
+                            csrfmiddlewaretoken: csrf_token,
+                        },
+                        url: "../../ajax_secret_letter",
+                        success: function (data) {
      
-                                    if (data.response == "false")
-                                    {   
-                                        var new_position = parseInt(position) + 200;
-                                        $("#position").val(new_position);
-                                        $("#wordguess-counter").css("background-position","0 "+new_position+"px") ; 
-                                        $("#secret_letter"+index).val('');
-                                        $("#secret_letter"+index).focus() ;   
-                                    }
-                                    else {
-                                        $("#secret_letter"+index).css('border','2px solid green');
-                                        var nidx      = parseInt(index)+1;
-                                        word_length_i = parseInt(word_length_i) ;
-                                        if (parseInt(index)+1 < word_length_i){ $("#secret_letter"+nidx).focus(); } else {  $("#secret_letter0").focus(); } 
-                                        $("#word_length").val(data.length);
-                                    }
 
-                                    $("#used_letter").text(data.used_letter);  
-                                    if (data.win == "true")
-                                    {   
-                                        $("#word_id_used").val(data.word_id_used);   
-                                        $("#"+data.input).val(data.word);
-                                        $("#new_word").html("").html(data.new_word);
-                                        $("#position").val(200);
-                                        $("#word_length_i").val(data.length_i);
-                                        $("#word_id").val(data.word_id);
-                                        $("#used_letter").text("");
-                                        $('#word_left').text(data.nb);
-                                    }
+                            if (data.response == "false")
+                            {   
+                                var new_position = parseInt(position) + 200;
+                                $("#position").val(new_position);
+                                $("#wordguess-counter").css("background-position","0 "+new_position+"px") ; 
+                                $("#secret_letter"+index).val('');
+                                $("#secret_letter"+index).focus() ;   
+                            }
+                            else {
+                                $("#secret_letter"+index).css('border','2px solid green');
+                                var nidx      = parseInt(index)+1;
+                                word_length_i = parseInt(word_length_i) ;
+                                if (parseInt(index)+1 < word_length_i){ $("#secret_letter"+nidx).focus(); } else {  $("#secret_letter0").focus(); } 
+                                $("#word_length").val(data.length);
+                            }
 
+                            $("#used_letter").text(data.used_letter);  
+                            if (data.win == "true")
+                            {   
+                                $("#word_id_used").val(data.word_id_used);   
+                                $("#"+data.input).val(data.word);
+                                $("#new_word").html("").html(data.new_word);
+                                $("#position").val(200);
+                                $("#word_length_i").val(data.length_i);
+                                $("#word_id").val(data.word_id);
+                                $("#used_letter").text("");
+                                $('#word_left').text(data.nb);
+                            }
+                        }
+     
+                    })
 
-
-
-                                
-                                }
-             
-                            })
-
-                    } 
-            });
+            } 
+    });
 
 
 

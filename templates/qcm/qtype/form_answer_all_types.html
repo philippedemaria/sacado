@@ -163,7 +163,7 @@
                 </span>
                 {% endif %}
 
-                <div style="border:thick double {{ supportfile.theme.subject.color }};width:750px;height:550px;padding:20px;background-color: white">
+                <div style="border:thick double {{ supportfile.theme.subject.color }};width:750px;height:550px;padding:20px;background-color: white; background-position: right bottom;{% if supportfile.theme.image %}background-image: url({{ supportfile.theme.image.url  }}){% endif %};background-repeat: no-repeat;">
                 <!-- ======================================================================= -->   
                 <!-- ================== Zone d'enregistrement ===============================--> 
                 <!-- ======================================================================= -->                     
@@ -329,7 +329,7 @@
 </div>
 
 
-<!-- <script>
+<script>
 function sendExercise(){
 	prod=document.getElementById("cke_1_contents").childNodes[1].contentDocument.body.innerHTML;
 	console.log("on envoie au prof : ",prod);
@@ -420,12 +420,7 @@ function sendExercise(){
   };
    
 
-</script> -->
 
-
-
-
-<script>
 MathJax = {
   tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
   startup: {

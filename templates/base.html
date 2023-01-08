@@ -45,14 +45,14 @@
     <div class="container">
         <div class="logo float-left">
             <a class="navbar-brand sacado" href="{% url 'index' %}#intro"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO<img src="{% static 'img/approche_gar.png' %}" /></a>
+            <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-sacado">  Version Établissement </a>
         </div>
         <nav class="main-nav float-right d-none d-lg-block">
             <ul> 
 
-
-                <li><a href="#" data-toggle='modal' data-target='#connexion' >Connexion</a></li>
-                <li><a href="#" data-toggle='modal' data-target='#inscription' >S'inscrire</a></li>
-                <li><a href="#footer">Contact</a></li>
+                <li><a href="#" data-toggle='modal' data-target='#connexion' class="btn btn-intro_sacado">Connexion</a></li>
+                <li><a href="#" data-toggle='modal' data-target='#inscription' class="btn btn-intro_sacado">S'inscrire</a></li>
+                <li><a href="#footer" class="btn btn-intro_sacado">Contact</a></li>
 
             </ul>
         </nav><!-- .main-nav -->
@@ -314,7 +314,7 @@
                         </div>
                         <div class="col-lg-4 col-xs-6">  
                             <div class="form-group">   
-                                <input name="envoi" type="submit" class="btn btn-primary" value="Connexion" />
+                                <input name="envoi" type="submit" class="btn btn-sacado" value="Connexion" />
                             </div>        
                         </div>
                         <div class="col-lg-3 col-xs-6">  
@@ -323,6 +323,19 @@
                             </div>        
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-6">
+                        </div>
+                        <div class="col-xs-12 col-md-12 col-lg-6">
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger index_size">
+                                Se connecter avec <img src="{% static 'img/Googlelogo.png' %}" height="15"
+                                                       style="margin-left: 5px; vertical-align: baseline"/>
+                            </a>
+                        </div>
+                    </div>
+
+
                 </form> 
             </div>
         </div>

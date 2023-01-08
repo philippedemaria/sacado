@@ -6129,7 +6129,7 @@ def parcours_exercises(request,id):
 
 
 def exercises_level(request, id):
-
+    teacher = request.user.teacher
     level = Level.objects.get(pk=id)    
     exercises = Exercise.objects.filter(level=level,supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     themes =  level.themes.all()
@@ -6137,10 +6137,11 @@ def exercises_level(request, id):
     u_form = UserForm()
     t_form = TeacherForm()
     s_form = StudentForm()
-    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
+    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'teacher' : teacher , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
 
 
 def exercises_level_subject(request, id, subject_id):
+
     exercises = Exercise.objects.filter(level_id=id,supportfile__is_title=0,theme__subject_id = subject_id).order_by("theme","knowledge__waiting","knowledge","ranking")
     level = Level.objects.get(pk=id)
     themes =  level.themes.all()
@@ -6148,7 +6149,7 @@ def exercises_level_subject(request, id, subject_id):
     u_form = UserForm()
     t_form = TeacherForm()
     s_form = StudentForm()
-    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
+    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes ,  'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
 
 ############################################################################################################################################################################
 ########################## Début de gestion des supportfiles 
@@ -7040,14 +7041,11 @@ def alea_annoncements(n,supportfile) :
     shufflechoices = list()
     s_choices = supportfile.supportchoices.all()
     
-
     if not vars_list : 
         su_choices = list(s_choices)
         random.shuffle(su_choices)
         n = min(n, s_choices.count())
         s_choices = su_choices[0:n]
-
-
 
     for i in range (n) :
         enonce  = supportfile.annoncement
@@ -7129,7 +7127,7 @@ def alea_annoncements(n,supportfile) :
 
 
 
-def define_all_type(n, supportfile):
+def define_all_types(n, supportfile):
 
     if  supportfile.qtype==1 :  # VF
 
@@ -7146,7 +7144,6 @@ def define_all_type(n, supportfile):
         vars_list , annoncements ,  shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , 'shufflesubchoices' : shufflesubchoices }
         
-
     elif supportfile.qtype==5 : # paires
 
         choices = list()
@@ -7211,7 +7208,7 @@ def define_all_type(n, supportfile):
             shufflechoices.append(puzzle)
         context = {  'shufflechoices' : shufflechoices  }  
 
-    elif supportfile.qtype==13 : #mots secrets : c 
+    elif supportfile.qtype==13 : #mots secrets :  
 
         shufflechoices =list() 
         for choice in supportfile.supportchoices.values('id','answer').all():
@@ -7250,17 +7247,6 @@ def define_all_type(n, supportfile):
 
 
 
-
-def all_type_exercises_creator(supportfile, relation) :
-    """ Créateur de tous les exercices pour les templates"""
-
-    n = relation.situation
-
-    context = define_all_type( n , supportfile)
-
-    return context
-
-
 @login_required(login_url= 'index')
 def execute_exercise(request, idp,ide):
     """ Vue d'un exercice depuis un parcours -- Template de réponse """ 
@@ -7289,11 +7275,7 @@ def execute_exercise(request, idp,ide):
 
     today = time_zone_user(request.user)
     timer = today.time()
-    try :
-        tracker_execute_exercise(True, request.user , idp , ide , 0)
-    except :
-        pass
-
+ 
     if exercise.supportfile.qtype != 100 :
         return show_supportfile_student(request,relation  )
 
@@ -7319,7 +7301,8 @@ def show_supportfile_student(request,relation):
     if supportfile.is_python or supportfile.qtype == 20 :
         return write_exercise(request,relation.id)
     else :
-        context.update( all_type_exercises_creator(supportfile, relation) ) # création du contexte de tous les exercices        
+
+        context.update( define_all_types( relation.situation , supportfile) ) # création du contexte de tous les exercices 
         url = "qcm/qtype/form_answer_all_types.html" 
 
     return render(request, url , context)
@@ -7538,7 +7521,7 @@ def check_solution_qcm_numeric(request):
     solutions_int = list()
     for s  in solutions:
         solutions_int.append( int(s) )
-
+ 
     if set(solutions_int) == set(supportchoice_ids) : 
         numexo += 1
         score  += 1

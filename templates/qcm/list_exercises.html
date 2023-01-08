@@ -39,99 +39,84 @@
     {% if datas %}
         {% include 'searching_bar.html' %}
 
-  
         <div id="content_exercises">
 
-            <div class="alert alert-sacado">
+
+            <div class="alert alert-sacado" style="margin-top:20px;">
                 <div class="row">
                     <div class="col-xs-2 col-md-1" align="center">
                         <i class="fa fa-warning fa-3x text-warning"></i>
                     </div>
                     <div class="col-xs-10 col-md-11">
-                        Cette page vous permet <b>seulement</b> de regarder les exercices proposés par niveau et par thème. <br/>Pour les proposer à vos élèves, <b>vous devez d'abord construire un parcours</b> puis les insérer dans le parcours, depuis le parcours.<br/>Si aucun niveau n'apparait, vous devez sélectionner vos niveaux d'enseignement <a href="{% url 'profile' %}" class="btn btn-sacado">Sélectionner mes niveaux d'enseignement</a>
+                        Cette page vous permet <b>seulement</b> de consulter les exercices proposés par niveau et par thème. <br/>Pour les proposer à vos élèves, vous devez les insérer dans des <b>parcours</b> d'apprentissage.
+
+                        {% if teacher.levels.count == 0 %} 
+                        <br/>Si aucun niveau n'apparait, vous devez sélectionner vos niveaux d'enseignement <a href="{% url 'profile' %}" class="btn btn-sacado">Sélectionner mes niveaux d'enseignement</a>{% endif %}
                     </div>
                 </div>
 
-            </div>  
-
-            <div class="row"> 
-                <div class="col-sm-12 col-md-12">
-                    <div class="alert alert-sacado">
-
+                <div class="row"> 
+                    <div class="col-sm-12 col-md-12">
                         <div class="row">
                             <div class="col-xs-12 col-md-12">
-                                <h1><img src="{% static 'img/conseil.png' %}" width="40px"/> Aides et conseils pour construire vos parcours</h1>
+                                <h1 class="sacado_color_text"> Aides et conseils pour construire vos parcours</h1>
                             </div>
                         </div>  
                         <div class="row">
-                            <div class="col-xs-12">
-                                <b>1.</b> Vous devriez commencer par créer vos groupes avant de créer vos dossiers et documents. Sans groupe (donc sans élèves) vos documents ne seront pas affectés. Il faudra le faire dans un second temps..
+                            <div class="col-xs-12 col-md-4">
+                                <a href="{% url 'create_group' %}" class="no_decoration">  
+                                    <div  class="round-border" style="margin-top: 40px;margin-bottom: 40px;"> 
+                                        1.<br/>  
+                                        Créer un  <br/>  
+                                        groupe 
+                                    </div>                                        
+                                </a>
                             </div>
-                        </div>   
+                            <div class="col-xs-12 col-md-4">
+                                <a href="{% url 'create_folder' 0 %}" class="no_decoration">
+                                    <div  class="round-border" style="margin-top: 40px;margin-bottom: 40px;"> 
+                                        2.<br/> 
+                                        Créer un<br/> 
+                                        dossier<br/> 
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-xs-12 col-md-4">
+                                <a href="{% url 'create_parcours' 0 %}" class="no_decoration">
+                                    <div class="round-border" style="margin-top: 40px;margin-bottom: 40px;"> 
+                                        3.<br> 
+                                        Créer un <br/> 
+                                        parcours <br/>  
+                                    </div>                                    
+                                </a>
+                            </div>
+                        </div>  
+
+
+                        {% if not sacado_asso %}
                         <div class="row">
                             <div class="col-xs-12 col-md-12">
-                                <p class='thin'><b>2.</b> Vous avez de 2 façons de disposer d'un parcours d'exercices </p>  
-                            
-                                <p class='thin'><b><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> En créant vous-même votre parcours</label></b> <br/>
-                                   Vous devez créer le parcours en quelques clics puis choisir les exercices adaptés aux savoir faire visés par votre parcours d'apprentissage.
-                                </p>
-                                <p class='thin'><i class="fa fa-question-circle text-warning"></i> Astuce. Vous avez deux approches selon votre convenance pour classer vos parcours.</p> 
-
-                                <div class="row">
-                                    <div class="col-sm-6 col-md-6 col-lg-4">
-                                            <ol>Méthode privilégiée <i class="fa fa-check text-success"></i> </ol>
-                                            <ol>1. Créer un dossier  </ol>
-                                            <ol>2. Depuis le dossier, créer vos parcours</ol>
-                                            <div align="center">
-                                            <img src="{% static 'img/dossier2.png' %}" />
-                                            </div>
+ 
+                                <img src="{% static 'img/conseil.png' %}" width="50px" style="float:left;margin-right:30px"/>  Avec la <b>version Etablissement</b> 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" > 
+                                        Payante.<br/> 
+                                        moins de 500 élèves : 100€ <br/>
+                                        moins de 1000 élèves : 200€ <br/>
+                                        moins de 1500 élèves : 300€ <br/>
+                                        plus de 1500 élèves : 350€ <br/>
+                                        en commande directe. <br/>Majoration si commande par eMLS.
                                     </div>
-                                    <div class="col-sm-6 col-md-6 col-lg-4">
-                                            <ol>1. Créer vos parcours </ol>
-                                            <ol>2. Créer votre dossier</ol>
-                                            <ol>3. Inclure les parcours créés dans le dossier</ol>
-                                            <div align="center">
-                                            <img src="{% static 'img/dossier1.png' %}"  />
-                                            </div>
-                                    </div> 
-                                    {% if not sacado_asso %} s{% endif %}
-
-                                    <div class="col-sm-12 col-md-12 col-lg-4">
-                                            Avec la <b>version Etablissement</b>, vous clonez un dossier et vous récupérer tous les parcours d'exercices d'apprentissage inclus dans le dossier. <br/> En <b>10 minutes</b>, tout SACADO est prêt à l'emploi. {% if not is_gar_check %}<br/> Il ne reste qu'à inscrire vos élèves ou leur donner un lien d'inscription.{% endif %}
-                                            <br/> <br/> <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a> 
-                                    </div> 
-
-                                </div>
-
-
-
-
-                                <p class='thin'><b><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> En récupérant un parcours déjà créé et mutualisé </label></b> (<em class="text-danger">Version ETABLISSEMENT seulement</em>) <br/>
-                                Vous clonez tous les parcours de l'équipe SACADO ou ceux mutualisés par les enseignants de votre établissement. Il vous sera possible de le modifier une fois cloné.
-                                </p>
-
+                                </span>
+                               , clonez directement les dossiers avec leurs parcours d'exercices d'apprentissage proposés par SACADO. <br/> En <b>10 minutes</b>, tout SACADO est prêt à l'emploi. {% if not is_gar_check %}<br/> Il ne reste qu'à inscrire vos élèves ou leur donner un lien d'inscription.{% endif %}
+                                <br/> <br/> <a href="{% url 'ask_school_adhesion' %}" class="btn btn-sacado">Opter pour la version établissement</a> 
+     
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12" align="center">
-
-                                <a href="{% url 'create_group'  %}" class="btn btn-sacado">Créer un groupe</a>
-
-                                
-                                <a href="{% url 'create_folder' 0 %}" class="btn btn-sacado">Créer un dossier</a>
-
-           
-                                <a href="{% url 'create_parcours' 0 %}" class="btn btn-sacado">Créer un parcours</a>
-      
-                            </div> 
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-
-
-
+            </div>  
         </div>
     {% else %}
 
