@@ -159,7 +159,7 @@ def index(request):
             #     grp = Group.objects.get(pk=sg_id)
             #     sgps.append(grp)
 
-            sgps    = Group.objects.filter(pk__in=shared_grps_id)
+            sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
             groupes =  grps | sgps
             groups  = groupes.order_by("level__ranking") 
             this_user = request.user
