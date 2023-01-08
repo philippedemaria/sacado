@@ -179,7 +179,7 @@
         {% else %}         
         <li {% if 'parcours_peuplate/' in request.path %} class="active" {% endif %}><a href="{% url 'peuplate_parcours' parcours.id   %}"><i class="bi bi-explicit"></i> Sélectionner les exercices</a>   </li>  
         <li {% if 'parcours_new_exercice/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'my_own_exercises'   %}" ><i class="bi bi-cloud-download-fill"></i> Créer un exercice</a> 
+            <a href="{% url 'my_own_exercises'   %}" ><i class="bi bi-explicit-fill"></i> Créer un exercice</a> 
         </li> 
         {% endif %}
 
