@@ -185,7 +185,7 @@
                                 <table class="table table-sacado">
                                 {% for s in group.just_students.all|dictsort:"user.last_name"  %}
                                     <tr><td>
-                                            {{ s }}
+                                            {{ s }} {% if s.user.username|length > 50 %}<small><b>GAR</b></small>{% endif %}
                                         </td>
                                         <td>
                                             <a  href="{% url 'delete_student_group'  group.id s.user.id  %}"
