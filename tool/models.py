@@ -153,8 +153,7 @@ class Qtype(models.Model):
     extra     = models.PositiveIntegerField(default=0,   ) # Nombre d'extra pour le inline formset
     is_pseudo = models.BooleanField(default=0 ) 
     is_insert = models.BooleanField(default=0 ) 
-    template_ans  = models.CharField(max_length=255,  blank=True, default='', verbose_name="template de réponse") 
-    
+
     def __str__(self):
         return self.title
 
