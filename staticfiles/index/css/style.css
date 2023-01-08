@@ -342,11 +342,30 @@ table.table-bordered.dataTable {
   border-radius: 50%;
 }
 
+
+a.btn-intro_sacado{
+  margin-left:10px;
+}
 a.btn-intro_sacado:hover{
+  border-radius: 4px;
+  border : solid 1px #5d4391;
+  background-color:#5d4391;    
+  border-radius: 10px;
+  color:white!important;
+}
+
+a.btn-connex{
   color:#FFF;
   border-radius: 4px;
   border : solid 1px #5d4391;   
   border-radius: 10px;
+}
+a.btn-connex:hover{
+  border-radius: 4px;
+  border : solid 1px #5d4391;
+  background-color:#5d4391;    
+  border-radius: 10px;
+  color:white!important;
 }
 
 .image_index_base{
