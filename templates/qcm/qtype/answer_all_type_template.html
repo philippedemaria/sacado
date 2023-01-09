@@ -250,24 +250,26 @@
         	</li>
 
 		{% elif supportfile.qtype == 5 %}
-
-			<label>Eléments</label>
-			<div class="quizz_item select_items">
-				{% for choice in choices %}
-					<span class="quizz_choice draggable" style="cursor: move;" data-subchoice="{{ choice.id }}">
-						{% if choice.imageanswerbis  %}<img src="{{ choice.imageanswerbis.url }}" height="80px" />{% endif %} {{  choice.answerbis }}
-					</span>
+			<li class="this_slide">
+				<label>Eléments</label>
+				<div class="quizz_item select_items">
+					{% for choice in choices %}
+						<span class="quizz_choice draggable" style="cursor: move;" data-subchoice="{{ choice.id }}">
+							{% if choice.imageanswerbis  %}<img src="{{ choice.imageanswerbis.url }}" height="80px" />{% endif %} {{  choice.answerbis }}
+						</span>
+					{% endfor %}
+				</div>	
+				<label>à appairer avec </label>
+				<div class="dropzone">
+				{% for customchoice in shufflechoices %}
+				<div class="quizz_item droppable" data-choice="{{ customchoice.id }}" >
+					<span class="quizz_choice">{% if customchoice.imageanswer  %}<img src="{{ customchoice.imageanswer.url }}" height="80px" />{% endif %} {{  customchoice.answer }}</span>
+					<input type="hidden" name="answers" value="{{ customchoice.id }}=" />
+				</div>
 				{% endfor %}
-			</div>	
-			<label>à appairer avec </label>
-			<div class="dropzone">
-			{% for customchoice in shufflechoices %}
-			<div class="quizz_item droppable" data-choice="{{ customchoice.id }}" >
-				<span class="quizz_choice">{% if customchoice.imageanswer  %}<img src="{{ customchoice.imageanswer.url }}" height="80px" />{% endif %} {{  customchoice.answer }}</span>
-				<input type="hidden" name="answers" value="{{ customchoice.id }}=" />
-			</div>
-			{% endfor %}
-			</div>
+				</div>
+				
+			</li>
 
 		{% elif supportfile.qtype == 6 %}
 
@@ -485,7 +487,7 @@
 		{% endif %}
 
 			<!------------------------------ Slide de fin --------------------------------------------->
-
+			{% if supportfile.qtype < 5 %}
         	<li class="this_slide">
         		<div align="center" style="padding:30px;">
 
@@ -526,7 +528,7 @@
 
 	                    <div class="col-sm-12 col-md-12" align="left" style="margin:10px 60px">
 	                    	{% if supportfile.supportvariables.count %}
-	               			<a href="javascript:window.close();" class="btn btn-default">Retour</a>
+	               			<a href="javascript:window.close();" class="btn btn-default">Fin </a>
 	                    	{% else %}
 	               			<a href="javascript:history.back()" class="btn btn-default">Retour</a>
 	                    	{% endif %}
@@ -534,6 +536,8 @@
                   {% endif %}
                 </div>
         	</li>
+        	{% endif %}
+        
         </ul>
     </div>
 </div>

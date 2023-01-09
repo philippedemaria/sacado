@@ -218,6 +218,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        $('#show_all_proposed_exercises').on('click', function (event) {
+
+             $('#all_proposed_exercises').toggle(500);
+        });
+
 
 
 

@@ -153,7 +153,8 @@ class Supportfile(models.Model):
     ####################################################################################################################################
     ####  Format de l'exercice
     qtype         = models.PositiveIntegerField(default=100)    
-    canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")     
+    canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")
+    nb_pseudo     = models.PositiveIntegerField(default=0, verbose_name="Nombre de pseudo situation")      
     ####  Cas spécifique axe gradué qtype = 18 
     xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
     xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
@@ -166,6 +167,10 @@ class Supportfile(models.Model):
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
 
+
+    def qtype_obj(self):        
+        Qtype = apps.get_model('tool', 'Qtype')
+        return Qtype.objects.get(pk=self.qtype)
 
 
     def qtype_title(self):
@@ -180,13 +185,10 @@ class Supportfile(models.Model):
         return logo
 
 
-
-
     def this_template(self):
         Qtype = apps.get_model('tool', 'Qtype')
         qt = Qtype.objects.get(pk=self.qtype)
         return 'qcm/qtype/ans_'+qt.custom+'.html'
-
 
 
     def grid(self):

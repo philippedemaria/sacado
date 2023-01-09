@@ -21,13 +21,48 @@
   height:70px;
 }
 
-@media (max-width:991px){
-  
-.search_bar{
-  height:100px;
+#all_proposed_exercises{
+    padding:15px;
+    max-width:650px;
+    -webkit-box-shadow: 0 0 20px rgb(0 0 0 / 50%);
+    -moz- box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgb(0 0 0 / 50%);
+    display:none;
+    border-radius: 5px;
+    position: absolute;
+    z-index:11;
+    background-color: white;
 }
 
+
+a.all_proposed_types_exercises{
+    float:left;
+    padding:5px 10px;
+    border-radius: 5px;
+    margin: 10px;
 }
+
+a.all_proposed_types_exercises:hover{
+    background-color: #ece8f6;
+    cursor: pointer;
+}
+
+
+@media (max-width:991px){
+  
+  .search_bar{
+    height:100px;
+  }
+
+  .loupe{
+    background-color: transparent!important;
+  }
+
+  .xs_no_display{
+    display:none;
+  }
+}
+
 
 
 
@@ -560,6 +595,75 @@ div.carte {
 /* ---------------------------------------------------      CUSTOMEXERCISE ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/
 
+/* ------------------------------------------------------------------------------------------------------------*/
+/* --------------------------------      wrapper_this_slider               ------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------*/
+
+.border_exercise{
+  width:750px;
+  min-height:550px;
+  padding:20px;
+  background-color: white; 
+  background-position: right bottom;
+  background-repeat: no-repeat;
+}
+
+.validation{
+  margin-top: 30px;
+}
+ 
+.wrapper_this_slider{
+  width:700px;
+  min-height::480px;
+  position: relative;
+  overflow: hidden;
+}
+
+.this_slider{
+  width:700px;
+  overflow: hidden;
+}
+ 
+
+.this_slider ul {
+  list-style: none;
+  width: 10000px; 
+  position: relative;
+  left : 0px; 
+  padding: 0; 
+  margin: 0;
+  overflow: hidden;
+}
+
+
+.this_slider ul li {
+  float: left;  
+  list-style: none;
+}
+ 
+
+li.this_slide{
+    margin-left: auto;
+    margin-right: auto;
+    width : 700px;
+    min-height::480px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    background-image: url('/static/img/fond_exercise.png')
+  }
+
+.this_slide .this_consigne{
+  background-color: #FAFAFA;
+  border:1px solid #ddd;
+  border-radius:2px;
+
+}
+
+/* ------------------------------------------------------------------------------------------------------------*/
+/* --------------------------------    fin wrapper_this_slider             ------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------*/
+
 .scrollbar::-webkit-scrollbar {
   height: 10px;
   width: 5px;
@@ -960,61 +1064,7 @@ div.carte {
   font-size: 0.8em;
 }
 
-/* ------------------------------------------------------------------------------------------------------------*/
-/* --------------------------------      wrapper_this_slider               ------------------------------------*/
-/* ------------------------------------------------------------------------------------------------------------*/
 
-
-
-
-.wrapper_this_slider{
-  width:700px;
-  height:480px;
-  position: relative;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-
-.this_slider{
-  width:700px;
-  overflow: hidden;
-}
- 
-
-.this_slider ul {
-  list-style: none;
-  width: 10000px; 
-  position: relative;
-  left : 0px; 
-  padding: 0; 
-  margin: 0;
-  overflow: hidden;
-}
-
-
-.this_slider ul li {
-  float: left;  
-  list-style: none;
-}
- 
-
-li.this_slide{
-    margin-left: auto;
-    margin-right: auto;
-    width : 700px;
-    height:480px;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
-    background-image: url('/static/img/fond_search.png')
-  }
-
-.this_slide .this_consigne{
-  background-color: #FAFAFA;
-  border:1px solid #ddd;
-  border-radius:2px;
-
-}
 
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------   SHARED   EXERCISE ------------------------------------*/

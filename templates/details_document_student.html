@@ -158,15 +158,11 @@
                     Parcours de maîtrise proposé<br/><i class="fa fa-sitemap"></i>
                 </a>
                 {% endif  %}
-
-    
                 {% if is_blck %}
                     <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
                           <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ rc.lock|date:"d-m-Y à H:i" }}</span>
                     </div>
                         {% include 'qcm/_imagefile_displayer.html' %}
-                         
-           
                 {% else %}  
                     {% if parcours_available.is_ok %} 
 
@@ -195,16 +191,14 @@
             
 
                     {% endif  %}
-
                 {% endif  %}
-          
-            
             {% else %}
                 <a href="#" class="detail_parcours"      data-exercise_id="{{ rc.exercise.id }}"  
                     data-num_exo="{{ forloop.counter}}"  data-parcours_id="{{ parcours.id }}">
                     {% include 'qcm/_imagefile_displayer.html' %}
                 </a> 
             {% endif  %}
+
 
             {% if  rc.date_limit %}
                 {% if not data.score %} 
@@ -219,12 +213,10 @@
                 <i class="fa fa-fw fa-save"></i> {{ rc.situation}}
                 
                 {% if not rc.parcours.is_evaluation %}
-                {% if rc.relationships_courses.all|length > 0 %}  
-                    <i class="fa fa-fw fa-desktop"></i>
+                    {% if rc.relationships_courses.all|length > 0 %}  
+                        <i class="fa fa-fw fa-desktop"></i>
+                    {% endif  %}
                 {% endif  %}
-                {% endif  %}
-
-
 
                 {% if noggb_data.is_corrected %}
                     <span class="pull-right selector_div_result helper_tip" data-relation_id ="{{ rc.id }}"  data-custom=0 ><i class="fa fa-trophy" style="color:{{ parcours.color|contrast_color }}"></i>
@@ -243,6 +235,7 @@
                     <div class="helper_tip_text_card" >Cet exercice contient une aide extérieure ou une consigne orale.</div>
                 </span>
                 {% endif  %}
+
                 {% if  rc.is_correction_visible %}
                     <span class="helper_tip"> <i class="pull-right  fa fa-copyright" style="color:{{ parcours.color|contrast_color }}"></i> 
                         <div class="helper_tip_text" >Correction disponible. Entrer dans l'exercice. </div>

@@ -44,7 +44,7 @@
 
     <div class="col-xs-2 col-sm-1 col-md-1" align='center' style="margin-bottom:5px"> 
         <a href="{% url 'create_supportfile' qt.id 0  %}">
-            <div style="font-size:{% if qt.id == 1 %}0.25{% elif qt.id == 3 or qt.id  == 4 %}0.2{% else %}0.3{% endif %}em" 
+            <div style="font-size:{% if qt.id == 1 %}0.25{% elif qt.id == 3 or qt.id  == 4 or qt.id  == 5 %}0.2{% else %}0.3{% endif %}em" 
                  class="qtypes_logo {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %} {% if qt.id ==  qtype  %}qtypes_logo_active{% endif %}" title="{{ qt.title}} {% if qt.id == 19 or qt.id == 20  %}à correction manuelle sur l'interface SACADO{% else %}auto-correctif{% endif %} "   >
                 {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="20px" /> {% else %}{{ qt.html|safe }}{% endif %}
             </div>

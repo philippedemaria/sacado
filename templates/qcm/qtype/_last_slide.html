@@ -1,0 +1,44 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+<li class="this_slide">
+	<div align="center" style="padding:30px;">
+
+			Tu as fini toutes les situations. Enregistre tes résultats.
+
+			<img src="{% static 'img/finish.jpg' %}" />
+
+        {% if request.user.is_student %}
+          <div class="col-sm-12 col-md-12" align="left" style="margin:10px 60px">
+     
+
+                {% get_is_lock relation.parcours today as is_lock %} 
+                {% get_is_locker relation student as is_locker %} 
+                {% if is_lock %}
+                
+                    {% if is_locker %}
+                      <div class="alert alert-danger" >
+                        <b>Cet exercice est verrouillé. Vous ne pouvez plus soumettre le résultat.</b>
+                      </div>
+                    {% else %} 
+                        {% include 'qcm/is_evaluation.html' %}
+                    {% endif %}
+                {% else %}  
+                    {% if available.is_ok %} 
+                        {% include 'qcm/is_evaluation.html' %}
+                    {% else %}
+                      <div class="alert alert-danger" >
+                        <b>Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
+                      </div>
+                    {% endif %}
+                {% endif %}
+          </div>
+        {% elif request.user.is_teacher %} 
+
+            <div class="col-sm-12 col-md-12" align="left" style="margin:10px 60px">
+       			    <a href="#" class="btn btn-default" onclick="javascript: window.close()">Fermer la visualisation </a>
+            </div>
+        {% endif %}
+      </div>
+</li>

@@ -10,9 +10,11 @@
                 <label>Titre </label>
                 {{ form.title|add_class:"form-control"|attr:"value:Choisir la ou les propositions correctes"   }}
                 {{ form.title.errors }}
+            <div class="form-group">        
             <label>Enoncé :</label><br/>
             {{ form.annoncement |add_class:"form-control"|attr:"rows:3" }}
             {{ form.annoncement.errors }}<br/>
+            </div>
         </div>                                              
     </div>
     <div class="col-sm-12 col-md-6">

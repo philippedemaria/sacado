@@ -105,27 +105,23 @@
             <br/><span class="formula_answer">$?!{a}+{b}?!$</span> calcule la somme des valeurs prises aléatoirement par a et b. 
             <br/>Si a=2 et b=3, <span class="formula_answer">${a}+{b} = ?!{a}+{b}?!$</span> affiche 2+3=5 </small>
         </li>
-        <li class="sanspuce">           
-            <small><b>5. Déterminer le nombres de situations proposées.</small></b> <small>Par commodité, on utilise le nombre de situations de l'onglet Pseudo-aléatoire. [Dernier onglet]</small>  
+        <li class="sanspuce">  
+            <small><b>5. Déterminer le nombres de situations proposées.</small></b> 
+            <small>
+                <label>Nombre de situations proposées  {{ form.situation }}</label>
+            </small> 
         </li>
-
-
-
-
-
-
-
     </div>
+    {% if qt.is_pseudo  %}
     <div id="pseudo" class="tab-pane fade">
-
         <small>    
             Le pseudo aléatoire tire le nombre de situations enregistrés parmi les items enregistrés. 
             <br/>Si vous enregistrez 20 items possibles et que vous inscrivez 5 situations, 5 items  seront aléatoirement choisis parmi les 20.
             <br/><br/>
-            <label>Nombre de situations proposées  {{ form.situation }}</label>
+            <label>Nombre d'items proposés  {{ form.nb_pseudo }} <small>[Si 0, tous les items enregistrés sont proposés.]</small></label>
         </small>
-
     </div>
+    {% endif %}
     <div id="inclusion" class="tab-pane fade">
 
  

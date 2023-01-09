@@ -9,71 +9,13 @@
         <div class="form_card" style="margin-top:20px;">
             <div class="form-group">
                 <label>Titre </label>
-                {{ form.title|add_class:"form-control"   }}
+                {{ form.title|add_class:"form-control"|attr:"value:Appairement par glisser déposer"   }}
                 {{ form.title.errors }}
             </div>
             <label>Enoncé :</label>
-            <a href="javascript:void();" id="show_randomize_zone" class="btn btn-sacado">
-                <label>Question à variables numériques aléatoires ? 
-                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                        <div class="helper_tip_text" >Placer des variables aléatoires<br/> dans l'énoncé et les réponses.</div>
-                    </span>
-                </label>
-            </a>
-            <div class="row no_visu_on_load" id="randomize_zone">
-                <div class="col-sm-12 col-md-12 alert alert-sacado">
-                    <div class="row">
-                        <div class="col-sm-11 col-md-11">
-                             
-                        </div>                                        
-                        <div class="col-sm-12 col-md-12 controls">
-                            <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-sacado add_more_question" >+ variable</a></h4>
-                        </div>
-                    </div>
-                    {{ form_var.management_form }} 
-                    <script id="rowToClone_question" type="text/template">
-                        <div id="duplicate_variables">  
-                            <div class="col-sm-12 col-md-6 qrandom">
-                                    <div class="col-sm-4 col-md-4"> 
-                                            <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }} 
-                                    </div>
-
-                                    <div class="col-sm-4 col-md-4" > 
-                                            <label>Nb entier ?</label> <br/>
-                                            {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
-                                    </div>
-                                    <div class="col-sm-4 col-md-4" > 
-                                                <label>0 exclus ?</label> <br/> 
-                                                {{ form_var.empty_form.is_notnull|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
-                                    </div>
-                                    <div class="col-sm-4 col-md-4" > 
-                                                <label>Min.</label> <br/> 
-                                                {{ form_var.empty_form.minimum|add_class:"form-control" }} 
-                                    </div>
-                                    <div class="col-sm-4 col-md-4" > 
-                                            <label>Max.</label>  <br/>
-                                            {{ form_var.empty_form.maximum|add_class:"form-control" }} 
-                                    </div>
-                                    <div class="col-sm-4 col-md-4"><br/>
-                                        <div class="delete_button_question"></div>
-                                    </div>                                 
-                            </div>
-                        </div>
-                    </script>                            
-                    <div id="formsetZone_variables">  
-                    </div>
-                </div>  
-                <div class="alert alert-danger">
-                    <div class="col-sm-12 col-md-12">
-                        <small><i class="fa fa-warning"></i> Ne pas utiliser dans votre énoncé et réponses les noms de vos variables pour désigner autre chose que vos variables.  </small>
-                    </div>
-                </div>
-            </div> 
-
-            {{ form.instruction |add_class:"form-control"|attr:"rows:3" }}
-            {{ form.instruction.errors }}<br/>
-            <img src="{% static 'img/tex.png' %}" height="15px"/> <small>Pour inclure une formule, utiliser les délimiteurs dollar $ et pour une figure, utiliser TiKZ</small>
-        </div>                                                    
+            {{ form.annoncement |add_class:"form-control"|attr:"rows:3" }}
+            {{ form.annoncement.errors }}<br/>
+        </div>                                                
     </div>
  
     <div class="col-sm-12 col-md-6">
@@ -84,9 +26,6 @@
             </div>
         </div>
     </div>  
-
-
-    
 </div>
 
 
@@ -156,7 +95,7 @@
                                 <div class="col-sm-12 col-md-12" >
                                     <a href="javascript:void()" class="automatic_insertion"   id="feed_back"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                                     <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
-                                    {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
+                                    {{ form_ans.empty_form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
                                     </div>
                                 </div>
                             </div>      
@@ -231,7 +170,13 @@
     </div>       
 </div>
 
-
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="form_card" style="margin-top:20px;">
+            {% include 'qcm/qtype/_content_correction.html' %} 
+        </div>   
+    </div>       
+</div>
 
  
 {% endblock %}

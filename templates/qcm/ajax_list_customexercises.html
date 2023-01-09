@@ -39,7 +39,7 @@
                         {% if supportfile.qtype == 100 %}
                             <img src="{% static 'img/ggb.png'  %}" width="20px" class="qtype_logo" />
                         {% else  %}  
-                        <label style="font-size:{% if supportfile.qtype == 1 %}0.25{% elif supportfile.qtype == 3 or supportfile.qtype  == 4 %}0.2{% else %}0.35{% endif %}em" class="qtype_logo">
+                        <label style="font-size:{% if supportfile.qtype == 1 %}0.25{% elif supportfile.qtype < 6 %}0.2{% else %}0.35{% endif %}em" class="qtype_logo">
                             {{ supportfile.qtype_logo|safe }}
                         </label> 
                         {% endif  %} 
@@ -47,11 +47,21 @@
                     </div>
                     <div class="col-sm-3" align='right'>
                         {% if supportfile.correction != "" %}
-                            <i class="fa fa-copyright text-danger" style="font-size:18px;cursor:help" title="Avec corrigé"></i> 
+                            <span class="helper_tip" style="color:#222">
+                                <i class="fa fa-copyright text-danger" style="font-size:18px;cursor:help"></i>
+                                <div class="helper_tip_text">Exercice corrigé</div>
+                            </span>
                         {% endif  %} 
-                        {% if supportfile.supportvariables.count %}
-                            <label><b><small>VA</small></b></label>
-                        {% endif  %}
+                        {% if supportfile.nb_pseudo %}
+                             <label>
+                                <small>
+                                    <span class="helper_tip" style="color:#222"><b>Ps</b> 
+                                        <div class="helper_tip_text">Exercice Pseudo aléatoire</div>
+                                    </span>
+                                    <small>[{{supportfile.nb_pseudo}}/{{supportfile.supportchoices.count}}]</small>
+                                </small>
+                            </label>
+                        {% endif  %} 
                         {% if supportfile.is_scratch %}
                             <img src="{% static 'img/is_scratch.png' %}" width="20px" />
                         {% endif  %}                               

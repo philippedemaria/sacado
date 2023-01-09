@@ -163,7 +163,7 @@
                 </span>
                 {% endif %}
 
-                <div style="border:thick double {{ supportfile.theme.subject.color }};width:750px;height:550px;padding:20px;background-color: white; background-position: right bottom;{% if supportfile.theme.image %}background-image: url({{ supportfile.theme.image.url  }}){% endif %};background-repeat: no-repeat;">
+                <div class="border_exercise" style="border:thick double {{ supportfile.theme.subject.color }};{% if supportfile.theme.image %}background-image: url({{ supportfile.theme.image.url  }}){% endif %}">
                 <!-- ======================================================================= -->   
                 <!-- ================== Zone d'enregistrement ===============================--> 
                 <!-- ======================================================================= -->                     
@@ -187,48 +187,48 @@
                     <input type="hidden" class="customvars" name="customvars" value="{{ v.name }}" />
                     {% endfor %}    
                     <input type="hidden" id="nb_variables" value="{{ supportfile.supportvariables.count }}" />
-                    {% include 'qcm/qtype/answer_all_type_template.html' %}
+                    <div class="wrapper_this_slider">   
+                    <!-- Wrapper for slides -->
+                        <div class="this_slider">
+                            <ul>
+                              <!-- ======================================================================= -->   
+                              <!-- =======================  Type d'exercice  ==============================--> 
+                              <!-- ======================================================================= -->
+                              {% block answer_all_type_template %}
+
+
+                              {% endblock %}
+                              <!-- ======================================================================= -->   
+                              <!-- ======================================================================= -->
+                              <!-- ======================================================================= -->
+                            </ul>
+                        </div>
+                    </div>
                 </div> 
+                <input id="relation" name="relation_id"  type="hidden" value="{{ relation.id }}"/>
+                <input id="start_time" name="start_time"  type="hidden" value="{{ start_time }}"/>
+                <input id="score"  name="score"  type="hidden" value=0  />
+                {% if supportfile.qtype == 14 %}  
+                <input id="numexo" name="numexo" type="hidden" value=-1  />
+                {% else %}
+                <input id="numexo" name="numexo"  type="hidden" value=0  />
+                {% endif %}
+                <input id="situation" name="situation"  type="hidden" value="{{ relation.situation }}"/> 
+                <input id="parcours_id" name="parcours_id"  type="hidden" value="{{ relation.parcours.id }}"/>
                 <!-- ======================================================================= -->   
                 <!-- ============================ Fin de Zone ===============================--> 
                 <!-- ======================================================================= -->
 
-                {% if supportfile.qtype > 4 %}
-                    {% if relation.situation == 1 or supportfile.supportvariables.count == 0  %}
-                        {% if request.user.is_student %} 
-                          <div class="col-sm-12 col-md-12" align="left" style="margin:10px 60px">
-       
-                            {% get_is_lock relation.parcours today as is_lock %}
-                            {% get_is_locker relation student as is_locker %} 
-                            {% if is_lock %}
-                                {% if is_locker %}
-                                  <div class="alert alert-danger" >
-                                    <b>Cet exercice est verrouillé. Vous ne pouvez plus soumettre le résultat.</b>
-                                  </div>
-                                {% else %} 
-                                    {% include 'qcm/is_evaluation.html' %}
-                                {% endif %}
-                            {% else %}  
-                                {% if available.is_ok %}  
-                                    {% include 'qcm/is_evaluation.html' %}
-                                {% else %} 
-                                  <div class="alert alert-danger" >
-                                    <b>Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
-                                  </div>
-                                {% endif %}
-                            {% endif %}
-                            <!-- Retour aux exercices du parcours -->
-                            {% if parcours.is_evaluation %}
-                                {% if  parcours.is_exit %}
-                                  <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
-                                {% endif %}
-                            {% else %}
-                              <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
-                            {% endif %}
-                          </div>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
+                <div class="col-sm-12 col-md-12" align="left" style="margin:30px 50px">
+                  <!-- Retour aux exercices du parcours -->
+                  {% if parcours.is_evaluation %}
+                      {% if  parcours.is_exit %}
+                        <a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-default" >  Revenir aux exercices   </a>
+                      {% endif %}
+                  {% else %}
+                    <a href="javascript:history.back()"><input type="button" value="Revenir aux exercices" class="btn btn-default "/></a>
+                  {% endif %}
+                </div>
             </div>  
             <div class="col-sm-12 col-lg-4">
                {% include 'qcm/signal_exercise_peda_live.html' %}  

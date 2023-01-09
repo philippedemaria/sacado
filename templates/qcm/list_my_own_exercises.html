@@ -16,27 +16,36 @@
   
 {% block page_title %}
     <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %}  Mes 20 derniers exercices  
-    <a href="#" id="show_exercises_search_div" class="btn btn-new"> <i class="bi bi-search"></i> </a>
-    <span class="btn btn-new" style="margin-left:20px"> Nouvel exercice <i class="bi bi-arrow-bar-right"></i></span>
+    <a href="#" id="show_exercises_search_div" class="btn btn-new loupe"> <i class="bi bi-search"></i> </a>
+
+    <span class="btn btn-new xs_no_display" id="show_all_proposed_exercises" style="margin-left:20px"> Nouvel exercice</span>
+
+    <div id="all_proposed_exercises">
+        <div class="row">
+            {% for qt in qtypes %}
+                    <a href="{% url 'create_supportfile' qt.id 0  %}" class="all_proposed_types_exercises">
+                        <div style="float:left;{% if qt.id == 1 %}font-size:0.2em{% elif qt.id == 3 or qt.id  == 4 %}font-size:0.18em;{% elif qt.id  == 5  %}font-size:0.15em;{% else %}font-size:0.25em{% endif %}" 
+                             class="qtypes_logo {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %} {% if qt.id ==  qtype  %}qtypes_logo_active{% endif %}" title="{{ qt.title}} {% if qt.id == 19 or qt.id == 20  %}à correction manuelle sur l'interface SACADO{% else %}auto-correctif{% endif %} "   >
+                            {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="20px" /> {% else %}{{ qt.html|safe }}{% endif %} 
+                        </div>
+                        <label  style="padding-top:10px; padding-left:5px;">{{ qt.title }}</label>
+                    </a>               
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+
+
+
 {% endblock %}
 
 
 
 
 {% block page_menu_right %}
-
-    {% for qt in qtypes %}
-
-    <div class="col-xs-2 col-sm-1 col-md-1" align='center' style="margin-bottom:5px"> 
-        <a href="{% url 'create_supportfile' qt.id 0  %}">
-            <div style="font-size:{% if qt.id == 1 %}0.25{% elif qt.id == 3 or qt.id  == 4 or qt.id  == 5  %}0.2{% else %}0.3{% endif %}em" 
-                 class="qtypes_logo {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %} {% if qt.id ==  qtype  %}qtypes_logo_active{% endif %}" title="{{ qt.title}} {% if qt.id == 19 or qt.id == 20  %}à correction manuelle sur l'interface SACADO{% else %}auto-correctif{% endif %} "   >
-                {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="20px" /> {% else %}{{ qt.html|safe }}{% endif %}
-            </div>
-        </a>               
-    </div>
-    {% endfor %}  
- 
+    
 
 {% endblock %}
 
