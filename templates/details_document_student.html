@@ -6,8 +6,8 @@
 {% if rc.type_id == 0 %}
 
     {% get_constraint_to_this_relationship  rc  student as    under_score   %}
-    {%  get_last_score_and_time   rc.exercise   rc.parcours   student    as    data %}
-    {%  get_noggb_data   rc   student    as    noggb_data %}
+    {% get_last_score_and_time   rc.exercise   rc.parcours   student    as    data %}
+    {% get_noggb_data   rc   student    as    noggb_data %}
 
 
     {% if rc.exercise.supportfile %}  
@@ -149,13 +149,9 @@
         </div>                    
         <div class="card-image"   {% if data.score > -1 %} style="opacity:0.8" {% endif %}>
             {% if student %}
-
                 {% get_this_exercise_is_locked  student rc rc.parcours 0 today as is_blck %}
-
                 {% get_available rc student  as available %} 
                 {% get_parcours_available parcours student rc.exercise as parcours_available %}
-
-
 
                 {% if rc.relationship_mastering.all|length > 0  and data.score  %}
                 <a href="{% url 'mastering_student_show' rc.id %}" target="_blank" class="btn btn-danger" style="position: absolute; z-index:9; right:0px;top:150px;background-color:{{ parcours.color }}">
@@ -164,46 +160,44 @@
                 {% endif  %}
 
     
-                    {% if is_blck %}
-                        <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                              <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ rc.lock|date:"d-m-Y à H:i" }}</span>
-                        </div>
-                            {% include 'qcm/_imagefile_displayer.html' %}
-                             
-               
-                    {% else %}  
-                        {% if parcours_available.is_ok %} 
+                {% if is_blck %}
+                    <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                          <i class="fa fa-lock"></i> <span class="hidden_lock"> {{ rc.lock|date:"d-m-Y à H:i" }}</span>
+                    </div>
+                        {% include 'qcm/_imagefile_displayer.html' %}
+                         
+           
+                {% else %}  
+                    {% if parcours_available.is_ok %} 
 
-                            {% if parcours.is_next and not available.is_ok %} 
-                                <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                      <i class="fa fa-lock"></i>  Vous devez passer l'exercice suivant  
-                                </div>
-                     
-                                    {% include 'qcm/_imagefile_displayer.html' %}
-                    
-                            {% else %}
-
-                                <a href="{% if not is_lock %}{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}{% endif %}">  
-                                    {% include 'qcm/_imagefile_displayer.html' %}
-                                </a>
-
-                            {% endif %}
-
-                        {% else %}                                            
-
+                        {% if parcours.is_next and not available.is_ok %} 
                             <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
-                                  <i class="fa fa-lock"></i>   Vous devez passer à un autre exercice  
+                                  <i class="fa fa-lock"></i>  Vous devez passer l'exercice suivant  
                             </div>
                  
                                 {% include 'qcm/_imagefile_displayer.html' %}
                 
+                        {% else %}
 
-                        {% endif  %}
+                            <a href="{% if not is_lock %}{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}{% endif %}">  
+                                {% include 'qcm/_imagefile_displayer.html' %}
+                            </a>
+
+                        {% endif %}
+
+                    {% else %}                                            
+
+                        <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                              <i class="fa fa-lock"></i>   Vous devez passer à un autre exercice  
+                        </div>
+             
+                            {% include 'qcm/_imagefile_displayer.html' %}
+            
 
                     {% endif  %}
 
- 
                 {% endif  %}
+          
             
             {% else %}
                 <a href="#" class="detail_parcours"      data-exercise_id="{{ rc.exercise.id }}"  
@@ -211,13 +205,13 @@
                     {% include 'qcm/_imagefile_displayer.html' %}
                 </a> 
             {% endif  %}
-            
+
             {% if  rc.date_limit %}
                 {% if not data.score %} 
                     <div  class="btn btn-danger"  style="position: absolute; right : 0px; top:120px;">   
                           Avant le {{rc.date_limit|date:"d N Y" }}
                     </div>
-           {% endif %}    
+                {% endif %}    
             {% endif %}   
             <div class="card-text" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">
                 <i class="fa fa-fw fa-barcode"></i> {{ rc.exercise.supportfile.code }}
@@ -257,6 +251,7 @@
             </div>
         </div>
     </div>
+
 <!---------------------------------------------------------->
 <!-------------------- sacado exercise  -------------------->
 <!---------------------------------------------------------->
