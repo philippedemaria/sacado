@@ -155,7 +155,7 @@ class Supportfile(models.Model):
     ####  Format de l'exercice
     qtype         = models.PositiveIntegerField(default=100)    
     canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")
-    nb_pseudo     = models.PositiveIntegerField(default=0, verbose_name="Nombre de pseudo situation")      
+    nb_pseudo     = models.PositiveIntegerField(default=0, blank=True,  verbose_name="Nombre de pseudo situation")      
     ####  Cas spécifique axe gradué qtype = 9 
     is_written = models.BooleanField(default=0, verbose_name="Mots à écrire ?") # ou à glisser déposer
     ####  Cas spécifique axe gradué qtype = 18 
