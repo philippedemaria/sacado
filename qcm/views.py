@@ -7712,7 +7712,7 @@ def check_grid_answers(request):## 12 mot mélés   non nécessaire
 
 
 
-def ajax_secret_letter(request):## 13 mot mélés 
+def ajax_secret_letter(request):## 13 mot secret 
 
     secret_letter = request.POST.get('secret_letter',None)
     used_letter   = request.POST.get('used_letter',"")    
