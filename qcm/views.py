@@ -6245,9 +6245,10 @@ def create_supportfile(request,qtype,ids):
         if form.is_valid() :
             nf = form.save(commit=False)
             nf.teacher = teacher
-            if nf.qtype == 19 : nf.is_python = True
+            if nf.qtype == 9    : nf.nb_pseudo  = 1
+            elif nf.qtype == 19 : nf.is_python  = True
             elif nf.qtype == 100: nf.is_ggbfile = True
-            elif nf.is_scratch  : nf.is_image = True
+            elif nf.is_scratch  : nf.is_image   = True
             nf.code = code
             nf.author = teacher
             if nf.imagefile != "" :  
@@ -6372,9 +6373,11 @@ def update_supportfile(request, id, redirection=0):
             if nf.is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
             nf.teacher = teacher
-            if nf.qtype == 19    : nf.is_python  = True
+            if nf.qtype == 9     : nf.nb_pseudo   = 1
+            elif nf.qtype == 19  : nf.is_python  = True            
             elif nf.qtype == 100 : nf.is_ggbfile = True
             elif nf.is_scratch   : nf.is_image   = True
+
             nf.save()
             supportfile_form.save_m2m()  
                        
@@ -6524,105 +6527,6 @@ def my_own_exercises(request): # Modification d'un exercice non autocorrigé dan
         qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by("ranking")
  
     context = { 'qtypes': qtypes, 'exercises' : exercises, 'subjects' : subjects, 'levels' : levels , 'is_mathJax' : False ,  'teacher' : teacher ,  }
-
-    ############################################################################################################
-    ############################################################################################################
-    ## Permet la mise à jour des custom exercise en Supportfile
-    # for custom in Customexercise.objects.all() :
-    #     instruction = custom.instruction
-    #     teacher     = custom.teacher
-    #     calculator  = custom.calculator
-    #     date_created  = custom.date_created
-    #     date_modified = custom.date_modified
-    #     #### pour donner une date de remise - Tache     
-    #     start  = custom.start  
-    #     date_limit  = custom.date_limit 
-    #     lock  = custom.lock
-    #     if custom.imagefile : 
-    #         imagefile  = custom.imagefile
-    #     else :
-    #         imagefile  = 'qtype_img/underlayer.png'
-    #     duration  = custom.duration 
-    #     skills  = custom.skills.all() 
-    #     knowledges  = custom.knowledges.all()
-    #     parcourses  = custom.parcourses.all()  
-    #     students  = custom.students.all()  
-    #     is_share  = custom.is_share  
-    #     is_realtime  = custom.is_realtime 
-    #     is_python  = custom.is_python 
-    #     is_scratch  = custom.is_scratch 
-    #     is_file  = custom.is_file 
-    #     is_image  = custom.is_image 
-    #     is_text  = custom.is_text 
-    #     is_mark  = custom.is_mark 
-    #     is_collaborative  = custom.is_collaborative 
-    #     is_autocorrection  = custom.is_autocorrection 
-    #     criterions  = custom.criterions.all()     
-    #     mark  = custom.mark 
-    #     is_publish  = custom.is_publish 
-    #     ranking  = custom.ranking 
-    #     text_cor  = custom.text_cor 
-    #     file_cor  = custom.file_cor 
-    #     video_cor  = custom.video_cor 
-    #     is_publish_cor  = custom.is_publish_cor 
-
-    #     if is_python : 
-    #         title = "Coder en Python"
-    #         imagefile = 'qtype_img/underlayer.png'
-    #         qtype = 19
-    #     else : 
-    #         title = "Remise de devoir"
-    #         qtype = 20
-    #         imagefile = 'qtype_img/underlayer.png'
-
-    #     for knowledge in knowledges :
-    #         code = code = str(uuid.uuid4())[:8]
-    #         data = { 
-    #         'title'       : title  ,
-    #         'knowledge'   : knowledge ,
-    #         'annoncement' : instruction   ,
-    #         'author'      : teacher   ,
-    #         'code'        : code ,
-    #         #### pour validation si le qcm est noté
-    #         'situation'   : 1  ,
-    #         'calculator'  : calculator  ,
-    #         #### 
-    #         'date_created'  :  date_created   ,
-    #         'date_modified' :  date_modified   ,
-    #         'level'      :  knowledge.level   ,
-    #         'theme'      :  knowledge.theme    , 
-    #         'width'      :  750   ,'height' :  550   , 'ggbfile' :  ""   , 'imagefile' : imagefile  ,
-    #         'toolBar'    :  0   ,'menuBar'     :   0  ,'algebraInput' : 0    ,'resetIcon'   :  0   ,'dragZoom'    : 0    ,
-    #         'is_title'   :  0   ,'is_subtitle' :  0  ,'attach_file' :  0   ,
-    #         'duration'   :  duration,
-    #         'is_ggbfile' :   0  ,
-    #         'is_python'  :  is_python   ,
-    #         'is_scratch' :  is_scratch  ,
-    #         'is_file'    :  is_file  ,
-    #         'is_image'   :  is_image  ,
-    #         'is_text'    :  is_text   ,
-    #         'is_mark'     : is_mark  ,
-    #         'mark'        : mark   ,
-    #         'is_share'    : 0  ,
-    #         'is_realtime' : 0   ,
-    #         'ranking'     : 10 , 
-    #         'correction'  : text_cor   ,
-    #         'qtype'       : qtype }
-
-    #         s = Supportfile(**data)
-    #         s.save()
-    #         s.skills.set(skills)
-
-    #         exercise = Exercise.objects.create(supportfile = s, knowledge = knowledge, level = knowledge.level, theme = knowledge.theme )
-            
-    #         for parcours in parcourses :
-    #             relation = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration=  duration, situation=  1 ) 
-                
-    #             students = parcours.students.all()
-    #             relation.students.set(students)
-    #             relation.skills.set(skills)
-    ############################################################################################################
-    ############################################################################################################
     return render(request, 'qcm/list_my_own_exercises.html', context)
 
 
@@ -6990,12 +6894,12 @@ def get_list_values_if_variables_alea(n, supportfile):
                         if is_integer :
                             number = random.randint(mini ,  maxi )
                         else :
-                            number = mini + random()*(maxi-mini)
+                            number = round(mini + random.random()*(maxi-mini),2)
                 else :
                     if is_integer :
                         number = random.randint(mini ,  maxi )
                     else :
-                        number = mini + random()*(maxi-mini)
+                        number = round(mini + random.random()*(maxi-mini),2)
                 dico['name'] = variable.name                    
                 dico['val']  = number
                 dico['loop'] = i+1
@@ -7050,12 +6954,16 @@ def alea_annoncements(n,supportfile) :
     nb_pseudo_support = supportfile.nb_pseudo
  
     if nb_pseudo_support: 
+
         su_choices = list(s_choices)
         random.shuffle(su_choices)
         s_choices = su_choices[0:nb_pseudo_support]
 
-    if supportfile.qtype == 1 : 
-        n = nb_pseudo_support
+    if supportfile.qtype == 1 or supportfile.qtype == 7 or supportfile.qtype == 13:
+        if nb_pseudo_support :
+            n = nb_pseudo_support
+        else :
+            n = s_choices.count()
 
     for i in range (n) :
         enonce  = supportfile.annoncement
@@ -7081,12 +6989,9 @@ def alea_annoncements(n,supportfile) :
             this_choice = s_choices[i]
             new    = replace_bloc(this_choice.answer,vars_list,i)
             newbis = replace_bloc(this_choice.answerbis,vars_list,i)
+            data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : this_choice.retroaction , 'is_correct' : this_choice.is_correct   } 
+            shufflechoices.append(data)
 
-        # elif supportfile.qtype<3 : 
-
-        #     this_choice = s_choices[i]
-        #     new    = this_choice.answer 
-        #     newbis = this_choice.answerbis
 
         elif 2<supportfile.qtype<5  :
             this_liste = list()
@@ -7098,15 +7003,6 @@ def alea_annoncements(n,supportfile) :
                 this_liste.append(data)
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
-
-        # elif 2<supportfile.qtype<5 :
-        #     this_liste = list()
-        #     for choice in s_choices : 
-        #         this_liste.append(choice)
-        #     random.shuffle(this_liste)
-        #     shufflechoices.append(this_liste)
-
-
 
         elif  supportfile.qtype == 5 :
             this_liste = list()
@@ -7120,25 +7016,72 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
 
-        # elif supportfile.qtype == 5 :
-        #     this_liste = list()
-        #     for choice in s_choices : 
-        #         this_liste.append(choice)
-        #     choices.append(this_liste)    
-        #     random.shuffle(this_liste)
-        #     shufflechoices.append(this_liste)
+
+        elif  supportfile.qtype == 7 :
+
+            this_choice = s_choices[i]
+            mystr = this_choice.answer
+            mystr = mystr.replace('<strong>','####')
+            mystr = mystr.replace('</strong>','####')
+            tab   = mystr.split('####')
+            string = ""
+            for i in range(len(tab)) :
+                if i%2==1:
+                    word = tab[i]
+                    word = ''.join(random.sample(word,len(word))) 
+                    data = { 'id' : this_choice.id , 'answer' : word  , 'retroaction' : this_choice.retroaction   } 
+                    shufflechoices.append(data)
+            random.shuffle(shufflechoices)
+ 
+
+        elif  supportfile.qtype == 8 :
+
+            this_liste = list()
+            for this_choice in s_choices : 
+                new    = replace_bloc(this_choice.answer,vars_list,i)
+                newbis = replace_bloc(this_choice.answerbis,vars_list,i)
+                retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
+                data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
+                this_liste.append(data)
+            random.shuffle(this_liste)
+            shufflechoices.append(this_liste)
+
+
+        elif  supportfile.qtype == 9 :
+            this_liste = list()
+            words = list()
+            for this_choice in s_choices : 
+                this_liste.append(this_choice)
+
+                mystr = this_choice.answer
+                mystr = mystr.replace('<strong>','####')
+                mystr = mystr.replace('</strong>','####')
+                tab   = mystr.split('####')
+                string = ""
+                for i in range(len(tab)) :
+                    if i%2==1:
+                        words.append(tab[i])
+            choices.append(this_liste)
+            random.shuffle(words)
+            shufflechoices.append(words) ## shufflechoices sont la liste des mots
 
 
 
+        elif  supportfile.qtype == 13 :
+
+            this_choice = s_choices[i]
+            data = { 'id' : this_choice.id , 'answer' : this_choice.answer  , 'retroaction' : this_choice.retroaction   } 
+            shufflechoices.append(data)
+            random.shuffle(shufflechoices)
 
         else : 
+            this_liste = list()
             this_choice = s_choices[i]
-            new    = this_choice.answer 
-            newbis = this_choice.answerbis
+            this_liste.append(this_choice)
+            random.shuffle(this_liste)
+            shufflechoices.append(this_liste)
  
-        if supportfile.qtype<3 :
-            data = { 'id' : this_choice.id , 'answer' : new , 'newbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : this_choice.retroaction , 'is_correct' : this_choice.is_correct   } 
-            shufflechoices.append(data)
+
 
 
 
@@ -7159,30 +7102,27 @@ def alea_annoncements(n,supportfile) :
 
 
 
-
 def define_all_types(n, supportfile):
 
     if  supportfile.qtype==1 :  # VF
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices }
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , 'numexo' : 0  }
 
     elif  supportfile.qtype==2 :  # Réponse à compléter
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , }
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices  , 'numexo' : 0  }
 
     elif  supportfile.qtype==3 or supportfile.qtype==4 :  # QCS et QCM
  
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices , }
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  , 'shufflechoices' : shufflechoices  , 'numexo' : 0 }
         
     elif supportfile.qtype==5 : # paires
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices   }
-
-
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0   }
 
     elif supportfile.qtype==6 : # correspondances
         subchoices = list()
@@ -7190,67 +7130,45 @@ def define_all_types(n, supportfile):
             for subchoice in choice.supportsubchoices.all():
                 subchoices.append(subchoice)
         random.shuffle(subchoices)
-        context = {  'subchoices' : subchoices  }  
+        context = {  'subchoices' : subchoices   , 'numexo' : 0 }  
 
     elif supportfile.qtype==7 : # anagrammes 
 
-        choices = list()
-        for choice in supportfile.supportchoices.all():
-            dico = {'id' : choice.id , 'word' : shuffle_word(choice.answer) }
-            choices.append(dico)
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0   } 
 
-        context = { 'choices' : choices  }  
+    elif supportfile.qtype==8 : # classement
 
-    elif supportfile.qtype==8 : # anagrammes
-
-        shufflechoices = list()
-        for choice in supportfile.supportchoices.all():
-            shufflechoices.append(choice)
-        random.shuffle(shufflechoices)
-        context = { 'shufflechoices' : shufflechoices  }  
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices   , 'numexo' : 0  } 
 
     elif supportfile.qtype==9 : # texte à trous
 
-        words = list()
-        mystr = supportfile.filltheblanks
-        mystr = mystr.replace('<strong>','####')
-        mystr = mystr.replace('</strong>','####')
-        tab   = mystr.split('####')
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0   }
 
-        string = ""
-        for i in range(len(tab)) :
-            if i%2==1:
-                words.append(tab[i])  
-
-        context = { 'supportfile' : supportfile, 'words' : words } 
  
-    elif supportfile.qtype==10 : # puzzles
+    elif supportfile.qtype==10 : # puzzle
+        pass
 
-        shufflechoices = list()
-        for supportchoice in supportfile.supportchoices.all():
-            shufflesubchoices = list()
-            for subchoice in supportchoice.supportsubchoices.all():
-                shufflesubchoices.append(subchoice)
-            random.shuffle(shufflesubchoices)
-            puzzle = { 'supportchoice' : supportchoice , 'shufflesubchoices' : shufflesubchoices }
-            shufflechoices.append(puzzle)
-        context = {  'shufflechoices' : shufflechoices  }  
+    elif supportfile.qtype==12 : #mots mélés   
+
+        supportchoices = list(supportfile.supportchoices.all())
+        random.shuffle(supportchoices)
+        nb_pseudo = supportfile.nb_pseudo
+
+        if nb_pseudo :
+            supportchoices = supportchoices[0:nb_pseudo]
+
+        context = { 'supportfile' : supportfile , 'supportchoices' : supportchoices , 'numexo' :  len(supportchoices) } 
+
+
 
     elif supportfile.qtype==13 : #mots secrets :  
 
-        shufflechoices =list() 
-        for choice in supportfile.supportchoices.values('id','answer').all():
-            shufflechoices.append(choice)
-        random.shuffle(shufflechoices)
-        secretword = shufflechoices[0]
-        shuffle_ids = ""
-        i = 1
-        for s in shufflechoices :
-            if i == len(shufflechoices) : sep = ""
-            else : sep = "-"
-            shuffle_ids += str(s["id"])+sep
-            i+=1
-        context = {  'shufflechoices' : shufflechoices, 'secretword' : secretword, 'shuffle_ids' : shuffle_ids  } 
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : len(shufflechoices)   }
+
 
     elif supportfile.qtype==14 :
 
@@ -7264,7 +7182,7 @@ def define_all_types(n, supportfile):
         supportchoice = supportfile.supportchoices.first()
         length = supportchoice.supportsubchoices.count()
 
-        context = {  'subchoices' : subchoices , 'length' : length , } 
+        context = {  'subchoices' : subchoices , 'length' : length , 'numexo' : -1 } 
 
     elif supportfile.qtype==19 :
 
@@ -7388,6 +7306,8 @@ def write_exercise(request,id): # Coté élève
 ######################################################################################################################################################################
 ###############################             Checking des réponses via ajax                      ######################################################################
 ######################################################################################################################################################################
+######################################################################################################################################################################
+###############################             Fonctions auxilières                                ######################################################################
 def shuffle_word(string):
 
     ls = len(string)
@@ -7406,8 +7326,55 @@ def message_correction(score,old_score):
         msg = "<i class='fa fa-check text-success'></i> C'est bien. Ta réponse est juste. Continue."
     return msg
 
+def check_secret_answers(request):  
 
-def check_solution_vf(request):
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    loop           = int(request.POST.get('loop',0))
+    answers        = request.POST.getlist('answers',None)
+    choice_id      = request.POST.get('choice_id',None)
+
+    old_score      = score
+    data = {}
+    supportfile = Supportfile.objects.get(pk=supportfile_id) 
+    choice      = Supportchoice.objects.get(pk=choice_id) 
+    
+
+
+    for i in range(len(locutions)) :
+        if i%2==1 : ans_to_do.append( locutions[i] )
+
+    for i in range(len(ans_to_do)) :
+        numexo +=1
+        if ans_to_do[i]==answers[i]:
+            score += 1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+    data['this_correction_text'] = choice.answer
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
+def calculate(this_item):
+    tab_calculus = this_item.split('?!')
+    calculate_value = eval(tab_calculus[1])
+    return calculate_value
+
+def calculate_str(this_item):
+    renew = ""
+    calcs = this_item.split('?!')
+    k=0
+    for calc in calcs :
+        if calcs != "" and k%2==1:
+            calc = eval(calc) 
+        k+=1
+        renew += str(calc)
+    return renew
+######################################################################################################################################################################
+######################################################################################################################################################################
+
+def check_solution_vf(request): ## 1 
 
     choice_id      = request.POST.get('choice_ids',None)
     supportfile_id = request.POST.get('supportfile_id',0)
@@ -7435,28 +7402,7 @@ def check_solution_vf(request):
 
     return JsonResponse(data)
 
-
-def calculate(this_item):
-    tab_calculus = this_item.split('?!')
-    calculate_value = eval(tab_calculus[1])
-    return calculate_value
-
-
-
-
-def calculate_str(this_item):
-    renew = ""
-    calcs = this_item.split('?!')
-    k=0
-    for calc in calcs :
-        if calcs != "" and k%2==1:
-            calc = eval(calc) 
-        k+=1
-        renew += str(calc)
-    return renew
-
-
-def check_solution_answers(request):
+def check_solution_answers(request):## 2
 
     supportfile_id = request.POST.get("supportfile_id")
     loop           = request.POST.get("loop")
@@ -7531,8 +7477,7 @@ def check_solution_answers(request):
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data)
 
-
-def check_solution_qcm_numeric(request):
+def check_solution_qcm_numeric(request):##3 - 4
 
     solutions      = request.POST.getlist('choice_ids',None)
     supportfile_id = request.POST.get('supportfile_id',0)
@@ -7560,8 +7505,7 @@ def check_solution_qcm_numeric(request):
 
     return JsonResponse(data) 
 
-
-def check_solution_pairs(request):
+def check_solution_pairs(request):## 5
 
     supportfile_id = request.POST.get('supportfile_id',0)
     numexo         = int(request.POST.get('numexo',0))
@@ -7632,67 +7576,189 @@ def check_solution_pairs(request):
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
 
+def check_correspondances_answers(request):## 6
+    pass
+
+def check_anagram_answers(request):## 7
+
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    loop           = int(request.POST.get('loop',0))
+    answers        = request.POST.getlist('answers',None)
+    choice_id      = request.POST.get('choice_id',None)
+
+    old_score      = score
+    data = {}
+    choice      = Supportchoice.objects.get(pk=choice_id) 
+    
+    texte = choice.answer
+    texte     = texte.replace('<strong>','####')
+    texte     = texte.replace('</strong>','####')
+    locutions = texte.split('####')
+    ans_to_do = list()
+
+    for i in range(len(locutions)) :
+        if i%2==1 : ans_to_do.append( locutions[i] )
+
+    numexo +=1
+    if ans_to_do[0]==answers[loop-1]:
+        score += 1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+    data['this_correction_text'] = choice.answer
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
+def check_sort_answers(request):## 8   
+
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    loop           = int(request.POST.get('loop',0))
+    answers        = request.POST.getlist('answers',None)
+    old_score      = score
+    data = {}
+    supportfile = Supportfile.objects.get(pk=supportfile_id) 
+    choices     = list(supportfile.supportchoices.order_by('id')) 
+    answer_ids = list() 
+
+    if supportfile.supportvariables.count() or supportfile.nb_pseudo : # avec VA , on on suppose que les answer sont des nombres
+        ans_list = answers[loop-1].split(',')
+        ans_list_sorted = answers[loop-1].split(',')
+        ans_list_sorted.sort()
+
+        for j in range(len(ans_list)):
+            numexo +=1
+            if ans_list[j] == ans_list_sorted[j]:
+                score+=1 
+
+    else : # Sans variable aléatoire
+        i = 0
+        for answer in answers[0].split(',') :
+            numexo +=1
+            if answer == choices[i].answer or answer == choices[i].imageanswer : score += 1
+            i+=1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+
+    correction = ""
+    for choice in choices :
+        if choice.imageanswer :
+            correction += r"<img src='{{ choice.imageanswer.url }}' width='140px' />"
+        if choice.answer : 
+            correction += " "+choice.answer
+        if choice.retroaction :  
+            correction += " "+choice.retroaction
+
+    data['this_correction_text'] = correction
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
+def check_filltheblanks_answers(request):## 9   
+
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    loop           = int(request.POST.get('loop',0))
+    answers        = request.POST.getlist('answers',None)
+    choice_id      = request.POST.get('choice_id',None)
+
+    old_score      = score
+    data = {}
+    supportfile = Supportfile.objects.get(pk=supportfile_id) 
+    choice      = Supportchoice.objects.get(pk=choice_id) 
+    
+    texte = choice.answer
+    texte     = texte.replace('<strong>','####')
+    texte     = texte.replace('</strong>','####')
+    locutions = texte.split('####')
+    ans_to_do = list()
+
+    for i in range(len(locutions)) :
+        if i%2==1 : ans_to_do.append( locutions[i] )
+
+    for i in range(len(ans_to_do)) :
+        numexo +=1
+        if ans_to_do[i]==answers[i]:
+            score += 1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+    data['this_correction_text'] = choice.answer
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
+def check_grid_answers(request):## 12 mot mélés   non nécessaire
+
+    sender = int(request.POST.get('sender',0))
+    score  = int(request.POST.get('score',0))
+    word   = request.POST.get('word',None)
+    l_word = len(word)
+
+    data = {}
+    true = "no"
+    if sender < l_word*20:
+        score += 1
+        true = "yes"
+
+    data['sender'] = sender 
+    data['score']  = score
+    data['word']   = word
+    data['true']   = true
+    return JsonResponse(data)  
 
 
 
-
-def ajax_secret_letter(request):
+def ajax_secret_letter(request):## 13 mot mélés 
 
     secret_letter = request.POST.get('secret_letter',None)
     used_letter   = request.POST.get('used_letter',"")    
-    index         = request.POST.get('index',None)
-    nb_tries      = request.POST.get('nb_tries',None)
-    word_id       = request.POST.get('word_id',None)
-    word_id_used  = request.POST.get('word_id_used',"")
+    index         = request.POST.get('index',None) # index de la lettre dans le mot
+    loop          = request.POST.get('loop',None)
+    choice_id     = request.POST.get('choice_id',None)
     position      = request.POST.get('position',None)
-    shuffle_ids   = request.POST.get('shuffle_ids',None)
+    score         = int(request.POST.get('score',0))
+    nb_tries      = int(request.POST.get('nb_tries',0))
 
     data = {}
-    word = Supportchoice.objects.get(pk=word_id).answer
+    word = Supportchoice.objects.get(pk=choice_id).answer
     word_length   = request.POST.get('word_length',len(word))
-    response , win = "false", "false"
+
+    response , win , new_slide = "false", "false", "false"
     input_idx = 0
  
     if secret_letter == '2'   : secret_letter = 'é'
     elif secret_letter == '7' : secret_letter = 'è' 
     elif secret_letter == '9' : secret_letter = 'ç'
     elif secret_letter == 'ù' : secret_letter = 'ù'
+    elif secret_letter == '0' : secret_letter = 'à'
 
- 
     new_string_word = ""
     if secret_letter.lower() == word[int(index)]   :
         response = "true"
         word_length   = int(word_length) - 1
         if word_length == 0 :
             win = "true"
-            tabs = shuffle_ids.split("-")
-            word_idx = tabs.index(str(word_id))+1
-            i = len(word_id_used.split("-")) 
-            input_idx = "answer"+str(i)
-            try :        
-                shuffle_id = tabs[word_idx]
-                next_word = Supportchoice.objects.get(pk=shuffle_id).answer
-                word_id_used += word_id+"-"
-                ind = 0               
-                for c in next_word :
-                    new_string_word +='<input class="secret_letter" id="secret_letter'+str(ind)+'" data-word_id="'+str(tabs[word_idx])+'" data-index="'+str(ind)+'" style="margin-left:5px"  />'
-                    ind +=1
-                data['length_i'] = ind
-                word_length = ind
-            except :
-                new_string_word = "<span class='text-success'>BRAVO ! Vous avez trouvé tous les mots. Cliquer sur le bouton Enregistrer.</span>"
-            data['nb'] = len(tabs)-i 
+            score += 1
+
+    if nb_tries == 0 : new_slide = 'yes'
 
     data['used_letter'] = used_letter + secret_letter +" "
-    data["new_word"] = new_string_word
     data["word"]     = word  
-    data["length"]   = word_length       
+    data["length"]   = word_length  
+    data["length_i"] = word_length     
     data["win"]      = win
     data["response"] = response              
-    data["word_id_used"] = word_id_used
-    data['input']    = input_idx   
-
+    data['input']    = input_idx 
+    data['score']    = score
+    data['slide']    = new_slide
     return JsonResponse(data)  
+
+
+
 
 
 def ajax_memo(request):

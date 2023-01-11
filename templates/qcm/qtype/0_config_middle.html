@@ -39,6 +39,15 @@
 <div class="tab-content">
     <div id="conf" class="tab-pane fade in active">
         <table class="table table-sacado borderless form_card">
+            {% if qtype == 9 %}
+            <tr>
+                <td>
+                   <label>Gestion des trous </label>  
+                </td>
+                <td>{{ form.is_written |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Mots à écrire"|attr:"data-off:Mots à placer"|attr:"data-width:130px"}}</td>
+                <td>{{ form.is_written.errors }}</td>
+            </tr>
+            {% endif %}
             {% if request.user.is_superuser %}
                 <tr>
                     <td>

@@ -206,15 +206,21 @@ urlpatterns = [
     path('ajax_get_skills', ajax_get_skills, name='ajax_get_skills'),
     path('ajax_theme_exercice', ajax_theme_exercice, name='ajax_theme_exercice'),
     path('ajax_theme_subject_levels', ajax_theme_subject_levels, name='ajax_theme_subject_levels'),
-    path('ajax_secret_letter', ajax_secret_letter, name='ajax_secret_letter'),
-    path('ajax_memo', ajax_memo, name='ajax_memo'),
     path('ajax_load_modal', ajax_load_modal, name='ajax_load_modal'), 
 
     #################################   Gestion des solutions par type d'exercice
-    path('check_solution_vf', check_solution_vf, name='check_solution_vf'),
-    path('check_solution_answers', check_solution_answers, name='check_solution_answers'),
-    path('check_solution_qcm_numeric', check_solution_qcm_numeric, name='check_solution_qcm_numeric'),
-    path('check_solution_pairs', check_solution_pairs, name='check_solution_pairs'),
+    path('check_solution_vf'          , check_solution_vf          , name='check_solution_vf'),
+    path('check_solution_answers'     , check_solution_answers     , name='check_solution_answers'),
+    path('check_solution_qcm_numeric' , check_solution_qcm_numeric , name='check_solution_qcm_numeric'),
+    path('check_solution_pairs'       , check_solution_pairs       , name='check_solution_pairs'),
+    path('check_filltheblanks_answers', check_filltheblanks_answers, name='check_filltheblanks_answers'),
+    path('check_anagram_answers'      , check_anagram_answers      , name='check_anagram_answers'),
+    path('check_sort_answers'         , check_sort_answers         , name='check_sort_answers'),
+
+    path('check_grid_answers'         , check_grid_answers         , name='check_grid_answers'),
+    path('check_secret_answers'       , check_secret_answers       , name='check_secret_answers'),
+    path('ajax_secret_letter'         , ajax_secret_letter         , name='ajax_secret_letter'),
+    path('ajax_memo'                  , ajax_memo                  , name='ajax_memo'),
 
     #################################  Enregistrement des solutions par type d'exercice
     path('store_the_score_relation_ajax/', store_the_score_relation_ajax, name='store_the_score_relation_ajax'),

@@ -39,7 +39,7 @@
                         {% if supportfile.qtype == 100 %}
                             <img src="{% static 'img/ggb.png'  %}" width="20px" class="qtype_logo" />
                         {% else  %}  
-                        <label style="font-size:{% if supportfile.qtype == 1 %}0.25{% elif supportfile.qtype < 6 %}0.2{% else %}0.35{% endif %}em" class="qtype_logo">
+                        <label style="font-size:{% if supportfile.qtype == 1 %}0.25{% elif supportfile.qtype < 6 %}0.2{% elif supportfile.qtype == 9 %}0.17{% else %}0.35{% endif %}em" class="qtype_logo">
                             {{ supportfile.qtype_logo|safe }}
                         </label> 
                         {% endif  %} 
@@ -48,7 +48,7 @@
                     <div class="col-sm-3" align='right'>
                         {% if supportfile.correction != "" %}
                             <span class="helper_tip" style="color:#222">
-                                <i class="fa fa-copyright text-danger" style="font-size:18px;cursor:help"></i>
+                                <i class="fa fa-copyright text-{% if supportfile.is_display_correction %}success{% else %}danger{% endif %}" style="font-size:18px;cursor:help"></i>
                                 <div class="helper_tip_text">Exercice corrigé</div>
                             </span>
                         {% endif  %} 
@@ -161,7 +161,7 @@
                             
                             <div class="row" style="margin-top:20px"> 
                                 <div class="col-sm-12 col-md-12" >
-                                    Vous devez trouver {{ supportfile.supportchoices.count }} mots donc les anagrammes sont ci-dessous.   
+                                    Vous devez trouver {% if supportfile.nb_pseudo %}{{ supportfile.nb_pseudo }} sur les {% endif %}{{ supportfile.supportchoices.count }}  mots donc les anagrammes sont ci-dessous.   
                                 </div>
                             </div>
                             {% for choice in supportfile.supportchoices.all %}
@@ -189,8 +189,16 @@
 
 
                         {% elif supportfile.qtype == 9 %}<!-- Filltheblanks_safe -->
+                            <div class="row" align="left"> 
+                                <div class="col-sm-12 col-md-12" >
+                                    {% for choice in supportfile.supportchoices.all %}
+                                        <div class="quizz_choice" style="text-align:left"> 
+                                             {{ choice.answer|filltheblanks_safe|safe }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
 
-                            {{ supportfile.filltheblanks|filltheblanks_safe|safe }}
 
                         {% elif supportfile.qtype == 10 %}<!-- Puzzle -->
 

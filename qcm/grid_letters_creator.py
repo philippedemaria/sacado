@@ -1,7 +1,5 @@
 import random
  
-my_words = ["salut","bonjour","coucou","hello"]
-
 def determine_grid_size(my_words):
     som = 0
     for w in my_words :
@@ -87,7 +85,8 @@ def place_word(w,grid):
             y = random.randint(0,n-l)
         test = test_grid(w,x,y,grid,o)
     for pos in position(o,w,x,y):
-        grid[pos[1]][pos[2]] = pos[0].upper()
+        code = random.randint(10,20)
+        grid[pos[1]][pos[2]] = "<td data-code="+str(code)+"  class='clickable'>"+pos[0].upper()+"</td>"
 
     return grid 
     
@@ -101,9 +100,10 @@ def create_final_grid(my_words,grid):
     
     for i in range(n):
         for j in range(m):
-            k = random.randint(0,25)
+            k   = random.randint(0,25)
+            cod = random.randint(21,50)
             if grid[i][j] == 0:
-                grid[i][j] = letters[k] 
+                grid[i][j] = "<td data-code="+str(cod)+" class='clickable' >"+letters[k]+"</td>" 
     return grid
 
 
@@ -113,7 +113,9 @@ def create_string_table(my_words):
     for row in create_final_grid(my_words,grid):
         string_table +="<tr>"
         for col in row :
-            string_table +="<td>"+col+"</td>"
+            string_table += col
         string_table +="</tr>"
     string_table +="</table>"
     return string_table
+
+ 

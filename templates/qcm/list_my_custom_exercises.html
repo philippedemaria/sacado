@@ -17,7 +17,7 @@
 {% block page_title %}
     <i class="bi bi-explicit-fill sacado_color_text"></i>  {% include 'qcm/breadcrumb.html' %} {% if is_mine %}Mes 20 derniers exercices perso {% else %}Exercices perso mutualisés{% endif %}
 
-    <a href="{% url 'create_supportfile' 0 %}" class="btn btn-new"> Nouvel exercice </a>
+    <a href="{% url 'create_supportfile' 100 0 %}" class="btn btn-new"> Nouvel exercice </a>
 {% endblock %}
 
 

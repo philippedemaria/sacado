@@ -1,20 +1,39 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}    
+
+
 {% if supportfile and supportfile.correction %}
+
 <div class="row">
-                      
-        {{ form.correction.label_tag }}<br/>                        
-        {{ form.correction }}
-        {{ form.correction.errors }}
- 
+    <label>Afficher le corrigé ?</label>  
+    {{ form.is_display_correction |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+    {{ form.is_display_correction.errors }}
+</div>
+
+<div class="row">          
+    {{ form.correction.label_tag }}<br/>                        
+    {{ form.correction }}
+    {{ form.correction.errors }}
 </div>
 {% else %}
 <div class="row">
     <label>
     	<a href="javascript:void()" id="enable_correction" class="btn btn-sacado">Ajouter un corrigé <small>(Falcultatif mais très conseillé)</small></a>    
     </label>
-    <div id="enable_correction_div">                      
+    <div id="enable_correction_div">  
+
+        <div class="form-group">
+            <label>Afficher le corrigé ?</label>  
+            {{ form.is_display_correction |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+            {{ form.is_display_correction.errors }}
+        </div>
+
         {{ form.correction.label_tag }}<br/>                        
         {{ form.correction }}
         {{ form.correction.errors }}
+
+
     </div>
 </div>
 {% endif %}

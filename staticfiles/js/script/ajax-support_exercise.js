@@ -576,17 +576,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     //=========================      PAIRES      ================================================  
     //===========================================================================================  
 
-    // $('body').on('mouseup', '.draggable' , function () {
-    //     $('.quizz_item').css('border', '1px solid #E0E0E0'); 
-    //     if ($('.select_items .quizz_choice').length == 1) { 
-    //         $("#submit_button_relation").show()
-    //     }
-    // })
-
     $( document ).on('mouseover', ".draggable" , function () { 
-
         var loop = $(this).data('loop');
-
         $( this ).draggable({
                 containment: ".dropzone"+loop ,
                 appendTo : '.droppable'+loop , 
@@ -620,13 +611,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
     })
 
-
-
-
-
-
     //===========================================================================================  
-    //===========================================================================================  
+    //==============================   Texte à trous   ==========================================  
     //===========================================================================================  
 
     // $('body').on('mouseup', '.word_draggable' , function () {
@@ -647,121 +633,24 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             drop: function( event, ui ) {
 
                 this_word = $(ui.draggable[0]).data("word") ;
-                this_loop = $(this).data("loop") ; alert(this_loop) ;
-
-                $(this).append( $(ui.draggable[0])  );
-                $(this).css('border', '0px');
-                $(this).css('vertical-align', 'normal');
-                $(this).parent().find('.'+this_loop).val(this_word);
-
+                this_loop = $(this).data("loop") ; 
+                $(ui.draggable[0]).removeClass("word_choice") ;  
+                $(ui.draggable[0]).css("font-weight","600") ;
+                $(this).append( $(ui.draggable[0]) );
+                $("#loop_"+this_loop).val( this_word );
+                $(this).removeClass("input_droppable") ;
+                $(this).addClass("input_droppable_no_width") ;
             },
             over: function(event, ui) {
             },
             out: function(event, ui) {
-                $(this).css('border', '1px solid #E0E0E0');
-                $(this).css('vertical-align', "");
+                $(this).addClass("input_droppable") ; 
+                $(this).removeClass("input_droppable_no_width") ;
             }
     });
 
 
-    $(document).on('keyup','.secret_letter', function(e) { 
-         
-          if (e.which == 32 || (65 <= e.which && e.which <= 65 + 25)
-                            || (97 <= e.which && e.which <= 97 + 25)
-                            || (192 == e.which) || (55 == e.which) || (50 == e.which)|| (57 == e.which) ) 
-            {   
-                let csrf_token    = $("input[name='csrfmiddlewaretoken']").val();
-                let secret_letter = String.fromCharCode(e.which) ;
-                let nb_tries      = $("#nb_tries").val();
-                let index         = $(this).data('index');
-                let word_id       = $(this).data("word_id");
-                let word_id_used  =  $("#word_id_used").val();
-                let position      =  $("#position").val();
-                let word_length   =  $("#word_length").val();
-                let word_length_i =  $("#word_length_i").val();
-                let shuffle_ids   =  $("#shuffle_ids").val();
-                let used_letter   =  $("#used_letter").text(); 
 
-                $.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            'secret_letter': secret_letter,
-                            'nb_tries'     : nb_tries,
-                            'word_id'      : word_id,
-                            'word_id_used' : word_id_used,
-                            'index'        : index,
-                            'position'     : position,
-                            'word_length'  : word_length,
-                            'shuffle_ids'  : shuffle_ids,
-                            'used_letter'  : used_letter,
-                            csrfmiddlewaretoken: csrf_token,
-                        },
-                        url: "../../ajax_secret_letter",
-                        success: function (data) {
-     
-
-                            if (data.response == "false")
-                            {   
-                                var new_position = parseInt(position) + 200;
-                                $("#position").val(new_position);
-                                $("#wordguess-counter").css("background-position","0 "+new_position+"px") ; 
-                                $("#secret_letter"+index).val('');
-                                $("#secret_letter"+index).focus() ;   
-                            }
-                            else {
-                                $("#secret_letter"+index).css('border','2px solid green');
-                                var nidx      = parseInt(index)+1;
-                                word_length_i = parseInt(word_length_i) ;
-                                if (parseInt(index)+1 < word_length_i){ $("#secret_letter"+nidx).focus(); } else {  $("#secret_letter0").focus(); } 
-                                $("#word_length").val(data.length);
-                            }
-
-                            $("#used_letter").text(data.used_letter);  
-                            if (data.win == "true")
-                            {   
-                                $("#word_id_used").val(data.word_id_used);   
-                                $("#"+data.input).val(data.word);
-                                $("#new_word").html("").html(data.new_word);
-                                $("#position").val(200);
-                                $("#word_length_i").val(data.length_i);
-                                $("#word_id").val(data.word_id);
-                                $("#used_letter").text("");
-                                $('#word_left').text(data.nb);
-                            }
-                        }
-     
-                    })
-
-            } 
-    });
-
-
-
-    var liste = [] ; 
-    $(document).on('mousedown','#grid td', function(e) {  
-     
-            if ( $(this).hasClass("highlight") )
-                {
-                    $(this).removeClass("highlight") ;
-                    idx = liste.indexOf(  $(this).text() ) ;
-                    if(idx>-1)
-                    { liste.splice(idx, 1) ;}
-                }
-            else
-                {
-                    $(this).addClass("highlight") ;
-                    liste.push($(this).text());
-                    text = liste.join("");
-                    nb_words = $(".these_words").length ;
-                    $(".these_words").each( function(index) {
-                        if ( text == $("#word"+index).val() ){
-                            $("#check"+index).html("<i class='fa fa-check text-success'></i>");
-                            liste = [] ;
-                        }
-                    })
-                }
-        });
 
 
     var card_ids = [] ; 
@@ -1099,7 +988,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             let supportfile_id = $(this).data("supportfile_id") ;
             let loop           = $(this).data("loop") ;
-            
+
             form_data.append("csrfmiddlewaretoken" , csrf_token);
             form_data.append("supportfile_id" , supportfile_id); 
             form_data.append("loop" , loop);  
@@ -1132,8 +1021,398 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
          });
 
 
+//*************************************************************************************************************  
+// Correction des anagrammes
+//************************************************************************************************************* 
+  
+    $(document).on('click', ".show_anagrams_correction" , function (event) {
+ 
+
+            event.preventDefault();   
+            my_form = document.querySelector("#all_types_form");
+            var form_data = new FormData(my_form); 
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let supportfile_id = $(this).data("supportfile_id") ;
+            let loop           = $(this).data("loop") ;
+            let choice_id      = $(this).data("choice_id") ;
+            form_data.append("supportfile_id" , supportfile_id); 
+            form_data.append("loop" , loop); 
+            form_data.append("choice_id" , choice_id); 
+            form_data.append("csrfmiddlewaretoken" , csrf_token); 
+                       
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional : true,
+                    data: form_data,
+                    url: "../../check_anagram_answers",
+                    success: function (data) {
+                        $("#score").val(data.score);
+                        $("#numexo").val(data.numexo);
+                        $("#score_span").html(data.score);
+                        $("#numexo_span").html(data.numexo);
+                        //********** Gestion de la div de solution ********************
+                        $("#show_correction"+loop).show(500);
+                        $("#this_correction_text"+loop).html(data.this_correction_text);
+                        $("#message_correction"+loop).html(data.msg);
+                        //*************************************************************
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);    
+                    },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                }
+            )
+         });
 
 
+
+//*************************************************************************************************************  
+// Correction des tris
+//************************************************************************************************************* 
+    
+    $(document).on('mouseover', ".item_sortable" , function (event) {
+
+            loop = $(this).data('loop') ;
+            $("#sortable"+loop).sortable({
+                    cursor: "move",
+                    swap: true,    
+                    animation: 150,
+                    distance: 5,
+                    tolerance: "pointer" ,
+                    revert: true,
+                    connectWith: "#sortable", 
+                    start: function( event, ui ) { 
+                           $(ui.item).css("box-shadow", "2px 2px 2px gray"); 
+                       },
+                    stop: function (event, ui) {
+
+                        var valeurs = [];
+                        $("#sortable"+loop+" .item_sortable").each(function() {
+
+                            let value = $(this).data("value"); console.log(value);
+                            valeurs.push(value);
+                        });
+                        $(ui.item).css("box-shadow", "0px 0px 0px transparent");  
+                        $("#sortable"+loop+" .answers").val(valeurs) ;
+
+                        },
+                    });
+
+        })
+
+    $(document).on('click', ".show_sort_correction" , function (event) {
+ 
+
+            event.preventDefault();   
+            my_form = document.querySelector("#all_types_form");
+            var form_data = new FormData(my_form); 
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let supportfile_id = $(this).data("supportfile_id") ;
+            let loop           = $(this).data("loop") ;
+            let choice_id      = $(this).data("choice_id") ;
+            form_data.append("supportfile_id" , supportfile_id); 
+            form_data.append("loop" , loop); 
+            form_data.append("choice_id" , choice_id); 
+            form_data.append("csrfmiddlewaretoken" , csrf_token); 
+                       
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional : true,
+                    data: form_data,
+                    url: "../../check_sort_answers",
+                    success: function (data) {
+                        $("#score").val(data.score);
+                        $("#numexo").val(data.numexo);
+                        $("#score_span").html(data.score);
+                        $("#numexo_span").html(data.numexo);
+                        //********** Gestion de la div de solution ********************
+                        $("#show_correction"+loop).show(500);
+                        $("#this_correction_text"+loop).html(data.this_correction_text);
+                        $("#message_correction"+loop).html(data.msg);
+                        //*************************************************************
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);    
+                    },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                }
+            )
+         });
+
+
+//*************************************************************************************************************  
+// Correction des filltheblanks
+//************************************************************************************************************* 
+  
+    $(document).on('click', ".show_filltheblanks_correction" , function (event) {
+ 
+
+            event.preventDefault();   
+            my_form = document.querySelector("#all_types_form");
+            var form_data = new FormData(my_form); 
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            form_data.append("csrfmiddlewaretoken" , csrf_token);
+
+            let supportfile_id = $(this).data("supportfile_id") ;
+            let loop           = $(this).data("loop") ;
+            form_data.append("supportfile_id" , supportfile_id); 
+            form_data.append("loop" , loop); 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional : true,
+                    data: form_data,
+                    url: "../../check_filltheblanks_answers",
+                    success: function (data) {
+                        $("#score").val(data.score);
+                        $("#numexo").val(data.numexo);
+                        $("#score_span").html(data.score);
+                        $("#numexo_span").html(data.numexo);
+                        //********** Gestion de la div de solution ********************
+                        $("#show_correction"+loop).show(500);
+                        $("#this_correction_text"+loop).html(data.this_correction_text);
+                        $("#message_correction"+loop).html(data.msg);
+                        //*************************************************************
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);    
+                    },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                }
+            )
+         });
+
+
+
+//*************************************************************************************************************  
+// Correction des mots mélés
+//************************************************************************************************************* 
+  
+    var liste = [] ; 
+    $(document).on('mousedown','.clickable', function(e) {
+
+            code    = $(this).data('code') ;
+            encoder = $("#encodeur").val() ;
+     
+            if ( $(this).hasClass("highlight") )
+                {
+                    $(this).removeClass("highlight") ;
+                    idx = liste.indexOf(  $(this).text() ) ;
+                    if(idx>-1)
+                    {  
+                        liste.splice(idx, 1) ;
+                        $("#encodeur").val( parseInt(encoder) - parseInt(code) );
+                        sender  = $("#encodeur").val() ;
+                    }
+
+
+                }
+            else
+                { 
+
+                    $("#encodeur").val( parseInt(encoder) + parseInt(code) );
+                    sender  = $("#encodeur").val() ;
+
+                    $(this).addClass("highlight") ;
+                    liste.push($(this).text());
+                    text = liste.join("");
+
+                    $(".these_words").each( function(index) {
+
+                        let word = $("#word"+index).val() ; 
+                        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                        if ( text == word ){
+
+                            liste = [] ;
+
+                            let score  = $("#score").val()   ; 
+
+                            $.ajax(
+                                {
+                                    type: "POST",
+                                    dataType: "json",
+                                    traditional : true,
+                                    data: {
+                                        'sender' : sender,
+                                        'word'   : word,
+                                        'score'  : score,
+                                        csrfmiddlewaretoken: csrf_token,
+                                    },
+                                    url: "../../check_grid_answers",
+                                    success: function (data) {
+                                        //********** Gestion de la div de solution ********************
+                                        $("#score").val( data.score);                            
+                                        $("#score_span").html( data.score );
+                                        $("#encodeur").val( 0 );
+                                        if (data.true == "yes" ) 
+                                            {
+                                                $("#check"+index).html("<i class='fa fa-check text-success'></i>");
+                                                $(".highlight").removeClass("clickable");
+                                                $(".highlight").addClass("highlight_win");
+                                                $(".highlight").removeClass("highlight");
+                                            }
+                                        else{
+                                            $(".highlight").addClass("highlight_red");
+                                            setTimeout(function(){
+                                            $('.highlight').removeClass("highlight").removeClass("highlight_red");
+                                                    },500);
+                                        }
+                                        //*************************************************************
+                                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);    
+                                    }
+                                })
+                        }
+                        else if (text.length > 8) { 
+                            if ($('#grid td').hasClass("highlight"))
+                            {
+                                liste = [] ;
+                                $('.highlight').addClass("highlight_red")  ;
+
+                                setTimeout(function(){
+                                            $('.highlight').removeClass("highlight").removeClass("highlight_red");
+                                                    },500);
+
+                                $("#encodeur").val( 0 ); 
+                            }
+                        }
+
+                    })
+                }
+        });
+
+    $(document).on('click', ".show_grid_correction" , function (event) {
+ 
+            event.preventDefault();   
+            my_form = document.querySelector("#all_types_form");
+            var form_data = new FormData(my_form); 
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let supportfile_id = $(this).data("supportfile_id") ;
+
+            form_data.append("csrfmiddlewaretoken" , csrf_token);            
+            form_data.append("supportfile_id" , supportfile_id); 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional : true,
+                    data: form_data,
+                    url: "../../check_grid_answers",
+                    success: function (data) {
+                        //********** Gestion de la div de solution ********************
+                        $("#show_correction"+loop).show(500);
+                        $("#this_correction_text"+loop).html(data.this_correction_text);
+                        $("#message_correction"+loop).html(data.msg);
+                        //*************************************************************
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);    
+                    },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                }
+            )
+         });
+
+
+//*************************************************************************************************************  
+// Correction des mots secrets
+//************************************************************************************************************* 
+
+    $('.show_sort_correction').hide();
+    $(document).on('keyup','.secret_letter', function(e) { 
+         
+          if (e.which == 32 || (65 <= e.which && e.which <= 65 + 25)
+                            || (97 <= e.which && e.which <= 97 + 25)
+                            || (192 == e.which) || (55 == e.which) || (50 == e.which)|| (57 == e.which) ) 
+            {   
+                let csrf_token    = $("input[name='csrfmiddlewaretoken']").val();
+                let secret_letter = String.fromCharCode(e.which) ;
+                let index         = $(this).data('index'); 
+                let choice_id     = $(this).data("choice_id");
+                let loop          = $(this).data("loop");                      
+                let nb_tries      = $("#nb_tries"+loop).val();
+                let position      = $("#position"+loop).val(); // Place de l'image de la fleur
+                let word_length   = $("#word_length"+loop).val();
+                let word_length_i = $("#word_length_i"+loop).val();
+                let used_letter   = $("#used_letter"+loop).text(); 
+                let score         = $("#score").val();
+
+                $("#nb_tries"+loop).val( parseInt(nb_tries) - 1 ) ;
+                if(  $("#nb_tries"+loop).val() == 1 )
+                    { $('#win_sentence'+loop).html("<span class='text-danger'>Oh lààààà, il ne reste plus qu'une seule tentative.</span>"); }
+                else 
+                    {$('#win_sentence'+loop).html("");}
+                
+                $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'secret_letter': secret_letter,
+                            'nb_tries'     : nb_tries,
+                            'index'        : index,
+                            'choice_id'    : choice_id,
+                            'position'     : position,
+                            'word_length'  : word_length,
+                            'word_length_i': word_length_i,
+                            'used_letter'  : used_letter,
+                            'score'        : score,
+                            csrfmiddlewaretoken: csrf_token,
+                        },
+                        url: "../../ajax_secret_letter",
+                        success: function (data) {
+     
+                            if (data.response == "false")
+                            {   
+                                var new_position = parseInt(position) + 200;
+                                $("#position"+loop).val(new_position);
+                                $("#wordguess-counter"+loop).css("background-position","0 "+new_position+"px") ; 
+                                $("#secret_letter"+index+"-"+loop).val('');
+                                $("#secret_letter"+index+"-"+loop).focus() ;   
+
+                                if (data.slide == 'yes'){
+                                    var pxValue = currentSlide * slideWidth ; 
+                                    this_slideBox.animate({
+                                        'left' : -pxValue
+                                    });
+                                    currentSlide++ ;                                    
+                                }
+                            }
+                            else {
+                                $("#secret_letter"+index+"-"+loop).css('border','2px solid green');
+                                $("#word_length"+loop).val(data.length);
+                                var nidx      = parseInt(index)+1;
+                                word_length_i = parseInt(word_length_i) ;
+                                if (parseInt(index)+1 < word_length_i){ $("#secret_letter"+nidx+"-"+loop).focus(); } else {  $("#secret_letter0-"+loop).focus(); }  
+                            }
+
+                            $("#used_letter"+loop).text(data.used_letter);  
+                            if (data.win == "true")
+                            {      
+                                $("#position"+loop).val(200);
+                                $("#word_length_i"+loop).val(data.length_i);
+                                $("#used_letter"+loop).text("");
+                                $('#win_sentence'+loop).html("<span class='text-success'>BRAVO !<br/> Vous avez trouvé le mot caché. <br/>Cliquer sur le bouton bleu Valider.</span>");
+                                $('#nav_start'+loop).show(500);
+                                $('#word_left').text(data.nb);
+                                $("#score").val(data.score);
+                                $("#score_span").html(data.score);
+                            }
+                        }
+     
+                    })
+
+            } 
+    });
 
 
 

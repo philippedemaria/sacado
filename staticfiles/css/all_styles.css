@@ -664,6 +664,15 @@ li.this_slide{
 /* --------------------------------    fin wrapper_this_slider             ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/
 
+
+input:invalid {
+  border: 2px solid red;
+}
+input:invalid:focus {
+  background-color: #ff2a5130;
+}
+
+
 .scrollbar::-webkit-scrollbar {
   height: 10px;
   width: 5px;
@@ -898,7 +907,7 @@ li.this_slide{
     border : 1px solid #aaa;
     display: inline-block;
     margin: 5px;
-    padding: 0px 10px;
+    padding: .2em 1em;
     text-align: center;
     vertical-align: middle;
 }
@@ -913,13 +922,44 @@ li.this_slide{
     border:1px solid #CCC; 
     width:100px;
     border-radius:4px;
-    height:26px;
+    height:30px;
     vertical-align: middle;
 }
+
+.input_droppable_no_width{
+    display: inline-block;
+    border-radius:4px;
+    height:30px;
+    vertical-align: middle;
+}
+
 
 .input_droppable:hover{
     border:2px solid #CCC;     
 }
+
+.text_fill_the_blanks{
+  line-height:30px;
+}
+
+
+.item_sortable{
+    padding:5px;
+    border-radius: 5px;
+    border : 1px solid #CCC;
+    background-color: white;
+    text-align: center;
+    min-width:35px;
+    max-width: 145px;
+    margin:5px; 
+    float:left;
+    cursor: move;
+}
+
+
+
+
+
 
 .secret_letter{
     width:1.5em;
@@ -950,7 +990,16 @@ li.this_slide{
     background-color: #e0ffde!important;
 }
 
-
+.highlight_win{
+    border:1px solid #075b01;
+    color : white ;
+    background-color: #075b01!important;
+}
+.highlight_red{
+    border:1px solid #c12222;
+    color : #780b0b ;
+    background-color: #ffb2b2!important;
+}
 
 
 .scene {

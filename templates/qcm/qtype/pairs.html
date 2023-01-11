@@ -33,30 +33,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="form_card" style="margin-top:20px;">
-            <div class="row" style="margin-bottom:20px;">
-                <div class="col-sm-5 col-md-3"> <label>Les paires</label>
-                    <a href="javascript:void();" id="show_pseudorandomize_zone" class="btn btn-sacado">
-                        <label>Question pseudo-aléatoire ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                                                <div class="helper_tip_text" >
-                                                                    Nombre de choix de réponses <br/>
-                                                                    proposées parmi les réponses<br/> 
-                                                                    enregistrées. Ex : Si vous<br/> 
-                                                                    enregistrez 20 réponses<br/>
-                                                                    possibles et que vous<br/>
-                                                                    inscrivez 5, 5 réponses<br/> 
-                                                                    seront aléatoirement choisies<br/>
-                                                                    parmi les 20. <br/>
-                                                                    Dans le cas d'un QCM/QCS,<br/> au moins une sera valide.</div>
-                                                            </span>
-                        </label>
-                    </a>
-                </div>
-                <div class="col-sm-7 col-md-9">
-                    <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
-                        {{ form.pseudoalea_nb }} <label>paires à proposer parmi les <span id="nb_pseudo_aleatoire">2</span> enregistrées ci-dessous. Si 0, les paires sont toutes proposées.</label>
-                    </span>                                    
-                </div>
-            </div>  
+            <label>Les paires</label>
             <script id="rowToClone" type="text/template">
                 <div id="duplicate">
                     <div class="col-sm-12">

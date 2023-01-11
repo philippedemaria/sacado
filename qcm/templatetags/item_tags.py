@@ -99,17 +99,39 @@ def insert_input(arg):
     tab = arg.split('####')
 
     string = ""
+    j=1
     for i in range(len(tab)) :
-        
         if i%2==1:
             if  int(len(tab[i]))  < 4 : ln = "30"
             elif  int(len(tab[i]))  < 10 : ln = "100"
             else : ln = str(int(len(tab[i]))*10)
-            st = "<input type='hidden' name='answers' class='loop"+str(i)+"' /><div class='input_droppable' data-loop='loop"+str(i)+"'></div> "
+            st = "<input type='hidden' name='answers' id='loop_"+str(j)+"' /><div class='input_droppable' data-loop='"+str(j)+"'></div> "
+            j+=1
         else :
             st = tab[i] 
         string += st
     return string
+
+
+
+@register.filter
+def insert_only_input(arg):
+    '''HTML entity filltheblanks_safe'''
+    arg = arg.replace('<strong>','####')
+    arg = arg.replace('</strong>','####')
+    tab = arg.split('####')
+
+    string = ""
+    for i in range(len(tab)) :
+        if i%2==1:
+            st = "<input type='text' name='answers' style='border:1px solid #CCC; width:"+str(int(len(tab[i]))*14)+"px;border-radius:4px;text-align:center;font-weight:600'    /> "
+        else :
+            st = tab[i] 
+        string += st
+    return string
+
+
+
 
 
 @register.filter

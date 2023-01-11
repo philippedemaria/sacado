@@ -1,16 +1,18 @@
-define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
+define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
     $(document).ready(function () { 
-        console.log("chargement JS ajax-support_exercise.js  OKK");
+        console.log("chargement JS ajax-support_creator.js  OKK");
 
 
-        //*************************************************************************************************************
+        //**************************************************************************************************************
         //********            ckEditor            **********************************************************************
-        //*************************************************************************************************************
+        //**************************************************************************************************************
+        if ( $('#qtype').val() == '2' ) {  cke_height = '250px' ;} else {  cke_height = '100px' ;}
+
         CKEDITOR.replace('annoncement', {
-                height: '200px',
+                height: cke_height ,
                 toolbar:    
                     [  
-                        { name: 'clipboard',  items: [ 'Source', '-','Copy', 'Paste', 'PasteText' ] },
+                        { name: 'clipboard',  items: [ 'Source'] },
                         { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
                         { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline',  ] },
                         { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
@@ -18,10 +20,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             });
 
         CKEDITOR.replace('correction', {
-                height: '200px',
+                height: cke_height,
                 toolbar:    
                     [  
-                        { name: 'clipboard', items: [ 'Source', '-','Copy', 'Paste', 'PasteText' ] },
+                        { name: 'clipboard', items: [ 'Source'] },
                         { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
                         { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline',  ] },
                         { name: 'insert', items: ['Image', 'SpecialChar','Iframe']},   
@@ -29,6 +31,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     ] ,
             });
 
+              
         //*************************************************************************************************************
         //*************************************************************************************************************
         //*************************************************************************************************************  
@@ -367,6 +370,49 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             if (totalForms==0) {$("#id_situation").val(1);}
         });
 
+        //***********************************************************************************************
+        //***********************************************************************************************
+
+        if (  $('#qtype').val() == 7  )
+        {  
+            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())  ;
+            let toolbar = [  
+                            { name: 'clipboard',  items: [ 'Bold' ] },
+                          ]  ;
+            insert_ckeditor('50px', totalForms,toolbar)
+        }
+        else if  ($('#qtype').val() == 9)  
+        {  
+            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())  ;
+            let toolbar = [  
+                            { name: 'paragraph',  items: [ 'Bold','-' , 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                            { name: 'basicstyles',  items: [ 'Italic', 'Underline',  ] },
+                            { name: 'insert', items: ['Image', 'HorizontalRule']},
+                          ] ;
+            insert_ckeditor('200px', totalForms,toolbar)
+        }
+
+
+
+        function insert_ckeditor(height, totalForms,toolbar){
+
+            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())  ;
+            for(var i=0;i<totalForms;i++)
+            { 
+                CKEDITOR.replace("supportchoices-"+i+"-answer",{
+                    height : height,
+                    toolbar: toolbar   
+                });
+            }
+
+        }
+
+
+
+
 
 
         $(document).on('click', '.add_more', function (event) { 
@@ -395,6 +441,35 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 });
                 $('#spanner').attr("id","spanner"+totalForms) ;
                 $('#preview').attr("id","preview"+totalForms) ;
+ 
+
+                if ( $('#qtype').val() == 7)
+                {  
+
+                    CKEDITOR.replace("supportchoices-"+totalForms+"-answer", {
+                        height: '50px',
+                        toolbar:    
+                            [  
+                                { name: 'clipboard',  items: [ 'Bold'] },
+                            ] 
+                    });
+                }
+                else if ($('#qtype').val() == 9) 
+                {  
+
+                    CKEDITOR.replace("supportchoices-"+totalForms+"-answer", {
+                        height: '200px',
+                        toolbar:    
+                            [  
+                                { name: 'paragraph',  items: [ 'Bold','-' , 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                                { name: 'basicstyles',  items: [ 'Italic', 'Underline',  ] },
+                                { name: 'insert', items: ['Image', 'HorizontalRule']},
+                            ]  
+                    });
+                }
+
+
+
                 total_form.val(totalForms+1);
             });
 

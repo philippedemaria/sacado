@@ -222,7 +222,7 @@ class SupportfileForm(forms.ModelForm):
 		knowledges = Knowledge.objects.filter(theme__subject__in= subjects)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']    =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject__in= subjects))
-		self.fields['level']     =  forms.ModelChoiceField(queryset= teacher.levels.exclude(pk= 13))
+		self.fields['level']     =  forms.ModelChoiceField(queryset= teacher.levels.exclude(pk= 13).order_by('ranking'))
 
 class SupportfileKForm(forms.ModelForm):
 	class Meta:

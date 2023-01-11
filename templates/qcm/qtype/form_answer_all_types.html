@@ -179,7 +179,7 @@
                         </div>
                         {% if element_is_display.score %}
                         <div class="col-sm-4 col-md-3"  >
-                            <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">0</span></label></div>
+                            <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">{{ numexo }}</span></label></div>
                         </div>
                         {% endif %}
                     </div>
@@ -208,11 +208,7 @@
                 <input id="relation" name="relation_id"  type="hidden" value="{{ relation.id }}"/>
                 <input id="start_time" name="start_time"  type="hidden" value="{{ start_time }}"/>
                 <input id="score"  name="score"  type="hidden" value=0  />
-                {% if supportfile.qtype == 14 %}  
-                <input id="numexo" name="numexo" type="hidden" value=-1  />
-                {% else %}
-                <input id="numexo" name="numexo"  type="hidden" value=0  />
-                {% endif %}
+                <input id="numexo" name="numexo"  type="hidden" value={{ numexo }}  />
                 <input id="situation" name="situation"  type="hidden" value="{{ relation.situation }}"/> 
                 <input id="parcours_id" name="parcours_id"  type="hidden" value="{{ relation.parcours.id }}"/>
                 <!-- ======================================================================= -->   

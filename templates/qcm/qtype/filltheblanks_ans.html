@@ -1,0 +1,56 @@
+{% extends 'qcm/qtype/form_answer_all_types.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block answer_all_type_template %}
+
+	{% for annoncement in annoncements %} 
+		<li class="this_slide">
+
+		    <div class="row"  align="left">
+		        {% if annoncement %}
+		            <div class="col-sm-12 col-lg-12 custom_content" 
+		                 style="max-height:80px">{{ annoncement|safe }}
+		            </div>
+		        {% endif %}
+		    </div>  
+			{% if supportfile.is_written %}
+				{% for choice in choices|index:forloop.counter0 %}
+					<div class="row text_fill_the_blanks" align="left">
+						{{ choice.answer|insert_only_input|safe }}
+					</div>
+					<input name="choice_id" type='hidden' value="{{ choice.id }}"/>
+				{% endfor %}
+	 		{% else %}
+				<div class="quizz_item select_items" align="left">
+					{% for word in shufflechoices|index:forloop.counter0 %}
+						<span class="draggable word_choice"  data-word="{{ word }}" style="cursor: move;" >
+							 {{  word }}
+						</span>
+					{% endfor %}
+				</div>	
+				{% for choice in choices|index:forloop.counter0 %}
+					<div class="row text_fill_the_blanks" align="left">
+						{{ choice.answer|insert_input|safe }}
+					</div>
+					<input name="choice_id" type='hidden' value="{{ choice.id }}"/>
+				{% endfor %}
+			{% endif %}
+		    <div class="row validation">
+		    	<div class="col-sm-12 col-md-3" align="center"  >
+		            <a  href="#" class="btn btn-primary show_filltheblanks_correction" data-supportfile_id="{{ supportfile.id }}"   
+		            	id="nav_start{{ forloop.counter }}" data-loop="{{ forloop.counter }}"><i class="fa fa-caret-right"></i> Valider 
+		            </a>
+		        </div>
+		    </div>
+			{% include 'qcm/qtype/_correction_div.html' %}
+		</li>        	
+	{% endfor %}
+
+
+	{% include 'qcm/qtype/_last_slide.html' %}
+
+{% endblock %}

@@ -25,7 +25,7 @@
 
 
     {% if request.user.is_superuser and  '/admin' in request.path %}
-    <li ><a href="{% url 'create_supportfile' 0 %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB </a> </li> 
+    <li ><a href="{% url 'create_supportfile' 100 0 %}"   class="btn btn-new"><img width="25px" src="{% static 'img/plus.png' %}"/> Nouveau support GGB </a> </li> 
     {% endif  %}
 
 {% endblock %}

@@ -147,7 +147,8 @@ class Supportfile(models.Model):
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     ####  Corrigé
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
-    criterions = models.ManyToManyField(Criterion, blank=True, related_name='supportfiles' )
+    is_display_correction = models.BooleanField(default=0, verbose_name="Afficher le corrigé ?") 
+    criterions   = models.ManyToManyField(Criterion, blank=True, related_name='supportfiles' )
     ####################################################################################################################################
     #### Pour rattacher les exercices non GGB
     ####################################################################################################################################
@@ -155,6 +156,8 @@ class Supportfile(models.Model):
     qtype         = models.PositiveIntegerField(default=100)    
     canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")
     nb_pseudo     = models.PositiveIntegerField(default=0, verbose_name="Nombre de pseudo situation")      
+    ####  Cas spécifique axe gradué qtype = 9 
+    is_written = models.BooleanField(default=0, verbose_name="Mots à écrire ?") # ou à glisser déposer
     ####  Cas spécifique axe gradué qtype = 18 
     xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
     xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
@@ -193,16 +196,21 @@ class Supportfile(models.Model):
 
     def grid(self):
 
-        supportchoices = list()
-        for choice in self.supportchoices.all():
-            supportchoices.append(choice.answer)
-        return create_string_table(supportchoices) 
+        support_choices = list()
+        nb_pseudo = self.nb_pseudo
+        supportchoices = self.supportchoices.all()
+        if nb_pseudo :
+            supportchoices = supportchoices[0,nb_pseudo]
+
+        for choice in supportchoices :
+            support_choices.append(choice.answer)
+        return create_string_table(support_choices) 
 
 
     def element_is_display(self):
         data = dict()
-        scores        = [0,True,True,True,True,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,False]
-        visus         = [0,True,True,False,False,True,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False]
+        scores        = [0,True,True,True,True,False,False,True,False,True,False,False,True,True,True,False,False,False,False,False,False]
+        visus         = [0,True,True,False,False,True,True,True,False,False,False,False,True,True,True,False,False,False,False,False,False]
         data["score"] = scores[self.qtype]
         data["visu"]  = visus[self.qtype] 
         return data 

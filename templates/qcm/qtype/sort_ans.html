@@ -1,0 +1,46 @@
+{% extends 'qcm/qtype/form_answer_all_types.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+
+{% block answer_all_type_template %}
+
+
+	{% for annoncement in annoncements %} 
+        <li class="this_slide" id="this_slide{{ forloop.counter }}">
+
+		    <div class="row"  align="left" style="margin-top:10px">
+		        {% if annoncement %}
+		            <div class="col-sm-12 col-lg-12 custom_content" 
+		                 style="max-height:80px">{{ annoncement|safe }}
+		            </div>
+		        {% endif %}
+		    </div> 
+
+		    <div class="row" align="left" style="margin:20px 0px;">
+		        <div class="col-sm-12 col-lg-12 custom_all_answers" id="sortable{{ forloop.counter }}"  style="max-height:300px;padding:10px"> 
+		        	<input class="answers" name='answers' type='hidden' />       
+					{% for choice in shufflechoices|index:forloop.counter0 %}
+						<div class="item_sortable" align='center' data-loop="{{ forloop.parentloop.counter }}" data-value="{{ choice.answer }}">
+							{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer  }} 
+						</div>
+					{% endfor %}            
+		        </div>
+		    </div>
+		    <div class="row validation">
+		    	<div class="col-sm-12 col-md-3" align="center"  >
+		            <a  href="#" class="btn btn-primary show_sort_correction" data-supportfile_id="{{ supportfile.id }}"   
+		            	id="nav_start{{ forloop.counter }}" data-loop="{{ forloop.counter }}"><i class="fa fa-caret-right"></i> Valider </a>
+		        </div>
+		    </div>
+			{% include 'qcm/qtype/_correction_div.html' %}
+        </li> 
+    {% endfor %}
+
+	{% include 'qcm/qtype/_last_slide.html' %}
+
+        
+
+{% endblock %}
