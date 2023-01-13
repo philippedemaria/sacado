@@ -4,7 +4,15 @@
 	<img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours"  style="position:absolute;{% if not rc.is_publish %}opacity:0.8{% endif %}" >
 	{% endif %}	  
 	<div style="width:100%; border: thick double  {{parcours.subject.color}};padding:10px;font-size: 14px; height:180px">
-		<label style="border:solid 1px #CCC; border-radius:50%; padding:5px;width:30px;height:30px;font-size:{% if rc.exercise.supportfile.qtype == 1 %}0.35{% elif rc.exercise.supportfile.qtype == 3 or rc.exercise.supportfile.qtype  == 4 %}0.3{% else %}0.4{% endif %}em">{{ rc.qtype_logo|safe }} </label>  
+		<label style="border:solid 1px #CCC; border-radius:50%; padding:5px;width:30px;height:30px;
+					{% if rc.exercise.supportfile.qtype == 1 %}padding:7px 0px 0px 4px;font-size:  0.35em
+					{% elif rc.exercise.supportfile.qtype == 3 or rc.exercise.supportfile.qtype  == 4 %}padding:5px;font-size:  0.3em
+					{% elif rc.exercise.supportfile.qtype == 5   %}padding:5px 0px 0px 8px;font-size:  0.25em
+					{% elif rc.exercise.supportfile.qtype  == 9  %}padding:10px 0px 0px 5px;font-size:  0.25em
+					{% elif rc.exercise.supportfile.qtype == 18  %}padding:7px 5px 5px 6px;font-size:  0.7em
+					{% else %}padding:5px;font-size:  0.4em{% endif %}">
+			{{ rc.qtype_logo|safe }} 
+		</label>  
 		{% if rc.instruction %}    
 			{{rc.instruction|safe|truncatechars_html:45}}    
 		{% else %}    

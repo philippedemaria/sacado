@@ -4,6 +4,15 @@
 {% load item_tags %}
 
 
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-check_vf']);
+    </script> 
+{% endblock %}
+
+
 {% block answer_all_type_template %}
 
 	<!------------------------------ Slides de type d'exercice --------------------------------------------->	

@@ -34,7 +34,7 @@
 {% block body %}
 <section class="content_main"> 
     <form action="{% url 'store_the_score_relation_ajax'  %}" method="POST" enctype='multipart/form-data' id="all_types_form">
-
+      {% csrf_token %}
       {% with element_is_display=supportfile.element_is_display %} 
         <div class="row">
  
@@ -167,7 +167,6 @@
                 <!-- ======================================================================= -->   
                 <!-- ================== Zone d'enregistrement ===============================--> 
                 <!-- ======================================================================= -->                     
-                    {% csrf_token %}
                     <div class="row">
                         <div class="col-sm-2 col-md-1" align="left">
                             <img src="{% static 'img/sacadoA1.png' %}" height="30px"/>
@@ -177,10 +176,10 @@
                             <div class="custom_title" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>{{ supportfile.title }}</label></div>
                             {% endif %}
                         </div>
-                        {% if element_is_display.score %}
-                        <div class="col-sm-4 col-md-3"  >
-                            <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">{{ numexo }}</span></label></div>
-                        </div>
+                        {% if relation.score_display %}
+                            <div class="col-sm-4 col-md-3"  >
+                                <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">{{ numexo }}</span></label></div>
+                            </div>
                         {% endif %}
                     </div>
                     {% for v in supportfile.supportvariables.all %}

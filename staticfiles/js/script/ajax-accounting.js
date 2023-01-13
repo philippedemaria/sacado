@@ -49,29 +49,7 @@ define(['jquery', 'bootstrap' ], function ($) {
             $('#duplicate'+totalForms).remove();
             total_form.val(totalForms)
         });
-
-
  
-
-
-        // $("body").on('change', '#id_is_abonnement', function (event) {
-
-        //         var value = $("#id_school").val() ;
-
-        //                 if (  value == ""  )
-        //                 {
-        //                     alert("Vous ne pouvez pas créer d'abonnement sans renseigner un établissement déjà créé."); return false ;                
-        //                     $('#id_is_abonnement').prop('checked', false);
-        //                 }
-        //                 else 
-        //                 {
-        //                     $(".abonnement_div").toggle();  
-        //                 }
-
-
-
-        //         }); 
-
   
 
         $("body").on('change', '#id_mode', function (event) {  
@@ -88,40 +66,7 @@ define(['jquery', 'bootstrap' ], function ($) {
                 }
 
         });
-
-        // $("body").on('change', '#id_mode', function (event) {  
-
-        //     var id_mode = $("#id_mode").val() ;
-
-        //     if(id_mode == "Période de test")
-
-        //         {
-
-        //         var date_start = $("#id_date_start").val(); 
-
-        //         var date_tab = date_start.split(" ");
-
-        //         if (date_tab[0].indexOf("/") >= 0)
-        //             { 
-        //                 var date_split = date_tab[0].split("/"); 
-        //                 var day   = date_split[0] ;
-        //                 var month = date_split[1] ;
-        //                 var year  = date_split[2] ;
-        //             }
-        //         else
-        //             { 
-        //                 var date_split = date_tab[0].split("-"); 
-        //                 var day   = date_split[2] ;
-        //                 var month = date_split[1] ;
-        //                 var year  = date_split[0] ;
-        //             }
-
-        //         var date_stop = year +"-"+ month +"-"+ day +" 00:00"
-
-        //         $("#id_date_stop").val(date_stop);
-        //         }
-
-        // });
+ 
 
     });
 

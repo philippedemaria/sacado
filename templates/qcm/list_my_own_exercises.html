@@ -24,7 +24,7 @@
         <div class="row">
             {% for qt in qtypes %}
                     <a href="{% url 'create_supportfile' qt.id 0  %}" class="all_proposed_types_exercises">
-                        <div style="float:left;{% if qt.id == 1 %}font-size:0.2em{% elif qt.id == 3 or qt.id  == 4 %}font-size:0.18em;{% elif qt.id  == 5 %}font-size:0.15em;{% elif qt.id  == 9 %}font-size:0.13em;padding-top:10px;{% else %}font-size:0.25em{% endif %}" 
+                        <div style="float:left;{% if qt.id == 1 %}font-size:0.2em{% elif qt.id == 3 or qt.id  == 4 %}font-size:0.18em;{% elif qt.id  == 5 %}font-size:0.15em;{% elif qt.id  == 9  or qt.id  == 6  %}font-size:0.13em;padding-top:10px;{% else %}font-size:0.25em{% endif %}" 
                              class="qtypes_logo {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %} {% if qt.id ==  qtype  %}qtypes_logo_active{% endif %}" title="{{ qt.title}} {% if qt.id == 19 or qt.id == 20  %}à correction manuelle sur l'interface SACADO{% else %}auto-correctif{% endif %} "   >
                             {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="20px" /> {% else %}{{ qt.html|safe }}{% endif %} 
                         </div>

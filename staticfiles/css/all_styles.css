@@ -555,26 +555,26 @@ a.label_my_own:hover{
 /*********************************************************************************/
 div.carte {
   position: absolute;
-  background-color: #f1f1f1;
-  border: 1px solid #d3d3d3;
+  background-color: #f6f3ff;
+  border: 1px solid #b295ff;
   text-align: center;
   width:150px;
+  border-radius: 5px;
 }
 #tableau {
-    width:80%;
-    height:500px;
-    border:2px solid; 
-    resize:both ; 
-    overflow:auto;
+    width:650px;
+    height:300px;
+    border:1px solid #527ded; 
+    background-color: #fbfaff ;
+
 }
 #axe {
-  width:80%;
-  height:3px;
-  background-color: #000000;
+  width:600px;
+  height:2px;
+  background-color: #5f8cff;
   border: 0 px solid;
   position:relative;
   top:70px;
-  left:10%;
 }
 
 
@@ -874,7 +874,7 @@ input:invalid:focus {
   height:550px;
   position:absolute;
   background-color: white;
-  z-index: 2;
+  z-index: 20;
   top:0px;
   padding-top:40px;
   left: 0px;
@@ -1113,8 +1113,7 @@ input:invalid:focus {
   font-size: 0.8em;
 }
 
-
-
+ 
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------   SHARED   EXERCISE ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/

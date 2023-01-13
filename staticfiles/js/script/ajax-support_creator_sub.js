@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
     $(document).ready(function () { 
-        console.log("chargement JS ajax-support_creator.js  OKK");
+        console.log("chargement JS ajax-support_creator_sub.js");
 
 
         //**************************************************************************************************************
@@ -331,13 +331,18 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 $('#id_is_realtime').prop('checked', false); 
             } 
         })
-        //*************************************************************************************************************
-        //*************************************************************************************************************
+
+
+    $("#id_title").val("Regrouper les cartes par thèmes");
+
+
         //*************************************************************************************************************  
+        // Gestion des variables dynamiques
+        //************************************************************************************************************* 
 
-        $(document).on('click', '.add_more_question', function (event) { 
+        $(document).on('click', '.add_more_question', function (event) { alert();
 
-                var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
+                var total_form = $('#id_customvariables-TOTAL_FORMS') ;
                 var totalForms = parseInt(total_form.val())  ;
 
                 var thisClone = $('#rowToClone_question');
@@ -345,6 +350,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
                 $('#formsetZone_variables').append(rowToClone);
                 $('#duplicate_variables').attr("id","duplicate_variables"+totalForms) 
+                //$('#cloningZone').attr("id","cloningZone"+totalForms) 
 
                 $('#duplicate_variables'+totalForms).find('.delete_button_question').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_question" ><i class="fa fa-trash"></i></a>'); 
                 $('#duplicate_variables'+totalForms).find("input[type='checkbox']").bootstrapToggle();
@@ -355,135 +361,110 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 });
                 total_form.val(totalForms+1);
 
-                $("#id_situation").val(5);
-
             });
 
 
         $(document).on('click', '.remove_more_question', function () {
-            var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
+            var total_form = $('#id_customvariables-TOTAL_FORMS') ;
             var totalForms = parseInt(total_form.val())-1  ;
 
             $('#duplicate_variables'+totalForms).remove();
-            total_form.val(totalForms);
-
-            if (totalForms==0) {$("#id_situation").val(1);}
+            total_form.val(totalForms)
         });
 
-        //***********************************************************************************************
-        //***********************************************************************************************
+        //*************************************************************************************************************  
+        // Gestion des thèmes
+        //************************************************************************************************************* 
 
-        if (  $('#qtype').val() == 7  )
-        {  
-            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
-            var totalForms = parseInt(total_form.val())  ;
-            let toolbar = [  
-                            { name: 'clipboard',  items: [ 'Bold' ] },
-                          ]  ;
-            insert_ckeditor('50px', totalForms,toolbar)
-        }
-        else if  ($('#qtype').val() == 9)  
-        {  
-            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
-            var totalForms = parseInt(total_form.val())  ;
-            let toolbar = [  
-                            { name: 'paragraph',  items: [ 'Bold','-' , 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                            { name: 'basicstyles',  items: [ 'Italic', 'Underline',  ] },
-                            { name: 'insert', items: ['Image', 'HorizontalRule']},
-                          ] ;
-            insert_ckeditor('200px', totalForms,toolbar)
-        }
+        $(document).on('click', '.add_more', function (event) {
 
-
-
-        function insert_ckeditor(height, totalForms,toolbar){
-
-            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
-            var totalForms = parseInt(total_form.val())  ;
-            for(var i=0;i<totalForms;i++)
-            { 
-                CKEDITOR.replace("supportchoices-"+i+"-answer",{
-                    height : height,
-                    toolbar: toolbar   
-                });
-            }
-
-        }
-
-
-
-
-
-
-        $(document).on('click', '.add_more', function (event) { 
-
-                var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
-                var totalForms = parseInt(total_form.val())  ;
-
+                var supportchoices       = $('#id_supportchoices-TOTAL_FORMS') ;
+                var total_supportchoices = parseInt( supportchoices.val() ) ;
+                $("#nb_pseudo_aleatoire").html("").html(total_supportchoices+1);
                 var thisClone = $('#rowToClone');
                 rowToClone = thisClone.html() ;
+
                 $('#formsetZone').append(rowToClone);
-                $('#duplicate').attr("id","duplicate"+totalForms) 
-                $('#imager').attr("id","imager"+totalForms) ;
-                $('#file-image').attr("id","file-image"+totalForms) ;
-                $('#feed_back').attr("id","feed_back"+totalForms)  ;       
-                $('#div_feed_back').attr("id","div_feed_back"+totalForms)  ;
-                $('#delete_img').attr("id","delete_img"+totalForms)  ;
-                $('#duplicate'+totalForms).find('.delete_button').html('<a href="javascript:void(0)" class="btn btn-danger remove_more" ><i class="fa fa-trash"></i></a>'); 
-                $('#duplicate'+totalForms).find("input[type='checkbox']").bootstrapToggle();
-                $("#duplicate"+totalForms+" input").each(function(){ 
-                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+
+                $('#duplicate').attr("id","duplicate"+total_supportchoices) ;
+                $('#cloningZone').attr("id","cloningZone"+total_supportchoices) ;
+                $('#imager').attr("id","imager"+total_supportchoices) ;
+                $('#file-image').attr("id","file-image"+total_supportchoices) ;
+                $('#feed_back').attr("id","feed_back"+total_supportchoices)  ;       
+                $('#div_feed_back').attr("id","div_feed_back"+total_supportchoices)  ;
+                $('#delete_img').attr("id","delete_img"+total_supportchoices)  ;
+                $('#data_loop').attr("data-loop", total_supportchoices)  ;
+                $('#data_loop').attr("id","data_loop"+total_supportchoices)  ;
+
+
+                if( $('#imagerbis').length ) { 
+                    $('#imagerbis').attr("id","imagerbis"+total_supportchoices) ; 
+                    $('#file-imagebis').attr("id","file-imagebis"+total_supportchoices) ;
+                    $('#preview_bis').attr("id","preview_bis"+total_supportchoices) ;
+                    $('#delete_imgbis').attr("id","delete_imgbis"+total_supportchoices)  ;
+                } 
+                $('#subformsetZone').attr("id","subformsetZone"+total_supportchoices)  ;
+
+                if( $('#imagersub').length ) { 
+
+                    l_items = $("#subformsetZone"+total_supportchoices+" .get_image").length ; 
+                    for(var i = 0;i<l_items;i++ ){
+                        var suf = "-"+total_supportchoices+'_'+i ; 
+                        $('#imagersub').attr("id","imagersub"+suf) ;
+                        $('#file-imagesub').attr("id","file-imagesub"+suf) ;
+                        $('#previewsub').attr("id","previewsub"+suf) ;
+                        $('#delete_subimg').attr("id","delete_subimg"+suf)  ;
+                    }
+
+                    this_selector = $("#subformsetZone"+total_supportchoices+" input"); 
+                    new_attr_id = this_selector.attr("id")+suf  ;
+                    new_attr_nm = this_selector.attr("name")+suf  ;
+                    this_selector.attr("data-loop",suf);                        
+                    this_selector.attr("id",new_attr_id);
+                    this_selector.attr("name",new_attr_nm);
+
+                    this_answer = $("#subformsetZone"+total_supportchoices+" textarea"); 
+                    new_attr_id = this_answer.attr("id")+suf  ;
+                    new_attr_nm = this_answer.attr("name")+suf  ;
+                    this_answer.attr("data-loop",suf);                        
+                    this_answer.attr("id",new_attr_id);
+                    this_answer.attr("name",new_attr_nm);
+                } 
+                
+                $("#supportchoices-"+total_supportchoices+"-is_correct").prop("checked", false); 
+
+                $("#duplicate"+total_supportchoices+" input").each(function(index){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',total_supportchoices));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',total_supportchoices));
                 });
-                $("#duplicate"+totalForms+" textarea").each(function(){ 
-                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+
+                $('#duplicate'+total_supportchoices).find("input[type='checkbox']").bootstrapToggle();
+ 
+                $("#duplicate"+total_supportchoices+" textarea").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',total_supportchoices));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',total_supportchoices));
                 });
-                $('#spanner').attr("id","spanner"+totalForms) ;
-                $('#preview').attr("id","preview"+totalForms) ;
  
 
-                if ( $('#qtype').val() == 7)
-                {  
+                $('#spanner').attr("id","spanner"+total_supportchoices) ;
+                $('#preview').attr("id","preview"+total_supportchoices) ;
 
-                    CKEDITOR.replace("supportchoices-"+totalForms+"-answer", {
-                        height: '50px',
-                        toolbar:    
-                            [  
-                                { name: 'clipboard',  items: [ 'Bold'] },
-                            ] 
-                    });
-                }
-                else if ($('#qtype').val() == 9) 
-                {  
+                $('#subloop'+total_supportchoices).val(0) ;
 
-                    CKEDITOR.replace("supportchoices-"+totalForms+"-answer", {
-                        height: '200px',
-                        toolbar:    
-                            [  
-                                { name: 'paragraph',  items: [ 'Bold','-' , 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                                { name: 'basicstyles',  items: [ 'Italic', 'Underline',  ] },
-                                { name: 'insert', items: ['Image', 'HorizontalRule']},
-                            ]  
-                    });
-                }
-
-
-
-                total_form.val(totalForms+1);
+                supportchoices.val(total_supportchoices+1);
             });
 
 
 
-        $(document).on('click', '.remove_more', function () { 
-            var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
-            var totalForms = parseInt(total_form.val())-1  ;
+        $(document).on('click', '.remove_more', function () {
+            
+            var supportchoices = $('#id_supportchoices-TOTAL_FORMS') ;
+            var total_supportchoices = parseInt( supportchoices.val() )-1  ;
 
-            $('#duplicate'+totalForms).remove();
-            total_form.val(totalForms)
+            $('#duplicate'+total_supportchoices).remove();
+            supportchoices.val(total_supportchoices);
+            $("#nb_pseudo_aleatoire").html("").html(total_supportchoices);
         });
-
-
 
 
         //*************************************************************************************************************  
@@ -510,6 +491,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             $("#preview"+nb).addClass("preview") ; 
             $("#id_supportchoices"+nb+"-imageanswer").removeClass("preview") ;
             $("#id_supportchoices-"+nb+"-answer").removeClass("preview") ;
+            $("#imager"+nb).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
+            $("#imager"+nb).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
 
           }
 
@@ -523,6 +506,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             $("#id_supportchoices-"+nb+"-answer").addClass("preview") ;
             $("#preview"+nb).removeClass("preview") ; 
             $("#delete_img"+nb).removeClass("preview") ; 
+            $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
+            $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
@@ -534,6 +519,155 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
           }
 
 
+
+        //*************************************************************************************************************  
+        // Gestion des sous thèmes
+        //************************************************************************************************************* 
+
+
+        var ntotal_form = $('#id_supportsubchoices-TOTAL_FORMS') ;
+        var ntotalForms = parseInt(ntotal_form.val())  ;
+
+        for (n=0;n<ntotalForms;n++){
+
+            $('#subformsetZone'+n+" .to-data-loop").each( function( index ) {
+                      $(this).attr('data-loop',n+"_"+index);
+                      $(this).attr('id',$(this).attr('id')+n+"_"+index);
+                      $(this).attr('name',$(this).attr('name')+n+"_"+index);
+                    });
+
+            $("#subformsetZone"+n+" textarea").each(function(index){ 
+                $(this).attr('name',$(this).attr('name')+n+"_"+index);
+                $(this).attr('id',$(this).attr('id')+n+"_"+index);
+            });
+        }
+ 
+
+        $(document).on('click', '.add_sub_more', function (event) { 
+
+                var thisClone = $('#subToClone');
+                subToClone = thisClone.html() ;
+
+                loop = $(this).attr("data-loop");
+                subloop = $('#subloop'+loop).val()
+                var suffixe = loop+"_"+subloop ;
+
+                $('#subformsetZone'+loop).append(subToClone);
+
+                $('#subduplicate').attr("id","subduplicate"+suffixe) ;
+                $('#imagersub').attr("id","imagersub"+suffixe)    ;
+                $('#file-imagesub').attr("id","file-imagesub"+suffixe);
+                $('#delete_subimg').attr("id","delete-subimg"+suffixe);
+
+                $("#subduplicate"+suffixe+" input").each(function(){                  
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',subloop));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',subloop));
+                    $(this).attr('data-loop', suffixe) ;
+                    $(this).attr('id',$(this).attr('id')+suffixe);
+                    $(this).attr('name',$(this).attr('name')+suffixe);
+                });
+
+                $("#subduplicate"+suffixe+" textarea").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',subloop));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',subloop));
+                    $(this).attr('name',$(this).attr('name')+suffixe);
+                    $(this).attr('id',$(this).attr('id')+suffixe);
+                });
+
+                $('#spanner').attr("id","spanner"+suffixe) ;
+                $('#previewsub').attr("id","previewsub"+suffixe) ;
+
+                var subloop_int = parseInt( subloop )  ;  
+
+                $('#subloop'+loop).val( subloop_int + 1 );  
+                $("#subduplicate"+suffixe).find("span").attr('data-suffixe',suffixe)
+
+            });
+
+
+
+        $(document).on('click', '.remove_sub_more', function () {
+ 
+            suffixe = $(this).data("suffixe") ; 
+            loop = suffixe.split("_")[0];
+            $('#subloop'+loop).val(    parseInt($('#subloop'+loop).val())-1 );
+            $('#subduplicate'+suffixe).remove();
+
+        });
+
+
+        $(document).on('click', '.automatic_insertion' , function (event) {  
+            var feed_back = $(this).attr('id');
+            $("#div_"+feed_back).toggle(500);
+         });
+
+
+
+        //*************************************************************************************************************  
+        // Gestion des images des sous thèmes
+        //*************************************************************************************************************  
+        $('body').on('change', '.choose_imageanswersub' , function (event) { alert() ;
+
+            var loop       = $(this).data("loop"); // le loop est composé du loop parent et du subloop dans cet ordre : 1-0 est le loop parent 1 et le subloop 0
+            SubpreviewFile(loop) ;
+         });  
+
+
+        $('body').on('click', '.delete_subimg' , function (event) { 
+                var suffix = this.id.match(/\d+/); 
+                var loop   = $(this).attr('id').substring(13);
+                SubnoPreviewFile(loop) ;
+                $(this).remove(); 
+            });  
+
+
+        function SubnoPreviewFile(loop) { 
+            let nb  = loop.split("_")[1];
+
+            if (nb<2)
+            { loop = loop.replace("-","");}
+
+            $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).val();
+            $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).removeAttr("src");
+            $("#id_supportsubchoices"+nb+"-imageanswer"+loop).removeClass("preview") ;
+            $("#id_supportsubchoices-"+nb+"-answer"+loop).removeClass("preview") ; 
+                       
+            $("#previewsub"+loop).removeAttr("src");
+            $("#previewsub"+loop).addClass("preview") ; 
+            $("#file-imagesub"+loop).removeClass("preview") ;
+
+            $("#imagersub"+loop).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
+            $("#imagersub"+loop).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
+          }
+
+        function SubpreviewFile(loop) {
+
+            let nb  = loop.split("_")[1];
+            
+            if (nb<2) { loop = loop.replace("-",""); } 
+ 
+            const file = $('#id_supportsubchoices-'+nb+'-imageanswer'+loop)[0].files[0];
+            const reader = new FileReader();
+
+            console.log(nb) ;
+            console.log(loop) ;
+            console.log(file) ;
+
+            $("#file-imagesub"+loop).addClass("preview") ; 
+            $("#id_supportsubchoices"+nb+"-answer-"+loop).addClass("preview") ;
+            $("#previewsub"+loop).removeClass("preview") ; 
+            $("#imagersub"+loop).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
+            $("#imagersub"+loop).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $("#imagersub"+loop).next().append('<a href="javascript:void()" id="delete_subimg'+loop+'" class="delete_subimg"><i class="fa fa-trash"></i></a>');
+
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#previewsub"+loop).attr("src", image );
+                                            }) ;
+
+            if (file) { reader.readAsDataURL(file);}            
+
+          }
 
         //*************************************************************************************************************  
         // FIN DE gestion
@@ -577,78 +711,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
          });
 
  
-
-
-        // Supprimer une image réponse depuis la vue élè
-        $('.closer_exercise').on('click', function () {
-
-            let exercise_id = $(this).attr("data-exercise_id");
-
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let custom = $(this).attr("data-custom");
-
-            if (custom == "0" ) { var parcours_id = $(this).attr("data-parcours_id"); } else { var parcours_id = 0 ; }
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'exercise_id': exercise_id,
-                        'parcours_id': parcours_id,
-                        'custom' : custom,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../../ajax_closer_exercise",
-                    success: function (data) {
- 
-                        $("#closer").html(data.html);
-
-                        $(".closer_exercise").removeClass(data.btn_off).addClass(data.btn_on);
-
-                    }
-                }
-            )
-         });
-
-
-
-
-        // Supprimer une image réponse depuis la vue élè
-        $('.correction_viewer').on('click', function () {
-
-            let exercise_id = $(this).attr("data-exercise_id");
-
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            let custom = $(this).attr("data-custom");
-
-            if (custom ==  1  ) { var parcours_id = $(this).attr("data-parcours_id"); } else { var parcours_id = 0 ; }
-
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        'exercise_id': exercise_id,
-                        'parcours_id': parcours_id,
-                        'custom' : custom,
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url: "../../../ajax_correction_viewer",
-                    success: function (data) {
- 
-                        $("#showing_cor").html(data.html);
-
-                        $(".correction_viewer").removeClass(data.btn_off).addClass(data.btn_on);
-
-                    }
-                }
-            )
-         });
-
-      
-
-
         // Supprimer une image réponse depuis la vue élève.
         $('body').on('click', '#click_more_criterion_button' , function () {
 
@@ -694,7 +756,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 }
             )
          });
-
 
 
 

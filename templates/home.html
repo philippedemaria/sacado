@@ -42,25 +42,8 @@ Intro Section -
 ============================-->
 <section id="intro" class="clearfix">
     <div class="container h-100">
-
-
-
- 
-
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
-
-                   
-
-            <div class="col-xs-12 alert alert-sacado on_index"  style="font-size:18px" >
-                <span style="font-size: 30px"><span class="sacado">SACADO</span> évolue.</span><br/> En plus de nos exercices mutualisés, <span class="sacado bigsize">SACADO</span> vous permet de <b>créer vos propres exercises à variables aléatoires dynamiques</b> ou pseudo-aléatoires<span class="helper_tip"> <i class="fa fa-question-circle"></i> <div class="helper_tip_text" > Parmi n propositions enregistrées, sacado en affiche m, inférieur à n. </div></span>. <span class="sacado bigsize">SACADO</span> va bientôt devenir compatible avec toutes les matières.                     
-            </div>
-
-
             <div class="col-xs-12 col-md-12 col-lg-5">
- 
-
-      
-   
                 {% if sacado_voyage %}
                 <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
                 {% endif %}
@@ -71,20 +54,13 @@ Intro Section -
                           <div class="helper_tip_text" >créés par des enseignants. Un parcours est une séquence de cours, d'exercices (parmi {{ nb_exercise }}) à variables didactiques aléatoires, de quizz, flashcards et d'exercices personnalisés.</div>
                     </span> 
                     interactif{{ nb_parcours|pluralize }} et corrigé{{  nb_parcours|pluralize }} de   la Maternelle à la Terminale en apprentissage adaptatif.
-
                 </div>
-       
-
+                
                 {% comment %}
                 <div class="row alert alert-info" style="margin-top:0px">
                     <a href="{% url 'academy'  %}" style="font-size:18px"><i class="bi bi-chevron-double-right"></i> L'équipe SacAdo lance <span class="sacado">SA</span>, la version pour accompagner les enfants pendant les vacances sur le chemin de la réussite en Mathématiques. Pour en savoir plus, cliquez ici. </a> 
-
                 </div>
                 {% endcomment %}
-
-
-
-
 
                 <div style="margin: 0px 0px 30px 0px;">
                     <i class="fa fa-apple"></i>
@@ -95,15 +71,9 @@ Intro Section -
                 </div>
 
                 {% comment %}
-
                 <div style="margin: 0px 0px 30px 0px;">
                     Aujourd'hui, c’est le <b><a href="https://fr.wikimini.org/wiki/Suite_de_Fibonacci" target="_blank">Fibonacci Day</a></b> le 23 novembre, soit en écriture anglaise :  1 1 2 3 qui sont les premiers termes de la suite de Fibonacci.
                 </div>
-
-
-
-
-
                 <div class="row" style="margin-top:0px">
                     <img src="{% static 'img/real_time.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/>  Suivis en<br/>   temps réel 
                     <a href="#" data-toggle='modal' data-target='#rt_modal'>                          

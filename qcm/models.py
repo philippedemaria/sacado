@@ -161,7 +161,8 @@ class Supportfile(models.Model):
     ####  Cas spécifique axe gradué qtype = 18 
     xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
     xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
-    tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
+    tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation principale")
+    subtick    = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
     precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision") 
 
 
@@ -1620,19 +1621,20 @@ class Folder(models.Model):
 
 class Relationship(models.Model):
 
-    exercise = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
-    parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
-    ranking = models.PositiveIntegerField(default=0, editable=False)
-    is_publish = models.BooleanField(default=1)
-    start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
-    date_limit = models.DateTimeField(null=True, blank=True, verbose_name="Date limite du rendu")
+    exercise      = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
+    parcours      = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
+    ranking       = models.PositiveIntegerField(default=0, editable=False)
+    is_publish    = models.BooleanField(default=1)
+    start         = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
+    date_limit    = models.DateTimeField(null=True, blank=True, verbose_name="Date limite du rendu")
     is_evaluation = models.BooleanField(default=0)
-    duration = models.PositiveIntegerField(default=15, verbose_name="Durée estimée en minutes")
-    situation = models.PositiveIntegerField(default=10, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")
-    beginner = models.TimeField(null=True, blank=True, verbose_name="Heure du début")
-    skills = models.ManyToManyField(Skill, blank=True, related_name='skills_relationship', editable=False)
-    students = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
-    instruction = models.TextField(blank=True,  null=True,  editable=False)
+    duration      = models.PositiveIntegerField(default=15, verbose_name="Durée estimée en minutes")
+    situation     = models.PositiveIntegerField(default=10, verbose_name="Nombre minimal de situations", help_text="Pour valider le qcm")
+    beginner      = models.TimeField(null=True, blank=True, verbose_name="Heure du début")
+    skills        = models.ManyToManyField(Skill, blank=True, related_name='skills_relationship', editable=False)
+    students      = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
+    instruction   = models.TextField(blank=True,  null=True,  editable=False)
+    score_display = models.BooleanField(default=1, blank=True)
 
     maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Nombre max de réalisation par exercice")
 
