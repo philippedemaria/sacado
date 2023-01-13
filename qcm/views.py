@@ -6175,21 +6175,28 @@ def create_supportfile_knowledge(request,id):
 
 
 
-def clean_form(fa,dico):
+def clean_form(request,loop,fa,dico):
+    print(dico)
+    print("===============================================================================================================")
+    print("===============================================================================================================")
+    print(loop)
+    print("===============================================================================================================")
+    print("===============================================================================================================")
     subfields = ('answer','imageanswer','label','is_correct','retroaction')
     nd={}
-    nb_loop = int(dico['customchoices-TOTAL_FORMS'][0])
+    nb_loop = int(dico['supportchoices-TOTAL_FORMS'][0])
     for key,value in dico.items() :
-        if "customsubchoices" in key   :
+        if "supportsubchoices-"+str(loop)+"_" in key   :
             try :
                 if key.split("-")[2] in subfields :
-                    nd[key.split("-")[2]+"-"+key.split("-")[3]]=value[0]
+                    nd[key.split("-")[2]]=value
             except :
                 pass
     dataset=[]
+    print(nd)
     for i in range(nb_loop) :
         for subloop in range(int(dico['subloop'+str(i)][0])):
-            data  = {'customchoice':fa}
+            data  = {'supportchoice':fa}
             for sf in subfields :
                 try :
                     sf_key = sf+"-"+str(i)+"_"+str(subloop)
@@ -6207,6 +6214,16 @@ def clean_form(fa,dico):
                     dataset.append(data)
     return dataset
 
+def insert_form(looper,fa,dico):
+
+    subfields = ('answer','imageanswer','label','is_correct','retroaction')
+    nd={}
+    liste = list()
+    for loop in range(int(dico['subloop'+str(looper)][0])) :
+        d={key:value for key,value in dico.items() if "supportsubchoices-"+str(looper)+"_"+str(loop) in key}
+         
+
+
 def create_supportfile(request,qtype,ids):
     """ Création d'un supportfile"""
     code = str(uuid.uuid4())[:8]
@@ -6222,6 +6239,7 @@ def create_supportfile(request,qtype,ids):
         qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by("ranking")
 
     qt = Qtype.objects.get(pk=qtype)
+    extra = qt.extra
 
     knowledge_id = request.session.get('exo_knowledge_id',None)
     knowledge = None
@@ -6236,12 +6254,12 @@ def create_supportfile(request,qtype,ids):
     today      = time_zone_user(request.user)
     sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
 
-    extra    = qt.extra
     form_sub_ans = None
-    formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra = extra)
+    formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra =  extra)
     form_ans = formSet()
 
     if request.method == "POST" :
+
         if form.is_valid() :
             nf = form.save(commit=False)
             nf.teacher = teacher
@@ -6267,12 +6285,7 @@ def create_supportfile(request,qtype,ids):
             form.save_m2m()
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
 
-            qtype  = nf.qtype
-            qto    = Qtype.objects.get(pk=qtype) 
-            is_sub = qto.is_sub
-            extra  = qto.extra
-
-            if qto.is_alea :
+            if qt.is_alea :
                 form_var = formSetvar(request.POST or None,  instance = nf) 
                 for form_v in form_var :
                     if form_v.is_valid():
@@ -6280,14 +6293,12 @@ def create_supportfile(request,qtype,ids):
                     else :
                         print(form_v.errors)
 
-            formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra=extra)
-            form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
-
-            if qtype < 19:
+            if qtype < 19 :
+                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                loop = 0
                 for form_answer in form_ans :
                     if form_answer.is_valid():
                         fa = form_answer.save()
-
                         if nf.qtype==10:
                             ##### A tester lors de la création
                             name, ext = os.path.splitext(fa.imageanswer)
@@ -6300,16 +6311,23 @@ def create_supportfile(request,qtype,ids):
                                 out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
                                 img.crop(box).save(out)
 
-                                my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'customchoice' : fa , 'label' : 0 } )
+                                my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'supportchoice' : fa , 'label' : 0 } )
                                 my_c.save()
                             ####################################
-                        if is_sub > 0  :
-                            dico_post = request.POST
-                            list_dico = clean_form(fa,dico_post)
-                            for dico in list_dico :
-                                print(dico)
-                                c = Supportsubchoice(**dico)
-                                c.save()
+                        if qt.is_sub > 0  :
+                            formSubSet  = inlineformset_factory( Supportchoice , Supportsubchoice , fields=('answer','imageanswer','label','is_correct','retroaction')  , extra =  extra)
+                            form_sub_ans = formSubSet(request.POST or None,  request.FILES or None, instance = fa)
+                            print(request.POST)
+                            for form_sub in form_sub_ans :
+                                print(form_sub)
+                                if form_sub.is_valid():
+                                    form_sub.save()
+
+                            # list_dico = clean_form(request,loop, fa,request.POST)
+                            # for dico in list_dico :
+                            #     c = Supportsubchoice(**dico)
+                            #     c.save()
+                            # loop+=1
             try :
                 msg = "Bonjour l'équipe,\n\n Un exercice vient d'être posté.\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+nf.id+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
                 if user.email :
@@ -6325,7 +6343,7 @@ def create_supportfile(request,qtype,ids):
                 'teacher': teacher,  'knowledge': knowledge,  'supportfile': None,  'form_template' : False ,  'parcours': None, 'qtypes': qtypes,  }
     
     if qt.is_sub > 0 :
-        formSubset   = inlineformset_factory( Supportchoice , Supportsubchoice , fields=('answer','imageanswer','label','is_correct','retroaction') , extra=extra)
+        formSubset   = inlineformset_factory( Supportchoice , Supportsubchoice , fields=('answer','imageanswer','label','is_correct','retroaction') , extra= extra)
         form_sub_ans = formSubset()
         context.update(  { 'form_sub_ans' : form_sub_ans,  } )
 
@@ -6420,7 +6438,7 @@ def update_supportfile(request, id, redirection=0):
 
                         if is_sub > 0  :
                             dico_post = request.POST
-                            list_dico = clean_form(fa,dico_post)
+                            list_dico = clean_form(request,fa,dico_post)
                             for dico in list_dico :
                                 print(dico)
                                 c = Customsubchoice(**dico)

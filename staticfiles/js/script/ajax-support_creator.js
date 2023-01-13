@@ -503,7 +503,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             });  
 
 
-        function noPreviewFile(nb) {  
+        function noPreviewFile(nb) { 
+            $("#id_supportchoices-"+nb+"-imageanswer").val('');
             $("#id_supportchoices-"+nb+"-imageanswer").attr("src", "" );
             $("#preview"+nb).val("") ;  
             $("#file-image"+nb).removeClass("preview") ;
@@ -512,6 +513,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             $("#id_supportchoices-"+nb+"-answer").removeClass("preview") ;
 
           }
+
 
         function previewFile(nb) {
 
@@ -522,7 +524,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             $("#preview"+nb).val("") ;  
             $("#id_supportchoices-"+nb+"-answer").addClass("preview") ;
             $("#preview"+nb).removeClass("preview") ; 
-            $("#delete_img"+nb).removeClass("preview") ; 
+            $("#delete_img"+nb).removeClass("preview") ;
+            $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
+            $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $("#imager"+nb).next().append('<a href="javascript:void()" id="delete_img'+nb+'" class="delete_img"><i class="fa fa-trash"></i></a>');
+
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 

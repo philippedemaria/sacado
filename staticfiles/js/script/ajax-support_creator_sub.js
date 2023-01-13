@@ -485,6 +485,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
 
         function noPreviewFile(nb) {  
+            $("#id_supportchoices-"+nb+"-imageanswer").val('');
             $("#id_supportchoices-"+nb+"-imageanswer").attr("src", "" );
             $("#preview"+nb).val("") ;  
             $("#file-image"+nb).removeClass("preview") ;
@@ -508,6 +509,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             $("#delete_img"+nb).removeClass("preview") ; 
             $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
             $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $("#imager"+nb).next().append('<a href="javascript:void()" id="delete_img'+nb+'" class="delete_img"><i class="fa fa-trash"></i></a>');
+
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
@@ -533,12 +536,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             $('#subformsetZone'+n+" .to-data-loop").each( function( index ) {
                       $(this).attr('data-loop',n+"_"+index);
                       $(this).attr('id',$(this).attr('id')+n+"_"+index);
-                      $(this).attr('name',$(this).attr('name')+n+"_"+index);
+                      attr_name_tab = $(this).attr('name').split('-');
+                      $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
                     });
 
             $("#subformsetZone"+n+" textarea").each(function(index){ 
-                $(this).attr('name',$(this).attr('name')+n+"_"+index);
-                $(this).attr('id',$(this).attr('id')+n+"_"+index);
+                $(this).attr('id',$(this).attr('id')+n+"_"+index);  
+                              
+                attr_name_tab  = $(this).attr('name').split('-')
+                $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
+
             });
         }
  
@@ -561,17 +568,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
                 $("#subduplicate"+suffixe+" input").each(function(){                  
                     $(this).attr('id',$(this).attr('id').replace('__prefix__',subloop));
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',subloop));
+                    $(this).attr('id',$(this).attr('id')+suffixe);                    
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',suffixe+"-"));
                     $(this).attr('data-loop', suffixe) ;
-                    $(this).attr('id',$(this).attr('id')+suffixe);
-                    $(this).attr('name',$(this).attr('name')+suffixe);
+
                 });
 
                 $("#subduplicate"+suffixe+" textarea").each(function(){ 
                     $(this).attr('id',$(this).attr('id').replace('__prefix__',subloop));
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',subloop));
-                    $(this).attr('name',$(this).attr('name')+suffixe);
-                    $(this).attr('id',$(this).attr('id')+suffixe);
+                    $(this).attr('id',$(this).attr('id')+suffixe);               
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',suffixe));
                 });
 
                 $('#spanner').attr("id","spanner"+suffixe) ;
@@ -606,8 +612,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         //*************************************************************************************************************  
         // Gestion des images des sous thèmes
         //*************************************************************************************************************  
-        $('body').on('change', '.choose_imageanswersub' , function (event) { alert() ;
-
+        $('body').on('change', '.to-data-loop' , function (event) { 
             var loop       = $(this).data("loop"); // le loop est composé du loop parent et du subloop dans cet ordre : 1-0 est le loop parent 1 et le subloop 0
             SubpreviewFile(loop) ;
          });  
@@ -617,7 +622,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 var suffix = this.id.match(/\d+/); 
                 var loop   = $(this).attr('id').substring(13);
                 SubnoPreviewFile(loop) ;
-                $(this).remove(); 
+                $(this).remove();
             });  
 
 
@@ -627,7 +632,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             if (nb<2)
             { loop = loop.replace("-","");}
 
-            $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).val();
+            $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).val('');
             $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).removeAttr("src");
             $("#id_supportsubchoices"+nb+"-imageanswer"+loop).removeClass("preview") ;
             $("#id_supportsubchoices-"+nb+"-answer"+loop).removeClass("preview") ; 
@@ -643,7 +648,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         function SubpreviewFile(loop) {
 
             let nb  = loop.split("_")[1];
-            
+
             if (nb<2) { loop = loop.replace("-",""); } 
  
             const file = $('#id_supportsubchoices-'+nb+'-imageanswer'+loop)[0].files[0];

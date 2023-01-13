@@ -5,6 +5,10 @@
 
 
 
+
+
+
+
 {% block body_qtype %}
 <div class="row">
     <div class="col-sm-12 col-md-6">
@@ -33,10 +37,10 @@
         <div class="form_card" style="margin-top:20px;">
             <label>Les thèmes et correspondances</label>  
             {{ form_ans.management_form }}
-            {{ form_sub_ans.management_form }}
             <div id="formsetZone">
             <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
             {% for form in form_ans %} 
+                {{ form_sub_ans.management_form }}
                 {{ form.id }}
                 <div class="col-sm-12">
                     <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
@@ -47,7 +51,7 @@
                                     {{ form.imageanswer|add_class:"choose_imageanswer" }}
                                     <img src="{% if form.imageanswer.url %}{{ form.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswer preview" id="preview{{ forloop.counter0 }}"> 
                                 </div>
-                                <div class="col-sm-10 col-md-11" ><a href="javascript:void()" id="delete_img{{ forloop.counter0 }}" class="preview delete_img"><i class="fa fa-trash"></i></a> 
+                                <div class="col-sm-10 col-md-11" >
                                     {{ form.answer|attr:"placeholder:Ecrire un thème de correspondance (vide si aucun label)"|add_class:"quizz_answer"  }}
                                 </div>
                             </div>
@@ -68,6 +72,7 @@
                         </div>
                         <div class="col-sm-6" id="subformsetZone{{ forloop.counter0 }}">
                             {% for form_sub in form_sub_ans %} 
+
                                 {{ form_sub.id }}
                                 <div class="col-sm-12">
                                     <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
@@ -123,7 +128,6 @@
                                  class="choose_imageanswer preview" id="preview"> 
                         </div>
                         <div class="col-sm-10 col-md-11" > 
-                            <a href="javascript:void()" id="delete_img" class="preview delete_img"><i class="fa fa-trash"></i></a>
                             {{ form_ans.empty_form.answer|attr:"placeholder:Thème de correspondance (vide si aucun label)"|add_class:"quizz_answer"  }}
                         </div>
                     </div>
