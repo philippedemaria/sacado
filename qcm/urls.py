@@ -213,9 +213,10 @@ urlpatterns = [
     path('check_solution_answers'     , check_solution_answers     , name='check_solution_answers'),
     path('check_solution_qcm_numeric' , check_solution_qcm_numeric , name='check_solution_qcm_numeric'),
     path('check_solution_pairs'       , check_solution_pairs       , name='check_solution_pairs'),
+    path('check_solution_regroup'     , check_solution_regroup       , name='check_solution_regroup'),
+    path('check_anagram_answers'      , check_anagram_answers      , name='check_anagram_answers'),    
+    path('check_sort_answers'         , check_sort_answers         , name='check_sort_answers'),    
     path('check_filltheblanks_answers', check_filltheblanks_answers, name='check_filltheblanks_answers'),
-    path('check_anagram_answers'      , check_anagram_answers      , name='check_anagram_answers'),
-    path('check_sort_answers'         , check_sort_answers         , name='check_sort_answers'),
 
     path('check_grid_answers'         , check_grid_answers         , name='check_grid_answers'),
     path('check_secret_answers'       , check_secret_answers       , name='check_secret_answers'),

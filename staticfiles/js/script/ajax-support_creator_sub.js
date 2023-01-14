@@ -282,10 +282,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
              }
             open_situation_pseudorandomize +=1 ;
          });
+        
+        // ==================================================================================================
+        // ==================================================================================================
+        // ==================================================================================================
 
-        // ==================================================================================================
-        // ==================================================================================================
-        // ==================================================================================================
+
+
+
 
  
 
@@ -336,13 +340,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
     $("#id_title").val("Regrouper les cartes par thèmes");
 
 
+
+        //*************************************************************************************************************
+        //****************      Gestion des variables aléatoires     **************************************************
         //*************************************************************************************************************  
-        // Gestion des variables dynamiques
-        //************************************************************************************************************* 
 
-        $(document).on('click', '.add_more_question', function (event) { alert();
+        $(document).on('click', '.add_more_question', function (event) { 
 
-                var total_form = $('#id_customvariables-TOTAL_FORMS') ;
+                var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
                 var totalForms = parseInt(total_form.val())  ;
 
                 var thisClone = $('#rowToClone_question');
@@ -350,7 +355,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
                 $('#formsetZone_variables').append(rowToClone);
                 $('#duplicate_variables').attr("id","duplicate_variables"+totalForms) 
-                //$('#cloningZone').attr("id","cloningZone"+totalForms) 
 
                 $('#duplicate_variables'+totalForms).find('.delete_button_question').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_question" ><i class="fa fa-trash"></i></a>'); 
                 $('#duplicate_variables'+totalForms).find("input[type='checkbox']").bootstrapToggle();
@@ -361,17 +365,23 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 });
                 total_form.val(totalForms+1);
 
+                $("#id_situation").val(5);
+
             });
 
 
         $(document).on('click', '.remove_more_question', function () {
-            var total_form = $('#id_customvariables-TOTAL_FORMS') ;
+            var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
             var totalForms = parseInt(total_form.val())-1  ;
 
             $('#duplicate_variables'+totalForms).remove();
-            total_form.val(totalForms)
+            total_form.val(totalForms);
+
+            if (totalForms==0) {$("#id_situation").val(1);}
         });
 
+        //***********************************************************************************************
+        //***********************************************************************************************
         //*************************************************************************************************************  
         // Gestion des thèmes
         //************************************************************************************************************* 
@@ -528,76 +538,70 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         //************************************************************************************************************* 
 
 
-        var ntotal_form = $('#id_supportsubchoices-TOTAL_FORMS') ;
-        var ntotalForms = parseInt(ntotal_form.val())  ;
+        // var ntotal_form = $('#id_supportsubchoices-TOTAL_FORMS') ;
 
-        for (n=0;n<ntotalForms;n++){
 
-            $('#subformsetZone'+n+" .to-data-loop").each( function( index ) {
-                      $(this).attr('data-loop',n+"_"+index);
-                      $(this).attr('id',$(this).attr('id')+n+"_"+index);
-                      attr_name_tab = $(this).attr('name').split('-');
-                      $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
-                    });
+        // for (n=0;n<ntotalForms;n++){
 
-            $("#subformsetZone"+n+" textarea").each(function(index){ 
-                $(this).attr('id',$(this).attr('id')+n+"_"+index);  
+        //     $('#subformsetZone'+n+" .to-data-loop").each( function( index ) {
+        //               $(this).attr('data-loop',n+"_"+index);
+        //               $(this).attr('id',$(this).attr('id')+n+"_"+index);
+        //               attr_name_tab = $(this).attr('name').split('-');
+        //               $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
+        //             });
+
+        //     $("#subformsetZone"+n+" textarea").each(function(index){ 
+        //         $(this).attr('id',$(this).attr('id')+n+"_"+index);  
                               
-                attr_name_tab  = $(this).attr('name').split('-')
-                $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
+        //         attr_name_tab  = $(this).attr('name').split('-')
+        //         $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
 
-            });
-        }
+        //     });
+        // }
  
 
         $(document).on('click', '.add_sub_more', function (event) { 
 
-                var thisClone = $('#subToClone');
-                subToClone = thisClone.html() ;
-
                 loop = $(this).attr("data-loop");
-                subloop = $('#subloop'+loop).val()
-                var suffixe = loop+"_"+subloop ;
+                this_id = $("#id_supportchoice-supportchoices-"+loop+"-subchoice-TOTAL_FORMS");
+                var ntotal_form = this_id.val()
+                var ntotalForms = parseInt(ntotal_form )  ;
 
+                subToClone = $('#subToClone').html() ;
                 $('#subformsetZone'+loop).append(subToClone);
+                 
+                var subloop  = $('#subloop'+loop).val()
+                var new_prefix = "choice-supportchoices-"+loop+"-subchoice-"+subloop
 
-                $('#subduplicate').attr("id","subduplicate"+suffixe) ;
-                $('#imagersub').attr("id","imagersub"+suffixe)    ;
-                $('#file-imagesub').attr("id","file-imagesub"+suffixe);
-                $('#delete_subimg').attr("id","delete-subimg"+suffixe);
-
-                $("#subduplicate"+suffixe+" input").each(function(){                  
-                    $(this).attr('id',$(this).attr('id').replace('__prefix__',subloop));
-                    $(this).attr('id',$(this).attr('id')+suffixe);                    
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',suffixe+"-"));
-                    $(this).attr('data-loop', suffixe) ;
+                $("#subformsetZone"+loop+" input").each(function(){                  
+                    $(this).attr('id',$(this).attr('id').replace('subchoices-__prefix__', new_prefix ));                   
+                    $(this).attr('name', $(this).attr('name').replace('subchoices-__prefix__',new_prefix) );
 
                 });
 
-                $("#subduplicate"+suffixe+" textarea").each(function(){ 
-                    $(this).attr('id',$(this).attr('id').replace('__prefix__',subloop));
-                    $(this).attr('id',$(this).attr('id')+suffixe);               
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',suffixe));
+                $("#subformsetZone"+loop+" textarea").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('subchoices-__prefix__', new_prefix ));                   
+                    $(this).attr('name', $(this).attr('name').replace('subchoices-__prefix__',new_prefix) );
                 });
 
-                $('#spanner').attr("id","spanner"+suffixe) ;
-                $('#previewsub').attr("id","previewsub"+suffixe) ;
+                $("#subformsetZone"+loop+" span").attr('data-loop', loop);
 
                 var subloop_int = parseInt( subloop )  ;  
-
                 $('#subloop'+loop).val( subloop_int + 1 );  
-                $("#subduplicate"+suffixe).find("span").attr('data-suffixe',suffixe)
-
+                this_id.val( ntotalForms+ 1 );
             });
 
 
 
         $(document).on('click', '.remove_sub_more', function () {
  
-            suffixe = $(this).data("suffixe") ; 
-            loop = suffixe.split("_")[0];
-            $('#subloop'+loop).val(    parseInt($('#subloop'+loop).val())-1 );
-            $('#subduplicate'+suffixe).remove();
+            loop = $(this).attr("data-loop");
+            subloop = $('#subloop'+loop).val();
+            var subloop_int = parseInt( subloop )  ;  
+            $('#subloop'+loop).val( subloop_int - 1 );  
+            this_id = $("#id_supportchoice-supportchoices-"+loop+"-subchoice-TOTAL_FORMS");
+            this_id.val( subloop_int - 1 );
+            $(this).parent().parent().parent().remove();
 
         });
 
@@ -613,66 +617,39 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         // Gestion des images des sous thèmes
         //*************************************************************************************************************  
         $('body').on('change', '.to-data-loop' , function (event) { 
-            var loop       = $(this).data("loop"); // le loop est composé du loop parent et du subloop dans cet ordre : 1-0 est le loop parent 1 et le subloop 0
-            SubpreviewFile(loop) ;
+            
+            const parental_div     = $(this).parent();
+            const image_preview_id = parental_div.find('img').attr('id');
+            const file  = parental_div.find('input')[0].files[0];
+            const reader = new FileReader();
+
+            parental_div.find('i').addClass('preview');
+            parental_div.removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
+            parental_div.next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            parental_div.next().append('<a href="javascript:void()" class="delete_subimg"><i class="fa fa-trash"></i></a>');
+
+            $("#"+image_preview_id).removeClass('preview');
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#"+image_preview_id).attr("src", image );
+                                            }) ;
+            if (file) { reader.readAsDataURL(file);}            
          });  
 
 
         $('body').on('click', '.delete_subimg' , function (event) { 
-                var suffix = this.id.match(/\d+/); 
-                var loop   = $(this).attr('id').substring(13);
-                SubnoPreviewFile(loop) ;
-                $(this).remove();
+
+            const parental_div = $(this).parent().parent() ;
+
+            parental_div.find('input').val("");
+            parental_div.find('img').attr("src", "" );
+            parental_div.find('img').addClass('preview');
+            parental_div.find('i').removeClass('preview');
+            $(this).parent().prev().addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
+            $(this).parent().next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
+            $(this).remove();
+
             });  
-
-
-        function SubnoPreviewFile(loop) { 
-            let nb  = loop.split("_")[1];
-
-            if (nb<2)
-            { loop = loop.replace("-","");}
-
-            $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).val('');
-            $("#id_supportsubchoices-"+nb+"-imageanswer"+loop).removeAttr("src");
-            $("#id_supportsubchoices"+nb+"-imageanswer"+loop).removeClass("preview") ;
-            $("#id_supportsubchoices-"+nb+"-answer"+loop).removeClass("preview") ; 
-                       
-            $("#previewsub"+loop).removeAttr("src");
-            $("#previewsub"+loop).addClass("preview") ; 
-            $("#file-imagesub"+loop).removeClass("preview") ;
-
-            $("#imagersub"+loop).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $("#imagersub"+loop).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
-          }
-
-        function SubpreviewFile(loop) {
-
-            let nb  = loop.split("_")[1];
-
-            if (nb<2) { loop = loop.replace("-",""); } 
- 
-            const file = $('#id_supportsubchoices-'+nb+'-imageanswer'+loop)[0].files[0];
-            const reader = new FileReader();
-
-            console.log(nb) ;
-            console.log(loop) ;
-            console.log(file) ;
-
-            $("#file-imagesub"+loop).addClass("preview") ; 
-            $("#id_supportsubchoices"+nb+"-answer-"+loop).addClass("preview") ;
-            $("#previewsub"+loop).removeClass("preview") ; 
-            $("#imagersub"+loop).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            $("#imagersub"+loop).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
-            $("#imagersub"+loop).next().append('<a href="javascript:void()" id="delete_subimg'+loop+'" class="delete_subimg"><i class="fa fa-trash"></i></a>');
-
-            reader.addEventListener("load", function (e) {
-                                                var image = e.target.result ; 
-                                                $("#previewsub"+loop).attr("src", image );
-                                            }) ;
-
-            if (file) { reader.readAsDataURL(file);}            
-
-          }
 
         //*************************************************************************************************************  
         // FIN DE gestion

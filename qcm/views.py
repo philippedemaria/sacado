@@ -6254,12 +6254,12 @@ def create_supportfile(request,qtype,ids):
     today      = time_zone_user(request.user)
     sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
 
-    form_sub_ans = None
-    formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra =  extra)
-    form_ans = formSet()
+    if qt.is_sub == 0 : 
+        formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra =  extra)
+    else :
+        formSet = formSetNested()
 
-    if request.method == "POST" :
-
+    if request.method == "POST" : 
         if form.is_valid() :
             nf = form.save(commit=False)
             nf.teacher = teacher
@@ -6294,40 +6294,30 @@ def create_supportfile(request,qtype,ids):
                         print(form_v.errors)
 
             if qtype < 19 :
-                form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
-                loop = 0
-                for form_answer in form_ans :
-                    if form_answer.is_valid():
-                        fa = form_answer.save()
-                        if nf.qtype==10:
-                            ##### A tester lors de la création
-                            name, ext = os.path.splitext(fa.imageanswer)
-                            img = Image.open(os.path.join(dir_in, filename))
-                            w, h = img.size
-                            
-                            grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
-                            for i, j in grid:
-                                box = (j, i, j+d, i+d)
-                                out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
-                                img.crop(box).save(out)
+                if qt.is_sub == 0  :
+                    form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                    for form_answer in form_ans :
+                        if form_answer.is_valid():
+                            fa = form_answer.save()
+                            # if nf.qtype==10:
+                            #     ##### A tester lors de la création
+                            #     name, ext = os.path.splitext(fa.imageanswer)
+                            #     img = Image.open(os.path.join(dir_in, filename))
+                            #     w, h = img.size
+                                
+                            #     grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
+                            #     for i, j in grid:
+                            #         box = (j, i, j+d, i+d)
+                            #         out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
+                            #         img.crop(box).save(out)
 
-                                my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'supportchoice' : fa , 'label' : 0 } )
-                                my_c.save()
-                            ####################################
-                        if qt.is_sub > 0  :
-                            formSubSet  = inlineformset_factory( Supportchoice , Supportsubchoice , fields=('answer','imageanswer','label','is_correct','retroaction')  , extra =  extra)
-                            form_sub_ans = formSubSet(request.POST or None,  request.FILES or None, instance = fa)
-                            print(request.POST)
-                            for form_sub in form_sub_ans :
-                                print(form_sub)
-                                if form_sub.is_valid():
-                                    form_sub.save()
-
-                            # list_dico = clean_form(request,loop, fa,request.POST)
-                            # for dico in list_dico :
-                            #     c = Supportsubchoice(**dico)
-                            #     c.save()
-                            # loop+=1
+                            #         my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'supportchoice' : fa , 'label' : 0 } )
+                            #         my_c.save()
+                                ####################################
+                else :
+                    formset = formSetNested(request.POST or None,  request.FILES or None, instance=nf)
+                    if formset.is_valid():
+                        formset.save()
             try :
                 msg = "Bonjour l'équipe,\n\n Un exercice vient d'être posté.\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+nf.id+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
                 if user.email :
@@ -6338,13 +6328,14 @@ def create_supportfile(request,qtype,ids):
         else :
             print(form.errors)
 
+
     template = "qcm/qtype/"+qt.custom+".html"
-    context = { 'form_c' : form_c, 'sacado_asso' : sacado_asso , 'form_var' : formSetvar ,  'form_ans' : form_ans ,  'qt' : qt , 'qtype' : qtype , 'form': form, 'subjects' : subjects , 
+    context = { 'form_c' : form_c, 'sacado_asso' : sacado_asso , 'form_var' : formSetvar ,  'form_ans' : formSet
+     ,  'qt' : qt , 'qtype' : qtype , 'form': form, 'subjects' : subjects , 
                 'teacher': teacher,  'knowledge': knowledge,  'supportfile': None,  'form_template' : False ,  'parcours': None, 'qtypes': qtypes,  }
     
     if qt.is_sub > 0 :
-        formSubset   = inlineformset_factory( Supportchoice , Supportsubchoice , fields=('answer','imageanswer','label','is_correct','retroaction') , extra= extra)
-        form_sub_ans = formSubset()
+        form_sub_ans = formSubSet()
         context.update(  { 'form_sub_ans' : form_sub_ans,  } )
 
 
@@ -6381,9 +6372,14 @@ def update_supportfile(request, id, redirection=0):
     form_var   = formSetvar(request.POST or None,  instance = supportfile) 
     qtype      = supportfile.qtype
 
-    formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra = 0)
-    form_ans = formSet(request.POST or None, request.FILES or None , instance = supportfile)
-    qto      = Qtype.objects.get(pk=supportfile.qtype)
+    qto        = Qtype.objects.get(pk=qtype)
+
+    if qto.is_sub == 0 : 
+        formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra =  0)
+        form_ans = formSet(request.POST or None, request.FILES or None , instance = supportfile)
+    else :
+        form_ans = formSetUpdateNested(instance = supportfile)
+    
 
     if request.method == "POST" :
 
@@ -6402,7 +6398,7 @@ def update_supportfile(request, id, redirection=0):
             supportfile_form.save_m2m()  
                        
             qtype  = nf.qtype
-            qto    = Qtype.objects.get(pk=qtype) 
+             
             is_sub = qto.is_sub
             extra  = qto.extra
             if qto.is_alea :
@@ -6415,35 +6411,31 @@ def update_supportfile(request, id, redirection=0):
             formSet  = inlineformset_factory( Supportfile , Supportchoice , fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction')  , extra=extra)
             form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
 
-            if qtype < 19:
-                for form_answer in form_ans :
-                    if form_answer.is_valid():
-                        fa = form_answer.save()
+            if qtype < 19 :
+                if qto.is_sub == 0  :
+                    form_ans = formSet(request.POST or None,  request.FILES or None, instance = nf)
+                    for form_answer in form_ans :
+                        if form_answer.is_valid():
+                            fa = form_answer.save()
+                            # if nf.qtype==10:
+                            #     ##### A tester lors de la création
+                            #     name, ext = os.path.splitext(fa.imageanswer)
+                            #     img = Image.open(os.path.join(dir_in, filename))
+                            #     w, h = img.size
+                                
+                            #     grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
+                            #     for i, j in grid:
+                            #         box = (j, i, j+d, i+d)
+                            #         out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
+                            #         img.crop(box).save(out)
 
-                        if nf.qtype==10:
-                            ##### A tester lors de la création
-                            name, ext = os.path.splitext(fa.imageanswer)
-                            img = Image.open(os.path.join(dir_in, filename))
-                            w, h = img.size
-                            
-                            grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
-                            for i, j in grid:
-                                box = (j, i, j+d, i+d)
-                                out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
-                                img.crop(box).save(out)
-
-                                my_c = Customsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'customchoice' : fa , 'label' : 0 } )
-                                my_c.save()
-                            ####################################
-
-                        if is_sub > 0  :
-                            dico_post = request.POST
-                            list_dico = clean_form(request,fa,dico_post)
-                            for dico in list_dico :
-                                print(dico)
-                                c = Customsubchoice(**dico)
-                                c.save()
-
+                            #         my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'supportchoice' : fa , 'label' : 0 } )
+                            #         my_c.save()
+                                ####################################
+                else :
+                    formset = formSetNested(request.POST or None,  request.FILES or None, instance=nf)
+                    if formset.is_valid():
+                        formset.save()
             try :
                 msg = "Bonjour l'équipe,\n\n Un exercice vient d'être modifié.\n\nPour le visualiser : https://sacado.xyz/qcm/show_this_supportfile/"+nf.id+"/ .\n\nCeci est un mail automatique. Merci de ne pas répondre."
                 if user.email :
@@ -6945,9 +6937,12 @@ def replace_bloc(texte,vars_list,i):
                 for v in varias:
                     bloc = bloc.replace('{'+v['name']+'}',str(v['val']) )
                 new += '$'+bloc+'$'
+            else :
+                new += bloc
             j += 1
     else :
         new = texte
+
     if new and '?!' in new :
         renew = ""
         calcs = new.split('?!')
@@ -6963,10 +6958,10 @@ def replace_bloc(texte,vars_list,i):
 
 
 def alea_annoncements(n,supportfile) :
-    annoncements , corrections =  list() , list()
+
     vars_list = get_list_values_if_variables_alea(n,supportfile)
 
-    choices , shufflechoices = list() , list()
+    annoncements , corrections , choices , shufflechoices , shufflesubchoices = list() , list() , list() , list() , list()
 
     s_choices = supportfile.supportchoices.all()
     nb_pseudo_support = supportfile.nb_pseudo
@@ -7045,6 +7040,26 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
 
+        elif  supportfile.qtype == 6 :
+
+            this_liste = list()
+            this_sub_liste = list()
+            for this_choice in s_choices : 
+                new    = replace_bloc(this_choice.answer,vars_list,i)
+                newbis = replace_bloc(this_choice.answerbis,vars_list,i)
+                retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
+                data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
+                this_liste.append(data)
+                for subchoice in this_choice.supportsubchoices.all():
+                    new    = replace_bloc(subchoice.answer,vars_list,i)
+                    retroaction = replace_bloc(subchoice.retroaction,vars_list,i)
+                    label = replace_bloc(subchoice.label,vars_list,i)
+                    subdata = { 'id' : subchoice.id , 'answer' : new , 'imageanswer' : subchoice.imageanswer   , 'retroaction' : retroaction , 'label' : label , 'is_correct' : subchoice.is_correct   } 
+                    this_sub_liste.append(subdata)
+            random.shuffle(this_liste)
+            shufflechoices.append(this_liste)
+            random.shuffle(this_sub_liste)
+            shufflesubchoices.append(this_sub_liste)
 
         elif  supportfile.qtype == 7 :
 
@@ -7125,23 +7140,7 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
  
-
-
-
-
-    #shufflesubchoices = list()
-    # m=0
-    # for subchoice in choice.supportsubchoices.all():
-    #     answer    = choice.answer 
-    #     answerbis = choice.answerbis 
-    #     new    = replace_bloc(answer,vars_list,k)
-    #     newbis = replace_bloc(answerbis,vars_list,k)
-    #     m+=1
-
-    #     ######Refaire la fonction replace_bloc en incluaunt un module de calcul si calc:. Problème avec les $
-    #     shufflechoices.append(choice)
-    # random.shuffle(shufflesubchoices)
-    shufflesubchoices = list()
+ 
     return vars_list , annoncements , choices , shufflechoices , shufflesubchoices, corrections
 
 
@@ -7169,12 +7168,10 @@ def define_all_types(n, supportfile):
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0   }
 
     elif supportfile.qtype==6 : # correspondances
-        subchoices = list()
-        for choice in supportfile.supportchoices.all():
-            for subchoice in choice.supportsubchoices.all():
-                subchoices.append(subchoice)
-        random.shuffle(subchoices)
-        context = {  'subchoices' : subchoices   , 'numexo' : 0 }  
+
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'shufflesubchoices' : shufflesubchoices  ,  'numexo' : 0   }
+
 
     elif supportfile.qtype==7 : # anagrammes 
 
@@ -7426,8 +7423,8 @@ def calculate_str(this_item):
         renew += str(calc)
     return renew
 ######################################################################################################################################################################
+########################################### CHECK des solutions  ----  create_supportfile ligne 6227   ###############################################################
 ######################################################################################################################################################################
-
 def check_solution_vf(request): ## 1 
 
     choice_id      = request.POST.get('choice_ids',None)
@@ -7630,8 +7627,47 @@ def check_solution_pairs(request):## 5
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
 
-def check_correspondances_answers(request):## 6
-    pass
+def check_solution_regroup(request):## 6
+
+    supportfile_id = request.POST.get('supportfile_id',0)
+    answers = request.POST.getlist("answers",[])
+    numexo  = int(request.POST.get("numexo",0))
+    score   = int(request.POST.get("score",0))
+    data = {}
+    old_score = score
+
+    for answer in answers :
+        choice_id, subchoice_id_str =  answer.split("====")
+        supportchoice = Supportchoice.objects.get(pk=choice_id)
+        supportsubchoices = supportchoice.supportsubchoices.all()
+        answer_ids = subchoice_id_str.split("----")
+        answer_ids = answer_ids[:len(answer_ids)-1]
+        for subchoice_id in supportchoice.supportsubchoices.values_list('id', flat=True) :
+            numexo +=1
+            if str(subchoice_id) in answer_ids :
+                score +=1
+
+    supportfile = Supportfile.objects.get(pk=supportfile_id) 
+    correction_str = ""
+    for choice in supportfile.supportchoices.all() :
+        if choice.imageanswer :
+            correction_str += r"<img src='{{ choice.imageanswer.url }}' width='150px' />"
+        if choice.answer : 
+            correction_str += str(choice.answer)
+        for subchoice in choice.supportsubchoices.all() :
+            if subchoice.imageanswer :
+                correction_str += r"<img src='{{ choice.imageanswer.url }}' width='150px' />"
+            if subchoice.answer : 
+                correction_str += str(choice.answer)
+
+
+    data['numexo'] = numexo  
+    data['score']  = score
+    data['this_correction_text'] = correction_str
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
+
 
 def check_anagram_answers(request):## 7
 

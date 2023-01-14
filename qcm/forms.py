@@ -1,13 +1,15 @@
 import datetime
 from django import forms
-from .models import Folder, Parcours, Blacklist, Exercise, Remediation, Relationship, DocumentReport, Supportfile, Course, Comment, Demand, Mastering,Mastering_done, Writtenanswerbystudent, Customexercise,Customanswerimage , Customanswerbystudent, Masteringcustom, Masteringcustom_done, Remediationcustom, Criterion
+from .models import  *
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
-
+ 
 from django.template.defaultfilters import filesizeformat
 from django.conf import settings
+
+from django.forms.models import inlineformset_factory,BaseInlineFormSet
 
 from itertools import groupby
 from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
@@ -85,9 +87,6 @@ class ParcoursForm(forms.ModelForm):
 		except:
 			pass
 
-
- 
-
 class Parcours_GroupForm(forms.ModelForm):
 
 	class Meta:
@@ -106,9 +105,6 @@ class Parcours_GroupForm(forms.ModelForm):
 			all_groups    = these_groups.order_by("teachers")
 			self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
  
-			
-
-
 class FolderForm(forms.ModelForm):
 
 	class Meta:
@@ -157,7 +153,6 @@ class FolderForm(forms.ModelForm):
 		except:
 			pass
 
-
 class AudioForm(forms.ModelForm):
 	class Meta:
 		model = Exercise
@@ -166,9 +161,6 @@ class AudioForm(forms.ModelForm):
 	def clean_content(self):
 		audiofile = self.cleaned_data['audiofile']
 		validation_file(audiofile)
-
-
-
 
 class RelationshipForm(forms.ModelForm):
 	class Meta:
@@ -208,6 +200,7 @@ class RemediationcustomForm(forms.ModelForm):
 		content = self.cleaned_data['mediation']
 		validation_file(content)
 
+
 class SupportfileForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
@@ -238,7 +231,6 @@ class SupportfileKForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']    =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject))
  
-
 class UpdateSupportfileForm(forms.ModelForm):
 
 	class Meta:
@@ -255,17 +247,88 @@ class UpdateSupportfileForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), required=False)
 
+
+#################################################################################################################################################################################
+###################################        FORMULAIRES GROUPES ET SOUS FORMULAIRES       ########################################################################################
+#################################################################################################################################################################################
+class BaseSupportchoiceFormset(BaseInlineFormSet):
+
+    def add_fields(self, form, index):
+        super().add_fields(form, index)
+        # save the formset in the 'nested' property
+        form.nested = formSubSet(
+                        instance=form.instance,
+                        data=form.data if form.is_bound else None,
+                        files=form.files if form.is_bound else None,
+                        prefix='supportchoice-{}-subchoice'.format( form.prefix ) )
+
+    def is_valid(self):
+        result = super().is_valid()
+        if self.is_bound:
+            for form in self.forms:
+                if hasattr(form, 'nested'):
+                    result = result and form.nested.is_valid()
+        return result
+
+
+    def save(self, commit=True):
+        result = super().save(commit=commit)
+        for form in self.forms:
+            if hasattr(form, 'nested'):
+                if not self._should_delete_form(form):
+                    form.nested.save(commit=commit)
+
+        return result
+
+formSetNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , formset=BaseSupportchoiceFormset,   extra=2)
+formSubSet    = inlineformset_factory(Supportchoice, Supportsubchoice, fields=('answer','imageanswer','label','is_correct','retroaction') , extra=2)
+
+
+class BaseSupportchoiceUpdateFormset(BaseInlineFormSet):
+
+    def add_fields(self, form, index):
+        super().add_fields(form, index)
+        # save the formset in the 'nested' property
+        form.nested = formSubSetUpdate(
+                        instance=form.instance,
+                        data=form.data if form.is_bound else None,
+                        files=form.files if form.is_bound else None,
+                        prefix='supportchoice-{}-subchoice'.format( form.prefix ) )
+
+    def is_valid(self):
+        result = super().is_valid()
+        if self.is_bound:
+            for form in self.forms:
+                if hasattr(form, 'nested'):
+                    result = result and form.nested.is_valid()
+        return result
+
+
+    def save(self, commit=True):
+        result = super().save(commit=commit)
+        for form in self.forms:
+            if hasattr(form, 'nested'):
+                if not self._should_delete_form(form):
+                    form.nested.save(commit=commit)
+
+        return result
+
+
+formSetUpdateNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , formset=BaseSupportchoiceUpdateFormset,   extra=0)
+formSubSetUpdate    = inlineformset_factory(Supportchoice, Supportsubchoice, fields=('answer','imageanswer','label','is_correct','retroaction') , extra=0)
+#################################################################################################################################################################################
+###################################    UPDATE FORMULAIRES GROUPES ET SOUS FORMULAIRES       #####################################################################################
+#################################################################################################################################################################################
+
 class AttachForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
 		fields = ('attach_file','title','is_subtitle')
  
-
 class CourseForm(forms.ModelForm):
 	class Meta:
 		model = Course
 		fields = '__all__'
-
 
 	def __init__(self, *args, **kwargs):
 		parcours = kwargs.pop('parcours')
@@ -284,8 +347,8 @@ class CourseNPForm(forms.ModelForm):
 		teacher = kwargs.pop('teacher')
 		super(CourseNPForm, self).__init__(*args, **kwargs)
  
-		self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.exclude(pk=13).order_by("ranking"), required=False )
-		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False )
+		self.fields['level']    = forms.ModelChoiceField(queryset=teacher.levels.exclude(pk=13).order_by("ranking"), required=False )
+		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False )
 		self.fields['parcours'] = forms.ModelChoiceField(queryset=teacher.teacher_parcours.all(), required=False )
 
 
@@ -293,6 +356,7 @@ class DemandForm(forms.ModelForm):
 	class Meta:
 		model = Demand
 		fields = '__all__'
+
 
 class MasteringForm (forms.ModelForm):
 	class Meta:
@@ -519,3 +583,4 @@ class CriterionOnlyForm (forms.ModelForm):
 
 		self.fields['skill'] = forms.ModelChoiceField(queryset=skills,    required=False )
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges,  required=False ) 
+

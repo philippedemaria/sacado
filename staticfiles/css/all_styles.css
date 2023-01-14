@@ -1118,7 +1118,17 @@ input:invalid:focus {
 /* ---------------------------------------------------   SHARED   EXERCISE ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/
 
+.bilan_div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #ddd;
+    margin-left:0%;
+    margin-right: 2%;
+    margin-bottom: 10px;
+    width:48%; 
+    float:left
 
+}
 
 .exercise_body_shared{
   overflow: auto;

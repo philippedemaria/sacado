@@ -59,16 +59,17 @@
                     {% regroup mentals by mentaltitle as mental_list %}
 
                     {% for mt in mental_list %}
-                    <tr class="opener out" id ="{{mt.grouper.id}}">
-                        <td style="color:white;background-color: #5d4391"><i class="fa fa-caret-right"></i> {{ mt.grouper.title }}
-                          <small><a href="{%  url 'admin_delete_mentaltitle' mt.grouper.id %}" class="pull-right" style="color:white"  onclick="return TestDelete('ce thème')"><i class="fa fa-trash"></i></a></small>                           
-                          <small><a href="{%  url 'admin_create_update_mentaltitle' mt.grouper.id %}" class="pull-right"  style="color:white;padding-right:20px" ><i class="bi bi-pencil"></i></a></small>
+                    
+                        <tr class="opener out" id ="{{mt.grouper.id}}">
+                            <td style="color:white;background-color: #5d4391"><i class="fa fa-caret-right"></i> {{ mt.grouper.title }}
+                              <small><a href="{%  url 'admin_delete_mentaltitle' mt.grouper.id %}" class="pull-right" style="color:white"  onclick="return TestDelete('ce thème')"><i class="fa fa-trash"></i></a></small>                           
+                              <small><a href="{%  url 'admin_create_update_mentaltitle' mt.grouper.id %}" class="pull-right"  style="color:white;padding-right:20px" ><i class="bi bi-pencil"></i></a></small>
 
-                        </td>
-                        <td style="color:white;background-color: #5d4391"> </td> 
-                        <td style="color:white;background-color: #5d4391"> </td>           
-                        <td style="color:white;background-color: #5d4391"> </td> 
-                    </tr>
+                            </td>
+                            <td style="color:white;background-color: #5d4391"> </td> 
+                            <td style="color:white;background-color: #5d4391"> </td>           
+                            <td style="color:white;background-color: #5d4391"> </td> 
+                        </tr>
 
                         {% for mental in mt.list %}
                         <tr id="{{mt.grouper.id}}" class="opener_k opened{{ mt.grouper.id }} out"  id="{{ mental.id}}">

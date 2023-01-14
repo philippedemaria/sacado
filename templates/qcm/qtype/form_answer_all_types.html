@@ -176,7 +176,13 @@
                             <div class="custom_title" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>{{ supportfile.title }}</label></div>
                             {% endif %}
                         </div>
-                        {% if relation.score_display %}
+                        {% if request.user.is_student %}
+                          {% if relation.score_display %}
+                              <div class="col-sm-4 col-md-3"  >
+                                  <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">{{ numexo }}</span></label></div>
+                              </div>
+                          {% endif %}
+                        {% else %}
                             <div class="col-sm-4 col-md-3"  >
                                 <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">{{ numexo }}</span></label></div>
                             </div>
