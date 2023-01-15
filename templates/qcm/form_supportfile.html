@@ -6,7 +6,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
 
-    {% if qtype == 6 %}
+    {% if qtype == 6 or qtype == 14 or qtype == 15 %}
         <script>
             require(['script/ajax-support_creator_sub']);
         </script>  

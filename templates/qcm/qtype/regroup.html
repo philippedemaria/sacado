@@ -33,7 +33,8 @@
         <div class="form_card" style="margin-top:20px;">
             <label>Les thèmes et correspondances</label>  
             {{ form_ans.management_form }}
-            {{ form_ans.non_form_errors }}           
+            {{ form_ans.non_form_errors }} 
+
             <div id="formsetZone">
             <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
             {% for form in form_ans %} 
@@ -92,16 +93,43 @@
                                 </div>
                             {% endfor %}
 
+                            <script id="subToClone" type="text/template">    
+                                <div class="col-sm-12">
+                                    <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
+                                        <div class="col-sm-11">
+                                            <div class="row ">
+                                                <div class="col-sm-2 col-md-1 get_image"  align="center" id="imagersub"> 
+                                                    <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-imagesub"></i>
+                                                    {{ form.nested.empty_form.imageanswer|add_class:"choose_imageanswersub to-data-loop" }}
+                                                    <img src="{% if form_sub.imageanswer.url %}{{ form_sub.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswersub preview" id="previewsub"> 
+                                                </div>
+                                                <div class="col-sm-10 col-md-10" > 
+                                                    {{ form.nested.empty_form.answer|attr:"placeholder:Ecrire une correspondance"|add_class:"quizz_answer"  }}
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div class="col-sm-1">
+                                            <span class="btn btn-danger remove_sub_more"><i class="bi bi-trash"></i></span>
+                                        </div>    
+                                    </div>
+                                </div>
+                            </script>
+
+
+
+
                         </div>
                     </div>
                 </div>
             {% endfor %}
             </div>
+
             <div class="row">
                 <div class="col-sm-12 col-md-12" >
                     <a href="javascript:void();"  class="add_more btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un thème de correspondance</a><br/><br/>
                 </div>                            
             </div>
+
         </div>                                                         
     </div>
 </div>
@@ -135,7 +163,7 @@
                         <div class="col-sm-12 col-md-12" >
                             <a href="javascript:void();"  class="add_sub_more edit" id="data_loop" ><i class="bi bi-plus-circle"></i> Ajouter une correspondance à ce thème</a> 
                             <input type="hidden" name="subloop__prefix__" id="subloop__prefix__" />
-                            |<span class="remove_more edit text-danger"><i class="bi bi-trash"></i> Supprimer ce thème</span>
+                            |<span class="remove_more text-danger"><i class="bi bi-trash"></i> Supprimer ce thème</span>
                         </div>                            
                     </div>
                     <div class="row">
@@ -156,27 +184,6 @@
         </div>
     </div>
 </script> 
-<script id="subToClone" type="text/template">    
-    <div class="col-sm-12">
-        <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-            <div class="col-sm-11">
-                <div class="row ">
-                    <div class="col-sm-2 col-md-1 get_image"  align="center" id="imagersub"> 
-                        <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-imagesub"></i>
-                        {{ form_sub_ans.empty_form.imageanswer|add_class:"choose_imageanswersub to-data-loop" }}
-                        <img src="{% if form_sub.imageanswer.url %}{{ form_sub.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswersub preview" id="previewsub"> 
-                    </div>
-                    <div class="col-sm-10 col-md-10" > 
-                        {{ form_sub_ans.empty_form.answer|attr:"placeholder:Ecrire une correspondance"|add_class:"quizz_answer"  }}
-                    </div>
-                </div>
-            </div> 
-            <div class="col-sm-1">
-                <span class="input-group-addon input-group-addon-right remove_sub_more"><i class="bi bi-trash"></i></span>
-            </div>    
-        </div>
-    </div>
-</script>
 
 
 {% endblock %}

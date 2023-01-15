@@ -39,7 +39,11 @@
                         {% if supportfile.qtype == 100 %}
                             <img src="{% static 'img/ggb.png'  %}" width="20px" class="qtype_logo" />
                         {% else  %}  
-                        <label style="font-size:{% if supportfile.qtype == 1  or supportfile.qtype == 6 %}0.25{% elif supportfile.qtype < 6 %}0.2{% elif supportfile.qtype == 18 %}0.6{% elif supportfile.qtype == 9 %}0.17{% else %}0.35{% endif %}em" class="qtype_logo">
+                        <label style="{% if supportfile.qtype == 1  or supportfile.qtype == 6  %}font-size:0.25em
+                                        {% elif supportfile.qtype < 6 or supportfile.qtype == 14 %}font-size:0.2em;padding-left:10px;
+                                        {% elif supportfile.qtype == 18 %}font-size:0.6em
+                                        {% elif supportfile.qtype == 9 %}font-size:0.17em
+                                        {% else %}font-size:0.35em{% endif %}" class="qtype_logo">
                             {{ supportfile.qtype_logo|safe }}
                         </label> 
                         {% endif  %} 
@@ -243,15 +247,13 @@
                             {% endfor %}  
                         {% elif supportfile.qtype == 14 %}<!-- Mémo cartes -->
                             {% for choice in supportfile.supportchoices.all %}
-                                <div class="col-sm-4">
                                     <div class="bilan_div" style="padding:5px">{{ choice.answer }}
                                         <div class="quizz_item" style="padding:5px">
                                         {% for subchoice in choice.supportsubchoices.all %}
-                                            <li class="sanspuce">{% if subchoice.imageanswer  %}<img src="{{ subchoice.imageanswer.url }}" width="50px" height="50px" />{% endif %} {{  subchoice.answer|title }}</li>
+                                            <li class="sanspuce">{{ subchoice.answer }}</li>
                                         {% endfor %}
                                         </div>
                                     </div>
-                                </div>
                             {% endfor %}
                         {% elif supportfile.qtype == 15 %} <!-- Placement sur image -->   
                             pass

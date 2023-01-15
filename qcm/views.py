@@ -6318,6 +6318,10 @@ def create_supportfile(request,qtype,ids):
                     formset = formSetNested(request.POST or None,  request.FILES or None, instance=nf)
                     if formset.is_valid():
                         formset.save()
+                    else :
+                        print( formset.errors )
+
+
             try :
                 msg = "Bonjour l'équipe,\n\n Un exercice vient d'être posté.\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+nf.id+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
                 if user.email :
@@ -7040,7 +7044,7 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
 
-        elif  supportfile.qtype == 6 :
+        elif  supportfile.qtype == 6 or supportfile.qtype == 14 :
 
             this_liste = list()
             this_sub_liste = list()
@@ -7119,6 +7123,7 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(shufflechoices)
       
 
+
         elif  supportfile.qtype == 18 :
 
             this_liste = list()
@@ -7167,7 +7172,7 @@ def define_all_types(n, supportfile):
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0   }
 
-    elif supportfile.qtype==6 : # correspondances
+    elif supportfile.qtype==6: # correspondances
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'shufflesubchoices' : shufflesubchoices  ,  'numexo' : 0   }
@@ -7204,7 +7209,6 @@ def define_all_types(n, supportfile):
         context = { 'supportfile' : supportfile , 'supportchoices' : supportchoices , 'numexo' :  len(supportchoices) } 
 
 
-
     elif supportfile.qtype==13 : #mots secrets :  
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
@@ -7212,20 +7216,12 @@ def define_all_types(n, supportfile):
 
 
     elif supportfile.qtype==14 :
-
-        subchoices = list()
-        for choice in supportfile.supportchoices.all():
-            for subchoice in choice.supportsubchoices.all():
-                subchoices.append(subchoice)
-        random.shuffle(subchoices)
-
-        length = 0
-        supportchoice = supportfile.supportchoices.first()
-        length = supportchoice.supportsubchoices.count()
-
-        context = {  'subchoices' : subchoices , 'length' : length , 'numexo' : -1 } 
-
-
+ 
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        try : length = int( len(shufflesubchoices[0])/len(shufflechoices[0]) )
+        except : length = 1 
+        context = { 'annoncements' : annoncements  ,   'shufflechoices' : shufflechoices  ,  'shufflesubchoices' : shufflesubchoices  , 'numexo' : len(shufflechoices)   , 'length' : length , 'numexo' : -1 }
+ 
 
     elif supportfile.qtype==18 :
 
@@ -8106,7 +8102,9 @@ def store_the_score_relation_ajax(request):
             score = request.POST.get("score",None)
             if score :
                 if relation.exercise.supportfile.qtype != 100 and score: # cas des exercices non GGB
-                    if numexo and  int(numexo) > 0: 
+                    if relation.exercise.supportfile.qtype == 14 and numexo and  int(numexo) < int(score) : 
+                        score = 100
+                    elif numexo and  int(numexo) > 0: 
                         score = round(float(int(score)/int(numexo)),2)*100 
                     else : 
                         score = 0

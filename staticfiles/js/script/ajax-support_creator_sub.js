@@ -415,6 +415,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 } 
                 $('#subformsetZone').attr("id","subformsetZone"+total_supportchoices)  ;
 
+
+
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS" value="1000" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS">');
+
+
+
+
                 if( $('#imagersub').length ) { 
 
                     l_items = $("#subformsetZone"+total_supportchoices+" .get_image").length ; 
@@ -558,30 +568,33 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
         //     });
         // }
- 
+
 
         $(document).on('click', '.add_sub_more', function (event) { 
 
-                loop = $(this).attr("data-loop");
+                loop = $(this).attr("data-loop"); 
                 this_id = $("#id_supportchoice-supportchoices-"+loop+"-subchoice-TOTAL_FORMS");
                 var ntotal_form = this_id.val()
                 var ntotalForms = parseInt(ntotal_form )  ;
 
                 subToClone = $('#subToClone').html() ;
+
                 $('#subformsetZone'+loop).append(subToClone);
-                 
-                var subloop  = $('#subloop'+loop).val()
-                var new_prefix = "choice-supportchoices-"+loop+"-subchoice-"+subloop
+
+                var subloop  = $('#subloop'+loop).val();
+                var new_prefix = "supportchoice-supportchoices-"+loop+"-subchoice-"+subloop;
 
                 $("#subformsetZone"+loop+" input").each(function(){                  
-                    $(this).attr('id',$(this).attr('id').replace('subchoices-__prefix__', new_prefix ));                   
-                    $(this).attr('name', $(this).attr('name').replace('subchoices-__prefix__',new_prefix) );
+                    $(this).attr('id',$(this).attr('id').replace('supportchoice-supportchoices-0-subchoice-__prefix__', new_prefix ));  
+
+                    $(this).attr('name', $(this).attr('name').replace('supportchoice-supportchoices-0-subchoice-__prefix__',new_prefix) );
 
                 });
 
                 $("#subformsetZone"+loop+" textarea").each(function(){ 
-                    $(this).attr('id',$(this).attr('id').replace('subchoices-__prefix__', new_prefix ));                   
-                    $(this).attr('name', $(this).attr('name').replace('subchoices-__prefix__',new_prefix) );
+                    $(this).attr('id',$(this).attr('id').replace('supportchoice-supportchoices-0-subchoice-__prefix__', new_prefix ));  
+
+                    $(this).attr('name', $(this).attr('name').replace('supportchoice-supportchoices-0-subchoice-__prefix__',new_prefix) );
                 });
 
                 $("#subformsetZone"+loop+" span").attr('data-loop', loop);

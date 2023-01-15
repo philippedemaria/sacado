@@ -1,18 +1,18 @@
 import datetime
 from django import forms
+from django.conf import settings 
+from django.template.defaultfilters import filesizeformat
+from django.forms.models import inlineformset_factory, BaseInlineFormSet , ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
+
+
 from .models import  *
 from account.models import Student , Teacher
-from socle.models import Knowledge, Skill
 from group.models import Group
+from socle.models import Knowledge, Skill
+
+
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
- 
-from django.template.defaultfilters import filesizeformat
-from django.conf import settings
-
-from django.forms.models import inlineformset_factory,BaseInlineFormSet
-
 from itertools import groupby
-from django.forms.models import ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
 from general_fonctions import *
 
 def validation_file(content):
@@ -251,6 +251,19 @@ class UpdateSupportfileForm(forms.ModelForm):
 #################################################################################################################################################################################
 ###################################        FORMULAIRES GROUPES ET SOUS FORMULAIRES       ########################################################################################
 #################################################################################################################################################################################
+def is_empty_form(form):
+    if form.is_valid() and not form.cleaned_data:
+        return True
+    else:
+        return False
+
+
+def is_form_persisted(form):
+    if form.instance and not form.instance._state.adding:
+        return True
+    else:
+        return False
+
 class BaseSupportchoiceFormset(BaseInlineFormSet):
 
     def add_fields(self, form, index):
@@ -263,24 +276,54 @@ class BaseSupportchoiceFormset(BaseInlineFormSet):
                         prefix='supportchoice-{}-subchoice'.format( form.prefix ) )
 
     def is_valid(self):
-        result = super().is_valid()
+        result = super(BaseSupportchoiceFormset, self).is_valid()
         if self.is_bound:
             for form in self.forms:
                 if hasattr(form, 'nested'):
                     result = result and form.nested.is_valid()
         return result
 
+    def clean(self):
+        super(BaseSupportchoiceFormset, self).clean()
+        for form in self.forms:
+            if not hasattr(form, "nested") or self._should_delete_form(form):
+                continue
+
+            if self._is_adding_nested_inlines_to_empty_form(form):
+                form.add_error(
+                    field=None,
+                    error=_(
+                        "You are trying to add image(s) to a book which "
+                        "does not yet exist. Please add information "
+                        "about the book and choose the image file(s) again."
+                    ),
+                )
 
     def save(self, commit=True):
-        result = super().save(commit=commit)
+        result = super(BaseSupportchoiceFormset, self).save(commit=commit)
         for form in self.forms:
             if hasattr(form, 'nested'):
                 if not self._should_delete_form(form):
                     form.nested.save(commit=commit)
-
         return result
 
-formSetNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , formset=BaseSupportchoiceFormset,   extra=2)
+
+    def _is_adding_nested_inlines_to_empty_form(self, form):
+        if not hasattr(form, "nested"):
+            return False
+
+        if is_form_persisted(form):
+            return False
+
+        if not is_empty_form(form):
+            return False
+
+        non_deleted_forms = set(form.nested.forms).difference(set(form.nested.deleted_forms))
+
+        return any(not is_empty_form(nested_form) for nested_form in non_deleted_forms)
+
+
+formSetNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , formset=BaseSupportchoiceFormset,   extra=1)
 formSubSet    = inlineformset_factory(Supportchoice, Supportsubchoice, fields=('answer','imageanswer','label','is_correct','retroaction') , extra=2)
 
 
