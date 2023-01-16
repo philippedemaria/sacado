@@ -6975,13 +6975,13 @@ def alea_annoncements(n,supportfile) :
         random.shuffle(su_choices)
         s_choices = su_choices[0:nb_pseudo_support]
 
-    if supportfile.qtype == 1 or supportfile.qtype == 7 or supportfile.qtype == 13 :
+    if supportfile.qtype == 1 or supportfile.qtype == 7 or supportfile.qtype == 13 or supportfile.qtype == 15 :
         if nb_pseudo_support :
             n = nb_pseudo_support
         else :
             n = s_choices.count()
 
-    for i in range (n) :
+    for i in range (n) : # n = nombre de loops
           
         enonce  = supportfile.annoncement
         corrige = supportfile.correction
@@ -7123,6 +7123,29 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(shufflechoices)
       
 
+        elif  supportfile.qtype == 15 :
+
+            this_liste = list()
+            this_sub_liste = list()
+            loop_choice = s_choices[i]
+            this_liste.append(loop_choice)
+            subchoices = list(loop_choice.supportsubchoices.all())
+            random.shuffle(subchoices)
+            if supportfile.nb_subpseudo :
+                m = min( supportfile.nb_subpseudo, loop_choice.supportsubchoices.count() )
+                subchoices = list(subchoices)[0:m]
+            for subchoice in subchoices :
+                new    = replace_bloc(subchoice.answer,vars_list,i)
+                retroaction = replace_bloc(subchoice.retroaction,vars_list,i)
+                label = replace_bloc(subchoice.label,vars_list,i)
+                subdata = { 'id' : subchoice.id , 'answer' : new , 'imageanswer' : subchoice.imageanswer   , 'retroaction' : retroaction , 'label' : label , 'is_correct' : subchoice.is_correct   } 
+                this_sub_liste.append(subdata)
+            random.shuffle(this_liste)
+            shufflechoices.append(this_liste)
+            random.shuffle(this_sub_liste)
+            shufflesubchoices.append(this_sub_liste)
+
+
 
         elif  supportfile.qtype == 18 :
 
@@ -7215,13 +7238,19 @@ def define_all_types(n, supportfile):
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : len(shufflechoices)   }
 
 
-    elif supportfile.qtype==14 :
+    elif supportfile.qtype==14 : # Mémoire 
  
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
         try : length = int( len(shufflesubchoices[0])/len(shufflechoices[0]) )
         except : length = 1 
         context = { 'annoncements' : annoncements  ,   'shufflechoices' : shufflechoices  ,  'shufflesubchoices' : shufflesubchoices  , 'numexo' : len(shufflechoices)   , 'length' : length , 'numexo' : -1 }
  
+  
+    elif supportfile.qtype==15 : #Légender une image  
+
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
+        context = { 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflesubchoices' : shufflesubchoices  , 'shufflechoices' : shufflechoices  , 'numexo' : 0   }
+
 
     elif supportfile.qtype==18 :
 
@@ -7373,35 +7402,6 @@ def message_correction(score,old_score):
         msg = "<i class='fa fa-check text-success'></i> C'est bien. Ta réponse est juste. Continue."
     return msg
 
-def check_secret_answers(request):  
-
-    supportfile_id = request.POST.get('supportfile_id',0)
-    numexo         = int(request.POST.get('numexo',0))
-    score          = int(request.POST.get('score',0))
-    loop           = int(request.POST.get('loop',0))
-    answers        = request.POST.getlist('answers',None)
-    choice_id      = request.POST.get('choice_id',None)
-
-    old_score      = score
-    data = {}
-    supportfile = Supportfile.objects.get(pk=supportfile_id) 
-    choice      = Supportchoice.objects.get(pk=choice_id) 
-    
-
-
-    for i in range(len(locutions)) :
-        if i%2==1 : ans_to_do.append( locutions[i] )
-
-    for i in range(len(ans_to_do)) :
-        numexo +=1
-        if ans_to_do[i]==answers[i]:
-            score += 1
-
-    data['numexo'] = numexo  
-    data['score']  = score
-    data['this_correction_text'] = choice.answer
-    data['msg'] = message_correction(score,old_score)
-    return JsonResponse(data) 
 
 def calculate(this_item):
     tab_calculus = this_item.split('?!')
@@ -7663,8 +7663,6 @@ def check_solution_regroup(request):## 6
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
 
-
-
 def check_anagram_answers(request):## 7
 
     supportfile_id = request.POST.get('supportfile_id',0)
@@ -7796,7 +7794,6 @@ def check_grid_answers(request):## 12 mot mélés   non nécessaire
     data['true']   = true
     return JsonResponse(data)  
 
-
 def ajax_secret_letter(request):## 13 mot secret 
 
     secret_letter = request.POST.get('secret_letter',None)
@@ -7841,6 +7838,96 @@ def ajax_secret_letter(request):## 13 mot secret
     data['score']    = score
     data['slide']    = new_slide
     return JsonResponse(data)  
+
+def check_secret_answers(request):## 13 mot secret  
+
+    supportfile_id = request.POST.get('supportfile_id',0)
+    numexo         = int(request.POST.get('numexo',0))
+    score          = int(request.POST.get('score',0))
+    loop           = int(request.POST.get('loop',0))
+    answers        = request.POST.getlist('answers',None)
+    choice_id      = request.POST.get('choice_id',None)
+
+    old_score      = score
+    data = {}
+    supportfile = Supportfile.objects.get(pk=supportfile_id) 
+    choice      = Supportchoice.objects.get(pk=choice_id) 
+    
+    for i in range(len(locutions)) :
+        if i%2==1 : ans_to_do.append( locutions[i] )
+
+    for i in range(len(ans_to_do)) :
+        numexo +=1
+        if ans_to_do[i]==answers[i]:
+            score += 1
+
+    data['numexo'] = numexo  
+    data['score']  = score
+    data['this_correction_text'] = choice.answer
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
+def check_memo_answers(request):
+
+    subchoice_ids = request.POST.getlist('liste',None)
+    length        = request.POST.get('length',0)
+    data = {}
+    supportsubchoice = Supportsubchoice.objects.get(pk=subchoice_ids[0])
+    solutions        = supportsubchoice.supportchoice.supportsubchoices.values_list('id',flat=True)
+
+    solutions_str = list()
+    for s  in solutions:
+        solutions_str.append( str(s) )
+
+    if set(solutions_str) == set(subchoice_ids) : 
+        test = "yes"
+        length = int(length)-1
+    else : test = "no"
+
+    data['test']   = test  
+    data['length'] = length
+
+    return JsonResponse(data)  
+
+
+def check_image_answers(request):
+
+
+    score          = int(request.POST.get('score',0))
+    numexo         = int(request.POST.get('numexo',0))
+    loop           = int(request.POST.get('loop',0)) - 1
+    answers        = request.POST.getlist('answers' + str(loop), [])
+    choice_ids     = request.POST.getlist('choice_ids'+ str(loop), [])
+
+    supportfile_id = request.POST.get('supportfile_id',0)
+
+    print(answers)
+    print(choice_ids)
+
+    data = {}
+    old_score  = score
+
+    for i in range( len (choice_ids) ) :
+        supportsubchoice = Supportsubchoice.objects.get(pk=choice_ids[i])
+        numexo += 1
+        if supportsubchoice.label == answers[i]:
+            score +=1
+
+    retroaction = ""
+    if supportfile_id :
+        supportfile = Supportfile.objects.get(pk=supportfile_id)
+        choice = supportfile.supportchoices.all()[loop]
+        retroaction += choice.retroaction+"<br/>"
+
+    data = {}
+    data['numexo'] = numexo
+    data['score']  = score
+    cor =""
+    if supportfile.correction : cor = "<br/><br/>"+supportfile.correction
+    data['this_correction_text']  =  retroaction+cor
+    data['msg'] = message_correction(score,old_score)
+    return JsonResponse(data) 
+
 
 
 def check_axe_answers(request):## 18 axe 
@@ -7890,31 +7977,6 @@ def check_axe_answers(request):## 18 axe
     if supportfile.correction : cor = "<br/><br/>"+supportfile.correction
     data['this_correction_text']  =  retroaction+cor
     data['msg'] = message_correction(score,old_score)
-    return JsonResponse(data)  
-
-
-
-
-def ajax_memo(request):
-
-    subchoice_ids = request.POST.getlist('liste',None)
-    length        = request.POST.get('length',0)
-    data = {}
-    supportsubchoice = Supportsubchoice.objects.get(pk=subchoice_ids[0])
-    solutions        = supportsubchoice.supportchoice.supportsubchoices.values_list('id',flat=True)
-
-    solutions_str = list()
-    for s  in solutions:
-        solutions_str.append( str(s) )
-
-    if set(solutions_str) == set(subchoice_ids) : 
-        test = "yes"
-        length = int(length)-1
-    else : test = "no"
-
-    data['test']   = test  
-    data['length'] = length
-
     return JsonResponse(data)  
 
 

@@ -776,11 +776,31 @@ input:invalid:focus {
     min-width:80px;
 }
 
+.answer_box_small{
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 5px;
+    min-width:40px;
+}
+
 .answer_mini_box{
     border-radius: 5px;
     border : 1px solid #CCC;
     padding: 2px;
     text-align: center;
+}
+
+.answer_input_box{
+    border-radius: 5px;
+    height:36px;
+    padding: 5px;
+    width:200px;
+    background-color: #FFF;
+    font-weight:600;
+}
+
+.drag_x{
+  cursor: grab;
 }
 
 
@@ -1113,7 +1133,68 @@ input:invalid:focus {
   font-size: 0.8em;
 }
 
+
+.map-marker{
+  padding-top:10px;
+} 
+
+.image_canvas{
+  border:1px solid #CCC;
+  padding:5px;
+  margin-top:10px;
+}
+/* ------------------------------------------------------------------------------------------------------------*/
+/* ------------------------------  Légender une image  --------------------------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------*/
+
+.text-info{
+  color :#1feae7;
+}
+
+.text-rose{
+  color :#fc2ffe;
+}
+
+.text-light{
+  color :#7dfe2f;
+}
+
+.text-white{
+  color :#F0F0F0;
+}
  
+.border-info{
+  border :2px solid #1feae7;
+}
+
+.border-rose{
+  border :2px solid #fc2ffe;
+}
+
+.border-light{
+  border :2px solid #7dfe2f;
+}
+
+.border-white{
+  border :2px solid #CCC;
+}
+
+.border-navy{
+  border :2px solid #5d4391;
+}
+
+.border-danger{
+  border :2px solid #a94442;
+}
+
+.border-success{
+  border :2px solid #249a56;
+}
+
+.border-warning{
+  border :2px solid #f9a83f;
+}
+
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------   SHARED   EXERCISE ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/

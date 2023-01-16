@@ -221,9 +221,10 @@ urlpatterns = [
     path('check_grid_answers'         , check_grid_answers         , name='check_grid_answers'),
     path('check_secret_answers'       , check_secret_answers       , name='check_secret_answers'),
     path('ajax_secret_letter'         , ajax_secret_letter         , name='ajax_secret_letter'),
-    path('ajax_memo'                  , ajax_memo                  , name='ajax_memo'),
+    path('check_memo_answers'         , check_memo_answers         , name='check_memo_answers'),
+    path('check_image_answers'        , check_image_answers        , name='check_image_answers'),    
     path('check_axe_answers'          , check_axe_answers          , name='check_axe_answers'),
-
+ 
 
     #################################  Enregistrement des solutions par type d'exercice
     path('store_the_score_relation_ajax/', store_the_score_relation_ajax, name='store_the_score_relation_ajax'),

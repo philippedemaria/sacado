@@ -209,6 +209,29 @@ def abreviation(raw_html): #nettoie le code des balises HTML
         return raw_html
 
 
+@register.filter
+def marker_details(string): #marker_coordonnees pour les exercices de placement sur image
+    data = {}
+    try :
+        classe,abscisse,ordonnee = string.split("|")
+        data['coordonnees'] = "left:{}px;top:{}px".format(abscisse, ordonnee)
+        data['classe'] = classe
+    except :
+        pass
+    return data
+
+
+@register.filter
+def marker_details_answer(string): #marker_coordonnees pour les exercices de placement sur image
+    data = {}
+    try :
+        classe,abscisse,ordonnee = string.split("|")
+        ordonnee = int(ordonnee)-25 
+        data['coordonnees'] = "left:{}px;top:{}px".format(abscisse, ordonnee)
+        data['classe'] = classe
+    except :
+        pass
+    return data
 
 
 @register.filter

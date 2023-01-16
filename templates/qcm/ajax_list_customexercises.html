@@ -256,8 +256,18 @@
                                     </div>
                             {% endfor %}
                         {% elif supportfile.qtype == 15 %} <!-- Placement sur image -->   
-                            pass
-
+                            {% for choice in supportfile.supportchoices.all %}
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <img src="{{ choice.imageanswer.url}}" width="300px"/>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            {% for subchoice in choice.supportsubchoices.all %}
+                                                <li class="sanspuce">{{ subchoice.label }}</li>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                            {% endfor %}
                         {% elif supportfile.qtype == 16 %}<!-- #####################################  Insertion vidéo Non codé -->
                         pass
                         {% elif supportfile.qtype == 17 %}<!-- #####################################  Quiz Cap Non codé -->

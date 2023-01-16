@@ -129,6 +129,13 @@
             <br/><br/>
             <label>Nombre d'items proposés  {{ form.nb_pseudo }} <small>[Si 0, tous les items enregistrés sont proposés.]</small></label>
         </small>
+        {% if qtype == 15 %}
+        <li class="sanspuce">  
+            <small>
+                <label>Nombre de légendes proposées  {{ form.nb_subpseudo }} <small>[Si 0, toutes les légendes enregistrés sont proposées.]</small></label>
+            </small> 
+        </li>
+        {% endif %}
     </div>
     {% endif %}
     <div id="inclusion" class="tab-pane fade">

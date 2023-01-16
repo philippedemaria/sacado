@@ -34,6 +34,13 @@ def vignette_directory_path(instance, filename):
 def custom_directory_path(instance, filename):
     return "customexercises/{}/{}".format(instance.teacher.user.id, filename)
 
+def choice_directory_path(instance, filename):
+    return "images_legendables/{}/{}".format(instance.supportfile.id, filename)
+
+def subchoice_directory_path(instance, filename):
+    return "images_legendables/{}/{}".format(instance.supportchoice.id, filename)
+
+
 def file_directory_path(instance, filename):
     return "files/{}/{}".format(instance.relationship.parcours.teacher.user.id, filename)
 
@@ -155,7 +162,8 @@ class Supportfile(models.Model):
     ####  Format de l'exercice
     qtype         = models.PositiveIntegerField(default=100)    
     canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")
-    nb_pseudo     = models.PositiveIntegerField(default=0, blank=True,  verbose_name="Nombre de pseudo situation")      
+    nb_pseudo     = models.PositiveIntegerField(default=0, blank=True,  verbose_name="Nombre de pseudo situation")
+    nb_subpseudo  = models.PositiveIntegerField(default=0, blank=True,  verbose_name="Nombre de pseudo proposition")      
     ####  Cas spécifique axe gradué qtype = 9 
     is_written = models.BooleanField(default=0, verbose_name="Mots à écrire ?") # ou à glisser déposer
     ####  Cas spécifique axe gradué qtype = 18 
@@ -284,11 +292,11 @@ class Supportchoice(models.Model):
     """
     Modèle représentant un associé.
     """
-    imageanswer = models.ImageField(upload_to=vignette_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
+    imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer      = models.TextField(default='', null=True,  blank=True, verbose_name="Réponse écrite")
     retroaction = models.TextField(default='', null=True,  blank=True, verbose_name="Rétroaction")
 
-    imageanswerbis = models.ImageField(upload_to=vignette_directory_path,  null=True,  blank=True, verbose_name="Image par paire", default="")
+    imageanswerbis = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image par paire", default="")
     answerbis      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse par paire")
 
     is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
@@ -302,7 +310,7 @@ class Supportsubchoice(models.Model):
     """
     Modèle représentant un associé.
     """
-    imageanswer   = models.ImageField(upload_to=vignette_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
+    imageanswer   = models.ImageField(upload_to=subchoice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer        = models.TextField(default='', null=True,  blank=True, verbose_name="Réponse écrite")
     retroaction   = models.TextField(default='', null=True,  blank=True, verbose_name="Rétroaction")
     label         = models.CharField(max_length=255, default='', null=True,  blank=True, verbose_name="Label")#pour les position sur images

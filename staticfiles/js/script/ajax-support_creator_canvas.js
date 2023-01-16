@@ -1,13 +1,12 @@
-define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
+define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
     $(document).ready(function () { 
-        console.log("chargement JS ajax-support_creator_sub.js");
+        console.log("chargement JS ajax-support_creator_canvas.js");
 
 
         //**************************************************************************************************************
         //********            ckEditor            **********************************************************************
         //**************************************************************************************************************
-        if ( $('#qtype').val() == '6' ) {   $("#id_title").val("Regrouper les cartes par thèmes");  }
-        else if ( $('#qtype').val() == '14' ) {   $("#id_title").val("Retourner les cartes du même thème");  }
+        $("#id_title").val("Légender les images"); 
 
         CKEDITOR.replace('annoncement', {
                 height: '100px' ,
@@ -286,25 +285,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         // ==================================================================================================
         // ==================================================================================================
 
-
-
-
-
- 
-
         $('#enable_correction_div').hide();
         $("#enable_correction").click(function(){ 
             $('#enable_correction_div').toggle(500);
         });
 
-
-
-
         $("#id_is_python").on('change', function () { console.log("coucou");
 
             if ($("#id_is_python").is(":checked")) { $("#config_render").hide(500) ;}
             else { $("#config_render").show(500) ;}
-
         });
 
 
@@ -312,10 +301,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
             if ($("#id_is_scratch").is(":checked")) { $("#config_render").hide(500) ;}
             else { $("#config_render").show(500) ;}
-
         });
-
-
 
 
 
@@ -336,48 +322,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         })
 
 
- 
-
-
-        //*************************************************************************************************************
-        //****************      Gestion des variables aléatoires     **************************************************
-        //*************************************************************************************************************  
-
-        $(document).on('click', '.add_more_question', function (event) { 
-
-                var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
-                var totalForms = parseInt(total_form.val())  ;
-
-                var thisClone = $('#rowToClone_question');
-                rowToClone = thisClone.html() ;
-
-                $('#formsetZone_variables').append(rowToClone);
-                $('#duplicate_variables').attr("id","duplicate_variables"+totalForms) 
-
-                $('#duplicate_variables'+totalForms).find('.delete_button_question').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_question" ><i class="fa fa-trash"></i></a>'); 
-                $('#duplicate_variables'+totalForms).find("input[type='checkbox']").bootstrapToggle();
-
-                $("#duplicate_variables"+totalForms+" input").each(function(){ 
-                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
-                });
-                total_form.val(totalForms+1);
-
-                $("#id_situation").val(5);
-
-            });
-
-
-        $(document).on('click', '.remove_more_question', function () {
-            var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
-            var totalForms = parseInt(total_form.val())-1  ;
-
-            $('#duplicate_variables'+totalForms).remove();
-            total_form.val(totalForms);
-
-            if (totalForms==0) {$("#id_situation").val(1);}
-        });
-
+      
         //***********************************************************************************************
         //***********************************************************************************************
         //*************************************************************************************************************  
@@ -393,7 +338,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 rowToClone = thisClone.html() ;
 
                 $('#formsetZone').append(rowToClone);
-
                 $('#duplicate').attr("id","duplicate"+total_supportchoices) ;
                 $('#cloningZone').attr("id","cloningZone"+total_supportchoices) ;
                 $('#imager').attr("id","imager"+total_supportchoices) ;
@@ -420,8 +364,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS">');
                 $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS" value="1000" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS">');
 
-
-
+                $('#canvas').attr("data-loop",total_supportchoices )  ;
+                $('#canvas').attr("id", $('#canvas').attr("id")+total_supportchoices )  ;
+                $('#div_canvas').attr("id", $('#div_canvas').attr("id")+total_supportchoices )  ;
 
                 if( $('#imagersub').length ) { 
 
@@ -490,82 +435,36 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         //************************************************************************************************************* 
 
         $('body').on('change', '.choose_imageanswer' , function (event) {
-            var suffix = this.id.match(/\d+/); 
-            previewFile(suffix) ;
+
+            var nb = this.id.match(/\d+/);  
+            const file = $('#id_supportchoices-'+nb+'-imageanswer')[0].files[0];
+            const reader = new FileReader();
+            $("#file-image"+nb).addClass("preview") ;
+            $("#div_canvas"+nb).append('<a href="javascript:void()" id="delete_img'+nb+'" class="btn btn-danger delete_img">Supprimer cette image</a>');
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ; 
+                                                $("#canvas"+nb).css("background-image", "url(" + image + ")"  );
+                                            }) ;
+            if (file) { reader.readAsDataURL(file);}      
          });  
 
 
         $('body').on('click', '.delete_img' , function (event) { 
-                var suffix = this.id.match(/\d+/); 
-                noPreviewFile(suffix) ;
+                var nb = this.id.match(/\d+/); 
+                $("#id_supportchoices-"+nb+"-imageanswer").val('');
+                $("#file-image"+nb).removeClass("preview") ;
+                $("#preview"+nb).addClass("preview") ; 
+                $("#id_supportchoices"+nb+"-imageanswer").removeClass("preview") ;
+                $("#canvas"+nb).css("background-image", "" );
                 $(this).remove(); 
+
             });  
-
-
-        function noPreviewFile(nb) {  
-            $("#id_supportchoices-"+nb+"-imageanswer").val('');
-            $("#id_supportchoices-"+nb+"-imageanswer").attr("src", "" );
-            $("#preview"+nb).val("") ;  
-            $("#file-image"+nb).removeClass("preview") ;
-            $("#preview"+nb).addClass("preview") ; 
-            $("#id_supportchoices"+nb+"-imageanswer").removeClass("preview") ;
-            $("#id_supportchoices-"+nb+"-answer").removeClass("preview") ;
-            $("#imager"+nb).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
-
-          }
-
-        function previewFile(nb) {
-
-            const preview = $('#preview'+nb);
-            const file = $('#id_supportchoices-'+nb+'-imageanswer')[0].files[0];
-            const reader = new FileReader();
-            $("#file-image"+nb).addClass("preview") ;
-            $("#preview"+nb).val("") ;  
-            $("#id_supportchoices-"+nb+"-answer").addClass("preview") ;
-            $("#preview"+nb).removeClass("preview") ; 
-            $("#delete_img"+nb).removeClass("preview") ; 
-            $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
-            $("#imager"+nb).next().append('<a href="javascript:void()" id="delete_img'+nb+'" class="delete_img"><i class="fa fa-trash"></i></a>');
-
-
-            reader.addEventListener("load", function (e) {
-                                                var image = e.target.result ; 
-                                                $("#preview"+nb).attr("src", image );
-                                            }) ;
-
-            if (file) { reader.readAsDataURL(file);}            
-
-          }
 
 
 
         //*************************************************************************************************************  
         // Gestion des sous thèmes
         //************************************************************************************************************* 
-
-
-        // var ntotal_form = $('#id_supportsubchoices-TOTAL_FORMS') ;
-
-
-        // for (n=0;n<ntotalForms;n++){
-
-        //     $('#subformsetZone'+n+" .to-data-loop").each( function( index ) {
-        //               $(this).attr('data-loop',n+"_"+index);
-        //               $(this).attr('id',$(this).attr('id')+n+"_"+index);
-        //               attr_name_tab = $(this).attr('name').split('-');
-        //               $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
-        //             });
-
-        //     $("#subformsetZone"+n+" textarea").each(function(index){ 
-        //         $(this).attr('id',$(this).attr('id')+n+"_"+index);  
-                              
-        //         attr_name_tab  = $(this).attr('name').split('-')
-        //         $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
-
-        //     });
-        // }
 
 
         $(document).on('click', '.add_sub_more', function (event) { 
@@ -597,6 +496,17 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
                 $("#subformsetZone"+loop+" span").attr('data-loop', loop);
 
+                for (var i=0;i<9;i++){
+
+                    classes = ['danger','warning','rose','white','light','success','info','navy','muted'];
+
+                    let selector = $("#this_"+classes[i]);
+                    selector.addClass('this_subloop'+subloop);
+                    selector.attr('data-loop',loop);
+                    selector.attr('data-subloop',subloop);
+                    selector.attr('id',  selector.attr('id')+"-"+loop+"-"+subloop  )
+                }
+
                 var subloop_int = parseInt( subloop )  ;  
                 $('#subloop'+loop).val( subloop_int + 1 );  
                 this_id.val( ntotalForms+ 1 );
@@ -613,6 +523,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             this_id = $("#id_supportchoice-supportchoices-"+loop+"-subchoice-TOTAL_FORMS");
             this_id.val( subloop_int - 1 );
             $(this).parent().parent().parent().remove();
+            $("#div_canvas"+loop).children()[subloop_int-1].remove();
 
         });
 
@@ -665,6 +576,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         //*************************************************************************************************************  
         // FIN DE gestion
         //************************************************************************************************************* 
+
+
 
 
 
@@ -750,6 +663,135 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             )
          });
 
+ 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///// Couleurs des markers
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        var classi = 0 ;
+        $('body').on('click', '.get_color' , function (event) {  
+ 
+            let loop = $(this).data('loop');
+            let subloop = $(this).data('subloop');
+            let classe = $(this).data('classe');            
+            let suffixe = loop+"-"+subloop;
+            let subloop_selector = $('.this_subloop'+loop).find('i')
+
+            subloop_selector.removeClass('fa-2x').removeClass('this_marker');
+            $(this).find('i').addClass('fa-2x').addClass('this_marker');
+
+            let parent = $(this).parent().parent().parent().parent();
+            let old_border = parent.attr('data-classe');
+            parent.removeClass(old_border);
+            parent.addClass('border-'+classe);
+            parent.attr('data-classe','border-'+classe);
+            
+            $('.get_color').removeClass('this_marker_selected');
+            $(this).addClass('this_marker_selected');
+
+         });
+
+ 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   Créer le marker
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+        $(document).on('click', '.image_canvas', function (e) {  
+
+            let selector    = $(".this_marker_selected");
+            let loop        = selector.data('loop'); 
+            let subloop     = selector.data('subloop');                      
+            let this_classe = selector.data("classe") ; 
+
+
+            if ( selector.length)
+            { place_marker( e, this_classe ,loop , subloop ) ; }
+
+        });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////   Supprime la div cliquée
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         $(document).on('click', '.remove', function () {
+                original_id = $(this).data("original_id") ;
+                o_tab =  original_id.split("-");
+                $(this).parent().remove();
+                $("#this_"+original_id).addClass('get_color');
+                $(".this_subloop"+o_tab[2]).addClass('get_color');
+                $("#this_"+original_id).find('i').removeClass('fa-2x');
+                $("#this_"+original_id).parent().parent().parent().parent().removeClass('border-'+o_tab[0]);
+            });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////      Création des annontations  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        function place_marker(event,this_classe,loop,subloop){ 
+
+
+                    // décale l'abscisse selon la position du clic de la souris
+                    let abscisse = event.offsetX; // - 412
+                    
+                    // décale l'ordonnée selon la hauteur du clic de la souris
+                    let ordonnee = event.offsetY - 25   ; //  - 82
+                    
+                    //////////////////////////////////////
+                    ////// Création des annotations //////
+                    //////////////////////////////////////
+                    let marker = "<i class='fa fa-map-marker fa-2x text-"+this_classe+"' data-classe="+this_classe+"></i>" ;
+                    
+                    // Poubelle Effaceur
+                    let original_id = this_classe+"-"+loop+"-"+subloop;
+                    marker = marker+"<a href='javascript:void();' class='pull-right gray remove' data-original_id='"+original_id+"''><i class='fa fa-times' style='font-size:9px'></i></a>";
+                    
+                    // La div crée dans le HTML et son style
+                    let style = "position:absolute;left:"+abscisse+"px; top:"+ordonnee+"px;z-index:99;" ;
+                    
+                    let myDiv = "<div class='marker_draggable' style='"+style+"'>"+marker+"</div>";
+
+                    // Ajout de myDiv à la div via son id  
+                    $('#div_canvas'+loop).append(myDiv) ;
+
+                    console.log('#div_canvas'+loop);
+
+                    // Rend la nouvelle div draggable
+                    $(".marker_draggable").draggable();
+
+                    // Supprime l'activation du marker 
+                    $("#this_"+original_id).removeClass('get_color').removeClass('this_marker_selected');
+                    $("#subformsetZone"+loop+" .this_subloop"+subloop).removeClass('get_color');
+
+                    $("#id_supportchoice-supportchoices-"+loop+"-subchoice-"+subloop+"-answer").val(this_classe+"|"+abscisse+"|"+ordonnee);
+                  } 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////// Déplace le marker
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $( ".marker_draggable " ).draggable({
+                        classes: {
+                          "ui-draggable": "move"
+                        }
+                      });  
+        // Permet de déplacer une annotation après son enregistrement dans la base de donnée
+        $( document ).on('mouseup', ".marker_draggable " , function(event){ 
+
+            original_id = $(this).find("a").data("original_id") ;
+            o_tab =  original_id.split("-");
+
+            let style = $(this).attr('style');
+            let s_tab = style.split(';')
+            let left = s_tab[1]; 
+            let abscisse = left.match(/\d+/);
+            let top  = s_tab[2];
+            let ordonnee =top.match(/\d+/) ;
+            $("#id_supportchoice-supportchoices-"+o_tab[1]+"-subchoice-"+o_tab[2]+"-answer").val(o_tab[0]+"|"+abscisse+"|"+ordonnee);
+
+        }); 
 
 
  
