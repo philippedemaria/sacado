@@ -7901,9 +7901,6 @@ def check_image_answers(request):
 
     supportfile_id = request.POST.get('supportfile_id',0)
 
-    print(answers)
-    print(choice_ids)
-
     data = {}
     old_score  = score
 
