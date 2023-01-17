@@ -33,7 +33,6 @@ urlpatterns = [
 
     path('clone_quizz_sequence/<int:id_quizz>', clone_quizz_sequence, name='clone_quizz_sequence'),
     
-
     path('show_quizz_shared/<int:id>', show_quizz_shared, name='show_quizz_shared'), 
 
     path('tools_to_exercise/<int:id>', tools_to_exercise, name='tools_to_exercise'), 
@@ -153,6 +152,7 @@ urlpatterns = [
     path('duplicate_questions_flash/<int:id>', duplicate_questions_flash, name='duplicate_questions_flash'),
     path('update_questions_flash/<int:id>', update_questions_flash, name='update_questions_flash'),
     path('delete_questions_flash/<int:id>', delete_questions_flash, name='delete_questions_flash'),
+    path('delete_all_questions_flash', delete_all_questions_flash, name='delete_all_questions_flash'), 
     path('show_questions_flash/<int:id>', show_questions_flash, name='show_questions_flash'),
     path('ajax_select_style_questions', ajax_select_style_questions, name='ajax_select_style_questions'), 
  
