@@ -623,7 +623,9 @@ def get_used_in_parcours(obj,teacher):
 def get_parcourses_from_level(obj,teacher): 
     return obj.parcourses_from_level(teacher) 
 
-
+@register.simple_tag  
+def get_question_is_already_used(obj,teacher): 
+    return obj.is_already_used(teacher) 
  
 @register.simple_tag  
 def get_scorek(obj,student): 

@@ -82,15 +82,16 @@
         </a>
     </li>
 
-    {% if nb_groups or request.user.is_superuser %}     
- 
+    {% if nb_groups or request.user.is_superuser %}   
+      
+        {% comment %}
         <li class="dropdown {% if not request.session.tdb and 'qcm/exercises' in request.path and not 'admin' in    request.path %}active{% endif %}">
             <a href="#" class="main"  id="exercises">
                 <i class="bi bi-explicit icon_size"></i> 
                 <div class="captionmenu">Exercices</div>
             </a>
         </li> 
-         
+        {% endcomment %}
          
         <li class="dropdown {% if not request.session.tdb and '/tool' in request.path and not 'admin' in    request.path %}active{% endif %}">
             <a href="#" class="main"  id="tools">
@@ -134,14 +135,14 @@
         </a>
     </li>
     {% endif %}
-  
+    {% if request.user.country_id != 5   %}
         <li class="dropdown {% if not request.session.tdb and '/aefe' in request.path %}active{% endif %}">
             <a href="{% url 'aefe' %}" class="main closer_notification">
                 <i class="bi bi-hdd-rack icon_size"></i> 
                 <div class="captionmenu">aefe</div>
             </a>
         </li>
- 
+    {% endif %}
 
         {%  if communications|length > 0  %}
         <li class="dropdown">

@@ -197,6 +197,24 @@ class Mental(models.Model):
         return data
 
 
+    def is_already_used(self,teacher):
+
+        questions = self.questions.all()
+        date = None
+        for quizz in teacher.teacher_quizz.filter(is_random=1).order_by('-id'):
+            for question in quizz.questions.all():
+                if question in questions :
+                    date = True
+                    break
+            if date : 
+                date = quizz.date_modified
+                break
+        return date
+
+
+
+
+
 class Question(models.Model):
     """ Modèle représentant un associé. """
     title         = models.TextField(  default='',  blank=True, verbose_name="Enoncé")
@@ -390,9 +408,10 @@ class Quizz(ModelWithCode):
     date_modified = models.DateTimeField(auto_now=True)
     color         = models.CharField(max_length=255, default='#5d4391', verbose_name="Couleur")
     
-    levels    = models.ManyToManyField(Level, related_name="quizz", blank=True)
-    themes    = models.ManyToManyField(Theme, related_name="quizz", blank=True)
-    subject   = models.ForeignKey(Subject, related_name="quizz", blank=True, null = True, on_delete=models.CASCADE)
+    levels       = models.ManyToManyField(Level, related_name="quizz", blank=True)
+    themes       = models.ManyToManyField(Theme, related_name="quizz", blank=True)
+    mentaltitles = models.ManyToManyField(Mentaltitle, related_name="quizz", blank=True, editable=False)
+    subject      = models.ForeignKey(Subject, related_name="quizz", blank=True, null = True, on_delete=models.CASCADE)
  
     vignette   = models.ImageField(upload_to=quizz_directory_path, verbose_name="Vignette d'accueil", blank=True, null = True , default ="")
     is_music   = models.BooleanField(default=0, verbose_name="En musique ?")
@@ -470,10 +489,6 @@ class Quizz(ModelWithCode):
         for question in self.questions.all():
             s.add(question.mental)
         return s
-
-
-
-
 
 
 def time_zone_user(user):

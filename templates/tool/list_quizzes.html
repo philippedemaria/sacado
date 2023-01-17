@@ -162,13 +162,30 @@
                             <input type="hidden" id="index_idq" name="idq" />
                             <table class="table table-sacado borderless">
                                 <tr>
-                                    <td>Questions mélangées ?</td>
+                                    <td>Imprimer les savoir faire ciblés ? <small>En début de questionnaire</small></td>
+                                    <td><input type="checkbox" name="is_sf" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
+                                </tr>
+                                <tr>
+                                    <td>Imprimer le corrigé ? <small>Feuille séparée</small></td>
+                                    <td><input type="checkbox" name="is_correction" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
+                                </tr>                                
+                                <tr>
+                                    <td>Mélanger les questions  ?</td>
                                     <td><input type="checkbox" name="is_ranking" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
                                 </tr>
                                 <tr>
-                                    <td>Propositions mélangées ?</td>
+                                    <td>Mélanger les propositions ?</td>
                                     <td><input type="checkbox" name="is_order" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
                                 </tr>
+                                <tr>
+                                    <td>Noter ?</td>
+                                    <td><input type="checkbox" name="is_mark" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
+                                </tr>
+                                <tr>
+                                    <td>Modifier les points par question ?  <small>1 par défaut</small></td>
+                                    <td><input type="number" name="point"  value="1" min="0" />
+                                </tr>
+
                             </table>
                         </div>    
                     </div>

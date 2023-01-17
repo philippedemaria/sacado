@@ -601,7 +601,7 @@
     {% if request.user.is_superuser %}
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
-            <a href="{% url 'sequences' %}"><i class="bi bi-ladder" ></i> Séquences </a>    
+            <a href="{% url 'sequences' %}"><i class="bi bi-ladder" ></i> Séquences<sup class="text-danger">Nouveauté</sup> </a>    
             <a href="{% url 'sequences_archives' %}" class="inside_volet pull-right" title="Mes séquences archivés"><i class="bi bi-archive"></i></a>
             <a href="{% url 'all_parcourses' 2 %}" class="inside_volet pull-right" title="Récupérer une séquence mutualisée"><i class="bi bi-cloud text-danger"></i></a>
             <a href="{% url 'create_sequence' 0 %}" class="inside_volet pull-right" title="Créer une nouvelle séquence"><i class="bi bi-plus-circle"></i></a>
@@ -658,6 +658,31 @@
         </div>
     </div>
     <hr/>
+    {%if request.user.is_superuser %}
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            {% if sacado_asso %}
+            <a href="{%  url 'list_questions_flash' %}"  ><i class="bi bi-lightning" ></i>Questions flash/Rituels<sup class="text-danger">Nouv</sup> </a>
+                <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
+                <a href="{% url 'create_quizz'%}" class="inside_volet pull-right" title="Créer un nouveau quizz"><i class="bi bi-plus-circle"></i></a>
+            {% else %}
+                <a href="#" style="cursor:not-allowed" title="Version établissement requise."><i class="bi bi-lightning" ></i>Questions flash</a>
+            {% endif %}
+        </div>
+    </div>    
+    <hr/>
+    {% endif %}
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'my_own_exercises' %}"><i class="bi bi-explicit"></i> Exercices<sup class="text-danger">Nouveauté</sup> </a> 
+            
+            <a href="#" data-toggle='modal' data-helper_text='custom_exercises'   data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a> 
+            <a href="{% url 'supportfile_creator' 0  %}" class="inside_volet pull-right" title="Créer une nouvel exercice perso"><i class="bi bi-plus-circle"></i></a>
+
+
+        </div>
+    </div>
+    <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             {% if sacado_asso %}
@@ -698,12 +723,20 @@
                 <a href="#" style="cursor:not-allowed" title="Version établissement requise."> <i class="bi bi-stack" ></i> Flashpack</a>
             {% endif %}
         </div>
+    </div>    
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            <a href="{% url 'exercises' %}"><i class="bi bi-explicit-fill"></i> Consulter les exercices</a> 
+        </div>
     </div>
+
+
 </div>
 
 
 
-
+{% comment %}
 <div class="notification-container dismiss" id="notification-exercises">
     <div class="row">
         <div class="col-lg-12 col-xs-12" style="text-align:center;">
@@ -730,6 +763,9 @@
     </div>
 
 </div>
+{% endcomment %}
+
+
 {% endif %}
 
 
@@ -741,15 +777,6 @@
         </div>
     </div>    
     <hr/>
-    {%if request.user.is_superuser %}
-    <div class="row">
-        <div class="col-lg-12 col-xs-12">
-            <a {% if sacado_asso %} href="{%  url 'list_questions_flash' %}" {% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %}  >Questions flash<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text_right" >Les questions flash  ne<br/> sont pas rattachées à un parcours.<br/> Pour cela créer un quizz <br/> depuis un parcours.</div>
-                                </span> </a>
-        </div>
-    </div>
-    {% endif %}
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a {% if sacado_asso %} href="{%  url 'list_diaporama' %}" {% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %}  >Présentations </a>
@@ -1058,6 +1085,25 @@
     </div>
 </div>
 
+<div class="no_visu_on_load" id="helper_qflash_text">
+    
+    <div class="alert">
+        <p>Les <b>Questions flash</b> sont un ensemble de questions courtes pour ancrer les notions, les savoirs et les méthodes. Elles se génèrent en 4 clics <b>automatiquement</b> et à <b>variables aléatoires</b>. 
+            <br/>Il suffit de choisir :
+             <ol>
+                <li>un enseignement </li>
+                <li>le ou les savoir faire spécifiques </li>
+                <li>le nombre de questions </li>
+                <li>le ou les groupes à attribuer </li>
+            </ol>   
+        </p>
+        <p>En 20 secondes, les questions flashs sont proposées et 
+         <ul>
+            <li>prêtes à <b>vidéo projeter au tableau</b></li>
+            <li>utilisables en <b>version numérique</b> sur smatphone, tablette ou ordinateur.</li>
+        </ul>
+    </div>
+</div>
 
 <div class="no_visu_on_load" id="helper_flashpack_text">
  

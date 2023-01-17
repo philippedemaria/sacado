@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% load item_tags %}
 
-
+<div class="form_card"> 
 {% if is_quizz %}
 
     {% for question in all_questions %}
@@ -54,9 +54,7 @@
         </div>
 
     {% endfor %}
- 
-
-{% else %}      
+{% else %}     
 <table class="table table-hover borderless display1000" style="width:100%;" >
     <thead> 
         <tr>
@@ -64,21 +62,26 @@
         </tr>
     </thead> 
     <tbody>
-
         {% for all_mental  in all_mentals %}   
-
-
             <tr class="title_tr">
-                <td style="width:85%"> {{ all_mental.level.name  }}</td> 
+                <td style="width:85%"> {{ all_mental.level.name  }} </td> 
             </tr>
+            
             {% for all_mental_sub  in all_mental.sub %} 
                 <tr class="subtitle_tr opener out"   id="{{ all_mental_sub.mentaltitle.id }}">
-                    <td style="width:85%"><i class="fa fa-caret-right"></i> {{ all_mental_sub.mentaltitle.title }}</td> 
+                    <td style="width:85%"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{ all_mental_sub.mentaltitle.id }}" /> <i class="fa fa-caret-right"></i> {{ all_mental_sub.mentaltitle.title }} </td> 
                 </tr> 
-                {% for m in all_mental_sub.mentaltitle.mentals.all %}
+                {% for m in all_mental_sub.mentals.all %}
+                    {% if m %}
                     <tr style="background:white; cursor: pointer;" class="opener_k opened{{ all_mental_sub.mentaltitle.id }} out no_visu_on_load" >
-                        <td ><label> <input type="checkbox" value="{{m.id }}" name="mental_ids" /> {{ m.content }} </label></td> 
-                    </tr>  
+                        {% get_question_is_already_used m teacher as is_already_used %}
+                        <td >
+                            <label {% if is_already_used.date %} class="text-success" title="Déjà utilisé le {{ is_already_used.date|date:'Y-m-d' }}"{% endif %}  > 
+                                <input type="checkbox" value="{{m.id }}" name="mental_ids"  class="these_items_to_be_selected{{ all_mental_sub.mentaltitle.id }}" /> {{ m.content }}   
+                            </label>
+                        </td> 
+                    </tr> 
+                    {% endif %} 
                 {% endfor %}
             {% endfor %}
         {% empty %}
@@ -93,3 +96,4 @@
     </tbody>
 </table> 
 {% endif %}
+</div>

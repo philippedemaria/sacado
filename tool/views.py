@@ -283,7 +283,7 @@ def all_quizzes(request):
     teacher = request.user.teacher 
 
     user_ids = user_list_of_school(teacher)
-    quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids  ).exclude(teacher = teacher )
+    quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids  , is_random=0  ).exclude(teacher = teacher )
 
     parcours_id = request.session.get("parcours_id",None)  
     if parcours_id :
@@ -303,7 +303,7 @@ def ajax_shared_quizzes(request):
 
     user_ids = user_list_of_school(teacher)
 
-    quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids ).exclude(teacher = teacher )
+    quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids , is_random=0  ).exclude(teacher = teacher )
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None, folder = None )
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
@@ -440,16 +440,16 @@ def ajax_chargethemes_quizz(request):
             for thm_id in thms_id :
                 th = Theme.objects.get(pk=thm_id)
                 #quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1, teacher_id__in = user_ids ).exclude(teacher=teacher)) 
-                quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1 ).exclude(teacher=teacher)) 
+                quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1 , is_random=0 ).exclude(teacher=teacher)) 
         else :
             #quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1, teacher_id__in = user_ids ).exclude(teacher=teacher))  
-            quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1 ).exclude(teacher=teacher))  
+            quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1 , is_random=0 ).exclude(teacher=teacher))  
     else :
         thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
         data['themes'] = list(thms)
  
         #quizzes = Quizz.objects.filter(Q(teacher_id = teacher_id)|Q(teacher_id__in = user_ids), subject_id = id_subject,  is_share = 1 , levels = level ).exclude(teacher=teacher)
-        quizzes = Quizz.objects.filter( subject_id = id_subject,  is_share = 1 , levels = level ).exclude(teacher=teacher)
+        quizzes = Quizz.objects.filter( subject_id = id_subject,  is_share = 1 , levels = level , is_random=0).exclude(teacher=teacher)
         quizz.update( quizzes )          
 
     data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })
@@ -461,7 +461,7 @@ def list_quizzes(request):
 
     request.session["parcours_id"] = False
     teacher = request.user.teacher 
-    quizzes = teacher.teacher_quizz.filter(is_archive=0 , folders=None) # non inclus dans un dossier
+    quizzes = teacher.teacher_quizz.filter(is_archive=0 , folders=None, is_random=0) # non inclus dans un dossier
     folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=0).exclude(folders=None).distinct().order_by("levels","folders")#  inclus dans un dossier
  
     delete_session_key(request, "quizz_id")
@@ -469,7 +469,7 @@ def list_quizzes(request):
     for folder in folders :
         quizzes_folders = dict()
         quizzes_folders["folder"] = Folder.objects.get(pk=folder)
-        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=0 , folders=folder).order_by("levels") 
+        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=0 , folders=folder, is_random=0).order_by("levels") 
         list_folders.append(quizzes_folders)
  
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -487,13 +487,13 @@ def all_quizzes_archived(request):
 
 
     teacher = request.user.teacher 
-    quizzes = teacher.teacher_quizz.filter(is_archive=1 , folders=None) # non inclus dans un dossier
+    quizzes = teacher.teacher_quizz.filter(is_archive=1 , folders=None, is_random=0) # non inclus dans un dossier
     folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=1).exclude(folders=None).distinct().order_by("levels","folders")#  inclus dans un dossier
     list_folders = list()
     for folder in folders :
         quizzes_folders = dict()
         quizzes_folders["folder"] = Folder.objects.get(pk=folder)
-        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder).order_by("levels") 
+        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder, is_random=0).order_by("levels") 
         list_folders.append(quizzes_folders)
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
@@ -746,7 +746,7 @@ def peuplate_quizz_parcours(request,idp):
     teacher = request.user.teacher
     parcours = Parcours.objects.get(id=idp)
 
-    quizzes = Quizz.objects.filter(parcours=parcours)
+    quizzes = Quizz.objects.filter(parcours=parcours , is_random=0)
 
 
     context = {'parcours': parcours, 'teacher': teacher , 'quizzes' : quizzes, 'type_of_document' : 2 }
@@ -764,12 +764,12 @@ def ajax_find_peuplate_sequence(request):
 
     if keyword and level_id :
         level = Level.objects.get(pk=level_id)
-        quizzes = Quizz.objects.filter(  Q(teacher__user=request.user)|Q(is_share =  1) ,title__icontains=keyword, teacher__user__school = request.user.school , subject_id=subject_id,levels=level,is_numeric=1  )
+        quizzes = Quizz.objects.filter(  Q(teacher__user=request.user)|Q(is_share =  1) ,title__icontains=keyword, teacher__user__school = request.user.school , subject_id=subject_id,levels=level,is_numeric=1 , is_random=0  )
     elif keyword :
-        quizzes = Quizz.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword, teacher__user__school = request.user.school, subject_id=subject_id, is_numeric=1  )
+        quizzes = Quizz.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword, teacher__user__school = request.user.school, subject_id=subject_id, is_numeric=1  , is_random=0 )
     else :
         level = Level.objects.get(pk=level_id)
-        quizzes = Quizz.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , teacher__user__school = request.user.school , subject_id=subject_id,levels=level,is_numeric=1 )
+        quizzes = Quizz.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , teacher__user__school = request.user.school , subject_id=subject_id,levels=level,is_numeric=1  , is_random=0)
     
     context = { "quizzes" : quizzes }
 
@@ -1870,10 +1870,14 @@ def quizz_unarchive(request):
 
 def print_quizz_to_pdf(request):
 
+    idq           = request.POST.get("idq",None)
+    is_ranking    = request.POST.get("is_ranking",None) 
+    is_order      = request.POST.get("is_order",None)
+    is_marker     = request.POST.get("is_mark",None) 
+    is_sf         = request.POST.get("is_sf",None)
+    is_correction = request.POST.get("is_correction",None) 
+    point         = request.POST.get("point",None)
 
-    idq        = request.POST.get("idq",None)
-    is_ranking = request.POST.get("is_ranking",None) 
-    is_order   = request.POST.get("is_order",None)
     if not idq :
         return redirect('list_quizzes')
 
@@ -1890,17 +1894,38 @@ def print_quizz_to_pdf(request):
     question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
     if not quizz.is_ranking : random.shuffle(question_ids)
     elements += r"\\"
+ 
+    if is_sf :
+        elements += r"\begin{description}"
+        for sf in quizz.mental_activities():
+            elements += r" \savoirs{ " +  sf.content + r"}"
+        elements += r"\end{description}" 
+
+
     i=1
     letters = ["A","B","C","D","E","F","G","H","I","J","K"]
     for question_id in question_ids :
         question = Question.objects.get(pk=question_id)
-        elements += r"\exo {\bf }" +question.title+r"\hfill{"+str(question.point)+r" points}\\"
+
+        if is_marker :
+            if point and int(point) <= 1 : point_str = "point"
+            else : point_str = "points"
+            elements += r"\exo {\bf }" +question.title+r"\hfill{"+str(point)+" "+point_str+r"}\\"
+        elif quizz.is_mark :    
+            elements += r"\exo {\bf }" +question.title+r"\hfill{"+str(question.point)+r" points}\\"
+        else :
+            elements += r"\exo {\bf }" +question.title
+
         if question.imagefile :
             elements += r"\includegraphics[scale=1]{"+question.imagefile.url+r"}"
-        
-        if question.qtype > 2 :
+
+        if question.qtype == 2 :
+            elements += r"\vspace{0,2cm}\\"
+            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
+        elif question.qtype > 2 :
             if  question.qtype == 3 : elements += r"\textit{Vous devez cocher les réponses qui vous semblent bonnes.}"
-            else : elements += r"\textit{Vous devez cocher la réponse qui vous semble bonne.}" 
+            elif  question.qtype == 4 : elements += r"\textit{Vous devez cocher la réponse qui vous semble bonne.}" 
             elements += r"\begin{description}"
             choice_ids = list(question.choices.values_list("id",flat=True))
             if not is_order :
@@ -1917,11 +1942,6 @@ def print_quizz_to_pdf(request):
             elements += r"\vspace{0,2cm}\\"
             elements += r" \hrule  "
             elements += r"\vspace{0,2cm}\\"
-        elif  question.qtype == 2 :
-            elements += r"\textit{Vous devez répondre à la question posée.}"
-            elements += r"\vspace{0,2cm}\\"
-            elements += r" \hrule  "
-            elements += r"\vspace{0,2cm}\\"
         else :
             elements += r"\textit{Vous devez cocher la réponse qui vous semble bonne.}"
             elements += r"\begin{description}"
@@ -1933,6 +1953,16 @@ def print_quizz_to_pdf(request):
             elements += r"\vspace{0,2cm}\\"
         i+=1
     elements += r"\vspace{0,4cm}\\"
+    if is_correction :
+        elements += r"\newpage "
+        elements +=r"\titreFiche{Correction}"
+        j = 1   
+        for question_id in question_ids :
+            question = Question.objects.get(pk=question_id)
+            elements += r"\textbf{Exercice "+str(j)+r".} \\" + question.writinganswer
+            elements += r"\vspace{0,2cm}\\"
+            j+=1
+
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
 
@@ -2772,10 +2802,9 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
             if i == noq  : break
                 
     shuffle(list_of_ids) # la liste des ids des questions flash
-
+    mentaltitles = set()
     for mental_id in list_of_ids :
         mental = Mental.objects.get(pk=mental_id)
-        #title, answer = mental.script alea_content(mental_id)
         variables  = dict()
         exec(mental.script,globals(),variables)
         title    = variables['title']
@@ -2783,6 +2812,10 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
         wanswer  = variables['wans']
         question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer)
         quizz.questions.add(question)
+        mentaltitles.add(mental.mentaltitle)
+
+    return mentaltitles
+
 
 
 
@@ -2791,12 +2824,13 @@ def create_quizz_random(request,id):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     noq = int(request.POST.get('noq',quizz.nb_slide)) 
+    quizz = Quizz.objects.filter(pk=quizz.id).update(nb_slide = noq )
 
     mental_ids = request.POST.getlist("mental_ids",None)
     if len(mental_ids) :
-        create_questions_flash_random_variable(mental_ids, quizz, noq)
+        mentaltitles = create_questions_flash_random_variable(mental_ids, quizz, noq)
+        quizz.mentaltitles.set( mentaltitles )
 
-    Quizz.objects.filter(pk=quizz.id).update(nb_slide = noq )
     return redirect('list_quizzes' )
 
 
@@ -3412,7 +3446,16 @@ def list_questions_flash(request):
     teacher = request.user.teacher 
     quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, folders=None).order_by("levels","-id") # non inclus dans un dossier, 
     delete_session_key(request, "quizz_id")
-    return render(request, 'tool/list_questions_flash.html', { 'quizzes': quizzes , 'teacher': teacher })
+
+    grps = teacher.groups.filter(is_hidden=0)
+    shared_grps_id = teacher.teacher_sharingteacher.values_list("group_id", flat=True) 
+    sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
+    groupes =  grps | sgps
+    groups  = groupes.order_by("level__ranking") 
+
+
+
+    return render(request, 'tool/list_questions_flash.html', { 'quizzes': quizzes , 'teacher': teacher , 'groups': groups })
 
 
 
@@ -3428,18 +3471,19 @@ def create_questions_flash(request,id):
             nf.teacher = teacher
             nf.is_questions = 1
             nf.is_random = 1
-            if nf.is_video == 0 : nf.is_numeric = 1
             nf.is_archive = 0
             nf.save()
             form.save_m2m()
+
             for group_id in request.POST.getlist("groups") :
                 group = Group.objects.get(pk=group_id)
                 nf.students.set(group.students.all())
 
             mental_ids = request.POST.getlist("mental_ids",None)
             if len(mental_ids) :
-                create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
-                    
+                mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
+                nf.mentaltitles.set( mentaltitles )  
+
             return redirect('list_questions_flash')
         else:
             print(form.errors)
@@ -3476,7 +3520,8 @@ def update_questions_flash(request,id):
 
             mental_ids = request.POST.getlist("mental_ids",None)
             if len(mental_ids) :
-                create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide )
+                mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
+                nf.mentaltitles.set( mentaltitles )  
                     
             return redirect('list_questions_flash')
         else:
@@ -3498,7 +3543,9 @@ def duplicate_questions_flash(request,id):
     quizz.code = str(uuid.uuid4())[:8]
     quizz.save()
     if len(mental_ids) :
-        create_questions_flash_random_variable(mental_ids, quizz, quizz.nb_slide)
+        mentaltitles = create_questions_flash_random_variable(mental_ids, quizz, quizz.nb_slide)
+        nf.mentaltitles.set( mentaltitles ) 
+
     return redirect('list_questions_flash')
 
 
@@ -3526,7 +3573,26 @@ def delete_questions_flash(request,id):
         if question.quizz.count()==1:
             question.delete()
     quizz.delete()
+    messages.success(request,'Questions flash Supprimée.')
     return redirect('list_questions_flash')
+
+
+
+@login_required(login_url= 'index')
+def delete_all_questions_flash(request):
+
+    selected_checkboxes = request.POST.getlist('selected_checkbox',[])
+    teacher = request.user.teacher
+    for selected_checkbox in selected_checkboxes :
+        quizz = Quizz.objects.get(pk = selected_checkbox, teacher = teacher)
+        questions = quizz.questions.all()
+        for question in questions :
+            if question.quizz.count()==1:
+                question.delete()
+        quizz.delete()
+    messages.success(request,'Questions flash Supprimée.')
+    return redirect('list_questions_flash')
+
 
 
 
@@ -3535,12 +3601,11 @@ def ajax_select_style_questions(request):
     subject_id = request.POST.get('subject_id',None)
     level_ids  = request.POST.getlist('level_ids',[])
     is_questions_quizz = request.POST.get('is_questions_quizz',None)
-
+    teacher = request.user.teacher
     data = {}
  
     if is_questions_quizz and level_ids and is_questions_quizz == "true" :
         is_quizz = True
-        teacher = request.user.teacher
         quizzes = set()
         for level_id in level_ids :
             level = Level.objects.get(pk=level_id)
@@ -3549,7 +3614,7 @@ def ajax_select_style_questions(request):
         for quizz in quizzes:
             if quizz.questions.count() :
                 all_questions.update(quizz.questions.all())
-        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_questions' : all_questions , 'is_quizz' : is_quizz  })
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_questions' : all_questions , 'is_quizz' : is_quizz , 'teacher' :  teacher })
     else :
         is_quizz = False
         all_mentals = list()
@@ -3561,14 +3626,18 @@ def ajax_select_style_questions(request):
             list_mentals = list()
             for mentaltitle in mentaltitles :
                 dict_mentals = dict()
-                dict_mentals["mentaltitle"] = mentaltitle 
-                mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking") 
-                dict_mentals["mentals"] = mentals
-                list_mentals.append(dict_mentals)
-            level_dict["sub"] = list_mentals
+                mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+                is_mentals = False 
+                if mentals :
+                    dict_mentals["mentaltitle"] = mentaltitle 
+                    dict_mentals["mentals"] = mentals
+                    list_mentals.append(dict_mentals)
+                    is_mentals = True
+                    level_dict["sub"] = list_mentals
         all_mentals.append(level_dict)
 
-        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  })
+
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  , 'teacher' :  teacher  })
 
     return JsonResponse(data)
 

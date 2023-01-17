@@ -16,13 +16,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#id_is_ranking').prop('checked', false); 
         $('#id_is_shuffle').prop('checked', false); 
         $('#id_is_back').prop('checked', false);
-        $('#id_is_result').prop('checked', false);
-
+        $('#id_is_result').prop('checked', true);
+        $('#id_is_share').prop('checked', false);
         
-        $('#id_is_numeric').on('change', function (event) {
-            $('.div_is_mark').toggle(300) ;
-            $('#is_video_div').toggle(300) ;
-        });
+        // $('#id_is_numeric').on('change', function (event) {
+        //     $('.div_is_mark').toggle(300) ;
+        //     $('#is_video_div').toggle(300) ;
+        // });
 
         $('#id_is_result').on('change', function (event) {
 
@@ -37,10 +37,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#id_is_publish').on('change', function (event) {
             $('.div_time').toggle(300) ; 
         });
-
- 
-
-
 
         $('.opener_k').hide() ;
         $('.opener_e').hide() ;
@@ -106,12 +102,17 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let level_ids  = $("#id_levels").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            if (!(level_ids)){ alert('Selectionner au moins un niveau.'); return false;}
+
             if ($("#is_questions_quizz").is(":checked")) {
                             is_quizz = true ;
                         } else {
                             is_quizz = false ;
                         }
  
+
+            $("#question_choice_style").html("<i class='fa fa-spinner fa-pulse fa-fw fa-3x'></i>"); 
+
             if(subject_id==''){ alert("Renseigner l'enseignement"); $('#is_questions_quizz').prop('checked', false); }
 
             $.ajax(
@@ -128,12 +129,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     url: "../ajax_select_style_questions",
                     success: function (data) {
 
-                        $('#question_choice_style').html(data.html);
- 
+                        $('#question_choice_style').html("").html(data.html);
+  
                     }
                 }
             )
          });
+
+
+
+
+
+
+
+
 
     });
 });
