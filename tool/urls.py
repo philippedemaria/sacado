@@ -157,6 +157,9 @@ urlpatterns = [
     path('ajax_select_style_questions', ajax_select_style_questions, name='ajax_select_style_questions'), 
  
 
+    path('list_questions_flash_student', list_questions_flash_student, name='list_questions_flash_student'), 
+
+
     ################################################################################################################ 
     ############## Play
     ################################################################################################################ 

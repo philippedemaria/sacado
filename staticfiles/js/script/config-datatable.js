@@ -30,6 +30,16 @@ $('.ordering_tab_1000').dataTable( {
 } );
 
 
+
+ 
+$('.ordering_tab_1000_1_reverse').DataTable({
+        order: [[1, 'desc']],
+    });
+ 
+
+
+
+
 $('#standard_tab').dataTable( {
     "order": [],
     "pageLength": 50,

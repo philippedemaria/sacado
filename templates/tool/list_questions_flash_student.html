@@ -1,0 +1,94 @@
+{% extends 'tool/list_quizz_student.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+ 
+{% block page_title %}
+        <a href="{% url 'index' %}" ><i class="bi bi-lightning"></i> Les Questions flash</a> 
+{% endblock %}
+
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+{% block table_list %}
+
+        <table class="table table-sacado table-hovered ordering_tab_1000_1_reverse"  style="position:relative; width:100%" >
+            <thead> 
+                <tr> 
+                    <th style="width:100px">Enseignement</th>
+                    <th style="width:100px">Date</th>        
+                    <th style="width:80px">Code</th>
+                    <th>Titre</th>
+                    <th>Actions</th>
+                    <th>Correction </th>
+                </tr> 
+            </thead>
+            <tbody>
+                {% for quizz in quizzes %}
+                <tr> 
+
+                    <td> 
+                       <span style="color:{{ quizz.subject.color }}">{{ quizz.subject.shortname }}</span>
+                    </td>
+                    <td> 
+                       {{ quizz.date_modified|date:"Y-m-d" }}
+                    </td>
+                    <td> 
+                       {{ quizz.code }}
+                    </td>
+                    <td  style="position: relative;height:90px">
+                        {{ quizz.title }}<br/>
+                        <small> 
+                        {% if quizz.is_random %}
+                            {{ quizz.nb_slide }}
+                        {% else %}
+                            {{ quizz.questions.all|length }}
+                        {% endif  %} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</small>
+                        {% if quizz.vignette %}
+                            <img src="{{ quizz.vignette.url }}" width="110px" style="position: absolute; bottom:5px; right:5px;" />
+                        {% endif %}
+                        <br/> 
+                        <small>{{ quizz.duration|time_done }}</small>
+                    </td>
+                    <td>
+                       {% if  quizz.quizz.is_video %}
+                            <a href="{% url 'play_quizz_student'  %}" class="btn btn-sacado btn-xs"><i class="bi bi-phone"></i> Commencer</a><br/><small> Mode jeu projeté</small> 
+                       {% elif quizz.is_numeric and not quizz.is_video %}
+                            <a href="{% url 'goto_quizz_student' quizz.id  %}" class="btn btn-sacado btn-xs"><i class="bi bi-play"></i> Démarrer</a>
+                            <a href="#" class="btn btn-default btn-xs show_my_quizz_result" data-toggle='modal'  data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Mes réponses</a>
+                            <br/><span  class="text-blue"> Réponse sur terminal</span>
+                        {% else %}
+                            <a href="{% url 'show_quizz' quizz.id  %}" class="btn btn-sacado btn-xs"><i class="bi bi-pen"></i> Démarrer</a><br/>
+                            <span class="text-orange">  Réponse sur papier</span>  
+                        {% endif %} 
+                    </td>
+                    <td>
+                        {% if quizz.is_result and not quizz.is_random %}
+                            <small><a href="#" data-toggle='modal' class="show_my_quizz_result" data-target='#my_quizz_results' data-quizz="{{ quizz.id }}">Lire</a></small>
+                        {% elif not quizz.is_random %}
+                            <small class="text-danger">Votre enseignant n'a pas encore<br/> publié les réponses</small>
+                        {% endif %}
+                    </td>
+
+
+
+
+
+
+
+
+
+                </tr> 
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %} 
+
+ 
+
+            

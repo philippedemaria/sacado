@@ -256,7 +256,6 @@ def student_dashboard(request,group_id):
     relationships_in_late  = relationships_in_base.filter(date_limit__lt=today).order_by("date_limit")
     relationships_in_tasks = relationships_in_base.filter(date_limit__gte=today).order_by("date_limit")
 
-
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  

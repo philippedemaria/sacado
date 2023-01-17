@@ -1172,6 +1172,20 @@ input:invalid:focus {
 .text-white{
   color :#F0F0F0;
 }
+
+.text-mauve{
+  color :#A383D9;
+}
+
+.text-orange{
+  color :#FF8B69;
+}
+
+.text-blue{
+  color :#007BC9;
+}
+
+
  
 .border-info{
   border :2px solid #1feae7;

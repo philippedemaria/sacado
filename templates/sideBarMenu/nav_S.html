@@ -75,8 +75,8 @@ active
 </li>
 --> 
 
-{% if not request.user.is_in_academy %}
-<li  class="dropdown  {% if '/tool' in request.path %} active{% endif %}">
+{% if nb_quizz  %}
+<li  class="dropdown  {% if 'quizz' in request.path %} active{% endif %}">
     <a href="{% url 'list_quizz_student' %}" class="main" >
         <i class="bi bi-aspect-ratio icon_size"></i> 
         <div class="captionmenu">Quizz</div>
@@ -84,21 +84,22 @@ active
 </li>
 {% endif %}
 
+{% if nb_qflash %}
+<li  class="dropdown  {% if 'questions_flash' in request.path %} active{% endif %}">
+    <a href="{% url 'list_questions_flash_student' %}" class="main" >
+        <i class="bi bi-lightning icon_size"></i> 
+        <div class="captionmenu">Q flash</div>
+    </a>
+</li> 
+{% endif %}
 
+
+
+{% if nb_flashpacks %}
 <li  class="dropdown  {% if '/flashpack' in request.path %} active{% endif %}">
     <a href="{% url 'flashpacks' %}" class="main" >
         <i class="bi bi-layers icon_size"></i> 
         <div class="captionmenu">Flashpack</div>
     </a>
 </li> 
-
-{% comment %} 
-{% if request.user.is_in_academy %}   
-<li  class="dropdown  {% if '/academy' in request.path %} active{% endif %}">
-    <a href="{% url 'autotests' %}" class="main" >
-        <i class="bi bi-question-circle icon_size"></i> 
-        <div class="captionmenu">Auto-test</div>
-    </a>
-</li> 
-{% endif %}  
-{% endcomment %}  
+{% endif %}

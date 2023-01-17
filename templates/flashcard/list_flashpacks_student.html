@@ -19,10 +19,7 @@
 
 
 {% block page_menu_right %}
-
-    {% if request.user.is_in_academy %}
-        <a href="{% url 'create_flashpack_academy' 0 %}" class="btn btn-new-violet">Créer un flashpack</a>
-    {% endif %}
+ 
 
 {% endblock %}
 

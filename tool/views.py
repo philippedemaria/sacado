@@ -1486,7 +1486,7 @@ def list_quizz_student(request):
     for g in student.students_to_group.all() : 
         teacher_user = g.teacher.user
         today = time_zone_user(teacher_user)
-        quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today)))
+        quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today) ,is_random=0))
 
     context = { 'quizzes' : quizzes , }
     return render(request, 'tool/list_quizz_student.html', context)
@@ -3452,10 +3452,28 @@ def list_questions_flash(request):
     sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
     groupes =  grps | sgps
     groups  = groupes.order_by("level__ranking") 
-
-
-
     return render(request, 'tool/list_questions_flash.html', { 'quizzes': quizzes , 'teacher': teacher , 'groups': groups })
+
+
+
+
+@login_required(login_url= 'index')
+def list_questions_flash_student(request):
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    student = request.user.student
+    tracker_execute_exercise(False, request.user)
+    delete_session_key(request, "quizz_id")
+    quizzes = set()
+    for g in student.students_to_group.all() : 
+        teacher_user = g.teacher.user
+        today = time_zone_user(teacher_user)
+        quizzes.update(g.quizz.filter(Q(is_publish = 1)| Q(start__lte= today, start__gte= today) ,is_random=1))
+
+    context = { 'quizzes' : quizzes , }
+    return render(request, 'tool/list_questions_flash_student.html', context)
+
+
 
 
 

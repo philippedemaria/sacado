@@ -136,6 +136,11 @@ def menu(request):
 
             url_helper =  "helpers/no_helper.html"
 
+            nb_flashpacks = student.flashpacks.count()
+            quiz = student.quizz.all()
+            nb_quizz      = quiz.filter(is_random=0,is_archive=0).count()
+            nb_qflash     = quiz.filter(is_random=1,is_archive=0).count()
+
             return {
                 'is_gar_check' : is_gar_check,
                 'student': student,
@@ -143,7 +148,8 @@ def menu(request):
                 'group' : group , 'url_helper' : url_helper ,
                 'groups' : groups,
                 'teacher_to_student' : teacher_to_student ,   
-                'index_tdb' : False , 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color ,          
+                'index_tdb' : False , 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color ,  
+                'nb_flashpacks' : nb_flashpacks , 'nb_quizz' : nb_quizz , 'nb_qflash' : nb_qflash ,     
             }
 
         elif request.user.is_parent:
