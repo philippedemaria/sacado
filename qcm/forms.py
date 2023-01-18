@@ -44,26 +44,26 @@ class ParcoursForm(forms.ModelForm):
 
 			try : 
 				#shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level, subject = group.subject)
-				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level)
+				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level,is_hidden=0)
 			except :
-				shared_groups = teacher.teacher_group.all()
+				shared_groups = teacher.teacher_group.filter(group__is_hidden=0)
 			
 			if folder and group :
 				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)				
-				groups      = folder.groups.filter(level=folder.level,group_folders=folder)
+				groups      = folder.groups.filter(level=folder.level,group_folders=folder,is_hidden=0)
  
 			elif folder :
 
 				all_folders = teacher.teacher_folders.filter(level = folder.level, subject = folder.subject,is_trash=0)				
-				groups      = folder.groups.filter(level=folder.level,group_folders=folder)
+				groups      = folder.groups.filter(level=folder.level,group_folders=folder,is_hidden=0)
 
 			elif group :
 				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)		
-				groups      = teacher.groups.filter(level=group.level )
+				groups      = teacher.groups.filter(level=group.level,is_hidden=0 )
 
 			else :
 				all_folders = teacher.teacher_folders.filter(is_trash=0)	
-				groups      = teacher.groups.all()
+				groups      = teacher.groups.filter(is_hidden=0 )
 
 
 			these_groups  = groups|shared_groups
@@ -99,8 +99,8 @@ class Parcours_GroupForm(forms.ModelForm):
 		super(Parcours_GroupForm, self).__init__(*args, **kwargs)
  
 		if teacher:
-			groups        = teacher.groups.all()
-			shared_groups = teacher.teacher_group.all()
+			groups        = teacher.groups.filter(is_hidden=0 )
+			shared_groups = teacher.teacher_group.filter(is_hidden=0)
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers")
 			self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
@@ -118,13 +118,13 @@ class FolderForm(forms.ModelForm):
 		super(FolderForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 		if teacher and level and subject:
-			groups        = teacher.groups.filter(level = level , subject = subject)
-			shared_groups = teacher.teacher_group.filter(level = level , subject = subject)
+			groups        = teacher.groups.filter(level = level , subject = subject,is_hidden=0)
+			shared_groups = teacher.teacher_group.filter(level = level , subject = subject,is_hidden=0 )
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teacher")
 		else :
-			groups        = teacher.groups.all()
-			shared_groups = teacher.teacher_group.all()
+			groups        = teacher.groups.filter( is_hidden=0 ) 
+			shared_groups = teacher.teacher_group.filter( is_hidden=0 )
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teacher")
 		
