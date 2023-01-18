@@ -46,7 +46,7 @@ class ParcoursForm(forms.ModelForm):
 				#shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level, subject = group.subject)
 				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level,is_hidden=0)
 			except :
-				shared_groups = teacher.teacher_group.filter(group__is_hidden=0)
+				shared_groups = teacher.teacher_group.filter(is_hidden=0)
 			
 			if folder and group :
 				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)				
