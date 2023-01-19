@@ -658,20 +658,6 @@
         </div>
     </div>
     <hr/>
-    {%if request.user.is_superuser %}
-    <div class="row">
-        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
-            {% if sacado_asso %}
-            <a href="{%  url 'list_questions_flash' %}"  ><i class="bi bi-lightning" ></i>Questions flash/Rituels<sup class="text-danger">Nouv</sup> </a>
-                <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
-                <a href="{% url 'create_quizz'%}" class="inside_volet pull-right" title="Créer un nouveau quizz"><i class="bi bi-plus-circle"></i></a>
-            {% else %}
-                <a href="#" style="cursor:not-allowed" title="Version établissement requise."><i class="bi bi-lightning" ></i>Questions flash</a>
-            {% endif %}
-        </div>
-    </div>    
-    <hr/>
-    {% endif %}
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'my_own_exercises' %}"><i class="bi bi-explicit"></i> Exercices<sup class="text-danger">Nouveauté</sup> </a> 
@@ -782,6 +768,22 @@
             <a {% if sacado_asso %} href="{%  url 'list_diaporama' %}" {% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %}  >Présentations </a>
         </div>
     </div>
+    <hr/>
+    {%if request.user.is_superuser %}
+    <div class="row">
+        <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
+            {% if sacado_asso %}
+            <a href="{%  url 'list_questions_flash' %}"  ><i class="bi bi-lightning" ></i>Questions flash/Rituels<sup class="text-danger">Nouv</sup> </a>
+                <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
+                <a href="{% url 'create_quizz'%}" class="inside_volet pull-right" title="Créer un nouveau quizz"><i class="bi bi-plus-circle"></i></a>
+            {% else %}
+                <a href="#" style="cursor:not-allowed" title="Version établissement requise."><i class="bi bi-lightning" ></i>Questions flash</a>
+            {% endif %}
+        </div>
+    </div>    
+    <hr/>
+    {% endif %}
+
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a {% if sacado_asso %} href="{%  url 'list_visiocopie' %}" {% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %} >VisioCopies  </a><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
@@ -791,7 +793,7 @@
     </div>
 
     <hr/>
-    <a href="{% url 'list_tools' %}" class="thin"  ><small> Outils projetables </small> </a>
+    <a href="{% url 'list_tools' %}" class="thin"  > Outils projetables  </a>
         <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                     <div class="helper_tip_text_right" >Choisir vos outils <br/>vidéoprojetables <br/>interactifs </div>
         </span>
