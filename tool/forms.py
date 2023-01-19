@@ -185,7 +185,6 @@ class QFlashForm(forms.ModelForm):
  
 
 
-
 class ChoiceForm(forms.ModelForm):
 	class Meta:
 		model = Choice

@@ -8,6 +8,13 @@ import re
 
 
 @register.filter
+def add_loop(arg, loop):
+    '''Rajoute un argument à une fonction'''
+    return arg[:-1]+","+str(loop)+")"
+
+
+
+@register.filter
 def no_iframe(arg):
     '''HTML entity decode'''
     arg = arg.replace('<iframe','___#iframe#___')
@@ -64,8 +71,6 @@ def splitter(arg):
         except :
             pass
     return new
-
-
 
 
 @register.filter

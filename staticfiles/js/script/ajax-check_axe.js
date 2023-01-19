@@ -28,7 +28,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 //*************************************************************************************************************  
 // Récupération des réponses
 //************************************************************************************************************* 
-
     $(document).on('change', ".selected_answer" , function () { 
 
         let csrf_token     = $("input[name='csrfmiddlewaretoken']").val();
@@ -128,11 +127,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             for (i=0;i< topz ;i++) { 
 
-                c=document.getElementById("carte"+i.toString());
-                if (i==0) {var rect = c.getBoundingClientRect();}
-                c.style.top = 140+yoffset + (i)*50 + "px";
-                c.style.left =xoffset + (i)*50 + "px";
-                c.style.zIndex=i;
+                c=$("#carte"+i.toString());
+                c.css('top', 140+yoffset + (i)*50 + "px");
+                c.css('left', xoffset + (i)*50 + "px");
+                c.css('zIndex', i);
                 cartes.push(c);
                 AssociationEvnt(cartes[i]);
             }

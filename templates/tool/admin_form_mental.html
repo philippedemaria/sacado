@@ -127,6 +127,31 @@
                 {{ form.html }}
                 {{ form.html.errors }}
                 <span class="formula">\$ \input[name][4em]{valeur par défaut} \$</span> <small>pour utiliser des input dans les formules LaTeX. Utiliser le séparateur de variable _##_ dans le code Python</small>
+                <div class="form-group">
+                    <label>Dessin ? : <small><a href="javascript:void()" id="select_parcours_div">Choix possibles :</a> </small> </label>                 
+                    {{ form.jquery|add_class:"form-control" }}
+                    {{ form.jquery.errors }}
+                    
+                    <div id="parcours_div">
+                        <table class="table">
+                            <tr>
+                                <td>abscisse(o,e,g,s,p,a)</td><td><b>o</b>rigine, <b>e</b>xtremité, <b>g</b>raduation, <b>s</b>ubdivision , <b>a</b>ffichage :0,1</td>
+                            </tr>
+                            <tr>
+                                <td>pythagore(a)</td><td>0 : aléatoire </td>
+                            </tr>
+                            <tr>
+                                <td>thales(a)</td><td>0 : aléatoire , 1 : voile , 2 papillon</td>
+                            </tr>
+                            <tr>
+                                <td>pizza(n,d)</td><td><b>n</b>umérateur, <b>d</b>énominateur</td>
+                            </tr>
+                            <tr>
+                                <td>chocolat(n,d,f)</td><td><b>n</b>umérateur, <b>d</b>énominateur , <b>f</b>ormat : nombre de carreaux par ligne <small>f=d si 0</small></td>
+                            </tr>
+                        </table> 
+                    </div>
+                </div>
             </div>
             <div class="col-sm-6 form-group">
                 <label>Code Python : <small><span class="formula_answer">answer</span> en fonction des variables utilisées dans le code html/TeX. Séparateur de variable : _##_ </small></label>                

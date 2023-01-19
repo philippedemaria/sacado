@@ -10,7 +10,7 @@
 
     {% if quizz.is_result and not quizz.is_result_final %}
     <script>
-        require(['script/quizz-slider_correction']);
+        require(['script/quizz-slider_correction','script/geometry']);
     </script> 
     {% else %}
     <script>
@@ -38,8 +38,6 @@
     {% endif %}
 
 {% endblock %}
-
-
 
 
 
@@ -141,9 +139,15 @@
                             </div> 
                             <div class="row">  
                                 <div class="col-sm-12 col-md-12" align="center">
+
+
                                     {% block question_title %}
                                     <h1 style="{% if not question.imagefile and not question.audio and not question.video %}padding-top: 100px;{% endif %}font-size:{% if question.size %}{{ question.size }}{% else %}4em{% endif %}" class="thin"> {{ question.title }} </h1>
                                     {% endblock %}
+
+
+
+
                                 </div>
                             </div> 
      
@@ -354,13 +358,16 @@
                                 {% endif %}
                         {% endfor %}
                     </li>
-
                 {% endif %}
-
-
-
             </ul>
         </div>
     </div>
- 
+
+
 {% endblock %} 
+
+
+
+{% block python %}
+ 
+{% endblock %}
