@@ -58,6 +58,12 @@ a.all_proposed_types_exercises:hover{
 }
 
 
+.helper_tip_text{
+   cursor:help;
+}
+
+
+
 @media (max-width:991px){
   
   .search_bar{

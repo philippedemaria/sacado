@@ -300,16 +300,11 @@ function abscisse(start,end,tick,subtick,aff,index){
     }
     ctx.stroke();
     ctx.closePath();
-    //let p = 150 + Math.floor(Math.random()*60*w/end)*10;
 	var n = (end-start)/sbtck;	
 	var m = start + Math.floor(Math.random()*n);
 	p = 150 +  600*(m-start)/n ;
-
     ctx.fillStyle = 'red';
     ctx.beginPath();
-
-    // ctx.moveTo(p,140);
-    // ctx.lineTo(p,160);
     ctx.fillStyle = "red"; 
     ctx.font = '30px Arial'; 
     ctx.fillText('|', p - 0.5*sbtck , 160);
