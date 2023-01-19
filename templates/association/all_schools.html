@@ -59,9 +59,9 @@
                         {% if c.school.active_accounting %}
                             <a href="{% url 'update_accounting'  c.school.active_accounting.id 2 %}" class="pull-right"><i class="fa fa-euro"></i></a>
                         {% else %}
-                            <a href="{% url 'renew_accounting' c.school.id %}" class="pull-right"><i class="fa fa-credit-card"></i></a>
+                            <a href="{% url 'renew_accounting' c.school.id %}" class="pull-right"><i class="fa fa-credit-card text-danger"></i></a>
                         {% endif %}
-               
+                        {% if c.school.country_id == 5 %}<b> {{ c.school.code_acad }}</b>{% endif %} 
                     </td>
                     <td>{{ c.school.nbstudents }}</td>
                     <td>{{ c.school.town|lower|capfirst }}</td>
