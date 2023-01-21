@@ -1263,7 +1263,7 @@ def espacenb(arg):
         new_arg = espacenb_ent(ent)+","+espacenb_dec(dec)
     else :
         new_arg = espacenb_ent(arg)
-    return new_arg
+    return r"$\np{"+new_arg+"}$"
 
 
 
