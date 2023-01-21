@@ -1235,3 +1235,35 @@ def oversize_students(school):
     if nb_students > 0 :
         test = True
     return test , nbss , nbsa
+
+def espacenb_ent(arg):
+    arg = str(arg)
+    new_arg = "" 
+    len_arg = len(arg)
+    for i in range(len_arg) :
+        if i>0 and i%3==0 : sep = " "
+        else : sep = ""
+        new_arg = arg[len_arg-1-i]+sep+new_arg
+    return new_arg
+
+def espacenb_dec(arg):
+    arg = str(arg)
+    new_arg = "" 
+    len_arg = len(arg)
+    for i in range(len_arg) :
+        if i>0 and i%3==0 : sep = " "
+        else : sep = ""
+        new_arg = new_arg+sep+arg[len_arg-1-i]
+    return new_arg
+
+def espacenb(arg):
+    arg = str(arg)
+    if '.' in arg :
+        ent,dec = arg.split(".")
+        new_arg = espacenb_ent(ent)+","+espacenb_dec(dec)
+    else :
+        new_arg = espacenb_ent(arg)
+    return new_arg
+
+
+
