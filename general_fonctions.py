@@ -1267,7 +1267,7 @@ def espacenb(arg):
     else :
         new_arg = espacenb_ent(arg)
     if negative : new_arg = "-"+new_arg
-    return new_arg
+    return r"\;"+new_arg+r"\;"
 
 
 
