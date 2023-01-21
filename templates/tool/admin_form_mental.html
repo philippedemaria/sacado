@@ -103,7 +103,7 @@
                 {% else %}
                     <a href="{%  url 'admin_create_update_mentaltitle' 0 %}"><i class="bi bi-plus-circle"></i></a> 
                 {% endif %}
-                {{ form.mentaltitle|add_class:"form-control select2" }}
+                {{ form.mentaltitle|add_class:"form-control select2"|attr:"required" }}
                 {{ form.mentaltitle.errors }}
             </div>
             <div class="col-sm-6 col-md-2 form-group">
@@ -120,7 +120,7 @@
         <div class="row">
             <div class="col-sm-6 form-group">
                 <label>Variables : ( Séparer les variables par ; sans espace) </label>
-                {{ form.variables|add_class:"form-control" }}
+                {{ form.variables|add_class:"form-control play_alea" }}
                 {{ form.variables.errors }}
 
                 <label>Code html/TeX :  </label>                 
@@ -129,13 +129,13 @@
                 <span class="formula">\$ \input[name][4em]{valeur par défaut} \$</span> <small>pour utiliser des input dans les formules LaTeX. Utiliser le séparateur de variable _##_ dans le code Python</small>
                 <div class="form-group">
                     <label>Dessin ? : <small><a href="javascript:void()" id="select_parcours_div">Choix possibles :</a> </small> </label>                 
-                    {{ form.jquery|add_class:"form-control" }}
+                    {{ form.jquery|add_class:"form-control play_alea" }}
                     {{ form.jquery.errors }}
                     
                     <div id="parcours_div">
                         <table class="table">
                             <tr>
-                                <td>abscisse(o,e,g,s,p,a)</td><td><b>o</b>rigine, <b>e</b>xtremité, <b>g</b>raduation, <b>s</b>ubdivision , <b>a</b>ffichage :0,1</td>
+                                <td>abscisse(x,y,u,s)</td><td><b>x</b> origine, <b>y</b> extremité, <b>u</b> unité de graduation, <b>s</b>ubdivision</td>
                             </tr>
                             <tr>
                                 <td>pythagore(a)</td><td>0 : aléatoire </td>
