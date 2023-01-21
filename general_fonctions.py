@@ -1258,8 +1258,8 @@ def espacenb_dec(arg):
 
 def espacenb(arg):
     arg = str(arg)
-    negatif = False
-    if '-'in arg : negatif = True
+    negative = False
+    if '-'in arg : negative = True
     arg = arg.replace("-","")
     if '.' in arg :
         ent,dec = arg.split(".")
