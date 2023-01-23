@@ -43,27 +43,32 @@ Intro Section -
 <section id="intro" class="clearfix">
     <div class="container h-100">
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
-
+            {% comment %}  
             <div class="col-xs-12 alert alert-sacado on_index"  style="font-size:18px" >
-                    <span style="font-size: 30px"> <span class="sacado">SACADO</span> évolue en 2023.</span> 
-                    Vous avez maintenant la possibilité de créer vos propres exercices, à <b>variables statiques</b> (mode basique) ou à <b>variables numériques aléatoires</b> ou <b>pseudo-aléatoires</b> (mode expert) parmi 17 types d'exercices (En version test).
-                    <hr/>
- 
-                    Pensez à la <b>version Etablissement</b>. En quelques clics, récupérer tous les dossiers (parcours d'exercices et cours) créés par notre équipe, modifiables bien sûr. Pour obtenir la version établissement, créer un compte gratuitement et cliquer sur "Opter pour la version Etablissement".
-            </div>
+                <span style="font-size: 30px"> <span class="sacado">SACADO</span> évolue en 2023.</span> 
+                Vous avez maintenant la possibilité de créer vos propres exercices, à <b>variables statiques</b> (mode basique) ou à <b>variables numériques aléatoires</b> ou <b>pseudo-aléatoires</b> (mode expert) parmi 17 types d'exercices (En version test).
+                <hr/>
 
+                Pensez à la <b>version Etablissement</b>. En quelques clics, récupérer tous les dossiers (parcours d'exercices et cours) créés par notre équipe, modifiables bien sûr. Pour obtenir la version établissement, créer un compte gratuitement et cliquer sur "Opter pour la version Etablissement".
+            </div>
+            {% endcomment %} 
 
             <div class="col-xs-12 col-md-12 col-lg-5">
                 {% if sacado_voyage %}
                 <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
                 {% endif %}
                 <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
-                    <span class="exo">{{ nb_parcours }}</span> parcours de 
-                    {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}
-                    <span class="helper_tip"><sup style="top:-1.5em"><i class="fa fa-question-circle text-danger"></i></sup> 
-                          <div class="helper_tip_text" >créés par des enseignants. Un parcours est une séquence de cours, d'exercices (parmi {{ nb_exercise }}) à variables didactiques aléatoires, de quizz, flashcards et d'exercices personnalisés.</div>
-                    </span> 
-                    interactif{{ nb_parcours|pluralize }} et corrigé{{  nb_parcours|pluralize }} de   la Maternelle à la Terminale en apprentissage adaptatif.
+                    <span class="exo">{{ nb_parcours }}</span> parcours <span class="helper_tip"><span style="position: relative; line-height: 0;top:-20px;color: #00B999"><i class="fa fa-question-circle"></i></span> 
+                          <div class="helper_tip_text" >créés à partir de plus {{ nb_exercise }} exercices interactifs, corrigés à variables dynamiques aléatoires.</div>
+                    </span> <span style="color: #0093CA">interactif{{ nb_parcours|pluralize }}</span>
+
+ 
+                    de {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}, <span style="color: #0093CA">auto-corrigé{{  nb_parcours|pluralize }}</span> de la Maternelle à la Terminale en <span style="color: #00B999">apprentissage  adaptatif</span>.
+
+                    <br/>
+                    <div class="index_step" style="background-color: #0960B5">1. Créer vos groupes</div> <div class="index_step"  style="background-color: #00B999">2. Créer vos parcours</div>  <div class="index_step"  style="background-color: #0093CA">3. SACADO est prêt</div>
+
+
                 </div>
                 
                 {% comment %}
@@ -72,7 +77,7 @@ Intro Section -
                 </div>
                 {% endcomment %}
 
-                <div style="margin: 0px 0px 30px 0px;">
+                <div style="margin: 0px 0px 30px 0px; clear:both">
                     <i class="fa fa-apple"></i>
                     <a href="https://java.com/fr/download/help/mac_install.xml"
                        target="_blank" >

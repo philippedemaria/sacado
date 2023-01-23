@@ -303,8 +303,30 @@ table.table-bordered.dataTable {
   font-size : 20px; 
 }
 
+.index_step{
+  width:110px;
+  height:110px;
+  border-radius: 50%;
+  border: 3px solid #5D4391; 
+  color:white;
+  margin-right: 10px; 
+  font-size : 20px; 
+  float:left;
+  text-align: center;
+  padding: 5px 5px 5px 5px;
+}
 
-
+.index_etablissement{
+  height:50px;
+  border-radius: 25px;
+  border: 3px solid #FFC05C; 
+  color:#FFC05C;
+  margin-right: 10px; 
+  font-size : 20px; 
+  float:left;
+  text-align: center;
+  padding: 5px 5px 5px 5px;
+}
 
 .card_association{
   border:1PX solid #CCC;
@@ -341,6 +363,21 @@ table.table-bordered.dataTable {
   border : solid 1px #5d4391;   
   border-radius: 50%;
 }
+
+
+
+.btn-sacado_index{
+  border-radius: 4px;
+  border : solid 1px #0093CA;
+  color:white;
+  background: #0093CA;
+}
+
+.btn-sacado_index:hover{ 
+  color:#FFF;
+  background: #00B999;  
+}
+
 
 
 a.btn-intro_sacado{

@@ -45,7 +45,7 @@
     <div class="container">
         <div class="logo float-left">
             <a class="navbar-brand sacado" href="{% url 'index' %}#intro"><img src="{% static 'img/sacadoA1.png' %}"/> SACADO<img src="{% static 'img/approche_gar.png' %}" /></a>
-            <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-sacado">  Version Établissement </a>
+            <a href="#" data-toggle='modal' data-target='#sacadopopup' class="btn btn-sacado_index">  Version Établissement </a>
         </div>
         <nav class="main-nav float-right d-none d-lg-block">
             <ul> 
@@ -209,7 +209,7 @@
             </div>
             <div class="modal-body">
                 Toutes les fonctionnalités qui s'utilisent en établissement ou qui demandent de la ressource du serveur ne sont pas incluses dans la version enseignant. Lorsqu'une fonctionnalité est proposée <i class="fa fa-check text-success"></i>, elle reste à la discrétion de l'enseignant. Les établissements SACADO dans le monde <a href="#" data-toggle='modal' data-target='#worldwide' > <i class="fa fa-globe"></i></a> 
-                 <br/><a href="{% url 'school_adhesion' %}" class="btn btn-primary">Passez à la version Etablissement - 15 jours gratuit</a> 
+                 <br/><a href="{% url 'school_adhesion' %}" class="btn btn-sacado_index">Passez à la version Etablissement - 15 jours gratuit</a> 
 
                 <br/>La version Etablissement est valable jusqu'au 13 juillet de l'année scolaire en cours.
                  {% include 'sacado_asso.html' %}
