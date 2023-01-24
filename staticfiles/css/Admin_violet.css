@@ -428,9 +428,9 @@ hr.menu {
  
 
 .btn-action  {
-  color : white!important;
+  color : #f1eef7!important;
   border-radius: 10px!important;
-  background-color: #0093CA;
+  background-color: #5d4391;
   margin-right: 5px;
   padding:0px 10px!important;
 }
@@ -438,8 +438,8 @@ hr.menu {
 .btn-action:hover, .btn-action:hover > a ,
 .btn-action:active, .btn-action:active > a ,
 .btn-action.hover,  .btn-action.hover > a  {
-  background-color: #079bd3!important;/*   #dd4b39!important;*/
-  color: white!important;
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
   text-decoration: none;
 }
 
