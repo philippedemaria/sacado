@@ -6,47 +6,55 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-check_filltheblanks']);
+        require(['script/ajax-check_filltheblanks','script/slider_answer_box']);
     </script> 
 {% endblock %}
 
 {% block answer_all_type_template %}
 
-	{% for annoncement in annoncements %} 
+	{% for choice in choices %} 
 		<li class="this_slide">
 
-		    <div class="row"  align="left">
-		        {% if annoncement %}
-		            <div class="col-sm-12 col-lg-12 custom_content" 
-		                 style="max-height:80px">{{ annoncement|safe }}
-		            </div>
-		        {% endif %}
-		    </div>  
-			{% if supportfile.is_written %}
-				{% for choice in choices|index:forloop.counter0 %}
-					<div class="row text_fill_the_blanks" align="left">
-						{{ choice.answer|insert_only_input|safe }}
+
+            {% include 'qcm/qtype/_annoncement_instruction.html' %}
+            <div class="legend_answer text-green_index zoom_in" align="left">
+            	{% if supportfile.is_written %}Glisser/déposer les étiquettes aux bons emplacements
+            	{% else %}Écrire les mots/lettres aux bons emplatements{% endif %}
+
+            </div> 
+
+ 
+ 
+
+
+ 
+				{% if choice.is_written %}
+					<div class="text_fill_the_blanks" align="left">
+						{{ choice.answer|insert_only_input:forloop.counter|safe }}
 					</div>
 					<input name="choice_id" type='hidden' value="{{ choice.id }}"/>
-				{% endfor %}
-	 		{% else %}
-				<div class="quizz_item select_items" align="left">
-					{% for word in shufflechoices|index:forloop.counter0 %}
-						<span class="draggable word_choice"  data-word="{{ word }}" style="cursor: move;" >
-							 {{  word }}
-						</span>
-					{% endfor %}
-				</div>	
-				{% for choice in choices|index:forloop.counter0 %}
-					<div class="row text_fill_the_blanks" align="left">
-						{{ choice.answer|insert_input|safe }}
-					</div>
-					<input name="choice_id" type='hidden' value="{{ choice.id }}"/>
-				{% endfor %}
-			{% endif %}
+				{% else %}
+
+					<div class="select_items droppable{{forloop.counter }}" align="left">
+						{% for word in shufflechoices|index:forloop.counter0 %}
+							<span class="draggable word_choice"  data-word="{{ word }}"  data-loop="{{ forloop.parentloop.counter }}" style="cursor: move;" >
+								 {{  word }}
+							</span>
+						{% endfor %}
+						<a href="javascript:void();" data-loop="{{ forloop.counter }}"  class="eraser btn btn-danger btn-xs pull-right">Ré initialiser</a>
+					</div>	
+						<div class="text_fill_the_blanks dropzone{{forloop.counter }}" align="left">
+							{{ choice.answer|insert_input:forloop.counter|safe }}
+						</div>
+						<input name="choice_id" type='hidden' value="{{ choice.id }}"/>
+	
+
+ 	 			{% endif %}
+ 
+
 		    <div class="row validation">
 		    	<div class="col-sm-12 col-md-3" align="center"  >
-		            <a  href="#" class="btn btn-primary show_filltheblanks_correction" data-supportfile_id="{{ supportfile.id }}"   
+		            <a  href="#" class="btn btn-lg btn-primary show_filltheblanks_correction" data-supportfile_id="{{ supportfile.id }}"   
 		            	id="nav_start{{ forloop.counter }}" data-loop="{{ forloop.counter }}"><i class="fa fa-caret-right"></i> Valider 
 		            </a>
 		        </div>

@@ -52,20 +52,32 @@ ul#id_skills li{
 
 <div class="content_main">
 
-    <div class="col-sm-12 col-md-12 form_card" id="full_kind_exercise_div">
-        <div class="form_card" id="kind_exercise_div" style="padding:5px">
-            <p>Type de support <span id="title_qtype"></span><a href="#"  id="up_and_down_kind_exercise_div" class="btn btn-sacado pull-right"><i class="fa fa-caret-up"></i></a></p>
-            <div class="row">
+    <div class="col-sm-12 col-md-12" id="full_kind_exercise_div">
+        <div style="margin-top:35px">
 
+            <div class="row">
 
                 {% for qt in qtypes %}
 
-                <div class="col-xs-2 col-sm-1 col-md-1" align='center' style="margin-bottom:5px"> 
-                    <a href="{% url 'create_supportfile' qt.id 0  %}">
-                        <div class="qtypes_choice {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %}" title="{{ qt.title}}" id="qtypes_choice{{ qt.id}}" >
-                            {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="25px" /> {% else %}{{ qt.html|safe }}{% endif %}
-                        </div>
-                    </a>               
+                <div class="col-xs-6 col-sm-4 col-md-3" align='left'>
+                    <div class="qtypes_choice qtypes_choice_square" style="background-image: url({{ qt.imagefile.url }});background-color: white; background-size: contain;background-repeat: no-repeat;height:100px;width:100%">
+                        <a href="{% url 'create_supportfile' qt.id 0  %}">
+                            <div style="height:98px;width:97px;float:left " />
+                            </div>
+                            <div style="padding:10px;float:left;background: white;width:227px;">
+                                <label>{{ qt.title }}</label> 
+                                {% if qt.is_alea %}<span class="helper_tip"> <img src="{% static 'img/shuffle.png' %}" width="15px" style="vertical-align: baseline;" />
+                                <div class="helper_tip_text" ><label>Aléatoire.</label> SACADO gère les variables dynamiques aléatoires déclarées à la création de l'exercice.</div>
+                                    </span>
+                                {% endif %}
+                                {% if qt.is_pseudo %}<span class="helper_tip"> <img src="{% static 'img/pseudo_shuffle.png' %}" width="15px" style="vertical-align: baseline;" />
+                                <div class="helper_tip_text" ><label>Pseudo aléatoire.</label> SACADO crée un exercice en choisissant aléatoirement des situations parmi vos choix enregistrés.</div>
+                                    </span>{% endif %}<br/>
+                                    {{ qt.html }}
+                                
+                            </div>
+                        </a>  
+                    </div>
                 </div>
                 {% endfor %}             
 

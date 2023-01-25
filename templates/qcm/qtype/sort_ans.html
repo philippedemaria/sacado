@@ -6,7 +6,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-check_sort']);
+        require(['script/ajax-check_sort','script/slider_answer_box']);
     </script> 
 {% endblock %}
 
@@ -16,23 +16,19 @@
 	{% for annoncement in annoncements %} 
         <li class="this_slide" id="this_slide{{ forloop.counter }}">
 
-		    <div class="row"  align="left" style="margin-top:10px">
-		        {% if annoncement %}
-		            <div class="col-sm-12 col-lg-12 custom_content" 
-		                 style="max-height:80px">{{ annoncement|safe }}
-		            </div>
-		        {% endif %}
-		    </div> 
+
+            {% include 'qcm/qtype/_annoncement_instruction.html' %}
 
 		    <div class="row" align="left" style="margin:20px 0px;">
-		        <div class="col-sm-12 col-lg-12 custom_all_answers" id="sortable{{ forloop.counter }}"  style="max-height:300px;padding:10px"> 
-		        	<input class="answers" name='answers' type='hidden' />       
-					{% for choice in shufflechoices|index:forloop.counter0 %}
-						<div class="item_sortable" align='center' data-loop="{{ forloop.parentloop.counter }}" data-value="{{ choice.answer }}">
+		        <div class="col-sm-12 col-lg-12 quizz_item_choice" id="sortable{{ forloop.counter }}"  style="max-height:300px;padding:10px"> 
+		        	<input class="answers" name='answers' type='hidden' value="{{this_solution|index:forloop.counter0}} " />       
+					{% for choice in shufflesubchoices|index:forloop.counter0 %}
+						<div class="item_sortable zoom_in" align='center' data-loop="{{ forloop.parentloop.counter }}" data-value="{{ choice.answer }}">
 							{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer  }} 
 						</div>
-					{% endfor %}            
+					{% endfor %}      
 		        </div>
+		        <div class="legend_answer text-green_index zoom_in"> Glisser/déposer les éléments horizontalement.</div>  
 		    </div>
 		    <div class="row validation">
 		    	<div class="col-sm-12 col-md-3" align="center"  >
@@ -46,6 +42,28 @@
 
 	{% include 'qcm/qtype/_last_slide.html' %}
 
-        
 
-{% endblock %}
+{% endblock %}	
+
+
+[
+	[
+	{'id': 108, 'answer': '$3$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}, 
+	{'id': 107, 'answer': '$8$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}
+	], 
+	[
+	{'id': 107, 'answer': '$2$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}, 
+	{'id': 108, 'answer': '$7$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}
+	], 
+	[{'id': 107, 'answer': '$6$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}, 
+	{'id': 108, 'answer': '$10$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}
+	], 
+	[
+	{'id': 108, 'answer': '$6$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}, 
+	{'id': 107, 'answer': '$9$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}
+	], 
+	[
+	{'id': 108, 'answer': '$3$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}, 
+	{'id': 107, 'answer': '$7$', 'imageanswer': <ImageFieldFile: None>, 'retroaction': '', 'label': '', 'is_correct': False}
+	]
+]

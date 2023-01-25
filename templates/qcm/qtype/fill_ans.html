@@ -7,7 +7,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-check_fill']);
+        require(['script/ajax-check_fill','script/slider_answer_box']);
     </script> 
 {% endblock %}
 
@@ -25,9 +25,18 @@
 	    	{% endif %}
 
 			{% if  'input' in  annoncement %}
-				<div class="row" style="margin-top:20px;padding: 10px; font-size:18px">		
+				<div class="row" style="margin-top:20px;padding: 10px">		
 					<div class="col-sm-12"> 
-			 			{{  annoncement|safe }}
+						<div class="consigne zoom_in"> 
+			 				{{  annoncement|safe }} 
+			 			</div> 
+			 			<div class="legend_answer text-green_index zoom_in" align="left">Écrire la réponse dans les pointillés</div>
+					</div>
+				</div>
+
+				<div class="row" style="margin:20px">		
+					<div class="col-sm-12"> 
+			 			
 					</div>
 				</div>
 			    <div class="row">
@@ -37,28 +46,34 @@
 			        </div>
 			    </div>
 			{% else %}	
-				<div class="row" style="padding-top: 10px; font-size:18px">  
+				<div class="row" style="padding-top: 10px;">  
 					{% with choice=shufflechoices|index:forloop.counter0 %}
 						{% if choice.answer %}
-							<div class="col-sm-12 this_consigne custom_content" align='left'> 
-
-					 			{{  annoncement|safe }}
-
-								{{ choice.answer|safe }}
-							</div>
-							<div class="col-sm-12" align='center'> 
-								<input type="text" name="answers" class="answer_box" style="text-align:center"/>
+							<div class="col-sm-12" align='left'> 
+								<div class="consigne custom_content zoom_in">
+					 				{{  annoncement|safe }}<br/>
+			
+									<div class="zoom_in" align='center'> 
+										{{ choice.answer|safe }}
+									</div>							
+								</div>
+								<div class="legend_answer text-green_index zoom_in" align="left">Ecrire la réponse dans les pointillés</div>	
+								<div class="zoom_in"  align='center'> 
+									<input type="text" name="answers" class="answer_student_box" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}"/>
+								</div>
 							</div>
 						{% else %}
-								<div class="col-sm-12 this_consigne custom_content" align='left'> 
-					 			{{  annoncement|safe }}
+							<div class="col-sm-12" align='left'>
+								<div class="consigne zoom_in"> 
+					 				{{  annoncement|safe }}
+					 			</div>
+								<div class="legend_answer text-green_index zoom_in" align="left">Ecrire la réponse dans les pointillés</div>					 			
 							</div>
-
-							<div class="col-sm-12" align='center'> 
-								<input type="text" name="answers" class="answer_box" style="text-align:center"/>
+							<div class="zoom_in" align='center'>
+								<input type="text" name="answers" class="answer_student_box" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}"/>
 							</div>
 						{% endif %}
-					    <div class="row validation">
+					    <div class="row validation"   style="margin:100px 0px;">
 					    	<div class="col-sm-12 col-md-3" align="center"  >
 					            <a href="#" class="btn btn-primary show_these_inputs_correction" 
 					               data-supportfile_id='{{ supportfile.id }}' data-loop='{{ forloop.counter }}' 

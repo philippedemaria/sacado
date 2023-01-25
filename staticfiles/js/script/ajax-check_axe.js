@@ -3,70 +3,27 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         console.log("chargement JS ajax-check_axe.js  OKK");
 
  
-    // ****************************************************************************************************************************************
-    // Gestion des slides dans la vue élève
-    // ****************************************************************************************************************************************
-    var this_slideBox = $('.this_slider ul');
-    var slideWidth = 700 ;
-    var slideQuantity = $('.this_slider ul').children('li').length;
-    var currentSlide = 1 ;
-    this_slideBox.css('width', slideWidth*slideQuantity);
-    var nb_variables = $('#nb_variables').length; 
-
-    //setTimeout( function() { set_var_value(1) }, 1000);
-
-
-    $('.nav_start').on('click', function(){ 
-
-            var pxValue = currentSlide * slideWidth ; 
-            this_slideBox.animate({
-                'left' : -pxValue
-            });
-            currentSlide++ ;
-    });
-
-//*************************************************************************************************************  
-// Récupération des réponses
-//************************************************************************************************************* 
-    $(document).on('change', ".selected_answer" , function () { 
-
-        let csrf_token     = $("input[name='csrfmiddlewaretoken']").val();
-        let is_correct     = $(this).data("is_correct") ;
-        let loop           = $(this).data("loop") ;
-        let choice_id      = $(this).val() ;
-        let list_choices   = [] ;   
-             
-        if ($(this).is(":checked"))
-        {
-            list_choices.push(choice_id) ;
-        }
-        else{
-
-            idx = list_choices.indexOf(  choice_id ) ;
-            if(idx>-1)
-            { list_choices.splice(idx, 1) ;}
-        }
-        $("#nav_start"+loop).attr("data-choice_ids",list_choices);;
-        $("#nav_start"+loop).attr("data-is_correct",is_correct);
-    });
-
 
 //*************************************************************************************************************  
 // Classement sur axe
 //*************************************************************************************************************  
 
 
-            var tab=document.getElementById("tableau");
-            var xoffset   = tab.offsetTop;
-            var yoffset   = tab.offsetLeft;
+
             var xmin      = parseFloat($("#xmin").val().replace(",","."));
             var xmax      = parseFloat($("#xmax").val().replace(",","."));
             var tick      = parseFloat($("#tick").val().replace(",","."));
             var subtick   = parseFloat($("#subtick").val().replace(",","."));
             var precision = parseFloat($("#precision").val().replace(",","."));
-            var topz      = $(".loop0").length ;   // le niveau de la couche la plus haute
+            var nb_tableaux=document.getElementsByClassName("tableau").length; alert(nb_tableaux);
 
-            var axe = document.getElementById("axe");
+for (var index =0;index<nb_tableaux;index++){ 
+
+            var tab=document.getElementById("tableau"+index);
+            var xoffset   = tab.offsetTop;
+            var yoffset   = tab.offsetLeft;            
+            var topz      = $(".loop0").length ;   // le niveau de la couche la plus haute
+            var axe = document.getElementById("axe"+index);
               //dessin des graduations de l'axe
 
             function placeValeur(x,v) {   
@@ -103,7 +60,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                tick.style.left = x_axe+"px";
                axe.appendChild(tick); 
             }
-
 
             function dessineGraduations(){
 
@@ -146,9 +102,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                    if (carte.childNodes.length>=3) {carte.removeChild(carte.childNodes[2])}
                    carte.childNodes[1].innerHTML="";
                }
-              }
+            }
 
-              function dragMouseDown(carte,e) {
+            function dragMouseDown(carte,e) {
                 e = e || window.event;
                 e.preventDefault();
                 // get the mouse cursor position at startup:
@@ -160,9 +116,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 carte.onmouseup = (e) => closeDragElement(carte);
                 // call a function whenever the cursor moves:
                 carte.onmousemove = (e) => elementDrag(carte,e);
-              }
+            }
 
-              function elementDrag(carte,e) {
+            function elementDrag(carte,e) {
                 nc=parseInt(carte.id.substring(5));
                 e = e || window.event;
                 e.preventDefault();
@@ -197,15 +153,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 if (precision<1){ nb_c = -1*Math.floor(Math.log10(precision)) ; v.innerHTML=valeur.toFixed(nb_c); }
                 else { v.innerHTML=valeur;}
                 
-              }
+            }
 
-              function closeDragElement(carte) {
+            function closeDragElement(carte) {
                 // stop moving when mouse button is released:
                 carte.onmouseup = null;
                 carte.onmousemove = null;
-              }
+            }
 
-
+}
             $(document).on('click', ".show_axe_correction" , function (event) {
          
                     event.preventDefault();

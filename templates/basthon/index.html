@@ -23,7 +23,7 @@
  
  
 {% block page_menu_right %}
-
+{{ relationship.exercise.supportfile.knowledge }}
 {% endblock %}
  
 
@@ -34,13 +34,12 @@
     <div id="container">
       {% if relationship %}
       <div class="row">
-          <div class="col-xs-12 col-md-7 consigne" >  
+          <div class="col-xs-12 col-md-7 consigne zoom_in" >  
 
 
            
             <b>{{ relationship.exercise.supportfile.title }}</b><br/> 
          
-             <label>Enoncé : </label>
 
               {% if relationship.instruction   %} 
 

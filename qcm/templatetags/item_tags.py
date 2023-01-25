@@ -8,9 +8,29 @@ import re
 
 
 @register.filter
-def add_loop(arg, loop):
-    '''Rajoute un argument à une fonction'''
-    return arg[:-1]+","+str(loop)+")"
+def add_parameters(arg, index):
+    '''Modifie les paramètres aléatoires pour les questions flash'''
+    tab = arg.split(";")
+    if len(tab)>1:
+        mini,maxi,step = tab[1].split(",")
+        a = random.randint(int(mini),int(maxi))*int(step)
+        b = a+int(tab[2])
+        arg = arg.replace("x",str(a))
+        string = arg.replace("y",str(b))
+        new_str = string[:-1]+","+str(index)+")"
+        new_str = new_str.split(";")[0]
+
+        new_str = new_str[:-1]+","+str(index)+")"
+    else :
+        new_str = tab[0][:-1]+","+str(index)+")"
+    return new_str
+
+
+
+@register.filter
+def is_checked(arg):
+    '''input est-il checked ?'''
+    return 'checked' in str(arg)
 
 
 
@@ -87,7 +107,7 @@ def filltheblanks_safe(arg):
             if  int(len(tab[i]))  < 4 : ln = "30"
             elif  int(len(tab[i]))  < 10 : ln = "100"
             else : ln = str(int(len(tab[i]))*10)
-            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value='"+tab[i]+"'   /> "
+            st = " <input type='text' style='border:1px solid #CCC; width:"+ln+"px;border-radius:4px;text-align:center' value='"+tab[i]+"'   />"
         else :
             st = tab[i] 
         string += st
@@ -97,7 +117,7 @@ def filltheblanks_safe(arg):
 
 
 @register.filter
-def insert_input(arg):
+def insert_input(arg,loop):
     '''HTML entity filltheblanks_safe'''
     arg = arg.replace('<strong>','####')
     arg = arg.replace('</strong>','####')
@@ -110,7 +130,7 @@ def insert_input(arg):
             if  int(len(tab[i]))  < 4 : ln = "30"
             elif  int(len(tab[i]))  < 10 : ln = "100"
             else : ln = str(int(len(tab[i]))*10)
-            st = "<input type='hidden' name='answers' id='loop_"+str(j)+"' /><div class='input_droppable' data-loop='"+str(j)+"'></div> "
+            st = "<input type='hidden' name='answers"+str(loop)+"' id='loop_"+str(loop)+"-"+str(j)+"' /><div class='input_droppable droppable"+str(loop)+"' data-subloop='"+str(j)+"'></div>"
             j+=1
         else :
             st = tab[i] 
@@ -120,7 +140,7 @@ def insert_input(arg):
 
 
 @register.filter
-def insert_only_input(arg):
+def insert_only_input(arg,loop):
     '''HTML entity filltheblanks_safe'''
     arg = arg.replace('<strong>','####')
     arg = arg.replace('</strong>','####')
@@ -129,12 +149,11 @@ def insert_only_input(arg):
     string = ""
     for i in range(len(tab)) :
         if i%2==1:
-            st = "<input type='text' name='answers' style='border:1px solid #CCC; width:"+str(int(len(tab[i]))*14)+"px;border-radius:4px;text-align:center;font-weight:600'    /> "
+            st = "<input type='text' name='answers"+str(loop)+"' style='width:"+str(int(len(tab[i]))*14)+"px;'  class='answer_the_blanks answer_fill_the_blanks'  />"
         else :
             st = tab[i] 
         string += st
     return string
-
 
 
 

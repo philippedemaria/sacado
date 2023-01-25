@@ -17,12 +17,12 @@
 
 
 {% block page_title %}
-  <i class="fab fa-python"></i> 
-{% endblock %}
+   <img src="{{ supportfile.qtype_logo.url }}" width="40px" class="qtype_logo_img" title="{{ qt.title }}" /> {{ supportfile.title }} 
+{% endblock %} 
  
  
 {% block page_menu_right %}
-
+     {{  supportfile.knowledge  }}
 {% endblock %}
  
 
@@ -32,8 +32,8 @@
     {% csrf_token %}
     <div id="container">
       <div class="row">
-          <div class="col-xs-12 consigne" >         
-              <label>Enoncé : </label> {{ supportfile.annoncement|safe }} 
+          <div class="col-xs-12 consigne zoom_in" >         
+               {{ supportfile.annoncement|safe }} 
           </div>
       </div>
       <div id="left-div">

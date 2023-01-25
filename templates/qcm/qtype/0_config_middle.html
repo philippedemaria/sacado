@@ -2,16 +2,23 @@
 {% load static %}
 {% load item_tags %}      
 
-
-<div style="margin-top:20px;">
 <ul class="nav nav-tabs">
+    {% if qt.is_pseudo  %}
     <li class="li_tabs_and_panels active">
-        <a data-toggle="tab" href="#conf" class="tabs_and_panels">
-            Config.
+        <a data-toggle="tab" href="#pseudo" class="tabs_and_panels">
+            Pseudo-aléatoire
+        </a>
+    </li>    
+    {% endif %}
+    {% if qtype != 19 and qtype != 20  %}
+    <li class="li_tabs_and_panels">
+        <a data-toggle="tab" href="#situations" class="tabs_and_panels">
+            Nb situations
         </a>
     </li>
+    {% endif %}
     {% if qt.is_alea %}
-    <li class="li_tabs_and_panels">
+    <li class="li_tabs_and_panels {% if not qt.is_pseudo %}active{% endif %}">
         <a data-toggle="tab" href="#alea" class="tabs_and_panels">
             <img src="{% static 'img/tex.png' %}" height="10px"/> Variables num. aléatoires
             <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
@@ -21,84 +28,102 @@
     </li>
     {% endif %}
     {% if qt.is_insert %}
-    <li class="li_tabs_and_panels">
+    <li class="li_tabs_and_panels ">
         <a data-toggle="tab" href="#inclusion" class="tabs_and_panels">
             <img src="{% static 'img/tex.png' %}" height="10px"/> Insertion 
         </a>
     </li>
-    {% endif %}    
-    {% if qt.is_pseudo  %}
-    <li class="li_tabs_and_panels">
-        <a data-toggle="tab" href="#pseudo" class="tabs_and_panels">
-            Pseudo-aléatoire
+    {% endif %}  
+    <li class="li_tabs_and_panels {% if not qt.is_alea and not qt.is_pseudo %}active{% endif %}">
+        <a data-toggle="tab" href="#conf" class="tabs_and_panels">
+            Config.
         </a>
     </li>
-    {% endif %}
 </ul>
 
-<div class="tab-content">
-    <div id="conf" class="tab-pane fade in active">
-        <table class="table table-sacado borderless form_card">
-            {% if qtype == 9 %}
+<div class="tab-content">  
+    {% if qt.is_pseudo  %}
+    <div id="pseudo" class="tab-pane fade in active ">
+        <small>    
+            Le pseudo aléatoire tire le nombre de situations enregistrées parmi les items enregistrés. 
+            <br/>Si vous enregistrez 20 items possibles et que vous inscrivez 5 situations, 5 items  seront aléatoirement choisis parmi les 20.
+            <br/><br/>
+        </small>
+        <table class="table borderless">
             <tr>
                 <td>
-                   <label>Gestion des trous </label>  
+                    <small>
+                        <label>Nombre de 
+                            {% if qtype == 1 %}
+                                propositions  
+                            {% elif qtype == 2 %}
+                                questions proposées
+                            {% elif qtype == 3 or qtype == 4 %}
+                                propositions simultanées
+                            {% elif qtype == 6 %}
+                                thèmes proposés
+                            {% elif qtype == 7 %}
+                                anagrammes proposées
+                            {% elif qtype == 9 %}
+                                textes proposés
+                            {% elif qtype == 12 %}
+                                grilles proposées 
+                            {% elif qtype == 13 %}
+                                mots cachés proposés
+                            {% elif qtype == 15 %}
+                                légendes proposées
+                            {% else %}
+                                items proposés
+                            {% endif %}
+                        </label>
+                    </small> 
                 </td>
-                <td>{{ form.is_written |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Mots à écrire"|attr:"data-off:Mots à placer"|attr:"data-width:130px"}}</td>
-                <td>{{ form.is_written.errors }}</td>
+                <td>
+                    {{ form.nb_pseudo }}<label><small>[Si 0, tout est proposé.]</small></label>
+                </td>
             </tr>
-            {% endif %}
-            {% if request.user.is_superuser %}
-                <tr>
-                    <td>
-                        <label>Mutualisé ?</label>  
-                    </td>
-                    <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                    <td>{{ form.is_share.errors }}</td>
-                </tr>
-            {% endif %}
+            {% if qt.is_sub  %}
             <tr>
                 <td>
-                   <label>Calculatrice ?</label>  
+                    <small>
+                        <label>Nombre de 
+                            {% if qtype == 1 %}
+                                propositions  
+                            {% elif qtype == 2 %}
+                                questions proposées
+                            {% elif qtype == 3 or qtype == 4 %}
+                                questions proposées
+                            {% elif qtype == 6 %}
+                                correspondances proposées
+                            {% elif qtype == 9 %}
+                                textes proposés
+                            {% elif qtype == 12 %}
+                                grilles proposées 
+                            {% elif qtype == 13 %}
+                                mots cachés proposés
+                            {% elif qtype == 15 %}
+                                légendes proposées
+                            {% else %}
+                                items proposés
+                            {% endif %}
+                        </label>
+                    </small> 
                 </td>
-                <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                <td>{{ form.calculator.errors }}</td>
-            </tr>
-
-            <tr>
-                <td> 
-                    <label>{{ form.duration.label_tag }}</label> 
+                <td>
+                    {{ form.nb_subpseudo }}<label><small>[Si 0, tout est proposé.]</small></label>
                 </td>
-                <td>{{ form.duration |add_class:"form-control" }} </td>
-                <td>minutes {{ form.duration.errors }}</td>
             </tr>
-        </table>
-
-
-        {{ form.imagefile.label_tag }}
-        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-            <div class="helper_tip_text">La vignette d'accueil propose un visuel de votre exercice. Sans vignette de votre part, SACADO associe une vignette transparente.</div>
-        </span>
-        {% if sacado_asso%}  
-            {% if supportfile.imagefile  %}
-                <img src="{{ supportfile.imagefile.url }}" width ="250px" />
             {% endif %}
-            {{ form.imagefile |add_class:"btn btn-default"|attr:"style:width:250px" }}
-            {{ form.imagefile.errors }}
-            <font style="font-size:12px;color:#c70000">Largeur : 750px - hauteur : 550px.</font>        
-        {% else %}
-            <div class="alert alert-danger">Version établissement</div>
-        {% endif %}
 
 
 
-
-
+        </table>  
     </div>
-    <div id="alea" class="tab-pane fade">
-
+    {% endif %}  
+    {% if qt.is_alea %}
+    <div id="alea" class="tab-pane fade {% if not qt.is_pseudo %}in active{% endif %}">
         <li class="sanspuce"> 
-            <small><b>1. Déclarer les variables.</small></b>  <a href="javascript:void();" id="show_randomize_zone" class="btn btn-sacado add_more_question"> ici</a>
+            <small><b>1. Déclarer les variables numériques.</small></b>  <a href="javascript:void();" id="show_randomize_zone" class="btn btn-sacado add_more_question"> ici</a>
             <a href="javascript:void();" {% if supportfile and supportfile.supportvariables.count %} id="new_itemize"{% else %} id="new_item" {% endif %} class="btn btn-sacado add_more_question" >+ variable</a>
 
             {% include 'qcm/qtype/_declaration_variable.html' %}
@@ -114,33 +139,9 @@
             <br/><span class="formula_answer">$?!{a}+{b}?!$</span> calcule la somme des valeurs prises aléatoirement par a et b. 
             <br/>Si a=2 et b=3, <span class="formula_answer">${a}+{b} = ?!{a}+{b}?!$</span> affiche 2+3=5 </small>
         </li>
-        <li class="sanspuce">  
-            <small><b>5. Déterminer le nombres de situations proposées.</small></b> 
-            <small>
-                <label>Nombre de situations proposées  {{ form.situation }}</label>
-            </small> 
-        </li>
-    </div>
-    {% if qt.is_pseudo  %}
-    <div id="pseudo" class="tab-pane fade">
-        <small>    
-            Le pseudo aléatoire tire le nombre de situations enregistrés parmi les items enregistrés. 
-            <br/>Si vous enregistrez 20 items possibles et que vous inscrivez 5 situations, 5 items  seront aléatoirement choisis parmi les 20.
-            <br/><br/>
-            <label>Nombre d'items proposés  {{ form.nb_pseudo }} <small>[Si 0, tous les items enregistrés sont proposés.]</small></label>
-        </small>
-        {% if qtype == 15 %}
-        <li class="sanspuce">  
-            <small>
-                <label>Nombre de légendes proposées  {{ form.nb_subpseudo }} <small>[Si 0, toutes les légendes enregistrés sont proposées.]</small></label>
-            </small> 
-        </li>
-        {% endif %}
     </div>
     {% endif %}
     <div id="inclusion" class="tab-pane fade">
-
- 
             <li class="sanspuce"  style="line-height: 1.5em">
                 <small><b>1. Insérer un champs dans l'énoncé.</b> 
                 Utiliser 
@@ -172,12 +173,76 @@
                 écrire dans "Ecrire la question" <span class="formula_answer">num</span> dans "Ecrire la réponse" <span class="formula_answer">$?!{a}+{b}?!$</span> 
                 </small>
             </li>
- 
- 
+    </div>
+    <div id="conf" class="tab-pane fade {% if not qt.is_alea and not qt.is_pseudo %}in active{% endif %}">
+        <table class="table table-sacado borderless form_card">
+            {% if qtype == 9 %}
+            <tr>
+                <td>
+                   <label>Gestion des trous </label>  
+                </td>
+                <td>{{ form.is_written |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Mots à écrire"|attr:"data-off:Mots à placer"|attr:"data-width:130px"}}</td>
+                <td>{{ form.is_written.errors }}</td>
+            </tr>
+            {% endif %}
+            {% if request.user.is_superuser %}
+                <tr>
+                    <td>
+                        <label>Mutualisé ?</label>  
+                    </td>
+                    <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                    <td>{{ form.is_share.errors }}</td>
+                </tr>
+            {% endif %}
+            {% if qtype  < 7 or qtype == 20 or qtype == 19 %}
+            <tr>
+                <td>
+                   <label>Calculatrice ?</label>  
+                </td>
+                <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                <td>{{ form.calculator.errors }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td> 
+                    <label>{{ form.duration.label_tag }}</label> 
+                </td>
+                <td width="100px">{{ form.duration |add_class:"form-control" }} </td>
+                <td>minutes {{ form.duration.errors }}</td>
+            </tr>
+        </table>
+
+        {% comment %}
+        {{ form.imagefile.label_tag }}
+        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+            <div class="helper_tip_text">La vignette d'accueil propose un visuel de votre exercice. Sans vignette de votre part, SACADO associe une vignette transparente.</div>
+        </span>
+        {% if request.user.is_superuser %}  
+            {% if supportfile.imagefile  %}
+                <img src="{{ supportfile.imagefile.url }}" width ="250px" />
+            {% endif %}
+            {{ form.imagefile |add_class:"btn btn-default"|attr:"style:width:250px" }}
+            {{ form.imagefile.errors }}
+            <font style="font-size:12px;color:#c70000">Largeur : 750px - hauteur : 550px.</font>        
+        {% endif %}
+        {% endcomment %}
+    </div>
+    <div id="situations" class="tab-pane fade">
+        <li class="sanspuce">  
+            <small>Vous pouvez déterminer le nombre de situations qui seront proposées aux élèves.  
+                   <br/>Si vous utilisez des variables numériques aléatoires, 5 situations par défaut sont proposées.
+  
+                    {% if qt.is_pseudo  %}                   
+                    <br/><br/><b>Exemple de lien avec le pseudo aléatoire.</b> <br/>
+                    Vous enregistrez 10 items, dont 5 items pseudo aléatoires et 4 situations. L'ordinateur lancera 4 situations et dans chacune d'elle, il tirera aléatoirement 5 items parmi les 10. 
+                    {% endif %}  
+                <br/><br/>
+                <label>Nombre de situations proposées  {{ form.situation }}</label>
+            </small> 
+        </li>
     </div>
 </div>  
 
-</div>
 
 
 

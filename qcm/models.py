@@ -161,19 +161,8 @@ class Supportfile(models.Model):
     ####################################################################################################################################
     ####  Format de l'exercice
     qtype         = models.PositiveIntegerField(default=100)    
-    canvasimage   = models.ImageField(upload_to=image_directory_path, blank=True, null=True, verbose_name="Image support", default="")
     nb_pseudo     = models.PositiveIntegerField(default=0, blank=True,  verbose_name="Nombre de pseudo situation")
     nb_subpseudo  = models.PositiveIntegerField(default=0, blank=True,  verbose_name="Nombre de pseudo proposition")      
-    ####  Cas spécifique axe gradué qtype = 9 
-    is_written = models.BooleanField(default=0, verbose_name="Mots à écrire ?") # ou à glisser déposer
-    ####  Cas spécifique axe gradué qtype = 18 
-    xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
-    xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
-    tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation principale")
-    subtick    = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
-    precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision") 
-
-
 
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
@@ -193,7 +182,7 @@ class Supportfile(models.Model):
 
     def qtype_logo(self):        
         Qtype = apps.get_model('tool', 'Qtype')
-        logo = Qtype.objects.get(pk=self.qtype).html
+        logo = Qtype.objects.get(pk=self.qtype).imagefile
         return logo
 
 
@@ -295,12 +284,24 @@ class Supportchoice(models.Model):
     imageanswer = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image", default="")
     answer      = models.TextField(default='', null=True,  blank=True, verbose_name="Réponse écrite")
     retroaction = models.TextField(default='', null=True,  blank=True, verbose_name="Rétroaction")
+    audioanswer = models.FileField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Audio", default="")
 
     imageanswerbis = models.ImageField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Image par paire", default="")
     answerbis      = models.TextField(max_length=255, default='', null=True,  blank=True, verbose_name="Réponse par paire")
+    audioanswerbis = models.FileField(upload_to=choice_directory_path,  null=True,  blank=True, verbose_name="Audio", default="")
 
-    is_correct  = models.BooleanField(default=0, verbose_name="Réponse correcte ?")
+    is_correct  = models.BooleanField(default=0, blank=True, verbose_name="Réponse correcte ?")
     supportfile = models.ForeignKey(Supportfile, related_name="supportchoices", blank=True, null = True,  on_delete=models.CASCADE)
+
+    ####  Cas spécifique axe gradué
+    xmin       = models.FloatField( null = True,   blank=True, verbose_name="x min ")
+    xmax       = models.FloatField( null = True,   blank=True, verbose_name="x max ")
+    tick       = models.FloatField( null = True,   blank=True, verbose_name="Graduation principale")
+    subtick    = models.FloatField( null = True,   blank=True, verbose_name="Graduation")
+    precision  = models.FloatField( null = True,   blank=True, verbose_name="Précision") 
+    ####  Cas spécifique texte à trous
+    is_written = models.BooleanField(default=0, blank=True,  verbose_name="Mots à écrire ?") # ou à glisser déposer
+
     def __str__(self):
         return self.answer 
 
@@ -2080,14 +2081,14 @@ class Resultexercise(models.Model):  # Last result
 class Writtenanswerbystudent(models.Model): # Commentaire pour les exercices non autocorrigé coté enseignant
 
     relationship = models.ForeignKey(Relationship,  on_delete=models.CASCADE,   related_name='relationship_written_answer', editable=False)
-    student = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_written_answer', editable=False)
-    date = models.DateTimeField(auto_now_add=True)
+    student      = models.ForeignKey(Student,  on_delete=models.CASCADE, blank=True,  related_name='student_written_answer', editable=False)
+    date         = models.DateTimeField(auto_now_add=True)
     # rendus
     imagefile = models.ImageField(upload_to= file_directory_student, blank = True, null=True,   verbose_name="Scan ou image ou Photo", default="")
-    answer = RichTextUploadingField( default="", null=True,  blank=True, ) 
-    comment = models.TextField( default="", null=True,   editable=False) # Commentaire de l'enseignant sur l'exercice
-    audio = models.FileField(upload_to=file_directory_path,verbose_name="Commentaire audio", blank=True, null= True, default ="")
-    point = models.CharField(default="", max_length=10, verbose_name="Note")
+    answer    = models.TextField(default="", null=True,  blank=True, ) 
+    comment   = models.TextField( default="", null=True,   editable=False) # Commentaire de l'enseignant sur l'exercice
+    audio     = models.FileField(upload_to=file_directory_path,verbose_name="Commentaire audio", blank=True, null= True, default ="")
+    point     = models.CharField(default="", max_length=10, verbose_name="Note")
     is_corrected = models.BooleanField( default=0, editable=False ) 
 
     def __str__(self):        

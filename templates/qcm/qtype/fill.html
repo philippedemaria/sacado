@@ -20,17 +20,13 @@
     </div>
     <div class="col-sm-12 col-md-6">
         <div class="form_card" style="margin-top:20px">    
-            {% include 'modes.html' %}
-            <div class="no_visu"> 
-                {% include 'qcm/qtype/0_config_middle.html' %}
-            </div>
+            {% include 'qcm/qtype/0_config_middle.html' %}
         </div>
-
     </div>       
 </div>
   <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
     <div class="form_card" style="margin-top:20px;" id="answers_list">            
-        <label>Items.   </label> <span class="proposition pull-right"><small>Séparer chaque réponse possible par _|_ (1 séparateur = 3 symboles) </small> </span> 
+        <span class="btn btn-sacado_active">Les couples Questions/réponses</span> <span class="proposition pull-right"><small>Séparer chaque réponse possible par _|_ (1 séparateur = 3 symboles) </small> </span> 
         {{ form_ans.management_form }}
         <div id="formsetZone">
        
@@ -38,11 +34,11 @@
             {{ form.id }}
             <div class="row quizz_line_answer quizz_box_answer quizz_box_answer_left" >
                 <div class="col-sm-12">
-                    <div class="row ">
-                        <div class="col-sm-12 col-md-7 answer_box proposition" > 
+                    <div class="row answer_box_light_purple ">
+                        <div class="col-sm-12 col-md-7 proposition  answer_box_no_border" > 
                             {{ form.answer|attr:"placeholder:Ecrire la question"|add_class:"quizz_font30 quizz_answer"  }}
                         </div>
-                        <div class="col-sm-12 col-md-5 answer_box reponse" >
+                        <div class="col-sm-12 col-md-5 reponse  answer_box_no_border" >
                             {{ form.answerbis|attr:"placeholder:Ecrire la réponse attendue"|add_class:"quizz_font30 quizz_answer"  }}
                         </div>
                     </div>
@@ -60,7 +56,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-12" >
-                <a href="javascript:void();"  class="add_more btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter <span class="qr">un couple Question/Réponse</span> </a><br/><br/>
+                <a href="javascript:void();"  class="add_more btn btn-sacado_active" ><i class="bi bi-plus-circle"></i> Ajouter <span class="qr">un couple Question/Réponse</span> </a><br/><br/>
             </div>                            
         </div>
     </div>
@@ -79,13 +75,16 @@
 <script id="rowToClone" type="text/template">
     <div id="duplicate"> 
         <div class="row quizz_line_answer quizz_box_answer quizz_box_answer_left" >  
-            <div class="col-sm-11">
-                <div class="row ">
-                    <div class="col-sm-12 col-md-7 answer_box" > 
+            <div class="col-sm-12">
+                <div class="row answer_box_light_purple">
+                    <div class="col-sm-12 col-md-7 answer_box_no_border" > 
                         {{ form_ans.empty_form.answer|attr:"placeholder:Ecrire la question"|add_class:"quizz_font30 quizz_answer"  }}
                     </div>
-                    <div class="col-sm-12 col-md-5 answer_box" > 
+                    <div class="col-sm-11 col-md-4 answer_box_no_border" > 
                         {{ form_ans.empty_form.answerbis|attr:"placeholder:Ecrire la réponse attendue"|add_class:"quizz_font30 quizz_answer"  }}
+                    </div>
+                    <div class="col-sm-1 col-sm-1">
+                        <span class="btn btn-danger remove_more"><i class="bi bi-trash"></i></span>
                     </div>
                 </div>
                 <div class="row">
@@ -96,9 +95,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-1">
-                <span class="btn btn-danger remove_more"><i class="bi bi-trash"></i></span>
             </div>
         </div>
     </div>

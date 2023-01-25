@@ -2,7 +2,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
     $(document).ready(function () { 
         console.log("chargement JS ajax-support_creator_sub.js");
 
+        if ($("#id_situation") != 100 ) {$("#id_situation").val(1);}
 
+        $(document).on('change', '.quizz_answer' ,  function (event) {  
+            if( $(this).val() != "" ) { $(this).parent().parent().addClass('answer_box_active') ;}
+            else {
+                { $(this).parent().parent().removeClass('answer_box_active') ;}
+            }
+        })
+
+        $(document).on('change', '.this_variable' , function(event){
+            $(this).addClass('this_variable_active');
+        });  
+
+        if (!$(".this_variable").is(':empty')  ) {$(".this_variable").addClass('this_variable_active');}
         //**************************************************************************************************************
         //********            ckEditor            **********************************************************************
         //**************************************************************************************************************
@@ -30,7 +43,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                     ] ,
             });
 
-              
+         $(document).on('change', 'select[name=knowledge]' , function (event) {
+
+                k_value = $( "#id_knowledge option:selected" ).text(); 
+                $("#id_title").val(k_value) ;
+
+            });
         //*************************************************************************************************************
         //*************************************************************************************************************
         //*************************************************************************************************************  
@@ -287,14 +305,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         // ==================================================================================================
 
 
-
-
-
- 
-
         $('#enable_correction_div').hide();
         $("#enable_correction").click(function(){ 
             $('#enable_correction_div').toggle(500);
+        });
+
+        $('#enable_correction').hide();
+        $("#id_is_display_correction").on('change', function () { console.log("coucou");
+
+            if ($("#id_is_display_correction").is(":checked")) { $("#enable_correction").show(500) ;}
+            else { $("#enable_correction").hide(500) ;}
         });
 
 
@@ -413,16 +433,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 } 
                 $('#subformsetZone').attr("id","subformsetZone"+total_supportchoices)  ;
 
-
-
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS">');
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS">');
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS">');
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS" value="1000" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS">');
-
-
-
-
                 if( $('#imagersub').length ) { 
 
                     l_items = $("#subformsetZone"+total_supportchoices+" .get_image").length ; 
@@ -469,6 +479,19 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
                 $('#subloop'+total_supportchoices).val(0) ;
 
+
+                $('#principal').attr('id',$('#principal').attr('id')+total_supportchoices);
+
+                var this_step = parseInt(total_supportchoices)-1;
+                $('#principal'+this_step).addClass('answer_box_active') ;
+
+
+
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS" value="1000" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS">');
+                
                 supportchoices.val(total_supportchoices+1);
             });
 
@@ -478,6 +501,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             
             var supportchoices = $('#id_supportchoices-TOTAL_FORMS') ;
             var total_supportchoices = parseInt( supportchoices.val() )-1  ;
+
+            var this_step = parseInt(total_supportchoices)-1;
+            $('#principal'+this_step).removeClass('answer_box_active') ; 
 
             $('#duplicate'+total_supportchoices).remove();
             supportchoices.val(total_supportchoices);
@@ -503,17 +529,15 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
 
         function noPreviewFile(nb) {  
-            $("#id_supportchoices-"+nb+"-imageanswer").val('');
+            $("#id_supportchoices-"+nb+"-imageanswer").val("");
             $("#id_supportchoices-"+nb+"-imageanswer").attr("src", "" );
-            $("#preview"+nb).val("") ;  
+            $("#preview"+nb).val("") ; 
             $("#file-image"+nb).removeClass("preview") ;
             $("#preview"+nb).addClass("preview") ; 
             $("#id_supportchoices"+nb+"-imageanswer").removeClass("preview") ;
-            $("#id_supportchoices-"+nb+"-answer").removeClass("preview") ;
-            $("#imager"+nb).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
-
+            $("#imager"+nb).parent().removeClass('answer_box_active') ;
           }
+
 
         function previewFile(nb) {
 
@@ -522,13 +546,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             const reader = new FileReader();
             $("#file-image"+nb).addClass("preview") ;
             $("#preview"+nb).val("") ;  
-            $("#id_supportchoices-"+nb+"-answer").addClass("preview") ;
             $("#preview"+nb).removeClass("preview") ; 
             $("#delete_img"+nb).removeClass("preview") ; 
-            $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
             $("#imager"+nb).next().append('<a href="javascript:void()" id="delete_img'+nb+'" class="delete_img"><i class="fa fa-trash"></i></a>');
-
+            $("#imager"+nb).parent().addClass('answer_box_active') ;
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
@@ -544,29 +565,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         //*************************************************************************************************************  
         // Gestion des sous thèmes
         //************************************************************************************************************* 
-
-
-        // var ntotal_form = $('#id_supportsubchoices-TOTAL_FORMS') ;
-
-
-        // for (n=0;n<ntotalForms;n++){
-
-        //     $('#subformsetZone'+n+" .to-data-loop").each( function( index ) {
-        //               $(this).attr('data-loop',n+"_"+index);
-        //               $(this).attr('id',$(this).attr('id')+n+"_"+index);
-        //               attr_name_tab = $(this).attr('name').split('-');
-        //               $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
-        //             });
-
-        //     $("#subformsetZone"+n+" textarea").each(function(index){ 
-        //         $(this).attr('id',$(this).attr('id')+n+"_"+index);  
-                              
-        //         attr_name_tab  = $(this).attr('name').split('-')
-        //         $(this).attr('name', attr_name_tab[0] +"-"+n+"_"+index +"-"+ attr_name_tab[2]);
-
-        //     });
-        // }
-
+ 
 
         $(document).on('click', '.add_sub_more', function (event) { 
 
@@ -617,47 +616,37 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         });
 
 
-        $(document).on('click', '.automatic_insertion' , function (event) {  
-            var feed_back = $(this).attr('id');
-            $("#div_"+feed_back).toggle(500);
-         });
-
-
 
         //*************************************************************************************************************  
         // Gestion des images des sous thèmes
         //*************************************************************************************************************  
-        $('body').on('change', '.to-data-loop' , function (event) { 
+        $('body').on('change', '.to-data-loop' , function (event) {  
             
             const parental_div     = $(this).parent();
-            const image_preview_id = parental_div.find('img').attr('id');
+            const image_preview_id = parental_div.find('img').attr('id'); 
             const file  = parental_div.find('input')[0].files[0];
             const reader = new FileReader();
 
-            parental_div.find('i').addClass('preview');
-            parental_div.removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            parental_div.next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $(this).parent().find('svg').addClass("preview");
             parental_div.next().append('<a href="javascript:void()" class="delete_subimg"><i class="fa fa-trash"></i></a>');
 
             $("#"+image_preview_id).removeClass('preview');
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
-                                                $("#"+image_preview_id).attr("src", image );
+                                                parental_div.find('img').attr("src", image );
                                             }) ;
-            if (file) { reader.readAsDataURL(file);}            
+            if (file) { reader.readAsDataURL(file);} 
+            parental_div.find('img').removeClass('preview');        
          });  
 
 
         $('body').on('click', '.delete_subimg' , function (event) { 
 
             const parental_div = $(this).parent().parent() ;
-
+            parental_div.find('svg').removeClass("preview");
             parental_div.find('input').val("");
             parental_div.find('img').attr("src", "" );
             parental_div.find('img').addClass('preview');
-            parental_div.find('i').removeClass('preview');
-            $(this).parent().prev().addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $(this).parent().next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
             $(this).remove();
 
             });  

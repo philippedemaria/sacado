@@ -3,6 +3,27 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         console.log("chargement JS ajax-support_creator.js  OKK");
 
 
+        if ($("#id_situation") != 100 ) {$("#id_situation").val(1);}
+
+        $(document).on('change', '.quizz_answer' ,  function (event) {  
+            if( $(this).val() != "" ) { $(this).parent().parent().addClass('answer_box_active') ;}
+            else {
+                { $(this).parent().parent().removeClass('answer_box_active') ;}
+            }
+        })
+
+        $(document).on('change', '.this_variable' , function(event){
+            $(this).addClass('this_variable_active');
+        });  
+
+        if (!$(".this_variable").is(':empty')  ) {$(".this_variable").addClass('this_variable_active');}
+
+         $(document).on('change', 'select[name=knowledge]' , function (event) {
+
+                k_value = $( "#id_knowledge option:selected" ).text(); 
+                $("#id_title").val(k_value) ;
+
+            });
         //**************************************************************************************************************
         //********            ckEditor            **********************************************************************
         //**************************************************************************************************************
@@ -29,7 +50,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                     ] ,
             });
 
-              
+        $(document).on('focusout',".min_letters", function (event) {
+            if ( ($(this).val().length < 4 ) && ($(this).val().length > 0 ) )  { alert(" Votre mot doit comporter au moins 4 lettres"); return false ;}
+        })
         //*************************************************************************************************************
         //*************************************************************************************************************
         //*************************************************************************************************************  
@@ -253,14 +276,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 $('#nb_situation').show(500);  
                 $('#show_pseudorandomize_zone').attr('id','no_show_pseudorandomize_zone') ; 
                 $('#no_show_pseudorandomize_zone').attr('disabled',true) ; 
-                $('.add_more').attr('disabled',true) ;
                 $('#show_randomize_zone').remove() ;
             }
             else {
                 $('#nb_situation').hide(500);  
                 $('#no_show_pseudorandomize_zone').attr('id','show_pseudorandomize_zone') ;
                 $('#show_pseudorandomize_zone').attr('disabled',false) ;
-                $('.add_more').attr('disabled',false) ;
             }
             open_situation_randomize +=1 ;
 
@@ -290,6 +311,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
         $('#enable_correction_div').hide();
         $("#enable_correction").click(function(){ 
             $('#enable_correction_div').toggle(500);
+        });
+
+        $('#enable_correction').hide();
+        $("#id_is_display_correction").on('change', function () { console.log("coucou");
+
+            if ($("#id_is_display_correction").is(":checked")) { $("#enable_correction").show(500) ;}
+            else { $("#enable_correction").hide(500) ;}
         });
 
 
@@ -410,9 +438,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
 
 
-
-
-
         $(document).on('click', '.add_more', function (event) { 
 
                 var total_form = $('#id_supportchoices-TOTAL_FORMS') ;
@@ -440,6 +465,19 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                 $('#spanner').attr("id","spanner"+totalForms) ;
                 $('#preview').attr("id","preview"+totalForms) ;
  
+
+
+                if ( $('#qtype').val() == 5)
+                {  
+                    $('#imager').attr("id","imager"+totalForms) ;
+                    $('#file-image').attr("id","file-image"+totalForms) ;
+                    $('#previewbis').attr("id","previewbis"+totalForms) ;
+                    $('#delete_imgbis').attr("id","delete_imgbis"+totalForms) ;
+
+                }
+
+
+
 
                 if ( $('#qtype').val() == 7)
                 {  
@@ -502,14 +540,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
 
         function noPreviewFile(nb) { 
-            $("#id_supportchoices-"+nb+"-imageanswer").val('');
+            $("#id_supportchoices-"+nb+"-imageanswer").val("");
             $("#id_supportchoices-"+nb+"-imageanswer").attr("src", "" );
-            $("#preview"+nb).val("") ;  
+            $("#preview"+nb).val("") ; 
             $("#file-image"+nb).removeClass("preview") ;
             $("#preview"+nb).addClass("preview") ; 
             $("#id_supportchoices"+nb+"-imageanswer").removeClass("preview") ;
-            $("#id_supportchoices-"+nb+"-answer").removeClass("preview") ;
-
+            $("#imager"+nb).parent().removeClass('answer_box_active') ;                
+            $("#delete_img"+nb).remove() ;
           }
 
 
@@ -518,15 +556,13 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             const preview = $('#preview'+nb);
             const file = $('#id_supportchoices-'+nb+'-imageanswer')[0].files[0];
             const reader = new FileReader();
-            $("#file-image"+nb).addClass("preview") ;
-            $("#preview"+nb).val("") ;  
-            $("#id_supportchoices-"+nb+"-answer").addClass("preview") ;
+            $("#file-image"+nb).addClass("preview") ; 
             $("#preview"+nb).removeClass("preview") ; 
             $("#delete_img"+nb).removeClass("preview") ;
             $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $("#imager"+nb).next().next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
             $("#imager"+nb).next().append('<a href="javascript:void()" id="delete_img'+nb+'" class="delete_img"><i class="fa fa-trash"></i></a>');
-
+            $("#imager"+nb).parent().addClass('answer_box_active') ;
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
@@ -538,7 +574,36 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
           }
 
 
+        $('body').on('change', '.choose_imageanswerbis' , function (event) {  
 
+            var nb = this.id.match(/\d+/); 
+            const file = $('#id_supportchoices-'+nb+'-imageanswerbis')[0].files[0];
+            const reader = new FileReader();
+            $(this).parent().find('svg').addClass("preview") ;
+            $(this).parent().next().append('<a href="javascript:void()" id="delete_imgbis'+nb+'" class="delete_imgbis"><i class="fa fa-trash"></i></a>');
+            $("#imagerbis"+nb).parent().addClass('answer_box_active') ;
+            $("#previewbis"+nb).removeClass("preview") ;
+            reader.addEventListener("load", function (e) {
+                                                var image = e.target.result ;  
+                                                $("#previewbis"+nb).attr("src", image );
+                                            }) ;
+            if (file) { reader.readAsDataURL(file);}
+         });  
+            
+
+
+
+        $('body').on('click', '.delete_imgbis' , function (event) { 
+                var nb = this.id.match(/\d+/); 
+                $("#id_supportchoices-"+nb+"-imageanswerbis").val("");
+                $("#id_supportchoices-"+nb+"-imageanswerbis").attr("src", "" );
+                $("#previewbis"+nb).val("") ; 
+                $("#file-imagebis"+nb).removeClass("preview") ;
+                $("#previewbis"+nb).addClass("preview") ; 
+                $("#id_supportchoices"+nb+"-imageanswerbis").removeClass("preview") ;
+                $(this).remove() ;
+                $("#imagerbis"+nb).parent().removeClass('answer_box_active') ;
+          });
         //*************************************************************************************************************  
         // FIN DE gestion
         //************************************************************************************************************* 

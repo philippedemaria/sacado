@@ -178,13 +178,17 @@ MathJax = {
     {% elif question.qtype == 2 %}
         <div class="row"> 
             <div class="col-sm-12 col-md-12"align="center">
+                {% if question.mental and question.mental.jquery %}
+                    <canvas class="this_canvas" id="canvas{{ forloop.counter0}}" width="900px" height="450px" style="border:1px solid #CCC; background-color: white;"></canvas>
+                    <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
+                {% endif %} 
                 {% if question.mental and question.mental.html %}
                     {{ question.mental.html|safe }} 
                 {% elif question.formula %}
                     {{ question.formula }}
                 {% else %}
                     {% get_ans_for_this_question quizz question student as this_answer %}
-                    <input type="text" name="solution" id="solution" required class="quizz_box_answer" placeholder="Répondre ici"  value="{{ this_answer.answer }}" style="width:10em" >
+                    <input type="text" name="solution" id="solution" required class="quizz_box_answer in_the_test" placeholder="Répondre ici"  value="{{ this_answer.answer }}" style="width:10em" >
                 {% endif %} 
             </div>
         </div> 
@@ -264,3 +268,9 @@ MathJax = {
 </section>
  
 {% endblock %} 
+
+
+
+{% block python %} 
+    <script src="{% static 'js/script/geometry.js' %}"></script>
+{% endblock %}

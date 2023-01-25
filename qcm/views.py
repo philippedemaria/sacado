@@ -6175,45 +6175,6 @@ def create_supportfile_knowledge(request,id):
 
 
 
-def clean_form(request,loop,fa,dico):
-    print(dico)
-    print("===============================================================================================================")
-    print("===============================================================================================================")
-    print(loop)
-    print("===============================================================================================================")
-    print("===============================================================================================================")
-    subfields = ('answer','imageanswer','label','is_correct','retroaction')
-    nd={}
-    nb_loop = int(dico['supportchoices-TOTAL_FORMS'][0])
-    for key,value in dico.items() :
-        if "supportsubchoices-"+str(loop)+"_" in key   :
-            try :
-                if key.split("-")[2] in subfields :
-                    nd[key.split("-")[2]]=value
-            except :
-                pass
-    dataset=[]
-    print(nd)
-    for i in range(nb_loop) :
-        for subloop in range(int(dico['subloop'+str(i)][0])):
-            data  = {'supportchoice':fa}
-            for sf in subfields :
-                try :
-                    sf_key = sf+"-"+str(i)+"_"+str(subloop)
-                    data[sf]=nd[sf_key]
-                except :
-                    sf_key = None
-
-                if sf == 'imageanswer' and request.FILES[sf_key] :
-                    upload = request.FILES[sf_key]
-                    fss = FileSystemStorage()
-                    file = fss.save(upload.name, upload)
-                    file_url = fss.url(file)
-
-                if 'answer' in data or 'imageanswer' in data or 'label' in data  :
-                    dataset.append(data)
-    return dataset
-
 def insert_form(looper,fa,dico):
 
     subfields = ('answer','imageanswer','label','is_correct','retroaction')
@@ -6524,9 +6485,7 @@ def my_own_exercises(request): # Modification d'un exercice non autocorrigé dan
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
-    exercises = Exercise.objects.filter(supportfile__author=teacher,supportfile__qtype__lt=100)
-    if exercises.count()>20 :
-        exercises = exercises.order_by("-id")[:20]
+    exercises = Exercise.objects.filter(supportfile__author=teacher,supportfile__qtype__lt=100).order_by('-id')[:15]
 
     subjects = teacher.subjects.all()
     levels   = teacher.levels.all()
@@ -6538,10 +6497,11 @@ def my_own_exercises(request): # Modification d'un exercice non autocorrigé dan
         pass
 
     if request.user.is_superuser :
-        qtypes = Qtype.objects.filter(is_online=1).order_by("ranking")
+        qtypes = Qtype.objects.order_by("ranking")
     else :
         qtypes = Qtype.objects.filter(is_online=1).exclude(pk=100).order_by("ranking")
- 
+
+
     context = { 'qtypes': qtypes, 'exercises' : exercises, 'subjects' : subjects, 'levels' : levels , 'is_mathJax' : False ,  'teacher' : teacher ,  }
     return render(request, 'qcm/list_my_own_exercises.html', context)
 
@@ -6878,13 +6838,17 @@ def show_all_type_exercise(request,ids): # vue coté prof de l'exercice autocorr
     loops = [0]*supportfile.situation
     context = { 'supportfile' : supportfile, 'today' : today , 'loops' : loops,  'student' : None, 'only_show' : False}
 
-    context.update ( define_all_types( supportfile.situation , supportfile) ) 
-
     qtype_custom = Qtype.objects.get(pk=supportfile.qtype).custom
  
     if supportfile.is_python :
         url = "basthon/index_supportfile.html" 
     else :
+        if supportfile.qtype == 20  :
+            wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None ) 
+            w_a = False
+            context.update ( { 'form' : wForm , 'w_a' : w_a } ) 
+        else :
+            context.update ( define_all_types( supportfile.situation , supportfile) ) 
         url = "qcm/qtype/"+qtype_custom+"_ans.html" 
 
     return render(request, url , context)
@@ -6924,8 +6888,6 @@ def get_list_values_if_variables_alea(n, supportfile):
     else :
         liste_v = None
     return liste_v
-
-
 
 def replace_bloc(texte,vars_list,i):
     """remplace les variables littérales par leur valeur et calcule éventuellement la partie à calculer.
@@ -6969,20 +6931,22 @@ def alea_annoncements(n,supportfile) :
 
     s_choices = supportfile.supportchoices.all()
     nb_pseudo_support = supportfile.nb_pseudo
+ 
 
     if nb_pseudo_support: 
         su_choices = list(s_choices)
         random.shuffle(su_choices)
         s_choices = su_choices[0:nb_pseudo_support]
 
-    if supportfile.qtype == 1 or supportfile.qtype == 7 or supportfile.qtype == 13 or supportfile.qtype == 15 :
-        if nb_pseudo_support :
-            n = nb_pseudo_support
-        else :
-            n = s_choices.count()
+    n=2
+    if supportfile.qtype == 1 or supportfile.qtype == 13 or supportfile.qtype == 15 :
+        if nb_pseudo_support : n = nb_pseudo_support
+        else : n = s_choices.count()
 
     for i in range (n) : # n = nombre de loops
-          
+
+        if 0 < nb_pseudo_support < n : s_choices = s_choices*(n//nb_pseudo_support + 1)
+
         enonce  = supportfile.annoncement
         corrige = supportfile.correction
         new = replace_bloc(enonce,vars_list,i)
@@ -7003,9 +6967,11 @@ def alea_annoncements(n,supportfile) :
             corrections.append(cor)
         else :
             corrections.append(corrige)
- 
-        if supportfile.qtype<3 and vars_list :
-            this_choice = s_choices[0]
+
+        
+
+        if supportfile.qtype<3 and vars_list : 
+            this_choice = s_choices[i]
             new    = replace_bloc(this_choice.answer,vars_list,i)
             newbis = replace_bloc(this_choice.answerbis,vars_list,i)
             data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : this_choice.retroaction , 'is_correct' : this_choice.is_correct   } 
@@ -7044,7 +7010,8 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
 
-        elif  supportfile.qtype == 6 or supportfile.qtype == 14 :
+        elif  supportfile.qtype == 6 or supportfile.qtype == 8  or supportfile.qtype == 14 :
+
 
             this_liste = list()
             this_sub_liste = list()
@@ -7054,7 +7021,12 @@ def alea_annoncements(n,supportfile) :
                 retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
                 data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
                 this_liste.append(data)
-                for subchoice in this_choice.supportsubchoices.all():
+                this_choices = this_choice.supportsubchoices.all()
+                if supportfile.nb_subpseudo :
+                    this_sub_choices = list(this_choices)
+                    random.shuffle(this_sub_choices)
+                    this_choices = this_sub_choices[0:supportfile.nb_subpseudo]  
+                for subchoice in this_choices:
                     new    = replace_bloc(subchoice.answer,vars_list,i)
                     retroaction = replace_bloc(subchoice.retroaction,vars_list,i)
                     label = replace_bloc(subchoice.label,vars_list,i)
@@ -7065,56 +7037,46 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_sub_liste)
             shufflesubchoices.append(this_sub_liste)
 
+
         elif  supportfile.qtype == 7 :
+            this_choice = s_choices[i]
+            mystr = this_choice.answer
+            mystr = mystr.replace('<p>','')
+            mystr = mystr.replace('</p>','')
+            mystr = mystr.replace('<strong>','####')
+            mystr = mystr.replace('</strong>','####')
+            tab   = mystr.split('####')
+            
+            my_str = ""
+            for i in range(len(tab)) :
+                if i%2 == 1:
+                    this_word = ''.join(random.sample(tab[i],len(tab[i])))
+                    word = this_word
+                else :
+                    word = "<small>"+tab[i]+'</small>' 
+                my_str += word
+            data = { 'id' : this_choice.id , 'answer' : my_str  , 'retroaction' : this_choice.retroaction   } 
+            shufflechoices.append(data)
+            random.shuffle(shufflechoices)
+ 
+
+        elif  supportfile.qtype == 9 :
 
             this_choice = s_choices[i]
+            words = list()
             mystr = this_choice.answer
             mystr = mystr.replace('<strong>','####')
             mystr = mystr.replace('</strong>','####')
             tab   = mystr.split('####')
             string = ""
-            for i in range(len(tab)) :
-                if i%2==1:
-                    word = tab[i]
-                    word = ''.join(random.sample(word,len(word))) 
-                    data = { 'id' : this_choice.id , 'answer' : word  , 'retroaction' : this_choice.retroaction   } 
-                    shufflechoices.append(data)
-            random.shuffle(shufflechoices)
- 
+            for j in range(len(tab)) :
+                if j%2==1:
+                    words.append(tab[j])
 
-        elif  supportfile.qtype == 8 :
-
-            this_liste = list()
-            for this_choice in s_choices : 
-                new    = replace_bloc(this_choice.answer,vars_list,i)
-                newbis = replace_bloc(this_choice.answerbis,vars_list,i)
-                retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
-                data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
-                this_liste.append(data)
-            random.shuffle(this_liste)
-            shufflechoices.append(this_liste)
-
-
-        elif  supportfile.qtype == 9 :
-            this_liste = list()
-            words = list()
-            for this_choice in s_choices : 
-                this_liste.append(this_choice)
-
-                mystr = this_choice.answer
-                mystr = mystr.replace('<strong>','####')
-                mystr = mystr.replace('</strong>','####')
-                tab   = mystr.split('####')
-                string = ""
-                for i in range(len(tab)) :
-                    if i%2==1:
-                        words.append(tab[i])
-            choices.append(this_liste)
-            random.shuffle(words)
+            choices.append(this_choice)
             shufflechoices.append(words) ## shufflechoices sont la liste des mots
 
-
-
+          
         elif  supportfile.qtype == 13 :
 
             this_choice = s_choices[i]
@@ -7200,16 +7162,28 @@ def define_all_types(n, supportfile):
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'shufflesubchoices' : shufflesubchoices  ,  'numexo' : 0   }
 
-
     elif supportfile.qtype==7 : # anagrammes 
 
-        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0   } 
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile) 
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'numexo' : 0 }
+        
 
     elif supportfile.qtype==8 : # classement
 
-        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices   , 'numexo' : 0  } 
+
+        vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)        
+
+        this_solution = list()
+        for shufflesubchoice in shufflesubchoices:
+            i , sep , this_sub_solution = 0 , ",", ""
+            for s in shufflesubchoice:
+                if i == len(shufflesubchoice)-1  : 
+                    sep = ""
+                i+=1
+                this_sub_solution += s['answer'] + sep
+            this_solution.append(this_sub_solution)  
+
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflesubchoices' : shufflesubchoices   , 'numexo' : 0  ,'this_solution' : this_solution  } 
 
     elif supportfile.qtype==9 : # texte à trous
 
@@ -7256,14 +7230,7 @@ def define_all_types(n, supportfile):
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
         context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'supportfile' : supportfile , 'numexo' : 0 } 
-
-
-
-
-    elif supportfile.qtype==19 :
-
-        context = {  'supportfile' : supportfile ,   }
-
+ 
     return context
 
 
@@ -7418,6 +7385,8 @@ def calculate_str(this_item):
         k+=1
         renew += str(calc)
     return renew
+
+
 ######################################################################################################################################################################
 ########################################### CHECK des solutions  ----  create_supportfile ligne 6227   ###############################################################
 ######################################################################################################################################################################
@@ -7595,10 +7564,10 @@ def check_solution_pairs(request):## 5
             string_pairs += "La paire <b>"+ str(answer) + sep + str(answerbis)+" "+sepa+" </b>  "+ str(retroaction) + "<br/>"
     
     retroaction = string_pairs 
-
+    numexo += 1
+    this_score , j = 0,0
     for answer in answers :
-        numexo += 1
-
+        j+=1
         if supportvariables:
             for var in customvars :
                 value = request.POST.getlist(var)[loop-1]
@@ -7607,13 +7576,15 @@ def check_solution_pairs(request):## 5
             tab_answer = answer.split("====") 
 
             if data_ans[str(tab_answer[0])] == str(tab_answer[1]):
-                score  += 1     
+                this_score  += 1     
 
         else :
             answer = answer.replace("----","")
             tab_answer = answer.split("====") 
             if data_ans[str(tab_answer[0])] == str(tab_answer[1]):
-                score  += 1  
+                this_score  += 1
+
+    if this_score == j : score +=1
  
     data['numexo'] = numexo  
     data['score']  = score
@@ -7632,16 +7603,28 @@ def check_solution_regroup(request):## 6
     data = {}
     old_score = score
 
+    numexo +=1
+    this_score = 0
+    j = 0
+    
     for answer in answers :
+        scores = list()
         choice_id, subchoice_id_str =  answer.split("====")
         supportchoice = Supportchoice.objects.get(pk=choice_id)
         supportsubchoices = supportchoice.supportsubchoices.all()
         answer_ids = subchoice_id_str.split("----")
+
         answer_ids = answer_ids[:len(answer_ids)-1]
-        for subchoice_id in supportchoice.supportsubchoices.values_list('id', flat=True) :
-            numexo +=1
-            if str(subchoice_id) in answer_ids :
-                score +=1
+        this_sub_score = 0
+        supportsubchoices_values = supportchoice.supportsubchoices.values_list('id', flat=True)
+
+        for answer_id in answer_ids :
+            if answer_id != "" and  int(answer_id)  in list(supportsubchoices_values) : scores.append(1)
+            else : scores.append(0)
+
+        if sum(scores) == len(scores): this_score += 1
+
+    if this_score == j : score +=1
 
     supportfile = Supportfile.objects.get(pk=supportfile_id) 
     correction_str = ""
@@ -7708,22 +7691,25 @@ def check_sort_answers(request):## 8
     choices     = list(supportfile.supportchoices.order_by('id')) 
     answer_ids = list() 
 
+    numexo +=1
     if supportfile.supportvariables.count() or supportfile.nb_pseudo : # avec VA , on on suppose que les answer sont des nombres
         ans_list = answers[loop-1].split(',')
         ans_list_sorted = answers[loop-1].split(',')
         ans_list_sorted.sort()
-
+        this_score = -1
+        
         for j in range(len(ans_list)):
-            numexo +=1
-            if ans_list[j] == ans_list_sorted[j]:
-                score+=1 
-
+            if ans_list[j] == ans_list_sorted[j]: 
+                this_score += 1
     else : # Sans variable aléatoire
-        i = 0
+        j = 0
+        this_score = 0
         for answer in answers[0].split(',') :
-            numexo +=1
-            if answer == choices[i].answer or answer == choices[i].imageanswer : score += 1
-            i+=1
+            if answer == choices[j].answer or answer == choices[j].imageanswer : 
+                this_score += 1
+            j+=1
+
+    if this_score == j : score +=1
 
     data['numexo'] = numexo  
     data['score']  = score
@@ -7741,39 +7727,43 @@ def check_sort_answers(request):## 8
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
 
+
 def check_filltheblanks_answers(request):## 9   
 
     supportfile_id = request.POST.get('supportfile_id',0)
     numexo         = int(request.POST.get('numexo',0))
     score          = int(request.POST.get('score',0))
     loop           = int(request.POST.get('loop',0))
-    answers        = request.POST.getlist('answers',None)
-    choice_id      = request.POST.get('choice_id',None)
+    answers        = request.POST.getlist('answers'+str(loop),None)
+    choice_ids      = request.POST.getlist('choice_id',None)
 
     old_score      = score
     data = {}
     supportfile = Supportfile.objects.get(pk=supportfile_id) 
-    choice      = Supportchoice.objects.get(pk=choice_id) 
+    choice      = Supportchoice.objects.get(pk=choice_ids[int(loop)-1]) 
     
-    texte = choice.answer
+    texte     = choice.answer
     texte     = texte.replace('<strong>','####')
     texte     = texte.replace('</strong>','####')
     locutions = texte.split('####')
     ans_to_do = list()
 
     for i in range(len(locutions)) :
-        if i%2==1 : ans_to_do.append( locutions[i] )
-
+        if i%2==1 : ans_to_do.append( locutions[i].strip() )
+    
     for i in range(len(ans_to_do)) :
         numexo +=1
         if ans_to_do[i]==answers[i]:
             score += 1
+
 
     data['numexo'] = numexo  
     data['score']  = score
     data['this_correction_text'] = choice.answer
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
+
+
 
 def check_grid_answers(request):## 12 mot mélés   non nécessaire
 
@@ -7903,18 +7893,21 @@ def check_image_answers(request):
 
     data = {}
     old_score  = score
+    numexo += 1
 
+    this_score = -1
     for i in range( len (choice_ids) ) :
         supportsubchoice = Supportsubchoice.objects.get(pk=choice_ids[i])
-        numexo += 1
         if supportsubchoice.label == answers[i]:
-            score +=1
+            this_score +=1
+    if i == this_score : score +=1
 
     retroaction = ""
     if supportfile_id :
         supportfile = Supportfile.objects.get(pk=supportfile_id)
         choice = supportfile.supportchoices.all()[loop]
         retroaction += choice.retroaction+"<br/>"
+    
 
     data = {}
     data['numexo'] = numexo
@@ -7956,15 +7949,19 @@ def check_axe_answers(request):## 18 axe
             retroaction += choice.retroaction + " "
         
     else :
-        
+        this_score =-1
+        numexo += 1
         for i in range(len(choice_ids)) :
-            numexo += 1
+            
             choice = Supportchoice.objects.get(pk=choice_ids[i])
             answer = float(choice.answer.replace(",","."))
 
             if str(  answer  - precision) <= str(valeurs[i]) <= str(  answer  + precision):
-                score +=1
+                this_score +=1
             retroaction += choice.retroaction + " "
+
+
+    if this_score == i : score +=1
 
     data = {}
     
@@ -9724,8 +9721,6 @@ def show_write_exercise(request,id): # vue pour le prof de l'exercice non autoco
 
     if relationship.exercise.supportfile.is_python :
         url = "basthon/index.html" 
-    elif relationship.exercise.supportfile.qtype == 20  :
-        url = "qcm/form_writing.html"
     else :
         return show_all_type_exercise(request,relationship.exercise.supportfile.id) 
 

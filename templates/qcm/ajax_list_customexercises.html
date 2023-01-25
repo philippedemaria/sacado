@@ -36,23 +36,13 @@
                         <a href="javascript:void();"  title="Assigner à un parcours" class="parcours_selector_support label_my_own" data-loop="{{ forloop.counter}}"><i class="bi bi-box-arrow-up-right"></i></a>
                     </div>
                     <div class="col-sm-6"> 
-                        {% if supportfile.qtype == 100 %}
-                            <img src="{% static 'img/ggb.png'  %}" width="20px" class="qtype_logo" />
-                        {% else  %}  
-                        <label style="{% if supportfile.qtype == 1  or supportfile.qtype == 6  %}font-size:0.25em
-                                        {% elif supportfile.qtype < 6 or supportfile.qtype == 14 %}font-size:0.2em;padding-left:10px;
-                                        {% elif supportfile.qtype == 18 %}font-size:0.6em
-                                        {% elif supportfile.qtype == 9 %}font-size:0.17em
-                                        {% else %}font-size:0.35em{% endif %}" class="qtype_logo">
-                            {{ supportfile.qtype_logo|safe }}
-                        </label> 
-                        {% endif  %} 
+                        <img src="{{ supportfile.qtype_logo.url  }}" width="20px" class="qtypes_logo" /> 
                         {{ supportfile.qtype_title  }} 
                     </div>
                     <div class="col-sm-3" align='right'>
                         {% if supportfile.correction != "" %}
                             <span class="helper_tip" style="color:#222">
-                                <i class="fa fa-copyright text-{% if supportfile.is_display_correction %}success{% else %}danger{% endif %}" style="font-size:18px;cursor:help"></i>
+                                <i class="fa fa-copyright text-{% if supportfile.is_display_correction %}light{% else %}mauve{% endif %}" style="font-size:18px;cursor:help"></i>
                                 <div class="helper_tip_text">Exercice corrigé</div>
                             </span>
                         {% endif  %} 
@@ -77,7 +67,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 exercise_body_shared consignecustomexercise" style="min-height:50px; max-height: 300px">
+                    <div class="col-sm-12 exercise_body_shared consigne_small_font" style="min-height:50px; max-height: 300px">
                         {% if supportfile.qtype == 100 %}
                             <img src="{{ supportfile.imagefile.url }}" height="270px" />
                         {% else %}
@@ -87,9 +77,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 exercise_body_shared" style="min-height:0px; max-height: 300px">
-                        
                         {% if supportfile.qtype == 1 %} <!-- VF -->
-                            
                             <div class="row" style="padding-top: 20px;"> 
                                 {% for c in supportfile.supportchoices.all %}
                                     <div class="col-sm-6" align='center'> 
@@ -148,8 +136,8 @@
                         {% elif supportfile.qtype == 6 %}<!-- Correspondance -->
 
                             {% for choice in supportfile.supportchoices.all %}
-                                    <div class="bilan_div" style="padding:5px">{{ choice.answer }}
-                                        <div class="quizz_item" style="padding:5px">
+                                    <div class="bilan_div" style="padding:5px">{{ choice.answer }}  {% if supportfile.nb_subpseudo %}<label><small>[{{ supportfile.nb_subpseudo}}]</small></label>{% endif %}
+                                        <div class="quizz_item_choice" style="padding:5px">
                                         {% for subchoice in choice.supportsubchoices.all %}
                                             <li class="sanspuce">{{ subchoice.answer }}</li>
                                         {% endfor %}
@@ -167,34 +155,39 @@
                                 </div>
                             </div>
                             {% for choice in supportfile.supportchoices.all %}
-                            <div class="row"> 
-                                <div class="col-sm-6 col-md-4" align='right'>
+                            <div class="row">
+                                {% if  choice.answer|wordcount > 1 %} 
+                                 <div class="col-sm-12 col-md-12">{{ choice.answer|filltheblanks_safe|safe }} </div>
+                                {% else %}
+                                <div class="col-sm-12 col-md-3" align='right'>
                                 {{ choice.answer|safe }} 
                                 </div>
                                 <div class="col-sm-1 col-md-1" align='left'>
                                   <i class="fa fa-caret-right"></i> 
                                 </div>
-                                <div class="col-sm-5 col-md-7" align='left'>
-                                   <input type="text"    />
+                                <div class="col-sm-11 col-md-8" align='left'>
+                                     <input type="text"    />
                                 </div>
+                                {% endif %}
                             </div>
                             {% endfor %}
                          
                         {% elif supportfile.qtype == 8 %}<!-- Classement par ordre -->
-
-                            {% for choice in supportfile.supportchoices.all %}
-                                <div class="quizz_choice"> 
-                                    {% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %}{{ choice.answer }}
-                                </div>
-                            {% endfor %}
                         
-
-
+                            {% for choice in supportfile.supportchoices.all %}
+                                    <div class="bilan_div" style="padding:5px;width:95%"> 
+                                        {% for subchoice in choice.supportsubchoices.all %}
+                                            {% if subchoice.imageanswer  %}<img src="{{ subchoice.imageanswer.url }}" width="80px" />{% endif %}
+                                            <div class="quizz_item" style="padding:5px;float:left;width:30px;height:30px">{{ subchoice.answer }}</div>
+                                        {% endfor %}
+                                    </div>
+                            {% endfor %}
+ 
                         {% elif supportfile.qtype == 9 %}<!-- Filltheblanks_safe -->
                             <div class="row" align="left"> 
                                 <div class="col-sm-12 col-md-12" >
                                     {% for choice in supportfile.supportchoices.all %}
-                                        <div class="quizz_choice" style="text-align:left"> 
+                                        <div class="fill_the_blanks_text" style="text-align:left;font-size: 13px"> 
                                              {{ choice.answer|filltheblanks_safe|safe }}
                                         </div>
                                     {% endfor %}
@@ -274,15 +267,30 @@
                         pass
                         {% elif supportfile.qtype == 18 %}<!-- Classement sur un axe -->     
 
-                            Etiquettes :
-                                   
-                                {% for choice in  supportfile.supportchoices.all %}
-                                    <div class="quizz_choice"> 
-                                        {{ choice.answer }}
+                            {% for choice in supportfile.supportchoices.all %}
+                                L'axe est gradué de <b>{{ choice.xmin }}</b> à  <b>{{ choice.xmax }}</b> avec une unité de <b>{{ choice.tick }}</b>, une secondaire de <b>{{ choice.subtick }}</b>.  
+                                {% if choice.is_written %}
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <b>Mode aléatoire</b>
+                                        </div>
                                     </div>
-                                {% endfor %} <br/> 
+                                {% else %}
+                                    <div class="row">
+                                        {% if choice.imageanswer %}
+                                        <div class="col-xs-9">
+                                            <img src="{{ choice.imageanswer.url}}" width="150px"/>
+                                        </div>
+                                        {% endif %}
+                                        {% for subchoice in choice.supportsubchoices.all %}
+                                        <div class="col-xs-3">
+                                            <li class="sanspuce">{{ subchoice.label }}</li>
+                                        </div>
+                                        {% endfor %}  
+                                    </div>
+                                {% endif %}    
+                            {% endfor %}
 
-                            L'axe est gradué de <b>{{ supportfile.xmin }}</b> à  <b>{{ supportfile.xmax }}</b> avec une graduation pincipale de <b>{{ supportfile.tick }}</b>, une secondaire de <b>{{ supportfile.subtick }}</b>. La précision des placement est de <b>{{ supportfile.precision }}</b>.  
 
                         {% elif supportfile.qtype == 19 %}<!-- Interface Python -->
                             <div class="row">

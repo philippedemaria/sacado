@@ -2,11 +2,19 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
     $(document).ready(function () { 
         console.log("chargement JS ajax-support_creator_canvas.js");
 
+        if ($("#id_situation") != 100 ) {$("#id_situation").val(1);}
+
+
+
+        $(document).on('change', '.this_variable' , function(event){
+            $(this).addClass('this_variable_active');
+        });  
+
+        if (!$(".this_variable").is(':empty')  ) {$(".this_variable").addClass('this_variable_active');}
 
         //**************************************************************************************************************
         //********            ckEditor            **********************************************************************
         //**************************************************************************************************************
-        $("#id_title").val("Légender les images"); 
 
         CKEDITOR.replace('annoncement', {
                 height: '100px' ,
@@ -29,7 +37,7 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                     ] ,
             });
 
-              
+   
         //*************************************************************************************************************
         //*************************************************************************************************************
         //*************************************************************************************************************  
@@ -167,7 +175,28 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
             )
         });
 
+         $(document).on('change', 'select[name=knowledge]' , function (event) {
+
+                k_value = $( "#id_knowledge option:selected" ).text(); 
+                $("#id_title").val(k_value) ;
+
+            });
+
+         $(document).on('change', '.show_right_side' , function (event) {
+
+                $("#right_side").toggle();
+                $("#more_choice_button").toggle();
+                if ($("#left_side").hasClass("col-sm-12"))
+                    {$("#left_side").removeClass("col-sm-12").addClass("col-sm-6");}
+                else
+                    {$("#left_side").removeClass("col-sm-6").addClass("col-sm-12");}
+            });
+
+
+
+
  
+
         $(".setup_no_ggb").hide();
             makeItemAppear($("#id_is_ggbfile"), $(".setup_ggb"), $(".setup_no_ggb"));
             function makeItemAppear($toggle, $item, $itm) {
@@ -207,7 +236,6 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
         // Gère l'affichage de la div des notes.
         if ($("#id_is_mark").is(":checked")) {$("#on_mark").show();} else { $("#on_mark").hide(); } 
  
-     
         function clickDivAppear(toggle, $item) {
             $(document).on('click', toggle , function () {
                         $(".no_display").hide();        
@@ -285,10 +313,26 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
         // ==================================================================================================
         // ==================================================================================================
 
+
+
+
+
         $('#enable_correction_div').hide();
         $("#enable_correction").click(function(){ 
             $('#enable_correction_div').toggle(500);
         });
+
+        $('#enable_correction').hide();
+        $("#id_is_display_correction").on('change', function () { console.log("coucou");
+
+            if ($("#id_is_display_correction").is(":checked")) { $("#enable_correction").show(500) ;}
+            else { $("#enable_correction").hide(500) ;}
+        });
+
+
+
+
+
 
         $("#id_is_python").on('change', function () { console.log("coucou");
 
@@ -348,7 +392,6 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 $('#data_loop').attr("data-loop", total_supportchoices)  ;
                 $('#data_loop').attr("id","data_loop"+total_supportchoices)  ;
 
-
                 if( $('#imagerbis').length ) { 
                     $('#imagerbis').attr("id","imagerbis"+total_supportchoices) ; 
                     $('#file-imagebis').attr("id","file-imagebis"+total_supportchoices) ;
@@ -357,12 +400,6 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 } 
                 $('#subformsetZone').attr("id","subformsetZone"+total_supportchoices)  ;
 
-
-
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS">');
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS">');
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS">');
-                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS" value="1000" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS">');
 
                 $('#canvas').attr("data-loop",total_supportchoices )  ;
                 $('#canvas').attr("id", $('#canvas').attr("id")+total_supportchoices )  ;
@@ -394,11 +431,12 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                     this_answer.attr("name",new_attr_nm);
                 } 
                 
-                $("#supportchoices-"+total_supportchoices+"-is_correct").prop("checked", false); 
+                $("#id_supportchoices-"+total_supportchoices+"-is_correct").prop("checked", false); 
+                $("#id_supportchoices-"+total_supportchoices+"-is_written").prop("checked", false); 
 
-                $("#duplicate"+total_supportchoices+" input").each(function(index){ 
-                    $(this).attr('id',$(this).attr('id').replace('__prefix__',total_supportchoices));
-                    $(this).attr('name',$(this).attr('name').replace('__prefix__',total_supportchoices));
+                $("#duplicate"+total_supportchoices+" input").each(function(index){
+                    $(this).attr('id',    $(this).attr('id').replace('__prefix__',total_supportchoices)    );
+                    $(this).attr('name',  $(this).attr('name').replace('__prefix__',total_supportchoices)   );
                 });
 
                 $('#duplicate'+total_supportchoices).find("input[type='checkbox']").bootstrapToggle();
@@ -412,7 +450,17 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 $('#spanner').attr("id","spanner"+total_supportchoices) ;
                 $('#preview').attr("id","preview"+total_supportchoices) ;
 
+                $('#loop'+total_supportchoices).val(total_supportchoices) ;
                 $('#subloop'+total_supportchoices).val(0) ;
+
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-TOTAL_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-INITIAL_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS" value="0" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MIN_NUM_FORMS">');
+                $('#subformsetZone'+total_supportchoices).append('<input type="hidden" name="supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS" value="1000" id="id_supportchoice-supportchoices-'+total_supportchoices+'-subchoice-MAX_NUM_FORMS">');
+
+
+                var this_step = parseInt(total_supportchoices)-1;
+                $('#principal'+this_step).addClass('answer_box_active') ;
 
                 supportchoices.val(total_supportchoices+1);
             });
@@ -423,6 +471,10 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
             
             var supportchoices = $('#id_supportchoices-TOTAL_FORMS') ;
             var total_supportchoices = parseInt( supportchoices.val() )-1  ;
+
+            var this_step = parseInt(total_supportchoices)-1;
+            $('#principal'+this_step).removeClass('answer_box_active') ;
+
 
             $('#duplicate'+total_supportchoices).remove();
             supportchoices.val(total_supportchoices);
@@ -444,8 +496,17 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
                                                 $("#canvas"+nb).css("background-image", "url(" + image + ")"  );
+                                                $("#canvas"+nb).attr('width',image.width+"px"); 
+                                                $("#canvas"+nb).attr('height',image.height+"px");
                                             }) ;
-            if (file) { reader.readAsDataURL(file);}      
+            if (file) { reader.readAsDataURL(file);} 
+
+
+
+
+
+
+
          });  
 
 
@@ -527,12 +588,7 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
 
         });
 
-
-        $(document).on('click', '.automatic_insertion' , function (event) {  
-            var feed_back = $(this).attr('id');
-            $("#div_"+feed_back).toggle(500);
-         });
-
+ 
 
 
         //*************************************************************************************************************  
@@ -545,9 +601,7 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
             const file  = parental_div.find('input')[0].files[0];
             const reader = new FileReader();
 
-            parental_div.find('i').addClass('preview');
-            parental_div.removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            parental_div.next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            parental_div.find('svg').addClass('preview');
             parental_div.next().append('<a href="javascript:void()" class="delete_subimg"><i class="fa fa-trash"></i></a>');
 
             $("#"+image_preview_id).removeClass('preview');
@@ -566,12 +620,10 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
             parental_div.find('input').val("");
             parental_div.find('img').attr("src", "" );
             parental_div.find('img').addClass('preview');
-            parental_div.find('i').removeClass('preview');
-            $(this).parent().prev().addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $(this).parent().next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
+            parental_div.find('svg').removeClass('preview');
             $(this).remove();
+            }); 
 
-            });  
 
         //*************************************************************************************************************  
         // FIN DE gestion
@@ -663,7 +715,110 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
             )
          });
 
- 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///// Gestion de l'axepour qtype = 18.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $(document).on('focusout',".axe_creator", function (event) { 
+            let index = $(this).parent().parent().children()[0].value ;
+            var canvas = document.getElementById("canvas"+index);
+            var ctx = canvas.getContext("2d");
+            ctx.beginPath();
+            // Tracé de l'axe
+            ctx.moveTo(25,60);
+            ctx.lineTo(625,60);   
+            //graduation
+            ctx.font = '25px Arial';
+            origin  = $(this).val();
+            ctx.clearRect(15, 15, 35, 35);
+            ctx.fillText( origin, 18, 45); 
+            ctx.moveTo(25,50); // haut de la graduation
+            ctx.lineTo(25,70); // bas de la graduation
+            ctx.stroke();
+            ctx.closePath();
+         });
+
+        $(document).on('focusout',".axe_extremite", function (event) { 
+            let index = $(this).parent().parent().children()[0].value ;
+            var canvas = document.getElementById("canvas"+index);
+            var ctx = canvas.getContext("2d");
+            ctx.beginPath();
+            ctx.font = '25px Arial';
+            detail  = $(this).val();
+            ctx.clearRect(600, 15, 60, 35);
+            ctx.fillText( detail, 610, 45);    
+            ctx.moveTo(625,50); // haut de la graduation
+            ctx.lineTo(625,70); // bas de la graduation
+            ctx.stroke();
+            ctx.closePath();
+         });
+
+
+        $(document).on('focusout',".axe_tick", function (event) {  // tick
+            var loop = $(this).parent().parent().children()[0].value ;
+            var tick = $(this).val();
+            var xmin =  $("#id_supportchoices-"+loop+"-xmin").val();
+            var xmax =  $("#id_supportchoices-"+loop+"-xmax").val();
+            var canvas = document.getElementById("canvas"+loop);
+            var ctx = canvas.getContext("2d");
+            if ((xmin=="") || (xmax=="")) { alert('Renseignez xmin et xmax.') ; return false ;}
+            ctx.beginPath();
+            ctx.moveTo(25,55); // haut de la graduation
+            ctx.lineTo(25,65); // bas de la graduation
+            var a  = 25;
+            var step = 600/( (xmax - xmin)/tick ) ;
+            while (a<625){
+                a = a + step;
+                ctx.moveTo(a,50);
+                ctx.lineTo(a,70);
+            }
+            ctx.stroke();
+            ctx.closePath();   
+         });
+
+
+        $(document).on('focusout',".axe_subtick", function (event) { // subtick
+
+            var loop = $(this).parent().parent().children()[0].value ;
+            var tick = $(this).val();
+            var xmin =  $("#id_supportchoices-"+loop+"-xmin").val();
+            var xmax =  $("#id_supportchoices-"+loop+"-xmax").val();
+            var canvas = document.getElementById("canvas"+loop);
+            var ctx = canvas.getContext("2d");
+            if ((xmin=="") || (xmax=="")) 
+                { alert('Renseignez xmin et xmax.') ; 
+                if (xmin=="") { $("#id_supportchoices-"+loop+"-xmin").focus() ; } else { $("#id_supportchoices-"+loop+"-xmax").focus() ; }
+            return false ;
+            }
+            ctx.beginPath();
+            ctx.moveTo(25,55); // haut de la graduation
+            ctx.lineTo(25,65); // bas de la graduation
+            var a  = 25;
+            var step = 600/tick/ (xmax - xmin) ;
+            while (a<625){
+                a = a + step;
+                ctx.moveTo(a,55);
+                ctx.lineTo(a,65);
+            }
+            ctx.stroke();
+            ctx.closePath();   
+         });
+
+         $(document).on('click',".eraser", function (event) { // subtick
+
+            var loop = $(this).data("loop") ;
+            $("#id_supportchoices-"+loop+"-xmin").val("");
+            $("#id_supportchoices-"+loop+"-xmax").val("");
+            $("#id_supportchoices-"+loop+"-tick").val("");
+            $("#id_supportchoices-"+loop+"-subtick").val("");
+            var canvas = document.getElementById("canvas"+loop);
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(5, 5, 650, 75);
+         });
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

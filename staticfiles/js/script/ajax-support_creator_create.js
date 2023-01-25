@@ -9,7 +9,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         if (qtype<100){
             $("#id_situation").val(1);
         }
- 
+        $('#on_mark').hide();
+
 
 });
 

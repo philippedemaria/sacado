@@ -1699,7 +1699,7 @@ def goto_quizz_student(request,id):
         is_correct , score = 0 , 0
         if quizz.is_random  :
             if question.mental.html : 
-                # on crée la chaine de caractère de la réponse
+                # on crée la chaine de caractère de la réponse  
                 variables = question.mental.variables.split(';')
                 rep, loop , ans_stu = "" , 1 , ""
                 for variable in variables :
@@ -1710,6 +1710,19 @@ def goto_quizz_student(request,id):
                     rep += "{}={}{}".format(variable,new_val,sep)
                     ans_stu += "${}${}".format(new_val,sepa)
                     loop += 1
+
+                if question.mental.jquery :
+                    origin  = request.POST.get("origin"+quizz_nav, None)
+                    value   = request.POST.get("value"+quizz_nav, None)      
+                    stick   = request.POST.get("stick"+quizz_nav, None)
+                    unit    = request.POST.get("unit"+quizz_nav, None)
+                    frmt    = request.POST.get("format"+quizz_nav, None)
+
+                    if frmt == 'pizza' : sol = origine + ((value-150)/stick)/unit
+                    reps_hash = str(hash(solutions[quizz_nav]))
+                    hashed = str(hash(sol))
+
+                    
                 ############ on la hashe
                 reps_hash = str(hash(str(rep)))
             # et on la compare 

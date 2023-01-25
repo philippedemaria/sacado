@@ -19,7 +19,7 @@ def validation_file(content):
     if content :
 	    content_type = content.content_type.split('/')[0]
 	    if content_type in settings.CONTENT_TYPES:
-	        if content._size > settings.MAX_UPLOAD_SIZE:
+	        if content._size > settings.MAX_UPLOAD_SIZE: 
 	            raise forms.ValidationError("Taille max : {}. Taille trop volumineuse {}".format(filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(content._size)))
 	    else:
 	        raise forms.ValidationError("Type de fichier non accepté")
@@ -217,6 +217,14 @@ class SupportfileForm(forms.ModelForm):
 		self.fields['skills']    =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject__in= subjects))
 		self.fields['level']     =  forms.ModelChoiceField(queryset= teacher.levels.exclude(pk= 13).order_by('ranking'))
 
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)
+		attach_file = self.cleaned_data['attach_file'] 
+		validation_file(attach_file)
+		
+
+
 class SupportfileKForm(forms.ModelForm):
 	class Meta:
 		model = Supportfile
@@ -230,6 +238,13 @@ class SupportfileKForm(forms.ModelForm):
 		knowledges = Knowledge.objects.filter(theme__subject= subject)
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']    =  forms.ModelMultipleChoiceField(queryset= Skill.objects.filter(subject= subject))
+ 
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)
+		attach_file = self.cleaned_data['attach_file'] 
+		validation_file(attach_file)
+
  
 class UpdateSupportfileForm(forms.ModelForm):
 
@@ -247,7 +262,11 @@ class UpdateSupportfileForm(forms.ModelForm):
 		self.fields['knowledge'] = forms.ModelChoiceField(queryset=knowledges) 
 		self.fields['skills']  = forms.ModelMultipleChoiceField(queryset=Skill.objects.filter(subject=subject), required=False)
 
-
+	def clean_content(self):
+		content = self.cleaned_data['imagefile']
+		validation_file(content)
+		attach_file = self.cleaned_data['attach_file'] 
+		validation_file(attach_file)
 #################################################################################################################################################################################
 ###################################        FORMULAIRES GROUPES ET SOUS FORMULAIRES       ########################################################################################
 #################################################################################################################################################################################
@@ -323,9 +342,8 @@ class BaseSupportchoiceFormset(BaseInlineFormSet):
         return any(not is_empty_form(nested_form) for nested_form in non_deleted_forms)
 
 
-formSetNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , formset=BaseSupportchoiceFormset,   extra=1)
+formSetNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction','xmin','xmax','tick','subtick','precision','is_written') , formset=BaseSupportchoiceFormset,   extra=1)
 formSubSet    = inlineformset_factory(Supportchoice, Supportsubchoice, fields=('answer','imageanswer','label','is_correct','retroaction') , extra=2)
-
 
 class BaseSupportchoiceUpdateFormset(BaseInlineFormSet):
 
@@ -357,7 +375,7 @@ class BaseSupportchoiceUpdateFormset(BaseInlineFormSet):
         return result
 
 
-formSetUpdateNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction') , formset=BaseSupportchoiceUpdateFormset,   extra=0)
+formSetUpdateNested = inlineformset_factory(Supportfile, Supportchoice, fields=('answer','imageanswer','answerbis','imageanswerbis','is_correct','retroaction','xmin','xmax','tick','subtick','precision','is_written')  , formset=BaseSupportchoiceUpdateFormset,   extra=0)
 formSubSetUpdate    = inlineformset_factory(Supportchoice, Supportsubchoice, fields=('answer','imageanswer','label','is_correct','retroaction') , extra=0)
 #################################################################################################################################################################################
 ###################################    UPDATE FORMULAIRES GROUPES ET SOUS FORMULAIRES       #####################################################################################

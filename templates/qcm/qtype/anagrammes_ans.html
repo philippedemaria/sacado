@@ -3,43 +3,35 @@
 {% load static %}
 {% load item_tags %}
 
-
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    <script>
+        require(['script/ajax-anagrams','script/slider_answer_box']);
+    </script> 
+{% endblock %}
 
 {% block answer_all_type_template %}
 
     {% for choice in shufflechoices %} 
         <li class="this_slide">
 
-            <div align="left" style="margin-top:10px">
-                <div class="this_consigne" align="left">  
-                    {% if relation.instruction %}
-                        <div class="custom_content" 
-                             style="max-height:80px">{{ relation.instruction|safe }}
-                        </div>
-                    {% elif relation.exercise.supportfile.annoncement %}
-                        <div class="custom_content" 
-                             style="max-height:80px">{{ supportfile.annoncement|safe }}
-                        </div>
-                    {% elif supportfile.annoncement %}
-                        <div class="custom_content" 
-                             style="max-height:80px">{{ supportfile.annoncement|safe }}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
+            {% include 'qcm/qtype/_annoncement_instruction.html' %}
+            <div class="legend_answer text-green_index zoom_in" align="left">Écrire l'anagramme du mot bleu dans les pointillés</div> 
 
  
             <div class="row"> 
-                <div class="col-sm-6 col-md-4" align='right'>
-                <h2>{{ choice.answer }} <i class="fa fa-caret-right"></i> </h2>
+                <div class="col-sm-12 col-md-5 anagram zoom_in">
+                    {{ choice.answer|safe }} <i class="fa fa-caret-right pull-right"></i>  
                 </div>
-                <div class="col-sm-6 col-md-8" align='left'>
-                    <h2><input type="text" name="answers" class="answer_box" data-choice_id='{{ choice.id }}' data-loop="{{ forloop.counter }}"  /> </h2>
+
+
+
+                <div class="col-sm-12 col-md-6 text-green_index " align='left'>
+                    <input type="text" name="answers" class="answer_student_box zoom_in" data-choice_id='{{ choice.id }}' data-loop="{{ forloop.counter }}" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}" /> 
                 </div>
             </div>
  
-
+ 
 
             <div class="row validation">
                 <div class="col-sm-12 col-md-3" align="center"  >

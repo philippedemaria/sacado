@@ -21,11 +21,12 @@
 
 
 {% block page_title %}
-  <i class="fab fa-python"></i> 
+    <img src="{{ exercise.supportfile.qtype_logo.url }}" width="40px" class="qtype_logo_img"/> {{ exercise.supportfile.title }}
 {% endblock %}
  
  
-{% block page_menu_right %}
+{% block page_menu_right %}    
+    {{  exercise.supportfile.knowledge  }}
 {% endblock %}
  
 

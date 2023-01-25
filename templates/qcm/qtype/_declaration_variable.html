@@ -10,7 +10,7 @@
                     <div id="duplicate_variables">  
                         <div class="col-sm-12 col-md-6 qrandom">
                                 <div class="col-sm-4 col-md-4"> 
-                                        <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }} 
+                                        <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control this_variable"|attr:"placeholder:a" }} 
                                 </div>
 
                                 <div class="col-sm-4 col-md-4" > 
@@ -23,11 +23,11 @@
                                 </div>
                                 <div class="col-sm-4 col-md-4" > 
                                             <label>Min.</label> <br/> 
-                                            {{ form_var.empty_form.minimum|add_class:"form-control" }} 
+                                            {{ form_var.empty_form.minimum|add_class:"form-control this_variable" }} 
                                 </div>
                                 <div class="col-sm-4 col-md-4" > 
                                         <label>Max.</label>  <br/>
-                                        {{ form_var.empty_form.maximum|add_class:"form-control" }} 
+                                        {{ form_var.empty_form.maximum|add_class:"form-control this_variable" }} 
                                 </div>
                                 <div class="col-sm-4 col-md-4"><br/>
                                     <div class="delete_button_question"></div>
@@ -42,7 +42,7 @@
                     <div id="duplicate_variables">  
                         <div class="col-sm-12 col-md-6 qrandom">
                             <div class="col-sm-4 col-md-4"> 
-                                    <label>Nom : </label>  <br/>{{ form.name|add_class:"form-control"|attr:"placeholder:a" }} 
+                                    <label>Nom : </label>  <br/>{{ form.name|add_class:"form-control this_variable"|attr:"placeholder:a" }} 
                             </div>
                             <div class="col-sm-4 col-md-4" > 
                                     <label>Nb entier ?</label> <br/>

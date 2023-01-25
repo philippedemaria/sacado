@@ -6,7 +6,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-check_image']);
+        require(['script/ajax-check_image','script/ajax-check_image','script/slider_answer_box']);
     </script> 
 {% endblock %}
 
@@ -40,7 +40,7 @@
 		    	{% with this_choice=choice|index:0 %}
 					<div class="row" style="padding: 10px; font-size:18px">  
 						<div align='center'>
-							<div style="width:650px;height:650px;background-image: url({{ this_choice.imageanswer.url }});background-repeat: no-repeat;background-size : cover;position:relative">
+							<div style="width:{{ this_choice.imageanswer.width  }}px;height:{{ this_choice.imageanswer.height  }}px;background-image: url({{ this_choice.imageanswer.url }});background-repeat: no-repeat;background-size : cover;position:relative">
 								{% for choice in shufflesubchoices|index:forloop.counter0 %}
 									{% if supportfile.is_written %}
 									    {% with details=choice.answer|marker_details_answer %}

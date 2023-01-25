@@ -55,7 +55,7 @@
         <h1 style="font-size:2.5em;padding-top:20px" class="thin"> {{ question.title}} </h1>
         <canvas class="this_canvas" id="canvas{{ forloop.counter0}}" width="900px" height="450px" style="border:1px solid #CCC; background-color: white;"></canvas>
 
-        <script>{{  question.mental.jquery|add_loop:forloop.counter0 }}</script>
+        <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
     {% else %}
         <h1 style="font-size:4em;padding-top:100px" class="thin"> {{ question.title}} </h1>
     {% endif %}
@@ -68,7 +68,5 @@
 
 
 {% block python %} 
- 
-        <script src="{% static 'js/script/geometry.js' %}"></script>
- 
+    <script src="{% static 'js/script/geometry.js' %}"></script>
 {% endblock %}

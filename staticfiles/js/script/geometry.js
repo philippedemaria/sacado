@@ -265,29 +265,28 @@ function pythagore(a,index){
 }
 
 // fonction d'appel
-function abscisse(start,end,tick,subtick,aff,index){
+function abscisse(start,end,tick,subtick,index){
  
     var canvas = document.getElementById("canvas"+index);
     var ctx = canvas.getContext("2d");
     ctx.beginPath();
-    var w = end - start ;
-    var tck = 600/w;
-    if(subtick) {var sbtck = tck*subtick;}
-    else  {var sbtck = tck;}
-	
+    //Conversion des pixels à la droite graduée
+    var unit = (end - start)/tick ; 
+    var tck = 600/unit;    // en pixel     
+    var sbtck = tck/subtick; // sous graduation  en pixel
+    var nb_total_graduation = unit * subtick ; // sous graduation  en pixel
+    // Tracé de l'axe
     ctx.moveTo(150,150);
     ctx.lineTo(750,150);   
+    //graduation
     ctx.font = '25px Arial';
-
-    if (aff){
     ctx.fillText(start, 142, 136);
     ctx.fillText(end, 735, 136);
-    ctx.fillText(tick, 142+tck, 136);   
-    }
+    ctx.fillText(start + tick, 142+tck, 136);     
     var a = 150;
     var b = 150;
-    ctx.moveTo(a,140);
-    ctx.lineTo(a,160); 
+    ctx.moveTo(a,140); // haut de la graduation
+    ctx.lineTo(a,160); // bas de la graduation
     while (a<750){
         a = a + sbtck;
         ctx.moveTo(a,145);
@@ -300,9 +299,8 @@ function abscisse(start,end,tick,subtick,aff,index){
     }
     ctx.stroke();
     ctx.closePath();
-	var n = (end-start)/sbtck;	
-	var m = start + Math.floor(Math.random()*n);
-	p = 150 +  600*(m-start)/n ;
+    // fin de la graduation	
+	p = 150 + Math.floor(Math.random()*nb_total_graduation)*6;
     ctx.fillStyle = 'red';
     ctx.beginPath();
     ctx.fillStyle = "red"; 
@@ -313,4 +311,37 @@ function abscisse(start,end,tick,subtick,aff,index){
     //ctx.fillText(p, p - 1*sbtck ,226);  // offsetleft de 150
     ctx.stroke();
     ctx.closePath();
+
+
+    var ipt = document.createElement("input");
+    ipt.setAttribute("type", "hidden");
+    ipt.setAttribute("name", "origin"+index);
+    ipt.setAttribute("value", start);
+    canvas.appendChild(ipt);
+
+    var inpt = document.createElement("input");
+    inpt.setAttribute("type", "hidden");
+    inpt.setAttribute("name", "unit"+index);
+    inpt.setAttribute("value", unit);
+    canvas.appendChild(inpt);
+
+    var input = document.createElement("input");
+    input.setAttribute("type", "hidden");
+    input.setAttribute("name", "value"+index);
+    input.setAttribute("value", p);
+    canvas.appendChild(input);
+
+    var inputs = document.createElement("input");
+    inputs.setAttribute("type", "hidden");
+    inputs.setAttribute("name", "sbtck"+index);
+    inputs.setAttribute("value", sbtck);
+    canvas.appendChild(inputs);
+
+    var inputf = document.createElement("input");
+    inputf.setAttribute("type", "hidden");
+    inputf.setAttribute("name", "format"+index);
+    inputf.setAttribute("value", "pizza");
+    canvas.appendChild(inputf);
+
+
 }

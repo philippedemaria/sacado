@@ -428,9 +428,9 @@ hr.menu {
  
 
 .btn-action  {
-  color : #f1eef7!important;
+  color : white!important;
   border-radius: 10px!important;
-  background-color: #5d4391;
+  background-color: #0093CA;
   margin-right: 5px;
   padding:0px 10px!important;
 }
@@ -439,7 +439,7 @@ hr.menu {
 .btn-action:active, .btn-action:active > a ,
 .btn-action.hover,  .btn-action.hover > a  {
   background-color: #f1eef7!important;/*   #dd4b39!important;*/
-  color: #5d4391!important;
+  color: white!important;
   text-decoration: none;
 }
 

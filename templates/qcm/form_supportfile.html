@@ -5,14 +5,14 @@
 
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
-
-    {% if qtype == 6 or qtype == 14 %}
-        <script>
-            require(['script/ajax-support_creator_sub']);
-        </script> 
-    {% elif qtype == 15 %}
+    
+    {% if  qtype == 15 or qtype == 18 %}
         <script>
             require(['script/ajax-support_creator_canvas']);
+        </script> 
+    {% elif qt.is_sub %}
+        <script>
+            require(['script/ajax-support_creator_sub']);
         </script> 
     {% else %}
         <script>
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block page_title %}
-<div id="new_style"><i class="bi bi-explicit sacado_color_text"></i> 
+<div id="new_style"><img src="{{ qt.imagefile.url }}" width="100px" class="qtype_logo_img" /> 
     <small> 
     {% if supportfile %}  
         {{ supportfile.qtype_title }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <b>{{ qt.title}}</b>
@@ -46,15 +46,9 @@
 {% block page_menu_right %}
 
     {% for qt in qtypes %}
-
-    <div class="col-xs-2 col-sm-1 col-md-1" align='center' style="margin-bottom:5px"> 
-        <a href="{% url 'create_supportfile' qt.id 0  %}">
-            <div style="font-size:{% if qt.id == 1 %}0.25{% elif qt.id == 3 or qt.id  == 4 or qt.id  == 5 %}0.2{% elif qt.id == 6 or qt.id == 9 or qt.id == 14 %}0.17{% else %}0.3{% endif %}em" 
-                 class="qtypes_logo {% if qt.id == 19 or qt.id == 20  %}qtypes_choice_square{% endif %} {% if qt.id ==  qtype  %}qtypes_logo_active{% endif %}" title="{{ qt.title}} {% if qt.id == 19 or qt.id == 20  %}à correction manuelle sur l'interface SACADO{% else %}auto-correctif{% endif %} "   >
-                {% if qt.imagefile %}<img src="{{ qt.imagefile.url }}" width="20px" /> {% else %}{{ qt.html|safe }}{% endif %}
-            </div>
-        </a>               
-    </div>
+        <a href="{% url 'create_supportfile' qt.id 0  %}" class="no_underline">
+            <img src="{{ qt.imagefile.url }}" width="40px" class="qtype_logo_img" title="{{ qt.title }}" />
+        </a>
     {% endfor %}
 
 

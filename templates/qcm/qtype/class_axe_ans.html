@@ -6,7 +6,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-check_axe']);
+        require(['script/ajax-check_axe','script/slider_answer_box']);
     </script> 
 {% endblock %}
 
@@ -25,33 +25,25 @@
 	    	{% endif %}
 
 
+		    {% include 'qcm/qtype/_annoncement_instruction.html' %}
 
-		    <div class="row"  align="left" style="margin-top:10px">
-		        {% if annoncement %}
-		            <div class="col-sm-12 col-lg-12 custom_content" 
-		                 style="max-height:80px">{{ annoncement|safe }}
-		            </div>
-		        {% endif %}
-		    </div> 
 
 		    <div class="row" align="center" style="margin:20px 0px;">
 		        <div class="col-sm-12 col-lg-12"> 
-		        	<div id="tableau">	
-						<div id="axe"></div>
+		        	<div id="tableau{{ forloop.counter}}" class="tableau">	
+						<div id="axe{{ forloop.counter}}"></div>
 						{% for choice in shufflechoices|index:forloop.counter0 %}
-						  	<div class="carte loop{{ forloop.parentloop.counter0 }}" id="carte{{ forloop.counter0 }}"><p>{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="150px" />{% endif %}{{ choice.answer }}</p><p id="valeur{{ forloop.counter0 }}"></p></div>
+						  	<div class="carte loop{{ forloop.parentloop.counter0 }}" id="carte{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}">
+						  		<p>{% if choice.imageanswer  %}
+						  			<img src="{{ choice.imageanswer.url }}" height="150px" />{% endif %}{{ choice.answer }}
+						  		</p>
+						  		<p id="valeur{{ forloop.counter0 }}"></p>
+						  	</div>
 						  	<input type="hidden" name="choice_ids" value="{{ choice.id }}"  class="loop{{ forloop.parentloop.counter }} insidechoices{{ forloop.counter0 }}"  />
 						{% endfor %}  
 					</div>            
 		        </div>
 		    </div>
-		    <input type="hidden" id="xmin" name="xmin" value={{ supportfile.xmin }} />
-		    <input type="hidden" id="xmax" name="xmax" value={{ supportfile.xmax }} />
-		    <input type="hidden" id="precision" name="precision" value={{ supportfile.precision }} />
-		    <input type="hidden" id="tick" name="tick" value={{ supportfile.tick }} />
-		    <input type="hidden" id="subtick" name="subtick" value={{ supportfile.subtick }} />
- 
-
 		    <div class="row validation">
 		    	<div class="col-sm-12 col-md-3" align="center"  >
 		            <a  href="#" class="btn btn-primary show_axe_correction" data-supportfile_id="{{ supportfile.id }}"   
@@ -61,6 +53,12 @@
 			{% include 'qcm/qtype/_correction_div.html' %}
         </li> 
     {% endfor %}
+
+    <input type="hidden" id="xmin" name="xmin" value={{ supportfile.xmin }} />
+    <input type="hidden" id="xmax" name="xmax" value={{ supportfile.xmax }} />
+    <input type="hidden" id="precision" name="precision" value={{ supportfile.precision }} />
+    <input type="hidden" id="tick" name="tick" value={{ supportfile.tick }} />
+    <input type="hidden" id="subtick" name="subtick" value={{ supportfile.subtick }} />
 
 	{% include 'qcm/qtype/_last_slide.html' %}
 

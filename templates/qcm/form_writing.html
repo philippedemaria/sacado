@@ -22,7 +22,7 @@
 
 
 {% block page_menu_right %}
-
+    {{  supportfile.knowledge  }}
 {% endblock %}
 
 
@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-8">
                 {% if relationship.instruction or relationship.exercise.supportfile.annoncement  %}  
-                    <a href="#" id='show_consigne_div' class="btn btn-sacado">Lire la consigne <i class="fa fa-caret-down"></i></a> 
+                    <a href="#" id='show_consigne_div' class="btn btn-sacado_active">Lire la consigne <i class="fa fa-caret-down"></i></a> 
 
                     <div id="consigne_div" class="consigne no_visu_on_load">
                         <div class="row">
@@ -60,7 +60,7 @@
                 {% endif  %}
 
                 {% if relationship.exercise.supportfile.is_correction_visible  %}  
-                    <a href="#" data-toggle='modal' data-target='#correction' class="btn btn-danger">Voir le corrigé</a><br/>
+                    <a href="#" data-toggle='modal' data-target='#correction'  class="btn btn-blue">Voir le corrigé</a><br/>
                 {% endif  %}
 
               {% for remediation in relationship.relationship_remediation.all %}
@@ -76,7 +76,7 @@
              <span class="pull-right">
                 <label>Aides : </label>
                   {% for remediation in relationship.relationship_remediation.all %}
-                      <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-default">
+                      <a href="#" data-target="#remediation_viewer" data-remediation_id="{{ remediation.id }}" data-is_custom="0"  data-url="0" data-toggle='modal' class="white remediation_viewer btn btn-blue">
                             {% include 'qcm/remediation_choices.html' %}
                       </a>
                   {% endfor  %} 
@@ -149,7 +149,7 @@
 </section>
 
 <div class="modal fade" id="correction" tabindex="-1" role="dialog" aria-labelledby="correction">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width:70%">
         <div class="modal-content" style="padding-top :0px;">
             <div class="modal-header">
                 <h3> Corrigé :     

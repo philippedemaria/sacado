@@ -6,7 +6,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
     <script>
-        require(['script/ajax-check_pairs']);
+        require(['script/ajax-check_pairs','script/slider_answer_box']);
     </script> 
 {% endblock %}
 
@@ -22,15 +22,11 @@
 	    	{% endif %}
 
 
-		    <div class="row"  align="left">
-		        {% if annoncement %}
-		            <div class="col-sm-12 col-lg-12 custom_content" 
-		                 style="max-height:80px">{{ annoncement|safe }}
-		            </div>
-		        {% endif %}
-		    </div>  
+		    {% include 'qcm/qtype/_annoncement_instruction.html' %}
+		    <div class="legend_answer text-green_index zoom_in" align="left">Glisser/déposer les étiquettes pour former les paires</div>  
 
-			<div class="quizz_item select_items" align="left">
+
+			<div class="select_items" align="left">
 				{% for choice in choices|index:forloop.counter0 %}
 					<span class="quizz_choice draggable"  data-loop="{{ forloop.parentloop.counter }}" style="cursor: move;" data-subchoice="{% if choice.imageanswerbis  %}{{ choice.imageanswerbis }}{% else %}{{ choice.answerbis }}{% endif %}" >
 						{% if choice.imageanswerbis  %}<img src="{{ choice.imageanswerbis.url }}" height="80px" />{% endif %} {{  choice.answerbis }}
@@ -41,10 +37,9 @@
  
 			<div class="dropzone{{ forloop.counter }}">
 			{% for choice in shufflechoices|index:forloop.counter0 %}
-			<div class="quizz_item droppable{{ forloop.parentloop.counter }}" align="left">
-				<span class="quizz_choice" style="border : 0px;">{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer }}</span>
+			<div class="quizz_choice_answer droppable{{ forloop.parentloop.counter }}" align="left">
+				<span class="quizz_droppable" style="border : 0px;">{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer }}</span>
 				<input type="hidden" class="answers{{ forloop.parentloop.counter }}" name="answers{{ forloop.parentloop.counter }}"  value="{% if choice.imageanswer  %}{{ choice.imageanswer }}{% else %}{{ choice.answer }}{% endif %}====" />
-
 			</div>
 			{% endfor %}
 			</div>
