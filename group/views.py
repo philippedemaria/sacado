@@ -404,14 +404,30 @@ def create_student_profile_inside(request, nf) :
 ################################################################
 ##  Toute l'installation de SACADO
 ################################################################
- 
+def get_teacher_id_by_subject_id(subject_id):
+
+    if subject_id == 1 or subject_id == "1" :
+        teacher_id = 2480
+
+    elif  subject_id == 2 or subject_id == "2" :
+        teacher_id = 35487
+
+    elif subject_id == 3 or subject_id == "3"  :
+        teacher_id = 37053
+
+    else :
+        teacher_id = 2480
+
+    return teacher_id 
 
 
 def set_up_by_level_subject(group, student):
     """  assigner les documents   """
     subject , level = group.subject ,  group.level
     teacher = group.teacher 
-    folders = Folder.objects.filter(subject=subject,level=level,teacher_id=2480,is_trash=0,is_archive =0   )
+    
+    teacher_id = get_teacher_id_by_subject_id(subject.id)
+    folders = Folder.objects.filter(subject=subject,level=level,teacher_id=teacher_id,is_trash=0,is_archive =0   )
 
     teacher.subjects.add(subject)
     teacher.levels.add(level)
