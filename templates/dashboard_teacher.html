@@ -294,7 +294,7 @@
                                     </div>
 
                                     <div id="set_up_subtitle"    align="center">
-                                    SACADO propose des parcours d'apprentissage composés d'exercices personnalisés et auto-corrigés à variables didactiques aléatoires.<br/>Suivez les résultats de vos élèves et indivisualisez les supports en fonction de leur réussite.
+                                    SACADO propose des parcours d'apprentissage composés de cours, de quiz et d'exercices auto-corrigés à variables didactiques aléatoires.<br/>Suivez les résultats de vos élèves et indivisualisez les supports en fonction de leur réussite.
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-6" align='center' id="manual_install">
@@ -325,6 +325,7 @@
                                                                         <div class="col-xs-12 col-md-2" align='left'><label>Nom :</label> <br/>{{ form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
                                                                         <div class="col-xs-12 col-md-2" align='left'><label>Enseignement :</label><br/> {{ form.subject |attr:"required"|add_class:"form-control select2  border_violet" }}</div>
                                                                         <div class="col-xs-12 col-md-2" align='left'><label>Niveau :</label> <br/>{{ form.level|attr:"required"|add_class:"form-control select2  border_violet" }}</div>
+                                                                        <div class="col-xs-12 col-md-2"><label>Contenus sacado ?</label> <br/> {{ form_groups.empty_form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</div>
                                                                     </div>
                                                                 {% endfor %}
                                                             </div>
@@ -394,6 +395,7 @@
                                     <div class="col-xs-12 col-md-2"><label>Nom : </label> <br/>{{ form_groups.empty_form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
                                     <div class="col-xs-12 col-md-2"><label>Enseignement :</label> <br/> {{ form_groups.empty_form.subject|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
                                     <div class="col-xs-12 col-md-2"><label>Niveau :</label> <br/> {{ form_groups.empty_form.level|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
+                                    <div class="col-xs-12 col-md-2"><label>Contenus sacado ?</label> <br/> {{ form_groups.empty_form.recuperation |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}</div>
                                     <div class="col-xs-12 col-md-2 delete_button_question"><br/></div>
                                 </div>
                             </div>
