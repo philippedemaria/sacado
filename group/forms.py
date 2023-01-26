@@ -30,8 +30,20 @@ class GroupTeacherForm(forms.ModelForm):
 		super(GroupTeacherForm, self).__init__(*args, **kwargs)
 		if teacher:
 
-			subjects = teacher.subjects.all()
-			levels = teacher.levels.order_by("ranking")
-			self.fields['subject']	 = forms.ModelChoiceField(queryset=subjects,  required=True)    
-			self.fields['level']	 = forms.ModelChoiceField(queryset=levels,  required=True)         
+			# subjects = teacher.subjects.all()
+			# levels = teacher.levels.order_by("ranking")
+
+			# if subjects :
+			# 	self.fields['subject']	 = forms.ModelChoiceField(queryset=subjects,  required=True)
+			# else :
+			subjects = Subject.objects.filter(is_active=1)
+			self.fields['subject']	 = forms.ModelChoiceField(queryset=subjects,  required=True)
+
+			# if levels :
+			# 	self.fields['level']	 = forms.ModelChoiceField(queryset=levels,  required=True)
+			# else :
+			subjects = Level.objects.exclude(pk=13).order_by("ranking")
+			self.fields['level']	 = forms.ModelChoiceField(queryset=subjects,  required=True)
+
+      
       

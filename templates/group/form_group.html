@@ -69,6 +69,13 @@
                         </div>
                         {% endif %}
                     {% endif %}
+                    <div class="col-sm-12 col-md-3">
+                            <label>Enseignement :<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Si aucun enseignement n'apparait, sélectionner vos enseignements <a href="{% url 'profile' %}">ici</a>.</div>
+                                    </span></label>
+                            {{ form.subject |add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                    </div>                    
                     <div class="col-sm-12 col-md-4">
                             <label>Niveau : <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                         <div class="helper_tip_text" >Si aucun niveau n'apparait, sélectionner vos niveaux préférés <a href="{% url 'profile' %}">ici</a>.</div>
@@ -76,13 +83,7 @@
                             {{ form.level |add_class:"form-control select2" }}
                             {{ form.level.errors }}
                     </div>
-                    <div class="col-sm-12 col-md-3">
-                            <label>Enseignement :<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                        <div class="helper_tip_text" >Si aucun enseignement n'apparait, sélectionner vos enseignements <a href="{% url 'profile' %}">ici</a>.</div>
-                                    </span></label>
-                            {{ form.subject |add_class:"form-control select2" }}
-                            {{ form.subject.errors }}
-                    </div>
+
                     <div class="col-sm-12 col-lg-2 no_visu">                    
                             {{ form.color.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -133,17 +134,17 @@
                     </div> 
                 </div>
          
-                <div class="row no_visu">
+                <div class="row">
                     <hr>
                     <div class="col-sm-8 col-md-10">
-                        <label>L'équipe SACADO vous propose ses dossiers incluant les parcours et les cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveaux et enseignements choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
+                        <label>L'équipe SACADO vous propose ses dossiers incluant les parcours modifiables et les cours interactifs déjà créés et testés en classe. <br/>Si vous souhaitez créer vos propres parcours pour ce groupe, choisissez NON. </label>
                     </div>
                     <div class="col-sm-4 col-md-2">
                         {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                     </div>
                 </div>
-                    
-                <div class="row no_visu" id="choosen_parcours_for_this_level_and_subject">
+                {% comment %}
+                <div class="row" id="choosen_parcours_for_this_level_and_subject">
                     <hr>
                     <div class="col-sm-12 col-md-12">
                         <label>Sélectionner les dossiers proposés.</label>
@@ -151,326 +152,46 @@
                 </div>
                 <div id="choosen_parcours_by_this_level_and_subject">
                 </div>
+                {% endcomment %}
 
-
-
-                {% if not is_gar_check %}
-                    {% if not sacado_asso  %}
-                        <hr>
-                        <div class="row no_visu">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
-                                     <ul>
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.</label>  </li>
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> 
-                                           {% if group %}Je veux lire le {% else %} Je veux inscrire mes élèves plus tard et générer un{% endif  %}   lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row recording no_visu" id="teacher_record">
-                            <div class="col-sm-12 col-md-12"><hr>
-                                <div class="form-group">
-                                    <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
-                                    <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
-
-                                     <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</small></label>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row recording no_visu" id="auto_record">
-                            <div class="col-sm-12 col-md-12"> 
-                                <div class="form-group">
-
-                                    {% if not group %}
-                                    
-                                    <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
-                                    </label>
-                                    {% endif  %}
-
-                                </div>
-                            </div>
-                        </div>  
-                    {% elif is_managing == 0  %}
-                        <hr>
-                        <div class="row no_visu">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
-                                     <ul>
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_now" /> J'ai la liste de mes élèves et je veux les inscrire maintenant.</label></li>
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_auto" /> {% if group %}Je veux lire le {% else %} Je veux inscrire mes élèves plus tard et générer un{% endif  %}  lien d'inscription. <small>Avec ce lien, les élèves pourront s'inscrire seuls. Ce lien est donné après la création du groupe.</small></label></li>
-                                        {% if group %}
-                                        <li class="sans_puce"><label><input type="radio" name="record_student" id="record_student_add" /> Sélectionner des élèves déjà inscrits sur ce niveau dans l'établissement</label></li>
-                                        {% else %}
-                                        <li class="sans_puce"><label><input type="radio" disabled /> Pour sélectionner des élèves, le groupe doit être déjà créé. Créer-le et revenir.</label></li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row recording no_visu" id="teacher_record">
-                            <div class="col-sm-12 col-md-12"><hr>
-                                <div class="form-group">
-                                    <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
-                                    <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="10" placeholder="Turing ; Alan ; alan.turing@enigma.com"></textarea>
-
-                                     <label style="color:#cb2131"><small> <b>Conseil :</b> Après la création du groupe, accéder à votre groupe via Détails et télécharger la liste des identifiants au format pdf pour la distribuer à vos élèves.</small></label>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row recording no_visu" id="auto_record">
-                            <div class="col-sm-12 col-md-12"><hr>
-                                <div class="form-group">
-                                    {% if group %}
-                                    <div class="alert alert-warning">
-                                        <div style="font-size: 16px"><i class="fa fa-question-circle"></i>
-                                            Les élèves peuvent aussi rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <br>Ils peuvent aussi s’inscrire en utilisant le code suivant : <strong>{{ group.code }}</strong>
-                                        </div>
-                                    </div>
-                                    {% else %}
-                                    <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.
-                                    </label>
-                                    {% endif  %}
-                                </div>
-                            </div>
-                        </div>
-                    {% else %}
-                        {% if not group %}
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                    <div class="alert alert-danger"><label>Vous pourrez ajouter des élèves après la création du groupe. Créer-le et revenir.</label></div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
 
                 {% if group %}
-                    <hr> 
-                    {% if is_managing == 2  %}
-                        <div class="row no_visu">
-                            <div class="col-sm-12 col-md-12">
-                                <h5><i class="fa fa-users"></i> Ajouter des élèves parmis les élèves proposés ci-dessous</h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5"  id="div_start_the_set_up">
+                            <div class="form-group">
+                                <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
+                                <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                                           class="btn btn-default "/></a>
                             </div>
                         </div>
-                        <div class="row no_visu" >
-                            <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">                           
-                                <table  class="table table-sacado table-hover standard_tab_sort2000" id='table_o'>
-                                    <thead>
-                                    <tr>
-                                        <td></td>
-                                        <td>Nom</td>
-                                        <td>Prénom</td>
-                                        <td>Groupes</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for student in all_students %}
-                                            <tr id="tr{{student.user.id}}">
-                                                <td>
-                                                     <input type="checkbox" class="student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" id="std{{student.user.id}}" /> 
-                                                </td>
-                                                <td>
-                                                   <label for="std{{student.user.id}}">{{ student.user.last_name|lower|capfirst }}  </label>
-                                                </td>
-                                                <td>
-                                                    {{ student.user.first_name|lower|capfirst }} 
-                                                </td>
-                                                <td>
-                                                    {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> 
-                        {% else %}
-                        <div class="row collapse" id="collapsed"  >
-                            <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">
-                                {% if not group.lock %}                            
-                                <table  class="table table-sacado table-hover standard_tab_sort2000" id='table_o'>
-                                    <thead>
-                                    <tr>
-                                        <td></td>
-                                        <td>Nom</td>
-                                        <td>Prénom</td>
-                                        <td>Groupes</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for student in all_students %}
-                                            <tr id="tr{{student.user.id}}">
-                                                <td>
-                                                     <input type="checkbox" class="student_select_to_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" id="std{{student.user.id}}" /> 
-                                                </td>
-                                                <td>
-                                                   <label for="std{{student.user.id}}">{{ student.user.last_name|lower|capfirst }}  </label>
-                                                </td>
-                                                <td>
-                                                    {{ student.user.first_name|lower|capfirst }} 
-                                                </td>
-                                                <td>
-                                                    {% for g in student.students_to_group.all %}{{ g }}{% endfor %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                                {% else %}
-                                    <div class="form-group alert alert-danger">
-                                        Votre groupe est verrouillé. Vous devez déverrouiller votre groupe pour ajouter des élèves.
-                                    </div>
-                                {% endif   %}
-                            </div>
-                        </div> 
-                    {% endif   %}
-                    {% if is_managing == 1 and sacado_asso %}
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group alert alert-danger">
-                                    Vous avez la version ETABLISSEMENT. La gestion des groupes et des élèves est assurée par l'administrateur SACADO de votre établissement. Vous ne pouvez donc pas assigner d'élèves à ce groupe.
+
+                        {% if not sacado_asso or request.user.is_manager or request.user.is_superuser or is_managing != 1  %}
+                            {% if not is_gar_check %}
+                            <div class="col-sm-12 col-md-7">
+                                <div class="form-group">
+                                    <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                                    <a href="{% url 'delete_group_and_his_documents' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe et ses documents')"><i class="bi bi-radioactive"></i> Forcer la suppresion de ce groupe</a>
                                 </div>
                             </div>
-                        </div>
-                    {%  elif not group  %}
-                        <hr/>
-                        <div class="form-group">
-                            <label>Vous souhaitez générer un lien d'inscription. Ce lien sera accessible depuis votre tableau de bord via les détails du groupe une fois celui-ci créé.</label>
-                        </div>
-                    {% endif   %}
-                {% endif   %}
-            </div>
-
-
-            {% if group %}
-                <div class="row">
-                    <div class="col-sm-12 col-md-5">
-                        <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
-                            <a href="javascript:history.back()"><input type="button" value="Retour"
-                                                                       class="btn btn-default "/></a>
-                        </div>
-                    </div>
-                {% if not sacado_asso or request.user.is_manager or request.user.is_superuser or is_managing != 1  %}
-                    {% if not is_gar_check %}
-                    <div class="col-sm-12 col-md-7">
-                        <div class="form-group">
-                            <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
-                            <a href="{% url 'delete_group_and_his_documents' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe et ses documents')"><i class="bi bi-radioactive"></i> Forcer la suppresion de ce groupe</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endif %}
-                
-            {% else %}
-                <div class="row">
-                <div class="col-sm-12 col-md-8">
-                    <div class="form-group">
-                        <input value="Créer le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
-                        <a href="javascript:history.back()"><input type="button" value="Retour"
-                                                                   class="btn btn-default "/></a>
-                    </div>
-                </div>
-            {% endif %}
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            {% if group %}
-            <div class="form_card">
-                <table class="table table-sacado table-striped table-hover display50" id="maTable">
-                    <thead> 
-                    <tr>
-                        <th>Nom  
-                        </th>
-                         <th>  Prénom
-                        </th>
-                        {% if not is_gar_check %}
-                         <th>  Identifiant
-                        </th>
-                         <th>  
-                        </th>
-                        {% endif %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for student in students  %}
-                        <tr id="tr_school{{ student.user.id }}">
-                            <td>{{ student.user.last_name|lower|capfirst  }}  
-                            </td>
-                            <td>{{ student.user.first_name|lower|capfirst    }}  
-                            </td>
-                            {% if not is_gar_check %}
-                            <td>{{ student.user.username    }}  
-                            </td>
-                            <td>                             
-                                {% if sacado_asso %}
-                                    <a class="btn btn-xs btn-danger student_remove_from_school" data_student_id="{{student.user.id}}" data_group_id="{{ group.id}}" title="dissocier du groupe">
-                                        <i class="fa fa-chain-broken"></i>
-                                    </a> 
-                                {% else %}
-                                    <a href="{% url 'delete_student' student.user.id  group.id %}" class="btn btn-xs btn-danger" title="Supprimer cet élève">
-                                        <i class="fa fa-times"></i>
-                                    </a> 
-                                {% endif %}
-                                </td>  
                             {% endif %}
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td><div class="alert alert-danger">Aucun élève inséré.</div></td>
-                          
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>            
-            {% endif %}
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8" id="div_start_the_set_up">
+                            <div class="form-group">
+                                <input value="Créer le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
+                                <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                                           class="btn btn-default "/></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
     </form>
 </div> 
 
-<div class="modal fade bd-example-modal-lg" id="help"  tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="margin:0px!important">
-
-        {% if user.user_type == 2 %}
-            <div class="modal-content help" >
-
-                <div class="helpdiv_help_title_page"  style="left:500px;">
-                    titre de page
-                </div>
-                <div class="helpdiv_help_groupe"   style="top:130px;left:160px;width:500px">
-                     Nom du groupe obligatoire <span style="margin-left:50px">Niveau obligatoire</span>
-                     <br><br><br><br> <span style="margin-left:150px;text-align: right">Suivi parent : cocher oui si vous voulez que les</span>
-                    <br> <span style="margin-left:150px;text-align: right">parents de vos élèves accèdent à leurs résultats</span>
-                    <br> <span style="margin-left:150px;text-align: right">Ils devront s'inscrire et se lier à leur enfants.</span>
-                    
-                </div>
-
-
-                <div class="helpdiv_help_acces"  style="top:45px;right:50px; padding:10px">
-                   Nouveau parcours lié à ce groupe <img src="{% static 'img/fleche_up_right.png' %}" width="40px" style="vertical-align:bottom" />
-                </div>
-
-
-
-                <div class="helpdiv_help_list_group">
-                    <div class="help_list_group">
-                        {% if group %}    <img src="{% static 'img/fleche_up_left.png' %}" width="40px" style="vertical-align:bottom" />Lien à donner aux élèves {% endif %}  
-                        <br><br>Liste des élèves. <br>Modification directe par réécriture dans les champs des noms, prénomns, courriels, identifiants. 
-                        <br><i class="fa fa-trash"></i> Supprimer un élève 
-                        <br><i class="fa fa-refresh"></i> Ré-initialiser son mot de passe : sacado2020  
-                    </div>
-                     <br> <br><img src="{% static 'img/fleche_up_right.png' %}" width="40px" /><br><br><img src="{% static 'img/fleche_bottom_right.png' %}" width="40px" style="vertical-align:middle;"/>
-
-                </div>
-   
-
-
-            </div>
-        {% endif %}
-    </div>
-</div>    
+ 
 {% endblock %}

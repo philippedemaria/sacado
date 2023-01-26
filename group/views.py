@@ -655,9 +655,10 @@ def create_group(request):
         student = create_student_profile_inside(request, nf)
         if not student :
             student = group.students.filter(user__username__contains="_e-test").first()
-        set_up_by_level_subject(nf ,  student)
+        if nf.recuperation :
+            set_up_by_level_subject(nf ,  student)
 
-        return redirect("show_group", nf.id)
+        return redirect("index")
     else:
         print(form.errors)
 
@@ -710,15 +711,28 @@ def update_group(request, id):
         student = create_student_profile_inside(request, nf) 
         if not student :
             student = group.students.filter(user__username__contains="_e-test").first()
-        set_up_by_level_subject(nf ,  student)
+        if nf.recuperation :
+            set_up_by_level_subject(nf ,  student)
  
-        return redirect("show_group", group.id)
+        return redirect("index")
     else:
         print(form.errors)
 
     context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing  }
 
-    return render(request, 'group/form_group.html', context )
+    return render(request, 'group/form_group_insert_student.html', context )
+
+
+
+
+
+ 
+
+
+
+
+
+
 
 
 

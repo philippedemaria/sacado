@@ -168,7 +168,7 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
 
 
 
-
+            $('#id_recuperation').prop('checked', false); 
 
 
 
@@ -218,19 +218,11 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
             }
         });
 
+        $(document).on('click',"#test_students", function(){ 
 
+            $('#div_start_the_set_up').append("<i class='fa fa-spinner fa-pulse fa-2x'></i> Chargement en cours.") ;
 
-
-        $('#test_students').on('click', function () {
-
-            let students_id =  $('#students_id').val(); 
-
-          
-                if ( students_id != "") {  
-                    alert("Si vous inscrivez des élèves, chacun de vos parcours et leurs exercices leur seront affectés. Il sera possible d'individualiser les exercices dans un parcours favori.")  ;  
-                    }  
-            });
-
+        })
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
