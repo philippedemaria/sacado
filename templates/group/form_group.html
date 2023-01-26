@@ -29,7 +29,7 @@
     {% else %} 
       <span style="color:#5d4391" ><i class="bi bi-people"></i> Nouveau groupe </span>
     {% endif %}  
-    
+        {% include 'modes.html' %}  
 {% endblock %}
 
 {% block page_menu_right %}
@@ -83,7 +83,7 @@
                             {{ form.subject |add_class:"form-control select2" }}
                             {{ form.subject.errors }}
                     </div>
-                    <div class="col-sm-12 col-lg-2">                    
+                    <div class="col-sm-12 col-lg-2 no_visu">                    
                             {{ form.color.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
                                 </span>
@@ -96,7 +96,7 @@
                 <div class="row"> 
                     <div class="form-group">
                         {% if sacado_asso %}
-                        <div class="col-sm-12 col-md-4">                       
+                        <div class="col-sm-12 col-md-4 no_visu">                       
                                <label>Suivi parent ?
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                             <div class="helper_tip_text" > Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. </div>
@@ -107,7 +107,7 @@
                         {% endif %}
 
   
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-4 no_visu">
                            <label>Verrouiller ?  
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" > Interdit d'inscrire de nouveaux élèves par un lien de connexion. </div>
@@ -133,7 +133,7 @@
                     </div> 
                 </div>
          
-                <div class="row">
+                <div class="row no_visu">
                     <hr>
                     <div class="col-sm-8 col-md-10">
                         <label>L'équipe SACADO vous propose ses dossiers incluant les parcours et les cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveaux et enseignements choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                     
-                <div class="row" id="choosen_parcours_for_this_level_and_subject">
+                <div class="row no_visu" id="choosen_parcours_for_this_level_and_subject">
                     <hr>
                     <div class="col-sm-12 col-md-12">
                         <label>Sélectionner les dossiers proposés.</label>
@@ -157,7 +157,7 @@
                 {% if not is_gar_check %}
                     {% if not sacado_asso  %}
                         <hr>
-                        <div class="row">
+                        <div class="row no_visu">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
                                      <ul>
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row recording" id="teacher_record">
+                        <div class="row recording no_visu" id="teacher_record">
                             <div class="col-sm-12 col-md-12"><hr>
                                 <div class="form-group">
                                     <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
@@ -178,7 +178,7 @@
                                 </div>
                             </div>
                         </div> 
-                        <div class="row recording" id="auto_record">
+                        <div class="row recording no_visu" id="auto_record">
                             <div class="col-sm-12 col-md-12"> 
                                 <div class="form-group">
 
@@ -193,7 +193,7 @@
                         </div>  
                     {% elif is_managing == 0  %}
                         <hr>
-                        <div class="row">
+                        <div class="row no_visu">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group"><h5><i class="fa fa-users"></i> Ajouter des élèves</h5>
                                      <ul>
@@ -208,7 +208,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row recording" id="teacher_record">
+                        <div class="row recording no_visu" id="teacher_record">
                             <div class="col-sm-12 col-md-12"><hr>
                                 <div class="form-group">
                                     <label>Possibilité d'inscrire les élèves par leur prénom et nom.<small><em> L'adresse mail est facultative. L'identifiant est généré directement.</em> <br><span style="color:#cb2131">Respecter le format donné : 1 élève par ligne : nom; prénom; email. Ces informations séparées par un ;  <br/>Le mot de passe par défaut est : <b>sacado2020</b>, chaque identifiant élève s'obtient dans le détail du groupe. </span></small></label> <br> 
@@ -218,7 +218,7 @@
                                 </div>
                             </div>
                         </div> 
-                        <div class="row recording" id="auto_record">
+                        <div class="row recording no_visu" id="auto_record">
                             <div class="col-sm-12 col-md-12"><hr>
                                 <div class="form-group">
                                     {% if group %}
@@ -249,12 +249,12 @@
                 {% if group %}
                     <hr> 
                     {% if is_managing == 2  %}
-                        <div class="row">
+                        <div class="row no_visu">
                             <div class="col-sm-12 col-md-12">
                                 <h5><i class="fa fa-users"></i> Ajouter des élèves parmis les élèves proposés ci-dessous</h5>
                             </div>
                         </div>
-                        <div class="row" >
+                        <div class="row no_visu" >
                             <div class="col-sm-12 col-md-12" style="overflow-y:auto; height: 500px;margin-bottom: 20px">                           
                                 <table  class="table table-sacado table-hover standard_tab_sort2000" id='table_o'>
                                     <thead>
