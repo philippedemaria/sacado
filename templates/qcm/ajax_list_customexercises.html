@@ -69,7 +69,10 @@
                 <div class="row">
                     <div class="col-sm-12 exercise_body_shared consigne_small_font" style="min-height:50px; max-height: 300px">
                         {% if supportfile.qtype == 100 %}
+                            {% if supportfile.imagefile %}
                             <img src="{{ supportfile.imagefile.url }}" height="270px" />
+                            {% endif %}
+
                         {% else %}
                             {{ supportfile.annoncement|safe }}
                         {% endif %}
