@@ -70,6 +70,12 @@
 
 
 
+
+
+
+    {% if nb_groups or request.user.is_superuser %}   
+      
+ 
     <li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path  %}active{% endif %}">
         <a href="#" class="main"  id="documents" style="cursor: pointer;">
             <i class="bi bi-folder icon_size"></i> 
@@ -77,7 +83,6 @@
         </a>
     </li>
 
-    {% if nb_groups or request.user.is_superuser %}   
       
         {% comment %}
         <li class="dropdown {% if not request.session.tdb and 'qcm/exercises' in request.path and not 'admin' in    request.path %}active{% endif %}">
