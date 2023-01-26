@@ -25,7 +25,10 @@
                 {% if request.user.is_superuser %}
                 <a href="{% url 'create_supportfile' qt.id 0  %}" class="all_proposed_types_exercises">
                     <div style="margin:10px;float:left">
-                        <span class="helper_tip"> <img src="{{ qt.imagefile.url }}" width='50px' style="border-radius:5px; border:2px solid #CCC;"/>
+                        <span class="helper_tip">
+                          {% if qt.imagefile %} 
+                          <img src="{{ qt.imagefile.url }}" width='50px' style="border-radius:5px; border:2px solid #CCC;"/>
+                          {% endif %}
                           <div class="helper_tip_text_right" ><b>{{ qt.title }}</b><br/>{{ qt.html|safe }}</div>
                         </span>
                     </div>
