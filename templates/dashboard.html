@@ -72,7 +72,8 @@
     </style>
 </head>
 
-<body {% if request.user.background %} class="bg_image" style="background-image: url('{{request.user.background}}'); background-size: cover;" {% endif %} >
+<body  {% if teacher.groups.count == 0 or nb_bases == 0  %} class="the_null_body" 
+        {% elif request.user.background %} class="bg_image" style="background-image: url('{{request.user.background}}'); background-size: cover;" {% endif %} >
 
 {% if messages %}
 <ul class="messages">
@@ -82,7 +83,7 @@
 </ul>
 {% endif %}
 
-
+ 
 <nav class="navbarLeft navbarLeft_none  navbarLeft-fixed-left" id="navbarLeft" >
     <ul class="nav navbarLeft-nav">
         {% if request.user.is_authenticated %}
@@ -105,108 +106,121 @@
     <b>Aide en ligne - Prise en main à distance</b><br/>Cliquer sur <img src="{% static 'img/sacadoLogo.png' %}" style="vertical-align: text-bottom;" width="15px"/> dans le menu pour terminer
 </div>
 {% endif %}
-    <div class="content_title" id="content_title_page">
-        <h1 class="thin">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="navbar-header"> 
-                        {% block page_title %}
-                                {% if request.user.is_authenticated %}
-                                    {% if user.is_teacher %}
-                                        <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span>                                   
-                                        {% if teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing != 1 %} 
-                                            <ul>
-                                                <li> <a href="{% url 'create_group'  %}" class="btn btn-new"  > Nouveau groupe</a> </li>  
-                                            </ul>
-                                        {% elif teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing == 1 %} 
-                                            <ul>
-                                                <li> <a href="#" class="btn btn-default" title="vous n'avez pas les droits pour créer un groupe"  > Nouveau groupe</a> </li>  
-                                            </ul>
-                                        {% endif %}
-                                        {% if hidden_groups %}
-                                            <ul>
-                                            <li class="dropdown">
-                                                <a href="#" data-toggle="dropdown" class="dropdown-toggle text-danger" title="Groupes cachés">  
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-slash" viewBox="2 2 14 14">
-                                                    <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465l3.465-3.465Zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465Zm-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
-                                                    </svg> 
-                                                </a>
-                                                <ul id="products-menu" class="dropdown-menu clearfix" role="menu">
-                                                    {% for g in hidden_groups %}
-                                                        <li><a href="{% url 'update_group' g.id %}">{{ g }}</a></li> 
-                                                    {% endfor %}
-                                                </ul>
-                                            </li></ul> 
-                                        {% endif %}
-                                        {% if webinaire %}
-                                        <div class="webinaire_index">
-                                            <i class="fa fa-bullhorn text-warning"></i> Invitation Webinaire</b> le {{ webinaire.date_time|date:"d-m-y à H:i"}} <i class="fa fa-hand-o-right"></i><a href="{% url 'webinaire_register'  %}" > Voir le menu</a>
-                                        </div>
-                                        {% endif %}
-                                    {% elif user.is_student %}                                        
-                                        <span style="color:#5d4391"><i class="bi bi-markdown icon_size" ></i> Matières  </span>  
-                                        <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
-                                            <i class="fa fa-play"></i> Sacado en vidéo
-                                        </a>
+
+{% if request.user.is_teacher and is_not_set_up  %}  
+<div class="alert" id="content_title_page" style="opacity:0.7; background-color:white">
+    <h3 class="thin">
+
+    Votre profil est configuré par défaut (<small>Par défaut : Maths, tous les niveaux, Fuseau : Europe/Paris</small>). Vous pouvez le modifier en cliquant sur <i class="bi bi-person-circle icon_size"></i> puis Profil & Notifications. 
+    </h3>
+</div>
+
+{% else %}
+
+<div class="content_title" id="content_title_page">
+    <h1 class="thin">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="navbar-header"> 
+                    {% block page_title %}
+                            {% if request.user.is_authenticated %}
+                                {% if user.is_teacher %}
+                                    <span style="color:#5d4391"><i class="bi bi-people icon_size" ></i> Groupes  </span>                                   
+                                    {% if teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing != 1 %} 
+                                        <ul>
+                                            <li> <a href="{% url 'create_group'  %}" class="btn btn-new"  > Nouveau groupe</a> </li>  
+                                        </ul>
+                                    {% elif teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing == 1 %} 
+                                        <ul>
+                                            <li> <a href="#" class="btn btn-default" title="vous n'avez pas les droits pour créer un groupe"  > Nouveau groupe</a> </li>  
+                                        </ul>
                                     {% endif %}
+                                    {% if hidden_groups %}
+                                        <ul>
+                                        <li class="dropdown">
+                                            <a href="#" data-toggle="dropdown" class="dropdown-toggle text-danger" title="Groupes cachés">  
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-slash" viewBox="2 2 14 14">
+                                                <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465l3.465-3.465Zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465Zm-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                                                </svg> 
+                                            </a>
+                                            <ul id="products-menu" class="dropdown-menu clearfix" role="menu">
+                                                {% for g in hidden_groups %}
+                                                    <li><a href="{% url 'update_group' g.id %}">{{ g }}</a></li> 
+                                                {% endfor %}
+                                            </ul>
+                                        </li></ul> 
+                                    {% endif %}
+                                    {% if webinaire %}
+                                    <div class="webinaire_index">
+                                        <i class="fa fa-bullhorn text-warning"></i> Invitation Webinaire</b> le {{ webinaire.date_time|date:"d-m-y à H:i"}} <i class="fa fa-hand-o-right"></i><a href="{% url 'webinaire_register'  %}" > Voir le menu</a>
+                                    </div>
+                                    {% endif %}
+                                {% elif user.is_student %}                                        
+                                    <span style="color:#5d4391"><i class="bi bi-markdown icon_size" ></i> Matières  </span>  
+                                    <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
+                                        <i class="fa fa-play"></i> Sacado en vidéo
+                                    </a>
                                 {% endif %}
-                        {% endblock %}
-                            <a href="#" id="mobile_version_button" class="mobile_version pull-right"><i class="fa fa-bars"></i></a>
-                        </div>
-                        <ul class="nav navbar-nav navbar-right">
-                        {% block page_menu_right %}
-                            {% comment %}
-                                {% if user.is_teacher %} 
-                                    <li>
-                                        <a href="https://sacado.xyz/ressources/prise_en_main.pdf" target ="_blank" class="btn btn-outline-danger" >
-                                            Prise en main  <img src="{% static 'img/pdf.png' %}" width="15px"/>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'tutos_video_sacado' %}" class="btn btn-outline-danger" >
-                                            Les tutos en vidéo
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endcomment %} 
-
-                            {% if request.user.user_type != 1 %}
-                            <form method="post"  enctype='multipart/form-data' class="pull-right search_div" >{% csrf_token %}
-                                <input type="hidden"  name="from" id="from" value="{% if '/dashboard'  in request.path %}1{% else %}0{% endif %}"  /> 
-                                <input type="text"  name="search" id="search" class="form-control" placeholder="Recherche exercice par code " style="width:200px" /> 
-                            </form>
                             {% endif %}
-                            {% if teacher_to_student %}
-                            <li class="sans_puce"><a href="#" id="teacher_to_student_view" class="btn btn-sacado">Revenir au profil enseignant</a> </li>
-
-                            <div id="teacher_to_student_div" class="">
-                                <form method="post" action="{% url 'switch_student_teacher' %}" enctype='multipart/form-data'>
-                                  {% csrf_token %}
-
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label> <small>Mot de passe :</small></label>
-                                                    <input type="password" name="password" placeholder="Mot de passe du compte enseignant" class="form-control" required />
-                                                </div>
-                                            </div> 
-                                        </div>   
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-12">
-                                                <button type="submit" class="btn btn-primary">Valider</button>   
-                                            </div>
-                                        </div>
-                                </form>
-                            </div>
-                            {% endif %}  
-                        {% endblock %}
-                        </ul>
+                    {% endblock %}
+                        <a href="#" id="mobile_version_button" class="mobile_version pull-right"><i class="fa fa-bars"></i></a>
                     </div>
+                    <ul class="nav navbar-nav navbar-right">
+                    {% block page_menu_right %}
+                        {% comment %}
+                            {% if user.is_teacher %} 
+                                <li>
+                                    <a href="https://sacado.xyz/ressources/prise_en_main.pdf" target ="_blank" class="btn btn-outline-danger" >
+                                        Prise en main  <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'tutos_video_sacado' %}" class="btn btn-outline-danger" >
+                                        Les tutos en vidéo
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endcomment %} 
+
+                        {% if request.user.user_type != 1 %}
+                        <form method="post"  enctype='multipart/form-data' class="pull-right search_div" >{% csrf_token %}
+                            <input type="hidden"  name="from" id="from" value="{% if '/dashboard'  in request.path %}1{% else %}0{% endif %}"  /> 
+                            <input type="text"  name="search" id="search" class="form-control" placeholder="Recherche exercice par code " style="width:200px" /> 
+                        </form>
+                        {% endif %}
+                        {% if teacher_to_student %}
+                        <li class="sans_puce"><a href="#" id="teacher_to_student_view" class="btn btn-sacado">Revenir au profil enseignant</a> </li>
+
+                        <div id="teacher_to_student_div" class="">
+                            <form method="post" action="{% url 'switch_student_teacher' %}" enctype='multipart/form-data'>
+                              {% csrf_token %}
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label> <small>Mot de passe :</small></label>
+                                                <input type="password" name="password" placeholder="Mot de passe du compte enseignant" class="form-control" required />
+                                            </div>
+                                        </div> 
+                                    </div>   
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <button type="submit" class="btn btn-primary">Valider</button>   
+                                        </div>
+                                    </div>
+                            </form>
+                        </div>
+                        {% endif %}  
+                    {% endblock %}
+                    </ul>
                 </div>
-            </nav> 
-        </h1>
-    </div>
+            </div>
+        </nav> 
+    </h1>
+</div>
+{% endif %}
+
 <div class="content-wrapper">
 
     {%  block body %}

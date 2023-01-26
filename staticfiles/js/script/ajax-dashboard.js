@@ -16,6 +16,106 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
            $(".messages").css('display', "none"); 
         }, 6000);
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        // SET UP SACADO
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        $(document).on('click',".set_up_add_more_group", function(){ 
+
+                var total_form = $('#id_groups-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ; 
+                var rowToClone = $('#rowToClone').html();  
+
+                $('#formsetZone').append(rowToClone);
+                $('#duplicate').attr("id","duplicate"+totalForms) 
+
+                $('#duplicate'+totalForms).find('.delete_button_question').html('<a href="javascript:void(0)" class="btn btn-danger remove_group" ><i class="fa fa-trash"></i></a>'); 
+                $('#duplicate'+totalForms).find("input[type='checkbox']").bootstrapToggle();
+
+                $("#duplicate"+totalForms+" input").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+                $("#duplicate"+totalForms+" select").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+
+
+                if (totalForms == 4) {
+                    $("#set_up_add_more_group").removeClass("set_up_add_more_group");
+                }   
+                             
+                total_form.val(totalForms+1);
+
+       })
+
+ 
+
+
+        $(document).on('click', '.remove_group', function () {
+                var total_form = $('#id_groups-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())-1  ;
+            $('#duplicate'+totalForms).remove();
+            total_form.val(totalForms);
+
+            if ( (totalForms < 5) && ($(!"#set_up_add_more_group").hasClass("set_up_add_more_group")) ){
+                $("#set_up_add_more_group").addClass("set_up_add_more_group");
+            }
+
+
+        })
+
+
+        $(document).on('click',"#show_auto_install", function(){ 
+
+            $('#div_auto_install').toggle(500) ;
+            $('#manual_install').toggle(500) ;
+            $('#sacado_logo_white').toggle(500) ;
+            $('#set_up_title').toggle(500) ;
+            $('#set_up_subtitle').toggle(500) ;
+            $('#auto_install').toggle(500) ;
+        })
+
+
+        $(document).on('click',"#show_manual_install", function(){ 
+
+            $('#div_manual_install').toggle(500) ;
+            $('#auto_install').toggle(500) ;
+            $('#sacado_logo_white').toggle(500) ;
+            $('#set_up_title').toggle(500) ;
+            $('#set_up_subtitle').toggle(500) ;
+            $('#manual_install').toggle(500) ;
+        })
+
+
+        $(document).on('click',".reset_the_set_up", function(){ 
+
+            $('#set_up_title').show(500) ;
+            $('#set_up_subtitle').show(500) ;
+            $('#auto_install').show(500) ;
+            $('#manual_install').show(500) ;
+
+            $('#sacado_logo_white').show(500) ;
+            $('#div_manual_install').hide(500) ;
+            $('#div_auto_install').hide(500) ;
+
+        })
+
+
+
+
+
+        $(document).on('click',"#start_the_set_up", function(){ 
+
+            $('#div_start_the_set_up').append("<i class='fa fa-spinner fa-pulse fa-2x'></i> Chargement en cours.") ;
+
+        })
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////
         // ACTIONNER LA FLECHE DES ACCORDIONS
         //////////////////////////////////////////////////////////////////////////////////////////////////

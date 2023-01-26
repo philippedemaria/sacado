@@ -132,33 +132,26 @@
  
                     </div> 
                 </div>
-                {% if sacado_asso %}            
-                        <div class="row">
-                            <hr>
-                            <div class="col-sm-8 col-md-10">
-                                <label>L'équipe SACADO vous propose ses dossiers incluant les parcours et les cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveaux et enseignements choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
-                            </div>
-                            <div class="col-sm-4 col-md-2">
-                                {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                            </div>
-                        </div>
-                            
-                        <div class="row" id="choosen_parcours_for_this_level_and_subject">
-                            <hr>
-                            <div class="col-sm-12 col-md-12">
-                                <label>Sélectionner les dossiers proposés.</label>
-                            </div>
-                        </div>
-                        <div id="choosen_parcours_by_this_level_and_subject">
-                        </div>
-                {% else %}
-                        <hr/>
-                        <div class="col-sm-12 col-md-12 alert alert-sacado">
-                            <label>Avec la version établissement, l'équipe SACADO vous propose ses dossiers, ses parcours et ses cours déjà créés et testés en classe. Pensez à la version ETABLISSEMENT. 
-                                <a href="{% url 'get_first_adhesion' %}" target="_blank" style="font-size:10px">Adhérer</a>
-                            </label>
-                        </div>
-                {% endif %}
+         
+                <div class="row">
+                    <hr>
+                    <div class="col-sm-8 col-md-10">
+                        <label>L'équipe SACADO vous propose ses dossiers incluant les parcours et les cours déjà créés et testés en classe. Souhaitez-vous les récupérer pour les niveaux et enseignements choisis ? <small>Vous pourrez les modifier par la suite. <span class="text-danger">Cocher ce bouton après avoir bien choisi le niveau.</span></small></label>
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                        {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    </div>
+                </div>
+                    
+                <div class="row" id="choosen_parcours_for_this_level_and_subject">
+                    <hr>
+                    <div class="col-sm-12 col-md-12">
+                        <label>Sélectionner les dossiers proposés.</label>
+                    </div>
+                </div>
+                <div id="choosen_parcours_by_this_level_and_subject">
+                </div>
+
 
 
                 {% if not is_gar_check %}

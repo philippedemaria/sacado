@@ -1,5 +1,18 @@
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect, get_object_or_404
+from django.forms import inlineformset_factory
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.http import JsonResponse
+from django.core import serializers
+from django.template.loader import render_to_string
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
+from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+from django.db.models import Avg, Count, Min, Sum 
+
 from account.models import Student, Teacher, Parent, Adhesion, User, Resultknowledge, Resultlastskill, Resultskill
 from account.forms import UserForm
 from group.models import Group, Sharing_group
@@ -10,21 +23,13 @@ from flashcard.models import Flashpack
 from sendmail.models import Email
 from sendmail.forms import EmailForm
 from school.models import Stage
-from django.contrib.auth import login, authenticate
-from django.http import JsonResponse
-from django.core import serializers
-from django.template.loader import render_to_string
-from django.contrib import messages
-from django.contrib.auth.hashers import make_password, check_password
-from django.core.mail import send_mail
+
 import uuid
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import user_passes_test, login_required 
+
 from group.decorators import user_is_group_teacher
 from account.decorators import user_can_create
 from templated_email import send_templated_mail
-from django.db.models import Q
-from django.db.models import Avg, Count, Min, Sum
+
  
 ############### bibliothèques pour les impressions pdf  #########################
 import os
@@ -385,17 +390,97 @@ def create_student_profile_inside(request, nf) :
             except :
                 pass
             code = str(uuid.uuid4())[:8]                 
-            student = Student.objects.create(user=user, level=nf.level, code=code)
+            student,created = Student.objects.get_or_create(user=user, level=nf.level, code=code)
             nf.students.add(student)
         else :
             student = Student.objects.get(user=user)
-        st = True   
-
     else :
-        st = False
-    return st
+        student = False
+    return student
 
  
+
+
+################################################################
+##  Toute l'installation de SACADO
+################################################################
+ 
+
+
+def set_up_by_level_subject(group, student):
+    """  assigner les documents   """
+    subject , level = group.subject ,  group.level
+    teacher = group.teacher 
+    folders = Folder.objects.filter(subject=subject,level=level,teacher_id=2480,is_trash=0,is_archive =0   )
+
+    teacher.subjects.add(subject)
+    teacher.levels.add(level)
+
+    for folder in folders :
+        parcourses = folder.parcours.all() # récupération des parcours
+        folder.pk=None        
+        folder.teacher = group.teacher
+        folder.save()
+        folder.students.add(student)
+        folder.groups.add(group)
+
+        for parcours in parcourses :
+
+            relationships   = parcours.parcours_relationship.all() # récupération des relations
+            courses         = parcours.course.all() # récupération des relations                       
+            #clone du parcours
+            parcours.pk = None
+            parcours.teacher = teacher
+            parcours.is_publish = 1
+            parcours.is_archive = 0
+            parcours.is_share = 0
+            parcours.is_favorite = 1
+            parcours.is_sequence = 0
+            parcours.target_id = None
+            parcours.code = str(uuid.uuid4())[:8]
+            parcours.save()
+            parcours.students.add(student)
+            folder.parcours.add(parcours)
+            # fin du clone
+ 
+            for course in courses : 
+                course.pk      = None
+                course.parcours = parcours
+                course.teacher = teacher
+                course.save()
+
+            for r in relationships :
+                skills = r.skills.all() 
+                r.pk       = None
+                r.parcours = parcours
+                r.save() 
+                r.students.add(student)
+                r.skills.set(skills)
+
+
+
+@login_required(login_url= 'index')
+def all_set_up_sacado(request):
+
+    teacher = request.user.teacher
+
+    formSet  = inlineformset_factory( Teacher , Group , fields=('name','level','subject','recuperation'), extra =  1 ,  max_num = 5)
+    form_groups = formSet(request.POST or None, request.FILES or None , instance = teacher)
+
+    for fgroup in form_groups :
+        if fgroup.is_valid():
+            fg = fgroup.save()
+            student = create_student_profile_inside(request, fg) 
+            set_up_by_level_subject( fg , student) 
+        else :
+            print(form_groups.errors)
+
+    return redirect('index')
+
+################################################################
+##  Fin de toute l'installation de SACADO
+################################################################
+
 
 def convert_seconds_in_time(secondes):
     if secondes : secondes = int(secondes)
@@ -566,8 +651,10 @@ def create_group(request):
         if stdts : 
             if len(stdts) > 0  :
                 include_students(request , stdts,nf)
-        student = create_student_profile_inside(request, nf) 
-        duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,   student) # dans general_fonction.py
+        student = create_student_profile_inside(request, nf)
+        if not student :
+            student = group.students.filter(user__username__contains="_e-test").first()
+        duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student)
 
         return redirect("show_group", nf.id)
     else:

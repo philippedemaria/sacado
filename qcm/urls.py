@@ -12,6 +12,9 @@ urlpatterns = [
     #################################################################
     # URL
     #################################################################
+
+ 
+
     path('fill_the_skills', fill_the_skills, name='fill_the_skills'),
     path('find_no_skill', find_no_skill, name='find_no_skill'),
     path('get_skill_to_support', get_skill_to_support, name='get_skill_to_support'),

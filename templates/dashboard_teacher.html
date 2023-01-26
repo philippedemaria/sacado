@@ -1,5 +1,6 @@
 {% load static %} 
 {% load item_tags %} 
+{% load widget_tweaks %}
 
 {% if over_students %}
 
@@ -127,7 +128,7 @@
                         <!-- Legende de la small-box -->
                         <div class="inner" style="color:white;opacity:0.9"><br/>
                             <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"14" }} </span>{% if group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
-                             <span style="color:{{ group.color|contrast_color }};font-size: 16px"> {{ group.code }} </span> 
+ 
 
                                 {% if group.is_task_exists %}
                                     <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:13px;margin-top:8px;"><i class="fa fa-calendar-check"></i> Tâche en cours </a>
@@ -195,7 +196,7 @@
                                             <i class="bi bi-gear"></i>
                                         </a> 
                                         <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};" title="Détails du groupe">
-                                            <i class="fa fa-arrow-circle-right"></i>
+                                            <i class="bi bi-eye"></i>
                                         </a>  
                                     </div>
                                     <div class="col-lg-6 col-xs-6" style="padding-right:0px">
@@ -210,7 +211,7 @@
                                             <i class="bi bi-gear"></i>
                                         </a> 
                                         <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe">
-                                            <i class="fa fa-arrow-circle-right"></i>
+                                            <i class="bi bi-eye"></i>
                                         </a> 
                                     </div>
 
@@ -284,39 +285,129 @@
                         {% endfor %}
                     {% endif %}
                 {% else %}
-                    {% if nb_teacher_level == 0 %} 
+                    {% if teacher.groups.count == 0 %} 
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="alert alert-sacado"> 
-                                    <h2>Bienvenue dans l'univers SACADO </h2>
-                                    L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
-                                    <i class="fa fa-user-circle"></i> <b>Avec la version Enseignant</b>, vous pouvez créer vos groupes ou classes, des parcours d'apprentissage, des quizz et utiliser certains de nos outils pédagogiques testés en classe avec nos élèves.<br/>
-                                    <i class="fa fa-bank"></i><b> Avec la version Etablissement</b>, vous pouvez directement récupérer les dossiers, les parcours et tous les documents classés par thèmes et les assigner à vos groupes en quelques clics, créer des évaluations, exporter les résultats en CSV ou en tableur et découvrir l'ensemble des outils SACADO. La version Etablissement ne coute rien aux enseignants. L'abonnement doit être pris en charge par l'établissement. <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a><br/>
+                                <div class="introduction_teacher"> 
+                                    <div id="set_up_title"  class="set_up_title">
+                                        Bienvenue dans l'univers <span class="sacado_menu">SACADO</span>  
+                                    </div>
+
+                                    <div id="set_up_subtitle"    align="center">
+                                    L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6" align='center' id="auto_install">
+                                            <a href="javascript:void();" id="show_auto_install" class="auto_install set_up_round" style="padding-top: 35px"> 
+                                                Je veux créer<br/>   mes groupes et leur associer  tous les documents SACADO 
+                                            </a> 
+                                        </div>
+                                        <div class="col-xs-6" align='center' id="manual_install">
+                                            <a href="javascript:void();"  id="show_manual_install"  class="manual_install set_up_round">
+                                                Je veux <br/> paramétrer toutes les étapes dans le fonctionnement de SACADO <br/><small>(expert)</small>
+                                            </a> 
+   
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12" align='center'>
+                                            <div id="div_auto_install" class="auto_install_body no_visu_on_load">
+                                                <div class="set_up_sacado" align='center'>
+                                                    Je veux créer  mes groupes et leur associer tous les documents  <span class="sacado_menu">SACADO </span> <hr/>
+                                                    <div align='left' style="padding-left:10px;"> 
+                                                        <form action="{% url 'all_set_up_sacado' %}" method="POST" enctype="form/data" id="set_up">
+                                                            {% csrf_token %}
+                                                            {{ form_groups.management_form }}
+                                                            <div id="formsetZone">
+                                                                <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
+                                                                {% for form in form_groups %} 
+                                                                    {{ form.id }}
+                                                                    <div class="row">
+                                                                        <div class="col-xs-12 col-md-2" align='left'><label>Nom :</label> <br/>{{ form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
+                                                                        <div class="col-xs-12 col-md-2" align='left'><label>Enseignement :</label><br/> {{ form.subject |attr:"required"|add_class:"form-control select2  border_violet" }}</div>
+                                                                        <div class="col-xs-12 col-md-2" align='left'><label>Niveau :</label> <br/>{{ form.level|attr:"required"|add_class:"form-control select2  border_violet" }}</div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="row" style="margin-top:20px;">
+                                                                <div class="col-sm-12 col-md-12" >
+                                                                    <a href="javascript:void();" id="set_up_add_more_group"  class="set_up_add_more_group btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un groupe </a><br/><br/>
+                                                                </div>                            
+                                                            </div>
+                                                            <div class="row" style="margin-top:20px;" id="div_start_the_set_up">
+                                                                <button type="submit" class="btn btn-primary" id="start_the_set_up">Lancer l'installation</button>
+
+                                                                <a href="javascript:void();" class="btn btn-default reset_the_set_up">Revenir à l'accueil</a>
+
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="div_manual_install"  class="manual_install_body no_visu_on_load">
+
+                                                <div class="row">
+                                                    <div class="col-xs-12" align='center' style="line-height:30px;font-size:25px;margin-top:5px;margin-bottom:35px;">
+                                                        <i class="bi bi-person-circle icon_size"></i> <span class="semi_bold">Avec la version Enseignant</span>, 3 étapes de configuration.
+                                                    </div>
+                                                </div>
+
+                                                <div align="center">
+                                                    <img src="{% static 'img/modules.png' %}" width="500" /><br/>
+                                                </div>
 
 
+                                                <div class="row">
+                                                    <div class="round" style="margin-top: 30px;padding-top:15px;margin-bottom: 10px;font-size:25px;background-color:#0960B5;color:white; "> 
+                                                         <a href="{% url 'profile' %}">
+                                                            <h1>1.</h1>   Configurer <br> 
+                                                          mon compte
+                                                        <h1 class="sacado_menu">SACADO </h1>
+                                                        </a>
+                                                    </div>
+                                                </div>
 
-                                    <h1>Démarrer en 3 étapes</h1> Au fil de ces 3 étapes vous devrez compléter les champs attendus, créer votre premier groupe puis votre dossier ou parcours<br/>
-                                    <img src="{% static 'img/modules.png' %}" width="500"/><br/>
-                                    Bonne prise en main. <br/>L'équipe SACADO. 
- 
+
+                                                <div class="row">
+                                                    <div class="col-xs-12" align='center' style="line-height:30px;font-size:25px;margin-top: 30px;">
+                                                         <i class="bi bi-people icon_size"></i><span class="semi_bold"> Avec la version Etablissement</span>, créer des évaluations auto-corrigées, exporter les résultats en CSV ou en tableur, mutualiser vos parcours, co-animer, créer vos rituels et bien  plus encore... 
+                                                        La version Etablissement ne coute rien aux enseignants. L'abonnement est pris en charge par l'établissement. <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a><br/>
+                                                        Bonne prise en main. <br/>L'équipe SACADO.
+                                                    </div>
+                                                    <div class="col-xs-12" style="line-height:30px;margin-top: 30px;">
+                                                    <a href="javascript:void();" class="btn btn-default reset_the_set_up">Revenir à l'accueil</a>
+                                                    </div>
+                                                </div>
+                                            </div>                                             
+                                        </div>
+                                    </div>
                                 </div>                            
                             </div>
-                        </div>     
-                        <div class="row">
-                            <div class="round" style="margin-top: 30px;margin-bottom: 10px;"> 
-                                <h1 class="sacado">1.<br>Démarrez  avec </h1>
-                                <a href="{% url 'profile' %}">Configurer mon compte</a>
-                                <h1 class="sacado">sacAdo </h1>
+                        </div>    
+                        <div class="row" align="center" id="sacado_logo_white" >
+                            <div class="col-lg-12 col-xs-12">
+                                <img src="{% static 'img/sacado_logo_white.png' %}" />
                             </div>
                         </div>
-                    {% else %}  
+                        <script id="rowToClone" type="text/template">
+                            <div id="duplicate">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-2"><label>Nom : </label> <br/>{{ form_groups.empty_form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
+                                    <div class="col-xs-12 col-md-2"><label>Enseignement :</label> <br/> {{ form_groups.empty_form.subject|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
+                                    <div class="col-xs-12 col-md-2"><label>Niveau :</label> <br/> {{ form_groups.empty_form.level|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
+                                    <div class="col-xs-12 col-md-2 delete_button_question"><br/></div>
+                                </div>
+                            </div>
+                        </script> <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
+                    {% e
+                        lse %}  
                         <div class="row">
                             <div class="col-lg-12 col-xs-12">
                                 <p></p>
-                                <div class="round" style="margin-top: 30px;margin-bottom: 10px;background-color: #FFB400">
-                                    <h1 class="sacado">2.<br>Démarrez  avec </h1>
-                                    <a href="{% url 'create_group' %}" >Créer mon premier groupe</a>
-                                    <h1 class="sacado">sacAdo </h1>
+                                <div class="round" style="margin-top: 30px;margin-bottom: 10px;background-color: #00B999 ; font-size:25px ; color:white; ">
+                                    <a href="{% url 'create_group' %}" ><h1>2.</h1> Créer <br/>   
+                                      mon premier groupe</a>
+               
                                 </div>
                             </div>
                         </div>

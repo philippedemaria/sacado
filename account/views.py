@@ -32,7 +32,7 @@ from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication
 from sendmail.forms import EmailForm
-from socle.models import Level, Theme
+from socle.models import Level, Theme , Subject
 from school.models import  Country , Town
 from school.forms import SchoolForm
 from .forms import UserForm, UserUpdateForm, StudentForm, TeacherForm, ParentForm, ParentUpdateForm, ManagerUpdateForm, NewUserTForm,ManagerForm , ResponseForm , NewpasswordForm , SetnewpasswordForm , AvatarForm , AvatarUserForm, BackgroundForm , BackgroundUserForm
@@ -1305,12 +1305,14 @@ def register_teacher(request):
                 user.country_id =  request.POST.get("country_school",None)
 
             user.set_password(user_form.cleaned_data["password1"])
+            user.time_zone = 'Europe/Paris'
             user.save()
             username = user_form.cleaned_data['username']
             password = user_form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             teacher = Teacher.objects.create(user=user)
+ 
 
             try :
                 #teacher.notify_registration()

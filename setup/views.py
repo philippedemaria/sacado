@@ -7,10 +7,9 @@ from django.contrib.auth.forms import  UserCreationForm,  AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.forms import BaseFormSet
+from django.forms import BaseFormSet ,inlineformset_factory
 from django.utils import formats, timezone
 from django.contrib import messages
- 
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse
@@ -29,6 +28,7 @@ from account.forms import  UserForm, TeacherForm, StudentForm , BaseUserFormSet 
 from account.models import  User, Teacher, Student  , Parent , Adhesion , Facture , Connexion
 from association.models import Accounting , Detail , Rate , Abonnement , Holidaybook, Customer
 from group.models import Group, Sharing_group
+from group.forms import  GroupTeacherForm
 from group.views import student_dashboard
 from qcm.models import Folder , Parcours, Exercise,Relationship,Studentanswer, Supportfile, Customexercise, Customanswerbystudent,Writtenanswerbystudent
 from sendmail.models import Communication
@@ -83,6 +83,10 @@ def end_of_contract() :
     else :
         end = int(date.year) + 1
     return end
+
+
+
+
 
 
 def index(request):
@@ -142,6 +146,7 @@ def index(request):
             request.user.last_login = today
             request.user.save()
 
+        is_not_set_up = False
         
         if request.user.is_teacher :
 
@@ -150,50 +155,58 @@ def index(request):
                 over_students , nbss , nbsa  = oversize_students(request.user.school)
                 if over_students :
                     messages.error(request,"Erreur...Vous avez dépassé le nombre maximal d'élèves inscrits. Veuillez augmenter votre capacité.")
-
-            teacher = request.user.teacher
-            grps = teacher.groups.filter(is_hidden=0)
-            shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
-            # sgps = []
-            # for sg_id in shared_grps_id :
-            #     grp = Group.objects.get(pk=sg_id)
-            #     sgps.append(grp)
-            hh_groups = teacher.groups.filter(is_hidden=1)
-            h_groups = teacher.groups.filter(pk__in=shared_grps_id,is_hidden=1)
-            hidden_groups = h_groups | hh_groups
-
-            sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
-            groupes =  grps | sgps
-            groups  = groupes.order_by("level__ranking") 
             this_user = request.user
-            nb_teacher_level = teacher.levels.count()
-            relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
-            folders_tab = teacher.teacher_folders.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 )#.exclude(teacher__user__username__contains="_e-test") ## Dossiers  favoris non affectés
-            teacher_parcours = teacher.teacher_parcours
-            parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation")#.exclude(teacher__user__username__contains="_e-test") ## Parcours / évaluation favoris non affecté
+            teacher   = this_user.teacher                
             
-            #Menu_right
-            #parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
-            communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
-
-            request.session["tdb"] = True
-
-            webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
-
-            # Pour la GAR et le Primaire
-            group_prims = []
-            if request.user.school and request.user.school.is_primaire :   
-                group_prims = request.user.school.school_group.filter(teacher=None)
-
-
-
-
             template = 'dashboard.html'
-            context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 'nbss' : nbss , 'nbsa': nbsa ,
-                       'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check ,
-                       'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,  'over_students' : over_students ,  'hidden_groups' : hidden_groups #'parcourses': parcourses
-                       }
-        
+
+            if teacher.groups.count() == 0 :    
+
+                formSet  = inlineformset_factory( Teacher , Group , fields=('name','level','subject','recuperation')  , extra =  1 ,  max_num = 5)
+                form_groups = formSet(request.POST or None, request.FILES or None , instance = teacher)
+                is_not_set_up = True
+                context = {'this_user': this_user, 'teacher': teacher, 'today' : today , 'form_groups' : form_groups , 'is_not_set_up' : is_not_set_up , 
+                            'index_tdb' : index_tdb,  'is_gar_check' : is_gar_check ,
+                            }
+ 
+            else :
+                grps = teacher.groups.filter(is_hidden=0)
+                shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
+                # sgps = []
+                # for sg_id in shared_grps_id :
+                #     grp = Group.objects.get(pk=sg_id)
+                #     sgps.append(grp)
+                hh_groups = teacher.groups.filter(is_hidden=1)
+                h_groups = teacher.groups.filter(pk__in=shared_grps_id,is_hidden=1)
+                hidden_groups = h_groups | hh_groups
+
+                sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
+                groupes =  grps | sgps
+                groups  = groupes.order_by("level__ranking") 
+                nb_teacher_level = teacher.levels.count()
+                relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
+                folders_tab = teacher.teacher_folders.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 )#.exclude(teacher__user__username__contains="_e-test") ## Dossiers  favoris non affectés
+                teacher_parcours = teacher.teacher_parcours
+                parcours_tab = teacher_parcours.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 ).order_by("is_evaluation")#.exclude(teacher__user__username__contains="_e-test") ## Parcours / évaluation favoris non affecté
+                
+                #Menu_right
+                #parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
+                communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
+
+                request.session["tdb"] = True
+
+                webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
+
+                # Pour la GAR et le Primaire
+                group_prims = []
+                if request.user.school and request.user.school.is_primaire :   
+                    group_prims = request.user.school.school_group.filter(teacher=None)
+
+                context = {'this_user': this_user, 'teacher': teacher, 'groups': groups,  'parcours': None, 'today' : today , 'timer' : timer , 'nb_teacher_level' : nb_teacher_level , 'nbss' : nbss , 'nbsa': nbsa ,
+                           'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check , 'is_not_set_up' : is_not_set_up , 
+                           'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,  'over_students' : over_students ,  'hidden_groups' : hidden_groups, #'parcourses': parcourses
+                            }
+            
         elif request.user.is_student:  ## student
 
             if request.user.closure : 
@@ -206,7 +219,7 @@ def index(request):
         elif request.user.is_parent:  ## parent
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
-            context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, }
+            context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, 'is_not_set_up' : is_not_set_up ,  }
             template = 'dashboard.html'
 
         return render(request, template , context)

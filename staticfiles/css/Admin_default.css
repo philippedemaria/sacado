@@ -83,7 +83,10 @@ h1, .h1, h2, .h2, h3, .h3 {
   color:  #5d4391 ;
 }
 
-
+.sacado{
+font-family: "Montserrat", sans-serif;
+color : #5d4391;
+}
 
 .options{
   padding:30px 10px 10px 10px;
@@ -3688,10 +3691,7 @@ a.surline:hover   {
 font-family: "Montserrat", sans-serif;
 }
 
-.sacado{
-  font-family:'Amatic Sc';
-}
-
+ 
 .thin{
   font-weight: 100;
 }

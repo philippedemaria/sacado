@@ -222,7 +222,7 @@ def time_zone_user(user):
     return today
 
 
- 
+
 def attribute_all_documents_to_student(parcourses,student):
     """  assigner les documents et renvoie Vrai ou Faux suivant l'attribution """
     try :

@@ -597,11 +597,11 @@ class Parcours(ModelWithCode):
     target_id  = models.PositiveIntegerField( blank=True, null=True, editable=False , verbose_name="Parcours cible") 
 
     def __str__(self):
-        flds = ""
-        for f in self.folders.all():
-            flds += f.title+" - "
+        try :        
+            flds = ""
+            for f in self.folders.all():
+                flds += f.title+" - "
  
-        try :
             if self.coteachers.count() > 0 and flds != "" :
                 return "{} > {} [CoA]".format(flds, self.title)
             elif self.coteachers.count() > 0 and flds == "" :

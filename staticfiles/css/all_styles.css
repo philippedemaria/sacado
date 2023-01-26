@@ -3,6 +3,95 @@
 /***********  dark-green_index : #00B999
 /***********  bleu_index :  #0093CA         ---------> fond #d6f4ff
 /********************************************************************/
+/*body{
+background:-webkit-gradient(linear, left bottom, right top, from(#38438b), color-stop(#944b94), color-stop(#d75a88), color-stop(#ff7e71), color-stop(#ffb25f), to(#ffeb68));background:-webkit-linear-gradient(left bottom, #38438b, #944b94, #d75a88, #ff7e71, #ffb25f, #ffeb68);background:-o-linear-gradient(left bottom, #38438b, #944b94, #d75a88, #ff7e71, #ffb25f, #ffeb68);background:linear-gradient(to right top, #38438b, #944b94, #d75a88, #ff7e71, #ffb25f, #ffeb68);
+
+height: 100vh;
+background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c), color-stop(#485DA6), color-stop(#00a1ba), color-stop(#00BF98), to(#36C486));background-image:-webkit-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:-o-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
+}
+*/
+
+.the_null_body{
+    height: 100vh;
+    background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c), color-stop(#485DA6), color-stop(#00a1ba), color-stop(#00BF98), to(#36C486));background-image:-webkit-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:-o-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
+}
+
+.alert-setup{
+  color:white;
+}
+
+.alert-setup a{
+  color:white;
+}
+
+
+.semi_bold{
+  font-weight:500;
+}
+
+.set_up_title{ 
+  margin-top: 50px;
+  padding:30px ;
+  transition: height 1s;
+  overflow: hidden;
+  text-align:center;
+  font-size: 50px;
+  height:80px;
+}
+
+
+.introduction_teacher{
+  line-height: 28px;
+  color:white;
+}
+
+.set_up_sacado{ 
+  margin: 30px;
+  font-size: 20px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border : 2px solid #fff; ;
+  height:550px;
+  display: block;
+  background-repeat: no-repeat;
+  transition: height 1s;
+  overflow: hidden;
+  opacity:0.9; 
+  background-color:white;
+  color : #5d4391 ;
+}
+
+.set_up_sacado:hover  {
+    height: 550px;
+}
+
+
+
+a.set_up_round{
+    margin-top: 30px;
+    padding-top: 20px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width:200px;
+    height:200px;
+    font-size: 22px;
+    border: 3px solid white;    
+    margin-bottom: 20px;
+    display: block;
+    color:white;
+}
+
+a.set_up_round:hover{
+    text-decoration: none;
+    -webkit-box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+    -moz-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+}
 
 .dropdown-menu {
     position: absolute;
@@ -16,6 +105,10 @@
     margin: 0px 0 0; 
 }
 
+.border_violet{
+  border : 2px solid #5d4391!important;
+  border-radius:5px!important;
+}
 
 /********************************************************************/
 /*********   cke  ***************************************************/
@@ -378,7 +471,6 @@ table.puzzle td {
     -webkit-box-shadow: 0 0 8px rgb(0 0 0 / 50%);
     -moz- box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 8px rgb(0 0 0 / 50%);
-    background-color: #F7F7F7;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -386,6 +478,12 @@ table.puzzle td {
     height: 200px;
 }
 
+.round a {
+  color:white;
+}
+.round a:active, .round a:focus, .round a:hover, {
+  text-decoration: none;
+}
 .onclic{
   font-weight: normal;
   font-size: 15px;
@@ -709,18 +807,16 @@ div.carte {
   width:150px;
   border-radius: 5px;
 }
-#tableau {
-    width:650px;
+.tableau {
     height:300px;
     border:1px solid #527ded; 
     background-color: #fbfaff ;
-
 }
-#axe {
-  width:600px;
+
+.axe {
   height:2px;
   background-color: #5f8cff;
-  border: 0 px solid;
+  border: 0px solid;
   position:relative;
   top:70px;
 }
@@ -1609,7 +1705,7 @@ input:invalid:focus {
     border-color: #FF8B69;
 }
 .btn-warning:hover, .btn-warning:active, , .btn-warning:focus   {
-    background-color: #f88f70;
+    background-color: #ea643d;
     border-color: #FF8B69;
 }
 

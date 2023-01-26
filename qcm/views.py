@@ -588,14 +588,16 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     Renvoie les parcours dont le prof est propriétaire et donc les parcours lui sont partagés
     """
     sharing_groups = teacher.teacher_sharingteacher.all()
-    parcourses = list(teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0).order_by("subject","level"))
+    parcourses =  teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0).order_by("subject","level") 
 
+    coteacher_parcours = teacher.coteacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0).order_by("subject","level")
 
-    for sg in sharing_groups :
-        pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
-        for p in pcs :
-            if p not in parcourses:
-                parcourses.append(p) 
+    prcs = list(parcourses | coteacher_parcours)
+    # for sg in sharing_groups :
+    #     pcs = group_has_parcourses(sg.group,is_evaluation ,is_archive )
+    #     for p in pcs :
+    #         if p not in parcourses:
+    #             parcourses.append(p) 
     return parcourses
 
 def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
@@ -608,6 +610,7 @@ def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
             if student in group.students.all()  :
                 test_has_permisson = True
                 break
+    #if parcours.is_share == 1 : test_has_permisson = True
     return test_has_permisson
 
 def teacher_has_permisson_to_parcourses(request,teacher,parcours):
@@ -766,8 +769,6 @@ def tracker_execute_exercise(track_untrack ,  user , idp=0 , ide=None , custom=0
         except :
             pass
 
-
- 
 
 #######################################################################################################################################################################
 #######################################################################################################################################################################
@@ -6907,7 +6908,7 @@ def replace_bloc(texte,vars_list,i):
                 new += bloc
             j += 1
     else :
-        new = texte
+        new = str(texte)
 
     if new and '?!' in new :
         renew = ""
@@ -6938,7 +6939,6 @@ def alea_annoncements(n,supportfile) :
         random.shuffle(su_choices)
         s_choices = su_choices[0:nb_pseudo_support]
 
-    n=2
     if supportfile.qtype == 1 or supportfile.qtype == 13 or supportfile.qtype == 15 :
         if nb_pseudo_support : n = nb_pseudo_support
         else : n = s_choices.count()
@@ -6969,7 +6969,6 @@ def alea_annoncements(n,supportfile) :
             corrections.append(corrige)
 
         
-
         if supportfile.qtype<3 and vars_list : 
             this_choice = s_choices[i]
             new    = replace_bloc(this_choice.answer,vars_list,i)
@@ -6984,8 +6983,6 @@ def alea_annoncements(n,supportfile) :
             data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : this_choice.retroaction , 'is_correct' : this_choice.is_correct   } 
             shufflechoices.append(data)
 
-
-
         elif 2<supportfile.qtype<5  :
             this_liste = list()
             for this_choice in s_choices : 
@@ -6996,7 +6993,6 @@ def alea_annoncements(n,supportfile) :
                 this_liste.append(data)
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
-
 
         elif  supportfile.qtype == 5 :
             this_liste = list()
@@ -7037,7 +7033,6 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_sub_liste)
             shufflesubchoices.append(this_sub_liste)
 
-
         elif  supportfile.qtype == 7 :
             this_choice = s_choices[i]
             mystr = this_choice.answer
@@ -7059,7 +7054,6 @@ def alea_annoncements(n,supportfile) :
             shufflechoices.append(data)
             random.shuffle(shufflechoices)
  
-
         elif  supportfile.qtype == 9 :
 
             this_choice = s_choices[i]
@@ -7076,7 +7070,6 @@ def alea_annoncements(n,supportfile) :
             choices.append(this_choice)
             shufflechoices.append(words) ## shufflechoices sont la liste des mots
 
-          
         elif  supportfile.qtype == 13 :
 
             this_choice = s_choices[i]
@@ -7084,7 +7077,6 @@ def alea_annoncements(n,supportfile) :
             shufflechoices.append(data)
             random.shuffle(shufflechoices)
       
-
         elif  supportfile.qtype == 15 :
 
             this_liste = list()
@@ -7107,21 +7099,46 @@ def alea_annoncements(n,supportfile) :
             random.shuffle(this_sub_liste)
             shufflesubchoices.append(this_sub_liste)
 
-
-
         elif  supportfile.qtype == 18 :
 
+            # choices = list()
+            # for this_choice in s_choices : 
+            #     xmin    = replace_bloc(this_choice.xmin,vars_list,i)
+            #     xmax    = replace_bloc(this_choice.xmax,vars_list,i)
+            #     tick    = replace_bloc(this_choice.tick,vars_list,i)
+            #     subtick = replace_bloc(this_choice.subtick,vars_list,i)
+
+            #     data = { 'id' : this_choice.id , 'tick' : tick , 'subtick' : subtick ,'xmin' : xmin  ,'xmax' : xmax   } 
+               
+            #     choices.append(data)
+            # random.shuffle(choices)
+            # shufflechoices.append(choices)
+
+            # print( choices ,   shufflechoices )
+
             this_liste = list()
+            this_sub_liste = list()
             for this_choice in s_choices : 
-                new    = replace_bloc(this_choice.answer,vars_list,i)
-                newbis = replace_bloc(this_choice.answerbis,vars_list,i)
+                xmin    = replace_bloc(this_choice.xmin,vars_list,i)
+                xmax    = replace_bloc(this_choice.xmax,vars_list,i)
+                tick    = replace_bloc(this_choice.tick,vars_list,i)
+                subtick = replace_bloc(this_choice.subtick,vars_list,i)
                 retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
-
-                data = { 'id' : this_choice.id , 'answer' : new , 'answerbis' : newbis ,'imageanswer' : this_choice.imageanswer ,'imageanswerbis' : this_choice.imageanswerbis , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
+                data = { 'id' : this_choice.id , 'tick' : tick , 'subtick' : subtick ,'xmin' : xmin  ,'xmax' : xmax  , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
                 this_liste.append(data)
-            random.shuffle(this_liste)
+                this_subchoices = this_choice.supportsubchoices.all()
+                if supportfile.nb_subpseudo :
+                    this_sub_choices = list(this_subchoices)
+                    random.shuffle(this_sub_choices)
+                    this_subchoices = this_sub_choices[0:supportfile.nb_subpseudo]  
+                for subchoice in this_subchoices:
+                    answer      = replace_bloc(subchoice.answer,vars_list,i)
+                    retroaction = replace_bloc(subchoice.retroaction,vars_list,i)
+                    label       = replace_bloc(subchoice.label,vars_list,i)
+                    subdata = { 'id' : subchoice.id , 'answer' : answer , 'imageanswer' : subchoice.imageanswer   , 'retroaction' : retroaction , 'label' : label , 'is_correct' : subchoice.is_correct   } 
+                    this_sub_liste.append(subdata)
             shufflechoices.append(this_liste)
-
+            shufflesubchoices.append(this_sub_liste)
 
         else :
             this_liste = list()
@@ -7229,8 +7246,8 @@ def define_all_types(n, supportfile):
     elif supportfile.qtype==18 :
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflechoices' : shufflechoices  , 'supportfile' : supportfile , 'numexo' : 0 } 
- 
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements ,  'shufflechoices' : shufflechoices ,  'shufflesubchoices' : shufflesubchoices    , 'supportfile' : supportfile , 'numexo' : 0 } 
+
     return context
 
 
