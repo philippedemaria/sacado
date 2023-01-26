@@ -440,6 +440,7 @@ def set_up_by_level_subject(group, student):
             parcours.code = str(uuid.uuid4())[:8]
             parcours.save()
             parcours.students.add(student)
+            parcours.groups.add(group)
             folder.parcours.add(parcours)
             # fin du clone
  
@@ -653,8 +654,8 @@ def create_group(request):
                 include_students(request , stdts,nf)
         student = create_student_profile_inside(request, nf)
         if not student :
-            student = nf.students.filter(user__username__contains="_e-test").first()
-        duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,  student)
+            student = group.students.filter(user__username__contains="_e-test").first()
+        set_up_by_level_subject(nf ,  student)
 
         return redirect("show_group", nf.id)
     else:
@@ -708,8 +709,8 @@ def update_group(request, id):
 
         student = create_student_profile_inside(request, nf) 
         if not student :
-            student = nf.students.filter(user__username__contains="_e-test").first()
-        duplicate_all_folders_of_group_to_a_new_student(nf , folders, teacher,  student)
+            student = group.students.filter(user__username__contains="_e-test").first()
+        set_up_by_level_subject(nf ,  student)
  
         return redirect("show_group", group.id)
     else:
