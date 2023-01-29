@@ -295,7 +295,7 @@
                 </table>
             </div>   
         </div> 
-
+        {% if students %}
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div class="form-group">
@@ -307,15 +307,16 @@
                     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
                 </div>
             </div>
-        </div> 
+        </div>
+        {% endif %}
     </form>
 	{% if group %}
 
         {% if not is_gar_check %}
             <div class="row">
-                <div class="col-sm-12 col-md-12 alert alert-info">
+                <div class="col-sm-12 col-md-12">
                     <div style="font-size: 16px"><i class="fa fa-info-circle"></i>
-                        <b>Lien d'inscription :</b> Les élèves peuvent rejoindre ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <a href="https://sacado.xyz/group/{{ group.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
+                        <b>Lien d'inscription :</b> Les élèves s'inscrivent à ce groupe via cette URL à leur donner : <strong>https://sacado.xyz/group/{{ group.code }}</strong> <a href="https://sacado.xyz/group/{{ group.code }}" target="_blank"><img src="{% static 'img/external-link.png' %}"/></a>
                     </div>
                 </div>
             </div>
@@ -339,12 +340,10 @@
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
                         <p></p>
-                        <div class="round" style="background-color: {{ group.color }};margin-top: 30px;margin-bottom: 10px;">
-                                <h1 class="sacado white">3.<br>Démarrez  avec </h1>
-                                <a href="{% url 'list_parcours_group' group.id %}"  class="white">Créer   un dossier  ou  <br>un parcours dans ce groupe</a>
-                                <h1 class="sacado white">sacAdo </h1>
-
-                        
+                        <div class="round" style="background-color: {{ group.color }};margin-top: 40px;padding-top: 35px;margin-bottom: 10px;">
+                                <h1 class=" white">Créer 
+                                <a href="{% url 'list_parcours_group' group.id %}"  class="white"> un <br>dossier  ou  un parcours</a>
+                                </h1>
                         </div>
                     </div>
                 </div>
@@ -372,11 +371,7 @@
                         <font style="color:#cb2131  ;font-size: 80px"> sacado2020</font>
                     </div>
                 </div>
-
- 
-
                 <hr/>
- 
                 <div class="row">
                     <div class="col-lg-12 col-xs-12">
                         <h3>Code du groupe : </h3>
@@ -387,9 +382,6 @@
                         <font style="color: {{ group.color}};font-size: 80px">{{ group.code }}</font>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>

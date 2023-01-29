@@ -109,19 +109,16 @@
                             <form action="" method="POST">
                             {% csrf_token %}
                             <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
-                               data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> <span class="label label-default"> {{ data.count_students }}<i class="fa fa-users"></i></span></a>
+                               data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> 
+                               <span class="label label-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"> {{ data.count_students }}<i class="fa fa-users"></i>
+                               </span>
+                            </a>
                             </form>
-                            <font style="color:#CCC">
+                            <font style="color:{{ group.color }}">
                                 {% for s in data.students %} 
                                     <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}</a>{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </font>
-                            {% if not is_gar_check %}
-                            <div style="clear:both"></div>
-                            <span style="color:{{ group.color }};font-size:12px"><a href="{% url 'update_group' group.id %}" style="background-color:{{ group.color }}; color:{{ group.color|contrast_color }}; padding :1px 5px; border-radius: 3px">+ Ajouter</a> ou lien d'inscription à donner aux élèves  : https://sacado.xyz/group/{{ group.code }}   
-                                  
-                            </span> 
-                            {% endif %}
                         </div>
 
 
@@ -189,44 +186,26 @@
 
                                 </div>
                             </div>
-                            {% if data.nb_documents == 0 %}
-                                <div class="row">                                      
-                                    <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};" title="Configurer du groupe">
-                                            <i class="bi bi-gear"></i>
-                                        </a> 
-                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:20px; color:{{ group.color|contrast_color }};" title="Détails du groupe">
-                                            <i class="bi bi-eye"></i>
-                                        </a>  
-                                    </div>
-                                    <div class="col-lg-6 col-xs-6" style="padding-right:0px">
-                                        <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:20px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i><span class="helper_tip small_displayer" style="color:{{ group.color|contrast_color }};"> {{ data.snt }} élève{{ data.snt|pluralize }}
-                                        </a>   
-                                    </div>
+                            <div class="row">                    
+                                <div class="col-lg-4 col-xs-4" style="padding-right:0px">
+                                    <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer le groupe"><i class="bi bi-gear"></i></a> 
+                                    <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe"><i class="bi bi-arrow-right-circle"></i></a> 
                                 </div>
-                            {% else  %}
-                                <div class="row">                    
-                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer le groupe">
-                                            <i class="bi bi-gear"></i>
-                                        </a> 
-                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe">
-                                            <i class="bi bi-eye"></i>
-                                        </a> 
-                                    </div>
 
-                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                        <a  href="{% url 'result_group_exercise'  group.id %}" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><i class="fa fa-mortar-board"></i><span class="small_displayer"> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
-                                    </div> 
-                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                        <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"><i class="fa fa-users"></i>
-                                            <span class="helper_tip small_displayer"  style="color:{{ group.color|contrast_color }};"> 
-                                                Élève{{ data.snt|pluralize }}
-                                            </span> 
-                                        </a>   
-                                    </div>
+                                <div class="col-lg-4 col-xs-4" style="padding-right:0px">
+                                    <a  href="{% url 'result_group_exercise'  group.id %}" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><span class="small_displayer"> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
+                                </div> 
+                                <div class="col-lg-4 col-xs-4" style="padding-right:0px" align="right">
+
+                                    {% if sacado_asso and not is_gar_check  and group.student_view %}
+                                    <a href="{% url 'switch_teacher_student' group.id %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Prendre la vue élève"><i class="bi bi-eye"></i></a> 
+                                    {% endif %}
+                                    <a  href="{% url 'insert_students_to_this_group' group.id %}" class="label_small_box group_shower" style="font-size:15px; color:{{ group.color|contrast_color }};"
+                                    title="Ajouter des élèves"><i class="bi bi-person-plus"></i></a>
+                                    <a  href="javascript:void();" class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"
+                                    title="Liste des élèves"><i class="fa fa-users"></i></a>   
                                 </div>
-                            {% endif  %}
+                            </div>
                         </div>
                     </div>
 

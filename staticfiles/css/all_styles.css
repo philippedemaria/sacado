@@ -10,7 +10,20 @@ height: 100vh;
 background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c), color-stop(#485DA6), color-stop(#00a1ba), color-stop(#00BF98), to(#36C486));background-image:-webkit-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:-o-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
 }
 */
-
+/********************************************* bleu :  #005e74 ************************************/
+/********************************************* violet       :  #5d4391 ************************************/
+/********************************************* violet light :  #f1eef7 ************************************/
+/********************************************* vert : #1bc074 *******************************************/
+/********************************************* orange: #ffb400 ***************************************/
+/********************************************* rouge: #cb2131 ***************************************/
+/********************************************* bleu side bar #364e61   ***************************************/
+/********************************************* bleu content #f5f8f9 ***************************************/
+/********************************************* moutarde #cb9500 ***************************************/
+/********************************************* violet #364e61  ***************************************/
+/********************************************* FOND DE PAGE #f4f6f9 *********************************/
+/********************************************* gris #657574 ***************************************/
+/********************************************* beige #e6e2dd ***************************************/
+/********************************************* beige clair #f2f1f0***************************************/
 .the_null_body{
     height: 100vh;
     background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c), color-stop(#485DA6), color-stop(#00a1ba), color-stop(#00BF98), to(#36C486));background-image:-webkit-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:-o-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
@@ -108,6 +121,11 @@ a.set_up_round:hover{
 .border_violet{
   border : 2px solid #5d4391!important;
   border-radius:5px!important;
+}
+
+.insert_student_to_this_group{
+  font-size: 20px;
+  color : #5d4391;
 }
 
 /********************************************************************/

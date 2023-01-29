@@ -1,0 +1,197 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+    {% if group %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+
+    <script>
+        require(['script/ajax-group']);
+        {% if not group %}
+        require(['script/ajax-group-complement']);
+        {% endif %}
+    </script>
+ 
+ 
+{% endblock %}
+
+
+{% block page_title %}  
+    {% if group %}  <span style="color:{{group.color}}" ><i class="bi bi-people"></i></span>
+        {% include 'group/breadcrumb.html' %}
+          <small> Configuration</small> </span> 
+    {% else %} 
+      <span style="color:#5d4391" ><i class="bi bi-people"></i> Nouveau groupe </span>
+    {% endif %}  
+        {% include 'modes.html' %}  
+{% endblock %}
+
+{% block page_menu_right %}
+    {% if group %}
+        {% include 'group/submenu_group.html'  %}
+    {% endif %}
+{% endblock %}
+
+
+ 
+
+
+ 
+     
+{% block body %}     
+<div class="content_main">
+    <form action="" method="POST"><input id="is_update" value="{% if group %}yes{% else %}no{% endif %}" type="hidden" />
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="form_card">   
+                {% csrf_token %}
+                <div class="row">
+                    {% if not is_gar_check %}
+                        <div class="col-sm-12 col-md-3">
+                            <label>Nom : <font style="font-size:12px">18 lettres max.</font></label>
+                            {{ form.name |add_class:"form-control" }}
+                            {{ form.name.errors }}
+                        </div>
+                    {% else %}
+                        {% if group.is_gar %}
+                        <input name="name" type="hidden" id="id_name" value="{{ group.name }}"/>
+                        {% else %}
+                        <div class="col-sm-12 col-md-3">
+                            <label>Nom : <font style="font-size:12px">18 lettres max.</font></label>
+                            {{ form.name |add_class:"form-control" }}
+                            {{ form.name.errors }}
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="col-sm-12 col-md-3">
+                            <label>Enseignement :<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Si aucun enseignement n'apparait, sélectionner vos enseignements <a href="{% url 'profile' %}">ici</a>.</div>
+                                    </span></label>
+                            {{ form.subject |add_class:"form-control select2" }}
+                            {{ form.subject.errors }}
+                    </div>                    
+                    <div class="col-sm-12 col-md-4">
+                            <label>Niveau : <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Si aucun niveau n'apparait, sélectionner vos niveaux préférés <a href="{% url 'profile' %}">ici</a>.</div>
+                                    </span></label>
+                            {{ form.level |add_class:"form-control select2" }}
+                            {{ form.level.errors }}
+                    </div>
+
+                    <div class="col-sm-12 col-lg-2 no_visu">                    
+                            {{ form.color.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
+                                </span>
+                            <div id="color-picker-component" class="input-group colorpicker-component">
+                              {{ form.color.as_hidden }}
+                                <span class="input-group-addon"><i></i></span>
+                            </div>
+                    </div>
+                </div> 
+                <div class="row"> 
+                    <div class="form-group">
+                        {% if sacado_asso %}
+                        <div class="col-sm-12 col-md-4 no_visu">                       
+                               <label>Suivi parent ?
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" > Si oui, le suivi par les parents est disponible via un code unique et secret sur le tableau de bord élève. </div>
+                                    </span>
+                                </label> <br>
+                                {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        </div>
+                        {% endif %}
+
+  
+                        <div class="col-sm-12 col-md-4 no_visu">
+                           <label>Verrouiller ?  
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" > Interdit d'inscrire de nouveaux élèves par un lien de connexion. </div>
+                                </span>
+                            </label> <br>
+                            {{ form.lock  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        </div>
+
+
+                        {% if is_gar_check %}
+                        <div class="col-sm-12 col-md-4">
+                           <label>Masquer ?  
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" > Masque un groupe non souhaité. </div>
+                                </span>
+                            </label> <br>
+                            {{ form.is_hidden  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                        </div>
+                        {% endif   %}
+
+
+ 
+                    </div> 
+                </div>
+         
+                <div class="row">
+                    <hr>
+                    <div class="col-sm-8 col-md-10">
+                        <label>L'équipe SACADO vous propose ses dossiers incluant les parcours modifiables et les cours interactifs déjà créés et testés en classe. <br/>Si vous souhaitez créer vos propres parcours pour ce groupe, choisissez NON. </label>
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                        {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                    </div>
+                </div>
+                {% comment %}
+                <div class="row" id="choosen_parcours_for_this_level_and_subject">
+                    <hr>
+                    <div class="col-sm-12 col-md-12">
+                        <label>Sélectionner les dossiers proposés.</label>
+                    </div>
+                </div>
+                <div id="choosen_parcours_by_this_level_and_subject">
+                </div>
+                {% endcomment %}
+
+
+                {% if group %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5"  id="div_start_the_set_up">
+                            <div class="form-group">
+                                <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
+                                <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                                           class="btn btn-default "/></a>
+                            </div>
+                        </div>
+
+                        {% if not sacado_asso or request.user.is_manager or request.user.is_superuser or is_managing != 1  %}
+                            {% if not is_gar_check %}
+                            <div class="col-sm-12 col-md-7">
+                                <div class="form-group">
+                                    <a href="{% url 'delete_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe')">Supprimer ce groupe</a>
+                                    <a href="{% url 'delete_group_and_his_documents' group.id %}" class="btn btn-danger" onclick="return TestDelete('ce groupe et ses documents')"><i class="bi bi-radioactive"></i> Forcer la suppresion de ce groupe</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8" id="div_start_the_set_up">
+                            <div class="form-group">
+                                <input value="Créer le groupe" type="submit" class="btn btn-primary"  id="test_students"  />
+                                <a href="javascript:history.back()"><input type="button" value="Retour"
+                                                                           class="btn btn-default "/></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    </form>
+</div> 
+
+ 
+{% endblock %}

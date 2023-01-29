@@ -216,9 +216,13 @@
         {%  get_access_to_this_group  group   teacher  as     has_access_to_this_group %}
         {%  if  has_access_to_this_group.access   %}
         <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
-            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer le groupe{% if not is_gar_check %}/Ajouter des élèves{% endif %}</span></a>    
-        </li>  
-
+            <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer le groupe</span></a>    
+        </li>
+        {% if not is_gar_check %}
+        <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
+            <a href="{% url 'insert_students_to_this_group' group.id %}"  > <i class="fa fa-user-plus fa-fw"  ></i><span class="small_displayer"> Ajouter des élèves</span></a>    
+        </li>
+        {% endif %}
         <li {% if 'group/show/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'show_group' group.id  %}" ><i class="fa fa-arrow-circle-right  fa-fw"></i>  Lire les détails{% if not is_gar_check %}/Modifier les élèves{% endif %}</a>
         </li>
@@ -256,9 +260,8 @@
         <li {% if 'group/stats/' in request.path %} class="active" {% endif %}>
              <a href="{% url 'stat_group' group.id   %}"   ><i class="fa fa-bar-chart fa-fw"></i> Lire les stats</a>
         </li> 
-        {% if not is_gar_check %}
+        {% if sacado_asso and not is_gar_check  and group.student_view %}
         <li class="divider"></li>
-
         <li >
             <a href="{% url 'switch_teacher_student' group.id %}" class="no_button">
                <i class="fa fa-glasses fa-fw"></i> Accéder à la vue élève

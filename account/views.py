@@ -604,6 +604,7 @@ def switch_teacher_student(request,idg): #idg = group_id
     user = request.user
     request.session["user_id_switch_student_teacher"] = request.user.id
     group = Group.objects.get(pk = idg)
+    student  = group.students.filter(user__username__contains= "_e-test").last()
     try :
         student  = group.students.filter(user__username__contains= "_e-test").last()
         user = authenticate(username=student.user.username, password = "sacado2020")
@@ -611,7 +612,7 @@ def switch_teacher_student(request,idg): #idg = group_id
         request.session["user_id"] = request.user.id
         messages.success(request,"Vous êtes maintenant sur l'interface Elève de votre groupe.")
     except :
-        messages.error(request,"Erreur sur la vue élève. Vue élève indisponible. Contacter l'équipe SACADO.")
+        messages.error(request,"Vous n'avez pas accès à la vue élève. Contacter l'équipe SACADO.")
 
     return redirect("index")
 

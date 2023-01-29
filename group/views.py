@@ -678,7 +678,7 @@ def create_group(request):
     else:
         print(form.errors)
 
-    context = {'form': form, 'teacher': teacher, 'group': None,   'students': None,  'is_managing': is_managing }
+    context = {'form': form, 'teacher': teacher, 'group': None,   'students': None,  'is_managing': is_managing , 'only_if_update_group' : False }
 
     return render(request, 'group/form_group.html', context)
 
@@ -734,21 +734,67 @@ def update_group(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing  }
+    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing , 'only_if_update_group' : True }
 
-    return render(request, 'group/form_group_insert_student.html', context )
+    return render(request, 'group/form_group.html', context )
 
 
 
 
 
  
+@login_required(login_url= 'index')
+def insert_students_to_this_group(request, id):
 
+    teacher = request.user.teacher
+    group   = Group.objects.get(id=id)
+    stdnts  = group.students.exclude(user__username = request.user.username).exclude(user__username__contains=  "_e-test").order_by("user__last_name")
+    try :
+        is_managing = teacher.user.school.is_managing # permet de savoir si un admin gère les groupes. True si c'est l'admin
+    except:
+        is_managing = False
 
+    stu = group.students.values_list("user_id",flat=True)
+    all_students = Student.objects.filter(user__user_type=0, level=group.level, user__school=teacher.user.school).exclude(user_id__in = stu ).order_by("user__last_name")
 
+    authorizing_access_group(request,teacher,group )
+    
+    form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
 
+    if form.is_valid():
+        nf = form.save(commit = False)
+        nf.teacher = teacher
+        nf.code = group.code
+        nf.studentprofile = 1
+        if teacher.user.school :
+            nf.school = teacher.user.school
+        nf.save()
+        messages.success(request, "Le groupe est modifié. ")
 
+        folders    = list()
+        folders_ids = request.POST.getlist("folder_ids")        
+        for f_id in folders_ids :
+            folder = Folder.objects.get(pk=f_id)
+            folders.append(folder)
 
+        stdts = request.POST.get("students")
+        if stdts : 
+            if len(stdts) > 0 :
+                include_students(request , stdts, group)
+
+        student = create_student_profile_inside(request, nf) 
+        if not student :
+            student = group.students.filter(user__username__contains="_e-test").first()
+        if nf.recuperation :
+            set_up_by_level_subject(nf ,  student)
+ 
+        return redirect("index")
+    else:
+        print(form.errors)
+
+    context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing   }
+
+    return render(request, 'group/form_group_insert_student.html', context )
 
 
 

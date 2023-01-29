@@ -257,6 +257,14 @@ class Group(ModelWithCode):
         return data
 
 
+
+    def student_view(self):
+        test = False
+        if self.students.filter(user__username__contains= "_e-test"):
+            test = True
+        return test
+
+
 def vignette(self):
 
     try :
