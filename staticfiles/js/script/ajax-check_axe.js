@@ -52,15 +52,6 @@ var nb_tableaux=document.getElementsByClassName("tableau").length; // Nb de situ
  
                     offsetLeft = $(ui.draggable[0])[0].offsetLeft ;
                     this_identifiant = $(ui.draggable[0]).data("identifiant") ;
-                    // var xmin      = parseInt($("#xmin"+loop).val().replace(",",".")); 
-                    // var xmax      = parseInt($("#xmax"+loop).val().replace(",","."));
-                    // var tick      = parseInt($("#tick"+loop).val().replace(",","."));
-                    // var subtick   = parseInt($("#subtick"+loop).val().replace(",","."));
-                    // var width_pixel  =  offsetWidth*tick/(xmax - xmin) ; 
-                    // var value = (offsetLeft-15)/width_pixel; 
-                    // nb_c = -1*Math.floor(Math.log10(1/(subtick)));
-                    // this_value = value.toFixed(nb_c);
-                    // $("#abscisse"+this_identifiant).val(this_value);
                     $("#abscisse"+this_identifiant).val(offsetLeft);
                 },
 

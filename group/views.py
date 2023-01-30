@@ -675,6 +675,7 @@ def create_group(request):
             set_up_by_level_subject(nf ,  student)
 
         return redirect("index")
+        
     else:
         print(form.errors)
 

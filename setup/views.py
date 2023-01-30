@@ -85,7 +85,13 @@ def end_of_contract() :
     return end
 
 
-
+def visitor_ip_address(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 
 
@@ -149,6 +155,14 @@ def index(request):
         is_not_set_up = False
         
         if request.user.is_teacher :
+            try :
+                ip_teacher = visitor_ip_address(request)
+                f = open('/var/www/sacado/logs/connexions.log','a')
+                writer_text = "{} , {} , {} , {} ,  {}".format(today , ip, request.user.last_name, request.user.first_name, request.user.id)
+                print(writer_text, file=f)
+                f.close()
+            except :
+                pass
 
             over_students, nbss , nbsa = False , 0 , 0
             if request.user.school :
