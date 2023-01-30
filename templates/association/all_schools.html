@@ -34,7 +34,7 @@
                         <td></td>
                         <td>Nom</td>
                         <td>RNE</td>
-                        <td>Nb elv</td>
+                        <td>Nb élv</td>
                         <td>Ville</td>
                         <td>Pays</td>
                         <td>GAR</td>
@@ -61,10 +61,12 @@
                             <a href="{% url 'update_accounting'  c.school.active_accounting.id 2 %}" class="pull-right"><i class="fa fa-euro"></i></a>
                         {% else %}
                             <a href="{% url 'renew_accounting' c.school.id %}" class="pull-right"><i class="fa fa-credit-card text-danger"></i></a>
-                        {% endif %} 
+                        {% endif %}
+                        <br/>
+                        <span class="text-blue">{{ c.school.student_and_teacher.nbt }} enseignants</span> 
                     </td>
                     <td>{% if c.school.country_id == 5 %}<b> {{ c.school.code_acad }}</b>{% endif %}</td>
-                    <td>{{ c.school.nbstudents }}</td>
+                    <td><span class="text-blue">{{ c.school.student_and_teacher.nbs }}</span>/{{ c.school.nbstudents }}</td>
                     <td>{{ c.school.town|lower|capfirst }}</td>
                     <td>{{ c.school.country.name|lower|capfirst }}</td>
                     <td> 

@@ -3424,7 +3424,7 @@ def admin_create_update_mentaltitle(request,idm):
 
 @login_required(login_url= 'index')
 def admin_delete_mental(request,idm):
-    idl    = request.session.get("admin_create_qf_level_id",1)
+    idl   = request.session.get("admin_create_qf_level_id",1)
     level = Level.objects.get(pk=idl)
     Mental.objects.filter(pk=idm).delete() 
     return redirect('admin_mentals', level.id )
@@ -3587,7 +3587,11 @@ def show_questions_flash(request,id):
     request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
-    context = {  "quizz" : quizz , "questions" : questions }
+    try :
+        level = quizz.levels.first()
+    except :
+        level = None
+    context = {  "quizz" : quizz , "questions" : questions , "is_test_admin" : False , 'level' : level }
 
     return render(request, 'tool/show_question_flash.html', context)
 
@@ -3623,6 +3627,42 @@ def delete_all_questions_flash(request):
         quizz.delete()
     messages.success(request,'Questions flash Supprimée.')
     return redirect('list_questions_flash')
+
+
+
+
+@login_required(login_url= 'index')
+def admin_test_mental(request,id):
+
+    teacher = request.user.teacher
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    mental = Mental.objects.get(pk=id)
+ 
+    quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = mental.mentaltitle.subject ,
+                                 is_questions = 1, is_random = 1,nb_slide = 10,is_result_final = 1,is_archive = 0,interslide = 10)
+
+    quizz.levels.set(mental.levels.all())
+    quizz.mentaltitles.add(mental.mentaltitle)
+    create_questions_flash_random_variable([id], quizz, 10)
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+    context = {  "quizz" : quizz , "questions" : questions , "is_test_admin" : True }
+
+    return render(request, 'tool/show_question_flash.html', context)
+ 
+
+
+
+@login_required(login_url= 'index')
+def admin_delete_test_mental(request):
+    idl   = request.session.get("admin_create_qf_level_id",1)
+    teacher = request.user.teacher
+    Quizz.objects.filter(title__contains = "Question_Flash_Admin").delete()
+    return redirect('admin_mentals', idl)
+
+
 
 
 

@@ -31,6 +31,11 @@
 
 {% block page_menu_right %}
 
+
+    {% if request.user.is_superuser and is_test_admin  %}
+        <a href="{%  url 'admin_delete_test_mental' %}" class="btn btn-danger">OK ça marche. Suppression</a>
+    {% endif %}
+
     {% if request.user.user_type == 2 %}
     <a href="{% url 'list_questions_flash' %}" class="btn btn-new">Mes questions flash </a>
     {% else %}

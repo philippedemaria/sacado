@@ -17,7 +17,8 @@ urlpatterns = [
     path('delete_quizz/<int:id>', delete_quizz, name='delete_quizz'),
     path('show_quizz/<int:id>', show_quizz, name='show_quizz'), 
     path('print_quizz_to_pdf', print_quizz_to_pdf, name='print_quizz_to_pdf'),
-    
+
+
     path('create_quizz_folder/<int:idf>', create_quizz_folder, name='create_quizz_folder'),
     path('create_quizz_parcours/<int:idp>', create_quizz_parcours, name='create_quizz_parcours'),
 
@@ -84,7 +85,6 @@ urlpatterns = [
     ############## Ajax
     path('delete_my_tool', delete_my_tool, name='delete_my_tool'),
 
- 
     path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
     path('ajax_chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),
     path('ajax_charge_groups', ajax_charge_groups, name='ajax_charge_groups'),
@@ -146,6 +146,8 @@ urlpatterns = [
     path('admin_delete_mentaltitle/<int:idm>', admin_delete_mentaltitle, name='admin_delete_mentaltitle'),
     path('admin_duplicate_mental/<int:idm>', admin_duplicate_mental, name='admin_duplicate_mental'), 
 
+    path('admin_test_mental/<int:id>', admin_test_mental, name='admin_test_mental'), 
+    path('admin_delete_test_mental', admin_delete_test_mental, name='admin_delete_test_mental'), 
 
     path('list_questions_flash', list_questions_flash, name='list_questions_flash'), 
     path('create_questions_flash/<int:id>', create_questions_flash, name='create_questions_flash'),

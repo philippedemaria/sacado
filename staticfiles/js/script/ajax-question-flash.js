@@ -18,7 +18,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('#id_is_back').prop('checked', false);
         $('#id_is_result').prop('checked', true);
         $('#id_is_share').prop('checked', false);
-        
+        $('#id_is_numeric').prop('checked', false);
         // $('#id_is_numeric').on('change', function (event) {
         //     $('.div_is_mark').toggle(300) ;
         //     $('#is_video_div').toggle(300) ;
