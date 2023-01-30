@@ -7117,14 +7117,24 @@ def alea_annoncements(n,supportfile) :
                 this_liste.append(data)
                 this_subchoices = this_choice.supportsubchoices.all()
                 if this_choice.precision :
+                    this_sub_list_alea = list()
                     for i in range(supportfile.nb_subpseudo) :
-                        if subtick : 
-                            nb_c = -1*math.floor(math.log10(1/(subtick)));
-                            answer = round(random.uniform(xmin, xmax),nb_c)
-                        else : answer      = random.randrange(xmin, xmax)
+                        inside = True
+                        while inside :
+                            if subtick : 
+                                nb_c = -1*math.floor(math.log10(1/(subtick)));
+                                answer = round(random.uniform(xmin, xmax),nb_c)
+                            else : answer      = random.randrange(xmin, xmax)
+                            
+                            if answer in this_sub_list_alea : inside = True
+                            else : 
+                                inside = False
+                                this_sub_list_alea.append(answer)
+
                         retroaction = ""
                         subdata = { 'id' : 0 , 'answer' : answer , 'imageanswer' : ''  , 'retroaction' : retroaction , 'label' : answer , 'is_correct' : 0   } 
                         this_sub_liste.append(subdata)
+
                 else : 
                     if supportfile.nb_subpseudo :
                         this_sub_choices = list(this_subchoices)
