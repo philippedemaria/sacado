@@ -43,7 +43,7 @@
           {% get_students_from_group_and_rc rc group as data_rc %}
           {% get_only_students  parcours group as  only_real_student %}
           <!-- Exercice dissocié  -->  
-          <div  style="position: absolute; left : 0px; top:80px;" title="Cet exercice est indiviualisé à certains élèves. Cliquez sur l'icone dans la barre d'outil pour modifier." id="individialise_id_student{{  rc.exercise.id }}"  {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
+          <div  style="position: absolute; left : 0px; top:90px;z-index: 99" title="Cet exercice est indiviualisé à certains élèves. Cliquez sur l'icone dans la barre d'outil pour modifier." id="individialise_id_student{{  rc.exercise.id }}"  {% if  data_rc.nb == only_real_student.count  %} class="checkbox_no_display" {% endif %}>   
             <a href = "#" data-toggle = 'modal'
                 data-target = '#individualisation_exercice'  
                 class = "individualiser btn btn-warning" 
@@ -373,9 +373,12 @@
                 {% endif %} 
 
                 <div style="width:100%; border: thick double  {{parcours.subject.color}};padding:10px;font-size: 14px; height:180px">
-                  <label class="qtype_logo" 
-                         style="font-size:{% if rc.exercise.supportfile.qtype == 1 %}0.35{% elif rc.exercise.supportfile.qtype == 3 or rc.exercise.supportfile.qtype  == 4 %}0.3{% else %}0.4{% endif %}em">{{ rc.qtype_logo|safe }}
-                  </label> 
+                  {% if rc.exercise.supportfile.qtype_logo %} 
+                    <img src="{{ rc.exercise.supportfile.qtype_logo.url }}"  width='30px' style="border-radius:5px; border:2px solid #CCC;display:inline;"/>
+                  {% endif %}
+                  <b>{{ rc.exercise.supportfile.qtype_title }}</b>
+
+
                   {% if rc.instruction %}    
                     {{rc.instruction|safe|truncatechars_html:45}}    
                   {% else %}      
