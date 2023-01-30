@@ -206,18 +206,7 @@
                         <li class="my_slide">
                             <input type="hidden" value="{{ question.duration }}" id="answer_choice{{ forloop.counter }}" />  
                             <div class="row"> 
-                                <div class="col-sm-8 col-md-8" align="center">
-                                        {% if question.qtype == 1 %}
-                                            <b>Vrai  ou  Faux ?</b>
-                                        {% elif question.qtype == 2 %}
-                                            <b>Ecrire la bonne réponse</b>.
-                                        {% elif question.qtype == 3 %}
-                                            <b> Choisir  la ou les bonnes réponses</b>. 
-                                        {% else %}
-                                            <b> Choisir la seule bonne réponse</b>. 
-                                        {% endif %}
-                                </div>
-                                <div class="col-sm-2 col-md-2" align="right">
+                                <div class="col-sm-12 col-md-12" align="right">
                                     <div class="countdown instruction" id="counterdown_cor{{ forloop.counter }}" > 
                                         {{ question.duration }}
                                     </div>
@@ -297,28 +286,18 @@
 
                 {% if quizz.is_result and quizz.is_result_final %}
 
-                    <li class="my_slide">
+                    <li class="my_slide form_card">
                         {% for question in questions %}
+                            <div class="quizz_item" style="margin-bottom: 20px;">
                                 <div class="row consigne_diapo"  align="center">  
-                                    <div class="col-sm-12 col-md-12">
-                                        <h1 class="thin"><b>Question {{forloop.counter}}.</b><span class="instruction"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
-                                            {% if question.qtype == 1 %}
-                                                <b>Vrai</b> ou <b>Faux</b><br/> 
-                                            {% elif question.qtype == 2 %}
-                                               <b>Choisir la bonne réponse</b><br/> 
-                                            {% elif question.qtype == 3 %}
-                                                  <b>QCM</b><br/>  
-                                            {% else %}
-                                                  <b>QCS</b><br/> 
-                                            {% endif %}
-                                        </h1>
-                                        <h1 class="thin"> {{ question.title }} </h1>
-                                         {% include 'tool/kind_of_question.html' %}
-
+                                    <div class="col-sm-12 col-md-6">
+                                        <h1 class="thin"><b>Question {{forloop.counter}}.</b> <small>{{ question.title }}</small> </h1>
                                     </div>
-                                </div> 
-                 
-
+                                    <div class="col-sm-12 col-md-6">
+                                         {% include 'tool/kind_of_question.html' %}
+                                    </div>
+                                </div>
+                                <div class="row"> 
                                 {% if question.qtype == 1 %}   
                                     <div class="col-sm-12 col-md-6 {% if   question.theme %}bgcolorBlue white{% endif %}"  align="center" style="border-radius : 10px ">
                                         <span style="font-size:1.5em" class="thin">VRAI {% if question.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>   {% endif %}</span>  
@@ -326,10 +305,10 @@
 
                                     <div class="col-sm-12 col-md-6 {% if   question.theme %}bgcolorRed white{% endif %}"  align="center" style="border-radius : 10px ">
                                         <span style="font-size:1.5em" class="thin">FAUX {% if not question.is_correct %}<i class="fa fa-check {% if   question.theme %}white{% endif %}"></i>   {% endif %} </span>  
-                                    </div> 
+                                    </div>
                                 {%  elif question.qtype == 2 %} 
                                     <div class="col-sm-12 col-md-12" align="center">
-                                        <span style="font-size:1.5em" class="thin">{{ question.writinganswer }}</span>  
+                                        <span style="font-size:1.5em" class="thin text-blue">{{ question.writinganswer }}</span>  
                                     </div> 
                                 {%  elif question.qtype > 2 %} 
                                     {% for choice in question.choices.all %}
@@ -356,6 +335,8 @@
                                     {% resetcycle %}
                                     {% resetcycle %}
                                 {% endif %}
+                                </div>
+                            </div>
                         {% endfor %}
                     </li>
                 {% endif %}

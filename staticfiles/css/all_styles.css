@@ -1059,6 +1059,7 @@ input:invalid:focus {
   max-height:330px;
   padding:10px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .vf_answer{

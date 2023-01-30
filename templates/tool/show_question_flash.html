@@ -46,11 +46,22 @@
 
 
 {% block title_quizz %} 
-    <h1 style="font-size:3em;padding-top:100px;line-height: 100px;"> 
-    {% for ma in quizz.mental_activities %}
-        <li class="sanspuce">{{ ma }}</li> 
-    {% endfor %}
+
+ 
+    {% if quizz.mental_activities.count == 1 %}
+    <h1 style="font-size:3em;padding-top:100px;line-height: 100px;">
+        {% for ma in quizz.mental_activities %}
+            <li class="sanspuce">{{ ma }}</li> 
+        {% endfor %}
     </h1>
+    {% else %}
+    <h1 style="font-size:4em;padding-top:100px;line-height: 100px;">
+       {{ quizz.title }}
+    </h1> 
+    {% endif %}
+
+
+
 {% endblock %}
 
 
