@@ -161,6 +161,7 @@
               {% if parcours.is_evaluation %}
                  {% if parcours_available.is_ok   %}
                       {% if available.is_ok %} 
+                          {% comment   %}
                           <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
                               <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
                               Dès que lors que vous commencez l'exercice, vous ne pouvez plus en sortir sans avoir cliqué sur le bouton bleu "Enregistrer l'exercice". <br/>Si vous tentez de sortir de l'exercice avant, votre résultat s'enregistre automatiquement avec les réponses fournies.<br/>
@@ -171,7 +172,8 @@
                               {% endif %}
                               <a href="#" class="btn btn-danger" data-dismiss="alert" aria-label="close">J ai compris, enlever ce bandeau.</a>
                           </div>
-                      {% else   %}
+                          {% endcomment   %}
+
                           <div style="width:750px; height : 550px; position:absolute; z-index:1000; opacity: 0.9; background-color: #FFF" ></div>
                           <div class="alert alert-danger" style="position:absolute; z-index:1001; top: 150px; text-align:center" >
                               <b><i class="fa fa-lock fa-10x"></i><br/><br/> Vous avez atteint la limite des tentatives. Vous ne pouvez plus soumettre le résultat.</b>
