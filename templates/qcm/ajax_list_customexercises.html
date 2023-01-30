@@ -271,14 +271,32 @@
                         {% elif supportfile.qtype == 18 %}<!-- Classement sur un axe -->     
 
                             {% for choice in supportfile.supportchoices.all %}
-                                L'axe est gradué de <b>{{ choice.xmin }}</b> à  <b>{{ choice.xmax }}</b> avec une unité de <b>{{ choice.tick }}</b>, une secondaire de <b>{{ choice.subtick }}</b>.  
+ 
                                 {% if choice.is_written %}
                                     <div class="row">
                                         <div class="col-xs-9">
-                                            <b>Mode aléatoire</b>
+                                            <div class="quizz_choice" style="background-color: #a94442;color:white">Mode aléatoire </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12" style="line-height:25px">
+                                            L'origine de l'axe est $a \in$ [<b>{{ choice.xmin }}</b>;<b>{{ choice.xmin|add:choice.xmax }}</b>] et l'extrémité de l'axe est $a +${{ choice.precision }} avec une unité de <b>{{ choice.tick }}</b>, une secondaire de <b>{{ choice.subtick }}</b>.
+                                        </div>
+                                    </div> 
+
+                                    <div class="row">
+                                        <div class="col-xs-12" style="line-height:25px">
+                                            Pour chaque situation, {{ supportfile.nb_subpseudo }}{% if supportfile.nb_subpseudo > 1 %}  marqueurs sont demandés.{% else %} marqueur est demandé.{% endif %}
+                                        </div>
+                                    </div> 
+
                                 {% else %}
+                                    <div class="row">
+                                        <div class="col-xs-12" style="line-height:25px">
+                                             L'axe est gradué de <b>{{ choice.xmin }}</b> à  <b>{{ choice.xmax }}</b> avec une unité de <b>{{ choice.tick }}</b>, une secondaire de <b>{{ choice.subtick }}</b>.
+                                        </div>
+                                    </div>                            
                                     <div class="row">
                                         {% if choice.imageanswer %}
                                         <div class="col-xs-9">
@@ -286,9 +304,7 @@
                                         </div>
                                         {% endif %}
                                         {% for subchoice in choice.supportsubchoices.all %}
-                                        <div class="col-xs-3">
-                                            <li class="sanspuce">{{ subchoice.label }}</li>
-                                        </div>
+                                            <div class="quizz_choice">{{ subchoice.label }} </div>
                                         {% endfor %}  
                                     </div>
                                 {% endif %}    

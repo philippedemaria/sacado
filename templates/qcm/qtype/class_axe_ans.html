@@ -30,18 +30,32 @@
 
 		    <div class="row" align="center" style="margin:20px 0px;">
 		        <div class="col-sm-12 col-lg-12"> 
-		        	<div id="tableau{{ forloop.counter}}" class="tableau">	
-						<div id="axe{{ forloop.counter}}"></div>
-						{% for choice in shufflechoices|index:forloop.counter0 %}
-						  	<div class="carte loop{{ forloop.parentloop.counter0 }}" id="carte{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}">
-						  		<p>{% if choice.imageanswer  %}
-						  			<img src="{{ choice.imageanswer.url }}" height="150px" />{% endif %}{{ choice.answer }}
+		        	<div id="tableau{{ forloop.counter0 }}" class="tableau dropzone{{ forloop.counter0 }}"  >	
+						<div id="axe{{ forloop.counter0 }}" class="axe"></div>
+						{% with choice=shufflechoices|index:forloop.counter0 %} 
+							{% for subchoice in  shufflesubchoices|index:forloop.counter0 %}
+						  	<div class="carte droppable{{ forloop.parentloop.counter0 }}" id="carte{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" data-loop="{{ forloop.parentloop.counter0 }}"
+						  		data-identifiant="{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}">
+						  		<p>{% if subchoice.imageanswer  %}
+						  			<img src="{{ subchoice.imageanswer.url }}" height="150px" />
+						  			{% endif %}
+						  			{{ subchoice.answer }}
 						  		</p>
 						  		<p id="valeur{{ forloop.counter0 }}"></p>
+						  		<input type="hidden" id="abscisse{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" name="answers{{ forloop.parentloop.counter0 }}">
+						  		<input type="hidden" name="subchoice_id{{ forloop.parentloop.counter0 }}" value="{{ subchoice.id }}"  />
+						  		<input type="hidden" name="aleas{{ forloop.parentloop.counter0 }}" value="{{ subchoice.answer }}"  />
 						  	</div>
-						  	<input type="hidden" name="choice_ids" value="{{ choice.id }}"  class="loop{{ forloop.parentloop.counter }} insidechoices{{ forloop.counter0 }}"  />
-						{% endfor %}  
-					</div>            
+						  	{% endfor %}
+
+						  	<input type="hidden" name="choice_id{{ forloop.counter0 }}" value="{{ choice.id }}"  />
+						    <input type="hidden" id="xmin{{ forloop.counter0 }}" name="xmin{{ forloop.counter0 }}" value={{ choice.xmin }} />
+						    <input type="hidden" id="xmax{{ forloop.counter0 }}" name="xmax{{ forloop.counter0 }}" value={{ choice.xmax }} />
+						    <input type="hidden" id="tick{{ forloop.counter0 }}" name="tick{{ forloop.counter0 }}" value={{ choice.tick }} />
+						    <input type="hidden" id="subtick{{ forloop.counter0 }}" name="subtick{{ forloop.counter0 }}" value={{ choice.subtick }} />
+						    <input type="hidden" id="width_axe{{ forloop.counter0 }}" name="width_axe{{ forloop.counter0 }}"   />
+						{% endwith %}
+					</div>         
 		        </div>
 		    </div>
 		    <div class="row validation">
@@ -54,11 +68,6 @@
         </li> 
     {% endfor %}
 
-    <input type="hidden" id="xmin" name="xmin" value={{ supportfile.xmin }} />
-    <input type="hidden" id="xmax" name="xmax" value={{ supportfile.xmax }} />
-    <input type="hidden" id="precision" name="precision" value={{ supportfile.precision }} />
-    <input type="hidden" id="tick" name="tick" value={{ supportfile.tick }} />
-    <input type="hidden" id="subtick" name="subtick" value={{ supportfile.subtick }} />
 
 	{% include 'qcm/qtype/_last_slide.html' %}
 

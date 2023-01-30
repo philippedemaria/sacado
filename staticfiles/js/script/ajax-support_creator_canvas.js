@@ -182,14 +182,29 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
 
             });
 
+
          $(document).on('change', '.show_right_side' , function (event) {
 
                 $("#right_side").toggle();
                 $("#more_choice_button").toggle();
+                $(".div_canvas").toggle();
+                $(".maxi").toggle();
+                $(".sup").toggle();
+                $(".alert-sacado").toggle();
+                $("#text_pseudo").toggle();
+                $("#tr_pseudo").toggle();
+                $("#tr_pseudo_sub").toggle();
+                $("#situation_student").toggle();
+                
                 if ($("#left_side").hasClass("col-sm-12"))
                     {$("#left_side").removeClass("col-sm-12").addClass("col-sm-6");}
                 else
                     {$("#left_side").removeClass("col-sm-6").addClass("col-sm-12");}
+
+
+                $("#id_situation").val(5);
+
+
             });
 
 
@@ -366,7 +381,44 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
         })
 
 
-      
+        //*************************************************************************************************************
+        //*************************************************************************************************************
+        //*************************************************************************************************************  
+
+        $(document).on('click', '.add_more_question', function (event) { 
+
+                var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
+                var totalForms = parseInt(total_form.val())  ;
+
+                var thisClone = $('#rowToClone_question');
+                rowToClone = thisClone.html() ;
+
+                $('#formsetZone_variables').append(rowToClone); 
+                $('#duplicate_variables').attr("id","duplicate_variables"+totalForms) 
+
+                $('#duplicate_variables'+totalForms).find('.delete_button_question').html('<a href="javascript:void(0)" class="btn btn-danger remove_more_question" ><i class="fa fa-trash"></i></a>'); 
+                $('#duplicate_variables'+totalForms).find("input[type='checkbox']").bootstrapToggle();
+
+                $("#duplicate_variables"+totalForms+" input").each(function(){ 
+                    $(this).attr('id',$(this).attr('id').replace('__prefix__',totalForms));
+                    $(this).attr('name',$(this).attr('name').replace('__prefix__',totalForms));
+                });
+                total_form.val(totalForms+1);
+
+                $("#id_situation").val(5);
+
+            });
+
+
+        $(document).on('click', '.remove_more_question', function () {
+            var total_form = $('#id_supportvariables-TOTAL_FORMS') ;
+            var totalForms = parseInt(total_form.val())-1  ;
+
+            $('#duplicate_variables'+totalForms).remove();
+            total_form.val(totalForms);
+
+            if (totalForms==0) {$("#id_situation").val(1);}
+        });
         //***********************************************************************************************
         //***********************************************************************************************
         //*************************************************************************************************************  
@@ -405,7 +457,7 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 $('#canvas').attr("id", $('#canvas').attr("id")+total_supportchoices )  ;
                 $('#div_canvas').attr("id", $('#div_canvas').attr("id")+total_supportchoices )  ;
 
-                if( $('#imagersub').length ) { 
+                if ( $('#imagersub').length > 0 ) { 
 
                     l_items = $("#subformsetZone"+total_supportchoices+" .get_image").length ; 
                     for(var i = 0;i<l_items;i++ ){

@@ -7101,42 +7101,41 @@ def alea_annoncements(n,supportfile) :
 
         elif  supportfile.qtype == 18 :
 
-            # choices = list()
-            # for this_choice in s_choices : 
-            #     xmin    = replace_bloc(this_choice.xmin,vars_list,i)
-            #     xmax    = replace_bloc(this_choice.xmax,vars_list,i)
-            #     tick    = replace_bloc(this_choice.tick,vars_list,i)
-            #     subtick = replace_bloc(this_choice.subtick,vars_list,i)
-
-            #     data = { 'id' : this_choice.id , 'tick' : tick , 'subtick' : subtick ,'xmin' : xmin  ,'xmax' : xmax   } 
-               
-            #     choices.append(data)
-            # random.shuffle(choices)
-            # shufflechoices.append(choices)
-
-            # print( choices ,   shufflechoices )
 
             this_liste = list()
             this_sub_liste = list()
             for this_choice in s_choices : 
-                xmin    = replace_bloc(this_choice.xmin,vars_list,i)
-                xmax    = replace_bloc(this_choice.xmax,vars_list,i)
-                tick    = replace_bloc(this_choice.tick,vars_list,i)
-                subtick = replace_bloc(this_choice.subtick,vars_list,i)
+                xmin    = this_choice.xmin
+                xmax    = this_choice.xmax
+                tick    = this_choice.tick
+                subtick = this_choice.subtick
                 retroaction = replace_bloc(this_choice.retroaction,vars_list,i)
-                data = { 'id' : this_choice.id , 'tick' : tick , 'subtick' : subtick ,'xmin' : xmin  ,'xmax' : xmax  , 'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
+                if this_choice.precision :
+                    xmin = random.randrange(xmin, xmin + this_choice.precision)
+                    xmax = xmin + this_choice.xmax
+                data = { 'id' : this_choice.id , 'tick' : tick , 'subtick' : subtick , 'xmin' : xmin  ,'xmax' : xmax  , 'precision' : this_choice.precision  ,'retroaction' : retroaction , 'is_correct' : this_choice.is_correct   } 
                 this_liste.append(data)
                 this_subchoices = this_choice.supportsubchoices.all()
-                if supportfile.nb_subpseudo :
-                    this_sub_choices = list(this_subchoices)
-                    random.shuffle(this_sub_choices)
-                    this_subchoices = this_sub_choices[0:supportfile.nb_subpseudo]  
-                for subchoice in this_subchoices:
-                    answer      = replace_bloc(subchoice.answer,vars_list,i)
-                    retroaction = replace_bloc(subchoice.retroaction,vars_list,i)
-                    label       = replace_bloc(subchoice.label,vars_list,i)
-                    subdata = { 'id' : subchoice.id , 'answer' : answer , 'imageanswer' : subchoice.imageanswer   , 'retroaction' : retroaction , 'label' : label , 'is_correct' : subchoice.is_correct   } 
-                    this_sub_liste.append(subdata)
+                if this_choice.precision :
+                    for i in range(supportfile.nb_subpseudo) :
+                        if subtick : 
+                            nb_c = -1*math.floor(math.log10(1/(subtick)));
+                            answer = round(random.uniform(xmin, xmax),nb_c)
+                        else : answer      = random.randrange(xmin, xmax)
+                        retroaction = ""
+                        subdata = { 'id' : 0 , 'answer' : answer , 'imageanswer' : ''  , 'retroaction' : retroaction , 'label' : answer , 'is_correct' : 0   } 
+                        this_sub_liste.append(subdata)
+                else : 
+                    if supportfile.nb_subpseudo :
+                        this_sub_choices = list(this_subchoices)
+                        random.shuffle(this_sub_choices)
+                        this_subchoices = this_sub_choices[0:supportfile.nb_subpseudo]  
+                    for subchoice in this_subchoices:
+                        answer      = replace_bloc(subchoice.answer,vars_list,i)
+                        retroaction = replace_bloc(subchoice.retroaction,vars_list,i)
+                        label       = replace_bloc(subchoice.label,vars_list,i)
+                        subdata = { 'id' : subchoice.id , 'answer' : answer , 'imageanswer' : subchoice.imageanswer   , 'retroaction' : retroaction , 'label' : label , 'is_correct' : subchoice.is_correct   } 
+                        this_sub_liste.append(subdata)
             shufflechoices.append(this_liste)
             shufflesubchoices.append(this_sub_liste)
 
@@ -7146,7 +7145,6 @@ def alea_annoncements(n,supportfile) :
             this_liste.append(this_choice)
             random.shuffle(this_liste)
             shufflechoices.append(this_liste)
- 
  
     return vars_list , annoncements , choices , shufflechoices , shufflesubchoices, corrections
 
@@ -7243,10 +7241,14 @@ def define_all_types(n, supportfile):
         context = { 'annoncements' : annoncements  ,  'choices' : choices  ,  'shufflesubchoices' : shufflesubchoices  , 'shufflechoices' : shufflechoices  , 'numexo' : 0   }
 
 
+
     elif supportfile.qtype==18 :
 
         vars_list , annoncements ,  choices , shufflechoices , shufflesubchoices, corrections = alea_annoncements(n,supportfile)
-        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements ,  'shufflechoices' : shufflechoices ,  'shufflesubchoices' : shufflesubchoices    , 'supportfile' : supportfile , 'numexo' : 0 } 
+        scs = list()
+        for s in shufflechoices :
+            scs.append(s[0])
+        context = { 'detail_vars' : vars_list  , 'annoncements' : annoncements ,  'shufflechoices' : scs ,  'shufflesubchoices' : shufflesubchoices    , 'supportfile' : supportfile , 'numexo' : 0 } 
 
     return context
 
@@ -7744,7 +7746,6 @@ def check_sort_answers(request):## 8
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
 
-
 def check_filltheblanks_answers(request):## 9   
 
     supportfile_id = request.POST.get('supportfile_id',0)
@@ -7779,8 +7780,6 @@ def check_filltheblanks_answers(request):## 9
     data['this_correction_text'] = choice.answer
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
-
-
 
 def check_grid_answers(request):## 12 mot mélés   non nécessaire
 
@@ -7896,7 +7895,6 @@ def check_memo_answers(request):
 
     return JsonResponse(data)  
 
-
 def check_image_answers(request):
 
 
@@ -7935,53 +7933,62 @@ def check_image_answers(request):
     data['msg'] = message_correction(score,old_score)
     return JsonResponse(data) 
 
-
-
 def check_axe_answers(request):## 18 axe 
     
     customvars     = request.POST.getlist('customvars',None)
     supportfile_id = request.POST.get('supportfile_id',None)
-    loop           = request.POST.get('loop',None)
-    valeurs        = request.POST.get('valeurs',None)
+    loop           = int(request.POST.get('loop',None))-1
+    answers        = request.POST.getlist('answers'+str(loop),None)
     score          = int(request.POST.get('score',0))
     numexo         = int(request.POST.get('numexo',0))
     old_score      = score
     retroaction    = ""
-    supportfile    = Supportfile.objects.get(pk= supportfile_id)
-    precision      = supportfile.precision
-    valeurs        = valeurs.split(",")
-    choice_ids = request.POST.getlist('choice_ids',None)
+    subchoice_ids  = request.POST.getlist('subchoice_id'+str(loop),None)
+    choice_id      = request.POST.get('choice_id'+str(loop),None)
+    aleas          = request.POST.getlist('aleas'+str(loop),None)
+
+    xmin      = request.POST.get('xmin'+str(loop),None)
+    xmax      = request.POST.get('xmax'+str(loop),None)
+    tick      = request.POST.get('tick'+str(loop),None)
+    subtick   = request.POST.get('subtick'+str(loop),None)
+    if xmin    : xmin   = float(xmin.replace(",","."))
+    if xmax    : xmax   = float(xmax.replace(",","."))
+    if tick    : tick   = float(tick.replace(",","."))
+    if subtick : subtick   = float(subtick.replace(",","."))
+
+    width_axe = float(request.POST.get('width_axe'+str(loop),None))
+
  
+    this_score =-1
+    numexo += 1
+    for i in range(len(subchoice_ids)) :
 
-    if 'customvars' in request.POST : # réponse avec variable aléatoire
-        nb_cards       = supportfile.supportchoices.count()
-        idx = int(loop)-1
-        for i in range(nb_cards):
-            numexo += 1
-            for customvar in request.POST.getlist('customvars') :
-                value = float(request.POST.getlist(customvar)[idx])
-                if str(value) in valeurs[nb_cards*idx:nb_cards*idx+(nb_cards-1)] :
-                    score  += 1
-        for choice in supportfile.supportchoices.all():
-            retroaction += choice.retroaction + " "
-        
-    else :
-        this_score =-1
-        numexo += 1
-        for i in range(len(choice_ids)) :
-            
-            choice = Supportchoice.objects.get(pk=choice_ids[i])
-            answer = float(choice.answer.replace(",","."))
+        width_pixel  =  width_axe*tick/(xmax - xmin) 
+        value = (float(answers[i])-15)/width_pixel 
 
-            if str(  answer  - precision) <= str(valeurs[i]) <= str(  answer  + precision):
+
+        if subtick : precision = 1/subtick
+        else : precision = 1/tick
+        choice    = Supportchoice.objects.get(pk=choice_id )
+        retroaction += choice.retroaction + " "
+        if choice.precision :
+            value = value + xmin
+            if str(  float(aleas[i].replace(",","."))  - precision/2) <= str(value) <= str(  float(aleas[i].replace(",",".")) + precision/2):
                 this_score +=1
-            retroaction += choice.retroaction + " "
+
+        else :
+            subchoice = Supportsubchoice.objects.get(pk=subchoice_ids[i])
+            answer = float(subchoice.answer.replace(",","."))
+
+            if str(  answer  - precision/2) <= str(value) <= str(  answer  + precision/2):
+                this_score +=1
+            
 
 
     if this_score == i : score +=1
 
     data = {}
-    
+    supportfile = Supportfile.objects.get(pk=supportfile_id)    
     data['numexo'] = numexo  
     data['score']  = score
     cor =""

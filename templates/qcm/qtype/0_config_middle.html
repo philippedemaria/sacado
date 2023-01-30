@@ -44,13 +44,13 @@
 <div class="tab-content">  
     {% if qt.is_pseudo  %}
     <div id="pseudo" class="tab-pane fade in active ">
-        <small>    
+        <small id="text_pseudo">    
             Le pseudo aléatoire tire le nombre de situations enregistrées parmi les items enregistrés. 
             <br/>Si vous enregistrez 20 items possibles et que vous inscrivez 5 situations, 5 items  seront aléatoirement choisis parmi les 20.
             <br/><br/>
         </small>
         <table class="table borderless">
-            <tr>
+            <tr id="tr_pseudo">
                 <td>
                     <small>
                         <label>Nombre de 
@@ -72,8 +72,8 @@
                                 mots cachés proposés
                             {% elif qtype == 15 %}
                                 légendes proposées
-                            {% else %}
-                                items proposés
+                            {% elif qtype == 18 %}
+                                axes proposés
                             {% endif %}
                         </label>
                     </small> 
@@ -83,7 +83,7 @@
                 </td>
             </tr>
             {% if qt.is_sub  %}
-            <tr>
+            <tr id="tr_sub_pseudo">
                 <td>
                     <small>
                         <label>Nombre de 
@@ -103,20 +103,17 @@
                                 mots cachés proposés
                             {% elif qtype == 15 %}
                                 légendes proposées
-                            {% else %}
-                                items proposés
+                            {% elif qtype == 18 %}
+                                marqueurs proposés
                             {% endif %}
                         </label>
                     </small> 
                 </td>
                 <td>
-                    {{ form.nb_subpseudo }}<label><small>[Si 0, tout est proposé.]</small></label>
+                    {{ form.nb_subpseudo }}<label><small id="tr_pseudo_sub">[Si 0, tout est proposé.]</small></label>
                 </td>
             </tr>
             {% endif %}
-
-
-
         </table>  
     </div>
     {% endif %}  
@@ -230,12 +227,12 @@
     <div id="situations" class="tab-pane fade">
         <li class="sanspuce">  
             <small>Vous pouvez déterminer le nombre de situations qui seront proposées aux élèves.  
-                   <br/>Si vous utilisez des variables numériques aléatoires, 5 situations par défaut sont proposées.
+                   <span id="situation_student"><br/>Si vous utilisez des variables numériques aléatoires, 5 situations par défaut sont proposées.
   
                     {% if qt.is_pseudo  %}                   
                     <br/><br/><b>Exemple de lien avec le pseudo aléatoire.</b> <br/>
                     Vous enregistrez 10 items, dont 5 items pseudo aléatoires et 4 situations. L'ordinateur lancera 4 situations et dans chacune d'elle, il tirera aléatoirement 5 items parmi les 10. 
-                    {% endif %}  
+                    {% endif %} </span> 
                 <br/><br/>
                 <label>Nombre de situations proposées  {{ form.situation }}</label>
             </small> 

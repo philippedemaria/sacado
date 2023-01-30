@@ -824,6 +824,7 @@ div.carte {
   text-align: center;
   width:150px;
   border-radius: 5px;
+  cursor: grab;
 }
 .tableau {
     height:300px;
