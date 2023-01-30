@@ -51,73 +51,78 @@
     	{% csrf_token %}
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-12 col-md-4 form_card">
+                <div class="col-sm-12 col-md-6 form_card">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <label>Titre des questions flash</label>
                             {{ form.title |add_class:"form-control"|attr:"value:Questions flash" }}
                             {{ form.title.errors }}
                         </div>
                     </div>
-                    <div class="row">  
-                        <div class="col-sm-6 form-group">         
+                    <div class="row form-group">  
+                        <div class="col-sm-12 col-md-5">
                             <label>Enseignement</label>
                             {{ form.subject|add_class:"form-control select2" }}
                             {{ form.subject.errors }}
                             <input name="color" type="hidden" value="#5d4391" /> 
+                                <label>Niveaux</label>
+                                {{ form.levels|add_class:"form-control select2" }}
+                                {{ form.levels.errors }}
                         </div>
-                        <div class="col-sm-6 form-group">    
-                            <label>Niveaux</label>
-                            {{ form.levels|add_class:"form-control select2" }}
-                            {{ form.levels.errors }}
-                        </div>                    
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;">
-                            <label>Attribuer aux groupes proposés</label> 
+                        <div class='col-sm-12 col-md-7'>
+                            <table class="table table-sacado borderless">
+                                <tr>
+                                    <td>Nombre de questions <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >Visible par les élèves.</div>
+                                        </span></td>
+                                    <td style="width:80px">{{ form.nb_slide|add_class:"form-control"  }}</td>
+                                    <td>{{ form.nb_slide.errors }}</td>
+                                </tr>
+                                <tr style="display:none">
+                                    <td class="no_border">Numérique ?  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Passation sur un ordinateur, un smartphone, une tablette.</div>
+                                                </span> 
+                                    </td>
+                                    <td>{{ form.is_numeric|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"|attr:"data-width:130" }}
+                                    </td>
+                                    <td></td>
+                                </tr> 
+                                <tr id="is_video_div" style="display:none">
+                                    <td class="no_border">{{ form.is_video.label_tag }}</td>
+                                    <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="no_visu">
+                                    <td class="no_border">{{ form.is_result_final.label_tag }} 
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                            <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
+                                        </span> 
+                                    </td>
+                                    <td colspan="2">{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
+                                </tr>
+                                <tr class="div_interslide no_visu">
+                                    <td class="no_border"> {{ form.interslide.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Pour les transitions automatisées, en mode auto déclenché des vidéo-projections.</div>
+                                                </span> </td>
+                                    <td style="width:80px">{{ form.interslide|add_class:"form-control" }}</td>
+                                    <td><small>sec.</small></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>    
+                </div>            
+                <div class="col-sm-12 col-md-6 setup_ggb no_visu">
+                    <div class="row ">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
+                                <label>Attribuer aux groupes</label> 
                                 {{ form.groups|add_class:"select_all"   }}
                                 {{ form.groups.errors }}
-    	                </div>	
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 setup_ggb">
-                    <div class='form_card'>
-                        <table class="table table-sacado borderless">
-                            <tr>
-                                <td>Nombre de questions <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                        <div class="helper_tip_text" >Visible par les élèves.</div>
-                                    </span></td>
-                                <td>{{ form.nb_slide|add_class:"form-control"  }}</td>
-                                <td>{{ form.nb_slide.errors }}</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="no_border">Numérique ?  <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                <div class="helper_tip_text" >Passation sur un ordinateur, un smartphone, une tablette.</div>
-                                            </span> 
-                                </td>
-                                <td>{{ form.is_numeric|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"|attr:"data-width:130" }}
-                                </td>
-                                <td></td>
-                            </tr> 
-                            <tr id="is_video_div" style="display:none">
-                                <td class="no_border">{{ form.is_video.label_tag }}</td>
-                                <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}</td>
-                                <td></td>
-                            </tr>
-                            <tr class="div_interslide">
-                                <td class="no_border"> {{ form.interslide.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                <div class="helper_tip_text" >Pour les transitions automatisées, en mode auto déclenché des vidéo-projections.</div>
-                                            </span> </td>
-                                <td style="width:80px">{{ form.interslide|add_class:"form-control" }}</td>
-                                <td><small>sec.</small></td>
-                            </tr>
-                        </table>
-                    </div>  
-                </div>            
-                <div class="col-sm-12 col-md-4 setup_ggb no_visu">
-                    <div class='form_card'>
-                            <table class="table table-sacado borderless">
+                            </div>
+ 
+                        </div>
+                        <div class='col-sm-12 col-md-6 form_card'  style="height: 270px;">
+                            <table class="table table-sacado borderless ">
                                 <tr>
                                     <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                             <div class="helper_tip_text" >Visible par les élèves.</div>
@@ -154,16 +159,9 @@
                                     </td>
                                     <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                                 </tr>
-                                <tr >
-                                    <td class="no_border">{{ form.is_result_final.label_tag }} 
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                            <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
-                                        </span> 
-                                    </td>
-                                    <td>{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
-                                </tr>
-                        </table>
-                    </div>  
+                            </table>
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>
