@@ -152,10 +152,12 @@ ul#id_skills li{
                                 </div>
                             </div>   
                             {% if exotex and exotex != 'init' %}
-                                <div class="col-sm-9 col-md-9">                                             
-                                    <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
-                                        <i class="fa fa-trash"> </i>   Supprimer
-                                    </a>
+                                <div class="col-sm-9 col-md-9">  
+                                    <div class="form-group">
+                                        <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
+                                            <i class="fa fa-trash"> </i>   Supprimer
+                                        </a>
+                                    </div>
                                 </div>
                             {% endif %}
                         </div>
