@@ -131,12 +131,16 @@ class FolderForm(forms.ModelForm):
 
 		coteachers    = Teacher.objects.filter(user__school=teacher.user.school).order_by("user__last_name")
 
-		self.fields['groups']	     = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['coteachers']    = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
+		self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['coteachers'] = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
+		
 
+		self.fields['level']    = forms.ModelMultipleChoiceField(queryset=teacher.levels.exclude(pk=13),  required=False).order_by("ranking")
+		self.fields['subject']  = forms.ModelMultipleChoiceField(queryset=teacher.subjects.filter(is_active=1),  required=False)
 		if subject and level :
 			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level,is_trash=0,is_archive=0).order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
+
 		else :
 			parcours                = teacher.teacher_parcours.filter(is_trash=0,is_archive=0).order_by("title")
 			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
