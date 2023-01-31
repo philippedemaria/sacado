@@ -955,8 +955,11 @@ def update_bibliotex(request, id):
         nf.groups.set(group_ids)
         nf.folders.set(folder_ids)
         all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
+        
+        save_form = request.POST.get("save_form",None)
 
-        return redirect('exercise_bibliotex_peuplate', nf.id)
+        if save_form : return redirect('my_bibliotexs')
+        else : return redirect('exercise_bibliotex_peuplate', nf.id)
 
     else:
         print(form.errors)

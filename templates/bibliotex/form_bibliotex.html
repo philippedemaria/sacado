@@ -195,15 +195,18 @@
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px" >
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-sm-12 col-md-7">
                         <div class="form-group">
+                            {% if bibliotex %}
+                            <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" name="save_form" />
+                            {% endif %}
                             <input value="Enregistrer et choisir les exercices" type="submit" class="btn btn-primary" id="click_button" />
 
                             <a href="javascript:history.back()"><input type="button" value="Retour {% if parcours.is_sequence %}à la séquence{% endif %}" class="btn btn-default "/></a>
                         </div>
                     </div>   
                     {% if bibliotex %}
-                        <div class="col-sm-6 col-md-6">
+                        <div class="col-sm-12 col-md-5">
 
  
                             <a href="{% url 'delete_bibliotex' bibliotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette biblioTex')" > 
