@@ -819,7 +819,28 @@ def clone_bibliotex_sequence(request, idb):
 
 
 
+def ajax_search_bibliotex_by_level(request):
 
+    teacher = request.user.teacher
+    data = {}
+    level_id =  request.POST.get("id_level")
+    subject_id =  request.POST.get("id_subject")
+    teacher_id = get_teacher_id_by_subject_id(subject_id)
+
+    if int(level_id) > 0 :
+        level = Level.objects.get(pk=int(level_id))
+        subject = Subject.objects.get(pk=int(subject_id))
+        thms  = level.themes.values_list('id', 'name').filter(subject_id=subject_id).order_by("name")
+        data['themes'] = list(thms)
+
+        bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, subjects = subject , 
+                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+    else :
+        bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),subjects = subject ,  is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+
+    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
+
+    return JsonResponse(data)
 
  
 
@@ -833,10 +854,10 @@ def ajax_search_bibliotex(request):
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
-    if request.user.is_superuser :
-        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
-    else :
-        bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(exotexs = None ,teacher=teacher).order_by('level','ranking')
+    # if request.user.is_superuser :
+    #     bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
+    # else :
+    #     bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(exotexs = None ,teacher=teacher).order_by('level','ranking')
 
     keywords = request.POST.get('keywords',None)
 
@@ -847,8 +868,6 @@ def ajax_search_bibliotex(request):
         if len(theme_ids) > 0 :
 
             if theme_ids[0] != '' :
-
-                print(theme_ids)
 
                 if keywords :
                     bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 

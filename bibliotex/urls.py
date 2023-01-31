@@ -67,6 +67,8 @@ urlpatterns = [
     path('ajax_my_bibliotexs', ajax_my_bibliotexs, name='ajax_my_bibliotexs'),
     path('ajax_set_exotex_in_bibliotex', ajax_set_exotex_in_bibliotex, name='ajax_set_exotex_in_bibliotex'),
 
+    path('ajax_search_bibliotex_by_level', ajax_search_bibliotex_by_level, name='ajax_search_bibliotex_by_level'),
+
     path('ajax_search_bibliotex', ajax_search_bibliotex, name='ajax_search_bibliotex'), 
 
     path('ajax_results_exotex', ajax_results_exotex, name='ajax_results_exotex'),

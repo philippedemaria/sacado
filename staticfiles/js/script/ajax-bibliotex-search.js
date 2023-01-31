@@ -13,7 +13,7 @@ define(['jquery', 'bootstrap'], function ($) {
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            url_ = "ajax_chargethemes" ;
+            url_ = "ajax_search_bibliotex_by_level" ;
 
             $.ajax(
                 {
@@ -28,6 +28,9 @@ define(['jquery', 'bootstrap'], function ($) {
                     url : url_,
                     success: function (data) {
 
+                        $('#bibliotex_details').html(data.html);
+
+                        
                         themes = data["themes"] ; 
                         $('select[name=theme]').empty("");
 
@@ -47,12 +50,14 @@ define(['jquery', 'bootstrap'], function ($) {
                         }
                         else
                         {
-                                    let option = $("<option>", {
-                                        'value': 0,
-                                        'html': "Aucun contenu disponible"
-                                    });
+                            let option = $("<option>", {
+                                'value': 0,
+                                'html': "Aucun contenu disponible"
+                            });
                             $('select[name=theme]').append(option);
                         }
+
+
 
 
                     }
