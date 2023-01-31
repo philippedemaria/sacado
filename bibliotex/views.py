@@ -230,6 +230,10 @@ def printer(request, relationtex_id, collection,output):
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
+
+        #pdflatex -halt-on-error -shell-escape table.tex   puis      htlatex table.tex
+
+
     elif output == "html" or output== "html_cor" :
         #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
         os.chdir(settings.DIR_TMP_TEX)
