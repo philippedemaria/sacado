@@ -101,13 +101,10 @@ def printer(request, relationtex_id, collection,output):
     elif output == "html" or output == "html_cor" :
         preamb = settings.TEX_PREAMBULE_FILE
 
-
     entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
-
     elements +=r"\begin{document}"+"\n"   
-
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
@@ -116,8 +113,6 @@ def printer(request, relationtex_id, collection,output):
             document     = "bibliotex" + str(relationtex_id)
             title        = bibliotex.title
             author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
-
-
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    =  Relationtex.objects.get(pk = relationtex_id) 
@@ -131,8 +126,6 @@ def printer(request, relationtex_id, collection,output):
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
       
- 
-
         today = datetime.now()
         if collection : 
             relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today)).order_by("ranking")
@@ -151,7 +144,6 @@ def printer(request, relationtex_id, collection,output):
                 for s in sks :
                     skills_display +=  s.name+". "
                 
-
             elements += r"\exo {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
             
             j+=1
@@ -229,10 +221,6 @@ def printer(request, relationtex_id, collection,output):
     if output=="pdf" :
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
-
-
-        #pdflatex -halt-on-error -shell-escape table.tex   puis      htlatex table.tex
-
 
     elif output == "html" or output== "html_cor" :
         #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
