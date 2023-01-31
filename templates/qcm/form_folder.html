@@ -104,34 +104,7 @@
                     </div> 
                 </div> 
             {% endif %}
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <label>Attribuer aux groupes
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                        </span> 
-                    </label>
-                        {% if teacher.nb_boolean_multi_subjects %}
-                            <div class="alert alert-sacado" id="grplist">
-                                <small>Choisir au moins un enseignement et un niveau.</small>
-                            </div>
-                        {% else %} 
-                            <div class="alert alert-sacado">        
-                            {{ form.groups  }}
-                            {{ form.groups.errors }}
-                            </div>
-                        {% endif %} 
-                </div> 
-                <div class="col-sm-6  col-md-6">
-                    <div class="form-group">  
-                        <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
-                            <small><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.<br/>
-                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois le parcours créé.<br/>
-                            </small>
-                        </label>
-                    </div>
-                </div>
-            </div>
+
 
 
 
