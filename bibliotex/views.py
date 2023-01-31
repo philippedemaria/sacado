@@ -1283,6 +1283,7 @@ def ajax_level_exotex(request):
         knowledges_level = Knowledge.objects.values_list("id","name").filter(theme__subject__id = subject_id,  level_id = level_id  ) 
         data['knowledges']       =  list( knowledges )
         data['knowledges_level'] =  list( knowledges_level )
+
     return JsonResponse(data)
 
 

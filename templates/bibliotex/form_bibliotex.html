@@ -63,7 +63,19 @@
                             </div>
                         </div>
                         <div class="row {% if bibliotex or group %}no_visu{% endif %}">
-                            <div class="col-sm-12 col-md-6 ">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">  
+                                    <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
+                                        <small>   
+                                            <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
+                                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
+                                        </small>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12 col-md-12 ">
                                 <div class="form-group">         
                                     <label>Affecter à mes groupes :</label> {% if group %}
                                             <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
@@ -75,16 +87,6 @@
                                     </div>
                                 </div>
                             </div>                            
-                            <div class="col-sm-12 col-md-6">
-                                <div class="form-group">  
-                                    <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
-                                        <small>   
-                                            <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
-                                            <i class="fa fa-users"></i> Vous pourrez individualiser les élèves une fois la BiblioTex créée.<br/>
-                                        </small>
-                                    </label>
-                                </div>
-                            </div>
                         </div>
                         <div class="row  {% if bibliotex or group %}no_visu{% endif %}">
                             <div class="col-sm-12 col-md-6" >
