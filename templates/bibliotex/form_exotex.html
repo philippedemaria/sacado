@@ -145,7 +145,7 @@ ul#id_skills li{
                             </div>
                         </div>
  
-                        <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
+                        <div class="row">
                             <label><a href="#"  id="enable_correction">Ajouter un corrigé en LaTeX</a> <small>Optionnel</small>    </label>
                             <div id="enable_correction_div">
                                 <div class="col-sm-12 col-md-12">                        
@@ -175,56 +175,54 @@ ul#id_skills li{
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-5 setup_ggb">
-                        <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
-                        <table class="table table-sacado borderless">
- 
-                                    <tr id="publication_div">
-                                        <td><label>Date de publication :</label>  
-                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                                        <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
-                                                        <span class="text-danger">Pour modifier la date, vider le champ.</span>
-                                                        </div>
-                                            </span>
-                                        </td>
-                                        <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
-                                    </tr>
-
-                                    <tr>     
-                                        <td>{{ form.duration.label_tag }} </td>
-                                        <td>{{ form.duration |add_class:"form-control" }}{{ form.duration.errors }}</td>
-                                    </tr> 
-                                    <tr>     
-                                        <td>{{ form.calculator.label_tag }} </td>
-                                        <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}{{ form.calculator.errors }}</td>
-                                    </tr> 
-
-                                    <tr>
-                                        <td>{{ form.is_share.label_tag }}
-                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                                <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
-                                            </span>
-                                        </td>
-                                        <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_share.errors }}</td>
-                                    </tr>
- 
-                   
-                                    <tr>
-                                        <td>{{ form.is_python.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                                <div class="helper_tip_text" >contient du Python.</div></td>
-                                        <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_python.errors }}</td>
-                                    </tr> 
-                                    <tr>
-                                        <td>{{ form.is_scratch.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                                <div class="helper_tip_text" >contient du Scratch.</div></td>
-                                        <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_scratch.errors }}</td>
-                                    </tr> 
-                                    <tr>
-                                        <td>{{ form.is_tableur.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                                <div class="helper_tip_text" >nécessite un tableur.</div></td>
-                                        <td>{{ form.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                                        {{ form.is_tableur.errors }}</td>
-                                    </tr> 
-                        </table>
+                        <div class="form-group"> 
+                            <table class="table table-sacado borderless">
+                                <tr id="publication_div">
+                                    <td><label>Date de publication :</label>  
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                    <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                    <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                    </div>
+                                        </span>
+                                    </td>
+                                    <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                                </tr>
+                                <tr>     
+                                    <td>{{ form.duration.label_tag }} </td>
+                                    <td>{{ form.duration |add_class:"form-control" }}{{ form.duration.errors }}</td>
+                                </tr> 
+                                <tr>     
+                                    <td>{{ form.calculator.label_tag }} </td>
+                                    <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}{{ form.calculator.errors }}</td>
+                                </tr> 
+                                <tr>
+                                    <td>{{ form.is_share.label_tag }}
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
+                                        </span>
+                                    </td>
+                                    <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_share.errors }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.is_python.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >contient du Python.</div></span></td>
+                                    <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_python.errors }}</td>
+                                </tr> 
+                                <tr>
+                                    <td>{{ form.is_scratch.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >contient du Scratch.</div></span></td>
+                                    <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_scratch.errors }}</td>
+                                </tr> 
+                                <tr>
+                                    <td>{{ form.is_tableur.label_tag }}
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                            <div class="helper_tip_text" >nécessite un tableur.</div>
+                                        </span></td>
+                                    <td>{{ form.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                    {{ form.is_tableur.errors }}</td>
+                                </tr> 
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
