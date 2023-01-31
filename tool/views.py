@@ -1881,7 +1881,6 @@ def quizz_unarchive(request):
 def print_quizz_to_pdf(request):
 
     idq           = request.POST.get("idq",None)
-    is_ranking    = request.POST.get("is_ranking",None) 
     is_order      = request.POST.get("is_order",None)
     is_marker     = request.POST.get("is_mark",None) 
     is_sf         = request.POST.get("is_sf",None)
@@ -1902,7 +1901,6 @@ def print_quizz_to_pdf(request):
     today = datetime.now()
 
     question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
-    if not quizz.is_ranking : random.shuffle(question_ids)
     elements += r"\\"
 
     if len(question_ids) < 6 : nb_loop = 3
@@ -1985,9 +1983,6 @@ def print_quizz_to_pdf(request):
             elements += r"\textbf{Exercice "+str(j)+r".} \\" + question.writinganswer
             elements += r"\vspace{0,2cm}\\"
             j+=1
-
-
-
 
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
