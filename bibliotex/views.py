@@ -375,6 +375,27 @@ def my_exotexs(request):
     return render(request, 'bibliotex/list_exotexs.html', {'exos': exos,  })
 
 
+def compile_html(request,nf):
+    compile_content_html    = request.POST.get("compile_content_html",None)
+    compile_correction_html = request.POST.get("compile_correction_html",None)
+    save_html = False
+    if r'\ps' in nf.content or r'\ps' in nf.correction :
+        messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
+    else :
+        save_html = True
+        try :
+            if compile_content_html : Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            if nf.correction and compile_correction_html :
+                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+        except :
+            save_html = False
+
+    return save_html 
+
+
+
+
+
 
 @user_passes_test(user_is_creator)
 def create_exotex_knowledge(request,idk):
@@ -383,26 +404,15 @@ def create_exotex_knowledge(request,idk):
     teacher = request.user.teacher
     form = ExotexForm(request.POST or None,request.FILES or None, teacher = teacher , knowledge = knowledge , initial={'author':teacher,'teachers':teacher,'knowledge':knowledge} )
 
+
     if form.is_valid():
         nf = form.save(commit = False) 
         nf.author = teacher
         nf.teacher = teacher
         nf.save()
         form.save_m2m()
-        save_html = False
 
-        if r'\ps' in nf.content or r'\ps' in nf.correction :
-            messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
-        else :
-            save_html = True
-            try :
-                Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-                if nf.correction :
-                    Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
-            except :
-                save_html = False
-
-
+        save_html = compile_html(request,nf)
 
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
@@ -439,22 +449,8 @@ def set_exotex_in_bibliotex(request,id):
 
         nf.save()
         form.save_m2m() 
-        save_html = False
-        if r'\ps' in nf.content or r'\ps' in nf.correction :
-            messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
-        else :
-            save_html = True
-            try :
-                Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-                if nf.correction :
-                    Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
-            except :
-                save_html = False
-
-
+        save_html = compile_html(request,nf)
         bibliotex.exotexs.add(nf)
- 
-
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
         else :
@@ -483,19 +479,7 @@ def create_exotex(request):
         nf.is_share = 1
         nf.save()
         form.save_m2m() 
-        save_html = False
-        if r'\ps' in nf.content or r'\ps' in nf.correction :
-            messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
-        else :
-            save_html = True
-            try :
-                Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-                if nf.correction :
-                    Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
-            except :
-                save_html = False
-
- 
+        save_html = compile_html(request,nf)
 
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
@@ -524,19 +508,7 @@ def update_exotex(request, id):
             nf.teacher = teacher
             nf.save()
             form.save_m2m()  
-
-            save_html = False
-            if r'\ps' in nf.content or r'\ps' in nf.correction :
-                messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
-            else :
-                save_html = True
-                try :
-                    Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-                    if nf.correction :
-                        Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
-                except :
-                    save_html = False
-
+            save_html = compile_html(request,nf)
 
             if save_html :
                 messages.success(request, "L'exercice a été créé avec succès !")
