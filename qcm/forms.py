@@ -135,7 +135,7 @@ class FolderForm(forms.ModelForm):
 		self.fields['coteachers'] = forms.ModelMultipleChoiceField(queryset=coteachers,  required=False)
 		
 
-		self.fields['level']    = forms.ModelMultipleChoiceField(queryset=teacher.levels.exclude(pk=13),  required=False).order_by("ranking")
+		self.fields['level']    = forms.ModelMultipleChoiceField(queryset=teacher.levels.exclude(pk=13).order_by("ranking"),  required=False)
 		self.fields['subject']  = forms.ModelMultipleChoiceField(queryset=teacher.subjects.filter(is_active=1),  required=False)
 		if subject and level :
 			parcours                = teacher.teacher_parcours.filter(subject=subject,level=level,is_trash=0,is_archive=0).order_by("title")
