@@ -120,7 +120,7 @@
                     {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
                 {% endfor %}
             </div>
-            <div id="content{{ r.exotex.id }}">
+            <div id="content{{ r.exotex.id }}" class="exotex_shower_content">
                 {% if r.content_html %}
                 {{ r.content_html|safe }}
                 {% else %}
