@@ -10,7 +10,7 @@ define(['jquery', 'bootstrap'], function ($) {
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            url_ = "../ajax_search_bibliotex_by_level" ;
+            url_ = "../ajax_level_exotex" ;
 
             $.ajax(
                 {
@@ -18,14 +18,14 @@ define(['jquery', 'bootstrap'], function ($) {
                     dataType: "json",
                     traditional: true,
                     data: {
-                        'id_level': id_level,
-                        'id_subject': id_subject,                        
+                        'level_id': id_level,
+                        'subject_id': id_subject,                        
                         csrfmiddlewaretoken: csrf_token
                     },
                     url : url_,
                     success: function (data) {
 
-                        
+
                         $('#content_exercises').html(data.html);
 
 

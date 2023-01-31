@@ -820,6 +820,12 @@ def ajax_search_bibliotex_by_level(request):
 
  
 
+
+
+
+
+
+
 def ajax_search_bibliotex(request):
 
     teacher = request.user.teacher
@@ -1197,7 +1203,6 @@ def  ajax_chargethemes(request):
     return JsonResponse(data)
 
 
-
 def ajax_level_exotex(request):
 
     data = {} 
@@ -1210,6 +1215,13 @@ def ajax_level_exotex(request):
     bibliotex_id = request.POST.get("bibliotex_id",None)
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
+
+    if int(level_id) > 0 :
+        level = Level.objects.get(pk=int(level_id))
+        subject = Subject.objects.get(pk=int(subject_id))
+        thms  = level.themes.values_list('id', 'name').filter(subject_id=subject_id).order_by("name")
+        data['themes'] = list(thms)
+
 
     if bibliotex_id :
 
@@ -1242,9 +1254,7 @@ def ajax_level_exotex(request):
                 exotexs = base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword), theme_id__in = theme_ids).order_by("theme","knowledge__waiting","knowledge","ranking")
 
             elif keyword   : 
-                print(keyword)
                 exotexs = base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword) ).order_by("theme","knowledge__waiting","knowledge","ranking")
-                print(exotexs)
 
             elif level_id   : 
                 exotexs = base.filter(  level_id= level_id ).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -1262,6 +1272,8 @@ def ajax_level_exotex(request):
             elif keyword and skill_id  : 
                 skill = Skill.objects.get(pk=skill_id)
                 exotexs =  base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword), skills= skill  ).order_by("theme","knowledge__waiting","knowledge","ranking")
+            elif level_id  : 
+                exotexs =  base.filter(level_id= level_id  )
             else :
                 exotexs = base
         data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
