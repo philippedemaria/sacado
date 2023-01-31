@@ -39,8 +39,8 @@
 
 
 {% block body %}
-<form action="" method="POST" enctype='multipart/form-data'> 
 <section class="content_container"  id="bibliotex_sortable">
+<form action="" method="POST" enctype='multipart/form-data'> 
 <input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
 {% csrf_token %}
 {% for r in relationtexs %} 
@@ -144,7 +144,7 @@
 </form>
 
 
-<input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
+<input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()" />
 
 
 
