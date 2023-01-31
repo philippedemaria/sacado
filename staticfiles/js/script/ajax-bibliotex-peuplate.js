@@ -26,7 +26,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     success: function (data) {
 
                         
-                        $('#list_choice_bibliotex').html(data.html);
+                        $('#content_exercises').html(data.html);
 
 
                         themes = data["themes"] ; 
