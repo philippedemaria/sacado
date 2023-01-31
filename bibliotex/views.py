@@ -384,7 +384,7 @@ def create_exotex_knowledge(request,idk):
         nf.author = teacher
         nf.teacher = teacher
         nf.save()
-
+        form.save_m2m()
         save_html = False
 
         if r'\ps' in nf.content or r'\ps' in nf.correction :
@@ -398,7 +398,7 @@ def create_exotex_knowledge(request,idk):
             except :
                 save_html = False
 
-        form.save_m2m()
+
 
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
@@ -434,7 +434,7 @@ def set_exotex_in_bibliotex(request,id):
             pass
 
         nf.save()
-
+        form.save_m2m() 
         save_html = False
         if r'\ps' in nf.content or r'\ps' in nf.correction :
             messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
@@ -449,7 +449,7 @@ def set_exotex_in_bibliotex(request,id):
 
 
         bibliotex.exotexs.add(nf)
-        form.save_m2m()  
+ 
 
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
@@ -478,7 +478,7 @@ def create_exotex(request):
         nf.teacher = teacher
         nf.is_share = 1
         nf.save()
-
+        form.save_m2m() 
         save_html = False
         if r'\ps' in nf.content or r'\ps' in nf.correction :
             messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
@@ -491,7 +491,7 @@ def create_exotex(request):
             except :
                 save_html = False
 
-        form.save_m2m()  
+ 
 
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
