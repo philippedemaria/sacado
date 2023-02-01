@@ -355,6 +355,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
     # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
     # return render(request, 'setup/test_gar.html', context)
 
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        writer_text = "{} , {} ".format(today , dico_received )
+        print(writer_text, file=f)
+        f.close()
+    except :
+        pass
+
+
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
 
@@ -457,10 +466,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
                 except :
                     pass
- 
-
-
-
             else :
                 nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
                 if nb_group == 1 :
@@ -477,9 +482,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         grp.students.add(this_student)
                 except :
                     pass
-
-
-
 
         elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
             try :
