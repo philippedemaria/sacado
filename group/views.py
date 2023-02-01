@@ -762,36 +762,12 @@ def insert_students_to_this_group(request, id):
     
     form = GroupTeacherForm(request.POST or None, teacher = teacher , instance=group )
 
-    if form.is_valid():
-        nf = form.save(commit = False)
-        nf.teacher = teacher
-        nf.code = group.code
-        nf.studentprofile = 1
-        if teacher.user.school :
-            nf.school = teacher.user.school
-        nf.save()
-        messages.success(request, "Le groupe est modifié. ")
-
-        folders    = list()
-        folders_ids = request.POST.getlist("folder_ids")        
-        for f_id in folders_ids :
-            folder = Folder.objects.get(pk=f_id)
-            folders.append(folder)
-
+    if request.method == "POST" :
         stdts = request.POST.get("students")
+        print(stdts)
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts, group)
-
-        student = create_student_profile_inside(request, nf) 
-        if not student :
-            student = group.students.filter(user__username__contains="_e-test").first()
-        if nf.recuperation :
-            set_up_by_level_subject(nf ,  student)
- 
-        return redirect("index")
-    else:
-        print(form.errors)
 
     context = {'form': form,   'group': group, 'teacher': teacher, 'students': stdnts, 'all_students' : all_students ,   'is_managing': is_managing   }
 
