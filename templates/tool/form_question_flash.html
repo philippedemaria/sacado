@@ -92,21 +92,6 @@
                                     <td>{{ form.is_video|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Numérique"|attr:"data-off:Papier"|attr:"data-width:130" }}</td>
                                     <td></td>
                                 </tr>
-                                <tr class="no_visu">
-                                    <td class="no_border">{{ form.is_result_final.label_tag }} 
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                            <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
-                                        </span> 
-                                    </td>
-                                    <td colspan="2">{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
-                                </tr>
-                                <tr class="div_interslide no_visu">
-                                    <td class="no_border"> {{ form.interslide.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                    <div class="helper_tip_text" >Pour les transitions automatisées, en mode auto déclenché des vidéo-projections.</div>
-                                                </span> </td>
-                                    <td style="width:80px">{{ form.interslide|add_class:"form-control" }}</td>
-                                    <td><small>sec.</small></td>
-                                </tr>
                             </table>
                         </div>
                     </div>    
@@ -159,6 +144,32 @@
                                     </td>
                                     <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                                 </tr>
+
+
+                                <tr>
+                                    <td class="no_border">{{ form.is_result_final.label_tag }} 
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                            <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
+                                        </span> 
+                                    </td>
+                                    <td colspan="2">{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
+                                </tr>
+                                <tr class="div_interslide">
+                                    <td class="no_border"> {{ form.interslide.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Pour les transitions automatisées, en mode auto déclenché des vidéo-projections.</div>
+                                                </span> </td>
+                                    <td style="width:80px">{{ form.interslide|add_class:"form-control" }}</td>
+                                    <td><small>sec.</small></td>
+                                </tr>
+
+
+
+
+
+
+
+
+
                             </table>
                         </div> 
                     </div>
