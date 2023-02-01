@@ -2022,15 +2022,15 @@ def print_qf_to_pdf(request):
     question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
     elements += r"\\"
 
-    if len(question_ids) < 6 : nb_loop , nb_subloop = 3 , 2
-    if len(question_ids) < 8 : nb_loop , nb_subloop = 2 , 2
-    else :  nb_loop , nb_subloop = 1 , 2
+    if len(question_ids) < 6 : nb_loop  = 3 
+    if len(question_ids) < 8 : nb_loop  = 2 
+    else :  nb_loop  = 1 
 
     for n in range(nb_loop):
         for k in range(2):
             elements +=r"\begin{minipage}{0.5\linewidth}"
 
-            if len(question_ids)<3 : start, stop = 0, len(question_ids)
+            if len(question_ids)<8 : start, stop = 0, len(question_ids)
             else : 
                 quotient , reste  = len(question_ids)//2 , len(question_ids)%2
                 if reste == 0 : start, stop = 0, quotient+1
@@ -2040,7 +2040,7 @@ def print_qf_to_pdf(request):
 
             if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
             else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-            elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
+            elements += r" \includegraphics[scale=0.5]{/var/www/sacado/static/img/sacadologoqf.png}"
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots\ldots \framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
             if is_sf :
