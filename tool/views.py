@@ -2038,13 +2038,15 @@ def print_qf_to_pdf(request):
                     if k == 0 : start, stop = 0, quotient + 1
                     else : start, stop = quotient + 1, len(question_ids)
 
-            if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
-            else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-            elements += r" \includegraphics[scale=0.5]{/var/www/sacado/static/img/sacadologoqf.png}"
-            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots\ldots \framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
+            elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
+            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
+            if is_marker :
+                elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
+            else : 
+                elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
 
             if is_sf :
-                elements += r"\begin{tabular}{|p{6cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|}\hline"
+                elements += r"\begin{tabular}{|p{6.3cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|}\hline"
                 for sf in quizz.mental_activities():
                     elements += r"  {\scriptsize" +  sf.content + r"}  & &  & &       \\ \hline"
                 elements += r"\end{tabular}" 
@@ -2055,11 +2057,12 @@ def print_qf_to_pdf(request):
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
-                elements += r" \textbf{"+ str(i) + r".} & " +question.title
+                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title
                 if question.imagefile :
-                    elements += r" \includegraphics[scale=1]{"+question.imagefile.url+r"}"
+                    elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
+                if 'complète' in question.title or 'compléte' in question.title : elements += r" \hline"
+                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
 
