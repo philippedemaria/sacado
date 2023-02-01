@@ -2040,7 +2040,7 @@ def print_qf_to_pdf(request):
 
             if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
             else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-            elements += r" \includegraphics[scale=1]{/var/ww/sacado/static/img/sacadologoqf.png}"
+            elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots\ldots \framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
             if is_sf :
