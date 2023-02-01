@@ -2022,37 +2022,44 @@ def print_qf_to_pdf(request):
     question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
     elements += r"\\"
 
-    if len(question_ids) < 6 : nb_loop = 3
-    if len(question_ids) < 8 : nb_loop = 2
-    else : nb_loop = 1 
+    if len(question_ids) < 6 : nb_loop , nb_subloop = 3 , 2
+    if len(question_ids) < 8 : nb_loop , nb_subloop = 2 , 2
+    else :  nb_loop , nb_subloop = 1 , 2
 
     for n in range(nb_loop):
         for k in range(2):
             elements +=r"\begin{minipage}{0.5\linewidth}"
 
+            if len(question_ids)<3 : start, stop = 0, len(question_ids)
+            else : 
+                quotient , reste  = len(question_ids)//2 , len(question_ids)%2
+                if reste == 0 : start, stop = 0, quotient+1
+                else : 
+                    if k == 0 : start, stop = 0, quotient + 1
+                    else : start, stop = quotient + 1, len(question_ids)
+
             if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
             else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-            #elements += r" \includegraphics[scale=1]{HTTPS://sacado.xyz/static/img/sacado_logo_qf.png}"
+            elements += r" \includegraphics[scale=1]{HTTPS://sacado.xyz/static/img/sacado_logo_qf.png}"
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots\ldots \framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
             if is_sf :
-                elements += r"\begin{description}"
+                elements += r"\begin{tabular}{|p{6cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|}\hline"
                 for sf in quizz.mental_activities():
-                    elements += r" \savoirs{ " +  sf.content + r"}"
-                elements += r"\end{description}" 
+                    elements += r"  {\scriptsize" +  sf.content + r"}  & &  & &       \\ \hline"
+                elements += r"\end{tabular}" 
    
+
             elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
 
-            i=1
-            for question_id in question_ids :
-                question = Question.objects.get(pk=question_id)
+            for i in range(start ,stop) :
+                question = Question.objects.get(pk=question_ids[i])
 
                 elements += r" \textbf{"+ str(i) + r".} & " +question.title
                 if question.imagefile :
                     elements += r" \includegraphics[scale=1]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.5cm} \\ \hline"
-                i+=1
+                elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
 
