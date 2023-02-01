@@ -11,21 +11,17 @@
             </a>
             {% endif %}            
         </li>
-        <li>{% if sacado_asso %}
-        		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé
-                {% if not folder %} 
-                    <span class="helper_tip"> 
-                            <i class="fa fa-warning text-danger"></i>
-                            <div class="helper_tip_text" >
-                                 Préférer cloner depuis un <br/>groupe. Le dossier sera <br/>directement affecté à votre<br/> groupe.   
-                            </div>
-                    </span>
-                {% endif %} 
-                </a> 
-        	{% else %}
-        		<a href="#"  class="no_sacado_asso" title="Ne peut être actif qu'à partir d'un groupe"> Récupérer un dossier mutualisé</a> 
-        	{% endif %} 
-
+        <li>
+    		<a href="{% url 'all_folders' %}" > Récupérer un dossier mutualisé
+            {% if not folder %} 
+                <span class="helper_tip"> 
+                        <i class="fa fa-warning text-danger"></i>
+                        <div class="helper_tip_text" >
+                             Préférer cloner depuis un <br/>groupe. Le dossier sera <br/>directement affecté à votre<br/> groupe.   
+                        </div>
+                </span>
+            {% endif %} 
+            </a> 
         </li>
         <li class="divider"></li> 
 
