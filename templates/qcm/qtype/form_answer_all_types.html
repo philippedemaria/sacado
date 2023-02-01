@@ -158,6 +158,7 @@
             </div> 
             {% endif %}
             <div class="col-sm-12 col-md-12 col-lg-9" align="center">
+
                 {% if relation.relationship_remediation.all|length > 0 %}
                 <span class="pull-right">
                     <label>Aides : </label>
@@ -245,7 +246,7 @@
                    {% endfor %}
                {% endif %}
 
-                <div class="form_card"  style="margin-top: 20px;">           
+                <div class="form_card zoom_in"  style="margin-top: 20px;">           
                       <label>Compétences visées :</label>
                       {% if relation.skills %}
                         {% for skill in relation.skills.all %}
@@ -257,6 +258,12 @@
                         {% endfor %}
                       {% endif %}
                 </div>
+
+                <div class="form_card"  style="margin-top: 20px;">  
+                  <label for="customRange" class="btn-darkblue zoom_in">Taille de police</label><input type="range" value="0" class="form-range" min="0" max="5" step="1" id="customRange" style="width:150px">
+                </div>
+
+
             </div>
         </div> 
       {% endwith %}

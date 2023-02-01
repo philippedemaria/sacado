@@ -32,9 +32,10 @@
         <div class="form_card" style="margin-top:20px;">
             <span class="btn btn-sacado_active"> Axes et étiquettes</span> 
             <span class="label label-sacado">1</span> Mode Aléatoire ?
-            <span class="label label-sacado">2</span> Choisir les caractéristiques de l'axe 
-            <span class="label label-sacado">3</span> Choisir un marqueur <i class="fa fa-map-marker text-muted" ></i> et cliquer sur l'axe à sa position  
-            <span class="label label-sacado">4</span> Ecrire sa légende, choisir son image pour les associer  <br/><br/>
+            <span class="label label-sacado">2</span> Choisir les caractéristiques de l'axe <br/> <label>Mode non aléatoire :</label>
+
+            <span class="label label-info">3</span> Choisir un marqueur <i class="fa fa-map-marker text-muted" ></i> et cliquer sur l'axe à sa position  
+            <span class="label label-info">4</span> Ecrire sa légende, choisir son image pour les associer  <br/><br/>
             {{ form_ans.management_form }}
             {{ form_ans.non_form_errors }} 
             <div id="formsetZone">
@@ -58,16 +59,17 @@
                                     <br/><span class="label label-sacado">2</span>                       
                                 </div>
                                 <div class="col-sm-4 col-md-2" > 
-                                    <label class="inf">Borne inf. :</label> 
+                                        <label class="inf maxi {% if supportfile and  form.precision %}no_visu_on_load{% endif %}">Borne inf. :</label> 
+                                        <label class="maxi {% if not supportfile or not form.precision %}no_visu_on_load{% endif %}">Mini : </label>
                                        {{ form.xmin|add_class:"multiple_quizz_box_answer axe_creator"|attr:"style:width:100px;padding:10px"|attr:"required"   }}  
                                 </div>
                                 <div class="col-sm-4 col-md-2 {% if not supportfile and form.precision %}no_visu_on_load{% endif %} maxi" > 
                                         <label>Maxi : </label>
                                         {{ form.precision|add_class:"multiple_quizz_box_answer axe_sup"|attr:"style:width:100px;padding:10px"     }}  
                                 </div>                                
-                                <div class="col-sm-4 col-md-2" > 
-                                        <label class="sup">Borne sup. : </label>
-                                        <label class="maxi no_visu_on_load">Amplitude : </label>
+                                <div class="col-sm-4 col-md-3" > 
+                                        <label class="sup {% if supportfile and  form.precision %}no_visu_on_load{% endif %}">Borne sup. : </label>
+                                        <label class="maxi {% if not supportfile or not form.precision %}no_visu_on_load{% endif %}">Amplitude : </label>
                                         {{ form.xmax|add_class:"multiple_quizz_box_answer axe_extremite"|attr:"style:width:100px;padding:10px"|attr:"required"     }}  
                                 </div>
                                 <div class="col-sm-6 col-md-2" >  
@@ -87,7 +89,7 @@
                                        {{ form.subtick|add_class:"multiple_quizz_box_answer axe_subtick"|attr:"style:width:100px;padding:10px"|attr:"min:0"|attr:"step:1"    }}  
                                 </div>
                                 <div class="col-sm-12 col-md-12  {% if not supportfile and form.precision %}no_visu_on_load{% endif %} alert alert-sacado" > 
-                                    Le segment est tracé sur [Borne inf;Borne inf + Amplitude], où Borne inf est aléatoire sur [Borne inf;Maxi], avec l'unité et la subdivision renseignées
+                                    Le segment est tracé sur [borne inf;borne inf + Amplitude], où la borne inf est aléatoire sur [Mini ;Maxi], avec l'unité et la subdivision renseignées
                                 </div>
                             </div> 
                             <div class="row {% if supportfile and form.precision %}no_visu_on_load{% endif %}">
@@ -124,8 +126,8 @@
 
                                     <div class="col-sm-12">
                                         <div class="row">
-                                           <div class="col-sm-4 col-md-4 map-marker" style="padding-left:30px"><span class="label label-sacado">3</span> <label>Marqueur</label></div>
-                                           <div class="col-sm-5 col-md-5 map-marker"><span class="label label-sacado">4</span> <label> Image ou légende</label> </div> 
+                                           <div class="col-sm-4 col-md-4 map-marker" style="padding-left:30px"><span class="label label-info">3</span> <label>Marqueur</label></div>
+                                           <div class="col-sm-5 col-md-5 map-marker"><span class="label label-info">4</span> <label> Image ou légende</label> </div> 
                                         </div>
                                     </div>
                                 </div>
@@ -284,11 +286,19 @@
             {% endfor %}
             </div>
 
+
+            
             <div class="row">
                 <div class="col-sm-12 col-md-12" >
+                    {% if supportfile and not supportfile.is_alea %}
                     <a href="javascript:void();" class="add_more btn btn-sacado_active"   id="more_choice_button"><i class="bi bi-plus-circle"></i> Ajouter un nouvel axe et ses étiquettes</a><br/><br/>
+                    {% endif  %}
                 </div>                            
             </div>
+            
+
+
+
 
         </div>                                                         
     </div>

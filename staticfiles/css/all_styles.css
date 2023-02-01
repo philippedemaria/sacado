@@ -917,13 +917,6 @@ li.this_slide{
     background-image: url('/static/img/fond_exercise.png')
   }
 
-.this_slide .this_consigne{
-  background-color: #e7f3fd;
-  color : #007BC9;
-  border : 1px solid #007BC9;
-  border-radius:10px;
-  font-size: 25px;
-}
 
 /* ------------------------------------------------------------------------------------------------------------*/
 /* --------------------------------    fin wrapper_this_slider             ------------------------------------*/
@@ -934,7 +927,8 @@ p {
 }
 
 .consigne{
-  /*background-color: white;*/
+  background-color: #f6f3ff;
+  font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
   min-height:80px;   
   line-height: 29px;
   border-left : 0;
@@ -942,13 +936,29 @@ p {
   border-radius : 10px;
   color: #007BC9;  
   font-weight: 500;
-  background-image: url('/static/img/quadrillage.jpg');
-  font-size: 25px;
+  /*background-image: url('/static/img/quadrillage.jpg');*/
+  font-size: 20px;
   margin-bottom: 0px;
 }
+.consigne ul{
+  list-style: disc;
+  clear: both;
+  display: list-item;
+
+}
+.consigne ul li{
+  list-style: disc;
+  clear: both;
+  display: list-item;
+
+}
+
+
+
 
 .consigne_small_font{
   /*background-color: white;*/
+  font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
   min-height:80px;   
   line-height: 29px;
   border-left : 0;
@@ -956,7 +966,7 @@ p {
   border-radius : 10px;
   color: #007BC9;  
   font-weight: 500;
-  background-image: url('/static/img/quadrillage.jpg');
+  background-color: #f6f3ff;
   font-size: 18px;
   margin-bottom: 0px;
 }
@@ -1727,7 +1737,21 @@ input:invalid:focus {
     background-color: #FF8B69;
     border-color: #FF8B69;
 }
- 
+
+input[type=range].form-range {
+  -webkit-appearance: none;     /*nécessaire pour Chrome */
+  padding: 0;                   /* nécessaire pour IE */
+  font: inherit;                /* même rendu suivant font document */
+  outline: none;
+  color: #1a2696;                  /* sert pour couleur de référence, via currentColor, pour le curseur */
+  opacity: .8;
+  background: #1eff00;             /* sert pour couleur de fond de la zone de déplacement */
+  box-sizing: border-box;       /* même modèle de boîte pour tous */
+  transition: opacity .2s;
+  cursor: pointer;
+}
+
+
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------   SHARED   EXERCISE ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/

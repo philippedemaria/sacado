@@ -50,6 +50,7 @@
             <br/><br/>
         </small>
         <table class="table borderless">
+            {% if qtype != 18 or not supportfile.is_alea  %}
             <tr id="tr_pseudo">
                 <td>
                     <small>
@@ -72,7 +73,7 @@
                                 mots cachés proposés
                             {% elif qtype == 15 %}
                                 légendes proposées
-                            {% elif qtype == 18 %}
+                            {% elif qtype == 18  %}
                                 axes proposés
                             {% endif %}
                         </label>
@@ -82,6 +83,8 @@
                     {{ form.nb_pseudo }}<label><small>[Si 0, tout est proposé.]</small></label>
                 </td>
             </tr>
+            {% endif %}
+
             {% if qt.is_sub  %}
             <tr id="tr_sub_pseudo">
                 <td>

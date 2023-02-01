@@ -75,7 +75,16 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        $('body').on('change', "#customRange", function (e) {
+            idx  = $("#customRange").val() ; 
 
+            sizes = [20,24,28,32,36,40];
+            lines = [25,30,35,40,45,50];
+            inputs = [22,24,28,32,36,40];
+
+            $(".consigne").attr("style","line-height:"+lines[idx]+"px;font-size:"+sizes[idx]+"px");
+            $(".input_latex").attr("style","font-size:"+inputs[idx]+"px");
+        });
 
 
 

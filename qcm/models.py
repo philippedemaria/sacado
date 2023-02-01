@@ -192,6 +192,17 @@ class Supportfile(models.Model):
         return 'qcm/qtype/ans_'+qt.custom+'.html'
 
 
+    def is_alea(self):
+        test = False
+        supportchoice = self.supportchoices.first()
+        if supportchoice.precision : test = True
+        return test
+
+
+
+
+
+
     def grid(self):
 
         support_choices = list()
