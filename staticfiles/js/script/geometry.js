@@ -279,7 +279,13 @@ function abscisse(start,end,tick,subtick,index){
     var tck = 600/unit;    // en pixel     
     var sbtck = tck/subtick; // sous graduation  en pixel
     var nb_total_graduation = unit * subtick ; // sous graduation  en pixel
-    var p = 150 + Math.floor(Math.random()*nb_total_graduation)*6;
+
+
+    var alea = Math.floor(Math.random()*nb_total_graduation)
+    var p = 150 + alea * (60/subtick);
+
+    console.log(nb_total_graduation + " " + subtick+ " " + alea+ " " + (60/subtick) + " " + p )
+
  
 
     abscisse_ctx(start,end,tick,tck,sbtck,ctx,100,p) ;
@@ -357,9 +363,15 @@ function abscisse_ctx(start,end,tick,tck,sbtck,ctx,top,p){
     ctx.beginPath();
     ctx.fillStyle = "red"; 
     ctx.font = '30px Arial'; 
-    ctx.fillText('|', p - 0.5*sbtck , top+60);
-    ctx.fillText('|', p - 0.5*sbtck , top+96);
-    ctx.fillText('^', p - 1*sbtck , top+96); 
+    if (sbtck==10)
+    {ctx.fillText('|', p - 0.5*sbtck , top+60);
+        ctx.fillText('|', p - 0.5*sbtck , top+96);
+        ctx.fillText('^', p - 1*sbtck , top+96); }
+    else
+    {ctx.fillText('|', p - 3  , top+60);
+        ctx.fillText('|', p - 3  , top+96);
+        ctx.fillText('^', p  - 6 , top+96); }  
+
     ctx.stroke();
     ctx.closePath();
 
