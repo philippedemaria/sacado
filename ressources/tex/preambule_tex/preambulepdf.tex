@@ -8,6 +8,8 @@
 \usepackage{listings}
 \usepackage{fancyvrb} %verbatim
 \usepackage{tabularx}
+\usepackage{eurosym}
+\usepackage{mathrsfs}
 \usepackage{stmaryrd}
 \usepackage{amssymb}
 \usepackage[?]{amsmath}
@@ -53,7 +55,7 @@
 \newcommand{\vecj}{\vec{\text{\it \j}}}
 \newcommand{\rep}{$(O;\veci,\vecj,\vec{k})$\xspace}
 \newcommand{\Oijk}{$(O, \veci,\vecj,\vec{k})$\xspace}
-\newcommand{\rond}{repère orthonormal direct}
+\newcommand{\rond}{repÃ¨re orthonormal direct}
 \newcommand{\bond}{base orthonormale directe}
 \newcommand{\eq}{\Longleftrightarrow}
 \newcommand{\implique}{\Longrightarrow}
@@ -83,8 +85,8 @@
 \newcommand{\et}{\wedge}
 \newcommand{\ou}{\vee}
 %\DeclareMathOperator{\trace}{{trace}}
-\renewcommand{\det}{\operatorname{\text{dét}}}
-%\DeclareMathOperator{\det}{{dét}}
+\renewcommand{\det}{\operatorname{\text{dÃ©t}}}
+%\DeclareMathOperator{\det}{{dÃ©t}}
 \DeclareMathOperator{\grad}{{grad}}
 %\DeclareMathOperator{\th}{th}
 %\renewcommand{\tanh}{\mathop{\mathrm{th}}{}}
@@ -117,7 +119,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \noindent{\bf \large Exercice \thecexo.\ #1}}
 \newcounter{cact}
 \renewcommand{\thecact}{\arabic{cact}}
-\newcommand{\act}{\addtocounter{cact}{1} \vskip 1em \noindent{\bf Activité \thecact.\ }}
+\newcommand{\act}{\addtocounter{cact}{1} \vskip 1em \noindent{\bf ActivitÃƒÂ© \thecact.\ }}
 %\renewcommand{\labelitemi}{\m@th$\star$}
 \newcommand{\limi}[2]{\underset{#1 \rightarrow #2}\lim}    
 \newcommand{\nterme}[1]{{\em #1}}
@@ -137,14 +139,14 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
   language=Python,
   commentstyle=\color{red},
   upquote=true,
-  literate={é}{{\'e}}1
-           {ê}{{\^e}}1
-           {à}{{\`a}}1
-           {è}{{\`e}}1
-           {û}{{\^e}}1
-           {ê}{{\^e}}1
-           {ï}{{\"i}}1
-           {ù}{{\`u}}1, 
+  literate={Ã©}{{\'e}}1
+           {Ãª}{{\^e}}1
+           {Ã }{{\`a}}1
+           {Ã¨}{{\`e}}1
+           {Ã®}{{\^i}}1
+           {Ã¯}{{\"i}}1
+           {Ã«}{{\"e}}1
+           {Ã¹}{{\`u}}1,  
   columns=flexible,
   basicstyle=\ttfamily,
   keywordstyle=\color{blue},
@@ -158,11 +160,12 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
   frame=L
 }
 
-
+ 
 \ifdefined\HCode
   \def\pgfsysdriver{pgfsys-dvisvgm4ht.def}
 \fi 
-\usepackage{pgfplots}
+\usepackage{pgf,tikz,pgfplots}
+\usepackage{tkz-tab,tkz-fct}
 \pgfplotsset{compat=1.16}
 %\usepackage{mathrsfs}
 \usetikzlibrary{arrows}
@@ -194,13 +197,13 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 
 \newcommand{\competence}[1]{
-%  {\bf Compétence ciblée : } #1
+%  {\bf CompÃƒÂ©tence ciblÃƒÂ©e : } #1
 %  \medskip
   \hfill\textcolor{bleusad}{#1}
 
 }
 \newcommand{\competences}[1]{
-  {\bf Compétences ciblées : }
+  {\bf CompÃƒÂ©tences ciblÃƒÂ©es : }
   \begin{enumerate}
    \item   #1
   \end{enumerate}
@@ -209,13 +212,13 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 }
 
 \newcommand{\savoir}[1]{
-  {\bf Autre savoir-faire ciblé : } 
+  {\bf Autre savoir-faire ciblÃƒÂ© : } 
   #1
   \medskip
 }
 
 \newcommand{\savoirs}[1]{
-  %  {\bf Autres savoir-faire ciblés : }
+  %  {\bf Autres savoir-faire ciblÃƒÂ©s : }
  \vspace{-1em}
   \textcolor{bleusad}{\it \begin{itemize}
    \item  #1
@@ -232,4 +235,4 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 }
 
 \setlength{\parindent}{0cm}
-\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}

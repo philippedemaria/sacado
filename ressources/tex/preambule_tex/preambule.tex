@@ -3,11 +3,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{xspace}
+\usepackage{eurosym}
 \usepackage{array}
 \usepackage{color}
 \usepackage{listings}
 \usepackage{fancyvrb} %verbatim
 \usepackage{tabularx}
+\usepackage{mathrsfs}
 \usepackage{stmaryrd}
 \usepackage{amssymb}
 \usepackage[?]{amsmath}
@@ -53,7 +55,7 @@
 \newcommand{\rep}{$(O;\veci,\vecj,\vec{k})$\xspace}
 \newcommand{\Oijk}{$(O, \veci,\vecj,\vec{k})$\xspace}
 \newcommand{\Oij}{$(O, \veci,\vecj)$\xspace}
-\newcommand{\rond}{repère orthonormal direct}
+\newcommand{\rond}{repÃ¨re orthonormal direct}
 \newcommand{\bond}{base orthonormale directe}
 \newcommand{\eq}{\Longleftrightarrow}
 \newcommand{\implique}{\Longrightarrow}
@@ -83,8 +85,8 @@
 \newcommand{\et}{\wedge}
 \newcommand{\ou}{\vee}
 %\DeclareMathOperator{\trace}{{trace}}
-\renewcommand{\det}{\operatorname{\text{dét}}}
-%\DeclareMathOperator{\det}{{dét}}
+\renewcommand{\det}{\operatorname{\text{dÃ©t}}}
+%\DeclareMathOperator{\det}{{dÃ©t}}
 \DeclareMathOperator{\grad}{{grad}}
 %\DeclareMathOperator{\th}{th}
 %\renewcommand{\tanh}{\mathop{\mathrm{th}}{}}
@@ -117,7 +119,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\nterme}[1]{{\em #1}}
 \newcommand{\dif}[1]{#1}
 
-
+ 
 \usepackage{xr}
 \usepackage{hyperref}
 \usepackage{textcomp} %pour les ' dans lstlisting
@@ -127,14 +129,14 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
   language=Python,
   commentstyle=\color{red},
   upquote=true,
-  literate={é}{{\'e}}1
-           {ê}{{\^e}}1
-           {à}{{\`a}}1
-           {è}{{\`e}}1
-           {û}{{\^e}}1
-           {ê}{{\^e}}1
-           {ï}{{\"i}}1
-           {ù}{{\`u}}1, 
+  literate={Ã©}{{\'e}}1
+           {Ãª}{{\^e}}1
+           {Ã }{{\`a}}1
+           {Ã¨}{{\`e}}1
+           {Ã®}{{\^i}}1
+           {Ã¯}{{\"i}}1
+           {Ã«}{{\"e}}1
+           {Ã¹}{{\`u}}1, 
   columns=flexible,
   basicstyle=\ttfamily,
   keywordstyle=\color{blue},
@@ -150,6 +152,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 \ifdefined\HCode\def\pgfsysdriver{pgfsys-dvisvgm4ht.def}\fi
 \usepackage{pgf,tikz,pgfplots}
+\usepackage{tkz-tab,tkz-fct}
 \pgfplotsset{compat=1.16}
 \usetikzlibrary{arrows}
  
@@ -167,3 +170,4 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\savoirs}[1]{}
 
 \setlength{\parindent}{0cm}
+\usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}

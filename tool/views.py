@@ -1907,73 +1907,66 @@ def print_quizz_to_pdf(request):
     if len(question_ids) < 8 : nb_loop = 2
     else : nb_loop = 1 
 
-    for n in range(nb_loop):
-        for k in range(2):
-            elements +=r"\begin{minipage}{0.5\linewidth}"
-            if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
-            else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-            elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{0.1cm}"
-            if is_sf :
-                elements += r"\begin{description}"
-                for sf in quizz.mental_activities():
-                    elements += r" \savoirs{ " +  sf.content + r"}"
-                elements += r"\end{description}" 
-            i=1
-            letters = ["A","B","C","D","E","F","G","H","I","J","K"]
-            for question_id in question_ids :
-                question = Question.objects.get(pk=question_id)
 
-                if is_marker :
-                    if point and int(point) <= 1 : point_str = "point"
-                    else : point_str = "points"
-                    elements += r" \textbf{"+ str(i) + r".} " +question.title+r"\hfill{"+str(point)+" "+point_str+r"}\\"
-                elif quizz.is_mark :    
-                    elements += r" \textbf{"+ str(i) + r".} " +question.title+r"\hfill{"+str(question.point)+r" points}\\"
+    if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
+    else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
+    elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{0.1cm}"
+    if is_sf :
+        elements += r"\begin{description}"
+        for sf in quizz.mental_activities():
+            elements += r" \savoirs{ " +  sf.content + r"}"
+        elements += r"\end{description}" 
+    i=1
+    letters = ["A","B","C","D","E","F","G","H","I","J","K"]
+    for question_id in question_ids :
+        question = Question.objects.get(pk=question_id)
+
+        if is_marker :
+            if point and int(point) <= 1 : point_str = "point"
+            else : point_str = "points"
+            elements += r" \textbf{"+ str(i) + r".} " +question.title+r"\hfill{"+str(point)+" "+point_str+r"}\\"
+        elif quizz.is_mark :    
+            elements += r" \textbf{"+ str(i) + r".} " +question.title+r"\hfill{"+str(question.point)+r" points}\\"
+        else :
+            elements += r" \textbf{"+ str(i) + r".} " +question.title
+
+        if question.imagefile :
+            elements += r" \includegraphics[scale=1]{"+question.imagefile.url+r"}"
+
+        if question.qtype == 2 :
+            elements += r"\vspace{0,2cm}\\"
+            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
+        elif question.qtype > 2 :
+            if  question.qtype == 3 : elements += r" \textit{Vous devez cocher les réponses qui vous semblent bonnes.}"
+            elif  question.qtype == 4 : elements += r" \textit{Vous devez cocher la réponse qui vous semble bonne.}" 
+            elements += r"\begin{description}"
+            choice_ids = list(question.choices.values_list("id",flat=True))
+            if not is_order :
+                random.shuffle(choice_ids)
+            j=0
+            for choice_id in choice_ids :
+                choice = Choice.objects.get(pk=choice_id)
+                if choice.imageanswer :
+                    elements += r"\includegraphics[scale=1]{"+choice.imageanswer.url+r"}"
                 else :
-                    elements += r" \textbf{"+ str(i) + r".} " +question.title
-
-                if question.imagefile :
-                    elements += r" \includegraphics[scale=1]{"+question.imagefile.url+r"}"
-
-                if question.qtype == 2 :
-                    elements += r"\vspace{0,2cm}\\"
-                    elements += r" \hrule  "
-                    elements += r"\vspace{0,2cm}\\"
-                elif question.qtype > 2 :
-                    if  question.qtype == 3 : elements += r" \textit{Vous devez cocher les réponses qui vous semblent bonnes.}"
-                    elif  question.qtype == 4 : elements += r" \textit{Vous devez cocher la réponse qui vous semble bonne.}" 
-                    elements += r"\begin{description}"
-                    choice_ids = list(question.choices.values_list("id",flat=True))
-                    if not is_order :
-                        random.shuffle(choice_ids)
-                    j=0
-                    for choice_id in choice_ids :
-                        choice = Choice.objects.get(pk=choice_id)
-                        if choice.imageanswer :
-                            elements += r"\includegraphics[scale=1]{"+choice.imageanswer.url+r"}"
-                        else :
-                            elements += r" \item[\quad "+letters[j]+".] " +  choice.answer
-                        j+=1  
-                    elements += r"\end{description}"
-                    elements += r"\vspace{0,2cm}\\"
-                    elements += r" \hrule  "
-                    elements += r"\vspace{0,2cm}\\"
-                else :
-                    elements += r" \textit{Vous devez cocher la réponse qui vous semble bonne.}"
-                    elements += r"\begin{description}"
-                    elements += r" \item[\quad  VRAI] " 
-                    elements += r" \item[\quad  FAUX] " 
-                    elements += r"\end{description}" 
-                    elements += r"\vspace{0,2cm}\\"
-                    elements += r" \hrule  "
-                    elements += r"\vspace{0,2cm}\\"
-                i+=1
-            elements += r"\end{minipage}" 
-            if k==0 : elements += r" \vrule" 
-            else :      
-                elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
-                elements += r"\\"
-
+                    elements += r" \item[\quad "+letters[j]+".] " +  choice.answer
+                j+=1  
+            elements += r"\end{description}"
+            elements += r"\vspace{0,2cm}\\"
+            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
+        else :
+            elements += r" \textit{Vous devez cocher la réponse qui vous semble bonne.}"
+            elements += r"\begin{description}"
+            elements += r" \item[\quad  VRAI] " 
+            elements += r" \item[\quad  FAUX] " 
+            elements += r"\end{description}" 
+            elements += r"\vspace{0,2cm}\\"
+            elements += r" \hrule  "
+            elements += r"\vspace{0,2cm}\\"
+        i+=1
+    
     if is_correction :
         elements += r"\newpage "
         elements +=r"\titreFiche{Correction}"
@@ -2003,6 +1996,98 @@ def print_quizz_to_pdf(request):
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
     return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
+
+def print_qf_to_pdf(request):
+
+    idq           = request.POST.get("idq",None)
+    is_order      = request.POST.get("is_order",None)
+    is_marker     = request.POST.get("is_mark",None) 
+    is_sf         = request.POST.get("is_sf",None)
+    is_correction = request.POST.get("is_correction",None) 
+    point         = request.POST.get("point",None)
+
+    if not idq :
+        return redirect('list_quizzes')
+
+    quizz = Quizz.objects.get(pk = idq) 
+ 
+    preamb = settings.TEX_PREAMBULE_PDF_QCM
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"
+    today = datetime.now()
+
+    question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
+    elements += r"\\"
+
+    if len(question_ids) < 6 : nb_loop = 3
+    if len(question_ids) < 8 : nb_loop = 2
+    else : nb_loop = 1 
+
+    for n in range(nb_loop):
+        for k in range(2):
+            elements +=r"\begin{minipage}{0.5\linewidth}"
+
+            if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
+            else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
+            #elements += r" \includegraphics[scale=1]{HTTPS://sacado.xyz/static/img/sacado_logo_qf.png}"
+            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots\ldots \framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
+
+            if is_sf :
+                elements += r"\begin{description}"
+                for sf in quizz.mental_activities():
+                    elements += r" \savoirs{ " +  sf.content + r"}"
+                elements += r"\end{description}" 
+   
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
+
+            i=1
+            for question_id in question_ids :
+                question = Question.objects.get(pk=question_id)
+
+                elements += r" \textbf{"+ str(i) + r".} & " +question.title
+                if question.imagefile :
+                    elements += r" \includegraphics[scale=1]{"+question.imagefile.url+r"}"
+                elements += r"\\"
+                elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.5cm} \\ \hline"
+                i+=1
+            elements += r"\end{tabular}\end{minipage}"
+
+
+    
+        elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
+        elements += r"\\"
+
+    if is_correction :
+        elements += r"\newpage "
+        elements +=r"\titreFiche{Correction}"
+        j = 1   
+        for question_id in question_ids :
+            question = Question.objects.get(pk=question_id)
+            elements += r"\textbf{Exercice "+str(j)+r".} \\" + question.writinganswer
+            elements += r"\vspace{0,2cm}\\"
+            j+=1
+
+    elements += r"\end{document}"
+    elements += settings.DIR_TMP_TEX    
+
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    #file = settings.DIR_TMP_TEX+r"\\quizz_pdf_"+str(quizz.id)
+    # pour Linux
+    file = settings.DIR_TMP_TEX+"/quizz_pdf_"+str(quizz.id)
+    ################################################################# 
+    ################################################################# 
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
 
 ############################################################################################################

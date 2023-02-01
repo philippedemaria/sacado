@@ -140,7 +140,7 @@
                 <h1 class='thin'><i class="bi bi-printer"></i> Imprimer <span id="idq_title"></span> en pdf</h1>
             </div>
             <div class="modal-body">
-                <form action="{% url 'print_quizz_to_pdf' %}" method="POST">
+                <form action="{% url 'print_qf_to_pdf' %}" method="POST">
                     <div class="row">            {% csrf_token %}
                         <div class="col-sm-12 col-md-12"> 
                             <input type="hidden" id="index_idq" name="idq" />
