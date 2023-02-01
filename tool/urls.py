@@ -147,6 +147,9 @@ urlpatterns = [
     path('admin_duplicate_mental/<int:idm>', admin_duplicate_mental, name='admin_duplicate_mental'), 
 
     path('admin_test_mental/<int:id>', admin_test_mental, name='admin_test_mental'), 
+    path('admin_test_mental_print/<int:id>', admin_test_mental_print, name='admin_test_mental_print'), 
+
+    
     path('admin_delete_test_mental', admin_delete_test_mental, name='admin_delete_test_mental'), 
 
     path('list_questions_flash', list_questions_flash, name='list_questions_flash'), 

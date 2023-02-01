@@ -3757,6 +3757,82 @@ def admin_test_mental(request,id):
  
 
 
+def admin_test_mental_print(request,id):
+
+    mental = Mental.objects.get(pk=id)
+    quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = mental.mentaltitle.subject ,
+                                 is_questions = 1, is_random = 1,nb_slide = 10,is_result =1 , is_result_final = 1,is_archive = 0,interslide = 10)
+    quizz.levels.set(mental.levels.all())
+    quizz.mentaltitles.add(mental.mentaltitle)
+    create_questions_flash_random_variable([id], quizz, 10)
+
+    preamb = settings.TEX_PREAMBULE_PDF_QCM
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"
+    today = datetime.now()
+
+    question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
+    elements += r"\\"
+
+    if len(question_ids) < 6 : nb_loop  = 3 
+    if len(question_ids) < 8 : nb_loop  = 2 
+    else :  nb_loop  = 1 
+
+    for n in range(nb_loop):
+        for k in range(2):
+            elements +=r"\begin{minipage}{0.5\linewidth}"
+
+            if len(question_ids)<8 : start, stop = 0, len(question_ids)
+            else : 
+                quotient , reste  = len(question_ids)//2 , len(question_ids)%2
+                if reste == 0 : start, stop = 0, quotient+1
+                else : 
+                    if k == 0 : start, stop = 0, quotient + 1
+                    else : start, stop = quotient + 1, len(question_ids)
+
+            elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
+            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
+            elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
+
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
+
+            for i in range(start ,stop) :
+                question = Question.objects.get(pk=question_ids[i])
+
+                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title
+                if question.imagefile :
+                    elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
+                elements += r"\\"
+                if 'complète' in question.title or 'compléte' in question.title : elements += r" \hline"
+                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
+            elements += r"\end{tabular}\end{minipage}"
+
+        elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
+        elements += r"\\"
+
+    elements += r"\end{document}"
+    elements += settings.DIR_TMP_TEX    
+
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    #file = settings.DIR_TMP_TEX+r"\\quizz_pdf_"+str(quizz.id)
+    # pour Linux
+    file = settings.DIR_TMP_TEX+"/quizz_pdf_"+str(quizz.id)
+    ################################################################# 
+    ################################################################# 
+    f_tex = open(file+".tex","w")
+    f_tex.write(elements)
+    f_tex.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+
+
+
 
 @login_required(login_url= 'index')
 def admin_delete_test_mental(request):
@@ -3764,8 +3840,6 @@ def admin_delete_test_mental(request):
     teacher = request.user.teacher
     Quizz.objects.filter(title__contains = "Question_Flash_Admin").delete()
     return redirect('admin_mentals', idl)
-
-
 
 
 

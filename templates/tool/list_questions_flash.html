@@ -95,7 +95,8 @@
                     <td style="width:200px">
                         <a href="{% url 'show_questions_flash' q.id %}" title="Projeter les questions"><i class="bi bi-webcam"></i></a>
  
-                        <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ q.title }}"  data-idq="{{ q.id }}"  class="quizz_to_pdf_modal"  title="Télécharger le quizz en pdf"><i class="bi bi-file-pdf"></i>    </a>
+                        <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ q.title }}"  data-idq="{{ q.id }}"  class="quizz_to_pdf_modal"  title="Télécharger les questions en pdf"><i class="bi bi-file-pdf"></i>    </a>
+
                     </td>
                     <td style="width:150px;">
                         {% if q.is_numeric %}
