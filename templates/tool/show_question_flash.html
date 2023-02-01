@@ -70,8 +70,6 @@
     {% if question.mental.jquery %}
         <h1 style="font-size:2.5em;padding-top:20px" class="thin"> {{ question.title}} </h1>
         <canvas class="this_canvas" id="canvas{{ forloop.counter0}}" width="900px" height="450px" style="border:1px solid #CCC; background-color: white;"></canvas>
-
-        <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
     {% else %}
         <h1 style="font-size:4em;padding-top:100px" class="thin"> {{ question.title}} </h1>
     {% endif %}
@@ -79,10 +77,27 @@
 {% endblock %}
 
 
+{% block question_correction %}
+    {% if question.mental.jquery %}
+    <canvas class="this_canvas" id="canvas_corrector{{ forloop.counter0}}" width="900px" height="100px" style="border:1px solid #CCC; background-color: white;"></canvas>
+    <br/><span style="font-size:1.5em" class="thin text-blue">La réponse est <span id="answer_cor{{ forloop.counter0}}"></span>{{ question.writinganswer }}</span>
+    <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
+    {% endif %}
+{% endblock %}
+
+
+{% block question_correction_inside %}
+    {% if question.mental.jquery %}
+    <canvas class="this_canvas" id="canvas_inside{{ forloop.counter0}}" width="900px" height="100px" style="border:1px solid #CCC; background-color: white;"></canvas>   
+    <span style="font-size:1.5em" class="thin text-blue">La réponse est <span id="answer_cor{{ forloop.counter0}}"></span>{{ question.writinganswer }}</span>
+    <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
+    {% endif %}
+{% endblock %}
 
 
 
 
 {% block python %} 
     <script src="{% static 'js/script/geometry.js' %}"></script>
+
 {% endblock %}

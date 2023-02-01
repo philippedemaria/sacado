@@ -15,6 +15,7 @@ function deg_to_rad(degrees){
   var pi = Math.PI;
   return degrees * (pi/180);
 }
+
 // fonction de construction
 function drawWedge(w,fill,stroke,index){
     const canvas = document.getElementById("canvas"+index);
@@ -269,49 +270,23 @@ function abscisse(start,end,tick,subtick,index){
  
     var canvas = document.getElementById("canvas"+index);
     var ctx = canvas.getContext("2d");
-    ctx.beginPath();
+
+    var canvas_cor = document.getElementById("canvas_corrector"+index); 
+    var canvas_cor = document.getElementById("canvas_corrector"+index);  
+
     //Conversion des pixels à la droite graduée
     var unit = (end - start)/tick ; 
     var tck = 600/unit;    // en pixel     
     var sbtck = tck/subtick; // sous graduation  en pixel
     var nb_total_graduation = unit * subtick ; // sous graduation  en pixel
-    // Tracé de l'axe
-    ctx.moveTo(150,150);
-    ctx.lineTo(750,150);   
-    //graduation
-    ctx.font = '25px Arial';
-    ctx.fillText(start, 142, 136);
-    ctx.fillText(end, 735, 136);
-    ctx.fillText(start + tick, 142+tck, 136);     
-    var a = 150;
-    var b = 150;
-    ctx.moveTo(a,140); // haut de la graduation
-    ctx.lineTo(a,160); // bas de la graduation
-    while (a<750){
-        a = a + sbtck;
-        ctx.moveTo(a,145);
-        ctx.lineTo(a,155);
-    }
-    while (b<750){
-        b = b + tck;
-        ctx.moveTo(b,140);
-        ctx.lineTo(b,160);
-    }
-    ctx.stroke();
-    ctx.closePath();
-    // fin de la graduation	
-	p = 150 + Math.floor(Math.random()*nb_total_graduation)*6;
-    ctx.fillStyle = 'red';
-    ctx.beginPath();
-    ctx.fillStyle = "red"; 
-    ctx.font = '30px Arial'; 
-    ctx.fillText('|', p - 0.5*sbtck , 160);
-    ctx.fillText('|', p - 0.5*sbtck , 196);
-    ctx.fillText('^', p - 1*sbtck , 196);
-    //ctx.fillText(p, p - 1*sbtck ,226);  // offsetleft de 150
-    ctx.stroke();
-    ctx.closePath();
+    var p = 150 + Math.floor(Math.random()*nb_total_graduation)*6;
+ 
 
+    abscisse_ctx(start,end,tick,tck,sbtck,ctx,100,p) ;
+    if(canvas_cor) {var ctx_cor = canvas_cor.getContext("2d");
+        abscisse_ctx(start,end,tick,tck,sbtck,ctx_cor,0,p) ;}
+   
+    document.getElementById("answer_cor"+index).innerText = (start + (p-150)/sbtck/subtick).toString().replace(".",",") ; 
 
     var ipt = document.createElement("input");
     ipt.setAttribute("type", "hidden");
@@ -331,6 +306,7 @@ function abscisse(start,end,tick,subtick,index){
     input.setAttribute("value", p);
     canvas.appendChild(input);
 
+
     var inputs = document.createElement("input");
     inputs.setAttribute("type", "hidden");
     inputs.setAttribute("name", "sbtck"+index);
@@ -342,6 +318,49 @@ function abscisse(start,end,tick,subtick,index){
     inputf.setAttribute("name", "format"+index);
     inputf.setAttribute("value", "pizza");
     canvas.appendChild(inputf);
+}
 
+
+
+function abscisse_ctx(start,end,tick,tck,sbtck,ctx,top,p){
+
+
+    ctx.beginPath();
+    // Tracé de l'axe
+    ctx.moveTo(150,top+50);
+    ctx.lineTo(750,top+50);   
+    //graduation
+    ctx.font = '25px Arial';
+    ctx.fillText(start, 142, top+36);
+    ctx.fillText(end, 735, top+36);
+    ctx.fillText(start + tick, 142+tck, top+36);   
+
+    var a = 150; // abscisses de la graduation tick
+    var b = 150; // abscisses de la graduation subtick
+    ctx.moveTo(a,top+40); // haut de la graduation
+    ctx.lineTo(a,top+60); // bas de la graduation
+
+    while (a<750){
+        a = a + sbtck;
+        ctx.moveTo(a,top+45);
+        ctx.lineTo(a,top+55);
+    }
+    while (b<750){
+        b = b + tck;
+        ctx.moveTo(b,top+40);
+        ctx.lineTo(b,top+60);
+    }
+    ctx.stroke();
+    ctx.closePath();
+    // fin de la graduation
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.fillStyle = "red"; 
+    ctx.font = '30px Arial'; 
+    ctx.fillText('|', p - 0.5*sbtck , top+60);
+    ctx.fillText('|', p - 0.5*sbtck , top+96);
+    ctx.fillText('^', p - 1*sbtck , top+96); 
+    ctx.stroke();
+    ctx.closePath();
 
 }
