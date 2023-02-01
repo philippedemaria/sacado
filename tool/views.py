@@ -1910,7 +1910,7 @@ def print_quizz_to_pdf(request):
     for n in range(nb_loop):
         for k in range(2):
             elements +=r"\begin{minipage}{0.5\linewidth}"
-            if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"} \hfill"+ today.strftime("%d-%b-%Y") +r" \\ \vspace{0.1cm}"
+            if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
             else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
             elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{0.1cm}"
             if is_sf :

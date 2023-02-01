@@ -12,6 +12,13 @@
 
 {% block page_title %}
     <i class="bi bi-lightning"></i> Mes Questions flash 
+
+    <ul>
+
+        <li><a href="{% url 'create_questions_flash' 0 %}" class="btn btn-new pull-right">Nouvelle Question flash</a></li>
+
+    </ul> 
+
 {% endblock %}
 
 
@@ -20,7 +27,7 @@
 
 {% block page_menu_right %}
 
-    <a href="{% url 'create_questions_flash' 0 %}" class="btn btn-new pull-right">Nouvelle Question flash</a>  
+  
 
 {% endblock %}
 

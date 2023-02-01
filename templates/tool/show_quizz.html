@@ -123,11 +123,9 @@
                                 <div class="col-sm-8 col-md-8" align="center">
                                         {% if question.qtype == 1 %}
                                             <b>Vrai  ou  Faux ?</b>
-                                        {% elif question.qtype == 2 %}
-                                            <b>Ecrire la bonne réponse</b>.
                                         {% elif question.qtype == 3 %}
                                             <b> Choisir  la ou les bonnes réponses</b>. 
-                                        {% else %}
+                                        {% elif question.qtype == 4 %}
                                             <b> Choisir la seule bonne réponse</b>. 
                                         {% endif %}
                                 </div>
