@@ -81,7 +81,7 @@ ul#id_skills li{
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             {{ form.title.label_tag }} <small>Optionnel</small> 
-                            {{ form.title |add_class:"form-control"  }}
+                            {{ form.title |add_class:"form-control textarea_more_shown"  }}
                             {{ form.title.errors }}
                         </div>
                     </div>
@@ -106,7 +106,7 @@ ul#id_skills li{
                         </div>
                         <div class="form-group">
                             {{ form.title.label_tag }} <small>Optionnel</small> 
-                            {{ form.title |add_class:"form-control"  }}
+                            {{ form.title |add_class:"form-control textarea_more_shown"  }}
                             {{ form.title.errors }}
                         </div>
                     </div>
@@ -139,7 +139,7 @@ ul#id_skills li{
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     {{ form.content.label_tag }} <label>Compilé en html ? <input type="checkbox" name="compile_content_html" value="1" /></label><br/>
-                                    {{ form.content|add_class:"form-control"|attr:"rows:15"   }}
+                                    {{ form.content|add_class:"form-control textarea_more_shown"|attr:"rows:15"   }}
                                     {{ form.content.errors }}
                                 </div>
                             </div>
@@ -150,7 +150,7 @@ ul#id_skills li{
                             <div id="enable_correction_div">
                                 <div class="col-sm-12 col-md-12">                        
                                     <div class="form-group">                      
-                                        {{ form.correction|add_class:"form-control"|attr:"rows:15" }}
+                                        {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
                                         {{ form.correction.errors }}
                                     </div>
                                 </div> 

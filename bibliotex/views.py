@@ -370,11 +370,12 @@ def compile_html(request,nf):
     if r'\ps' in nf.content or r'\ps' in nf.correction :
         messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
     else :
-        save_html = True
+        
         try :
             if compile_content_html : Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
             if nf.correction and compile_correction_html :
                 Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+            save_html = True    
         except :
             save_html = False
 

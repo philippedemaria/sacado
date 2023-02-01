@@ -39,8 +39,9 @@
 
 
 {% block body %}
-<section class="content_container"  id="bibliotex_sortable">
+
 <form action="" method="POST" enctype='multipart/form-data'> 
+<section class="content_container"  id="bibliotex_sortable">
 <input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
 {% csrf_token %}
 {% for r in relationtexs %} 
@@ -80,45 +81,43 @@
         {% else %}
         <div class="col-sm-12 col-md-12 col-lg-12" > 
         {% endif %}
-            <div> 
-                <span class="exotex_show_exercice"><i class="fa fa-sort"></i> Exercice {{ forloop.counter}}.</span> <label> {{ r.exotex.title }} 
+        <div class="titles_details">
+                <span class="exotex_show_exercice">Exercice {{ forloop.counter}}.</span> 
+
+                <label style="margin-bottom:0px"> {{ r.exotex.title }} 
 
                     {% if r.calculator  %}
-                         <img src="{% static 'img/calculator.png' %}" width="25px" />
+                         <img src="{% static 'img/calculator.png' %}" width="20px" style="vertical-align: bottom;" />
                     {% else %}
-                         <img src="{% static 'img/no_calculator.png' %}" width="25px" />
+                         <img src="{% static 'img/no_calculator.png' %}" width="20px" style="vertical-align:bottom;" />
                     {% endif %}
                     {% if r.is_python  %}
-                          <img src="{% static 'img/is_python.png' %}" width="25px" />
+                          <img src="{% static 'img/is_python.png' %}" width="20px" style="vertical-align:bottom;" />
                     {% endif %}
                     {% if r.is_scratch  %}
-                          <img src="{% static 'img/is_scratch.png' %}" width="25px" />
+                          <img src="{% static 'img/is_scratch.png' %}" width="20px" style="vertical-align:bottom;" />
                     {% endif %}
                     {% if r.is_tableur  %}
-                          <img src="{% static 'img/is_tableur.png' %}" width="25px" />
+                          <img src="{% static 'img/is_tableur.png' %}" width="20px" style="vertical-align:bottom;" />
                     {% endif %}
 
-                    <i class="bi bi-clock-history"></i> {{ r.duration }} min.</label>
-
-
-                    {% if r.correction  or r.exotex.correction  %}
-                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
-                    {% endif %}
-
- 
-
-
-                    <small class="pull-right">
+                    <i class="bi bi-clock-history"></i> {{ r.duration }} min.
+                </label>
+                {% if r.correction  or r.exotex.correction  %}
+                    <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                {% endif %}
+                <div class="show_exotex_knowledges"><i class="bi bi-c-square" title="Compétences et savoirs faire ciblés"></i>
+                    <div class="exotex_knowledges">
                         {% for s in r.exotex.skills.all %}
                             {{ s.name }}.
+                        {% endfor %}                            
+                        <hr/>
+                        {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+                        {% for k in r.exotex.knowledges.all %}
+                            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
                         {% endfor %}
-                    </small>
-            </div> 
-            <div class="exotex_knowledges">
-                {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-                {% for k in r.exotex.knowledges.all %}
-                    {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
-                {% endfor %}
+                    </div>
+                </div>
             </div>
             <div id="content{{ r.exotex.id }}" class="exotex_shower_content">
                 {% if r.content_html %}
@@ -129,7 +128,6 @@
             </div>
             <div class="no_visu_on_load" id="correction{{ r.id }}"> 
                 <div class="exotex_correction"> 
-                    <label>Corrigé.</label><br/>
                     {% if r.correction_html %}
                         {{ r.correction_html|safe }} 
                     {% else %}
@@ -140,15 +138,14 @@
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
         </div>  
     </div>
-{% endfor %} 
+{% endfor %}
+<input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
+
+</section> 
 </form>
 
 
-<input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()" />
 
-
-
-</section>
 
 
 

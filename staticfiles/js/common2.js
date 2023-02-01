@@ -87,7 +87,14 @@ requirejs.config({
                         displayMath: [['$$', '$$'], ["\\[", "\\]"]],
                         processEscapes: true
                     },
-                    "HTML-CSS": {availableFonts: ["TeX"], scale: 90}
+ 
+                    'CommonHTML': {availableFonts: ["TeX"],scale: 90},
+                    "HTML-CSS": {availableFonts: ["TeX"],scale: 90},
+                    'NativeMML': {availableFonts: ["TeX"],scale: 90},
+                    'SVG': {availableFonts: ["TeX"],scale: 90},
+                    'PreviewHTML': {availableFonts: ["TeX"],scale: 90}
+
+
                 });
                 MathJax.Hub.Startup.onload();
                 return MathJax;
