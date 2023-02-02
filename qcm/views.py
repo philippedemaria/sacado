@@ -3723,7 +3723,7 @@ def delete_parcours(request, id, idg=0):
     parcours = Parcours.objects.get(id=id)
     parcours_is_evaluation = parcours.is_evaluation
 
-    if parcours.teacher.id == 2480 :
+    if parcours.teacher.user.id == 2480 :
         messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
         return redirect('index')
 
