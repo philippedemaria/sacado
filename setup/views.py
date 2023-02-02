@@ -2321,3 +2321,8 @@ def tweeter_delete(request, id):
         return redirect('tweeters')
     else :
         return redirect('index') 
+
+
+def ggbfiles(request):
+    logout(request)
+    return redirect('index') 
