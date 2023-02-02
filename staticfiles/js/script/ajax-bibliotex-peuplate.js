@@ -8,6 +8,7 @@ define(['jquery', 'bootstrap'], function ($) {
     
             if ((id_level == "")||(id_level == " ")) { alert("Sélectionner un niveau") ; return false ;}
             let id_subject = $("#id_subject").val();
+            let bibliotex_id = $("#bibliotex_id").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             url_ = "../ajax_level_exotex" ;
@@ -19,15 +20,27 @@ define(['jquery', 'bootstrap'], function ($) {
                     traditional: true,
                     data: {
                         'level_id': id_level,
-                        'subject_id': id_subject,                        
+                        'subject_id': id_subject,
+                        'bibliotex_id' : bibliotex_id,                        
                         csrfmiddlewaretoken: csrf_token
                     },
                     url : url_,
                     success: function (data) {
 
 
-                        $('#content_exercises').html(data.html);
+                        if ((id_level==9)||(id_level==11)||(id_level==12))  { 
+                            $("#is_annale").show(500);
+                            $("#keyword_div").addClass("col-lg-2");
+                            $("#keyword_div").removeClass("col-lg-3" );
+                        }
+                        else  { 
+                            $("#is_annale").hide(500);
+                            $("#keyword_div").addClass( "col-lg-3");
+                            $("#keyword_div").removeClass("col-lg-2" );
+                        }
 
+
+                        $('#content_exercises').html(data.html);
 
                         themes = data["themes"] ; 
                         $('select[name=theme]').empty("");
@@ -54,11 +67,14 @@ define(['jquery', 'bootstrap'], function ($) {
                         }
 
 
+
+
                     }
                 }
             )
         });
  
+
 
 
         $('#id_theme').on('change', function (event) {
@@ -72,6 +88,58 @@ define(['jquery', 'bootstrap'], function ($) {
                 alert("Vous devez choisir un niveau."); return false;             
             }
         }); 
+
+
+
+        $('#id_annale').on('change', function (event) {
+
+             if ($(this).is(":checked"))
+
+                {   
+                    var is_annale =  'yes' ;
+                }
+                else
+                {   
+                    var is_annale =  'no' ;
+                }
+
+                let id_level = $("#id_level").val();
+                if ((id_level == "")||(id_level == " ")) { alert("Sélectionner un niveau") ; return false ;}
+                let id_subject = $("#id_subject").val();
+                let bibliotex_id = $("#bibliotex_id").val();
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+                url_ = "../ajax_level_exotex" ;
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        traditional: true,
+                        data: {
+                            'level_id'     : id_level,
+                            'subject_id'   : id_subject,
+                            'bibliotex_id' : bibliotex_id, 
+                            'is_annale'    : is_annale ,                    
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url : url_,
+                        success: function (data) {
+
+                            $('#content_exercises').html(data.html);
+                
+                        }
+                    })
+
+
+        }); 
+
+
+
+
+
+
+
 
  
         function ajax_choice(param0, param1){
@@ -105,37 +173,65 @@ define(['jquery', 'bootstrap'], function ($) {
  
                         $('#content_exercises').html("").html(data.html);
                         $("#loader").html(""); 
-                        
-                        }
+
+
+                        knowledges = data["knowledges"] ; 
+
+                        if (knowledges.length >0)
+                            {
+                            $("#knowledges_div").show(500); 
+                            $('select[name=knowledges]').empty("");
+
+                            for (let i = 0; i < knowledges.length; i++) { 
+                                        
+                                        let knowledges_id = knowledges[i][0];
+                                        let knowledges_name =  knowledges[i][1]  ;
+                                        let option = $("<option>", {
+                                            'value': Number(knowledges_id),
+                                            'html': knowledges_name
+                                        });
+                                        $('select[name=knowledges]').append(option);
+                                    }
+                            }
+                            else
+                            {
+                                        let option = $("<option>", {
+                                            'value': 0,
+                                            'html': "Aucun contenu disponible"
+                                        });
+                                $('select[name=knowledges]').append(option);
+                                $("#knowledges_div").hide(500); 
+                            }
+                    }
                 }
             )
         }
 
-        $('.click_this_level').on('click', function (event) {
+    $('.click_this_level').on('click', function (event) {
 
-            let level_id = $(this).data("level_id");
-            let subject_id = $(this).data("subject_id");
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+        let level_id = $(this).data("level_id");
+        let subject_id = $(this).data("subject_id");
+        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            $.ajax(
-                {
-                    type: "POST",
-                    dataType: "json",
-                    traditional: true,
-                    data: {
-                        'level_id'  : level_id,
-                        'subject_id': subject_id,                    
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    url : "../ajax_my_bibliotexs" ,
-                    success: function (data) {
+        $.ajax(
+            {
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'level_id'  : level_id,
+                    'subject_id': subject_id,                    
+                    csrfmiddlewaretoken: csrf_token
+                },
+                url : "../ajax_my_bibliotexs" ,
+                success: function (data) {
 
-                        $("#my_biblio").html(data.html) ;
+                    $("#my_biblio").html(data.html) ;
 
-                    }
                 }
-            )
-        });
+            }
+        )
+    });
 
 
     $('#id_skill').on('change', function (event) {
@@ -301,7 +397,51 @@ define(['jquery', 'bootstrap'], function ($) {
     });
 
  
- 
+    $('#id_knowledges').on('change', function (event) {
+            let id_level = $("#id_level").val();
+    
+            let skill_id =  $("#id_skill").val();
+            let bibliotex_id = $("#bibliotex_id").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let keyword = $("#keyword").val();
+            let knowledge_ids = $(this).val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'skill_id'     : skill_id,
+                        'bibliotex_id' : bibliotex_id,  
+                        'keyword'      : keyword,     
+                        'knowledge_ids': knowledge_ids,    
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../ajax_knowledges_exotex" ,
+                    success: function (data) {
+
+
+                        if ((id_level==9)||(id_level==11)||(id_level==12))  { 
+                            $("#is_annale").show(500);
+                            $("#keyword_div").addClass("col-lg-2");
+                            $("#keyword_div").removeClass("col-lg-3" );
+                        }
+                        else  { 
+                            $("#is_annale").hide(500);
+                            $("#keyword_div").addClass( "col-lg-3");
+                            $("#keyword_div").removeClass("col-lg-2" );
+                        }
+
+
+                        $('#content_exercises').html(data.html);
+
+
+
+                    }
+                }
+            )
+        });
 
 });
 

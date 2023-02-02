@@ -41,9 +41,8 @@ p{
 .search_bar{
   margin-left:0px; 
   margin-right:0px; 
-  border:1px solid #CCC; 
-  background: #c8efa9;
-  padding-top: 15px; 
+  border:1px solid #c8efa9; 
+  padding: 15px; 
   background-image: url('/static/img/fond_search.png')
 }
 

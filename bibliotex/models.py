@@ -52,11 +52,12 @@ class Exotex(models.Model):
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_exotexs', verbose_name="Compétences ciblées")
     knowledges = models.ManyToManyField(Knowledge, blank=True,  default="",  related_name='other_knowledge_exotexs', verbose_name="Savoir faire associés complémentaires")
 
-    is_share = models.BooleanField(default=1, verbose_name="Mutualisé ?")
-    is_python = models.BooleanField(default=0, verbose_name="Python ?")
-    is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
-    is_tableur = models.BooleanField(default=0, verbose_name="Tableur ?")
+    is_share     = models.BooleanField(default=1, verbose_name="Mutualisé ?")
+    is_python    = models.BooleanField(default=0, verbose_name="Python ?")
+    is_scratch   = models.BooleanField(default=0, verbose_name="Scratch ?")
+    is_tableur   = models.BooleanField(default=0, verbose_name="Tableur ?")
     is_corrected = models.BooleanField(default=0, verbose_name="Correction ?")
+    is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
 
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
     correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html") 

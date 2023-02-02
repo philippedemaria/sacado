@@ -149,9 +149,6 @@ a.set_up_round:hover{
 /********************************************************************/
 /********************************************************************/
 /********************************************************************/
-.search_bar{
-  height:70px;
-}
 
 #all_proposed_exercises{
     padding:15px;
@@ -1913,7 +1910,10 @@ input[type=range].form-range {
   margin:0px;
 }
 
-
+.exotex{
+  font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
+  line-height: :22px;
+}
 
 .exotex_show_exercice{
   border-radius: 5px 5px 0px 0px;

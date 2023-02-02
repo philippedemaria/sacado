@@ -3716,6 +3716,7 @@ def unarchive_parcours(request, id, idg=0):
     else :
         return redirect('list_parcours_group', idg)
 
+
 @login_required(login_url= 'index')
 @parcours_exists
 def delete_parcours(request, id, idg=0):
@@ -7300,7 +7301,6 @@ def execute_exercise(request, idp,ide):
     else :
         context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
         return render(request, 'qcm/show_relation.html', context)
-
 
 
 
