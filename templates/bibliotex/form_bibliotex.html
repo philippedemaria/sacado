@@ -134,6 +134,52 @@
                                     {{ form.vignette|add_class:"btn btn-default form-control"   }}
                                     {{ form.vignette.errors }}
                         </div>
+
+                        <div class="row ">
+                            <div class="col-sm-12 col-md-12" >
+                                <div class="form-group"> 
+                                {% if bibliotex or folder or group  %}                                
+                                
+                                    <label>Inclure dans les dossiers</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                    </span>
+                                    <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;" id="cblist">   
+                                        {{ form.folders|add_class:"select_all" }}
+                                        {{ form.folders.errors }}
+                                    </div>
+                                {% else %}
+
+                                    <label>Inclure dans les dossiers</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                    </span> 
+                                    <div class="alert alert-sacado form-group" id="cblist" style="overflow-y: auto;height: 200px;">
+                                        <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
+                                    </div>
+
+                                {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">  
+                                    <label>Associer aux parcours  </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                    </span>                                          
+                                    {% if bibliotex  or folder  %}
+                                        <div class="alert alert-sacado form-group"  style="overflow-y: auto;height: 200px;" id="pclist">
+                                                {{ form.parcours|add_class:"select_all_parcours" }}
+                                                {{ form.parcours.errors }} 
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-sacado form-group" id="pclist" style="overflow-y: auto;height: 200px;">
+                                            <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un dossier.</label>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
                     <div class="col-sm-12 col-md-4 setup_ggb no_visu">
                         <div class="form_card">
