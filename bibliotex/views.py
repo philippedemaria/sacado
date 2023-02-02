@@ -192,7 +192,7 @@ def printer(request, relationtex_id, collection,output):
             else : 
                 ctnt =  exotex.content
 
-        ctnt = ctnt.replace("mathcal","")
+        ctnt = ctnt.replace(r"\mathcal","")
 
 
 
