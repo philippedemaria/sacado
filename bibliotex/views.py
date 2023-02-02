@@ -192,6 +192,8 @@ def printer(request, relationtex_id, collection,output):
             else : 
                 ctnt =  exotex.content
 
+        ctnt = ctnt.replace("mathcal","mathscr")
+
 
 
         document       = "relationtex" + str(relationtex_id)
