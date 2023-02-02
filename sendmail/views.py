@@ -166,7 +166,7 @@ def pending_notification(request):
 
 
 def list_communications(request):
-	communications = Communication.objects.all()
+	communications = Communication.objects.order_by("-id")
 	form = CommunicationForm(request.POST or  None)
 	context = {'form': form,  'communications': communications,  } 
 	return render(request, 'sendmail/list_communications.html', context)
