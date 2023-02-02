@@ -158,7 +158,7 @@ def index(request):
             try :
                 ip_teacher = visitor_ip_address(request)
                 f = open('/var/www/sacado/logs/connexions.log','a')
-                writer_text = "{} , {} , {} , {} ,  {}".format(today , ip, request.user.last_name, request.user.first_name, request.user.id)
+                writer_text = "{} , {} , {} , {} ,  {}".format(today , ip_teacher , request.user.last_name, request.user.first_name, request.user.id)
                 print(writer_text, file=f)
                 f.close()
             except :
@@ -325,6 +325,19 @@ def ressource_sacado(request): #Protection saml pour le GAR
     dico_received = dict()
     for gar in gars :
         dico_received[gar['key']] = gar['values']
+
+
+
+    # dico_received =  {'P_MAT': ['2270EFF884BA43988AAA4205AA91B7FE##MATHEMATIQUES', '55CF4973C9DE4270A93D5FA1086701F8##EPA'], 
+    # 'PRE': ['EVE'], 
+    # 'GRO': ['199001~GOA22_3E3G1##3E3G1', '199001~GOA22_3E3G2##3E3G2', '199001~GOA22_3E4G1##3E4G1', '199001~GOA22_3E4G2##3E4G2', '199001~GOA22_6E4G1##6E4G1', '199001~GOA22_6E4G2##6E4G2', '199001~GOA22_EPA##EPA'], 
+    # 'P_MS4': ['2111', '2112', '2116'], 'PRO': ['National_ens'], 'NOM': ['CHAMBON'], 
+    # 'DIV': ['199001~3EME3##3EME3', '199001~3EME4##3EME4', '199001~5EME5##5EME5', '199001~5EME6##5EME6', '199001~6EME4##6EME4'], 'CIV': ['Mme'], 
+    # 'DIV_APP': ['199001~GOA22_3E3G1||199001~3EME3##3EME3', '199001~GOA22_3E3G2||199001~3EME3##3EME3', '199001~GOA22_3E4G1||199001~3EME4##3EME4', '199001~GOA22_3E4G2||199001~3EME4##3EME4', '199001~GOA22_6E4G1||199001~6EME4##6EME4', '199001~GOA22_6E4G2||199001~6EME4##6EME4', '199001~GOA22_EPA||199001~3EME2##3EME2', '199001~GOA22_EPA||199001~3EME3##3EME3'], 
+    # 'IDO': ['2bec13600ce5c8c0f887ebb3430b4c4e3509260b6287208415eb9768ecec146f49a4873bb6839de4cfad019f1826357c1009dc162889c66301b81b25aee8ee68'], 
+    # 'P_MEL': [None], 'UAI': ['0320740F']} 
+
+
     ##########################################################
     today = datetime.now()
 
@@ -362,7 +375,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         f.close()
     except :
         pass
-
 
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
@@ -490,10 +502,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
                 if not dico_received["DIV"][0] :
-                    messages.error(request,"Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
+                    messages.error(request,"Vous êtes référencé.e en tant que DOCUMENTALISTE ou AUTRE PERSONNEL. Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
                     return redirect('index')
             except :
-                messages.error(request,"Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
+                messages.error(request,"Vous n'êtes pas référencé.e et n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
                 return redirect('index')
 
         else :
