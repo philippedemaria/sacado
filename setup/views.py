@@ -153,16 +153,19 @@ def index(request):
             request.user.save()
 
         is_not_set_up = False
-        
+
+        try :
+            ip = visitor_ip_address(request)
+            f = open('/var/www/sacado/logs/connexions.log','a')
+            writer_text = "{} , {} , {} , {} ,  {}".format(today , ip , request.user.last_name, request.user.first_name, request.user.id, request.user.user_type)
+            print(writer_text, file=f)
+            f.close()
+        except :
+            pass 
+
+
         if request.user.is_teacher :
-            try :
-                ip_teacher = visitor_ip_address(request)
-                f = open('/var/www/sacado/logs/connexions.log','a')
-                writer_text = "{} , {} , {} , {} ,  {}".format(today , ip_teacher , request.user.last_name, request.user.first_name, request.user.id)
-                print(writer_text, file=f)
-                f.close()
-            except :
-                pass
+
 
             over_students, nbss , nbsa = False , 0 , 0
             if request.user.school :
