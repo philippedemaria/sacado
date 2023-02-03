@@ -2002,7 +2002,6 @@ def print_qf_to_pdf(request):
     idq           = request.POST.get("idq",None)
     is_order      = request.POST.get("is_order",None)
     is_marker     = request.POST.get("is_mark",None) 
-    is_sf         = request.POST.get("is_sf",None)
     is_correction = request.POST.get("is_correction",None) 
     point         = request.POST.get("point",None)
 
@@ -2011,7 +2010,7 @@ def print_qf_to_pdf(request):
 
     quizz = Quizz.objects.get(pk = idq) 
  
-    preamb = settings.TEX_PREAMBULE_PDF_QCM
+    preamb = settings.TEX_PREAMBULE_FILE
     entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
@@ -2045,13 +2044,7 @@ def print_qf_to_pdf(request):
             else : 
                 elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
 
-            if is_sf :
-                elements += r"\begin{tabular}{|p{6.3cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|}\hline"
-                for sf in quizz.mental_activities():
-                    elements += r"  {\scriptsize" +  sf.content + r"}  & &  & &       \\ \hline"
-                elements += r"\end{tabular}" 
-   
-
+            elements += r"\vspace{0,2cm} "
             elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
 
             for i in range(start ,stop) :
@@ -2061,7 +2054,7 @@ def print_qf_to_pdf(request):
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                if 'complète' in question.title or 'compléte' in question.title : elements += r" \hline"
+                if 'Complète' in question.title or 'complète' in question.title : elements += r" \hline"
                 else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
@@ -2072,11 +2065,13 @@ def print_qf_to_pdf(request):
 
     if is_correction :
         elements += r"\newpage "
-        elements +=r"\titreFiche{Correction}"
+        elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
+        elements += r"\titreFiche{Correction}"
         j = 1   
         for question_id in question_ids :
             question = Question.objects.get(pk=question_id)
-            elements += r"\textbf{Exercice "+str(j)+r".} \\" + question.writinganswer
+            elements += r"\textbf{Exercice "+str(j)+r".} \\ {\small" + question.title + +r"}"
+            elements += r"\\" + question.writinganswer
             elements += r"\vspace{0,2cm}\\"
             j+=1
 

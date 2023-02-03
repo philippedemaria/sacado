@@ -794,7 +794,6 @@
             {% if sacado_asso %}
             <a href="{%  url 'list_questions_flash' %}"  >Questions flash/Rituels<sup class="text-danger">Nouv</sup> </a>
                 <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
-                <a href="{% url 'create_quizz'%}" class="inside_volet pull-right" title="Créer un nouveau quizz"><i class="bi bi-plus-circle"></i></a>
             {% else %}
                 <a href="#" style="cursor:not-allowed" title="Version établissement requise."><i class="bi bi-lightning" ></i>Questions flash</a>
             {% endif %}
