@@ -14,7 +14,14 @@ define(['jquery', 'bootstrap'], function ($) {
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             url_ = "ajax_search_bibliotex_by_level" ;
-
+            if ($('#id_annale').is(":checked"))
+                {   
+                    var is_annale =  'yes' ;
+                }
+                else
+                {   
+                    var is_annale =  'no' ;
+                }
             $.ajax(
                 {
                     type: "POST",
@@ -113,7 +120,14 @@ define(['jquery', 'bootstrap'], function ($) {
             let subject_id = $("#id_subject").val();
             let keyword    = $("#keyword").val();
             url= "ajax_search_bibliotex" ; 
-
+            if ($('#id_annale').is(":checked"))
+                {   
+                    var is_annale =  'yes' ;
+                }
+                else
+                {   
+                    var is_annale =  'no' ;
+                }
 
             if($("#loading")) {$("#loading").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
 
@@ -151,6 +165,18 @@ define(['jquery', 'bootstrap'], function ($) {
  
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
         if($("#loading")) {$("#loading").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
+
+
+        if ($('#id_annale').is(":checked"))
+            {   
+                var is_annale =  'yes' ;
+            }
+            else
+            {   
+                var is_annale =  'no' ;
+            }
+
+
 
         if ( keyword.length > 3 ) {
 

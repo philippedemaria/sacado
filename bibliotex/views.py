@@ -791,7 +791,8 @@ def ajax_search_bibliotex_by_level(request):
     teacher = request.user.teacher
     data = {}
     level_id =  request.POST.get("id_level")
-    subject_id =  request.POST.get("id_subject")
+    subject_id =  request.POST.get("id_subject")    
+    id_annale  = request.POST.get('is_annale',None)
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if int(level_id) > 0 :
@@ -805,7 +806,17 @@ def ajax_search_bibliotex_by_level(request):
     else :
         bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),subjects = subject ,  is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
 
-    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
+    annales = set()        
+    if id_annale == "yes" :
+        for bibliotex in bibliotexs :
+            if bibliotex.is_annale() :
+                annales.add(bibliotex)
+    else :
+        for bibliotex in bibliotexs :
+            if not bibliotex.is_annale() :
+                annales.add(bibliotex)
+
+    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : annales, 'teacher' : teacher ,  })
 
     return JsonResponse(data)
 
