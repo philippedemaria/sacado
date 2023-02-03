@@ -865,16 +865,18 @@ def ajax_search_bibliotex(request):
         else :
             bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id) ).order_by('teacher').distinct()
 
-
+    annales = set()        
     if id_annale == "yes" :
-        annales = set()
         for bibliotex in bibliotexs :
             if bibliotex.is_annale() :
                 annales.add(bibliotex)
-        bibliotexs = annales
+    else :
+        for bibliotex in bibliotexs :
+            if not bibliotex.is_annale() :
+                annales.add(bibliotex)
 
 
-    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
+    data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : annales, 'teacher' : teacher ,  })
  
     return JsonResponse(data)
 
