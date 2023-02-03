@@ -124,7 +124,7 @@
     {% if quizzes %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" id="evaluation" >Mes quizz </h1>
+            <h1 class="thin">Mes quizz </h1>
             <div class="row"> 
                 <div class="col-sm-12 col-md-12">
                     {% for quizz in quizzes %}   
@@ -132,12 +132,13 @@
                     {% endfor %}
                 </div>
             </div>
+        </div>
     </div>    
     {% endif %}
     {% if bibliotexs %}
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <h1 class="thin" id="evaluation" >Mes bilioTex </h1>
+            <h1 class="thin">Mes BiblioTex </h1>
             <div class="row"> 
                 <div class="col-sm-12 col-md-12">
                     {% for bibliotex in bibliotexs %}   
@@ -148,6 +149,22 @@
         </div>
     </div>
     {% endif %}
+
+    {% if flashpacks %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1 class="thin">Mes Flashpacks </h1>
+            <div class="row"> 
+                <div class="col-sm-12 col-md-12">
+                    {% for flashpack in flashpacks %}   
+                          {% include 'bibliotex/flashpack_tag.html' %} 
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
 
 
     {% if nb_bases == 0 %} 

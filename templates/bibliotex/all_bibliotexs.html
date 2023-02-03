@@ -31,14 +31,14 @@
     <form action="" method="POST" enctype='multipart/form-data'> 
         {% csrf_token %}
         <div class="row search_bar">
-            <div class="col-sm-12 col-md-3 col-lg-3">
+            <div class="col-sm-12 col-md-3 col-lg-3"  id="subject_div">
                 <select id="id_subject" name="subject" class="form-control select2">
                     {% for s in teacher.subjects.all %}
                         <option value="{{s.id}}">{{ s.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-sm-10 col-md-3 col-lg-2">
+            <div class="col-sm-9 col-md-3 col-lg-2"  id="level_div">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
                     {% if group %}
@@ -50,34 +50,42 @@
                     {% endif %}
                 </select>
             </div>
-            <div class="col-sm-2 col-md-1 col-lg-1">
-                <div id="loading">
-                </div>
+
+            <div class="col-sm-3 col-md-2 col-lg-1 no_visu_on_load" id="is_annale">
+                <input type="checkbox"  id="is_annale" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Annale" data-off="Exercice" data-width="100%" />
             </div>
 
-            <div class="col-sm-10 col-md-3 col-lg-4">
+            <div class="col-sm-12 col-md-3 col-lg-4"  id="theme_div">
                     <select id="id_theme" name="theme" class="form-control select2" multiple>
                         <option value=" ">Choisir un niveau puis un thème</option>
                     </select>
             </div>
 
-            <div class="col-sm-12 col-md-2 col-lg-2">
+            <div class="col-sm-12 col-md-3 col-lg-3" id="keyword_div">
                     <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
             </div>
 
         </div>
 
         <div class="row" id="bibliotex_details">
- 
+
+            <div id="loading">
+            </div>
 
             <div class="col-sm-12 col-md-12">
  
-                <div style="height:50px"></div> 
-                Pour trouver des biblioTex mutualisées, vous devez :                <div style="height:20px"></div>
-                <ol>Sélectionner une matière</ol>
-                <ol>Sélectionner un niveau</ol>
-                <ol>Sélectionner un thème</ol> 
-                <ol>ou choisir un mot clé</ol>
+                <div style="margin-top:50px">
+                        <div class="col-sm-12 col-md-12  form_card">
+                            Pour trouver des biblioTex mutualisées, vous devez :                
+                            <div style="height:20px"></div>
+                            <ol>Sélectionner une matière</ol>
+                            <ol>Sélectionner un niveau</ol>
+                            <ol>Sélectionner un thème</ol> 
+                            <ol>ou choisir un mot clé</ol>
+                        </div>
+
+                </div> 
+
             </div>
 
         </div>
@@ -85,4 +93,48 @@
   
     </form>  
 </section>
+
+
+
+    <div class="modal fade" id="duplication_modal" tabindex="-1" role="dialog" aria-labelledby="duplication_modal">
+        <div class="modal-dialog modal-lg" role="document"  style="width:95%">
+            <div class="modal-content" >
+                <div class="modal-header">     
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
+                    <h2>Duplication de la BibiloTex : <span id="this_document_title"></span></h2>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" enctype='multipart/form-data' id="duplicate_form"> 
+                        {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
+                        <div class="row">
+                        {% for group in teacher.groups.all %}
+                        <div class="col-sm-6 card_modal_search exercise_body_shared">
+                            <div class="quizz_item" style="background-color:{{ group.color }}">
+                                <label  class="btn btn-sacado"> {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                            
+                            {% for folder in  group.group_folders.all  %}
+                                <div class="quizz_item"> <label class="btn btn-warning">{{ folder.title }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <hr/>
+                                    {% for parcours in folder.parcours.all %}
+                                        <label class="btn btn-default full_width" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">{{ parcours.title }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %} 
+                            </div>
+                        </div>
+                        {% endfor %} 
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer la BiblioTex <span id="this_document_label"></span></a>
+                            </div>
+                        </div>
+                    </form> 
+                    <small class="text-green_index"><em>Pour modifier mes niveaux, aller dans Mon compte ou sur votre avatar puis dans Mon profil ou <a href="{% url 'profile' %}">cliquer ici</a></em></small>          
+                </div>
+            </div>
+        </div> 
+    </div>
+
 {% endblock  %}   

@@ -1,0 +1,88 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+           
+ 
+<div  class="box box-widget widget-user-2"  
+      style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{bibliotex.color }};height:300px">
+    <div class="handler widget-user-header" style="height:150px">
+        <!-- Add signet to folder -->
+ 
+
+        <div class="annale_box">
+            <div class="rounda">
+                Annale
+            </div>
+        </div>
+
+
+
+
+
+        <div class="box_title_vignette"  style="padding:4px; opacity:0.95;background-color:{{bibliotex.color }};color:{{color|contrast_color }};font-weight: 100;top:120px">
+
+                   
+                {% if bibliotex.title|length > 26 %}
+                <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
+                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                </span>
+                {% elif bibliotex.title|length > 22 %}
+                    {{ bibliotex.title|truncatechars:"22"}}
+                {% else %}
+                    {{ bibliotex.title}}
+                {% endif %}
+   
+        </div>
+    </div>
+
+    <!-- box-footer DES FONCTIONNALITES  -->
+
+
+
+    <div class="box-footer" style="position: relative; padding-top: 0px;height:150px">
+ 
+        <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px; padding-left :-10px;font-size:20px"> 
+            <div class="col-xs-6 col-md-6 col-lg-6"> 
+                {{  bibliotex.relationtex.nb_exotexs }} exercice{{  bibliotex.relationtex.nb_exotexs|pluralize }} 
+            </div>
+            <div class="col-xs-3 col-md-3 col-lg-3" align="center"> 
+                <a href="{% url 'show_bibliotex' bibliotex.id  %}" style="font-size:20px" target="_blank"><i class="bi bi-eye"></i></a> 
+            </div>
+            <div class="col-xs-3 col-md-3 col-lg-3" align="center"> 
+                <a  href="#" data-toggle='modal' data-target='#duplication_modal' style="font-size:20px" 
+                    id='duplication_document' 
+                    data-document_id='{{ bibliotex.id }}' data-document_title='{{ bibliotex.title }}'><i class="bi bi-clipboard-plus"></i></a>  
+            </div>
+        </div>
+
+
+ 
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                Savoir faire ciblés
+            </div> 
+        </div>
+
+ 
+        {% for k in bibliotex.knowledges %}
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                {{ k.name }}
+            </div> 
+        </div>
+        {% endfor %}
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                Compétences ciblées
+            </div> 
+        </div>
+        
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                {% for s in bibliotex.skills %}
+                    {{ s }}. 
+                {% endfor %}
+            </div> 
+        </div>
+    </div>
+</div>    

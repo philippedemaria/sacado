@@ -1892,7 +1892,14 @@ def list_parcours_group(request,id):
     clear_realtime(parcours_tab , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
 
-    context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today ,
+    bibliotexs = group.bibliotexs.filter(folders=None)
+    quizzes    = group.quizz.filter(folders=None)
+    flashpacks = group.flashpacks.filter(folders=None)
+
+
+
+
+    context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
                  'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'nb_bases' : nb_bases }
 
     return render(request, 'qcm/list_parcours_group.html', context )

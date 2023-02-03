@@ -211,7 +211,8 @@ class Level(models.Model):
         return data
 
 
-
+    def folders_from_level(self,teacher):
+        return self.level_folders.filter(teacher = teacher)
 
 class Vignette(models.Model):
     subject = models.ForeignKey(Subject,  null=True, blank=True,   related_name='vignettes', on_delete=models.CASCADE, verbose_name="Enseignement")

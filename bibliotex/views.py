@@ -811,28 +811,25 @@ def ajax_search_bibliotex_by_level(request):
 
  
 
-
-
-
-
-
-
 def ajax_search_bibliotex(request):
 
     teacher = request.user.teacher
     data = {}
 
-    level_id = request.POST.get('level_id',0)
+    level_id   = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
-
+    subject_id = request.POST.get('subject_id',None)
+    is_annale  = request.POST.get('is_annale',None)
+    
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
-    # if request.user.is_superuser :
-    #     bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
-    # else :
-    #     bibliotexs_ids = Bibliotex.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(exotexs = None ,teacher=teacher).order_by('level','ranking')
-
     keywords = request.POST.get('keywords',None)
+
+    base = Bibliotex.objects.filter(is_share = 1).exclude(teacher=teacher)
+    if is_annale == "yes" :
+        base = base.filter(exotexs__is_annals=1)
+
+
 
     if int(level_id) > 0 :
         level = Level.objects.get(pk=int(level_id))
@@ -843,33 +840,33 @@ def ajax_search_bibliotex(request):
             if theme_ids[0] != '' :
 
                 if keywords :
-                    bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, 
-                                                        exotexs__knowledge__theme__in = theme_ids,  teacher__user__school = teacher.user.school,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    bibliotexs = base.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , 
+                                                        exotexs__knowledge__theme__in = theme_ids,  teacher__user__school = teacher.user.school,  levels = level ).order_by('teacher').distinct() 
                 else :
-                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                            exotexs__knowledge__theme_id__in = theme_ids, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct()
+                    bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
+                                                            exotexs__knowledge__theme_id__in = theme_ids, levels = level ).order_by('teacher').distinct()
          
             else :
                 if keywords :            
-                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exotexs__content__icontains = keywords),is_share = 1,  
-                                                            teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    bibliotexs = base.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exotexs__content__icontains = keywords),  
+                                                            teacher__user__school = teacher.user.school ,  levels = level  ).order_by('teacher').distinct() 
 
                 else :
-                    bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                            levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id), 
+                                                            levels = level ).order_by('teacher').distinct() 
 
         else :
             if keywords:
-                bibliotexs = Bibliotex.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exotexs__content__icontains = keywords),teacher__user__school = teacher.user.school,is_share = 1,
-                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                bibliotexs = base.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exotexs__content__icontains = keywords),teacher__user__school = teacher.user.school, 
+                                                        levels = level ).order_by('teacher').distinct() 
             else :
-                bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),  
+                                                        levels = level ).order_by('teacher').distinct() 
     else :
         if keywords:
-            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1 ,  exotexs__content__icontains = keywords ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+            bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,    exotexs__content__icontains = keywords ).order_by('author','ranking').distinct()
         else :
-            bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+            bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id) ).order_by('teacher').distinct()
 
     data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
  
@@ -1056,6 +1053,47 @@ def show_bibliotex(request, id):
 
 
 
+def duplicate_bibliotex(request):
+
+    bibliotex_id = request.POST.get("this_document_id",None)
+    folders      = request.POST.getlist("folders",[])
+    parcourses   = request.POST.getlist("parcourses",[])
+    groups       = request.POST.getlist("groups",[])
+
+    data = {}
+    if bibliotex_id :
+        bibliotex = Bibliotex.objects.get(id=bibliotex_id) 
+        bibliotex.folders.set(folders)    
+        bibliotex.parcours.set(parcourses)
+        bibliotex.groups.set(groups)
+
+        students = set()
+        for fldr_id in folders :
+            folder = Folder.objects.get(pk=fldr_id)
+            students.update( folder.students.all() )
+        for prc_id in parcourses :
+            parcours = Parcours.objects.get(pk=prc_id)
+            students.update( parcours.students.all() )
+        for grp_id in groups :
+            group = Group.objects.get(pk=grp_id)
+            students.update( group.students.all() )
+
+        bibliotex.students.set(students)
+        data["validation"] = "Duplication réussie"
+    else :
+        data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 
+
+    return JsonResponse(data)
+
+
+
+
+
+
+
+
+
+
 def bibliotex_actioner(request):
 
     teacher = request.user.teacher 
@@ -1207,9 +1245,7 @@ def ajax_level_exotex(request):
     is_annale    = request.POST.get("is_annale",None)
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
-
-    print(is_annale)
-
+ 
     if int(level_id) > 0 :
         level = Level.objects.get(pk=int(level_id))
         subject = Subject.objects.get(pk=int(subject_id))

@@ -65,10 +65,6 @@ define(['jquery', 'bootstrap'], function ($) {
                                     });
                             $('select[name=theme]').append(option);
                         }
-
-
-
-
                     }
                 }
             )

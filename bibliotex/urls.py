@@ -31,13 +31,15 @@ urlpatterns = [
     path('exercise_bibliotex_delete/<int:id>', delete_bibliotex, name='delete_bibliotex'), 
     path('exercise_bibliotex_peuplate/<int:id>', exercise_bibliotex_peuplate, name='exercise_bibliotex_peuplate'),
     path('exercise_bibliotex_show/<int:id>', show_bibliotex, name='show_bibliotex'),
+    path('exercise_bibliotex_duplicate', duplicate_bibliotex, name='duplicate_bibliotex'),
+
 
     path('update_relationtex/<int:id>', update_relationtex , name='update_relationtex'),
     path('delete_relationtex/<int:id>', delete_relationtex , name='delete_relationtex'),
 
     path('create_bibliotex_from_parcours/<int:idp>', create_bibliotex_from_parcours , name='create_bibliotex_from_parcours'),
     path('peuplate_bibliotex_parcours/<int:idp>', peuplate_bibliotex_parcours , name='peuplate_bibliotex_parcours'), 
-    path('clone_bibliotex_sequence/<int:idb>', clone_bibliotex_sequence, name='clone_bibliotex_sequence'),
+ 
 
 
     path('real_time_bibliotex/<int:id>', real_time_bibliotex, name='real_time_bibliotex'),  
@@ -62,7 +64,7 @@ urlpatterns = [
     path('ajax_chargethemes', ajax_chargethemes, name='ajax_chargethemes'),
     path('ajax_level_exotex', ajax_level_exotex, name='ajax_level_exotex'),
     path('ajax_knowledges_exotex', ajax_knowledges_exotex, name='ajax_knowledges_exotex'),
-    
+
     path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
     path('ajax_charge_parcours', ajax_charge_parcours, name='ajax_charge_parcours'),
 
