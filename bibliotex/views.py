@@ -827,7 +827,7 @@ def ajax_search_bibliotex(request):
 
     base = Bibliotex.objects.filter(is_share = 1).exclude(teacher=teacher)
     if is_annale == "yes" :
-        base = base.filter(exotexs__is_annals=1)
+        base = base.filter(is_annals=1)
 
 
 

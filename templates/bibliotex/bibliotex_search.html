@@ -8,13 +8,13 @@
     <div class="handler widget-user-header" style="height:150px">
         <!-- Add signet to folder -->
  
-
+        {% if bibliotex.is_annale %}
         <div class="annale_box">
             <div class="rounda">
                 Annale
             </div>
         </div>
-
+        {% endif %}
 
 
 
@@ -55,34 +55,50 @@
             </div>
         </div>
 
-
- 
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Savoir faire ciblés
+                Thèmes :                         
+                {% for t in bibliotex.themes %}
+                    {{ t.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div> 
+        </div>
+
+
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                Savoir faire ciblés 
+                <span class="helper_tip"> <i class="bi bi-eye"></i>
+                    <div class="helper_tip_text" >
+                        {% for k in bibliotex.knowledges %}
+                        <div class="row"> 
+                            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                {{ k.name }}
+                            </div> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                </span>
             </div> 
         </div>
 
  
-        {% for k in bibliotex.knowledges %}
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                {{ k.name }}
-            </div> 
-        </div>
-        {% endfor %}
+
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
                 Compétences ciblées
-            </div> 
-        </div>
-        
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                {% for s in bibliotex.skills %}
-                    {{ s }}. 
-                {% endfor %}
-            </div> 
+                <span class="helper_tip"> <i class="bi bi-eye"></i>
+                    <div class="helper_tip_text" >
+                        {% for s in bibliotex.skill %}
+                        <div class="row"> 
+                            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
+                                {{ s.name }}
+                            </div> 
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </span>
         </div>
     </div>
 </div>    

@@ -158,6 +158,19 @@ class Bibliotex(models.Model):
 
     def type_of_document(self):
         return 4
+
+
+    def is_annale(self):
+        test = False
+        for r in self.relationtexs.all():
+            if r.exotex.is_annals :
+                test = True
+                break
+        return test
+
+
+
+
 ########################################################################################################
 ########################################################################################################
 class Relationtex(models.Model):
