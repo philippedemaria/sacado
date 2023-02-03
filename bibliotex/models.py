@@ -127,6 +127,13 @@ class Bibliotex(models.Model):
             knowledges.update(exotex.knowledges.all())
         return knowledges
 
+    def themes(self):    
+        themes = set()
+        for exotex in self.exotexs.all():
+            themes.update(set([exotex.theme]))
+        return themes
+
+
 
     def relationtex(self):    
         data = {}

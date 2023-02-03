@@ -57,49 +57,41 @@
 
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Thèmes :                         
+                Thèmes : <span style="font-variant-caps:normal" >                        
                 {% for t in bibliotex.themes %}
                     {{ t.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
+                {% endfor %}</span>
             </div> 
         </div>
 
 
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Savoir faire ciblés 
+                Savoir faire ciblés <small>{{ bibliotex.knowledges|length }}</small>
                 <span class="helper_tip"> <i class="bi bi-eye"></i>
                     <div class="helper_tip_text" >
                         {% for k in bibliotex.knowledges %}
-                        <div class="row"> 
-                            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                                {{ k.name }}
-                            </div> 
-                        </div>
+                            <li style="list-style: square">{{ k.name }}</li>
                         {% endfor %}
                     </div>
                 </span>
             </div> 
         </div>
 
- 
-
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Compétences ciblées
+                Compétences ciblées <small>{{ bibliotex.skill|length }}</small>
                 <span class="helper_tip"> <i class="bi bi-eye"></i>
                     <div class="helper_tip_text" >
                         {% for s in bibliotex.skill %}
-                        <div class="row"> 
-                            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                                {{ s.name }}
-                            </div> 
-                        </div>
+                            <li style="list-style: square"></li>
                         {% endfor %}
 
                     </div>
                 </span>
             </div>
-        </div>
+        </div> 
+
+
     </div>    
 </div>   
