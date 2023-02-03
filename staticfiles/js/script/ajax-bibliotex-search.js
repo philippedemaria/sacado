@@ -183,10 +183,9 @@ define(['jquery', 'bootstrap'], function ($) {
     });
 
 
-    $('#is_annale').on('change', function (event) {
+    $('#id_annale').on('change', function (event) {  
 
              if ($(this).is(":checked"))
-
                 {   
                     var is_annale =  'yes' ;
                 }
@@ -220,7 +219,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         url : url_,
                         success: function (data) {
 
-                            $('#content_exercises').html(data.html);
+                            $('#bibliotex_details').html("").html(data.html);
                 
                         }
                     })

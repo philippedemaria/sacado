@@ -819,16 +819,13 @@ def ajax_search_bibliotex(request):
     level_id   = request.POST.get('level_id',0)
     subject_id = request.POST.get('subject_id',None)
     subject_id = request.POST.get('subject_id',None)
-    is_annale  = request.POST.get('is_annale',None)
+    id_annale  = request.POST.get('is_annale',None)
     
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     keywords = request.POST.get('keywords',None)
 
     base = Bibliotex.objects.filter(is_share = 1).exclude(teacher=teacher)
-    if is_annale == "yes" :
-        base = base.filter(is_annals=1)
-
 
 
     if int(level_id) > 0 :
@@ -867,6 +864,15 @@ def ajax_search_bibliotex(request):
             bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,    exotexs__content__icontains = keywords ).order_by('author','ranking').distinct()
         else :
             bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id) ).order_by('teacher').distinct()
+
+
+    if id_annale == "yes" :
+        annales = set()
+        for bibliotex in bibliotexs :
+            if bibliotex.is_annale() :
+                annales.add(bibliotex)
+        bibliotexs = annales
+
 
     data['html'] = render_to_string('bibliotex/ajax_list_bibliotexs.html', {'bibliotexs' : bibliotexs, 'teacher' : teacher ,  })
  

@@ -69,7 +69,7 @@
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
                 Savoir faire ciblés <small>{{ bibliotex.knowledges|length }}</small>
                 <span class="helper_tip"> <i class="bi bi-eye"></i>
-                    <div class="helper_tip_text" >
+                    <div class="helper_tip_no_width" >
                         {% for k in bibliotex.knowledges %}
                             <li style="list-style: square">{{ k.name }}</li>
                         {% endfor %}
@@ -82,7 +82,7 @@
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
                 Compétences ciblées <small>{{ bibliotex.skill|length }}</small>
                 <span class="helper_tip"> <i class="bi bi-eye"></i>
-                    <div class="helper_tip_text" >
+                    <div class="helper_tip_no_width" >
                         {% for s in bibliotex.skill %}
                             <li style="list-style: square"></li>
                         {% endfor %}
