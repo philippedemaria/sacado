@@ -100,7 +100,7 @@
          <input type="hidden" name="parcours_id" id="parcours_id" value="{{parcours.id }}"/>
     {% endif %}
 
-                {% comment %}
+               
     <div class="row">
         <div class="col-sm-12 col-md-12">
 
@@ -112,16 +112,16 @@
                 <span id="before_choice"> 
                     Lors de votre recherche, vos parcours ne vous sont pas montrés. Ils sont déjà à vous. Seuls les parcours de votre établissement et de l'équipe SACADO vous sont proposés.
                 </span>
-
+                {% comment %}
                 <span class="no_visu_on_load" id="after_choice"> Adapter l'affichage de votre recherche
                         <input id="listing"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Liste" data-off="Vignettes" data-width="130"/> 
                 </span>
-
+                {% endcomment %}
             </div>
 
         </div>
     </div>
-                {% endcomment %}
+                
 
   
     <div class="row" id="courses_details">
@@ -190,7 +190,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button> 
                 <h2>Duplication du parcours : <span id="this_document_title"></span></h2>
-                <div class="row2">
+                <div class="row">
                     <div class="col-sm-12">
                         <input type="checkbox" name="with_courses" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Je veux aussi récupérer les cours" data-off="Je ne veux pas récupérer les cours" data-width="300px" />
                     </div>

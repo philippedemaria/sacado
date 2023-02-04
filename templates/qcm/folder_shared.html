@@ -37,7 +37,10 @@
             </div> 
  
             <div class="col-lg-6 col-xs-6">      
-                    <a href="{% url 'clone_folder' folder.id  %}" style="font-variant:small-caps; font-size: 12px;margin-left: 5px"  class="btn btn-mastering" title="Dupliquer le dossier"  > Dupliquer</a>  
+                <a  href="#" data-toggle='modal' data-target='#duplication_modal' style="font-size:20px" 
+                    id='duplication_document' 
+                    data-document_id='{{ folder.id }}' data-document_title='{{ folder.title }}'><i class="bi bi-clipboard-plus"></i>
+                </a>  
             </div> 
         </div>
     </div>

@@ -76,14 +76,15 @@
 
                     <img src="{% static 'img/conseil.png' %}" height="40px" />
 
-                <span id="before_choice"> 
+
                     <b>Vous ne pouvez récupérer dans votre groupe que les dossiers liés au niveau du groupe</b>.<br/>
                     <small>Lors de votre recherche, vos dossiers ne vous sont pas montrés. Ils sont déjà à vous. Seuls les dossiers de votre établissement et de l'équipe SACADO vous sont proposés.</small>
-                </span>
+      
+                {% comment %}
                 <span class="no_visu_on_load" id="after_choice"> Adapter l'affichage de votre recherche
                         <input id="listing"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Liste" data-off="Vignettes" data-width="130"/> 
                 </span>
-
+                {% endcomment %}
             </div>
 
         </div>
@@ -178,6 +179,52 @@
         </div>
     </div>
 </div>
+
+
+
+
+<div class="modal fade" id="duplication_modal" tabindex="-1" role="dialog" aria-labelledby="duplication_modal">
+    <div class="modal-dialog modal-lg" role="document">                
+        <form action="" method="POST" enctype='multipart/form-data' id="duplicate_form"> 
+        <div class="modal-content" >
+            <div class="modal-header">     
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Duplication du parcours : <span id="this_document_title"></span></h2>
+            </div>
+            <div class="modal-body">
+                <p>Voici vos groupes avec leurs dossiers éventuels. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
+
+                    {% csrf_token %}<input type="type" name="this_document_id" id="this_document_id" />
+                    <div class="row">
+                    {% for group in teacher.groups.all %}
+                    <div class="col-sm-6 card_modal_search" style="height:80px">
+                        <div class="quizz_item" style="background-color:{{ group.color }}">
+                            <label  class="btn btn-sacado"> {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                        </div>
+                    </div>
+                    {% endfor %} 
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer le parcours <span id="this_document_label"></span></a>
+                        </div>
+                    </div>
+                <small class="text-green_index"><em>Pour modifier mes niveaux, aller dans Mon compte ou sur votre avatar puis dans Mon profil ou <a href="{% url 'profile' %}">cliquer ici</a></em></small>          
+            </div>
+        </div>
+        </form> 
+    </div> 
+</div>
+
+
+
+
+
+
+
+
 
  
 {% endblock %}

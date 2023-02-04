@@ -2364,6 +2364,8 @@ def clone_folder(request, id ):
             course.pk = None
             course.parcours_id = new_folder_id_tab[i]
             course.save()
+            if group_id :
+                course.students.set(students)
             # clone l'exercice rattaché au cours du parcours
             try :
                 for relationship in old_relationships : 
@@ -2396,6 +2398,109 @@ def clone_folder(request, id ):
         return redirect('list_parcours_group',  group_id)
     else :
         return redirect('all_folders')
+
+
+
+@login_required(login_url= 'index')
+def duplicate_folder(request):
+    """ cloner un dossier """
+
+    folder_id  = request.POST.get("this_document_id",None)
+    groups       = request.POST.getlist("groups",[])
+    teacher = request.user.teacher
+    data = {}
+
+    students = set()
+    for grp_id in groups :
+        group = Group.objects.get(pk=grp_id)
+        students.update( group.students.all() )
+
+
+
+    if folder_id :
+        folder = Folder.objects.get(pk = folder_id)
+        prcs   = folder.parcours.all()
+        #################################################
+        # clone le dossier
+        #################################################
+        folder.pk = None
+        folder.teacher = teacher
+        folder.is_publish = 0
+        folder.is_archive = 0
+        folder.is_share = 0
+        folder.is_favorite = 1
+        folder.save()
+        folder.students.set(students)
+        folder.groups.set(groups)
+        folder.parcours.set(prcs)
+        #################################################
+        # clone les exercices attachés à un cours 
+        #################################################
+        former_relationship_ids = []
+        new_folder_id_tab , folder_id_tab = [] , []
+        # ajoute le group au parcours si group    
+        i = 0
+        for p in prcs :
+            courses = p.course.all()
+            p.pk = None
+            p.code = str(uuid.uuid4())[:8] 
+            p.teacher = teacher
+            for g in groups :
+                group = Group.objects.get(pk=g)
+                p.subject = group.subject
+                p.level = group.level
+            p.is_publish = 0
+            p.is_archive = 0
+            p.is_share = 0
+            p.is_favorite = 1
+            p.save()
+            p.students.set(students)
+            new_folder_id_tab.append(p)
+            for course in courses :
+                old_relationships = course.relationships.all()
+                # clone le cours associé au parcours
+                course.pk = None
+                course.parcours = new_folder_id_tab[i]
+                course.save()
+                course.students.set(students)
+                # clone l'exercice rattaché au cours du parcours
+                try :
+                    for relationship in old_relationships : 
+                        if not relationship.id in former_relationship_ids :
+                            relationship.pk = None
+                            relationship.parcours = new_folder_id_tab[i]
+                            relationship.save()
+                        course.relationships.add(relationship)
+                        former_relationship_ids.append(relationship.id)
+                except :
+                    pass
+            #################################################
+            # clone tous les exercices rattachés au parcours 
+            #################################################
+            for relationship in p.parcours_relationship.all()  :
+                skills = relationship.skills.all()
+                try :
+                    relationship.pk = None
+                    relationship.parcours_id = new_folder_id_tab[i]
+                    relationship.save()
+                    relationship.skills.set(skills)    
+                    relationship.students.set(students) 
+                except :
+                    pass
+            i += 1
+
+        data["validation"] = "Duplication réussie"
+    else :
+        data["validation"] = "Duplication abandonnée." 
+
+    return JsonResponse(data)
+
+
+
+
+
+
+
 
 
 @csrf_exempt
