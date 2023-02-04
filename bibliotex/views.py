@@ -836,10 +836,10 @@ def ajax_search_bibliotex(request):
     keywords = request.POST.get('keywords',None)   
     theme_ids = request.POST.getlist('theme_id',[])
 
-    base = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher=teacher),  is_share = 1).exclude(teacher=teacher)
+    teacher_id = get_teacher_id_by_subject_id(subject_id)
+    base = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher=teacher)| Q(teacher_id=teacher_id),  is_share = 1).exclude(teacher=teacher)
 
     if subject_id : 
-        teacher_id = get_teacher_id_by_subject_id(subject_id)
         subject = Subject.objects.get(pk=subject_id)
         base = base.filter(subjects=subject)
 
@@ -1061,6 +1061,9 @@ def duplicate_bibliotex(request):
     data = {}
     if bibliotex_id :
         bibliotex = Bibliotex.objects.get(id=bibliotex_id) 
+        bibliotex.pk=None
+        bibliotex.save()
+        
         bibliotex.folders.set(folders)    
         bibliotex.parcours.set(parcourses)
         bibliotex.groups.set(groups)

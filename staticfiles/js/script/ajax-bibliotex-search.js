@@ -8,6 +8,8 @@ define(['jquery', 'bootstrap'], function ($) {
 
         $('#id_level').on('change', function (event) {
             let id_level = $(this).val();
+            let id_subject = $("#id_subject").val();
+            if ((id_subject == "")||(id_subject == " ")) { alert("Sélectionner un enseignement") ; return false ;}
     
             if ((id_level == "")||(id_level == " ")) { alert("Sélectionner un niveau") ; return false ;}
             let id_subject = $("#id_subject").val();
