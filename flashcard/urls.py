@@ -53,6 +53,10 @@ urlpatterns = [
     path('ajax_charge_groups_level', ajax_charge_groups_level, name='ajax_charge_groups_level'),
 
     path('ajax_search_flashpack', ajax_search_flashpack, name='ajax_search_flashpack'),   
+    path('ajax_search_flashpack_by_level', ajax_search_flashpack_by_level, name='ajax_search_flashpack_by_level'),   
+    path('flashpack_duplicate', flashpack_duplicate, name='flashpack_duplicate'),   
+
+
 
     path('ajax_set_flashcard_in_flashpack', ajax_set_flashcard_in_flashpack, name='ajax_set_flashcard_in_flashpack'),  
 

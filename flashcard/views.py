@@ -13,7 +13,7 @@ from account.decorators import  user_is_testeur
 from sacado.settings import MEDIA_ROOT
 from qcm.views import  get_teacher_id_by_subject_id
 from group.models import Group 
-from socle.models import Level, Waiting , Knowledge , Theme
+from socle.models import Level, Waiting , Knowledge , Theme, Subject
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import inlineformset_factory
 from templated_email import send_templated_mail
@@ -616,10 +616,36 @@ def import_flashcards_to_flashpack(request, id):
 def clone_flashpack(request, id):
 
     flashpack = Flashpack.objects.get(id=id)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
 
+    flashcards = flashpack.flashcards.all()
+    levels   = flashpack.levels.all()
+    themes   = flashpack.themes.all()
+    groups   = flashpack.groups.all()
+    parcours = flashpack.parcours.all()
+    folders  = flashpack.folders.all()
+    
+    students = set()
+    for folder in folders :
+        students.update( folder.students.all() )
+    for parcours in parcourses :
+        students.update( parcours.students.all() )
+    for group in groups :
+        students.update( group.students.all() )
+
+    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     flashpack.pk = None
     flashpack.save()
+    flashpack.levels.set(levels)
+    flashpack.themes.set(themes)
+    flashpack.folders.set(folders)    
+    flashpack.parcours.set(parcourses)
+    flashpack.groups.set(groups)
+    flashpack.students.set(students)
+
+    for f in flashcards :
+        f.pk = None
+        f.save()
+        f.students.set(students)
 
     return redirect('set_flashcards_to_flashpack' , id)
 
@@ -861,6 +887,40 @@ def ajax_level_flashcard(request):
     return JsonResponse(data)
 
 
+
+def ajax_search_flashpack_by_level(request):
+
+    teacher = request.user.teacher
+    data = {}
+    level_id =  request.POST.get("id_level",None)
+    subject_id =  request.POST.get("id_subject",None)  
+    id_annale  = request.POST.get('is_annale',None)
+
+    base = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher = teacher ),is_share = 1).exclude(teacher=teacher)
+    
+    if subject_id :    
+        teacher_id = get_teacher_id_by_subject_id(subject_id)        
+        subject = Subject.objects.get(pk=int(subject_id))
+        base = base.filter( subject = subject)
+
+    if level_id :
+        level = Level.objects.get(pk=int(level_id))
+        thms  = level.themes.values_list('id', 'name').filter(subject_id=subject_id).order_by("name")
+        data['themes'] = list(thms)
+        base = base.filter(  levels = level )
+    
+    flashpacks = base.order_by('teacher').distinct() 
+
+ 
+
+    data['html'] = render_to_string('flashcard/ajax_list_flashpacks.html', {'flashpacks' : flashpacks, 'teacher' : teacher , "get_flashcard" : True  })
+
+    return JsonResponse(data)
+
+
+
+
+
 def ajax_search_flashpack(request):
 
     teacher = request.user.teacher
@@ -870,13 +930,6 @@ def ajax_search_flashpack(request):
     subject_id = request.POST.get('subject_id',None)
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
-
-    if request.user.is_superuser :
-        #flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level','ranking')
-        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(is_share = 1).order_by('level','ranking')
-    else :
-        #flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(flashcards = None ,teacher=teacher).order_by('level','ranking')
-        flashpacks_ids = Flashpack.objects.values_list("id",flat=True).distinct().filter(is_share = 1).exclude(flashcards = None ,teacher=teacher).order_by('level','ranking')
 
     keywords = request.POST.get('keywords',None)
 
@@ -891,7 +944,6 @@ def ajax_search_flashpack(request):
                 if keywords :
                     for theme_id in theme_ids :
                         theme = Theme.objects.get(pk = theme_id)
-                        #fs = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__school = teacher.user.school) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,is_share = 1, teacher__user__school = teacher.user.school,  levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
                         fs = Flashpack.objects.filter(is_share = 1,   levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
                         flashpacks.update(fs)
@@ -899,42 +951,81 @@ def ajax_search_flashpack(request):
                 else :
                     for theme_id in theme_ids :
                         theme = Theme.objects.get(pk = theme_id)
-                        #fs =  Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
                         fs =  Flashpack.objects.filter(is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
                         flashpacks.update(fs)
 
                     
             else :
                 if keywords :            
-                    #flashpacks = Flashpack.objects.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)    ,is_share = 1,  teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
                     flashpacks = Flashpack.objects.filter(is_share = 1,  teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
                 else :
-                    #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
                     flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
 
         else :
             if keywords:
-                #flashpacks = Flashpack.objects.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   ,teacher__user__school = teacher.user.school,is_share = 1,levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
                 flashpacks = Flashpack.objects.filter(  is_share = 1,levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
             
             else :
-                #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
                 flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
     
     else :
         if keywords:
-            #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
             flashpacks = Flashpack.objects.filter(is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
         
         else :
-            #flashpacks = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
             flashpacks = Flashpack.objects.filter(is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
 
     data['html'] = render_to_string('flashcard/ajax_list_flashpacks.html', {'flashpacks' : flashpacks, 'teacher' : teacher ,  })
  
     return JsonResponse(data)
 
+
+
+def flashpack_duplicate(request):
+
+    flashpack_id = request.POST.get("this_document_id",None)
+    folders      = request.POST.getlist("folders",[])
+    parcourses   = request.POST.getlist("parcourses",[])
+    groups       = request.POST.getlist("groups",[])
+
+    data = {}
+    if flashpack_id :
+        flashpack = Flashpack.objects.get(id=flashpack_id)
+        flashcards = flashpack.flashcards.all()
+
+        request.session["tdb"] = False
+        flashpack.pk = None
+        flashpack.save()
+
+        flashpack.folders.set(folders)    
+        flashpack.parcours.set(parcourses)
+        flashpack.groups.set(groups)
+
+        students = set()
+        for fldr_id in folders :
+            folder = Folder.objects.get(pk=fldr_id)
+            students.update( folder.students.all() )
+        for prc_id in parcourses :
+            parcours = Parcours.objects.get(pk=prc_id)
+            students.update( parcours.students.all() )
+        for grp_id in groups :
+            group = Group.objects.get(pk=grp_id)
+            students.update( group.students.all() )
+
+        flashpack.students.set(students)
+
+        for f in flashcards :
+            f.pk = None
+            f.save()
+            f.students.set(students)
+
+
+        data["validation"] = "Duplication réussie"
+    else :
+        data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 
+
+    return JsonResponse(data)
 
 ######################################################################################
 ######################################################################################

@@ -1060,10 +1060,12 @@ def duplicate_bibliotex(request):
 
     data = {}
     if bibliotex_id :
-        bibliotex = Bibliotex.objects.get(id=bibliotex_id) 
+        bibliotex = Bibliotex.objects.get(id=bibliotex_id)
+        relationtexs = bibliotex.relationtexs.all()
+
         bibliotex.pk=None
         bibliotex.save()
-        
+
         bibliotex.folders.set(folders)    
         bibliotex.parcours.set(parcourses)
         bibliotex.groups.set(groups)
@@ -1080,6 +1082,20 @@ def duplicate_bibliotex(request):
             students.update( group.students.all() )
 
         bibliotex.students.set(students)
+
+        for relationtex in relationtexs :
+            skills     = relationtex.skills.all()
+            knowledges = relationtex.knowledges.all()
+            courses    = relationtex.courses.all()
+            relationtex.pk = None
+            relationtex.bibliotex = bibliotex
+            relationtex.save()
+            relationtex.students.set(students)
+            relationtex.skills.set(skills)
+            relationtex.knowledges.set(knowledges)
+            relationtex.courses.set(courses)
+
+
         data["validation"] = "Duplication réussie"
     else :
         data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 

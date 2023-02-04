@@ -149,8 +149,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     success: function (data) {
  
                         $('#bibliotex_details').html("").html(data.html);
-                        $("#loader").html(""); 
-                        
+ 
                         }
                 }
             )

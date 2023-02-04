@@ -12,7 +12,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             let id_subject = $("#id_subject").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            url_ = "ajax_chargethemes" ;
+            url_ = "ajax_search_flashpack_by_level" ;
 
             $.ajax(
                 {
@@ -53,6 +53,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             $('select[name=theme]').append(option);
                         }
 
+                        $('#content_flashpack').html(data.html);
 
                     }
                 }
@@ -86,7 +87,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             url= "ajax_search_flashpack" ; 
 
 
-            if($("#loader")) {$("#loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
+            if($("#loading")) {$("#loading").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");      }
 
             $.ajax(
                 {
@@ -249,6 +250,41 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+    $(document).on('click', '#duplication_document', function (event) {
+            var  document_id = $(this).data("document_id");  
+            var  document_title = $(this).data("document_title");  
+
+            $("#this_document_id").val(document_id) ;
+            $("#this_document_title").html(document_title) ;
+            $("#this_document_label").html(document_title) ;
+        });
+
+
+    $(document).on('click', "#duplicate_button_action" , function () {
+
+            event.preventDefault();   
+            my_form = document.querySelector("#duplicate_form");
+            var form_data = new FormData(my_form); 
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional : true,
+                    data: form_data,
+                    url: "flashpack_duplicate",
+                    success: function (data) {
+                        alert(data.validation);
+
+                    },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                }
+            )
+         });
     
 
 });

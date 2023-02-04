@@ -28,7 +28,7 @@
 
 {% block body  %}  
 <section class="content_main"> 
-    <form action="" method="POST" enctype='multipart/form-data'> 
+    <form action="" method="POST" enctype='multipart/form-data'>  
         {% csrf_token %}
         <div class="row alert search_bar" >
      
@@ -50,40 +50,33 @@
                         {% endfor %}
                     {% endif %}
                 </select>
-
             </div>
-            <div class="col-sm-2 col-md-1 col-lg-1">
-                <div  id="loading">
-                </div>
-            </div>
-
             <div class="col-sm-10 col-md-3 col-lg-4">
-
-                    <select id="id_theme" name="theme" class="form-control select2" multiple>
-                        <option value=" ">Choisir un niveau puis un thème</option>
-                    </select>
-
+                <select id="id_theme" name="theme" class="form-control select2" multiple>
+                    <option value=" ">Choisir un niveau puis un thème</option>
+                </select>
             </div>
-
             <div class="col-sm-12 col-md-2 col-lg-2">
-
-                    <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
-
+                <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
             </div>
-
         </div>
 
         <div class="row" id="content_flashpack">
- 
-
+            
             <div class="col-sm-12 col-md-12">
- 
-                <div style="height:50px"></div> 
-                Pour trouver des flashpacks mutualisés, vous devez :                <div style="height:20px"></div>
-                <ol>Sélectionner une matière</ol>
-                <ol>Sélectionner un niveau</ol>
-                <ol>Sélectionner un thème</ol> 
-                <ol>ou choisir un mot clé</ol>
+
+                <div style="margin-top:50px">
+                    <div class="col-sm-12 col-md-12  form_card">
+                        Pour trouver des biblioTex mutualisées, vous devez :                
+                        <div style="height:20px"></div>
+                        <ol>Sélectionner une matière</ol>
+                        <ol>Sélectionner un niveau</ol>
+                        <ol>Sélectionner un thème</ol> 
+                        <ol>ou choisir un mot clé</ol>
+                        <div id="loading"></div>                        
+                    </div>
+
+                </div> 
             </div>
 
         </div>
@@ -91,4 +84,50 @@
   
     </form>  
 </section>
+
+
+<div class="modal fade" id="duplication_modal" tabindex="-1" role="dialog" aria-labelledby="duplication_modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">     
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Duplication du flashpack : <span id="this_document_title"></span></h2>
+            </div>
+            <div class="modal-body">
+                <p>Voici vos groupes avec leurs dossiers éventuels et leurs parcours. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre Flashpack. Si un parcours est partagé, ne le cocher qu'une seule fois.</p>
+                <form action="" method="POST" enctype='multipart/form-data' id="duplicate_form"> 
+                    {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
+                    <div class="row">
+                    {% for group in teacher.groups.all %}
+                    <div class="col-sm-6 card_modal_search exercise_body_shared">
+                        <div class="quizz_item" style="background-color:{{ group.color }}">
+                            <label  class="btn btn-sacado"> {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                        
+                        {% for folder in  group.group_folders.all  %}
+                            <div class="quizz_item"> <label class="btn btn-warning">{{ folder.title }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <hr/>
+                                {% for parcours in folder.parcours.all %}
+                                    <label class="btn btn-default full_width" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">{{ parcours.title }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
+                                {% endfor %}
+                            </div>
+                        {% endfor %} 
+                        </div>
+                    </div>
+                    {% endfor %} 
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer le Flashpack <span id="this_document_label"></span></a>
+                        </div>
+                    </div>
+                </form> 
+                <small class="text-green_index"><em>Pour modifier mes niveaux, aller dans Mon compte ou sur votre avatar puis dans Mon profil ou <a href="{% url 'profile' %}">cliquer ici</a></em></small>          
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
 {% endblock  %}   
