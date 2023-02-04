@@ -2186,9 +2186,9 @@ def ajax_all_parcourses(request):
     print(request.POST)
 
     if is_eval == 2 :
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher=teacher)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude(teacher=teacher) 
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(author__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude(teacher=teacher) 
     else :   
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher=teacher)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval).exclude(teacher=teacher) 
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(author__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval).exclude(teacher=teacher) 
 
 
     if subject_id : 
@@ -2268,30 +2268,19 @@ def ajax_all_folders(request):
     listing = request.POST.get('listing',None)
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
-
-    # if request.user.is_superuser :
-    #     folders = Folder.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).order_by('level')
-    # else :
-    #     folders = Folder.objects.values_list("id",flat=True).distinct().filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1).exclude(teacher=teacher).order_by('level')
-
     keywords = request.POST.get('keywords',None)
 
-    if int(level_id) > 0 :
-        level = Level.objects.get(pk=int(level_id))
+    base = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(author__user_id=teacher_id), is_share = 1 , subject_id = subject_id ).exclude(teacher=teacher)
 
-        if keywords:
-            parcours_key = Parcours.objects.filter(Q(exercises__supportfile__title__icontains = keywords)|Q(exercises__supportfile__annoncement__icontains = keywords)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords) )
-            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, parcours__in=parcours_key ,
-                                             level  =  level   ).exclude(teacher=teacher).order_by('teacher','ranking').distinct()
-        else :
-            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1,  
-                                                        level  =  level  ).exclude(teacher=teacher).order_by('teacher','ranking').distinct()
-    else :
-        if keywords:
-            parcours_key = Parcours.objects.filter(Q(exercises__supportfile__title__icontains = keywords)|Q(exercises__supportfile__annoncement__icontains = keywords)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   )
-            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, parcours__in=parcours_key ).exclude(teacher=teacher).order_by('teacher','ranking').distinct()
-        else :
-            folders = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1 ).exclude(teacher=teacher).order_by('teacher','ranking').distinct()
+    if int(level_id) > 0 :
+        base = base.filter( level_id = level_id )
+
+    if keywords:
+        parcours_key = Parcours.objects.filter(Q(exercises__supportfile__title__icontains = keywords)|Q(exercises__supportfile__annoncement__icontains = keywords)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   )
+        base = base.objects.filter( Q( title__icontains = keywords )|Q(parcours__in=parcours_key) )
+
+    folders = base.order_by("author") 
+
 
     if listing == "yes" :
         data['html'] = render_to_string('qcm/ajax_list_folders_listing.html', {'folders' : folders, 'teacher' : teacher ,  }) 
@@ -2520,7 +2509,7 @@ def ajax_chargethemes_parcours(request):
 
     thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
-    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, exercises__level_id = level_id ,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(author__user_id=teacher_id),is_share = 1, exercises__level_id = level_id ,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
 
@@ -12054,7 +12043,7 @@ def get_course_in_this_parcours(request,id):
     request.session["parcours_id"] = parcours.id
     request.session["group_id"] = group_id
 
-    courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
+    courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__author__user_id=teacher_id),is_share = 1).exclude(parcours__teacher = teacher).order_by("parcours__level","parcours")
 
     return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'group': group , 'courses':courses,   'parcours': parcours, 'relationships' : [] ,  'communications': [] , })
  
@@ -12140,21 +12129,21 @@ def ajax_course_custom_show_shared(request):
                 parcours_set.update(exercise.exercises_parcours.all())
 
             parcours_tab = list(parcours_set)
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id),is_share = 1, parcours__subject = subject, parcours__in = parcours_tab ).exclude(teacher = teacher) )
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__author__user_id=teacher_id),is_share = 1, parcours__subject = subject, parcours__in = parcours_tab ).exclude(teacher = teacher) )
 
         else :
-            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, parcours__level = level,is_share = 1 ).exclude(teacher = teacher)   )   
+            courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__author__user_id=teacher_id), parcours__subject = subject, parcours__level = level,is_share = 1 ).exclude(teacher = teacher)   )   
     
     else :
-        courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1 ).exclude(teacher = teacher)  )     
+        courses += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__author__user_id=teacher_id), parcours__subject = subject, is_share = 1 ).exclude(teacher = teacher)  )     
 
 
     if keywords :
         for keyword in keywords.split(' '):
-            courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher))
+            courses += list(Course.objects.filter(Q(title__icontains=keyword)| Q(annoncement__icontains=keyword)| Q(parcours__author__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher))
 
     elif int(level_id) == 0 : 
-        courses  += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher))
+        courses  += list(Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__author__user_id=teacher_id), parcours__subject = subject, is_share = 1).exclude(teacher = teacher))
 
 
     data['html'] = render_to_string(template , {'courses' : courses, 'teacher' : teacher, 'parcours' : parcours  ,  'group': group })

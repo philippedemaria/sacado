@@ -836,12 +836,12 @@ def ajax_find_peuplate_sequence(request):
 
     if keyword and level_id :
         level = Level.objects.get(pk=level_id)
-        quizzes = Quizz.objects.filter(  Q(teacher__user=request.user)|Q(is_share =  1) ,title__icontains=keyword, teacher__user__school = request.user.school , subject_id=subject_id,levels=level,is_numeric=1 , is_random=0  )
+        quizzes = Quizz.objects.filter(  Q(teacher__user__school = request.user.school)|Q(teacher__user=request.user)|Q(is_share =  1) ,title__icontains=keyword, subject_id=subject_id,levels=level,is_numeric=1 , is_random=0  )
     elif keyword :
-        quizzes = Quizz.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword, teacher__user__school = request.user.school, subject_id=subject_id, is_numeric=1  , is_random=0 )
+        quizzes = Quizz.objects.filter( Q(teacher__user__school = request.user.school)|Q(teacher__user=request.user)|Q(is_share =  1) , title__icontains=keyword, subject_id=subject_id, is_numeric=1  , is_random=0 )
     else :
         level = Level.objects.get(pk=level_id)
-        quizzes = Quizz.objects.filter( Q(teacher__user=request.user)|Q(is_share =  1) , teacher__user__school = request.user.school , subject_id=subject_id,levels=level,is_numeric=1  , is_random=0)
+        quizzes = Quizz.objects.filter( Q(teacher__user__school = request.user.school)|Q(teacher__user=request.user)|Q(is_share =  1) ,  subject_id=subject_id,levels=level,is_numeric=1  , is_random=0)
     
     context = { "quizzes" : quizzes }
 
