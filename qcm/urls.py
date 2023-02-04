@@ -244,6 +244,10 @@ urlpatterns = [
 
     path('show_this_exercise/<int:id>/', show_this_exercise, name='show_this_exercise'),  #from dashboard 
 
+    path('show_this_exercise_test/<int:id>/', show_this_exercise_test, name='show_this_exercise_test'),  #from dashboard 
+
+
+
     path('show_custom_sequence/<int:idc>/', show_custom_sequence, name='show_custom_sequence'),
 
     path('show_exercise/<int:id>/', show_exercise, name='show_exercise'),       #from index  

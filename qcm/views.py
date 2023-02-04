@@ -6839,6 +6839,58 @@ def show_this_exercise(request, id):
 
 
 
+
+
+def show_this_exercise_test(request, id):
+
+    exercise  = Exercise.objects.get(pk = id)
+    ranking   = exercise.level.ranking 
+    level_inf = ranking - 1
+    level_sup = ranking + 1
+
+    if request.user.is_authenticated:
+        today = time_zone_user(request.user)
+        if request.user.is_teacher:
+            teacher = Teacher.objects.get(user=request.user)
+            parcours = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), level__lte = level_sup, level__gte = level_inf   ,is_trash=0)
+        elif request.user.is_student :
+            student = Student.objects.get(user=request.user)
+            parcours = None
+        else :
+            student = None
+            parcours = None
+    else :
+        student = None
+        parcours = None        
+        today = timezone.now()
+
+    start_time = time.time()
+
+    if exercise.supportfile.is_ggbfile :
+        wForm = None
+        url = "qcm/show_exercise_test.html" 
+    elif exercise.supportfile.is_python :
+        url = "basthon/index_teacher.html"
+        wForm = None
+    else :
+        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+        url = "qcm/show_teacher_writing.html"
+
+    file = open("ggbfilesBase64"+str(exercise.supportfile.ggbfile)[8:]+"b64","r")
+    source = file.read()
+    file.close()
+
+    context = { 'source_64' :  source  ,  'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today , 'wForm' : wForm }
+
+    return render(request, url, context)
+
+
+
+
+
+
+
+
 def show_all_type_exercise(request,ids): # vue coté prof de l'exercice autocorrigé  du customexercise
     """vue de tous les types d'exercices depuis un supportfile """
     supportfile = Supportfile.objects.get(pk = ids)
