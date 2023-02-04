@@ -210,14 +210,13 @@
                   "appletOnLoad" :  function(api) { 
                             var situation = "{{ exercise.supportfile.situation }}" ;
                             api.setValue("situation", situation );
-                            loadGgbFile() ;
+                            ggbApplet.setBase64("{{ source_64  }}");
                       }
             };
         var applet = new GGBApplet('5.0', parameters,true);
         // Geogebra applet creation
         applet.inject('ggb_applet_container', 'preferHTML5');  
 
-        function loadGgbFile(){ ggbApplet.setBase64("{{ source_64  }}"); }
     </script>
     <div style="height:20px"></div>
 
