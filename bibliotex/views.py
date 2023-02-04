@@ -790,21 +790,24 @@ def ajax_search_bibliotex_by_level(request):
 
     teacher = request.user.teacher
     data = {}
-    level_id =  request.POST.get("id_level")
-    subject_id =  request.POST.get("id_subject")    
+    level_id =  request.POST.get("id_level",None)
+    subject_id =  request.POST.get("id_subject",None)  
     id_annale  = request.POST.get('is_annale',None)
-    teacher_id = get_teacher_id_by_subject_id(subject_id)
 
-    if int(level_id) > 0 :
-        level = Level.objects.get(pk=int(level_id))
+    base = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher = teacher ),is_share = 1).exclude(teacher=teacher)
+    
+    if subject_id :    
+        teacher_id = get_teacher_id_by_subject_id(subject_id)        
         subject = Subject.objects.get(pk=int(subject_id))
+        base = base.filter( subjects = subject)
+
+    if level_id :
+        level = Level.objects.get(pk=int(level_id))
         thms  = level.themes.values_list('id', 'name').filter(subject_id=subject_id).order_by("name")
         data['themes'] = list(thms)
-
-        bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, subjects = subject , 
-                                                        levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
-    else :
-        bibliotexs = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),subjects = subject ,  is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+        base = base.filter(  levels = level )
+    
+    bibliotexs = base.order_by('teacher').distinct() 
 
     annales = set()        
     if id_annale == "yes" :
@@ -827,54 +830,30 @@ def ajax_search_bibliotex(request):
     teacher = request.user.teacher
     data = {}
 
-    level_id   = request.POST.get('level_id',0)
-    subject_id = request.POST.get('subject_id',None)
+    level_id   = request.POST.get('level_id',None)
     subject_id = request.POST.get('subject_id',None)
     id_annale  = request.POST.get('is_annale',None)
-    
-    teacher_id = get_teacher_id_by_subject_id(subject_id)
+    keywords = request.POST.get('keywords',None)   
+    theme_ids = request.POST.getlist('theme_id',[])
 
-    keywords = request.POST.get('keywords',None)
+    base = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher=teacher),  is_share = 1).exclude(teacher=teacher)
 
-    base = Bibliotex.objects.filter(is_share = 1).exclude(teacher=teacher)
+    if subject_id : 
+        teacher_id = get_teacher_id_by_subject_id(subject_id)
+        subject = Subject.objects.get(pk=subject_id)
+        base = base.filter(subjects=subject)
 
+    if  keywords :
+        base = base.filter(  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
 
-    if int(level_id) > 0 :
+    if level_id :
         level = Level.objects.get(pk=int(level_id))
-        theme_ids = request.POST.getlist('theme_id',[])
+        base = base.filter( levels = level )
 
-        if len(theme_ids) > 0 :
+    if len(theme_ids) > 0 and theme_ids[0] != '' :
+        base = base.filter(exotexs__knowledge__theme_id__in = theme_ids )
 
-            if theme_ids[0] != '' :
-
-                if keywords :
-                    bibliotexs = base.filter( Q(teacher__user_id=teacher_id)|Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  , 
-                                                        exotexs__knowledge__theme__in = theme_ids,  teacher__user__school = teacher.user.school,  levels = level ).order_by('teacher').distinct() 
-                else :
-                    bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, 
-                                                            exotexs__knowledge__theme_id__in = theme_ids, levels = level ).order_by('teacher').distinct()
-         
-            else :
-                if keywords :            
-                    bibliotexs = base.filter(Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains= keywords) |Q(teacher__user__last_name__icontains = keywords)   |Q(exotexs__content__icontains = keywords),  
-                                                            teacher__user__school = teacher.user.school ,  levels = level  ).order_by('teacher').distinct() 
-
-                else :
-                    bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id), 
-                                                            levels = level ).order_by('teacher').distinct() 
-
-        else :
-            if keywords:
-                bibliotexs = base.filter( Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  |Q(exotexs__content__icontains = keywords),teacher__user__school = teacher.user.school, 
-                                                        levels = level ).order_by('teacher').distinct() 
-            else :
-                bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),  
-                                                        levels = level ).order_by('teacher').distinct() 
-    else :
-        if keywords:
-            bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)  ,    exotexs__content__icontains = keywords ).order_by('author','ranking').distinct()
-        else :
-            bibliotexs = base.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id) ).order_by('teacher').distinct()
+    bibliotexs = base.order_by('teacher').distinct()   
 
     annales = set()        
     if id_annale == "yes" :

@@ -71,7 +71,7 @@
                 <span class="helper_tip"> <i class="bi bi-eye"></i>
                     <div class="helper_tip_no_width" >
                         {% for k in bibliotex.knowledges %}
-                            <li style="list-style: square">{{ k.name }}</li>
+                            <li style="font-variant-caps:normal;list-style: square">{{ k.name }}</li>
                         {% endfor %}
                     </div>
                 </span>
@@ -80,11 +80,11 @@
 
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Compétences ciblées <small>{{ bibliotex.skill|length }}</small>
+                Compétences ciblées <small>{{ bibliotex.skills|length }}</small>
                 <span class="helper_tip"> <i class="bi bi-eye"></i>
-                    <div class="helper_tip_no_width" >
-                        {% for s in bibliotex.skill %}
-                            <li style="list-style: square"></li>
+                    <div class="helper_tip_text" >
+                        {% for s in bibliotex.skills %}
+                            <li style="font-variant-caps:normal;list-style: square">{{ s.name }}</li>
                         {% endfor %}
 
                     </div>
