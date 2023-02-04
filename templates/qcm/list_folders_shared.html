@@ -196,7 +196,7 @@
             <div class="modal-body">
                 <p>Voici vos groupes avec leurs dossiers éventuels. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
 
-                    {% csrf_token %}<input type="type" name="this_document_id" id="this_document_id" />
+                    {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
                     {% for group in teacher.groups.all %}
                     <div class="col-sm-6 card_modal_search" style="height:80px">
