@@ -30,6 +30,7 @@ urlpatterns = [
     path('all_quizzes/search', all_quizzes, name='all_quizzes'), 
     path('ajax_shared_quizzes', ajax_shared_quizzes, name='ajax_shared_quizzes'), 
     path('clone_quizz/<int:id_quizz>', clone_quizz, name='clone_quizz'),
+    path('ajax_clone_quizz', ajax_clone_quizz, name='ajax_clone_quizz'),
     path('ajax_chargethemes_quizz', ajax_chargethemes_quizz, name='ajax_chargethemes_quizz'),
 
     path('clone_quizz_sequence/<int:id_quizz>', clone_quizz_sequence, name='clone_quizz_sequence'),

@@ -311,6 +311,85 @@ def ajax_shared_quizzes(request):
 
 
 @login_required(login_url= 'index')
+def ajax_clone_quizz(request):
+    """ cloner un parcours """
+
+    data = {}
+    id_quizz     = request.POST.get("this_document_id",None)
+    folders      = request.POST.getlist("folders",[])
+    parcourses   = request.POST.getlist("parcourses",[])
+    groups       = request.POST.getlist("groups",[])
+
+    teacher = request.user.teacher
+
+    if id_quizz :
+        quizz = Quizz.objects.get(pk=id_quizz) # parcours à cloner.pk = None
+        questions = quizz.questions.all()
+        levels = quizz.levels.all()
+        qrandoms = quizz.qrandoms.all()
+        themes = quizz.themes.all()
+
+        quizz.pk = None
+        quizz.teacher = teacher
+        quizz.code = str(uuid.uuid4())[:8]
+        quizz.save()
+
+        parcours_id = request.session.get("parcours_id",None)  
+        if parcours_id :
+            parcours = Parcours.objects.get(pk = parcours_id)
+            quizz.parcours.add(parcours) 
+
+
+        tab_id , t_idd = [] , []
+        for q in questions :
+            tab_id.append(q.id)
+            q.pk = None
+            q.save()
+            t_idd.append(q.id)
+            quizz.questions.add(q)
+
+        i = 0
+        for tid in tab_id :
+            quest = Question.objects.get(pk=tid)
+            for c in quest.choices.all():
+                c.pk = None
+                c.question_id = t_idd[i]
+                c.save()
+            i+=1
+
+
+        for l in levels :
+            quizz.levels.add(l)
+        for qr in qrandoms :
+            quizz.qrandoms.add(qr)
+        for t in themes :
+            quizz.themes.add(t)
+
+        quizz.folders.set(folders)    
+        quizz.parcours.set(parcourses)
+        quizz.groups.set(groups)
+
+        students = set()
+        for fldr_id in folders :
+            folder = Folder.objects.get(pk=fldr_id)
+            students.update( folder.students.all() )
+        for prc_id in parcourses :
+            parcours = Parcours.objects.get(pk=prc_id)
+            students.update( parcours.students.all() )
+        for grp_id in groups :
+            group = Group.objects.get(pk=grp_id)
+            students.update( group.students.all() )
+        quizz.students.set(students)
+
+        data["validation"] = "Duplication réussie"
+    else :
+        data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 
+
+    return JsonResponse(data)
+
+
+
+@login_required(login_url= 'index')
 def clone_quizz(request, id_quizz):
     """ cloner un parcours """
 
@@ -418,9 +497,6 @@ def clone_quizz_sequence(request, id_quizz):
         return redirect('list_quizzes')
  
 
-
-
-
 @csrf_exempt
 @login_required(login_url= 'index')
 def ajax_chargethemes_quizz(request):
@@ -432,29 +508,25 @@ def ajax_chargethemes_quizz(request):
     thms_id = request.POST.getlist("theme_id")
     quizz = set()
 
-    user_ids = user_list_of_school(teacher)
-    teacher_id = get_teacher_id_by_subject_id(id_subject)
-
     if len(thms_id) > 0 :
         if thms_id[0] != "" :
             for thm_id in thms_id :
                 th = Theme.objects.get(pk=thm_id)
-                #quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1, teacher_id__in = user_ids ).exclude(teacher=teacher)) 
                 quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1 , is_random=0 ).exclude(teacher=teacher)) 
         else :
-            #quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1, teacher_id__in = user_ids ).exclude(teacher=teacher))  
             quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1 , is_random=0 ).exclude(teacher=teacher))  
     else :
         thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
         data['themes'] = list(thms)
  
-        #quizzes = Quizz.objects.filter(Q(teacher_id = teacher_id)|Q(teacher_id__in = user_ids), subject_id = id_subject,  is_share = 1 , levels = level ).exclude(teacher=teacher)
         quizzes = Quizz.objects.filter( subject_id = id_subject,  is_share = 1 , levels = level , is_random=0).exclude(teacher=teacher)
-        quizz.update( quizzes )          
+        quizz.update( quizzes )         
 
     data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })
 
     return JsonResponse(data)
+
+
 
 @login_required(login_url= 'index')
 def list_quizzes(request):

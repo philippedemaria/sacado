@@ -1,21 +1,56 @@
+{% load static %}
+{% load widget_tweaks %}
 {% load item_tags %}
+           
 {% for q in quizz %}
+<div  class="box box-widget widget-user-2"  
+      style="{% if q.vignette %}background-image: url('{{ q.vignette.url }}'); background-size: cover; {% endif %}background-color:{{q.color }};height:300px">
+    <div class="handler widget-user-header" style="height:150px">
+        <!-- Add signet to folder -->
  
-	<div class="quizz_card" style=" border-radius: 5px; float:left;
-		{% if q.vignette %}
-			background-image: url('{{ q.vignette.url }}'); background-size: cover; 
-		{% endif %}">
-		<div style="padding:10px; background-color: #FFF; opacity:0.8;border-radius:30px;">
-			<span style="font-size:25px">{{ q.title|truncatechars:"25" }}</span>
-			<p>{{ q.questions.count }} questions, <small>{{ q.duration|time_done }}</small> </p>
 
-			<p>
-				<a href="{% url 'show_quizz_shared' q.id %}" target="_blank" class="btn btn-primary btn-xs">Voir</a> 
-				<a href="{% url 'clone_quizz' q.id %}"  class="btn btn-primary btn-xs">Récupérer</a>
-			</p>
+        <div class="box_title_vignette"  style="padding:4px; opacity:0.95;background-color:{{q.color }};color:{{color|contrast_color }};font-weight: 100;top:120px">
 
-		</div>
-	</div>
+                   
+                {% if q.title|length > 26 %}
+                <span class="helper_tip" style=" font-size:16px;">{{ q.title|truncatechars:"26" }}
+                    <div class="helper_tip_text_right" style="font-size:14px;">{{ q.title }}</div>
+                </span>
+                {% elif q.title|length > 22 %}
+                    {{ q.title|truncatechars:"22"}}
+                {% else %}
+                    {{ q.title}}
+                {% endif %}
+   
+        </div>
+    </div>
+    <!-- box-footer DES FONCTIONNALITES  -->
+    <div class="box-footer" style="position: relative; padding-top: 0px;height:150px">
  
-{% endfor %}
+        <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px; padding-left :-10px;font-size:20px"> 
+
+            <div class="col-xs-6" align="center"> 
+                <a href="{% url 'show_quizz_shared' q.id  %}" style="font-size:20px" target="_blank"><i class="bi bi-eye"></i></a> 
+            </div>
+            <div class="col-xs-6" align="center"> 
+                <a  href="#" data-toggle='modal' data-target='#duplication_modal' style="font-size:20px" 
+                    id='duplication_document' 
+                    data-document_id='{{ q.id }}' data-document_title='{{ q.title }}'><i class="bi bi-clipboard-plus"></i></a>  
+            </div>
+        </div>
+
+        <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                {{ q.questions.count }} questions
+            </div> 
+        </div>
+
+         <div class="row"> 
+            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                {{ q.duration|time_done }}
+            </div> 
+        </div>
+    </div>    
+</div>   
+{% endfor %} 
  

@@ -213,9 +213,6 @@ class Mental(models.Model):
         return date
 
 
-
-
-
 class Question(models.Model):
     """ Modèle représentant un associé. """
     title         = models.TextField(  default='',  blank=True, verbose_name="Enoncé")
