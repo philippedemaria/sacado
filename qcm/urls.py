@@ -97,6 +97,8 @@ urlpatterns = [
     path('parcourses_all/<int:is_eval>/', all_parcourses, name='all_parcourses'),
     path('folders_all/0/', all_folders, name='all_folders'), 
 
+    path('exercise_parcours_duplicate', exercise_parcours_duplicate, name='exercise_parcours_duplicate'), 
+    
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_clone_folder/<int:id>', clone_folder, name='clone_folder'),
     path('parcours_group/<int:id>/', list_parcours_group, name='list_parcours_group'), # parcours d'un groupe
