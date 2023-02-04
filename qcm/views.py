@@ -6876,7 +6876,7 @@ def show_this_exercise_test(request, id):
         wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
         url = "qcm/show_teacher_writing.html"
 
-    file = open("ggbfilesBase64"+str(exercise.supportfile.ggbfile)[8:]+"b64","r")
+    file = open("/var/www/sacado/ressources/ggbfilesBase64"+str(exercise.supportfile.ggbfile)[8:]+"b64","r")
     source = file.read()
     file.close()
 
