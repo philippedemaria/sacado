@@ -2183,8 +2183,6 @@ def ajax_all_parcourses(request):
     theme_ids = request.POST.getlist('theme_id',[])
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
-    print(request.POST)
-
     if is_eval == 2 :
         base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(author__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude(teacher=teacher) 
     else :   
@@ -2196,13 +2194,13 @@ def ajax_all_parcourses(request):
         base = base.filter(subject = subject)
 
     if  keywords :
-        base = base.filter(  Q(parcours__title__icontains = keywords) | Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
+        base = base.filter(  Q(title__icontains = keywords) | Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
 
     if level_id :
         base = base.filter( level_id = level_id )
 
     if len(theme_ids) > 0 and theme_ids[0] != '' :
-        base = base.filter(parcours__knowledge__theme_id__in = theme_ids )
+        base = base.filter(exercises__knowledge__theme_id__in = theme_ids )
 
     parcourses = base.order_by('teacher').distinct()   
     listing = request.POST.get('listing',None)
