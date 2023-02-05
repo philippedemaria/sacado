@@ -76,12 +76,12 @@
     {% if nb_groups or request.user.is_superuser %}   
       
  
-    <li  class="dropdown {% if request.session.tdb == 'Documents' %}active{% endif %}">
-        <a href="#" class="main"  id="documents" style="cursor: pointer;">
-            <i class="bi bi-folder icon_size"></i> 
-            <div class="captionmenu">Documents</div>
-        </a>
-    </li>
+        <li  class="dropdown {% if request.session.tdb == 'Documents' %}active{% endif %}">
+            <a href="#" class="main"  id="documents" style="cursor: pointer;">
+                <i class="bi bi-folder icon_size"></i> 
+                <div class="captionmenu">Documents</div>
+            </a>
+        </li>
 
       
         {% comment %}
@@ -127,35 +127,34 @@
         </li>
           
 
-    {% if request.user.is_superuser or  request.user.teacher.is_lesson   %}
-    <li  class="dropdown  {% if request.session.tdb == 'Lesson' %}  active{% endif %}">
-        <a href="{% url 'calendar_show' 0 %}" class="main" >
-            <i class="bi bi-camera-video icon_size"></i> 
-            <div class="captionmenu">Leçons</div>
-        </a>
-    </li>
-    {% endif %}
-    {% if request.user.country_id != 5   %}
-        <li class="dropdown {% if request.session.tdb == 'Aefe' %}active{% endif %}">
-            <a href="{% url 'aefe' %}" class="main closer_notification">
-                <i class="bi bi-hdd-rack icon_size"></i> 
-                <div class="captionmenu">aefe</div>
-            </a>
-        </li>
-    {% endif %}
-
-        {%  if communications|length > 0  %}
-        <li class="dropdown {% if request.session.tdb == 'Actu' %}active{% endif %}">
-            <a href="#"  data-toggle='modal' data-target='#nouveaute' class="main closer_notification">
-                <i class="bi bi-rss icon_size"></i> 
-                <div class="captionmenu">Actu.</div>
+        {% if request.user.is_superuser or  request.user.teacher.is_lesson   %}
+        <li  class="dropdown  {% if request.session.tdb == 'Lesson' %}  active{% endif %}">
+            <a href="{% url 'calendar_show' 0 %}" class="main" >
+                <i class="bi bi-camera-video icon_size"></i> 
+                <div class="captionmenu">Leçons</div>
             </a>
         </li>
         {% endif %}
-         
+        {% if request.user.country_id != 5   %}
+            <li class="dropdown {% if request.session.tdb == 'Aefe' %}active{% endif %}">
+                <a href="{% url 'aefe' %}" class="main closer_notification">
+                    <i class="bi bi-hdd-rack icon_size"></i> 
+                    <div class="captionmenu">aefe</div>
+                </a>
+            </li>
+        {% endif %}
 
-
-
+          
+        {% comment %}
+            {%  if communications|length > 0  %}
+            <li class="dropdown {% if request.session.tdb == 'Actu' %}active{% endif %}">
+                <a href="#"  data-toggle='modal' data-target='#nouveaute' class="main closer_notification">
+                    <i class="bi bi-rss icon_size"></i> 
+                    <div class="captionmenu">Actu.</div>
+                </a>
+            </li>
+            {% endif %}
+        {% endcomment %}
     {% endif  %}
 
 
