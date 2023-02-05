@@ -81,7 +81,7 @@
         				<div class="col-xs-2">
                             <small>
                             {% if  m.user.is_superuser %}Modérateur<br> Equipe Sacado 
-                            {% else %}{{ m.user.username }} <br>{{ m.user.school.name }} <br> {{ m.user.school.country }}
+                            {% else %}{{ m.user.first_name }} {{ m.user.last_name }}<br>{{ m.user.school.name }} <br> {{ m.user.school.country }}
                             {% endif %}
                             </small> 
 
