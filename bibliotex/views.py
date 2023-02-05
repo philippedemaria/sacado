@@ -794,8 +794,8 @@ def ajax_search_bibliotex_by_level(request):
     level_id =  request.POST.get("id_level",None)
     subject_id =  request.POST.get("id_subject",None)  
     id_annale  = request.POST.get('is_annale',None)
-
-    base = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q( author__user_id=teacher_id ) ,is_share = 1).exclude(teacher=teacher)
+    teacher_id = get_teacher_id_by_subject_id(subject_id) 
+    base = Bibliotex.objects.filter(Q(teacher__user__school = teacher.user.school)| Q( teacher__user_id=teacher_id ) ,is_share = 1).exclude(teacher=teacher)
     
     if subject_id :    
         teacher_id = get_teacher_id_by_subject_id(subject_id)        

@@ -110,21 +110,35 @@
                 <form action="" method="POST" enctype='multipart/form-data' id="duplicate_form"> 
                     {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
+ 
+
                     {% for group in teacher.groups.all %}
                     <div class="col-sm-6 card_modal_search exercise_body_shared">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado">Groupe : {{ group.name|truncatechars:32 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
-                        
-                        {% for folder in  group.group_folders.all  %}
-                            <div class="quizz_item"> <label class="btn btn-warning">{{ folder.title|truncatechars:32 }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <hr/>
-                                {% for parcours in folder.parcours.all %}
-                                    <label class="btn btn-default full_width" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">{{ parcours.title|truncatechars:32 }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
-                                {% endfor %}
+                            <label  class="btn btn-sacado ">Groupe : {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                            <div class="form_card" style="padding : 15px 5px "><label>Dossiers associés</label>                         
+                            {% for folder in  group.group_folders.all  %}
+                                <div class="quizz_item" style="background-color:{{ folder.color }};color:{{ folder.color|contrast_color}}"> 
+                                    <label class="btn btn-sacado full_width">{{ folder.title|truncatechars:29  }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <label>Parcours associés</label>    
+                                    {% for parcours in folder.parcours.all %}
+                                        <label class="btn btn-default full_width">{{ parcours.title }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %} 
                             </div>
-                        {% endfor %} 
                         </div>
                     </div>
                     {% endfor %} 
+
+
+
+
+
+
+
+
+
+
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
