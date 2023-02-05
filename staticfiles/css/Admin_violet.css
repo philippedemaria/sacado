@@ -39,6 +39,7 @@ body {
 p{
   font-size: inherit!important;
 }
+
 .search_bar{
   margin-left:0px; 
   margin-right:0px; 
@@ -451,6 +452,11 @@ hr.menu {
 }
 
 
+
+.inside_volet_show_submenu a:hover{
+    text-decoration: none;
+    color: #FF8B69 ;  
+}
 
 .inside_volet_show_submenu a.inside_volet{
   display:none;

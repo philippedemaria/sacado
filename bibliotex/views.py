@@ -605,8 +605,8 @@ def my_bibliotexs(request):
     bibliotexs = dataset.filter(folders=None)
     bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
-
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     list_folders = list()
     for folder in bibliotexs_folders :
@@ -618,7 +618,6 @@ def my_bibliotexs(request):
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
     nb_archive = dataset_user.filter(  is_archive=1).count()
     return render(request, 'bibliotex/list_bibliotexs.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups,   'nb_archive' : nb_archive  })
@@ -636,8 +635,8 @@ def my_bibliotex_archives(request):
     bibliotexs = dataset.filter(folders=None)
     bibliotexs_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
-
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
  
     list_folders = list()
@@ -649,8 +648,6 @@ def my_bibliotex_archives(request):
         list_folders.append(bibtexs_folders)
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
- 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
  
     return render(request, 'bibliotex/list_bibliotexs_archives.html', { 'list_folders': list_folders , 'bibliotexs': bibliotexs , 'teacher': teacher,  'groups': groups  })
 
@@ -682,6 +679,10 @@ def create_bibliotex_sequence(request,id):
     else : group = None
     if folder_id : folder = Folder.objects.get(id=folder_id)
     else : folder = None
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
+
 
     parcours = Parcours.objects.get(id=id)
 
@@ -875,6 +876,8 @@ def ajax_search_bibliotex(request):
 
 def create_bibliotex(request,idf=0):
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     teacher = request.user.teacher
     folder_id = request.session.get("folder_id",idf)
@@ -917,6 +920,9 @@ def create_bibliotex(request,idf=0):
 
 
 def update_bibliotex(request, id):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     teacher = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)
@@ -967,6 +973,8 @@ def update_bibliotex(request, id):
 
 def create_bibliotex_from_parcours(request,idp=0):
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     teacher = request.user.teacher
     folder_id = request.session.get("folder_id",None)
@@ -1040,6 +1048,9 @@ def delete_bibliotex(request, id):
 
 
 def show_bibliotex(request, id):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id).order_by("ranking")
@@ -1189,6 +1200,9 @@ def ajax_publish_bibliotex(request):
 
 def exercise_bibliotex_results(request, id):
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
+
     bibliotex    = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id)
     students     = bibliotex.students.exclude(user__username__contains="_e-test").order_by('user__last_name')
@@ -1201,6 +1215,9 @@ def exercise_bibliotex_results(request, id):
 
 
 def exercise_bibliotex_peuplate(request, id):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     teacher   = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)
@@ -1215,6 +1232,9 @@ def exercise_bibliotex_peuplate(request, id):
  
 
 def  exercise_bibliotex_individualise(request, id):
+    
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
 
     teacher   = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)

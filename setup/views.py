@@ -166,7 +166,6 @@ def index(request):
 
         if request.user.is_teacher :
 
-
             over_students, nbss , nbsa = False , 0 , 0
             if request.user.school :
                 over_students , nbss , nbsa  = oversize_students(request.user.school)
@@ -210,7 +209,8 @@ def index(request):
                 #parcourses = teacher_parcours.filter(is_evaluation=0, is_favorite =1, is_archive=0,  is_trash=0 ).order_by("-is_publish")
                 communications = Communication.objects.values('id', 'subject', 'texte', 'today').filter(active=1).order_by("-id")
 
-                request.session["tdb"] = True
+                request.session["tdb"] = "Groups"
+                if request.session.has_key("subtdb"): del request.session["subtdb"]
 
                 webinaire = Webinaire.objects.filter(date_time__gte=today,is_publish=1).first()
 

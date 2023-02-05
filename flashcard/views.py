@@ -36,16 +36,17 @@ from general_fonctions import *
 
 def list_flashpacks(request):
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
+
     if request.user.is_authenticated :
         if request.user.is_teacher :
             teacher = request.user.teacher
-            request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
             flashpacks = Flashpack.objects.filter(teacher__user = request.user)
             return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
         else :
             student = request.user.student
             today = time_zone_user(request.user)
-            request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
             fpacks_base = Flashpack.objects.filter(students=student)
             fpacks = fpacks_base.exclude(is_global=1)
             flashpacks = fpacks_base.filter(is_global=1)
@@ -63,7 +64,9 @@ def list_flashpacks(request):
  
 def list_my_flashpacks(request):
 
-    request.session["tdb"]          = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
+
     request.session["flashpack_id"] = None 
     teacher            = request.user.teacher
     dataset_user       = teacher.flashpacks
@@ -103,7 +106,9 @@ def list_my_flashpacks(request):
 
 def my_flashpack_archives(request):
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
+
     request.session["folder_id"] = None
     request.session["flashpack_id"] = None 
     request.session["group_id"] = None
@@ -632,7 +637,9 @@ def clone_flashpack(request, id):
     for group in groups :
         students.update( group.students.all() )
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
+
     flashpack.pk = None
     flashpack.save()
     flashpack.levels.set(levels)
@@ -656,7 +663,8 @@ def clone_flashpack(request, id):
 def flashpack_results(request, idf,idp=0):
 
     flashpack = Flashpack.objects.get(id=idf)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
 
     parcours = None
     if idp > 0 :
@@ -726,7 +734,8 @@ def clone_flashcard(request, idf, id):
 
     flashpack = Flashpack.objects.get(id=idf)
     flashcard = Flashcard.objects.get(id=id)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
 
     flashcard.pk = None
     flashcard.save()
@@ -747,7 +756,8 @@ def list_flashcards(request):
 def create_flashcard(request):
 
     form = FlashcardForm(request.POST or None  , flashpack = None )
-
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
     if form.is_valid():
         nf = form.save()
         for l_id in request.POST.getlist("levels") :
@@ -769,7 +779,8 @@ def update_flashcard(request, id):
 
     flashcard = Flashcard.objects.get(id=id)
     flashcard_form = FlashcardForm(request.POST or None, instance=flashcard , flashpack = None )
-
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Flashpack"
     if request.method == "POST" :
         if flashcard_form.is_valid():
             flashcard_form.save()
@@ -994,7 +1005,6 @@ def flashpack_duplicate(request):
         flashpack = Flashpack.objects.get(id=flashpack_id)
         flashcards = flashpack.flashcards.all()
 
-        request.session["tdb"] = False
         flashpack.pk = None
         flashpack.save()
 

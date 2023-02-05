@@ -139,7 +139,9 @@ def all_datas_qia(level):
 @login_required(login_url= 'index') 
 def list_tools(request):
     teacher = request.user.teacher
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
+
     if request.user.is_superuser :
         tools = Tool.objects.all()
     else :
@@ -151,7 +153,9 @@ def list_tools(request):
 
 def create_tool(request):
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
+
     form = ToolForm(request.POST or None, request.FILES or None,   )
  
 
@@ -169,7 +173,9 @@ def create_tool(request):
 @login_required(login_url= 'index')
 def update_tool(request, id):
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
+
     tool = Tool.objects.get(id=id)
  
     teacher = request.user.teacher   
@@ -189,7 +195,9 @@ def update_tool(request, id):
 
 
 def delete_tool(request, id):
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
+
     tool = Tool.objects.get(id=id)
     tool.delete()
     return redirect('tool_index')
@@ -197,7 +205,8 @@ def delete_tool(request, id):
 
  
 def show_tool(request, id ):
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
     tool = Tool.objects.get(id=id)
     if tool.url != "" :
         url = tool.url
@@ -212,7 +221,8 @@ def get_this_tool(request):
 
     data = {} 
     tool_id = int(request.POST.get("tool_id"))
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.add(request.user.teacher)
 
@@ -227,7 +237,8 @@ def delete_my_tool(request):
 
     data = {} 
     tool_id = int(request.POST.get("tool_id"))
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
     tool = Tool.objects.get(pk=tool_id) 
     tool.teachers.remove(request.user.teacher)
  
@@ -236,7 +247,8 @@ def delete_my_tool(request):
 
 
 def tools_to_exercise(request,id):
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
     exercise = Exercise.objects.get(id=id)
     tools = Tool.objects.all()
 
@@ -253,7 +265,8 @@ def ajax_attribute_this_tool_to_exercise(request):
     tool_id = int(request.POST.get("tool_id"))
 
     exercise_id = int(request.POST.get("exercise_id"))
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Projections"
     exercise = Exercise.objects.get(pk=exercise_id) 
     tool     = Tool.objects.get(pk=tool_id)
     if exercise in tool.exercises.all() :
@@ -291,7 +304,8 @@ def all_quizzes(request):
     else :
         parcours = None
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None, folder = None)
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours }) 
 
@@ -304,7 +318,11 @@ def ajax_shared_quizzes(request):
     user_ids = user_list_of_school(teacher)
 
     quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids , is_random=0  ).exclude(teacher = teacher )
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
+
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None, folder = None )
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
 
@@ -544,7 +562,9 @@ def list_quizzes(request):
         quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=0 , folders=folder, is_random=0).order_by("levels") 
         list_folders.append(quizzes_folders)
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     is_archive = False
     nba = teacher.teacher_quizz.filter(  is_archive=1).count()
 
@@ -567,7 +587,8 @@ def all_quizzes_archived(request):
         quizzes_folders["folder"] = Folder.objects.get(pk=folder)
         quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder, is_random=0).order_by("levels") 
         list_folders.append(quizzes_folders)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
  
     is_archive = True
     return render(request, 'tool/list_quizzes.html', {   'list_folders': list_folders , 'quizzes': quizzes ,  'teacher': teacher, 'is_archive' : is_archive })
@@ -621,7 +642,8 @@ def create_quizz(request):
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
     else :
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
  
 
     if form.is_valid():
@@ -659,7 +681,8 @@ def create_quizz_sequence(request,id) :
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
     else :
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder )
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
  
     parcours = Parcours.objects.get(pk=id )
     if form.is_valid():
@@ -698,7 +721,8 @@ def create_quizz_folder(request,idf):
         group = None
         form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : folder.subject , 'folders' : [folder]   }   )
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
 
     if form.is_valid():
         nf = form.save(commit = False)
@@ -737,7 +761,8 @@ def create_quizz_parcours(request,idp):
 
     form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : parcours.subject , 'folders' : [folder] , 'parcours' : [parcours]   ,  'groups' : [group] }   )
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
 
     if form.is_valid():
         nf = form.save(commit = False)
@@ -775,7 +800,8 @@ def update_quizz(request,id):
 
 
     form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher , group = group, folder = folder, )
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     if form.is_valid():
         nf = form.save(commit = False)
         nf.teacher = teacher
@@ -802,7 +828,8 @@ def update_quizz(request,id):
 @login_required(login_url= 'index')
 def delete_quizz(request,id):
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     quizz = Quizz.objects.get(pk= id)
     if quizz.teacher == request.user.teacher :
         quizz.delete() 
@@ -859,7 +886,9 @@ def ajax_find_peuplate_sequence(request):
 def show_quizz_numeric(request,id,idp):
     """ permet à un prof de voir son quizz """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk= id)
     parcours = Parcours.objects.get(pk= idp)
     questions =  quizz.questions.filter(is_publish=1).order_by("ranking")
@@ -874,7 +903,9 @@ def show_quizz_numeric(request,id,idp):
 def show_quizz(request,id):
     """ permet à un prof de voir son quizz """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
@@ -889,7 +920,9 @@ def show_quizz(request,id):
 def show_quizz_student(request,idgq):
     """ permet à un prof de voir son quizz """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk= idgq)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
@@ -901,7 +934,9 @@ def show_quizz_student(request,idgq):
 def show_quizz_shared(request,id):
     """ permet à un prof de voir le quizz mutualisé """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions }
@@ -918,7 +953,10 @@ def result_quizz(request,id,idp=0):
         parcours = Parcours.objects.get(pk=idp)
     else :
         parcours = None 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk= id)
     questions =  quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz  , 'parcours' : parcours , 'questions' : questions }
@@ -931,7 +969,9 @@ def result_quizz(request,id,idp=0):
 @login_required(login_url= 'index')
 def delete_historic_quizz(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk= id)
 
     if quizz.teacher == request.user.teacher :
@@ -1039,7 +1079,9 @@ def ajax_affectation_to_group(request):
 @login_required(login_url= 'index')
 def ajax_show_generated(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     gq_id = request.POST.get("gq_id")
     data = {}  
     g_quizz = Generate_quizz.objects.get(pk= gq_id, quizz__teacher = request.user.teacher) 
@@ -1202,7 +1244,9 @@ def show_quizz_group(request,id,idg):
 
     """ show quizz d'un groupe classe """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     group = Group.objects.get(pk = idg)
@@ -1222,7 +1266,9 @@ def show_quizz_parcours_student(request,id,idp):
     except :
         return redirect("show_parcours_student", id)
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
  
@@ -1237,7 +1283,9 @@ def show_quizz_parcours_student(request,id,idp):
 def create_quizz_code(request,id,idg):
     """ show quizz d'un groupe classe """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = id)
 
     return redirect("show_quizz_group", id , idg ) 
@@ -1253,7 +1301,9 @@ def create_quizz_code(request,id,idg):
 def play_quizz_teacher(request,id,idg):
     """ Lancer d'un play quizz """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     if request.session.get("gquizz_questions",None) :
         del request.session["gquizz_questions"] 
 
@@ -1278,7 +1328,9 @@ def play_quizz_teacher(request,id,idg):
 def launch_play_quizz(request):
     """ Lancer d'un play quizz """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     gquizz_id = request.POST.get("gquizz_id",None)
     group_id  = request.POST.get("group_id",None)
     gquizz = Generate_quizz.objects.get(pk = gquizz_id) 
@@ -1333,7 +1385,9 @@ def launch_play_quizz(request):
 def this_student_can_play(student,gquizz):
     """ Vérifie qu'un joueur peut participer au quiz"""
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     can_play = False
     groups = gquizz.quizz.groups.all()
     group_set = set()
@@ -1350,7 +1404,10 @@ def play_quizz_student(request):
     """ Lancer le play quizz élève """
 
     tracker_execute_exercise(False, request.user)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     starter = True
     if request.method == 'POST' :
         code = request.POST.get("code",None)
@@ -1376,7 +1433,9 @@ def play_quizz_student(request):
 def ajax_quizz_show_result(request):  
     """ affichage des résultats après la question du quizz"""
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     all_results = request.POST.get("all",None)
     question_id = request.POST.get("question_id",None)
     random      = int(request.POST.get("random",0))
@@ -1550,7 +1609,8 @@ def list_quizz_student(request):
     """ Lancer le play quizz élève """
     
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     student = request.user.student
     tracker_execute_exercise(False, request.user)
     delete_session_key(request, "quizz_id")
@@ -1625,7 +1685,8 @@ def store_quizz_solution( quizz_id,student,q_id, solutions,t,hashed):
 
 def goto_quizz_numeric(request,id):
     """ participation à un quizz sur poste"""
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     quizz = Quizz.objects.get(pk= id)
     fl = False
     #Génération des questions
@@ -1708,7 +1769,8 @@ def goto_quizz_numeric(request,id):
 def goto_quizz_student(request,id):
     """ participation à un quizz sur poste"""
     student = request.user.student
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     quizz = Quizz.objects.get(pk= id)
 
     #Génération des questions
@@ -2174,7 +2236,8 @@ def print_qf_to_pdf(request):
 ############################################################################################################
 def list_questions(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
     questions = Question.objects.all()
     return render(request, 'tool/list_question.html', {'questions': questions  })
 
@@ -2184,7 +2247,9 @@ def list_questions(request):
 @login_required(login_url= 'index')
 def create_question(request,idq,qtype):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = idq)
     questions = quizz.questions.order_by("ranking")
 
@@ -2343,7 +2408,9 @@ def create_question(request,idq,qtype):
 @login_required(login_url= 'index')
 def update_question(request,id,idq,qtype):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = idq)
     questions = quizz.questions.order_by("ranking")
     question = Question.objects.get(pk=id) 
@@ -2495,7 +2562,9 @@ def update_question(request,id,idq,qtype):
  
 def delete_question(request,id,idq):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     question = Question.objects.get(pk= id)
     if question.quizz.count() == 0 :
         question.delete()
@@ -2508,7 +2577,9 @@ def delete_question(request,id,idq):
 @login_required(login_url= 'index')
 def remove_question(request,id,idq):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = idq)
     if quizz.teacher == request.user.teacher :
         question = Question.objects.get(pk = id)
@@ -2521,7 +2592,9 @@ def remove_question(request,id,idq):
 @login_required(login_url= 'index')
 def remove_question_ia(request,id,idq):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = idq)
     if quizz.teacher == request.user.teacher :
         question = Question.objects.get(pk = id)
@@ -2532,7 +2605,9 @@ def remove_question_ia(request,id,idq):
  
 def show_question(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     question = Question.objects.get(pk= id)
     context = {'form': form, "question" : question }
 
@@ -2605,7 +2680,9 @@ def get_this_question(request):
 
 def clone_question(request,id,idq,qtype):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
+
     quizz = Quizz.objects.get(pk = idq)
     question = Question.objects.get(pk = id)
     answer_choices = question.choices.all()
@@ -2726,7 +2803,8 @@ def play_printing_teacher(request, id):
 @login_required(login_url= 'index')
 def list_diaporama(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Presentations" 
     teacher = request.user.teacher 
     diaporamas = Diaporama.objects.filter(teacher =teacher,is_archive=0 )
     nbd = Diaporama.objects.filter(teacher =teacher,is_archive=1 ).count()
@@ -2738,7 +2816,10 @@ def list_diaporama(request):
 @login_required(login_url= 'index')
 def all_diaporama_archived(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Presentations"
+
+
     teacher = request.user.teacher 
     diaporamas = Diaporama.objects.filter(teacher =teacher ,is_archive=1 )
     nbd = Diaporama.objects.filter(teacher =teacher,is_archive=0 ).count()
@@ -2775,7 +2856,9 @@ def diaporama_actioner(request):
 @login_required(login_url= 'index') 
 def create_diaporama(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche     
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Presentations"
+
     teacher = request.user.teacher 
     form = DiaporamaForm(request.POST or None, request.FILES or None , teacher = teacher  )
  
@@ -2799,7 +2882,9 @@ def create_diaporama(request):
 @login_required(login_url= 'index') 
 def update_diaporama(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche     
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Presentations"
+
     teacher = request.user.teacher
     diaporama = Diaporama.objects.get(pk= id)
     form = DiaporamaForm(request.POST or None, request.FILES or None , instance = diaporama , teacher = teacher  )
@@ -2821,7 +2906,8 @@ def update_diaporama(request,id):
 
 def show_diaporama(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Presentations"
     diaporama = Diaporama.objects.get(pk= id)
     slides = diaporama.slides.order_by("ranking")
  
@@ -2832,7 +2918,8 @@ def show_diaporama(request,id):
 @login_required(login_url= 'index')
 def delete_diaporama(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "Presentations" 
     diaporama = Diaporama.objects.get(pk= id)
     if diaporama.teacher == request.user.teacher :
         diaporama.delete() 
@@ -2848,7 +2935,8 @@ def delete_diaporama(request,id):
 @login_required(login_url= 'index')
 def create_slide(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Presentations"
     diaporama = Diaporama.objects.get(pk = id)
     teacher = request.user.teacher
     form = SlideForm(request.POST or None)
@@ -2872,7 +2960,8 @@ def create_slide(request,id):
 @login_required(login_url= 'index') 
 def delete_slide(request,id,idp):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Presentations"
     slide = Slide.objects.get(pk= id)
     diaporama = Diaporama.objects.get(pk = idp)
     if request.user.teacher ==  diaporama.teacher : 
@@ -2885,7 +2974,8 @@ def delete_slide(request,id,idp):
 @login_required(login_url= 'index') 
 def remove_slide(request,id,idq):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Presentations" 
     diaporama = Diaporama.objects.get(pk = idq)
     if diaporama.teacher == request.user.teacher :
         slide = Slide.objects.get(pk= id)
@@ -2896,7 +2986,8 @@ def remove_slide(request,id,idq):
 @login_required(login_url= 'index')
 def update_slide(request,id,idp):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche  
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Presentations" 
     diaporama = Diaporama.objects.get(pk = idp)
 
     slide= Slide.objects.get(pk = id)
@@ -3028,7 +3119,8 @@ def create_quizz_random(request,id):
 def show_quizz_random(request,id):
     """ Vue pour l'enseignant """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     quizz , gquizz , qrandoms , save = get_qr(id, None,0)  
  
     context = {  "quizz" : quizz , "gquizz" : gquizz , "qrandoms" : qrandoms  , "save" : save }
@@ -3040,7 +3132,8 @@ def show_quizz_random(request,id):
 def show_quizz_random_group(request,id,idg):
     """ Vue pour le groupe en vidéo projection """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     group = Group.objects.get(id = idg)
     quizz ,  gquizz , qrandoms , save = get_qr(id,idg,0)
 
@@ -3051,7 +3144,8 @@ def show_quizz_random_group(request,id,idg):
 
 @login_required(login_url= 'index')
 def list_qrandom(request):
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     if request.user.is_superuser :
         qrandoms = Qrandom.objects.all()
         context = {  "qrandoms" : qrandoms  }
@@ -3063,7 +3157,8 @@ def list_qrandom(request):
 @login_required(login_url= 'index')
 def create_qrandom(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     teacher = request.user.teacher
     if request.user.is_superuser :
         form = QrandomForm(request.POST or None )
@@ -3095,7 +3190,8 @@ def create_qrandom(request):
 @login_required(login_url= 'index')
 def update_qrandom(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     teacher = request.user.teacher
     if request.user.is_superuser :
         qr = Qrandom.objects.get(pk=id)
@@ -3125,7 +3221,8 @@ def update_qrandom(request,id):
 @login_required(login_url= 'index')
 def delete_qrandom(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     if request.user.is_superuser :
         qr = Qrandom.objects.get(pk= id)
         qr.delete()
@@ -3138,7 +3235,8 @@ def delete_qrandom(request,id):
 @login_required(login_url= 'index')
 def admin_qrandom(request,id_level):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     if request.user.is_superuser :
         level = Level.objects.get(pk = id_level)
         data = all_datas(level)
@@ -3151,7 +3249,8 @@ def admin_qrandom(request,id_level):
 @login_required(login_url= 'index')
 def create_qrandom_admin(request,id_knowledge):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     teacher = request.user.teacher
     if request.user.is_superuser :
         knowledge = Knowledge.objects.get(pk=id_knowledge)
@@ -3185,7 +3284,8 @@ def create_qrandom_admin(request,id_knowledge):
 @login_required(login_url= 'index')
 def update_qrandom_admin(request,id_knowledge,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     teacher = request.user.teacher
     if request.user.is_superuser :
         knowledge = Knowledge.objects.get(pk=id_knowledge)
@@ -3220,7 +3320,8 @@ def update_qrandom_admin(request,id_knowledge,id):
 
 def show_qrandom_admin(request,id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     qrandom = Qrandom.objects.get(pk = id)
  
     return render(request, 'tool/show_qr.html', {'qrandom': qrandom      })
@@ -3625,7 +3726,12 @@ def admin_duplicate_mental(request,idm):
 
 @login_required(login_url= 'index')
 def list_questions_flash(request):
+
     request.session["parcours_id"] = False
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
+
+
     teacher = request.user.teacher 
     quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, folders=None).order_by("levels","-id") # non inclus dans un dossier, 
     delete_session_key(request, "quizz_id")
@@ -3643,7 +3749,8 @@ def list_questions_flash(request):
 @login_required(login_url= 'index')
 def list_questions_flash_student(request):
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
     student = request.user.student
     tracker_execute_exercise(False, request.user)
     delete_session_key(request, "quizz_id")
@@ -3664,7 +3771,8 @@ def list_questions_flash_student(request):
 def create_questions_flash(request,id):
     teacher = request.user.teacher
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
 
     if request.method == "POST":
         if form.is_valid():
@@ -3703,7 +3811,8 @@ def update_questions_flash(request,id):
     quizz   = Quizz.objects.get(pk=id)
 
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , instance = quizz)
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
 
     if request.method == "POST":
         if form.is_valid():
@@ -3754,7 +3863,8 @@ def duplicate_questions_flash(request,id):
 def show_questions_flash(request,id):
     """ permet à un prof de voir son quizz """
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
     quizz = Quizz.objects.get(pk= id)
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     try :
@@ -3806,7 +3916,8 @@ def admin_test_mental(request,id):
 
     teacher = request.user.teacher
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "QFlash"
     mental = Mental.objects.get(pk=id)
  
     quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = mental.mentaltitle.subject ,
@@ -3816,7 +3927,6 @@ def admin_test_mental(request,id):
     quizz.mentaltitles.add(mental.mentaltitle)
     create_questions_flash_random_variable([id], quizz, 10)
 
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
     context = {  "quizz" : quizz , "questions" : questions , "is_test_admin" : True }
 
@@ -3967,7 +4077,9 @@ def ajax_select_style_questions(request):
 @login_required(login_url= 'index')
 def list_visiocopie(request):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "VisioCopies"
+
     teacher = request.user.teacher
 
     if request.user.school :
@@ -3996,7 +4108,8 @@ def list_visiocopie(request):
 @login_required(login_url= 'index')
 def create_visiocopie(request,code):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "VisioCopies"
     form = VideocopyForm(request.POST or None, request.FILES or None,   )
  
     if request.method == "POST" :
@@ -4017,7 +4130,8 @@ def create_visiocopie(request,code):
 @login_required(login_url= 'index')
 def delete_visiocopie(request, id):
     
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche 
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "VisioCopies"
     videocopy = Videocopy.objects.get(id=id)
 
     if request.user == videocopy.teacher.user :

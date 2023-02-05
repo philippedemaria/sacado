@@ -29,6 +29,10 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
     background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c), color-stop(#485DA6), color-stop(#00a1ba), color-stop(#00BF98), to(#36C486));background-image:-webkit-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:-o-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
 }
 
+.advises{
+  background-color: white;
+}
+
 .alert-setup{
   color:white;
 }

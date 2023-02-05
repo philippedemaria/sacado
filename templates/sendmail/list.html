@@ -110,6 +110,8 @@
                       <li><a href="#" class="nav-link" data-target-id="tweets">Tweets  </a> </li> 
                       <hr>
                       <li><a href="#" class="nav-link" data-target-id="webinaires">Webinaires  </a> </li> 
+                      <hr>
+                      <li><a href="#" class="nav-link" data-target-id="actu_com">Actu & Com'  </a> </li> 
 
 
 
@@ -387,7 +389,20 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="admin-content" id="actu_com" >
+                    <div class="row">
+                        <div class="col-xs-11 col-md-11 col-lg-11" id ="principal_section">
+                            
+                            {% for c in communications %}
+                                <div class="advises">
+                                    <h3> {{ c.today|date:"d N Y" }} : {{ c.subject }} </h3>
+                                    {{ c.texte|safe }}
+                                </div>
+                            {% endfor %}
+                            
+                        </div> 
+                    </div>
+                </div>
 
 
 

@@ -28,11 +28,20 @@
     border-radius: 0px;
 }
  
+
 .nav > li > a.main:hover, .nav > li > a.main:focus {
     text-decoration: none;
-    color: #ffb914 ; /*#5d4391;*/
+    color: #FF8B69 ; /*#5d4391;*/
     background-color:  #FFF ;  
 }
+
+a.active_selected{
+    color: #FF8B69!important ;
+    background-color: #FFF  !important; 
+    border-radius: 0px;
+}
+
+
 
 .nav > li > a:hover, .nav > li > a:focus {
     text-decoration: none;

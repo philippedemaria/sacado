@@ -37,7 +37,8 @@ def list_emails(request):
 			shared_groups = teacher.teacher_group.order_by("level__ranking") 
 			groups = groups | shared_groups
 
-			request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+			request.session["tdb"] = "Sendmail"
+			if request.session.has_key("subtdb") : del request.session["subtdb"]
 
 			group_students = set()
 			for group in groups:
@@ -48,6 +49,9 @@ def list_emails(request):
 			tasks = Relationship.objects.filter(parcours__teacher = teacher,  exercise__supportfile__is_title=0).exclude(date_limit=None).order_by("-date_limit")[:50] 
 			sent_emails = Email.objects.distinct().filter(author=user).order_by("-today")
 			emails = Email.objects.distinct().filter(receivers=user).order_by("-today")
+
+			communications = Communication.objects.values('id', 'subject', 'texte', 'today').order_by("-id")
+
 			form = EmailForm(request.POST or None, request.FILES or None)
 
 			discussions = Discussion.objects.all().order_by("-date_created")
@@ -55,7 +59,7 @@ def list_emails(request):
 			tweeters = Tweeter.objects.all().order_by("-date_created")
 			return render(request,
 			          'sendmail/list.html',
-			          {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': [], 
+			          {'tweeters': tweeters, 'emails': emails, 'sent_emails': sent_emails, 'form': form, 'users': users, 'groups': groups,  'today': today, 'communications': communications, 
 			           'discussions' : discussions, 'nb_discussions': nb_discussions ,  'studentanswers': studentanswers, 'tasks': tasks})
 
 		elif user.is_student:

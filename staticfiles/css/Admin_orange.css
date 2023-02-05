@@ -449,6 +449,10 @@ hr.menu {
   font-weight: 800;
 }
 
+.inside_volet_show_submenu a:hover{
+    text-decoration: none;
+    color: #FF8B69 ;  
+}
 
 
 .inside_volet_show_submenu a.inside_volet{

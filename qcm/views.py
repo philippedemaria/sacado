@@ -1650,8 +1650,8 @@ def list_folders(request):
     nb_base =  len( folders  )   
     nb_archive =  len( teacher_has_folders(teacher, 1  )  ) 
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Folders"
  
     groups = teacher.has_groups()
 
@@ -1680,8 +1680,8 @@ def list_folders_archives(request):
     nb_base =  len( folders  )   
  
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
-
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Folders"
  
     groups = teacher.has_groups()
 
@@ -1712,8 +1712,10 @@ def list_parcours(request):
 
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,0 )   )   
     nb_base = len( folders ) + parcourses.count()
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
+
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Parcours"
+
     groups = teacher.has_groups()
 
     if request.session.has_key("group_id"):
@@ -1741,8 +1743,9 @@ def list_archives(request):
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,0 )   )   
  
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Parcours"
+
     return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  'is_sequence': False ,
                                                         'today' : today ,  'teacher' : teacher , 'nb_base' : nb_archive   })
 
@@ -1767,14 +1770,14 @@ def list_sequences(request):
 
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,1)   )   
     nb_base = len( folders ) + parcourses.count()
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
+    
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Sequences"
+
     groups = teacher.has_groups()
 
-    if request.session.has_key("group_id"):
-        del request.session["group_id"]
-    if request.session.has_key("folder_id"):
-        del request.session["folder_id"]
+    if request.session.has_key("group_id"): del request.session["group_id"]
+    if request.session.has_key("folder_id"): del request.session["folder_id"]
 
     return render(request, 'qcm/list_sequences.html', { 'folders' : folders , 'parcourses' : parcourses , 'nb_base' : nb_base ,  'groups' : groups ,
                     'parcours' : None , 'group' : None , 'today' : today ,  'teacher' : teacher , 'nb_archive' : nb_archive })
@@ -1796,8 +1799,9 @@ def list_sequences_archives(request):
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,0,1,1 )   )   
  
  
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Sequences"
+
     return render(request, 'qcm/list_archives.html', { 'folders' : folders , 'parcourses' : parcourses ,  'is_sequence': True,
                                                         'today' : today ,  'teacher' : teacher , 'nb_base' : nb_archive   })
 
@@ -1820,8 +1824,10 @@ def list_evaluations(request):
     parcourses = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher),folders=None,is_evaluation=1,is_archive=0,is_trash=0,is_sequence=0)
     nb_archive =  len(  teacher_has_own_parcourses_and_folder(teacher,1,1,0 )   )   
     nb_base = len( folders ) + parcourses.count()
-    request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
- 
+    
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Evaluations"
+
     groups = teacher.has_groups()
 
     delete_session_key(request, "group_id") 
@@ -1840,6 +1846,10 @@ def list_evaluations_archives(request):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
+
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Evaluations"
+
     parcourses = teacher_has_parcourses(teacher,1 ,1 ) #  is_evaluation ,is_archive 
     nb_base = len( parcourses )  
     today = time_zone_user(teacher.user)
@@ -1862,6 +1872,10 @@ def list_parcours_group(request,id):
 
     today = time_zone_user(request.user)
     group = Group.objects.get(pk = id) 
+
+    request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
+    if request.session.has_key("subtdb"): del request.session["subtdb"]
+
 
     #On entre dans un groupe donc on garde sa clé dans la session
     request.session["group_id"] = id
@@ -6035,13 +6049,17 @@ def all_levels(user, status):
 
 
 def list_exercises(request):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Consulting"
+
     
     user = request.user
     if user.is_authenticated :
         if user.is_teacher:  # teacher
             teacher = Teacher.objects.get(user=user)
             datas = all_levels(user, 0)
-            request.session["tdb"] = False # permet l'activation du surlignage de l'icone dans le menu gauche
+
             customexercises = teacher.teacher_customexercises.all()
             return render(request, 'qcm/list_exercises.html', {'datas': datas, 'teacher': teacher , 'customexercises':customexercises, 'parcours': None, 'relationships' : [] ,  'communications': [] , })
         
@@ -6555,6 +6573,7 @@ def delete_supportfile(request, id):
 @user_passes_test(user_is_testeur)
 def show_this_supportfile(request, id):
 
+
     if request.user.is_teacher:
         teacher = Teacher.objects.get(user=request.user)
         parcours = Parcours.objects.filter(teacher=teacher,is_trash=0)
@@ -6585,7 +6604,10 @@ def show_this_supportfile(request, id):
 
 @login_required(login_url= 'index') 
 def my_own_exercises(request): # Modification d'un exercice non autocorrigé dans un parcours
-    
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Exercises"
+
     try :
         teacher = request.user.teacher
     except :
@@ -11440,6 +11462,9 @@ def list_courses(request):
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
     parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=0).exclude(course=None).order_by("subject", "level", "title").distinct()
     parcours_courses = list()
     for parcours in parcours_dataset :
@@ -11466,6 +11491,9 @@ def list_courses_archives(request):
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
     parcours_dataset = Parcours.objects.filter(Q(teacher=teacher)|Q(coteachers=teacher), is_trash=0 ,is_evaluation=0, is_archive=1).exclude(course=None).order_by("subject", "level", "ranking")
     parcours_courses = list()
     for parcours in parcours_dataset :
@@ -11487,6 +11515,9 @@ def only_create_course(request):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     form    = CourseNPForm(request.POST or None, teacher = teacher)
     if request.method == "POST" :
@@ -11516,6 +11547,9 @@ def only_update_course(request,idc):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     course  =  Course.objects.get(pk=idc)
     form    =  CourseNPForm(request.POST or None, instance = course , teacher = teacher , initial = {   'subject' : course.parcours.subject  , 'level' : course.parcours.level })
@@ -11549,6 +11583,8 @@ def create_course(request, idc , id ):
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
     
@@ -11591,6 +11627,9 @@ def create_course_sequence(request, id ):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     relationships = Relationship.objects.filter(parcours = parcours,exercise__supportfile__is_title=0).order_by("ranking")
     if parcours.is_sequence :
@@ -11637,6 +11676,10 @@ def create_custom_sequence(request, id ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
     try :
         teacher = request.user.teacher
     except :
@@ -11690,6 +11733,10 @@ def update_course(request, idc, id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
     parcours = Parcours.objects.get(pk =  id)
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
     try :
         teacher = request.user.teacher
     except :
@@ -11740,7 +11787,8 @@ def delete_course(request, idc , id  ):
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
 
-
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     try :
         teacher = request.user.teacher
@@ -11783,6 +11831,8 @@ def peuplate_course_parcours(request,idp):
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     if not authorizing_access(teacher,parcours, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
@@ -11808,7 +11858,10 @@ def show_course(request, idc , id ) :
     teacher = Teacher.objects.get(user= request.user)
 
     role, group , group_id , access = get_complement(request, teacher, parcours)
-    
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
   
@@ -11829,7 +11882,9 @@ def show_one_course(request, idc  ) :
     """
     idc : course_id et id = parcours_id pour correspondre avec le decorateur
     """
- 
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
     teacher = Teacher.objects.get(user= request.user)
     course = Course.objects.get(pk=idc) 
 
@@ -11845,6 +11900,9 @@ def show_courses_from_folder(request,  idf ) :
     """
     folder = Folder.objects.get(pk =  idf)
     teacher = Teacher.objects.get(user= request.user)
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
 
     role, group , group_id , access = get_complement(request, teacher, folder)
     
