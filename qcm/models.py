@@ -643,7 +643,7 @@ class Parcours(ModelWithCode):
  
     def contains_exo_perso(self):
         contains = False
-        if self.parcours_customexercises.count() > 0 :
+        if self.parcours_relationship.exclude(exercise__supportfile__qtype=100).count() > 0 :
             contains = True
         return contains
 

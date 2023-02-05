@@ -66,14 +66,16 @@
         <div class="col-sm-12 col-md-3 col-lg-2">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
-                    {% if group %}
-                        <option value="{{group.level.id}}">{{ group.level.name }}</option>
-                    {% else %}
-                        {% for l in teacher.levels.all|dictsort:"ranking" %}
-                            <option value="{{l.id}}">{{ l.name }}</option>
-                        {% endfor %}
-                    {% endif %}
+                    {% for l in teacher.levels.all|dictsort:"ranking" %}
+                        <option value="{{l.id}}">{{ l.name }}</option>
+                    {% endfor %}
                 </select>
+
+                {% if group %}
+                    <input id="level_group_comparaison" value="{{group.level.id}}" type="hidden" /> 
+                    <input id="is_level_group_comparaison" value="yes" type="hidden" /> 
+                {% endif %}
+
         </div>
         <div class="col-sm-12 col-md-5 col-lg-3">
  
@@ -190,11 +192,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button> 
                 <h2>Duplication dans vos groupes du parcours : <span id="this_document_title"></span></h2>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <input type="checkbox" name="with_courses" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Je veux aussi récupérer les cours" data-off="Je ne veux pas récupérer les cours" data-width="300px" />
-                    </div>
-                </div>
             </div>
             <div class="modal-body">
                 <p class="text-index_blue">Voici vos groupes et leurs dossiers éventuels. Cocher <b>les groupes ou les dossiers</b> dans lesquels vous souhaitez placer votre parcours.</p>

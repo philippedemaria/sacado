@@ -2191,17 +2191,16 @@ def ajax_all_parcourses(request):
         return redirect('index')
     data = {}
     is_eval    = int(request.POST.get('is_eval',0))
-    level_id   = request.POST.get('level_id',0)
+    level_id   = request.POST.get('level_id',None)
     subject_id = request.POST.get('subject_id',None)
     keywords   = request.POST.get('keywords',None)
     theme_ids = request.POST.getlist('theme_id',[])
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if is_eval == 2 :
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude(teacher=teacher) 
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude( teacher=teacher).exclude(exercises = None) 
     else :   
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval).exclude(teacher=teacher) 
-
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval).exclude(teacher=teacher).exclude(exercises = None) 
 
     if subject_id : 
         subject = Subject.objects.get(pk=subject_id)
@@ -2210,19 +2209,19 @@ def ajax_all_parcourses(request):
     if  keywords :
         base = base.filter(  Q(title__icontains = keywords) | Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
 
-    if level_id :
+
+    if level_id and int(level_id) > 0:
         base = base.filter( level_id = level_id )
 
     if len(theme_ids) > 0 and theme_ids[0] != '' :
         base = base.filter(exercises__knowledge__theme_id__in = theme_ids )
 
+
+
     parcourses = base.order_by('teacher').distinct()   
     listing = request.POST.get('listing',None)
 
-    if listing == "yes" :
-        data['html'] = render_to_string('qcm/ajax_list_parcours_listing.html', {'parcourses' : parcourses, 'teacher' : teacher ,  }) 
-    else :
-        data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
+    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
  
 
 
@@ -4914,7 +4913,6 @@ def exercise_parcours_duplicate(request):
     parcours_id  = request.POST.get("this_document_id",None)
     folders      = request.POST.getlist("folders",[])
     groups       = request.POST.getlist("groups",[])
-    with_courses = request.POST.get("with_courses",None)
     teacher = request.user.teacher
     data = {}
 
@@ -4950,23 +4948,23 @@ def exercise_parcours_duplicate(request):
 
         former_relationship_ids = []
 
-        if with_courses : 
-            for course in courses :
-                old_relationships = course.relationships.all()
-                course.pk = None
-                course.parcours = parcours
-                course.teacher = teacher
-                course.save()
 
-                for relationship in old_relationships :
-                    # clone l'exercice rattaché au cours du parcours 
-                    if not relationship.id in former_relationship_ids :
-                        relationship.pk = None
-                        relationship.parcours = parcours
-                        relationship.save() 
-                    course.relationships.add(relationship)
+        for course in courses :
+            old_relationships = course.relationships.all()
+            course.pk = None
+            course.parcours = parcours
+            course.teacher = teacher
+            course.save()
 
-                    former_relationship_ids.append(relationship.id)
+            for relationship in old_relationships :
+                # clone l'exercice rattaché au cours du parcours 
+                if not relationship.id in former_relationship_ids :
+                    relationship.pk = None
+                    relationship.parcours = parcours
+                    relationship.save() 
+                course.relationships.add(relationship)
+
+                former_relationship_ids.append(relationship.id)
 
         # clone tous les exercices rattachés au parcours 
         for relationship in relationships :
@@ -13142,7 +13140,7 @@ def delete_folder(request,id,idg):
         return redirect('index')
 
     folder  = Folder.objects.get(id=id)
-    if folder.teacher.id == 2480 :
+    if folder.teacher.user.id == 2480 :
         messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
         return redirect('index')
 

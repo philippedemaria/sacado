@@ -4,7 +4,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
             $('[type=checkbox]').prop('checked', false);            
-            $('#id_recuperation').prop('checked', true); 
+            // $('#id_recuperation').prop('checked', true); 
 
 });
 
