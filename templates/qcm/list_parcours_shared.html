@@ -197,20 +197,19 @@
                 </div>
             </div>
             <div class="modal-body">
-                <p>Voici vos groupes avec leurs dossiers éventuels. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
+                <p class="text-index_blue">Voici vos groupes qui incluent en-dessous leurs dossiers éventuels. Cocher le <b>groupe et/ou le dossier</b> dans lesquels vous souhaitez placer votre parcours.</p>
 
-                    {% csrf_token %}<input type="type" name="this_document_id" id="this_document_id" />
+                    {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
                     {% for group in teacher.groups.all %}
                     <div class="col-sm-6 card_modal_search exercise_body_shared" style="height:350px">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado"> {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
-                        
-                        {% for folder in  group.group_folders.all  %}
-                            <div class="quizz_item"> 
-                                <label class="btn btn-warning">{{ folder.title }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label>
-                            </div>
-                        {% endfor %} 
+                            <label  class="btn btn-sacado"> {{ group.name|truncatechars:32 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                            {% for folder in  group.group_folders.all  %}
+                                <div class="quizz_item"> 
+                                    <label class="btn btn-warning">{{ folder.title|truncatechars:32 }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label>
+                                </div>
+                            {% endfor %} 
                         </div>
                     </div>
                     {% endfor %} 

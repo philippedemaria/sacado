@@ -4932,6 +4932,8 @@ def exercise_parcours_duplicate(request):
             group = Group.objects.get(pk=grp_id)
             students.update( group.students.all() )
 
+        parcours.students.set(students)
+
         former_relationship_ids = []
 
         if with_courses : 
@@ -4968,22 +4970,6 @@ def exercise_parcours_duplicate(request):
         data["validation"] = "Duplication abandonnée." 
 
     return JsonResponse(data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

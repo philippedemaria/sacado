@@ -191,7 +191,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h2>Duplication du parcours : <span id="this_document_title"></span></h2>
+                <h2>Duplication du parcours dans vos groupes : <span id="this_document_title"></span></h2>
             </div>
             <div class="modal-body">
                 <p>Voici vos groupes avec leurs dossiers éventuels. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
@@ -201,7 +201,7 @@
                     {% for group in teacher.groups.all %}
                     <div class="col-sm-6 card_modal_search" style="height:80px">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado"> {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                            <label  class="btn btn-sacado">Groupe :  {{ group.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
                         </div>
                     </div>
                     {% endfor %} 

@@ -113,12 +113,12 @@
                     {% for group in teacher.groups.all %}
                     <div class="col-sm-6 card_modal_search exercise_body_shared">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado"> {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                            <label  class="btn btn-sacado"> {{ group.name|truncatechars:32 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
                         
                         {% for folder in  group.group_folders.all  %}
-                            <div class="quizz_item"> <label class="btn btn-warning">{{ folder.title }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <hr/>
+                            <div class="quizz_item"> <label class="btn btn-warning">{{ folder.title|truncatechars:32 }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <hr/>
                                 {% for parcours in folder.parcours.all %}
-                                    <label class="btn btn-default full_width" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">{{ parcours.title }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
+                                    <label class="btn btn-default full_width" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">{{ parcours.title|truncatechars:32 }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
                                 {% endfor %}
                             </div>
                         {% endfor %} 

@@ -1651,9 +1651,17 @@ input:invalid:focus {
   color :#007BC9;
 }
 
+
+.text-index_blue{
+  color :#0093CA;
+}
+
+
 .btn-darkblue{
   color :#0152a3;
 }
+
+
 
 .text-green_index{
   color:#00B999;
@@ -1695,9 +1703,6 @@ input:invalid:focus {
   border :2px solid #007BC9;
 }
 
-
-
- 
 
 .btn-blue{
   background-color :#0152a3;
