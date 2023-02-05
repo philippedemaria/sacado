@@ -76,7 +76,7 @@
     {% if nb_groups or request.user.is_superuser %}   
       
  
-    <li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path  %}active{% endif %}">
+    <li  class="dropdown {% if not request.session.tdb and 'qcm' in request.path  or 'bibliotex' in request.path or 'tool' in request.path or 'flashpack' in request.path %}active selected_menu{% endif %}">
         <a href="#" class="main"  id="documents" style="cursor: pointer;">
             <i class="bi bi-folder icon_size"></i> 
             <div class="captionmenu">Documents</div>
