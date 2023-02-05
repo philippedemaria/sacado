@@ -30,6 +30,6 @@ urlpatterns = [
     path('ajax_notification_group', ajax_notification_group, name='ajax_notification_group'),
     path('ajax_notification_student', ajax_notification_student, name='ajax_notification_student'),
 
-
+    path('faq', faq, name='faq'),
   
 ]

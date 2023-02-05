@@ -1,0 +1,117 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %} 
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+    <script>
+       require(['script/ajax-dashboard']); 
+       require(['script/ajax-sendmail']);
+    </script> 
+{% endblock %}
+
+
+{% block page_title %}
+    <a href="#" id='buttonToggle'><i class="fa fa-inbox sacado_text_color"></i></a> Communications
+{% endblock %}
+ 
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{% block body %}
+
+<style>
+.nav-pills > li.active > a {
+   font-weight: 100;
+}
+.nav-stacked > li.active > a, .nav-stacked > li.active > a:hover {
+    background: #271942;
+    color: #FFF;
+    border-top: 0;
+    border-radius: 5px;
+}
+.modal-lg {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto ;
+}
+.tab-pane {
+    padding: 15px;
+    background-color: #FFF;
+    border-left: 0px solid #FFF;
+    border-right: 0px solid #FFF;
+    border-bottom: 0px solid #FFF;
+}
+.content_main .nav > li > a:hover {
+    text-decoration: none;
+    color: #007EE2;
+    text-decoration-style: underline;
+}
+.table{
+  font-size: 12px
+}
+ 
+</style>
+
+
+        <div class="content_main">
+
+                    <div class="row"> 
+                      <div class="col-sm-12 col-md-12">
+                          <a href="{% url 'create_discussion' %}"  class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouvelle discussion</a>
+ 
+                              <table class="table table-sacado table-striped table-hover standard_tab_sort">
+                                  <thead>
+                                      <tr>
+                                        <th></th>
+                                        <th>Intitulé/Auteur </th>
+                                        <th style="width:15%">Réponses/Affichages </th>       
+                                        <th style="width:15%">Dernier message par </th>                    
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                        {% for d in discussions %}
+                                        <tr>
+                                            <td style="width:30px">
+                                                <i class="fa fa-envelope fa-2x"></i> 
+                                                <br/>
+                                                <small>{{ d.subject.shortname }}</small>
+                                            </td> 
+                                            <td>
+                                                <a href="{% url 'show_discussion' d.id %}">
+                                                    {% if d.solve %}<i class="fa fa-check text-success"></i> {% else %} [{{ d.category }} - {{ d.subject.shortname }} ]{% endif %} {{ d.topic }}
+                                                </a> 
+                                                <br/>
+                                                <small>Créé par {{ d.user.first_name}}, {{ d.user.last_name}}, {{ d.date_created|date:"d-m-Y H:i"}}</small>
+                                            </td> 
+                                            <td>
+                                                Réponse{{ d.details.answers_count|pluralize }} : {{ d.details.answers_count }}<br/>
+                                                Affichage{{ d.nb_display|pluralize }} : {{ d.nb_display }}
+                                            </td>  
+                                            <td>
+                                                <small>
+                                                    {{ d.details.user.username  }}<br/>
+                                                    {{ d.details.date_created|date:"d-m-Y,  H:i"}}
+                                                </small>
+                                            </td>  
+                                        </tr>
+                                        {% endfor %}
+                                  </tbody>
+                              </table>
+ 
+                        </div>  
+                    </div>
+                
+        </div>
+
+{% endblock %}

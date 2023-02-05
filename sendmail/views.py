@@ -304,31 +304,46 @@ def ajax_notification_student(request):
 ##### Forum
 #######################################################################################################################################
 #######################################################################################################################################
+def faq(request):
+	if request.user.is_authenticated and request.user.is_teacher:
 
+		request.session["tdb"] = "FAQ"
+		if request.session.has_key("subtdb") : del request.session["subtdb"]
+
+		form = EmailForm(request.POST or None, request.FILES or None)
+
+		discussions = Discussion.objects.all().order_by("-date_created")
+		nb_discussions = discussions.count()
+
+		return render(request,'sendmail/faq.html', { 'discussions' : discussions ,  'nb_discussions' : nb_discussions , 'form' : form , })
+
+	else :
+		return redirect('index')
 
 def create_discussion(request):  
 	form   = DiscussionForm(request.POST or  None)
 	form_m = MessageForm(request.POST or  None)
+	request.session["tdb"] = "FAQ"
 	if request.user.school :
 		if request.method == "POST":
 			if all((form.is_valid(),form_m.is_valid())):
 				new_f = form.save(commit=False)
 				new_f.user = request.user
-				discuss = new_f.save()
+				new_f.save()
 
 				new_fm = form_m.save(commit=False)
 				new_fm.user = request.user
 				new_fm.discussion = new_f
 				new_fm.save()
 
-				for message  in discuss.discussion_message.all() :
+				for message  in new_f.discussion_message.all() :
 					try :
 						send_mail("SACADO Forum : " +new_f.category  , 
 									cleanhtml(unescape_html(new_fm.texte)) +"\n Pour répondre, connectez-vous à Sacado : https://sacado.xyz", 
 									settings.DEFAULT_FROM_EMAIL, ['sacado.asso@gmail.com',message.user.email] )
 					except :
 						pass
-				return redirect('emails')
+				return redirect('faq')
 
 			else :
 				print(form.errors)
@@ -344,7 +359,8 @@ def create_discussion(request):
 def show_discussion(request,idd):
 	discussion = Discussion.objects.get(id = idd)
 	msgs = Message.objects.filter(discussion = discussion)
-	m = msgs.last()
+	m = msgs.last()		
+	request.session["tdb"] = "FAQ"
  
 	form = MessageForm(request.POST or  None)
 

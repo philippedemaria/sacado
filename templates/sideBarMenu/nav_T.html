@@ -155,6 +155,19 @@
             </li>
             {% endif %}
         {% endcomment %}
+
+
+ 
+            <li class="dropdown {% if request.session.tdb == 'FAQ' %}active{% endif %}">
+                <a href="{% url 'faq' %}" class="main">
+                    <i class="bi bi-question-circle icon_size"></i> 
+                    <div class="captionmenu">FAQ</div>
+                </a>
+            </li>
+ 
+
+
+
     {% endif  %}
 
 
