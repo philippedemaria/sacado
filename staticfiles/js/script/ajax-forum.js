@@ -1,17 +1,8 @@
-define(['jquery', 'bootstrap'], function ($) {
-    $(document).ready(function () {
-        console.log("chargement JS ajax-sendmail.js OK");
+define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
+    $(document).ready(function () { 
+        console.log("chargement JS ajax-support_creator.js  OKK");
 
-        $('#div_to_answer').hide();
-        $('#answer_button').on('click', function () { 
-                $('#div_to_answer').toggle(500);
-            });
 
-        $('#answer_close_button').on('click', function () { 
-                $('#div_to_answer').toggle(500);
-            });
-
- 
         CKEDITOR.replace('texte', {
                 height: '200px' ,
                 toolbar:    
@@ -23,8 +14,8 @@ define(['jquery', 'bootstrap'], function ($) {
             });
 
 
-
-
-
-    });
 });
+
+});
+
+ 

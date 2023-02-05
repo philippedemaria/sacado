@@ -83,7 +83,7 @@ class Message(models.Model):
 
     discussion   = models.ForeignKey(Discussion, blank = True, null=True , on_delete=models.CASCADE,   related_name="discussion_message")
     user         = models.ForeignKey(User, blank = True, on_delete=models.CASCADE,   related_name="user_message")
-    texte        = RichTextUploadingField(  verbose_name="Texte")      
+    texte        = models.TextField( verbose_name="Texte")      
     date_created = models.DateTimeField( auto_now_add= True)
  
 

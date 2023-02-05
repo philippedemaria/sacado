@@ -314,18 +314,20 @@ def create_discussion(request):
 			if all((form.is_valid(),form_m.is_valid())):
 				new_f = form.save(commit=False)
 				new_f.user = request.user
-				new_f.save()
+				discuss = new_f.save()
 
 				new_fm = form_m.save(commit=False)
 				new_fm.user = request.user
 				new_fm.discussion = new_f
 				new_fm.save()
 
-				try :
-					for teacher in Teacher.objects.filter(is_mailing=1).values_list("user__email",flat=True).distinct():
-						send_mail("sacado Forum : " +new_f.discussion  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", settings.DEFAULT_FROM_EMAIL, [teacher.user.email] )
-				except :
-					pass
+				for message  in discuss.discussion_message.all() :
+					try :
+						send_mail("SACADO Forum : " +new_f.category  , 
+									cleanhtml(unescape_html(new_fm.texte)) +"\n Pour répondre, connectez-vous à Sacado : https://sacado.xyz", 
+									settings.DEFAULT_FROM_EMAIL, ['sacado.asso@gmail.com',message.user.email] )
+					except :
+						pass
 				return redirect('emails')
 
 			else :
@@ -359,12 +361,12 @@ def show_discussion(request,idd):
 				new_f.user = request.user
 				new_f.discussion = discussion
 				new_f.save()
-				try :				
+				try :
 					dest = ['sacado.asso@gmail.com']
 					for e in discussion.discussion_message.values_list("user__email",flat=True).distinct():
 						dest.append(e)
- 
-					send_mail("sacado Forum : " +new_f.discussion  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", settings.DEFAULT_FROM_EMAIL, dest )
+
+					send_mail("sacado Forum : " +new_f.discussion.category  , cleanhtml(unescape_html(new_f.texte)) +"\n Pour répondre connectez-vous à Sacado : https://sacado.xyz", settings.DEFAULT_FROM_EMAIL, dest )
 				except :
 					pass
 			else :
