@@ -2476,7 +2476,7 @@ def duplicate_folder(request):
                     pass
             i += 1
 
-        data["validation"] = "Duplication réussie"
+        data["validation"] = "Duplication réussie. Retrouvez-le depuis le menu Groupes."
     else :
         data["validation"] = "Duplication abandonnée." 
 
@@ -4965,7 +4965,7 @@ def exercise_parcours_duplicate(request):
             except :
                 pass
 
-        data["validation"] = "Duplication réussie"
+        data["validation"] = "Duplication réussie. Retrouvez-le depuis le menu Groupes."
     else :
         data["validation"] = "Duplication abandonnée." 
 

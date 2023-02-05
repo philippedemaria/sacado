@@ -1096,7 +1096,7 @@ def duplicate_bibliotex(request):
             relationtex.courses.set(courses)
 
 
-        data["validation"] = "Duplication réussie"
+        data["validation"] = "Duplication réussie. Retrouvez-la depuis le menu Groupes."
     else :
         data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 
 

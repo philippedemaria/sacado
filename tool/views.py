@@ -381,9 +381,9 @@ def ajax_clone_quizz(request):
             students.update( group.students.all() )
         quizz.students.set(students)
 
-        data["validation"] = "Duplication réussie"
+        data["validation"] = "Duplication réussie. Retrouvez-le depuis le menu Groupes."
     else :
-        data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 
+        data["validation"] = "Duplication abandonnée. Le quizz n'est pas reconnu." 
 
     return JsonResponse(data)
 
