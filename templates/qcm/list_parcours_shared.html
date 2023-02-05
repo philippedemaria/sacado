@@ -204,7 +204,8 @@
                     {% for group in teacher.groups.all %}
                     <div class="col-sm-6 card_modal_search exercise_body_shared" style="height:350px">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado"> {{ group.name|truncatechars:32 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                            <label  class="btn btn-sacado">Groupe : {{ group.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label><br/> 
+                            <label style="color:{{ group.color|contrast_color }}">Dossiers </label> 
                             {% for folder in  group.group_folders.all  %}
                                 <div class="quizz_item"> 
                                     <label class="btn btn-warning">{{ folder.title|truncatechars:32 }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label>
