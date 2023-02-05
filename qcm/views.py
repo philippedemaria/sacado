@@ -2415,8 +2415,6 @@ def duplicate_folder(request):
         group = Group.objects.get(pk=grp_id)
         students.update( group.students.all() )
 
-
-
     if folder_id :
         folder = Folder.objects.get(pk = folder_id)
         prcs   = folder.parcours.all()
@@ -4942,6 +4940,9 @@ def exercise_parcours_duplicate(request):
             students.update( folder.students.all() )
         for grp_id in groups :
             group = Group.objects.get(pk=grp_id)
+            parcours.level = group.level
+            parcours.subject = group.subject
+            parcours.save()
             students.update( group.students.all() )
 
         parcours.students.set(students)
@@ -4958,14 +4959,16 @@ def exercise_parcours_duplicate(request):
 
             for relationship in old_relationships :
                 # clone l'exercice rattaché au cours du parcours 
-                if not relationship.id in former_relationship_ids :
-                    relationship.pk = None
-                    relationship.parcours = parcours
-                    relationship.save() 
-                course.relationships.add(relationship)
+                try : 
+                    if not relationship.id in former_relationship_ids :
+                        relationship.pk = None
+                        relationship.parcours = parcours
+                        relationship.save() 
+                        
+                    course.relationships.add(relationship)
 
-                former_relationship_ids.append(relationship.id)
-
+                    former_relationship_ids.append(relationship.id)
+                except : pass
         # clone tous les exercices rattachés au parcours 
         for relationship in relationships :
             skills = relationship.skills.all()
@@ -13146,11 +13149,8 @@ def delete_folder(request,id,idg):
 
 
     if folder.teacher == teacher or request.user.is_superuser :
-        if folder.parcours.count() == 0 :
-            Folder.objects.filter(pk=folder.id).update(is_trash=1)
-        else :
-            messages.error(request, "Le dossier "+ folder.title +" n'est pas vide. La suppression n'est pas possible. Vous devez dissocier les parcours en les décochant depuis le dossier "+ folder.title +".")
-    
+        Folder.objects.filter(pk=folder.id).update(is_trash=1)
+
     else :
         messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ folder.title +". Contacter le propriétaire.")
     if idg == 999999999999999999 :
@@ -13159,6 +13159,12 @@ def delete_folder(request,id,idg):
         return redirect ("parcours" )  
     else :
         return redirect ("list_parcours_group", idg )  
+
+
+
+
+
+
 
 
 @login_required(login_url= 'index')
