@@ -335,15 +335,14 @@ hr.divider {
 
 .panel-group_list .panel-default > .panel-heading {
     color: #333;
-    background-color: #b3edff;
+    background-color: #FFF;
     border-color: #b3edff;
 }
 
 .panel-group_list .panel-heading {
     padding: 10px 5px;
     border-bottom: 1px solid transparent;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-radius: 3px;
 }
 .panel-group_list .panel-title {
     padding-bottom: 0px;
