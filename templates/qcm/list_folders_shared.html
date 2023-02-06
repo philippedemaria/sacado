@@ -53,13 +53,9 @@
         <div class="col-sm-12 col-md-4 col-lg-4">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
-                    {% if group %}
-                        <option value="{{group.level.id}}">{{ group.level.name }}</option>
-                    {% else %}
                         {% for l in teacher.levels.all|dictsort:"ranking" %}
                             <option value="{{l.id}}">{{ l.name }}</option>
                         {% endfor %}
-                    {% endif %}
                 </select>
         </div>   
         <div class="col-sm-12 col-md-4 col-lg-5">
@@ -68,27 +64,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
 
-            <div class="alert alert-sacado">            
-                
-
-                    <img src="{% static 'img/conseil.png' %}" height="40px" />
-
-
-                    <b>Vous ne pouvez récupérer dans votre groupe que les dossiers liés au niveau du groupe</b>.<br/>
-                    <small>Lors de votre recherche, vos dossiers ne vous sont pas montrés. Ils sont déjà à vous. Seuls les dossiers de votre établissement et de l'équipe SACADO vous sont proposés.</small>
-      
-                {% comment %}
-                <span class="no_visu_on_load" id="after_choice"> Adapter l'affichage de votre recherche
-                        <input id="listing"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Liste" data-off="Vignettes" data-width="130"/> 
-                </span>
-                {% endcomment %}
-            </div>
-
-        </div>
-    </div>
 
 
 

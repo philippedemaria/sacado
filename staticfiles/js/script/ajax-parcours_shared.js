@@ -11,7 +11,7 @@ define(['jquery', 'bootstrap'], function ($) {
         $('#id_level').on('change', function (event) {
 
             if ($("#is_level_group_comparaison").val()=="yes") {
-            if ($("#level_group_comparaison").val() != $('#id_level').val()) { !confirm("Vous sélectionnez un niveau qui n'est pas celui de votre groupe. Il existe un risque de conflit entre les savoir.")}
+            if ($("#level_group_comparaison").val() != $('#id_level').val()) { !confirm("Vous sélectionnez un niveau qui n'est pas celui de votre groupe. Les savoir faire cibles ne seront pas pris en compte dans les bilans.")}
             }
 
 
