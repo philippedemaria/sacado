@@ -313,8 +313,8 @@
                                 {%  elif question.qtype == 2 %} 
                                     <div class="col-sm-12 col-md-12" align="center">
                                         {% block question_correction %}
+                                            <span style="font-size:1.5em" class="thin text-blue">{{ question.writinganswer }}</span>  
                                         {% endblock %}
-                                        <span style="font-size:1.5em" class="thin text-blue">{{ question.writinganswer }}</span>  
                                     </div> 
                                 {%  elif question.qtype > 2 %} 
                                     {% for choice in question.choices.all %}
