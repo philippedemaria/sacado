@@ -167,18 +167,6 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
         });
 
 
-
-            $('#id_recuperation').prop('checked', false); 
-
-
-
-
-
-
-
-
-
-
         $('.updateStudent').on('keyup', function (event) {
             let value = $(this).val();
             let student_id = $(this).attr("data-student_id");
@@ -314,39 +302,39 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
 
 
 
-        $("#id_recuperation").change(function () {
-                if ($("#id_recuperation").is(":checked")) {
+        // $("#id_recuperation").change(function () {
+        //         if ($("#id_recuperation").is(":checked")) {
 
-                    let level_id   = $("#id_level").val();
-                    let subject_id = $("#id_subject").val();
-                    let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                    let is_update  = $("#is_update").val();
+        //             let level_id   = $("#id_level").val();
+        //             let subject_id = $("#id_subject").val();
+        //             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+        //             let is_update  = $("#is_update").val();
 
-                    if (is_update=="yes") {  url = "../../ajax_choose_parcours" } else { url = "ajax_choose_parcours"}
-                        $.ajax(
-                            {
-                                type: "POST",
-                                dataType: "json",
-                                data: {
-                                    'subject_id' :  subject_id, 
-                                    'level_id'   :  level_id, 
-                                    csrfmiddlewaretoken : csrf_token
-                                },
-                                url: url,
-                                success: function (data) {
-                                    $('#choosen_parcours_by_this_level_and_subject').html("").html(data.html);
-                                }
-                            }
-                        )
+        //             if (is_update=="yes") {  url = "../../ajax_choose_parcours" } else { url = "ajax_choose_parcours"}
+        //                 $.ajax(
+        //                     {
+        //                         type: "POST",
+        //                         dataType: "json",
+        //                         data: {
+        //                             'subject_id' :  subject_id, 
+        //                             'level_id'   :  level_id, 
+        //                             csrfmiddlewaretoken : csrf_token
+        //                         },
+        //                         url: url,
+        //                         success: function (data) {
+        //                             $('#choosen_parcours_by_this_level_and_subject').html("").html(data.html);
+        //                         }
+        //                     }
+        //                 )
 
-                    $("#choosen_parcours_for_this_level_and_subject").show(500);
-                    $("#choosen_parcours_by_this_level_and_subject").show(500);
+        //             $("#choosen_parcours_for_this_level_and_subject").show(500);
+        //             $("#choosen_parcours_by_this_level_and_subject").show(500);
        
-                } else {
-                    $("#choosen_parcours_for_this_level_and_subject").hide(500);
-                    $("#choosen_parcours_by_this_level_and_subject").hide(500);
-                }
-            });
+        //         } else {
+        //             $("#choosen_parcours_for_this_level_and_subject").hide(500);
+        //             $("#choosen_parcours_by_this_level_and_subject").hide(500);
+        //         }
+        //     });
 
        
     });
