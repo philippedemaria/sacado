@@ -315,6 +315,7 @@
                                         {% block question_correction %}
                                             <span style="font-size:1.5em" class="thin text-blue">{{ question.writinganswer }}</span>  
                                         {% endblock %}
+                                        
                                     </div> 
                                 {%  elif question.qtype > 2 %} 
                                     {% for choice in question.choices.all %}
