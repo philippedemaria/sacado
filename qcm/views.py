@@ -2157,10 +2157,13 @@ def all_parcourses(request,is_eval):
         group_id = request.session.get("group_id",None)
         if group_id :
             group = Group.objects.get(pk = group_id)
+            same_level_groups = teacher.groups.filter(level=group.level,subject=group.subject)
         else :
-            group = None   
+            group = None
+            same_level_groups = teacher.groups.all()   
     except :
         group = None
+        same_level_groups = teacher.groups.all()
 
     try :
         parcours_id = request.session.get("parcours_id",None)
@@ -2179,7 +2182,9 @@ def all_parcourses(request,is_eval):
 
     levels = teacher.levels.order_by("ranking")
 
-    return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher , "levels" : levels ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group   })
+    print(group)
+
+    return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher , "levels" : levels ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group , 'same_level_groups' : same_level_groups  })
 
  
 def ajax_all_parcourses(request):
@@ -2250,10 +2255,13 @@ def all_folders(request):
         group_id = request.session.get("group_id",None)
         if group_id :
             group = Group.objects.get(pk = group_id)
+            same_level_groups = teacher.groups.filter(level=group.level,subject=group.subject)
         else :
-            group = None   
+            group = None
+            same_level_groups = teacher.groups.all()  
     except :
         group = None
+        same_level_groups = teacher.groups.all()
 
 
     if request.user.school != None :
@@ -2261,7 +2269,7 @@ def all_folders(request):
     else :
         inside = False
 
-    return render(request, 'qcm/list_folders_shared.html', {  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,  'group' : group   })
+    return render(request, 'qcm/list_folders_shared.html', {  'teacher' : teacher ,   'parcourses': parcourses , 'inside' : inside ,  'group' : group , 'same_level_groups' : same_level_groups  })
 
 
 
@@ -2431,6 +2439,9 @@ def duplicate_folder(request):
         folder.students.set(students)
         folder.groups.set(groups)
         folder.parcours.set(prcs)
+        for g in groups :
+            Folder.objects.filter(pk=folder.pk).update(level = group.level)
+            Folder.objects.filter(pk=folder.pk).update(subject = group.subject)
         #################################################
         # clone les exercices attachés à un cours 
         #################################################
@@ -2444,9 +2455,11 @@ def duplicate_folder(request):
             p.code = str(uuid.uuid4())[:8] 
             p.teacher = teacher
             for g in groups :
-                group = Group.objects.get(pk=g)
+                group     = Group.objects.get(pk=g)
                 p.subject = group.subject
-                p.level = group.level
+                p.level   = group.level
+                Folder.objects.filter(pk=folder.pk).update(level = group.level)
+                Folder.objects.filter(pk=folder.pk).update(subject = group.subject)
             p.is_publish = 0
             p.is_archive = 0
             p.is_share = 0

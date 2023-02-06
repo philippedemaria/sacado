@@ -104,7 +104,7 @@
         </div>
     {% else %} 
         <div class="alert alert-danger">      
-            <i class="fa fa-warning"></i> Pour récupérer un parcours mutualisé, vous devez souscrire la version établisssement.
+            <i class="fa fa-warning"></i> Pour récupérer un dossier mutualisé, vous devez souscrire la version établisssement.
         </div>
     {% endif %}  
 
@@ -170,21 +170,21 @@
                 <h2>Duplication dans vos groupes du parcours  : <span id="this_document_title"></span></h2>
             </div>
             <div class="modal-body">
-                <p>Voici vos groupes. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
+                <p>Voici vos groupes du même niveau que  {{ group.name }}. Cocher ceux dans lesquels vous souhaitez placer ou rattacher votre dossier.</p>
 
                     {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
-                    {% for group in teacher.groups.all %}
+                    {% for grp in same_level_groups %}
                     <div class="col-sm-6 card_modal_search" style="height:80px">
-                        <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado">Groupe :  {{ group.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
+                        <div class="quizz_item" style="background-color:{{ grp.color }}">
+                            <label  class="btn btn-sacado">Groupe :  {{ grp.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ grp.id }}" {% if group.id == grp.id %} checked {% endif %} /> </label> 
                         </div>
                     </div>
                     {% endfor %} 
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer le parcours <span id="this_document_label"></span></a>
+                            <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer le dossier <span id="this_document_label"></span></a>
                         </div>
                     </div>
                 <small class="text-green_index"><em>Pour modifier mes niveaux, aller dans Mon compte ou sur votre avatar puis dans Mon profil ou <a href="{% url 'profile' %}">cliquer ici</a></em></small>          

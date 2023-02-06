@@ -18,16 +18,16 @@
 
   
 {% block page_title %}
-    
 
-
-    {% if parcours %} 
-        <span style="color:{{ parcours.color|contrast_color_title }}"><i class="bi bi-explicit"></i> </span>
-        {% include 'qcm/breadcrumb.html' %}
-        <small> Les {% if is_eval == 1 %}évaluations mutualisées{% elif is_eval == 2 %}séquences mutualisées{% else %}parcours mutualisés{% endif  %}   </small>
-    {% else  %} 
-        <i class="fa fa-laptop"></i> Les {% if is_eval == 1 %}évaluations mutualisées{% elif is_eval == 2 %}séquences mutualisées{% else %}parcours mutualisés{% endif  %} 
+    {% if group %} 
+        <span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-th"></i> {{ group.name }} <img width="25px" src="{% static 'img/angle-right.png' %}"/></span>
     {% endif  %} 
+    {% if parcours %} 
+        {% include 'qcm/breadcrumb.html' %}
+     {% endif  %}   
+        <small> Les {% if is_eval == 1 %}évaluations mutualisées{% elif is_eval == 2 %}séquences mutualisées{% else %}parcours mutualisés{% endif  %}   </small>
+
+ 
 
 
 {% endblock %}
@@ -194,16 +194,16 @@
                 <h2>Duplication dans vos groupes du parcours : <span id="this_document_title"></span></h2>
             </div>
             <div class="modal-body">
-                <p class="text-index_blue">Voici vos groupes et leurs dossiers éventuels. Cocher <b>les groupes ou les dossiers</b> dans lesquels vous souhaitez placer votre parcours.</p>
+                <p class="text-index_blue">Voici vos groupes du même niveau que  {{ group.name }} et leurs dossiers eventuels. Cocher ceux dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
 
                     {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
-                    {% for group in teacher.groups.all %}
+                    {% for grp in same_level_groups %}
                     <div class="col-sm-6 card_modal_search exercise_body_shared" style="height:350px">
-                        <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado">Groupe : {{ group.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label><br/> 
+                        <div class="quizz_item" style="background-color:{{ grp.color }}">
+                            <label  class="btn btn-sacado">Groupe : {{ grp.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ grp.id }}" {% if group.id == grp.id %} checked {% endif %} /> </label><br/> 
                             <div class="form_card" style="padding : 15px 5px "><label>Dossiers associés</label> 
-                            {% for folder in  group.group_folders.all  %}
+                            {% for folder in  grp.group_folders.all  %}
                                 <div class="quizz_item"> 
                                     <label class="btn btn-sacado full_width" style="color:{{ folder.color }}; border:color:{{ folder.color }}">{{ folder.title|truncatechars:29 }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label>
                                 </div>
