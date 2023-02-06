@@ -725,6 +725,25 @@ class Parcours(ModelWithCode):
         return theme_tab
 
 
+
+    def get_theme(self):
+        try:
+            exercises = self.exercises.filter(supportfile__is_title=0)
+            theme_tab_id  = []
+            theme_id = []
+            for exercise in exercises :     
+                theme_tab_id.append(exercise.theme.id)
+            compte = {}.fromkeys(set(theme_tab_id),0)
+            for valeur in theme_tab_id:
+                compte[valeur] += 1
+            for k, v in sorted(compte.items(), key=lambda x: x[1]):
+                theme_id.append(k)
+            theme = Theme.objects.get(pk=theme_id[-1]) 
+        except :
+            theme = None
+        return theme
+
+
     def nb_exercises(self):
         nb = self.parcours_relationship.filter(exercise__supportfile__is_title=0).count()
         nba = self.parcours_customexercises.all().count()     

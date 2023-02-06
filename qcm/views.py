@@ -2182,8 +2182,6 @@ def all_parcourses(request,is_eval):
 
     levels = teacher.levels.order_by("ranking")
 
-    print(group)
-
     return render(request, 'qcm/list_parcours_shared.html', { 'is_eval' : is_eval ,  'teacher' : teacher , "levels" : levels ,   'parcourses': parcourses , 'inside' : inside ,   'parcours' : parcours , 'group' : group , 'same_level_groups' : same_level_groups  })
 
  
@@ -2218,15 +2216,18 @@ def ajax_all_parcourses(request):
     if level_id and int(level_id) > 0:
         base = base.filter( level_id = level_id )
 
+    base = base.order_by('teacher').distinct() 
+
     if len(theme_ids) > 0 and theme_ids[0] != '' :
-        base = base.filter(exercises__knowledge__theme_id__in = theme_ids )
+        nbase = set()
+        for p in base :
+            if str(p.get_theme().id) in theme_ids :
+                nbase.add(p)
+        base = nbase 
 
+ 
 
-
-    parcourses = base.order_by('teacher').distinct()   
-    listing = request.POST.get('listing',None)
-
-    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, 'teacher' : teacher ,  })
+    data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : base, 'teacher' : teacher ,  })
  
 
 

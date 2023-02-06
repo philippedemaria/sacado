@@ -25,9 +25,7 @@
 
         <div class="row box_shared_label"> 
             <div class="col-lg-12 col-xs-12">
-                {% for data in parcours.get_themes   %} 
-                <b>{{ data.theme.name }}</b> 
-                {% endfor %}
+                {% if parcours.get_theme  %}<b>{{ parcours.get_theme  }}</b>{% endif %} 
             </div> 
         </div>
         <div class="row box_shared_label"> 
