@@ -3079,17 +3079,13 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
     shuffle(list_of_ids) # la liste des ids des questions flash
     mentaltitles = set()
 
-    
     same_titles = []
-
-    print(list_of_ids)
 
     for mental_id in list_of_ids :
         mental = Mental.objects.get(pk=mental_id)
         variables  = dict()
         i = 1
         not_same_title = True
-        print(not_same_title)
         while not_same_title :
             exec(mental.script,globals(),variables)
             title    = variables['title']
@@ -3099,11 +3095,7 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
                 same_titles.append(title)
                 not_same_title = False
                 question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer)
-            
-            print(i)
-
             i+=1
-
         quizz.questions.add(question)
         mentaltitles.add(mental.mentaltitle)
 
