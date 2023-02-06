@@ -293,12 +293,9 @@
                     <li class="my_slide form_card">
                         {% for question in questions %}
                             <div class="quizz_item" style="margin-bottom: 20px;">
-                                <div class="row consigne_diapo"  align="center">  
-                                    <div class="col-sm-12 col-md-6">
+                                <div class="row consigne_diapo"  align="left">  
+                                    <div class="col-sm-12 col-md-12">
                                         <h1 class="thin"><b>Question {{forloop.counter}}.</b> <small>{{ question.title }}</small> </h1>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                         {% include 'tool/kind_of_question.html' %}
                                     </div>
                                 </div>
                                 <div class="row"> 

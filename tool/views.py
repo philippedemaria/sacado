@@ -2158,6 +2158,7 @@ def print_qf_to_pdf(request):
     if len(question_ids) < 6 : nb_loop  = 3 
     if len(question_ids) < 8 : nb_loop  = 2 
     else :  nb_loop  = 1 
+    quotient , reste  = len(question_ids)//2 , len(question_ids)%2
 
     for n in range(nb_loop):
         for k in range(2):
@@ -2165,26 +2166,24 @@ def print_qf_to_pdf(request):
 
             if len(question_ids)<8 : start, stop = 0, len(question_ids)
             else : 
-                quotient , reste  = len(question_ids)//2 , len(question_ids)%2
-                if reste == 0 : start, stop = 0, quotient+1
+                if k == 0 : start, stop = 0, quotient + 1
+                else : start, stop = quotient+ 1, len(question_ids)
+            if len(question_ids)<8 or k == 0 : 
+                elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
+                elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
+                elements += r" \vspace{0.05cm}"
+                if is_marker :
+                    elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
                 else : 
-                    if k == 0 : start, stop = 0, quotient + 1
-                    else : start, stop = quotient + 1, len(question_ids)
+                    elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
 
-            elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
-            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
-            elements += r" \vspace{0.05cm}"
-            if is_marker :
-                elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
-            else : 
-                elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
-
-            elements += r"\vspace{0,2cm} "
+                elements += r"\vspace{0,2cm} "
             elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
+         
                 elements += r" \textbf{"+ str(i+1) + r".} & " +question.title
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
@@ -2195,7 +2194,7 @@ def print_qf_to_pdf(request):
 
 
     
-        elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
+        elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]\unskip{\tiny\dotfill}"
         elements += r"\\"
 
     if is_correction :
@@ -2205,7 +2204,7 @@ def print_qf_to_pdf(request):
         j = 1   
         for question_id in question_ids :
             question = Question.objects.get(pk=question_id)
-            elements += r"\textbf{Exercice "+str(j)+r".} \\ {\small" + question.title + +r"}"
+            elements += r"\textbf{Exercice " + str(j) + r".}  {\small" + question.title + r"}"
             elements += r"\\" + question.writinganswer
             elements += r"\vspace{0,2cm}\\"
             j+=1
