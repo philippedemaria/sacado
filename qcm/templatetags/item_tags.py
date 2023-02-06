@@ -11,7 +11,7 @@ import re
 def add_parameters(arg, index):
     '''Modifie les paramètres aléatoires pour les questions flash'''
     tab = arg.split(";")
-    if len(tab)>1:
+    if 'abscisse' in tab[0]:
         mini,maxi,step = tab[1].split(",")
         a = random.randint(int(mini),int(maxi))*int(step)
         b = a+int(tab[2])
@@ -19,10 +19,21 @@ def add_parameters(arg, index):
         string = arg.replace("y",str(b))
         new_str = string[:-1]+","+str(index)+")"
         new_str = new_str.split(";")[0]
+        new_str = new_str[:-1]+","+str(index)+")"
 
+    elif 'pizza' in tab[0] or 'chocolat' in tab[0] :
+        mini,maxi = tab[1].split(",")
+        a = random.randint(int(mini),int(maxi))
+        arg = arg.replace("n",str(a))
+        if len(tab)>1:
+            minim,maxim = tab[2].split(",")
+            b = random.randint(int(minim),int(maxim))
+            string = arg.replace("d",str(b))
+        new_str = string[:-1]+","+str(index)+")"
+        new_str = new_str.split(";")[0]
         new_str = new_str[:-1]+","+str(index)+")"
     else :
-        new_str = tab[0][:-1]+","+str(index)+")"
+        new_str = arg[:-1]+","+str(index)+")"
     return new_str
 
 
