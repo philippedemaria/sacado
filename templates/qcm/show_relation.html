@@ -160,7 +160,7 @@
           <div class='justify-content-center'  style="position:relative">
               {% if parcours.is_evaluation %}
                  {% if parcours_available.is_ok   %}
-                      {% if available.is_ok %} 
+                      {% if not available.is_ok %} 
                           {% comment   %}
                           <div class="alert alert-danger" style="width:750px; position:absolute;z-index: 500;"  role="alert" id="message_alerte">
                               <h2>Cet exercice est proposé dans une <b>évaluation</b></h2> 
