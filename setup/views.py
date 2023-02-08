@@ -422,8 +422,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 email = dico_received["P_MEL"][0]
                 if not email :
                     email = str(today.timestamp()) + "@sacado.xyz"
-
-            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
+            try : civilite = dico_received["CIV"][0]
+            except : civilite = "Mme"
+            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
             
             try :
