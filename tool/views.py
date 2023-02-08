@@ -2171,7 +2171,7 @@ def print_qf_to_pdf(request):
             if len(question_ids)<8 or k == 0 : 
                 elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
                 elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
-                elements += r" \vspace{0.05cm}"
+                elements += r" \vspace{0.2cm}"
                 if is_marker :
                     elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
                 else : 
