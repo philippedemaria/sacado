@@ -2,9 +2,6 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
     $(document).ready(function () { 
         console.log("chargement JS ajax-support_creator_canvas.js");
 
-        if ($("#id_situation") != 100 ) {$("#id_situation").val(1);}
-
-
 
         $(document).on('change', '.this_variable' , function(event){
             $(this).addClass('this_variable_active');

@@ -2,7 +2,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
     $(document).ready(function () { 
         console.log("chargement JS ajax-support_creator_sub.js");
 
-        if ($("#id_situation") != 100 ) {$("#id_situation").val(1);}
 
         $(document).on('change', '.quizz_answer' ,  function (event) {  
             if( $(this).val() != "" ) { $(this).parent().parent().addClass('answer_box_active') ;}
