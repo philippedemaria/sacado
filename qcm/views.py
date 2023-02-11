@@ -1121,9 +1121,7 @@ def individualise_parcours(request,id):
 def update_parcourscreator_ia(knowledge , parcours, student, exercise_id , action):
 
     eid = str(exercise_id)
-    print(eid)
-    ex = Exercise.objects.get(pk=exercise_id)
-    print(ex.knowledge.id)    
+    ex = Exercise.objects.get(pk=exercise_id)  
     if action == 1 :
         pcrses = Parcourscreator.objects.filter(knowledge_id = knowledge.id ,  parcours_id = parcours.id )
 
@@ -1138,20 +1136,13 @@ def update_parcourscreator_ia(knowledge , parcours, student, exercise_id , actio
                 print(p.id)
                 break
     else :
-        print("else")
         if Parcourscreator.objects.filter(knowledge_id = knowledge.id ,  student_id = student.user.id ,  parcours_id = parcours.id ).count() == 1 :
             pcrs = Parcourscreator.objects.get(knowledge_id = knowledge.id ,  student_id = student.user.id ,  parcours_id = parcours.id )
-            print("else - ici")
         else :
             pcrs = Parcourscreator.objects.filter(knowledge_id = knowledge.id ,  student_id = student.user.id ,  parcours_id = parcours.id ).first()
-            print("else - là")
         if pcrs and eid in pcrs.exercises :
-            print("ici") 
-            print(pcrs.exercises)
             pcrs.exercises.replace("#"+eid+"#","")
             pcrs.save()
-            print(pcrs.id)
-            print(pcrs.exercises)
         elif pcrs :
             print(pcrs.id)
         else :
