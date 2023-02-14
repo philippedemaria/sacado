@@ -226,6 +226,9 @@ def index(request):
             
         elif request.user.is_student:  ## student
 
+            request.session["tdb"] = "Groups"
+            if request.session.has_key("subtdb"): del request.session["subtdb"]
+
             if request.user.closure : 
                 if request.user.closure < today :
                     messages.error(request,"Votre adhésion est terminée.")  
@@ -234,6 +237,8 @@ def index(request):
             template, context = student_dashboard(request, 0)
 
         elif request.user.is_parent:  ## parent
+            request.session["tdb"] = "Groups"
+            if request.session.has_key("subtdb"): del request.session["subtdb"]
             parent = Parent.objects.get(user=request.user)
             students = parent.students.order_by("user__first_name")
             context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, 'is_not_set_up' : is_not_set_up ,  }
