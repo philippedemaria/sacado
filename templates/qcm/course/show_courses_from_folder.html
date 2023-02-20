@@ -50,7 +50,7 @@
                         {% if   course  %}
 
                         <li class="{% if forloop.first %}active{% endif %} menu_course">
-                            <a href="#" {% if sacado_asso %} class="course_viewer"  {% elif course.author_id == request.user_id %} class="course_viewer" {% else %} title="Version établissement requise"  {% endif  %} data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
+                            <a href="#" class="course_viewer" data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" >  
 
                                 <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" ></i>
                                  {{ course.title }}   
