@@ -2185,7 +2185,7 @@ def print_qf_to_pdf(request):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r"  & \begin{center}" +question.title+r"\end{center}"
+                    elements += r" &"+question.title
                 else :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
 
@@ -3997,7 +3997,7 @@ def admin_test_mental_print(request,id):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r"  & \begin{center}" +question.title+r"\end{center}"
+                    elements += r"  & " +question.title
                 else :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
 
