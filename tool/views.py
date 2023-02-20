@@ -3089,7 +3089,8 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
             title   = variables['title']
             answer  = variables['answer']
             wanswer = variables['wans']
-            body    = variables['body']
+            try :   body    = variables['body']
+            except : body = ""
             if not title in same_titles or i > 10:
                 same_titles.append(title)
                 not_same_title = False
