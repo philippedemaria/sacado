@@ -111,8 +111,8 @@ class Group(ModelWithCode):
             profilTest = True
             
  
-        parcourses = self.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = self.subject, level = self.level ,  folders=None, is_favorite=1,  is_archive=0, is_trash=0) 
-        folders    = self.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers=teacher), subject = self.subject, level = self.level ,  is_favorite=1,  is_archive=0,  is_trash=0) 
+        parcourses = self.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = self.subject, level = self.level ,  folders=None,   is_archive=0, is_trash=0) 
+        folders    = self.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers=teacher), subject = self.subject, level = self.level ,   is_archive=0,  is_trash=0) 
  
         nb_folders = folders.count()
         nb_folders_published = folders.filter(is_publish=1).count()
