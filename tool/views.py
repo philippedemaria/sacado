@@ -2183,11 +2183,12 @@ def print_qf_to_pdf(request):
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
-                if question.filltheblanks  == "" :
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title.replace("\\","")
-                else :
+                if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
                     elements += r"  & " +question.title
+                else :
+                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
+
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.title or 'complète' in question.title : elements += r"\\ \hline"
