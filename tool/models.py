@@ -230,7 +230,6 @@ class Question(models.Model):
 
     mental     = models.ForeignKey(Mental, related_name="questions", blank=True, null = True,  on_delete=models.CASCADE,editable=True)
 
-
     imagefile  = models.ImageField(upload_to=question_directory_path, blank=True, verbose_name="Image", default="")
     audio      = models.FileField(upload_to=question_directory_path, blank=True, verbose_name="Audio", default="")
     video      = models.TextField( default='',  blank=True, verbose_name="Vidéo intégrée")
