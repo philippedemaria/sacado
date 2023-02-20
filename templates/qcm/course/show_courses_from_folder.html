@@ -47,8 +47,6 @@
             <ul class="nav nav-pills nav-stacked admin-menu" id="course_sortable">
  
                 {% for course in courses %}
-                    {% get_permit_access  teacher.user    course    as     get_access %}
-                    {% if get_access %}
                         {% if   course  %}
 
                         <li class="{% if forloop.first %}active{% endif %} menu_course">
@@ -67,8 +65,6 @@
                             <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
                         </li>
                         {% endif %} 
-                    {% endif %} 
-
                 {% endfor %}
             </ul>        
             </form>
@@ -93,18 +89,12 @@
                 </h1>
                 <hr>
 
-                {% get_permit_access  teacher.user    course    as     get_access %}
-                {% if get_access %}
                     {% if   course  %}
                         {{ course.annoncement|decode|safe }} 
                     {% else %} 
                         <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
                     {% endif %} 
-                {% else %} 
-                    <div class="alert alert-danger">
-                        Vous avez téléchargé ce cours mais vous n'avez pas la version établissement. Le cours n'est donc plus utilisable. <a href="{% url 'admin_tdb' %}">Abonnez votre établissement à Sacado.</a>
-                    </div>
-                {% endif %} 
+               
 
             </div>
         {% else %} 
