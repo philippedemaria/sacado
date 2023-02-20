@@ -53,12 +53,8 @@
 
                 <input type="hidden" value="{{ parcours.id }}" name="parcours_id" id="parcours_id"/>
                 {% for course in courses %}
-                    {% get_permit_access  teacher.user    course    as     get_access %}
-                    {% if get_access %}
                         {% if   course  %}
                         <li class="{% if forloop.first %}active{% endif %} menu_course">
-
-
                             <a href="#" {% if sacado_asso %} class="course_viewer"  {% elif course.author_id == request.user_id %} class="course_viewer" {% else %} title="Version établissement requise"  {% endif  %} data-course_id="{{ course.id }}" data-parcours_id="{{ course.parcours.id }}" > 
                             <i class="{% if course.is_publish %}fa fa-eye{% else %}fa fa-eye-slash{% endif %} show_hide"  id="show_hide{{ course.id }}"  data-course_id="{{ course.id }}" title="Gérer la publication élève : Actuellement {% if course.is_publish %}Publié{% else %}Non publié{% endif %}" ></i>
                              
@@ -70,8 +66,7 @@
                             </a>                      
                             <input type="hidden" value="{{ course.id }}" class="course_sort" /> 
                         </li>
-                        {% endif %} 
-                    {% endif %} 
+                        {% endif %}  
                 {% endfor %}
             </ul>        
             </form>
@@ -111,18 +106,9 @@
                 </h1>
                 <hr>
 
-                {% get_permit_access  teacher.user    course    as     get_access %}
-                {% if get_access %}
-                    {% if   course  %}
-                        {{ course.annoncement|decode|safe }} 
-                    {% else %} 
-                        <div class="alert alert-danger">Aucun cours n'est associé à ce parcours.</div> 
-                    {% endif %} 
-                {% else %} 
-                    <div class="alert alert-danger">
-                        Vous avez téléchargé ce cours mais vous n'avez pas la version établissement. Le cours n'est donc plus utilisable. <a href="{% url 'admin_tdb' %}">Abonnez votre établissement à Sacado.</a>
-                    </div>
-                {% endif %} 
+
+                {{ course.annoncement|decode|safe }} 
+ 
 
             </div>
         {% else %} 
