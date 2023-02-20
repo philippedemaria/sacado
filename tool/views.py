@@ -2186,8 +2186,8 @@ def print_qf_to_pdf(request):
                 if question.filltheblanks  == "" :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title.replace("\\","")
                 else :
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks 
-                    elements += r"  & " +question.title.replace("\\","")
+                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
+                    elements += r"  & " +question.title
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.title or 'complète' in question.title : elements += r"\\ \hline"
