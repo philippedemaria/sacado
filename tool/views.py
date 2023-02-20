@@ -2185,14 +2185,14 @@ def print_qf_to_pdf(request):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r"  & " +question.title
+                    elements += r"  & \begin{center}" +question.title+r"\end{center}"
                 else :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
 
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.filltheblanks or 'complète' in question.filltheblanks : elements += r"\\ \hline"
-                else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
+                else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{0.7cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
 
@@ -3995,12 +3995,17 @@ def admin_test_mental_print(request,id):
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
-                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title
+                if question.filltheblanks :
+                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
+                    elements += r"  & \begin{center}" +question.title+r"\end{center}"
+                else :
+                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
+
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'complète' in question.title or 'compléte' in question.title : elements += r" \hline"
-                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
+                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{0.7cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
