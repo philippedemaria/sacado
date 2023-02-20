@@ -68,7 +68,6 @@ from io import BytesIO
 from math import sin,cos
 import xlwt
  
-
 def get_username_teacher(request ,ln):
     """
     retourne un username
@@ -649,6 +648,8 @@ def create_group(request):
         if teacher.user.school :
             nf.school = teacher.user.school
         nf.save()
+        teacher.levels.add(nf.level)
+        teacher.subjects.add(nf.subject)
         messages.success(request, "Le groupe est créé. ")
         folders    = list()
         parcourses =  list()
@@ -860,6 +861,11 @@ def delete_all_groups(request) :
 
 @login_required(login_url= 'index')
 def show_group(request, id ):
+
+    # for group in Group.objects.all() :
+    #     if not group.students.filter(user__username__contains= "_e-test"):
+    #         Group.objets.filter(pk=group.pk).update(studentprofile=1)
+        
 
     group = Group.objects.get(id=id)
     try :
