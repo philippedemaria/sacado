@@ -2178,7 +2178,7 @@ def print_qf_to_pdf(request):
                     elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
 
                 elements += r"\vspace{0,2cm} "
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{6cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
@@ -3990,7 +3990,7 @@ def admin_test_mental_print(request,id):
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
             elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.5cm}|}\hline"
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{6cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
