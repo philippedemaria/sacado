@@ -68,9 +68,11 @@
 {% block question_title %}
 
     {% if question.mental.jquery %}
+        <h1 style="font-size:2.5em;padding-top:20px" class="thin"> {{ question.body|safe }} </h1>
         <h1 style="font-size:2.5em;padding-top:20px" class="thin"> {{ question.title|safe }} </h1>
         <canvas class="this_canvas" id="canvas{{ forloop.counter0}}" width="900px" height="450px" style="border:1px solid #CCC; background-color: white;"></canvas>
     {% else %}
+        <h1 style="font-size:3.6em;padding-top:100px" class="thin"> {{ question.body|safe}} </h1>
         <h1 style="font-size:3.6em;padding-top:100px" class="thin"> {{ question.title|safe}} </h1>
     {% endif %}
 
