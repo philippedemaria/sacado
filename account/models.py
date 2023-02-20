@@ -607,9 +607,17 @@ class Student(ModelWithCode):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
+        g_folders  = group.group_folders.values_list('id',flat=True).filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_archive=0,  is_trash=0)
+
+
         today      = time_zone_user(self.user) 
         bases      = self.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,    is_archive=0, is_trash=0) 
-        nb_folders = self.folders.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  is_archive=0,  is_trash=0).count() 
+        folders    = self.folders.values_list('id',flat=True).filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  is_archive=0,  is_trash=0)
+ 
+        nb_folders = len([i for f in  folders if f in g_folders])
+
+
+
         nb         = bases.filter( is_evaluation = 0).count() 
         nbe        = bases.filter( is_evaluation = 1).count() 
 
