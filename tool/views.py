@@ -2184,7 +2184,7 @@ def print_qf_to_pdf(request):
                 question = Question.objects.get(pk=question_ids[i])
 
          
-                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title.replace(r"\\","")
+                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.title or 'complète' in question.title : elements += r"\\ \hline"
