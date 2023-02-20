@@ -2184,11 +2184,11 @@ def print_qf_to_pdf(request):
                 question = Question.objects.get(pk=question_ids[i])
 
          
-                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title
+                elements += r" \textbf{"+ str(i+1) + r".} & " +question.title.replace("\\","")
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.title or 'complète' in question.title : elements += r"\\ \hline"
-                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
+                else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{1.2cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
 
