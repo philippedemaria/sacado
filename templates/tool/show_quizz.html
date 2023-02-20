@@ -295,7 +295,7 @@
                             <div class="quizz_item" style="margin-bottom: 20px;">
                                 <div class="row consigne_diapo"  align="left">  
                                     <div class="col-sm-12 col-md-12">
-                                        <h1 class="thin"><b>Question {{forloop.counter}}.</b> <small>{{ question.title }}</small> </h1>
+                                        <h1 class="thin"><b>Question {{forloop.counter}}.</b> <small>{%  if question.filltheblanks %}{{ question.filltheblanks }} {% endif %}{{ question.title }}</small> </h1>
                                     </div>
                                 </div>
                                 <div class="row"> 

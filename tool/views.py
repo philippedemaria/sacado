@@ -3086,13 +3086,14 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
         not_same_title = True
         while not_same_title :
             exec(mental.script,globals(),variables)
-            title    = variables['title']
-            answer   = variables['answer']
-            wanswer  = variables['wans']
+            title   = variables['title']
+            answer  = variables['answer']
+            wanswer = variables['wans']
+            body    = variables['body']
             if not title in same_titles or i > 10:
                 same_titles.append(title)
                 not_same_title = False
-                question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer)
+                question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer,filltheblanks=body)
             i+=1
         quizz.questions.add(question)
         mentaltitles.add(mental.mentaltitle)
