@@ -608,7 +608,8 @@ class Student(ModelWithCode):
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
         """
         today      = time_zone_user(self.user) 
-        bases      = self.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,    is_archive=0, is_trash=0) 
+        bases      = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self , subject = group.subject, level = group.level ,    is_archive=0, is_trash=0)
+
         #nb_folders = self.folders.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level ,  is_archive=0,  is_trash=0).count() 
         nb         = bases.filter( is_evaluation = 0).count() 
         nbe        = bases.filter( is_evaluation = 1).count()
@@ -616,13 +617,13 @@ class Student(ModelWithCode):
 
         nb_folders  = group.group_folders.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self,  is_archive=0,  is_trash=0).count()
 
-
-
-
-        nbb        = self.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subjects = group.subject, levels = group.level ,   is_archive=0 ).count() 
         nbc        = bases.exclude(course = None ).count() 
-        nbf        = self.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
-        nbq        = self.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
+
+
+        nbb        = group.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  students = self ,  subjects = group.subject, levels = group.level ,   is_archive=0 ).count() 
+
+        nbf        = group.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self ,  subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
+        nbq        = group.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self ,  subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
 
         a_new_c    = self.student_custom_answer.values("parcours").filter(parcours__subject = group.subject ,is_reading=0).first()
         if a_new_c :
