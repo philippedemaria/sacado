@@ -2192,7 +2192,7 @@ def print_qf_to_pdf(request):
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.filltheblanks or 'complète' in question.filltheblanks : elements += r"\\ \hline"
-                else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{0.7cm} \\ \hline"
+                else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{1cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
 
@@ -4005,7 +4005,7 @@ def admin_test_mental_print(request,id):
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'complète' in question.title or 'compléte' in question.title : elements += r" \hline"
-                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{0.7cm} \\ \hline"
+                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
