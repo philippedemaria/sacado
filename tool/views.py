@@ -2185,13 +2185,13 @@ def print_qf_to_pdf(request):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" &"+question.title
+                    elements += r" & {\large "+question.title+r"}"
                 else :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
 
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
-                if 'Complète' in question.filltheblanks or 'complète' in question.filltheblanks : elements += r"\\ \hline"
+                if 'Complète' in question.filltheblanks or 'complète' in question.filltheblanks or 'Parmi' in question.filltheblanks : elements += r"\\ \hline"
                 else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{1cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
@@ -3997,14 +3997,14 @@ def admin_test_mental_print(request,id):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r"  & " +question.title
+                    elements += r" & {\large "+question.title+r" }"
                 else :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
 
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                if 'complète' in question.title or 'compléte' in question.title : elements += r" \hline"
+                if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
                 else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1cm} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
