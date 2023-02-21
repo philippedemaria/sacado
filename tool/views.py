@@ -2207,7 +2207,7 @@ def print_qf_to_pdf(request):
         j = 1   
         for question_id in question_ids :
             question = Question.objects.get(pk=question_id)
-            elements += r"\textbf{Exercice " + str(j) + r".}  {\small" + question.title + r"}"
+            elements += r"\textbf{Exercice " + str(j) + r".}  {\small" + question.filltheblanks + " " + question.title + r"}"
             elements += r"\\" + question.writinganswer
             elements += r"\vspace{0,2cm}\\"
             j+=1
