@@ -2042,9 +2042,9 @@ def print_quizz_to_pdf(request):
     else : nb_loop = 1 
 
 
-    if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{1cm}"
+    if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
     else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-    elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{1cm}"
+    elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{0.1cm}"
     if is_sf :
         elements += r"\begin{description}"
         for sf in quizz.mental_activities():
@@ -2196,6 +2196,7 @@ def print_qf_to_pdf(request):
                 else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
+        elements += r"\\"
 
     if is_correction :
         elements += r"\newpage "
@@ -3985,7 +3986,7 @@ def admin_test_mental_print(request,id):
 
             elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
-            elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
+            elements += r"\framebox{ \ldots / \ldots} \\ \vspace{1cm}"
 
             elements +=r"\begin{tabular}{|l| c  r|}\hline"
 
@@ -4005,8 +4006,6 @@ def admin_test_mental_print(request,id):
                 else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
             
-
-        elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
         elements += r"\\"
 
 
