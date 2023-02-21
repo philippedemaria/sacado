@@ -22,7 +22,7 @@ from general_fonctions import *
  
  
 def image_directory_path(instance, filename):
-    return "bibliotex/{}/{}".format(instance.author.id, filename)
+    return "bibliotex/{}/{}".format(instance.author.user.id, filename)
 
 
 ########################################################################################################
