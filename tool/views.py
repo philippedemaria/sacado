@@ -2038,7 +2038,7 @@ def print_quizz_to_pdf(request):
     elements += r"\\"
 
     if len(question_ids) < 6 : nb_loop = 3
-    if len(question_ids) < 8 : nb_loop = 2
+    if len(question_ids) < 11 : nb_loop = 2
     else : nb_loop = 1 
 
 
@@ -2156,7 +2156,7 @@ def print_qf_to_pdf(request):
     elements += r"\\"
 
     if len(question_ids) < 6 : nb_loop  = 3 
-    if len(question_ids) < 8 : nb_loop  = 2 
+    if len(question_ids) < 11 : nb_loop  = 2 
     else :  nb_loop  = 1 
     quotient , reste  = len(question_ids)//2 , len(question_ids)%2
 
@@ -2164,11 +2164,11 @@ def print_qf_to_pdf(request):
         for k in range(2):
             elements +=r"\begin{minipage}{0.5\linewidth}"
 
-            if len(question_ids)<8 : start, stop = 0, len(question_ids)
+            if len(question_ids)<11 : start, stop = 0, len(question_ids)
             else : 
                 if k == 0 : start, stop = 0, quotient + 1
                 else : start, stop = quotient+ 1, len(question_ids)
-            if len(question_ids)<8 or k == 0 : 
+            if len(question_ids)<11 or k == 0 : 
                 elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
                 elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
                 elements += r" \vspace{0.2cm}"
