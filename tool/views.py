@@ -3990,18 +3990,16 @@ def admin_test_mental_print(request,id):
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
             elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|>{\centering\arraybackslash}p{7cm}|}\hline"
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}m{0.5cm}|>{\centering\arraybackslash}m{7cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" & \\"
-                    elements += r" & {\large "+question.title+r" } "
+                    elements += r" & {\large "+question.title+r" }  \vspace{1cm}"
                 else :                    
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title  
-                    elements += r" &  \\"
+                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title +r" }  \vspace{1cm}" 
 
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
