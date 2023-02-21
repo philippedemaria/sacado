@@ -2178,21 +2178,21 @@ def print_qf_to_pdf(request):
                     elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
 
                 elements += r"\vspace{0,2cm} "
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{6cm}|}\hline"
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.3cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" & {\large "+question.title+r"}"
+                    elements += r" & {\large "+question.title+r"} \vspace{1.2cm}"
                 else :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
 
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 if 'Complète' in question.filltheblanks or 'complète' in question.filltheblanks or 'Parmi' in question.filltheblanks : elements += r"\\ \hline"
-                else : elements += r"\\ & {\scriptsize Écris ta réponse :} \vspace{1cm} \\ \hline"
+                else : elements += r"\\ & {\scriptsize Écris ta réponse :}  \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
 
@@ -3997,9 +3997,9 @@ def admin_test_mental_print(request,id):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" & {\large "+question.title+r" }"
+                    elements += r" & {\large "+question.title+r" } \vspace{1.2cm}"
                 else :
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
+                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title  
 
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
