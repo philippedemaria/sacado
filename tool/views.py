@@ -2200,8 +2200,9 @@ def print_qf_to_pdf(request):
 
     if is_correction :
         elements += r"\newpage "
-        elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
+        
         elements += r"\titreFiche{Correction}"
+        elements += r"\vspace{0.5cm}"
         j = 1   
         for question_id in question_ids :
             question = Question.objects.get(pk=question_id)
@@ -2209,7 +2210,7 @@ def print_qf_to_pdf(request):
             elements += r"\\" + question.writinganswer
             elements += r"\vspace{0,2cm}\\"
             j+=1
-
+        elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
 
@@ -3985,7 +3986,7 @@ def admin_test_mental_print(request,id):
                     else : start, stop = quotient + 1, len(question_ids)
 
             elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
-            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
+            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots \quad Date : \ldots\ldots\ldots"
             elements += r"\framebox{ \ldots / \ldots} \\ \vspace{1cm}"
 
             elements +=r"\begin{tabular}{|l| c  r|}\hline"
@@ -4010,8 +4011,9 @@ def admin_test_mental_print(request,id):
 
 
     elements += r"\newpage "
-    elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
+
     elements += r"\titreFiche{Correction}"
+    elements += r"\vspace{0.5cm}"
     j = 1   
     for question_id in question_ids :
         question = Question.objects.get(pk=question_id)
@@ -4020,6 +4022,7 @@ def admin_test_mental_print(request,id):
         elements += r"\vspace{0,2cm}\\"
         j+=1
 
+    elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
 
