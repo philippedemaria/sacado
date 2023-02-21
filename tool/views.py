@@ -4005,7 +4005,7 @@ def admin_test_mental_print(request,id):
                     elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r" & {\scriptsize Écris ta réponse :} \\ \hline"
+                else : elements += r" &  \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
