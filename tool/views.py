@@ -3990,7 +3990,7 @@ def admin_test_mental_print(request,id):
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
             elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{6cm}|}\hline"
+            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|>{\centering\arraybackslash}p{7cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
@@ -4007,7 +4007,7 @@ def admin_test_mental_print(request,id):
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r" & {\scriptsize Écris ta réponse :} \vspace{1cm} \\ \hline"
+                else : elements += r" & {\scriptsize Écris ta réponse :} \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
@@ -4016,7 +4016,7 @@ def admin_test_mental_print(request,id):
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
 
-    ################################################################# 
+    ################################################################# \vspace{1cm} 
     ################################################################# Attention ERREUR si non modif
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\quizz_pdf_"+str(quizz.id)
