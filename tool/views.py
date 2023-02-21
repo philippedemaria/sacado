@@ -2185,15 +2185,15 @@ def print_qf_to_pdf(request):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{7cm}|}{ " +question.filltheblanks + r"} \\  "
-                    elements += r" & \multicolumn{2}{c|}{ "+question.title+r" } "
+                    elements += r" \phantom{\Large{$\frac{1}{2}$}} & \multicolumn{2}{c|}{ "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{c|}{ " +question.title +r" } "
 
                 if question.imagefile :
-                    elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
+                    elements += r" \phantom{\Large{$\frac{1}{2}$}} & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r" & Ta\;réponse\;: &   \\ \hline"
+                if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
+                else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]\unskip{\tiny\dotfill}"
@@ -3996,15 +3996,15 @@ def admin_test_mental_print(request,id):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{7cm}|}{ " +question.filltheblanks + r"} \\  "
-                    elements += r" & \multicolumn{2}{c|}{ "+question.title+r" } "
+                    elements += r" \phantom{\Large{$\frac{1}{2}$}} & \multicolumn{2}{c|}{ "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{c|}{ " +question.title +r" } "
 
                 if question.imagefile :
                     elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r" & Ta\;réponse\;: &   \\ \hline"
+                if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
+                else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
             
 
