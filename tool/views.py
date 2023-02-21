@@ -3997,12 +3997,12 @@ def admin_test_mental_print(request,id):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" &  \vspace{0.2cm}"
-                    elements += r" & {\large "+question.title+r" } \vspace{1.2cm}"
+                    elements += r" & \\"
+                    elements += r" & {\large "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & " +question.title  
-                    elements += r" &  \vspace{0.2cm}"
-                    
+                    elements += r" &  \\"
+
                 if question.imagefile :
                     elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
