@@ -4007,6 +4007,7 @@ def admin_test_mental_print(request,id):
                 if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
                 else : elements += r" &  \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
+            
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
         elements += r"\\"
