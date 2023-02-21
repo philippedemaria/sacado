@@ -2178,25 +2178,24 @@ def print_qf_to_pdf(request):
                     elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
 
                 elements += r"\vspace{0,2cm} "
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|p{7.3cm}|}\hline"
+            elements +=r"\begin{tabular}{|l| c  r|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
                 if question.filltheblanks :
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" & {\large "+question.title+r"} \vspace{1.2cm}"
-                else :
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
+                    elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{7cm}|}{ " +question.filltheblanks + r"} \\  "
+                    elements += r" & \multicolumn{2}{c|}{ "+question.title+r" } "
+                else :                    
+                    elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{c|}{ " +question.title +r" } "
 
                 if question.imagefile :
-                    elements += r" \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
-                if 'Complète' in question.filltheblanks or 'complète' in question.filltheblanks or 'Parmi' in question.filltheblanks : elements += r"\\ \hline"
-                else : elements += r"\\ & {\scriptsize Écris ta réponse :}  \\ \hline"
+                    elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
+                elements += r"\\"
+                if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
+                else : elements += r" & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
-
-    
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]\unskip{\tiny\dotfill}"
         elements += r"\\"
 
@@ -3990,27 +3989,39 @@ def admin_test_mental_print(request,id):
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
             elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
 
-            elements +=r"\begin{tabular}{|>{\centering\arraybackslash}p{0.5cm}|>{\centering\arraybackslash}m{7cm}|}\hline"
+            elements +=r"\begin{tabular}{|l| c  r|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
                 if question.filltheblanks :
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.filltheblanks + r"\\  "
-                    elements += r" & "+question.title+r" \vspace{1cm}"
+                    elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{7cm}|}{ " +question.filltheblanks + r"} \\  "
+                    elements += r" & \multicolumn{2}{c|}{ "+question.title+r" } "
                 else :                    
-                    elements += r" \textbf{"+ str(i+1) + r".} & " +question.title 
+                    elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{c|}{ " +question.title +r" } "
 
                 if question.imagefile :
                     elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'Parmi' in question.filltheblanks or 'complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r" &  \\ \hline"
+                else : elements += r" & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
             
 
         elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]{\small\ding{34}}\unskip{\tiny\dotfill}"
         elements += r"\\"
+
+
+    elements += r"\newpage "
+    elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
+    elements += r"\titreFiche{Correction}"
+    j = 1   
+    for question_id in question_ids :
+        question = Question.objects.get(pk=question_id)
+        elements += r"\textbf{Exercice " + str(j) + r".}  {\small" + question.filltheblanks + " " + question.title + r"}"
+        elements += r"\\" + question.writinganswer
+        elements += r"\vspace{0,2cm}\\"
+        j+=1
 
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
