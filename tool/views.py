@@ -2042,9 +2042,9 @@ def print_quizz_to_pdf(request):
     else : nb_loop = 1 
 
 
-    if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{0.1cm}"
+    if quizz.is_random : elements +=r"\textbf{"+quizz.title+r"}\\ \vspace{1cm}"
     else : elements +=r"\titreFiche{"+quizz.title+r"} \\"
-    elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{0.1cm}"
+    elements +=r" Nom : \ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots \\ \vspace{1cm}"
     if is_sf :
         elements += r"\begin{description}"
         for sf in quizz.mental_activities():
@@ -2171,7 +2171,7 @@ def print_qf_to_pdf(request):
             if len(question_ids)<11 or k == 0 : 
                 elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
                 elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
-                elements += r" \vspace{0.2cm}"
+                elements += r" \vspace{1cm}"
                 if is_marker :
                     elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
                 else : 
@@ -2196,8 +2196,6 @@ def print_qf_to_pdf(request):
                 else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
-        elements += r"\\ \noindent\raisebox{-2.8pt}[0pt][0.75\baselineskip]\unskip{\tiny\dotfill}"
-        elements += r"\\"
 
     if is_correction :
         elements += r"\newpage "
