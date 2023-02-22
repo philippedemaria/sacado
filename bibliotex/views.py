@@ -170,12 +170,14 @@ def printer(request, relationtex_id, collection,output):
 
                 elements += r"}"
 
-            if output == "html" or output== "html_cor" :
+            if output == "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
                 else                       : ctnt =  relationtex.exotex.correction
-            else :
+            elif output == "html" :
                 if  relationtex.content : ctnt =  relationtex.content
                 else                    : ctnt =  relationtex.exotex.content
+            else :
+                ctnt =  relationtex.exotex.content
 
 
             elements += ctnt
@@ -186,23 +188,25 @@ def printer(request, relationtex_id, collection,output):
             relationtex = Relationtex.objects.get(pk = relationtex_id)
             title       =  relationtex.exotex.title
              
-            if output== "html_cor" :
+            if output == "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
                 else                       : ctnt =  relationtex.exotex.correction
+            elif output == "html" :
+                ctnt =  relationtex.exotex.content 
             else :
                 ctnt =  relationtex.exotex.content 
  
         except :
             exotex         = Exotex.objects.get(pk = relationtex_id)
             title          =  exotex.title
-            if output== "html_cor" :
+            if output == "html_cor" :
                 ctnt =  exotex.correction
-            else : 
+            elif output == "html" :
                 ctnt =  exotex.content
+            else :
+                ctnt =  exotex.content 
 
         ctnt = ctnt.replace(r"\mathcal","")
-
-
 
         document       = "relationtex" + str(relationtex_id)
         author         = "Équipe SACADO"
@@ -280,7 +284,7 @@ def printer_bibliotex_by_student(bibliotex):
 
     today = datetime.now()
  
-    relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today)).order_by("ranking")
+    relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today),is_publish_cor=1).order_by("ranking")
  
 
     j = 1
@@ -1671,6 +1675,24 @@ def ajax_display_exotex(request):
     data["display"] = "true"
     return JsonResponse(data)
 
+
+@csrf_exempt
+def ajax_display_correction_exotex(request):
+
+    data = {}
+    relationtex_id = request.POST.get('relationtex_id', None)
+    r = Relationtex.objects.get(pk = relationtex_id )
+    if r.is_publish_cor : 
+        r.is_publish_cor = 0
+        data["addClass"]    = "fa-eye-slash text-danger"
+        data["removeClass"] = "fa-eye text-green"
+    else :  
+        r.is_publish_cor = 1
+        data["addClass"]    = "fa-eye text-green"
+        data["removeClass"] = "fa-eye-slash text-danger"
+    r.save()
+    
+    return JsonResponse(data)
 
 ############################################################################################################
 ############################################################################################################

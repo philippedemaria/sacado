@@ -501,7 +501,30 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         publisher_bibliotexs( $('.bibliotex_publisher') , '#bibliotex_publisher' ,'#bibliotex_statut' ) ;
  
 
+    $('body').on('click', '.printer_correction',   function (event) {
 
+        let relationtex_id = $(this).data("relationtex_id");
+        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+        $.ajax(
+            {
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'relationtex_id'   : relationtex_id,
+                    csrfmiddlewaretoken: csrf_token
+                },
+                url : "../ajax_display_correction_exotex" ,
+                success: function (data) {
+
+                    $("#print_correction"+relationtex_id).find('i').addClass(data.addClass);
+                    $("#print_correction"+relationtex_id).find('i').removeClass(data.removeClass);
+
+                }
+            }
+        )
+    });
 
 
         // ===============================================================

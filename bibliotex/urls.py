@@ -90,7 +90,7 @@ urlpatterns = [
     path('ajax_sort_exotexs_in_bibliotex', ajax_sort_exotexs_in_bibliotex, name='ajax_sort_exotexs_in_bibliotex'), 
 
     path('ajax_display_exotex', ajax_display_exotex, name='ajax_display_exotex'), 
- 
+    path('ajax_display_correction_exotex', ajax_display_correction_exotex, name='ajax_display_correction_exotex'),
 
 
     path('ajax_find_peuplate_sequence', ajax_find_peuplate_sequence, name='ajax_find_peuplate_sequence'),
