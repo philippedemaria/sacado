@@ -295,16 +295,18 @@ Intro Section -
                       </a>
                     </div>
 
-
+                    {% comment %}
                     <div class="index_label_icone" >
                       <a href="#"  data-toggle='modal' data-target='#comptes'  ><img src="{% static 'img/index_compte.png' %}" class="index_icone"/> Les comptes  
                       </a>
                     </div>
+
                     <div class="index_label_icone" >
                       <a href="#"  data-toggle='modal' data-target='#membres'  >
                         <img src="{% static 'img/index_membres.png' %}" class="index_icone"/>Les membres  
                       </a>
                     </div>
+                    {% endcomment %}
 
                     <div class="index_label_icone" >
                       <a href="#"  data-toggle='modal' data-target='#whos'  ><img src="{% static 'img/index_whos.png' %}" class="index_icone"/> Côté presse
@@ -470,7 +472,7 @@ Intro Section -
     </div> 
 </div>
 
-
+{% comment %}
 <div class="modal fade" id="membres" tabindex="-1" role="dialog" aria-labelledby="membres">
     <div class="modal-dialog modal-maxsize" role="document">
         <div class="modal-content" >
@@ -487,6 +489,8 @@ Intro Section -
         </div>
     </div> 
 </div>
+{% endcomment %}
+
 <div class="modal fade" id="whos" tabindex="-1" role="dialog" aria-labelledby="whos">
     <div class="modal-dialog modal-maxsize" role="document">
         <div class="modal-content" >
@@ -519,6 +523,7 @@ Intro Section -
         </div>
     </div> 
 </div>
+{% comment %}
 <div class="modal fade" id="comptes" tabindex="-1" role="dialog" aria-labelledby="comptes">
     <div class="modal-dialog" role="document">
         <div class="modal-content" >
@@ -535,6 +540,7 @@ Intro Section -
         </div>
     </div> 
 </div>
+{% endcomment %}
 <div class="modal fade" id="connecteurs" tabindex="-1" role="dialog" aria-labelledby="connecteurs">
     <div class="modal-dialog modal-maxsize" role="document">
         <div class="modal-content" >
