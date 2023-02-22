@@ -5,15 +5,35 @@
 
 
 <div class="row">
-    <div class="col-sm-12 col-md-12">
-            <label>Imprimer les savoir faire ? <input type="checkbox" name="knowledges"  id="knowledges"></label><br/>
-            <label>Imprimer les compétences ? <input type="checkbox" name="skills" id="skills"></label>
-            <hr/>
+    <div class="col-sm-12 col-md-6">
 
-            <button type="submit" class="btn btn-primary" > Télécharger le fichier </button>   
-            <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+
+        Le titre actuel est : <b>{{ bibliotex.title}} </b><br/>
+        Modifier le titre : <input type="text" name="new_title" class="form-control" maxlength="30" placeholder="Nouveau titre (30 caractères max)">
+        <hr/>    	
+        <label>Imprimer les savoir faire ? <input type="checkbox" name="knowledges"  id="knowledges"></label><br/>
+        <label>Imprimer les compétences ? <input type="checkbox" name="skills" id="skills"></label>
+
+    </div> 
+    <div class="col-sm-12 col-md-6">
+        Sélectionner les exercices à télécharger : <label>(tous)  <input type="checkbox" name="relationtexs" id="select_all_these_items" ></label><br/>
+        {% for relationtex in  relationtexs %}
+            <label>
+            	<i class="fa fa-fw fa-{% if relationtex.is_publish %}eye text-green{% else%}eye-slash text-danger{% endif %}"></i> {{ relationtex.exotex.title }}  <input type="checkbox" name="relationtexs" class="items_to_be_selected"  value="{{ relationtex.id }}">
+            </label><br/>
+        {% endfor %}
      </div> 
-</div> 
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <hr/>
+        <button type="submit" class="btn btn-primary" > Télécharger la BiblioTex </button>   
+        <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
+     </div> 
+</div>
+
+
 
 <script>
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);

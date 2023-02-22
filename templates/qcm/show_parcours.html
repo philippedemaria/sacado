@@ -135,7 +135,6 @@ body{
 
                 </div>
             </div>
-
         {% else %}
             <div class="row {% if accordion %}documents_div documents_div_shadow{% endif %}">
                 <div class="col-sm-12 col-md-12"  id="exercise_sorter">
@@ -231,9 +230,9 @@ body{
 
                 {% if parcours.bibliotexs.count > 0  %}
                     <div class="row documents_div documents_div_shadow">            
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-12 col-md-12" id="sort_bibliotex">
                             <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.bibliotexs.count }} biblioTex</span> </h1>
-                            {% for bibliotex in parcours.bibliotexs.all %}
+                            {% for bibliotex in parcours.bibliotexs.all|dictsort:"ranking" %}
                                 {% include 'bibliotex/bibliotex_tag.html' %}
                             {% endfor %}
                             <a href="{% url 'create_bibliotex_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
@@ -248,7 +247,7 @@ body{
 
                 {% if parcours.flashpacks.count > 0  %}  
                     <div class="row documents_div documents_div_shadow">           
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-12 col-md-12" id="sort_flashpack">
                             <h1 class="thin">Les flashpacks   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.flashpacks.count }} flashpacks</span></h1>
                             {% for flashpack in parcours.flashpacks.all  %}
                                 {% include 'flashcard/flashpack_tag.html' %}

@@ -85,9 +85,11 @@ urlpatterns = [
     path('ajax_affectation_to_group', ajax_affectation_to_group, name='ajax_affectation_to_group'), 
     path('ajax_sharer_parcours', ajax_sharer_parcours, name='ajax_sharer_parcours'), 
  
-
+    path('ajax_bibliotex_sorter', ajax_bibliotex_sorter, name='ajax_bibliotex_sorter'), 
 
     path('ajax_sort_exotexs_in_bibliotex', ajax_sort_exotexs_in_bibliotex, name='ajax_sort_exotexs_in_bibliotex'), 
+
+    path('ajax_display_exotex', ajax_display_exotex, name='ajax_display_exotex'), 
  
 
 

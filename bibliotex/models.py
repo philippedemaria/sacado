@@ -110,6 +110,10 @@ class Bibliotex(models.Model):
 
     levels = models.ManyToManyField(Level,  related_name="bibliotexs",  editable=False)
     subjects = models.ManyToManyField(Subject,  related_name="bibliotexs",  editable=False)
+    
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+
+
 
     def __str__(self):    
         return "{}".format(self.title)
@@ -174,8 +178,6 @@ class Bibliotex(models.Model):
                 test = True
                 break
         return test
-
-
 
 
 ########################################################################################################
@@ -247,12 +249,24 @@ class Relationtex(models.Model):
 
 
 
+class Annotationtex(models.Model):
 
+    CHOICES = ( (1,1) , (2,2) , (3,3) , (4,4))
 
+    relationtex = models.ForeignKey(Relationtex,  on_delete=models.CASCADE,   related_name='annotationtex', editable= False)
+    student     = models.ForeignKey(Student,  on_delete=models.PROTECT, related_name="annotationtex", editable=False)
+    comment     = models.CharField(max_length=255,  verbose_name="Commentaire")
+    emoticon    = models.CharField(max_length=255,  choices = CHOICES , verbose_name="Emoticon")
 
+    def __str__(self):   
+        return "{} > {}  > {}".format(self.relationtex.id, self.student.user.id, self.emoticon)
 
-
-
+    def emoji(self):
+        if  self.emoticon == 1 : emo ="<i class='bi bi-emoji-frown'></i>"
+        elif  self.emoticon == 2 : emo ="<i class='bi bi-emoji-neutral'></i>"
+        elif  self.emoticon == 3 : emo ="<i class='bi bi-emoji-smile'></i>"
+        else : emo ="<i class='bi bi-emoji-smile-fill darkgreen'></i>"
+        return emo
 
 
 class Blacklistex(models.Model):

@@ -1292,7 +1292,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         sorter_parcours('#evaluations_sortable',".evaluation_sorter",1) ;
         sorter_parcours('#parcours_sortable',".parcours_sorter",1) ;
         sorter_folders('#folders_sortable',".folder_sorter",1) ;
-
         sorter_parcours('#subparcours_sortable',".parcours_sorter",0) ;
 
         $('#course_sortable').sortable({
@@ -1350,6 +1349,46 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 });
 
             }
+
+
+
+
+        sorter_bibliotex('#sort_bibliotex',".sorter_bibliotex",0) ;
+
+        function sorter_bibliotex($div_class , $exercise_class, $choice ) {
+
+            $($div_class).sortable({
+                start: function( event, ui ) { 
+                       $(ui.item).css("box-shadow", "4px 2px 4px gray");
+                   }, 
+                stop: function (event, ui) {
+                    var valeurs = "";
+                    $($exercise_class ).each(function() {
+                        let id = $(this).attr("data-id"); 
+                        valeurs = valeurs + id +"-";
+                    });
+                    $(ui.item).css("box-shadow",  "2px 1px 2px gray");
+
+    
+                    this_url =  "../../../bibliotex/ajax_bibliotex_sorter"  ;                   
+  
+                    $.ajax({
+                            data:   { 'valeurs': valeurs    } ,   
+                            type: "POST",
+                            dataType: "json",
+                            url: this_url,
+                        }); 
+                    }
+                });
+
+            }
+
+
+
+
+
+
+
 
 
         // =================================================================================================================

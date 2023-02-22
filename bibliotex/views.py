@@ -104,14 +104,17 @@ def printer(request, relationtex_id, collection,output):
     entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
-    elements +=r"\begin{document}"+"\n"   
+    elements +=r"\begin{document}"+"\n" 
+
+    new_title = request.POST.get("new_title",None) 
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
             bibliotex_id = request.POST.get("print_bibliotex_id",None)  
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
             document     = "bibliotex" + str(relationtex_id)
-            title        = bibliotex.title
+            if new_title : title  = new_title
+            else : title  = bibliotex.title
             author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
@@ -125,9 +128,14 @@ def printer(request, relationtex_id, collection,output):
 
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
-      
+        relationtex_ids    = request.POST.getlist("relationtexs",None)
+
+
         today = datetime.now()
-        if collection : 
+        if collection and relationtex_ids :
+            relationtex_ids = relationtex_ids[1:]
+            relationtexs = bibliotex.relationtexs.filter(pk__in=relationtex_ids).order_by("ranking")
+        elif collection : 
             relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today)).order_by("ranking")
             i = 1
         else: relationtexs=[relationtex]
@@ -1637,8 +1645,31 @@ def ajax_sort_exotexs_in_bibliotex(request):
         i+=1
     return JsonResponse(data)
 
+@csrf_exempt
+def ajax_bibliotex_sorter(request):
+
+    data = {}
+    valeurs = request.POST.get('valeurs', None)
+    i=0
+    for val in valeurs.split("-") :
+        try :Bibliotex.objects.filter(pk = val ).update(ranking=i)
+        except :pass
+        i+=1
+    return JsonResponse(data)
 
 
+
+@csrf_exempt
+def ajax_display_exotex(request):
+
+    data = {}
+    relationtex_id = request.POST.get('relationtex_id', None)
+    r = Relationtex.objects.get(pk = relationtex_id )
+    if r.is_publish : r.is_publish = 0
+    else :  r.is_publish = 1
+    r.save()
+    data["display"] = "true"
+    return JsonResponse(data)
 
 
 ############################################################################################################
@@ -1836,11 +1867,11 @@ def ajax_print_bibliotex(request):
 
     data = {}
     relationtex_id = request.POST.get('relationtex_id', None)
-    bibliotex = Bibliotex.objects.get(pk=relationtex_id)
-    students =  bibliotex.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
-    context = { 'students': students , 'bibliotex':  bibliotex   }
-    data["html"] = render_to_string('bibliotex/ajax_print_bibliotex.html', context)
-    data["title"] = "Imprimer la Bibliotex "+bibliotex.title
+    bibliotex      = Bibliotex.objects.get(pk=relationtex_id)
+    students       =  bibliotex.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
+    context        = { 'students': students , 'bibliotex':  bibliotex , 'relationtexs':  bibliotex.relationtexs.all()  }
+    data["html"]   = render_to_string('bibliotex/ajax_print_bibliotex.html', context)
+    data["title"]  = "Imprimer la Bibliotex "+bibliotex.title
 
     return JsonResponse(data)
 

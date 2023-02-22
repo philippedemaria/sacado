@@ -6,14 +6,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $("#publication_div").hide();
  
 
-            makeDivAppear($("#id_is_publish"), $("#publication_div"));
+        makeDivAppear($("#id_is_publish"), $("#publication_div"));
 
 
-            function makeDivAppear($toggle, $item) {
-                    $toggle.change(function () {
-                         $item.toggle();
-                    });
-                }
+        function makeDivAppear($toggle, $item) {
+                $toggle.change(function () {
+                     $item.toggle();
+                });
+            }
  
 
         $('#enable_correction_div').hide();
@@ -183,10 +183,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         }
 
 
-
-
-
-
         $('.click_this_level').on('click', function (event) {
 
             let level_id = $(this).data("level_id");
@@ -211,11 +207,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     }
                 }
             )
-
-
         });
-
-
 
 
     $('#id_skill').on('change', function (event) {
@@ -305,37 +297,23 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     $('body').on('click', '.bibliotex_shower' , function (event) {
             let bibliotex_id = $(this).data("bibliotex_id");
             $("#bibliotex_show"+bibliotex_id).toggle(500);
-
         });
-
-
- 
 
 
     $('body').on('click', '.overlay_show' , function (event) {
             let bibliotex_id = $(this).data("bibliotex_id");
             $("#overlay_show"+bibliotex_id).toggle(500);
-
         });
-
-
 
 
 
     $('body').on('click', '.select_correction' , function (event) {
             let r_id = $(this).data("r_id");
             $("#correction"+r_id).toggle(500);
-
         });
 
 
-
-
-
-
-
-
-        $('body').on('click', '.expand_video', function () {
+    $('body').on('click', '.expand_video', function () {
 
             var exotex_id = $(this).data("exotex_id");  
             var content = $("#content"+exotex_id).html();
@@ -347,12 +325,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
-        $('body').on('click', ".closer_projection_div", function () {
+    $('body').on('click', ".closer_projection_div", function () {
              $("#projection_div").remove();
         });
 
 
-        $('body').on('change', "#customRange", function (e) {
+    $('body').on('change', "#customRange", function (e) {
             size  = $("#customRange").val() ; 
             $("#projection_div").attr("style","font-size:"+size+"rem");
         });
@@ -404,7 +382,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         else if (action == "print_bibliotex") { url = "../ajax_print_bibliotex"  ; label ="print_bibliotex" ; }
         else if (action == "students") { url = "../ajax_individualise_exotex" ; label ="individualise_exotex" ;  }
         else if (action == "print_bibliotex_out") { url = "ajax_print_bibliotex"  ; label ="print_bibliotex" ; }
- 
+        else if (action == "display") { url = "../ajax_display_exotex" ; label ="display_exotex" ;  }
 
         $("#"+label+"_id").val(relationtex_id) ;
 
@@ -420,8 +398,32 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 url : url ,
                 success: function (data) {
                     
-                    $("#"+label+"_title").html(data.title) ;
-                    $("#"+label+"_body").html(data.html) ;
+                    if (data.display == "true") {  
+
+                        if ( $("#display"+relationtex_id).find("i").hasClass("fa-eye") ) 
+                            { 
+                                $("#display"+relationtex_id).find("i").addClass("fa-eye-slash"); 
+                                $("#display"+relationtex_id).find("i").removeClass("fa-eye") ; 
+                                $(".relationtex"+relationtex_id).addClass("no_visu_on_load") ; 
+                                $("#display"+relationtex_id).parent().find('li').addClass("no_visu_on_load") ; 
+                                $("#display"+relationtex_id).removeClass("no_visu_on_load") ; 
+                            }
+                        else 
+                            { 
+                                $("#display"+relationtex_id).find("i").removeClass("fa-eye-slash");
+                                $("#display"+relationtex_id).find("i").addClass("fa-eye") ; 
+                                $(".relationtex"+relationtex_id).removeClass("no_visu_on_load") ;
+                                $("#display"+relationtex_id).parent().find('li').removeClass("no_visu_on_load") ; 
+                            }
+
+                    }
+                    else {
+
+                        $("#"+label+"_title").html(data.title) ;
+                        $("#"+label+"_body").html(data.html) ;
+
+                    }
+
                 }
             }
         )
@@ -435,8 +437,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         let bibliotex_id = $(this).data("bibliotex_id"); 
         let statut = $(this).data("statut");
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-        console.log(event , bibliotex_id , statut) ; 
  
         $.ajax(
             { 
@@ -823,6 +823,12 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
     
         sorter_exotexs('#bibliotex_sortable' , ".relationtex_sorter");
+
+
+ 
+
+
+
 
 });
 

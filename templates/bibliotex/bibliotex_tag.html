@@ -3,7 +3,7 @@
 {% load item_tags %}
            
  
-<div  class="box box-widget widget-user-2"  
+<div  class="box box-widget widget-user-2 sorter_bibliotex"  data-id="{{ bibliotex.id }}"
       style="cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{bibliotex.color }};">
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->

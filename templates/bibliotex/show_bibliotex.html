@@ -70,12 +70,23 @@
             </li>
             {% endcomment %}
 
+
+
+            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
+                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="fa fa-fw {% if r.is_publish %}fa-eye{% else %}fa-eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
+            </li>
+
+
             <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
                 <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-times"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
             </li>
+
+
             <li class="relative_div_exotex"> 
                 <span href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="fa fa-fw fa-expand"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></span>
             </li>
+
+
         </div>  
         <div class="col-sm-11 col-md-11 col-lg-11" >         
         {% else %}
@@ -119,7 +130,7 @@
                     </div>
                 </div>
             </div>
-            <div id="content{{ r.exotex.id }}" class="exotex_shower_content">
+            <div id="content{{ r.exotex.id }}" class="exotex_shower_content relationtex{{ r.id }} {% if not r.is_publish %}no_visu_on_load{% endif %}">
                 {% if r.content_html %}
                 {{ r.content_html|safe }}
                 {% else %}
