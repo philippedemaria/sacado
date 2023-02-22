@@ -1440,6 +1440,33 @@ define(['jquery','bootstrap'], function ($) {
         }); 
 
 
+    $('body').on('click', '.action_exotex',   function (event) {
+
+        let relationtex_id     = $(this).data("relationtex_id");
+        let action             = $(this).data("action");
+        let csrf_token         = $("input[name='csrfmiddlewaretoken']").val();
+        $("#print_bibliotex_id").val(relationtex_id) ;
+        $.ajax(
+            {
+                type: "POST",
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'relationtex_id' : relationtex_id,
+                    csrfmiddlewaretoken  : csrf_token
+                },
+                url : "../../../../bibliotex/ajax_print_bibliotex"    ,
+                success: function (data) {
+ 
+
+                        $("#print_bibliotex_title").html(data.title) ;
+                        $("#print_bibliotex_body").html(data.html) ;
+                        
+
+                }
+            }
+        )
+    });
 
 
     });

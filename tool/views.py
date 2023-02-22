@@ -2202,7 +2202,7 @@ def print_qf_to_pdf(request):
         elements += r"\newpage "
         
         elements += r"\titreFiche{Correction}"
-        elements += r"\vspace{0.5cm}"
+        elements += r" \vspace{0.5cm}"
         j = 1   
         for question_id in question_ids :
             question = Question.objects.get(pk=question_id)

@@ -1,5 +1,6 @@
 {% load static %}
 
+	{% if parcours %}
     <li><a href="{% url 'show_parcours_student' parcours.id %}" class="btn btn-new"><i class="bi bi-explicit" ></i><span class="label_plus"> Exercices</span></a></li> 
     <li><a href="{% url 'show_course_student' 0 parcours.id %}" class="btn btn-new">
 	    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
@@ -11,4 +12,4 @@
     <li><a href="{% url 'list_parcours_bibliotex_student' parcours.id %}" class="btn btn-new"><i class="bi bi-bootstrap" ></i><span class="label_plus"> Bibliotex </span></a></li>
     <li><a href="{% url 'list_parcours_flashpack_student' parcours.id %}" class="btn btn-new"><i class="bi bi-stack" ></i><span class="label_plus"> Flashpack</span></a> </li>
 
- 
+ 	{% endif %}

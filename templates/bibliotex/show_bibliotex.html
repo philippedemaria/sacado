@@ -114,16 +114,21 @@
 
                     <i class="bi bi-clock-history"></i> {{ r.duration }} min.
                 </label>
-                {% if r.correction  or r.exotex.correction  %}
-                    <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
-                    <small><a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}" >
-                    {% if r.is_publish_cor %}
-                          <i class="fa fa-eye text-green" title="Vue et impression de la correction autorisées"></i>
-                    {% else %}
-                          <i class="fa fa-eye-slash text-danger" title="Vue et impression de la correction non autorisées"></i>
+                {% if request.user.user_type == 2 %}
+                    {% if r.correction  or r.exotex.correction  %}
+                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                        <small><a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}" >
+                        {% if r.is_publish_cor %}
+                              <i class="fa fa-eye text-green" title="Vue et impression de la correction autorisées"></i>
+                        {% else %}
+                              <i class="fa fa-eye-slash text-danger" title="Vue et impression de la correction non autorisées"></i>
+                        {% endif %}
+                        </a></small>
                     {% endif %}
-                    </a></small>
-
+                {% elif request.user.user_type == 0 and r.is_publish_cor %}
+                    {% if r.correction  or r.exotex.correction  %}
+                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                    {% endif %}
                 {% endif %}
                 <div class="show_exotex_knowledges"> <small>Compétences et savoirs faire ciblés</small>
                     <div class="exotex_knowledges text-blue" style="font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
@@ -162,7 +167,6 @@
 
 </section> 
 </form>
-
 
 
 
