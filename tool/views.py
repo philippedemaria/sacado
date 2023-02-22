@@ -2157,7 +2157,6 @@ def print_qf_to_pdf(request):
 
     if len(question_ids) < 6 : nb_loop  = 2 
     elif len(question_ids) < 11 : nb_loop  = 1
-    elif len(question_ids) < 21 : nb_loop  = 1
     else :  nb_loop  = 1 
     quotient , reste  = len(question_ids)//2 , len(question_ids)%2
 
@@ -2182,7 +2181,7 @@ def print_qf_to_pdf(request):
 
 
 
-                
+
             elements +=r"\begin{tabular}{|p{0.5cm}|>{\centering\arraybackslash}p{3.25cm}>{\raggedleft\arraybackslash}p{3.25cm}|}\hline"  
 
             for i in range(start ,stop) :
