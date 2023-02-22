@@ -442,7 +442,8 @@ def set_up_by_level_subject(group, student):
         for parcours in parcourses :
 
             relationships   = parcours.parcours_relationship.all() # récupération des relations
-            courses         = parcours.course.all() # récupération des relations                       
+            courses         = parcours.course.all() # récupération des relations 
+            bibliotexs      = parcours.bibliotexs.all()                     
             #clone du parcours
             parcours.pk = None
             parcours.teacher = teacher
@@ -464,6 +465,7 @@ def set_up_by_level_subject(group, student):
                 course.parcours = parcours
                 course.teacher = teacher
                 course.save()
+                course.students.add(student)
 
             for r in relationships :
                 skills = r.skills.all() 
@@ -472,7 +474,31 @@ def set_up_by_level_subject(group, student):
                 r.save() 
                 r.students.add(student)
                 r.skills.set(skills)
+            
+            try :
+                for bibliotex in bibliotexs :
+                    reltexs = bibliotex.relationtexs.all()
+                    bibliotex.pk = None
+                    bibliotex.teacher = teacher
+                    bibliotex.save()
+                    bibliotex.students.add(student)
+                    bibliotex.folders.add(folder)
+                    bibliotex.groups.add(group)
+                    bibliotex.parcours.add(parcours)
+                    bibliotex.levels.add(group.level)
+                    bibliotex.subjects.add(group.subject)
 
+                    for reltex in reltexs :
+                        skills           = reltex.skills.all()
+                        knowledges       = reltex.knowledges.all() 
+                        reltex.pk        = None
+                        reltex.teacher   = teacher
+                        reltex.bibliotex = bibliotex
+                        reltex.save()
+                        reltex.students.add(student)
+                        reltex.skills.set(skills)
+                        reltex.knowledges.set(knowledges)
+            except : pass
 
 
 @login_required(login_url= 'index')
