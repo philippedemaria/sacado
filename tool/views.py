@@ -2144,7 +2144,7 @@ def print_qf_to_pdf(request):
 
     quizz = Quizz.objects.get(pk = idq) 
  
-    preamb = settings.TEX_PREAMBULE_FILE
+    preamb = settings.TEX_PREAMBULE_PDF_QCM
     entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
@@ -2199,11 +2199,12 @@ def print_qf_to_pdf(request):
         elements += r"\\"
 
     if is_correction :
+
         elements += r" \newpage "
 
         elements += r" \titreFiche{Correction} "
 
-        elements += r" \vspace{0,5cm} "
+        elements += r" \\ \vspace{0,5cm} "
         j = 1   
         for question_id in question_ids :
             question = Question.objects.get(pk=question_id)
@@ -4014,7 +4015,7 @@ def admin_test_mental_print(request,id):
     elements += r"\newpage "
 
     elements += r" \titreFiche{Correction} "
-    elements += r" \vspace{0,5cm} "
+    elements += r" \\ \vspace{0,5cm} "
     j = 1   
     for question_id in question_ids :
         question = Question.objects.get(pk=question_id)
