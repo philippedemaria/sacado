@@ -1965,9 +1965,9 @@ def list_sub_parcours_group_student(request,idg,idf):
     parcourses = bases.filter( is_evaluation=0).order_by("ranking")
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
 
-    quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  ) 
-    flashpacks = folder.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  )  
-    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 ) 
+    quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  , folders=None) 
+    flashpacks = folder.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  , folders=None) 
+    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , folders=None)
 
 
     context = {'parcourses': parcourses , 'evaluations': evaluations , 'quizzes': quizzes , 'flashpacks': flashpacks , 'bibliotexs': bibliotexs , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }

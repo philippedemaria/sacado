@@ -2155,8 +2155,9 @@ def print_qf_to_pdf(request):
     question_ids =  list(quizz.questions.values_list("id",flat=True).filter(is_publish=1).order_by("ranking"))
     elements += r"\\"
 
-    if len(question_ids) < 6 : nb_loop  = 3 
-    if len(question_ids) < 11 : nb_loop  = 2 
+    if len(question_ids) < 6 : nb_loop  = 2 
+    elif len(question_ids) < 11 : nb_loop  = 1
+    elif len(question_ids) < 21 : nb_loop  = 1
     else :  nb_loop  = 1 
     quotient , reste  = len(question_ids)//2 , len(question_ids)%2
 
@@ -2178,6 +2179,10 @@ def print_qf_to_pdf(request):
                     elements += r"   \\ \vspace{0.1cm}"
 
                 elements += r"\vspace{0,2cm} "
+
+
+
+                
             elements +=r"\begin{tabular}{|p{0.5cm}|>{\centering\arraybackslash}p{3.25cm}>{\raggedleft\arraybackslash}p{3.25cm}|}\hline"  
 
             for i in range(start ,stop) :
@@ -2185,15 +2190,15 @@ def print_qf_to_pdf(request):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{6.5cm}|}{ " +question.filltheblanks + r"} \\  "
-                    elements += r" \phantom{\Large{$\frac{1^1}{1^1}$}} & \multicolumn{2}{>{\centering\arraybackslash}p{7cm}|}{ "+question.title+r" } "
+                    elements += r" \phantom{\Large{$\frac{1^1}{1^1_n}$}} & \multicolumn{2}{>{\centering\arraybackslash}p{7cm}|}{ "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{>{\centering\arraybackslash}p{7cm}|}{ " +question.title +r" } "
 
                 if question.imagefile :
-                    elements += r" \phantom{\Large{$\frac{1^1}{1^1}$}} & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
+                    elements += r" \phantom{\Large{$\frac{1^1}{1^1_n}$}} & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'Encadre' in question.filltheblanks : elements += r" \hline"
-                else : elements += r"\phantom{\Large{$\frac{1^1}{1^1}$}} & Ta\;réponse\;: &   \\ \hline"
+                else : elements += r"\phantom{\Large{$\frac{1^1}{1^1_n}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\"
@@ -3998,7 +4003,7 @@ def admin_test_mental_print(request,id):
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{7cm}|}{ " +question.filltheblanks + r"} \\  "
-                    elements += r" \phantom{\Large{$\frac{1^1}{1^1}$}} & \multicolumn{2}{>{\centering\arraybackslash}p{7cm}|}{ "+question.title+r" } "
+                    elements += r" \phantom{\Large{$\frac{1^1}{1^1_n}$}} & \multicolumn{2}{>{\centering\arraybackslash}p{7cm}|}{ "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{>{\centering\arraybackslash}p{7cm}|}{ " +question.title +r" } "
 
@@ -4006,7 +4011,7 @@ def admin_test_mental_print(request,id):
                     elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
                 if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'Encadre' in question.filltheblanks : elements += r" \hline"
-                else : elements += r"\phantom{\Large{$\frac{1^1}{1^1}$}} & Ta\;réponse\;: &   \\ \hline"
+                else : elements += r"\phantom{\Large{$\frac{1^1}{1^1_n}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
             
         elements += r"\\"
