@@ -1175,10 +1175,11 @@ label {
 }
 
 
- 
-.skill_knowledge_bibliotex_title{
-   font-size : 18px;
-   font-variant-caps: small-caps;
+.skill_knowledge_bibliotex_title {
+    font-size: 18px;
+    font-variant-caps: small-caps;
+    color: #0093CA;
+    font-weight: normal;
 }
 
 .skill_knowledge_body{

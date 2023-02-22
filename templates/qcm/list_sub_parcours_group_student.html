@@ -255,10 +255,17 @@
                             </div> 
                         </div>
                         <div class="row"> 
-                           <div class="col-lg-6 col-xs-6">
+                            <div class="col-lg-3 col-xs-3">
+                                {% if parcours %}
+                                <a href="{% url 'parcours_show_bibliotex_student' parcours.id bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-eye"></i>  <span class="label_icon">Voir</span></a> 
+                                {% else %}
+                                <a href="{% url 'parcours_show_bibliotex_student' 0 bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-eye"></i> <span class="label_icon">Voir</span></a>
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-4 col-xs-4">
                                 <a href="{% url 'print_bibliotex_by_student' bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-download"></i>  <span class="label_icon">Télécharger</span>  </a>
                             </div>
-                            <div class="col-lg-6 col-xs-6">
+                            <div class="col-lg-5 col-xs-5">
                                 <a href="javascript:void();" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
                                 </a>
                             </div> 
