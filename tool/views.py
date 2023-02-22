@@ -2170,12 +2170,12 @@ def print_qf_to_pdf(request):
                 else : start, stop = quotient+ 1, len(question_ids)
             if len(question_ids)<11 or k == 0 : 
                 elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
-                elements += r" Nom : \ldots\ldots\ldots\ldots\ldots Date \ldots\ldots\ldots"
+                elements += r" Nom : \ldots\ldots\ldots\ldots\ldots \; Date \ldots\ldots\ldots"
                 elements += r" \vspace{1cm}"
                 if is_marker :
                     elements += r"\framebox{ \ldots / \ldots} \\ \vspace{0.1cm}"
                 else : 
-                    elements += r" \ldots\ldots\ldots\ldots  \\ \vspace{0.1cm}"
+                    elements += r"   \\ \vspace{0.1cm}"
 
                 elements += r"\vspace{0,2cm} "
             elements +=r"\begin{tabular}{|l| c  r|}\hline"
@@ -3986,8 +3986,8 @@ def admin_test_mental_print(request,id):
                     else : start, stop = quotient + 1, len(question_ids)
 
             elements += r" \includegraphics[scale=0.4]{/var/www/sacado/static/img/sacadologoqf.png}"
-            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots \quad Date : \ldots\ldots\ldots"
-            elements += r"\framebox{ \ldots / \ldots} \\ \vspace{1cm}"
+            elements += r" Nom : \ldots\ldots\ldots\ldots\ldots \; Date : \ldots\ldots\ldots"
+            elements += r" \\ \vspace{1cm}"
 
             elements +=r"\begin{tabular}{|l| c  r|}\hline"
 
