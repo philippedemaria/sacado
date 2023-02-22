@@ -1967,7 +1967,7 @@ def list_sub_parcours_group_student(request,idg,idf):
 
     quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  , parcours=None) 
     flashpacks = folder.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  , parcours=None) 
-    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , parcours=None)
+    bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , parcours=None).order_by("ranking")
 
 
     context = {'parcourses': parcourses , 'evaluations': evaluations , 'quizzes': quizzes , 'flashpacks': flashpacks , 'bibliotexs': bibliotexs , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
