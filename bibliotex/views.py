@@ -284,7 +284,7 @@ def printer_bibliotex_by_student(bibliotex):
 
     today = datetime.now()
  
-    relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today),is_publish_cor=1).order_by("ranking")
+    relationtexs = bibliotex.relationtexs.filter(Q( is_publish = 1 )|Q(start__lte=today , stop__gte= today)).order_by("ranking")
  
 
     j = 1
@@ -303,33 +303,23 @@ def printer_bibliotex_by_student(bibliotex):
         
         j+=1
 
-  
-        k_display = relationtex.exotex.knowledge.name
-        elements += r"\savoirs{  \item " +  k_display 
-
-
-        if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
-        elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
-        else : kws = []
-        
-        for k in kws : 
-            elements += r" \item " +  k.name  
-
-        elements += r"}"
-
- 
- 
         if  relationtex.content : ctnt =  relationtex.content
         else                    : ctnt =  relationtex.exotex.content
 
         elements += r"\vspace{0,2cm}\\"
         elements += ctnt
-        elements += r"\vspace{0,4cm}\\"
+        elements += r"\vspace{0,2cm}\\"
+
+        if  relationtex.is_publish_cor and  relationtex.exotex.correction :
+            elements += r"\textbf{ Correction :} \\"
+            if relationtex.correction :
+                elements += relationtex.correction
+            else :
+                elements += relationtex.exotex.correction
+            elements += r"\vspace{0,2cm}\\"
+        else :
 
 
-
-
- 
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
 
