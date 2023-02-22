@@ -2202,7 +2202,7 @@ def print_qf_to_pdf(request):
 
         elements += r" \newpage "
 
-        elements += r" \titreFiche{Correction} "
+        elements += r" \titreFiche{ \includegraphics[scale=0.5]{/var/www/sacado/static/img/sacadologoqf.png} Correction } "
 
         elements += r" \\ \vspace{0,5cm} "
         j = 1   
@@ -2212,7 +2212,7 @@ def print_qf_to_pdf(request):
             elements += r"\\" + question.writinganswer
             elements += r"\vspace{0,2cm}\\"
             j+=1
-        elements += r" \includegraphics[scale=1]{/var/www/sacado/static/img/sacadologoqf.png}"
+ 
     elements += r"\end{document}"
     elements += settings.DIR_TMP_TEX    
 

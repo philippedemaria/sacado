@@ -6357,7 +6357,9 @@ def create_supportfile(request,qtype,ids):
             nf.teacher = teacher
             if nf.qtype == 9    : nf.nb_pseudo  = 1
             elif nf.qtype == 19 : nf.is_python  = True
-            elif nf.qtype == 100: nf.is_ggbfile = True
+            elif nf.qtype == 100: 
+                nf.is_ggbfile = True
+                nf.is_share   = True
             elif nf.is_scratch  : nf.is_image   = True
             nf.code = code
             nf.is_share = 0
@@ -6487,7 +6489,9 @@ def update_supportfile(request, id, redirection=0):
             nf.teacher = teacher
             if nf.qtype == 9     : nf.nb_pseudo   = 1
             elif nf.qtype == 19  : nf.is_python  = True            
-            elif nf.qtype == 100 : nf.is_ggbfile = True
+            elif nf.qtype == 100 : 
+                nf.is_ggbfile = True
+                nf.is_share   = True
             elif nf.is_scratch   : nf.is_image   = True
 
             nf.save()
