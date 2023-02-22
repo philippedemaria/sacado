@@ -317,7 +317,7 @@ def printer_bibliotex_by_student(bibliotex):
             else :
                 elements += relationtex.exotex.correction
             elements += r"\vspace{0,2cm}\\"
-        else :
+ 
 
 
     # Fermeture du texte dans le fichier tex
