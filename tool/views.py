@@ -2178,22 +2178,22 @@ def print_qf_to_pdf(request):
                     elements += r"   \\ \vspace{0.1cm}"
 
                 elements += r"\vspace{0,2cm} "
-            elements +=r"\begin{tabular}{|l| c  r|}\hline"
+            elements +=r"\begin{tabular}{|p{0.5cm}|>{\centering\arraybackslash}p{3.25cm}>{\raggedleft\arraybackslash}p{3.25cm}|}\hline"  
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{6.5cm}|}{ " +question.filltheblanks + r"} \\  "
-                    elements += r" \phantom{\Large{$\frac{1}{2}$}} & \multicolumn{2}{c|}{ "+question.title+r" } "
+                    elements += r" \phantom{\Large{$\frac{1^1}{1^1}$}} & \multicolumn{2}{c|}{ "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{c|}{ " +question.title +r" } "
 
                 if question.imagefile :
-                    elements += r" \phantom{\Large{$\frac{1}{2}$}} & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
+                    elements += r" \phantom{\Large{$\frac{1^1}{1^1}$}} & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
+                if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'Encadre' in question.filltheblanks : elements += r" \hline"
+                else : elements += r"\phantom{\Large{$\frac{1^1}{1^1}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
 
         elements += r"\\"
@@ -3989,22 +3989,22 @@ def admin_test_mental_print(request,id):
             elements += r" Nom : \ldots\ldots\ldots\ldots\ldots \; Date : \ldots\ldots\ldots"
             elements += r" \\ \vspace{1cm}"
 
-            elements +=r"\begin{tabular}{|l| c  r|}\hline"
+            elements +=r"\begin{tabular}{|p{0.5cm}|>{\centering\arraybackslash}p{3.25cm}>{\raggedleft\arraybackslash}p{3.25cm}|}\hline"
 
             for i in range(start ,stop) :
                 question = Question.objects.get(pk=question_ids[i])
 
                 if question.filltheblanks :
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{p{6.5cm}|}{ " +question.filltheblanks + r"} \\  "
-                    elements += r" \phantom{\Large{$\frac{1}{2}$}} & \multicolumn{2}{c|}{ "+question.title+r" } "
+                    elements += r" \phantom{\Large{$\frac{1^1}{1^1}$}} & \multicolumn{2}{c|}{ "+question.title+r" } "
                 else :                    
                     elements += r" \textbf{"+ str(i+1) + r".} & \multicolumn{2}{c|}{ " +question.title +r" } "
 
                 if question.imagefile :
                     elements += r" & \includegraphics[scale=0.5]{"+question.imagefile.url+r"}"
                 elements += r"\\"
-                if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'compléte' in question.filltheblanks : elements += r" \hline"
-                else : elements += r"\phantom{\Large{$\frac{1}{2}$}} & Ta\;réponse\;: &   \\ \hline"
+                if 'Parmi' in question.filltheblanks or 'Complète' in question.filltheblanks or 'Encadre' in question.filltheblanks : elements += r" \hline"
+                else : elements += r"\phantom{\Large{$\frac{1^1}{1^1}$}} & Ta\;réponse\;: &   \\ \hline"
             elements += r"\end{tabular}\end{minipage}"
             
         elements += r"\\"
