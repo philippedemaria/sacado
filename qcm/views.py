@@ -6365,7 +6365,7 @@ def create_supportfile(request,qtype,ids):
             nf.is_share = 0
             if teacher.user.is_superuser : nf.is_share = 1
             nf.author = teacher
-            if nf.imagefile != "" :  
+            if nf.imagefile == "" :  
                 nf.imagefile = 'qtype_img/underlayer.png'
             if nf.is_ggbfile :
                 nf.annoncement = unescape_html(cleanhtml(nf.annoncement)) 
