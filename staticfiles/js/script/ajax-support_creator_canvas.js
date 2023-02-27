@@ -15,6 +15,8 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
 
         CKEDITOR.replace('annoncement', {
                 height: '100px' ,
+                filebrowserBrowseUrl : '/ckeditor/browse/',
+                filebrowserUploadUrl : '/ckeditor/upload/',    
                 toolbar:    
                     [  
                         { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
@@ -25,6 +27,8 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
 
         CKEDITOR.replace('correction', {
                 height: '100px' ,
+                filebrowserBrowseUrl : '/ckeditor/browse/',
+                filebrowserUploadUrl : '/ckeditor/upload/',   
                 toolbar:    
                     [  
                         { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 

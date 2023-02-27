@@ -29,6 +29,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
         CKEDITOR.replace('annoncement', {
                 height: cke_height ,
+                filebrowserBrowseUrl : '/ckeditor/browse/',
+                filebrowserUploadUrl : '/ckeditor/upload/', 
                 toolbar:    
                     [  
                         { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
@@ -39,6 +41,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
         CKEDITOR.replace('correction', {
                 height: cke_height,
+                filebrowserBrowseUrl : '/ckeditor/browse/',
+                filebrowserUploadUrl : '/ckeditor/upload/',  
                 toolbar:    
                     [  
                         { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
@@ -427,7 +431,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
             for(var i=0;i<totalForms;i++)
             { 
                 CKEDITOR.replace("supportchoices-"+i+"-answer",{
-                    height : height,
+                    height : height,  
                     toolbar: toolbar   
                 });
             }
