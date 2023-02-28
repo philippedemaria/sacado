@@ -11046,12 +11046,15 @@ def export_skills_after_evaluation(request):
     nb_skill = int(request.POST.get("nb_skill"))
 
     this_clic = request.POST.get("this_clic_skills")
-
-    try : 
-        students = parcours.only_students(group)
+    group_id = request.session.get("group_id",None) 
+    try :
+        if group_id :
+            group = Group.objects.get(pk = group_id )
+            students = parcours.only_students(group)
+        else :
+            students = students_from_p_or_g(request,parcours)
     except:
-        students = students_from_p_or_g(request,parcours) 
-
+        students = students_from_p_or_g(request,parcours)
 
     if this_clic == "csv" :
 
@@ -11214,10 +11217,16 @@ def export_knowledges_after_evaluation(request):
 
     this_clic = request.POST.get("this_clic_knowledges")
 
-    try : 
-        students = parcours.only_students(group)
+    group_id = request.session.get("group_id",None) 
+    try :
+        if group_id :
+            group = Group.objects.get(pk = group_id )
+            students = parcours.only_students(group)
+        else :
+            students = students_from_p_or_g(request,parcours)
     except:
-        students = students_from_p_or_g(request,parcours) 
+        students = students_from_p_or_g(request,parcours)
+
 
     if this_clic == "csv" : 
 
@@ -11310,10 +11319,16 @@ def export_note_custom(request,id,idp):
     fieldnames = ("Eleves", "Notes")
     writer.writerow(fieldnames)
 
-    try : 
-        students = parcours.only_students(group)
+    group_id = request.session.get("group_id",None) 
+    try :
+        if group_id :
+            group = Group.objects.get(pk = group_id )
+            students = parcours.only_students(group)
+        else :
+            students = students_from_p_or_g(request,parcours)
     except:
-        students = students_from_p_or_g(request,parcours) 
+        students = students_from_p_or_g(request,parcours)
+        
 
     for student in students :
         full_name = str(student.user.last_name).lower() +" "+ str(student.user.first_name).lower() 
