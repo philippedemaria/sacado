@@ -10913,6 +10913,8 @@ def export_notes_after_evaluation(request):
     this_clic = request.POST.get("this_clic_notes")
 
     try : 
+        group_id = request.session.get("group_id")
+        group    = Group.objets.get(pk=group_id)
         students = parcours.only_students(group)
     except:
         students = students_from_p_or_g(request,parcours) 
