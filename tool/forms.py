@@ -2,7 +2,7 @@ import datetime
 from django import forms
 from .models import *
 from account.models import Student , Teacher
-from socle.models import Knowledge, Skill
+from socle.models import Knowledge, Skill , Level
 from group.models import Group
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from django.forms import MultiWidget, TextInput , CheckboxInput
@@ -180,7 +180,10 @@ class QFlashForm(forms.ModelForm):
 		else :
 			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 
-		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.order_by("ranking"), required=False)
+
+		levels = Level.objects.filter(pk__lt=6)
+		#teacher.levels.order_by("ranking")
+		self.fields['levels']   = forms.ModelChoiceField(queryset=levels, required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=False)
  
 

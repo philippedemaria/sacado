@@ -4099,8 +4099,6 @@ def ajax_select_style_questions(request):
                     is_mentals = True
                     level_dict["sub"] = list_mentals
         all_mentals.append(level_dict)
-
-
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  , 'teacher' :  teacher  })
 
     return JsonResponse(data)

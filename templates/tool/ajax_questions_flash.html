@@ -77,7 +77,7 @@
                         {% get_question_is_already_used m teacher as is_already_used %}
                         <td >
                             <label {% if is_already_used.date %} class="text-success" title="Déjà utilisé le {{ is_already_used.date|date:'Y-m-d' }}"{% endif %}  > 
-                                <input type="checkbox" value="{{m.id }}" name="mental_ids"  class="these_items_to_be_selected{{ all_mental_sub.mentaltitle.id }}" /> {{ m.content }}   
+                                <input type="checkbox" value="{{m.id }}" name="mental_ids"  class="groupcheckbox these_items_to_be_selected{{ all_mental_sub.mentaltitle.id }}" /> {{ m.content }}   
                             </label>
                         </td> 
                     </tr> 
