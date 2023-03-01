@@ -150,11 +150,28 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                   $('#create_questions_flash').prop('disabled', true);  
                 }
             });
+
+        $('body').on('change', '.class_select_all_these_items' , function(event){               
+                //on vérifie que nos conditions d'envoi sont bonnes
+                if (countCheckedJQuery() >= 1){
+                    $('#create_questions_flash').prop('disabled', false);
+                }else
+                {
+                  $('#create_questions_flash').prop('disabled', true);  
+                }
+            });
+        
              
             function countCheckedJQuery(){
                 var checked = $(".groupcheckbox:checked");//sélectionne tous les éléments de classe "groupcheckbox" qui sont sélectionné
                 return checked.length;
             }
+
+
+
+
+
+
 
 
 
