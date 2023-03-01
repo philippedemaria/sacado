@@ -781,20 +781,13 @@
         </div>
     </div>
     <hr/>
-    {%if request.user.is_superuser %}
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
-            {% if sacado_asso %}
-            <a href="{%  url 'list_questions_flash' %}"  {% if request.session.subtdb == 'QFlash' %} class="active_selected"{% endif %} >Questions flash/Rituels<sup class="text-danger">Nouv</sup> </a>
+            <a href="{%  url 'list_questions_flash' %}"  {% if request.session.subtdb == 'QFlash' %} class="active_selected"{% endif %} >Questions flash<sup class="text-danger">Nouv</sup> </a>
                 <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
-            {% else %}
-                <a href="#" style="cursor:not-allowed" title="Version établissement requise."><i class="bi bi-lightning" ></i>Questions flash</a>
-            {% endif %}
         </div>
     </div>    
     <hr/>
-    {% endif %}
-
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a {% if sacado_asso %} href="{%  url 'list_visiocopie' %}" {% if request.session.subtdb == 'VisioCopies' %} class="active_selected"{% endif %}{% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %} 
@@ -1121,14 +1114,9 @@
                 <li>un enseignement </li>
                 <li>le ou les savoir faire spécifiques </li>
                 <li>le nombre de questions </li>
-                <li>le ou les groupes à attribuer </li>
             </ol>   
         </p>
-        <p>En 20 secondes, les questions flashs sont proposées et 
-         <ul>
-            <li>prêtes à <b>vidéo projeter au tableau</b></li>
-            <li>utilisables en <b>version numérique</b> sur smatphone, tablette ou ordinateur.</li>
-        </ul>
+        <p><a href="https://sacado.xyz/ressources/tuto_qf.pdf" class="btn btn-primary">Télécharger le tuto en pdf</a></p>
     </div>
 </div>
 
