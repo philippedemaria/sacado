@@ -334,18 +334,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     for gar in gars :
         dico_received[gar['key']] = gar['values']
 
-
-
-    # dico_received =  {'P_MAT': ['2270EFF884BA43988AAA4205AA91B7FE##MATHEMATIQUES', '55CF4973C9DE4270A93D5FA1086701F8##EPA'], 
-    # 'PRE': ['EVE'], 
-    # 'GRO': ['199001~GOA22_3E3G1##3E3G1', '199001~GOA22_3E3G2##3E3G2', '199001~GOA22_3E4G1##3E4G1', '199001~GOA22_3E4G2##3E4G2', '199001~GOA22_6E4G1##6E4G1', '199001~GOA22_6E4G2##6E4G2', '199001~GOA22_EPA##EPA'], 
-    # 'P_MS4': ['2111', '2112', '2116'], 'PRO': ['National_ens'], 'NOM': ['CHAMBON'], 
-    # 'DIV': ['199001~3EME3##3EME3', '199001~3EME4##3EME4', '199001~5EME5##5EME5', '199001~5EME6##5EME6', '199001~6EME4##6EME4'], 'CIV': ['Mme'], 
-    # 'DIV_APP': ['199001~GOA22_3E3G1||199001~3EME3##3EME3', '199001~GOA22_3E3G2||199001~3EME3##3EME3', '199001~GOA22_3E4G1||199001~3EME4##3EME4', '199001~GOA22_3E4G2||199001~3EME4##3EME4', '199001~GOA22_6E4G1||199001~6EME4##6EME4', '199001~GOA22_6E4G2||199001~6EME4##6EME4', '199001~GOA22_EPA||199001~3EME2##3EME2', '199001~GOA22_EPA||199001~3EME3##3EME3'], 
-    # 'IDO': ['2bec13600ce5c8c0f887ebb3430b4c4e3509260b6287208415eb9768ecec146f49a4873bb6839de4cfad019f1826357c1009dc162889c66301b81b25aee8ee68'], 
-    # 'P_MEL': [None], 'UAI': ['0320740F']} 
-
-
     ##########################################################
     today = datetime.now()
 
@@ -372,10 +360,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
     civilite = "Mme"
 
-
-    # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
-    # return render(request, 'setup/test_gar.html', context)
-
     try :
         f = open('/var/www/sacado/logs/gar_connexions.log','a')
         writer_text = "{} , {} ".format(today , dico_received )
@@ -390,9 +374,25 @@ def ressource_sacado(request): #Protection saml pour le GAR
         divs = dico_received["DIV"]
         gros = dico_received["GRO"]
 
-        liste_div_gro = div_gro(divs , gros)
+        liste_div_gro = (divs , gros)
+
+        try :
+            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+            print("===> liste_div_gro" + liste_div_gro + "  ===> dico_received['PRO']" + dico_received["PRO"] , file=f)
+            f.close()
+        except :
+            pass
+
+
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
+
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> ELEVE", file=f)
+                f.close()
+            except :
+                pass
 
             if not school.is_primaire :
                 try :
@@ -419,9 +419,17 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 group.students.add(student)
                 groups = [group]     
             test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
-                
+                div_gro
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
-            user_type   = 2    
+            user_type   = 2  
+
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> ENSEIGNANT", file=f)
+                f.close()
+            except :
+                pass
+
             
             if "P_MEL" in dico_received.keys() : 
                 email = dico_received["P_MEL"][0]
@@ -505,6 +513,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     pass
 
         elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
+            
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> DOCUMENTALISTE", file=f)
+                f.close()
+            except :
+                pass
+
+
             try :
                 user_type   = 2    
                 user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "is_manager" : 1 ,  "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
