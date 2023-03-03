@@ -419,7 +419,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 group.students.add(student)
                 groups = [group]     
             test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
-                div_gro
+                
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2  
 
