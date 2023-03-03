@@ -378,7 +378,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         try :
             f = open('/var/www/sacado/logs/gar_connexions.log','a')
-            print("===> liste_div_gro" + liste_div_gro + "  ===> dico_received['PRO']" + dico_received["PRO"] , file=f)
+            print(last_name+" "+first_name+"===> liste_div_gro" + liste_div_gro + "  ===> dico_received['PRO']" + dico_received["PRO"] , file=f)
             f.close()
         except :
             pass
@@ -400,6 +400,14 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         groups = Group.objects.filter(school = school, name = name )
                         group  = groups.last()
                         group_is_exist = True
+
+                        try :
+                            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                            print("===> Mes groupes"+groups, file=f)
+                            f.close()
+                        except :
+                            pass
+
                         try :
                             user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
                             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
