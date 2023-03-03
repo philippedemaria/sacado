@@ -316,6 +316,14 @@ def div_gro(divs , gros):
             liste_div_gro.append( gro.split("##")[1] )
     except :
         pass
+
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        print("===> liste_div_gro : " +  liste_div_gro , file=f)
+        f.close()
+    except :
+        pass
+
     return liste_div_gro 
 
 
@@ -327,6 +335,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
     ###########################################################################################
     ###########################################################################################
+
     data_xml = request.headers["X-Gar"]
     gars = json.loads(data_xml)
 
@@ -375,15 +384,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         gros = dico_received["GRO"]
 
         liste_div_gro = div_gro(divs , gros)
-
-        try :
-            f = open('/var/www/sacado/logs/gar_connexions.log','a')
-            print(last_name+" "+first_name+"===> liste_div_gro" + liste_div_gro + "  ===> dico_received['PRO']" + dico_received["PRO"] , file=f)
-            f.close()
-        except :
-            pass
-
-
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
@@ -572,12 +572,22 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
     request.session["is_gar_check"] = True # permet de savoir si l'utilisateur passe par le GAR
     ###########################################################################################
     ###########################################################################################
-    data_xml = request.headers["X-Gar"]
-    gars = json.loads(data_xml)
+    dico_received =  {'P_MAT': ['2270EFF884BA43988AAA4205AA91B7FE##MATHEMATIQUES', '55CF4973C9DE4270A93D5FA1086701F8##EPA'], 
+    'PRE': ['EVE'], 
+    'GRO': ['199001~GOA22_3E3G1##3E3G1', '199001~GOA22_3E3G2##3E3G2', '199001~GOA22_3E4G1##3E4G1', '199001~GOA22_3E4G2##3E4G2', '199001~GOA22_6E4G1##6E4G1', '199001~GOA22_6E4G2##6E4G2', '199001~GOA22_EPA##EPA'], 
+    'P_MS4': ['2111', '2112', '2116'], 'PRO': ['National_ens'], 'NOM': ['CHAMBON'], 
+    'DIV': ['199001~3EME3##3EME3', '199001~3EME4##3EME4', '199001~5EME5##5EME5', '199001~5EME6##5EME6', '199001~6EME4##6EME4'], 'CIV': ['Mme'], 
+    'DIV_APP': ['199001~GOA22_3E3G1||199001~3EME3##3EME3', '199001~GOA22_3E3G2||199001~3EME3##3EME3', '199001~GOA22_3E4G1||199001~3EME4##3EME4', '199001~GOA22_3E4G2||199001~3EME4##3EME4', '199001~GOA22_6E4G1||199001~6EME4##6EME4', '199001~GOA22_6E4G2||199001~6EME4##6EME4', '199001~GOA22_EPA||199001~3EME2##3EME2', '199001~GOA22_EPA||199001~3EME3##3EME3'], 
+    'IDO': ['2bec13600ce5c8c0f887ebb3430b4c4e3509260b6287208415eb9768ecec146f49a4873bb6839de4cfad019f1826357c1009dc162889c66301b81b25aee8ee68'], 
+    'P_MEL': [None], 'UAI': ['0320740F']} 
 
-    dico_received = dict()
-    for gar in gars :
-        dico_received[gar['key']] = gar['values']
+    # data_xml = request.headers["X-Gar"]
+    # gars = json.loads(data_xml)
+
+    # dico_received = dict()
+    # for gar in gars :
+    #     dico_received[gar['key']] = gar['values']
+
     ##########################################################
     today = datetime.now()
 
@@ -604,9 +614,13 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
     password   = make_password("sacado_gar")
     civilite = "Mme"
 
-
-    # context = {"dico_received" : dico_received , 'data_xml' : data_xml ,'is_gar_check' : request.session["is_gar_check"]  }
-    # return render(request, 'setup/test_gar.html', context)
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        writer_text = "{} , {} ".format(today , dico_received )
+        print(writer_text, file=f)
+        f.close()
+    except :
+        pass
 
 
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
@@ -616,7 +630,23 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
 
         liste_div_gro = div_gro(divs , gros)
 
+        try :
+            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+            print(last_name+" "+first_name+"===> liste_div_gro : " + liste_div_gro + "  ===> dico_received['PRO'] : " + dico_received["PRO"] , file=f)
+            f.close()
+        except :
+            pass
+
+
+
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
+
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> ELEVE", file=f)
+                f.close()
+            except :
+                pass
 
             if not school.is_primaire :
                 try :
@@ -624,6 +654,14 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
                         groups = Group.objects.filter(school = school, name = name )
                         group  = groups.last()
                         group_is_exist = True
+
+                        try :
+                            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                            print("===> Mes groupes"+groups, file=f)
+                            f.close()
+                        except :
+                            pass
+
                         try :
                             user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
                             student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
@@ -645,14 +683,23 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
             test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
                 
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
-            user_type   = 2    
+            user_type   = 2  
+
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> ENSEIGNANT", file=f)
+                f.close()
+            except :
+                pass
+
             
             if "P_MEL" in dico_received.keys() : 
                 email = dico_received["P_MEL"][0]
                 if not email :
                     email = str(today.timestamp()) + "@sacado.xyz"
-
-            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
+            try : civilite = dico_received["CIV"][0]
+            except : civilite = "Mme"
+            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
             
             try :
@@ -710,10 +757,6 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
 
                 except :
                     pass
- 
-
-
-
             else :
                 nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
                 if nb_group == 1 :
@@ -731,20 +774,26 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
                 except :
                     pass
 
-
-
-
         elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
+            
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> DOCUMENTALISTE", file=f)
+                f.close()
+            except :
+                pass
+
+
             try :
                 user_type   = 2    
                 user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "is_manager" : 1 ,  "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
                 teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
 
                 if not dico_received["DIV"][0] :
-                    messages.error(request,"Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
+                    messages.error(request,"Vous êtes référencé.e en tant que DOCUMENTALISTE ou AUTRE PERSONNEL. Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
                     return redirect('index')
             except :
-                messages.error(request,"Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
+                messages.error(request,"Vous n'êtes pas référencé.e et n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
                 return redirect('index')
 
         else :
@@ -766,7 +815,7 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
         messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
 
     return index(request) 
-
+ 
 
 
 
