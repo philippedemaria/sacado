@@ -32,7 +32,7 @@ class Exotex(models.Model):
     title = models.CharField(max_length=255, blank=True,  default="", null=True,  verbose_name="Titre")
 
     content = models.TextField( verbose_name="Enoncé en LaTeX")
-    content_html = models.TextField( blank=True,  verbose_name="Enoncé pour html") 
+    content_html = RichTextUploadingField( blank=True,  verbose_name="Enoncé pour html") 
 
     author = models.ForeignKey(Teacher, related_name="author_exotexs", on_delete=models.PROTECT, editable=False)
     #### pour validation si le qcm est noté
@@ -60,7 +60,7 @@ class Exotex(models.Model):
     is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
 
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
-    correction_html = models.TextField( blank=True,  verbose_name="Correction pour html") 
+    correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html") 
 
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
