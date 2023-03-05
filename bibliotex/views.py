@@ -258,8 +258,6 @@ def printer(request, relationtex_id, collection,output):
         return 
 
 
-
-
 def printer_bibliotex_by_student(bibliotex):
     """affiche un exo ou une collection d'exercices, en pdf (output="pdf") """
 
@@ -369,15 +367,16 @@ def my_exotexs(request):
 
 def compile_html(request,nf):
 
-
     save_html = False
     if r'\ps' in nf.content or r'\ps' in nf.correction :
         messages.error(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
     else :
         
         try :
-            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-            Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+            if nf.content_html == "" :
+                Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            if nf.correction_html == "" :
+                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
             save_html = True    
         except :
             save_html = False
@@ -403,7 +402,6 @@ def create_exotex_knowledge(request,idk):
         nf.teacher = teacher
         nf.save()
         form.save_m2m()
-
         save_html = compile_html(request,nf)
 
         if save_html :

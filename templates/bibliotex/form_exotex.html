@@ -134,101 +134,125 @@ ul#id_skills li{
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-7">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    {{ form.content.label_tag }} <br/>
-                                    {{ form.content|add_class:"form-control textarea_more_shown"|attr:"rows:15"   }}
-                                    {{ form.content.errors }}
-                                </div>
-                            </div>
-                        </div>
- 
-                        <div class="row">
-                            <label><a href="#"  id="enable_correction">Ajouter un corrigé en LaTeX</a> <small>Optionnel</small></label>
-                            <div id="enable_correction_div">
-                                <div class="col-sm-12 col-md-12">                        
-                                    <div class="form-group">                      
-                                        {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
-                                        {{ form.correction.errors }}
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top:15px" >
-                            <div class="col-sm-3 col-md-3">
-                                <div class="form-group">
-                                    <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
-                                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
-                                </div>
-                            </div>   
-                            {% if exotex and exotex != 'init' %}
-                                <div class="col-sm-9 col-md-9">  
-                                    <div class="form-group">
-                                        <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
-                                            <i class="fa fa-trash"> </i>   Supprimer
-                                        </a>
-                                    </div>
-                                </div>
-                            {% endif %}
+                    <div class="col-sm-12 col-md-2">
+                        <table class="table table-sacado borderless">
+                            <tr id="publication_div">
+                                <td><label>Date de publication :</label>  
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                </div>
+                                    </span>
+                                </td>
+                                <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                            </tr>
+                            <tr>     
+                                <td>{{ form.duration.label_tag }} </td>
+                                <td>{{ form.duration |add_class:"form-control" }}{{ form.duration.errors }}</td>
+                            </tr> 
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                        <table class="table table-sacado borderless">
+                            <tr>     
+                                <td>{{ form.calculator.label_tag }} </td>
+                                <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}{{ form.calculator.errors }}</td>
+                            </tr> 
+                            <tr>
+                                <td>{{ form.is_share.label_tag }}
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
+                                    </span>
+                                </td>
+                                <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_share.errors }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                        <table class="table table-sacado borderless">
+                            <tr>
+                                <td>{{ form.is_python.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >contient du Python.</div></span></td>
+                                <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_python.errors }}</td>
+                            </tr> 
+                            <tr>
+                                <td>{{ form.is_scratch.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >contient du Scratch.</div></span></td>
+                                <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_scratch.errors }}</td>
+                            </tr> 
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                        <table class="table table-sacado borderless">
+                            <tr>
+                                <td>{{ form.is_tableur.label_tag }}
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >nécessite un tableur.</div>
+                                    </span></td>
+                                <td>{{ form.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_tableur.errors }}</td>
+                            </tr> 
+                            <tr>
+                                <td>{{ form.is_annals.label_tag }}</td>
+                                <td>{{ form.is_annals |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_annals.errors }}</td>
+                            </tr> 
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ form.content.label_tag }} <br/>
+                            {{ form.content|add_class:"form-control textarea_more_shown"|attr:"rows:15"   }}
+                            {{ form.content.errors }}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-5 setup_ggb">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            {{ form.content_html.label_tag }} <small>Enoncé en html (enregistrement rapide)</small><br/>
+                            {{ form.content_html|add_class:"form-control textarea_more_shown"|attr:"rows:15"   }}
+                            {{ form.content.errors }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">                        
                         <div class="form-group"> 
-                            <table class="table table-sacado borderless">
-                                <tr id="publication_div">
-                                    <td><label>Date de publication :</label>  
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                                    <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
-                                                    <span class="text-danger">Pour modifier la date, vider le champ.</span>
-                                                    </div>
-                                        </span>
-                                    </td>
-                                    <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
-                                </tr>
-                                <tr>     
-                                    <td>{{ form.duration.label_tag }} </td>
-                                    <td>{{ form.duration |add_class:"form-control" }}{{ form.duration.errors }}</td>
-                                </tr> 
-                                <tr>     
-                                    <td>{{ form.calculator.label_tag }} </td>
-                                    <td>{{ form.calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Autorisée"|attr:"data-off:Interdite"}}{{ form.calculator.errors }}</td>
-                                </tr> 
-                                <tr>
-                                    <td>{{ form.is_share.label_tag }}
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >Mutualisation à l'ensemble des collègues de son établissement (si version établissement)</div>
-                                        </span>
-                                    </td>
-                                    <td>{{ form.is_share |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_share.errors }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ form.is_python.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >contient du Python.</div></span></td>
-                                    <td>{{ form.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_python.errors }}</td>
-                                </tr> 
-                                <tr>
-                                    <td>{{ form.is_scratch.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >contient du Scratch.</div></span></td>
-                                    <td>{{ form.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}{{ form.is_scratch.errors }}</td>
-                                </tr> 
-                                <tr>
-                                    <td>{{ form.is_tableur.label_tag }}
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >nécessite un tableur.</div>
-                                        </span></td>
-                                    <td>{{ form.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                                    {{ form.is_tableur.errors }}</td>
-                                </tr> 
-                                <tr>
-                                    <td>{{ form.is_annals.label_tag }}</td>
-                                    <td>{{ form.is_annals |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                                    {{ form.is_annals.errors }}</td>
-                                </tr> 
-                            </table>
+                            {{ form.correction.label_tag }} <small>Optionnel</small><br/>   
+                            {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
+                            {{ form.correction.errors }}
                         </div>
-                    </div>
+                    </div> 
+
+                    <div class="col-sm-12 col-md-6">                        
+                        <div class="form-group"> 
+                            {{ form.correction_html.label_tag }} <small>Correction en html (enregistrement rapide)</small> <br/>      
+                            {{ form.correction_html|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
+                            {{ form.correction_html.errors }}
+                        </div>
+                    </div> 
+                </div>
+
+
+
+
+                <div class="row" style="margin-top:15px" >
+                    <div class="col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
+                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                        </div>
+                    </div>   
+                    {% if exotex and exotex != 'init' %}
+                        <div class="col-sm-9 col-md-9">  
+                            <div class="form-group">
+                                <a href="{% url 'delete_exotex' exotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cet exercice')" > 
+                                    <i class="fa fa-trash"> </i>   Supprimer
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </form>
