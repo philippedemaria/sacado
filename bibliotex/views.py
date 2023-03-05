@@ -368,17 +368,16 @@ def my_exotexs(request):
 
 
 def compile_html(request,nf):
-    compile_content_html    = request.POST.get("compile_content_html",None)
-    compile_correction_html = request.POST.get("compile_correction_html",None)
+
+
     save_html = False
     if r'\ps' in nf.content or r'\ps' in nf.correction :
         messages.error(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
     else :
         
         try :
-            if compile_content_html : Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
-            if nf.correction and compile_correction_html :
-                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+            Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
             save_html = True    
         except :
             save_html = False
