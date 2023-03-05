@@ -136,23 +136,15 @@ ul#id_skills li{
                 <div class="row">
                     <div class="col-sm-12 col-md-2">
                         <table class="table table-sacado borderless">
-                            <tr id="publication_div">
-                                <td><label>Date de publication :</label>  
-                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                                <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
-                                                <span class="text-danger">Pour modifier la date, vider le champ.</span>
-                                                </div>
-                                    </span>
-                                </td>
-                                <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
-                            </tr>
                             <tr>     
                                 <td>{{ form.duration.label_tag }} </td>
+                            <tr>    
+                            </tr> 
                                 <td>{{ form.duration |add_class:"form-control" }}{{ form.duration.errors }}</td>
                             </tr> 
                         </table>
                     </div>
-                    <div class="col-sm-12 col-md-2">
+                    <div class="col-sm-12 col-md-3">
                         <table class="table table-sacado borderless">
                             <tr>     
                                 <td>{{ form.calculator.label_tag }} </td>
