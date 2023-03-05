@@ -372,7 +372,7 @@ def compile_html(request,nf):
     compile_correction_html = request.POST.get("compile_correction_html",None)
     save_html = False
     if r'\ps' in nf.content or r'\ps' in nf.correction :
-        messages.eror(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
+        messages.error(request,'Votre contenu contient du pstricks. Il ne peut pas être compilé correctement.')
     else :
         
         try :
