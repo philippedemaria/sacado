@@ -60,6 +60,9 @@
 .table{
   font-size: 12px
 }
+td .title{
+  font-size: 16px
+}
  
 </style>
 
@@ -87,7 +90,7 @@
                                                 <br/>
                                                 <small>{{ d.subject.shortname }}</small>
                                             </td> 
-                                            <td>
+                                            <td class="title">
                                                 <a href="{% url 'show_discussion' d.id %}">
                                                     {% if d.solve %}<i class="fa fa-check text-success"></i> {% else %} [{{ d.category }} - {{ d.subject.shortname }} ]{% endif %} {{ d.topic }}
                                                 </a> 
