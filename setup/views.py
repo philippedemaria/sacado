@@ -395,39 +395,41 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         liste_div_gro = div_gro(divs , gros)
 
+
+        try :
+            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+            print("===> liste_div_gro : " + liste_div_gro , file=f)
+            f.close()
+        except :
+            pass
+
+
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
-            try :
-                f = open('/var/www/sacado/logs/gar_connexions.log','a')
-                print("===> ELEVE", file=f)
-                f.close()
-            except :
-                pass
+            school_groups = list()
 
             if not school.is_primaire :
+
+                for name in liste_div_gro : 
+                    try : 
+                        school_groups.append ( Group.objects.get(school = school, name = name ) )
+                        if Group.objects.filter(school = school, name = name ):
+                            group  = Group.objects.filter(school = school, name = name ).last()
+                            group_is_exist = True
+                    except : pass
+ 
+                user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                for group in school_groups : 
+                    group.students.add(student)
+
+
                 try :
-                    for name in liste_div_gro : 
-                        groups = Group.objects.filter(school = school, name = name )
-                        group  = groups.last()
-                        group_is_exist = True
-
-                        try :
-                            f = open('/var/www/sacado/logs/gar_connexions.log','a')
-                            print("===> Mes groupes"+groups, file=f)
-                            f.close()
-                        except :
-                            pass
-
-                        try :
-                            user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
-                            student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                            for group in groups : 
-                                group.students.add(student)
-                        except :
-                            created_s = False
+                    f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                    print("===> school_groups : " + school_groups , file=f)
+                    f.close()
                 except :
-                    created_s = None
-                    group     = None
+                    pass      
 
             else :
                 level = Level.objects.get(pk=1)
@@ -435,9 +437,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone, "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,   "country" : country , })
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
                 group.students.add(student)
-                groups = [group]     
-            test = attribute_all_documents_of_groups_to_a_new_student(groups, student)
-                
+                school_groups = [group]     
+            test = attribute_all_documents_of_groups_to_a_new_student(school_groups, student)
+
+
         elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
             user_type   = 2  
 
@@ -454,7 +457,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 if not email :
                     email = str(today.timestamp()) + "@sacado.xyz"
 
-            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_manager" : 1 ,  "country" : country , })
+            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_staff" : 1 ,  "is_manager" : 1 ,  "country" : country , })
             teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
             
             try :
@@ -590,8 +593,228 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
     'IDO': ['2bec13600ce5c8c0f887ebb3430b4c4e3509260b6287208415eb9768ecec146f49a4873bb6839de4cfad019f1826357c1009dc162889c66301b81b25aee8ee68'], 
     'P_MEL': [None], 'UAI': ['0320740F']} 
 
-    ressource_sacado(request)
 
+
+    gars =   [{"key":"DIV","values":["199001~4EME4##4EME4"]},{"key":"CIV","values":["M."]},{"key":"DIV_APP",
+    "values":["199001~GOA22_4E4G1||199001~4EME4##4EME4","199001~GOA22_4E4NONLAT||199001~4EME4##4EME4"]},
+    {"key":"PRE","values":["JÃ©rÃ©mie"]},{"key":"GRO","values":["199001~GOA22_4E4G1##4E4G1","199001~GOA22_4E4NONLAT##4E4NONLAT"]},
+    {"key":"IDO","values":["f650c1ae635bdbc5f61f438c0343a1c15ef3951389133256a682fb931e47c67daceea124137cda792f26cc1dd3cea8ada39363a3da07d9943981f7393fa39c9b"]},
+    {"key":"P_MEL","values":['null']},{"key":"E_MS4","values":["2115"]},
+    {"key":"PRO","values":["National_elv"]},{"key":"UAI","values":["0320740F"]},{"key":"NOM","values":["BLAISE"]} ]
+
+
+
+    dico_received = dict()
+    for gar in gars :
+        dico_received[gar['key']] = gar['values']
+
+    ##########################################################
+    today = datetime.now()
+
+    uai        = dico_received["UAI"][0] 
+    school     = School.objects.filter(code_acad = uai).last()
+    last_name  = dico_received["NOM"][0] 
+    first_name = dico_received["PRE"][0]
+    email      = str(today.timestamp()) + "@sacado.xyz"
+    try    : civilite = dico_received["CIV"][0]
+    except : civilite = "Mme"
+
+    if 7 < today.month < 13  :
+        closure  = datetime(today.year + 1, 6 , 30 , 0 , 0 , 0)
+    else :
+        closure  = datetime(today.year, 6 , 30 , 0 , 0 , 0)
+
+    time_zone  = "Europe/Paris"
+    is_extra   = 0
+    is_manager = 0 
+    cgu        = 1
+    is_testeur = 0
+    country    = school.country
+    is_board   = 0
+
+    username   = dico_received["IDO"][0]
+    password   = make_password("sacado_gar")
+
+
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        writer_text = "{} , {} ".format(today , dico_received )
+        print(writer_text, file=f)
+        f.close()
+    except :
+        pass
+
+
+    if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
+
+        divs = dico_received["DIV"]
+        gros = dico_received["GRO"]
+
+        liste_div_gro = div_gro(divs , gros)
+
+        if 'elv' in dico_received["PRO"][0] : # si ELEVE 
+
+            school_groups = list()
+
+            if not school.is_primaire :
+    
+                for name in liste_div_gro : 
+                    try : 
+                        school_groups.append ( Group.objects.get(school = school, name = name ) )
+                        if Group.objects.filter(school = school, name = name ):
+                            group  = Group.objects.filter(school = school, name = name ).last()
+                            group_is_exist = True
+                    except : pass
+ 
+                user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                for group in school_groups : 
+                    group.students.add(student)
+
+ 
+
+            else :
+                level = Level.objects.get(pk=1)
+                group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level , 'is_gar' : 1 }  )
+                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone, "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,   "country" : country , })
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+                group.students.add(student)
+                school_groups = [group]     
+            test = attribute_all_documents_of_groups_to_a_new_student(school_groups, student)
+ 
+                
+        elif 'ens' in dico_received["PRO"][0] :  # si ENSEIGNANT 'ens' in dico_received["PRO"][0] 
+            user_type   = 2  
+
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> ENSEIGNANT", file=f)
+                f.close()
+            except :
+                pass
+
+            
+            if "P_MEL" in dico_received.keys() : 
+                email = dico_received["P_MEL"][0]
+                if not email :
+                    email = str(today.timestamp()) + "@sacado.xyz"
+
+            user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone , "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "is_staff" : 1 ,  "is_manager" : 1 ,  "country" : country , })
+            teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+            
+            try :
+                mats = dico_received["P_MAT"]
+                for mat in mats :
+                    ensei = mat.split("##")[1]
+                    if   'NUME' in ensei : pk = 3
+                    elif 'PHY'  in ensei : pk = 2
+                    elif 'MATH' in ensei : pk = 1
+                    subject = Subject.objects.get(pk=pk)
+                    teacher.subjects.add(subject)
+            except :
+                pass
+
+             
+            if not school.is_primaire :
+
+                code_levels = dico_received["P_MS4"]
+                try :
+                    dico_level = {'2111': 6 ,'2112': 7 ,  '2115': 8 , '2216': 9 ,'2211': 10 ,  '2212': 11   }
+                    for code_level in code_levels  : 
+                        if str(code_level) not in dico_level :
+                            level_id = 12
+                        else :
+                            level_id = dico_level[str(code_level)]
+
+                        level = Level.objects.get(pk=level_id)
+                        teacher.levels.add(level)
+                except :
+                    pass
+
+
+                try :    
+                    for name in liste_div_gro :
+                        try :
+                            level = name.split("~")[1]
+                            if '1' <= str(level[0]) <= '6' : level_id = 12 - int(level[0])
+                            else : level_id = 12
+                        except :
+                            if '1' <= str(name[0]) <= '6' : level_id = 12 - int(name[0])
+                            else : level_id = 12
+                        level = Level.objects.get(pk=level_id)
+                        teacher.levels.add(level)
+
+                        grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 , 'level_id' : level_id , "lock" : 0 , "is_gar" : 1   })
+                        try :  # Profil élève
+                            if creat :
+                                username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                                password = make_password("sacado2020") 
+                                user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                                student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                                grp.students.add(student)
+                        except :
+                            pass
+
+                except :
+                    pass
+            else :
+                nb_group = Group.objects.filter(name = name ,  school = school,teacher=None).count()
+                if nb_group == 1 :
+                    username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
+                    password = make_password("sacado2020") 
+                    user    = User.objects.create(username = username , school = school , user_type = 0 , password = password ,  time_zone =  time_zone , last_name =   last_name , first_name =   first_name  ,  email = "" ,  closure =  closure ,   country  =  country)
+                    this_student = Student.objects.create(user = user, notification = 0 , exercise_post= 0    )
+                else :
+                    this_student = None
+
+                grp, creat = Group.objects.get_or_create(name = name ,  school = school , defaults = {  'subject_id' : 1 ,  'teacher' : teacher ,  'level_id' : level_id , "lock" : 0 , "is_gar" : 1 })
+                try :  # Profil élève
+                    if this_student :
+                        grp.students.add(this_student)
+                except :
+                    pass
+
+        elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
+            
+            try :
+                f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                print("===> DOCUMENTALISTE", file=f)
+                f.close()
+            except :
+                pass
+
+
+            try :
+                user_type   = 2    
+                user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "is_manager" : 1 ,  "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
+                teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
+
+                if not dico_received["DIV"][0] :
+                    messages.error(request,"Vous êtes référencé.e en tant que DOCUMENTALISTE ou AUTRE PERSONNEL. Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
+                    return redirect('index')
+            except :
+                messages.error(request,"Vous n'êtes pas référencé.e et n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
+                return redirect('index')
+
+        else :
+            messages.error(request,"Votre catégorie de PERSONNEL n'est pas reconnue. Contacter votre administrateur GAR.")
+            return redirect('index')
+
+        #########################################################
+        user_authenticated = authenticate( username= username, password= "sacado_gar")
+ 
+        if user_authenticated  :
+            login(request, user_authenticated,  backend='django.contrib.auth.backends.ModelBackend' )
+            request.session["user_id"] = user_authenticated.id
+            return index(request) 
+
+        else : 
+            messages.error(request,"Votre compte n'est pas connu par SACADO.")
+
+    else :
+        messages.error(request,"Votre établissement n'est pas abonné à SACADO.")
+
+    return index(request) 
 
 
 def logout_view(request):
