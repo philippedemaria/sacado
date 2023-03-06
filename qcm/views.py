@@ -10911,8 +10911,6 @@ def export_notes_after_evaluation(request):
     note_totale  = request.POST.get("note_totale")  
 
     this_clic = request.POST.get("this_clic_notes")
-    group_id = request.session.get("group_id")
-    group= Group.objects.get(pk=group_id)
 
     try : 
         group_id = request.session.get("group_id")
