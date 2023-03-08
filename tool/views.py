@@ -2358,9 +2358,7 @@ def create_question(request,idq,qtype):
     context = { 'bgcolors' : bgcolors , "parcours" : parcours ,  'form' : form, 'qtype' : qtype , "question" : None ,   'questions': questions,  'waitings' : waitings , "quizz_id" : quizz.id ,
                 "quizz" : quizz , 'qtypes' : qtypes ,  'qt' : qt , "class_quizz_box" : False ,  'form_var' : formSetvar}
 
-    
     if quizz.is_random :
-
         all_mentals = list()
         mentaltitles = Mentaltitle.objects.filter(subject = quizz.subject, is_display=1).order_by("ranking")
         if quizz.levels.count()==1 : levels = quizz.levels.all()
@@ -2379,7 +2377,6 @@ def create_question(request,idq,qtype):
             print(level ,  level_dict )
         all_mentals.append(level_dict)
  
-
         context.update( {  'title_type_of_question' : "Questions aléatoires" , "all_mentals" : all_mentals  })
         template = 'tool/quizz_random.html'
 
@@ -2388,6 +2385,7 @@ def create_question(request,idq,qtype):
         template = 'tool/choice_type_of_question.html'
 
     elif qtype == 1 or qtype == 2 or qtype == 7 or qtype == 9  :
+
         context.update( {  'title_type_of_question' : qt.title , })
         template = 'tool/'+qt.template+'.html'
 
@@ -2404,6 +2402,7 @@ def create_question(request,idq,qtype):
         template = 'tool/'+qt.template+'.html'
 
     else : 
+
         context.update( { 'form_ans' : form_ans, 'title_type_of_question' : qt.title , })
         template = 'tool/'+qt.template+'.html'
 

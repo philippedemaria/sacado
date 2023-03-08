@@ -126,7 +126,7 @@
                             <!-- ============== Gestion du randomize dans les questions ======================-->
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
-                            {% if request.user.is_superuser and not quizz.is_video %}
+ 
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
                                     <label>Enoncé</label>
@@ -141,13 +141,7 @@
 
                             <div class="row no_visu_on_load" id="randomize_zone">
                                 <div class="col-sm-12 col-md-12 alert alert-sacado">
-                                    <div class="row">
-                                     
-                                        <div class="col-sm-12 col-md-12 controls">
-                                            <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-info add_more_question" >+ variable</a></h4>
-                                        </div>
 
-                                    </div>
                                     {{ form_var.management_form }} 
 
                                     <script id="rowToClone_question" type="text/template">
@@ -190,7 +184,7 @@
                                 </div>
 
                             </div> 
-                            {% endif %}                            
+                                     
                             <!-- ============================================================================ -->
                             <!-- ============================================================================ -->
                             <!-- ==========  Fin de la gestion du randomize dans les questions  ============= -->
@@ -388,6 +382,9 @@
 
                     {% block type_of_choices %}
                         {% if qtype == 2 %} 
+
+                            {{ form_ans }}
+
 
                             {% if quizz.is_result %}
                             <div class="row" > 

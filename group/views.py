@@ -234,15 +234,14 @@ def student_dashboard(request,group_id):
     customexercises = list(customexercises_set)
 
     relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today)).filter(Q(parcours__in=parcourses_brut)| Q(parcours__in=sequences_brut)).filter( date_limit__gte=today).order_by("date_limit")
-    nb_relationships =  relationships.count()
-
-
+    
     exercise_tab = Relationship.objects.values_list("exercise_id",flat=True).filter(Q(is_publish=1) | Q(start__lte=today)).filter(Q(parcours__in=parcourses_brut)| Q(parcours__in=sequences_brut)).filter(type_id = 0 , date_limit__gte=today)
     
     som = student.answers.values_list("exercise_id",flat=True).filter( exercise__in =exercise_tab).distinct().count()  
     som += student.student_custom_answer.filter(customexercise__in=customexercises).count()  
 
     try:
+        nb_relationships =  relationships.count()
         ratio = int(som / (nb_relationships+nb_custom) * 100)
     except:
         ratio = 0
