@@ -130,18 +130,26 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-5"> 
                                     <label>Enoncé</label>
+                                    {% comment %}
                                     <a href="#" id="show_randomize_zone" class="btn btn-sacado {% if qtype == 1 or qtype == 5 or qtype == 6 or qtype == 7 or qtype == 8 or qtype == 9 or qtype == 11 or qtype == 12 or qtype == 13 or qtype == 14   or qtype == 18 %} no_visu_on_load {% endif %}">
                                         <label>Question à variables numériques aléatoires ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                                                     <div class="helper_tip_text" >Placer des variables aléatoires<br/> dans l'énoncé et les réponses.</div>
                                                                                 </span>
                                         </label>
                                     </a>
+                                    {% endcomment %}
                                 </div>
                             </div>
 
                             <div class="row no_visu_on_load" id="randomize_zone">
                                 <div class="col-sm-12 col-md-12 alert alert-sacado">
+                                    <div class="row">
+                                     
+                                        <div class="col-sm-12 col-md-12 controls">
+                                            <h4 class="thin">Déclaration des variables aléatoires <a href="#" id="new_item" class="btn btn-info add_more_question" >+ variable</a></h4>
+                                        </div>
 
+                                    </div>
                                     {{ form_var.management_form }} 
 
                                     <script id="rowToClone_question" type="text/template">
