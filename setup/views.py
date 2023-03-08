@@ -419,7 +419,11 @@ def ressource_sacado(request): #Protection saml pour le GAR
                     except : pass
  
                 user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
-                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                if group_is_exist : 
+                    student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
+                else : 
+                    level = Level.objects.get(pk=6)
+                    student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
                 for group in school_groups : 
                     group.students.add(student)
 
