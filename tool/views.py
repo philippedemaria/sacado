@@ -2482,7 +2482,6 @@ def update_question(request,id,idq,qtype):
             nf           = form.save(commit=False) 
             nf.teacher   = request.user.teacher
             nf.qtype     = qtype
-            nf.knowledge = knowledge
             nf.is_ia     = 1
             nf.save()
             form.save_m2m()
