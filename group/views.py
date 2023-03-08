@@ -2256,7 +2256,7 @@ def print_inscription_link(request, id):
     if  group.teacher.user.civilite : civilite =  group.teacher.user.civilite
     else : civilite = "Mme"
 
-    for i in range(15):
+    for i in range(20):
         paragraph = Paragraph( "---------------------------------------------------------------------------------------------------------------" , normal )
         elements.append(paragraph)
         elements.append(Spacer(0, 0.1*inch))
