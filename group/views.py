@@ -2233,6 +2233,50 @@ def print_ids(request, id):
 
 
 
+@login_required(login_url= 'index')
+def print_inscription_link(request, id):
+    group = Group.objects.get(id=id)
+    teacher = Teacher.objects.get(user=request.user)
+    authorizing_access_group(request,teacher,group ) 
+ 
+    elements = []        
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Inscription_groupe_SACADO_'+group.name+'.pdf"'
+    doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                        topMargin=0.3*inch,
+                                        leftMargin=0.3*inch,
+                                        rightMargin=0.3*inch,
+                                        bottomMargin=0.3*inch     )
+
+    sample_style_sheet = getSampleStyleSheet()
+
+
+    normal = ParagraphStyle(name='Normal',fontSize=12,)    
+
+    if  group.teacher.user.civilite : civilite =  group.teacher.user.civilite
+    else : civilite = "Mme"
+
+    for i in range(15):
+        paragraph = Paragraph( "---------------------------------------------------------------------------------------------------------------" , normal )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.1*inch))
+        paragraph = Paragraph( "Rejoindre le groupe "+group.name+" de "+  civilite +"  "+ group.teacher.user.last_name +" via cette URL: https://sacado.xyz/group/"+group.code , normal )
+        elements.append(paragraph)
+        elements.append(Spacer(0, 0.1*inch))
+
+    doc.build(elements) 
+
+    return response
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url= 'index')
 def print_list_ids(request, id):

@@ -41,6 +41,7 @@ urlpatterns = [
     
     path('print_monthly_statistiques', print_monthly_statistiques, name='print_monthly_statistiques'),
 
+    path('print_inscription_link/<int:id>', print_inscription_link, name='print_inscription_link'),
     path('print_ids/<int:id>/', print_ids, name='print_ids'),
     path('print_list_ids/<int:id>/', print_list_ids, name='print_list_ids'),
     path('print_list_tableur_ids/<int:id>/', print_list_tableur_ids, name='print_list_tableur_ids'),
