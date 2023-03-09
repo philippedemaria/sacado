@@ -1,4 +1,5 @@
 {% load static %}
+{% load item_tags %}
 
 
 
@@ -19,7 +20,7 @@
                 QCM
             {% elif question.qtype == 4 %} 
                 QCS
-            {% endif   %}  </b>
+            {% endif   %}  {{ question.duration|time_done}}</b>
 
 
 
@@ -35,10 +36,10 @@
             <a href="{% url 'remove_question' question.id quizz.id %}"  class="delete_question" onclick="return TestDelete('cette question')" title="Supprimer"> <i class="fa fa-trash"></i></a>
 
         </div>
-        <div class="col-xs-10 col-md-10" style="position: relative">
+        <div class="col-xs-10 col-md-10">
             {{ question.title|truncatechars_html:"250"|safe }}
 
-            <div style="position: absolute;right:10px;bottom:5px;font-size:10px">{{ question.duration}}</div>
+
         </div>
     </div>
 </li>
