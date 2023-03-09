@@ -13,14 +13,14 @@
             <label>{% if from_ajax %}{{ nbq }}{% else %}{{ forloop.counter }}{% endif %}.  
                 <b>
             {% if question.qtype == 1 %}
-                Vrai/Faux
+                Vrai/Faux.
             {% elif question.qtype == 2 %}
-                Réponse écrite
+                Réponse écrite.
             {% elif question.qtype == 3 %}
-                QCM
+                QCM.
             {% elif question.qtype == 4 %} 
-                QCS
-            {% endif   %}  <span class="pull-right">{{ question.duration}}s</span></b>
+                QCS.
+            {% endif   %}  <span class="pull-right">  {{ question.duration}}s</span></b>
 
 
 
