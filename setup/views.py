@@ -283,7 +283,7 @@ def index(request):
             nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
         except :
             nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count()
-            
+
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
         nb_exercise = exercises.count() - 1
 
@@ -397,10 +397,15 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
         liste_div_gro = div_gro(divs , gros)
 
-
         try :
             f = open('/var/www/sacado/logs/gar_connexions.log','a')
-            print("===> liste_div_gro : " + liste_div_gro , file=f)
+            print("===> liste_div_gro : ", file=f)
+            f.close()
+        except :
+            pass
+        try :
+            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+            print(liste_div_gro , file=f)
             f.close()
         except :
             pass
@@ -429,13 +434,23 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 for group in school_groups : 
                     group.students.add(student)
 
+                try :
+                    f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                    print("===> ELEVE, school_groups : ", file=f)
+                    f.close()
+                except :
+                    pass
 
                 try :
                     f = open('/var/www/sacado/logs/gar_connexions.log','a')
-                    print("===> school_groups : " + school_groups , file=f)
+                    print(school_groups , file=f)
                     f.close()
                 except :
                     pass      
+
+
+
+
 
             else :
                 level = Level.objects.get(pk=1)
