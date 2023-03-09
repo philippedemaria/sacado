@@ -183,7 +183,7 @@ def printer(request, relationtex_id, collection,output):
 
 
             elements += ctnt
-            elements += r"\vspace{0,4cm}\\"
+            elements += r" \vspace{0,4cm}\\"
     else : #pour la création d'un exercise ou son update*
 
         try :
@@ -214,7 +214,7 @@ def printer(request, relationtex_id, collection,output):
         author         = "Équipe SACADO"
 
         elements += ctnt
-        elements += r"\vspace{0,4cm}"
+        elements += r" \vspace{0,4cm}"
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
 
