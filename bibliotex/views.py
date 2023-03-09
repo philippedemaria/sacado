@@ -151,8 +151,10 @@ def printer(request, relationtex_id, collection,output):
                     sks =  relationtex.exotex.skills.all()
                 for s in sks :
                     skills_display +=  s.name+". "
-                
-            elements += r"\exo {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
+            try :
+                elements += r"\exo {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
+            except :
+                elements += r"\exo {\competence{" +skills_display+r"}"
             
             j+=1
 
