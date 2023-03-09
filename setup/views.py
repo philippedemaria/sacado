@@ -279,9 +279,11 @@ def index(request):
 
         nb_parcours = Parcours.objects.filter(is_trash = 0).count()
 
-
-        nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
-        
+        try :
+            nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
+        except :
+            nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count()
+            
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
         nb_exercise = exercises.count() - 1
 
