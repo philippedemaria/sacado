@@ -279,11 +279,6 @@ def index(request):
 
         nb_parcours = Parcours.objects.filter(is_trash = 0).count()
 
-        try :
-            nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count() + Writtenanswerbystudent.objects.filter(date__gte= today_start).count()
-        except :
-            nb_student_answers = Studentanswer.objects.filter(date__gte= today_start).count()
-
         exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
         nb_exercise = exercises.count() - 1
 
@@ -296,7 +291,7 @@ def index(request):
         cookie_rgpd_accepted = not ( cookie_rgpd_accepted  == "True" )
 
         context = { 'cookie_rgpd_accepted' : cookie_rgpd_accepted , 'form': form, 'u_form': u_form, 't_form': t_form, 's_form': s_form, 'np_form': np_form, 'levels': levels,  'nb_teacher': nb_teacher, 
-                    'nb_student_answers': nb_student_answers,  'communications': communications,
+                     'communications': communications,
                     'nb_exotex': nb_exotex, 'nb_exercise': nb_exercise, 'exercise': exercise,  'nb_student': nb_student, 'nb_parcours' : nb_parcours , 
                     'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
 
