@@ -423,7 +423,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         if Group.objects.filter(school = school, name = name ):
                             group  = Group.objects.filter(school = school, name = name ).last()
                             group_is_exist = True
-                    except : pass
+                    except : group_is_exist = False
  
                 user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
                 if group_is_exist : 
