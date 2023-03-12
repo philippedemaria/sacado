@@ -107,6 +107,7 @@ def printer(request, relationtex_id, collection,output):
     elements +=r"\begin{document}"+"\n" 
 
     new_title = request.POST.get("new_title",None) 
+    texte_supplement   = request.POST.get("texte_supplement",None)
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
@@ -129,6 +130,7 @@ def printer(request, relationtex_id, collection,output):
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
         relationtex_ids    = request.POST.getlist("relationtexs",None)
+        
 
 
         today = datetime.now()
@@ -184,6 +186,12 @@ def printer(request, relationtex_id, collection,output):
 
             elements += ctnt
             elements += r" \vspace{0,4cm}\\"
+
+        if texte_supplement : 
+            elements +=  r"\hrule "
+            elements +=  texte_supplement 
+
+
     else : #pour la création d'un exercise ou son update*
 
         try :
