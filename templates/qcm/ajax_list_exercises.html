@@ -31,7 +31,7 @@
                                          {% if knowledge_list|length > 0 %}
                                                 <tr style="background:#d4cbe6; cursor: pointer; color: black" class="opener_k opened{{ waiting.grouper.id }} out"  id="{{ knowledge.grouper.id}}"><td><i class="fa fa-caret-right"></i></td>
                                                     <td class="listingtd">
-                                                        {{ knowledge.grouper.name|capfirst }}  <b><small> {{  knowledge.grouper.exercises.count }} exercice{{  knowledge.grouper.exercises.count|pluralize }}</small></b>
+                                                        {{ knowledge.grouper.name|capfirst }}  <b><small> {{  knowledge.grouper.exercises|counting }} exercice{{  knowledge.grouper.exercises|counting|pluralize }}</small></b>
                                                         {% if request.user.is_superuser and '/admin' in request.path %}
                                                             <a href="{% url 'create_exercise_knowledge' knowledge.grouper.id %}" class="pull-right edit"><i class='fa fa-plus' style="margin-left:10px;font-size: 10px"></i></a>
                                                         {% endif %}
