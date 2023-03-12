@@ -62,10 +62,7 @@
 
 <td>
     {% for p in quizz.parcours.all %}
-        {% if list_folder.folder %}<a href="{% url 'show_parcours' list_folder.folder.id  p.id %}"  style="font-size:14px">{{ p }}</a>
-        {% else %}<a href="{% url 'show_parcours' 0 p.id %}"  style="font-size:14px">{{ p }}</a>
-        {% endif %}
-        {% if not forloop.last %}, {% endif %} 
+        {% if list_folder.folder %}<a href="{% url 'show_parcours' list_folder.folder.id  p.id %}"  style="font-size:14px">{{ p }}</a>{% else %}<a href="{% url 'show_parcours' 0 p.id %}"  style="font-size:14px">{{ p }}</a>{% endif %}{% if not forloop.last %}, {% endif %} 
     {% endfor %}
 </td>
 <td style="position:relative">
