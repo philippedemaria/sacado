@@ -62,7 +62,8 @@
 
 <td>
     {% for p in quizz.parcours.all %}
-        {{ p }}{% if not forloop.last %}, {% endif %} 
+        <a href="{% url 'show_parcours' 0 p.id %}">{{ p }}</a>
+        {% if not forloop.last %}, {% endif %} 
     {% endfor %}
 </td>
 <td style="position:relative">
