@@ -555,6 +555,9 @@ def list_quizzes(request):
     folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=0).exclude(folders=None).distinct().order_by("levels","folders")#  inclus dans un dossier
  
     delete_session_key(request, "quizz_id")
+    delete_session_key(request, "group_id")
+    delete_session_key(request, "folder_id")
+    
     list_folders = list()
     for folder in folders :
         quizzes_folders = dict()
