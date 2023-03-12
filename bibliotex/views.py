@@ -189,6 +189,7 @@ def printer(request, relationtex_id, collection,output):
 
         if texte_supplement : 
             elements +=  r"\hrule "
+            elements +=  r"\vspace{0,1cm} "
             elements +=  texte_supplement 
 
 
