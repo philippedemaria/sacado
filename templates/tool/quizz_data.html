@@ -17,7 +17,7 @@
     {% else %} 
         <i class="fa fa-square fa-3x" style="color:{{ quizz.color }}"></i>
     {% endif %}<br/>
-    <small>{{ quizz.date_modified|date:"d N Y"}}</small>
+    <small>{% if quizz.start %}<i class="bi bi-calendar3"></i> {{ quizz.start|date:"d N Y"}}{% %}{{ quizz.date_modified|date:"d N Y"}}{% endif %}</small>
 </td>
 <td>
     {{ quizz.title }}     
