@@ -17,7 +17,7 @@
     {% else %} 
         <i class="fa fa-square fa-3x" style="color:{{ quizz.color }}"></i>
     {% endif %}<br/>
-    <small>{% if quizz.start %}<i class="bi bi-calendar3"></i> {{ quizz.start|date:"d N Y"}}{% else %}{{ quizz.date_modified|date:"d N Y"}}{% endif %}</small>
+    <small>{% if quizz.start %}<i class="bi bi-calendar3"></i>{% else %}{{ quizz.date_modified|date:"d N Y"}}{% endif %}</small>
 </td>
 <td>
     {{ quizz.title }}     
@@ -40,7 +40,7 @@
             </span>
         </div> 
     {% elif quizz.start  %}
-        <div class="text-success"></small>{{ quizz.start|date:"d N Y H:i" }}</small></div>  {% if  quizz.stop %}  <div class="text-danger"><small>{{ quizz.stop|date:"d N Y H:i" }}</small></div> {% endif %}
+        <div class="text-success"><small>{{ quizz.start|date:"d N Y H:i" }}</small></div>  {% if  quizz.stop %}  <div class="text-danger"><small>{{ quizz.stop|date:"d N Y H:i" }}</small></div> {% endif %}
     {% else %} 
         <div class="text-danger">
             <small>dépublié</small> 
