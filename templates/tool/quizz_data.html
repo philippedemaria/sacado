@@ -40,7 +40,7 @@
             </span>
         </div> 
     {% elif quizz.start  %}
-        <div class="text-success"><small>{{ quizz.start|date:"d N Y H:i" }}</small></div>  {% if  quizz.stop %}  <div class="text-danger"><small>{{ quizz.stop|date:"d N Y H:i" }}</small></div> {% endif %}
+        <div class="text-danger"><small>{{ quizz.start|date:"d N Y H:i" }}</small>  {% if  quizz.stop %}   <small>{{ quizz.stop|date:"d N Y H:i" }}</small></div> {% endif %}
     {% else %} 
         <div class="text-danger">
             <small>dépublié</small> 
