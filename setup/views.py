@@ -346,7 +346,8 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     dico_received = dict()
     for gar in gars :
-        dico_received[gar['key']] = gar['values']
+        if gar['values'] == "None" or gar['values'] == "null" : dico_received[gar['key']] = []
+        else : dico_received[gar['key']] = gar['values']
 
     ##########################################################
     today = datetime.now()
@@ -356,7 +357,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
     last_name  = dico_received["NOM"][0] 
     first_name = dico_received["PRE"][0]
     email      = str(today.timestamp()) + "@sacado.xyz"
-    try    : civilite = dico_received["CIV"][0]
+    try    : 
+        civilite = dico_received["CIV"][0]
+        if civilite == "None": civilite = "Mme"
+
     except : civilite = "Mme"
 
     if 7 < today.month < 13  :
