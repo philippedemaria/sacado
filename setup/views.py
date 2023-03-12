@@ -361,7 +361,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         civilite = dico_received["CIV"][0]
         if civilite == "None" : civilite = "Mme"
         elif len(civilite) == 0 : civilite = "Mme"
-        else : civilite = "Mme"
     except : civilite = "Mme"
 
     if 7 < today.month < 13  :
