@@ -425,13 +425,13 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group"> 
                                 {% if quizz %}
-                                <span data-toggle="modal" data-target="#overview" class="btn btn-info btn-lg"  id="this_question_display_overview" > <i class="fa fa-eye"></i> Aperçu de la question</span>
+                                <span data-toggle="modal" data-target="#overview" class="btn btn-info"  id="this_question_display_overview" > <i class="fa fa-eye"></i> Aperçu de la question</span>
                                 {% endif %}
-                                <input value="Enregistrer" type="submit" class="btn btn-primary  btn-lg" id="click_button" />
+                                <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
                                 {% if quizz %}
-                                <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
+                                <a href="{% url 'create_question'  quizz.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default "/></a> 
                                 {% else %}
-                                <a href="{% url 'admin_create_question_ia'  knowledge.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default btn-lg"/></a> 
+                                <a href="{% url 'admin_create_question_ia'  knowledge.id  0 %}"><input type="button" value="Changer de type de question" class="btn btn-default"/></a> 
                                 {% endif %}
                             </div>                            
                         </div>
