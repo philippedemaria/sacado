@@ -558,15 +558,16 @@ def list_quizzes(request):
     delete_session_key(request, "group_id")
     delete_session_key(request, "folder_id")
 
-    list_folders, list_name = list(), list()
+    list_folders, list_details = list(), list()
     for folder in folders :
         quizzes_folders = dict()
         fld = Folder.objects.get(pk=folder)
         quizzes_folders["folder"]  = fld
         quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=0 , folders=folder, is_random=0).order_by("levels")
-        list_name.append(fld.name)
-        if not fld.name in list_name : 
-            list_name.append(fld.name)
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
             list_folders.append(quizzes_folders)
  
     request.session["tdb"] = "Documents"
