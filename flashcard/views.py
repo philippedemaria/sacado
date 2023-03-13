@@ -74,13 +74,18 @@ def list_my_flashpacks(request):
     flashpacks         = dataset.filter(folders=None)
     flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
-    list_folders = list()
+    list_folders, list_details = list(), list()
     for folder in flashpacks_folders :
         flash_folders = dict()
-        flash_folders["folder"] = Folder.objects.get(pk=folder)
-        teacher_flash_folders = dataset.filter(is_archive=0 , folders=folder)
-        flash_folders["flashpacks"] = teacher_flash_folders  
-        list_folders.append(flash_folders)
+        fld = Folder.objects.get(pk=folder)
+        flash_folders["folder"] = fld
+        flash_folders["flashpacks"] = dataset.filter(folders=folder).order_by("levels")  
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(flash_folders)
+
 
     ########################################################################
     # insere les cartes d'un flashpack de parcours dans les flashpack annuel
@@ -118,13 +123,17 @@ def my_flashpack_archives(request):
     flashpacks = dataset.filter(folders=None)
     flashpacks_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
 
-    list_folders = list()
+    list_folders, list_details = list(), list()
     for folder in flashpacks_folders :
         flash_folders = dict()
-        flash_folders["folder"] = Folder.objects.get(pk=folder)
-        teacher_flash_folders = dataset.filter(is_archive=1 , folders=folder)
-        flash_folders["flashpacks"] = teacher_flash_folders  
-        list_folders.append(flash_folders)
+        fld = Folder.objects.get(pk=folder)
+        flash_folders["folder"] = fld
+        flash_folders["flashpacks"] = dataset.filter(folders=folder).order_by("levels")  
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(flash_folders)
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
  

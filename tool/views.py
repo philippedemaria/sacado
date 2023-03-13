@@ -585,18 +585,25 @@ def list_quizzes(request):
 @login_required(login_url= 'index')
 def all_quizzes_archived(request):
 
+    request.session["tdb"] = "Documents"
+    request.session["subtdb"] = "Quizz"
 
     teacher = request.user.teacher 
     quizzes = teacher.teacher_quizz.filter(is_archive=1 , folders=None, is_random=0) # non inclus dans un dossier
     folders = teacher.teacher_quizz.values_list("folders", flat=True).filter(is_archive=1).exclude(folders=None).distinct().order_by("levels","folders")#  inclus dans un dossier
-    list_folders = list()
+
+    list_folders, list_details = list(), list()
     for folder in folders :
         quizzes_folders = dict()
-        quizzes_folders["folder"] = Folder.objects.get(pk=folder)
-        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder, is_random=0).order_by("levels") 
-        list_folders.append(quizzes_folders)
-    request.session["tdb"] = "Documents"
-    request.session["subtdb"] = "Quizz"
+        fld = Folder.objects.get(pk=folder)
+        quizzes_folders["folder"]  = fld
+        quizzes_folders["quizzes"] = teacher.teacher_quizz.filter(is_archive=1 , folders=folder, is_random=0).order_by("levels")
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(quizzes_folders)
+
  
     is_archive = True
     return render(request, 'tool/list_quizzes.html', {   'list_folders': list_folders , 'quizzes': quizzes ,  'teacher': teacher, 'is_archive' : is_archive })

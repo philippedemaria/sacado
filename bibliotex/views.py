@@ -606,7 +606,8 @@ def bibliotexs(request):
 def my_bibliotexs(request):
 
     request.session["folder_id"] = None
-    request.session["group_id"] = None
+    request.session["group_id"] = None    
+    request.session["parcours_id"] = False
     teacher = request.user.teacher
 
     dataset_user = teacher.teacher_bibliotexs
@@ -618,13 +619,18 @@ def my_bibliotexs(request):
     request.session["tdb"] = "Documents"  
     request.session["subtdb"] = "Bibliotex"
 
-    list_folders = list()
+    list_folders, list_details = list(), list()
     for folder in bibliotexs_folders :
         bibtexs_folders = dict()
-        bibtexs_folders["folder"] = Folder.objects.get(pk=folder)
-        teacher_bibliotexs = dataset.filter(folders=folder)
-        bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
-        list_folders.append(bibtexs_folders)
+        fld = Folder.objects.get(pk=folder)
+        bibtexs_folders["folder"] = fld
+        bibtexs_folders["bibliotexs"] = dataset.filter(folders=folder).order_by("levels")  
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(bibtexs_folders)
+
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
  
@@ -649,13 +655,17 @@ def my_bibliotex_archives(request):
     request.session["subtdb"] = "Bibliotex"
 
  
-    list_folders = list()
+    list_folders, list_details = list(), list()
     for folder in bibliotexs_folders :
         bibtexs_folders = dict()
-        bibtexs_folders["folder"] = Folder.objects.get(pk=folder)
-        teacher_bibliotexs = dataset.filter(folders=folder)
-        bibtexs_folders["bibliotexs"] = teacher_bibliotexs  
-        list_folders.append(bibtexs_folders)
+        fld = Folder.objects.get(pk=folder)
+        bibtexs_folders["folder"] = fld
+        bibtexs_folders["bibliotexs"] = dataset.filter(folders=folder).order_by("levels")  
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(bibtexs_folders)
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
  
