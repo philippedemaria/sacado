@@ -76,7 +76,7 @@
  
         <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
             <div class="col-xs-6 col-md-6 col-lg-6"> 
-                {{  quizz.questions.count }} questions {% if  quizz.is_video %}sur smartphone{% elif  quizz.is_numeric %}sur poste{% else %}sur papier{% endif %}
+                {{  quizz.questions.count }} questions {% if  quizz.is_video and quizz.is_numeric %}sur smartphone{% elif  not quizz.is_video and  quizz.is_numeric %}sur poste{% else %}sur papier{% endif %}
             </div>
             <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
                 {{ quizz.duration|time_done}} 
