@@ -8,10 +8,6 @@
 <li class="dropdown">
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new {% if  'result_parcours_skill' in request.path %} active {% endif %}"> Paramètres <b class="caret"></b> </a>
         <ul class="dropdown-menu clearfix pull-right" role="menu">
-            <li>
-                <a href="{% url 'create_bibliotex' 0 %}" > Créer une nouvelle BiblioTex </a> 
-            </li>
-            <li class="divider"></li> 
             <li {% if 'update' in request.path %}class="active"{% endif %}>
                 <a href="{% url 'update_bibliotex' bibliotex.id  %}" ><i class="fa fa-fw fa-cogs"></i> Configurer</a>
             </li> 

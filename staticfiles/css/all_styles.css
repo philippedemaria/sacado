@@ -143,6 +143,39 @@ a.selected_menu{
     border-color: #d25946;
 }
 
+a.level_title{
+  font-size:14px;
+  background-color: #0960B5 ;
+  padding:3px;
+  color:white;
+  border-radius: 3px;
+}
+
+a.level_title{
+  font-size:14px;
+  background-color: #0093CA ;
+  padding:3px;
+  color:white;
+  border-radius: 3px;  
+}
+
+a.level_title:hover, a.level_title:active,a.level_title:focus{
+  background-color: #064d68 ;
+  width:50px;
+  text-decoration:none;
+}
+
+.number_exotex{
+  background-color: #0093CA ;
+  font-size:14px;
+  background-color: #0093CA ;
+  padding:3px;
+  color:white;
+  margin-left:30px;
+  border-radius: 3px; 
+}
+
+
 /********************************************************************/
 /*********   cke  ***************************************************/
 /********************************************************************/

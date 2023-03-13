@@ -1,0 +1,104 @@
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
+{% endblock %} 
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <table class="table  table-hover display1000" style="width:100%;background-color: #d4cdc4" >
+            <thead> 
+                <tr>
+                    <th></th>
+                </tr>
+            </thead> 
+            <tbody  id="supportfile_ranking">  
+                {% regroup waitings by theme as theme_list %}
+                {% for theme in theme_list  %} 
+                    <tr style="background:#5d4391; color:white">
+                        <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td> 
+                    </tr> 
+
+
+
+                    {% for waiting in theme.list  %}
+                    
+                        <tr style="background:#aa98cd; cursor: pointer; color: white" class="opener out"  id="{{ waiting.id }}">
+                            <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name}}   <small><b>{{  waiting.exotexs_counter }} exercice{{ waiting.exotexs_counter|pluralize  }}</b>  </small> </td> 
+                        </tr>  
+             
+
+                        {% for knowledge in waiting.knowledges.all  %}
+                        {% with  k_e_c=knowledge.exotexs_counter  %}
+                                <tr  style="background:#d4cbe6; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.id }} out no_visu_on_load"  id="{{ knowledge.id}}"> 
+                                    <td>
+                                        <i class="fa fa-caret-right"></i>  
+                                        {{ knowledge.name|capfirst }} <small><b>{{  k_e_c  }} exercice{{ k_e_c|pluralize  }}</b></small> 
+                                        {% if request.user.is_superuser and '/admin' in request.path or request.user.is_extra %}                                                       
+                                        <a href="{% url 'create_exotex_knowledge' knowledge.id %}" ><i class='fa fa-plus pull-right' style="margin-right:20px"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% if k_e_c > 0 %}
+
+                                {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
+                                    <tr  class="opener_e openedk{{ knowledge.id }} no_visu_on_load" style="background:#fff;" >
+                                        <td style="position: relative;" class="container_checkbox"> 
+                                            <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
+                                            <label>
+                                            <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex.id}}" class="selector_exotex" name="exotexs"
+                                                   id="selected_exotex{{ exotex.id }}"  data-statut="{{ is_selected }}" {% if is_selected %}checked{% endif  %} />
+
+                                            <span class="checkmark"  style="top:13px;"></span>
+
+                                            <b><span class="number_exotex">{{ exotex.id}}</span>{% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Exercice sans titre {% endif %}</b> 
+                                            </label>
+                                            {% if  exotex.correction  %}
+                                                <i class="fa fa-copyright text-success" title="Exercice corrigé" style="font-size:12px;"></i> 
+                                            {% endif %}
+                                            {% if exotex.calculator %}
+                                              <img src="{% static 'img/calculator.png' %}" width="20px" />
+                                            {% else %}
+                                              <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
+                                            {% endif  %}
+
+                                            <small class="pull-right">
+                                                {% for s in exotex.skills.all %}
+                                                    {{ s.name }}.
+                                                {% endfor %}
+                                            </small>
+
+
+                                            <div class="admin_exotex">
+                                            {{ exotex.content_html|safe}}
+                                            </div>
+                                       </td>
+                                    </tr>
+                                {% endfor %} 
+                            {% endif %}
+
+                        {% endwith %}
+                        {% endfor %}
+                        
+                    {% endfor %}
+
+                    
+
+                {% endfor %}  
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+ 
+                      
+
+ 
+
+ 

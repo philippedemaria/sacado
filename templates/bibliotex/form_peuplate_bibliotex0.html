@@ -1,0 +1,131 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-bibliotex-peuplate']);
+    </script> 
+{% endblock %} 
+
+
+{% block page_title %}
+    {% include 'bibliotex/logo.html' %}
+    {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
+    <small>Ajouter des exercices </small>
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
+{% endblock %}
+
+
+{% block body %}
+ 
+  
+     
+<section class="content_main">
+    <div class="col-sm-12 col-md-12">
+        <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+            <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
+            <div class="row search_bar" style="padding-top:0px">
+                <div class="col-sm-12 col-md-4 col-lg-2">
+                    <div class="form-group">
+                        <select id="id_subject" name="subject" class="form-control select2">
+                            {% for s in teacher.subjects.all %}
+                                <option value="{{s.id}}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-9 col-md-4 col-lg-2">
+                    <div class="form-group">
+                        <select id="id_level" name="level" class="form-control select2" >
+                            <option value=" ">Choisir un niveau</option>
+                            {% for l in levels|dictsort:"ranking" %}
+                                <option value="{{l.id}}">{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-1 no_visu_on_load" id="is_annale">
+                    <div class="form-group">
+                        <input type="checkbox"  id="id_annale" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Annale" data-off="Exercice" data-width="100%" />
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <select id="id_theme" name="theme" class="form-control select2" multiple>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-2">
+                    <div class="form-group">
+                        <select id="id_skill" name="skill" class="form-control select2">
+                                <option value="">Choisir une compétence</option>
+                            {% for s in skills %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-3" id="keyword_div">
+                    <div class="form-group">
+                        <input name="keyword" id="keyword" class="form-control" placeholder="Mot clé" />
+                    </div>
+                </div>
+                <div class="col-sm-12  no_visu_on_load" id="knowledges_div">
+                    <select id="id_knowledges" name="knowledges" class="form-control select2" multiple>
+                    </select>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div id="loader">
+                    </div>
+                    <div id="content_exercises" class="list_choice_bibliotex"> 
+                        {% for relationtex in relationtexs %}
+                            {% with exotex=relationtex.exotex  %}
+                            {% include 'bibliotex/exotex_tag.html' %}
+                            {% endwith %}
+                        {% endfor %}
+
+                        <div style="clear: both;"> 
+                    </div>
+                </div>
+            </div> 
+        </form>
+    </div>
+</section>  
+
+
+<div class="modal fade" id="show_exotex_by_pop" tabindex="-1" role="dialog" aria-labelledby="show_exotex_by_pop">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+             
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+            </div>
+            <div class="modal-body">
+ 
+            </div>
+        </div>
+    </div> 
+</div>
+
+{% endblock %}
+
+ 
+ 
+ 
+       
+ 
+ 

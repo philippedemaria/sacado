@@ -65,6 +65,8 @@ urlpatterns = [
     path('ajax_level_exotex', ajax_level_exotex, name='ajax_level_exotex'),
     path('ajax_knowledges_exotex', ajax_knowledges_exotex, name='ajax_knowledges_exotex'),
 
+    path('ajax_list_exotex', ajax_list_exotex, name='ajax_list_exotex'),
+
     path('ajax_charge_folders', ajax_charge_folders, name='ajax_charge_folders'),
     path('ajax_charge_parcours', ajax_charge_parcours, name='ajax_charge_parcours'),
 

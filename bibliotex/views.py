@@ -1244,12 +1244,30 @@ def exercise_bibliotex_peuplate(request, id):
     skills    = Skill.objects.filter(subject__in=teacher.subjects.all())
     relationtexs = bibliotex.relationtexs.order_by("ranking")
 
+    levels = Level.objects.exclude(pk=13).order_by("ranking")
+
  
-    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills  }
+    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels   }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex.html', context )
  
  
+
+def ajax_list_exotex(request):
+
+    level_id   =  request.POST.get("level_id")
+    subject_id =  request.POST.get("subject_id")
+    teacher    = request.user.teacher
+    level      = Level.objects.get(pk=level_id)
+    waitings   = level.waitings.filter(theme__subject_id = subject_id).order_by("theme") 
+    data = dict()
+    data['html'] = render_to_string('bibliotex/ajax_list_exotexs.html', {'waitings' : waitings , })
+
+    return JsonResponse(data)
+
+
+
+
 
 def  exercise_bibliotex_individualise(request, id):
     
@@ -1265,12 +1283,17 @@ def  exercise_bibliotex_individualise(request, id):
  
 
 
+
+
+
 def real_time_bibliotex(request, id):
     pass
  
 
 
-def  ajax_chargethemes(request):
+
+
+def ajax_chargethemes(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
     teacher = request.user.teacher
@@ -1483,24 +1506,21 @@ def ajax_set_exotex_in_bibliotex(request):
     skills      = exotex.skills.all()
     knowledges  = exotex.knowledges.all()
 
-    statut = request.POST.get("statut") 
+    statut = request.POST.get("statut")
 
     data = {}    
     stds     = bibliotex.students.all()
 
     if statut=="true" or statut == "True":
-
         r = Relationtex.objects.get(bibliotex_id=bibliotex_id , exotex_id = exotex_id )  
         students = list(stds)
         r.students.remove(*students)
-
-        data["statut"] = "False"
-        data["class"] = "btn btn-danger"
+        r.delete()
+        data["statut"]  = "False"
+        data["class"]   = "btn btn-danger"
         data["noclass"] = "btn btn-success"
-
-
     else:
-        try :
+        try :        
             relationtex = Relationtex.objects.create(   bibliotex_id=bibliotex_id, exotex_id = exotex_id, ranking = 100,  
                                                         teacher = request.user.teacher, calculator = exotex.calculator,  duration =exotex.duration , 
                                                         is_python = exotex.is_python,is_scratch =exotex.is_scratch,is_tableur =exotex.is_tableur,is_print = 0,
@@ -1509,18 +1529,17 @@ def ajax_set_exotex_in_bibliotex(request):
             relationtex.knowledges.set(knowledges)
             relationtex.students.set(stds)
 
-
             data["statut"]  = "True"
             data["class"]   = "btn btn-success"
             data["noclass"] = "btn btn-danger"
         except :
-            data["statut"] = "False"
-            data["class"] = "btn btn-danger"
+            data["statut"]  = "False"
+            data["class"]   = "btn btn-danger"
             data["noclass"] = "btn btn-success"
 
-
     data["nb"] = bibliotex.exotexs.count()
-
+    context        = { 'exotex': exotex , 'bibliotex':  bibliotex  }
+    data["html"]   = render_to_string('bibliotex/exotex_tag.html', context)
 
     return JsonResponse(data)
 
