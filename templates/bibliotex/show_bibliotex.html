@@ -21,7 +21,10 @@
 
   
 {% block page_title %}
-    {% include 'bibliotex/logo.html' %} {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/> 
+    {% include 'bibliotex/logo.html' %} {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/>  
+
+    <ul>{% include 'bibliotex/submenu_bibliotex.html' %}</ul>
+
 {% endblock %}
 
 

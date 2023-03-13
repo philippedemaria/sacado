@@ -278,13 +278,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-6" align='center' id="manual_install">
-                                            <a href="{% url 'create_group' %}"  class="auto_install set_up_round" style="padding-top: 45px"> 
+                                            <a href="{% url 'create_group' %}"  class="auto_install set_up_round" style="padding-top: 50px"> 
                                                 Je veux créer<br/>   mon premier groupe 
                                             </a> 
                                         </div>
                                         <div class="col-xs-6" align='center' id="auto_install">
-                                            <a href="javascript:void();" id="show_auto_install" class="auto_install set_up_round" style="padding-top: 45px"> 
-                                                Je veux créer<br/>  tous mes groupes (mode expert)
+                                            <a href="javascript:void();" id="show_auto_install" class="auto_install set_up_round" style="padding-top: 50px"> 
+                                                Je veux créer<br/>  tous mes <br/>groupes 
                                             </a> 
                                         </div>
                                     </div>
@@ -292,7 +292,11 @@
                                         <div class="col-xs-12" align='center'>
                                             <div id="div_auto_install" class="auto_install_body no_visu_on_load">
                                                 <div class="set_up_sacado" align='center'>
-                                                    Je veux créer  mes groupes et leur associer tous les documents  <span class="sacado_menu">SACADO </span> <hr/>
+                                                    Je veux créer  mes groupes et leur associer tous les documents  <span class="sacado_menu">SACADO </span><br/> <small>Il ne faut pas inscrire ses élèves. Chaque groupe contient un code à donner à vos élèves pour qu'ils s'inscrivent eux-même.</small>
+
+
+
+                                                    <hr/>
                                                     <div align='left' style="padding-left:10px;"> 
                                                         <form action="{% url 'all_set_up_sacado' %}" method="POST" enctype="form/data" id="set_up">
                                                             {% csrf_token %}
