@@ -64,21 +64,24 @@
                     <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
                     {% csrf_token %} 
                     <div class="row">
-                        <div class="col-sm-5 col-md-5">
+                        <div class="col-sm-3 col-md-5">
+                            <b>{{ bibliotex.title }}</b>
+                        </div>
+                        <div class="col-sm-4 col-md-3">
                             <select name="subject_id" id="subject_id" class="form-control select2 level_search">
                             {% for s in teacher.subjects.all %}
-                                <option value="{{ s.id }}">{{ s.name }}</option>
+                                <option value="{{ s.id }}" {% if s.id == subject.id %}selected{% endif %}>{{ s.name }}</option>
                             {% endfor%}
                             </select>
                         </div>
-                        <div class="col-sm-5 col-md-5">
+                        <div class="col-sm-4 col-md-3">
                             <select name="level_id" id="level_id" class="form-control select2 level_search">
                             {% for l in levels %}
-                                <option value="{{ l.id }}">{{ l.name }}</option>
+                                <option value="{{ l.id }}" {% if l.id == level.id %}selected{% endif %}>{{ l.name }}</option>
                             {% endfor%}
                             </select>
                         </div>
-                        <div class="col-sm-2 col-md-2">
+                        <div class="col-sm-1 col-md-1">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button> 
@@ -88,7 +91,7 @@
                 <div class="modal-body">
                     <div  id="body_search_result">
 
-
+                        {% include 'bibliotex/ajax_list_exotexs.html' %}
                         
                     </div>
                     <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}" class="btn btn-primary">Ma biblioTex</a>

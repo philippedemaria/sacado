@@ -1246,8 +1246,22 @@ def exercise_bibliotex_peuplate(request, id):
 
     levels = Level.objects.exclude(pk=13).order_by("ranking")
 
+    try : 
+        level  = bibliotex.levels.first()
+        subject  = bibliotex.subjects.first()
+
+    except : 
+        try : 
+            level = teacher.levels.first()
+            level = teacher.subjects.first()
+        except : 
+            level   = Level.objects.get(pk=6)
+            subject = Subject.objects.get(pk=1)
+
+    waitings = level.waitings.filter(theme__subject = subject ).order_by("theme__subject" , "theme")
+
  
-    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels   }
+    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject    }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex.html', context )
  
