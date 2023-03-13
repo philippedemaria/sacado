@@ -104,13 +104,13 @@
                         {% else  %}
                             <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
                                class="edit" target="_blank" >
-                               <i class="bi bi-aspect-ratio"></i>  <span class="label_icon"> Projeter</span>
+                               <i class="bi bi-webcam"></i>  <span class="label_icon"> Projeter</span>
                             </a>
                         {% endif %}
                     {% else %}
                         <a href="{% if quizz.is_random %}{% url 'show_quizz_random_group'  quizz.id  group.id %}{% else %}{% url 'show_quizz_group'  quizz.id  group.id %}{% endif %}" 
                            class="edit" target="_blank" >
-                           <i class="bi bi-aspect-ratio"></i>  <span class="label_icon"> Projeter</span>
+                           <i class="bi bi-webcam"></i>  <span class="label_icon"> Projeter</span>
                         </a>  
                     {% endif %}
                 {% endif %}
@@ -134,7 +134,7 @@
                 {% if quizz.is_video or quizz.is_numeric  %}
                 <div class="col-lg-4 col-xs-4">
                     <a href="{% url 'show_quizz_numeric' quizz.id parcours.id %}" class="edit" >
-                        <i class="bi bi-eye"></i> <span class="label_icon">Visualiser</span>
+                        <i class="bi bi-laptop"></i> <span class="label_icon">Visualiser</span>
                     </a>
                 </div>
                 <div class="col-lg-4 col-xs-4">
