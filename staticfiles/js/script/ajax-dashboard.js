@@ -2550,23 +2550,23 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
  
-        $('#on_line').on('click', function (event) { 
-              $('.this_card').addClass("show_div_for_payment"); 
-              $('#show_on_line').removeClass("show_div_for_payment"); 
-        });
+        // $('#on_line').on('click', function (event) { 
+        //       $('.this_card').addClass("show_div_for_payment"); 
+        //       $('#show_on_line').removeClass("show_div_for_payment"); 
+        // });
 
  
-        $('#virement_bancaire').on('click', function (event) { 
-              $('.this_card').addClass("show_div_for_payment"); 
-              $('#show_virement_bancaire').removeClass("show_div_for_payment"); 
+        // $('#virement_bancaire').on('click', function (event) { 
+        //       $('.this_card').addClass("show_div_for_payment"); 
+        //       $('#show_virement_bancaire').removeClass("show_div_for_payment"); 
 
-        });
+        // });
 
  
-        $('#envoi_postal').on('click', function (event) { 
-              $('.this_card').addClass("show_div_for_payment"); 
-              $('#show_envoi_postal').removeClass("show_div_for_payment"); 
-        });
+        // $('#envoi_postal').on('click', function (event) { 
+        //       $('.this_card').addClass("show_div_for_payment"); 
+        //       $('#show_envoi_postal').removeClass("show_div_for_payment"); 
+        // });
 
     });        
 });
