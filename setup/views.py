@@ -398,7 +398,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
             if divs[0] == "None" : divs = []
             if gros[0] == "None" : gros = []
             liste_div_gro = div_gro(divs , gros)
-        try :
             f = open('/var/www/sacado/logs/gar_connexions.log','a')
             print("===> liste_div_gro pour evelyne : ", file=f)
             f.close()
