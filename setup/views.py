@@ -364,9 +364,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
     except : civilite = "Mme"
 
     if 7 < today.month < 13  :
-        closure  = datetime(today.year + 1, 6 , 30 , 0 , 0 , 0)
+        closure  = datetime(today.year + 1, 7 , 7 , 0 , 0 , 0)
     else :
-        closure  = datetime(today.year, 6 , 30 , 0 , 0 , 0)
+        closure  = datetime(today.year, 7 , 7 , 0 , 0 , 0)
 
     time_zone  = "Europe/Paris"
     is_extra   = 0
@@ -409,19 +409,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
         except :
             liste_div_gro = div_gro(divs , gros)
 
-
-        try :
-            f = open('/var/www/sacado/logs/gar_connexions.log','a')
-            print("===> liste_div_gro : ", file=f)
-            f.close()
-        except :
-            pass
-        try :
-            f = open('/var/www/sacado/logs/gar_connexions.log','a')
-            print(liste_div_gro , file=f)
-            f.close()
-        except :
-            pass
 
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
