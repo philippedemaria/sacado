@@ -124,9 +124,22 @@ def sharing_teachers(request,group, teachers):
 			sh.role = role
 			sh.save()
 
+
+		for folder in group.group_folders.all():
+			folder.coteachers.add(teacher)
+
 		parcourses = group_has_overall_parcourses(group)
 		for parcours in parcourses :
 			parcours.coteachers.add(teacher)
+
+		for bibliotex in group.bibliotexs.all():
+			bibliotex.coteachers.add(teacher)
+
+		for flashpack in group.flashpacks.all():
+			flashpack.coteachers.add(teacher)
+
+
+
 
 
 @user_is_superuser
