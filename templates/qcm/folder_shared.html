@@ -19,29 +19,29 @@
     </div>
     <div class="box_shared_footer">
         <div class="row box_shared_label"> 
-            <div class="col-lg-7 col-xs-12" style="font-variant:small-caps; font-size: 16px">
+            <div class="col-lg-12 col-xs-12" style="font-variant:small-caps; font-size: 16px">
                 <b>{{ folder.subject.name }}</b>
                      
             </div> 
 
-
-            <div class="col-lg-5 col-xs-12">      
-                 {{ folder.teacher}} 
-            </div> 
         </div>
         <div class="row box_shared_label_last"> 
-            <div class="col-lg-6 col-xs-6">
- 
-                {{ folder.parcours.count }} parcours 
- 
+            <div class="col-lg-7 col-xs-7">
+                {{ folder.parcours.count }} parcours<br/>
+                {{ folder.quizz.count }} quizz <br/>
+                {{ folder.bibliotexs.count }} biblioTex <br/>
+                {{ folder.flashpacks.count }} flashpacks 
             </div> 
- 
-            <div class="col-lg-6 col-xs-6">      
+
+            <div class="col-lg-5 col-xs-12" align="center"> 
                 <a  href="#" data-toggle='modal' data-target='#duplication_modal' style="font-size:20px" 
                     id='duplication_document' 
-                    data-document_id='{{ folder.id }}' data-document_title='{{ folder.title }}'><i class="bi bi-clipboard-plus"></i>
-                </a>  
-            </div> 
+                    data-document_id='{{ folder.id }}' data-document_title='{{ folder.title }}' title="Cloner"><i class="bi bi-clipboard-plus"></i>
+                </a>    
+                <hr style="margin:10px 0px"  />               
+                 {{ folder.teacher}} 
+            </div>  
+
         </div>
     </div>
 </div>     

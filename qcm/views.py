@@ -2579,12 +2579,6 @@ def duplicate_folder(request):
 
 
 
-
-
-
-
-
-
 @csrf_exempt
 def ajax_chargethemes_parcours(request):
     level_id =  request.POST.get("id_level")
