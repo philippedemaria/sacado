@@ -624,6 +624,8 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
                     bibliotex.save()
 
                     for relationtex in relationtexs :
+                        knowledges = relationtex.knowledges.all() 
+                        skills     = relationtex.skills.all() 
                         relationtex.pk        = None
                         relationtex.bibliotex = bibliotex
                         relationtex.teacher   = teacher
@@ -633,7 +635,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
      
                     bibliotex.themes.set(themes)
                     bibliotex.levels.set(levels)
-
+                    bibliotex.students.add(student)
 
 
                 for flashpack in flashpacks :  
@@ -653,7 +655,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
                     flashpack.parcours.add(parcours)
                     flashpack.themes.set(themes)
                     flashpack.levels.set(levels)
-
+                    flashpack.students.add(student)
 
 def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher,  student):
  

@@ -2339,6 +2339,9 @@ def clone_folder(request, id ):
         folder.groups.add(group)
         students = group.students.all()
         folder.students.set(students)
+    else :
+        messages.error(request,"Cloner le dossier depuis un groupe.")
+        return redirect('index')
 
     i = 0
     for p in prcs :
@@ -2392,6 +2395,81 @@ def clone_folder(request, id ):
                     relationship.students.set(students)
             except :
                 pass
+
+
+        for quizz in p.quizz.all()  :  
+
+            questions = quizz.questions.all()    
+            themes    = quizz.themes.all()  
+            levels    = quizz.levels.all()  
+
+            quizz.pk      = None
+            quizz.code    = str(uuid.uuid4())[:8]
+            quizz.teacher = teacher
+            quizz.save()
+
+            for question in questions :
+                choices = question.choices.all()
+                question.pk = None
+                question.save()
+                question.students.set(students)
+
+                for choice in choices :
+                    choice.pk= None
+                    choice.question = question
+                    choice.save()
+
+            quizz.groups.add(group)
+            quizz.parcours.add(p)
+            quizz.folders.add(folder)
+            quizz.levels.set(levels)
+            quizz.themes.set(themes)
+            quizz.students.set(students)
+
+        for bibliotex in p.bibliotexs.all() :  
+            relationtexs = bibliotex.relationtexs.all()    
+            themes       = bibliotex.subjects.all()  
+            levels       = bibliotex.levels.all()    
+
+            bibliotex.pk      = None
+            bibliotex.teacher = teacher
+            bibliotex.save()
+
+            for relationtex in relationtexs :
+                knowledges = relationtex.knowledges.all() 
+                skills     = relationtex.skills.all() 
+                relationtex.pk        = None
+                relationtex.bibliotex = bibliotex
+                relationtex.teacher   = teacher
+                relationtex.save()
+                relationtex.skills.set(skills)
+                relationtex.knowledges.set(knowledges)
+                relationtex.students.set(students)
+
+            bibliotex.themes.set(themes)
+            bibliotex.levels.set(levels)
+
+
+
+        for flashpack in p.flashpacks.all() :  
+            flashcards = flashpack.flashcards.all()    
+            themes     = flashpack.subjects.all()  
+            levels     = flashpack.levels.all()    
+
+            flashpack.pk      = None
+            flashpack.teacher = teacher
+            flashpack.save()
+
+            for flashcard in flashcards :
+                flashcard.pk        = None
+                flashcard.save()
+                flashcard.students.set(students)
+
+            flashpack.authors.add(teacher.user)
+            flashpack.parcours.add(p)
+            flashpack.themes.set(themes)
+            flashpack.levels.set(levels)
+            flashpack.students.set(students)
         i += 1
 
     messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
