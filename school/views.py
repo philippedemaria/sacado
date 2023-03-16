@@ -110,9 +110,23 @@ def group_has_overall_parcourses(group):
 
 def sharing_teachers(request,group, teachers):
 
+	# effacement de toute coanimation
 	shares = Sharing_group.objects.filter(group  = group)
 	for share in shares : 	
 		share.delete()
+
+	for folder in group.group_folders.all():
+		folder.coteachers.clear()
+
+	for parcours in group.group_parcours.all() :
+		parcours.coteachers.clear()
+
+	for bibliotex in group.bibliotexs.all():
+		bibliotex.coteachers.clear()
+
+	for flashpack in group.flashpacks.all():
+		flashpack.coteachers.clear()
+
 
 	choices = request.POST.getlist("choices") 
 	for c in choices :
@@ -127,16 +141,13 @@ def sharing_teachers(request,group, teachers):
 
 		for folder in group.group_folders.all():
 			folder.coteachers.add(teacher)
-
-		parcourses = group_has_overall_parcourses(group)
-		for parcours in parcourses :
+		for parcours in group.group_parcours.all() :
 			parcours.coteachers.add(teacher)
-
 		for bibliotex in group.bibliotexs.all():
 			bibliotex.coteachers.add(teacher)
-
 		for flashpack in group.flashpacks.all():
 			flashpack.coteachers.add(teacher)
+
 
 
 
