@@ -468,9 +468,6 @@
 
   function updateListener(objName) {  
 
-
-
-
       var applet      = ggbApplet; 
       var exercise_id = "{{ exercise.id }}"; 
       var grade       = applet.getValue("grade");
@@ -482,9 +479,6 @@
       var p_available = "{{ parcours_available.nbleft}}" ;
       var available   = "{{ available.nbleft}}" ;
       var ide         = "{{ide}}" ;
-
-
-
 
       window.onblur =()=>  {  
                               if ( applet.getValue("demarrer") && numexo != situation && objName == "numexo"   )
