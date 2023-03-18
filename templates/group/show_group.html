@@ -26,7 +26,7 @@
         <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}   </span>
             <img src="{% static 'img/angle-right.png' %}"/> <small>Détails</small> <img src="{% static 'img/angle-right.png' %}"/>
 
-            {% if group.students.only_students %}
+            {% if group.just_students_count %}
             <a href="{% url 'print_list_ids' group.id  %}" class="btn btn-default">  Télécharger la liste des identifiants <i class="bi bi-file-pdf text-danger"></i></a>
             <a href="{% url 'print_list_tableur_ids' group.id  %}" class="btn btn-default"> Télécharger la liste des identifiants <i class="bi bi-file-earmark-spreadsheet text-success"></i></a>
             <a href="{% url 'print_ids' group.id  %}" class="btn btn-default"> Télécharger les identifiants en étiquette <i class="bi bi-file-pdf text-danger"></i></a>
