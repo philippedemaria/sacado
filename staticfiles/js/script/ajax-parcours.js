@@ -338,7 +338,10 @@ define(['jquery','bootstrap'], function ($) {
             $('#show_open_option'+value).toggle(500);
         });
 
-
+        $(".open_options_bibliotex").click(function(){
+            value =  $(this).data("bibliotex_id"); 
+            $('#bibliotex_options'+value).toggle(500);
+        });
 
         $(".subparcours_show_close").click(function(){
             value =  $(this).data("close"); 

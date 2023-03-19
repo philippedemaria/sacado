@@ -1463,7 +1463,7 @@ def register_school_new(request):
 				school_country_name = school_name
 
 			subject = "Nouvel établissement"
-			school_datas = "\n"+school_name +"\nNb élèves : " + str(school_nbstudents) +  " élèves \n" + school_address +  "\nVille, pays : "+school_town+", "+school_country_name +  "\nCode postal : "+school_zip
+			school_datas = "\n"+school_name +"\nRNE : "+school_rne+"\nNb élèves : " + str(school_nbstudents) +  " élèves \n" + school_address +  "\nVille, pays : "+school_town+", "+school_country_name +  "\nCode postal : "+school_zip
 			############################################################  
 
 			send_mail(subject,
