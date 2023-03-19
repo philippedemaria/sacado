@@ -27,11 +27,13 @@
 
 
 
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
+{% endblock %} 
 
-{% block body %}
- 
-  
-     
+
+
+{% block body %}  
 <section class="content_main">
     <div class="col-sm-12 col-md-12">
  
@@ -70,14 +72,14 @@
                         <div class="col-sm-4 col-md-3">
                             <select name="subject_id" id="subject_id" class="form-control select2 level_search">
                             {% for s in teacher.subjects.all %}
-                                <option value="{{ s.id }}" {% if s.id == subject.id %}selected{% endif %}>{{ s.name }}</option>
+                                <option value="{{ s.id }}" >{{ s.name }}</option>
                             {% endfor%}
                             </select>
                         </div>
                         <div class="col-sm-4 col-md-3">
                             <select name="level_id" id="level_id" class="form-control select2 level_search">
                             {% for l in levels %}
-                                <option value="{{ l.id }}" {% if l.id == level.id %}selected{% endif %}>{{ l.name }}</option>
+                                <option value="{{ l.id }}">{{ l.name }}</option>
                             {% endfor%}
                             </select>
                         </div>
@@ -89,10 +91,10 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <div  id="body_search_result">
-
-                        {% include 'bibliotex/ajax_list_exotexs.html' %}
-                        
+                    <div id="body_search_result" >
+                        <div align="center">
+                        Choisir une matière et un niveau <img src="{% static 'img/fleche_up_right_violet.png' %}" />
+                        </div>
                     </div>
                     <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}" class="btn btn-primary">Ma biblioTex</a>
                 </div>

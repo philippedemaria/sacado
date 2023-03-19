@@ -3,11 +3,6 @@
 {% load item_tags %}
 
 
-{% block styleMk4ht %}
-    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
-{% endblock %} 
-
-
 
 <div class="row">
     <div class="col-sm-12 col-md-12">
@@ -17,7 +12,7 @@
                     <th></th>
                 </tr>
             </thead> 
-            <tbody  id="supportfile_ranking">  
+            <tbody>  
                 {% regroup waitings by theme as theme_list %}
                 {% for theme in theme_list  %} 
                     <tr style="background:#5d4391; color:white">
