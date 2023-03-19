@@ -164,17 +164,7 @@ a.level_title:hover, a.level_title:active,a.level_title:focus{
   width:50px;
   text-decoration:none;
 }
-
-.number_exotex{
-  background-color: #0093CA ;
-  font-size:14px;
-  background-color: #0093CA ;
-  padding:3px;
-  color:white;
-  margin-left:30px;
-  border-radius: 3px; 
-}
-
+ 
 
 /********************************************************************/
 /*********   cke  ***************************************************/
@@ -1912,6 +1902,16 @@ input[type=range].form-range {
 /********************************************************************************************************************/
 /****************************              Exotex              ******************************************************/
 /********************************************************************************************************************/
+.number_exotex{
+  background-color: #0093CA ;
+  font-size:14px;
+  background-color: #0093CA ;
+  padding:3px;
+  color:white;
+  margin-left:30px;
+  border-radius: 3px; 
+}
+
 .show_exotex_knowledges{
     position:relative;
     display: inline;
@@ -1922,7 +1922,6 @@ input[type=range].form-range {
 .show_exotex_knowledges:hover .exotex_knowledges{
     font-size:16px; 
     position:absolute;
-    width:1000px;
     display: block;
     min-height:130;  
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
@@ -1931,13 +1930,14 @@ input[type=range].form-range {
     border: 1px solid #eeeeee;    
     border-radius: 5px;
     background-color: #FFF;
-    z-index: 99;
+    z-index: 99;    
+    text-align : left ;  
 }
 
 .exotex_knowledges{
     font-size:16px; 
     position:absolute;
-    width:1000px;
+    width:400px;
     display: none;
 }
 
@@ -1946,7 +1946,7 @@ input[type=range].form-range {
     font-size:20px;
     border: 1px solid #eeeeee;  
     border-radius: 5px;  
-    background-color: #fff ;  
+    background-color: #fff ;   
 }
 
 .ecbx-1200{
@@ -1968,7 +1968,30 @@ input[type=range].form-range {
 
 .exotex{
   font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
-  line-height: :22px;
+  line-height: :22px
+
+
+}
+
+.new_exotex {
+    width: 47%;
+    color: #666;
+    padding: 0px; 
+    background-color: #FFF;
+    -webkit-box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    box-shadow: 2px 2px 6px rgba(79, 73, 66, .1);
+    position: relative;
+    border: 1px solid #e6e2dd;
+    max-height: 350px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    margin-left: 15px;
+    overflow-y: auto;
+    float: left;
+    border-radius: 5px;  
+    font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
+    line-height: :22px 
 }
 
 .exotex_show_exercice{
@@ -2074,8 +2097,55 @@ a.select_correction:focus {
     height : 500px;
 }
 
+.menu_exotex{
+    width: 40px;
+    float:left;
+    padding-top:5px;
+    background-color: transparent;
+    text-align: center;
+}
 
 
+.body_exotex{
+    padding: 5px 0px 0px 50px;
+    background-color: white ;
+
+  
+}
+
+
+.three_dots{
+  margin-top:10px;
+}
+
+.menu_exotex:hover .three_dots  {
+    margin-top:0px;
+    display:none;
+}
+.relative_div_exotex {
+    position: relative;
+    list-style: none;
+    padding: 5px 9px;
+    cursor: pointer;
+    font-size:15px;
+    display:none;
+}
+
+.menu_exotex:hover .relative_div_exotex  {
+    position: relative;
+    list-style: none;
+    padding: 5px 9px;
+    cursor: pointer;
+    font-size:15px;    
+    display:block;
+}
+
+
+.relative_div_exotex:hover {
+    background-color: #f1eef7;
+    padding: 3px 9px;
+    border-radius: 3px 0px 0px 3px;
+}
 /********************************************************************************************************************/
 /********************************************************************************************************************/
 /********************************************************************************************************************/
