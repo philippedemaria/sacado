@@ -114,6 +114,14 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcounter{cexo}
 \renewcommand{\thecexo}{\arabic{cexo}}
 \newcommand{\exo}{\refstepcounter{cexo} \vskip 1.5em \noindent{\bf Exercice \thecexo.\ }}
+
+\definecolor{bleu2}{rgb}{0,0.58,0.79}
+\newcommand{\exercice}[1]{ % Exercice directement dans la page
+\vspace{0.4cm}
+\tikz\node[rounded corners=2pt, fill=bleu2]{\color{white}\textbf{#1}};
+\vspace{0.2cm}
+}
+
 \newcommand{\exod}[1]{\addtocounter{cexo}{1} \vskip 1em 
 \noindent{\bf \large Exercice \thecexo.\ #1}}
 \newcounter{cact}

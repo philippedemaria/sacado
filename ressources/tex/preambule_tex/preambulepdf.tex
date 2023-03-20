@@ -141,7 +141,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
   upquote=true,
   literate={Ã©}{{\'e}}1
            {Ãª}{{\^e}}1
-           {Ã }{{\`a}}1
+           {Ã }{{\`a}}1
            {Ã¨}{{\`e}}1
            {Ã®}{{\^i}}1
            {Ã¯}{{\"i}}1
@@ -195,6 +195,13 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \renewcommand{\thecexo}{\arabic{cexo}}
 \newcommand{\exo}{\refstepcounter{cexo} \vskip 1.5em \noindent{\bf Exercice \thecexo.\ }}
 
+\definecolor{bleu2}{rgb}{0,0.58,0.79}
+
+\newcommand{\exercice}[1]{ % Exercice directement dans la page
+\vspace{0.4cm}
+\tikz\node[rounded corners=2pt, fill=bleu2]{\color{white}\textbf{#1}};
+\vspace{0.2cm}
+}
 
 \newcommand{\competence}[1]{
 %  {\bf CompÃƒÂ©tence ciblÃƒÂ©e : } #1
