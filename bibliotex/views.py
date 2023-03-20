@@ -105,8 +105,8 @@ def printer(request, relationtex_id, collection,output):
     elements=entetes.read()
     entetes.close()
     elements +=r"\begin{document}"+"\n" 
-
-    new_title = request.POST.get("new_title",None) 
+    print_title = request.POST.get("print_title",None)  
+    new_title   = request.POST.get("new_title",None) 
     texte_supplement   = request.POST.get("texte_supplement",None)
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
@@ -114,8 +114,10 @@ def printer(request, relationtex_id, collection,output):
             bibliotex_id = request.POST.get("print_bibliotex_id",None)  
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
             document     = "bibliotex" + str(relationtex_id)
+
             if new_title : title  = new_title
             else : title  = bibliotex.title
+
             author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
@@ -124,7 +126,7 @@ def printer(request, relationtex_id, collection,output):
             title          =  relationtex.exotex.title
             author         = "Équipe SACADO"
 
-        elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
+        if print_title : elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
 
 
         skills_printer     = request.POST.get("skills",None)  
