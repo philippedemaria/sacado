@@ -334,8 +334,6 @@ class Supportsubchoice(models.Model):
 
 
 
-
-
 class Exercise(models.Model):
     level       = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
     theme       = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
@@ -556,7 +554,6 @@ class Exercise(models.Model):
 
 
 
-
 class Parcours(ModelWithCode):
 
     title = models.CharField(max_length=255, verbose_name="Titre")
@@ -586,7 +583,7 @@ class Parcours(ModelWithCode):
     is_exit = models.BooleanField(default=0, verbose_name="Retour aux exercices ?")
     is_stop = models.BooleanField(default=0, verbose_name="Limité ?")
 
-    duration = models.PositiveIntegerField(default=2, blank=True, verbose_name="Temps de chargement (min.)")
+    duration = models.PositiveIntegerField(default=1, blank=True, verbose_name="Temps de chargement (min.)")
     start = models.DateTimeField(null=True, blank=True, verbose_name="A partir de")
     stop = models.DateTimeField(null=True, blank=True, verbose_name="Date de verrouillage")
 

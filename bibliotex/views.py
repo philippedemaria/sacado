@@ -128,13 +128,10 @@ def printer(request, relationtex_id, collection,output):
 
         if print_title : elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
 
-
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
         relationtex_ids    = request.POST.getlist("relationtexs",None)
         
-
-
         today = datetime.now()
         if collection and relationtex_ids :
             relationtex_ids = relationtex_ids[1:]

@@ -3759,19 +3759,26 @@ def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ):
                 return redirect('list_parcours_group', idg)     
             else:
                 return redirect('parcours')
-
-
         else :
             print(form.errors)
 
-
     if parcours.teacher == teacher :
         role = True
- 
+
 
     context = {'form': form,   'idg': idg, 'teacher': teacher, 'group_id': idg ,  'group': group ,  'folder': folder ,  'is_folder' : False,   'role' : role , 'images' : images ,  'parcours': parcours }
  
-    return render(request, 'qcm/form_parcours.html', context) 
+    if is_eval       : 
+        template = 'qcm/form_evaluation.html'
+        context.update({"evaluation" : parcours})
+    elif is_sequence : 
+        template = 'qcm/form_sequence.html'
+    else             : 
+        template = 'qcm/form_parcours.html'
+
+    return render(request, template , context) 
+
+
 
 @login_required(login_url= 'index')
 @parcours_exists
