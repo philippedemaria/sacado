@@ -80,8 +80,7 @@ import xlwt
 #                 relationship.duration = int(seconde_avg['average'] // 60) + 2
 #                 relationship.save()
 
-
-
+ 
 
 def is_sacado_asso(this_user, today):
     is_sacado = False
@@ -3770,7 +3769,7 @@ def update_parcours_or_evaluation(request, is_eval, id, is_sequence, idg=0 ):
  
     if is_eval       : 
         template = 'qcm/form_evaluation.html'
-        context.update({"evaluation" : parcours})
+        context.update({'evaluation' : parcours})
     elif is_sequence : 
         template = 'qcm/form_sequence.html'
     else             : 

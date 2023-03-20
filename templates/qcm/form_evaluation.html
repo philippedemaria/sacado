@@ -39,7 +39,6 @@
             Nouvelle évaluation
             {% include 'modes.html' %}
         {% endif %}
-    {% include 'modes.html' %}
 {% endblock %}
 
 
@@ -49,11 +48,7 @@
 
 
 {% block page_menu_right %}
-    {% if folder and parcours %}
-    <li> 
-        <a href="{% url 'show_evaluation' folder.id parcours.id  %}" class="btn-new">Voir l'évaluation</a> 
-    </li>
-    {% endif %}
+
 {% endblock %} 
 
 
@@ -177,16 +172,16 @@
 {% block save_evaluation %}    
     <div class="col-sm-12 col-md-4">
             {% if parcours %}
-                <a href="{% url 'clone_parcours' evaluation.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('cette évaluation')"> 
+                <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('cette évaluation')"> 
                     <i class="fa fa-clone"> </i>   Dupliquer
                 </a>
                 
-                         <a href="{% url 'archive_parcours' evaluation.id  idg  %}" class="btn btn-warning"  onclick="return TestArchive('cette évaluation')"> 
+                         <a href="{% url 'archive_parcours' parcours.id  idg  %}" class="btn btn-warning"  onclick="return TestArchive('cette évaluation')"> 
                             <i class="fa fa-archive"> </i>   Archiver
                         </a>
 
     
-            <a href="{% url 'delete_parcours' evaluation.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('cette évaluation')"> 
+            <a href="{% url 'delete_parcours' parcours.id  idg  %}" class="btn btn-danger"  onclick="return TestDelete('cette évaluation')"> 
                 <i class="fa fa-trash"> </i>   Supprimer
             </a>
             {% endif %}  
