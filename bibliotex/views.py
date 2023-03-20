@@ -154,9 +154,9 @@ def printer(request, relationtex_id, collection,output):
                 for s in sks :
                     skills_display +=  s.name+". "
             try :
-                elements += r"\exercice{"+ relationtex.exotex.id + r"} {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
+                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
             except :
-                elements += r"\exercice{"+ relationtex.exotex.id + r"} {\competence{" +skills_display+r"}"
+                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} {\competence{" +skills_display+r"}"
             
             j+=1
 
