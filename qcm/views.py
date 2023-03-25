@@ -13187,9 +13187,8 @@ def folder_archive(request,id,idg):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
-
+    folder = Folder.objects.get(id=id)    
     if folder.teacher == teacher :
-        folder = Folder.objects.get(id=id)
         folder.is_archive = 1
         folder.save()
         parcourses = folder.parcours.all()
