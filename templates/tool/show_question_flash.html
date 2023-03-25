@@ -4,23 +4,6 @@
 {% load item_tags %}
 
 
- {% block require %}
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-
-
-    {% if quizz.is_result and not quizz.is_result_final %}
-    <script>
-        require(['script/quizz-slider_correction']);
-    </script> 
-    {% else %}
-    <script>
-        require(['script/quizz-slider']);
-    </script> 
-    {% endif %}
-
-{% endblock %}
-
-
 
 {% block page_title %}
    <a href="{% url 'list_questions_flash' %}" ><i class="bi bi-lightning"></i> </a> Outils pédagogiques 
@@ -65,7 +48,9 @@
 {% block question_title %}
 
     {% if question.mental.jquery %}
+        {% if question.filltheblanks %}
         <h1 style="font-size:2.5em;padding-top:20px" class="thin"> {{ question.filltheblanks|safe }} </h1>
+        {% endif %}
         <h1 style="font-size:{% if question.title|length > 27 %}1.5{% else%}2.5{% endif %}em" class="thin"> {{ question.title|safe }} </h1>
         <canvas class="this_canvas" id="canvas{{ forloop.counter0}}" width="900px" height="450px" style="border:1px solid #CCC; background-color: white;"></canvas>
     {% else %}

@@ -3961,6 +3961,7 @@ def admin_test_mental(request,id):
     create_questions_flash_random_variable([id], quizz, 10)
 
     questions = quizz.questions.filter(is_publish=1).order_by("ranking")
+
     context = {  "quizz" : quizz , "questions" : questions , "is_test_admin" : True }
 
     return render(request, 'tool/show_question_flash.html', context)

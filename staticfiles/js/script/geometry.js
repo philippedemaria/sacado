@@ -267,11 +267,10 @@ function pythagore(a,index){
 
 // fonction d'appel
 function abscisse(start,end,tick,subtick,index){
- 
+
     var canvas = document.getElementById("canvas"+index);
     var ctx = canvas.getContext("2d");
 
-    var canvas_cor = document.getElementById("canvas_corrector"+index); 
     var canvas_cor = document.getElementById("canvas_corrector"+index);  
 
     //Conversion des pixels à la droite graduée
@@ -286,11 +285,12 @@ function abscisse(start,end,tick,subtick,index){
 
     console.log(nb_total_graduation + " " + subtick+ " " + alea+ " " + (60/subtick) + " " + p )
 
- 
-
     abscisse_ctx(start,end,tick,tck,sbtck,ctx,100,p) ;
-    if(canvas_cor) {var ctx_cor = canvas_cor.getContext("2d");
-        abscisse_ctx(start,end,tick,tck,sbtck,ctx_cor,0,p) ;}
+
+    if(canvas_cor) {
+        var ctx_cor = canvas_cor.getContext("2d");
+        abscisse_ctx(start,end,tick,tck,sbtck,ctx_cor,0,p) ;
+    }
    
     document.getElementById("answer_cor"+index).innerText = (start + (p-150)/sbtck/subtick).toString().replace(".",",") ; 
 
@@ -359,19 +359,22 @@ function abscisse_ctx(start,end,tick,tck,sbtck,ctx,top,p){
     ctx.stroke();
     ctx.closePath();
     // fin de la graduation
-    ctx.fillStyle = 'red';
+
     ctx.beginPath();
     ctx.fillStyle = "red"; 
     ctx.font = '30px Arial'; 
     if (sbtck==10)
-    {ctx.fillText('|', p - 0.5*sbtck , top+60);
+    {
+        ctx.fillText('|', p - 0.5*sbtck , top+60);
         ctx.fillText('|', p - 0.5*sbtck , top+96);
-        ctx.fillText('^', p - 1*sbtck , top+96); }
+        ctx.fillText('^', p - 1*sbtck , top+96); 
+    }
     else
-    {ctx.fillText('|', p - 3  , top+60);
+    {
+        ctx.fillText('|', p - 3  , top+60);
         ctx.fillText('|', p - 3  , top+96);
-        ctx.fillText('^', p  - 6 , top+96); }  
-
+        ctx.fillText('^', p  - 6 , top+96); 
+    }  
     ctx.stroke();
     ctx.closePath();
 

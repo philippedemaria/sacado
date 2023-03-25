@@ -35,6 +35,9 @@
     <form action="{% url 'quizz_actioner' %}" method="POST" enctype='multipart/form-data'> 
 {% endblock %}
 
+
+
+
 {% block inside_folder %}
     <table class="table table-sacado table-hovered standard_tab_10_not_first"  style="width:100%" >
         <thead> 
@@ -49,7 +52,7 @@
             </tr> 
         </thead>
         <tbody>
-            {% for quizz  in list_folder.quizzes  %} 
+            {% for quizz in list_folder.quizzes  %} 
                 <tr class="tr_edit"> 
                     {% include 'tool/quizz_data.html' %}
                 </tr>
@@ -57,6 +60,7 @@
          </tbody>
     </table>
 {% endblock %}
+
 
 
 
