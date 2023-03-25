@@ -64,10 +64,10 @@
 {% block question_correction %}
     {% if question.mental.jquery %}
     <canvas class="this_canvas" id="canvas_corrector{{ forloop.counter0}}" width="900px" height="100px" style="border:1px solid #CCC; background-color: white;"></canvas>   
-    <span style="font-size:1.5em" class="thin text-blue">La réponse est <span id="answer_cor{{ forloop.counter0}}"></span>{{ question.writinganswer }}</span>
+    <span style="font-size:2.5em" class="thin text-blue">La réponse est <span id="answer_cor{{ forloop.counter0}}"></span>{{ question.writinganswer }}</span>
     <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
     {% else %}
-        <span style="font-size:1.5em" class="thin text-blue">{{ question.writinganswer }}</span>
+        <span style="font-size:2.5em" class="thin text-blue">{{ question.writinganswer }}</span>
     {% endif %}
 {% endblock %}
 
@@ -75,10 +75,10 @@
 {% block question_correction_inside %}
     {% if question.mental.jquery %}
         <canvas class="this_canvas" id="canvas_corrector{{ forloop.counter0}}" width="900px" height="100px" style="border:1px solid #CCC; background-color: white;"></canvas>   
-        <span style="font-size:1.5em" class="thin text-blue">La réponse est <span id="answer_cor{{ forloop.counter0}}"></span>{{ question.writinganswer }}</span>
+        <span style="font-size:2.5em" class="thin text-blue">La réponse est <span id="answer_cor{{ forloop.counter0}}"></span>{{ question.writinganswer }}</span>
         <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
     {% else %}
-        <span style="font-size:1.5em" class="thin text-blue">{{ question.writinganswer }}</span>
+        <span style="font-size:2.5em" class="thin text-blue">{{ question.writinganswer }}</span>
     {% endif %}
 {% endblock %}
 
