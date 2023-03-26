@@ -268,14 +268,13 @@ def printer(request, relationtex_id, collection,output):
     if relationtex_id == 0 : elements +=r"\end{multicols}"
     elements +=  r"\end{document}"
 
-    elements +=  settings.DIR_TMP_TEX    
 
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+document
+    file = settings.DIR_TMP_TEX+"/"+document
     ################################################################# 
     ################################################################# 
 
