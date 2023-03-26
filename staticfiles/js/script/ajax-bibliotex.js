@@ -255,7 +255,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
     $('body').on('click', '.select_correction' , function (event) {
-            let r_id = $(this).data("r_id");
+            let r_id = $(this).data("r_id"); alert(r_id) ;
             $("#correction"+r_id).toggle(500);
         });
 
@@ -351,16 +351,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             { 
                                 $("#display"+relationtex_id).find("i").addClass("bi-eye-slash"); 
                                 $("#display"+relationtex_id).find("i").removeClass("bi-eye") ; 
-                                $(".relationtex"+relationtex_id).addClass("no_visu_on_load") ; 
-                                $("#display"+relationtex_id).parent().find('li').addClass("no_visu_on_load") ; 
-                                $("#display"+relationtex_id).removeClass("no_visu_on_load") ; 
+                                $(".relationtex"+relationtex_id).addClass("no_visu_on_load_important") ; 
+                                $("#display"+relationtex_id).parent().find('li').addClass("no_visu_on_load_important") ; 
+                                $("#display"+relationtex_id).removeClass("no_visu_on_load_important") ; 
                             }
                         else 
                             { 
                                 $("#display"+relationtex_id).find("i").removeClass("bi-eye-slash");
                                 $("#display"+relationtex_id).find("i").addClass("bi-eye") ; 
-                                $(".relationtex"+relationtex_id).removeClass("no_visu_on_load") ;
-                                $("#display"+relationtex_id).parent().find('li').removeClass("no_visu_on_load") ; 
+                                $(".relationtex"+relationtex_id).removeClass("no_visu_on_load_important") ;
+                                $("#display"+relationtex_id).parent().find('li').removeClass("no_visu_on_load_important") ; 
                             }
 
                     }

@@ -57,11 +57,13 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 }
 
 .no_visu_on_load{
-  display:none!important;
+  display:none;
 }
 
 
-
+.no_visu_on_load_important{
+  display:none!important;
+}
 
 
 

@@ -49,16 +49,14 @@
 <input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
 {% csrf_token %}
 {% for r in relationtexs %} 
-    <div class="new_exotex relationtex_sorter" style="margin-bottom:20px" data-relationtex_id ="{{r.id}}" style="cursor: move;">
-
-        <div class="menu_exotex">
-            <div style="margin:0px 0px  5px 0px"><b><label class="number_exotex" style="margin:0px;font-size:18px"> {{ r.exotex.id}}</label></b></div>
-
-             
+    <div class="new_exotex relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
+        <div style="padding-left:10px;">
+        <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
+        <span class="container_checkbox_title" style="font-size:22px!important">{{ r.exotex.title }} </span>
             {% if r.exotex.calculator  %}
-                 <img src="{% static 'img/calculator.png' %}" width="22px" />
+                 <img src="{% static 'img/calculator.png' %}" width="22px" style="vertical-align:baseline" />
             {% else %}
-                 <img src="{% static 'img/no_calculator.png' %}" width="22px" />
+                 <img src="{% static 'img/no_calculator.png' %}" width="22px"  style="vertical-align:baseline" />
             {% endif %}
             {% if r.exotex.is_python  %}
                   <img src="{% static 'img/is_python.png' %}" width="22px" />
@@ -69,6 +67,56 @@
             {% if r.exotex.is_tableur  %}
                   <img src="{% static 'img/is_tableur.png' %}" width="22px" />
             {% endif %}
+
+        
+                {% if request.user.user_type == 2 %}
+                    {% if r.correction  or r.exotex.correction  %}
+                            <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                            <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
+                            {% if r.is_publish_cor %}
+                                  <i class="fa fa-eye text-green" title="Vue et impression par les élèves de la correction autorisées"></i>
+                            {% else %}
+                                  <i class="fa fa-eye-slash text-danger" title="Vue et impression par les élèves de la correction non autorisées"></i>
+                            {% endif %}
+                            </a>
+                    {% endif %}
+
+                    {% if r.relationships.count %}
+                        <span class="show_exotex_knowledges"> <i class="bi bi-link"  style="font-size:18px"></i>
+                            <div class="exotex_knowledges text-blue">
+                                {% for relationship in r.relationships.all %}
+                                    {% if 'underlayer' in relationship.exercise.supportfile.imagefile.url %}
+                                        <img src="{{ relationship.exercise.supportfile.qtype_logo.url }}" class="image_thumb_parcours_link_exotex"   />
+                                    {% else %}
+                                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="image_thumb_parcours_link_exotex"  />
+                                    {% endif %}
+                                {% endfor %}                            
+                            </div>
+                        </span>  
+                    {% endif %}
+
+
+                {% elif request.user.user_type == 0 and r.is_publish_cor %}
+                    {% if r.correction  or r.exotex.correction  %}
+                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                    {% endif %}
+                {% endif %}
+
+                <span class="show_exotex_knowledges"> <i class="bi bi-cc-circle" title="correction" style="font-size:18px"></i>
+                    <div class="exotex_knowledges text-blue" style="font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
+                        {% for s in r.exotex.skills.all %}
+                            {{ s.name }}.
+                        {% endfor %}                            
+                        <hr/>
+                        {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+                        {% for k in r.exotex.knowledges.all %}
+                            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
+                        {% endfor %}
+                    </div>
+                </span> 
+        </div>
+        <div class="menu_exotex">
+
 
             <div class="three_dots">
                 <i class="bi bi-three-dots-vertical"></i>
@@ -91,14 +139,14 @@
                 <a href="{% url 'link_to_relationship' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices </span></a>
             </li>
             {% else %}
-            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}">  
+            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load_important{% endif %}">  
                 <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices (V. etab.)</span></a>
             </li>
             {% endif %}
 
 
 
-            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"> 
+            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load_important{% endif %}"> 
                 <a href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></a>
             </li>
 
@@ -125,61 +173,8 @@
 
         </div>
         <div class="body_exotex">
-            <span class="container_checkbox_title" style="font-size:22px!important">{{ r.exotex.title }} </span>
 
-                {% if request.user.user_type == 2 %}
-                    {% if r.correction  or r.exotex.correction  %}
-                            <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
-                            <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
-                            {% if r.is_publish_cor %}
-                                  <i class="fa fa-eye text-green" title="Vue et impression par les élèves de la correction autorisées"></i>
-                            {% else %}
-                                  <i class="fa fa-eye-slash text-danger" title="Vue et impression par les élèves de la correction non autorisées"></i>
-                            {% endif %}
-                            </a>
-                    {% endif %}
-
-                    {% if r.relationships.count %}
-                        <div class="show_exotex_knowledges"> <i class="bi bi-link"  style="font-size:18px"></i>
-                            <div class="exotex_knowledges text-blue">
-                                {% for relationship in r.relationships.all %}
-                                    {% if 'underlayer' in relationship.exercise.supportfile.imagefile.url %}
-                                        <img src="{{ relationship.exercise.supportfile.qtype_logo.url }}" class="image_thumb_parcours_link_exotex"   />
-                                    {% else %}
-                                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="image_thumb_parcours_link_exotex"  />
-                                    {% endif %}
-                                {% endfor %}                            
-                            </div>
-                        </div>  
-                    {% endif %}
-
-
-                {% elif request.user.user_type == 0 and r.is_publish_cor %}
-                    {% if r.correction  or r.exotex.correction  %}
-                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
-                    {% endif %}
-                {% endif %}
-
-                <div class="show_exotex_knowledges"> <i class="bi bi-cc-circle" title="correction" style="font-size:18px"></i>
-                    <div class="exotex_knowledges text-blue" style="font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
-                        {% for s in r.exotex.skills.all %}
-                            {{ s.name }}.
-                        {% endfor %}                            
-                        <hr/>
-                        {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-                        {% for k in r.exotex.knowledges.all %}
-                            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>   
-
-
-
-
-
-                <hr/>
-
-            <div id="content{{ r.exotex.id }}" class="relationtex{{ r.id }} {% if not r.is_publish %}no_visu_on_load{% endif %}">
+            <div id="content{{ r.exotex.id }}" class="relationtex{{ r.id }} {% if not r.is_publish %}no_visu_on_load_important{% endif %}">
                 {% if r.content_html %}
                 {{ r.content_html|safe }}
                 {% else %}

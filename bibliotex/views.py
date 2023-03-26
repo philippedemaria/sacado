@@ -104,6 +104,7 @@ def printer(request, relationtex_id, collection,output):
     entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
+    if relationtex_id == 0 : elements +=r"\setlength{\columnseprule}{1pt}\setlength{\columnseprule}{1pt}"
     elements +=r"\begin{document}"+"\n"
 
     print_title = request.POST.get("print_title",None)  
@@ -117,7 +118,7 @@ def printer(request, relationtex_id, collection,output):
             bibliotex_id = request.POST.get("print_bibliotex_id",None)  
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
             document     = "bibliotex" + str(relationtex_id)
-
+            this_folder  =  bibliotex.folders.first().title + " > "+ bibliotex.parcours.first().title
             if new_title : title  = new_title
             else : title  = bibliotex.title
 
@@ -128,8 +129,10 @@ def printer(request, relationtex_id, collection,output):
             document       = "relationtex" + str(relationtex_id)
             title          =  relationtex.exotex.title
             author         = "Équipe SACADO"
+            this_folder    = relationtex.bibliotex.folders.first().title + " > "+relationtex.bibliotex.parcours.first().title
 
-        if print_title : elements +=r"\titreFiche{"+title+r"}{"+author+r"}"
+
+        if print_title : elements +=r"\titreFiche{"+title+r"}{"+author+r"}{"+this_folder+r"}"
 
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
@@ -144,7 +147,11 @@ def printer(request, relationtex_id, collection,output):
             i = 1
         else: relationtexs=[relationtex]
 
+
+        if relationtex_id == 0 : elements += r"\begin{multicols}{2}"
+        
         j = 1
+
         for relationtex in relationtexs :
         
             skills_display = ""
@@ -158,10 +165,12 @@ def printer(request, relationtex_id, collection,output):
                 skill_dpl = r"\competence{" +skills_display+r"}"
             else : skill_dpl = ""
 
+            elements += r"\\ \vspace{0,1cm}"
+
             try :
-                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} {\bf " +  relationtex.exotex.title  +  r" } " +   skill_dpl
+                elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " +   skill_dpl
             except :
-                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} "+   skill_dpl
+                elements += r"\exercice{Exercice "+ str(j) + r"} "+   skill_dpl
             
             if texte_supplement : 
                 elements +=  r"\\  "
@@ -214,7 +223,7 @@ def printer(request, relationtex_id, collection,output):
                         this_loop +=1
                     elements +=  text_linked 
 
-            elements +=  r"\\ \vspace{0,2cm}  "
+            elements +=  r"\\ "
 
 
 
@@ -252,6 +261,7 @@ def printer(request, relationtex_id, collection,output):
         elements += ctnt
         elements += r" \vspace{0,4cm}"
     # Fermeture du texte dans le fichier tex
+    if relationtex_id == 0 : elements +=r"\end{multicols}"
     elements +=  r"\end{document}"
 
     elements +=  settings.DIR_TMP_TEX    
