@@ -174,13 +174,36 @@ def printer(request, relationtex_id, collection,output):
 
             elements += r"\\ \vspace{0,1cm}"
 
+            pref_image = '/var/www/sacado/static/img/'
+
+
+            if relationtex.exotex.calculator : calculator = pref_image + 'calculator.png'
+            else : calculator = pref_image + 'no_calculator.png'   
+
+            details += r'\includegraphics[scale=0.4]{'+calculator+r'}'
+
+            if relationtex.exotex.is_python : 
+                img_python = pref_image +'is_python.png'
+                details += r'\includegraphics[scale=0.4]{'+img_python+r'}'
+
+            if relationtex.exotex.is_scratch : 
+                img_scratch = pref_image +'is_scratch.png'
+                details += r'\includegraphics[scale=0.4]{'+img_scratch+r'}'
+
+            if relationtex.exotex.is_tableur : 
+                img_tableur = pref_image + 'is_tableur.png'
+                details += r'\includegraphics[scale=0.4]{'+img_tableur+r'}'
+
+
+
+
             try :
                 if request.POST.get("all_titles",None)   :
-                    elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " +   skill_dpl
+                    elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details +  skill_dpl
                 else :
-                    elements += r"\exercice{Exercice "+ str(j) + r"} "+   skill_dpl 
+                    elements += r"\exercice{Exercice "+ str(j) + r"} "+ details +   skill_dpl 
             except :
-                elements += r"\exercice{Exercice "+ str(j) + r"} "+   skill_dpl
+                elements += r"\exercice{Exercice "+ str(j) + r"} "+ details +   skill_dpl
             
             if texte_supplement : 
                 elements +=  r"\\  "

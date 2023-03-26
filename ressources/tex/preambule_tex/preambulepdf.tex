@@ -208,19 +208,17 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 \newcommand{\sacado}[1]{ % Exercice directement dans la page
 \vspace{0.2cm}
-\tikz\node[rounded corners=2pt, fill=violet]{\color{white}\textbf{#1}};
+\tikz\node[rounded corners=5pt, fill=violet]{\color{white}\textbf{#1}};
 }
 
 
 \newcommand{\competence}[1]{
-%  {\bf CompÃƒÂ©tence ciblÃƒÂ©e : } #1
-%  \medskip
-  \hfill\textcolor{bleusad}{#1}
-
+  \hfill{   {\scriptsize #1}} 
 }
+
 \newcommand{\competences}[1]{
   {\bf CompÃƒÂ©tences ciblÃƒÂ©es : }
-  \begin{enumerate}
+  \begin{enumerate} {\scriptsize 
    \item   #1
   \end{enumerate}
 
