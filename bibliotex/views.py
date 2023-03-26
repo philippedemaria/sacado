@@ -94,9 +94,12 @@ def printer(request, relationtex_id, collection,output):
     soit en html (output="html") """
 
     # ouverture du texte dans le fichier tex
-
+    landscape = request.POST.get("landscape",None)
     if output=="pdf" :
-        preamb = settings.TEX_PREAMBULE_PDF_FILE
+        if landscape :
+            preamb = settings.TEX_PREAMBULE_PDF_FILE_LANDSCAPE
+        else :
+            preamb = settings.TEX_PREAMBULE_PDF_FILE
 
     elif output == "html" or output == "html_cor" :
         preamb = settings.TEX_PREAMBULE_FILE
@@ -111,6 +114,9 @@ def printer(request, relationtex_id, collection,output):
     new_title   = request.POST.get("new_title",None) 
     texte_supplement   = request.POST.get("texte_supplement",None)
     linked_exercises   = request.POST.get("linked_exercises",None)
+
+    columns   = request.POST.get("columns",None)
+
 
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
@@ -155,7 +161,7 @@ def printer(request, relationtex_id, collection,output):
         else: relationtexs=[relationtex]
 
 
-        if relationtex_id == 0 : elements += r"\begin{multicols}{2}"
+        if columns : elements += r"\begin{multicols}{2}"
         
         j = 1
 
@@ -288,7 +294,7 @@ def printer(request, relationtex_id, collection,output):
         elements += ctnt
         elements += r" \vspace{0,4cm}"
     # Fermeture du texte dans le fichier tex
-    if relationtex_id == 0 : elements +=r"\end{multicols}"
+    if columns : elements +=r"\end{multicols}"
     elements +=  r"\end{document}"
 
 

@@ -20,16 +20,18 @@
 
     </div> 
     <div class="col-sm-12 col-md-6">
-        Sélectionner les exercices à télécharger : <label>(tous)  <input type="checkbox" name="relationtexs" id="select_all_these_items" ></label><br/>
+        Sélectionner les exercices à télécharger : <label>(tous)  <input type="checkbox" name="relationtexs" id="select_all_these_items" checked></label><br/>
         {% for relationtex in  relationtexs %}
             <label>
             	<i class="fa fa-fw fa-{% if relationtex.is_publish %}eye text-green{% else%}eye-slash text-danger{% endif %}"></i> {{ relationtex.exotex.title }}  
-                <input type="checkbox" name="relationtexs" class="items_to_be_selected"  value="{{ relationtex.id }}">
+                <input type="checkbox" name="relationtexs" class="items_to_be_selected"  value="{{ relationtex.id }}" checked>
                 {% if relationtex.relationships.count %}<i class="bi bi-link"></i>{% endif%}
             </label><br/>
         {% endfor %}
         <hr/>
-        <label>Imprimer le titre des exercices ? <input type="checkbox" name="all_titles" ></label>
+        <label>Imprimer le titre des exercices ? <input type="checkbox" name="all_titles" checked></label>
+        <label>Imprimer sur deux colonnes ? <input type="checkbox" name="columns" checked></label>
+        <label>Imprimer en format paysage ? <input type="checkbox" name="landscape" checked></label>
      </div> 
 </div>
 
