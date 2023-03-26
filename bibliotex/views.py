@@ -275,7 +275,7 @@ def printer(request, relationtex_id, collection,output):
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+"/"+document
+    file = settings.DIR_TMP_TEX+document
     ################################################################# 
     ################################################################# 
 
