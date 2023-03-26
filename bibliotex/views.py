@@ -104,10 +104,13 @@ def printer(request, relationtex_id, collection,output):
     entetes=open(preamb,"r")
     elements=entetes.read()
     entetes.close()
-    elements +=r"\begin{document}"+"\n" 
+    elements +=r"\begin{document}"+"\n"
+
     print_title = request.POST.get("print_title",None)  
     new_title   = request.POST.get("new_title",None) 
     texte_supplement   = request.POST.get("texte_supplement",None)
+    linked_exercises   = request.POST.get("linked_exercises",None)
+
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
         if collection : 
@@ -152,11 +155,19 @@ def printer(request, relationtex_id, collection,output):
                     sks =  relationtex.exotex.skills.all()
                 for s in sks :
                     skills_display +=  s.name+". "
+                skill_dpl = r"\competence{" +skills_display+r"}"
+            else : skill_dpl = ""
+
             try :
-                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} {\bf " +  relationtex.exotex.title  +  r" }    \competence{" +skills_display+r"}"
+                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} {\bf " +  relationtex.exotex.title  +  r" } " +   skill_dpl
             except :
-                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} {\competence{" +skills_display+r"}"
+                elements += r"\exercice{"+ str(relationtex.exotex.id) + r"} "+   skill_dpl
             
+            if texte_supplement : 
+                elements +=  r"\\  "
+                elements +=  texte_supplement 
+            elements +=  r"\\  "
+
             j+=1
 
             if knowledges_printer :  
@@ -182,14 +193,31 @@ def printer(request, relationtex_id, collection,output):
             else :
                 ctnt =  relationtex.exotex.content
 
-
             elements += ctnt
-            elements += r" \vspace{0,4cm}\\"
 
-        if texte_supplement : 
-            elements +=  r"\hrule "
-            elements +=  r"\vspace{0,1cm} "
-            elements +=  texte_supplement 
+
+            if linked_exercises :
+                relationships = relationtex.relationships.filter(is_publish=1).order_by("ranking")
+                if relationships.count() > 0 :
+                    elements +=  r"\\ \vspace{0,1cm}"                
+                    text_linked = r"\sacado{SACADO} "
+                    this_loop = 0
+                    for relationship in relationships :
+                        if relationships.count() == this_loop + 1 : sep = ""
+                        else : sep = " - "
+                        if this_loop == 0 and bibliotex.folders.count(): 
+                            fs = [f for f in relationship.parcours.folders.all() if f in bibliotex.folders.all() ]
+                            folder   =  fs[0]
+                            text_linked += folder.title +" > "+  relationship.parcours.title  +" > Exercices > "
+                        if relationship.is_publish and relationship.document_id == 0 :
+                            text_linked += str(relationship.ranking + 1 ) + sep
+                        this_loop +=1
+                    elements +=  text_linked 
+
+            elements +=  r"\\ \vspace{0,2cm}  "
+
+
+
 
 
     else : #pour la création d'un exercise ou son update*
@@ -1306,6 +1334,26 @@ def real_time_bibliotex(request, id):
 
 
 
+def link_to_relationship(request,idr):
+
+    relationtex = Relationtex.objects.get(pk=idr)
+    parcourses  = relationtex.bibliotex.parcours.all()
+
+    if request.method == "POST" :
+        relationships = request.POST.getlist("relationships")
+        relationtex.relationships.set(relationships)
+        return redirect( 'show_bibliotex' , relationtex.bibliotex.id ) 
+
+
+    context   = { 'relationtex': relationtex, 'parcourses': parcourses }
+
+    return render(request, 'bibliotex/form_link_to_relationship.html', context )
+
+
+
+
+
+
 def ajax_chargethemes(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
@@ -1734,11 +1782,6 @@ def ajax_display_correction_exotex(request):
     
     return JsonResponse(data)
 
-############################################################################################################
-############################################################################################################
-#################  Résultats
-############################################################################################################
-############################################################################################################
 
 def ajax_results_exotex(request):
 
@@ -1908,6 +1951,9 @@ def ajax_individualise_exotex(request):
     data["title"] = "Individualiser l'exercice "+relationtex.exotex.title
 
     return JsonResponse(data)
+
+
+
 ############################################################################################################
 ############################################################################################################
 #################   IMPRESSION

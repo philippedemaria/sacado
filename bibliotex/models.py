@@ -6,7 +6,7 @@ from group.models import  Group
 from django.utils import timezone
 from account.models import Student, Teacher, ModelWithCode, generate_code, User
 from socle.models import  Knowledge, Level , Theme, Skill , Subject 
-from qcm.models import Folder , Parcours , Course
+from qcm.models import Folder , Parcours , Course , Relationship
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import Q, Min, Max
@@ -218,7 +218,9 @@ class Relationtex(models.Model):
     correction_html = models.TextField( blank=True, default="", null=True,  editable= False)
 
     courses = models.ManyToManyField(Course, related_name="relationtexs", blank=True, verbose_name="Cours éventuel"  )
-    students = models.ManyToManyField(Student, related_name="relationtexs", editable=False)
+    students = models.ManyToManyField(Student, related_name="relationtexs", blank=True, editable=False)
+
+    relationships = models.ManyToManyField(Relationship, related_name="relationtexs", blank=True, verbose_name="Exercices"  )   
 
     def __str__(self):       
         return "{} > {}".format(self.bibliotex.title,self.exotex.title)

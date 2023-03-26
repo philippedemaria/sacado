@@ -1,0 +1,82 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/link_to_relationship']);
+    </script> 
+{% endblock %} 
+
+
+{% block page_title %}
+        {% include 'bibliotex/logo.html' %}
+        {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
+
+
+       Lier un exoTex à des exercices
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+    <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
+{% endblock %}
+
+
+
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
+{% endblock %} 
+
+
+
+{% block body %}  
+<section class="content_main">
+    <div class="col-sm-12 col-md-12">
+        <form action="{% url 'link_to_relationship' relationtex.id %}" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %} 
+            <div class="new_exotex relationtex_sorter" style="margin-bottom:20px;padding:10px">
+                <div style="margin:0px 0px  5px 0px"><b><label class="number_exotex" style="margin:0px;font-size:18px"> {{ relationtex.exotex.id}}</label></b>
+                    <span class="container_checkbox_title" style="font-size:22px!important">{{ relationtex.exotex.title }} </span>
+                </div>
+                {% if relationtex.content_html %}
+                {{ relationtex.content_html|safe }}
+                {% else %}
+                {{ relationtex.exotex.content_html|safe }}
+                {% endif %}
+            </div> 
+            <button type="submit" class="btn btn-primary" style="margin-top:50px">Enregistrer les liaisons</button>               
+            <a href="javascript:history.back()" class="btn btn-default" style="margin-top:50px">Retour à la biblioTex</a>
+            <div style="clear:both"></div>
+            {% for parcours in parcourses %}
+                <div class="alert alert-sacado">{{ parcours.title}}</div>
+                {% for r in parcours.parcours_relationship.all|dictsort:"ranking" %}
+                    <input type="checkbox" name="relationships" value="{{ r.id }}" id="to_link{{ r.id }}" class="no_visu_on_load" {% if relationtex.relationships.count %}checked{% endif %} />
+                    {% if 'underlayer' in r.exercise.supportfile.imagefile.url %}
+                        <img src="{{ r.exercise.supportfile.qtype_logo.url }}" class="image_parcours_link_exotex {% if relationtex.relationships.count %}image_parcours_link_exotex_selected{% endif %}" data-id="{{ r.id }}" id="image_link{{ r.id }}" />
+                    {% else %}
+                        <img src="{{ r.exercise.supportfile.imagefile.url }}" class="image_parcours_link_exotex {% if relationtex.relationships.count %}image_parcours_link_exotex_selected{% endif %}" data-id="{{ r.id }}" id="image_link{{ r.id }}" />
+                    {% endif %}
+                {% empty %}
+                    <div class="alert alert-sacado">Le parcours est un parcours vide.</div>
+                {% endfor %}
+            {% empty %}
+                <div class="alert alert-sacado">L'exercice appartient à une biblioTex sans parcours associé.</div>
+            {% endfor %}
+            <div style="clear:both"></div>
+            <button type="submit" class="btn btn-primary" style="margin-top:50px">Enregistrer les liaisons</button>
+            <a href="javascript:history.back()" class="btn btn-default" style="margin-top:50px">Retour à la biblioTex</a>
+        </form>
+    </div>
+</section>  
+{% endblock %}
+
+ 
+ 
+ 
+       
+ 
+ 

@@ -56,6 +56,14 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
   height:80px;
 }
 
+.no_visu_on_load{
+  display:none!important;
+}
+
+
+
+
+
 
 .introduction_teacher{
   line-height: 28px;
@@ -457,6 +465,35 @@ table.puzzle td {
 }
 
 
+.image_parcours_link_exotex{
+  float:left;
+  width:200px; 
+  height: 157px;
+  margin: 15px;
+  cursor: pointer; 
+}
+
+.image_parcours_link_exotex_selected{
+  float:left;
+  width:200px; 
+  height: 157px;
+  margin: 15px;
+  cursor: pointer; 
+  border:5px solid #0093CA;
+}
+
+.image_thumb_parcours_link_exotex{
+  float:left;
+  width:50px; 
+}
+
+
+.image_parcours_link_exotex:hover{
+  float:left;
+  width:400px; 
+  height: 314px; 
+}
+
 
 .card-image{
   margin: 0px;
@@ -468,6 +505,7 @@ table.puzzle td {
   width:288px; 
   height: 194px; 
 }
+
 .image_parcours{
   float:left;
   width:288px; 

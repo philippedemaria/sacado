@@ -43,83 +43,7 @@
 
 
 
-    <div class="row relationtex_sorter" style="margin-bottom:20px" data-relationtex_id ="{{r.id}}" style="cursor: move;">
-        {% if request.user.user_type == 2 %}
-        <div class="col-sm-1 col-md-1 col-lg-1" >  
-            {% if request.user.is_superuser %}
-            <li class="relative_div_exotex">  
-                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-cogs"></i><span class="legend_exotex_parameter"> Configurer </span></a>
-            </li>
-            {% endif %}
-            <li class="relative_div_exotex action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
-                <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-print"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
-            </li>
-            <li class="relative_div_exotex action_print_tex"   data-relationtex_id="{{ r.id }}">  
-                <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="25px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
-            </li>
-
-            {% comment %}
-            <li class="relative_div_exotex action_exotex"  data-action="results" data-relationtex_id="{{ r.id }}"> 
-                <span data-toggle='modal' data-target='#results_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-trophy"></i> <span class="legend_exotex_parameter"> Résultats </span> </span> 
-            </li>
-            <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
-                <span data-toggle='modal' data-target='#individualise_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-users"></i> 
-                <span class="legend_exotex_parameter"> Individualiser  </span> </span>
-            </li>
-            {% endcomment %}
-
-
-
-            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
-                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="fa fa-fw {% if r.is_publish %}fa-eye{% else %}fa-eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
-            </li>
-
-
-            <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
-                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-times"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
-            </li>
-
-
-            <li class="relative_div_exotex"> 
-                <span href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="fa fa-fw fa-expand"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></span>
-            </li>
-        </div>  
-        <div class="col-sm-11 col-md-11 col-lg-11" >         
-        {% else %}
-        <div class="col-sm-12 col-md-12 col-lg-12" > 
-        {% endif %}
-        <div class="titles_details">
-                <span class="exotex_show_exercice">Exercice {{ forloop.counter}}.</span> 
-
-                <label style="margin-bottom:0px"> {{ r.exotex.title }} 
-
-                    {% if r.calculator  %}
-                         <img src="{% static 'img/calculator.png' %}" width="20px" style="vertical-align: bottom;" />
-                    {% else %}
-                         <img src="{% static 'img/no_calculator.png' %}" width="20px" style="vertical-align:bottom;" />
-                    {% endif %}
-                    {% if r.is_python  %}
-                          <img src="{% static 'img/is_python.png' %}" width="20px" style="vertical-align:bottom;" />
-                    {% endif %}
-                    {% if r.is_scratch  %}
-                          <img src="{% static 'img/is_scratch.png' %}" width="20px" style="vertical-align:bottom;" />
-                    {% endif %}
-                    {% if r.is_tableur  %}
-                          <img src="{% static 'img/is_tableur.png' %}" width="20px" style="vertical-align:bottom;" />
-                    {% endif %}
-
-                    <i class="bi bi-clock-history"></i> {{ r.duration }} min.
-                </label>
-
-            </div>
-
-        </div>  
-    </div>
-
-
-
 {% block body %}
-
 <form action="" method="POST" enctype='multipart/form-data'> 
 <section class="content_container"  id="bibliotex_sortable">
 <input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
@@ -152,18 +76,44 @@
 
             {% if request.user.is_superuser %}
             <li class="relative_div_exotex">  
-                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-cogs"></i><span class="legend_exotex_parameter"> Configurer </span></a>
+                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-gear"></i><span class="legend_exotex_parameter"> Configurer </span></a>
             </li>
             {% endif %}
-            <li class="relative_div_exotex action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
-                <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-print"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
+            <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
+                <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
             </li>
-            <li class="relative_div_exotex action_print_tex"   data-relationtex_id="{{ r.id }}">  
-                <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="25px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
+            <li class="relative_div_exotex action_print_tex  {% if not r.is_publish %}no_visu_on_load{% endif %}"   data-relationtex_id="{{ r.id }}">  
+                <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="20px" style="padding:3px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
             </li>
 
+            {% if sacado_asso %}
+            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}">  
+                <a href="{% url 'link_to_relationship' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices </span></a>
+            </li>
+            {% else %}
+            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}">  
+                <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices (V. etab.)</span></a>
+            </li>
+            {% endif %}
+
+
+
+            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"> 
+                <a href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></a>
+            </li>
+
+            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
+                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
+            </li>
+
+
+            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="students" data-relationtex_id="{{ r.id }}"> 
+                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="bi bi-x"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
+            </li>
+
+
             {% comment %}
-            <li class="relative_div_exotex action_exotex"  data-action="results" data-relationtex_id="{{ r.id }}"> 
+            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="results" data-relationtex_id="{{ r.id }}"> 
                 <span data-toggle='modal' data-target='#results_exotex' class="exotex_div_menu_label"><i class="fa fa-fw fa-trophy"></i> <span class="legend_exotex_parameter"> Résultats </span> </span> 
             </li>
             <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
@@ -172,21 +122,6 @@
             </li>
             {% endcomment %}
 
-
-
-            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
-                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="fa fa-fw {% if r.is_publish %}fa-eye{% else %}fa-eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
-            </li>
-
-
-            <li class="relative_div_exotex action_exotex"  data-action="students" data-relationtex_id="{{ r.id }}"> 
-                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-times"></i><span class="legend_exotex_parameter"> Dissocier </span></a>
-            </li>
-
-
-            <li class="relative_div_exotex"> 
-                <a href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="fa fa-fw fa-expand"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></a>
-            </li>
 
         </div>
         <div class="body_exotex">
@@ -203,6 +138,22 @@
                             {% endif %}
                             </a>
                     {% endif %}
+
+                    {% if r.relationships.count %}
+                        <div class="show_exotex_knowledges"> <i class="bi bi-link"  style="font-size:18px"></i>
+                            <div class="exotex_knowledges text-blue">
+                                {% for relationship in r.relationships.all %}
+                                    {% if 'underlayer' in relationship.exercise.supportfile.imagefile.url %}
+                                        <img src="{{ relationship.exercise.supportfile.qtype_logo.url }}" class="image_thumb_parcours_link_exotex"   />
+                                    {% else %}
+                                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="image_thumb_parcours_link_exotex"  />
+                                    {% endif %}
+                                {% endfor %}                            
+                            </div>
+                        </div>  
+                    {% endif %}
+
+
                 {% elif request.user.user_type == 0 and r.is_publish_cor %}
                     {% if r.correction  or r.exotex.correction  %}
                         <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>

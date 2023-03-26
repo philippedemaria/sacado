@@ -99,7 +99,7 @@ urlpatterns = [
     path('clone_bibliotex_sequence/<int:idb>', clone_bibliotex_sequence, name='clone_bibliotex_sequence'),
 
 
-
+    path('link_to_relationship/<int:idr>', link_to_relationship, name='link_to_relationship'),
 
 
  ]

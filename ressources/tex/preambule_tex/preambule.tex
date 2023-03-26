@@ -162,12 +162,19 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\exo}{}
 
 \definecolor{bleu2}{rgb}{0,0.58,0.79}
+\definecolor{violet}{rgb}{0.79,0.66,0.98}
 
 \newcommand{\exercice}[1]{ % Exercice directement dans la page
-\vspace{0.4cm}
-\tikz\node[rounded corners=2pt, fill=bleu2]{\color{white}\textbf{#1}};
 \vspace{0.2cm}
+\tikz\node[rounded corners=2pt, fill=bleu2]{\color{white}\textbf{#1}};
+\vspace{0.1cm}
 }
+
+\newcommand{\sacado}[1]{ % Exercice directement dans la page
+\vspace{0.2cm}
+\tikz\node[rounded corners=2pt, fill=violet]{\color{white}\textbf{#1}};
+}
+
 
 
 \newcommand{\competence}[1]{}
@@ -178,4 +185,4 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\savoirs}[1]{}
 
 \setlength{\parindent}{0cm}
-\usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}
+\usepackage[left=1cm,right=1cm,top=1cm,bottom=1.5cm]{geometry}

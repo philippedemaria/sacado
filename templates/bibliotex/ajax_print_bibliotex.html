@@ -13,17 +13,19 @@
         <label>Imprimer le titre ? <input type="checkbox" name="print_title"  id="print_title" checked></label>
         <hr/>    	
         <label>Imprimer les savoir faire ? <input type="checkbox" name="knowledges"  id="knowledges"></label><br/>
-        <label>Imprimer les compétences ? <input type="checkbox" name="skills" id="skills"></label>
-
+        <label>Imprimer les compétences ? <input type="checkbox" name="skills" id="skills"></label><br/>
+        <label>Imprimer les exercices des parcours liés ? <i class="bi bi-link"></i> <input type="checkbox" name="linked_exercises" ></label>
         <hr/>
-        <label>Texte personnalisé : </label><input type="text" name="texte_supplement" class="form-control" maxlength="255" placeholder="Faire les exercices SACADO ......">
+        <label>Texte personnalisé : </label><input type="text" name="texte_supplement" class="form-control" maxlength="255">
 
     </div> 
     <div class="col-sm-12 col-md-6">
         Sélectionner les exercices à télécharger : <label>(tous)  <input type="checkbox" name="relationtexs" id="select_all_these_items" ></label><br/>
         {% for relationtex in  relationtexs %}
             <label>
-            	<i class="fa fa-fw fa-{% if relationtex.is_publish %}eye text-green{% else%}eye-slash text-danger{% endif %}"></i> {{ relationtex.exotex.title }}  <input type="checkbox" name="relationtexs" class="items_to_be_selected"  value="{{ relationtex.id }}">
+            	<i class="fa fa-fw fa-{% if relationtex.is_publish %}eye text-green{% else%}eye-slash text-danger{% endif %}"></i> {{ relationtex.exotex.title }}  
+                <input type="checkbox" name="relationtexs" class="items_to_be_selected"  value="{{ relationtex.id }}">
+                {% if relationtex.relationships.count %}<i class="bi bi-link"></i>{% endif%}
             </label><br/>
         {% endfor %}
      </div> 

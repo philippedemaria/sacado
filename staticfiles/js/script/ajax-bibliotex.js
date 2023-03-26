@@ -347,18 +347,18 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     
                     if (data.display == "true") {  
 
-                        if ( $("#display"+relationtex_id).find("i").hasClass("fa-eye") ) 
+                        if ( $("#display"+relationtex_id).find("i").hasClass("bi-eye") ) 
                             { 
-                                $("#display"+relationtex_id).find("i").addClass("fa-eye-slash"); 
-                                $("#display"+relationtex_id).find("i").removeClass("fa-eye") ; 
+                                $("#display"+relationtex_id).find("i").addClass("bi-eye-slash"); 
+                                $("#display"+relationtex_id).find("i").removeClass("bi-eye") ; 
                                 $(".relationtex"+relationtex_id).addClass("no_visu_on_load") ; 
                                 $("#display"+relationtex_id).parent().find('li').addClass("no_visu_on_load") ; 
                                 $("#display"+relationtex_id).removeClass("no_visu_on_load") ; 
                             }
                         else 
                             { 
-                                $("#display"+relationtex_id).find("i").removeClass("fa-eye-slash");
-                                $("#display"+relationtex_id).find("i").addClass("fa-eye") ; 
+                                $("#display"+relationtex_id).find("i").removeClass("bi-eye-slash");
+                                $("#display"+relationtex_id).find("i").addClass("bi-eye") ; 
                                 $(".relationtex"+relationtex_id).removeClass("no_visu_on_load") ;
                                 $("#display"+relationtex_id).parent().find('li').removeClass("no_visu_on_load") ; 
                             }
