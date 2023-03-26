@@ -118,19 +118,26 @@ def printer(request, relationtex_id, collection,output):
             bibliotex_id = request.POST.get("print_bibliotex_id",None)  
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
             document     = "bibliotex" + str(relationtex_id)
-            this_folder  =  bibliotex.folders.first().title + " > "+ bibliotex.parcours.first().title
+            if bibliotex.folders.count() and  bibliotex.parcours.count() : this_folder  =  bibliotex.folders.first().title + " > "+ bibliotex.parcours.first().title
+            elif bibliotex.folders.count() and  not bibliotex.parcours.count() : this_folder  =  bibliotex.folders.first().title + " > "
+            elif not bibliotex.folders.count() and  bibliotex.parcours.count() : this_folder  = " > "+ bibliotex.parcours.first().title
+            else : this_folder = ""
             if new_title : title  = new_title
             else : title  = bibliotex.title
-
             author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
+
+
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    =  Relationtex.objects.get(pk = relationtex_id) 
             document       = "relationtex" + str(relationtex_id)
             title          =  relationtex.exotex.title
             author         = "Équipe SACADO"
-            this_folder    = relationtex.bibliotex.folders.first().title + " > "+relationtex.bibliotex.parcours.first().title
-
+ 
+            if relationtex.bibliotex.folders.count() and  relationtex.bibliotex.parcours.count() : this_folder  =  relationtex.bibliotex.folders.first().title + " > "+ relationtex.bibliotex.parcours.first().title
+            elif relationtex.bibliotex.folders.count() and  not relationtex.bibliotex.parcours.count() : this_folder  =  relationtex.bibliotex.folders.first().title + " > "
+            elif not relationtex.bibliotex.folders.count() and  relationtex.bibliotex.parcours.count() : this_folder  = " > "+ relationtex.bibliotex.parcours.first().title
+            else : this_folder = ""
 
         if print_title : elements +=r"\titreFiche{"+title+r"}{"+author+r"}{"+this_folder+r"}"
 
@@ -168,7 +175,10 @@ def printer(request, relationtex_id, collection,output):
             elements += r"\\ \vspace{0,1cm}"
 
             try :
-                elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " +   skill_dpl
+                if request.POST.get("all_titles",None)   :
+                    elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " +   skill_dpl
+                else :
+                    elements += r"\exercice{Exercice "+ str(j) + r"} "+   skill_dpl 
             except :
                 elements += r"\exercice{Exercice "+ str(j) + r"} "+   skill_dpl
             
@@ -209,18 +219,12 @@ def printer(request, relationtex_id, collection,output):
                 relationships = relationtex.relationships.filter(is_publish=1).order_by("ranking")
                 if relationships.count() > 0 :
                     elements +=  r"\\ \vspace{0,1cm}"                
-                    text_linked = r"\sacado{SACADO} "
-                    this_loop = 0
+                    text_linked = ""
+
                     for relationship in relationships :
-                        if relationships.count() == this_loop + 1 : sep = ""
-                        else : sep = " - "
-                        if this_loop == 0 and bibliotex.folders.count(): 
-                            fs = [f for f in relationship.parcours.folders.all() if f in bibliotex.folders.all() ]
-                            folder   =  fs[0]
-                            text_linked += folder.title +" > "+  relationship.parcours.title  +" > Exercices > "
                         if relationship.is_publish and relationship.document_id == 0 :
-                            text_linked += str(relationship.ranking + 1 ) + sep
-                        this_loop +=1
+                            text_linked += r"\sacado{"+str(relationship.ranking + 1 ) + r"} \; "
+ 
                     elements +=  text_linked 
 
             elements +=  r"\\ "
