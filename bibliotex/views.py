@@ -117,7 +117,7 @@ def printer(request, relationtex_id, collection,output):
         if collection : 
             bibliotex_id = request.POST.get("print_bibliotex_id",None)  
             bibliotex    = Bibliotex.objects.get(pk = bibliotex_id)
-            document     = "bibliotex" + str(relationtex_id)
+            document     = "bibliotex" + str(bibliotex_id)
             if bibliotex.folders.count() and  bibliotex.parcours.count() : this_folder  =  bibliotex.folders.first().title + " > "+ bibliotex.parcours.first().title
             elif bibliotex.folders.count() and  not bibliotex.parcours.count() : this_folder  =  bibliotex.folders.first().title + " > "
             elif not bibliotex.folders.count() and  bibliotex.parcours.count() : this_folder  = " > "+ bibliotex.parcours.first().title
