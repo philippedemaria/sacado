@@ -180,7 +180,7 @@ def printer(request, relationtex_id, collection,output):
             if relationtex.exotex.calculator : calculator = pref_image + 'calculator.png'
             else : calculator = pref_image + 'no_calculator.png'   
 
-            details += r'\includegraphics[scale=0.4]{'+calculator+r'}'
+            details = r'\includegraphics[scale=0.4]{'+calculator+r'}'
 
             if relationtex.exotex.is_python : 
                 img_python = pref_image +'is_python.png'
