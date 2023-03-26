@@ -180,19 +180,19 @@ def printer(request, relationtex_id, collection,output):
             if relationtex.exotex.calculator : calculator = pref_image + 'calculator.png'
             else : calculator = pref_image + 'no_calculator.png'   
 
-            details = r'\includegraphics[scale=0.4]{'+calculator+r'}'
+            details = r'\includegraphics[scale=0.6]{'+calculator+r'}'
 
             if relationtex.exotex.is_python : 
                 img_python = pref_image +'is_python.png'
-                details += r'\includegraphics[scale=0.4]{'+img_python+r'}'
+                details += r'\includegraphics[scale=0.6]{'+img_python+r'}'
 
             if relationtex.exotex.is_scratch : 
                 img_scratch = pref_image +'is_scratch.png'
-                details += r'\includegraphics[scale=0.4]{'+img_scratch+r'}'
+                details += r'\includegraphics[scale=0.6]{'+img_scratch+r'}'
 
             if relationtex.exotex.is_tableur : 
                 img_tableur = pref_image + 'is_tableur.png'
-                details += r'\includegraphics[scale=0.4]{'+img_tableur+r'}'
+                details += r'\includegraphics[scale=0.6]{'+img_tableur+r'}'
 
 
 
