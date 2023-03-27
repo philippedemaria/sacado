@@ -81,7 +81,12 @@
                                {{ quizz.title}} 
                             </h1>
                             {% endblock %}
-                            {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="700px"  />{% endif %}
+
+                            {% block logo_qf %}
+                                {% if quizz.vignette %}
+                                    <img src="{{ quizz.vignette.url }}" width="700px"  />
+                                {% endif %}
+                            {% endblock %}
                         </div>
                     </div> 
                 </li>
