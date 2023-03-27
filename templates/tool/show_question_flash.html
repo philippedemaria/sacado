@@ -48,7 +48,28 @@
 {% endblock %}
 
 
+{% block question_intro %}
+<li class="my_slide">
+    <input type="hidden" value="2" id="inter_slide{{ forloop.counter }}" /> 
+    <div class="row consigne_diapo"  align="center">  
+        <div class="col-sm-12 col-md-12">
 
+            
+            <h1 style="font-size:4em" class="thin">
+                <b>Question {{forloop.counter}}.</b>
+            </h1>
+            <div class="starter_in" style="font-size:2em"> Démarrage dans 
+                <span class="instruction counterdown" id="countdown{{ forloop.counter }}" > 
+                    {{ quizz.interslide }}
+                </span> s
+            </div>
+
+
+
+        </div>
+    </div> 
+</li>
+{% endblock %}
 
 
 

@@ -88,10 +88,15 @@
 
                 {% block body_quizz %}
                     {% for question in questions %}
+
+
+                        {% block question_intro %}
                         <li class="my_slide">
                             <input type="hidden" value="{{ quizz.interslide }}" id="inter_slide{{ forloop.counter }}" /> 
                             <div class="row consigne_diapo"  align="center">  
                                 <div class="col-sm-12 col-md-12">
+
+                                    
                                     <h1 style="font-size:4em" class="thin"><b>Question {{forloop.counter}}.</b><span class="instruction"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
                                         {% if question.qtype == 1 %}
                                             Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
@@ -103,7 +108,6 @@
                                              Vous devez choisir la <br/><b>seule bonne réponse</b><br/>  parmi les 4 réponses proposées. 
                                         {% endif %}
                                     </h1>
-
                                     <div class="starter_in" style="font-size:2em"> Démarrage dans 
                                         <span class="instruction counterdown" id="countdown{{ forloop.counter }}" > 
                                             {{ quizz.interslide }}
@@ -111,9 +115,13 @@
                                     </div>
      
 
+
                                 </div>
                             </div> 
                         </li>
+                        {% endblock %}
+
+
                         <li class="my_slide">
                             <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" />  
                             <div class="row">  
