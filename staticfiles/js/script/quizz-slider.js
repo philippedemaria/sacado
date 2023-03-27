@@ -71,7 +71,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                             { 
                                 currentSlide++ ; 
                             }
-                        transition(currentSlide, slideWidth )  ;
+                        transition(currentSlide, slideWidth*2 )  ;
 
                    } else if (whichButton === 'prev') {
 
@@ -84,7 +84,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                             { 
                                 currentSlide-- ; 
                             }
-                        transition(currentSlide, slideWidth ) ;
+                        transition(currentSlide, slideWidth*2 ) ;
                    }
 
             });
