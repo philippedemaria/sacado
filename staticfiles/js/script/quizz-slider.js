@@ -169,25 +169,20 @@ define(['jquery',  'bootstrap' ], function ($) {
                             else  // Lecture des diapo des questions
                             {
 
-
                                 this_slide = parseInt( (currentSlide-1)/2) ; // Sélection du temps entre les diapos ou de la diapo
-
                                 if ( step%2 === 0 ) 
                                     {
                                         this_slide++;
                                         duree = $("#inter_slide"+this_slide).val() * 1000 ;
                                         timer("countdown" , this_slide , duree  )
-
                                     }
                                     else   
                                     {   
                                         duree = $("#duration"+this_slide).val() * 1000 ;
                                         timer("counterdown" , this_slide , duree  )
-
                                     }
-                           
 
-                                 // Couleurs des boutons déjà des questions déjà travaillées
+                                // Couleurs des boutons déjà des questions déjà travaillées
                                 currentQuestion++ ; 
                                 this_question = parseInt( (currentQuestion+1)/2) ;
                                 for (col=1;col<this_question;col++){ $("#question"+col).addClass("btn-success").removeClass("btn-default")  ;  }
