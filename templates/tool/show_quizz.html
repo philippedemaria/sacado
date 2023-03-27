@@ -117,9 +117,11 @@
                         <li class="my_slide">
                             <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" />  
                             <div class="row">  
+                                {% block calculator %}
                                 <div class="col-sm-2 col-md-2" align="left">
                                     <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
                                 </div>
+                                {% endblock %}
                                 <div class="col-sm-8 col-md-8" align="center">
                                         {% if question.qtype == 1 %}
                                             <b>Vrai  ou  Faux ?</b>
