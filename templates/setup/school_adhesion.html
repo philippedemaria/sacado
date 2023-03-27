@@ -8,9 +8,9 @@
 {% block body %}
 
 <section class="container" style="margin-top:100px">
-    <h3 class="thin">Demande d'adhésion à la version Etablissement  <a href="#" id="show_fonctions" style="font-size : 14px">Fonctionnalités proposées</a>
+    <h3 class="thin">Demande d'adhésion à la version Etablissement
 
-          <span  class="btn btn-periode_test"> 15 j d'essai gratuit* </span><span style="font-size : 10px;color: #CCC"> *Pour tout nouvelle adhésion</span>
+          <span  class="btn btn-periode_test"> 15 j d'essai gratuit* </span><span style="font-size : 10px;color: #CCC"> *Pour toute nouvelle adhésion</span>
 
     </h3>    
 
@@ -21,14 +21,8 @@
     </div>
  
  
+            
  
-    <div class="row" id="fonctions">
-        <div class="col-sm-12 col-md-12">
-            {% include 'table_fonctions.html' %}
-            <a href="#" id="close_tab" class="btn btn-default">Fermer</a>
-        </div>
-    </div> 
-
  
 
 
@@ -170,11 +164,12 @@
                 
                 <li class="sanspuce">2.2. Sélectionner le bouton orange Opter pour la version établissement</li>
                       <img src="{% static 'img/opter_pour.png' %}"  width="250px" />
+                      <br/>
+                <a href="{% url 'register_teacher_accueil' %}" class="btn btn-primary">Créer un compte</a>
 
             </div>
             <div class="col-sm-12 col-md-6">
-
-                <a href="{% url 'register_teacher_accueil' %}" class="btn btn-primary">Créer un compte</a>
+                {% include 'table_fonctions.html' %}
             </div>
 
         </div>
