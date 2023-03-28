@@ -181,7 +181,8 @@ class Mental(models.Model):
     is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
     mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
     ranking     = models.PositiveIntegerField(default=0,   ) 
-    levels     = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
+    levels      = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
+    duration    = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
 
     def __str__(self):
         return self.content
@@ -423,6 +424,7 @@ class Quizz(ModelWithCode):
     nb_slide     = models.PositiveIntegerField(default=5, blank=True)  # Nombre de diapositive si le quizz est randomisé
     is_video     = models.BooleanField(default=0, verbose_name="Support de passation")  # Vidéo projection
     # si is_numeric et is_video en même temps alors c'est un jeu
+    delta_duration = models.IntegerField(default=0, blank=True)  # Nombre de diapositive si le quizz est randomisé
 
     is_back      = models.BooleanField(default=0, verbose_name="Retour arrière ?")  
     is_ranking   = models.BooleanField(default=0, verbose_name="Ordre aléatoire des questions ?")  

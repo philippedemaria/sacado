@@ -552,7 +552,9 @@ table.puzzle td {
   padding: 2px;
 }
 
-
+.table-hover > tbody > tr.colored_tr:hover{
+    background-color: #eae6f4!important;
+}
 
 /***************************************************************************/
 /*********************     round   ******************************************/

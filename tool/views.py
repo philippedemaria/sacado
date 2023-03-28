@@ -3116,7 +3116,8 @@ def create_questions_flash_random_variable(m_ids,quizz,noq) :
             if not title in same_titles or i > 10:
                 same_titles.append(title)
                 not_same_title = False
-                question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, writinganswer = wanswer,filltheblanks=body)
+                duration = mental.duration + quizz.delta_duration
+                question = Question.objects.create(title = title, answer = answer, mental_id = mental_id, qtype=2 , size = 48, duration = duration , writinganswer = wanswer,filltheblanks=body)
             i+=1
         quizz.questions.add(question)
         mentaltitles.add(mental.mentaltitle)
@@ -3814,6 +3815,7 @@ def create_questions_flash(request,id):
             nf.is_questions = 1
             nf.is_random = 1
             nf.is_archive = 0
+            nf.interslide = 2
             nf.save()
             form.save_m2m()
 
@@ -3853,6 +3855,7 @@ def update_questions_flash(request,id):
             nf.teacher = teacher
             nf.is_questions = 1
             nf.is_random = 1
+            nf.interslide = 2
             if nf.is_video == 0 : nf.is_numeric = 1
             nf.is_archive = 0
             nf.save()
@@ -3954,7 +3957,7 @@ def admin_test_mental(request,id):
     mental = Mental.objects.get(pk=id)
  
     quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = mental.mentaltitle.subject ,
-                                 is_questions = 1, is_random = 1,nb_slide = 10,is_result =1 , is_result_final = 1,is_archive = 0,interslide = 10)
+                                 is_questions = 1, is_random = 1,nb_slide = 10,is_result =1 , is_result_final = 1,is_archive = 0,interslide = 2)
 
     quizz.levels.set(mental.levels.all())
     quizz.mentaltitles.add(mental.mentaltitle)
@@ -3973,7 +3976,7 @@ def admin_test_mental_print(request,id):
     mental = Mental.objects.get(pk=id)
     teacher = request.user.teacher
     quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = mental.mentaltitle.subject ,
-                                 is_questions = 1, is_random = 1,nb_slide = 10,is_result =1 , is_result_final = 1,is_archive = 0,interslide = 10)
+                                 is_questions = 1, is_random = 1,nb_slide = 10,is_result =1 , is_result_final = 1,is_archive = 0,interslide = 2)
     quizz.levels.set(mental.levels.all())
     quizz.mentaltitles.add(mental.mentaltitle)
     create_questions_flash_random_variable([id], quizz, 10)

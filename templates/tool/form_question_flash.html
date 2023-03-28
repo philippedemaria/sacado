@@ -162,10 +162,10 @@
                                     <td colspan="2">{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
                                 </tr>
                                 <tr class="div_interslide">
-                                    <td class="no_border"> {{ form.interslide.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                    <div class="helper_tip_text" >Pour les transitions automatisées, en mode auto déclenché des vidéo-projections.</div>
+                                    <td class="no_border"> Variation de la durée <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                                    <div class="helper_tip_text" >Permet de ralentir (+) ou d'accélérer (-) la durée donnée dans les formats de question.</div>
                                                 </span> </td>
-                                    <td style="width:80px">{{ form.interslide|add_class:"form-control" }}</td>
+                                    <td style="width:80px">{{ form.delta_duration|add_class:"form-control" }}</td>
                                     <td><small>sec.</small></td>
                                 </tr>
 

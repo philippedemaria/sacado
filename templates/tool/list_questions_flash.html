@@ -68,7 +68,7 @@
                             {% if not forloop.last %}<br/>{% endif %}
                         {% endfor %}
                     </td>
-                    <td>{{ q.nb_slide }} questions</td> 
+                    <td>{{ q.nb_slide }} [{{ q.duration|time_done }}]</td> 
                     <td style="position:relative">
                         <span id="new_group_affected{{ q.id}}">
                         {% for g in  q.groups.all  %}
