@@ -66,18 +66,16 @@
                     <td> 
                         {% for relationship in relationships %}
                             <span class="img_bulle">
+                                {% if relationship.exercise.supportfile.imagefile %}
                                 <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="28px" style="margin:0px" />
                                 <div class="img_shower">
                                     <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width="400px"  />
                                 </div>
+                                {% else %}
+                                    <i class="bi bi-image"></i>
+                                {% endif %}
                             </span>
                         {% endfor %}  
-                        {% for customexercise in customexercises  %}
-                            <img src="{{ customexercise.imagefile.url }}" width="30px"/>
-                        {% endfor %} 
-
-
-
                     </td>       
                     {% endblock %}  
                 </tr>
@@ -114,12 +112,6 @@
                                     {% for relationship in relationships %}
                                         {% include 'qcm/score.html' %}
                                     {% endfor %}  
-                                    {% for customexercise in customexercises %}
-                                        {% include 'qcm/score_custom.html' %}
-                                    {% endfor %} 
-
-
-
                                 </td>       
                                 {% endblock %}                                       
                             </tr>

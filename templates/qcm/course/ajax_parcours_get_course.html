@@ -10,12 +10,13 @@
     </div>
     <hr>     
     {% endif  %}
-
-    {% if course %}
-    <label>Titre du chapitre : <b>{{ course.title }}</b></label>
-    {% else %} 
-    <label>Cours intégral : <b>{{ parcours.title }}</b></label>
-    {% endif %} 
+    
+    <h4 class="thin">
+        {% if course %}
+            Titre du chapitre : <b>{{ course.title }}</b>
+        {% else %} 
+            Cours intégral : <b>{{ parcours.title }}</b>
+        {% endif %} </h4>
     <hr> 
 
  

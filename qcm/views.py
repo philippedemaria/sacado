@@ -4330,11 +4330,11 @@ def result_parcours(request, id, is_folder):
         students = folder.only_students_folder() # liste des élèves d'un parcours donné 
         relationships = Relationship.objects.filter(parcours__in=folder.parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
 
-        custom_set = set()
-        for p in folder.parcours.all():
-            cstm = p.parcours_customexercises.all() 
-            custom_set.update(set(cstm))
-        customexercises = list(custom_set)
+        #custom_set = set()
+        #for p in folder.parcours.all():
+        #    cstm = p.parcours_customexercises.all() 
+        #    custom_set.update(set(cstm))
+        #customexercises = list(custom_set)
 
         target = folder
 
@@ -4343,7 +4343,7 @@ def result_parcours(request, id, is_folder):
         role, group , group_id , access = get_complement(request, teacher, parcours)
         students =  parcours.only_students(group)
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
-        customexercises = parcours.parcours_customexercises.all() 
+        #customexercises = parcours.parcours_customexercises.all() 
 
         target = parcours
 
@@ -4367,8 +4367,8 @@ def result_parcours(request, id, is_folder):
 
     stage = get_stage(teacher.user)
 
-    context = {  'customexercises': customexercises, 'relationships': relationships, 'parcours': target, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
-
+    context = {   'relationships': relationships, 'parcours': target, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
+    #'customexercises': customexercises,
     return render(request, 'qcm/result_parcours.html', context )
 
 
