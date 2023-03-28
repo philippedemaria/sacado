@@ -702,6 +702,7 @@ def knowledges_in_parcours(parcours):
 
 
 def total_by_skill_by_student(skill,relationships, parcours,student) : # résultat d'un élève par compétence sur un parcours donné
+
     total_skill = 0            
     scs = student.student_correctionskill.filter(skill = skill, parcours = parcours).order_by("-point")
     nbs = scs.count()
@@ -710,14 +711,20 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
         total_skill += int(sc.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    exercise_ids = relationships.values_list("exercise_id").filter(skills = skill  )
+ 
 
-    result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id__in = exercise_ids).order_by("-point")
-    #student.student_resultggbskills.filter(skill= skill, relationship__in = relationships)
-    for rss in result_sacado_skills :
-        print(rss.point)
-        total_skill += rss.point
-        nbs += 1
+    for exercise_id in relationships.values_list("exercise_id").filter(skills = skill  ) :
+        result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id = exercise_id).order_by("-point").first()
+        if result_sacado_skills :
+            total_skill += result_sacado_skills.point
+            nbs += 1
+
+    # result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id__in = exercise_ids).order_by("exercise", "-point")
+    # #student.student_resultggbskills.filter(skill= skill, relationship__in = relationships)
+    # for rss in result_sacado_skills :
+    #     print(rss.point, rss.exercise.id)
+    #     total_skill += rss.point
+    #     nbs += 1
 
     ################################################################
 
@@ -738,16 +745,18 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
         total_knowledge += int(sk.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    result_sacado_knowledges = student.answers.filter(parcours= parcours , exercise__knowledge = knowledge).order_by("-point")
-    for rsk in result_sacado_knowledges :
-        total_knowledge += rsk.point
-        nbk += 1
+    for exercise_id in  relationships.values_list("exercise_id").filter(exercise__knowledge = knowledge) :
+        result_sacado_knowledge = student.answers.filter(parcours= parcours , exercise_id = exercise_id).order_by("-point").first()  
+        if result_sacado_knowledge :
+            total_knowledge += result_sacado_knowledge.point
+            nbk += 1
 
     ################################################################
     if nbk !=0  :
         tot_k = total_knowledge//nbk
     else :
         tot_k  = -10
+
     return tot_k
 
 
