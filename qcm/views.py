@@ -703,7 +703,7 @@ def knowledges_in_parcours(parcours):
 
 def total_by_skill_by_student(skill,relationships, parcours,student) : # résultat d'un élève par compétence sur un parcours donné
     total_skill = 0            
-    scs = student.student_correctionskill.filter(skill = skill, parcours = parcours)
+    scs = student.student_correctionskill.filter(skill = skill, parcours = parcours).order_by("-point")
     nbs = scs.count()
  
     for sc in scs :
@@ -712,9 +712,10 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
     exercise_ids = relationships.values_list("exercise_id").filter(skills = skill  )
 
-    result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id__in = exercise_ids   )
+    result_sacado_skills = student.answers.filter(parcours= parcours , exercise_id__in = exercise_ids).order_by("-point")
     #student.student_resultggbskills.filter(skill= skill, relationship__in = relationships)
     for rss in result_sacado_skills :
+        print(rss.point)
         total_skill += rss.point
         nbs += 1
 
@@ -730,14 +731,14 @@ def total_by_skill_by_student(skill,relationships, parcours,student) : # résult
 
 def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : # résultat d'un élève par knowledge sur un parcours donné
     total_knowledge = 0            
-    sks = student.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours)
+    sks = student.student_correctionknowledge.filter(knowledge = knowledge, parcours = parcours).order_by("-point")
     nbk = sks.count()
 
     for sk in sks :
         total_knowledge += int(sk.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    result_sacado_knowledges = student.answers.filter(parcours= parcours , exercise__knowledge = knowledge) 
+    result_sacado_knowledges = student.answers.filter(parcours= parcours , exercise__knowledge = knowledge).order_by("-point")
     for rsk in result_sacado_knowledges :
         total_knowledge += rsk.point
         nbk += 1

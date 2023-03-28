@@ -337,6 +337,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
     try :
         f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        print("===> data_xml ", file=f)
         print(data_xml, file=f)
         f.close()
     except :
@@ -379,16 +380,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
     username   = dico_received["IDO"][0]
     password   = make_password("sacado_gar")
 
-
-    try :
-        f = open('/var/www/sacado/logs/gar_connexions.log','a')
-        writer_text = "{} , {} ".format(today , dico_received )
-        print(writer_text, file=f)
-        f.close()
-    except :
-        pass
-
-
     if Abonnement.objects.filter( school__code_acad = uai ,  date_stop__gte = today , date_start__lte = today , is_active = 1 ) : 
 
         divs = dico_received["DIV"]
@@ -398,18 +389,16 @@ def ressource_sacado(request): #Protection saml pour le GAR
             if divs[0] == "None" : divs = []
             if gros[0] == "None" : gros = []
             liste_div_gro = div_gro(divs , gros)
-            try :
-                f = open('/var/www/sacado/logs/gar_connexions.log','a')
-                print("===> liste_div_gro pour evelyne : " , file=f)
-                print(liste_div_gro , file=f)
-
-                f.close()
-            except :
-                pass
         except :
             liste_div_gro = div_gro(divs , gros)
 
-
+        try :
+            f = open('/var/www/sacado/logs/gar_connexions.log','a')
+            print("===> liste_div_gro ", file=f)
+            print(liste_div_gro , file=f)
+            f.close()
+        except :
+            pass 
 
         if 'elv' in dico_received["PRO"][0] : # si ELEVE 
 
@@ -419,10 +408,10 @@ def ressource_sacado(request): #Protection saml pour le GAR
 
                 for name in liste_div_gro : 
                     try : 
-                        school_groups.append ( Group.objects.get(school = school, name = name ) )
-                        if Group.objects.filter(school = school, name = name ):
-                            group  = Group.objects.filter(school = school, name = name ).last()
-                            group_is_exist = True
+                        these_groups = Group.objects.filter(school = school, name = name )
+                        for group in these_groups :
+                            school_groups.append ( group )
+                        group_is_exist = True
                     except : group_is_exist = False
  
                 user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
@@ -431,27 +420,20 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 else : 
                     level = Level.objects.get(pk=6)
                     student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
-                for group in school_groups : 
-                    group.students.add(student)
-
+                
                 try :
                     f = open('/var/www/sacado/logs/gar_connexions.log','a')
-                    print("===> ELEVE, school_groups : ", file=f)
-                    f.close()
-                except :
-                    pass
-
-                try :
-                    f = open('/var/www/sacado/logs/gar_connexions.log','a')
+                    print("===> school_groups qui devrait être comme liste_div_gro  ", file=f)
                     print(school_groups , file=f)
                     f.close()
                 except :
-                    pass      
+                    pass  
 
+                for groupe in school_groups : 
+                    if student not in groupe.students.all() :
+                        groupe.students.add(student)
 
-
-
-
+    
             else :
                 level = Level.objects.get(pk=1)
                 group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level , 'is_gar' : 1 }  )
