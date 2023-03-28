@@ -5,6 +5,27 @@
 
 
 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+
+    {% if quizz.is_result and not quizz.is_result_final %}
+    <script>
+        require(['script/quizz-slider_correction','script/geometry']);
+    </script> 
+    {% else %}
+    <script>
+        require(['script/quizz-slider-qf']);
+    </script> 
+    {% endif %}
+
+{% endblock %}
+
+
+
+
+
+
 {% block page_title %}
    <a href="{% url 'list_questions_flash' %}" ><i class="bi bi-lightning"></i> </a> Outils pédagogiques 
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> Questions flash 

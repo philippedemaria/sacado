@@ -18,7 +18,7 @@ define(['jquery',  'bootstrap' ], function ($) {
             slideBox.animate({
                 'left' : pxValue
             })
-            this_question = parseInt( (currentSlideInput+1)/2)-1 ;
+            this_question = 2*parseInt( (currentSlideInput+1)/2)-1 ;
 
             $(".this_question").addClass("btn-default").removeClass("btn-primary") ;
             $("#question"+this_question).removeClass("btn-default").addClass("btn-primary") ;
@@ -71,7 +71,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                             { 
                                 currentSlide++ ; 
                             }
-                        transition(currentSlide, slideWidth )  ;
+                        transition(currentSlide, slideWidth  *2  )  ;
 
                    } else if (whichButton === 'prev') {
 
@@ -84,7 +84,7 @@ define(['jquery',  'bootstrap' ], function ($) {
                             { 
                                 currentSlide-- ; 
                             }
-                        transition(currentSlide, slideWidth  ) ;
+                        transition(currentSlide, slideWidth *2 ) ;
                    }
 
             });
