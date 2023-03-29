@@ -170,27 +170,56 @@ function thales_voile(index){
 }
 // fonction de construction
 function thales_papillon(index){
-    let i = 90 + Math.floor(Math.random()*5)*50;
-    let k = 400 + Math.floor(Math.random()*4)*50;
-    let j = Math.floor(Math.random()*5)*30;
+
+    let k  = Math.random()*1.2 ;
+    let delta = Math.random()*100 + 1;
+    let xA =  Math.random()*300 + 40 ;
+    let yA =  Math.random()*180 + 40 ;
+    let xB =  Math.random()*300 + 480 ;
+    let yB =  Math.random()*180 + 220 ;
+    let xC =  xA + delta ;
+    let yC =  Math.random()*180 + 220 ;
+    let xD =  k*(xA-xC) + xB ;
+    let yD =  k*(yA-yC) + yB ;
+    
+    let a = yA - yB;
+    let b = xB - xA;
+    let c = -a*xA-yA*b;
+    let m = yC - yD;
+    let n = xD - xC;
+    let p = -m*xC-yC*n;
+    
+    let xO =  (b*p-n*c)/(n*a-m*b) ;    
+    let yO =  (m*c-p*a)/(n*a-m*b) ;
+
     var canvas = document.getElementById("canvas"+index);
     var ctx = canvas.getContext("2d");
+
     ctx.beginPath();
     ctx.strokeStyle = '#000'
-    ctx.moveTo(80,80);
-    ctx.lineTo(750,400);
-    ctx.moveTo(50,350);    
-    ctx.lineTo(735,100);
+    ctx.font = '15px Arial';
+    letters = ['A','B','C','D','O','A','B','C','D','O']
+    let nletter = parseInt(Math.random()*5)
+    ctx.fillText(letters[nletter], xA-10, yA-10); 
+    ctx.fillText(letters[nletter+1], xB, yB+20); 
+    ctx.fillText(letters[nletter+2], xC, yC+20); 
+    ctx.fillText(letters[nletter+3], xD, yD-10);
+    ctx.fillText(letters[nletter+4], xO, yO-10);
+    
+    ctx.moveTo(xA,yA);    
+    ctx.lineTo(xB,yB);
+    ctx.moveTo(xC,yC);
+    ctx.lineTo(xD,yD);
     ctx.stroke();
     ctx.closePath();
     ctx.beginPath();
     ctx.strokeStyle = '#ff0000'
-    ctx.moveTo(i+j,375);    
-    ctx.lineTo(i,75);
-    ctx.moveTo(k+j,375);
-    ctx.lineTo(k,75);
-    ctx.font = '15px Arial';  
-    ctx.fillText('Les droites sont parallèles.', 20, 430);
+    ctx.moveTo(xA,yA);    
+    ctx.lineTo(xC,yC);
+    ctx.moveTo(xB,yB);
+    ctx.lineTo(xD,yD);
+  
+    ctx.fillText('Les droites rouges sont parallèles.', 20, 430);
     ctx.stroke();
 }
 // fonction d'appel

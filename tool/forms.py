@@ -181,7 +181,7 @@ class QFlashForm(forms.ModelForm):
 			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 
 
-		levels = Level.objects.filter(pk__lt=6)
+		levels = Level.objects.exclude(pk=13).order_by("ranking")
 		#teacher.levels.order_by("ranking")
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=levels, required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=False)
