@@ -1,0 +1,94 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-quizz-create','script/ajax-question-flash']);
+    </script>  
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <span class="sacado_color_text"><i class="bi bi-lightning"></i></span>  
+       Les thèmes des questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/>
+{% endblock %}
+
+
+
+{% block page_menu_right %}
+
+ 
+    <a href="{% url 'admin_create_update_mentaltitle'   0  %}" class="btn btn-new pull-right">+ Thème de savoir faire</a> 
+    <a href="{% url 'admin_create_update_mental' 0  %}" class="btn btn-new pull-right">+ Savoir faire de QF</a>  
+ 
+
+
+
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Questions flash <i class="fa fa-caret-down"></i></a>
+
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            {% for l in levels %}       
+            <li> 
+                <a href="{% url 'admin_mentals' l.id  %}">{{ l.name }}</a>
+            </li> 
+            {% endfor %}   
+        </ul>
+    </li>  
+
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <h4 class="thin">Thèmes </h4>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-sacado table-hovered standard_tab_1000"  style="width:100%" >
+                <thead> 
+                    <tr> 
+                        <th>Titre</th>
+                        <th>Niveaux</th>
+                        <th>Enseignement</th>
+                        <th>Ordre</th>
+                        <th></th>
+                    </tr> 
+                </thead>
+                <tbody>
+                    {% for m in mentaltitles %}
+                    <tr> 
+                        <td {% if not m.is_display %} style='border-left:5px solid red'{% endif %}>
+                            {{ m.title }}
+                        </td>
+                        <td>
+                            {% for l in m.levels.all %} {{l.name}}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        </td>
+                        <td>
+                            {% for s in m.subjects.all %} {{s.name}}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        </td>
+                        <td>
+                            {{ m.ranking }} 
+                        </td>
+                        <td>
+                            <a href="{%  url 'admin_create_update_mentaltitle' m.id %}" ><i class="bi bi-pencil"></i></a>
+                            <a href="{%  url 'admin_delete_mentaltitle' m.id %}"  onclick="return TestDelete('ce thème')"><i class="bi bi-trash"></i></a>                        
+                        </td>
+                    </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+</section>
+{% endblock %} 

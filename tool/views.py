@@ -1,8 +1,3 @@
-#################################
-#### Auteur : philipe Demaria 
-#### pour SACADO
-#################################
-
 from django.conf import settings # récupération de variables globales du settings.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse , FileResponse
@@ -3679,6 +3674,20 @@ def ajax_is_ia(request):
 #####################################################################################################################################
 #####################################################################################################################################
  
+@login_required(login_url= 'index')
+def admin_mentaltitles(request):
+
+    # mentals = Mental.objects.all()
+    # for mental in mentals:
+    #     levels = mental.levels.all()
+    #     mental.mentaltitle.levels.set(levels)
+
+    mentaltitles = Mentaltitle.objects.order_by("levels","ranking")#filter(levels=level)
+    return render(request, 'tool/admin_list_mentaltitle.html', { 'mentaltitles': mentaltitles   })
+
+
+
+
 
 @login_required(login_url= 'index')
 def admin_mentals(request,idl):
@@ -3723,6 +3732,7 @@ def admin_create_update_mentaltitle(request,idm):
     if request.method == "POST" :
         if form.is_valid():
             form.save()
+        return redirect('admin_mentaltitles')
     return render(request, 'tool/admin_form_mentaltitle.html', {  'form': form , 'mentaltitle' : mentaltitle , 'levels' : levels, 'idl' : idl  , 'level' : level , 'mentaltitles' : mentaltitles })
 
 
@@ -3753,6 +3763,37 @@ def admin_duplicate_mental(request,idm):
     mental.save()
     return redirect('admin_mentals', level.id )
 
+
+@csrf_exempt
+def ajax_charge_mentaltitle(request):
+
+    id_levels  = request.POST.getlist("id_levels")
+    id_subjects = request.POST.getlist("id_subjects")
+    
+    data = {}
+
+    mentaltitle_set_l = set()
+    for id_level in id_levels :
+        level = Level.objects.get(pk=id_level)
+        mentaltitle_set_l.update(  Mentaltitle.objects.values_list('id', 'title').filter(levels = level).order_by("title") )
+
+    print(mentaltitle_set_l)
+
+    mentaltitle_set_s = set()
+    for id_subject in id_subjects :
+        subject = Subject.objects.get(pk=id_subject)
+        mentaltitle_set_s.update(  Mentaltitle.objects.values_list('id', 'title').filter(subjects = subject).order_by("title") )
+
+    mentaltitle_set = mentaltitle_set_l.intersection(mentaltitle_set_s)
+
+    print(mentaltitle_set_s)
+
+
+    print(mentaltitle_set)
+
+    data['themes'] = list(mentaltitle_set)
+
+    return JsonResponse(data)
 
 
 
@@ -3800,7 +3841,6 @@ def list_questions_flash_student(request):
 
 
 
-
 @login_required(login_url= 'index')
 def create_questions_flash(request,id):
     teacher = request.user.teacher
@@ -3833,7 +3873,7 @@ def create_questions_flash(request,id):
             print(form.errors)
 
 
-    mentals = Mental.objects.filter(mentaltitle__subject__id = 1 ).order_by("mentaltitle")
+    mentals = Mental.objects.order_by("mentaltitle")
     context = {'form': form, 'teacher': teacher,  'mentals' : mentals   }
 
     return render(request, 'tool/form_question_flash.html', context)
@@ -3874,7 +3914,7 @@ def update_questions_flash(request,id):
             print(form.errors)
 
 
-    mentals = Mental.objects.filter(mentaltitle__subject__id = 1 ).order_by("mentaltitle")
+    mentals = Mental.objects.filter(subjects = quizz.subject ).order_by("mentaltitle")
     context = {'form': form, 'teacher': teacher,  'mentals' : mentals   }
 
     return render(request, 'tool/form_question_flash.html', context)
@@ -4099,7 +4139,8 @@ def ajax_select_style_questions(request):
     else :
         is_quizz = False
         all_mentals = list()
-        mentaltitles = Mentaltitle.objects.filter(subject__id = subject_id, is_display=1).order_by("ranking")
+        subject = Subject.objects.get(pk=subject_id)
+        mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
         for level_id in level_ids :
             level_dict = dict()
             level = Level.objects.get(pk=level_id)
@@ -4115,7 +4156,9 @@ def ajax_select_style_questions(request):
                     list_mentals.append(dict_mentals)
                     is_mentals = True
                     level_dict["sub"] = list_mentals
+
         all_mentals.append(level_dict)
+
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  , 'teacher' :  teacher  })
 
     return JsonResponse(data)

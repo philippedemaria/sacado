@@ -18,7 +18,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-quizz-create']);
+        require(['script/ajax-mental']);
     </script>
     {% if mental %} 
     <script>
@@ -41,7 +41,12 @@
 
 
 {% block page_menu_right %}
-     <li class="dropdown">
+
+
+    <a href="{% url 'admin_mentaltitles'      %}" class="btn btn-new pull-right"> Thème de savoir faire</a> 
+    <a href="{% url 'admin_create_update_mentaltitle'   0  %}" class="btn btn-new pull-right">+ Thème de savoir faire</a>     
+
+    <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Questions flash <i class="fa fa-caret-down"></i></a>
 
         <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
@@ -84,20 +89,18 @@
     <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
         {% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 form-group">
-                <label>Titre</label>
-                {{ form.content|add_class:"form-control" }}
-                {{ form.content.errors }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 col-md-3 form-group">
+            <div class="col-sm-4 col-md-2 form-group">
                 <label>Niveaux</label>
-                {{ form.levels|add_class:"form-control select2" }}
+                {{ form.levels|add_class:"form-control select2 onselect" }}
                 {{ form.levels.errors }}
             </div> 
-            <div class="col-sm-4 col-md-5 form-group">
-                <label>Thème </label>
+            <div class="col-sm-4 col-md-2 form-group">
+                <label>Matières</label>
+                {{ form.subjects|add_class:"form-control select2 onselect" }}
+                {{ form.subjects.errors }}
+            </div> 
+            <div class="col-sm-4 col-md-4 form-group">
+                <label>Thèmes </label>
                 {% if mental %} 
                     <a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}"><i class="bi bi-pencil"></i></a> 
                 {% else %}
@@ -106,7 +109,14 @@
                 {{ form.mentaltitle|add_class:"form-control select2"|attr:"required" }}
                 {{ form.mentaltitle.errors }}
             </div>
-            <div class="col-sm-2 col-md-2 form-group">
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-8 form-group">
+                <label>Titre</label>
+                {{ form.content|add_class:"form-control" }}
+                {{ form.content.errors }}
+            </div>
+            <div class="col-sm-3 col-md-2 form-group">
                 <label>Durée (sec.) </label>
                 {{ form.duration|add_class:"form-control"  }}
                 {{ form.duration.errors }}

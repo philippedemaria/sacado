@@ -140,6 +140,9 @@ urlpatterns = [
     ################################################################################################################ 
     ############## Questions flash
     ################################################################################################################ 
+
+    path('admin_mentaltitles', admin_mentaltitles, name='admin_mentaltitles'),
+
     path('admin_mentals/<int:idl>', admin_mentals, name='admin_mentals'),
     path('admin_create_update_mental/<int:idm>', admin_create_update_mental, name='admin_create_update_mental'),
     path('admin_delete_mental/<int:idm>', admin_delete_mental, name='admin_delete_mental'),
@@ -164,6 +167,10 @@ urlpatterns = [
  
 
     path('list_questions_flash_student', list_questions_flash_student, name='list_questions_flash_student'), 
+
+
+    path('ajax_charge_mentaltitle', ajax_charge_mentaltitle, name='ajax_charge_mentaltitle'), 
+
 
 
     ################################################################################################################ 

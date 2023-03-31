@@ -17,12 +17,20 @@
 
 {% block page_title %}
     <span class="sacado_color_text"><i class="bi bi-lightning"></i></span>  
-       Les thèmes des questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/>
+       Nouveau thème des questions flash <img src="{% static 'img/angle-right.png' %}" width="25px"/>
 {% endblock %}
 
 
 
 {% block page_menu_right %}
+
+
+
+    <a href="{% url 'admin_mentaltitles'      %}" class="btn btn-new pull-right"> Thème de savoir faire</a> 
+    <a href="{% url 'admin_create_update_mental' 0  %}" class="btn btn-new pull-right">+ Savoir faire de QF</a>  
+ 
+ 
+
 
     <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Questions flash <i class="fa fa-caret-down"></i></a>
@@ -53,15 +61,11 @@
 }
 </style>
 <section class="content_main"> 
-    <h4 class="thin">Thèmes </h4>
-
+ 
     <div class="row">
         <div class="col-sm-6">
             <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
                {% csrf_token %}
-                <div class="col-sm-12">
-                    <a href="{%  url 'admin_create_update_mentaltitle' 0 %}" ><i class="bi bi-plus-circle"></i> Nouveau thème</a>
-                </div>
                 <div class="row">
                     <div class="col-sm-12 form-group">
                         <label>Titre </label>
@@ -70,10 +74,10 @@
                     </div>
                 </div>    
                 <div class="row">
-                    <div class="col-sm-4 form-group">
+                    <div class="col-sm-7 form-group">
                         <label>Enseignement</label>
-                        {{ form.subject|add_class:"form-control select2" }}
-                        {{ form.subject.errors }}
+                        {{ form.subjects|add_class:"form-control select2" }}
+                        {{ form.subjects.errors }}
                     </div> 
                     <div class="col-sm-3 form-group">
                         <label>En ligne ?</label><br/>
@@ -85,7 +89,14 @@
                         {{ form.ranking |add_class:"form-control"  }}
                         {{ form.ranking.errors }}
                     </div>
-                </div>    
+                </div>  
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label>Niveaux</label>
+                        {{ form.levels|add_class:"form-control select2" }}
+                        {{ form.levels.errors }}
+                    </div> 
+                </div>  
                 <div class="row">
                     <div class="col-sm-12 form-group">
                         <div class="form-group">
@@ -94,37 +105,6 @@
                     </div>
                 </div>
             </form> 
-        </div>
-        <div class="col-sm-6">
-            <table class="table table-sacado table-hovered standard_tab_1000"  style="width:100%" >
-                <thead> 
-                    <tr> 
-                        <th>Titre</th>
-                        <th>Enseignement</th>
-                        <th>Ordre</th>
-                        <th></th>
-                    </tr> 
-                </thead>
-                <tbody>
-                    {% for m in mentaltitles %}
-                    <tr> 
-                        <td {% if not m.is_display %} style='border-left:5px solid red'{% endif %}>
-                            {{ m.title }}
-                        </td>
-                        <td>
-                            {{ m.subject.name }}
-                        </td>
-                        <td>
-                            {{ m.ranking }} 
-                        </td>
-                        <td>
-                            <a href="{%  url 'admin_create_update_mentaltitle' m.id %}" ><i class="bi bi-pencil"></i></a>
-                            <a href="{%  url 'admin_delete_mentaltitle' m.id %}"  onclick="return TestDelete('ce thème')"><i class="bi bi-trash"></i></a>                        
-                        </td>
-                    </tr> 
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
 </section>
 {% endblock %} 

@@ -162,10 +162,10 @@ class Qtype(models.Model):
 class Mentaltitle(models.Model):
     """ Modèle représentant un associé. """
     title      = models.CharField(max_length=255,   verbose_name="Titre")
-    subject    = models.ForeignKey(Subject, related_name="mentaltitles", blank=True, null = True,  on_delete=models.CASCADE) 
+    subjects   = models.ManyToManyField(Subject, related_name="mentaltitles", blank=True ) 
     ranking    = models.PositiveIntegerField(default=0,   ) 
     is_display = models.BooleanField(default=0, verbose_name="En ligne ?")
-
+    levels     = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
 
     def __str__(self):
         return self.title
@@ -173,16 +173,17 @@ class Mentaltitle(models.Model):
 
 class Mental(models.Model):
     """ Modèle représentant un associé. """
-    content     = models.CharField(max_length=255,   verbose_name="Contenu")
-    html        = models.TextField(blank=True, null = True,  verbose_name="Html éventuel")
-    variables   = models.CharField(max_length=255, blank=True, null = True,  verbose_name="Variables")
-    script      = models.TextField( blank=True, null = True,  verbose_name="Python éventuel")
-    jquery      = models.CharField( max_length=255, blank=True, null = True,  verbose_name="Jquery éventuel")
-    is_display  = models.BooleanField(default=0, verbose_name="En ligne ?")
-    mentaltitle = models.ForeignKey(Mentaltitle, related_name="mentals", blank=True, null = True,  on_delete=models.CASCADE) 
-    ranking     = models.PositiveIntegerField(default=0,   ) 
-    levels      = models.ManyToManyField(Level, related_name="mentaltitles", blank=True)
-    duration    = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
+    content      = models.CharField(max_length=255,   verbose_name="Contenu")
+    html         = models.TextField(blank=True, null = True,  verbose_name="Html éventuel")
+    variables    = models.CharField(max_length=255, blank=True, null = True,  verbose_name="Variables")
+    script       = models.TextField( blank=True, null = True,  verbose_name="Python éventuel")
+    jquery       = models.CharField( max_length=255, blank=True, null = True,  verbose_name="Jquery éventuel")
+    is_display   = models.BooleanField(default=0, verbose_name="En ligne ?")
+    mentaltitle  = models.ForeignKey(Mentaltitle, related_name="mentals" , default="" , on_delete=models.CASCADE)
+    ranking      = models.PositiveIntegerField(default=0,   ) 
+    levels       = models.ManyToManyField(Level, related_name="mentals", blank=True)
+    duration     = models.PositiveIntegerField(default=20, blank=True, verbose_name="Durée")
+    subjects     = models.ManyToManyField(Subject, related_name="mentals" ) 
 
     def __str__(self):
         return self.content

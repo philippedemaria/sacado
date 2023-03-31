@@ -24,8 +24,26 @@
 
 
 {% block page_menu_right %}
-    <a href="{% url 'admin_create_update_mentaltitle' 0   %}" class="btn btn-new pull-right">+ Thème de savoir faire</a> 
+ 
+
+    <a href="{% url 'admin_create_update_mentaltitle'   0  %}" class="btn btn-new pull-right">+ Thème de savoir faire</a> 
     <a href="{% url 'admin_create_update_mental' 0  %}" class="btn btn-new pull-right">+ Savoir faire de QF</a>  
+ 
+
+
+
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-new"> Questions flash <i class="fa fa-caret-down"></i></a>
+
+        <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+            {% for l in levels %}       
+            <li> 
+                <a href="{% url 'admin_mentals' l.id  %}">{{ l.name }}</a>
+            </li> 
+            {% endfor %}   
+        </ul>
+    </li> 
+
 
 {% endblock %}
 
@@ -73,7 +91,7 @@
 
                         {% for mental in mt.list %}
                         <tr id="{{mt.grouper.id}}" class="opener_k opened{{ mt.grouper.id }} out"  id="{{ mental.id}}">
-                          <td {% if not mental.is_display %} style='border-left:5px solid red'{% endif %}>
+                            <td {% if not mental.is_display %} style='border-left:5px solid red'{% endif %}>
                                 <a href="{% url 'admin_create_update_mental' mental.id %}">
                                 {% if mental.test %}
                                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-sign-stop" viewBox="0 0 16 16">
@@ -86,26 +104,26 @@
                                 {% if not mental.html  %}<img src="{% static 'img/html.png' %}" style='width:15px' /> {% endif %}
                                 {{ mental.content }}
                                 </a>
-
-                                <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right"  onclick="return TestDelete('ce savoir faire')"><i class="fa fa-trash"></i></a>
+                                <a href="{%  url 'admin_test_mental' mental.id %}" class="pull-right text-green_index" title="Tester le diaporama des QF"><i class="bi bi-pip"></i></a>
+                                <a href="{%  url 'admin_test_mental_print' mental.id %}" class="pull-right text-green_index" style="padding-right:10px"  title="Tester l'impression des QF"><i class="bi bi-file-pdf"></i></a>
+                                <a href="{%  url 'admin_delete_mental' mental.id %}" class="pull-right" style="padding-right:10px"  onclick="return TestDelete('ce savoir faire')"><i class="fa fa-trash"></i></a>
                                 <a href="{%  url 'admin_duplicate_mental' mental.id %}" class="pull-right" style="padding-right:10px" ><i class="bi bi-clipboard-plus"></i></a>
                                 {% if mental.script != "" %}<span class="pull-right" style="padding-right:10px"><img src="{% static 'img/python_logo.png' %}" style='width:15px' /></span>{% endif %}
                                 {% if mental.html  %}<span class="pull-right" style="padding-right:10px"><img src="{% static 'img/html.png' %}" style='width:15px' /></span>{% endif %}
-                          </td>
-                          <td>
-                                {{ mental.mentaltitle.subject.shortname }} 
-                                <a href="{%  url 'admin_test_mental' mental.id %}" class="text-green_index" title="Tester le diaporama des QF"><i class="bi bi-pip"></i></a>
-                                <a href="{%  url 'admin_test_mental_print' mental.id %}" class="text-green_index" title="Tester l'impression des QF"><i class="bi bi-file-pdf"></i></a>
-                               
-                          </td>
-                          <td>     
+                            </td>
+                            <td>
+                                {% for s in mental.subjects.all %}
+                                      {{ s.shortname }}{% if not forloop.last %}, {% endif %} 
+                                {% endfor %}                                    
+                            </td>
+                            <td>     
                                 {% for l in mental.levels.all %}                 
                                     {{ l.shortname  }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %} 
-                          </td> 
-                          <td>
-                                {{ mental.ranking }} 
-                          </td>
+                            </td> 
+                            <td>
+                                  {{ mental.ranking }} 
+                            </td>
                         </tr>                    
                         {% endfor %}
                     {% endfor %}
