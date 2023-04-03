@@ -411,15 +411,16 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         these_groups = Group.objects.filter(school = school, name = name )
                         for group in these_groups :
                             school_groups.append ( group )
-                        group_is_exist = True
-                    except : group_is_exist = False
+                            grp = group
+                        if these_groups.count() == 0 : level_id = 6
+                        else : level_id = grp.level.id
+                    except : 
+                        level_id = 6
  
                 user, created = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : 0 , "password" : password , "time_zone" : time_zone ,  "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,"country" : country , })
-                if group_is_exist : 
-                    student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : group.level })
-                else : 
-                    level = Level.objects.get(pk=6)
-                    student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+                level = Level.objects.get(pk=level_id)
+                student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
+
                 
                 try :
                     f = open('/var/www/sacado/logs/gar_connexions.log','a')

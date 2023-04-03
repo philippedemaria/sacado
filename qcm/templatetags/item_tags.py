@@ -7,6 +7,13 @@ from sendmail.models import Communication
 import re
 
 
+
+@register.filter
+def create_slug(arg, slug):
+    return "{}-{}".format(arg, slug)
+    
+
+
 @register.filter
 def add_parameters(arg, index):
     '''Modifie les paramètres aléatoires pour les questions flash'''

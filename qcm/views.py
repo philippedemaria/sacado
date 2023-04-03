@@ -4690,7 +4690,8 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 
     for studentanswer_id in  studentanswer_ids : 
         studentanswer = Studentanswer.objects.get(pk=studentanswer_id)
-        coefficient = Relationship.objects.get(exercise = studentanswer.exercise , parcours = studentanswer.parcours  ).coefficient
+        try : coefficient = Relationship.objects.get(exercise = studentanswer.exercise , parcours = studentanswer.parcours  ).coefficient
+        except : coefficient = 1
         duration += int(studentanswer.secondes)
         score += int(studentanswer.point)
         score_coeff += int(studentanswer.point)*coefficient
@@ -6328,10 +6329,7 @@ def admin_list_supportfiles(request,id):
     user = request.user
     teacher = Teacher.objects.get(user=user)
     if user.is_superuser or user.is_extra :  # admin and more
-
-        teacher = Teacher.objects.get(user=user)
         level = Level.objects.get(pk=id)
-
         waitings = level.waitings.filter(theme__subject__in= teacher.subjects.all()).order_by("theme__subject" , "theme")
  
     return render(request, 'qcm/list_supportfiles.html', { 'waitings': waitings, 'teacher':teacher , 'level':level , 'relationships' : [] , 'communications' : [] , 'parcours' :  None })

@@ -207,4 +207,9 @@ urlpatterns = [
     path('delete_visiocopie/<int:id>', delete_visiocopie, name='delete_visiocopie'),
     path('show_quizz_student/<int:idgq>', show_quizz_student, name='show_quizz_student'), 
 
+
+    ################################################################################################################ 
+    ############## Les SF du BO
+    ################################################################################################################ 
+    path('list_sf_bo/<slug:slug>', list_sf_bo, name='list_sf_bo'), 
 ] 

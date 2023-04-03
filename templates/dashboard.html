@@ -749,7 +749,13 @@
             <a href="#" id="closeTools" class="pull-right"> <i class="fa fa-times"></i></a>
             <h1 class='sacado'>Mes outils péda.</h1>
         </div>
-    </div>    
+    </div>   
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{%  url 'list_sf_bo' 0 %}" {% if request.session.subtdb == 'BO' %} class="active_selected"{% endif %}   >les savoir faire du BO </a>
+        </div>
+    </div>
     <hr/>
     <div class="row">
         <div class="col-lg-12 col-xs-12">

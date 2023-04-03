@@ -129,7 +129,7 @@ def all_datas_qia(level):
 ####    tool
 #####################################################################################################################################
 #####################################################################################################################################
-
+ 
  
 @login_required(login_url= 'index') 
 def list_tools(request):
@@ -4241,3 +4241,34 @@ def delete_visiocopie(request, id):
     
 
  
+#####################################################################################################################################
+#####################################################################################################################################
+####    les SF du BO
+#####################################################################################################################################
+#####################################################################################################################################
+def list_sf_bo(request,slug): 
+
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "BO"
+
+    try : ids, idl = slug.split("-")
+    except : idl = False
+
+    user = request.user    
+    teacher = Teacher.objects.get(user=user)
+    subjects = teacher.subjects.all()
+    levels =  Level.objects.exclude(pk=13)
+
+
+    if idl : 
+        level = Level.objects.get(pk=idl)
+        subject = Subject.objects.get(pk=ids)
+        waitings = level.waitings.filter(theme__subject= subject).order_by("theme__subject" , "theme")
+    else :
+        level , subject = False , False
+        waitings =""
+
+
+    context = {'waitings': waitings , 'teacher':teacher , 'level':level , 'subject':subject  , 'levels':levels , 'subjects':subjects   }
+
+    return render(request, 'tool/list_sf_bo.html', context)

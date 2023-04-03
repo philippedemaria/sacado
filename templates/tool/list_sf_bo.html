@@ -1,0 +1,80 @@
+{% extends 'dashboard.html' %}
+
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-supportfile']);
+    </script> 
+
+
+{% endblock %} 
+
+  
+{% block page_title %}
+     Les savoir faire par niveau<img src="{% static 'img/angle-right.png' %}"/> {{ level.name }}
+{% endblock %}
+
+{% block page_menu_right %}
+    <a href="{% url 'list_sf_bo' 0 %}" class="btn btn-default" >Liste des niveaux</a>
+{% endblock %}
+
+
+{% block body %}
+<section class="content_container">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            {% if level %}
+                <table class="table table-hover display1000" style="width:100%;" >
+                    <thead> 
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead> 
+                    <tbody>  
+                        {% regroup waitings by theme as theme_list %}
+                        {% for theme in theme_list  %} 
+                            <tr style="background:#5d4391; color:white">
+                                <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td> 
+                            </tr> 
+                            {% for waiting in theme.list  %}
+                                <tr style="background:#aa98cd; cursor: pointer; color: white" class="opener out"  id="{{ waiting.id }}">
+                                    <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name}}  </td> 
+                                </tr>  
+                                {% for knowledge in waiting.knowledges.all  %}
+                                    <tr style="background:#d4cbe6; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.id }} out"  id="{{ knowledge.id}}"> 
+                                        <td>
+                                            {{ knowledge.name|capfirst }} 
+                                        </td>
+                                    </tr>
+                                {% endfor %}  
+                            {% endfor %}
+                        {% endfor %}  
+                    </tbody>
+                </table>
+            {% else %}
+
+                {% for s in subjects %}
+                    <h3 class="thin"> {{ s.name }}. <small>Sélectionner un niveau</small></h3>
+                    {% for l in levels %}
+                        {% with slug=s.id|create_slug:l.id %}
+                        <a href="{% url 'list_sf_bo'  slug %}" class="btn btn-sacado" >{{ l.shortname }}</a>
+                        {% endwith %}
+                    {% endfor %}
+                    <hr/>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div> 
+</section>
+{% endblock %}                        
+
+ 
+
+ 
