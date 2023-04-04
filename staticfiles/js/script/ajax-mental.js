@@ -43,8 +43,10 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
                                         'value': Number(themes_id),
                                         'html': themes_name
                                     });
-                                    $('select[name=mentaltitle]').html("").append(option);
+
+                                $('select[name=mentaltitle]').append(option);    
                                 }
+
                         }
                         else
                         {
