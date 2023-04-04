@@ -507,7 +507,7 @@ urlpatterns = [
     path('ajax_course_custom_show_shared', ajax_course_custom_show_shared, name='ajax_course_custom_show_shared'), 
 
 
-    path('all_courses', all_courses, name='all_courses'), 
+    path('all_courses/0', all_courses, name='all_courses'), 
      
 
 

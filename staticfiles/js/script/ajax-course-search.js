@@ -11,12 +11,9 @@ define(['jquery', 'bootstrap'], function ($) {
 
             let search_list = $("#search_list").val();
 
-            if (search_list == "yes") {
-                url = "../ajax/chargethemes"
-            }
-            else {
-                url = "ajax/chargethemes"
-            }
+
+            url = "../ajax/chargethemes"
+
 
 
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
@@ -114,12 +111,8 @@ define(['jquery', 'bootstrap'], function ($) {
             
             let search_list = $("#search_list").val();
 
-            if ( search_list == "yes" ) {
-                url = "../ajax_course_custom_show_shared" ;
-            }
-            else {
-                url = "ajax_course_custom_show_shared";
-            }
+            url = "../ajax_course_custom_show_shared" ;
+
 
             $.ajax(
                     {
@@ -166,8 +159,7 @@ define(['jquery', 'bootstrap'], function ($) {
             let all_parcours = $(this).attr("data-all_parcours");
             let this_url = $("#this_url").val();
 
-            if (this_url == "all") { url = "parcours_get_course"} 
-            else { url = "../parcours_get_course"}
+            url = "../parcours_get_course"
 
 
             $.ajax(
