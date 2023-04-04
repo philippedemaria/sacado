@@ -92,13 +92,13 @@
                             {% endfor %}
                         </div>
                     </td>
-                    <td style="width:200px">
+                    <td>
                         <a href="{% url 'show_questions_flash' q.id %}" title="Projeter les questions"><i class="bi bi-webcam"></i></a>
  
                         <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ q.title }}"  data-idq="{{ q.id }}"  class="quizz_to_pdf_modal"  title="Télécharger les questions en pdf"><i class="bi bi-file-pdf"></i>    </a>
 
                     </td>
-                    <td style="width:150px;">
+                    <td>
                         {% if q.is_numeric %}
                         <a href="{% url 'result_quizz' q.id 0 %}" title="Résultats des questions"><i class="fa fa-trophy"></i></a>
                             <a href="{% url 'goto_quizz_numeric' q.id %}" target='_blank' title="Voir le test - Nouvel onglet"><i class="bi bi-laptop"></i></a>
@@ -115,10 +115,7 @@
                     </td>
                     <td>
                         <div class="btn-group no_padding_margin" >
-
-                            <a href="#" class="btn btn-default qpublisher" id="qpublisher{{q.id}}" data-quizz_id="{{q.id}}">  
-                                <i class="fa fa-circle-o-notch"></i>
-                            </a><span class="btn btn-{% if  q.is_publish %}success{% else  %}danger{% endif  %}" id="quizz{{q.id}}" style="cursor:auto;display:inline;padding:3px 6px"  >  
+                            <span class="btn btn-{% if  q.is_publish %}success{% else  %}danger{% endif  %}" id="quizz{{q.id}}" style="cursor:auto;display:inline;padding:3px 6px"  >  
                               {% if q.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
                             </span>
                         </div>
