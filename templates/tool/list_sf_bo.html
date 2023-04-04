@@ -67,6 +67,33 @@
                         <a href="{% url 'list_sf_bo'  slug %}" class="btn btn-sacado" >{{ l.shortname }}</a>
                         {% endwith %}
                     {% endfor %}
+                    {% if s.id == 1 %}
+                        <h3 class="thin">    Repères de progressivité : 
+                           <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/2/02-Maths-CP-attendus-eduscol_1114732.pdf" target="_blank" class="btn btn-sacado" > CP</a>
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/4/04-Maths-CE1-attendus-eduscol_1114734.pdf" target="_blank" class="btn btn-sacado" > CE1</a>
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/6/06-Maths-CE2-attendus-eduscol_1114736.pdf" target="_blank" class="btn btn-sacado" > CE2</a>
+
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/73/8/08-Maths-CM1-attendus-eduscol_1114738.pdf" target="_blank" class="btn btn-sacado" >CM1</a>
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/0/10-Maths-CM2-attendus-eduscol_1114740.pdf" target="_blank" class="btn btn-sacado" >CM2</a>
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/2/12-Maths-6e-attendus-eduscol_1114742.pdf" target="_blank" class="btn btn-sacado" >6<sup>ème</sup></a> 
+
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/4/14-Maths-5e-attendus-eduscol_1114744.pdf" target="_blank" class="btn btn-sacado" >5<sup>ème</sup></a> 
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/6/16-Maths-4e-attendus-eduscol_1114746.pdf" target="_blank" class="btn btn-sacado" >4<sup>ème</sup>  </a>
+
+                            <a href="https://cache.media.eduscol.education.fr/file/Attendus_et_reperes_C2-3-4/74/8/18-Maths-3e-attendus-eduscol_1114748.pdf" target="_blank" class="btn btn-sacado" >3<sup>ème</sup> </a>
+                        </h3>
+
+
+
+ 
+                    {% endif %}
                     <hr/>
                 {% endfor %}
             {% endif %}
