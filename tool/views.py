@@ -3991,7 +3991,7 @@ def admin_test_mental(request,id):
     request.session["subtdb"] = "QFlash"
     mental = Mental.objects.get(pk=id)
  
-    quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = mental.mentaltitle.subject ,
+    quizz = Quizz.objects.create(title = "Question_Flash_Admin", teacher = teacher, color = '#5d4391', subject = teacher.subjects.first() ,
                                  is_questions = 1, is_random = 1,nb_slide = 10,is_result =1 , is_result_final = 1,is_archive = 0,interslide = 2)
 
     quizz.levels.set(mental.levels.all())
