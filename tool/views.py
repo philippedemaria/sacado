@@ -3677,12 +3677,7 @@ def ajax_is_ia(request):
 @login_required(login_url= 'index')
 def admin_mentaltitles(request):
 
-    # mentals = Mental.objects.all()
-    # for mental in mentals:
-    #     levels = mental.levels.all()
-    #     mental.mentaltitle.levels.set(levels)
-
-    mentaltitles = Mentaltitle.objects.order_by("levels","ranking")#filter(levels=level)
+    mentaltitles = Mentaltitle.objects.order_by("ranking")#filter(levels=level)
     return render(request, 'tool/admin_list_mentaltitle.html', { 'mentaltitles': mentaltitles   })
 
 
