@@ -1,6 +1,6 @@
 function these_colors(){
-    colors = ["orangered","sienna","brown","sienna","orangered","orangered","orangered","ivdarkkhaki","darkseagreen","royalblue","navy","royalblue"] 
-    bgcolors = ["tomato","salmon","coral","lightcoral","linen","bisque","blanchedalmond","ivory","honeydew","seashell","peachpuff","lightsteelblue"]
+    colors = ["sienna","sienna","brown","sienna","orangered","orangered","orangered", "darkseagreen","royalblue","navy","royalblue"] 
+    bgcolors = ["tomato","salmon","coral","lightcoral","linen","bisque","blanchedalmond", "honeydew","seashell","lightsteelblue","lightsteelblue"]
 
     max = colors.length ;
     let i = Math.floor(Math.random() * max);
