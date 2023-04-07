@@ -33,7 +33,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        $('#submit_button_relation').on('click', function (event) {
+        $('#submit_button_this_relation').on('click', function (event) {
 
           var grade = ggb_applet_container.getValue("grade");
           var numexo = ggb_applet_container.getValue("numexo");

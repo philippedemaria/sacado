@@ -9,9 +9,9 @@
 		 		{% if available.is_ok %} 
  				
 				 		{% if parcours.is_stop  %}  
-				    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_evaluation"  value="Passer à l'exercice suivant"  />
+				    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_this_relation"  value="Passer à l'exercice suivant"  />
 						 {% else %} 
-				    		<input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer l'exercice"  />
+				    		<input  class="btn btn-primary"   type="submit" id="submit_button_this_relation"  value="Enregistrer l'exercice"  />
 						{% endif %}
  
 
@@ -22,7 +22,7 @@
 {% else %}
 
     <input  class="btn btn-primary"   
-    		type="submit"  id="submit_button_relation"  value="Enregistrer l'exercice"  />
+    		type="submit"  id="submit_button_this_relation"  value="Enregistrer l'exercice"  />
 {% endif %}
 
 

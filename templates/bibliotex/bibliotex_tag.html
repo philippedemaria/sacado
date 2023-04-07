@@ -4,10 +4,35 @@
            
  
 <div  class="box box-widget widget-user-2 sorter_bibliotex"  data-id="{{ bibliotex.id }}"
-      style="cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}background-color:{{bibliotex.color }};">
+      style="cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}">
     <div class="handler widget-user-header">
         <!-- Add signet to folder -->
  
+        <img src="{% static 'img/bibliotex_fond.jpg' %}" width='50px'/>
+        <div>
+            <a href="{% url 'show_bibliotex' bibliotex.id  %}" style="font-size:15px;font-weight:600" >             
+                {% if bibliotex.title|length > 26 %}
+                <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
+                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                </span>
+                {% elif bibliotex.title|length > 22 %}
+                    {{ bibliotex.title|truncatechars:"22"}}
+                {% else %}
+                    {{ bibliotex.title}}
+                {% endif %}
+            </a>   
+        </div>
+
+
+        <div class="exo_tex_scrollbar">     
+            {% for e in  bibliotex.exotex.all %}
+                <li class="list_exotex_in_tag"><span style="color:#222">{{ e.title }}</span></li>
+            {% endfor %}
+ 
+        </div> 
+
+
+
 
 
         <div class="group_show  no_visu_on_load" id="group_show{{bibliotex.id }}"> 
@@ -31,8 +56,6 @@
                     <b>Savoir faire ciblés</b>
                 </div> 
             </div>
-
-     
             {% for k in bibliotex.knowledges %}
             <div class="row"> 
                 <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
@@ -45,7 +68,6 @@
                     <b>compétences ciblées</b>
                 </div> 
             </div>
-            
             <div class="row"> 
                 <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
                     {% for s in bibliotex.skills %}
@@ -58,29 +80,25 @@
 
 
         <!-- Fenetre des options -->
-
         <div class="group_show  no_visu_on_load" id="bibliotex_options{{bibliotex.id }}"> 
-            <div class="row extend"> 
+            <div class="row extend" align="center"> 
                 <div class="col-lg-6 col-xs-6">
-                    <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit"><i class="bi bi-printer"></i> 
-                        <span class="label_icon">Imprimer</span>
+                    <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit" title="Imprimer"><i class="bi bi-printer"></i> 
                     </a>
                 </div>
                 <div class="col-lg-6 col-xs-6">
-                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit"  ><i class="bi bi-plus-circle-dotted"></i> <span class="label_icon">Exercices</span></a> 
+                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit" title="Ajouter des exercices" ><i class="bi bi-plus-circle-dotted"></i>  </a> 
                 </div> 
-
             </div>
 
-            <div class="row extend"> 
+            <div class="row" align="center">  
                 <div class="col-lg-6 col-xs-6">
-                    <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit"  ><i class="bi bi-person"></i> <span class="label_icon">Individualiser</span></a> 
+                    <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit" title="Individualiser" ><i class="bi bi-person"></i> </a> 
                 </div>
                 <div class="col-lg-6 col-xs-6">
-                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="bi bi-clouds"></i> <span class="label_icon">Dupliquer</span></a> 
+                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Dupliquer" ><i class="bi bi-clipboard-plus"></i> </a> 
                 </div>
             </div>
-
         </div>
         <!-- ================================ -->
 
@@ -103,9 +121,10 @@
                 </a>
                 <div class="btn-group"  style="padding:0px;margin:0px;">
                     <span style="cursor:pointer" class="btn btn-default btn-publisher publisher" id="publisher{{bibliotex.id}}" 
-                            data-bibliotex_id="{{bibliotex.id}}" data-statut="{{bibliotex.is_publish }}">  
+                            data-bibliotex_id="{{bibliotex.id}}" data-statut="{{ bibliotex.is_publish }}">  
                         <i class="fa fa-circle-o-notch"></i>
-                    </span><span class="legend-btn legend-btn-{% if not bibliotex.is_publish %}danger{% else  %}success{% endif  %} size15" id="bibliotex_publisher{{bibliotex.id}}" style="cursor:auto" >  
+                    </span>
+                    <span class="legend-btn legend-btn-{% if not bibliotex.is_publish %}danger{% else  %}success{% endif  %} size15" id="bibliotex_publisher{{bibliotex.id}}" style="cursor:auto" >  
                       {% if bibliotex.is_publish %} Publié  {% else %} Non publié {% endif  %} 
                     </span>
                 </div>
@@ -119,20 +138,8 @@
         </div>
 
 
-        <div class="box_title_vignette"  style="padding:4px; opacity:0.95;background-color:{{bibliotex.color }};font-weight: 100">
+ 
 
-            <a href="{% url 'show_bibliotex' bibliotex.id  %}"  style="color:{{ bibliotex.color|contrast_color }};" >             
-                {% if bibliotex.title|length > 26 %}
-                <span class="helper_tip" style=" font-size:16px;">{{ bibliotex.title|truncatechars:"26" }}
-                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
-                </span>
-                {% elif bibliotex.title|length > 22 %}
-                    {{ bibliotex.title|truncatechars:"22"}}
-                {% else %}
-                    {{ bibliotex.title}}
-                {% endif %}
-            </a>    
-        </div>
     </div>
 
     <!-- box-footer DES FONCTIONNALITES  -->
@@ -141,33 +148,28 @@
 
     <div class="box-footer" style="position: relative; padding-top: 0px;">
  
-        <div class="row dossier"  style="padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;"> 
-            <div class="col-xs-12 col-md-12 col-lg-12"> 
-                <a href="javascript: void(0)" data-bibliotex_id="{{ bibliotex.id}}" class="open_options_bibliotex pull-right" title="Ouvrir les options" >
-                    <i class="fa fa-ellipsis-v" style="font-size:16px;padding-top: 5px;"></i>
-                </a>
-                {{  bibliotex.relationtex.nb_exotexs }} exercices dont {{ bibliotex.relationtex.nb_exotexs_published }} publié{{ bibliotex.relationtex.nb_exotexs_published|pluralize }} 
-                {% if    bibliotex.relationtex.care %} 
-                    <i class="fa fa-circle text-danger" style="font-size:8px"></i>
-                {% endif %}  
-            </div>
-        </div>
+ 
 
-        <div class="row extend"> 
-           <div class="col-lg-4 col-xs-4">
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" ><i class="bi bi-gear"></i> <span class="label_icon">Config.</span>  </a> 
+        <div class="row"> 
+           <div class="col-lg-3 col-xs-3">
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Configuration"><i class="bi bi-gear"></i>   </a> 
             </div>
 
-            <div class="col-lg-4 col-xs-4">
-                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"><i class="bi bi-people"></i>  <span class="label_icon">Groupes</span>
+            <div class="col-lg-3 col-xs-3">
+                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"  title="Groupes attribués"><i class="bi bi-people"></i> </span>
                 </span>
             </div> 
 
 
              
-            <div class="col-lg-4 col-xs-4">
-                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="bi bi-mortarboard"></i>  <span class="label_icon">Compéten.</span>
+            <div class="col-lg-3 col-xs-3">
+                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"  title="Compétences et savoir faire"><i class="bi bi-c-circle"></i> 
                 </span>
+            </div> 
+            <div class="col-lg-3 col-xs-3">
+                <a href="javascript: void(0)" data-bibliotex_id="{{ bibliotex.id}}" class="edit open_options_bibliotex pull-right" title="Ouvrir les options" >
+                    <i class="fa fa-ellipsis-v" style="font-size:14px;padding-top: 2px;"></i>
+                </a>
             </div> 
         </div>
 

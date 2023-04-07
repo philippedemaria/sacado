@@ -3772,7 +3772,7 @@ def ajax_charge_mentaltitle(request):
         level = Level.objects.get(pk=id_level)
         mentaltitle_set_l.update(  Mentaltitle.objects.values_list('id', 'title').filter(levels = level).order_by("title") )
 
-    print(mentaltitle_set_l)
+ 
 
     mentaltitle_set_s = set()
     for id_subject in id_subjects :
@@ -3781,10 +3781,7 @@ def ajax_charge_mentaltitle(request):
 
     mentaltitle_set = mentaltitle_set_l.intersection(mentaltitle_set_s)
 
-    print(mentaltitle_set_s)
-
-
-    print(mentaltitle_set)
+ 
 
     data['themes'] = list(mentaltitle_set)
 

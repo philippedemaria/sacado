@@ -617,19 +617,71 @@ a.no_decoration:hover{
 /*********************   pop up tag   **************************************/
 /***************************************************************************/
 
- .widget-user-header .group_show{
+.sorter_bibliotex{
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border-top: 0px solid #d2d6de;
+    padding: 0px;
+    width: 130px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    float: left;
+    margin: 0px 31px 36px 5px;
+    height: 180px;
+}
+
+
+.sorter_bibliotex .widget-user-header {
+    padding: 0px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    height: 155px;
+    position: relative;
+    width: 100%;
+}
+
+
+.sorter_bibliotex .box_title_vignette {
+    position: absolute;
+    top: 105px;
+    font-size: 14px;
+    padding-left: 5px;
+    padding-bottom: 0px;
+    font-weight: 800;
+    z-index: 50;
+    width: 100%;
+    left: 0;
+    opacity: 0.95;
+}
+
+.skill_knowledge_bibliotex_title {
+    font-size: 12px;
+    font-variant-caps: small-caps;
+    color: #0093CA;
+    font-weight: normal;
+}
+
+.widget-user-header .group_show{
   position: absolute;
   top:0px;
   left:0px;
-  font-size: 16px;
+  font-size: 12px;
   border-radius:2px;
-  width:310px;
+  width:130px;
   padding: 10px;
   background-color:#FFF;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
   z-index:60;
 }
 
+.widget-user-header .group_show label {
+    display: inline-block;
+    max-width: 100%;
+    font-weight: normal;
+    font-size: 12px; 
+}
 
 
 .ia_options{
@@ -646,6 +698,43 @@ a.no_decoration:hover{
 .remove_more, .remove_sub_more {
   cursor: pointer ;
 }
+
+.sorter_bibliotex:hover .disc{
+  position: absolute;
+  top:2px;
+  right: 2px;
+  font-size: 20px;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  padding: 4px 5px;
+  color:#FFF;
+  z-index: 1;
+  opacity: 0.9;
+  display: block;
+}
+
+
+.exo_tex_scrollbar::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+.exo_tex_scrollbar::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
+}
+.exo_tex_scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.exo_tex_scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+
+
 /***************************************************************************/
 /*********************       btn      **************************************/
 /***************************************************************************/
@@ -2070,6 +2159,19 @@ input[type=range].form-range {
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
+
+
+
+.list_exotex_in_tag{
+    list-style-type: square;
+    color : #007bc9;
+    font-size:11px;
+}
+
+
+
+
+
 
 /* General Links */
 a.select_correction {
