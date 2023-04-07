@@ -157,7 +157,10 @@ urlpatterns = [
     path('admin_delete_test_mental', admin_delete_test_mental, name='admin_delete_test_mental'), 
 
     path('list_questions_flash', list_questions_flash, name='list_questions_flash'), 
-    path('create_questions_flash/<int:id>', create_questions_flash, name='create_questions_flash'),
+    path('list_questions_flash_sub/<int:idl>', list_questions_flash_sub, name='list_questions_flash_sub'), 
+
+
+    path('create_questions_flash/<int:idl>', create_questions_flash, name='create_questions_flash'),
     path('duplicate_questions_flash/<int:id>', duplicate_questions_flash, name='duplicate_questions_flash'),
     path('update_questions_flash/<int:id>', update_questions_flash, name='update_questions_flash'),
     path('delete_questions_flash/<int:id>', delete_questions_flash, name='delete_questions_flash'),

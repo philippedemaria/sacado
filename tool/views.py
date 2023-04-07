@@ -3798,17 +3798,38 @@ def list_questions_flash(request):
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
 
+    teacher = request.user.teacher     
+    levels = teacher.levels.order_by("ranking") 
+    delete_session_key(request, "quizz_id")
+    return render(request, 'tool/list_questions_flash.html', { 'levels': levels , 'teacher': teacher   })
 
+
+
+
+
+@login_required(login_url= 'index')
+def list_questions_flash_sub(request,idl):
+
+    request.session["parcours_id"] = False
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
+
+    level = Level.objects.get(pk=idl)
     teacher = request.user.teacher 
-    quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, folders=None).order_by("levels","-id") # non inclus dans un dossier, 
+    quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, levels = level , folders=None).order_by("levels","-id") # non inclus dans un dossier, 
     delete_session_key(request, "quizz_id")
 
-    grps = teacher.groups.filter(is_hidden=0)
+    grps = teacher.groups.filter(is_hidden=0, level  = level)
     shared_grps_id = teacher.teacher_sharingteacher.values_list("group_id", flat=True) 
-    sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
+    sgps    = Group.objects.filter(pk__in=shared_grps_id, level  = level,is_hidden=0) 
     groupes =  grps | sgps
     groups  = groupes.order_by("level__ranking") 
-    return render(request, 'tool/list_questions_flash.html', { 'quizzes': quizzes , 'teacher': teacher , 'groups': groups })
+    return render(request, 'tool/list_questions_flash_sub.html', { 'quizzes': quizzes , 'teacher': teacher , 'groups': groups , 'level' : level })
+
+
+
+
+
 
 
 
@@ -3834,11 +3855,35 @@ def list_questions_flash_student(request):
 
 
 @login_required(login_url= 'index')
-def create_questions_flash(request,id):
+def create_questions_flash(request,idl):
     teacher = request.user.teacher
+
+    level = Level.objects.get(pk=idl)
+
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
+
+    all_mentals = list()
+    subject = Subject.objects.get(pk=1)
+    mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
+ 
+    level_dict = dict()
+ 
+    level_dict["level"] = level 
+    list_mentals = list()
+    for mentaltitle in mentaltitles :
+        dict_mentals = dict()
+        mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+        is_mentals = False 
+        if mentals :
+            dict_mentals["mentaltitle"] = mentaltitle 
+            dict_mentals["mentals"] = mentals
+            list_mentals.append(dict_mentals)
+            is_mentals = True
+            level_dict["sub"] = list_mentals
+
+    all_mentals.append(level_dict)
 
     if request.method == "POST":
         if form.is_valid():
@@ -3860,13 +3905,13 @@ def create_questions_flash(request,id):
                 mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
                 nf.mentaltitles.set( mentaltitles )  
 
-            return redirect('list_questions_flash')
+            return redirect('list_questions_flash_sub' , idl)
         else:
             print(form.errors)
 
 
     mentals = Mental.objects.order_by("mentaltitle")
-    context = {'form': form, 'teacher': teacher,  'mentals' : mentals   }
+    context = {'form': form, 'teacher': teacher,  'all_mentals' : all_mentals  , 'level' : level }
 
     return render(request, 'tool/form_question_flash.html', context)
 
@@ -3876,6 +3921,34 @@ def create_questions_flash(request,id):
 def update_questions_flash(request,id):
     teacher = request.user.teacher
     quizz   = Quizz.objects.get(pk=id)
+
+    all_mentals = list()
+    subject = Subject.objects.get(pk=subject_id)
+    mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
+    for level_id in level_ids :
+        level_dict = dict()
+        level = Level.objects.get(pk=level_id)
+        level_dict["level"] = level 
+        list_mentals = list()
+        for mentaltitle in mentaltitles :
+            dict_mentals = dict()
+            mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+            is_mentals = False 
+            if mentals :
+                dict_mentals["mentaltitle"] = mentaltitle 
+                dict_mentals["mentals"] = mentals
+                list_mentals.append(dict_mentals)
+                is_mentals = True
+                level_dict["sub"] = list_mentals
+
+    all_mentals.append(level_dict)
+
+
+
+
+
+
+
 
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , instance = quizz)
     request.session["tdb"] = "Tools"
