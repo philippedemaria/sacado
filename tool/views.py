@@ -3919,36 +3919,29 @@ def create_questions_flash(request,idl):
 
 @login_required(login_url= 'index')
 def update_questions_flash(request,id):
+
     teacher = request.user.teacher
     quizz   = Quizz.objects.get(pk=id)
+    level   = quizz.levels.first()
 
     all_mentals = list()
     subject = Subject.objects.get(pk=subject_id)
     mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
-    for level_id in level_ids :
-        level_dict = dict()
-        level = Level.objects.get(pk=level_id)
-        level_dict["level"] = level 
-        list_mentals = list()
-        for mentaltitle in mentaltitles :
-            dict_mentals = dict()
-            mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
-            is_mentals = False 
-            if mentals :
-                dict_mentals["mentaltitle"] = mentaltitle 
-                dict_mentals["mentals"] = mentals
-                list_mentals.append(dict_mentals)
-                is_mentals = True
-                level_dict["sub"] = list_mentals
+ 
+    level_dict = dict()
+    list_mentals = list()
+    for mentaltitle in mentaltitles :
+        dict_mentals = dict()
+        mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+        is_mentals = False 
+        if mentals :
+            dict_mentals["mentaltitle"] = mentaltitle 
+            dict_mentals["mentals"] = mentals
+            list_mentals.append(dict_mentals)
+            is_mentals = True
+            level_dict["sub"] = list_mentals
 
     all_mentals.append(level_dict)
-
-
-
-
-
-
-
 
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , instance = quizz)
     request.session["tdb"] = "Tools"
@@ -3974,7 +3967,7 @@ def update_questions_flash(request,id):
                 mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
                 nf.mentaltitles.set( mentaltitles )  
                     
-            return redirect('list_questions_flash')
+            return redirect('list_questions_flash_sub' , level.id )
         else:
             print(form.errors)
 
@@ -3988,7 +3981,9 @@ def update_questions_flash(request,id):
 
 @login_required(login_url= 'index')
 def duplicate_questions_flash(request,id):
+
     quizz      = Quizz.objects.get(pk=id)
+    level      = quizz.levels.first()
     mental_ids = quizz.questions.values_list("mental_id",flat=True).distinct()
     quizz.pk   = None
     quizz.code = str(uuid.uuid4())[:8]
@@ -3997,7 +3992,7 @@ def duplicate_questions_flash(request,id):
         mentaltitles = create_questions_flash_random_variable(mental_ids, quizz, quizz.nb_slide)
         quizz.mentaltitles.set( mentaltitles ) 
 
-    return redirect('list_questions_flash')
+    return redirect('list_questions_flash_sub' , level.id)
 
 
 @login_required(login_url= 'index') 
@@ -4024,13 +4019,16 @@ def goto_questions_flash(request,id):
 @login_required(login_url= 'index')
 def delete_questions_flash(request,id):
     quizz = Quizz.objects.get(pk = id)
+
+    level     = quizz.levels.first()
     questions = quizz.questions.all()
     for question in questions :
         if question.quizz.count()==1:
             question.delete()
     quizz.delete()
     messages.success(request,'Questions flash Supprimée.')
-    return redirect('list_questions_flash')
+
+    return redirect('list_questions_flash_sub' , level.id)
 
 
 
