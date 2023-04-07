@@ -4685,7 +4685,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
     score_coeff = 0
     total_coeff = 0
 
-    rtcoeff          =  Relationship.objects.filter(parcours=parcours).exclude(exercise__supportfile__is_title=1).aggregate(Sum('coefficient'))
+    rtcoeff          = Relationship.objects.filter(parcours=parcours).exclude(exercise__supportfile__is_title=1).aggregate(Sum('coefficient'))
     real_total_coeff = rtcoeff['coefficient__sum']
 
     for studentanswer_id in  studentanswer_ids : 
