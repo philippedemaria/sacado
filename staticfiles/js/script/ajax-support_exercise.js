@@ -618,7 +618,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     // $('body').on('mouseup', '.word_draggable' , function () {
     //     $('.quizz_item').css('border', '1px solid #E0E0E0'); 
     //     if ($('.select_items .word_choice').length == 1) { 
-    //         $("#submit_button_this_relation").show()
+    //         $("#submit_button_relation").show()
     //     }
     // })
 

@@ -611,7 +611,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
         if ($('.select_items .quizz_choice').length == 1) { 
 
-            $("#submit_button_this_relation").show()
+            $("#submit_button_relation").show()
         }
     })
 
@@ -654,7 +654,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $('.quizz_item').css('border', '1px solid #E0E0E0'); 
 
         if ($('.select_items .word_choice').length == 1) { 
-            $("#submit_button_this_relation").show()
+            $("#submit_button_relation").show()
         }
     })
 
