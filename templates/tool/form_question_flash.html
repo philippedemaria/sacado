@@ -110,7 +110,6 @@
                                 {{ form.groups|add_class:"select_all"   }}
                                 {{ form.groups.errors }}
                             </div>
- 
                         </div>
                         <div class='col-sm-12 col-md-6 form_card'  style="height: 270px;">
                             <table class="table table-sacado borderless ">
@@ -150,8 +149,6 @@
                                     </td>
                                     <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                                 </tr>
-
-
                                 <tr>
                                     <td class="no_border">{{ form.is_result_final.label_tag }} 
                                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
@@ -167,15 +164,6 @@
                                     <td style="width:80px">{{ form.delta_duration|add_class:"form-control" }}</td>
                                     <td><small>sec.</small></td>
                                 </tr>
-
-
-
-
-
-
-
-
-
                             </table>
                         </div> 
                     </div>
@@ -220,14 +208,6 @@
                                     {% endif %} 
                                 {% endfor %}
                             {% endfor %}
-                        {% empty %}
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="alert alert-danger">
-                                        Aucune question ne correspond à cette recherche.
-                                    </div>
-                                </div>
-                            </div>
                         {% endfor %}
                     </tbody>
                 </table> 

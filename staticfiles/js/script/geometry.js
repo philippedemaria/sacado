@@ -228,7 +228,7 @@ function thales(p,index){
         let j = Math.floor(Math.random()*2);
         if (j==0) {thales_voile(index) ; } else { thales_papillon(index) ; }
     }
-    else if (p==0){ thales_voile(index) ; }
+    else if (p==1){ thales_voile(index) ; }
     else { thales_papillon(index) ; }   
 }
 
