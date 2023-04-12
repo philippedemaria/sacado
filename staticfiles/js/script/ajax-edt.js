@@ -6,19 +6,23 @@ define(['jquery', 'bootstrap'], function ($) {
  
         $('.get_this_group_to_this_slot').on('change', function (event) {
             
-                        fill_the_edt($(this),false)
+                        fill_the_edt($(this),false,false)
         }); 
  
 
-         $('.get_this_group_to_this_slot_half_time').on('change', function (event) {
+         $('.get_this_group_to_this_slot_half_time_A').on('change', function (event) {
         
-            fill_the_edt($(this),true)
+            fill_the_edt($(this),true,true)
 
         }); 
 
+         $('.get_this_group_to_this_slot_half_time_B').on('change', function (event) {
+        
+            fill_the_edt($(this),true,false)
 
+        }); 
 
-        function fill_the_edt($this,half){
+        function fill_the_edt($this,half,even){
 
             let id_group = $this.val();
             let slot     = $("#this_slot").val();
@@ -40,13 +44,23 @@ define(['jquery', 'bootstrap'], function ($) {
                             $('#slot-'+slot).attr('style',data.style);
                             time = data.name ;
                             hf_slot = 0 ;
+                            hf_even = 0 ;
                             if (half) 
-                                { time = '1sem/2 : '+data.name ;
-                                  hf_slot = 1; 
-                                } 
+                                { 
+
+                                if (even) 
+                                    { 
+                                        time = '1sem/2 A : '+data.name  ; hf_even = 1; 
+                                    }
+                                else{
+                                    time = '1sem/2 B: '+data.name ; hf_even = 0; 
+                                    }
+                                    hf_slot = 1; 
+                                }
+
                             $('#slot-'+slot).html(time);
                             $('#edt_modal').modal('toggle');
-                            $('#annual_slot-'+slot).val(data.group_id+'-'+slot+'-'+hf_slot);                            
+                            $('#annual_slot-'+slot).val(data.group_id+'-'+slot+'-'+hf_slot+'-'+hf_even);                            
                         }
                         else{
                             $('#slot-'+slot).attr('style',data.style);

@@ -102,7 +102,9 @@
                             <h3>Heure quinzaine</h3>
                             {% for g in teacher.groups.all %}
                                 <li class="sanspuce"><label>
-                                    {{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time" /></label>
+                                    Sem. A : {{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time_A" /></label>
+
+                                    <label>Sem. B : {{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time_B" /></label>
                                 </li>
                             {% endfor %}
                                 <li class="sanspuce"><label class="btn btn-danger">Vider la cellule <input  name="id_group" type="radio" value="0" class="get_this_group_to_this_slot_half_time" /></label></li>

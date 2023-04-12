@@ -128,7 +128,7 @@ def my_edt(request):
  
 
         for a_slot in annual_slots :
-            group_id, slot , day , half = a_slot.split("-")
+            group_id, slot , day , half , even  = a_slot.split("-")
             group = Group.objects.get(pk=group_id)
 
             template_edt,created = Template_edt.objects.update_or_create( edt= my_edt,slot=slot,day=day,is_half=half)
@@ -139,8 +139,9 @@ def my_edt(request):
 
             nextDay = start +   timedelta(days= int(day) - start.weekday() )
             while nextDay < stop :
+                if str(even) == "0"   : nextDay + timedelta(days= 7 )
                 slt  = Slotedt.objects.create( start=nextDay,slot=slot )
-                if half == 1 : hday = 14 
+                if half == 1 : hday = 14
                 else  : hday = 7
                 nextDay +=  timedelta(days=hday)
                 slt.groups.add(group)
