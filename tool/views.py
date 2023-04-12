@@ -3924,11 +3924,14 @@ def update_questions_flash(request,id):
     quizz   = Quizz.objects.get(pk=id)
     level   = quizz.levels.first()
 
+
     all_mentals = list()
-    subject = Subject.objects.get(pk=subject_id)
+    subject = Subject.objects.get(pk=1)
     mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
  
     level_dict = dict()
+ 
+    level_dict["level"] = level 
     list_mentals = list()
     for mentaltitle in mentaltitles :
         dict_mentals = dict()
@@ -3942,6 +3945,7 @@ def update_questions_flash(request,id):
             level_dict["sub"] = list_mentals
 
     all_mentals.append(level_dict)
+ 
 
     form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , instance = quizz)
     request.session["tdb"] = "Tools"
@@ -3973,7 +3977,7 @@ def update_questions_flash(request,id):
 
 
     mentals = Mental.objects.filter(subjects = quizz.subject ).order_by("mentaltitle")
-    context = {'form': form, 'teacher': teacher,  'mentals' : mentals   }
+    context = {'form': form, 'teacher': teacher,  'mentals' : mentals ,'all_mentals' : all_mentals  }
 
     return render(request, 'tool/form_question_flash.html', context)
 
