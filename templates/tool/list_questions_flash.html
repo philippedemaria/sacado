@@ -29,44 +29,51 @@
 {% block body %}
 
 <section class="content_main"> 
-    <div class="row">
 
-        {% for level in levels %}
-
-            <div class="col-xs-6 col-md-4 col-lg-3" >
-                <div class="small-box" style="background-color:#007bc9;color:white;height:250px">
-                <!-- modal qui affiche la liste des élèves -->
-                    <div class="inner" style="color:white;opacity:0.9"><br/>
-                        <span style="color:{{ level.color|contrast_color }};font-size: 35px">{{ level.name |truncatechars:"14" }} </span>  <br/><br><br>
+        {% for subject in subjects %}
+        <div class="row">            
+            <div class="col-xs-12" >
+                <h3 class="thin">{{ subject.name }}</h3>
+            </div>
+        </div>
 
 
-                     
-                         <br/> <br/>
-
-                    </div>
-
-                        
- 
-                    <div class="small-box-footer" >
-
-                        <div class="row">                                      
-                            <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
-                            
-                                <a href="{% url 'list_questions_flash_sub' level.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
-                                    Accéder aux Flashpacks                             
-                                </a>
-                        
+        <div class="row">
+            {% for level in levels %}
+                <div class="col-xs-6 col-md-4 col-lg-3" >
+                    <div class="small-box" style="background-color:#007bc9;color:white;height:250px">
+                    <!-- modal qui affiche la liste des élèves -->
+                        <div class="inner" style="color:white;opacity:0.9"><br/>
+                            <span style="color:{{ level.color|contrast_color }};font-size: 35px">{{ level.name |truncatechars:"14" }} </span>  <br/><br><br>
 
 
-                            </div>
+                         
+                             <br/> <br/>
+
                         </div>
-                       
+
+                            
+     
+                        <div class="small-box-footer" >
+
+                            <div class="row">                                      
+                                <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
+                                    {% get_nb_qf_subject level subject.id teacher.user.id as nb_qf %}
+                                    <a href="{% url 'list_questions_flash_sub' level.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
+                                        Accéder aux questions flash  <b>[{{  nb_qf }}]</b>                           
+                                    </a>
+                                    
+
+
+                                </div>
+                            </div>
+                           
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
+        </div>
         {% endfor %}
-
-    </div>
 </section>
 
 {% endblock %}

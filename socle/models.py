@@ -214,6 +214,16 @@ class Level(models.Model):
     def folders_from_level(self,teacher):
         return self.level_folders.filter(teacher = teacher)
 
+
+    def nb_qf_subject(self, subject_id,teacher_id):
+        nb = self.quizz.filter(is_random=1,subject_id=subject_id,teacher_id=teacher_id).count()
+        for q in  self.quizz.filter(is_random=1,subject_id=subject_id,teacher_id=teacher_id) :
+            print(q.id)
+        return nb
+
+
+
+
 class Vignette(models.Model):
     subject = models.ForeignKey(Subject,  null=True, blank=True,   related_name='vignettes', on_delete=models.CASCADE, verbose_name="Enseignement")
     imagefile = models.ImageField(upload_to=directory_path,  verbose_name="Image" )

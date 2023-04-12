@@ -3801,7 +3801,9 @@ def list_questions_flash(request):
     teacher = request.user.teacher     
     levels = teacher.levels.order_by("ranking") 
     delete_session_key(request, "quizz_id")
-    return render(request, 'tool/list_questions_flash.html', { 'levels': levels , 'teacher': teacher   })
+
+    subjects = teacher.subjects.all()
+    return render(request, 'tool/list_questions_flash.html', { 'levels': levels , 'teacher': teacher , 'subjects' : subjects   })
 
 
 
