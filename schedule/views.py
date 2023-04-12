@@ -50,7 +50,7 @@ def progressions(request):
     teacher =   request.user.teacher
     groups = teacher.groups.all()
 
-    if teacher.my_edts.count()>0 :
+    if teacher.user.my_edts.count()>0 :
         context = {  'groups': groups,   }
         return render(request, 'schedule/progressions.html', context )
     else :
