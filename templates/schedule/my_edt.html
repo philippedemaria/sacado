@@ -1,0 +1,125 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-edt']);
+    </script> 
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class="bi bi-calendar4"></i> Mes progressions
+    
+    <ul>{% include 'schedule/submenu_config.html' %}</ul>
+    
+
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+
+  
+
+{% endblock %}
+
+ 
+
+{% block body %}
+
+<section class="content_main"> 
+
+    <div class="row"> 
+        <div class="col-sm-12 col-md-12">    
+            <form action="" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+                <table class="table-edt">
+                    <tr>
+                        <th>{% if my_edt.is_slot %}Créneaux{% else %}Heures{% endif %}</th>
+                        {% for day in days %}
+                             <th style="text-align: center">{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for sloter in sloters %}
+                    <tr>
+                        {% if my_edt.is_slot %}
+                            <td>H{{ forloop.counter}}</td>
+                        {% else %}
+                            <td style="vertical-align:top;text-align:right;font-size: 0.8em">{{ my_edt.start_class|add_hour:forloop.counter0 }}</td>
+                        {% endif %} 
+                        {% for day in days %}
+                            {%  get_day_slot  my_edt  forloop.parentloop.counter   forloop.counter0 as this_slot   %}
+                            <td id="slot-{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}" 
+                                data-slot="{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}" 
+                                class="get_this_slot" data-toggle='modal' data-target='#edt_modal'
+                                {% if  this_slot.boolean %}style="{{ this_slot.style}}"{% endif %}>
+                                  {% if  this_slot.boolean %} {{ this_slot.group}} {% endif %}  
+                            </td> 
+          
+                            <input name="annual_slots" type="hidden" id="annual_slot-{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}"> 
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <button type="submit" class="btn btn-primary">Propager cet emploi du temps sur l'année</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="edt_modal" tabindex="-1" role="dialog" aria-labelledby="edt_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4  class='sacado'  >Groupes</h4>              
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">{% csrf_token %}
+                <input type="hidden" name="this_slot" id="this_slot" /> 
+
+                    <div class="row">
+                        <div class="col-xs-6" >
+                            <h3>Heure hebdomadaire</h3>
+                            {% for g in teacher.groups.all %}
+                                <li class="sanspuce"><label>{{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot" /></label></li>
+                            {% endfor %}
+                            <li class="sanspuce"><label class="btn btn-danger">Vider la cellule <input    name="id_group" type="radio" value="0" class="get_this_group_to_this_slot" /></label></li>
+                        </div>
+                        <div class="col-xs-6" >
+                            <h3>Heure quinzaine</h3>
+                            {% for g in teacher.groups.all %}
+                                <li class="sanspuce"><label>
+                                    {{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time" /></label>
+                                </li>
+                            {% endfor %}
+                                <li class="sanspuce"><label class="btn btn-danger">Vider la cellule <input  name="id_group" type="radio" value="0" class="get_this_group_to_this_slot_half_time" /></label></li>
+                        </div>
+
+
+                    
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+{% endblock %}
+
+
+ 
+
+ 

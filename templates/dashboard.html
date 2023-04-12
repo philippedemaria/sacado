@@ -755,6 +755,14 @@
         </div>
     </div>
     <hr/>
+    {% if request.user.is_superuser %}
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <a href="{%  url 'progressions' %}" {% if request.session.subtdb == 'Progression' %} class="active_selected"{% endif %}   >Progressions </a>
+        </div>
+    </div>
+    <hr/>
+    {% endif %}
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a {% if sacado_asso %} href="{%  url 'list_diaporama' %}" {% if request.session.subtdb == 'Presentations' %} class="active_selected"{% endif %} {% else %} href="#" class="no_sacado_asso"  title="Version Etablissement requise" {% endif %}  

@@ -2,8 +2,10 @@ from django import http
 import json
 from django.utils import timezone
 from django.shortcuts import render, redirect
-from schedule.models import Calendar, Event, Automatic
-from schedule.forms import CalendarForm, EventForm
+
+from schedule.models import Calendar, Event, Automatic , Edt , Slotedt , Template_edt
+from schedule.forms import CalendarForm, EventForm , EdtForm
+
 from group.models import Group
 from account.models import User, Teacher , Student
 from datetime import datetime,timedelta
@@ -23,7 +25,156 @@ import pytz
 import re
 import html
 
+##################################################################################################################################
+##################################################################################################################################
+##                     Def annexe
+##################################################################################################################################
+##################################################################################################################################
 
+
+
+
+
+
+
+
+##################################################################################################################################
+##################################################################################################################################
+##                     Progessions
+##################################################################################################################################
+##################################################################################################################################
+
+
+def progressions(request):
+    
+    teacher =   request.user.teacher
+    groups = teacher.groups.all()
+
+    context = {  'groups': groups,   }
+
+    return render(request, 'schedule/progressions.html', context )
+
+
+
+def config_progression(request,idc):
+    
+    teacher =   request.user.teacher
+    groups = teacher.groups.all()
+
+    context = {  'groups': groups,   }
+
+    return render(request, 'schedule/progressions.html', context )
+
+
+def config_edt(request,ide):
+
+    user = request.user 
+
+    if user.my_edts.count() :  
+        my_edt = user.my_edts.first() 
+        form = EdtForm(request.POST or None , instance = my_edt  )
+    else :  
+        form    = EdtForm(request.POST or None  )
+        my_edt = None
+ 
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        first_day = nf.first_day
+
+        dico_fist = {  "0":"Lundi","1":"Mardi","2":"Mercredi","3":"Jeudi","4":"Vendredi","5":"Samedi","6":"Dimanche",}
+        days = request.POST.getlist("days") #liste
+        first = days.index(dico_fist[first_day])
+        days_on = ""
+        for i in range(len(days)):
+            days_on += days[(first+i)%len(days)]+"-"
+        nf.days_on = days_on
+        nf.user = user
+        nf.save()
+        return redirect('my_edt')
+    else:
+        print(form.errors)
+
+    context = {  'form' : form , 'edt' : my_edt  }
+
+    return render(request, 'schedule/edt_config.html', context )
+
+
+def my_edt(request):
+
+    user = request.user
+    teacher = user.teacher
+    sloters = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+    if user.my_edts.count() :  
+        my_edt = user.my_edts.first()
+        days   = my_edt.days_on.split("-")
+        days   = days[:-1] 
+        start , stop  = my_edt.start , my_edt.stop
+        try :
+            slots_edt = my_edt.slots.filter(start__gte=start, start__lt=start+timedelta(days=7))
+        except : 
+            slots_edt = None
+
+    else :  
+        my_edt = None
+
+    if my_edt and request.method == "POST" :
+        annual_slots,slots = list(), list()
+
+        for a_s in  request.POST.getlist('annual_slots') :
+            if a_s != "" : annual_slots.append(a_s)
+ 
+
+        for a_slot in annual_slots :
+            group_id, slot , day , half = a_slot.split("-")
+            group = Group.objects.get(pk=group_id)
+
+            template_edt,created = Template_edt.objects.update_or_create( edt= my_edt,slot=slot,day=day,is_half=half)
+            if created : template_edt.groups.add(group)
+            else : 
+                template_edt.groups.clear()
+                template_edt.groups.add(group)
+
+            nextDay = start +   timedelta(days= int(day) - start.weekday() )
+            while nextDay < stop :
+                slt  = Slotedt.objects.create( start=nextDay,slot=slot )
+                if half == 1 : hday = 14 
+                else  : hday = 7
+                nextDay +=  timedelta(days=hday)
+                slt.groups.add(group)
+                slt.users.add(user)
+                slots.append(slt)
+        my_edt.slots.set(slots)
+
+    context = {  'sloters' : sloters ,'days' : days , 'my_edt' : my_edt , 'teacher' : teacher ,'slots_edt' : slots_edt }
+
+    return render(request, 'schedule/my_edt.html', context )
+
+ 
+
+def my_edt_group_attribution(request):
+
+    id_group = request.POST.get("id_group",None)
+    data     = {}
+    if id_group and int(id_group) > 0 :   
+        group   =  Group.objects.get(pk = id_group)
+        data['style']    = "background-color:"+group.color+";color:white"
+        data['name']     =  group.name
+        data['group_id'] =  group.id
+    else :
+        data['style']    = "background-color:white;color:white"
+        data['name']     =  ""
+        data['group_id'] =  ""
+ 
+    return JsonResponse(data)
+
+
+##################################################################################################################################
+##################################################################################################################################
+##                     Calendrier à partir d'un groupe
+##################################################################################################################################
+##################################################################################################################################
 
 
 def insert_in_calendar(user,title,start,end,comment, type_of_event,link):
@@ -164,7 +315,7 @@ def calendar_initialize(request):
 
 ##################################################################################################################################
 ##################################################################################################################################
-##                     AFichage du calendrier à partir d'un groupe
+##                     Affichage du calendrier à partir d'un groupe
 ##################################################################################################################################
 ##################################################################################################################################
 
@@ -255,10 +406,7 @@ def schedule_task_group(request, id):
     context = {  'group': group, 'relationships' : relationships , 'teacher' : teacher  }
 
     return render(request, 'schedule/base_group.html', context )
-
-
-
-##################################################################################################################################
+ ##################################################################################################################################
 ##################################################################################################################################
 ##                    FIN 
 ##################################################################################################################################

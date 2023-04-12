@@ -1679,7 +1679,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }
             makeItemAppear($("#id_is_task"), $("#task_date"));
             makeItemDisappear($("#id_is_publish"), $("#publish_date"));
-
+            makeItemDisappear($("#id_is_slot"), $("#heure"));
 
 
 

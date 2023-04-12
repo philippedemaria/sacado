@@ -1,5 +1,5 @@
 from django import forms
-from .models import Calendar, Event  
+from .models import Calendar, Event , Edt 
 
 
 class EventForm(forms.ModelForm):
@@ -18,3 +18,10 @@ class CalendarForm(forms.ModelForm):
     class Meta:
         model = Calendar
         fields =  ('__all__')
+
+
+class EdtForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Edt
+		fields =  ('__all__')

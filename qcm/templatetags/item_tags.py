@@ -45,6 +45,16 @@ def add_parameters(arg, index):
 
 
 
+
+
+
+@register.filter
+def add_hour(arg, index):
+    hour = arg.split(":")
+    h = int(hour[0])+index
+    return str(h)+':'+hour[1]
+
+
 @register.filter
 def is_checked(arg):
     '''input est-il checked ?'''
@@ -1132,6 +1142,13 @@ def get_nb_level_subject(obj, subject_id):
     """
     return obj.nb_level_subject(subject_id)  
 
+@register.simple_tag 
+def get_nb_qf_subject(obj, subject_id,teacher_id):
+    """
+    Donne le nombre d'exercices sur un niveau dans une matière donnée
+    """
+    return obj.nb_qf_subject(subject_id,teacher_id)  
+
 
 @register.simple_tag 
 def is_can_quizz_restart(obj, student):
@@ -1237,3 +1254,7 @@ def is_inside_my_lesson(obj,student):
     """
     return obj.student_in_my_lesson(student) 
 
+
+@register.simple_tag
+def get_day_slot(obj, slot,day):
+    return obj.this_day_slot(slot,day) 

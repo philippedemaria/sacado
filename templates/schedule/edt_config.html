@@ -1,0 +1,103 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class="bi bi-lightning"></i> Mes progressions
+    
+    <ul>{% include 'schedule/submenu_config.html' %}</ul>
+    
+
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+
+  
+
+{% endblock %}
+
+ 
+
+{% block body %}
+<style>
+    .datepicker {
+    padding: 4px;
+    border-radius: 2px;
+    direction: ltr;
+    border: 1px solid #CCC;
+    width: 220px;
+    text-align: center;
+}
+</style>
+<section class="content_main"> 
+    <form action="" method="POST" enctype='multipart/form-data'>
+        <div class="row">
+            <div class="col-sm-12 col-md-6 form_card">
+                {% csrf_token %}
+                <table class="table table-sacado borderless form_card">
+                    <tr>
+                        <td> Début de l'année </td>
+                        <td>{{ form.start|add_class:"form-control datepicker"  }} </td>
+                        <td>{{ form.start.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td> Début de l'année </td>
+                        <td>{{ form.stop|add_class:"form-control datepicker"}} </td>
+                        <td>{{ form.stop.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td>Horaire ou créneaux ? </td>
+                        <td>{{ form.is_slot|attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Créneaux"|attr:"data-off:Horaire"}}</td>
+                        <td>{{ form.is_slot.errors }}</td>
+                    </tr>
+                    <tr id="heure" class="no_visu_on_load">
+                        <td>Heure début des cours ? </td>
+                        <td>{{ form.start_class|add_class:"form-control"  }}</td>
+                        <td>{{ form.start_class.errors }}</td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Jours affichés ? </td>
+                        <td>
+                            <label>Lundi <input name="days" value="Lundi" type="checkbox" {% if edt and 'Lundi' in edt.days_on %} checked {% endif %}/></label>
+                            <label>Mardi <input name="days" value="Mardi"  type="checkbox" {% if edt and 'Mardi' in edt.days_on %} checked {% endif %}/></label>
+                            <label>Mercredi <input name="days" value="Mercredi"  type="checkbox" {% if edt and 'Mercredi' in edt.days_on %} checked {% endif %}/></label>
+                            <label>Jeudi <input name="days" value="Jeudi"  type="checkbox" {% if edt and 'Jeudi' in edt.days_on %} checked {% endif %} /></label>
+                            <label>Vendredi <input name="days" value="Vendredi" type="checkbox" {% if edt and 'Vendredi' in edt.days_on %} checked {% endif %} /></label>
+                            <label>Samedi <input name="days" value="Samedi" type="checkbox" {% if edt and 'Samedi' in edt.days_on %} checked {% endif %} /></label>
+                            <label>Dimanche <input name="days" value="Dimanche"  type="checkbox" {% if edt and 'Dimanche' in edt.days_on %} checked {% endif %}/></label>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Premier jour de la semaine ?</label></td>
+                        <td> {{ form.first_day|add_class:"form-control"}}</td>
+                        <td>{{ form.first_day.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td><button type="submit" class="btn btn-primary">Enregistrer</button> <a href="javascript:history.back()" class="btn btn-default" >Retour</a> </td>
+                        <td></td>
+                        <td> </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+
+  

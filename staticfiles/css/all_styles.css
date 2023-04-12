@@ -552,9 +552,29 @@ table.puzzle td {
   padding: 2px;
 }
 
-.table-hover > tbody > tr.colored_tr:hover{
-    background-color: #eae6f4!important;
+.table-edt {
+    border-spacing: 0; 
 }
+.table-edt > tbody > tr > td {
+    background-color: #FFF;
+}
+
+
+.table-edt > tbody > tr > td {
+    background-color: #FFF;
+    color: #444;
+}
+
+.get_this_slot{
+  cursor: pointer;
+  border: 1px solid #CCC;
+  width:150px;
+  height:45px;
+  text-align: center;
+}
+
+ 
+
 
 /***************************************************************************/
 /*********************     round   ******************************************/
@@ -669,12 +689,29 @@ a.no_decoration:hover{
   left:0px;
   font-size: 12px;
   border-radius:2px;
-  width:130px;
+  width:310px;
   padding: 10px;
   background-color:#FFF;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
   z-index:60;
 }
+
+
+
+.widget_bibliotex .group_show{
+  position: absolute;
+  top:0px;
+  left:0px;
+  font-size: 12px;
+  border-radius:2px;
+  width:310px;
+  padding: 10px;
+  background-color:#FFF;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+  z-index:60;
+}
+
+
 
 .widget-user-header .group_show label {
     display: inline-block;
