@@ -50,10 +50,11 @@ def progressions(request):
     teacher =   request.user.teacher
     groups = teacher.groups.all()
 
-    context = {  'groups': groups,   }
-
-    return render(request, 'schedule/progressions.html', context )
-
+    if teacher.my_edts.count()>0 :
+        context = {  'groups': groups,   }
+        return render(request, 'schedule/progressions.html', context )
+    else :
+        return redirect("config_edt",0)
 
 
 def config_progression(request,idc):

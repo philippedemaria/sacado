@@ -48,12 +48,12 @@
                 {% csrf_token %}
                 <table class="table table-sacado borderless form_card">
                     <tr>
-                        <td> Début de l'année </td>
+                        <td> Premier jour de l'année </td>
                         <td>{{ form.start|add_class:"form-control datepicker"  }} </td>
                         <td>{{ form.start.errors }}</td>
                     </tr>
                     <tr>
-                        <td> Début de l'année </td>
+                        <td> Dernier jour  de l'année </td>
                         <td>{{ form.stop|add_class:"form-control datepicker"}} </td>
                         <td>{{ form.stop.errors }}</td>
                     </tr>
