@@ -199,7 +199,7 @@
                                 <div class="col-lg-5 col-xs-5" style="padding-right:0px" align="right">
 
                                     {% if not is_gar_check  and group.student_view %}
-                                    <a href="{% url 'switch_teacher_student' group.id %}" class="label_small_box" style="font-size:12px; color:{{ group.color|contrast_color }};" title="Prendre la vue élève"><i class="fa fa-glasses"></i></a> 
+                                    <a href="{% url 'switch_teacher_student' group.id %}" class="label_small_box" style=" color:{{ group.color|contrast_color }};" title="Prendre la vue élève"><i class="bi bi-eyeglasses"></i></a> 
                                     {% endif %}
                                     <a  href="{% url 'insert_students_to_this_group' group.id %}" class="label_small_box group_shower" style="font-size:15px; color:{{ group.color|contrast_color }};"
                                     title="Ajouter des élèves"><i class="bi bi-person-plus"></i></a>
