@@ -6357,7 +6357,7 @@ def parcours_exercises(request,id):
 
 
 def exercises_level(request, id):
-    teacher = request.user.teacher
+
     level = Level.objects.get(pk=id)    
     exercises = Exercise.objects.filter(level=level,supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
     themes =  level.themes.all()
@@ -6365,7 +6365,7 @@ def exercises_level(request, id):
     u_form = UserForm()
     t_form = TeacherForm()
     s_form = StudentForm()
-    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes , 'teacher' : teacher , 'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
+    return render(request, 'list_exercises.html', {'exercises': exercises, 'level':level , 'themes':themes ,   'form':form , 'u_form':u_form , 's_form': s_form , 't_form': t_form , 'levels' : [] })
 
 
 def exercises_level_subject(request, id, subject_id):
