@@ -236,7 +236,7 @@
                                     <h4>{{ dico.parcours.title }}</h4>
                                     {% for cours in dico.courses %}
                                         <a href="javascript:void();" class="insert_this_into_edt content_edt cours_edt" data-type="Cours" data-id="{{ cours.id }}">
-                                            {{ cours.title }}
+                                            {{ cours.title|truncatechars:40 }}
                                         </a>
                                     {% endfor %}
                                     <div style="clear:both"></div>
