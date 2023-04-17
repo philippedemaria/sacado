@@ -56,7 +56,7 @@
 
                             <div class="row"> 
                                 <div class="col-sm-2 col-md-2"> 
-                                    <button data-nav="prev" class="btn btn-default nav"><i class="fa fa-caret-left"></i>  </button>  
+                                    <button data-nav="prev" class="btn btn-default this_nav"><i class="fa fa-caret-left"></i>  </button>  
                                 </div>
                                 <div class="col-sm-8 col-md-8"> 
                                     <label id="to_fill_this_slot_week" >Semaine du {{ this_first_day_week|date:"d" }} au {{ this_last_day_week|date:"d N Y" }}</label>
@@ -65,7 +65,7 @@
                                 <input type="hidden" name="this_last_day_week" id="this_last_day_week" value="{{ this_last_day_week|date:'Y-m-d' }}" />
 
                                 <div class="col-sm-2 col-md-2">  
-                                    <button data-nav="next" class="btn btn-default nav"><i class="fa fa-caret-right"></i>  </button>
+                                    <button data-nav="next" class="btn btn-default this_nav"><i class="fa fa-caret-right"></i>  </button>
                                 </div>
                             </div>
                             <table class="table-edt">
@@ -168,7 +168,6 @@
                                 Exercices
                             </a>
                         </li>    
-
                         <li class="li_tabs_and_panels ">
                             <a data-toggle="tab" href="#biblioTex" class="tabs_and_panels">
                                 BiblioTex 
@@ -180,9 +179,8 @@
                             </a>
                         </li>
                     </ul>
-
                     <div class="tab-content">  
-                        <div id="contenu" class="tab-pane fade in active ">
+                        <div id="contenu" class="tab-pane fade in active">
                             <input type="hidden" name="start" id="to_fill_this_slot_day"   />
                             <input type="hidden" name="slot" id="to_fill_this_slot_slot"   />
                             <div class="row">
@@ -192,7 +190,7 @@
                             </div>
                             <button class="btn btn-primary" /> Enregistrer</form>
                         </div>
-                        <div id="sf" class="tab-pane fade ">
+                        <div id="sf" class="tab-pane fade">
                             <table class="table table-hover" style="width:100%;" > 
                                 {% regroup waitings by theme as theme_list %}
                                 {% for theme in theme_list  %} 
@@ -206,7 +204,9 @@
                                         {% for knowledge in waiting.knowledges.all  %}
                                             <tr style="background:#d4cbe6; cursor: pointer; color: #5d4391;font-size:12px"> 
                                                 <td>
-                                                    <a href="javascript:void();" class="insert_this_into_edt" data-type="Savoir Faire"  data-id="{{ knowledge.id }}" data-title="{{ knowledge.name }}">{{ knowledge.name|capfirst }}</a> 
+                                                    <a href="javascript:void();" class="insert_this_into_edt" data-type="Savoir Faire"  data-id="{{ knowledge.id }}" data-title="{{ knowledge.name }}">
+                                                        {{ knowledge.name|capfirst }}
+                                                    </a> 
                                                 </td>
                                             </tr>
                                         {% endfor %}  
@@ -214,7 +214,7 @@
                                 {% endfor %}  
                             </table>
                         </div>
-                        <div id="exercises" class="tab-pane fade ">
+                        <div id="exercises" class="tab-pane fade">
                             {% for dico in list_relationships %}
                                 <div style="border:2px solid {{dico.parcours.color}} ; border-radius: 5px; padding: 5px; color : {{dico.parcours.color}};clear:both">
                                     <h4>{{ dico.parcours.title }}</h4>
@@ -230,7 +230,7 @@
                             <div class="alert alert-danger">Aucun exercice n'est associé à ce groupe</div>
                             {% endfor %}
                         </div>
-                        <div id="lesson" class="tab-pane fade ">
+                        <div id="lesson" class="tab-pane fade">
                             {% for dico in list_courses %}
                                 <div style="border:2px solid {{ dico.parcours.color}} ; border-radius: 5px; padding: 5px; color : {{ dico.parcours.color}};clear:both">
                                     <h4>{{ dico.parcours.title }}</h4>
@@ -245,7 +245,7 @@
                                 <div class="alert alert-danger">Aucun cours n'est associé à ce groupe</div>
                             {% endfor %}                            
                         </div>
-                        <div id="biblioTex" class="tab-pane fade ">
+                        <div id="biblioTex" class="tab-pane fade">
                             {% for bibliotex in bibliotexs %}
                                 <a href="javascript:void();" class="insert_this_into_edt content_edt bibliotex_edt" data-type="Bibliotex" data-title="{{ bibliotex.title }}" data-id="{{ bibliotex.id }}">
                                     {{ bibliotex.title }}
@@ -255,7 +255,7 @@
                             {% endfor %}
                             <div style="clear:both"></div>
                         </div>
-                        <div id="flashpack" class="tab-pane fade ">
+                        <div id="flashpack" class="tab-pane fade">
                             {% for flashpack in flashpacks %}
                                     <a href="javascript:void();" class="insert_this_into_edt content_edt flashpack_edt" data-type="Flashpack" data-title="{{ flashpack.title }}" data-id="{{ flashpack.id }}">
                                         {{ flashpack.name }}
@@ -265,7 +265,7 @@
                             {% endfor %}
                             <div style="clear:both"></div>
                         </div>
-                        <div id="quizz" class="tab-pane fade ">
+                        <div id="quizz" class="tab-pane fade">
                             {% for quizz in quizzes %}
                                     <a href="javascript:void();" class="insert_this_into_edt content_edt quizz_edt" data-type="Quizz" data-title="{{ quizz.title }}" data-id="{{ quizz.id }}">
                                         {{ quizz }}

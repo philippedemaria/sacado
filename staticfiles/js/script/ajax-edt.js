@@ -117,7 +117,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-       $('.nav').on('click', function(){ 
+       $(document).on('click', '.this_nav', function(){ 
 
             var whichButton = $(this).data('nav'); 
             const nfday = $("#this_first_day_week").val() ;
@@ -154,7 +154,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-       $('body').on('click', '.fill_edt_this_slot' , function(){ 
+       $('body').on('click', '.fill_edt_this_slot' , function(){  
 
             const this_first_day_week = $("#this_first_day_week").val();
             const this_details = $(this).data('slot').split("-");
@@ -210,23 +210,8 @@ define(['jquery', 'bootstrap'], function ($) {
             } 
 
             CKEDITOR.instances['id_content'].setData(msg) ; 
- 
-
-
-
-
-
-
 
         });
-
-
-
-
-
-
-
-
 
 
     });
