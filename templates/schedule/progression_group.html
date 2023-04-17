@@ -221,11 +221,7 @@
                                     {% for relationship in parcours.relationships %}
                                         <a href="javascript:void();" class="insert_this_into_edt content_edt exercise_edt" data-type="Exercice" data-id="{{ relationship.id }}">
                                             <b>{{ forloop.counter }}.</b>
-                                            {% if relationship.exercise.supportfile.imagefile %}
-                                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width='45px' />
-                                            {% else %}
-                                                {{ relationship.exercise.supportfile.knowledge.name }}
-                                            {% endif %}
+                                            {{ relationship.exercise.supportfile.knowledge.name }}
                                          </a>
                                     {% endfor %}
                                 </div>
