@@ -73,26 +73,31 @@
                                     {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td> 
-                                                    <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
+                                                <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
 
-                                                    {% if  exotex.correction  %}
-                                                        <i class="fa fa-copyright" title="correction"></i> 
-                                                    {% endif %}
-
-                                                    <a href="{% url 'update_exotex'  exotex.id   %}" class="listing" style="font-size: 18px">
-                                                        {% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Modifier l'exercice  {% endif %}  <i class="bi bi-pen"></i>
-                                                    </a> 
-
-                                                    <div class="admin_exotex">
-                                                    {{ exotex.content_html|safe}}
-                                                    </div>
                                                 <span class="pull-right">
+                                                    {% if  exotex.is_annals  %}
+                                                        <label style="font-size:12px; color:white;background-color: red">ANNALE</label> 
+                                                    {% endif %}
                                                     {% if exotex.calculator %}
                                                       <img src="{% static 'img/calculator.png' %}" width="30px" />
                                                     {% else %}
                                                       <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                                     {% endif  %}
                                                 </span>
+
+                                                {% if  exotex.correction  %}
+                                                    <i class="fa fa-copyright  text-success" title="correction"></i> 
+                                                {% endif %}
+
+                                                <a href="{% url 'update_exotex'  exotex.id   %}" class="listing" style="font-size: 18px">
+                                                    {% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Modifier l'exercice  {% endif %}  <i class="bi bi-pen"></i>
+                                                </a> 
+
+                                                <div class="admin_exotex">
+                                                {{ exotex.content_html|safe}}
+                                                </div>
+
                                            </td>
                                         </tr>
                                     {% endfor %} 

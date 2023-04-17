@@ -53,6 +53,10 @@
 
                                             <b><span class="number_exotex">{{ exotex.id}}</span>{% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Exercice sans titre {% endif %}</b> 
                                             </label>
+                                            
+                                            {% if  exotex.is_annals  %}
+                                                <label style="font-size:12px; color:white;background-color: red">ANNALE</label> 
+                                            {% endif %}
                                             {% if  exotex.correction  %}
                                                 <i class="fa fa-copyright text-success" title="Exercice corrigé" style="font-size:12px;"></i> 
                                             {% endif %}
