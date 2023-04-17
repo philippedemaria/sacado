@@ -103,7 +103,7 @@ def progression_group(request,idg):
 
     list_relationships , list_courses  = list() ,  list()
     for parcours in parcourses :
-        dico_list_relationships = {'parcours' : parcours  , 'relationships' : parcours.parcours_relationship.all()  }
+        dico_list_relationships = {'parcours' : parcours  , 'relationships' : parcours.parcours_relationship.filter(is_title=0,is_publish=1)  }
         dico_list_courses  = {'parcours' : parcours  , 'courses' : parcours.course.all() }
         list_relationships.append(dico_list_relationships)
         list_courses.append(dico_list_courses)
