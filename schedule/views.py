@@ -50,7 +50,7 @@ def progressions(request):
     teacher =   request.user.teacher
     groups = teacher.groups.all()
 
-    if teacher.user.edt.count()>0 :
+    if teacher.user.edt :
         context = {  'groups': groups,   }
         return render(request, 'schedule/progressions.html', context )
     else :
@@ -156,7 +156,7 @@ def config_edt(request,ide):
 
     user = request.user 
 
-    if user.edt.count() :  
+    if user.edt  :  
         my_edt = user.edt
         form = EdtForm(request.POST or None , instance = my_edt  )
     else :  
@@ -193,7 +193,7 @@ def my_edt(request):
     groups = teacher.groups.all()
     sloters = [1,2,3,4,5,6,7,8,9,10,11,12]
 
-    if user.edt.count() :  
+    if user.edt  :  
         my_edt = user.edts
         days   = my_edt.days_on.split("-")
         days   = days[:-1] 
