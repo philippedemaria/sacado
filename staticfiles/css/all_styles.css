@@ -712,6 +712,7 @@ a.content_edt{
   background-color: white;  
   max-width:68px;
   height: 51px;
+  float:left;
 }
 
 .bibliotex_edt {

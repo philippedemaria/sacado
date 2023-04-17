@@ -225,6 +225,7 @@
                             {% empty %}
                             <div class="alert alert-danger">Aucun exercice n'est associé à ce groupe</div>
                             {% endfor %}
+                            <div style="clear:both"></div>
                         </div>
                         <div id="lesson" class="tab-pane fade ">
                             {% for parcours in list_relationships %}
@@ -236,7 +237,8 @@
                                 {% endfor %}
                             {% empty %}
                                 <div class="alert alert-danger">Aucun cours n'est associé à ce groupe</div>
-                            {% endfor %}
+                            {% endfor %}                            
+                            <div style="clear:both"></div>
                         </div>
                         <div id="biblioTex" class="tab-pane fade ">
                             {% for bibliotex in bibliotexs %}
@@ -246,6 +248,7 @@
                             {% empty %}
                                 <div class="alert alert-danger">Aucun bibliotex n'est associé à ce groupe</div>
                             {% endfor %}
+                            <div style="clear:both"></div>
                         </div>
                         <div id="flashpack" class="tab-pane fade ">
                             {% for flashpack in flashpacks %}
@@ -255,6 +258,7 @@
                             {% empty %}
                                 <div class="alert alert-danger">Aucun flashpack n'est associé à ce groupe</div>
                             {% endfor %}
+                            <div style="clear:both"></div>
                         </div>
                         <div id="quizz" class="tab-pane fade ">
                             {% for quizz in quizzes %}
@@ -264,6 +268,7 @@
                             {% empty %}
                                 <div class="alert alert-danger">Aucun quizz n'est associé à ce groupe</div>
                             {% endfor %}
+                            <div style="clear:both"></div>
                         </div>
                     </div>
                 </form>
