@@ -103,8 +103,8 @@ def progression_group(request,idg):
 
     list_relationships , list_courses  = list() ,  list()
     for parcours in parcourses :
-        dico_list_relationships = {'title' : parcours.title , 'relationships' : parcours.parcours_relationship.all()  }
-        dico_list_courses  = {'title' : parcours.title , 'courses' : parcours.course.all() }
+        dico_list_relationships = {'parcours' : parcours  , 'relationships' : parcours.parcours_relationship.all()  }
+        dico_list_courses  = {'parcours' : parcours  , 'courses' : parcours.course.all() }
         list_relationships.append(dico_list_relationships)
         list_courses.append(dico_list_courses)
 
@@ -291,18 +291,6 @@ def get_progression(request,idg) :
         messages.error(request,"Cet enseignant ne mutualise pas de progression sur ce niveau.")
  
     return redirect('progression' , idg)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

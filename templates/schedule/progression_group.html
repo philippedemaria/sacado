@@ -215,10 +215,10 @@
                             </table>
                         </div>
                         <div id="exercises" class="tab-pane fade ">
-                            {% for parcours in list_relationships %}
-                                <div style="border:2px solid {{parcours.color}} ; border-radius: 5px; padding: 5px; color : {{parcours.color}};clear:both">
-                                    <h4>{{ parcours.title }}</h4>
-                                    {% for relationship in parcours.relationships %}
+                            {% for dico in list_relationships %}
+                                <div style="border:2px solid {{dico.parcours.color}} ; border-radius: 5px; padding: 5px; color : {{dico.parcours.color}};clear:both">
+                                    <h4>{{ dico.parcours.title }}</h4>
+                                    {% for relationship in dico.relationships %}
                                         <a href="javascript:void();" class="insert_this_into_edt content_edt exercise_edt" data-type="Exercice" data-id="{{ relationship.id }}">
                                             <b>{{ forloop.counter }}.</b>
                                             {{ relationship.exercise.supportfile.knowledge.name }}
@@ -231,10 +231,10 @@
                             {% endfor %}
                         </div>
                         <div id="lesson" class="tab-pane fade ">
-                            {% for parcours in list_relationships %}
-                                <div style="border:2px solid {{parcours.color}} ; border-radius: 5px; padding: 5px; color : {{parcours.color}};clear:both">
-                                    <h4>{{ parcours.title }}</h4>
-                                    {% for cours in parcours.courses %}
+                            {% for dico in list_courses %}
+                                <div style="border:2px solid {{ dico.parcours.color}} ; border-radius: 5px; padding: 5px; color : {{ dico.parcours.color}};clear:both">
+                                    <h4>{{ dico.parcours.title }}</h4>
+                                    {% for cours in dico.courses %}
                                         <a href="javascript:void();" class="insert_this_into_edt content_edt cours_edt" data-type="Cours" data-id="{{ cours.id }}">
                                             {{ cours.name }}
                                         </a>
@@ -244,7 +244,6 @@
                             {% empty %}
                                 <div class="alert alert-danger">Aucun cours n'est associé à ce groupe</div>
                             {% endfor %}                            
-                            
                         </div>
                         <div id="biblioTex" class="tab-pane fade ">
                             {% for bibliotex in bibliotexs %}
