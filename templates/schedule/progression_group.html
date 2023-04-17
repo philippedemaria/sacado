@@ -216,12 +216,15 @@
                         </div>
                         <div id="exercises" class="tab-pane fade ">
                             {% for parcours in list_relationships %}
-                                <li class="sanspuce">{{ parcours.title }}</li>
-                                {% for relationship in parcours.relationships %}
-                                    <a href="javascript:void();" class="insert_this_into_edt content_edt exercise_edt" data-type="Exercice" data-id="{{ relationship.id }}">
-                                        {{ relationship.exercise.knowledge.name }}
-                                    </a>
-                                {% endfor %}
+                                <div style="border:2px solid {{parcours.color}} ; border-radius: 5px; padding: 5px; color : {{parcours.color}}">
+                                    <h4>{{ parcours.title }}</h4>
+                                    {% for relationship in parcours.relationships %}
+                                        <a href="javascript:void();" class="insert_this_into_edt content_edt exercise_edt" data-type="Exercice" data-id="{{ relationship.id }}">
+                                            <b>{{ forloop.counter }}.</b>
+                                            <img src="{{ relationship.exercise.supportfile.imagefile.url }}" width='45px' />
+                                         </a>
+                                    {% endfor %}
+                                </div>
                             {% empty %}
                             <div class="alert alert-danger">Aucun exercice n'est associé à ce groupe</div>
                             {% endfor %}
