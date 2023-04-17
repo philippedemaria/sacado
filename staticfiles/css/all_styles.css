@@ -2427,6 +2427,16 @@ a.select_correction:focus {
   font-size:20px;
 }
 
+.annale{
+  font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
+  padding: 1px 5px;
+  background: #0093CA ;
+  color:white;
+  border-radius: 5px;  
+  font-size:12px;
+}
+
+
 
  
 .card_modal_search {
