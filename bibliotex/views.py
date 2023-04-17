@@ -89,7 +89,7 @@ def affectation_students_folders_groups(nf,group_ids,folder_ids):
 
 
 
-def printer(request, relationtex_id, collection,output):
+def printer(request, relationtex_id, collection,output , obj):
     """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
     soit en html (output="html") """
 
@@ -265,26 +265,42 @@ def printer(request, relationtex_id, collection,output):
     else : #pour la création d'un exercise ou son update*
 
         try :
-            relationtex = Relationtex.objects.get(pk = relationtex_id)
-            title       =  relationtex.exotex.title
-             
-            if output == "html_cor" :
-                if  relationtex.correction : ctnt =  relationtex.correction
-                else                       : ctnt =  relationtex.exotex.correction
-            elif output == "html" :
-                ctnt =  relationtex.exotex.content 
-            else :
-                ctnt =  relationtex.exotex.content 
- 
+            if obj == "R" : 
+                relationtex = Relationtex.objects.get(pk = relationtex_id)
+                title       =  relationtex.exotex.title
+                if output == "html_cor" :
+                    if  relationtex.correction != "" : ctnt =  relationtex.correction
+                    else                       : ctnt =  relationtex.exotex.correction
+                elif output == "html" :
+                    if  relationtex.content != "" :
+                        ctnt =  relationtex.content 
+                    else :
+                        ctnt =  relationtex.exotex.content 
+                else :
+                    ctnt =  relationtex.exotex.content 
+
+
+            else : 
+                exotex = Exotex.objects.get(pk = relationtex_id)
+                title  = exotex.title
+                 
+                if output == "html_cor" :
+                    ctnt =  exotex.correction
+                elif output == "html" :
+                    ctnt =  exotex.content 
+                else :
+                    ctnt =  exotex.content 
+
         except :
-            exotex         = Exotex.objects.get(pk = relationtex_id)
-            title          =  exotex.title
+            exotex = Exotex.objects.get(pk = relationtex_id)
+            title  =  exotex.title
             if output == "html_cor" :
                 ctnt =  exotex.correction
             elif output == "html" :
                 ctnt =  exotex.content
             else :
                 ctnt =  exotex.content 
+
 
         ctnt = ctnt.replace(r"\mathcal","")
 
@@ -454,9 +470,9 @@ def compile_html(request,nf):
         
         try :
             if nf.content_html == "" :
-                Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+                Exotex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" , "E" )   )
             if nf.correction_html == "" :
-                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+                Exotex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" , "E" )   )
             save_html = True    
         except :
             save_html = False
@@ -633,9 +649,9 @@ def update_relationtex(request, id):
             nf.save()
             form.save_m2m()  
 
-            Relationtex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" )   )
+            Relationtex.objects.filter(pk= nf.id).update( content_html = printer(request, nf.id, False , "html" , "R" )   )
             if nf.correction :  
-                Relationtex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" )   )
+                Relationtex.objects.filter(pk= nf.id).update( correction_html = printer(request, nf.id, False , "html_cor" , "R" )   )
 
             messages.success(request, "L'exercice a été modifié avec succès !")
             return redirect('show_bibliotex', bibliotex_id )
@@ -2033,12 +2049,12 @@ def ajax_print_bibliotex(request):
 
 def print_bibliotex(request ):
 
-    return printer(request,0, True,"pdf")
+    return printer(request,0, True,"pdf" , "E")
 
 
 def print_exotex(request):
 
-    return printer(request,0, False,"pdf")
+    return printer(request,0, False,"pdf" , "E")
 
 
 
