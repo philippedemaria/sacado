@@ -29,6 +29,11 @@ def is_sacado_asso(this_user, today):
             is_active = True
     except :
         pass
+
+    if this_user.is_superuser :
+        is_sacado = True
+        is_active = True
+        
     return is_sacado, is_active
 
 
