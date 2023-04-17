@@ -2,17 +2,25 @@
     <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Gestion des progressions <b class="caret"></b> </a>
     <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
         <li>
-        	<a href="{% url 'config_edt' 0 %}" > Configuration annuelle </a> 
+        	<a href="{% if sacado_asso %}{% url 'config_edt' 0 %}{% endif  %}" {% if not sacado_asso %}title="Version établissement requise" class="link_not_allowed"{% endif  %}> Configuration annuelle </a> 
+        </li>
+
+        <li>
+            <a href="{% if sacado_asso %}{% url 'my_edt' %}{% endif  %}" {% if not sacado_asso %}title="Version établissement requise" class="link_not_allowed" {% endif  %} >  Mon emploi du temps</a> 
         </li>
         <li class="divider"></li>
+        {% for g in groups %}
         <li>
-            <a href="{% url 'my_edt' %}" >  Mon emploi du temps</a> 
+            <a href="{% if sacado_asso %}{% url 'progression_group' g.id %}{% endif  %}" {% if not sacado_asso %}title="Version établissement requise" class="link_not_allowed" {% endif  %} style="color:{{ g.color}}"> Progression de {{ g.name }}</a> 
         </li>
-
-
-
+        {% endfor %}
     </ul>
 </li>
+
+
+
+
+ 
 
  
 

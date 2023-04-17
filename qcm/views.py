@@ -41,7 +41,7 @@ import time
 import math
 import json
 import random
-from datetime import datetime , timedelta
+from datetime import datetime , timedelta ,date
 
 from qcm.adaptatif import *
 ##############bibliothèques pour les impressions pdf  #########################
@@ -5599,8 +5599,18 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
             if date :
                 if custom == "0" : 
                     Relationship.objects.filter(pk = int(relationship_id)).update(date_limit = date)
-
                     r = Relationship.objects.get(pk = int(relationship_id))
+
+                    try :
+                        group_id = request.session.get("group_id")
+                        group = Group.objects.get(pk = int(group_id))
+                        date = date.split(" ")[0]
+                        slot_start = datetime.strptime(date, '%Y-%m-%d').date()
+                        slotedt = Slotedt.objects.filter(users=request.user, start__startswith = slot_start, groups = group).first()
+                        slot.content += "Exercice : <a href='http://sacado.xyz/qcm/{}/{}' target='_blank'>{}<a>".format(r.exercise.supportfile.code,r.parcours.id , r.exercise.id )
+                        slot.save()
+                    except : pass
+
                     data["class"] = "btn-success"
                     data["noclass"] = "btn-default"
                     msg = "Pour le "+str(date)+": \n Un exercice vous est assigné. Rejoindre sacado.xyz. \n. Si vous ne souhaitez plus recevoir les notifications, désactiver la notification dans votre compte."

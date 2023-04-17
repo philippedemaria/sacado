@@ -50,7 +50,7 @@ class Automatic(models.Model):
 
 class Slotedt(models.Model):
     users   = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='my_slots_edt' )  
-    start   = models.DateTimeField(_('start'))
+    start   = models.DateField(_('start'))
     slot    = models.PositiveIntegerField(default=1, editable=False) # id du type
     content = models.TextField( null=True, blank=True, verbose_name="Contenu")   
     groups  = models.ManyToManyField(Group, blank = True, related_name='slots_edt', editable=False)  
@@ -61,12 +61,11 @@ class Slotedt(models.Model):
 
 
 
-
   
 class Edt(models.Model):
 
     DAYS = (("0","Lundi"),("1","Mardi"),("2","Mercredi"),("3","Jeudi"),("4","Vendredi"),("5","Samedi"),("6","Dimanche"))
-    user        = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='my_edts', null=True, blank = True, on_delete=models.CASCADE, editable=False)
+    user        = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='edt', null=True, blank = True, on_delete=models.CASCADE, editable=False)
     is_slot     = models.BooleanField(default=0) 
     start_class = models.CharField( default="8:00" ,blank = True, max_length=5)
     slots       = models.ManyToManyField(Slotedt, blank = True, related_name='edts', editable=False) 
@@ -74,6 +73,7 @@ class Edt(models.Model):
     stop        = models.DateTimeField(_('stop'))
     days_on     = models.CharField( default="Lundi-Mardi-Mercredi-Jeudi-Vendredi-Samedi" ,max_length=250,editable=False)
     first_day   = models.CharField( default="0",choices=DAYS ,max_length=250)
+    is_share    = models.BooleanField(default=1) # Mutualiser les progressions
 
     def __str__(self):
         return "Edt:{}".format(self.user)  
@@ -86,8 +86,9 @@ class Edt(models.Model):
             boolean = True
             tedt = template_edts.first() 
             group = tedt.groups.first() 
-            if tedt.is_half : data["group"] = "1sem/2 : "+ group.name
-            else : data["group"] =  group.name
+            if tedt.is_half : data["group_name"] = "1sem/2 : "+ group.name
+            else : data["group_name"] =  group.name
+            data["group_id"] =  group.id
             data["style"] = "background-color:"+group.color+";color:white;text-align:center"
              
         else :

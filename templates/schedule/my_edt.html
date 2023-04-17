@@ -61,7 +61,7 @@
                                 data-slot="{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}" 
                                 class="get_this_slot" data-toggle='modal' data-target='#edt_modal'
                                 {% if  this_slot.boolean %}style="{{ this_slot.style}}"{% endif %}>
-                                  {% if  this_slot.boolean %} {{ this_slot.group}} {% endif %}  
+                                  {% if  this_slot.boolean %} {{ this_slot.group_name}} {% endif %}  
                             </td> 
           
                             <input name="annual_slots" type="hidden" id="annual_slot-{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}"> 
@@ -99,12 +99,12 @@
                             <li class="sanspuce"><label class="btn btn-danger">Vider la cellule <input    name="id_group" type="radio" value="0" class="get_this_group_to_this_slot" /></label></li>
                         </div>
                         <div class="col-xs-6" >
-                            <h3>Heure quinzaine</h3>
+                            <h3>Heure quinzaine.  <small>Semaine A/B</small></h3>
                             {% for g in teacher.groups.all %}
-                                <li class="sanspuce"><label>
-                                    Sem. A : {{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time_A" /></label>
+                                <li class="sanspuce">{{ g.name }} : <label>
+                                    A <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time_A" /></label>
 
-                                    <label>Sem. B : {{ g.name }} <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time_B" /></label>
+                                    <label>B <input  name="id_group" type="radio" value="{{ g.id }}" class="get_this_group_to_this_slot_half_time_B" /></label>
                                 </li>
                             {% endfor %}
                                 <li class="sanspuce"><label class="btn btn-danger">Vider la cellule <input  name="id_group" type="radio" value="0" class="get_this_group_to_this_slot_half_time" /></label></li>

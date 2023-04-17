@@ -1086,6 +1086,16 @@ def get_vote(obj, user):
 
 
 @register.simple_tag 
+def get_teachers_exclude_myself(obj, user):
+    """
+    renvoie le résultat d'un exo custom coté élève
+    """
+    return obj.teachers_exclude_myself(user)
+
+
+
+
+@register.simple_tag 
 def get_group_in_this_school(obj, school):
     """
     obj = teacher , renvoie les groupes de cet enseignant dans l'école

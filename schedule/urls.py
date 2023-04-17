@@ -18,7 +18,12 @@ urlpatterns = [
     
 
     path('progressions', progressions, name='progressions'),
+    path('progression/<int:idg>', progression_group, name='progression_group'),     
     path('config_progression', config_progression, name='config_progression'),
+    path('insert_content_into_slot/<int:idg>', insert_content_into_slot, name='insert_content_into_slot'),
 
+    path('clear_the_slot/<int:ids>/<int:idg>', clear_the_slot, name='clear_the_slot'),
 
+    path('print_progression/<int:idg>', print_progression, name='print_progression'),  
+    path('get_progression/<int:idg>', get_progression, name='get_progression'),  
  ]

@@ -1,0 +1,354 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+    <script>
+        require(['script/ajax-edt']);
+    </script> 
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class="bi bi-calendar4"></i> Ma progression en {{ group.name }}
+       <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Cliquer un créneau de l'emploi du temps coloré pour le remplir.</div>
+                                </span> 
+    
+    <ul>{% include 'schedule/submenu_config.html' %}</ul>
+    
+
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+
+   
+    <a href="#" data-toggle="modal" data-target='#edt_print'  class="dropdown-toggle btn btn-new"> <i class="bi bi-printer"></i> Imprimer / Exporter    </a>
+ 
+    <a href="#" data-toggle="modal" data-target='#edt_import'  class="dropdown-toggle btn btn-new"> <i class="bi bi-box-arrow-in-down-left"></i>  Récupérer   </a>
+ 
+
+{% endblock %}
+
+ 
+
+{% block body %}
+
+<section class="content_main"> 
+
+    <div class="row"> 
+        <div class="col-sm-12 col-md-5">    
+            
+            <div class="wrapper_edt_slider">
+          <!-- Wrapper for slides -->
+                <div class="edt_slider">
+
+                    <ul>
+                        <li class="my_edt_slide">
+
+                            <div class="row"> 
+                                <div class="col-sm-2 col-md-2"> 
+                                    <button data-nav="prev" class="btn btn-default nav"><i class="fa fa-caret-left"></i>  </button>  
+                                </div>
+                                <div class="col-sm-8 col-md-8"> 
+                                    <label id="to_fill_this_slot_week" >Semaine du {{ this_first_day_week|date:"d" }} au {{ this_last_day_week|date:"d N Y" }}</label>
+                                </div>
+                                <input type="hidden" name="this_first_day_week" id="this_first_day_week" value="{{ this_first_day_week|date:'Y-m-d' }}" />
+                                <input type="hidden" name="this_last_day_week" id="this_last_day_week" value="{{ this_last_day_week|date:'Y-m-d' }}" />
+
+                                <div class="col-sm-2 col-md-2">  
+                                    <button data-nav="next" class="btn btn-default nav"><i class="fa fa-caret-right"></i>  </button>
+                                </div>
+                            </div>
+                            <table class="table-edt">
+                                <tr>
+                                    <th  style="text-align: center;font-size:11px;padding:5px">{% if my_edt.is_slot %}Créneaux{% else %}Heures{% endif %}</th>
+                                    {% for day in days %}
+                                        <th style="text-align: center;font-size:11px;padding:5px">{{ day }}{{ this_first_day_week|date:"d"|add:forloop.counter0 }}</th>
+                                    {% endfor %}
+                                </tr>
+                                {% for sloter in sloters %}
+                                <tr>
+                                    {% if my_edt.is_slot %}
+                                        <td>H{{ forloop.counter}}</td>
+                                    {% else %}
+                                        <td style="vertical-align:top;text-align:right;font-size: 0.8em">{{ my_edt.start_class|add_hour:forloop.counter0 }}</td>
+                                    {% endif %} 
+                                    {% for day in days %}
+                                        {%  get_day_slot  my_edt  forloop.parentloop.counter   forloop.counter0 as this_slot   %}
+                                        <td id="slot-{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}" 
+                                            data-slot="{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}" 
+                                            class="fill_edt_this_slot" 
+                                            {% if  this_slot.boolean and this_slot.group_id == group.id %}style="{{ this_slot.style}}"  data-toggle='modal' data-target='#edt_modal'{% endif %}>
+                                              {% if  this_slot.boolean %} {{ this_slot.group_name }} {% endif %}  
+                                        </td> 
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-7">
+
+
+            <div class="edt_listing_text" id="edt_listing_text">
+                <input value="{{ nb_px}}" id="this_scrollTop" type="hidden"/>
+                {% for slot in all_slots %}
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 edt_listing {% if today_slot == slot.start %}edt_listing_active{% endif %}">
+                            <label>
+                                <div class="edt_listing_title">{{ slot.start|date:"d N Y" }}</div>
+                                <hr/>
+                                <div style="text-align:center"><a href="{% url 'clear_the_slot' slot.id group.id %}" onclick="return clear_the_slot()"><i class="bi bi-trash"></i></a></div>
+                            </label>
+                        </div>
+                        <div class="col-sm-11 col-md-11  {% if slot.content %}edt_listing{% else %}edt_listing_no_content{% endif %}" >
+                            <div class="edt_listing_body" id="edt_listing_body{{ slot.id }}">{% if slot.content %}{{ slot.content|safe }}{% else %}{% endif %}</div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-danger">Votre emploi du temps n'est pas créé pour ce groupe.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="edt_modal" tabindex="-1" role="dialog" aria-labelledby="edt_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4>
+                    Contenu du créneau
+                    <span  id="fill_this_slot_slot"></span> du
+                    <span id="fill_this_slot_day"></span>
+                </h4> 
+
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'insert_content_into_slot' group.id %}" method="POST">{% csrf_token %} 
+                    <ul class="nav nav-tabs">
+                        <li class="li_tabs_and_panels active">
+                            <a data-toggle="tab" href="#contenu" class="tabs_and_panels">
+                                Contenu
+                            </a>
+                        </li>
+                        <li class="li_tabs_and_panels">
+                            <a data-toggle="tab" href="#sf" class="tabs_and_panels">
+                                SF
+                            </a>
+                        </li>
+                        <li class="li_tabs_and_panels">
+                            <a data-toggle="tab" href="#quizz" class="tabs_and_panels">
+                                Quizz/Qflash
+                            </a>
+                        </li>
+                        <li class="li_tabs_and_panels">
+                            <a data-toggle="tab" href="#lesson" class="tabs_and_panels">
+                                Cours
+                            </a>
+                        </li>                        
+                        <li class="li_tabs_and_panels">
+                            <a data-toggle="tab" href="#exercises" class="tabs_and_panels">
+                                Exercices
+                            </a>
+                        </li>    
+
+                        <li class="li_tabs_and_panels ">
+                            <a data-toggle="tab" href="#biblioTex" class="tabs_and_panels">
+                                BiblioTex 
+                            </a>
+                        </li>
+                        <li class="li_tabs_and_panels">
+                            <a data-toggle="tab" href="#flashpack" class="tabs_and_panels">
+                                Flashpack
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">  
+                        <div id="contenu" class="tab-pane fade in active ">
+                            <input type="hidden" name="start" id="to_fill_this_slot_day"   />
+                            <input type="hidden" name="slot" id="to_fill_this_slot_slot"   />
+                            <div class="row">
+                                <div class="col-xs-12" >
+                                    {{ form.content  }}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" /> Enregistrer</form>
+                        </div>
+                        <div id="sf" class="tab-pane fade ">
+                            <table class="table table-hover" style="width:100%;" > 
+                                {% regroup waitings by theme as theme_list %}
+                                {% for theme in theme_list  %} 
+                                    <tr style="background:#5d4391; color:white;font-size:12px">
+                                        <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td> 
+                                    </tr> 
+                                    {% for waiting in theme.list  %}
+                                        <tr style="background:#aa98cd; cursor: pointer; color: white;font-size:12px">
+                                            <td style="width:85%">{{waiting.name}}  </td> 
+                                        </tr>  
+                                        {% for knowledge in waiting.knowledges.all  %}
+                                            <tr style="background:#d4cbe6; cursor: pointer; color: #5d4391;font-size:12px"> 
+                                                <td>
+                                                    <a href="javascript:void();" class="insert_this_into_edt" data-type="Savoir Faire"  data-id="{{ knowledge.id }}" data-title="{{ knowledge.name }}">{{ knowledge.name|capfirst }}</a> 
+                                                </td>
+                                            </tr>
+                                        {% endfor %}  
+                                    {% endfor %}
+                                {% endfor %}  
+                            </table>
+                        </div>
+                        <div id="exercises" class="tab-pane fade ">
+                            {% for parcours in list_relationships %}
+                                <li class="sanspuce">{{ parcours.title }}</li>
+                                {% for relationship in parcours.relationships %}
+                                    <a href="javascript:void();" class="insert_this_into_edt content_edt exercise_edt" data-type="Exercice" data-id="{{ relationship.id }}">
+                                        {{ relationship.exercise.knowledge.name }}
+                                    </a>
+                                {% endfor %}
+                            {% empty %}
+                            <div class="alert alert-danger">Aucun exercice n'est associé à ce groupe</div>
+                            {% endfor %}
+                        </div>
+                        <div id="lesson" class="tab-pane fade ">
+                            {% for parcours in list_relationships %}
+                                <li class="sanspuce">{{ parcours.title }}</li>
+                                {% for cours in parcours.courses %}
+                                    <a href="javascript:void();" class="insert_this_into_edt content_edt cours_edt" data-type="Cours" data-id="{{ cours.id }}">
+                                        {{ cours.name }}
+                                    </a>
+                                {% endfor %}
+                            {% empty %}
+                                <div class="alert alert-danger">Aucun cours n'est associé à ce groupe</div>
+                            {% endfor %}
+                        </div>
+                        <div id="biblioTex" class="tab-pane fade ">
+                            {% for bibliotex in bibliotexs %}
+                                <a href="javascript:void();" class="insert_this_into_edt content_edt bibliotex_edt" data-type="Bibliotex" data-title="{{ bibliotex.title }}" data-id="{{ bibliotex.id }}">
+                                    {{ bibliotex.title }}
+                                </a>
+                            {% empty %}
+                                <div class="alert alert-danger">Aucun bibliotex n'est associé à ce groupe</div>
+                            {% endfor %}
+                        </div>
+                        <div id="flashpack" class="tab-pane fade ">
+                            {% for flashpack in flashpacks %}
+                                    <a href="javascript:void();" class="insert_this_into_edt content_edt flashpack_edt" data-type="Flashpack" data-title="{{ flashpack.title }}" data-id="{{ flashpack.id }}">
+                                        {{ flashpack.name }}
+                                    </a>
+                            {% empty %}
+                                <div class="alert alert-danger">Aucun flashpack n'est associé à ce groupe</div>
+                            {% endfor %}
+                        </div>
+                        <div id="quizz" class="tab-pane fade ">
+                            {% for quizz in quizzes %}
+                                    <a href="javascript:void();" class="insert_this_into_edt content_edt quizz_edt" data-type="Quizz" data-title="{{ quizz.title }}" data-id="{{ quizz.id }}">
+                                        {{ quizz }}
+                                    </a>
+                            {% empty %}
+                                <div class="alert alert-danger">Aucun quizz n'est associé à ce groupe</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+<div class="modal fade" id="edt_print" tabindex="-1" role="dialog" aria-labelledby="edt_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4>
+                    Impression de la progression
+                </h4> 
+
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'print_progression' group.id %}" method="POST">{% csrf_token %} 
+                    <div class="form-group">
+                        <label>Toute la progression <input type="radio" name="all_progression" value="1" /></label>
+                        <b>ou</b>
+                        <label>du : <input type="date" name="date_start" /></label> <label>au : <input type="date" name="date_stop" /></label>
+                    </div>
+                    <div class="form-group">
+                        <label>Format : <small>le séparateur est le point virgule.</small></label>
+                        <li class="sanspuce"><label> <input type="radio" name="format" value="pdf" /> pdf</label></li>
+                        <li class="sanspuce"><label> <input type="radio" name="format" value="csv" /> csv</label></li>
+                        <li class="sanspuce"><label> <input type="radio" name="format" value="xls" /> Excel</label></li>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="my_edt_id" value="{{ my_edt.id }}" />
+                        <button type="submit" class="btn btn-primary" > Imprimer / Exporter</button>
+                    </div>
+                </form>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+<div class="modal fade" id="edt_import" tabindex="-1" role="dialog" aria-labelledby="edt_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4>
+                    Récupérer une progression
+                </h4> 
+
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'get_progression' group.id %}" method="POST">{% csrf_token %} 
+                    <div class="form-group">
+                        {% get_teachers_exclude_myself request.user.school request.user as listing %}
+                        {% for u in listing %}
+                            <div style="border:1px solid #CCC; margin-bottom: 10px;padding: 10px;"><b>{{ u.first_name }} {{ u.last_name }}</b>
+                                {% for g in u.teacher.groups.all %}
+                                    <li class="sanspuce"><label><input type="radio" name="user_and_group_id" value="{{ u.id }}-{{ g.id }}" /> {{ g.name }}, {{ g.level.name }}</label></li>
+                                {% endfor %}
+                            </div>
+                        {% empty %}
+                            <div class="alert alert-danger">
+                                   Aucune progression mutualisée.
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">               
+                        <input type="hidden" name="my_edt_id" value="{{ my_edt.id }}" />
+                        <button type="submit" class="btn btn-primary"> Récupérer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock %}

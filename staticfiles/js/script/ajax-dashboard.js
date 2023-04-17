@@ -192,7 +192,11 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 $("#helper_div_title").html("Les questions flash "); 
                 value = $("#helper_qflash_text").html();
             }
-
+            else if (condition == "progression") 
+            {
+                $("#helper_div_title").html("Les progressions "); 
+                value = $("#helper_progression_text").html();
+            }
             $("#helper_div_in").html(value) ;
         });
 

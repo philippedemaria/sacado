@@ -759,6 +759,7 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12">
             <a href="{%  url 'progressions' %}" {% if request.session.subtdb == 'Progression' %} class="active_selected"{% endif %}   >Progressions </a>
+            <a href="#" data-toggle='modal' data-helper_text='progression' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
         </div>
     </div>
     <hr/>
@@ -778,7 +779,7 @@
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{%  url 'list_questions_flash' %}"  {% if request.session.subtdb == 'QFlash' %} class="active_selected"{% endif %} >Questions flash<sup class="text-danger">Nouv</sup> </a>
-                <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
+            <a href="#" data-toggle='modal' data-helper_text='qflash' data-target='#helper_div' class="pull-right edit helper_div_text"><i class="fa fa-question-circle"></i></a>
         </div>
     </div>    
     <hr/>
@@ -1093,6 +1094,24 @@
         </ol>
     </div>
 </div>
+
+<div class="no_visu_on_load" id="helper_progression_text">
+    
+    <div class="alert">
+        <p>Notre plateforme SACADO devient peu à peu tentaculaire avec de multiples utilisations qui correspondent à nos idées pédagogiques. J'avais besoin d'un outil pour recenser les modules SACADO utilisés en classe, un texte copiable/collable rapidement dans le Pronote de mon établissement.
+             <ol>
+                <li>Configurer son emploi du temps </li>
+                <li>Choisir un groupe</li>
+                <li>Cliquer sur le créneau du groupe </li>
+                <li>Créer sa séance </li>
+                <li>Copier coller où on veut. </li>
+            </ol>   
+            En plus, les progressions sont imprimables en pdf, importables/exportables en Excel et mutualisables. D'une année sur l'autre, ces progressions peuvent faire gagner un peu de temps.
+        </p>
+    </div>
+</div>
+
+
 
 <div class="no_visu_on_load" id="helper_qflash_text">
     

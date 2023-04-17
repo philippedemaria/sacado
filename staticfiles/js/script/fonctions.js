@@ -174,3 +174,7 @@ function check_checkboxes_ia()
   }
    alert("Selectionnez au moins un savoir faire.") ; return false ;
 }
+
+function clear_the_slot(){
+     if (!confirm('Vous souhaitez vider le contenu de ce créneau. \nConfirmer ?')) return false;
+}

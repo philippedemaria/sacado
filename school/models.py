@@ -62,10 +62,23 @@ class School(models.Model):
 
 
     def admin(self):
-        User = apps.get_model('account', 'User')
-
-        users = User.objects.filter(school_id = self.pk, is_manager = 1)
+        users = self.users.filter(is_manager = 1).order_by("last_name")
         return users
+
+
+    def teachers(self):
+        users = self.users.filter(user_type = 2).order_by("last_name")
+        return users
+
+
+    def teachers_exclude_myself(self,user):
+        listing = list()
+        users = self.users.filter(user_type = 2).exclude(pk=user.id).order_by("last_name")
+        for u in users :
+            try : 
+                if u.edt.is_share : listing.append(u)
+            except : pass
+        return listing
 
 
 
@@ -125,9 +138,7 @@ class School(models.Model):
         except :
             account  = False
         return account
-
-
-
+ 
 class Stage(models.Model):
     """" Niveau d'aquisition """
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='aptitude', editable=False)

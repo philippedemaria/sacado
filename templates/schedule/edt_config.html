@@ -67,8 +67,6 @@
                         <td>{{ form.start_class|add_class:"form-control"  }}</td>
                         <td>{{ form.start_class.errors }}</td>
                     </tr>
-
-
                     <tr>
                         <td>Jours affichés ? </td>
                         <td>
@@ -88,8 +86,23 @@
                         <td>{{ form.first_day.errors }}</td>
                     </tr>
                     <tr>
-                        <td><button type="submit" class="btn btn-primary">Enregistrer</button> <a href="javascript:history.back()" class="btn btn-default" >Retour</a> </td>
-                        <td></td>
+                        <td>Mutualiser les progressions ? </td>
+                        <td>{{ form.is_share|attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                        <td>{{ form.is_share.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if sacado_asso %}
+                            <button type="submit" class="btn btn-primary">Enregistrer</button> <a href="javascript:history.back()" class="btn btn-default" >Retour</a> 
+                            {% else %}
+                            <button class="btn btn-primary">Version étabIissement requise</button> 
+                            {% endif  %}
+                        </td>
+                        <td>
+                            {% if not sacado_asso %}
+                                 <a href="javascript:history.back()" class="btn btn-default" >Retour</a>
+                            {% endif  %} 
+                        </td>
                         <td> </td>
                     </tr>
                 </table>

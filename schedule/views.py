@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 
 from schedule.models import Calendar, Event, Automatic , Edt , Slotedt , Template_edt
-from schedule.forms import CalendarForm, EventForm , EdtForm
+from schedule.forms import CalendarForm, EventForm , EdtForm , ContentslotForm
 
 from group.models import Group
 from account.models import User, Teacher , Student
@@ -50,7 +50,7 @@ def progressions(request):
     teacher =   request.user.teacher
     groups = teacher.groups.all()
 
-    if teacher.user.my_edts.count()>0 :
+    if teacher.user.edt.count()>0 :
         context = {  'groups': groups,   }
         return render(request, 'schedule/progressions.html', context )
     else :
@@ -67,12 +67,97 @@ def config_progression(request,idc):
     return render(request, 'schedule/progressions.html', context )
 
 
+def progression_group(request,idg):
+
+    user = request.user
+    teacher = request.user.teacher
+    group   = teacher.groups.get(pk=idg) 
+    groups = teacher.groups.all()
+
+    sloters = [1,2,3,4,5,6,7,8,9,10,11,12]
+    my_edt = user.edt
+    days   = my_edt.days_on.split("-")
+    days   = days[:-1] 
+    start , stop  = my_edt.start , my_edt.stop
+    all_slots = my_edt.slots.filter(groups=group).order_by("start")
+    slots_edt = my_edt.slots.filter(start__gte=start, start__lt=start+timedelta(days=7))
+    today = time_zone_user(user)
+    list_all_slot_ids  = all_slots.values_list("id",flat=True)
+    list_this_slot_ids = list_all_slot_ids.filter(start__gte=today, start__lt=today+timedelta(days=7))
+    if not list_all_slot_ids : list_this_slot_ids = list_all_slot_ids.filter(start__gte=today, start__lt=today+timedelta(days=20))
+    
+    if len(list_this_slot_ids) : nb_px = list(list_all_slot_ids).index(list_this_slot_ids[0])*100
+    else : nb_px = 10 
+
+    today = time_zone_user(request.user)
+    this_first_day_week = today +   timedelta(days=  int(my_edt.first_day) - today.weekday() )
+    this_last_day_week  = this_first_day_week +   timedelta(days= len(my_edt.days_on.split("-"))-2 )
+    form = ContentslotForm(request.POST or None)
+
+
+    bibliotexs = group.bibliotexs.all()
+    flashpacks = group.flashpacks.all()
+    quizzes    = group.quizz.all()
+
+    parcourses = group.group_parcours.filter( is_publish=1 ,is_trash=0)
+
+    list_relationships , list_courses  = list() ,  list()
+    for parcours in parcourses :
+        dico_list_relationships = {'title' : parcours.title , 'relationships' : parcours.parcours_relationship.all()  }
+        dico_list_courses  = {'title' : parcours.title , 'courses' : parcours.course.all() }
+        list_relationships.append(dico_list_relationships)
+        list_courses.append(dico_list_courses)
+
+    waitings = group.level.waitings.filter(theme__subject= group.subject).order_by("theme__subject" , "theme")
+
+    context = { 'bibliotexs' : bibliotexs , 'flashpacks' : flashpacks , 'quizzes' : quizzes , 'list_relationships' : list_relationships , 'list_courses' : list_courses ,  'waitings' : waitings ,  
+                'groups': groups , 'group': group, 'teacher': teacher, 'sloters': sloters, 'slots_edt':slots_edt  , 'all_slots' : all_slots ,   'nb_px' : nb_px , 'today_slot' : today.date() ,
+                'my_edt':my_edt  , 'days':days , 'this_first_day_week':this_first_day_week  , 'this_last_day_week':this_last_day_week  , 'form':form  }
+
+    return render(request, 'schedule/progression_group.html', context )
+
+
+
+def insert_content_into_slot(request,idg):
+
+    user = request.user
+    teacher = request.user.teacher
+    group   = teacher.groups.get(pk=idg) 
+    groups = teacher.groups.all()
+
+    slot       = request.POST.get("slot")
+    slot_start = request.POST.get("start")
+    slot_start = datetime.strptime(slot_start, '%Y-%m-%d').date()
+    slotedt = Slotedt.objects.get(users=user, start__startswith = slot_start, slot = slot , groups = group)
+    content = slotedt.content
+    form = ContentslotForm(request.POST or None,instance =slotedt)
+    if form.is_valid() :
+        nf = form.save(commit=True)
+        nf.content = nf.content + content
+        nf.save()
+        nf.users.add(user)
+        nf.groups.add(group)
+
+    return redirect('progression_group',  idg )
+
+
+
+def clear_the_slot(request,ids,idg):
+ 
+    slotedt = Slotedt.objects.get(pk=ids)
+    slotedt.content = ""
+    slotedt.save() 
+
+    return redirect('progression_group',  idg )
+
+
+
 def config_edt(request,ide):
 
     user = request.user 
 
-    if user.my_edts.count() :  
-        my_edt = user.my_edts.first() 
+    if user.edt.count() :  
+        my_edt = user.edt
         form = EdtForm(request.POST or None , instance = my_edt  )
     else :  
         form    = EdtForm(request.POST or None  )
@@ -105,10 +190,11 @@ def my_edt(request):
 
     user = request.user
     teacher = user.teacher
+    groups = teacher.groups.all()
     sloters = [1,2,3,4,5,6,7,8,9,10,11,12]
 
-    if user.my_edts.count() :  
-        my_edt = user.my_edts.first()
+    if user.edt.count() :  
+        my_edt = user.edts
         days   = my_edt.days_on.split("-")
         days   = days[:-1] 
         start , stop  = my_edt.start , my_edt.stop
@@ -138,18 +224,19 @@ def my_edt(request):
                 template_edt.groups.add(group)
 
             nextDay = start +   timedelta(days= int(day) - start.weekday() )
+            if str(even) == "0"   : nextDay += timedelta(days= 7 )
+            if half == 1 : hday = 14
+            else  : hday = 7            
             while nextDay < stop :
-                if str(even) == "0"   : nextDay + timedelta(days= 7 )
                 slt  = Slotedt.objects.create( start=nextDay,slot=slot )
-                if half == 1 : hday = 14
-                else  : hday = 7
+
                 nextDay +=  timedelta(days=hday)
                 slt.groups.add(group)
                 slt.users.add(user)
                 slots.append(slt)
         my_edt.slots.set(slots)
 
-    context = {  'sloters' : sloters ,'days' : days , 'my_edt' : my_edt , 'teacher' : teacher ,'slots_edt' : slots_edt }
+    context = {  'sloters' : sloters ,'days' : days , 'my_edt' : my_edt , 'teacher' : teacher ,'slots_edt' : slots_edt ,'groups' : groups  }
 
     return render(request, 'schedule/my_edt.html', context )
 
@@ -171,6 +258,133 @@ def my_edt_group_attribution(request):
  
     return JsonResponse(data)
 
+
+
+
+
+def get_progression(request,idg) :
+
+    group = Group.objects.get(pk=idg)
+    user_and_group_id  = request.POST.get("user_and_group_id")
+    user_id , group_id = user_and_group_id.split("-")
+
+    my_edt_id = request.POST.get("my_edt_id")
+    my_edt = Edt.objects.get(pk=my_edt_id)
+    my_edt_slots = my_edt.slots.filter(groups = group).order_by("start")
+    # détails du donneur
+    share_user  = User.objects.get(pk=user_id)
+    share_group = Group.objects.get(pk=group_id) 
+    share_slots = share_user.edt.slots.filter(groups = share_group).order_by("start")
+    ################# 
+    if share_slots :
+        i=0
+        for slot in my_edt_slots :
+            try :
+                slot.content = share_slots[i]["content"]
+                slot.save()
+                i+=1
+            except :
+                pass
+
+        messages.success(request,"Mutualisation réussie.")
+    else :
+        messages.error(request,"Cet enseignant ne mutualise pas de progression sur ce niveau.")
+ 
+    return redirect('progression' , idg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def print_progression(request,idg) :
+
+    group = Group.objects.get(pk=idg)
+    formatage = request.POST.get("format")
+    my_edt_id = request.POST.get("my_edt_id")
+    my_edt = Edt.objects.get(pk=my_edt_id)
+
+    date_start = request.POST.get("date_start")
+    date_stop  = request.POST.get("date_stop")
+    all_progression = request.POST.get("all_progression")
+
+
+    if all_progression : slots = my_edt.slots.filter(groups=group).order_by("start")
+    else : slots = my_edt.slots.filter(groups=group, start__gte=date_start, start__lte=date_stop )
+
+    if formatage == "pdf" :
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename=progression_'+group.level.name+'.pdf'
+
+        doc = SimpleDocTemplate(response,   pagesize=A4, 
+                                            topMargin=0.3*inch,
+                                            leftMargin=0.3*inch,
+                                            rightMargin=0.3*inch,
+                                            bottomMargin=0.3*inch     )
+
+        title = ParagraphStyle('title',  fontSize=13, textColor=colors.HexColor("#000000"),)
+        normal = ParagraphStyle('normal',  fontSize=11, textColor=colors.HexColor("#000000"),)                   
+
+        logo = Image('https://sacado.xyz/static/img/sacadoA1.png')
+        logo_tab = [[logo,  "Progression de "+group.level.name+"\nDocument généré par SACADO"  ]]
+        logo_tab_tab = Table(logo_tab, hAlign='LEFT', colWidths=[0.7*inch,5*inch])
+        logo_tab_tab.setStyle(TableStyle([ ('TEXTCOLOR', (0,0), (-1,0), colors.Color(0,0.5,0.62))]))
+        
+        elements = list()
+        elements.append(logo_tab_tab)
+        elements.append(Spacer(0, 0.2*inch))
+        i = 1
+        for slot in slots :
+            elements.append(Paragraph( i+". "+ slot.start , title ))
+            elements.append(Paragraph( slot.content , normal ))
+            elements.append(Spacer(0, 0.2*inch))
+            i+=1
+
+        doc.build(elements)
+        return response
+
+    elif  formatage == "csv" :
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=progression_'+group.level.name+'.pdf'
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
+        fieldnames = ("Créneau", "Date", "Contenu"  )
+        writer.writerow(fieldnames)
+        i = 1
+        for slot in slots :
+            writer.writerow( i, slot.start , slot.content )
+            i +=1
+        return response
+
+    elif  formatage == "xls" :
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=progression_'+group.level.name+'.pdf'
+
+        response.write(u'\ufeff'.encode('utf8'))
+        wb = xlwt.Workbook(encoding='utf-8')
+        font_style = xlwt.XFStyle()
+        ws = wb.add_sheet("Progression"+group.level.name)
+
+        # Sheet header, first row
+        row_num = 0
+
+        columns = ("Créneau", "Date", "Contenu"  ) 
+        i = 1
+        for col_num in range(len(columns)):
+            ws.write(i, col_num, columns[col_num], font_style)
+            i +=1
+
+        return response
 
 ##################################################################################################################################
 ##################################################################################################################################
