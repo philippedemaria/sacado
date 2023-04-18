@@ -59,6 +59,8 @@ class Exotex(models.Model):
     is_corrected = models.BooleanField(default=0, verbose_name="Correction ?")
     is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
 
+    point = models.PositiveIntegerField(  default=0,  blank=True, null=True ,  verbose_name="Points") 
+
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
     correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html") 
 
@@ -212,7 +214,7 @@ class Relationtex(models.Model):
     stop = models.DateTimeField(null=True, blank=True, verbose_name="Date de verrouillage")
 
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-
+    point = models.PositiveIntegerField(  default=0,  blank=True, null=True ,  verbose_name="Points") 
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Enoncé")
     is_publish_cor = models.BooleanField(default=0, verbose_name="Publié ?")
     correction_html = models.TextField( blank=True, default="", null=True,  editable= False)

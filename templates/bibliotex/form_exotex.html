@@ -85,6 +85,13 @@ ul#id_skills li{
                             {{ form.title.errors }}
                         </div>
                     </div>
+                    <div class="col-sm-12 col-md-2">
+                        <div class="form-group">
+                            {{ form.point.label_tag }} <small>Optionnel</small> 
+                            {{ form.point |add_class:"form-control"  }}
+                            {{ form.point.errors }}
+                        </div>
+                    </div>
                 </div> 
                 {% else %}  
                 <div class="row">
@@ -108,6 +115,11 @@ ul#id_skills li{
                             {{ form.title.label_tag }} <small>Optionnel</small> 
                             {{ form.title |add_class:"form-control textarea_more_shown"  }}
                             {{ form.title.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.point.label_tag }} <small>Optionnel</small> 
+                            {{ form.point |add_class:"form-control"  }}
+                            {{ form.point.errors }}
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-8">
