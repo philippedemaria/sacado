@@ -255,7 +255,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
     $('body').on('click', '.select_correction' , function (event) {
-            let r_id = $(this).data("r_id"); alert(r_id) ;
+            let r_id = $(this).data("r_id");  
             $("#correction"+r_id).toggle(500);
         });
 
