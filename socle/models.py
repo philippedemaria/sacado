@@ -342,7 +342,6 @@ class Knowledge(models.Model):
         return exercises
 
 
-
     def my_relationships(self,group):
 
         Relationship = apps.get_model('qcm', 'Relationship')

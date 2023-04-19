@@ -294,7 +294,9 @@ urlpatterns = [
     path('parcours_delete_course/<int:idc>/<int:id>', delete_course, name='delete_course'),
     path('parcours_show_course/<int:idc>/<int:id>', show_course, name='show_course'),
     path('show_one_course/<int:idc>', show_one_course, name='show_one_course'),
-
+    ############## Accessible via un qrcode
+    path('show_course_from_qrcode/<int:idc>', show_course_from_qrcode, name='show_course_from_qrcode'),
+    ################################################################################################################  
     path('create_course_sequence/<int:id>', create_course_sequence, name='create_course_sequence'),
     path('create_custom_sequence/<int:id>', create_custom_sequence, name='create_custom_sequence'),
 

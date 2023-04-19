@@ -12018,6 +12018,31 @@ def show_one_course(request, idc  ) :
 
 
 
+
+
+def show_course_from_qrcode(request, idc  ) :
+    """
+    idc : course_id 
+    """
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
+    course = Course.objects.get(pk=idc) 
+
+    context = {  'course': course   }
+    return render(request, 'qcm/course/show_course_from_qrcode.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required(login_url= 'index')
 def show_courses_from_folder(request,  idf ) :
     """
