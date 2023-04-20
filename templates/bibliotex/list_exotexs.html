@@ -74,15 +74,10 @@
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td>
 
-                                                <div class="pull-right">
                                                 {% for k in exotex.knowledges.all %}
                                                     {{ k.name }}
                                                 {% endfor %}
                                                 <hr/>
-                                                {% for s in exotex.skills.all %}
-                                                    {{ s.name }}
-                                                {% endfor %}
-                                                </div>
 
 
                                                 <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
