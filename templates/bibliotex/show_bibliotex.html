@@ -30,6 +30,8 @@
 
 {% block page_menu_right %}
 
+    <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
+
     {% if request.user.user_type == 2 %}
         {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
     {% else %}
