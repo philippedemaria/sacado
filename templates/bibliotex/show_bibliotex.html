@@ -32,6 +32,7 @@
 
 
     {% if request.user.user_type == 2 %}
+        <li  class="dropdown"><a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> </li>
         {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
     {% else %}
         {% if not parcours.is_sequence %}
