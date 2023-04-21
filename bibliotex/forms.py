@@ -1,7 +1,7 @@
 from django import forms
 from .models import Exotex , Bibliotex , Relationtex 
 from socle.models import Knowledge , Skill
-
+from django.db.models import Q 
 
 class ExotexForm(forms.ModelForm):
 	class Meta:
@@ -17,11 +17,10 @@ class ExotexForm(forms.ModelForm):
 			subjects = teacher.subjects.all()
 			levels   = teacher.levels.order_by("ranking")
 			if knowledge :
-				skills     = knowledge.theme.subject.skill.all()
-				knowledges = Knowledge.objects.filter(level = knowledge.level )
+				skills = knowledge.theme.subject.skill.all()
 			else :
-				skills     = Skill.objects.all()
-				knowledges = Knowledge.objects.all()
+				skills = Skill.objects.all()
+			knowledges = Knowledge.objects.filter(Q(level_id = knowledge.level.id )|Q(level_id = knowledge.level.id-1 ))
 			self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
 			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
