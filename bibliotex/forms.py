@@ -40,8 +40,6 @@ class BibliotexForm(forms.ModelForm):
 		super(BibliotexForm, self).__init__(*args, **kwargs)
 		levels = teacher.levels.order_by("ranking")  
  
-		
-
 		if group : all_folders = group.group_folders.filter(is_archive=0,is_trash=0)
 		else : all_folders = teacher.teacher_folders.filter(is_archive=0,is_trash=0) 
 
