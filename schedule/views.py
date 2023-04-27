@@ -194,8 +194,7 @@ def my_edt(request):
     sloters = [1,2,3,4,5,6,7,8,9,10,11,12]
 
     if user.edt  :  
-        my_edt = user.edts
-        days   = my_edt.days_on.split("-")
+        days   = user.edt.days_on.split("-")
         days   = days[:-1] 
         start , stop  = my_edt.start , my_edt.stop
         try :
