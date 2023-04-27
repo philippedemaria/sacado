@@ -129,7 +129,8 @@ def insert_content_into_slot(request,idg):
     slot_start = request.POST.get("start")
     slot_start = datetime.strptime(slot_start, '%Y-%m-%d').date()
     slotedt = Slotedt.objects.filter(users=user, start__startswith = slot_start, slot = slot , groups = group).first()
-    content = slotedt.content
+    if slotedt : content = slotedt.content
+    else : content = None
     form = ContentslotForm(request.POST or None,instance =slotedt)
     if form.is_valid() :
         nf = form.save(commit=True)
