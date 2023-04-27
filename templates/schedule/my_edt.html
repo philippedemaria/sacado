@@ -64,7 +64,8 @@
                                   {% if  this_slot.boolean %} {{ this_slot.group_name}} {% endif %}  
                             </td> 
           
-                            <input name="annual_slots" type="hidden" id="annual_slot-{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}"> 
+                            <input name="annual_slots" type="hidden" id="annual_slot-{{ forloop.parentloop.counter }}-{{ forloop.counter0 }}" 
+                            {% if  this_slot.boolean %}value="{{this_slot.group_id}}-{{this_slot.slot}}-{{this_slot.day}}-{{this_slot.is_half }}-{{this_slot.is_even}}"{% endif %}> 
                         {% endfor %}
                     </tr>
                     {% endfor %}

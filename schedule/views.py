@@ -128,12 +128,12 @@ def insert_content_into_slot(request,idg):
     slot       = request.POST.get("slot")
     slot_start = request.POST.get("start")
     slot_start = datetime.strptime(slot_start, '%Y-%m-%d').date()
-    slotedt = Slotedt.objects.get(users=user, start__startswith = slot_start, slot = slot , groups = group)
+    slotedt = Slotedt.objects.filter(users=user, start__startswith = slot_start, slot = slot , groups = group).first()
     content = slotedt.content
     form = ContentslotForm(request.POST or None,instance =slotedt)
     if form.is_valid() :
         nf = form.save(commit=True)
-        nf.content = nf.content + content
+        if content :  nf.content = nf.content + content
         nf.save()
         nf.users.add(user)
         nf.groups.add(group)
@@ -212,28 +212,31 @@ def my_edt(request):
         for a_s in  request.POST.getlist('annual_slots') :
             if a_s != "" : annual_slots.append(a_s)
  
-
         for a_slot in annual_slots :
-            group_id, slot , day , half , even  = a_slot.split("-")
+            group_id, slot , day , is_half , is_even  = a_slot.split("-")
             group = Group.objects.get(pk=group_id)
+            if is_even == "" or is_even == 0 : is_even = False
+            else : is_even = True 
 
-            template_edt,created = Template_edt.objects.update_or_create( edt= my_edt,slot=slot,day=day,is_half=half)
+            template_edt,created = Template_edt.objects.update_or_create( edt= my_edt,slot=slot,day=day,is_half=is_half,is_even=is_even)
             if created : template_edt.groups.add(group)
             else : 
                 template_edt.groups.clear()
                 template_edt.groups.add(group)
 
             nextDay = start +   timedelta(days= int(day) - start.weekday() )
-            if str(even) == "0"   : nextDay += timedelta(days= 7 )
-            if half == 1 : hday = 14
+            if str(is_even) == "0"   : nextDay += timedelta(days= 7 )
+            if is_half == 1 : hday = 14
             else  : hday = 7            
             while nextDay < stop :
-                slt  = Slotedt.objects.create( start=nextDay,slot=slot )
-
+                slt, created  = Slotedt.objects.get_or_create( start=nextDay,slot=slot )
                 nextDay +=  timedelta(days=hday)
                 slt.groups.add(group)
                 slt.users.add(user)
-                slots.append(slt)
+
+                if not created :
+                    slots.append(slt)
+        messages.success(request,"Propagation réussie.")
         my_edt.slots.set(slots)
 
     context = {  'sloters' : sloters ,'days' : days , 'my_edt' : my_edt , 'teacher' : teacher ,'slots_edt' : slots_edt ,'groups' : groups  }

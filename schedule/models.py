@@ -90,7 +90,9 @@ class Edt(models.Model):
             else : data["group_name"] =  group.name
             data["group_id"] =  group.id
             data["style"] = "background-color:"+group.color+";color:white;text-align:center"
-             
+            data["slot"]  = slot
+            data["is_half"]   = tedt.is_half
+            data["day"]   = day
         else :
             boolean = False
 
@@ -104,7 +106,8 @@ class Template_edt(models.Model):
     day     = models.PositiveIntegerField(default=1, editable=False)
     groups  = models.ManyToManyField(Group, blank = True, related_name='template_edts', editable=False)  
     is_half = models.BooleanField(default=0)
-
+    is_even = models.BooleanField(default=0)
+    
     def __str__(self):
         g_str=""
         for g in self.groups.all():
