@@ -72,7 +72,7 @@
                                 <tr>
                                     <th  style="text-align: center;font-size:11px;padding:5px">{% if my_edt.is_slot %}Créneaux{% else %}Heures{% endif %}</th>
                                     {% for day in days %}
-                                        <th style="text-align: center;font-size:11px;padding:5px">{{ day }}{{ this_first_day_week|date:"d"|add:forloop.counter0 }}</th>
+                                        <th style="text-align: center;font-size:11px;padding:5px">{{ day }}<span id="day{{forloop.counter0}}" class="class_days">{{ this_first_day_week|date:"d"|add:forloop.counter0 }}</span></th>
                                     {% endfor %}
                                 </tr>
                                 {% for sloter in sloters %}
@@ -108,13 +108,13 @@
                     <div class="row">
                         <div class="col-sm-1 col-md-1 edt_listing {% if today_slot == slot.start %}edt_listing_active{% endif %}">
                             <label>
-                                <div class="edt_listing_title">{{ slot.start|date:"d N Y" }}</div>
+                                <div class="edt_listing_title">{% if today_slot == slot.start %}<b>{{ slot.start|date:"d N Y" }}</b>{% else %}{{ slot.start|date:"d N Y" }}{% endif %}</div>
                                 <hr/>
                                 <div style="text-align:center"><a href="{% url 'clear_the_slot' slot.id group.id %}" onclick="return clear_the_slot()"><i class="bi bi-trash"></i></a></div>
                             </label>
                         </div>
                         <div class="col-sm-11 col-md-11  {% if slot.content %}edt_listing{% else %}edt_listing_no_content{% endif %}" >
-                            <div class="edt_listing_body" id="edt_listing_body{{ slot.id }}">{% if slot.content %}{{ slot.content|safe }}{% else %}{% endif %}</div>
+                            <div class="edt_listing_body" id="edt_listing_body{{ slot.id }}">{{ slot.id }}{% if slot.content %}{{ slot.content|safe }}{% endif %}</div>
                         </div>
                     </div>
                 {% empty %}

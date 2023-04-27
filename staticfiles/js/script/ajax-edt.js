@@ -135,7 +135,7 @@ define(['jquery', 'bootstrap'], function ($) {
             } else if (whichButton === 'prev') {
 
                 var this_new_first = addDaysToDate( nfday,-7);
-                var this_new_last  = addDaysToDate( nfday,-7);
+                var this_new_last  = addDaysToDate( nlday,-7);
                 var str_this_new_first = this_new_first.split("-")[2];
                 var str_this_new_last  = str_addDaysToDate( nlday,-7);
                 var delta_scrollTop =   - 100 ;
@@ -149,6 +149,13 @@ define(['jquery', 'bootstrap'], function ($) {
             $("#to_fill_this_slot_week").html("Semaine du "+str_this_new_first+" au "+str_this_new_last) ;
             $("#this_first_day_week").val(this_new_first);
             $("#this_last_day_week").val(this_new_last);
+
+            length = $(".class_days").length;
+
+            for(let i=0;i<length;i++){ 
+                $("#day"+i).html(parseInt(str_this_new_first)+i);
+            }
+
 
         });
 

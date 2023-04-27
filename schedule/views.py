@@ -138,7 +138,6 @@ def insert_content_into_slot(request,idg):
         nf.save()
         nf.users.add(user)
         nf.groups.add(group)
-
     return redirect('progression_group',  idg )
 
 
