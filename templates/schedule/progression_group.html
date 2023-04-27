@@ -114,7 +114,7 @@
                             </label>
                         </div>
                         <div class="col-sm-11 col-md-11  {% if slot.content %}edt_listing{% else %}edt_listing_no_content{% endif %}" >
-                            <div class="edt_listing_body" id="edt_listing_body{{ slot.id }}">{{ slot.id }}{% if slot.content %}{{ slot.content|safe }}{% endif %}</div>
+                            <div class="edt_listing_body" id="edt_listing_body{{ slot.id }}">{% if slot.content %}{{ slot.content|safe }}{% endif %}</div>
                         </div>
                     </div>
                 {% empty %}
