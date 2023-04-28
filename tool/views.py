@@ -2959,14 +2959,11 @@ def create_slide(request,id):
  
     if request.method == "POST"  :  
         if form.is_valid():
-            nf = form.save() 
-            print("laaaaaa")    
+            nf = form.save()   
             diaporama.slides.add(nf)
         else :
             print(form.errors)
- 
 
-    
     slides = diaporama.slides.order_by("ranking")
 
     context = { 'diaporama': diaporama, 'slides': slides, 'form': form, }
