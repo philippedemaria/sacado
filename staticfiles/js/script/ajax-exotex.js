@@ -190,6 +190,18 @@ define(['jquery', 'bootstrap'], function ($) {
         }
 
 
+    var editor_exo = ace.edit("id_content");
+        editor_exo.setTheme("ace/theme/textmate");
+        editor_exo.getSession().setMode("ace/mode/latex");
+        editor_exo.container.style.height = "300px";
+
+    var editor_exo_cor = ace.edit("id_correction");
+        editor_exo_cor.setTheme("ace/theme/textmate");
+        editor_exo_cor.getSession().setMode("ace/mode/latex");
+        editor_exo_cor.container.style.height = "300px";
+
+
+
 });
 
 });
