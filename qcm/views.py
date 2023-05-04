@@ -923,7 +923,7 @@ def ajax_populate(request):
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
             try :
                 relation = Relationship.objects.create(parcours_id=parcours_id, exercise_id = exercise_id, ranking = 100, maxexo = parcours.maxexo, is_calculator = exercise.supportfile.calculator ,
-                                                                                situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
+                                                        is_paper = exercise.supportfile.is_paper ,  situation = exercise.supportfile.situation , duration = exercise.supportfile.duration) 
                 relation.skills.set(exercise.supportfile.skills.all())
                 students = parcours.students.all()
                 relation.students.set(students)
@@ -1003,7 +1003,7 @@ def peuplate_parcours(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -1075,7 +1075,7 @@ def peuplate_parcours_evaluation(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper,is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -3605,7 +3605,7 @@ def create_relationships(rt,parcours,exercises,student,label):
     j = 0
     for exercise_dict in get_sorted_list :
         exercise = Exercise.objects.get(pk=exercise_dict['e_id'])
-        relationship,create = Relationship.objects.get_or_create(exercise  = exercise , parcours=parcours, defaults={ 'situation' : 5, 'ranking' : ranking , 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator} )
+        relationship,create = Relationship.objects.get_or_create(exercise  = exercise , parcours=parcours, defaults={ 'situation' : 5, 'ranking' : ranking , 'duration' : exercise.supportfile.duration, 'is_calculator' : exercise.supportfile.calculator, 'is_paper' : exercise.supportfile.is_paper } )
         ranking +=1
         if create :
             relationship.skills.set(exercise.supportfile.skills.all())
@@ -4906,7 +4906,7 @@ def add_exercice_in_a_parcours(request):
             except :
                 r = 0
 
-            relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, is_calculator = exercise.supportfile.calculator, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
+            relation = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking=  r, is_publish= 1 , start= None , date_limit= None, is_paper = exercise.supportfile.is_paper,  is_calculator = exercise.supportfile.calculator, duration= exercise.supportfile.duration, situation= exercise.supportfile.situation ) 
             relation.skills.set(exercise.supportfile.skills.all())   
             i +=1
 
@@ -8648,7 +8648,7 @@ def ajax_assign_exercise_to_parcours(request):
     exercise    = Exercise.objects.get(pk=exercise_id)
     supportfile = exercise.supportfile
     skills      = supportfile.skills.all()
-    relation    = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration= supportfile.duration, situation= supportfile.situation ) 
+    relation    = Relationship.objects.create(parcours = parcours , exercise = exercise , document_id = 0 , type_id = 0 , ranking =  0 , is_publish= 1 , start= None , date_limit= None, duration= supportfile.duration, situation= supportfile.situation, is_paper= supportfile.is_paper  ) 
     
     students = parcours.students.all()
     relation.students.set(students)
@@ -8946,11 +8946,11 @@ def ajax_create_title_parcours(request):
         supportfile.save()
 
         exe = Exercise.objects.create(knowledge_id=1762, level_id=13, theme_id=49, supportfile=supportfile)
-        relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, ranking=0)
+        relation = Relationship.objects.create(exercise=exe, parcours_id=parcours_id, ranking=0,   is_paper=exe.supportfile.is_paper, duration= exe.supportfile.duration, situation= exe.supportfile.situation )
 
         parcours = Parcours.objects.get(pk = parcours_id)
         for student in parcours.students.all():
-            relation.students.add(student)
+            relation.students.add(student) 
 
 
 

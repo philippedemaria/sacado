@@ -123,6 +123,7 @@ class Supportfile(models.Model):
     height = models.PositiveIntegerField(default=550,  blank=True,verbose_name="Hauteur")
     ggbfile = models.FileField(upload_to=quiz_directory_path, verbose_name="Fichier ggb",blank=True, default="" )
     imagefile = models.ImageField(upload_to=image_directory_path, verbose_name="Vignette d'accueil", blank=True, default="qtype_img/underlayer.png")
+    is_paper = models.BooleanField(default=0, blank=True, verbose_name="Nécessite l'utilisation d'une feuille de papier")
 
     toolBar = models.BooleanField(default=0, verbose_name="Barre des outils ?")
     menuBar = models.BooleanField(default=0, verbose_name="Barre de menu ?")
@@ -1681,7 +1682,7 @@ class Relationship(models.Model):
 
     coefficient   = models.DecimalField(default=1,  max_digits=4, decimal_places=2, verbose_name="Coefficient")
     is_calculator = models.BooleanField(default=0, editable=False  )
-
+    is_paper      = models.BooleanField(default=0, editable=False)
     # document : type du doc et id du doc ( exercice = 0 , custom = 1 , cours = 2 , quizz= 3 , biblio = 4 , flash = 5)
     document_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)    
     type_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)
