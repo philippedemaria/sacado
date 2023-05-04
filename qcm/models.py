@@ -138,6 +138,7 @@ class Supportfile(models.Model):
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_supportfile', verbose_name="Compétences ciblées")
 
+
     is_ggbfile = models.BooleanField(default=1, verbose_name="Type de support")
     is_python  = models.BooleanField(default=0, verbose_name="Python ?")
     is_scratch = models.BooleanField(default=0, verbose_name="Scratch ?")
