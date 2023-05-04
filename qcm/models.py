@@ -123,7 +123,7 @@ class Supportfile(models.Model):
     height = models.PositiveIntegerField(default=550,  blank=True,verbose_name="Hauteur")
     ggbfile = models.FileField(upload_to=quiz_directory_path, verbose_name="Fichier ggb",blank=True, default="" )
     imagefile = models.ImageField(upload_to=image_directory_path, verbose_name="Vignette d'accueil", blank=True, default="qtype_img/underlayer.png")
-    is_paper = models.BooleanField(default=0, blank=True, verbose_name="Nécessite l'utilisation d'une feuille de papier")
+    is_paper = models.BooleanField(default=1, blank=True, verbose_name="Nécessite l'utilisation d'une feuille de papier")
 
     toolBar = models.BooleanField(default=0, verbose_name="Barre des outils ?")
     menuBar = models.BooleanField(default=0, verbose_name="Barre de menu ?")
