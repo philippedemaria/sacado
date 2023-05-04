@@ -85,6 +85,11 @@
 
         <p style="font-size:14px;">{{ supportfile.situation }} situation{{ supportfile.situation|pluralize }}</p>
         <i class="fa fa-barcode fa-4x"></i><p>{{ supportfile.code }}</p>
+        {% if relation.is_paper %}
+ 
+          <p><i class="fa fa-edit fa-4x" style="color : #5d4391" title="Nécessite l'utilisation d'une feuille et d'un stylo"></i></p>
+ 
+        {% endif  %} 
 
     </div>  
     <div class="col-sm-12 col-md-8 col-lg-8">

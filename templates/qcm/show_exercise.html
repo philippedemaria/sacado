@@ -77,7 +77,11 @@
         {% endif  %} 
          <div class="button_caption">{{ exercise.supportfile.duration }} minute{{ exercise.supportfile.duration|pluralize }}</div>
         </div>
-
+        {% if exercise.supportfile.is_paper %}
+        <div class="double_bottom_padding"> 
+            <i class="fa fa-edit fa-5x" style="color : #5d4391" title="Nécessite l'utilisation d'une feuille et d'un stylo"></i>
+        </div> 
+        {% endif  %} 
         <div class="exercise_buttons">
             <i class="fa fa-save refresh_5x" style="color : #5d4391"></i>
             <div class="button_caption">{{ exercise.supportfile.situation }} situation{{ exercise.supportfile.situation|pluralize }}</div>
