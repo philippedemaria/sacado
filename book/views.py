@@ -25,20 +25,6 @@ from django.utils.html import escape
 ################################################################################################
 ########################    FONCTIONS ANNEXE    ################################################
 ################################################################################################
-def implement_courses(request,book) :
-
-    i = 1
-    for p in Parcours.objects.filter(level_id=6,teacher__user_id=2480).order_by("ranking") :
-        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,is_publish=1,ranking=i)
-        courses = p.course.all()
-        i+=1
-        documents = list()
-        for c in courses :
-            document,created = Document.objects.get_or_create(title=c.title,section_id=2, subject = book.subject, level=book.level, author_id=2480,is_publish=1,is_share=1,ranking=i,content=c.annoncement)
-            documents.append(document)
-        chapt.documents.set(documents)
-        chapt.teachers.add(request.user.teacher)
-
 
 @user_is_superuser 
 def books(request):
@@ -123,6 +109,21 @@ def delete_book(request):
     return redirect('books')
 
 
+
+def implement_book_courses(request,book) :
+
+    book = Book.objects.get(pk=idb)
+    i = 1
+    for p in Parcours.objects.filter(level_id=6,teacher__user_id=2480).order_by("ranking") :
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,is_publish=1,ranking=i)
+        courses = p.course.all()
+        i+=1
+        documents = list()
+        for c in courses :
+            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=2480, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+            if created : documents.append(document)
+        chapt.documents.set(documents)
+        chapt.teachers.add(request.user.teacher)
 
 
 def show_conception_book(request,idb,idch,is_conception):
@@ -210,8 +211,8 @@ def show_conception_book(request,idb,idch,is_conception):
                 messages.error(request, formdoc.errors)
 
         return redirect('conception_book',idb,idch)
-    #implement_courses(request, book)
-
+        
+    implement_book_courses(request,book)
 
     return render(request, template , context )
 
