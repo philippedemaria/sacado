@@ -112,7 +112,7 @@ def delete_book(request):
 
 def implement_book_courses(request,book) :
 
-    book = Book.objects.get(pk=idb)
+ 
     i = 1
     for p in Parcours.objects.filter(level_id=6,teacher__user_id=2480).order_by("ranking") :
         chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,is_publish=1,ranking=i)
@@ -211,7 +211,7 @@ def show_conception_book(request,idb,idch,is_conception):
                 messages.error(request, formdoc.errors)
 
         return redirect('conception_book',idb,idch)
-        
+
     implement_book_courses(request,book)
 
     return render(request, template , context )
