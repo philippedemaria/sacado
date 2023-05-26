@@ -32,7 +32,15 @@
                 <div class="inner">
                      <span style="font-size: 35px">Comptabilité </span>    
                      <h3  style="font-weight: 100">{{ active_year }} <a href="{% url 'activeyears' %}" style="font-size: 15px"><i class="fa fa-edit white"></i></a></h3>
+
+                     {% if customers_pending %}
+                        <a href="{% url 'customers_pending' %}" class="btn btn-sacado" title="Etablissement"> {{ customers_pending.count }} demande{{ customers_pending|pluralize }}
+                            d'établissement</a>
+                    {% endif %} 
+
+
                  </div>
+
                  <a href="{% url 'statistiques'  %}" class="small-box-footer"><i
                         class="fa fa-arrow-circle-right"></i> En détails </a>
 

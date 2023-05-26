@@ -21,7 +21,7 @@
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Opérations <b class="caret"></b> </a>
     <ul   class="dropdown-menu clearfix pull-right" role="menu">
         <li>
-            <a href="{% url 'create_accounting' 0 %}" > Nouvelle opération Client   </a>   
+            <a href="{% url 'create_accounting' 0 0 %}" > Nouvelle opération Client   </a>   
         </li>
         <li>
             <a href="{% url 'list_accountings' 0 %}"  class="no_button" > 
@@ -31,7 +31,7 @@
         {% comment %}
         <li class="divider"></li>
         <li>
-            <a href="{% url 'create_accounting' 1 %}" > Nouvelle opération Fournisseur    </a>   
+            <a href="{% url 'create_accounting' 1 0 %}" > Nouvelle opération Fournisseur    </a>   
         </li>
         <li>
             <a href="{% url 'list_accountings' 1 %}"  class="no_button" > 
@@ -41,7 +41,7 @@
         {% endcomment %}
         <li class="divider"></li>
         <li>
-            <a href="{% url 'create_accounting' 2 %}" > Nouvelle opération Bancaire </a>  
+            <a href="{% url 'create_accounting' 2 0 %}" > Nouvelle opération Bancaire </a>  
         </li>
         <li>
             <a href="{% url 'list_accountings' 2 %}"  class="no_button" > Journal opérations bancaires  CA</a> 
@@ -63,31 +63,27 @@
     <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button"> Suivi Clients <b class="caret"></b> </a>
     <ul class="dropdown-menu clearfix pull-right" role="menu">
         <li>
-            <a href="{% url 'adhesions' %}" class="no_button">Abonnés</a>   
+            <a href="{% url 'adhesions' %}" class="no_button">Abonnés <b>{{ nb_customers }}</b></a>   
         </li>
         <li>
-            <a href="{% url 'pending_adhesions' %}" class="no_button">En attente</a>   
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="{% url 'prospec_schools' %}"  class="no_button" >Enseignants non affectés</a> 
-        </li> 
-        <li>
-            <a href="{% url 'prospec_to_adhesions' %}"  class="no_button" >Ex clients</a> 
+            <a href="{% url 'pending_adhesions' %}" class="no_button">En attente <b>{{ nb_pendings }}</b></a>   
         </li>
         <li>
-            <a href="{% url 'create_school' %}"  class="no_button" >Nouvel établissement</a> 
+            <a href="{% url 'prospec_to_adhesions' %}"  class="no_button" >Ex clients <b>{{ nb_else }}</b></a> 
         </li>
         <li class="divider"></li>
         <li>
             <a href="{% url 'new_customer'  %}"  class="no_button" > Nouveau client</a> 
         </li>
+        <li class="divider"></li>
         <li>
-            <a href="{% url 'all_schools'  %}"  class="no_button" > Fichier Clients</a> 
-        </li>
+            <a href="{% url 'prospec_schools' %}"  class="no_button" >Enseignants non affectés</a> 
+        </li> 
+        {% comment %}
         <li>
             <a href="{% url 'list_historic_schools'  %}"  class="no_button" > Historique</a> 
         </li>
+        {% endcomment %}
         <li class="divider"></li>
         <li>
             <a href="{% url 'abonnements_gar'  %}" >Abonnements aux GAR </a>  

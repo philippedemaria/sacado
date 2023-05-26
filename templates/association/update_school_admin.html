@@ -3,42 +3,76 @@
 {% load widget_tweaks %}
 
 {% block page_title %} 
-   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {% if request.user.is_superuser %}Gestion d'un établissement {% else %}Modifier l'établissement{% endif %}
+   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-bank"></i></a> {{ school.name }}
+ 
+
 {% endblock  %}
 
 
 {% block require %}
-{% if school %}
+
+ 
 <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
-{% else %}
-<script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
-{% endif %}
+
+ <script>
+    require(['script/update_school_admin']);
+</script>  
+
+
+
 {% endblock %} 
 
 
-{% block page_menu_right %}
+{% block page_menu_right %} 
 
-    <li>Statut : {{ status }}</li>
+{% include 'association/menubar.html' %} 
+
+
+    <li {% if customer.status == 0 %}
+            style="padding:5px;background-color:violet;border-radius:5px"
+        {% elif  customer.status == 1 %}
+            style="padding:5px;background-color:red;border-radius:5px"  
+        {% elif customer.status == 2 %}
+            style="padding:5px;background-color:orange;border-radius:5px"
+        {% else %}
+            style="padding:5px;background-color:green;border-radius:5px"
+        {% endif %} >
+        <a href="#" data-target="#new_abo" data-toggle ="modal" style="color:white;font-weight:400">
+        {% if customer.status == 0 %}
+             Nouvelle demande  
+        {% elif  customer.status == 1 %}
+            Ancien client  
+        {% elif customer.status == 2 %}
+            {% if customer.actual == 0 %}<span class="badge">PE</span>{% endif %} En attente de paiement    
+        {% elif  customer.is_active_asso %}
+            Abonné      
+        {% endif %} 
+    </a>
+
+
+    </li>
+
+
 
 {% endblock %}
-
-
+ 
 
 
 
 {% block body  %}    
-<form  action="" method="POST" enctype='multipart/form-data'> 
+
 <section class="content_main">
     <div class="row">
         <div class="col-sm-12 col-md-4 alert alert-sacado">
-            
+            <form  action="" method="POST" enctype='multipart/form-data'> 
                 {% csrf_token %}
 
-                <div class="form-group">
+
                     {{ form.name.label_tag }}
                     {{ form.name |add_class:"form-control" }}
                     {{ form.name.errors }}
-                </div>
+  
+
 
                 <div class="form-group">
                     <label>Pays :</label>
@@ -53,19 +87,15 @@
                 </div>
  
                 <div class="row">
-                    <div class="col-sm-9 col-md-9">
-                        <div class="form-group">                
+                    <div class="col-sm-7 col-md-7">           
                             {{ form.complement.label_tag }}
                             {{ form.complement |add_class:"form-control" }}
                             {{ form.complement.errors }}
-                        </div>
                     </div> 
-                    <div class="col-sm-3 col-md-3">
-                         <div class="form-group">                
+                    <div class="col-sm-5 col-md-5">             
                             {{ form.zip_code.label_tag }}
                             {{ form.zip_code |add_class:"form-control" }}
                             {{ form.zip_code.errors }}
-                        </div>
                     </div> 
                 </div>
                 <div class="row">
@@ -94,8 +124,8 @@
                 <div class="row">
                     <div class="col-sm-6 col-md-6">
                         <div class="form-group">                
-                            <label>GAR ? </label>
-                            {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            <label>GAR affilié ? </label>
+                            {{ form.gar |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                             {{ form.gar.errors }}
                         </div>
                     </div> 
@@ -118,8 +148,15 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
+                        {{ form.comment.label_tag }}
+                        {{ form.comment |add_class:"form-control"|attr:"rows:4" }}
+                        {{ form.comment.errors }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
                         <div class="form-group">
-                            <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
+                            <input value="Enregistrer" type="submit" class="btn btn-primary"  name="update_school" />            
                             <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
                         </div>
                     </div>
@@ -129,89 +166,194 @@
                     <a href="{% url 'delete_school'  school.id %}"  class="btn btn-danger pull-right"  onclick="return TestDelete(' cet établissement ')">Supprimer l'établissement</a>
                 </div>    
                 {% endcomment %}
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-8">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    {{ form.comment.label_tag }}
-                    {{ form.comment |add_class:"form-control"|attr:"rows:4" }}
-                    {{ form.comment.errors }}
+
+
+                    <div class="alert alert-sacado">                
+                         <a href="{% url 'create_accounting' 0 school.id %}"  class="pull-right btn btn-xs btn-danger" ><i class="bi bi-plus-circle-dotted"></i> Créer une facture</a> 
+                         <i class="bi bi-currency-euro"></i> Factures 
+                         <br/><br/>
+
+
+                    <table class="table table-sacado table-striped table-hover table-responsive">
+                            <tr> 
+                                <th>Date</th>
+                                <th>Chrono</th> 
+                                <th style="text-align:center">Montant</th> 
+                                <th style="text-align:center">Payé le</th> 
+                                <th style="text-align:center"></th> 
+                            </tr>
+                        {% for a in accountings  %}
+                            <tr> 
+                                <td style="text-align:center;{% if not accounting.is_facturation %}background-color:#f9edeb;{% endif %}">{{ a.date|date:"Y-m-d" }}</td> 
+                                <td style="text-align:center;{% if not accounting.is_facturation %}background-color:#f9edeb;{% endif %}">{{ a.chrono }}</td> 
+                                <td style="text-align:center;{% if not accounting.is_facturation %}background-color:#f9edeb;{% endif %}color:{% if customer.status == 3 %}green{% else %}red{% endif %};text-align:center">{{ a.amount }}€</td>
+                                <td style="text-align:center;{% if not accounting.is_facturation %}background-color:#f9edeb;{% endif %}">
+                                    {% if a.date_payment %}
+                                         <a href="#" data-target="#to_pay" data-toggle ="modal" data-aid="{{ a.id }}" class="paiement text-success">{{ a.date_payment|date:"Y-m-d" }}</a>
+                                    {% else %}
+                                        <a href="#" data-target="#to_pay" data-toggle ="modal" data-aid="{{ a.id }}" class="paiement"> <i class="bi bi-calendar3"></i></a>
+                                    {% endif %}
+                                </td> 
+                                <td style="text-align:center;{% if not accounting.is_facturation %}background-color:#f9edeb;{% endif %}">
+                                    <a href="{% url 'update_accounting' a.id 0 %}" class="btn btn-default"  title="Modifier la facture"><i class="bi bi-pen"></i></a>
+                                    <a href="{% url 'show_accounting'  a.id %}" class="btn btn-default" title="Voir la facture"><i class="fa fa-eye"></i></a>   
+                                    <a href="{% url 'print_accounting'  a.id %}" class="btn btn-default" title="Imprimer la facture"><i class="fa fa-print"></i></a>                                                                
+                                    <a href="{% url 'relance_accounting'  a.id %}" title="Relancer" class="btn btn-default"><i class="fa fa-repeat"></i></a>
+                                    {% if accounting.is_display    %}
+                                    <a href="{% url 'create_avoir'  a.id %}"  style="margin-right:10px" title="Créer un avoir"><i class="fa fa-times text-danger"></i></a>
+                                    {% endif %}
+                                </td> 
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    </div>
+                    <hr/> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    {% if customer.gar_abonnement_id %}
+                        <a href="{% url 'delete_abonnement_gar' abonnement.gar_abonnement_id %}"  onclick="return TestDelete('ce webservice ' + str(customer.gar_abonnement_id) )" class="btn btn-xs btn-danger pull-right" >         Supprimer ce webservice
+                        </a>
+                    {% endif %} 
+                    <div class="form-group alert alert-sacado">                
+                       <i class="bi bi-person-circle"></i> Contact de l'établissement
+                    </div>
+                    <div class="form-group">                
+                        <li class="sanspuce">{{customer.user.get_full_name}}, {{user.email}}</li> 
+                    </div>
+                    <div class="form-group alert alert-sacado">                
+                       <i class="bi bi-person-circle"></i> Administrateur SACADO
+                    </div>
+                    <div class="form-group">                
+                        {% for u in school.admin %} <li class="sanspuce">{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
+                    </div>
+                    <hr/>
+                    <div class="form-group alert alert-sacado">                
+                        <i class="bi bi-envelope"></i>  Mailing Admin
+                    </div>
+                    <div class="form-group">                
+                        {% for u in school.admin %}{{u.email}}, {% endfor %}
+                    </div>
+                    <hr/>
+                    <div class="form-group alert alert-sacado">                
+                        <i class="bi bi-envelope"></i> Mailing Enseignants
+                    </div>
+                    <div class="form-group">                
+                        {% for t in teachers %}{{t.email}}, {% endfor %}
+                    </div>
+                    <hr/>
+
+                    <div class="col-sm-12 col-md-12">
+                        {{ form.resiliation.label_tag }}
+                        {{ form.resiliation|add_class:"form-control" |attr:"rows:4" }}
+                        {{ form.resiliation.errors }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">   
+                    <div class="form-group alert alert-sacado">                
+                        <i class="fa fa-users"></i> Enseignants
+                    </div>
+                    <div class="form-group">                
+                        {% for t in  teachers %}
+                            <li class="sanspuce">{{ t }} - {{ t.email }}</li>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4">
-            
-                <div class="form-group alert alert-sacado">                
-                   <i class="bi bi-person-circle"></i> Admin
-                </div>
-                <div class="form-group">                
-                    {% for u in school.admin %} <li class="sanspuce">{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
-                </div>
-                <hr/>
-                <div class="form-group alert alert-sacado">                
-                    <i class="bi bi-envelope"></i>  Mailing Admin
-                </div>
-                <div class="form-group">                
-                    {% for u in school.admin %}{{u.email}}, {% endfor %}
-                </div>
-                <hr/>
-
-                <div class="form-group alert alert-sacado">                
-                    <i class="fa fa-users"></i> Enseignants
-                </div>
-                <div class="form-group">                
-                    {% for t in  teachers %}
-                        <li class="sanspuce">{{ t }} - {{ t.email }}</li>
-                    {% endfor %}
-                </div>
-                 <hr/>
-                <div class="form-group alert alert-sacado">                
-                    <i class="bi bi-envelope"></i> Mailing Enseignants
-                </div>
-                <div class="form-group">                
-                    {% for t in teachers %}{{t.email}}, {% endfor %}
-                </div>
-                <hr/>
-
-                <div class="col-sm-12 col-md-12">
-                    {{ form.resiliation.label_tag }}
-                    {{ form.resiliation|add_class:"form-control" |attr:"rows:4" }}
-                    {{ form.resiliation.errors }}
-                </div>
-        </div>
-        <div class="col-sm-12 col-md-4">
-            
-                <div class="form-group alert alert-sacado">                
-                   <i class="bi bi-person-circle"></i>Abonnements
-                </div>
-
-                <table class="table table-sacado table-striped table-hover table-responsive">
-                        <tr> 
-                            <th>Début</th> 
-                            <th>Fin</th> 
-                            <th>Type</th>
-                            <th style="text-align:center">Montant</th> 
-                            <th style="text-align:center">Paiement</th> 
-                        </tr>
-                    {% for a in abonnements  %}
-                        <tr> 
-                            <td>{{ a.date_start|date:"Y-m-d" }}</td> 
-                            <td>{{ a.date_stop|date:"Y-m-d"  }}</td> 
-                            <td>{{ a.accounting.forme }}</td>
-                            <td style="color:red;text-align:center">{{ a.accounting.amount }}€</td>
-                            <td style="text-align:center">{% if a.accounting.payment %} 
-                                    {{ a.accounting.payment|date:"Y-m-d" }} {% if a.accounting.is_paypal %} <i class="bi bi-paypal"></i> {% else %}<i class="bi bi-coin"></i>{% endif %}
-                                {% else %}
-                                    <i class="fa fa-times text-danger"></i>
-                                {% endif %}
-                            </td> 
-                        </tr>
-                    {% endfor %}
-                </table>
-
-                 
-
-        </div>
-
     </div>
 </section>
-</form>
+
+
+
+<div class="modal fade" id="new_abo" tabindex="-1" role="dialog" aria-labelledby="new_abo">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                 
+                <h2>Date d'échéance</h2>
+                <small>La modification de la date d'échéance enclenche l'abonnement si elle est supérieure à aujourd'hui</small>              
+            </div>
+            <div class="modal-body">
+                {% if customer.school.gar %}
+                    <div class="alert alert-success">Gestion par le GAR demandée.</div>
+                {% else %}
+                    <div class="alert alert-danger">Gestion par le GAR non demandée.</div>
+                {% endif %}
+                <form  action="{% url 'customer_payment_from_modal' customer.id %}" method="POST" enctype='multipart/form-data'> 
+                <table class="table borderless">                {% csrf_token %}
+                    <tr>
+                        <td colspan='2'>{{ form_abo.actual |add_class:"form-control select2"}}  {{ form.actual.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date d'échéance <br/><small>Effacer la date avant modification</small>  </td><td>{{ form_abo.date_stop|add_class:"datepicker"}} {{ form_abo.date_stop.errors }}</td>
+                    </tr>
+                    <tr class="no_visu_on_load" id="date_receipt">
+                        <td colspan='2'><div  style="background-color: green;padding:10px;color:white">Abonnement activé</div></td>
+                    </tr>
+                    <tr>
+                        <td>Prise d'abonnement</td><td>{{ form_abo.gestion|add_class:"form-control select2"}}   {{ form_abo.gestion.errors }}</td>
+                    </tr>
+                </table>
+ 
+
+                <input value="Enregistrer l'échéance'" type="submit" class="btn btn-primary" name="validation_demande"   />
+           
+                <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                   class="btn btn-default "/></a>
+                </form>
+            </div> 
+        </div>
+    </div>        
+</div>
+
+
+
+<div class="modal fade" id="to_pay" tabindex="-1" role="dialog" aria-labelledby="to_pay">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                 
+                <h2>Date de paiement</h2>              
+            </div>
+            <div class="modal-body">
+                <form  action="{% url 'paiement_abonnement' customer.id %}" method="POST" enctype='multipart/form-data'>
+                {% csrf_token %} 
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">   
+                        <div class="form-group">                
+                            <input  type="date" id="date_payment" name="date_payment" class="form-control"   />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                <input  type="hidden" id="aid" name="accounting_id"   />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">   
+                        <input value="Enregistrer le paiement" type="submit" class="btn btn-primary"   />
+                   
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                   class="btn btn-default "/></a>
+                    </div>
+                </div>                              
+                </form>
+            </div> 
+        </div>
+    </div>        
+</div>
+
+
 {% endblock  %}

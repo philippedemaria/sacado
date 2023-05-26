@@ -590,7 +590,7 @@ class Parcours(ModelWithCode):
 
     zoom = models.BooleanField(default=1, verbose_name="Zoom ?")
 
-    maxexo = models.IntegerField(  default=-1,  blank=True, null=True,  verbose_name="Tentatives")
+    maxexo = models.IntegerField(default=-1,  blank=True, null=True,  verbose_name="Tentatives")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
@@ -2442,9 +2442,6 @@ class Autoposition(models.Model): # Commentaire et note pour les exercices custo
         return "{} {} {}".format(self.customexercise, self.criterion , self.position)
 
 
-
-
-
 class Blacklist(models.Model):
     relationship   = models.ForeignKey(Relationship,  null=True, blank=True, on_delete=models.CASCADE,  related_name='relationship_individualisation',   editable= False)
     customexercise = models.ForeignKey(Customexercise,  null=True, blank=True, on_delete=models.CASCADE,  related_name='customexercise_individualisation',   editable= False)
@@ -2556,7 +2553,6 @@ class Course(models.Model): # pour les
     is_publish = models.BooleanField( default= 0, verbose_name="Publié ?")
     publish_start = models.DateTimeField(default=timezone.now,  blank=True, max_length=255, verbose_name="Début à", help_text="Changer les dates des cours peut remplacer les réglages de leur durée de disponibilité et leur placement dans les pages de cours ou le tableau de bord. Veuillez confirmer les dates d’échéance avant de modifier les dates des cours. ")
     publish_end = models.DateTimeField( blank=True, null=True,  max_length=255, verbose_name="Se termine à")
-
 
     ranking = models.PositiveIntegerField(  default=1,  blank=True, null=True,  verbose_name="Ordre") 
     

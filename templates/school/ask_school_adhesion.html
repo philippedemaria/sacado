@@ -25,7 +25,6 @@
 
     <h3 style="color: red">
         15 jours d'essai gratuit* </span><span style="font-size : 10px;color: #CCC"> *Pour toute demande d'adhésion</span>
-
     </h3>    
   
     <div class="row">  
@@ -50,7 +49,8 @@
  
                </div>
             </div> 
-
+            <div class="row">
+               <div class="col-sm-12 col-md-12"  align="left">
  
                 {% if request.user.school %}
 
@@ -58,30 +58,26 @@
                     <form action="" method="POST" enctype='multipart/form-data'>
                         {% csrf_token %} 
                         <div class="row">
-                            <div class="col-sm-3 col-md-2"  align="center">
+                            <div class="col-sm-9 col-md-10">
+                                <div class="form-group">
+                                  <label>Logo de l'établissement : <em>20ko max. 60px*60px (optionnel)</em></label>
+                                  {{ form.logo|add_class:"btn btn-default" }}
+                                  {{ form.logo.errors }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-md-2">
                                 {% if request.user.school.logo %}
                                     <img src="{{ request.user.school.logo.url }}" width="50px" />
                                 {% endif %}
                             </div>
-                            <div class="col-sm-9 col-md-10">
-                                <div class="form-group">
-                                  <label>Logo de l'établissement : <em>20ko max. 60px*60px (optionnel)</em></label>
-                                  {{ form.logo }}
-                                  {{ form.logo.errors }}
-                                </div>
-                            </div>
+
                         </div>
                         <div class="row">     
-                            <div class="col-sm-5 col-md-4" align="right">
-                                <div class="form-group">
+                            <div class="col-sm-5 col-md-4">
                                   {{ form.nbstudents.label_tag }}
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-md-3">
-                                <div class="form-group">
                                   {{ form.nbstudents |add_class:"form-control" }}
                                   {{ form.nbstudents.errors }}
-                                </div>
                             </div>
                         </div>
 
@@ -99,7 +95,11 @@
                         <div class="row">     
                             <div class="col-sm-12 col-md-6">
                                 <div class="form-group">
-                                    <input value="Confirmer la demande" type="submit" class="btn btn-primary"/>            
+                                  {% if not  customer %}
+                                    <input value="Confirmer la demande" type="submit" class="btn btn-primary"/>
+                                  {% else %}           
+                                    <span class="btn btn-danger">Demande en attente de traitement</span>
+                                  {% endif %} 
                                     <a href="javascript:history.back()" class="btn btn-default">Retour</a>
                                 </div>
                             </div>
@@ -117,8 +117,8 @@
                         </div>
                     </div>
                 {% endif %}
-
- 
+                </div>
+            </div>
         </div>
  
 

@@ -1,5 +1,6 @@
 import pytz
 from django.utils import timezone
+from association.models import Customer
 from account.models import Teacher, Student, User
 from qcm.models import Parcours, Studentanswer, Exercise, Demand
 from school.models import School
@@ -9,7 +10,7 @@ from socle.models import Level
 from school.models import School
 from group.models import Group
 from tool.models import Tool,Qtype
-from datetime import datetime 
+from datetime import datetime , timedelta 
 
 ##############################################################################################################################################
 ##############################################################################################################################################
@@ -18,10 +19,27 @@ from datetime import datetime
 ##############################################################################################################################################
 
 
+# def is_sacado_asso(this_user, today):
+#     is_sacado = False
+#     is_active = False
+#     try :
+#         customer = this_user.school.customer 
+#         if today.date() < customer.date_stop  :
+#             is_sacado = True
+#             is_active = True
+#     except :
+#         pass
+
+#     if this_user.is_superuser :
+#         is_sacado = True
+#         is_active = True
+        
+#     return is_sacado, is_active
+
+
 def is_sacado_asso(this_user, today):
     is_sacado = False
     is_active = False
-
     try :
         abonnement = this_user.school.abonnement.last()
         if today < abonnement.date_stop and abonnement.is_active :
@@ -29,13 +47,23 @@ def is_sacado_asso(this_user, today):
             is_active = True
     except :
         pass
-
     if this_user.is_superuser :
         is_sacado = True
         is_active = True
-        
     return is_sacado, is_active
 
+
+
+def is_quite_finish_sacado_asso(this_user, today):
+
+    is_quite_finish = False
+    customer = this_user.school.customer
+    the_end_day = today+timedelta(days=15)
+
+    if the_end_day.date() > customer.date_stop and customer.status == 3 :
+        is_quite_finish = True
+
+    return is_quite_finish
 
 ##############################################################################################################################################
 ##############################################################################################################################################
@@ -75,6 +103,13 @@ def menu(request):
                             "/qcm/parcours_sub_parcours/" : 'parcours_sub_parcours' , '/qcm/parcours_update/' : "parcours_update" , "/group/show/" :"group_show" , "/group/update/" : "group_update" , '/qcm/parcours_show/' :  'parcours_show',
                             "/school/groups" : 'school_groups' , '/school/new_student/' : 'school_new_student' , '/school/new_student_list/' : 'school_new_student_list'  }
 
+            nb_customers = 0
+            nb_pendings  = 0
+            nb_else      = 0  
+            if request.user.is_superuser :
+                nb_customers = Customer.objects.filter(status=3).count()
+                nb_pendings  = Customer.objects.filter(status=2).count()
+                nb_else      = Customer.objects.filter(status=1).count()
 
             ihelp=0 
             request_path = str(request.path) 
@@ -106,18 +141,13 @@ def menu(request):
  
             ### Permet de vérifier qu'un enseignant est dans un établissement sacado
             sacado_asso, sacado_is_active = is_sacado_asso(teacher.user,today)
+            is_quite_finish = is_quite_finish_sacado_asso(teacher.user, today)
  
-            ### Rapelle le renouvellement de la cotisation
-            renew_hidden = request.session.get("renewal", False)
-            if not renew_hidden :
-                rates = Rate.objects.all() #tarifs en vigueur 
-                today = datetime.now()
-
-                if Abonnement.objects.filter(school = teacher.user.school,   date_stop__gte=today, date_start__lte=today,is_active = 1 ).count() == 1:
-                    renew_hidden = True
-                    request.session["renewal"] = renew_hidden
             
-            return { 'url_helper' : url_helper , 'qtypes':qtypes, 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels, 'renew_propose' : renew_hidden ,  'nb_demand' : nb_demand , 'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
+            return {    'is_quite_finish':is_quite_finish,'nb_else' : nb_else ,'nb_pendings' :nb_pendings , 'nb_customers' :nb_customers ,  'url_helper' : url_helper , 
+                        'qtypes':qtypes, 'theme_color' : theme_color , 'navbar_theme_color' : navbar_theme_color , 'nb_levels' : nb_levels , 'nb_groups' : nb_groups ,  
+                        'is_gar_check' : is_gar_check,'today': today, 'index_tdb' : False , 'nbe': nbe, 'levels': levels,   'nb_demand' : nb_demand ,
+                        'mytools' : mytools , 'sacado_asso' : sacado_asso , "is_pending_studentanswers" : is_pending_studentanswers  }
 
         elif request.user.is_student:
             

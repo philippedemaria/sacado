@@ -436,12 +436,10 @@ def school_accounting(request):
 		messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. ")
 		return redirect('index')
 
-
 	accountings = Accounting.objects.filter(school = school).order_by("-date")
-	renew_propose =  renew(school)
 
 
-	return render(request,'school/list_accountings.html', { 'accountings' : accountings , 'school' : school , 'renew_propose' : renew_propose })
+	return render(request,'school/list_accountings.html', { 'accountings' : accountings , 'school' : school })
 
 
 
@@ -855,10 +853,10 @@ def get_first_adhesion(request):
 				    somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
 
 
-				accounting_id =  accounting_adhesion(school, today , None , user, False , "Premier abonnement" )
-				accounting = Accounting.objects.get(pk = accounting_id) 
-				date_start, date_stop = date_abonnement(today)
-				abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
+				#accounting_id =  accounting_adhesion(school, today , None , user, False , "Premier abonnement" )
+				# accounting = Accounting.objects.get(pk = accounting_id) 
+				# date_start, date_stop = date_abonnement(today)
+				# abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
 
 
 				subject = "Adhésion SACADO - demande d'IBAN"
@@ -871,7 +869,7 @@ def get_first_adhesion(request):
 				          [user.email, "sacado.asso@gmail.com"])
  
 
-				request.session["accounting_id"] = accounting_id
+ 
 				messages.success(request,"Demandé envoyée. Nous allons vous répondre rapidement. Merci.")
 				return redirect( 'index')
 
@@ -890,49 +888,21 @@ def get_first_adhesion(request):
 def renew_school_adhesion(request):
 	""" renouvellement de la cotisation annuelle"""
 	school = request.user.school
-
-	request.session["inscription_school_id"] = None
-
-	renew_propose = renew(school)
-
 	today = datetime.now()
-	try :
-		if today < datetime(today.year,7,1) :
-			somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().discount
-		else :
-			somme = Rate.objects.filter(quantity__gte=school.nbstudents).first().amount
-	except :
-		somme = 350
-
 	user = request.user
-
-
-	# if Accounting.objects.filter( school = school , is_abonnement =  1 , is_active = 0 ):
-	# 	accounting    = Accounting.objects.filter(school = school , is_abonnement =  1, is_active = 0 ).last()
-	# 	accounting_id = accounting.id
-	# 	administration= ""
-	# 	print("ici")
-
-	# else :
-	accounting_id           = accounting_adhesion(school, today , None , user, False , "Renouvellement" )
-	accounting              = Accounting.objects.get(pk = accounting_id) 
-	date_start, date_stop   = date_abonnement(today)
-	#abonnement, abo_created = Abonnement.objects.get_or_create(school = school, date_start = date_start, date_stop = date_stop,  accounting_id = accounting_id , is_gar = school.gar , defaults={ 'user' : user, 'is_active' : 0}  )
-	administration= ". Nous traitons votre demande."
- 
+	school.customer.status = 0
+	school.customer.save()
 
 	subject = "Abonnement SACADO - demande d'IBAN"
 	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
 
 	send_mail(subject,
-	          "Bonjour,  :\n\n Vous avez formulé une demande de renouvellement d'abonnement "+administration+" \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+	          "Bonjour,  :\n\n Vous avez formulé une demande de renouvellement d'abonnement. Nous traitons votre demande. \n\n" + user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
 	          settings.DEFAULT_FROM_EMAIL ,
 	          [user.email, "sacado.asso@gmail.com"])
 
+	context =  {  'school' : school  , 'user' : user   }
 
-	request.session["accounting_id"] = accounting_id
-
-	context =  {  'school' : school  , 'user' : user , 'accounting_id' : accounting_id, 'accounting' : accounting , 'renew_propose' : renew_propose }
 
 	return render(request, 'school/renew_school_adhesion.html', context)
 
@@ -942,17 +912,23 @@ def renew_school_adhesion(request):
 
 def delete_renewal_school_adhesion(request):
 
-    school = request.user.school
-    school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
-
-    send_mail("Résiliation d'abonnement",
-	          "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'abonnement   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
-	          settings.DEFAULT_FROM_EMAIL ,
-	          [request.user.email, "sacado.asso@gmail.com"])
+	school = request.user.school
+	today  = date.today()
+	if school.customer.date_stop > today :
+		school.customer.status = 3
+		school.customer.save()
 
 
-    messages.success(request,"Demande de résiliation d'abonnement réussie")
-    return redirect('admin_tdb')
+	school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+
+	send_mail("Résiliation d'abonnement",
+	      "Bonjour,  :\n\n Vous avez formulé une demande de résiliation d'abonnement   \n\n" + request.user.email + " \n\n" +  school_datas +" \n\n Ceci est un mail automatique. Ne pas répondre.",
+	      settings.DEFAULT_FROM_EMAIL ,
+	      [request.user.email, "sacado.asso@gmail.com"])
+
+
+	messages.success(request,"Demande de résiliation d'abonnement réussie")
+	return redirect('admin_tdb')
 
 
 
@@ -1226,43 +1202,21 @@ def get_school(request):
 
 
 
+ 
+
 def ask_school_adhesion(request):
 	""" permet à un enseignant de rejoindre un établissement"""
 	school = request.user.school
 	user   = request.user
-	form = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance = school)
-	if request.method == "POST" :
+	form   = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance = school)
+
+	if request.method == "POST" : 
 		if form.is_valid():   
-
 			school = form.save()
-			today = time_zone_user(request.user)
-			is_active   = False # date d'effet, user, le paiement est payé non ici... doit passer par la vérification
-			observation = "Paiement en ligne"             
-
-			accounting_id = accounting_adhesion(school, today , None, user, is_active , observation) # création de la facturation
-
-			########################################################################################################################
-			#############  Abonnement
-			########################################################################################################################
-			date_start, date_stop = date_abonnement(today)
-			# Celui qui demande est manager de l'école
-			User.objects.filter(pk=user.id).update(is_manager=1)
-			User.objects.filter(pk=user.id).update(school=school)
-
-
-			abonnement, abo_created = Abonnement.objects.get_or_create( accounting_id = accounting_id  , defaults={'school' : school, 'is_gar' : school.gar, 'date_start' : date_start, 'date_stop' : date_stop,  'user' : user, 'is_active' : 0}  )
-			asking_gar = "Pas d'accès au GAR demandé."
-			if school.gar: # appel de la fonction qui valide le Web Service
-				asking_gar = "Accès au GAR demandé."
-				test, raison , header , decode , ida = create_abonnement_gar(today, abonnement,request.user)
-				if test :
-					fa.gar_abonnement_id = ida
-					abonnement.save()
-					messages.success(request,"Activation du GAR réussie")
-				else :
-					messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-				
-
+			Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
+			if school.gar : asking_gar = " Accès au GAR demandé"
+			else : asking_gar = " Pas d'accès au GAR demandé"
+			
 			send_mail("Demande d'abonnement à la version établissement",
 			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant "+ user.first_name +" "+ user.last_name +" : "+ user.email +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
 			          settings.DEFAULT_FROM_EMAIL,
@@ -1273,14 +1227,21 @@ def ask_school_adhesion(request):
 	               settings.DEFAULT_FROM_EMAIL,[user.email])
 
 			messages.success(request,"Demande d'abonnement envoyée. Vous recevrez rapidement l'IBAN de l'association à transmettre à votre DAF")
+
 		else :
-			messages.error(request,"Erreur du token" )
+			print(form.errors)
+
+	try :
+		status = school.customer.status
+		if customer.status < 2 : customer = False
+		else : customer = True
+	except :
+		customer = False
  
 
  
-	context = {   'form' : form , 'school' : school }
+	context = {  'school' : school , 'form' : form , 'customer' : customer }
 	return render(request, 'school/ask_school_adhesion.html', context )
-
 
 
 

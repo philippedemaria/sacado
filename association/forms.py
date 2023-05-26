@@ -29,7 +29,16 @@ class AccountancyForm(forms.ModelForm):
 
 
  
- 
+class StatusForm(forms.ModelForm):
+    class Meta:
+        model = Customer 
+        fields = ('status',) 
+
+class CustomAboForm(forms.ModelForm):
+    class Meta:
+        model = Customer 
+        fields = ('date_stop','actual','gestion') 
+
 
 
 
@@ -37,6 +46,8 @@ class DetailForm(forms.ModelForm):
     class Meta:
         model = Detail 
         fields = '__all__' 
+
+
 
 class AbonnementForm(forms.ModelForm):
     class Meta:

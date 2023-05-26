@@ -1,0 +1,67 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+ 
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     Les livres numériques  <img src="{% static 'img/angle-right.png' %}"/>  
+{% endblock %}
+
+{% block page_menu_right %}
+
+    {% if request.user.is_superuser %}
+        <li><a href="{% url 'create_book' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau Livre</a> </li> 
+    {% endif %}
+
+{% endblock %}
+
+{% block body  %} 
+<section class="content_main"> 
+
+        {% regroup mybooks by subject as subject_list %}
+        {% for subject in subject_list %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {{ subject.grouper.name }}
+            </div>
+        </div><hr/>
+        <div class="row" align="center">
+            {% regroup subject.list by level as level_list %}
+            {% for level in level_list %}
+               <div class="col-sm-12 col-md-3 col-lg-3">
+               <div class="book_level">
+
+                   <div>{{ level.grouper.name }}</div>
+
+                    {% for book in level.list %}
+                        <div style="float: left;margin-right: 5px;">
+                            {% if book.imagefile  %}
+                            <a href="{% url 'show_book' book.id %}"><img src='{{ book.imagefile.url }}' width="99px" height="132px" /></a>
+                            {% else  %}
+                            <a href="{% url 'show_book' book.id %}">{{book.title }} </a>
+                            {% endif %}
+            
+                            {% if request.user.is_superuser  %}
+                            <div> <a href="{% url 'update_book' book.id %}"><i class="bi bi-pen"></i></a> </div>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+                    <div style="clear: both;"></div>
+                </div>
+                </div>
+            {% endfor %}
+        </div>  
+        {% endfor %}
+
+    </div>
+</section>
+{% endblock  %}   

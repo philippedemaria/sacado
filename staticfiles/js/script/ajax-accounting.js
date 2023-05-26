@@ -52,20 +52,20 @@ define(['jquery', 'bootstrap' ], function ($) {
  
   
 
-        $("body").on('change', '#id_mode', function (event) {  
+        // $("body").on('change', '#id_mode', function (event) {  
 
-            var id_mode = $("#id_mode").val() ;
+        //     var id_mode = $("#id_mode").val() ;
 
-            if(id_mode == "Période de test")
+        //     if(id_mode == "Période de test")
 
-                {
+        //         {
 
-                    alert("Renseigner la date de fin de la période d'essai");
-                    $("#id_date_stop").val("");
-                    $("#id_date_stop").focus();
-                }
+        //             alert("Renseigner la date de fin de la période d'essai");
+        //             $("#id_date_stop").val("");
+        //             $("#id_date_stop").focus();
+        //         }
 
-        });
+        // });
  
 
     });

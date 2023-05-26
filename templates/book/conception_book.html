@@ -1,0 +1,385 @@
+{% extends 'book/show_book.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+
+
+{% block conception_creation %}
+    <a href="{% url 'show_book' book.id %}" class="ecbx-1200" title="Vision/Conception"><i class="bi bi-arrow-repeat"></i></a>  
+{% endblock %}
+
+
+
+
+
+{% block sommaire %}
+    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus"></i> Chapitre</a>
+    <hr/>
+    <div id="droppable_sommary">    
+    {% for ch in chapters %}
+        <li class="book_chapters_in_menu sorter_chapter {% if chapter.id == ch.id %}book_chapters_in_menu_selected{% endif %}" data-chapter_id='{{ ch.id }}'>
+            <span class="book_chapter_number">{{ forloop.counter}}.</span> 
+
+            <a href="{% url 'conception_book' book.id ch.id %}" class="book_chapter_shower">
+            {{ ch.title|truncatechars:43|lower|capfirst }}
+            </a>
+            <a href="{% url 'delete_chapter' book.id ch.id %}" class="book_new_chapter" title="Supprimer" onclick="return TestDelete('le chapitre {{ch.title}}')"><i class="bi bi-trash"></i></a>                            
+            <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter get_the_title" title="Modifier"  data-title="{{ ch.title }}" data-pk="{{ ch.id }}"><i class="bi bi-pen"></i></a>
+        </li>
+    {% endfor %}
+    </div>
+{% endblock %}
+
+
+{% block main_page %}
+
+
+    <h2 class="sacado_color_text">{{ chapter }}  
+        <a href="#" class="chapter_new_document " title="Classer les documents par type/chronologie" data-chapter_id="{{ chapter.id }}"><i class="bi bi-filter-circle"></i></a>          
+        <a href="#" data-toggle='modal' data-target='#chapter_new_document' class="pull-right book_main_page_add_document" title="Ajouter" data-chapter_id="{{ chapter.id }}">+ document</a>
+    </h2>
+
+    <div id="dropzone" >
+    {% regroup documents by section as section_list %}
+    {% for section in section_list %}
+        <div class="book_main_page_section"  id="book_main_page_section{{ section.grouper.id }}" data-over_section_id="{{ section.grouper.id }}" >
+            <div class="book_main_page_section_title">
+                <i class="fa fa-sort"></i> <span id="section_title{{ section.grouper.id }}">{{ section.grouper.title }}</span>           
+                <a href="#" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.grouper.id }}"><i class="bi bi-pen"></i></a>
+                <a href="#" class="delete_section white" title="Supprimer" data-section_id="{{ section.grouper.id }}"><i class="bi bi-trash"></i></a>
+            </div> 
+            {% for document in section.list %}
+                <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.grouper.id }}" >
+                    <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
+                    <a href="#" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}"  ><i class="fa fa-times"></i></a>
+                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                        {% if document.content %}
+                        <i class="bi bi-file-earmark book_main_page_section_document_earmark"></i>
+                        {% elif document.file %}
+                        <i class="bi bi-file  book_main_page_section_document_earmark"></i>
+                        {% elif document.url %}
+                        <i class="bi bi-link book_main_page_section_document_earmark"></i>
+                        {% elif document.bibliotex %}
+                        <i class="bi bi-file-bootstrap book_main_page_section_document_earmark"></i>
+                        {% elif document.quizz.is_random %}
+                        <i class="bi bi-lightning book_main_page_section_document_earmark"></i>
+                        {% elif document.quizz %}
+                        <i class="bi bi-file-aspect-ratio book_main_page_section_document_earmark"></i>
+                        {% elif document.flashpack %}
+                        <i class="bi bi-stack book_main_page_section_document_earmark"></i>
+                        {% elif document.exercise %}
+                        <i class="bi bi-explicit book_main_page_section_document_earmark"></i>
+                        {% endif %}
+
+                    </a><br/>
+                    {% if document.doctype == 0 %}
+                    <a href="#" class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }}</a> 
+                    {% else %}
+                    {{ document.title }} 
+                    {% endif  %}
+                </div>
+            {% endfor %}
+            <div style="clear:both"></div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
+ 
+
+
+{% block modal_chapter %}
+<div class="modal fade" id="book_new_chapter" tabindex="-1" role="dialog" aria-labelledby="book_new_chapter">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 id='modal_title' >Nouveau chapitre</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="" enctype='multipart/form-data' id="new_chapter">                    
+                    <input type="hidden" value="book" name="form_type"/>
+                    {% csrf_token %}
+                    {{ form.book}}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label>{{ form.title.label_tag }}</label>
+                                {{ form.title |add_class:"form-control" }}
+                                {{ form.title.errors }}
+                            </div>
+                            <input name="is_update" id="is_update" type="hidden" />
+                            <input name="pk_update" id="pk_update" type="hidden" /> 
+                        </div>    
+                        <div class="col-sm-12 col-md-12">         
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+<div class="modal fade" id="chapter_new_document" tabindex="-1" role="dialog" aria-labelledby="chapter_new_document">
+    <div class="modal-dialog modal-lg" role="document"  style="width:1000px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Ajouter un document</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="" enctype='multipart/form-data' id="new_document">
+                    <input type="hidden" value="document" name="form_type"/>
+                    <input type="hidden" name="doctype" id="doctype" />
+                    <input type="hidden" id="book_subject_id" value="{{ book.subject.id }}" />
+                    <input type="hidden" id="book_level_id" value="{{ book.level.id }}" />
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label>Document à placer dans</label>
+                                {{ formdoc.section |add_class:"form-control select2" }}
+                                {{ formdoc.section.errors }}
+                            </div>
+                        </div>  
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <a href="#" data-toggle='modal' class="new_section" data-target='#new_section'>Nouvelle section de document</a> <br/>
+                                <a href="#" data-toggle='modal' class="new_section" data-target='#delete_section'>Supprimer une section</a> 
+                            </div>
+                        </div>  
+                    </div>     
+                    <div class="row" align="center">
+                        <div class="col-sm-6 col-md-6">
+                            <a href="javascript:void();" class="btn btn-default"  id="create_a_new_document_button">
+                                Créer un nouveau document
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <a href="javascript:void();" class="btn btn-default" id="get_an_existing_document"  >
+                               Récupérer un document existant
+                            </a>
+                        </div>
+                    </div>
+                    <div id="create_a_new_document" class="no_visu_on_load">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.title.label_tag }}</label>
+                                        {{ formdoc.title |add_class:"form-control" }}
+                                        {{ formdoc.title.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <a href="javascript:void();" class="book_document_choice" id="show_text_part">Texte</a>
+                                        <a href="javascript:void();" class="book_document_choice" id="show_link_part">Lien externe</a>
+                                        <a href="javascript:void();" class="book_document_choice" id="show_file_part">Fichier</a>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="row no_visu_on_load disappear_div" id="text_part">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.content.label_tag }}</label>
+                                        {{ formdoc.content }}
+                                        {{ formdoc.content.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row no_visu_on_load disappear_div" id="file_part">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.file.label_tag }}</label>
+                                        {{ formdoc.file |add_class:"form-control btn btn-default" }}
+                                        {{ formdoc.file.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row no_visu_on_load disappear_div" id="link_part">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.url.label_tag }}</label>
+                                        {{ formdoc.url |add_class:"form-control"|attr:"placeholder:https://" }}
+                                        {{ formdoc.url.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">         
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                                    <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                                </div>
+                            </div>
+                    </div>
+                    <div id="get_this_existing_document"  class="no_visu_on_load">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <a href="javascript:void();" class="book_document_choice" data-type="BiblioTex">
+                                        <span class="book_document_choice_text">BiblioTex</span>
+                                        <span class="book_document_choice_icon"><i class="bi bi-bootstrap"></i></span>
+                                    </a>
+                                    <a href="javascript:void();" class="book_document_choice" data-type="Course">
+                                        <span class="book_document_choice_text">Cours</span>
+                                        <span class="book_document_choice_icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
+                                                <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/>
+                                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                    <a href="javascript:void();" class="book_document_choice" data-type="Exotex"> 
+                                        <span class="book_document_choice_text">Exercice rédigé</span>
+                                        <span class="book_document_choice_icon"><i class="bi bi-explicit"></i></span>
+                                    </a>
+                                    <a href="javascript:void();" class="book_document_choice" data-type="GGB"> 
+                                        <span class="book_document_choice_text">Exercice autocorrigé</span>
+                                        <span class="book_document_choice_icon"><i class="bi bi-explicit-fill"></i></span>
+                                    </a>
+                                    <a href="javascript:void();" class="book_document_choice" data-type="Flashpack">
+                                        <span class="book_document_choice_text">Flashpack</span>
+                                        <span class="book_document_choice_icon"><i class="bi bi-stack"></i></span>
+                                    </a>
+                                    <a href="javascript:void();" class="book_document_choice" data-type="Quizz">
+                                        <span class="book_document_choice_text">Quizz</span>
+                                        <span class="book_document_choice_icon"><i class="bi bi-aspect-ratio"></i></span>
+                                    </a>
+                                    <a href="javascript:void();" class="book_document_choice" data-type="QF">
+                                        <span class="book_document_choice_text">Questions flash</span>
+                                        <span class="book_document_choice_icon"><i class="bi bi-lightning"></i></span>
+                                    </a>
+                                </div>
+                            </div>  
+                        </div> 
+                        <div id="show_document_by_type" align='center'>
+ 
+                        </div> 
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+<div class="modal fade" id="new_section" tabindex="-1" role="dialog" aria-labelledby="new_section">
+    <div class="modal-dialog modal-lg" role="document"  style="width:500px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Nouvelle section</h2>              
+            </div>
+            <div class="modal-body" id='modal_document_body' >
+                <form method="POST" action="" enctype='multipart/form-data'  id='new_form_sec'> 
+                    {% csrf_token %}                          
+                    <input type="hidden" value="emplacement" name="form_type"/>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">         
+                            {{ formsec.title|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">         
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+ 
+<div class="modal fade" id="update_section" tabindex="-1" role="dialog" aria-labelledby="update_section">
+    <div class="modal-dialog modal-lg" role="document"  style="width:300px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Modifier la section</h2>              
+            </div>
+            <div class="modal-body" >
+                <form method="POST" action="" enctype='multipart/form-data' id='update_form_sec'> 
+                    {% csrf_token %}                          
+                    <input type="hidden" id="section_id" name="section_id" />
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">         
+                            {{ formsec.title|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">         
+                            <a href="#" id="udpate_section_button"  class="btn btn-primary">Enregistrer</a>   
+                            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+<div class="modal fade" id="delete_section" tabindex="-1" role="dialog" aria-labelledby="delete_section">
+    <div class="modal-dialog modal-lg" role="document"  style="width:300px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 ></h2>              
+            </div>
+            <div class="modal-body"  >
+                {% for section in sections %}
+                    <div class="row" id="this_section_in_modal{{ section.id }}">
+                        <div class="col-sm-10 col-md-10">         
+                            {{ section.title }}
+                        </div>
+                        <div class="col-sm-2 col-md-2">         
+                            <a href="javascript:void();" class="delete_section" data-section_id="{{ section.id }}" onclick="return TestDelete('la section {{section.title}}')" ><i class="bi bi-trash"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+<div class="modal fade" id="show_this_document" tabindex="-1" role="dialog" aria-labelledby="show_this_document">
+    <div class="modal-dialog modal-lg" role="document"  style="width:1100px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 id='modal_document_title' ></h2>              
+            </div>
+            <div class="modal-body" id='modal_document_body' >
+ 
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock %}

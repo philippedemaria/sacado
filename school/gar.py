@@ -48,7 +48,7 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 def web_update_abonnement_xml(accounting,id_abonnement):
     #Webservice du GAR
-    date_start, date_stop = accounting.abonnement.date_start.isoformat().split("T"), accounting.abonnement.date_stop.isoformat().split("T") 
+    date_start, date_stop = accounting.date_payment.isoformat().split("T"), accounting.school.customer.date_stop.isoformat().split("T") 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
@@ -81,12 +81,8 @@ def web_update_abonnement_xml(accounting,id_abonnement):
 
 def create_abonnement_gar(today,accounting ,user): 
     """Création d'un abonnement dans la base de données"""
-
-    now = datetime.now()
-    timestamp = datetime.timestamp(now)
-    salt = str(timestamp).split(".") 
-
-    id_abonnement = "SACADO_" + str(accounting.school.code_acad)+"_"+salt[0]
+ 
+    id_abonnement = "SACADO_" + str(accounting.school.code_acad)+"_"+str(today)
     #host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
 
     host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi

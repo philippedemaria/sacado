@@ -154,10 +154,8 @@ class Accounting(models.Model):
     TYPES = (
 
         ("Période de test", "Période d'essai"),
-        ("par carte de crédit", "Carte de crédit"),
-        ("par virement bancaire", "Virement bancaire"),
-        ("en espèces", "Espèces"),
-        ("par mandatement administratif", "Mandatement administratif"),
+        ("Abonnement", "Abonnement"),
+        ("Remboursement", "Remboursement"),
     )
 
     FORMES = (
@@ -308,25 +306,49 @@ class Bank(models.Model):
 class Customer(models.Model):
 
     STATUS = (
-        (0, "Perdu"),
+        (0, "Ouverture compte"),
         (1, "En suspens"),
         (2, "Paiement en attente"),
         (3, "Abonné"),
     )
 
-    school     = models.OneToOneField(School, on_delete=models.CASCADE, blank=True,  null=True, related_name='customer')
-    name       = models.CharField(max_length=255, blank=True, verbose_name="Nom") 
-    address    = models.CharField(max_length=255, blank=True, verbose_name="Adresse")
-    complement = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
-    town       = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
-    country    = models.ForeignKey(Country, related_name="customers", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Pays")
-    contact    = models.CharField(max_length=255, blank=True ,  verbose_name="Contact")
-    phone      = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
-    status     = models.PositiveSmallIntegerField(default=3,choices=STATUS)
+    ACTUALS = (
+        (0,"Période d'essai") , 
+        (1,"Abonnement")
+        )
+
+    GESTIONS = (
+        ("En direct","Directe") , 
+        ("eMLS","eMLS")
+        )
+
+
+    school    = models.OneToOneField(School, on_delete=models.CASCADE, blank=True,  null=True, related_name='customer')
+    user      = models.ForeignKey(User, related_name="customers", blank=True,  null=True,  on_delete=models.SET_NULL, verbose_name="Contact")
+    phone     = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
+    status    = models.PositiveSmallIntegerField(default=2,choices=STATUS)
+    actual    = models.PositiveSmallIntegerField(default=1,choices=ACTUALS)
+    date_stop           = models.DateField( blank=True,  null=True,  verbose_name="Fin d'abonement")
+    gar_abonnement_id   = models.CharField(max_length=255, default='',  blank=True, editable=False)
+    gestion   = models.CharField(max_length=255, default='En direct',  blank=True, choices=GESTIONS)
+
 
     def __str__(self):
         return self.name
+
+
+    def last_accounting(self):
+        last_account = self.school.accountings.last()
+        return last_account
  
+
+    def is_active_asso(self):
+        today = date.today()
+        is_active = False
+        if self.date_stop >=  today : is_active = True
+        return is_active
+
+
 
 class Accountancy(models.Model):
     """ Accounting   """
@@ -406,6 +428,11 @@ class Document(models.Model): # pour l'asso'
 
 class Abonnement(models.Model):
 
+    STATUS = (
+        (0,"Période d'essai") , 
+        (1,"Abonnement")
+        )
+
     school              = models.ForeignKey(School, on_delete=models.CASCADE, related_name='abonnement', editable=False)
     date_start          = models.DateTimeField( blank=True, verbose_name="Date de début")
     date_stop           = models.DateTimeField( blank=True, verbose_name="Date de fin")
@@ -414,6 +441,9 @@ class Abonnement(models.Model):
     is_gar              = models.BooleanField(default=0, verbose_name="Usage du GAR")
     is_active           = models.BooleanField(default=0, verbose_name="Actif")
     gar_abonnement_id   = models.CharField(max_length=255, default='',  blank=True, editable=False)
+    status              = models.CharField(max_length=255, default='',  choices = STATUS , blank=True )
+
+
 
     def __str__(self):
         return "{}".format(self.school.name)

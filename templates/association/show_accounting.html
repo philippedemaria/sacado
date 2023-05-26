@@ -20,58 +20,18 @@
 
 
 {% block page_title %}
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Transaction n° : {{ accounting.code }} 
-
-
- 
-
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Transaction n° : {{ accounting.id }} 
 {% endblock %}
 
 
 {% block page_menu_right %}
- 
-
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle no_button" >  Les opérations  <b class="caret"></b> </a>
-    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
-       
-        <li >          <a href="{% url 'list_accountings' 0 %}"  > Clients </a>   </li>
-         <li >          <a href="{% url 'list_accountings' 1 %}" >Fournisseurs </a>   </li>
-        <li >          <a href="{% url 'list_accountings' 2 %}" > Banque </a>   </li>
-    </ul>
-</li>
-
-
+ {% include 'association/menubar.html' %} 
 
 {% endblock %}
  
 
 {% block body %}
-<div class="content_main">  
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <div class="{% if accounting.acting %}credit_asso{% else %}debit_asso{% endif %}"> 
-                    <div class="col-sm-3 col-md-3">
-                         <label>Montant : </label> <b>{{ accounting.amount }} €</b>
-                    </div>                       
-                    <div class="col-sm-3 col-md-3">
-                         {% if accounting.is_credit %}CREDIT{% else %}DEBIT{% endif %}
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                         <label>Date d'enregistrement : </label> {{ accounting.date }}
-                    </div>
-                    <div class="col-sm-3 col-md-3">
-                         <label>Date d'effet : </label> 
-                        {% if accounting.acting %}
-                            {{ accounting.acting }} : {{ accounting.mode }}
-                        {% else %}
-                            En attente
-                        {% endif %}
-
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="content_main  alert alert-sacado">  
         <div class="row">        
             <div class="col-sm-12 col-md-8">
                 <div class="observation_asso">
@@ -80,7 +40,7 @@
             </div>       
             <div class="col-sm-12 col-md-4">
                 <div class="observation_asso">
-                    <label> Etabli par : </label> {{ accounting.user }}
+                    <label> Etablie par : </label> {{ accounting.user }}
                 </div>
             </div>
         </div>  
@@ -94,7 +54,7 @@
                         <label> Ville : </label> {{ accounting.town }}, <label> Pays : </label> {{ accounting.country }}<br/>
                         <label> Contact : </label> {{ accounting.contact }}
                     {% else %}
-                        <label> Bénéficiaire : </label> {{ accounting.school.name }}, <label> Code académique : </label> {{ accounting.school.code_acad }}<br/>
+                        <label> Bénéficiaire : </label> {{ accounting.school.name }}, <br/><label> Code académique : </label> {{ accounting.school.code_acad }}<br/>
                         <label> Adresse : </label> {{ accounting.school.address }}<br/>
                         {% if accounting.complement %}<label> Complément : </label> {{ accounting.school.complement }}<br/>{% endif %}
                         <label> Ville : </label> {{ accounting.school.town }}, <label> Pays : </label> {{ accounting.school.country }}<br/>
@@ -108,33 +68,42 @@
             </div>
         </div> 
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-12 col-md-6">
                 <div class="observation_asso">
-                    <table class="table table-sacado ">
-                        <tr><th>Descriptions</th><th>Montant</th></tr>
+                    <table class="table table-sacado">
+                        <tr><td>Descriptions</td><td>Montant</td></tr>
                         {% for d in details %}
                             <tr><td>{{ d.description }}</td><td>{{ d.amount }} €/TTC</td></tr>
                         {% endfor %}
                     </table>
                 </div>        
             </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="observation_asso">
+                    <table class="table table-sacado">
+                        <tr><td>Date de paiement : </div></td><td> <b>{{ accounting.date|date:"Y-m-d" }}  </b></td></tr> 
+                        <tr ><td colspan='2'>{% if accounting.is_credit %}<div  class="credit_asso">CREDIT  : <b>{{ accounting.amount }} €</b> </div>{% else %}<div  class="debit_asso">DEBIT  : <b>{{ accounting.amount }} €</b></div>{% endif %} </td></tr>
+                    </table>
+                </div>   
+
+ 
+            </div>
         </div> 
         <div class="row">        
             <div class="col-sm-12 col-md-12">
                 <div class="observation_asso">
                     <label> Observations :</label>
-                        {% if accounting.observation %}{{ accounting.observation|safe }}{% else %}Néant{% endif %}
+                    {% if accounting.observation %}{{ accounting.observation|safe }}{% else %}Néant{% endif %}
                 </div>
             </div>
         </div> 
 
         <div class="row" style="margin-top:20px">        
             <div class="col-sm-6 col-md-3">
-                <a href="{% url 'print_accounting'  accounting.id %}" class="btn btn-primary" ><i class="fa fa-print"></i> Imprimer cette facture </a>
+                <a href="{% url 'print_accounting' accounting.id %}" class="btn btn-primary" ><i class="fa fa-print"></i> Imprimer cette facture </a>
             </div>
             <div class="col-sm-6 col-md-3">
-                                    <a href="javascript:history.back()"><input type="button" value="Retour"
-                                                               class="btn btn-default "/></a>
+                <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
             </div>
         </div> 
  

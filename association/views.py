@@ -14,8 +14,8 @@ from templated_email import send_templated_mail
 from django.db.models import Q , Sum
 from django.contrib.auth.decorators import  permission_required,user_passes_test
 ############### bibliothèques pour les impressions pdf  #########################
-from association.models import Accounting,Associate , Voting , Document, Section , Detail , Rate  , Holidaybook, Abonnement , Activeyear, Plancomptable , Accountancy , Customer , Prospection
-from association.forms import AccountingForm,AssociateForm,VotingForm, DocumentForm , SectionForm, DetailForm , RateForm , AbonnementForm , HolidaybookForm ,  ActiveyearForm, AccountancyForm  
+from association.models import *
+from association.forms import *
 from account.models import User, Student, Teacher, Parent ,  Response , Connexion
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
@@ -45,7 +45,7 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
-from datetime import datetime  , timedelta
+from datetime import datetime  , timedelta , date
 from general_fonctions import *
 import xlwt
 import uuid
@@ -486,63 +486,112 @@ def update_school_admin(request,id):
     today    = datetime.now()
     today_time = today -   timedelta(days = 15)
     school = School.objects.get(id=id)
+    accountings = school.accountings.order_by("chrono")
+    last_accounting = accountings.last()
+
+
     form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
 
-    teachers = school.users.filter(user_type=2) 
+    form_accounting = AccountingForm(request.POST or None )
+    formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
+    form_ds  = formSet(request.POST or None)
 
+
+    teachers = school.users.filter(user_type=2) 
 
     nb_total = school.users.filter(user_type=0).count()
     nb = 150
     if nb > nb_total:
         nb = nb_total
 
-    abonnements = school.abonnement.all()
+ 
+    customer = school.customer
+    status = customer.status
+    statusForm =  StatusForm(request.POST or None, instance=customer ) 
 
-    abonnement = abonnements.last()
+    form_abo = CustomAboForm(request.POST or None , instance=customer )   
 
-    if abonnement :
-        status = "Abonné"
-    else :
-        status = "Non abonné"
-        if school.accountings.filter(date_payment=None, date__lte=today_time).last() :
-            status = "En attente de paiement"
+    if request.POST.get("update_school",None)  :   
+        if form.is_valid():
+            school = form.save()
+            school.is_active = 1
+            school.save()
+ 
+    context =  { 'accountings':accountings, 'form':form,  'last_accounting' : last_accounting ,'school':school ,'nb':nb ,'nb_total':nb_total ,
+                 'customer' : customer , 'teachers' : teachers , 'status' : status ,'form_abo' : form_abo ,'statusForm' : statusForm ,
+                 'form_accounting' : form_accounting , "form_abo" : form_abo , 'form_ds' : form_ds , 'school' : school , 
+                 }
+    return render(request,'association/update_school_admin.html' ,context )
 
-    if form.is_valid():
-        school = form.save()
-        school.is_active = 1
-        school.save()
 
-        if school.gar :
-            abonnement.is_gar=1
-            if not abonnement.gar_abonnement_id :
-                test, raison , header , decode , ida = create_abonnement_gar( today , abonnement.accounting  , request.user )
-                if test :
-                    abonnement.gar_abonnement_id = ida
-                    abonnement.save()
-                    messages.success(request,"Activation du GAR réussie")
-                else :
-                    messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+@user_passes_test(user_is_board)
+def customer_payment_from_modal(request,idc):
+
+    customer = Customer.objects.get(pk=idc)
+    today    = date.today()
+    form_abo = CustomAboForm(request.POST or None , instance=customer )   
+    if request.method == "POST"  :  
+        if form_abo.is_valid():
+            fa = form_abo.save(commit = False)
+            if fa.actual == 1 :
+                fa.status = 3 
             else :
-                test, raison , header , decode , ida = update_abonnement_gar(  today , abonnement.accounting  )
-                if test :
-                    abonnement.save()
-                    messages.success(request,"Modification du GAR réussie")
+                fa.status = 2
+            if fa.school.gar: # appel de la fonction qui valide le Web Service
+                if not customer.gar_abonnement_id :
+                    test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
+                    if test :
+                        fa.gar_abonnement_id = ida
+                        messages.success(request,"Abonnement réussi. Activation du GAR réussie")
+                    else :
+                        messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
                 else :
-                    messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+                    test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                    if test :
+                        messages.success(request,"Abonnement réussi. Modification du GAR réussie")
+                    else :
+                        messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+
+            else :
+                messages.success(request,"Abonnement réussi. Le GAR n'est pas demandé.")
+            
+            fa.save()
+
+        else :
+            print(fa.errors) 
+    return redirect("update_school_admin" , customer.school.id )
 
 
 
 
-        return redirect('all_schools')
+@user_passes_test(user_is_board)
+def paiement_abonnement(request,idc):
+    
 
-    return render(request,'association/update_school_admin.html', { 'abonnements':abonnements, 'form':form,  'communications' : [],'school':school ,'nb':nb ,'nb_total':nb_total ,'teachers' : teachers , 'status' : status })
+    aid = request.POST.get('accounting_id')
+    date_payment = request.POST.get('date_payment')
+
+    customer =  Customer.objects.get(pk=idc)
+    customer.date_payment = date_payment
+    customer.status = 3
+    customer.save()
+
+    accounting = Accounting.objects.get(pk=aid)
+    accounting.amount = customer.school.fee()
+    accounting.date_payment = date_payment
+    accounting.save()
+
+    messages.success(request,"Modification du paiement réussi.")
+
+    return redirect("update_school_admin" , customer.school.id )
+
+
 
 
 
 
 @user_passes_test(user_is_board)
 def association_index(request):
-
 
     today_start  = datetime.date(datetime.now())
     nb_teachers  = Teacher.objects.all().count()
@@ -588,14 +637,33 @@ def association_index(request):
     else :
         holidaybook = False
 
+
+    customers_pending = Customer.objects.filter(status=0)
+
     active_year, this_year = get_active_year()
 
-    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 
+    context = { 'nb_teachers': nb_teachers , 'nb_students': nb_students , 'nb_exercises': nb_exercises, 'customers_pending' : customers_pending , 
                 'nb_schools': nb_schools, 'nb_answers': nb_answers, 'holidaybook': holidaybook ,
                 'list_months': list_months, 'string': string,  'month_start' : month_start , 'active_year' : active_year ,
                 }
 
     return render(request, 'association/dashboard.html', context )
+
+
+
+def customers_pending(request) :
+
+    customers_pending = Customer.objects.filter(status=0)
+
+
+
+    context = {  'customers_pending' : customers_pending   }
+
+    return render(request, 'association/customers_pending.html', context )
+
+
+
+
 
 
 
@@ -662,12 +730,7 @@ def adhesions(request):
     today = datetime.now()
     this_month = today.month
     this_year = today.year
- 
-
     activeyear, year = get_active_year()
-
- 
-
     first_date_month =  datetime(year, this_month, 1)
     first_date_year  = datetime(year, 1, 1)
 
@@ -682,10 +745,17 @@ def adhesions(request):
     date_start = datetime(year, 8, 31)
     date_stop  = datetime(year+1, 8, 31)
 
-    schools = Customer.objects.values("school").filter(status=3)
-    abonnements = Abonnement.objects.filter( school__in=schools, date_stop__gte = today ).exclude(accounting__date_payment=None).order_by("-accounting__date")    
+    customers = Customer.objects.all()
 
-    context =  {'abonnements': abonnements , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month, 'activeyear' : activeyear }
+    for customer in customers :
+        la = customer.school.abonnement.last()
+        if la :
+            customer.date_stop         = la.date_stop
+            customer.gar_abonnement_id = la.gar_abonnement_id
+            customer.user              = customer.school.users.filter(is_manager=1).first()
+            customer.save()   
+
+    context =  {'customers': customers , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month, 'activeyear' : activeyear ,'title_page' : 'abonnés' }
  
     return render(request, 'association/adhesions.html', context )
 
@@ -1614,7 +1684,7 @@ def str_to_date(date_str):
 def ajax_total_period(request):
     data = {}
     from_date = request.POST.get("from_date",None)
-    to_date = request.POST.get("to_date",None)
+    to_date   = request.POST.get("to_date",None)
 
     if from_date and to_date :
         from_date = str_to_date(from_date)
@@ -1636,14 +1706,14 @@ def ajax_total_period(request):
 
 
 @user_passes_test(user_is_board) 
-def create_accounting(request,tp):
+def create_accounting(request,tp,ids):
  
     form     = AccountingForm(request.POST or None )
-    form_abo = AbonnementForm(request.POST or None )
     formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
     form_ds  = formSet(request.POST or None)
     today    = datetime.now()
 
+    school = School.objects.get(pk=ids)
 
     if tp == 0 :
         template = 'association/form_accounting.html'
@@ -1657,6 +1727,7 @@ def create_accounting(request,tp):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
+            nf.school = school
             forme = request.POST.get("forme",None)
             nf.chrono = str(uuid.uuid4())[:5]
             nf.is_active = 1
@@ -1701,30 +1772,30 @@ def create_accounting(request,tp):
             except :
                 pass
 
-            if nf.is_abonnement :
-                if form_abo.is_valid():
-                    fa = form_abo.save(commit = False)
-                    fa.user = request.user
-                    fa.accounting = nf
-                    fa.school = nf.school
-                    if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        if not fa.gar_abonnement_id :
-                            test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
-                            if test :
-                                fa.gar_abonnement_id = ida
-                                messages.success(request,"Activation du GAR réussie")
-                            else :
-                                messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-                        else :
-                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
-                            if test :
-                                messages.success(request,"Modification du GAR réussie")
-                            else :
-                                messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+            # if nf.is_abonnement :
+            #     if form_abo.is_valid():
+            #         fa = form_abo.save(commit = False)
+            #         fa.user = request.user
+            #         fa.accounting = nf
+            #         fa.school = nf.school
+            #         if fa.is_gar: # appel de la fonction qui valide le Web Service
+            #             if not fa.gar_abonnement_id :
+            #                 test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
+            #                 if test :
+            #                     fa.gar_abonnement_id = ida
+            #                     messages.success(request,"Activation du GAR réussie")
+            #                 else :
+            #                     messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+            #             else :
+            #                 test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+            #                 if test :
+            #                     messages.success(request,"Modification du GAR réussie")
+            #                 else :
+            #                     messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
 
-                    fa.save() 
+            #         fa.save() 
 
-            if request.POST.get("validation_demande",None) and tp == 0 :
+            if tp == 0 :
                 nb = 411
             elif nf.is_paypal :
                 nb = 5212
@@ -1749,7 +1820,7 @@ def create_accounting(request,tp):
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1 ).update(amount = am) 
 
 
-            elif tp == 2 :
+            if tp == 2 :
 
                 if nf.is_credit :
                     if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1):
@@ -1792,10 +1863,10 @@ def create_accounting(request,tp):
         else :
             print(form.errors)
         
-        return redirect('list_accountings',tp)
+        return redirect('update_school_admin', ids )
  
 
-    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : tp , 'accounting' : None }
+    context = {'form': form, 'form_ds': form_ds,  'tp' : tp , 'accounting' : None , 'school' : school }
 
     return render(request, template , context)
 
@@ -1807,7 +1878,7 @@ def renew_accounting(request,ids):
 
     school   = School.objects.get(pk=ids)
     form     = AccountingForm(request.POST or None , initial = { 'school' : school, })
-    form_abo = AbonnementForm(request.POST or None )
+    #form_abo = AbonnementForm(request.POST or None )
     formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
     form_ds  = formSet(request.POST or None)
     today    = datetime.now()
@@ -1816,6 +1887,7 @@ def renew_accounting(request,ids):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
+            nf.beneficiaire = school.name
             forme = request.POST.get("forme",None)
             nf.chrono = str(uuid.uuid4())[:5]
             nf.chrono = create_chrono(Accounting, forme) # Create_chrono dans general_functions.py
@@ -1837,37 +1909,42 @@ def renew_accounting(request,ids):
             for d in details :
                 som += d.amount
 
+            customer = school.customer
+            customer.actual = nf.mode
+            customer.save()
+
+
             Accounting.objects.filter(pk = nf.id).update(amount=som)
 
-            if nf.is_abonnement :
-                if form_abo.is_valid():
-                    fa = form_abo.save(commit = False)
-                    fa.user = request.user
-                    fa.accounting = nf
-                    fa.school = nf.school
-                    if nf.date_payment:
-                        fa.is_active = 1
-                    if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        if not fa.gar_abonnement_id :
-                            test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
-                            if test :
-                                fa.gar_abonnement_id = ida
-                                messages.success(request,"Activation du GAR réussie")
-                            else :
-                                messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-                        else :
-                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
-                            if test :
-                                messages.success(request,"Modification du GAR réussie")
-                            else :
-                                messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-                    fa.save() 
+            # if nf.is_abonnement :
+            #     if form_abo.is_valid():
+            #         fa = form_abo.save(commit = False)
+            #         fa.user = request.user
+            #         fa.accounting = nf
+            #         fa.school = nf.school
+            #         if nf.date_payment:
+            #             fa.is_active = 1
+            #         if fa.is_gar: # appel de la fonction qui valide le Web Service
+            #             if not fa.gar_abonnement_id :
+            #                 test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
+            #                 if test :
+            #                     fa.gar_abonnement_id = ida
+            #                     messages.success(request,"Activation du GAR réussie")
+            #                 else :
+            #                     messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+            #             else :
+            #                 test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+            #                 if test :
+            #                     messages.success(request,"Modification du GAR réussie")
+            #                 else :
+            #                     messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+            #         fa.save() 
         else :
             print(form.errors)
         
         return redirect('all_schools',)
  
-    context = {'form': form, 'form_ds': form_ds, 'form_abo' : form_abo , 'tp' : 0 , 'accounting' : None }
+    context = {'form': form, 'form_ds': form_ds, 'tp' : 0 , 'accounting' : None }
 
     return render(request, 'association/form_accounting.html', context)
 
@@ -1884,11 +1961,11 @@ def update_accounting(request, id,tp):
     school     = accounting.school
     try :
         abonnement = accounting.abonnement 
-        form_abo   = AbonnementForm(request.POST or None, instance= abonnement  )
+        #form_abo   = AbonnementForm(request.POST or None, instance= abonnement  )
         id_a_gar   = abonnement.gar_abonnement_id
     except :
         abonnement = False
-        form_abo   = AbonnementForm(request.POST or None )
+        #form_abo   = AbonnementForm(request.POST or None )
         id_a_gar   = None
 
     form = AccountingForm(request.POST or None, instance=accounting )
@@ -1932,46 +2009,46 @@ def update_accounting(request, id,tp):
             current_year = c_year.year
 
 
-            if nf.is_abonnement :
-                if form_abo.is_valid():
-                    fa = form_abo.save(commit = False)
-                    fa.user = request.user
-                    fa.accounting = accounting
-                    fa.school = school
-                    Accounting.objects.filter(pk = accounting.id).update(is_abonnement = 1)
-                    Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
-                    fa.is_active = 1
-                    if nf.mode == "Période de test":
-                        customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 2 } )
-                        messages.success(request,"Abonnement créé en période de Test")
-                    if nf.date_payment:
-                        customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 3 } )
-                        if not create :
-                            customer.status = 3
-                            customer.save()
-                        messages.success(request,"Abonnement payé.")
+            if nf.is_credit :
+                # if form_abo.is_valid():
+                #     fa = form_abo.save(commit = False)
+                #     fa.user = request.user
+                #     fa.accounting = accounting
+                #     fa.school = school
+                #     Accounting.objects.filter(pk = accounting.id).update(is_abonnement = 1)
+                #     Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
+                #     fa.is_active = 1
+                #     if nf.mode == "Période de test":
+                #         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 2 } )
+                #         messages.success(request,"Abonnement créé en période de Test")
+                #     if nf.date_payment:
+                #         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 3 } )
+                #         if not create :
+                #             customer.status = 3
+                #             customer.save()
+                #         messages.success(request,"Abonnement payé.")
 
-                    if fa.is_gar: # appel de la fonction qui valide le Web Service
-                        School.objects.filter(pk= school.id).update(gar=1)                    
-                        if not id_a_gar :
-                            test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
-                            if test :
-                                fa.gar_abonnement_id = ida
-                                messages.success(request,"Activation du GAR réussie")
-                            else :
-                                messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
+                #     if fa.is_gar: # appel de la fonction qui valide le Web Service
+                #         School.objects.filter(pk= school.id).update(gar=1)                    
+                #         if not id_a_gar :
+                #             test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
+                #             if test :
+                #                 fa.gar_abonnement_id = ida
+                #                 messages.success(request,"Activation du GAR réussie")
+                #             else :
+                #                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
 
-                        else :
-                            test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
-                            if test :
-                                abonnement.save()
-                                messages.success(request,"Modification du GAR réussie")
-                            else :
-                                messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
+                #         else :
+                #             test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                #             if test :
+                #                 abonnement.save()
+                #                 messages.success(request,"Modification du GAR réussie")
+                #             else :
+                #                 messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
 
-                    fa.save()
-                else :
-                    print(form_abo.errors)
+                #     fa.save()
+                # else :
+                #     print(form_abo.errors)
 
 
                 if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0).count() == 0   : 
@@ -2009,20 +2086,7 @@ def update_accounting(request, id,tp):
                 else :
                     Accountancy.objects.update_or_create(accounting_id = accounting.id  , plan_id = bank , is_credit = 1, amount = som  , defaults = {"ranking" : 1 , 'current_year': current_year})   
                     Accountancy.objects.update_or_create(accounting_id = accounting.id ,  plan_id = nf.plan.code , is_credit = 0, amount = -som , defaults = {"ranking" : 2 , 'current_year' : current_year})
-
  
-
-
-            else :
-                if Abonnement.objects.filter(accounting = accounting)  :
-                    Abonnement.objects.filter(accounting = accounting).delete()
-                    Accounting.objects.filter(pk = accounting.id).update(is_abonnement=0)
-                    Accounting.objects.filter(pk = accounting.id).update(is_active=0)
-                    messages.success(request,"Abonnement supprimé")
-                else :
-                    messages.error(request,"Abonnement déjà supprimé ou inexistant.")
-
-
 
             if int(tp) == 0 :
                 return redirect('list_accountings', 0)
@@ -2042,7 +2106,7 @@ def update_accounting(request, id,tp):
         else :
             return redirect('list_paypal') 
     
-    context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'form_abo': form_abo, 'abonnement' : abonnement  }
+    context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'school' : school  }
 
     return render(request, template , context )
 
@@ -2756,12 +2820,13 @@ def relance_accounting(request, id ):
     chrono = accounting.chrono
 
 
-    msg = "Bonjour Madame, Monsieur,\n\nRéférence : "+chrono+ "\n\nComme suite à la demande d'abonnement SACADO de votre établissement " + accounting.school +", nous n'avons pas reçu votre cotisation durant la période d'essai qui vient de se terminer.\n\nPourriez-vous nous confirmer le règlement de ladite cotisation ? \n\nCordialement."
+    msg = "Bonjour Madame, Monsieur,\n\nRéférence : "+chrono+ "\n\nComme suite à la demande d'abonnement SACADO de votre établissement " + accounting.school.name +", nous n'avons pas reçu votre cotisation durant la période d'essai qui vient de se terminer.\n\nPourriez-vous nous confirmer le règlement de ladite cotisation ? \n\nCordialement."
 
     send_mail("Rappel Abonnement SACADO", msg , settings.DEFAULT_FROM_EMAIL , dest)
+    send_mail("Rappel Abonnement SACADO", msg , settings.DEFAULT_FROM_EMAIL , [settings.DEFAULT_FROM_EMAIL])
 
-
-    return redirect("list_accountings" , 0 )
+    messages.success(request,"Message de relance envoyé aux administrateurs SACADO de "+ accounting.school.name )
+    return redirect("update_school_admin" , accounting.school.id )
 
 
 
@@ -3114,9 +3179,9 @@ def pending_adhesions(request):
     date_limit  = today - timedelta(days=15)
 
     customers     = Customer.objects.filter(status=2)
-    context     = { 'customers': customers,  'prosp' : True    }
+    context     = { 'customers': customers,  'prosp' : True  ,'title_page' : 'en attente'   }
 
-    return render(request, 'association/list_pending_adhesions.html', context )
+    return render(request, 'association/adhesions.html', context )
 
 
 
@@ -3135,24 +3200,10 @@ def prospec_schools(request):
 def prospec_to_adhesions(request):
 
     customers     = Customer.objects.filter(status=1)
-    context     = { 'customers': customers,  'prosp' : False     }
+    context     = { 'customers': customers,  'prosp' : False ,'title_page' : 'anciens clients'    }
 
+    return render(request, 'association/adhesions.html', context )
  
-
-    return render(request, 'association/list_pending_adhesions.html', context )
-
-
-
-@user_passes_test(user_is_board)
-def prospec_to_adhesions(request):
-
-    customers     = Customer.objects.filter(status=1)
-    context     = { 'customers': customers,  'prosp' : False     }
-
- 
-
-    return render(request, 'association/list_pending_adhesions.html', context )
-
 
 
 @user_passes_test(user_is_board)

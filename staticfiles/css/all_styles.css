@@ -2505,5 +2505,155 @@ a.select_correction:focus {
     border-radius: 3px 0px 0px 3px;
 }
 /********************************************************************************************************************/
+/********************       Livre numérique        ******************************************************************/
 /********************************************************************************************************************/
-/********************************************************************************************************************/
+
+
+.book_level{
+  border-radius: 10px;
+  background-color: white;
+  width: 100%;
+  padding: 10px;
+  margin-bottom:20px;
+}
+
+a.book_chapter_shower,a.book_chapter_shower:active,a.book_chapter_shower:visited{
+  color: white;
+  font-size: 1em;
+  padding-top: 5px;
+}
+
+
+a.book_new_chapter,a.book_new_chapter:active,a.book_new_chapter:visited{
+  color: white;
+  font-size: 12px;
+  float:right;
+  padding-top: 5px;
+}
+
+a.book_new_chapter:hover{
+  color: white;  
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.book_section_main_page{
+  background-color: white;
+  border-radius: 10px;
+}
+
+.book_chapters_in_menu{
+   list-style: none;
+   padding: 5px 0px;
+}
+
+
+.sorter_chapter{
+  cursor: ns-resize;
+}
+
+.sorter_chapter_selected {
+  animation: slide_menu-in 0.5s forwards;
+  -webkit-animation: slide_menu-in 0.5s forwards;
+}
+
+.sorter_chapter_dismiss {
+  animation: slide_menu-out 0.5s forwards;
+  -webkit-animation: slide_menu-out 0.5s forwards;
+}
+
+@keyframes slide_menu-in {
+  0% {
+    -webkit-transform: translateX(-25vw);
+  }
+  100% {
+    -webkit-transform: translateX(1vw);
+  }
+}
+
+@-webkit-keyframes slide_menu-in {
+  0% {
+    -webkit-transform: translateX(-25vw);
+  }
+  100% {
+    -webkit-transform: translateX(1vw);
+  }
+}
+
+@keyframes slide_menu-out {
+  0% {
+    -webkit-transform: translateX(0px);
+  }
+  100% {
+    -webkit-transform: translateX(-25vw);
+  }
+}
+
+@-webkit-keyframes slide_menu-out {
+  0% {
+    -webkit-transform: translateX(0px);
+  }
+  100% {
+    -webkit-transform: translateX(-25vw);
+  }
+}
+
+.chapter_new_document{
+  font-size:18px;
+}
+
+.section_up_and_del{
+  font-size:12px;
+  padding: 0px 2px;
+}
+
+
+.book_main_page{
+  padding-left : 30px;
+  float:left;    
+  width:60vw;   
+}
+ 
+ 
+.book_main_page_document{
+  width:100%;
+  border-radius: 10px;
+  background-color: white;
+  min-height: 80px;
+}
+
+.book_main_page_section_document_eraser{
+  color:#C2C2C2;
+  position: absolute;
+  top:2px;
+  left:75%;
+}
+
+.book_main_page_section_document_move{
+  color:#C2C2C2;
+  position: absolute;
+  top:2px;
+  left:10%;
+}
+
+.this_css_template_exercise_document{
+   width :100px;
+   margin:10px;
+}
+
+.this_css_template_exercise_document:hover{
+   width :350px;
+   margin:10px;
+}
+
+.this_search_document_get{
+  top:2px;
+  left:2px;
+  position: absolute;
+  cursor:pointer;
+  font-size:1.5em;
+}
+
+/*--------------------------------------------------------------
+#   fin ---->  Livre numérique
+--------------------------------------------------------------*/

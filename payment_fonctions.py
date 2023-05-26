@@ -16,16 +16,11 @@ def accounting_adhesion(school, today , date_payment, user, is_active , observat
                                                                                                                     town= school.town , country= school.country , contact= school.address , forme= "FACTURE", plan_id= 18 ,
                                                                                                                     mode = observation, observation= observation ,date_payment= date_payment , user= user )
 
-
     Detail.objects.create( accounting = accounting  ,  description = objet , amount = fee)
 
     if Customer.objects.filter(school=school):
         Customer.objects.filter(school=school).update(status=2)
     else :
         Customer.objects.create(school=school, name =  school.name , town= school.town , address= school.address ,  country= school.country, status=2)
-
-
-
-
 
     return accounting.id

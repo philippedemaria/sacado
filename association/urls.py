@@ -18,7 +18,7 @@ urlpatterns = [
     path('adhesions', adhesions, name='adhesions'),
 
     path('list_accountings/<int:tp>/', list_accountings, name='list_accountings'),
-    path('new/<int:tp>/', create_accounting, name='create_accounting'),
+    path('new/<int:tp>/<int:ids>', create_accounting, name='create_accounting'),
     path('update/<int:id>/<int:tp>', update_accounting, name='update_accounting'),
     path('create_avoir/<int:id>/', create_avoir, name='create_avoir'),
     path('show/<int:id>/', show_accounting, name='show_accounting'), 
@@ -87,6 +87,12 @@ urlpatterns = [
     path('update_school_admin/<int:id>/', update_school_admin, name='update_school_admin'),
     path('ajax_customer/', ajax_customer, name='ajax_customer'),
 
+    path('customer_payment_from_modal/<int:idc>', customer_payment_from_modal, name='customer_payment_from_modal'),
+
+    path('paiement_abonnement/<int:idc>', paiement_abonnement, name='paiement_abonnement'),
+
+
+
 
     path('pending_adhesions', pending_adhesions, name='pending_adhesions'),
     path('prospec_schools', prospec_schools, name='prospec_schools'),
@@ -95,7 +101,7 @@ urlpatterns = [
 
     path('contact_prosp', contact_prosp, name='contact_prosp'),
 
-
+    path('customers_pending', customers_pending, name='customers_pending'),
 
     ### -------------------------  GAR
     path('abonnements_gar', abonnements_gar, name='abonnements_gar'),

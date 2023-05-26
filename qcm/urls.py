@@ -155,6 +155,8 @@ urlpatterns = [
 
     #####################################  Modifie les relations par parcours et exercices  ##############################################################  
     path('<int:idp>/<int:ide>/', execute_exercise, name='execute_exercise'),#modif idp en id pour la sécurité 
+    path('practice/frombook/<int:ide>/', execute_exercise_from_qrcode, name='execute_exercise_from_qrcode'),#modif idp en id pour la sécurité 
+
     ######################################################################################################################################################
     path('practice_group/<int:idf>/<int:idp>', practice_group, name='practice_group'), # Groupe de besoins
     path('recap_parcours/<int:idf>/<int:idp>', recap_parcours, name='recap_parcours'), # Listes de exercices donnés par élèves lors d'une individualisation ou d'un parcours IA

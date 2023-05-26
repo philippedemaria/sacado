@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Abonnements {{ activeyear}} - <small>{{ abonnements.count }}</small>
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Liste des {{ title_page }} {{ activeyear}} - {{ abonnements.count }}
 
         {% comment %}
         <a href="#" data-toggle='modal' data-target='#e_bilans' class="btn btn-default btn-xs"> <i class="fa fa-file-excel-o fa-xs text-success"></i> Exporter le bilan</a>
@@ -73,49 +73,48 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table   class="standard_tab_sort300 table  table-hover">
+            <table  class="standard_tab_sort300 table table-sacado table-striped table-hover table-responsive">
                 <thead>
                 <tr>
                     <td style="width:180px">Chrono</td>                    
-                    <td style="width:150px">Date de valeur</td>                     
+                    <td style="width:150px">Date d'échéance</td>                     
                     <td>Etablissement</td>
-                    <td>Ville</td>
-                    <td>Pays</td>
-                    <td>Contacts</td>
+                    <td>Pays , Ville </td>
+                    <td>GAR </td>
+                    <td>Contact </td>
                 </tr>
                 </thead>
                 <tbody>
-                    {% for abonnement in abonnements %}
+                    {% for customer in customers %}
                         <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
                             <td>
-                                <span >{{ abonnement.accounting.chrono }}</span> 
+                                <span >{{ customer.last_accounting.chrono }}</span> 
                             </td>                            
                             <td>
-                                <span >{{ abonnement.accounting.date_payment|date:"Y-m-d" }} </span> 
+                                <span >{{ customer.date_stop|date:"Y-m-d" }} </span> 
                             </td>
                             <td>
-                                <span class="helper_tip">{% if abonnement.accounting.beneficiaire  %} {{ abonnement.accounting.beneficiaire }} {% else %}{{ abonnement.accounting.school.name }}, {{ abonnement.accounting.school.country.name }} {% endif %}
-                                    <div class="helper_tip_text" > {{ abonnement.accounting.observation|safe }}</div>
-                                
+                                <span class="helper_tip">
+                                    <a href="{% url 'update_school_admin'  customer.school.id %}">{{ customer.school.name|lower|capfirst }}</a>
+                                    <div class="helper_tip_text" > {{  customer.last_accounting.observation|safe }}</div>
                                 </span>
-                                <a href="{% url 'update_school_admin'  abonnement.school.id %}" class="pull-right"><i class="bi bi-cursor"></i></a>
+                                
+                                {% if customer.status == 0 %}<i class="bi bi-bell-fill text-danger" title="Demande à traiter"></i>{% endif %}
                             </td> 
 
                             <td>
-                                 {{ abonnement.accounting.school.town }}
+                                {{ customer.school.country.name }},  {{ customer.school.town }}
                             </td>
                             <td>
-                                 {{ abonnement.accounting.school.country.name }} 
+                                {% if customer.school.gar %}<img src="{% static 'img/approche_gar.png' %}" height="20px" />{% endif %}
                             </td>
                             <td style="font-size: 10px">
-                                 {% for u in abonnement.accounting.school.admin %} <li>{{u.get_full_name}}, {{u.email}}</li> {% endfor %}
+                                <span class="helper_tip" style="color:black">
+                                    {{customer.user.get_full_name}}
+                                    <div class="helper_tip_text" > {{customer.user.email}} </div>
+                                </span>
                             </td>
-
-
-
-
                         </tr>
-
                     {% endfor %}
                 </tbody>
             </table>

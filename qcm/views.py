@@ -7590,6 +7590,45 @@ def execute_exercise(request, idp,ide):
 
 
 
+
+@login_required(login_url= 'index')
+def execute_exercise_from_qrcode(request, ide):
+    """ Execution d'un exerice pour un élève depuis un qrcode """ 
+    if not request.user.is_authenticated :
+        messages.error(request,"Utilisateur non authentifié")
+        return redirect("index")
+        
+    try :
+        student = request.user.student
+    except :
+        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        return redirect('index')
+
+    
+    exercise = Exercise.objects.get(id= ide)
+
+
+    relationship  = Relationship.objects.filter(exercise=exercise, students=request.user.student)
+    if relationship.count()  :
+        relation = relationship.first()
+        parcours = relation.parcours
+    else :
+        messages.error(request,"Vous ne faites pas partie des utilisateurs de cet exercice. Demandez à votre enseignant de vérifier que vous êtes dans le liste des utilisateurs de l'exercice.")
+        return redirect('index')
+
+    start_time =  time.time()
+    today = time_zone_user(request.user)
+    timer = today.time()
+ 
+    if exercise.supportfile.qtype != 100 :
+        return show_supportfile_student(request,relation)
+
+    else :
+        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today }
+        return render(request, 'qcm/show_relation.html', context)
+
+
+
 def show_supportfile_student(request,relation): 
     """ Fonction de lecture d'un exercice depuis un parcours pour la def précédente""" 
 
@@ -12018,8 +12057,6 @@ def show_one_course(request, idc  ) :
 
 
 
-
-
 def show_course_from_qrcode(request, idc  ) :
     """
     idc : course_id 
@@ -12031,15 +12068,6 @@ def show_course_from_qrcode(request, idc  ) :
 
     context = {  'course': course   }
     return render(request, 'qcm/course/show_course_from_qrcode.html', context)
-
-
-
-
-
-
-
-
-
 
 
 

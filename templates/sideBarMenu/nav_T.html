@@ -83,7 +83,16 @@
             </a>
         </li>
 
-      
+        {% if request.user.is_superuser %}
+        <li class="dropdown {% if  request.session.tdb == 'Books' %}active{% endif %}">
+            <a href="{% url 'books' %}" class="main" >
+                <i class="bi bi-book icon_size" ></i> 
+                <div class="captionmenu">Livres numériques</div>
+            </a>
+        </li>
+        {% endif %}
+
+
         {% comment %}
         <li class="dropdown {% if request.session.tdb == 'Exercises' %}active{% endif %}">
             <a href="#" class="main"  id="exercises">

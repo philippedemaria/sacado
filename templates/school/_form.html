@@ -3,7 +3,19 @@
 {% load widget_tweaks %}
 
 {% block page_title %} 
-   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> {% if request.user.is_superuser %}Gestion d'un établissement {% else %}Modifier l'établissement{% endif %}
+   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-cloud"></i></a> 
+
+
+
+   {% if request.user.is_superuser %}
+        {% if school %} Modification  
+        {% else %}Création{% endif %}  d'un établissement
+
+    {% else %}Modifier l'établissement{% endif %}
+
+
+
+
 {% endblock  %}
 
 

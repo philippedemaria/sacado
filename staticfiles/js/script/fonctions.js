@@ -2,7 +2,7 @@
 /* code pour sacado */
 
 function TestDelete(f1) {
-    if (!confirm('Vous souhaitez supprimer ' + f1 + ' ?')) return false;
+    if (!confirm('Vous souhaitez supprimer ' + f1 + ' ? Les données sont alors DEFINITIVEMENT perdues. Cette action est irréversible si vous cliquez sur OK.' )) return false;
 }
 
 function TestArchive(f1) {
@@ -57,7 +57,7 @@ function clone(f1,f2) {
 }
 
 function deleteAllStudents() {
-    if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? \nToutes leurs données actuelles seront perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
+    if (!confirm('Vous souhaitez supprimer tous les élèves de votre établissement ? \nToutes leurs données actuelles seront DEFINITIVEMENT perdues. Cette action est irréversible si vous cliquez sur OK.')) return false;
 }
 
 

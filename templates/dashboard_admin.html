@@ -25,13 +25,25 @@
 
 {% block body %}
 <section class="content_main"> 
-{% if not sacado_asso %}
+
+{% if is_quite_finish %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12 alert alert-danger">
+            Votre version Etablissement va se terminer le {{ request.user.school.customer.date_stop|date:'d N Y' }}. Si vous souhaitez vous ré-abonner, cliquez ici : <a href="{% url 'school_accounting' %}" class="btn btn-primary" > Se réabonner </a> .
+        </div>
+    </div>
+{% elif not sacado_asso %}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-xs-12 alert alert-danger">
             Vous n'avez pas la version Etablissement. Si vous venez de faire une demande d'abonnement ou de ré-abonnement, nous traitons l'opération sous 24h.
         </div>
     </div>
 {% endif %}
+
+
+
+
+
 {% if not is_gar_check %}
     {% if request.user.is_manager %}
      
@@ -128,12 +140,7 @@
                                         <div class="helper_tip_text" >Ce token est à donner aux enseignants de votre établissement pour s'enregistrer.</div>
                                     </span> :   {{ school.code_acad}}_{{ school.id }}  
                                 </div>
- 
-                                {% if school.customer.status == 1  %}
-                                <a href="{% url 'school_accounting' %}" class="btn btn-warning btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" > Réabonnement </a> 
-                                {% elif not sacado_asso %}
-                                <a href="{% url 'school_accounting' %}" class="btn btn-warning btn-accueil" style="margin-left:10px;width:280px; position: absolute; top:150px;" > Abonnement </a> 
-                                {% endif %}
+
  
                                     <a href="{% url 'school_accounting'  %}" class="small-box-footer" ><i
                                         class="fa fa-arrow-circle-right"></i> Les cotisations </a>

@@ -3855,10 +3855,163 @@ a.menuright:hover{
 
 
 
+/*--------------------------------------------------------------
+#    Livre numérique
+--------------------------------------------------------------*/
+
+.book_menu{
+    background-color: #5d4391 ;
+    color: #f2f2f2;
+    padding:10px ;
+    width:30vw;    
+    float:left;
+    transform: translateX(3%);
+    -webkit-transform: translateX(3%);  
+    z-index: 2;
+
+}
 
 
+.book_chapters_in_menu_selected{
+    background-color: #9274C7!important ;
+    color:white;
+}
 
 
+.book_chapter_high_light_sorter{
+    background-color: #9274C7 ;
+    list-style: none;
+    height:40px;
+}
+
+.book_main_page_title{
+  color :  #5d4391 ;
+}
+
+.book_main_page_section{
+  width:100%;
+  border-radius: 10px;
+  background-color: white;
+  min-height: 150px;
+  padding:0px;
+  text-align: center;
+  margin : 30px 0px;
+  border : 2px solid #5d4391 ;
+}
+
+.book_main_page_section_title{
+  width:100%;
+  border-radius: 5px 5px 0px 0px ;
+  background-color: #9274C7;
+  padding :7px 7px 7px 25px;
+  text-align: left;
+  margin : 0px;
+  color:white;
+  border-bottom : 2px solid #5d4391 ;
+  font-variant-caps: small-caps;
+  font-weight: 600;
+}
+
+.book_main_page_section_document_detail{
+  font-size : 0.7em;
+  color : #5d4391 ;
+  float: left;
+  margin: 12px;
+  width:100px;
+  height:100px;
+  text-align: center;
+  position: relative;
+  cursor: move;
+}
+
+.book_main_page_section_document_earmark{
+  font-size : 4em;
+  color : #5d4391 ;
+}
+
+.book_document_choice{
+  font-size: 0.8em;
+  width:75px;
+  height: 75px;
+  border-radius: 50%;
+  background-color: #5d4391 ;
+  color:white;
+  padding: 20px 2px 2px 2px;
+  margin: 5px;
+  display: block;
+  float: left;
+  text-align: center;
+}
+
+.book_document_choice .book_document_choice_icon{
+   display : block;
+   padding: 2px 0px 0px 0px;
+   font-size: 2em;
+}
+.book_document_choice .book_document_choice_text{
+   display : none;
+}
+.book_document_choice:hover{
+  background-color: #9274C7 ;
+  text-decoration: none;
+}
+.book_document_choice:hover .book_document_choice_icon{
+   display : none;
+}
+.book_document_choice:hover .book_document_choice_text{
+   display : block;
+   color:white;
+}
+
+.book_main_page_add_document{
+  font-size: 10px;
+  width:45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #5d4391 ;
+  color:white;
+  padding: 5px 2px 2px 2px;
+  margin: 5px;
+  display: block;
+  text-align: center;
+}
+
+.book_main_page_add_document:hover, .book_main_page_add_document:focus, .book_main_page_add_document:active{
+  background-color: #9274C7 ;
+  text-decoration: none;  
+  color:white;
+}
+
+.this_css_template_all_document{
+  text-align: center;
+  margin:10px;
+  padding: 15px 5px 5px 5px;
+  font-size:14px;
+  width: 120px;
+  border: 2px solid #5d4391 ;
+  border-radius:5px;
+  color:#5d4391;
+  height:120px;
+  float:left;
+  position: relative;
+  cursor:pointer;
+}
+.this_css_template_all_document:hover{
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.get_this_document:hover{
+  background-color: #5d4391 ;
+  border-radius: 3px;
+  margin-top:2px;
+  margin-left:2px;
+  height:15px;
+  width: 15px;
+}
+
+/*--------------------------------------------------------------
+#   fin ---->  Livre numérique
+--------------------------------------------------------------*/
 
 
 @-webkit-keyframes animate-preloader {

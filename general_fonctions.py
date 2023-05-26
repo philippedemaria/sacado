@@ -1207,18 +1207,7 @@ def this_year_from_today(today) :
     else :
         year = str(today.year-1) +"-"+str(today.year)
     return year
-
-
-def renew(school) :
-    renew_propose = False
-    last_accounting = school.accountings.exclude(date_payment=None).filter(is_credit=1).count()
-    all_accountings = school.accountings.count()
-
-    if   last_accounting   :
-        renew_propose = True
-
-    return renew_propose
-
+ 
 
 def can_inscribe_students(school, compare):
 

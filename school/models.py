@@ -28,6 +28,7 @@ class Town(models.Model):
 
 
 class School(models.Model):
+    
     name                = models.CharField(max_length=255, verbose_name="nom")
     country             = models.ForeignKey(Country, default='', blank=True, related_name='school', related_query_name="school", on_delete=models.PROTECT, verbose_name="Pays")
     town                = models.CharField(max_length=255, default='', verbose_name="ville")
@@ -46,6 +47,7 @@ class School(models.Model):
     tiers               = models.PositiveIntegerField(default=411 ,  editable=False)
     is_primaire         = models.BooleanField(default=1 ,   editable=False)
     is_managing         = models.PositiveIntegerField(default=1 ,   editable=False)
+
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
 

@@ -1,0 +1,106 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+ 
+
+
+    {% if subject %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-subject']);
+    </script> 
+    {% endif %}
+ 
+
+
+
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     Livres numériques  <img src="{% static 'img/angle-right.png' %}"/>  
+     {% if book %}
+     <small>Modification {{ book }}</small>
+    {% else %}
+     <small>Nouveau</small>
+    {% endif %} 
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+{% block body  %} 
+<section class="content_main">             
+    <form method="post" action="" enctype='multipart/form-data'>{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <label>{{ form.title.label_tag }}</label>
+                {{ form.title |add_class:"form-control" }}
+                {{ form.title.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.level.label_tag }}</label>
+                {{ form.level|add_class:"form-control select2" }}
+                {{ form.level.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.subject.label_tag }}</label>
+                {{ form.subject|add_class:"form-control select2" }}
+                {{ form.subject.errors }}
+            </div>
+        </div>    
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <label>{{ form.ranking.label_tag }}</label>
+                {{ form.ranking|add_class:"form-control" }}
+                {{ form.ranking.errors }}
+            </div>
+            <div class="form-group">
+                <label>Prix en €</label>
+                {{ form.price|add_class:"form-control" }}
+                {{ form.price.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.imagefile.label_tag }}</label>
+                {{ form.imagefile|add_class:"btn btn-defaut" }}
+                {{ form.imagefile.errors }}
+            </div>
+        </div>  
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <label>{{ form.is_student.label_tag }}</label>
+                {{ form.is_student  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                {{ form.is_student.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.is_publish.label_tag }}</label>
+                {{ form.is_publish  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                {{ form.is_publish.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.texte.label_tag }}</label>
+                {{ form.texte }}
+                {{ form.texte.errors }}
+            </div>
+        </div>    
+  
+        <div class="col-sm-12 col-md-12">         
+            <button type="submit" class="btn btn-primary">Enregistrer</button>   
+            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+        </div>
+    </div>
+    </form>
+</section>
+{% endblock  %}       
+
+ 
