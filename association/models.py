@@ -345,7 +345,10 @@ class Customer(models.Model):
     def is_active_asso(self):
         today = date.today()
         is_active = False
-        if self.date_stop >=  today : is_active = True
+        try :
+            if self.date_stop >=  today : is_active = True
+        except :
+            pass
         return is_active
 
 
