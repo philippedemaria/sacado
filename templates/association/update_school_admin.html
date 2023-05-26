@@ -218,7 +218,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     {% if customer.gar_abonnement_id %}
-                        <a href="{% url 'delete_abonnement_gar' abonnement.gar_abonnement_id %}"  onclick="return TestDelete('ce webservice ' + str(customer.gar_abonnement_id) )" class="btn btn-xs btn-danger pull-right" >         Supprimer ce webservice
+                        <a href="{% url 'delete_abonnement_gar' customer.gar_abonnement_id %}"  onclick="return TestDelete('ce webservice ' + str(customer.gar_abonnement_id) )" class="btn btn-xs btn-danger pull-right" >         Supprimer ce webservice
                         </a>
                     {% endif %} 
                     <div class="form-group alert alert-sacado">                
