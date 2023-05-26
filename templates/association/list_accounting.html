@@ -98,13 +98,14 @@
                             <td>
                                 <span >{{ accounting.chrono }}</span> 
                             </td>   
-                            <td><span class="helper_tip"><a href="{% url 'update_school_admin'  accounting.school.id   %}" >
-                                {% if accounting.beneficiaire  %} {{ accounting.beneficiaire }} 
-                                {% elif accounting.school %}{{ accounting.school.name }}, {{ accounting.school.country.name }} 
+                            <td><span class="helper_tip">
+                                
+                                {% if accounting.school %}<a href="{% url 'update_school_admin'  accounting.school.id   %}" >{{ accounting.school.name }}, {{ accounting.school.country.name }} </a>
+                                {% elif accounting.beneficiaire  %} {{ accounting.beneficiaire }} 
                                 {% else %}{{ accounting.objet }} 
                                 {% endif %}
                                     <div class="helper_tip_text" > {{ accounting.observation|safe }}</div>
-                                </a></span>
+                                </span>
 
                                 {% if accounting.abonnement.gar_abonnement_id  %}
                                 <span class="helper_tip"> 
