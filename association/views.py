@@ -745,7 +745,7 @@ def adhesions(request):
     date_start = datetime(year, 8, 31)
     date_stop  = datetime(year+1, 8, 31)
 
-    customers = Customer.objects.all()
+    customers = Customer.objects.filter(status=3)
 
     for customer in customers :
         la = customer.school.abonnement.last()
