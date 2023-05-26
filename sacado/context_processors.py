@@ -19,38 +19,38 @@ from datetime import datetime , timedelta
 ##############################################################################################################################################
 
 
-# def is_sacado_asso(this_user, today):
-#     is_sacado = False
-#     is_active = False
-#     try :
-#         customer = this_user.school.customer 
-#         if today.date() < customer.date_stop  :
-#             is_sacado = True
-#             is_active = True
-#     except :
-#         pass
-
-#     if this_user.is_superuser :
-#         is_sacado = True
-#         is_active = True
-        
-#     return is_sacado, is_active
-
-
 def is_sacado_asso(this_user, today):
     is_sacado = False
     is_active = False
     try :
-        abonnement = this_user.school.abonnement.last()
-        if today < abonnement.date_stop and abonnement.is_active :
+        customer = this_user.school.customer 
+        if today.date() < customer.date_stop  :
             is_sacado = True
             is_active = True
     except :
         pass
+
     if this_user.is_superuser :
         is_sacado = True
         is_active = True
+        
     return is_sacado, is_active
+
+
+# def is_sacado_asso(this_user, today):
+#     is_sacado = False
+#     is_active = False
+#     try :
+#         abonnement = this_user.school.abonnement.last()
+#         if today < abonnement.date_stop and abonnement.is_active :
+#             is_sacado = True
+#             is_active = True
+#     except :
+#         pass
+#     if this_user.is_superuser :
+#         is_sacado = True
+#         is_active = True
+#     return is_sacado, is_active
 
 
 
