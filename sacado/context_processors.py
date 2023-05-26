@@ -57,11 +57,14 @@ def is_sacado_asso(this_user, today):
 def is_quite_finish_sacado_asso(this_user, today):
 
     is_quite_finish = False
-    customer = this_user.school.customer
-    the_end_day = today+timedelta(days=15)
+    try :
+        customer = this_user.school.customer
+        the_end_day = today+timedelta(days=15)
 
-    if the_end_day.date() > customer.date_stop and customer.status == 3 :
-        is_quite_finish = True
+        if the_end_day.date() > customer.date_stop and customer.status == 3 :
+            is_quite_finish = True
+    except :
+        pass
 
     return is_quite_finish
 
