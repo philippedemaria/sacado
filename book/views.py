@@ -147,8 +147,11 @@ def show_conception_book(request,idb,idch,is_conception):
             chapter = chapters.first()
         else :
             chapter = Chapter.objects.get(id=idch)
-        documents = chapter.documents.order_by("section__ranking","ranking")
-        context = { 'chapter': chapter , 'documents': documents  }
+        if chapter :
+            documents = chapter.documents.order_by("section__ranking","ranking")
+            context = { 'chapter': chapter , 'documents': documents  }
+        else :
+            context = { }
     else : 
         template =  'book/show_book.html'
         context = {}
