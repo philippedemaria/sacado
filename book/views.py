@@ -265,7 +265,7 @@ def show_conception_book(request,idb,idch,is_conception):
 
             return redirect('conception_book', idb , idch )
 
-    #implement_book_courses(request,book)
+    implement_book_courses(request,book)
     return render(request, template , context )
 
 
