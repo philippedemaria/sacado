@@ -21,12 +21,13 @@
         <b>{{ book.level.shortname_full|safe }}</b> <img src="{% static 'img/angle-right.png' %}"/>  Livret Elève <img src="{% static 'img/angle-right.png' %}"/> {{ book.subject.shortname }} 
     {% else %}
         <b>{{ book.level.shortname_full|safe }}</b> <img src="{% static 'img/angle-right.png' %}"/>  Mon livre numérique 
-
-
-        {% block conception_creation %}
-            <a href="{% url 'conception_book' book.id 0 %}" class="ecbx-1200" title="Vision/Conception"><i class="bi bi-arrow-repeat"></i></a>  
-        {% endblock %}
+ 
         <img src="{% static 'img/angle-right.png' %}"/>  {{ book.subject.shortname }}    
+
+     {% block conception_creation %}
+            <a href="{% url 'conception_book' book.id 0 %}" class="btn btn-sacado" title="Visualisation => Conception"> Visu. <i class="bi bi-arrow-right-short"></i> Concept.</a>  
+        {% endblock %}
+
 
     {% endif %}
 
@@ -34,6 +35,8 @@
 {% endblock %}
 
 {% block page_menu_right %}
+
+
     <li><a href="{% url 'books' %}" class="btn btn-new pull-right" > Mes Livres numériques</a> </li> 
 {% endblock %}
 

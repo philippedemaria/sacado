@@ -112,7 +112,6 @@ def delete_book(request):
 
 def implement_book_courses(request,book) :
 
- 
     i = 1
     for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
         chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,defaults={'is_publish':1,'ranking':i})
@@ -120,8 +119,11 @@ def implement_book_courses(request,book) :
         i+=1
         documents = list()
         for c in courses :
-            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=2480, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
-            if created : documents.append(document)
+            try :
+                document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=2480, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+                if created : documents.append(document)
+            except :
+                pass
         chapt.documents.set(documents)
         chapt.teachers.add(request.user.teacher)
 
