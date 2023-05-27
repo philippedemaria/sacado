@@ -1960,7 +1960,6 @@ def update_accounting(request, id,tp):
     valeur     = accounting.amount
     school     = accounting.school
 
-
     form = AccountingForm(request.POST or None, instance=accounting )
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
     form_ds = formSet(request.POST or None, instance = accounting)
@@ -2100,7 +2099,7 @@ def update_accounting(request, id,tp):
         else :
             return redirect('list_paypal') 
     
-    context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'school' : school  }
+    context = {'form': form, 'form_ds': form_ds ,  'accounting': accounting,  'school' : school , 'tp' :tp }
 
     return render(request, template , context )
 
