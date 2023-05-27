@@ -30,7 +30,7 @@
 
         
         {% if accounting %}
-            {% if accounting.tp == 0 %}Client :  <small>  {{ school.name}}</small>{% elif accounting.tp == 1 %}Fournisseur{% else %}Banque{% endif %}
+            {% if tp == 0 %}Client :  <small>  {{ school.name}}</small>{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
         {% else %}
             {% if tp == 0 %}Client : <small> {{ school.name}}</small>{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
         {% endif %}
