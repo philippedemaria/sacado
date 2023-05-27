@@ -1959,14 +1959,7 @@ def update_accounting(request, id,tp):
     accounting = Accounting.objects.get(id=id)
     valeur     = accounting.amount
     school     = accounting.school
-    try :
-        abonnement = accounting.abonnement 
-        #form_abo   = AbonnementForm(request.POST or None, instance= abonnement  )
-        id_a_gar   = abonnement.gar_abonnement_id
-    except :
-        abonnement = False
-        #form_abo   = AbonnementForm(request.POST or None )
-        id_a_gar   = None
+
 
     form = AccountingForm(request.POST or None, instance=accounting )
     formSet = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount') , extra=0)
