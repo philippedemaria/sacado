@@ -119,11 +119,8 @@ def implement_book_courses(request,book) :
         i+=1
         documents = list()
         for c in courses :
-            try :
-                document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=2480, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
-                if created : documents.append(document)
-            except :
-                pass
+            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=2480, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+            if created : documents.append(document)
         chapt.documents.set(documents)
         chapt.teachers.add(request.user.teacher)
 
