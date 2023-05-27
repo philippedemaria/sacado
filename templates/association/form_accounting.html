@@ -27,7 +27,6 @@
 {% block page_title %}  
     
         <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Facturation 
-
         
         {% if accounting %}
             {% if tp == 0 %}Client :  <small>  {{ school.name}}</small>{% elif tp == 1 %}Fournisseur{% else %}Banque{% endif %}
