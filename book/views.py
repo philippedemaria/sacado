@@ -84,7 +84,7 @@ def update_book(request,idb):
     request.session["subtdb"] = "Chapter"
 
     book = Book.objects.get(id=idb)
-    form = BookForm(request.POST or None, instance=book )
+    form = BookForm(request.POST or None,request.FILES or None, instance=book )
 
     if form.is_valid():
         nf = form.save()
