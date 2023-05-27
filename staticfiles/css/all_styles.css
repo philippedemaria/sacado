@@ -2636,6 +2636,13 @@ a.book_new_chapter:hover{
   left:10%;
 }
 
+.book_main_page_section_document_copy{
+  color:#C2C2C2;
+  position: absolute;
+  top:30px;
+  left:10%;
+}
+
 .this_css_template_exercise_document{
    width :100px;
    margin:10px;

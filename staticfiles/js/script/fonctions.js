@@ -53,7 +53,11 @@ function testPassword(f1, f2) {
 }
 
 function clone(f1,f2) {
-    if (!confirm('Vous souhaitez cloner '+f1+' '+f2+'? '+f1+' va se placer dans votre liste hors dossier. Confirmer')) return false;
+    if (!confirm('Vous souhaitez cloner '+f1+' '+f2+'? '+f1+' va se placer dans votre liste hors dossier. Confirmer.')) return false;
+}
+
+function Test_duplicate(f1) {
+    if (!confirm('Ne cloner '+f1+' que si vous souhaitez le modifier. Vous souhaitez cloner '+f1+' ? Confirmer.')) return false;
 }
 
 function deleteAllStudents() {

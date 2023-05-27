@@ -32,15 +32,18 @@ urlpatterns = [
     #################################################################
     # document
     #################################################################
-    path('delete_document', delete_document, name='delete_document'),
-    path('show_document', show_document, name='show_document'),
-    path('sorter_document', sorter_document, name='sorter_document'),
 
-    path('get_type_document', get_type_document, name='get_type_document'),
+    path('update_book_document/<int:idb>/<int:idch>/<int:idd>', update_book_document, name='update_book_document'),
+    path('duplicate_book_document/<int:idb>/<int:idch>/<int:idd>', duplicate_book_document, name='duplicate_book_document'),
+    path('delete_book_document', delete_book_document, name='delete_book_document'),
+    path('show_book_document', show_book_document, name='show_book_document'),
+    path('sorter_book_document', sorter_book_document, name='sorter_book_document'),
+
+    path('get_type_book_document', get_type_book_document, name='get_type_book_document'),
+    path('get_this_document_to_chapter', get_this_document_to_chapter, name='get_this_document_to_chapter'),
 
 
-
-    path('update_section', update_section, name='update_section'),
-    path('delete_section', delete_section, name='delete_section'),
-    path('sorter_section', sorter_section, name='sorter_section'),
+    path('update_book_section', update_book_section, name='update_book_section'),
+    path('delete_book_section', delete_book_section, name='delete_book_section'),
+    path('sorter_book_section', sorter_book_section, name='sorter_book_section'),
  ]

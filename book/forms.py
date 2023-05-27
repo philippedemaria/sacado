@@ -67,3 +67,11 @@ class DocumentForm(forms.ModelForm):
 		self.fields['section']  = forms.ModelChoiceField(queryset=sections)
 
   
+
+class UpdateDocumentForm(forms.ModelForm):
+
+	class Meta:
+		model = Document
+		fields = ('title','content','is_publish','is_share',)
+ 
+ 

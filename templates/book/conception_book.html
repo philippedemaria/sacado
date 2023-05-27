@@ -38,7 +38,6 @@
 
     <h2 class="sacado_color_text">{{ chapter }}  
         <a href="#" class="chapter_new_document " title="Classer les documents par type/chronologie" data-chapter_id="{{ chapter.id }}"><i class="bi bi-filter-circle"></i></a>          
-        <a href="#" data-toggle='modal' data-target='#chapter_new_document' class="pull-right book_main_page_add_document" title="Ajouter" data-chapter_id="{{ chapter.id }}">+ document</a>
     </h2>
 
     <div id="dropzone" >
@@ -49,11 +48,14 @@
                 <i class="fa fa-sort"></i> <span id="section_title{{ section.grouper.id }}">{{ section.grouper.title }}</span>           
                 <a href="#" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.grouper.id }}"><i class="bi bi-pen"></i></a>
                 <a href="#" class="delete_section white" title="Supprimer" data-section_id="{{ section.grouper.id }}"><i class="bi bi-trash"></i></a>
+
+
             </div> 
             {% for document in section.list %}
                 <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.grouper.id }}" >
                     <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
                     <a href="#" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}"  ><i class="fa fa-times"></i></a>
+
                     <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
                         {% if document.content %}
                         <i class="bi bi-file-earmark book_main_page_section_document_earmark"></i>
@@ -74,16 +76,30 @@
                         {% endif %}
 
                     </a><br/>
-                    {% if document.doctype == 0 %}
-                    <a href="#" class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }}</a> 
+                    {% if document.doctype == 0 and document.author == request.user.teacher %}
+                    <a href="{% url 'update_book_document' book.id chapter.id document.id %}"  class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }}</a> 
                     {% else %}
-                    {{ document.title }} 
+                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }} </a>
                     {% endif  %}
+                    <small> <a href="{% url 'duplicate_book_document' book.id chapter.id document.id %}"  title="Cloner {{document.title}}" onclick="return Test_duplicate('{{document.title}}')"><i class="bi bi-clipboard-plus"></i></a></small>
                 </div>
             {% endfor %}
+ 
+                 <a href="#" data-toggle='modal' data-target='#chapter_new_document' class="selector_book_section_document" title="Ajouter" data-chapter_id="{{ chapter.id }}" data-section_id="{{  section.grouper.id }}"><i class="bi bi-file-plus-fill book_main_page_section_document_section"></i></a>
+     
             <div style="clear:both"></div>
         </div>
+
+ 
+
     {% endfor %}
+
+        <div class="row" align="center">
+            <div class="col-sm-12 col-md-12">
+                 <a href="#" data-toggle='modal' data-target='#chapter_new_section' class="btn btn-primary" title="Ajouter" data-chapter_id="{{ chapter.id }}"><i class="bi bi-plus-circle-dotted"></i> Nouvelle section</a>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
  
@@ -125,7 +141,7 @@
     </div> 
 </div>
 
-
+ 
 
 
 <div class="modal fade" id="chapter_new_document" tabindex="-1" role="dialog" aria-labelledby="chapter_new_document">
@@ -141,32 +157,18 @@
                 <form method="POST" action="" enctype='multipart/form-data' id="new_document">
                     <input type="hidden" value="document" name="form_type"/>
                     <input type="hidden" name="doctype" id="doctype" />
-                    <input type="hidden" id="book_subject_id" value="{{ book.subject.id }}" />
-                    <input type="hidden" id="book_level_id" value="{{ book.level.id }}" />
+                    <input type="hidden" name="book_section_id" id="book_section_id" />
+                    <input type="hidden" name="book_subject_id" id="book_subject_id" value="{{ book.subject.id }}" />
+                    <input type="hidden" name="book_level_id"   id="book_level_id" value="{{ book.level.id }}" />
+                    <input type="hidden" name="book_chapter_id" id="book_chapter_id"  value="{{ chapter.id }}" />
                     {% csrf_token %}
+     
                     <div class="row">
-                        <div class="col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <label>Document à placer dans</label>
-                                {{ formdoc.section |add_class:"form-control select2" }}
-                                {{ formdoc.section.errors }}
-                            </div>
-                        </div>  
-                        <div class="col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <a href="#" data-toggle='modal' class="new_section" data-target='#new_section'>Nouvelle section de document</a> <br/>
-                                <a href="#" data-toggle='modal' class="new_section" data-target='#delete_section'>Supprimer une section</a> 
-                            </div>
-                        </div>  
-                    </div>     
-                    <div class="row" align="center">
-                        <div class="col-sm-6 col-md-6">
-                            <a href="javascript:void();" class="btn btn-default"  id="create_a_new_document_button">
+                        <div class="col-sm-12 col-md-12">
+                            <a href="javascript:void();" class="new_document_button_selector"  id="create_a_new_document_button">
                                 Créer un nouveau document
                             </a>
-                        </div>
-                        <div class="col-sm-6 col-md-6">
-                            <a href="javascript:void();" class="btn btn-default" id="get_an_existing_document"  >
+                            <a href="javascript:void();" class="new_document_button_selector" id="get_an_existing_document"  >
                                Récupérer un document existant
                             </a>
                         </div>
@@ -183,11 +185,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <a href="javascript:void();" class="book_document_choice" id="show_text_part">Texte</a>
-                                        <a href="javascript:void();" class="book_document_choice" id="show_link_part">Lien externe</a>
-                                        <a href="javascript:void();" class="book_document_choice" id="show_file_part">Fichier</a>
-                                    </div>
+                                    <a href="javascript:void();" class="book_document_choice" id="show_text_part">Ecrire du texte ?</a>
+                                    <a href="javascript:void();" class="book_document_choice" id="show_link_part">Attacher un lien externe ?</a>
+                                    <a href="javascript:void();" class="book_document_choice" id="show_file_part">Téléverser un fichier ?</a>
                                 </div> 
                             </div>
                             <div class="row no_visu_on_load disappear_div" id="text_part">
@@ -218,9 +218,11 @@
                                 </div>  
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-12">         
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>   
-                                    <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                                <div class="col-sm-12 col-md-12">  
+                                    <div class="form-group">  
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                                    </div>
                                 </div>
                             </div>
                     </div>
@@ -228,38 +230,30 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <a href="javascript:void();" class="book_document_choice" data-type="BiblioTex">
-                                        <span class="book_document_choice_text">BiblioTex</span>
-                                        <span class="book_document_choice_icon"><i class="bi bi-bootstrap"></i></span>
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="BiblioTex" data-chapter_id="{{ chapter.id}}">
+                                         <i class="bi bi-bootstrap"></i> BiblioTex ?
                                     </a>
-                                    <a href="javascript:void();" class="book_document_choice" data-type="Course">
-                                        <span class="book_document_choice_text">Cours</span>
-                                        <span class="book_document_choice_icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="Course">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
                                                 <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/>
                                                 <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/>
                                             </svg>
-                                        </span>
+                                        Cours ?
                                     </a>
-                                    <a href="javascript:void();" class="book_document_choice" data-type="Exotex"> 
-                                        <span class="book_document_choice_text">Exercice rédigé</span>
-                                        <span class="book_document_choice_icon"><i class="bi bi-explicit"></i></span>
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="Exotex" data-chapter_id="{{ chapter.id}}"> 
+                                        <i class="bi bi-explicit"></i> Exercice rédigé ?
                                     </a>
-                                    <a href="javascript:void();" class="book_document_choice" data-type="GGB"> 
-                                        <span class="book_document_choice_text">Exercice autocorrigé</span>
-                                        <span class="book_document_choice_icon"><i class="bi bi-explicit-fill"></i></span>
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="GGB" data-chapter_id="{{ chapter.id}}"> 
+                                        <i class="bi bi-explicit-fill"></i> Exercice autocorrigé ? 
                                     </a>
-                                    <a href="javascript:void();" class="book_document_choice" data-type="Flashpack">
-                                        <span class="book_document_choice_text">Flashpack</span>
-                                        <span class="book_document_choice_icon"><i class="bi bi-stack"></i></span>
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="Flashpack" data-chapter_id="{{ chapter.id}}">
+                                        <i class="bi bi-stack"></i> Flashpack ?
                                     </a>
-                                    <a href="javascript:void();" class="book_document_choice" data-type="Quizz">
-                                        <span class="book_document_choice_text">Quizz</span>
-                                        <span class="book_document_choice_icon"><i class="bi bi-aspect-ratio"></i></span>
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="Quizz" data-chapter_id="{{ chapter.id}}">
+                                        <i class="bi bi-aspect-ratio"></i> Quizz ?
                                     </a>
-                                    <a href="javascript:void();" class="book_document_choice" data-type="QF">
-                                        <span class="book_document_choice_text">Questions flash</span>
-                                        <span class="book_document_choice_icon"><i class="bi bi-lightning"></i></span>
+                                    <a href="javascript:void();" class="existant_book_document_choice" data-type="QF" data-chapter_id="{{ chapter.id}}">
+                                        <i class="bi bi-lightning"></i> Questions flash ?
                                     </a>
                                 </div>
                             </div>  
@@ -275,7 +269,7 @@
 </div>
 
 
-<div class="modal fade" id="new_section" tabindex="-1" role="dialog" aria-labelledby="new_section">
+<div class="modal fade" id="chapter_new_section" tabindex="-1" role="dialog" aria-labelledby="chapter_new_section">
     <div class="modal-dialog modal-lg" role="document"  style="width:500px">
         <div class="modal-content" >
             <div class="modal-header">
@@ -289,13 +283,15 @@
                     {% csrf_token %}                          
                     <input type="hidden" value="emplacement" name="form_type"/>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">         
+                        <div class="col-sm-12 col-md-12"> 
+                            <div class="form-group"> <label>Titre :</label><br/> 
                             {{ formsec.title|add_class:"form-control" }}
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">         
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                            <button type="submit" class="btn btn-primary" name="emplacement">Enregistrer</button>   
                             <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                         </div>
                     </div>
@@ -365,8 +361,6 @@
 </div>
 
 
-
-
 <div class="modal fade" id="show_this_document" tabindex="-1" role="dialog" aria-labelledby="show_this_document">
     <div class="modal-dialog modal-lg" role="document"  style="width:1100px">
         <div class="modal-content" >
@@ -374,9 +368,28 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h2 id='modal_document_title' ></h2>              
+                <h2 id='show_modal_document_title' ></h2>              
             </div>
-            <div class="modal-body" id='modal_document_body' >
+            <div class="modal-body" id='show_modal_document_body' >
+ 
+            </div>
+        </div>
+    </div> 
+</div>
+
+<div class="modal fade" id="book_new_section" tabindex="-1" role="dialog" aria-labelledby="book_new_section">
+    <div class="modal-dialog modal-lg" role="document"  style="width:1100px">
+        <div class="modal-content" >
+            <div class="modal-body" id='update_modal_document_body' >
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label>Document à placer dans</label>
+                            {{ formdoc.section |add_class:"form-control select2" }}
+                            {{ formdoc.section.errors }}
+                        </div>
+                    </div>  
+ 
  
             </div>
         </div>

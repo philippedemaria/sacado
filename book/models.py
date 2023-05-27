@@ -9,7 +9,7 @@ from group.models import Group
 from qcm.models import Course, Exercise
 from tool.models import Quizz, Question
 from socle.models import Level , Subject , Skill , Knowledge , Theme
-
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils import formats, timezone
 from datetime import datetime, timedelta       
 import uuid
@@ -59,44 +59,44 @@ class Section(models.Model):
 	    return "{}".format(self.title )
 
 
-
+##################################     doctypes     ########################################     
+##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack"]
+##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8]
+##################################     doctypes     ########################################
 
 
 class Document(models.Model):
  
-	title    = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
-	section  = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True,  related_name='documents', verbose_name="Type de document")
+    title    = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    section  = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True,  related_name='documents', verbose_name="Type de document")
 
-	author   = models.ForeignKey(Teacher, on_delete=models.CASCADE,  blank=True,null=True,  related_name='author_documents', verbose_name="Auteur")
-	teachers = models.ManyToManyField(Teacher, related_name="documents", blank=True,  verbose_name="Participants")
+    author   = models.ForeignKey(Teacher, on_delete=models.CASCADE,  blank=True,null=True, related_name='author_documents', verbose_name="Auteur")
+    teacher  = models.ForeignKey(Teacher, on_delete=models.CASCADE,  blank=True,null=True, related_name="documents", verbose_name="Participants")
 
-	level    = models.ForeignKey(Level, on_delete=models.CASCADE,  blank=True,null=True,  related_name='documents', verbose_name="Niveau")
-	subject  = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True, related_name='documents', verbose_name="Enseignement")
-	ranking  = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
+    level    = models.ForeignKey(Level, on_delete=models.CASCADE,  blank=True,null=True,  related_name='documents', verbose_name="Niveau")
+    subject  = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True, related_name='documents', verbose_name="Enseignement")
+    ranking  = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
 
-	doctype   = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
-	content   = models.TextField( blank=True,  verbose_name="Texte")  
-	file      = models.FileField(upload_to=document_path, blank=True,  verbose_name="Fichier", default="")
-	url       = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Lien externe")
-	exercise  = models.ForeignKey( Exercise,  on_delete=models.CASCADE,  related_name="chapters", blank=True,  null=True, verbose_name="Exercices" )
-	quizz     = models.ForeignKey( Quizz,  on_delete=models.CASCADE,  related_name="chapters", blank=True,  null=True, verbose_name="Quizz")
-	bibliotex = models.ForeignKey( Bibliotex,  on_delete=models.CASCADE,  related_name="chapters", blank=True,  null=True, verbose_name="Bibliotex")
-	exotex    = models.ManyToManyField(Exotex,  through="Documentex",  related_name="chapters" ,   blank=True,  verbose_name="Exotex")
-	flashpack = models.ForeignKey( Flashpack,  on_delete=models.CASCADE,  related_name="chapters", blank=True,  null=True, verbose_name="Flashpack")
+    content  = RichTextUploadingField( blank=True,  verbose_name="Texte")  
+    file     = models.FileField(upload_to=document_path, blank=True,  verbose_name="Fichier", default="")
+    url      = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Lien externe")
 
-	is_publish   = models.BooleanField(default=0, verbose_name="Publié ?")
-	is_share     = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    doctype  = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)#doctypes = ["content","file","url","exercise","quizz","question","bibliotex","exotex","flashcard","flashpack"]
+    doc_id   = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
 
-	def __str__(self):
-	    return "{} {}".format(self.title,self.level.name)
+    is_publish   = models.BooleanField(default=0, verbose_name="Publié ?")
+    is_share     = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+
+    def __str__(self):
+        return "{} {}".format(self.title,self.level.name)
 
 
 class Chapter(models.Model):
 
     title         = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
 
-    author        = models.ForeignKey(Teacher, on_delete=models.CASCADE,  related_name='author_chapters', verbose_name="Enseignant")
-    teachers      = models.ManyToManyField(Teacher, related_name="teacher_chapters", blank=True,  verbose_name="Participants")
+    author        = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='author_chapters', blank=True,null=True,  verbose_name="Enseignant")
+    teacher       = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="teacher_chapters", blank=True,null=True,  verbose_name="Participants")
 
     is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
     is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")

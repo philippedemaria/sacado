@@ -20,7 +20,14 @@ from qcm.models import Parcours
 
 from socle.decorators import user_is_superuser
 from django.utils.html import escape
+
  
+
+
+##################################     doctypes     ########################################     
+##########  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack"]
+##########  [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8]
+##################################     doctypes     ########################################
 
 ################################################################################################
 ########################    FONCTIONS ANNEXE    ################################################
@@ -66,8 +73,8 @@ def create_book(request):
         nf = form.save(commit=False)
         user = User.objects.get(id=2480)
         nf.author = user.teacher
+        nf.teacher = user.teacher        
         nf.save()
-        nf.teachers.add(request.user.teacher)
         messages.success(request, 'Le livre a été créé avec succès !')
         return redirect('books')
     else:
@@ -112,17 +119,21 @@ def delete_book(request):
 
 def implement_book_courses(request,book) :
 
+    #Document.objects.all().delete()
     i = 1
     for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
-        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,defaults={'is_publish':1,'ranking':i})
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
         courses = p.course.all()
         i+=1
         documents = list()
         for c in courses :
-            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=2480, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
-            documents.append(document)
+            try :
+                document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+                documents.append(document)
+            except :
+                pass
         chapt.documents.set(documents)
-        chapt.teachers.add(request.user.teacher)
+
 
 
 def show_conception_book(request,idb,idch,is_conception):
@@ -133,7 +144,7 @@ def show_conception_book(request,idb,idch,is_conception):
     teacher = request.user.teacher
 
     book = Book.objects.get(id=idb)
-    chapters = book.chapters.filter(teachers=teacher).order_by("ranking")
+    chapters = book.chapters.filter(teacher=teacher).order_by("ranking")
     form = NewChapterForm(request.POST or None )
 
     formdoc = DocumentForm(request.POST or None,teacher=teacher )
@@ -171,8 +182,8 @@ def show_conception_book(request,idb,idch,is_conception):
                 nf = form.save(commit=False)
                 nf.book = book
                 nf.author = request.user.teacher
+                nf.teacher = request.user.teacher                
                 nf.save()
-                nf.teachers.add(request.user.teacher)
                 messages.success(request, 'Le chapitre a été modifié avec succès !')
 
             else:
@@ -194,16 +205,17 @@ def show_conception_book(request,idb,idch,is_conception):
                 try : 
                     document_pk_update = request.POST.get("document_pk_update" , None )
                     document   = Document.objects.get(pk = document_pk_update)
-                    formdoc    = DocumentForm(request.POST or None , instance = document )
+                    formdoc    = DocumentForm(request.POST or None ,teacher=teacher , instance = document )
                 except : pass
             if formdoc.is_valid():
                 nf = formdoc.save(commit=False)
                 nf.author  = request.user.teacher
                 nf.level   = book.level
                 nf.subject = book.subject
+                nf.teacher = request.user.teacher
                 nf.doctype = request.POST.get("doctype",2)
+                nf.section.id = request.POST.get("section_id",2)
                 nf.save()
-                nf.teachers.add(teacher)
                 chapter.documents.add(nf)
                 messages.success(request, 'Le document a été créé avec succès !')
             else :
@@ -211,7 +223,7 @@ def show_conception_book(request,idb,idch,is_conception):
 
         return redirect('conception_book',idb,idch)
 
-    implement_book_courses(request,book)
+    #implement_book_courses(request,book)
 
     return render(request, template , context )
 
@@ -227,17 +239,6 @@ def conception_book(request,idb,idch):
 
     return show_conception_book(request,idb,idch,True)
 
-
-@csrf_exempt
-def sorter_chapter(request):
-
-    valeurs = request.POST.getlist("valeurs")
-    for i in range(len(valeurs)):
-        Chapter.objects.filter(pk = valeurs[i]).update(ranking = i)
-
-    data = {}
-    return JsonResponse(data) 
-  
 
 
 #def duplicate_book(request,level,subject):
@@ -261,7 +262,7 @@ def sorter_chapter(request):
 # section
 #################################################################
 @csrf_exempt
-def update_section(request):
+def update_book_section(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
@@ -274,7 +275,7 @@ def update_section(request):
     return JsonResponse(data) 
 
 @csrf_exempt
-def delete_section(request):
+def delete_book_section(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
@@ -286,7 +287,7 @@ def delete_section(request):
 
  
 @csrf_exempt
-def sorter_section(request):
+def sorter_book_section(request):
 
     valeurs = request.POST.getlist("valeurs")
 
@@ -341,13 +342,24 @@ def show_chapter(request,idb,idch):
     return render(request, 'book/show_chapter.html', {'chapter': chapter , 'book': book  })
 
 
+@csrf_exempt
+def sorter_chapter(request):
+
+    valeurs = request.POST.getlist("valeurs")
+    for i in range(len(valeurs)):
+        Chapter.objects.filter(pk = valeurs[i]).update(ranking = i)
+
+    data = {}
+    return JsonResponse(data) 
+  
+
 
 
 #################################################################
 # document
 #################################################################
 @csrf_exempt
-def delete_document(request):
+def delete_book_document(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
@@ -356,9 +368,26 @@ def delete_document(request):
     Document.objects.filter(pk=document_id).delete()
     data = {}
     return JsonResponse(data) 
+ 
+ 
+def update_book_document(request,idb,idch,idd):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    book     = Book.objects.get(pk=idb)
+    chapter     = Chapter.objects.get(pk=idch)
+    document    = Document.objects.get(pk=idd)
+    form_update = UpdateDocumentForm(instance=document )
+ 
+    context = {   'chapter' : chapter , 'form_update' : form_update , 'book' : book , 'chapter' : chapter }
+    return render(request, 'book/form_update_document.html', context)
+
+ 
+ 
 
 @csrf_exempt
-def show_document(request):
+def show_book_document(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
@@ -370,11 +399,25 @@ def show_document(request):
         data["body"] = document.content
     data["title"] = document.title 
     return JsonResponse(data) 
+ 
+ 
+def duplicate_book_document(request,idb,idch,idd):
 
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    teacher = request.user.teacher
+    chapter = Chapter.objects.get(pk=idch)
+
+    document = Document.objects.get(pk=idd)
+    document.pk=None
+    document.teacher = teacher
+    document.save()
+    chapter.documents.add(document)
+    return redirect('conception_book' , idb , idch ) 
 
  
 @csrf_exempt
-def sorter_document(request):
+def sorter_book_document(request):
 
     valeurs = request.POST.getlist("valeurs")
     document_section_id = request.POST.get("over_section_id")
@@ -396,15 +439,17 @@ def sorter_document(request):
 
 
 @csrf_exempt
-def get_type_document(request):
+def get_type_book_document(request):
 
     this_type  = request.POST.get("type")
     level_id   = request.POST.get("level_id")
     subject_id = request.POST.get("subject_id")
+    chapter_id = request.POST.get("chapter_id")
     teacher    = request.user.teacher
 
     data = {}
     level   = Level.objects.get(pk=level_id)
+    chapter = Chapter.objects.get(pk=chapter_id)
     subject = Subject.objects.get(pk=subject_id)
 
     if this_type == "BiblioTex" :
@@ -421,11 +466,47 @@ def get_type_document(request):
         documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 0 )[:100]
     elif this_type == "QF" :
         documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 1 )[:100]
+    else :
+        documents = []
 
-    context = { 'documents' : documents ,  'this_type' : this_type }
+    context = { 'documents' : documents ,  'this_type' : this_type ,  'chapter' : chapter }
     data['html'] = render_to_string('book/ajax_get_documents.html', context )
 
     return JsonResponse(data)
         
 
 
+
+@csrf_exempt
+def get_this_document_to_chapter(request):
+
+    this_type   = request.POST.get("type")
+    book_id     = request.POST.get("book_id")
+    document_id = request.POST.get("document_id")
+    chapter_id  = request.POST.get("chapter_id")
+    teacher    = request.user.teacher
+
+    book    = Book.objects.get(pk=book_id)
+    chapter = Chapter.objects.get(pk=chapter_id)
+
+    ##################################     doctypes     ########################################     
+    ##########  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack"]
+    ##########  [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8]
+    ##################################     doctypes     ########################################   
+
+    if this_type == "BiblioTex"   : doctype = 6 
+    elif this_type == "Course"    : doctype = 5 
+    elif this_type == "Exotex"    : doctype = 7         
+    elif this_type == "GGB"       : doctype = 3  
+    elif this_type == "Flashpack" : doctype = 8         
+    else : doctype = 4 
+
+
+    document = Document.objects.create(title = b.title, doc_id=b , doctype = 6, author = b.author, teacher = teacher, section = section , level = book.level , subject = book.subject,is_publish=1,is_share=1)
+    chapter.documents.add(document)
+
+
+    data = {}
+    data["section_id"] = data.html
+
+    return JsonResponse(data)

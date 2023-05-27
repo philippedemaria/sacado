@@ -44,7 +44,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     $(ui.item).css("background-color", "transparent");
 
     
-                    this_url =  "../../sorter_chapter"  ;                   
+                    this_url =  "../../sorter_book_chapter"  ;                   
   
                     $.ajax({
                             data:   { 'valeurs': valeurs    } ,   
@@ -115,7 +115,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     } ,   
                     type: "POST",
                     dataType: "json",
-                    url: "../../delete_document" ,
+                    url: "../../delete_book_document" ,
                     traditional: true,
 					success: function (data) {
 
@@ -148,7 +148,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
                     $(ui.item).css("background-color", "transparent");
 
-                    this_url =  "../../sorter_document"  ;  
+                    this_url =  "../../sorter_book_document"  ;  
 
                     $.ajax({
                             data:   { 
@@ -204,16 +204,41 @@ define(['jquery', 'bootstrap'], function ($) {
                     } ,   
                     type: "POST",
                     dataType: "json",
-                    url: "../../show_document" ,
+                    url: "../../show_book_document" ,
                     traditional: true,
 					success: function (data) {
 
-						$("#modal_document_title").html(data.title);
-						$("#modal_document_body").html(data.body);						
+						$("#show_modal_document_title").html(data.title);
+						$("#show_modal_document_body").html(data.body);						
 					}
                 }); 
         }); 
 
+        $(".update_this_document").on('click', function (event) {
+
+            let document_id = $(this).data("document_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+
+            $.ajax({
+                    data: { 
+                    	'document_id': document_id ,  
+                    	'csrf_token': csrf_token 
+                    } ,   
+                    type: "POST",
+                    dataType: "json",
+                    url: "../../update_book_document" ,
+                    traditional: true,
+					success: function (data) {
+
+						$("#update_modal_document_body").html(data.body);
+
+						$('#id_is_share').bootstrapToggle();  
+						$('#id_is_publish').bootstrapToggle();  
+
+					}
+                }); 
+        }); 
 
 
 
@@ -244,7 +269,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     } ,   
                     type: "POST",
                     dataType: "json",
-                    url: "../../update_section" ,
+                    url: "../../update_book_section" ,
                     traditional: true,
 					success: function (data) {
 
@@ -269,7 +294,7 @@ define(['jquery', 'bootstrap'], function ($) {
 	                    } ,   
 	                    type: "POST",
 	                    dataType: "json",
-	                    url: "../../delete_section" ,
+	                    url: "../../delete_book_section" ,
 	                    traditional: true,
 						success: function (data) {
 
@@ -329,23 +354,20 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        CKEDITOR.replace('content', {
-                height: 400 ,
-                width: '100%',
-                filebrowserBrowseUrl : '/ckeditor/browse/',
-                filebrowserUploadUrl : '/ckeditor/upload/', 
-                toolbar:    
-                    [   { name: 'document', 'items': ['Source', 'Maximize','Preview','Print']},
-                        { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock','-', 'CreateDiv'] }, 
-                        { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline','-','TextColor', 'BGColor'  ] },
-                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule','Iframe']},
-            			{ name: 'styles', 'items': ['Styles', 'Format', 'FontSize']},
-                    ] ,
-            });
+
+        $(document).on('click', ".selector_book_section_document" , function (event) {
+
+        	var section_id = $(this).data("section_id");
+
+  			$("#book_section_id").val(section_id);
 
 
- 
- 
+  			console.log(section_id)
+        });
+
+
+
+
 
             $("#dropzone").sortable({ 
             	connectWith: "#dropzone" , 
@@ -360,7 +382,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         valeurs.push(doc_id);
                     });
 
-                    this_url =  "../../sorter_section"  ;  
+                    this_url =  "../../sorter_book_section"  ;  
 
                     $.ajax({
                             data:   { 
@@ -376,26 +398,31 @@ define(['jquery', 'bootstrap'], function ($) {
 
  
 
-	        $(document).on('click', ".book_document_choice" , function (event) {
+	        $(document).on('click', ".existant_book_document_choice" , function (event) {
 
-
+	            let chapter_id = $(this).data("chapter_id");
 	            let type       = $(this).data("type");
 	            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 	            let level_id   = $("#book_level_id").val();
 	            let subject_id = $("#book_subject_id").val();
 
+
+	            $(".existant_book_document_choice").removeClass("book_chapters_in_menu_selected");
 	            $(this).addClass("book_chapters_in_menu_selected");
+
+
 
 	            $.ajax({
 	                    data: { 
 	                    	'type': type ,  
+	                    	'chapter_id' : chapter_id,
 	                    	'level_id'   : level_id,
 	                    	'subject_id' : subject_id,
-	                    	'csrf_token': csrf_token 
+	                    	'csrf_token' : csrf_token 
 	                    } ,   
 	                    type: "POST",
 	                    dataType: "json",
-	                    url: "../../get_type_document" ,
+	                    url: "../../get_type_book_document" ,
 	                    traditional: true,
 						success: function (data) {
 
@@ -404,6 +431,58 @@ define(['jquery', 'bootstrap'], function ($) {
 						}
 	                }); 
         	}); 
+
+
+
+
+
+
+	        $(document).on('click', ".get_this_document" , function (event) {
+
+
+	            let type        = $(this).data("type");
+	            let document_id = $(this).data("document_id");
+	            let chapter_id  = $(this).data("chapter_id");
+	            let book_id     = $(this).data("book_id");
+	            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+	            $(this).remove();
+
+
+	            $.ajax({
+	                    data: { 
+	                    	'type'       : type ,  
+	                    	'document_id': document_id,
+	                    	'chapter_id' : chapter_id,
+	                    	'book_id'    : book_id,
+	                    	'csrf_token': csrf_token 
+	                    } ,   
+	                    type: "POST",
+	                    dataType: "json",
+	                    url: "../../get_this_document_to_chapter" ,
+	                    traditional: true,
+						success: function (data) {
+
+							$("#book_main_page_section"+data.section_id).html(data.html);
+
+						}
+	                }); 
+        	}); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 });

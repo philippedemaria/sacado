@@ -3924,6 +3924,43 @@ a.menuright:hover{
   cursor: move;
 }
 
+
+.selector_book_section_document{
+  font-size : 0.7em;
+  color : #9274C7 ;
+  float: left;
+  margin: 12px;
+  width:100px;
+  height:100px;
+  text-align: center;
+  position: relative;
+}
+
+
+.new_document_button_selector{
+  cursor:pointer;
+  font-size: 16px;
+  padding: 10px 10px 5px 10px;
+  font-weight: normal;
+}
+
+
+.new_document_button_selector:active{
+  border-bottom: 5px solid  #9274C7 ;
+}
+
+
+.book_main_page_section_document_section{
+  font-size : 4em;
+  color : #9274C7 ;
+}
+
+.book_main_page_section_document_section:hover{
+  font-size : 4em;
+  color : #5d4391 ;
+}
+
+
 .book_main_page_section_document_earmark{
   font-size : 4em;
   color : #5d4391 ;
@@ -3931,37 +3968,36 @@ a.menuright:hover{
 
 .book_document_choice{
   font-size: 0.8em;
-  width:75px;
-  height: 75px;
-  border-radius: 50%;
-  background-color: #5d4391 ;
-  color:white;
-  padding: 20px 2px 2px 2px;
+  font-weight: normal;
+  color:#5d4391 ;
+  padding: 5px;
   margin: 5px;
-  display: block;
-  float: left;
-  text-align: center;
 }
 
-.book_document_choice .book_document_choice_icon{
-   display : block;
-   padding: 2px 0px 0px 0px;
-   font-size: 2em;
+
+.existant_book_document_choice{
+  font-size: 0.8em;
+  font-weight: normal;
+  color:#9274C7 ;
+  padding: 5px;
+  margin: 5px;
+  display: block;
+  float:left;
+  text-align: center;
 }
-.book_document_choice .book_document_choice_text{
-   display : none;
+ 
+
+.existant_book_document_choice:hover{
+  background-color:#5d4391 ;
+  color : white ;
 }
-.book_document_choice:hover{
-  background-color: #9274C7 ;
-  text-decoration: none;
+ 
+.existant_book_document_choice_active{
+  background-color:#5d4391 ;
+  color : white ;
 }
-.book_document_choice:hover .book_document_choice_icon{
-   display : none;
-}
-.book_document_choice:hover .book_document_choice_text{
-   display : block;
-   color:white;
-}
+
+
 
 .book_main_page_add_document{
   font-size: 10px;

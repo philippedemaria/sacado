@@ -6,12 +6,12 @@
 
     {% if this_type == "GGB" %}
 
-            <img src='{{ document.supportfile.imagefile.url }}' class='this_css_template_exercise_document' data-type="GGB" data-document_id='{{ document.id }}'/>
+            <img src='{{ document.supportfile.imagefile.url }}' class='this_css_template_exercise_document' data-type="GGB" data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'/>
 
     {% else %}
         <div class="this_css_template_all_document" >
             <div class="this_search_document_get">
-                <i class="bi bi-app get_this_document" data-document_id='{{ document.id }}'  data-type="{{ this_type}}"></i>
+                <i class="bi bi-app get_this_document" data-chapter_id='{{ chapter.id }}' data-document_id='{{ document.id }}' data-book_id='{{ book.id }}'  data-type="{{ this_type}}"></i>
             </div>
             <a href="javascript:void();" data-toggle='modal' data-target='#show_this_document'  class="this_search_document_label" data-document_id='{{ document.id }}'>{{document.title}} </div>
         </div>
