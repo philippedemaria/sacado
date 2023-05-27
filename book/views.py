@@ -114,8 +114,8 @@ def implement_book_courses(request,book) :
 
  
     i = 1
-    for p in Parcours.objects.filter(level_id=6,teacher__user_id=2480).order_by("ranking") :
-        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,is_publish=1,ranking=i)
+    for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title,author_id=2480,defaults={'is_publish':1,'ranking':i})
         courses = p.course.all()
         i+=1
         documents = list()
