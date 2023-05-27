@@ -96,7 +96,7 @@
                                 <span >{{ accounting.id }} </span> 
                             </td>
                             <td>
-                                <span >{{ accounting.chrono }}</span> 
+                                <a href="{% url 'update_accounting' accounting.id 0 %}" class="btn btn-default"  title="Modifier la facture">{{ accounting.chrono }}</a> 
                             </td>   
                             <td><span class="helper_tip">
                                 
