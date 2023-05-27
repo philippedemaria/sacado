@@ -29,6 +29,8 @@ urlpatterns = [
     path('show_chapter/<int:idb>/<int:idch>', show_chapter, name='show_chapter'),
     path('sorter_chapter', sorter_chapter, name='sorter_chapter'),
 
+    path('reset_all_chapters/<int:idb>', reset_all_chapters, name='reset_all_chapters'),
+
     #################################################################
     # document
     #################################################################

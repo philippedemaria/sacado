@@ -117,10 +117,11 @@ def delete_book(request):
 
 
 
-def implement_book_courses(request,book) :
+def reset_all_chapters(request,idb) :
 
     Document.objects.all().delete()
     Section.objects.all().delete()
+    book = Book.objects.get(pk=idb)
     i = 1
     for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
         chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
@@ -131,7 +132,7 @@ def implement_book_courses(request,book) :
         for c in courses :
             document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section  = section , author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
         chapt.sections.add(section)
-
+    return redirect('conception_book', idb , 0 )
  
 
 def show_conception_book(request,idb,idch,is_conception):
@@ -265,7 +266,7 @@ def show_conception_book(request,idb,idch,is_conception):
 
             return redirect('conception_book', idb , idch )
 
-    implement_book_courses(request,book)
+    #implement_book_courses(request,book)
     return render(request, template , context )
 
 

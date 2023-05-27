@@ -44,7 +44,7 @@
                     {% for book in level.list %}
                         <div style="float: left;margin-right: 5px;">
                             {% if book.imagefile  %}
-                            <a href="{% url 'show_book' book.id %}"><img src='{{ book.imagefile.url }}' width="99px" height="132px" /></a>
+                            <a href="{% url 'show_book' book.id %}"><img src='{{ book.imagefile.url }}' width="99px"  /></a>
                             {% else  %}
                             <a href="{% url 'show_book' book.id %}">{{book.title }} </a>
                             {% endif %}

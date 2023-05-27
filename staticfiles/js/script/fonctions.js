@@ -180,5 +180,11 @@ function check_checkboxes_ia()
 }
 
 function clear_the_slot(){
-     if (!confirm('Vous souhaitez vider le contenu de ce créneau. \nConfirmer ?')) return false;
+     if (!confirm('Vous souhaitez vider le contenu de ce créneau. Attention les données seront écrasées et perdues.\nConfirmer ?')) return false;
+}
+
+
+
+function reset_all_chapters() {
+    if (!confirm('Vous souhaitez réinitialiser tous les chapitres. Attention les données seront écrasées et perdues. \nConfirmer ?')) return false;
 }

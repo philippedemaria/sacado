@@ -42,6 +42,8 @@ class Book(models.Model):
     imagefile     = models.ImageField(upload_to=image_book_path, blank=True,  verbose_name="Fichier", default="")
     ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True)
     price         = models.DecimalField( decimal_places=2, default=6, max_digits=4, blank=True, null=True) 
+
+
  
     def __str__(self):
         return "{}".format(self.title)
