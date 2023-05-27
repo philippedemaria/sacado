@@ -1981,6 +1981,7 @@ def update_accounting(request, id,tp):
         if form.is_valid():
             nf = form.save(commit = False)
             nf.user = request.user
+            nf.school = school
             forme = request.POST.get("forme", None)
             nf.chrono = update_chrono(Accounting, accounting, forme)
 
