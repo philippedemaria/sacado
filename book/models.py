@@ -48,27 +48,48 @@ class Book(models.Model):
 
 
 
+class Chapter(models.Model):
+
+    title         = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+
+    author        = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='author_chapters', blank=True,null=True,  verbose_name="Enseignant")
+    teacher       = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="teacher_chapters", blank=True,null=True,  verbose_name="Participants")
+
+    is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
+    is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    
+    ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
+
+    date_created  = models.DateTimeField( auto_now_add= True)
+    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
+    book          = models.ForeignKey(Book, on_delete=models.CASCADE,  blank=True,   related_name='chapters', editable=False)
+
+
+    def __str__(self):
+        return "{}".format(self.title)
+
 
 class Section(models.Model):
 
-	title   = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
-	ranking = models.PositiveIntegerField( default=0)
-	teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, default="2480" , related_name='sections', verbose_name="teacher")
+    title   = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    ranking = models.PositiveIntegerField( default=0)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,  blank=True, null=True,  related_name='sections', editable=False)
 
-	def __str__(self):
-	    return "{}".format(self.title )
+    def __str__(self):
+        return "{}".format(self.title )
 
+    class Meta:
+        unique_together = ('title', 'chapter')
 
-##################################     doctypes     ########################################     
-##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack"]
-##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8]
-##################################     doctypes     ########################################
-
+##################################     doctypes     ################################################    
+##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
+##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
+##################################     doctypes     ################################################
 
 class Document(models.Model):
  
     title    = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
-    section  = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True,  related_name='documents', verbose_name="Type de document")
+    section  = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, null=True, related_name='documents', verbose_name="Section")
 
     author   = models.ForeignKey(Teacher, on_delete=models.CASCADE,  blank=True,null=True, related_name='author_documents', verbose_name="Auteur")
     teacher  = models.ForeignKey(Teacher, on_delete=models.CASCADE,  blank=True,null=True, related_name="documents", verbose_name="Participants")
@@ -90,31 +111,23 @@ class Document(models.Model):
     def __str__(self):
         return "{} {}".format(self.title,self.level.name)
 
+    def icon_doctype(self):
 
-class Chapter(models.Model):
+        if self.doctype == 0 : icon = '<i class="bi bi-file-earmark book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 1 : icon = '<i class="bi bi-file book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 2 : icon = '<i class="bi bi-link  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 3 : icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 4 : icon = '<i class="bi bi-file-aspect-ratio  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 5 : icon = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16"><path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/></svg>'
+        elif self.doctype == 6 : icon = '<i class="bi bi-bootstrap  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 7 : icon = '<i class="bi bi-explicit-fill  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 8 : icon = '<i class="bi bi-stack  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 9 : icon = '<i class="bi bi-lightning  book_main_page_section_document_earmark"></i>'
+        return icon
 
-    title         = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+ 
 
-    author        = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='author_chapters', blank=True,null=True,  verbose_name="Enseignant")
-    teacher       = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="teacher_chapters", blank=True,null=True,  verbose_name="Participants")
-
-    is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
-    is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")
-
-    documents     = models.ManyToManyField(Document, related_name="chapters", blank=True,  verbose_name="Documents") 
-
-    ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
-
-    date_created  = models.DateTimeField( auto_now_add= True)
-    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
-    book          = models.ForeignKey(Book, on_delete=models.CASCADE,  blank=True,   related_name='chapters', editable=False)
-
-    def __str__(self):
-        return "{}".format(self.title)
-
-
-
-
+ 
 
 
 class Documentex(models.Model):

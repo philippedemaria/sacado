@@ -40,7 +40,7 @@ urlpatterns = [
     path('sorter_book_document', sorter_book_document, name='sorter_book_document'),
 
     path('get_type_book_document', get_type_book_document, name='get_type_book_document'),
-    path('get_this_document_to_chapter', get_this_document_to_chapter, name='get_this_document_to_chapter'),
+ 
 
 
     path('update_book_section', update_book_section, name='update_book_section'),

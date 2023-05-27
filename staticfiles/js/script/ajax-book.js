@@ -339,17 +339,20 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', "#show_text_part" , function (event) {
   			make_it_appears("#text_part");
   			$("#doctype").val(0);
+            $("#new_document").removeClass("no_visu_on_load") ;
         });
 
 
         $(document).on('click', "#show_link_part" , function (event) {
   			make_it_appears("#link_part");
   			$("#doctype").val(2);
+            $("#new_document").removeClass("no_visu_on_load") ; 
         });
 
         $(document).on('click', "#show_file_part" , function (event) {
   			make_it_appears("#file_part");
   			$("#doctype").val(1);
+            $("#new_document").removeClass("no_visu_on_load") ;
         });
 
 
@@ -358,11 +361,8 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', ".selector_book_section_document" , function (event) {
 
         	var section_id = $(this).data("section_id");
-
   			$("#book_section_id").val(section_id);
-
-
-  			console.log(section_id)
+            $("#book_section_id_get").val(section_id);
         });
 
 
@@ -398,7 +398,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
  
 
-	        $(document).on('click', ".existant_book_document_choice" , function (event) {
+	        $(document).on('click', ".selector_existant_book_document_choice" , function (event) {
 
 	            let chapter_id = $(this).data("chapter_id");
 	            let type       = $(this).data("type");
@@ -407,9 +407,10 @@ define(['jquery', 'bootstrap'], function ($) {
 	            let subject_id = $("#book_subject_id").val();
 
 
-	            $(".existant_book_document_choice").removeClass("book_chapters_in_menu_selected");
-	            $(this).addClass("book_chapters_in_menu_selected");
+	            $(".selector_existant_book_document_choice").removeClass("book_chapters_in_menu_selected");
 
+	            $(this).addClass("book_chapters_in_menu_selected");
+				$(this).removeClass("existant_book_document_choice");
 
 
 	            $.ajax({
@@ -442,11 +443,12 @@ define(['jquery', 'bootstrap'], function ($) {
 
 	            let type        = $(this).data("type");
 	            let document_id = $(this).data("document_id");
+	            let section_id  = $(this).data("section_id");
 	            let chapter_id  = $(this).data("chapter_id");
 	            let book_id     = $(this).data("book_id");
 	            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-	            $(this).remove();
+	            $(this).parent().parent().remove();
 
 
 	            $.ajax({
@@ -455,7 +457,8 @@ define(['jquery', 'bootstrap'], function ($) {
 	                    	'document_id': document_id,
 	                    	'chapter_id' : chapter_id,
 	                    	'book_id'    : book_id,
-	                    	'csrf_token': csrf_token 
+	                    	'section_id' : section_id,
+	                    	'csrf_token' : csrf_token 
 	                    } ,   
 	                    type: "POST",
 	                    dataType: "json",

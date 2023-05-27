@@ -53,25 +53,10 @@ class SectionForm(forms.ModelForm):
 		fields = ('title',)
  
 
-
 class DocumentForm(forms.ModelForm):
 
 	class Meta:
 		model = Document
-		fields = '__all__'
- 
-	def __init__(self, *args, **kwargs):
-		teacher = kwargs.pop('teacher')
-		super(DocumentForm, self).__init__(*args, **kwargs)
-		sections = teacher.sections.order_by("title")
-		self.fields['section']  = forms.ModelChoiceField(queryset=sections)
-
-  
-
-class UpdateDocumentForm(forms.ModelForm):
-
-	class Meta:
-		model = Document
-		fields = ('title','content','is_publish','is_share',)
+		fields = ('title','content','file','url','is_publish','is_share',)
  
  

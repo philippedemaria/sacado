@@ -119,22 +119,20 @@ def delete_book(request):
 
 def implement_book_courses(request,book) :
 
-    #Document.objects.all().delete()
+    Document.objects.all().delete()
+    Section.objects.all().delete()
     i = 1
     for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
         chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
+        section, cre = Section.objects.get_or_create(title = "Cours" , chapter = chapt , defaults = {'ranking': 1, })
         courses = p.course.all()
         i+=1
         documents = list()
         for c in courses :
-            try :
-                document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section_id=2, author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
-                documents.append(document)
-            except :
-                pass
-        chapt.documents.set(documents)
+            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section  = section , author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+        chapt.sections.add(section)
 
-
+ 
 
 def show_conception_book(request,idb,idch,is_conception):
 
@@ -147,65 +145,66 @@ def show_conception_book(request,idb,idch,is_conception):
     chapters = book.chapters.filter(teacher=teacher).order_by("ranking")
     form = NewChapterForm(request.POST or None )
 
-    formdoc = DocumentForm(request.POST or None,teacher=teacher )
+    formdoc = DocumentForm(request.POST or None  )
     formsec = SectionForm(request.POST or None)
     form_type = request.POST.get("form_type", None )
 
-    sections = teacher.sections.order_by("ranking")
     if is_conception : 
         template =  'book/conception_book.html'
         if idch == 0 :
             chapter = chapters.first()
         else :
             chapter = Chapter.objects.get(id=idch)
-        if chapter :
-            documents = chapter.documents.order_by("section__ranking","ranking")
-            context = { 'chapter': chapter , 'documents': documents  }
-        else :
-            context = { }
+        sections = Section.objects.filter(chapter=idch).order_by("ranking")
+        context = { 'chapter': chapter , 'sections': sections  }
+
     else : 
         template =  'book/show_book.html'
         context = {}
 
-    context.update({ 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  , 'sections' : sections  })
+    context.update({ 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec   })
 
     if request.method == "POST" :
         if form_type == "book" :
             if request.POST.get("is_update") == "1" :
-                try : 
-                    pk_update = request.POST.get("pk_update" , None )
-                    chapter   = Chapter.objects.get(pk = pk_update)
-                    form      = NewChapterForm(request.POST or None , instance = chapter )
-                except : pass
-
+                pk_update = request.POST.get("pk_update" , None )
+                chapter   = Chapter.objects.get(pk = pk_update)
+                form      = NewChapterForm(request.POST or None , instance = chapter )
+        
             if form.is_valid():
                 nf = form.save(commit=False)
                 nf.book = book
                 nf.author = request.user.teacher
                 nf.teacher = request.user.teacher                
                 nf.save()
-                messages.success(request, 'Le chapitre a été modifié avec succès !')
-
+                if request.POST.get("is_update") == "1" :
+                    messages.success(request, 'Le chapitre a été modifié avec succès !')
+                else :
+                    messages.success(request, 'Le chapitre a été créé avec succès !')
+ 
             else:
                 messages.error(request, formdoc.errors)
+            return redirect('conception_book', idb , nf.pk )
 
         elif form_type == "emplacement" :
 
             if formsec.is_valid():
                 nf = formsec.save(commit=False)
-                nf.teacher = request.user.teacher
+                nf.chapter = chapter
+                nf.ranking = 100
                 nf.save()
-                messages.success(request, 'La section a été crée avec succès !')
+                messages.success(request, 'La section a été créée avec succès !')
             else :
                 messages.error(request, formsec.errors)
+            return redirect('conception_book', idb , idch )
 
-        elif form_type == "document" :
+        elif form_type == "new_document" :
             #doctypes = ["content","file","url","exercise","quizz","question","bibliotex","exotex","flashcard","flashpack"]
             if request.POST.get("document_is_update") == "1" :
                 try : 
                     document_pk_update = request.POST.get("document_pk_update" , None )
                     document   = Document.objects.get(pk = document_pk_update)
-                    formdoc    = DocumentForm(request.POST or None ,teacher=teacher , instance = document )
+                    formdoc    = DocumentForm(request.POST or None , instance = document )
                 except : pass
             if formdoc.is_valid():
                 nf = formdoc.save(commit=False)
@@ -214,17 +213,59 @@ def show_conception_book(request,idb,idch,is_conception):
                 nf.subject = book.subject
                 nf.teacher = request.user.teacher
                 nf.doctype = request.POST.get("doctype",2)
-                nf.section.id = request.POST.get("section_id",2)
+                nf.section = Section.objects.get(pk=request.POST.get("book_section_id",2))
                 nf.save()
-                chapter.documents.add(nf)
                 messages.success(request, 'Le document a été créé avec succès !')
             else :
                 messages.error(request, formdoc.errors)
+ 
+            return redirect('conception_book', idb , idch )
 
-        return redirect('conception_book',idb,idch)
+        elif form_type == "get_doc" :
+ 
+
+            select_documents = request.POST.getlist("select_this_document_for_chapter")
+            document_id      = request.POST.get("document_id")
+            section_id       = request.POST.get("book_section_id_get")
+
+
+
+
+            for doc in select_documents :
+                ##################################     doctypes     ################################################    
+                ##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
+                ##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
+                ##################################     doctypes     ################################################ 
+                doc_id , this_type = doc.split("-")  
+
+                if this_type == "BiblioTex"   :
+                    b = Bibliotex.objects.get(pk=doc_id) 
+                    doctype = 6 
+                elif this_type == "Course"    : 
+                    b = Course.objects.get(pk=doc_id) 
+                    doctype = 5 
+                elif this_type == "Exotex"    : 
+                    b = Exotex.objects.get(pk=doc_id)
+                    doctype = 7         
+                elif this_type == "GGB"       : 
+                    b = Exercise.objects.get(pk=doc_id)
+                    doctype = 3  
+                elif this_type == "Flashpack" :
+                    b = Flashpack.objects.get(pk=doc_id)
+                    doctype = 8         
+                elif this_type == "QF" :
+                    b = Quizz.objects.get(pk=doc_id)
+                    doctype = 9 
+                else : 
+                    b = Quizz.objects.get(pk=doc_id)
+                    doctype = 4 
+
+                document = Document.objects.create(title = b.title, doc_id=doc_id , doctype = doctype, author = b.author, teacher = teacher, section_id = section_id , level = book.level , subject = book.subject,is_publish=1,is_share=1)
+                print(document.id)
+
+            return redirect('conception_book', idb , idch )
 
     #implement_book_courses(request,book)
-
     return render(request, template , context )
 
 
@@ -291,7 +332,6 @@ def sorter_book_section(request):
 
     valeurs = request.POST.getlist("valeurs")
 
-    print(valeurs)
     for i in range(len(valeurs)):
         Section.objects.filter(pk = valeurs[i]).update(ranking = i)
 
@@ -395,8 +435,7 @@ def show_book_document(request):
     document_id  = request.POST.get("document_id" , None )
     document = Document.objects.get(pk=document_id)
     data = {}
-    if document.section.id == 2 : 
-        data["body"] = document.content
+    data["body"] = document.content
     data["title"] = document.title 
     return JsonResponse(data) 
  
@@ -405,14 +444,9 @@ def duplicate_book_document(request,idb,idch,idd):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
-    teacher = request.user.teacher
-    chapter = Chapter.objects.get(pk=idch)
-
     document = Document.objects.get(pk=idd)
     document.pk=None
-    document.teacher = teacher
     document.save()
-    chapter.documents.add(document)
     return redirect('conception_book' , idb , idch ) 
 
  
@@ -475,38 +509,3 @@ def get_type_book_document(request):
     return JsonResponse(data)
         
 
-
-
-@csrf_exempt
-def get_this_document_to_chapter(request):
-
-    this_type   = request.POST.get("type")
-    book_id     = request.POST.get("book_id")
-    document_id = request.POST.get("document_id")
-    chapter_id  = request.POST.get("chapter_id")
-    teacher    = request.user.teacher
-
-    book    = Book.objects.get(pk=book_id)
-    chapter = Chapter.objects.get(pk=chapter_id)
-
-    ##################################     doctypes     ########################################     
-    ##########  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack"]
-    ##########  [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8]
-    ##################################     doctypes     ########################################   
-
-    if this_type == "BiblioTex"   : doctype = 6 
-    elif this_type == "Course"    : doctype = 5 
-    elif this_type == "Exotex"    : doctype = 7         
-    elif this_type == "GGB"       : doctype = 3  
-    elif this_type == "Flashpack" : doctype = 8         
-    else : doctype = 4 
-
-
-    document = Document.objects.create(title = b.title, doc_id=b , doctype = 6, author = b.author, teacher = teacher, section = section , level = book.level , subject = book.subject,is_publish=1,is_share=1)
-    chapter.documents.add(document)
-
-
-    data = {}
-    data["section_id"] = data.html
-
-    return JsonResponse(data)

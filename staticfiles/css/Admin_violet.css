@@ -3874,7 +3874,7 @@ a.menuright:hover{
 
 .book_chapters_in_menu_selected{
     background-color: #9274C7!important ;
-    color:white;
+    color:white!important;
 }
 
 
@@ -3975,7 +3975,19 @@ a.menuright:hover{
 }
 
 
-.existant_book_document_choice{
+.existant_book_document_choice,.selector_existant_book_document_choice{
+  font-size: 0.8em;
+  font-weight: normal;
+  color:#9274C7 ;
+  padding: 5px;
+  margin: 5px;
+  display: block;
+  float:left;
+  text-align: center;
+}
+
+
+.selector_existant_book_document_choice{
   font-size: 0.8em;
   font-weight: normal;
   color:#9274C7 ;
@@ -3987,9 +3999,13 @@ a.menuright:hover{
 }
  
 
-.existant_book_document_choice:hover{
+.existant_book_document_choice:hover,
+.existant_book_document_choice:active,
+.existant_book_document_choice:focus,
+.existant_book_document_choice:visited{
   background-color:#5d4391 ;
   color : white ;
+  text-decoration: none;
 }
  
 .existant_book_document_choice_active{
