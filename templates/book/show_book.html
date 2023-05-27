@@ -20,7 +20,7 @@
     {% if book.is_student %}
         <b>{{ book.level.shortname_full|safe }}</b> <img src="{% static 'img/angle-right.png' %}"/>  Livret Elève <img src="{% static 'img/angle-right.png' %}"/> {{ book.subject.shortname }} 
     {% else %}
-        <b>{{ book.level.shortname_full|safe }}</b> <img src="{% static 'img/angle-right.png' %}"/>  Mon livre numérique 
+        <img src="{{ book.imagefile.url }}" height="45px" />  Mon livre numérique 
  
         <img src="{% static 'img/angle-right.png' %}"/>  {{ book.subject.shortname }}    
 

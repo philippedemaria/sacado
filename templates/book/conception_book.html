@@ -18,19 +18,19 @@
     Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus"></i> Chapitre</a>
     <hr/>
     <div id="droppable_sommary">    
-        {% for ch in chapters %}
-            <li class="book_chapters_in_menu sorter_chapter {% if chapter.id == ch.id %}book_chapters_in_menu_selected{% endif %}" data-chapter_id='{{ ch.id }}'>
-                <span class="book_chapter_number">{{ forloop.counter}}.</span> 
+    {% for ch in chapters %}
+        <li class="book_chapters_in_menu sorter_chapter {% if chapter.id == ch.id %}book_chapters_in_menu_selected{% endif %}" data-chapter_id='{{ ch.id }}'>
+            <span class="book_chapter_number">{{ forloop.counter}}.</span> 
 
-                <a href="{% url 'conception_book' book.id ch.id %}" class="book_chapter_shower">
-                {{ ch.title|truncatechars:43|lower|capfirst }}
-                </a>
-                <a href="{% url 'delete_chapter' book.id ch.id %}" class="book_new_chapter" title="Supprimer" onclick="return TestDelete('le chapitre {{ch.title}}')"><i class="bi bi-trash"></i></a>                            
-                <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter get_the_title" title="Modifier"  data-title="{{ ch.title }}" data-pk="{{ ch.id }}"><i class="bi bi-pen"></i></a>
-            </li>
-        {% endfor %}
+            <a href="{% url 'conception_book' book.id ch.id %}" class="book_chapter_shower">
+            {{ ch.title|truncatechars:43|lower|capfirst }}
+            </a>
+            <a href="{% url 'delete_chapter' book.id ch.id %}" class="book_new_chapter" title="Supprimer" onclick="return TestDelete('le chapitre {{ch.title}}')"><i class="bi bi-trash"></i></a>                            
+            <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter get_the_title" title="Modifier"  data-title="{{ ch.title }}" data-pk="{{ ch.id }}"><i class="bi bi-pen"></i></a>
+        </li>
+    {% endfor %}
 
-        <a href="{% url 'reset_all_chapters' book.id %}" class="btn btn-primary btn-xs" onclick="return reset_all_chapters()">Ré-initialiser les chapitres</a>
+        <a href="{% url 'reset_all_chapters' book.id %}" class="btn btn-primary btn-xs" onclick="return reset_all_chapters()">Ré initialiser les chapitgres</a>
     </div>
 {% endblock %}
 
@@ -57,10 +57,9 @@
                 <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
                     <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
                     <a href="#" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}"  ><i class="fa fa-times"></i></a>
- 
-                        {{ document.icon_doctype|safe }}
 
-
+                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                         {{ document.icon_doctype|safe}}
                     </a><br/>
                     {% if document.doctype == 0 and document.author == request.user.teacher %}
                     <a href="{% url 'update_book_document' book.id chapter.id document.id %}"  class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }}</a> 
