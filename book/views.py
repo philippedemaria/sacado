@@ -152,18 +152,16 @@ def show_conception_book(request,idb,idch,is_conception):
 
     if is_conception : 
         template =  'book/conception_book.html'
-        if idch == 0 :
-            chapter = chapters.first()
-        else :
-            chapter = Chapter.objects.get(id=idch)
-        sections = Section.objects.filter(chapter=idch).order_by("ranking")
-        context = { 'chapter': chapter , 'sections': sections  }
-
     else : 
         template =  'book/show_book.html'
         context = {}
 
-    context.update({ 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec   })
+    if idch == 0 :
+        chapter = chapters.first()
+    else :
+        chapter = Chapter.objects.get(id=idch)
+    sections = Section.objects.filter(chapter=idch).order_by("ranking")
+    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections  }
 
     if request.method == "POST" :
         if form_type == "book" :
@@ -272,9 +270,9 @@ def show_conception_book(request,idb,idch,is_conception):
 
 
 
-def show_book(request,idb):
+def show_book(request,idb,idch):
 
-    return show_conception_book(request,idb,0,False)
+    return show_conception_book(request,idb,idch,False)
 
  
 def conception_book(request,idb,idch):
@@ -373,15 +371,7 @@ def delete_chapter(request,idb,idch):
     return redirect('conception_book' , idb, 0)
 
 
-def show_chapter(request,idb,idch):
-
-    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
-    request.session["subtdb"] = "Chapter"
-
-    book    = Book.objects.get(id=idb)
-    chapter = Chapter.objects.get(id=idch)
-    return render(request, 'book/show_chapter.html', {'chapter': chapter , 'book': book  })
-
+ 
 
 @csrf_exempt
 def sorter_chapter(request):
@@ -421,8 +411,33 @@ def update_book_document(request,idb,idch,idd):
     document    = Document.objects.get(pk=idd)
     form_update = UpdateDocumentForm(instance=document )
  
-    context = {   'chapter' : chapter , 'form_update' : form_update , 'book' : book , 'chapter' : chapter }
+    context = { 'form_update' : form_update , 'book' : book , 'chapter' : chapter }
     return render(request, 'book/form_update_document.html', context)
+
+
+
+
+
+def book_chapter_show_document(request,idb,idch,idd):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    document    = Document.objects.get(pk=idd)
+
+    doctype_templates = ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
+ 
+    template = doctype_templates[document.doctype]
+
+    context = { 'document' : document }
+
+    return redirect( "" )
+
+
+
+
+
+
 
  
  
@@ -440,6 +455,7 @@ def show_book_document(request):
     data["title"] = document.title 
     return JsonResponse(data) 
  
+
  
 def duplicate_book_document(request,idb,idch,idd):
 

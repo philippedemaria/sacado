@@ -25,10 +25,11 @@
         <img src="{% static 'img/angle-right.png' %}"/>  {{ book.subject.shortname }}    
 
      {% block conception_creation %}
-            <a href="{% url 'conception_book' book.id 0 %}" class="btn btn-sacado" title="Visualisation => Conception"> Visu. <i class="bi bi-arrow-right-short"></i> Concept.</a>  
+ 
+
+            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-sacado" title="Visualisation => Conception"> Visu. <i class="bi bi-arrow-right-short"></i> Concept.</a>  
+
         {% endblock %}
-
-
     {% endif %}
 
 
@@ -56,27 +57,75 @@ h1{margin-bottom:0px;}
                     {% for chapter in chapters %}
                         <li class="book_chapters_in_menu {% if chapter.id == idch %}book_chapters_in_menu_selected{% endif %}">
                             <span class="book_chapter_number">{{ forloop.counter}}.</span>             
-                            <a href="{% url 'show_chapter' book.id chapter.id %}"  class="white">
+                            <a href="{% url 'show_book' book.id chapter.id %}"  class="white">
                                 {{ chapter.title|lower|capfirst }} 
                             </a>                   
                         </li>
                     {% endfor %}
                 {% endblock %}
             </div>
-            <div class="book_main_page" id="book_main_page">
+            <div class="book_main_page"  id="id_book_main_page">
 
                 {% block main_page %}
- 
 
 
+                    <h2 class="sacado_color_text">{{ chapter }}  
+                        <a href="#" class="chapter_new_document " title="Classer les documents par type/chronologie" data-chapter_id="{{ chapter.id }}"><i class="bi bi-filter-circle"></i></a>          
+                    </h2>
+
+
+                    {% for section in sections %}
+                        <div class="book_main_page_section" >
+                            <div class="book_main_page_section_title">
+                                {{ section.title }}        
+                            </div> 
+                            {% for document in section.documents.all|dictsort:'ranking' %}
+                                <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
+                                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                                         {{ document.icon_doctype|safe}}
+                                    </a><br/>
+                                    {{ document.title }}
+                                </div>
+                            {% endfor %}
+                            <div style="clear:both"></div>
+                        </div>
+
+                 
+
+                    {% endfor %}
+
+                    </div>
                 {% endblock %}
 
             </div>
 
         </div>
     
-{% block modal_chapter %} 
-{% endblock  %} 
+        {% block modal_chapter %} 
+        <div class="modal fade" id="show_this_document" tabindex="-1" role="dialog" aria-labelledby="show_this_document"  style="padding-right:0!important">
+            <div class="modal-dialog modal-lg" role="document"  style="max-width:100%;margin:0!important">
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> 
+                        <h2 id='show_modal_document_title' ></h2>              
+                    </div>
+                    <div class="modal-body">
+                        <div class="row"  id='show_modal_document_body' >
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">         
+                                <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        {% endblock  %} 
 
 
 {% endblock  %} 

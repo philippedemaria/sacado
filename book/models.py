@@ -43,7 +43,8 @@ class Book(models.Model):
     ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True)
     price         = models.DecimalField( decimal_places=2, default=6, max_digits=4, blank=True, null=True) 
 
-
+    color         = models.CharField(max_length=255, default="#5d4391" , verbose_name="Couleur")
+    color_hover   = models.CharField(max_length=255, default="#9274C7" , verbose_name="Couleur hover")
  
     def __str__(self):
         return "{}".format(self.title)
