@@ -135,7 +135,7 @@ def reset_all_chapters(request,idb) :
     return redirect('conception_book', idb , 0 )
  
 
-def show_conception_book(request,idb,idch,is_conception):
+def show_conception_book(request,idb,idch,is_conception,is_chrono):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
@@ -156,12 +156,21 @@ def show_conception_book(request,idb,idch,is_conception):
         template =  'book/show_book.html'
         context = {}
 
+
     if idch == 0 :
         chapter = chapters.first()
     else :
         chapter = Chapter.objects.get(id=idch)
     sections = Section.objects.filter(chapter=idch).order_by("ranking")
     context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections  }
+
+
+    if is_chrono :
+        sections = chapter.sections.all()
+        documents = Document.objects.filter(section__in=sections).order_by("ranking")
+
+        context.update({  'documents': documents  })
+        template =  'book/chapter_chrono_concept_document.html'
 
     if request.method == "POST" :
         if form_type == "book" :
@@ -212,7 +221,11 @@ def show_conception_book(request,idb,idch,is_conception):
                 nf.subject = book.subject
                 nf.teacher = request.user.teacher
                 nf.doctype = request.POST.get("doctype",2)
-                nf.section = Section.objects.get(pk=request.POST.get("book_section_id",2))
+                book_section_id = request.POST.get("book_section_id",None)
+                if book_section_id : 
+                    nf.section = Section.objects.get(pk=book_section_id)
+                else :
+                    nf.section = sections.first()
                 nf.save()
                 messages.success(request, 'Le document a été créé avec succès !')
             else :
@@ -221,14 +234,13 @@ def show_conception_book(request,idb,idch,is_conception):
             return redirect('conception_book', idb , idch )
 
         elif form_type == "get_doc" :
- 
 
             select_documents = request.POST.getlist("select_this_document_for_chapter")
             document_id      = request.POST.get("document_id")
-            section_id       = request.POST.get("book_section_id_get")
-
-
-
+            section_id       = request.POST.get("book_section_id_get",None)
+            if not section_id :
+                section    = sections.first()
+                section_id = section.id
 
             for doc in select_documents :
                 ##################################     doctypes     ################################################    
@@ -260,8 +272,7 @@ def show_conception_book(request,idb,idch,is_conception):
                     doctype = 4 
 
                 document = Document.objects.create(title = b.title, doc_id=doc_id , doctype = doctype, author = b.author, teacher = teacher, section_id = section_id , level = book.level , subject = book.subject,is_publish=1,is_share=1)
-                print(document.id)
-
+ 
             return redirect('conception_book', idb , idch )
 
     #implement_book_courses(request,book)
@@ -272,12 +283,40 @@ def show_conception_book(request,idb,idch,is_conception):
 
 def show_book(request,idb,idch):
 
-    return show_conception_book(request,idb,idch,False)
+    return show_conception_book(request,idb,idch,False,False)
 
  
 def conception_book(request,idb,idch):
 
-    return show_conception_book(request,idb,idch,True)
+    return show_conception_book(request,idb,idch,True,False)
+
+
+def chapter_chrono_concept_document(request,idb,idch):
+
+    return show_conception_book(request,idb,idch,True,True)
+ 
+
+
+def chapter_chrono_show_document(request,idb,idch):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    teacher = request.user.teacher
+
+    book = Book.objects.get(id=idb)
+    chapters = book.chapters.filter(teacher=teacher).order_by("ranking")
+
+    if idch == 0 :
+        chapter = chapters.first()
+    else :
+        chapter = Chapter.objects.get(id=idch)
+    sections = chapter.sections.all()
+    documents = Document.objects.filter(section__in=sections)
+
+    context = { 'book': book ,'chapters': chapters , 'idch' : idch, 'chapter': chapter , 'documents': documents  }
+
+    return render(request, 'book/chapter_chrono_show_document.html' , context )
 
 
 
@@ -433,13 +472,6 @@ def book_chapter_show_document(request,idb,idch,idd):
 
     return redirect( "" )
 
-
-
-
-
-
-
- 
  
 
 @csrf_exempt
@@ -488,6 +520,18 @@ def sorter_book_document(request):
 
 
 
+
+
+@csrf_exempt
+def sorter_book_chrono_document(request):
+
+    valeurs = request.POST.getlist("valeurs")
+    data = {}  
+    for i in range(len(valeurs)):
+        try :
+            Document.objects.filter(pk = valeurs[i]).update(ranking = i)
+        except : pass
+    return JsonResponse(data) 
 
 @csrf_exempt
 def get_type_book_document(request):

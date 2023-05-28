@@ -30,6 +30,9 @@ urlpatterns = [
 
     path('reset_all_chapters/<int:idb>', reset_all_chapters, name='reset_all_chapters'),
 
+    path('chapter_chrono_show_document/<int:idb>/<int:idch>', chapter_chrono_show_document, name='chapter_chrono_show_document'),
+    path('chapter_chrono_concept_document/<int:idb>/<int:idch>', chapter_chrono_concept_document, name='chapter_chrono_concept_document'),
+
     #################################################################
     # document
     #################################################################
@@ -39,14 +42,16 @@ urlpatterns = [
     path('delete_book_document', delete_book_document, name='delete_book_document'),
     path('show_book_document', show_book_document, name='show_book_document'),
     path('sorter_book_document', sorter_book_document, name='sorter_book_document'),
+    path('sorter_book_chrono_document', sorter_book_chrono_document, name='sorter_book_chrono_document'),
+    
     path('get_type_book_document', get_type_book_document, name='get_type_book_document'),
  
-
-
     path('book_chapter_show_document/<int:idb>/<int:idch>/<int:idd>', book_chapter_show_document, name='book_chapter_show_document'),
-
 
     path('update_book_section', update_book_section, name='update_book_section'),
     path('delete_book_section', delete_book_section, name='delete_book_section'),
     path('sorter_book_section', sorter_book_section, name='sorter_book_section'),
+
+
+
  ]

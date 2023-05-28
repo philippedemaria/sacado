@@ -1,0 +1,74 @@
+{% extends 'book/show_book.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+
+
+{% block conception_creation %}
+  
+    <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-sacado"   title="Conception => Visualisation"> Concept. <i class="bi bi-arrow-right-short"></i> Visu.</a>
+
+{% endblock %} 
+
+
+
+
+
+{% block sommaire %}
+    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus"></i> Chapitre</a>
+    <hr/>
+    <div id="droppable_sommary">    
+    {% for ch in chapters %}
+        <li class="book_chapters_in_menu sorter_chapter {% if chapter.id == ch.id %}book_chapters_in_menu_selected{% endif %}" data-chapter_id='{{ ch.id }}'>
+            <span class="book_chapter_number">{{ forloop.counter}}.</span> 
+
+            <a href="{% url 'conception_book' book.id ch.id %}" class="book_chapter_shower">
+            {{ ch.title|truncatechars:43|lower|capfirst }}
+            </a>
+            <a href="{% url 'delete_chapter' book.id ch.id %}" class="book_new_chapter" title="Supprimer" onclick="return TestDelete('le chapitre {{ch.title}}')"><i class="bi bi-trash"></i></a>                            
+            <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter get_the_title" title="Modifier"  data-title="{{ ch.title }}" data-pk="{{ ch.id }}"><i class="bi bi-pen"></i></a>
+        </li>
+    {% endfor %}
+
+        <a href="{% url 'reset_all_chapters' book.id %}" class="btn btn-primary btn-xs" onclick="return reset_all_chapters()">Ré initialiser les chapitgres</a>
+    </div>
+{% endblock %}
+
+
+{% block main_page %}
+ 
+    <h2 class="sacado_color_text">{{ chapter }}  
+        <a href="{% url 'show_book' book.id idch %}"   title="Classer les documents par type" class="chapter_new_document"><i class="bi bi-filter-circle"></i></a>          
+    </h2>
+ 
+
+    <div id="dropzone" >
+
+
+            {% for document in documents|dictsort:'ranking' %}
+                <div class="book_main_page_section_document_chrono" >
+
+                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                         <div class="row">
+                            <div class="col-xs-9 col-md-9">
+                                <div style="font-size:2em"><b>{{forloop.counter }}.</b> {{ document.section.title }}</div>
+                                <div style="font-size:1.5em">{{ document.title }}</div>
+                            </div>
+                            <div class="col-xs-3 col-md-3">
+                                {{ document.icon_doctype|safe}}
+                            </div>
+                         </div>
+                    </a>
+
+                    
+                </div>
+            {% endfor %}
+     
+            <div style="clear:both"></div>
+
+    </div>
+{% endblock %}
+ 
+

@@ -128,9 +128,6 @@ class Document(models.Model):
         elif self.doctype == 9 : icon = '<i class="bi bi-lightning  book_main_page_section_document_earmark"></i>'
         return icon
 
- 
-
- 
 
 
 class Documentex(models.Model):

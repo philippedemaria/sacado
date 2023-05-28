@@ -86,7 +86,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
         	} else{
 
-
 			  	$("#sort_chapter" ).addClass('sorter_chapter_dismiss');
 
 			  	$("#id_book_main_page" ).addClass('sorter_chapter_dismiss').removeClass('sorter_chapter_selected');
@@ -95,9 +94,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         	} 
 
-
         });
-
 
 
 
@@ -169,15 +166,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         }); 
                     }
                 });
-
-
-
             }
-
-
-
-
-
 
 
 
@@ -190,6 +179,60 @@ define(['jquery', 'bootstrap'], function ($) {
         	sorter_document(document_id , section_id) ;
 
         })
+
+
+
+
+
+
+
+ 
+
+            $("#dropzone_chrono_concept").sortable({ 
+                distance : 10,
+                start: function( event, ui ) { 
+                       $(ui.item).css("background-color", "#F7F7F7");
+                   }, 
+                stop: function (event, ui) {
+                    var valeurs = [];
+                    $( ".book_main_page_section_document_type" ).each(function() {
+                        let doc_id = $(this).data("document_id"); 
+                        valeurs.push(doc_id);
+                    });
+
+                    $(ui.item).css("background-color", "white");
+
+                    this_url =  "../../sorter_book_chrono_document"  ;  
+
+                    $.ajax({
+                            data:   { 
+                                'valeurs': valeurs  , 
+                                 } ,   
+                            type: "POST",
+                            dataType: "json",
+                            url: this_url,
+                            traditional: true,
+                            success: function (data) {
+                                var i = 1;
+                                $(".forlooper").each(function() {
+                                     $(this).html(i); 
+                                     i++;
+
+                                });
+                            }
+
+                        }); 
+                    }
+                }) 
+
+
+
+
+
+
+
+
+
 
 
 

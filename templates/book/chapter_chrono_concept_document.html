@@ -8,7 +8,7 @@
 
 {% block conception_creation %}
   
-    <a href="{% url 'show_book' book.id idch %}" class="btn btn-sacado"   title="Conception => Visualisation"> Concept. <i class="bi bi-arrow-right-short"></i> Visu.</a>
+    <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-sacado"   title="Conception => Visualisation"> Concept. <i class="bi bi-arrow-right-short"></i> Visu.</a>
 
 {% endblock %} 
 
@@ -38,59 +38,46 @@
 
 
 {% block main_page %}
-
-
+ 
     <h2 class="sacado_color_text">{{ chapter }}  
-        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="chapter_new_document " title="Classer les documents par chronologie"><i class="bi bi-filter-circle"></i></a>          
+        <a href="{% url 'conception_book' book.id idch %}"   title="Classer les documents par type" class="chapter_new_document"><i class="bi bi-filter-circle"></i></a>          
     </h2>
+ 
 
-    <div id="dropzone" >
-
-    {% for section in sections %}
-        <div class="book_main_page_section"  id="book_main_page_section{{ section.id }}" data-over_section_id="{{ section.id }}" >
-            <div class="book_main_page_section_title">
-                <i class="fa fa-sort this_sorter_handle"></i> <span id="section_title{{ section.id }}">{{ section.title }}</span>           
-                <a href="#" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.id }}"><i class="bi bi-pen"></i></a>
-                <a href="#" class="delete_section white" title="Supprimer" data-section_id="{{ section.id }}"><i class="bi bi-trash"></i></a>
+    <div id="dropzone_chrono_concept" >
 
 
-            </div> 
-            {% for document in section.documents.all|dictsort:'ranking' %}
-                <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
-                    <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
-                    <a href="#" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}"  ><i class="fa fa-times"></i></a>
+            {% for document in documents %}
+                <div class="book_main_page_section_document_chrono book_main_page_section_document_type" data-document_id="{{ document.id }}">
 
-                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
-                         {{ document.icon_doctype|safe}}
-                    </a><br/>
-                    {% if document.doctype == 0 and document.author == request.user.teacher %}
-                    <a href="{% url 'update_book_document' book.id chapter.id document.id %}"  class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }}</a> 
-                    {% else %}
-                    <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }} </a>
-                    {% endif  %}
-                    <small> <a href="{% url 'duplicate_book_document' book.id chapter.id document.id %}"  title="Cloner {{document.title}}" onclick="return Test_duplicate('{{document.title}}')"><i class="bi bi-clipboard-plus"></i></a></small>
+                    <a href="#" data-toggle='modal' class="show_this_document book_main_page_section_document_type" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                         <div class="row book_main_page_section_document_type">
+                            <div class="col-xs-9 col-md-9">
+                                <div style="font-size:2em"><b class="forlooper">{{forloop.counter }}.</b> {{ document.section.title }}</div>
+                                <div style="font-size:1.5em">{{ document.title }}</div>
+                            </div>
+                            <div class="col-xs-3 col-md-3">
+                                {{ document.icon_doctype|safe}}
+                            </div>
+                         </div>
+                    </a>
+
+                    
                 </div>
             {% endfor %}
- 
-                 <a href="#" data-toggle='modal' data-target='#chapter_new_document' class="selector_book_section_document" title="Ajouter" data-chapter_id="{{ chapter.id }}" data-section_id="{{  section.id }}"><i class="bi bi-file-plus-fill book_main_page_section_document_section"></i></a>
-     
+                <div class="book_main_page_section_document_chrono book_main_page_section_document_type">
+                    <div class="row book_main_page_section_document_type">
+                        <div class="col-xs-12">
+                            <a href="#" data-toggle='modal' data-target='#chapter_new_document' title="Ajouter" data-chapter_id="{{ chapter.id }}" data-section_id="{{  section.id }}"><i class="bi bi-file-plus-fill book_main_page_section_document_section"></i>Ajouter un document</a>
+                        </div>                
+                    </div>
+                </div>
+
             <div style="clear:both"></div>
-        </div>
-
- 
-
-    {% endfor %}
-
-        <div class="row" align="center">
-            <div class="col-sm-12 col-md-12">
-                 <a href="#" data-toggle='modal' data-target='#chapter_new_section' class="btn btn-primary" title="Ajouter" data-chapter_id="{{ chapter.id }}"><i class="bi bi-plus-circle-dotted"></i> Nouvelle section</a>
-            </div>
-        </div>
 
     </div>
 {% endblock %}
  
-
 
 {% block modal_chapter %}
     <div class="modal fade" id="book_new_chapter" tabindex="-1" role="dialog" aria-labelledby="book_new_chapter">

@@ -67,12 +67,11 @@ h1{margin-bottom:0px;}
             <div class="book_main_page"  id="id_book_main_page">
 
                 {% block main_page %}
-
-
+ 
                     <h2 class="sacado_color_text">{{ chapter }}  
-                        <a href="#" class="chapter_new_document " title="Classer les documents par type/chronologie" data-chapter_id="{{ chapter.id }}"><i class="bi bi-filter-circle"></i></a>          
+                        <a href="{% url 'chapter_chrono_show_document' book.id idch %}"   title="Classer les documents par chronologie" class="chapter_new_document"><i class="bi bi-filter-circle"></i></a>          
                     </h2>
-
+ 
 
                     {% for section in sections %}
                         <div class="book_main_page_section" >
