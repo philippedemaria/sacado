@@ -279,8 +279,6 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
     return render(request, template , context )
 
 
-
-
 def show_book(request,idb,idch):
 
     return show_conception_book(request,idb,idch,False,False)
