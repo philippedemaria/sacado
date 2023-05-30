@@ -634,7 +634,7 @@ def create_page(request,idb, idch):
         total_number = request.POST.get("total_number",None)
         if total_number :
             tn = int(total_number)
-            for i in range(book.pages.count(),tn) :
+            for i in range(tn) :
                 Page.objects.create(number=i , chapter = chapter , css="cours")
         return redirect('student_book_builder' , idb, 0)
     context = { }
