@@ -1,0 +1,54 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    {% if knowledge %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+
+{% block page_title %}
+    {{ book.level.shortname }} <img src="{% static 'img/angle-right.png' %}"/> Création du livret numérique Elève   <img src="{% static 'img/angle-right.png' %}"/>  
+{% endblock %}
+
+
+
+
+{% block page_menu_right %}
+  
+{% endblock %}
+
+
+
+
+
+{% block body  %}  
+
+
+<section class="content_main"> 
+
+    <div class="col-sm-12 col-md-12">
+        <table class="table borderless">
+        {% for chapter in chapters %}
+            <tr>
+                <td width='450px'>{{ chapter }}</td>
+                <td width='40px'><a href="{% url 'create_page' book.id chapter.id %}" class="btn btn-sacado">+</a></td>
+                <td>
+                    {% for page in chapter.pages.all|dictsort:"number" %}
+                        <a href="{% url 'update_page' book.id page.id %}" class="btn btn-sacado">{{ page.number }}</a>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</section>
+{% endblock  %}   
+
+

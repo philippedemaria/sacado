@@ -275,7 +275,7 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
  
             return redirect('conception_book', idb , idch )
 
-    #implement_book_courses(request,book)
+ 
     return render(request, template , context )
 
 
@@ -567,4 +567,255 @@ def get_type_book_document(request):
 
     return JsonResponse(data)
         
+
+
+###################################################################################################################################################################################################
+###################################################################################################################################################################################################
+###################################################################################################################################################################################################
+#########################################################  Student book     #########################################################
+###################################################################################################################################################################################################
+###################################################################################################################################################################################################
+###################################################################################################################################################################################################
+
+def show_student_book(request,idb, n):
+    book = Book.objects.get(pk=idb)
+    i = 1
+    for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
+        i+=1
+ 
+    try :
+        chapters = book.chapters.order_by("ranking")
+        context = {'book': book,  'chapters': chapters,  }
+    except :
+        context = {'book': book, }
+
+    return render(request, 'book/show_student_page.html', context)
+
+
+@user_is_superuser 
+def student_book_builder(request,idb, n):
+
+    book = Book.objects.get(pk=idb)
+    chapters = book.chapters.order_by("ranking")
+    context = {'book': book,  'chapters': chapters,  }
+
+    return render(request, 'book/conception_student_page.html', context)
+
+ 
+#################################################################
+# paragraphs
+#################################################################
+
+@user_is_superuser 
+def pages(request,idb, idp):
+
+    book = Book.objects.get(pk=idb)
+    page = Page.objects.get(id=idp)
+
+    context = {'book': book, 'page': page   }
+
+    return render(request, 'book/form_page.html', context)
+
+
+@user_is_superuser 
+def create_page(request,idb, idch):
+
+    book = Book.objects.get(pk=idb)
+    chapter = Chapter.objects.get(pk=idch)
+
+    if request.method == "POST" :
+        total_number = request.POST.get("total_number",None)
+        if total_number :
+            tn = int(total_number)
+            for i in range(book.pages.count(),tn) :
+                Page.objects.create(number=i , chapter = chapter , css="cours")
+        return redirect('student_book_builder' , idb, 0)
+    context = { }
+
+    return render(request, 'book/form_page.html', context)
+
+
+
+@user_is_superuser 
+def update_page(request,idb, idp):
+
+    book = Book.objects.get(pk=idb)
+    page = Page.objects.get(id=idp)
+
+    form_page  = PageForm(request.POST or None,instance=page)
+    form_p  = ParagraphForm(request.POST or None)
+    form_b  = BlocForm(request.POST or None,book=book)
+    form_tb = TypeblocForm(request.POST or None)
+
+    if request.method == "POST" :
+        form_action = request.POST.get("form_action")
+        if form_action == "new_paragraph" :
+            if form_p.is_valid():
+                nf = form_p.save(commit=False)
+                nf.page  = page
+                nf.save() 
+                messages.success(request, 'Le paragraphe a été créé avec succès !')
+            else:
+                print(form_p.errors)
+
+
+        elif form_action == "new_bloc" :
+            if form_b.is_valid():
+                nf = form_b.save()
+                messages.success(request, 'Le bloc a été créé avec succès !')
+            else:
+                print(form_b.errors)
+
+
+        elif form_action == "new_typebloc" :
+            if form_tb.is_valid():
+                nf = form_tb.save()
+                messages.success(request, 'Le typebloc a été créé avec succès !')
+            else:
+                print(form_tb.errors)
+
+
+        elif form_action == "update_page" :
+            if form_page.is_valid():
+                nf = form_page.save()
+                messages.success(request, 'La page a été modifiée avec succès !')
+            else:
+                print(form.errors)
+
+        return redirect('update_page',idb,idp)
+
+    
+    use_this_css = "css/bookstyle_"+str(book.level.id)+".css"   
+
+    context = {'form_p': form_p,  'form_b': form_b,  'form_page': form_page, 'form_tb': form_tb, 'book': book, 'page': page,  'use_this_css' : use_this_css , }
+
+    return render(request, 'book/form_update_page.html', context )
+
+
+@user_is_superuser 
+def delete_page(request, idb,idp):
+
+    book = Book.objects.get(pk=idb)
+    page = Page.objects.get(id=idp)
+    page.delete()
+    if idp>0:
+        idp -= 1
+    messages.success(request, 'La page a été supprimée avec succès !')
+    return redirect('pages',idb,idp)
+
+
+
+
+#################################################################
+# paragraphs
+#################################################################
+
+
+
+@user_is_superuser 
+def create_paragraph(request,idb):
+
+    book = Book.objects.get(pk=idb)
+    form = ParagraphForm(request.POST or None , book=book )
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Le paragraphe a été créé avec succès !')
+        return redirect('paragraphs')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'paragraph': None  }
+
+    return render(request, 'book/form_paragraph.html', context)
+
+
+
+@user_is_superuser 
+def update_paragraph(request,idb, idp):
+
+    book = Book.objects.get(pk=idb)
+    paragraph = Paragraph.objects.get(id=idt)
+    form = ParagraphForm(request.POST or None, book=book , instance=paragraph )
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Le paragraphe a été modifié avec succès !')
+            return redirect('paragraphs')
+        else:
+            print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'paragraph': paragraph,   }
+
+    return render(request, 'book/form_paragraph.html', context )
+
+
+@user_is_superuser 
+def delete_paragraph(request, idb,idp):
+
+    book = Book.objects.get(pk=idb)
+    paragraph = Paragraph.objects.get(id=idt)
+    paragraph.delete()
+    messages.success(request, 'Le paragraphe a été supprimé avec succès !')
+    return redirect('paragraphs')
+
+
+#################################################################
+# typebloc
+#################################################################
+
+
+@user_is_superuser
+def typeblocs(request):
+ 
+    typeblocs = Typebloc.objects.all()
+
+    return render(request, 'book/typeblocs.html', {'typeblocs': typeblocs, })
+
+
+
+@user_is_superuser 
+def create_typebloc(request):
+
+    form = TypeblocForm(request.POST or None  )
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Le typebloc a été créé avec succès !')
+        return redirect('typeblocs')
+    else:
+        print(form.errors)
+
+    context = {'form': form,  'typebloc': None  }
+
+    return render(request, 'book/form_typebloc.html', context)
+
+
+
+@user_is_superuser 
+def update_typebloc(request, idt):
+
+    typebloc = Typebloc.objects.get(id=idt)
+    form = TypeblocForm(request.POST or None, instance=typebloc )
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Le typebloc a été modifié avec succès !')
+            return redirect('typeblocs')
+        else:
+            print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'typebloc': typebloc,   }
+
+    return render(request, 'book/form_typebloc.html', context )
+
+
+@user_is_superuser 
+def delete_typebloc(request, idt):
+    typebloc = Typebloc.objects.get(id=idt)
+    typebloc.delete()
+    messages.success(request, 'Le typebloc a été supprimé avec succès !')
+    return redirect('typeblocs')
+
 

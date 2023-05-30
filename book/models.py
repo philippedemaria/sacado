@@ -43,8 +43,8 @@ class Book(models.Model):
     ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True)
     price         = models.DecimalField( decimal_places=2, default=6, max_digits=4, blank=True, null=True) 
 
-    color         = models.CharField(max_length=255, default="#5d4391" , verbose_name="Couleur")
-    color_hover   = models.CharField(max_length=255, default="#9274C7" , verbose_name="Couleur hover")
+    color         = models.CharField(max_length=255, default="#5d4391" , blank=True, verbose_name="Couleur")
+    color_hover   = models.CharField(max_length=255, default="#9274C7" , blank=True, verbose_name="Couleur hover")
  
     def __str__(self):
         return "{}".format(self.title)
@@ -173,3 +173,87 @@ class Documentex(models.Model):
 
     class Meta:
         unique_together = ('exotex', 'document')
+
+
+################################################################################################################################################################################
+################################################################################################################################################################################
+################################################################################################################################################################################
+###############################################               LIVRET ELEVE             #########################################################################################
+################################################################################################################################################################################
+################################################################################################################################################################################
+################################################################################################################################################################################
+
+class Page(models.Model):
+
+    number  = models.PositiveIntegerField( default=0,  blank=True, null=True)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,  blank=True,   null=True,  related_name='pages')
+    css     = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Nom de la classe")
+
+    class Meta:
+        unique_together = ('number', 'chapter')
+
+
+    def __str__(self):
+        return "{}".format(self.number)
+
+
+class Paragraph(models.Model):
+
+    page    = models.ForeignKey(Page, on_delete=models.CASCADE,  blank=True, null=True,  related_name='paragraphs')
+    title   = models.CharField(max_length=255,     verbose_name="Titre")
+    number  = models.PositiveIntegerField( default=1 )
+
+    ranking = models.PositiveIntegerField( default=0, null=True, blank=True)
+
+    def __str__(self):
+        return "{}".format(self.title )
+
+##################################     doctypes     ################################################    
+##  doctypes  ["définition","Exemple","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
+##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
+##################################     doctypes     ################################################
+
+class Typebloc(models.Model):
+
+    title = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    css   = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Nom de la classe")
+
+    def __str__(self):
+        return "{}".format(self.title )
+
+
+class Bloc(models.Model):
+
+    title     = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    typebloc  = models.ForeignKey(Typebloc, on_delete=models.CASCADE, related_name='blocs', verbose_name="Type de bloc")
+    paragraph = models.ForeignKey(Paragraph, on_delete=models.CASCADE, related_name='blocs')
+    ranking   = models.PositiveIntegerField( default=0,  blank=True, null=True)
+
+    content = models.TextField( blank=True,  verbose_name="Enoncé en LaTeX")
+    content_html = RichTextUploadingField( verbose_name="Enoncé pour html") 
+    correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
+    correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html")  
+    #### pour validation si le qcm est noté
+
+    duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
+
+    ###### Socle
+    knowledge  = models.ForeignKey(Knowledge,  on_delete=models.CASCADE,  blank=True, null=True,    related_name='blocs', verbose_name="Savoir faire associé")
+    theme      = models.ForeignKey(Theme,      on_delete=models.CASCADE,  blank=True, null=True ,   related_name="blocs",  verbose_name="Thème")
+    skills     = models.ManyToManyField(Skill, blank=True, related_name='blocs', verbose_name="Compétences ciblées")
+    knowledges = models.ManyToManyField(Knowledge, blank=True,  related_name='other_knowledge_blocs', verbose_name="Savoir faire associés complémentaires")
+    
+    is_calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
+    is_python    = models.BooleanField(default=0, verbose_name="Python ?")
+    is_scratch   = models.BooleanField(default=0, verbose_name="Scratch ?")
+    is_tableur   = models.BooleanField(default=0, verbose_name="Tableur ?")
+    is_corrected = models.BooleanField(default=0, verbose_name="Correction ?")
+    is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
+
+    exercises    = models.ManyToManyField(Exercise, blank=True, related_name='blocs', verbose_name="Exercices connexes")
+    exotexs      = models.ManyToManyField(Exotex  , blank=True, related_name='blocs', verbose_name="ExoTex connexes")
+
+    def __str__(self):
+        return "{} {}".format(self.title,self.level.name)
+
+

@@ -44,12 +44,22 @@
                     {% for book in level.list %}
                         <div style="float: left;margin-right: 5px;">
                             
-                            <a href="{% url 'show_book' book.id 0%}">{% if book.imagefile  %}<img src='{{ book.imagefile.url }}' width="99px"  />{% else  %}{{book.title }}</a>{% endif  %}
-                            
- 
+
+                            {% if book.is_student %}
+                            <a href="{% url 'show_student_book' book.id 0 %}">{% if book.imagefile  %}<img src='{{ book.imagefile.url }}' width="99px"  />{% else  %}{{book.title }}</a>{% endif  %}
+                            {% else  %}
+                            <a href="{% url 'show_book' book.id 0 %}">{% if book.imagefile  %}<img src='{{ book.imagefile.url }}' width="99px"  />{% else  %}{{book.title }}</a>{% endif  %}
+                            {% endif %}
+
+
             
                             {% if request.user.is_superuser  %}
-                            <div style="font-size:12px;"> <a href="{% url 'update_book' book.id %}">Modifier </a></div>
+                            <div style="font-size:12px;"> <a href="{% url 'update_book' book.id %}">Modifier </a>
+                            {% if book.is_student %} |
+                                <a href="{% url 'student_book_builder' book.id 0 %}">Pages</a> 
+                            {% endif %}
+
+                            </div>
                             {% endif %}
 
                         </div>

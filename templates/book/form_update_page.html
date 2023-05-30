@@ -1,0 +1,348 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+
+{% endblock %}
+
+
+{% block page_title %}
+    <b>{{ book.level.shortname }}</b> <img src="{% static 'img/angle-right.png' %}"/> Livre élève <img src="{% static 'img/angle-right.png' %}"/> page {{ page.number }}  
+{% endblock %}
+
+
+
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static use_this_css %}">
+{% endblock %} 
+
+
+
+{% block page_menu_right %}
+    <li><a href="#" data-toggle='modal'  data-target="#book_new_bloc" class="btn btn-new" ><i class="bi bi-plus"></i> bloc</a> </li> 
+    <li><a href="#" data-toggle='modal'  data-target="#book_new_paragraph" class="btn btn-new" ><i class="bi bi-plus"></i> paragraphe</a> </li> 
+    <li><a href="#" data-toggle='modal'  data-target="#book_new_typebloc" class="btn btn-new" ><i class="bi bi-plus"></i> type de bloc</a> </li> 
+    <li><a href="#" data-toggle='modal'  data-target="#update_page" class="btn btn-new" ><i class="bi bi-pen"></i> page</a> </li> 
+{% endblock %}
+
+
+ 
+{% block body  %}  
+
+
+    <div class="course_page_top">
+        Cours  
+    </div>
+    <div class="course_page_main">
+        {% for paragraph in page.paragraphs.all %}
+            <div class="this_paragraph">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="paragraph_number">{{ paragraph.number }}</span>
+                        <span class="paragraph_title">{{ paragraph.title }}</span>
+                    </div>
+                </div>
+                {% for bloc in paragraph.blocs.all %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="{{ bloc.typebloc.css }}">
+                            <div class="bloc_title">{{ bloc.title }}
+                            </div>
+                            <div class="bloc_content">
+                                {{ bloc.content_html|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+
+
+    </div>
+
+
+
+<div class="modal fade" id="book_new_paragraph" tabindex="-1" role="dialog" aria-labelledby="book_new_paragraph">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Nouveau paragraphe</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <label>{{ form_p.title.label_tag }}</label>
+                            {{ form_p.title |add_class:"form-control" }}
+                            {{ form_p.title.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="submit" class="btn btn-primary" name="form_action" value="new_paragraph">Enregistrer</button>   
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+<div class="modal fade" id="book_new_typebloc" tabindex="-1" role="dialog" aria-labelledby="book_new_typebloc">        
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Nouveau type de bloc</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <label>{{ form_tb.title.label_tag }}</label>
+                            {{ form_tb.title |add_class:"form-control" }}
+                            {{ form_tb.title.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                          <div class="form-group">
+                              <label>{{ form_tb.css.label_tag }}</label>
+                              {{ form_tb.css |add_class:"form-control" }}
+                              {{ form_tb.css.errors }}
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="submit" class="btn btn-primary" name="form_action" value="new_typebloc">Enregistrer</button>   
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>   
+ 
+
+<div class="modal fade" id="update_page" tabindex="-1" role="dialog" aria-labelledby="update_page">        
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Modification de la page</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <label>Numéro de page</label>
+                            {{ form_page.number |add_class:"form-control" }}
+                            {{ form_page.number.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                          <div class="form-group">
+                              <label>{{ form_page.css.label_tag }}</label>
+                              {{ form_page.css |add_class:"form-control" }}
+                              {{ form_page.css.errors }}
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="submit" class="btn btn-primary" name="form_action" value="update_page">Enregistrer</button>   
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>  
+
+
+
+
+<div class="modal fade" id="book_new_bloc" tabindex="-1" role="dialog" aria-labelledby="book_new_bloc">        
+    <div class="modal-dialog modal-lg" role="document"  style="width:100%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Nouveau bloc</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label>{{ form_b.typebloc.label_tag }}</label>
+                            {{ form_b.typebloc |add_class:"form-control" }}
+                            {{ form_b.typebloc.errors }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label>Paragraphe</label>
+                            {{ form_b.paragraph |add_class:"form-control" }}
+                            {{ form_b.paragraph.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <label>{{ form_b.title.label_tag }}</label>
+                            {{ form_b.title |add_class:"form-control" }}
+                            {{ form_b.title.errors }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.content_html.label_tag }}</label>
+                                {{ form_b.content_html |add_class:"form-control" }}
+                                {{ form_b.content_html.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.content.label_tag }}</label>
+                                {{ form_b.content |add_class:"form-control"|attr:"rows:13" }}
+                                {{ form_b.content.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.correction_html.label_tag }}</label>
+                                {{ form_b.correction_html |add_class:"form-control" }}
+                                {{ form_b.correction_html.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.correction.label_tag }}</label>
+                                {{ form_b.correction |add_class:"form-control"|attr:"rows:13" }}
+                                {{ form_b.correction.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>Savoir faire principal</label>
+                                {{ form_b.knowledge |add_class:"form-control select2" }}
+                                {{ form_b.knowledge.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>Thème</label>
+                                {{ form_b.theme |add_class:"form-control select2" }}
+                                {{ form_b.theme.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label>Compétences</label>
+                            {{ form_b.skills |add_class:"form-control select2" }}
+                            {{ form_b.skills.errors }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label>Savoir faire </label>
+                            {{ form_b.knowledges |add_class:"form-control select2" }}
+                            {{ form_b.knowledges.errors }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_calculator.label_tag }}</label>
+                                {{ form_b.is_calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_calculator.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_python.label_tag }}</label>
+                                {{ form_b.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_python.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_scratch.label_tag }}</label>
+                                {{ form_b.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_scratch.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_tableur.label_tag }}</label>
+                                {{ form_b.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_tableur.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_annals.label_tag }}</label>
+                                {{ form_b.is_annals |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_annals.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.exercises.label_tag }}</label>
+                                {{ form_b.exercises |add_class:"form-control select2" }}
+                                {{ form_b.exercises.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.exotexs.label_tag }}</label>
+                                {{ form_b.exotexs |add_class:"form-control select2" }}
+                                {{ form_b.exotexs.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="submit" class="btn btn-primary" name="form_action" value="new_bloc">Enregistrer</button>   
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+{% endblock  %}   
+
+

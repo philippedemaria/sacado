@@ -43,7 +43,7 @@ urlpatterns = [
     path('show_book_document', show_book_document, name='show_book_document'),
     path('sorter_book_document', sorter_book_document, name='sorter_book_document'),
     path('sorter_book_chrono_document', sorter_book_chrono_document, name='sorter_book_chrono_document'),
-    
+
     path('get_type_book_document', get_type_book_document, name='get_type_book_document'),
  
     path('book_chapter_show_document/<int:idb>/<int:idch>/<int:idd>', book_chapter_show_document, name='book_chapter_show_document'),
@@ -53,5 +53,28 @@ urlpatterns = [
     path('sorter_book_section', sorter_book_section, name='sorter_book_section'),
 
 
+    ##################################################################################################################################
+    ##################################################################################################################################
+    # Student book
+    ##################################################################################################################################
+    ##################################################################################################################################
 
+    path('show_student_book/<int:idb>/<int:n>', show_student_book, name='show_student_book'),
+    path('student_book_builder/<int:idb>/<int:n>', student_book_builder, name='student_book_builder'),
+
+    path('create_page/<int:idb>/<int:idch>', create_page, name='create_page'),
+    path('update_page/<int:idb>/<int:idp>', update_page, name='update_page'),
+    path('delete_page/<int:idb>/<int:idp>', delete_page, name='delete_page'),
+
+
+
+    path('create_paragraph/<int:idb>/0', create_paragraph, name='create_paragraph'),
+    path('update_paragraph/<int:idb>/<int:idp>', update_paragraph, name='update_paragraph'),
+    path('delete_paragraph/<int:idb>/<int:idp>', delete_paragraph, name='delete_paragraph'),
+
+
+    path('typeblocs/0', typeblocs, name='typeblocs'),
+    path('create_typebloc/0', create_typebloc, name='create_typebloc'),
+    path('update_typebloc/<int:idt>', update_typebloc, name='update_typebloc'),
+    path('delete_typebloc/<int:idt>', delete_typebloc, name='delete_typebloc'),
  ]
