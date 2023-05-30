@@ -635,7 +635,7 @@ def create_page(request,idb, idch):
         if total_number :
             tn = int(total_number)
             for i in range(tn) :
-                Page.objects.create(number=i , chapter = chapter , css="cours")
+                Page.objects.create(number=i+1 , chapter = chapter , css="cours")
         return redirect('student_book_builder' , idb, 0)
     context = { }
 
