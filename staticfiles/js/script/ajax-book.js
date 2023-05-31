@@ -227,17 +227,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         $(".show_this_document").on('click', function (event) {
 
             let document_id = $(this).data("document_id");

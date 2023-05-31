@@ -2527,6 +2527,7 @@ a.book_new_chapter,a.book_new_chapter:active,a.book_new_chapter:visited{
   font-size: 12px;
   float:right;
   padding-top: 5px;
+  padding-left:10px; 
 }
 
 a.book_new_chapter:hover{
@@ -2546,18 +2547,23 @@ a.book_new_chapter:hover{
 }
 
 .book_main_page_section_document_chrono{
-  font-size : 0.7em;
-  color : #5d4391 ;
-  float: left;
-  margin: 12px;
-  padding: 10px;
-  width:45%;
-  height:100px;
-  position: relative;
-  background-color: white ;
-  border-radius: 10px;
-  margin:2%;
+    font-size: 0.5em;
+    color: #5d4391;
+    float: left;
+    margin: 5px;
+    padding: 10px;
+    width: 45%;
+    max-height: 90px;
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    border : 2px solid white;
 }
+
+.book_main_page_section_document_chrono:hover{
+    border : 2px solid #5d4391;
+}
+
 
 .book_main_page_section_document_type{
   cursor:move;
@@ -2641,22 +2647,22 @@ a.book_new_chapter:hover{
   min-height: 80px;
 }
 
-.book_main_page_section_document_eraser{
-  color:#C2C2C2;
+.book_main_page_section_document_duplicate{
+  color:#9274C7;
   position: absolute;
   top:2px;
   left:75%;
 }
 
 .book_main_page_section_document_move{
-  color:#C2C2C2;
+  color:#9274C7;
   position: absolute;
   top:2px;
   left:10%;
 }
 
 .book_main_page_section_document_copy{
-  color:#C2C2C2;
+  color:#9274C7;
   position: absolute;
   top:30px;
   left:10%;

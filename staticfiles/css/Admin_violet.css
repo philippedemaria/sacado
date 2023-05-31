@@ -4061,6 +4061,23 @@ a.menuright:hover{
   width: 15px;
 }
 
+
+
+.chapter_new_document_circle{
+    border-radius:50%;
+    border : 2px solid #5d4391 ;
+    padding: 1px 3px;
+}
+
+.chapter_new_document_circle:hover{
+    border-radius:50%;
+    border : 2px solid #5d4391 ;
+    padding: 1px 3px;
+    background-color: #9274C7 ;
+    color:white!important;
+}
+
+
 /*--------------------------------------------------------------
 #   fin ---->  Livre numérique
 --------------------------------------------------------------*/

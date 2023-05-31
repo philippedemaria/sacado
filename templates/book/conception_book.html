@@ -17,7 +17,7 @@
 
 
 {% block sommaire %}
-    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus"></i> Chapitre</a>
+    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus-circle"></i> Chapitre</a>
     <hr/>
     <div id="droppable_sommary">    
     {% for ch in chapters %}
@@ -32,7 +32,13 @@
         </li>
     {% endfor %}
 
-        <a href="{% url 'reset_all_chapters' book.id %}" class="btn btn-primary btn-xs" onclick="return reset_all_chapters()">Ré initialiser les chapitgres</a>
+        <a href="{% url 'reset_all_chapters' book.id %}" class="btn btn-primary btn-xs" onclick="return reset_all_chapters()">
+        {% if book.chapters.count %}
+            Ré-initialiser les chapitres
+        {% else %}
+            Générer le livre SACADO
+        {% endif %}
+    </a>
     </div>
 {% endblock %}
 
@@ -41,7 +47,7 @@
 
 
     <h2 class="sacado_color_text">{{ chapter }}  
-        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="chapter_new_document " title="Classer les documents par chronologie"><i class="bi bi-filter-circle"></i></a>          
+        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}"  class="chapter_new_document chapter_new_document_circle"  title="Classer les documents par chronologie"><i class="bi bi-sort-numeric-down"></i></a>          
     </h2>
 
     <div id="dropzone" >
@@ -58,7 +64,11 @@
             {% for document in section.documents.all|dictsort:'ranking' %}
                 <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
                     <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
-                    <a href="#" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}"  ><i class="fa fa-times"></i></a>
+                    
+                    <a href="{% url 'duplicate_book_document' book.id chapter.id document.id %}" class="book_main_page_section_document_duplicate" title="Dupliquer {{document.title}}" onclick="return Test_duplicate('{{document.title}}')" >
+                        <i class="bi bi-clipboard-plus-fill"></i>
+                    </a> 
+
 
                     <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
                          {{ document.icon_doctype|safe}}
@@ -68,7 +78,9 @@
                     {% else %}
                     <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title }} </a>
                     {% endif  %}
-                    <small> <a href="{% url 'duplicate_book_document' book.id chapter.id document.id %}"  title="Cloner {{document.title}}" onclick="return Test_duplicate('{{document.title}}')"><i class="bi bi-clipboard-plus"></i></a></small>
+                    <small>
+                        <a href="#" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
+                    </small>
                 </div>
             {% endfor %}
  
@@ -143,16 +155,60 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
+                            <a href="javascript:void();" class="new_document_button_selector btn-primary" id="get_an_existing_document"  >
+                               Choisir vos documents existants
+                            </a>
                             <a href="javascript:void();" class="new_document_button_selector"  id="create_a_new_document_button">
                                 Créer un nouveau document
                             </a>
-                            <a href="javascript:void();" class="new_document_button_selector" id="get_an_existing_document"  >
-                               Choisir vos documents existants
-                            </a>
                         </div>
                     </div>
-                    <div id="create_a_new_document" class="no_visu_on_load">
+                    <div id="get_this_existing_document">
+                        <form method="POST" action="" enctype='multipart/form-data'>
+                            <input type="hidden" name="book_section_id_get" id="book_section_id_get" />
+                            <input type="hidden" name="book_subject_id" value="{{ book.subject.id }}" />
+                            <input type="hidden" name="book_level_id"   value="{{ book.level.id }}" />
+                            <input type="hidden" name="book_chapter_id" value="{{ chapter.id }}" />
+                            {% csrf_token %}
 
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="BiblioTex" data-chapter_id="{{ chapter.id}}">
+                                             <i class="bi bi-bootstrap"></i> BiblioTex ?
+                                        </a>
+                                        <a href="javascript:void();" class="existant_book_document_choice" data-type="Course" data-chapter_id="{{ chapter.id}}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
+                                                    <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/>
+                                                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/>
+                                                </svg>
+                                            Cours ?
+                                        </a>
+                                        <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Exotex" data-chapter_id="{{ chapter.id}}"> 
+                                            <i class="bi bi-explicit"></i> Exercice rédigé ?
+                                        </a>
+                                        <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="GGB" data-chapter_id="{{ chapter.id}}"> 
+                                            <i class="bi bi-explicit-fill"></i> Exercice autocorrigé ? 
+                                        </a>
+                                        <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Flashpack" data-chapter_id="{{ chapter.id}}">
+                                            <i class="bi bi-stack"></i> Flashpack ?
+                                        </a>
+                                        <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Quizz" data-chapter_id="{{ chapter.id}}">
+                                            <i class="bi bi-aspect-ratio"></i> Quizz ?
+                                        </a>
+                                        <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="QF" data-chapter_id="{{ chapter.id}}">
+                                            <i class="bi bi-lightning"></i> Questions flash ?
+                                        </a>
+                                    </div>
+                                </div>  
+                            </div> 
+                            <div id="show_document_by_type" align='center'>
+     
+                            </div> 
+                        </form>
+                    </div>
+                    <div id="create_a_new_document" class="no_visu_on_load">
                         <form method="POST" action="" enctype='multipart/form-data' id="form_new_document">
                             <input type="hidden" value="document" name="form_type"/>
                             <input type="hidden" name="doctype" id="doctype" />
@@ -216,52 +272,6 @@
                                 </div>
                             </form>   
                         </div>
-                        <div id="get_this_existing_document"  class="no_visu_on_load">
-                            <form method="POST" action="" enctype='multipart/form-data'>
-                                <input type="hidden" name="book_section_id_get" id="book_section_id_get" />
-                                <input type="hidden" name="book_subject_id" value="{{ book.subject.id }}" />
-                                <input type="hidden" name="book_level_id"   value="{{ book.level.id }}" />
-                                <input type="hidden" name="book_chapter_id" value="{{ chapter.id }}" />
-                                {% csrf_token %}
-
-
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12">
-                                        <div class="form-group">
-                                            <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="BiblioTex" data-chapter_id="{{ chapter.id}}">
-                                                 <i class="bi bi-bootstrap"></i> BiblioTex ?
-                                            </a>
-                                            <a href="javascript:void();" class="existant_book_document_choice" data-type="Course" data-chapter_id="{{ chapter.id}}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16">
-                                                        <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/>
-                                                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/>
-                                                    </svg>
-                                                Cours ?
-                                            </a>
-                                            <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Exotex" data-chapter_id="{{ chapter.id}}"> 
-                                                <i class="bi bi-explicit"></i> Exercice rédigé ?
-                                            </a>
-                                            <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="GGB" data-chapter_id="{{ chapter.id}}"> 
-                                                <i class="bi bi-explicit-fill"></i> Exercice autocorrigé ? 
-                                            </a>
-                                            <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Flashpack" data-chapter_id="{{ chapter.id}}">
-                                                <i class="bi bi-stack"></i> Flashpack ?
-                                            </a>
-                                            <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Quizz" data-chapter_id="{{ chapter.id}}">
-                                                <i class="bi bi-aspect-ratio"></i> Quizz ?
-                                            </a>
-                                            <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="QF" data-chapter_id="{{ chapter.id}}">
-                                                <i class="bi bi-lightning"></i> Questions flash ?
-                                            </a>
-                                        </div>
-                                    </div>  
-                                </div> 
-                                <div id="show_document_by_type" align='center'>
-         
-                                </div> 
-                            </form>
-                        </div>
-                    </form>   
                 </div>
             </div>
         </div> 
