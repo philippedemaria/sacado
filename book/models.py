@@ -6,7 +6,7 @@ from account.models import Teacher
 from bibliotex.models import Bibliotex , Exotex
 from flashcard.models import Flashpack , Flashcard
 from group.models import Group
-from qcm.models import Course, Exercise
+from qcm.models import Course, Exercise , Parcours
 from tool.models import Quizz, Question
 from socle.models import Level , Subject , Skill , Knowledge , Theme
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -66,7 +66,7 @@ class Chapter(models.Model):
     date_created  = models.DateTimeField( auto_now_add= True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
     book          = models.ForeignKey(Book, on_delete=models.CASCADE,  blank=True,   related_name='chapters', editable=False)
-
+    parcours      = models.OneToOneField(Parcours, blank=True, null= True, related_name="chapters", on_delete=models.CASCADE )
 
     def __str__(self):
         return "{}".format(self.title)
@@ -74,9 +74,11 @@ class Chapter(models.Model):
 
 class Section(models.Model):
 
-    title   = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
-    ranking = models.PositiveIntegerField( default=0)
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,  blank=True, null=True,  related_name='sections', editable=False)
+    title      = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    ranking    = models.PositiveIntegerField( default=0)
+    chapter    = models.ForeignKey(Chapter, on_delete=models.CASCADE,  blank=True, null=True,  related_name='sections', editable=False)
+    color      = models.CharField(max_length=15, null=True, blank=True, default="#9274C7",   verbose_name="Couleur")
+    is_publish = models.BooleanField(default=1, blank=True  )
 
     def __str__(self):
         return "{}".format(self.title )
@@ -110,7 +112,8 @@ class Document(models.Model):
 
     is_publish   = models.BooleanField(default=0, verbose_name="Publié ?")
     is_share     = models.BooleanField(default=0, verbose_name="Mutualisé ?")
-
+    is_done = models.BooleanField(default=0, blank=True, null=True, verbose_name="Effectué ?")
+    
     def __str__(self):
         return "{} {}".format(self.title,self.level.name)
 
@@ -119,11 +122,17 @@ class Document(models.Model):
         if self.doctype == 0 : icon = '<i class="bi bi-file-earmark book_main_page_section_document_earmark"></i>'
         elif self.doctype == 1 : icon = '<i class="bi bi-file book_main_page_section_document_earmark"></i>'
         elif self.doctype == 2 : icon = '<i class="bi bi-link  book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 3 : icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 3 : 
+            try :
+                exercise = Exercise.objects.get(pk=self.doc_id)
+                icon = "<img src='"+exercise.supportfile.imagefile.url+"' class='mini_imagefile' />"
+            except :
+                icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
+
         elif self.doctype == 4 : icon = '<i class="bi bi-file-aspect-ratio  book_main_page_section_document_earmark"></i>'
         elif self.doctype == 5 : icon = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16"><path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/></svg>'
         elif self.doctype == 6 : icon = '<i class="bi bi-bootstrap  book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 7 : icon = '<i class="bi bi-explicit-fill  book_main_page_section_document_earmark"></i>'
+        elif self.doctype == 7 : icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
         elif self.doctype == 8 : icon = '<i class="bi bi-stack  book_main_page_section_document_earmark"></i>'
         elif self.doctype == 9 : icon = '<i class="bi bi-lightning  book_main_page_section_document_earmark"></i>'
         return icon
@@ -167,6 +176,8 @@ class Documentex(models.Model):
 
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     point = models.PositiveIntegerField(  default=0,  blank=True, null=True ,  verbose_name="Points") 
+
+
 
     def __str__(self):       
         return "{} > {}".format(self.chapter.title,self.document.title)

@@ -155,7 +155,7 @@ def reset_all_chapters(request,idb) :
         # Exercices auto-correctifs ###################################################################################################################
         section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices auto-correctifs" , chapter = chapt , defaults = {'ranking': 4, })
         for exercise in exercises :
-            document,created = Document.objects.get_or_create(title=exercise.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
+            document,created = Document.objects.get_or_create(title=exercise.supportfile.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
                                                                 teacher=request.user.teacher, 
                                                                 defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
         chapt.sections.add(section_exe)
@@ -192,7 +192,7 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
         chapter = chapters.first()
     else :
         chapter = Chapter.objects.get(id=idch)
-    sections = Section.objects.filter(chapter=idch).order_by("ranking")
+    sections = Section.objects.filter(is_publish=1,chapter=idch).order_by("ranking")
     context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections  }
 
 
@@ -224,6 +224,14 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
             else:
                 messages.error(request, formdoc.errors)
             return redirect('conception_book', idb , nf.pk )
+ 
+
+        elif form_type == "udpate_section_button" :
+            section_id = request.POST.get('section_id')
+            section = Section.objects.get(pk=section_id)
+            formsec = SectionForm(request.POST or None , instance = section)
+            if formsec.is_valid():
+                formsec.save()
 
         elif form_type == "emplacement" :
 
@@ -364,23 +372,39 @@ def chapter_chrono_show_document(request,idb,idch):
     #     for i in  range(len(titles)) :
     #         Document.objects.get_or_create( title=titles[i] , teacher=teacher ,defaults={'ranking':i} )
 
-
-
-#################################################################
-# section
-#################################################################
 @csrf_exempt
-def update_book_section(request):
+def publish_book_document(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
 
-    section_id  = request.POST.get("section_id" , None )
-    title  = request.POST.get("title" , None )
-
-    Section.objects.filter(pk=section_id).update(title=escape(title))
+    document_id  = request.POST.get("document_id" , None )
+    document = Document.objects.get(pk=document_id)
+    if document.is_publish : document.is_publish = False
+    else : document.is_publish = True
+    document.save()
     data = {}
     return JsonResponse(data) 
+
+ 
+
+@csrf_exempt
+def book_document_is_done(request):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    document_id  = request.POST.get("document_id" , None )
+    document = Document.objects.get(pk=document_id)
+    if document.is_done : document.is_done = False
+    else : document.is_done = True
+    document.save()
+    data = {}
+    return JsonResponse(data) 
+#################################################################
+# section
+#################################################################
+
 
 @csrf_exempt
 def delete_book_section(request):
@@ -402,6 +426,20 @@ def sorter_book_section(request):
     for i in range(len(valeurs)):
         Section.objects.filter(pk = valeurs[i]).update(ranking = i)
 
+    data = {}
+    return JsonResponse(data)
+
+@csrf_exempt
+def publish_book_section(request):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    section_id  = request.POST.get("section_id" , None )
+    section = Section.objects.get(pk=section_id)
+    if section.is_publish : section.is_publish = False
+    else : section.is_publish = True
+    section.save()
     data = {}
     return JsonResponse(data) 
 #################################################################

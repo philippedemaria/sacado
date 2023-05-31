@@ -44,14 +44,17 @@ urlpatterns = [
     path('sorter_book_document', sorter_book_document, name='sorter_book_document'),
     path('sorter_book_chrono_document', sorter_book_chrono_document, name='sorter_book_chrono_document'),
 
+    path('publish_book_document', publish_book_document, name='publish_book_document'),
+    path('book_document_is_done', book_document_is_done, name='book_document_is_done'),
+
+
     path('get_type_book_document', get_type_book_document, name='get_type_book_document'),
  
     path('book_chapter_show_document/<int:idb>/<int:idch>/<int:idd>', book_chapter_show_document, name='book_chapter_show_document'),
 
-    path('update_book_section', update_book_section, name='update_book_section'),
     path('delete_book_section', delete_book_section, name='delete_book_section'),
     path('sorter_book_section', sorter_book_section, name='sorter_book_section'),
-
+    path('publish_book_section', publish_book_section, name='publish_book_section'),
 
     ##################################################################################################################################
     ##################################################################################################################################

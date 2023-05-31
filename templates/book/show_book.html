@@ -24,16 +24,14 @@
  
         <img src="{% static 'img/angle-right.png' %}"/>  {{ book.subject.shortname }}    
 
-     {% block conception_creation %}
- 
-
-            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-sacado" title="Visualisation => Conception"> Visu. <i class="bi bi-arrow-right-short"></i> Concept.</a>  
-
+        {% block conception_creation %}
+            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-sacado"  style="margin-left:70px" title="Visualisation => Conception"><i class="bi bi-pen"></i><i class="bi bi-arrow-left-right" style="margin:0px 5px"></i><i class="bi bi-eye"></i></a>
         {% endblock %}
+
     {% endif %}
-
-
 {% endblock %}
+
+
 
 {% block page_menu_right %}
 
@@ -69,7 +67,7 @@ h1{margin-bottom:0px;}
                 {% block main_page %}
  
                     <h2 class="sacado_color_text">{{ chapter }}  
-                        <a href="{% url 'chapter_chrono_show_document' book.id idch %}"   title="Classer les documents par chronologie" class="chapter_new_document"><i class="bi bi-filter-circle"></i></a>          
+                        <a href="{% url 'chapter_chrono_show_document' book.id idch %}"   title="Classer les documents par chronologie" class="chapter_new_document chapter_new_document_circle"><i class="bi bi-sort-numeric-down"></i></a> 
                     </h2>
  
 
@@ -79,11 +77,11 @@ h1{margin-bottom:0px;}
                                 {{ section.title }}        
                             </div> 
                             {% for document in section.documents.all|dictsort:'ranking' %}
-                                <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
+                                <div class="book_main_page_section_document_detail {% if document.is_done %}book_main_page_section_document_is_done{% endif %}" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
                                     <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
                                          {{ document.icon_doctype|safe}}
                                     </a><br/>
-                                    {{ document.title }}
+                                    {{ document.title|truncatechars:30  }}
                                 </div>
                             {% endfor %}
                             <div style="clear:both"></div>

@@ -50,7 +50,7 @@ class SectionForm(forms.ModelForm):
 
 	class Meta:
 		model = Section
-		fields = ('title',)
+		fields = ('title','color')
  
 
 class DocumentForm(forms.ModelForm):

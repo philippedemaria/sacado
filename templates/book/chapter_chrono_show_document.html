@@ -8,8 +8,7 @@
 
 {% block conception_creation %}
   
-    <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-sacado"   title="Conception => Visualisation"> Concept. <i class="bi bi-arrow-right-short"></i> Visu.</a>
-
+    <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-sacado" style="margin-left:70px"  title="Conception => Visualisation"><i class="bi bi-pen"></i><i class="bi bi-arrow-left-right" style="margin:0px 5px"></i><i class="bi bi-eye"></i></a>
 {% endblock %} 
 
 
@@ -17,7 +16,7 @@
 
 
 {% block sommaire %}
-    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus"></i> Chapitre</a>
+    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus-circle"></i> Chapitre</a>
     <hr/>
     <div id="droppable_sommary">    
     {% for ch in chapters %}
@@ -40,7 +39,7 @@
 {% block main_page %}
  
     <h2 class="sacado_color_text">{{ chapter }}  
-        <a href="{% url 'show_book' book.id idch %}"   title="Classer les documents par type" class="chapter_new_document"><i class="bi bi-filter-circle"></i></a>          
+        <a href="{% url 'show_book' book.id idch %}"   title="Classer les documents par type" class="chapter_new_document chapter_new_document_circle"><i class="bi bi-sort-alpha-down"></i></i></a>                    
     </h2>
  
 
@@ -48,13 +47,13 @@
 
 
             {% for document in documents|dictsort:'ranking' %}
-                <div class="book_main_page_section_document_chrono" >
+                <div class="book_main_page_section_document_chrono {% if document.is_done %}book_main_page_section_document_is_done{% endif %}" >
 
                     <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
                          <div class="row">
                             <div class="col-xs-9 col-md-9">
                                 <div style="font-size:2em"><b>{{forloop.counter }}.</b> {{ document.section.title }}</div>
-                                <div style="font-size:1.5em">{{ document.title }}</div>
+                                <div style="font-size:1.5em">{{ document.title|truncatechars:30  }}</div>
                             </div>
                             <div class="col-xs-3 col-md-3">
                                 {{ document.icon_doctype|safe}}

@@ -291,31 +291,117 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        $("#udpate_section_button").on('click', function (event) {
 
-            let section_id = $("#update_form_sec #section_id").val();
-            let title      = $("#update_form_sec #id_title").val();
+
+        $(".selector_section_color").on('click', function (event) {
+            $(".selector_section_color").addClass("opacity_color") ;   
+            let color = $(this).data("color");
+            $(this).removeClass("opacity_color") ; 
+            $("#new_form_sec  #id_color").val("#"+color);
+        }); 
+
+        $(".selector_section_color_update").on('click', function (event) {
+            $(".selector_section_color_update").addClass("opacity_color") ;   
+            let color = $(this).data("color");
+            $(this).removeClass("opacity_color") ;
+            $("#update_form_sec  #id_color").val("#"+color);
+        }); 
+
+
+
+        $(".publish_section").on('click', function (event) {
+
+            let section_id = $(this).data("section_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            if ($(this).parent().next().hasClass("opacity_color")){
+
+                $(this).html("<i class='bi bi-eye'></i>") ;
+                $(this).parent().next().removeClass("opacity_color");
+
+
+            } else {
+
+                $(this).html("<i class='bi bi-eye-slash'></i>") ;
+                $(this).parent().next().addClass("opacity_color");
+            }
+            
 
             $.ajax({
                     data: { 
-                    	'section_id': section_id ,  
-                    	'title': title ,  
-                    	'csrf_token': csrf_token 
+                        'section_id': section_id ,  
+                        'csrf_token': csrf_token 
                     } ,   
                     type: "POST",
                     dataType: "json",
-                    url: "../../update_book_section" ,
-                    traditional: true,
-					success: function (data) {
-
-						$("#section_title"+section_id).html(title);
-						$("#update_section").modal('hide');					
-					}
+                    url: "../../publish_book_section" ,
+                    traditional: true
                 }); 
         }); 
 
+
+
+        $(".publish_book").on('click', function (event) {
+
+            let document_id = $(this).data("document_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if ($(this).hasClass("is_published")){
+
+ 
+                $(this).removeClass("is_published");
+
+            } else {
+
+ 
+                $(this).addClass("is_published");
+            }
+            
+
+            $.ajax({
+                    data: { 
+                        'document_id': document_id ,  
+                        'csrf_token': csrf_token 
+                    } ,   
+                    type: "POST",
+                    dataType: "json",
+                    url: "../../publish_book_document" ,
+                    traditional: true
+                }); 
+        }); 
+
+
+
+
+        $(".is_done_document").on('click', function (event) {
+
+            let document_id = $(this).data("document_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if ($(this).hasClass("is_done")){
+ 
+                $(this).removeClass("is_done");
+
+            } else {
+
+ 
+                $(this).addClass("is_done");
+            }
+            
+
+            $.ajax({
+                    data: { 
+                        'document_id': document_id ,  
+                        'csrf_token': csrf_token 
+                    } ,   
+                    type: "POST",
+                    dataType: "json",
+                    url: "../../book_document_is_done" ,
+                    traditional: true
+                }); 
+        });
+
+ 
 
 
  
