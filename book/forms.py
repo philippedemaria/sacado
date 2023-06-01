@@ -4,7 +4,7 @@ from django.template.defaultfilters import filesizeformat
 from django.forms.models import inlineformset_factory, BaseInlineFormSet , ModelChoiceIterator, ModelChoiceField, ModelMultipleChoiceField
 
 from .models import  *
- 
+from tool.models import Quizz
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from itertools import groupby
 from general_fonctions import *
@@ -109,3 +109,21 @@ class BlocForm(forms.ModelForm):
 
 			self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
 			self.fields['exotexs']    = forms.ModelMultipleChoiceField(queryset=exotexs,  required=False)  
+
+
+
+
+class QFlashBookForm(forms.ModelForm):
+ 
+	class Meta:
+		model = Quizz
+		fields = ('nb_slide','is_result','is_publish','subject','levels')
+
+	def __init__(self, *args, **kwargs):
+		book = kwargs.pop('book')
+		super(QFlashBookForm, self).__init__(*args, **kwargs)
+
+		self.fields['subject'].initial  = book.subject 
+		self.fields['levels'].initial  = book.level 
+
+

@@ -3908,8 +3908,6 @@ def create_questions_flash(request,idl):
         else:
             print(form.errors)
 
-
-    mentals = Mental.objects.order_by("mentaltitle")
     context = {'form': form, 'teacher': teacher,  'all_mentals' : all_mentals  , 'level' : level }
 
     return render(request, 'tool/form_question_flash.html', context)

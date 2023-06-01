@@ -17,17 +17,18 @@ from .models import Book, Chapter
 from .forms import *
 from account.models import User
 from qcm.models import Parcours
-
+from tool.models import Mentaltitle, Quizz , Mental
+from tool.views import create_questions_flash_random_variable
 from socle.decorators import user_is_superuser
 from django.utils.html import escape
 
  
 
 
-##################################     doctypes     ########################################     
-##########  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack"]
-##########  [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8]
-##################################     doctypes     ########################################
+##################################     doctypes     ################################################    
+##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
+##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
+##################################     doctypes     ################################################ 
 
 ################################################################################################
 ########################    FONCTIONS ANNEXE    ################################################
@@ -177,9 +178,10 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
     chapters = book.chapters.filter(teacher=teacher).order_by("ranking")
     form = NewChapterForm(request.POST or None )
 
-    formdoc = DocumentForm(request.POST or None  )
-    formsec = SectionForm(request.POST or None)
+    formdoc   = DocumentForm(request.POST or None  )
+    formsec   = SectionForm(request.POST or None)
     form_type = request.POST.get("form_type", None )
+    form_qf   = QFlashBookForm(request.POST or None , book = book)
 
     if is_conception : 
         template =  'book/conception_book.html'
@@ -193,7 +195,28 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
     else :
         chapter = Chapter.objects.get(id=idch)
     sections = Section.objects.filter(is_publish=1,chapter=idch).order_by("ranking")
-    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections  }
+
+    mentaltitles = Mentaltitle.objects.filter(subjects = book.subject, is_display=1).order_by("ranking")
+
+    all_mentals = list()
+    level_dict = dict()
+ 
+    level_dict["level"] = book.level 
+    list_mentals = list()
+    for mentaltitle in mentaltitles :
+        dict_mentals = dict()
+        mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = book.level, is_display=1 ).order_by("ranking")
+        is_mentals = False 
+        if mentals :
+            dict_mentals["mentaltitle"] = mentaltitle 
+            dict_mentals["mentals"] = mentals
+            list_mentals.append(dict_mentals)
+            is_mentals = True
+            level_dict["sub"] = list_mentals
+
+    all_mentals.append(level_dict)
+
+    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections , 'form_qf' : form_qf ,'all_mentals':all_mentals }
 
 
     if is_chrono :
@@ -246,7 +269,10 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
             return redirect('conception_book', idb , idch )
 
         elif form_type == "new_document" :
-            #doctypes = ["content","file","url","exercise","quizz","question","bibliotex","exotex","flashcard","flashpack"]
+            ##################################     doctypes     ################################################    
+            ##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
+            ##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
+            ##################################     doctypes     ################################################ 
             if request.POST.get("document_is_update") == "1" :
                 try : 
                     document_pk_update = request.POST.get("document_pk_update" , None )
@@ -271,6 +297,8 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
                 messages.error(request, formdoc.errors)
  
             return redirect('conception_book', idb , idch )
+
+
 
         elif form_type == "get_doc" :
 
@@ -314,8 +342,29 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
  
             return redirect('conception_book', idb , idch )
 
+        elif form_type == "new_qf_document" :
+            if form.is_valid():
+                nf = form_qf.save(commit = False)
+                nf.teacher = teacher
+                nf.is_questions = 1
+                nf.is_random = 1
+                nf.is_archive = 0
+                nf.interslide = 2
+                nf.save()
+                form.save_m2m()
+
+                mental_ids = request.POST.getlist("mental_ids",None)
+                if len(mental_ids) :
+                    mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
+                    nf.mentaltitles.set( mentaltitles )  
+
+                messages.success(request, 'Les questions flash ont été créées avec succès !')
+            else :
+                messages.error(request, formdoc.errors)
  
-    return render(request, template , context )
+            return redirect('conception_book', idb , idch )
+
+    return render(request,template,context) 
 
 
 def show_book(request,idb,idch):

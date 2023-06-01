@@ -1,7 +1,7 @@
 {% extends 'book/show_book.html' %}
 {% load static %}
+{% load item_tags %}
 {% load widget_tweaks %}
-
 
 
 
@@ -230,62 +230,121 @@
                             <input type="hidden" name="book_level_id"   id="book_level_id" value="{{ book.level.id }}" />
                             <input type="hidden" name="book_chapter_id" id="book_chapter_id"  value="{{ chapter.id }}" />
                             {% csrf_token %}
-
-
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.title.label_tag }}</label>
+                                        {{ formdoc.title |add_class:"form-control" }}
+                                        {{ formdoc.title.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href="javascript:void();" class="book_document_choice" id="show_text_part">Ecrire du texte ?</a>
+                                    <a href="javascript:void();" class="book_document_choice" id="show_link_part">Attacher un lien externe ?</a>
+                                    <a href="javascript:void();" class="book_document_choice" id="show_file_part">Téléverser un fichier ?</a>
+                                    <a href="javascript:void();" class="book_document_choice" id="show_qf_part">Créer des questions flash ?</a>
+                                </div> 
+                            </div>
+                            <div class="row no_visu_on_load disappear_div" id="text_part">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.content.label_tag }}</label>
+                                        {{ formdoc.content }}
+                                        {{ formdoc.content.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row no_visu_on_load disappear_div" id="file_part">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.file.label_tag }}</label>
+                                        {{ formdoc.file |add_class:"form-control btn btn-default" }}
+                                        {{ formdoc.file.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row no_visu_on_load disappear_div" id="link_part">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label>{{ formdoc.url.label_tag }}</label>
+                                        {{ formdoc.url |add_class:"form-control"|attr:"placeholder:https://" }}
+                                        {{ formdoc.url.errors }}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="no_visu_on_load disappear_div" id="qf_part">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12">
-                                        <div class="form-group">
-                                            <label>{{ formdoc.title.label_tag }}</label>
-                                            {{ formdoc.title |add_class:"form-control" }}
-                                            {{ formdoc.title.errors }}
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-md-3">
+                                            <label>Nombre de questions</label>
+                                            {{ form_qf.nb_slide |add_class:"form-control" }}
+                                            {{ form_qf.nb_slide.errors }}
                                         </div>
-                                    </div>  
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <a href="javascript:void();" class="book_document_choice" id="show_text_part">Ecrire du texte ?</a>
-                                        <a href="javascript:void();" class="book_document_choice" id="show_link_part">Attacher un lien externe ?</a>
-                                        <a href="javascript:void();" class="book_document_choice" id="show_file_part">Téléverser un fichier ?</a>
-                                        <a href="javascript:void();" class="book_document_choice" id="show_qf_part">Créer des questions flash ?</a>
-                                    </div> 
-                                </div>
-                                <div class="row no_visu_on_load disappear_div" id="text_part">
-                                    <div class="col-sm-12 col-md-12">
-                                        <div class="form-group">
-                                            <label>{{ formdoc.content.label_tag }}</label>
-                                            {{ formdoc.content }}
-                                            {{ formdoc.content.errors }}
+                                        <div class="col-sm-4">
+                                            <label>{{ form_qf.is_result.label_tag }} </label>
+                                            {{ form_qf.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
+                                            {{ form_qf.is_result.errors }}
                                         </div>
-                                    </div>  
-                                </div>
-                                <div class="row no_visu_on_load disappear_div" id="file_part">
-                                    <div class="col-sm-12 col-md-12">
-                                        <div class="form-group">
-                                            <label>{{ formdoc.file.label_tag }}</label>
-                                            {{ formdoc.file |add_class:"form-control btn btn-default" }}
-                                            {{ formdoc.file.errors }}
-                                        </div>
-                                    </div>  
-                                </div>
-                                <div class="row no_visu_on_load disappear_div" id="link_part">
-                                    <div class="col-sm-12 col-md-12">
-                                        <div class="form-group">
-                                            <label>{{ formdoc.url.label_tag }}</label>
-                                            {{ formdoc.url |add_class:"form-control"|attr:"placeholder:https://" }}
-                                            {{ formdoc.url.errors }}
-                                        </div>
-                                    </div>  
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12">  
-                                        <div class="form-group">  
-                                            <button type="submit" class="btn btn-primary no_visu_on_load" name="form_type" value="new_document" id="new_document">Enregistrer</button>   
-                                            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                                        <div class="col-sm-4">
+                                            <label>{{ form_qf.is_publish.label_tag }}</label>
+                                            {{ form_qf.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }}
+                                            {{ form_qf.is_publish.errors }}
                                         </div>
                                     </div>
+                                </div> 
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <table class="table borderless">
+                                                <tbody>
+                                                    {% for all_mental  in all_mentals %}   
+                                                        <tr class="title_tr">
+                                                            <td style="width:85%"> {{ all_mental.level.name  }} </td><td ></td>
+                                                        </tr>
+                                                        
+                                                        {% for all_mental_sub  in all_mental.sub %} 
+                                                            <tr>
+                                                                <td style="width:85%">
+                                                                    <input type="checkbox" class="class_select_all_these_items" data-document_id="{{ all_mental_sub.mentaltitle.id }}" /> <i class="fa fa-caret-right"></i> {{ all_mental_sub.mentaltitle.title }} 
+                                                                </td> 
+                                                                <td>Temps par question</td>
+                                                            </tr> 
+                                                            {% for m in all_mental_sub.mentals.all %}
+                                                                {% if m %}
+                                                                <tr>
+                                                                    {% get_question_is_already_used m teacher as is_already_used %}
+                                                                    <td >
+                                                                        <label {% if is_already_used.date %} class="text-success" title="Déjà utilisé le {{ is_already_used.date|date:'Y-m-d' }}"{% endif %}  > 
+                                                                            <input type="checkbox" value="{{m.id }}" name="mental_ids"  class="groupcheckbox these_items_to_be_selected{{ all_mental_sub.mentaltitle.id }}" /> {{ m.content }}   
+                                                                        </label> 
+                                                                    </td> 
+                                                                    <td >
+                                                                        <small>{{ m.duration }} secondes </small>
+                                                                    </td>  
+                                                                </tr> 
+                                                                {% endif %} 
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table> 
+                                        </div>
+                                    </div> 
                                 </div>
-                            </form>   
-                        </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">  
+                                    <div class="form-group">  
+                                        <button type="submit" class="btn btn-primary no_visu_on_load" name="form_type" value="new_qf_document" id="new_qf_document">Générer</button>
+                                        <button type="submit" class="btn btn-primary no_visu_on_load" name="form_type" value="new_document" id="new_document">Enregistrer</button>   
+                                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div> 

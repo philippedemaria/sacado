@@ -451,6 +451,9 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
+ 
+
+
 
         function make_it_appears(div){
   			$(".disappear_div").hide("slow");        	
@@ -462,6 +465,7 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', "#show_text_part" , function (event) {
   			make_it_appears("#text_part");
   			$("#doctype").val(0);
+            $("#new_qf_document").addClass("no_visu_on_load") ;
             $("#new_document").removeClass("no_visu_on_load") ;
         });
 
@@ -469,6 +473,7 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', "#show_link_part" , function (event) {
   			make_it_appears("#link_part");
   			$("#doctype").val(2);
+            $("#new_qf_document").addClass("no_visu_on_load") ;
             $("#new_document").removeClass("no_visu_on_load") ; 
         });
 
@@ -476,8 +481,15 @@ define(['jquery', 'bootstrap'], function ($) {
   			make_it_appears("#file_part");
   			$("#doctype").val(1);
             $("#new_document").removeClass("no_visu_on_load") ;
+            $("#new_qf_document").addClass("no_visu_on_load") ;
         });
 
+        $(document).on('click', "#show_qf_part" , function (event) {
+            make_it_appears("#qf_part");
+            $("#doctype").val(9);
+            $("#new_qf_document").removeClass("no_visu_on_load") ;
+            $("#new_document").addClass("no_visu_on_load") ;
+        });
 
 
 
