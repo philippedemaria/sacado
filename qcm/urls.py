@@ -49,6 +49,9 @@ urlpatterns = [
     path('parcours_unarchive/<int:id>/<int:idg>/', unarchive_parcours, name='unarchive_parcours'), 
     path('parcours_show/<int:idf>/<int:id>', show_parcours, name='show_parcours'), 
 
+    path('parcours_show_only_exercises/<int:id>', parcours_show_only_exercises, name='parcours_show_only_exercises'), 
+
+
     path('parcours_folder/<int:idg>/', create_folder, name='create_folder'),
     path('parcours_folder_archive/<int:id>/<int:idg>/', folder_archive, name='folder_archive'),
     path('parcours_folder_unarchive/<int:id>/<int:idg>/', folder_unarchive, name='folder_unarchive'),

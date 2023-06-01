@@ -53,8 +53,13 @@
 
     <h2 class="sacado_color_text">{{ chapter }}  
         <a href="{% url 'chapter_chrono_concept_document' book.id idch %}"  class="chapter_new_document chapter_new_document_circle"  title="Classer les documents par chronologie"><i class="bi bi-sort-numeric-down"></i></a> 
+        {% if chapter.parcours.id %}
+        <a href="javascript:void(0);"  data-toggle="modal"  data-target="#book_new_parcours"  class="link_parcours"><i class="bi bi-pen" style="font-size:10px"></i></a>
+        <a href="{% url 'parcours_show_only_exercises' chapter.parcours.id  %}"  target="_blank" class="link_parcours"><i class="bi bi-link"></i> Vers le parcours</a>
 
-        <a href="javascript:void();" data-toggle='modal' data-target='#link_parcours' class="link_parcours"><i class="bi bi-link"></i> Lier un parcours</a>           
+        {% else %}
+        <a href="javascript:void(0);"  data-toggle="modal"  data-target="#book_new_parcours"  class="link_parcours"><i class="bi bi-link"></i> Lier un parcours</a>
+        {% endif %}          
     </h2>
 
     <div id="dropzone" >
@@ -64,11 +69,11 @@
             <div class="book_main_page_section_title" style="background-color: {{ section.color}}">
                 <i class="fa fa-sort this_sorter_handle"></i> <span id="section_title{{ section.id }}">{{ section.title }}</span>   
 
-                <a href="javascript:void();" class="publish_section white" title="Visible par les élèves" data-section_id="{{ section.id }}">{% if section.is_publish %}<i class="bi bi-eye"></i>{% else %}<i class="bi bi-eye-slash"></i>{% endif %}</a>                
+                <a href="javascript:void(0);" class="publish_section white" title="Visible par les élèves" data-section_id="{{ section.id }}">{% if section.is_publish %}<i class="bi bi-eye"></i>{% else %}<i class="bi bi-eye-slash"></i>{% endif %}</a>                
 
-                <a href="javascript:void();" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.id }}"><i class="bi bi-pen"></i></a>
+                <a href="javascript:void(0);" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.id }}"><i class="bi bi-pen"></i></a>
                 
-                <a href="javascript:void();" class="delete_section white" title="Supprimer" data-section_id="{{ section.id }}"><i class="bi bi-trash"></i></a>
+                <a href="javascript:void(0);" class="delete_section white" title="Supprimer" data-section_id="{{ section.id }}"><i class="bi bi-trash"></i></a>
 
 
             </div> 
@@ -92,12 +97,12 @@
                     <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >{{ document.title|truncatechars:30  }} </a>
                     {% endif  %}
                     <small>
-                        <a href="javascript:void();" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
+                        <a href="javascript:void(0);" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
                     </small>
                 </div>
             {% endfor %}
 
-                 <a href="javascript:void();" data-toggle='modal' data-target='#chapter_new_document' class="selector_book_section_document" title="Ajouter" data-chapter_id="{{ chapter.id }}" data-section_id="{{  section.id }}"><i class="bi bi-file-plus-fill book_main_page_section_document_section"></i></a>
+                 <a href="javascript:void(0);" data-toggle='modal' data-target='#chapter_new_document' class="selector_book_section_document" title="Ajouter" data-chapter_id="{{ chapter.id }}" data-section_id="{{  section.id }}"><i class="bi bi-file-plus-fill book_main_page_section_document_section"></i></a>
             </div>     
             <div style="clear:both"></div>
         </div>
@@ -503,6 +508,46 @@
             </div>
         </div> 
     </div>
+
+
+
+    <div class="modal fade" id="book_new_parcours" tabindex="-1" role="dialog" aria-labelledby="book_new_parcours">
+        <div class="modal-dialog modal-lg" role="document"  >
+            <div class="modal-content" >
+                <form method="POST" action="" enctype='multipart/form-data'  > 
+                    {% csrf_token %}  
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> 
+                        <h2 >Lier un parcours</h2>              
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            {% for p in parcours %}
+                                <div class="col-xs-3"> 
+                                    <input type="checkbox" name="my_parcours" value="{{ p.id }}" />
+                                    <br/>
+                                    {% if p.vignette %}
+                                    <img src="{{ p.vignette.url }}" width='80px'/><br/>
+                                    {% endif %}
+                                    <label>{{ p.title }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">                            
+                                <button type="submit" class="btn btn-primary"  name="form_type"   value='link_form_parcours' >Enregistrer</button>           
+                                <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+    </div>
+
 
     <div class="modal fade" id="book_new_section" tabindex="-1" role="dialog" aria-labelledby="book_new_section">
         <div class="modal-dialog modal-lg" role="document"  style="width:1100px">

@@ -130,7 +130,7 @@ def reset_all_chapters(request,idb) :
         qfs        = p.quizz.filter(is_random=1)[:4]
         bibliotexs = p.bibliotexs.all()
 
-        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':2,'ranking':i,'parcours':p})
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':2,'ranking':i})
 
         # QF ###################################################################################################################
         section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
@@ -216,7 +216,10 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
 
     all_mentals.append(level_dict)
 
-    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections , 'form_qf' : form_qf ,'all_mentals':all_mentals ,'teacher' : teacher }
+    parcours = Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user=request.user).order_by("ranking") 
+
+    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 
+                'sections': sections , 'form_qf' : form_qf ,'all_mentals':all_mentals ,'teacher' : teacher , 'parcours' : parcours }
 
 
     if is_chrono :
@@ -365,6 +368,14 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
             else :
                 messages.error(request, formdoc.errors)
  
+            return redirect('conception_book', idb , idch )
+
+        elif form_type == "link_form_parcours":
+            my_parcours = request.POST.get("my_parcours",None)
+            parcours = Parcours.objects.get(pk=my_parcours)
+            chapter.parcours = parcours
+            chapter.save()
+            messages.success(request, 'Le parcours a été lié avec succès !')
             return redirect('conception_book', idb , idch )
 
     return render(request,template,context) 

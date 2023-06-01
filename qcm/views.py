@@ -4027,6 +4027,57 @@ def show_parcours(request, idf = 0, id=0):
 
 
 
+def parcours_show_only_exercises(request,id):
+
+
+    parcours = Parcours.objects.get(id=id)
+    rq_user = request.user
+
+    try :
+        teacher = rq_user.teacher
+    except :
+        return redirect ('index')
+
+    today = time_zone_user(rq_user)
+    delete_session_key(request, "quizz_id")
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+        return redirect('index')
+ 
+    relationships , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+
+    nb_point , nb_time = 0 , 0
+    nb_point_display = False
+    for rc in relationships :
+        try : 
+            nb_point += rc.mark
+        except : pass
+        try : 
+            nb_time += rc.duration
+        except : pass
+
+    if nb_point > 0 :
+        nb_point = str(nb_point) + " points"
+        nb_point_display = True
+
+ 
+    context = { 'parcours': parcours, 'teacher': teacher, 
+                  'nb_exo_visible': nb_exo_visible ,   'relationships': relationships,
+               'nb_exo_only': nb_exo_only    }
+
+    return render(request, 'qcm/parcours_show_only_exercises.html', context) 
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url= 'index')
 def result_parcours_exercises(request, idf = 0, id=0):
