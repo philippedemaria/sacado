@@ -525,8 +525,8 @@
                     <div class="modal-body">
                         <div class="row">
                             {% for p in parcours %}
-                                <div class="col-xs-3" style="height:150px"> 
-                                    <input type="checkbox" name="my_parcours" value="{{ p.id }}" />
+                                <div class="col-xs-3" style="height:150px;text-align: center"> 
+                                    <input type="radio" name="my_parcours" value="{{ p.id }}" />
                                     <br/>
                                     {% if p.vignette %}
                                     <img src="{{ p.vignette.url }}" width='80px'/><br/>
