@@ -216,7 +216,7 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
 
     all_mentals.append(level_dict)
 
-    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections , 'form_qf' : form_qf ,'all_mentals':all_mentals }
+    context = { 'book': book ,'chapters': chapters , 'form':form , 'formdoc':formdoc , 'formsec': formsec  ,'idch' : idch, 'chapter': chapter , 'sections': sections , 'form_qf' : form_qf ,'all_mentals':all_mentals ,'teacher' : teacher }
 
 
     if is_chrono :
