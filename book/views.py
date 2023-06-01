@@ -130,7 +130,7 @@ def reset_all_chapters(request,idb) :
         qfs        = p.quizz.filter(is_random=1)[:4]
         bibliotexs = p.bibliotexs.all()
 
-        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':2,'ranking':i})
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':2,'ranking':i,'parcours':p})
 
         # QF ###################################################################################################################
         section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
@@ -303,8 +303,7 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
         elif form_type == "get_doc" :
 
             select_documents = request.POST.getlist("select_this_document_for_chapter")
-            document_id      = request.POST.get("document_id")
-            section_id       = request.POST.get("book_section_id_get",None)
+            section_id       = request.POST.get("book_section_id",None)
             if not section_id :
                 section    = sections.first()
                 section_id = section.id
@@ -353,10 +352,14 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
                 nf.save()
                 form.save_m2m()
 
+                section_id       = request.POST.get("book_section_id",None)
                 mental_ids = request.POST.getlist("mental_ids",None)
+
                 if len(mental_ids) :
                     mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
                     nf.mentaltitles.set( mentaltitles )  
+
+                document = Document.objects.create(title = nf.title, doc_id=nf.id , doctype = 9, author = b.author, teacher = teacher, section_id = section_id , level = book.level , subject = book.subject,is_publish=1,is_share=1)
 
                 messages.success(request, 'Les questions flash ont été créées avec succès !')
             else :

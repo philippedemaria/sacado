@@ -281,6 +281,7 @@
                                             <label>Nombre de questions</label>
                                             {{ form_qf.nb_slide |add_class:"form-control" }}
                                             {{ form_qf.nb_slide.errors }}
+                                            {{ form_qf.title.as_hidden }}
                                         </div>
                                         <div class="col-sm-4">
                                             <label>{{ form_qf.is_result.label_tag }} </label>

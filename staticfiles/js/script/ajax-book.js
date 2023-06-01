@@ -451,8 +451,9 @@ define(['jquery', 'bootstrap'], function ($) {
         });
 
 
- 
-
+        $(document).on('keyup', "#form_new_document #id_title" , function (event) {
+            $("#qf_part #id_title").val($(this).val())
+        });
 
 
         function make_it_appears(div){

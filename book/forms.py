@@ -117,7 +117,7 @@ class QFlashBookForm(forms.ModelForm):
  
 	class Meta:
 		model = Quizz
-		fields = ('nb_slide','is_result','is_publish','subject','levels')
+		fields = ('title','nb_slide','is_result','is_publish','subject','levels')
 
 	def __init__(self, *args, **kwargs):
 		book = kwargs.pop('book')
