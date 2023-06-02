@@ -2592,7 +2592,8 @@ a.book_new_chapter:hover{
 
 .book_chapters_in_menu{
    list-style: none;
-   padding: 5px 0px;
+   padding: 10px 0px;
+   font-size:14px;
 }
 
 .book_main_page_section_document_chrono{
@@ -2638,40 +2639,21 @@ a.book_new_chapter:hover{
   -webkit-animation: slide_menu-out 0.5s forwards;
 }
 
-@keyframes slide_menu-in {
-  0% {
-    -webkit-transform: translateX(-25vw);
-  }
-  100% {
-    -webkit-transform: translateX(1vw);
-  }
+ 
+
+.book_main_page_uncollapse {
+    padding-left: 30px;
+    float: left;
+    width: 1700px;
 }
 
-@-webkit-keyframes slide_menu-in {
-  0% {
-    -webkit-transform: translateX(-25vw);
-  }
-  100% {
-    -webkit-transform: translateX(1vw);
-  }
+.summary_collapse {
+    margin-right: 0px;
+    margin-left: -338px;
 }
 
-@keyframes slide_menu-out {
-  0% {
-    -webkit-transform: translateX(0px);
-  }
-  100% {
-    -webkit-transform: translateX(-25vw);
-  }
-}
-
-@-webkit-keyframes slide_menu-out {
-  0% {
-    -webkit-transform: translateX(0px);
-  }
-  100% {
-    -webkit-transform: translateX(-25vw);
-  }
+.book_main_page_expand{
+    width: 90vw!important;
 }
 
 .chapter_new_document{
@@ -2691,7 +2673,7 @@ a.book_new_chapter:hover{
 .book_main_page{
   padding-left : 30px;
   float:left;    
-  width:60vw;   
+  width:70vw;   
 }
  
  

@@ -46,7 +46,7 @@
 h1{margin-bottom:0px;}
 </style>
 
-        <div class="row">
+        <div class="row" id="book_all_main_page" >
             <div class="book_menu" id="sort_chapter">
                 {% block sommaire %}
                     Sommaire 
@@ -56,7 +56,7 @@ h1{margin-bottom:0px;}
                         <li class="book_chapters_in_menu {% if chapter.id == idch %}book_chapters_in_menu_selected{% endif %}">
                             <span class="book_chapter_number">{{ forloop.counter}}.</span>             
                             <a href="{% url 'show_book' book.id chapter.id %}"  class="white">
-                                {{ chapter.title|lower|capfirst }} 
+                                {{ chapter.title|lower|capfirst|truncatechars:40 }} 
                             </a>                   
                         </li>
                     {% endfor %}
@@ -68,9 +68,13 @@ h1{margin-bottom:0px;}
  
                     <h2 class="sacado_color_text">{{ chapter }}  
                         <a href="{% url 'chapter_chrono_show_document' book.id idch %}"   title="Classer les documents par chronologie" class="chapter_new_document chapter_new_document_circle"><i class="bi bi-sort-numeric-down"></i></a> 
+
+                        {% if chapter.parcours.id %}
+                        <a href="{% url 'parcours_show_only_exercises' chapter.parcours.id  %}"  target="_blank" class="link_parcours"><i class="fa fa-th"></i> Vers le parcours</a>
+                        {% endif %}  
+
                     </h2>
  
-
                     {% for section in sections %}
                         <div class="book_main_page_section" >
                             <div class="book_main_page_section_title">
@@ -86,12 +90,7 @@ h1{margin-bottom:0px;}
                             {% endfor %}
                             <div style="clear:both"></div>
                         </div>
-
-                 
-
                     {% endfor %}
-
-                    </div>
                 {% endblock %}
 
             </div>

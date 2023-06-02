@@ -3835,7 +3835,7 @@ a.menuright:hover{
     background-color: #5d4391 ;
     color: #f2f2f2;
     padding:10px ;
-    width:30vw;    
+    width:23vw;    
     float:left;
     transform: translateX(3%);
     -webkit-transform: translateX(3%);  
@@ -3861,18 +3861,18 @@ a.menuright:hover{
 }
 
 .book_main_page_section{
-  width:100%;
-  border-radius: 10px;
-  background-color: white;
-  padding:0px;
-  text-align: center;
-  margin : 30px 0px;
-  border : 2px solid #5d4391 ;
+    width: 95%;
+    border-radius: 20px;
+    background-color: white;
+    padding: 0px;
+    text-align: center;
+    margin: 40px;
+    border: 2px solid #5d4391;
 }
 
 .book_main_page_section_title{
   width:100%;
-  border-radius: 5px 5px 0px 0px ;
+  border-radius: 18px 18px 0px 0px ;
   background-color: #9274C7;
   padding :7px 7px 7px 25px;
   text-align: left;

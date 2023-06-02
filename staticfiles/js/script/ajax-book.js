@@ -72,25 +72,27 @@ define(['jquery', 'bootstrap'], function ($) {
   
         $("#collapse_menu_button").on('click', function (event) {
 
-        	var width_page = $( window ).width();
 
-        	if ($("#sort_chapter").hasClass("sorter_chapter_dismiss")){
+        	if ($("#sort_chapter").hasClass("summary_collapse")){ 
 
-             	$("#sort_chapter").removeClass("collapse_menu");
+             	$("#book_all_main_page").removeClass("book_main_page_uncollapse");
 
             	$("#collapse_menu_button").html("<i class='bi bi-box-arrow-in-left'></i>");
 
-			  	$("#id_book_main_page" ).removeClass('sorter_chapter_dismiss').addClass('sorter_chapter_selected');
-            	$("#sort_chapter").removeClass('sorter_chapter_dismiss').addClass('sorter_chapter_selected');
-
+			  	$("#sort_chapter" ).removeClass('summary_collapse') ;
+                $("#id_book_main_page" ).removeClass('book_main_page_expand');
 
         	} else{
 
-			  	$("#sort_chapter" ).addClass('sorter_chapter_dismiss');
+			  	$("#sort_chapter" ).addClass('summary_collapse');
 
-			  	$("#id_book_main_page" ).addClass('sorter_chapter_dismiss').removeClass('sorter_chapter_selected');
+			  	$("#book_all_main_page" ).addClass('book_main_page_uncollapse');
 
             	$("#collapse_menu_button").html("<i class='bi bi-box-arrow-right'></i>");
+
+                $("#id_book_main_page" ).addClass('book_main_page_expand');
+
+
 
         	} 
 

@@ -17,7 +17,7 @@
 
 
 {% block sommaire %}
-    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter" id="new_chapter_button"><i class="bi bi-plus-circle"></i> Chapitre</a>
+    Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter"   title="Nouveau chapitre"   id="new_chapter_button"><i class="bi bi-plus-circle"></i> Chapitre</a>
     <hr/>
     <div id="droppable_sommary">    
     {% for ch in chapters %}
@@ -27,7 +27,7 @@
 
             {% block details_section %}
             <a href="{% url 'conception_book' book.id ch.id %}" class="book_chapter_shower">
-            {{ ch.title|truncatechars:43|lower|capfirst }}
+            {{ ch.title|truncatechars:40|lower|capfirst }}
             </a>
             <a href="{% url 'delete_chapter' book.id ch.id %}" class="book_new_chapter" title="Supprimer" onclick="return TestDelete('le chapitre {{ch.title}}')"><i class="bi bi-trash"></i></a>                            
             <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter get_the_title" title="Modifier"  data-title="{{ ch.title }}" data-pk="{{ ch.id }}"><i class="bi bi-pen"></i></a>
@@ -52,13 +52,13 @@
 
 
     <h2 class="sacado_color_text">{{ chapter }}  
-        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}"  class="chapter_new_document chapter_new_document_circle"  title="Classer les documents par chronologie"><i class="bi bi-sort-numeric-down"></i></a> 
+        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="chapter_new_document chapter_new_document_circle"  title="Classer les documents par chronologie"><i class="bi bi-sort-numeric-down"></i></a> 
         {% if chapter.parcours.id %}
         <a href="javascript:void(0);"  data-toggle="modal"  data-target="#book_new_parcours"  class="link_parcours"><i class="bi bi-pen" style="font-size:10px"></i></a>
-        <a href="{% url 'parcours_show_only_exercises' chapter.parcours.id  %}"  target="_blank" class="link_parcours"><i class="bi bi-link"></i> Vers le parcours</a>
+        <a href="{% url 'parcours_show_only_exercises' chapter.parcours.id  %}"  target="_blank" class="link_parcours"><i class="fa fa-th"></i> Vers le parcours</a>
 
         {% else %}
-        <a href="javascript:void(0);"  data-toggle="modal"  data-target="#book_new_parcours"  class="link_parcours"><i class="bi bi-link"></i> Lier un parcours</a>
+        <a href="javascript:void(0);"  data-toggle="modal"  data-target="#book_new_parcours"  class="link_parcours"><i class="fa fa-th"></i> Lier un parcours</a>
         {% endif %}          
     </h2>
 
