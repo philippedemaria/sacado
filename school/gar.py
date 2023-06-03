@@ -46,9 +46,9 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 
 
-def web_update_abonnement_xml(accounting,id_abonnement):
+def web_update_abonnement_xml(customer,id_abonnement):
     #Webservice du GAR
-    date_start, date_stop = accounting.date_payment.isoformat().split("T"), accounting.school.customer.date_stop.isoformat().split("T") 
+    date_start, date_stop = school.customer.date_start_gar.isoformat().split("T"), customer.date_stop.isoformat().split("T") 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
@@ -62,9 +62,9 @@ def web_update_abonnement_xml(accounting,id_abonnement):
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
-    body += "<nbLicenceEleve>"+str(accounting.school.nbstudents)+"</nbLicenceEleve>"
+    body += "<nbLicenceEleve>"+str(customer.school.nbstudents)+"</nbLicenceEleve>"
 
-    if not accounting.school.is_primaire :
+    if not customer.school.is_primaire :
         body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
         body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
         body += "<publicCible>DOCUMENTALISTE</publicCible>"
