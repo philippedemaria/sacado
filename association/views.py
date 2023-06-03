@@ -556,7 +556,6 @@ def customer_payment_from_modal(request,idc):
                 messages.success(request,"Abonnement réussi. Le GAR n'est pas demandé.")
             
             fa.save()
-
         else :
             print(fa.errors) 
     return redirect("update_school_admin" , customer.school.id )
