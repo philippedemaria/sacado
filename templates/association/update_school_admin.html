@@ -285,11 +285,11 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                {% if customer.school.gar %}
-                    <div class="alert alert-success">Gestion par le GAR demandée.</div>
-                {% else %}
-                    <div class="alert alert-danger">Gestion par le GAR non demandée.</div>
-                {% endif %}
+                        {% if customer.school.gar %}
+                            <div style="background-color: green;color:white">Gestion par le GAR demandée.</div>
+                        {% else %}
+                            <div style="background-color: red;color:white">Gestion par le GAR non demandée.</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">
