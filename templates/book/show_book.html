@@ -25,37 +25,29 @@
 
         {% if  request.session.show  %}
             {% if request.session.chrono  %}
-                <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default  btn_block_left btn_block_left_100">Création</a>
-                <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Projection</a>
+                <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default  btn_block_left btn_block_left_100">Création</a><a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Projection</a>
             {% else %}
-                <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default  btn_block_left btn_block_left_100">Création</a>
-                <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Projection</a>
+                <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default  btn_block_left btn_block_left_100">Création</a><a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Projection</a>
             {% endif %}
         {% else %}
             {% if request.session.chrono  %}
-                <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary  btn_block_left btn_block_left_100">Création</a>
-                <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_right">Projection</a>
+                <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary  btn_block_left btn_block_left_100">Création</a><a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_right">Projection</a>
             {% else %}
-                <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary btn_block_left btn_block_left_100">Création</a>
-                <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_right">Projection</a>
+                <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary btn_block_left btn_block_left_100">Création</a><a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_right">Projection</a>
             {% endif %}    
         {% endif %}
 
         {% if request.session.show  %}
             {% if request.session.chrono  %}
-            <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_left btn_block_left_40">Thématique</a>
-            <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Personnalisé</a>
+            <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_left btn_block_left_40">Thématique</a><a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Personnalisé</a>
             {% else %}
-            <a href="{% url 'show_book' book.id idch %}" class="btn btn-primary btn_block_left btn_block_left_40">Thématique</a>            
-            <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-default btn_block_right">Personnalisé</a>
+            <a href="{% url 'show_book' book.id idch %}" class="btn btn-primary btn_block_left btn_block_left_40">Thématique</a><a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-default btn_block_right">Personnalisé</a>
             {% endif %}
         {% else %}
             {% if request.session.chrono  %}
-            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-default btn_block_left btn_block_left_40">Thématique</a>
-            <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-primary btn_block_right">Personnalisé</a>
+            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-default btn_block_left btn_block_left_40">Thématique</a><a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-primary btn_block_right">Personnalisé</a>
             {% else %}
-            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary btn_block_left_40 btn_block_left">Thématique</a>            
-            <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default btn_block_right ">Personnalisé</a>
+            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary btn_block_left_40 btn_block_left">Thématique</a><a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default btn_block_right ">Personnalisé</a>
             {% endif %}
         {% endif %}
 
