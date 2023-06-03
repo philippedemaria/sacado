@@ -2673,7 +2673,7 @@ a.book_new_chapter:hover{
 .book_main_page{
   padding-left : 30px;
   float:left;    
-  width:70vw;   
+  width:69vw;   
 }
  
  
@@ -2736,3 +2736,21 @@ a.book_new_chapter:hover{
 /*--------------------------------------------------------------
 #   fin ---->  Livre numérique
 --------------------------------------------------------------*/
+
+.btn_block_left{
+   border-radius: 4px 0px 0px 4px;
+}
+
+.btn_block_left_40{
+   margin-left:40px;
+
+}
+
+.btn_block_left_100{
+   margin-left:104px;
+}
+
+
+.btn_block_right{
+   border-radius:  0px 4px 4px 0px ;
+}

@@ -5,16 +5,7 @@
 
 
 
-
-{% block conception_creation %}
-  
-    <a href="{% url 'show_book' book.id idch %}" class="btn btn-sacado" style="margin-left:70px"  title="Conception => Visualisation"> <i class="bi bi-pen"></i><i class="bi bi-arrow-left-right" style="margin:0px 5px"></i><i class="bi bi-eye"></i></a>
-
-{% endblock %} 
-
-
-
-
+ 
 
 {% block sommaire %}
     Sommaire <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="book_new_chapter"   title="Nouveau chapitre"   id="new_chapter_button"><i class="bi bi-plus-circle"></i> Chapitre</a>
@@ -52,7 +43,7 @@
 
 
     <h2 class="sacado_color_text">{{ chapter }}  
-        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="chapter_new_document chapter_new_document_circle"  title="Classer les documents par chronologie"><i class="bi bi-sort-numeric-down"></i></a> 
+        <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="chapter_new_document chapter_new_document_circle"  title="Vers une organisation personnalisée des documents"><i class="bi bi-sort-numeric-down"></i></a> 
         {% if chapter.parcours.id %}
         <a href="javascript:void(0);"  data-toggle="modal"  data-target="#book_new_parcours"  class="link_parcours"><i class="bi bi-pen" style="font-size:10px"></i></a>
         <a href="{% url 'parcours_show_only_exercises' chapter.parcours.id  %}"  target="_blank" class="link_parcours"><i class="fa fa-th"></i> Vers le parcours</a>
@@ -69,7 +60,7 @@
             <div class="book_main_page_section_title" style="background-color: {{ section.color}}">
                 <i class="fa fa-sort this_sorter_handle"></i> <span id="section_title{{ section.id }}">{{ section.title }}</span>   
 
-                <a href="javascript:void(0);" class="publish_section white" title="Visible par les élèves" data-section_id="{{ section.id }}">{% if section.is_publish %}<i class="bi bi-eye"></i>{% else %}<i class="bi bi-eye-slash"></i>{% endif %}</a>                
+                <a href="javascript:void(0);" class="publish_section white" title="Visible en projection" data-section_id="{{ section.id }}">{% if section.is_publish %}<i class="bi bi-eye"></i>{% else %}<i class="bi bi-eye-slash"></i>{% endif %}</a>                
 
                 <a href="javascript:void(0);" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.id }}"><i class="bi bi-pen"></i></a>
                 
@@ -88,7 +79,7 @@
                     </a> 
                     {% endif  %}
 
-                    <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                    <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
                          {{ document.icon_doctype|safe}}
                     </a><br/>
                     {% if document.doctype == 0 and document.author == request.user.teacher %}

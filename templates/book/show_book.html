@@ -20,15 +20,48 @@
     {% if book.is_student %}
         <b>{{ book.level.shortname_full|safe }}</b> <img src="{% static 'img/angle-right.png' %}"/>  Livret Elève <img src="{% static 'img/angle-right.png' %}"/> {{ book.subject.shortname }} 
     {% else %}
-        <img src="{{ book.imagefile.url }}" height="45px" />  Mon livre numérique 
- 
-        <img src="{% static 'img/angle-right.png' %}"/>  {{ book.subject.shortname }}    
 
-        {% block conception_creation %}
-            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-sacado"  style="margin-left:70px" title="Visualisation => Conception"><i class="bi bi-pen"></i><i class="bi bi-arrow-left-right" style="margin:0px 5px"></i><i class="bi bi-eye"></i></a>
-        {% endblock %}
+        <img src="{{ book.imagefile.url }}" height="45px" /> 
+
+        {% if  request.session.show  %}
+            {% if request.session.chrono  %}
+                <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default  btn_block_left btn_block_left_100">Création</a>
+                <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Projection</a>
+            {% else %}
+                <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default  btn_block_left btn_block_left_100">Création</a>
+                <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Projection</a>
+            {% endif %}
+        {% else %}
+            {% if request.session.chrono  %}
+                <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary  btn_block_left btn_block_left_100">Création</a>
+                <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_right">Projection</a>
+            {% else %}
+                <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary btn_block_left btn_block_left_100">Création</a>
+                <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_right">Projection</a>
+            {% endif %}    
+        {% endif %}
+
+        {% if request.session.show  %}
+            {% if request.session.chrono  %}
+            <a href="{% url 'show_book' book.id idch %}" class="btn btn-default btn_block_left btn_block_left_40">Thématique</a>
+            <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-primary btn_block_right">Personnalisé</a>
+            {% else %}
+            <a href="{% url 'show_book' book.id idch %}" class="btn btn-primary btn_block_left btn_block_left_40">Thématique</a>            
+            <a href="{% url 'chapter_chrono_show_document' book.id idch %}" class="btn btn-default btn_block_right">Personnalisé</a>
+            {% endif %}
+        {% else %}
+            {% if request.session.chrono  %}
+            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-default btn_block_left btn_block_left_40">Thématique</a>
+            <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-primary btn_block_right">Personnalisé</a>
+            {% else %}
+            <a href="{% url 'conception_book' book.id idch %}" class="btn btn-primary btn_block_left_40 btn_block_left">Thématique</a>            
+            <a href="{% url 'chapter_chrono_concept_document' book.id idch %}" class="btn btn-default btn_block_right ">Personnalisé</a>
+            {% endif %}
+        {% endif %}
 
     {% endif %}
+
+
 {% endblock %}
 
 
@@ -56,7 +89,7 @@ h1{margin-bottom:0px;}
                         <li class="book_chapters_in_menu {% if chapter.id == idch %}book_chapters_in_menu_selected{% endif %}">
                             <span class="book_chapter_number">{{ forloop.counter}}.</span>             
                             <a href="{% url 'show_book' book.id chapter.id %}"  class="white">
-                                {{ chapter.title|lower|capfirst|truncatechars:40 }} 
+                                {{ chapter.title|lower|capfirst|truncatechars:50 }} 
                             </a>                   
                         </li>
                     {% endfor %}
@@ -67,7 +100,7 @@ h1{margin-bottom:0px;}
                 {% block main_page %}
  
                     <h2 class="sacado_color_text">{{ chapter }}  
-                        <a href="{% url 'chapter_chrono_show_document' book.id idch %}"   title="Classer les documents par chronologie" class="chapter_new_document chapter_new_document_circle"><i class="bi bi-sort-numeric-down"></i></a> 
+                        <a href="{% url 'chapter_chrono_show_document' book.id idch %}"   title="Vers une organisation personnalisée des documents" class="chapter_new_document chapter_new_document_circle"><i class="bi bi-sort-numeric-down"></i></a> 
 
                         {% if chapter.parcours.id %}
                         <a href="{% url 'parcours_show_only_exercises' chapter.parcours.id  %}"  target="_blank" class="link_parcours"><i class="fa fa-th"></i> Vers le parcours</a>

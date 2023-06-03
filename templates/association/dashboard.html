@@ -76,8 +76,12 @@
                      <span style="font-size: 35px">Documents </span>
                 </div>
 
-                <a href="{% url 'list_documents' %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
+                <div class="small-box-footer" >
+                                    <a href="{% url 'list_documents' %}" class="white" ><i
+                        class="fa fa-arrow-circle-right"   ></i> En détails </a>
+
+                    |         <a href="{% url 'mails_parents' %}" class="white"  title="Mails parents" style="font-size: 14px"> Mails parents</a>
+                </div>
             </div>
         </div>
 

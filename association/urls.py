@@ -91,7 +91,7 @@ urlpatterns = [
 
     path('paiement_abonnement/<int:idc>', paiement_abonnement, name='paiement_abonnement'),
 
-
+    path('mails_parents', mails_parents, name='mails_parents'),
 
 
     path('pending_adhesions', pending_adhesions, name='pending_adhesions'),

@@ -185,8 +185,10 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
 
     if is_conception : 
         template =  'book/conception_book.html'
+        sections = Section.objects.filter(chapter=idch).order_by("ranking")
     else : 
         template =  'book/show_book.html'
+        sections = Section.objects.filter(is_publish=1,chapter=idch).order_by("ranking")
         context = {}
 
 
@@ -194,8 +196,7 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
         chapter = chapters.first()
     else :
         chapter = Chapter.objects.get(id=idch)
-    sections = Section.objects.filter(is_publish=1,chapter=idch).order_by("ranking")
-
+        
     mentaltitles = Mentaltitle.objects.filter(subjects = book.subject, is_display=1).order_by("ranking")
 
     all_mentals = list()
@@ -340,8 +341,11 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
                     b = Quizz.objects.get(pk=doc_id)
                     doctype = 4 
 
-                document = Document.objects.create(title = b.title, doc_id=doc_id , doctype = doctype, author = b.author, teacher = teacher, section_id = section_id , level = book.level , subject = book.subject,is_publish=1,is_share=1)
- 
+                try : 
+                    document = Document.objects.create(title = b.title, doc_id=doc_id , doctype = doctype, author = b.author, teacher = teacher, section_id = section_id , level = book.level , subject = book.subject,is_publish=1,is_share=1)
+                except :
+                    document = Document.objects.create(title = b.title, doc_id=doc_id , doctype = doctype, author = teacher, teacher = teacher, section_id = section_id , level = book.level , subject = book.subject,is_publish=1,is_share=1)
+        
             return redirect('conception_book', idb , idch )
 
         elif form_type == "new_qf_document" :
@@ -383,15 +387,25 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
 
 def show_book(request,idb,idch):
 
+    request.session["show"]  = True
+    request.session["chrono"] = False
+
     return show_conception_book(request,idb,idch,False,False)
 
  
 def conception_book(request,idb,idch):
 
+    request.session["show"]   = False
+    request.session["chrono"] = False
+
+
     return show_conception_book(request,idb,idch,True,False)
 
 
 def chapter_chrono_concept_document(request,idb,idch):
+
+    request.session["show"]   = False
+    request.session["chrono"] = True  
 
     return show_conception_book(request,idb,idch,True,True)
  
@@ -401,6 +415,10 @@ def chapter_chrono_show_document(request,idb,idch):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
+
+    request.session["show"]   = True
+    request.session["chrono"] = True
+  
 
     teacher = request.user.teacher
 

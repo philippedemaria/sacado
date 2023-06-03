@@ -1,0 +1,30 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Mails des parents d'élèves SACADO
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+ 
+
+{% block body %}
+    <section class="content_main"> 
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                {% for u in users %}
+                    {{ u.email }};
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    </div>
+{% endblock %}

@@ -2902,6 +2902,15 @@ def accept_associate(request, id):
     Associate.objects.filter(id=id).update(is_active = 1)
     return redirect('list_associate')
 
+
+@user_passes_test(user_is_board)
+def mails_parents(request):
+    users = User.objects.filter(user_type=1) 
+    context = {'users': users,   }
+
+    return render(request, 'association/mails_parents.html', context)
+
+
 #####################################################################################################################################
 #####################################################################################################################################
 ####    Voting
