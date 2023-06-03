@@ -105,7 +105,7 @@ def update_abonnement_gar(today,accounting):
 
     #host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
 
-    id_abonnement = accounting.abonnement.gar_abonnement_id
+    id_abonnement = accounting.school.customer.gar_abonnement_id
 
     host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi
     directory = '/home/sacado/'
