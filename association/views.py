@@ -746,14 +746,6 @@ def adhesions(request):
 
     customers = Customer.objects.filter(status=3)
 
-    for customer in customers :
-        la = customer.school.abonnement.last()
-        if la :
-            customer.date_stop         = la.date_stop
-            customer.gar_abonnement_id = la.gar_abonnement_id
-            customer.user              = customer.school.users.filter(is_manager=1).first()
-            customer.save()   
-
     context =  {'customers': customers , 'total_month': total_month, 'total_year': total_year, 'total_shoolyear': total_shoolyear ,'this_month' :this_month, 'activeyear' : activeyear ,'title_page' : 'abonnés' }
  
     return render(request, 'association/adhesions.html', context )
