@@ -223,12 +223,15 @@ def show_conception_book(request,idb,idch,is_conception,is_chrono):
                 'sections': sections , 'form_qf' : form_qf ,'all_mentals':all_mentals ,'teacher' : teacher , 'parcours' : parcours }
 
 
-    if is_chrono :
+    if is_chrono and chapter :
         sections = chapter.sections.all()
         documents = Document.objects.filter(section__in=sections).order_by("ranking")
 
         context.update({  'documents': documents  })
         template =  'book/chapter_chrono_concept_document.html'
+
+    else :
+        reset_all_chapters(request,idb)        
 
     if request.method == "POST" :
         if form_type == "book" :
