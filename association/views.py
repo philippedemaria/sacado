@@ -539,14 +539,14 @@ def customer_payment_from_modal(request,idc):
                 fa.status = 2
             if fa.school.gar: # appel de la fonction qui valide le Web Service
                 if not customer.gar_abonnement_id :
-                    test, raison , header , decode , ida = create_abonnement_gar( today , nf  , request.user )
+                    test, raison , header , decode , ida = create_abonnement_gar( today , fa  , request.user )
                     if test :
                         fa.gar_abonnement_id = ida
                         messages.success(request,"Abonnement réussi. Activation du GAR réussie")
                     else :
                         messages.error(request,"Activation du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
                 else :
-                    test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
+                    test, raison , header , decode , ida = update_abonnement_gar(  today , fa  )
                     if test :
                         messages.success(request,"Abonnement réussi. Modification du GAR réussie")
                     else :
