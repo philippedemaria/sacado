@@ -283,11 +283,15 @@
                 <small>La modification de la date d'échéance enclenche l'abonnement si elle est supérieure à aujourd'hui</small>              
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
                 {% if customer.school.gar %}
                     <div class="alert alert-success">Gestion par le GAR demandée.</div>
                 {% else %}
                     <div class="alert alert-danger">Gestion par le GAR non demandée.</div>
                 {% endif %}
+                    </div>
+                </div>
                 <form  action="{% url 'customer_payment_from_modal' customer.id %}" method="POST" enctype='multipart/form-data'> 
                 <table class="table borderless">                {% csrf_token %}
                     <tr>

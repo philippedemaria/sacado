@@ -490,6 +490,16 @@ def update_school_admin(request,id):
     last_accounting = accountings.last()
 
 
+
+    abonnements = Abonnement.objects.exclude(gar_abonnement_id="")
+    for a in abonnements :
+        try :
+            a.school.customer.date_start_gar = a.date_start
+            a.school.customer.save()
+        except :
+            pass
+
+
     form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
 
     form_accounting = AccountingForm(request.POST or None )
