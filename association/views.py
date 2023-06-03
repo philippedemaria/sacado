@@ -1822,7 +1822,7 @@ def create_accounting(request,tp,ids):
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1,current_year= this_year ).update(amount = am) 
 
 
-            if tp == 2 :
+            elif tp == 2 :
 
                 if nf.is_credit :
                     if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year):
