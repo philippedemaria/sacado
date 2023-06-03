@@ -292,28 +292,32 @@
                 {% endif %}
                     </div>
                 </div>
-                <form  action="{% url 'customer_payment_from_modal' customer.id %}" method="POST" enctype='multipart/form-data'> 
-                <table class="table borderless">                {% csrf_token %}
-                    <tr>
-                        <td colspan='2'>{{ form_abo.actual |add_class:"form-control select2"}}  {{ form.actual.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td>Date d'échéance <br/><small>Effacer la date avant modification</small>  </td><td>{{ form_abo.date_stop|add_class:"datepicker"}} {{ form_abo.date_stop.errors }}</td>
-                    </tr>
-                    <tr class="no_visu_on_load" id="date_receipt">
-                        <td colspan='2'><div  style="background-color: green;padding:10px;color:white">Abonnement activé</div></td>
-                    </tr>
-                    <tr>
-                        <td>Prise d'abonnement</td><td>{{ form_abo.gestion|add_class:"form-control select2"}}   {{ form_abo.gestion.errors }}</td>
-                    </tr>
-                </table>
- 
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form  action="{% url 'customer_payment_from_modal' customer.id %}" method="POST" enctype='multipart/form-data'> 
+                        <table class="table borderless">                {% csrf_token %}
+                            <tr>
+                                <td colspan='2'>{{ form_abo.actual |add_class:"form-control select2"}}  {{ form.actual.errors }}</td>
+                            </tr>
+                            <tr>
+                                <td>Date d'échéance <br/><small>Effacer la date avant modification</small>  </td><td>{{ form_abo.date_stop|add_class:"datepicker"}} {{ form_abo.date_stop.errors }}</td>
+                            </tr>
+                            <tr class="no_visu_on_load" id="date_receipt">
+                                <td colspan='2'><div  style="background-color: green;padding:10px;color:white">Abonnement activé</div></td>
+                            </tr>
+                            <tr>
+                                <td>Prise d'abonnement</td><td>{{ form_abo.gestion|add_class:"form-control select2"}}   {{ form_abo.gestion.errors }}</td>
+                            </tr>
+                        </table>
+         
 
-                <input value="Enregistrer l'échéance" type="submit" class="btn btn-primary" name="validation_demande"   />
-           
-                <a href="javascript:history.back()"><input type="button" value="Annuler"
-                                                   class="btn btn-default "/></a>
-                </form>
+                        <input value="Enregistrer l'échéance" type="submit" class="btn btn-primary" name="validation_demande"   />
+                   
+                        <a href="javascript:history.back()"><input type="button" value="Annuler"
+                                                           class="btn btn-default "/></a>
+                        </form>
+                    </div>
+                </div> 
             </div> 
         </div>
     </div>        
