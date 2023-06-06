@@ -380,7 +380,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     username   = dico_received["IDO"][0]
     password   = make_password("sacado_gar")
 
-    if Customer.objects.filter( school__code_acad = uai ,  date_stop__gte = today , status__gte=2 ) : 
+    if Customer.objects.filter( school__code_acad = uai ,  date_stop__gte = today  ) : 
 
         divs = dico_received["DIV"]
         gros = dico_received["GRO"]
