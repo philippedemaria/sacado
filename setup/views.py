@@ -380,7 +380,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     username   = dico_received["IDO"][0]
     password   = make_password("sacado_gar")
 
-    if Customer.objects.filter( school__code_acad = uai ,  date_stop__gte = today , status=3 ) : 
+    if Customer.objects.filter( school__code_acad = uai ,  date_stop__gte = today , status__gte=2 ) : 
 
         divs = dico_received["DIV"]
         gros = dico_received["GRO"]
@@ -561,7 +561,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
         # else :
         #     messages.error(request,"Votre catégorie de PERSONNEL n'est pas reconnue. Contacter votre administrateur GAR.")
         #     return redirect('index')
-
+        # pbkdf2_sha256$180000$F7ef9xEiScUx$rB9DXm380T29cbGxC5KPdnhZ7Lw0KyWa9ypZcKvyVks=
         #########################################################
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
