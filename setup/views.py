@@ -561,7 +561,9 @@ def ressource_sacado(request): #Protection saml pour le GAR
         # else :
         #     messages.error(request,"Votre catégorie de PERSONNEL n'est pas reconnue. Contacter votre administrateur GAR.")
         #     return redirect('index')
-        # pbkdf2_sha256$180000$F7ef9xEiScUx$rB9DXm380T29cbGxC5KPdnhZ7Lw0KyWa9ypZcKvyVks=
+        #
+        #########################################################
+        # mdp sacado_gar = pbkdf2_sha256$180000$F7ef9xEiScUx$rB9DXm380T29cbGxC5KPdnhZ7Lw0KyWa9ypZcKvyVks=
         #########################################################
         user_authenticated = authenticate( username= username, password= "sacado_gar")
  
