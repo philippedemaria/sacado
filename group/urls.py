@@ -78,6 +78,15 @@ urlpatterns = [
     path('book_bilan_group/<int:idg>', book_bilan_group , name='book_bilan_group'),
 
 
+    path('homeless_group/<int:id>', homeless_group, name='homeless_group'),
+    path('ajax_add_homeworkless/', ajax_add_homeworkless, name='ajax_add_homeworkless'),
+    path('ajax_add_toolless/', ajax_add_toolless, name='ajax_add_toolless'),
+    path('ajax_remove_homeworkless/', ajax_remove_homeworkless , name='ajax_remove_homeworkless'),
+    path('ajax_remove_toolless/', ajax_remove_toolless, name='ajax_remove_toolless'),
+ 
+    path('ajax_remove_homeworkless_mini/', ajax_remove_homeworkless_mini , name='ajax_remove_homeworkless_mini'),
+    path('ajax_remove_toolless_mini/', ajax_remove_toolless_mini, name='ajax_remove_toolless_mini'),
+
 
 ]
  

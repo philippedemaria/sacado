@@ -15,7 +15,7 @@ from django.db.models import Avg, Count, Min, Sum
 
 from account.models import Student, Teacher, Parent, Adhesion, User, Resultknowledge, Resultlastskill, Resultskill
 from account.forms import UserForm
-from group.models import Group, Sharing_group
+from group.models import * 
 from socle.models import Knowledge, Theme, Level, Skill
 from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker , Folder
 from group.forms import GroupForm , GroupTeacherForm
@@ -2546,3 +2546,104 @@ def schedule_task_group(request, id):
     context = {  'group': group, 'relationships' : relationships , 'teacher' : teacher  }
 
     return render(request, 'schedule/base_group.html', context )
+
+
+
+def homeless_group(request, id):
+    
+    group = Group.objects.get(id=id)
+    teacher =   request.user.teacher
+    request.session["group_id"] = group.id   
+
+    context = {  'group': group, }
+
+    return render(request, 'group/homeless_group.html', context )
+
+
+
+
+@csrf_exempt
+def ajax_add_homeworkless(request):
+    student_id = int(request.POST.get("student_id"))
+    today      = time_zone_user(request)
+    date       = today.date()
+    data = { }    
+    homeworkless, created = Homeworkless.objects.get_or_create(student_id=student_id,date=date)
+    if created :
+        data["create"] ="yes"
+    else :
+        data["create"] ="no"
+
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def ajax_remove_homeworkless(request):
+    h_id = int(request.POST.get("h_id"))
+    
+    homeworkless = Homeworkless.objects.filter( id = h_id ).delete()
+  
+    data = { }
+    return JsonResponse(data)
+
+
+
+
+
+
+@csrf_exempt
+def ajax_add_toolless(request):
+    student_id = int(request.POST.get("student_id"))
+    today      = time_zone_user(request)
+    date       = today.date()
+    toolless, created = Toolless.objects.get_or_create(student_id=student_id,date=date)
+    data = { }    
+    if created :
+        data["create"] ="yes"
+    else :
+        data["create"] ="no"
+
+    return JsonResponse(data)
+ 
+
+
+@csrf_exempt
+def ajax_remove_toolless(request):
+
+    t_id = int(request.POST.get("t_id"))
+    
+    Toolless.objects.filter( id = t_id ).delete()
+ 
+    data = { }
+    return JsonResponse(data)
+
+
+
+
+
+@csrf_exempt
+def ajax_remove_homeworkless_mini(request):
+
+    student_id = int(request.POST.get("student_id"))
+    try :
+        homeworkless = Homeworkless.objects.filter( student_id = student_id ).last()
+        homeworkless.delete()
+    except :
+        pass
+    data = { }
+    return JsonResponse(data)
+
+ 
+
+@csrf_exempt
+def ajax_remove_toolless_mini(request):
+
+    student_id = int(request.POST.get("student_id"))
+    try :
+        tool = Toolless.objects.filter( student_id = student_id ).last()
+        tool.delete()
+    except :
+        pass
+
+    data = { }
+    return JsonResponse(data)

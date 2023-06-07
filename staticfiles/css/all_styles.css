@@ -2754,3 +2754,40 @@ a.book_new_chapter:hover{
 .btn_block_right{
    border-radius:  0px 4px 4px 0px ;
 }
+
+
+/*--------------------------------------------------------------
+#    ---->  Oublis
+--------------------------------------------------------------*/
+.remove_homeworkless_mini, .remove_toolless_mini{
+    display:none;
+  }
+
+
+@media (max-width:991px){
+
+    .remove_homeworkless, .remove_toolless{
+        display:none;
+      }
+
+
+
+    .remove_homeworkless_mini, .remove_toolless_mini{
+        padding:3px;
+        background-color: #913225 ;
+        color:white;
+        float: right;
+        border-radius: 3px;
+        width:17px;
+        display: block;
+      }
+
+
+    .remove_homeworkless_mini:hover, .remove_toolless_mini:hover{
+      display:none;
+    } 
+
+
+
+
+}

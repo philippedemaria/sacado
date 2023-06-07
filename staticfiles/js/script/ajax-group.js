@@ -52,32 +52,6 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
             });
 
    
-   
-        // $('.delete_student_profile').on('click', function () {
-
-        //     let student_id = $(this).attr("data-student_id");
-        //     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
-        //     $.ajax(
-        //         {
-        //             type: "POST",
-        //             dataType: "json",
-        //             data: {
-        //                 'student_id': student_id,
-        //                 csrfmiddlewaretoken: csrf_token
-        //             },
-        //             url: "../../ajax_delete_student_profiles",
-        //              success: function (data) {
-        //                 $('#profile_incognito'+student_id).remove();
-        //             }
-        //         }
-        //     )
-
-        //     });
-
-
-
-
 
 
         // Affiche dans la modal la liste des élèves du groupe sélectionné
@@ -302,39 +276,162 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
 
 
 
-        // $("#id_recuperation").change(function () {
-        //         if ($("#id_recuperation").is(":checked")) {
+        $('.add_homeworkless').on('click', function () {
 
-        //             let level_id   = $("#id_level").val();
-        //             let subject_id = $("#id_subject").val();
-        //             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        //             let is_update  = $("#is_update").val();
+            let student_id = $(this).data("student_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_add_homeworkless/",
+                     success: function (data) {                        
+                        var nb = parseInt( $('#homeworkless'+student_id).html() ) + 1;
+                        if (data.create == "yes")
+                        { $('#homeworkless'+student_id).html(nb);}
+                        else {
+                            alert("Enregistrement déjà effectué pour ce jour")
+                        }
+                    }
+                }
+            )
 
-        //             if (is_update=="yes") {  url = "../../ajax_choose_parcours" } else { url = "ajax_choose_parcours"}
-        //                 $.ajax(
-        //                     {
-        //                         type: "POST",
-        //                         dataType: "json",
-        //                         data: {
-        //                             'subject_id' :  subject_id, 
-        //                             'level_id'   :  level_id, 
-        //                             csrfmiddlewaretoken : csrf_token
-        //                         },
-        //                         url: url,
-        //                         success: function (data) {
-        //                             $('#choosen_parcours_by_this_level_and_subject').html("").html(data.html);
-        //                         }
-        //                     }
-        //                 )
+            });
 
-        //             $("#choosen_parcours_for_this_level_and_subject").show(500);
-        //             $("#choosen_parcours_by_this_level_and_subject").show(500);
-       
-        //         } else {
-        //             $("#choosen_parcours_for_this_level_and_subject").hide(500);
-        //             $("#choosen_parcours_by_this_level_and_subject").hide(500);
-        //         }
-        //     });
+
+
+        $('.remove_homeworkless').on('click', function () {
+
+            let h_id = $(this).data("h_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).data("student_id");
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'h_id': h_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_remove_homeworkless/",
+                     success: function (data) {
+                        var nb = parseInt( $('#homeworkless'+student_id).html() ) - 1;
+                        $('#h_'+h_id).remove();
+                        $('#homeworkless'+student_id).html(nb);
+                    }
+                }
+            )
+
+            });
+
+
+        $('.add_toolless').on('click', function () {
+
+            let student_id = $(this).data("student_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_add_toolless/",
+                     success: function (data) {
+                        var nb = parseInt( $('#toolless'+student_id).html() ) + 1;
+                        if (data.create == "yes")
+                        { $('#toolless'+student_id).html(nb);}
+                        else {
+                            alert("Enregistrement déjà effectué pour ce jour")
+                        }
+                    }
+                }
+            )
+
+            });
+
+
+        $('.remove_toolless').on('click', function () {
+
+            let t_id = $(this).data("t_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).data("student_id");
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        't_id': t_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_remove_toolless/",
+                     success: function (data) {
+                        var nb = parseInt( $('#toolless'+student_id).html() ) - 1;
+                        $('#t_'+t_id).remove();
+                        $('#toolless'+student_id).html(nb);
+                    }
+                }
+            )
+
+            });
+
+
+
+        $('.remove_homeworkless_mini').on('click', function () {
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).data("student_id");
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_remove_homeworkless_mini/",
+                     success: function (data) {
+                        var nb = parseInt( $('#homeworkless'+student_id).html() ) - 1;
+                        $('#toolless'+student_id).html(nb);
+                    }
+                }
+            )
+        });
+
+
+
+
+        $('.remove_toolless_mini').on('click', function () {
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            let student_id = $(this).data("student_id");
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'student_id': student_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../ajax_remove_toolless_mini/",
+                     success: function (data) {
+                        var nb = parseInt( $('#toolless'+student_id).html() ) - 1;
+                        $('#toolless'+student_id).html(nb);
+                    }
+                }
+            )
+        });
+
+
+
+
 
        
     });

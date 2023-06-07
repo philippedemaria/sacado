@@ -294,3 +294,23 @@ class Sharing_group(models.Model):
  
     
 
+
+
+class Homeworkless(models.Model):
+
+    date    = models.DateField(null=True, blank=True, editable= False)
+    student = models.ForeignKey(Student, related_name="homeworkless", on_delete=models.CASCADE,  null=True, blank=True, editable= False)
+
+    def __str__(self):
+        return "{}".format(self.date)
+
+
+
+class Toolless(models.Model):
+
+    date    = models.DateField(null=True, blank=True, editable= False)
+    student = models.ForeignKey(Student, related_name="toolless", on_delete=models.CASCADE,  null=True, blank=True, editable= False)
+
+    def __str__(self):
+        return "{}".format(self.date)
+

@@ -1,0 +1,80 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common2.js' %}"></script> 
+    <script>
+        require(['script/ajax-dashboard']);
+        require(['script/ajax-group']);
+    </script>
+{% endblock %}
+
+
+
+{% block page_title %}
+    <i class='bi bi-slash-circle'></i> Oublis du groupe {{ group.name }}
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+
+
+{% block body %}
+    <section class="content_main"> 
+        <form method="POST">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-sacado  table-hover">
+                    <thead>
+                    <tr>
+                        <td>Nom</td>
+                        <td>Nbre</td>
+                        <td></td>
+                        <td>Dates</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in group.just_students %}
+                            <tr>
+                                <td rowspan="2"  style="width:100px">
+                                    {{ student }}
+                                </td>
+                                <td style="font-size:10px;width:70px">
+                                    Travail non fait 
+                                    <a href="javascript:void();" class="remove_homeworkless_mini" title="Erreur" data-student_id="{{ student.user.id }}"><i class="bi bi-dash-circle-dotted"></i></a> 
+                                </td>
+                                <td style="width:50px" id="homeworkless{{ student.user.id }}">{{ student.homeworkless.count }}</td>
+                                <td style="font-size:10px">
+                                    {% for h in student.homeworkless.all %}
+                                        <a href="javascript:void();" id="h_{{ h.id }}" class="remove_homeworkless text-danger" data-h_id="{{ h.id }}" title="Supprimer" data-student_id="{{ student.user.id }}">{{ h.date|date:"d-m-Y" }} <i class="bi bi-x"></i> |</a>  
+                                    {% endfor %}
+                                    <a href="javascript:void();" class="add_homeworkless btn btn-sacado" data-group_id="{{ group.id }}" data-student_id="{{ student.user.id }}"><i class="bi bi-plus-circle-dotted"></i></a>
+                                </td>                                 
+                            </tr>
+                            <tr>
+                                <td style="font-size:10px">
+                                    Matériel oublié
+                                    <a href="javascript:void();" class="remove_toolless_mini" title="Erreur" data-student_id="{{ student.user.id }}"><i class="bi bi-dash-circle-dotted"></i></a> 
+                                </td>
+                                <td id="toolless{{ student.user.id }}">{{ student.toolless.count }}</td>
+                                <td style="font-size:10px">
+                                    {% for t in student.toolless.all %}
+                                        <a href="javascript:void();"  id="t_{{ t.id }}" class="remove_toolless text-danger" data-t_id="{{ t.id }}"  title="Supprimer" data-student_id="{{ student.user.id }}">{{ t.date|date:"d-m-Y" }} <i class="bi bi-x"></i> |</a>  
+                                    {% endfor %}
+                                    <a href="javascript:void();" class="add_toolless btn btn-sacado" data-group_id="{{ group.id }}" data-student_id="{{ student.user.id }}"><i class="bi bi-plus-circle-dotted"></i> </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </form>
+
+    </section>
+{% endblock %}

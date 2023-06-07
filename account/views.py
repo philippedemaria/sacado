@@ -27,7 +27,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from account.decorators import user_can_read_details, who_can_read_details, can_register, is_manager_of_this_school
-from account.models import User, Teacher, Student, Resultknowledge, Parent , Response , Newpassword , Avatar , Background
+from account.models import *
 from group.models import Group, Sharing_group
 from qcm.models import Exercise, Parcours, Relationship, Resultexercise, Studentanswer
 from sendmail.models import Communication

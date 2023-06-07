@@ -120,4 +120,9 @@ urlpatterns = [
     path('ajax_charge_school_by_rne/', ajax_charge_school_by_rne, name='ajax_charge_school_by_rne'),
 
 
+
+
+
+
+
 ]

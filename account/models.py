@@ -646,6 +646,7 @@ class Student(ModelWithCode):
 
 
 
+
 class Adhesion(models.Model):
     """docstring for Facture"""
     amount     = models.DecimalField(max_digits = 6,decimal_places=2,  verbose_name="Montant", editable= False)

@@ -188,15 +188,17 @@
                                 </div>
                             </div>
                             <div class="row">                    
-                                <div class="col-lg-3 col-xs-3" style="padding-right:0px">
+                                <div class="col-lg-4 col-xs-4" style="padding-right:0px">
                                     <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer le groupe"><i class="bi bi-gear"></i></a> 
                                     <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe"><i class="bi bi-arrow-right-circle"></i></a> 
+                                    <a href="{% url 'homeless_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Oublis"><i class="bi bi-slash-circle"></i></a> 
+
                                 </div>
 
                                 <div class="col-lg-4 col-xs-4" style="padding-right:0px;padding-top:5px;text-align:right">
                                     <a  href="{% url 'result_group_exercise'  group.id %}"  style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><span class="small_displayer"><i class="fa fa-mortar-board"></i> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
                                 </div> 
-                                <div class="col-lg-5 col-xs-5" style="padding-right:0px" align="right">
+                                <div class="col-lg-4 col-xs-4" style="padding-right:0px" align="right">
 
                                     {% if not is_gar_check  and group.student_view %}
                                     <a href="{% url 'switch_teacher_student' group.id %}" class="label_small_box" style=" color:{{ group.color|contrast_color }};" title="Prendre la vue élève"><i class="bi bi-eyeglasses"></i></a> 
