@@ -339,10 +339,10 @@ class Exercise(models.Model):
     level       = models.ForeignKey(Level, related_name="exercises", on_delete=models.PROTECT, verbose_name="Niveau")
     theme       = models.ForeignKey(Theme, related_name="exercises", on_delete=models.PROTECT, verbose_name="Thème")
     knowledge   = models.ForeignKey(Knowledge, on_delete=models.PROTECT, related_name='exercises',verbose_name="Savoir faire associé - Titre")
-    supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises", on_delete=models.CASCADE, verbose_name="Fichier Géogebra")
+    supportfile = models.ForeignKey(Supportfile, blank=True, default=1, related_name="exercises", on_delete=models.CASCADE, verbose_name="Enoncé")
     ranking     = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
-    audiofile   = models.FileField(upload_to=audio_directory_path, verbose_name="Fichier Audio", blank=True, default="" )
-
+    audiofile   = models.FileField(upload_to = audio_directory_path, verbose_name="Fichier Audio", blank=True, default="" )
+    codebook    = models.CharField(max_length=5,  blank=True, default='', verbose_name="Code Livre",editable=False)
 
     def __str__(self):
         return "{}".format(self.knowledge.name)

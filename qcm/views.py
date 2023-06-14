@@ -86,13 +86,48 @@ def is_sacado_asso(this_user, today):
     is_sacado = False
     is_active = False
     try :
-        abonnement = this_user.school.abonnement.last()
-        if today < abonnement.date_stop and abonnement.is_active :
+        customer = this_user.school.customer 
+        if today.date() < customer.date_stop  :
             is_sacado = True
             is_active = True
     except :
         pass
+
+    if this_user.is_superuser :
+        is_sacado = True
+        is_active = True
+        
     return is_sacado, is_active
+
+
+
+def change_code_exercises_to_book():
+
+    carateres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    exercises = Exercises.objects.filter(theme__subject__is_active=1)
+    compteurs = dict()
+
+    for l in Level.objects.exclude(pk=13).order_by("ranking"):
+        for s in Subject.objects.filter(is_active=1):
+            compteurs[(l,s)]=0
+
+
+    for exercise in exercises :
+        level   = exercise.level.id
+        subject = exercise.theme.subject.id
+        cpt     = compteurs[(level,subject)]
+        q       = cpt//len(caracteres)  
+        r       = cpt%len(caracteres) 
+
+        exercise.codebook =  caracteres[level] +str(subject)+ caracteres[q] + caracteres[r] 
+        exercise.save()
+        compteurs[(level,subject)] +=1
+
+
+
+
+
 
 
 #################################################################
@@ -6461,8 +6496,21 @@ def insert_form(looper,fa,dico):
     liste = list()
     for loop in range(int(dico['subloop'+str(looper)][0])) :
         d={key:value for key,value in dico.items() if "supportsubchoices-"+str(looper)+"_"+str(loop) in key}
-         
 
+
+
+def get_this_codebook(nf) :
+
+    carateres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    level_id = nf.level.id, 
+    subject_id = nf.theme.subject.id
+    exercise = Exercise.objects.filter(level=nf.level, knowledge__subject = nf.theme.subject).order_by("id").last()
+    e_id     = exercise.id + 1
+    q        = e_id//len(caracteres)  
+    r        = e_id%len(caracteres) 
+    codebook = caracteres[level] +str(subject)+ caracteres[q] + caracteres[r] 
+    return codebook
+ 
 
 def create_supportfile(request,qtype,ids):
     """ Création d'un supportfile"""
@@ -6525,7 +6573,8 @@ def create_supportfile(request,qtype,ids):
                           
             nf.save()
             form.save_m2m()
-            Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme )
+            codebook = get_this_codebook(nf)
+            Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme,codebook=codebook )
 
             if qt.is_alea :
                 form_var = formSetvar(request.POST or None,  instance = nf) 
