@@ -443,12 +443,17 @@ def new_customer(request):
     if request.method == 'POST' :
         rne = request.POST.get('rne',None)
         if rne :
-            school = School.objects.filter(code_acad=rne).first()
-            Customer.objects.get_or_create(school=school, defaults={ 'name' : school.name , 'address' : school.address, 'complement' : school.complement, 'town' : school.town, 'country' : school.country, 'status': 3} )
-            return redirect('all_schools')
-    context = { }
+            this_user_id = request.POST.get('this_user_id',None)
 
+            school = School.objects.filter(code_acad=rne).first()
+            c ,cr = Customer.objects.get_or_create(school=school, defaults={ 'user_id' : this_user_id , 'phone' :  "0000000000" , 'status': 2, 'actual' : 1,
+                                             'gestion' : 'En direct' , 'date_stop': None,   'date_start_gar': None, 'gar_abonnement_id': "", 'is_display_button': 0 } )
+
+            print(school)
+            return redirect('update_school_admin' , school.id)
+    context = { }
     return render(request, 'association/new_customer.html', context ) 
+
 
 
 @user_passes_test(user_is_board)
@@ -477,6 +482,8 @@ def ajax_new_customer(request):
     school = School.objects.filter(code_acad=rne).first()
     data = {}
     data["html"] = school.name + ", "+school.town+ ", "+school.country.name
+    data["users"] = list(school.users.filter(user_type=2).values_list("id",'last_name'))
+
     return JsonResponse(data)
 
 
@@ -488,7 +495,6 @@ def update_school_admin(request,id):
     school = School.objects.get(id=id)
     accountings = school.accountings.order_by("chrono")
     last_accounting = accountings.last()
-
 
     form = SchoolForm(request.POST or None, request.FILES  or None, instance=school)
 
@@ -1797,7 +1803,7 @@ def create_accounting(request,tp,ids):
 
             if tp == 0 :
                 if nf.is_credit :
-                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, current_year = this_year):
+                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, current_year = this_year):
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am ,current_year= this_year)  
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am ,current_year= this_year) 
                     else :
@@ -1805,7 +1811,7 @@ def create_accounting(request,tp,ids):
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0,current_year= this_year ).update(amount = -am)  
                 else :
                    
-                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
+                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am ,current_year= this_year)  
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am ,current_year= this_year)
                     else :
@@ -1816,7 +1822,7 @@ def create_accounting(request,tp,ids):
             elif tp == 2 :
 
                 if nf.is_credit :
-                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year):
+                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year):
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am,current_year= this_year )  
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am,current_year= this_year ) 
                     else :
@@ -1824,7 +1830,7 @@ def create_accounting(request,tp,ids):
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0 ,current_year= this_year).update(amount = -am)  
                 else :
                    
-                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
+                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am,current_year= this_year )  
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am ,current_year= this_year)
                     else :
@@ -1835,7 +1841,7 @@ def create_accounting(request,tp,ids):
             else :
 
                 if nf.is_credit :
-                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year):
+                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year):
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am,current_year= this_year )  
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am,current_year= this_year ) 
                     else :
@@ -1843,7 +1849,7 @@ def create_accounting(request,tp,ids):
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0,current_year= this_year ).update(amount = -am)  
                 else :
                    
-                    if not Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
+                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am,current_year= this_year )  
                         Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am ,current_year= this_year)
                     else :
@@ -2038,7 +2044,6 @@ def update_accounting(request, id,tp):
 
 
                 if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, current_year = current_year).count() == 0   : 
-       
                     Accountancy.objects.create(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0 , amount = som , current_year = current_year )  
                     Accountancy.objects.create(accounting_id = accounting.id , ranking = 2 , plan_id = 706 , is_credit = 1 , amount = som , current_year = current_year)
                 elif  som != valeur :
