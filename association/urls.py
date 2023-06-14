@@ -97,12 +97,18 @@ urlpatterns = [
     path('pending_adhesions', pending_adhesions, name='pending_adhesions'),
     path('prospec_schools', prospec_schools, name='prospec_schools'),
     path('prospec_to_adhesions', prospec_to_adhesions, name='prospec_to_adhesions'),
-    path('list_historic_schools', list_historic_schools, name='list_historic_schools'),
+
 
     path('contact_prosp', contact_prosp, name='contact_prosp'),
 
     path('customers_pending', customers_pending, name='customers_pending'),
 
+
+    ### -------------------------  Bouton d'adhésion
+    path('ajax_display_button', ajax_display_button, name='ajax_display_button'),
+    path('ajax_display_all_buttons', ajax_display_all_buttons, name='ajax_display_all_buttons'),
+
+    
     ### -------------------------  GAR
     path('abonnements_gar', abonnements_gar, name='abonnements_gar'),
     path('delete_abonnement_gar/<slug:idg>', delete_abonnement_gar, name='delete_abonnement_gar'),

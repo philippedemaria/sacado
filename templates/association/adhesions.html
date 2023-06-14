@@ -73,12 +73,20 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-12">
+            <form action="" method="POST">
+            {% csrf_token %}
             <table  class="standard_tab_sort300 table table-sacado table-striped table-hover table-responsive">
                 <thead>
                 <tr>
                     <td style="width:180px">Chrono</td>                    
                     <td style="width:150px">Date d'échéance</td>                     
-                    <td>Etablissement</td>
+                    <td>
+                        <a href="javascript:void();" id="display_button">
+                            <i class="bi bi-database-fill" 
+                                    title="Afficher/cacher les boutons d'adhésion"></i>
+                        </a> 
+                        Etablissement
+                    </td>
                     <td>Pays , Ville </td>
                     <td>GAR </td>
                     <td>Contact </td>
@@ -94,7 +102,13 @@
                                 <span >{{ customer.date_stop|date:"Y-m-d" }} </span> 
                             </td>
                             <td>
+                                <a href="javascript:void();" id="display_button{{customer.id}}" class="displayer_button" data-customer_id="{{customer.id}}">
+                                    <i class="bi {% if customer.is_display_button %}bi-database-fill-down text-success{% else %}bi-database-dash text-danger{% endif %}" 
+                                    title="{% if customer.is_display_button %}Le bouton d'adhésion est affiché. Cacher{% else %}Le bouton d'adhésion est caché.  Afficher{% endif %} le bouton d'adhésion"></i>
+                                </a>                                 
                                 <span class="helper_tip">
+
+
                                     <a href="{% url 'update_school_admin'  customer.school.id %}">{{ customer.school.name|lower|capfirst }}</a>
                                     <div class="helper_tip_text" > {{  customer.last_accounting.observation|safe }}</div>
                                 </span>
@@ -118,6 +132,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            </form>
         </div>
     </div>
 

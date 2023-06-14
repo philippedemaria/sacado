@@ -79,30 +79,16 @@
             </div>
         </div>
 
-        {% if school.customer.status == 2  %}
-        <div class="row alert alert-sacado">
-            <div class="col-sm-12 col-md-12">  
-                Une demande d'adhésion a été envoyée. La demande est en cours de traitement.  
+        {% if request.user.school.customer.is_display_button %} 
+        <div class="row">
+            <div class="col-sm-12 col-md-12"> 
+                <div class="alert alert-sacado">
+                    <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-warning">Abonnement nouvelle année scolaire</a>   <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>  
+                </div>
             </div>
         </div>
         {% endif %}
 
-
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                {% if is_quite_finish %}
-                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Abonnement Nouvelle Année Scolaire</a>
-                {% elif  school.customer and  school.customer.status > 1 %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">   
-                        </div>
-                    </div>
-                {% elif  school.customer and school.customer.status < 2 %}
-                <a href="{% url 'renew_school_adhesion' %}" class="btn btn-warning" onclick="return TestRenew('cette adhésion')">Réabonnement Nouvelle Année Scolaire</a>
-                {% endif %}
-                <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
-            </div>
-        </div>
 
     </section>
 {% endblock %}

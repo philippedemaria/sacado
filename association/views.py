@@ -3230,12 +3230,32 @@ def contact_prosp(request):
 
     return render(request, 'association/contact_prosp.html', context )
 
+ 
 
+def ajax_display_button(request):    
 
+    customer_id =  int(request.POST.get("customer_id"))
+    customer =  Customer.objects.get(pk=customer_id)
+    data = {}
+    if customer.is_display_button :
+        customer.is_display_button = 0
+        html = "<i class='bi bi-database-dash text-danger' title='Le bouton d\'adhésion est caché. Afficher le bouton d\'adhésion'></i>"
+    else :
+        customer.is_display_button = 1
+        html = "<i class='bi bi-database-fill-down text-success' title='Le bouton d\'adhésion est affiché. Cacher le bouton d\'adhésion'></i>"
+    customer.save()
 
+    data['html'] = html
 
-@user_passes_test(user_is_board)
-def list_historic_schools(request):    
-    pass
+    return JsonResponse(data)
+
+ 
+def ajax_display_all_buttons(request):    
+
+    Customer.objects.all().update(is_display_button=1)
+    data = {}
+    data['html'] =  "<i class='bi bi-database-fill-down text-success' title='Le bouton d\'adhésion est affiché. Cacher le bouton d\'adhésion'></i>"
+
+    return JsonResponse(data)
 
  

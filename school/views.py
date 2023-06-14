@@ -901,9 +901,9 @@ def renew_school_adhesion(request):
 	          settings.DEFAULT_FROM_EMAIL ,
 	          [user.email, "sacado.asso@gmail.com"])
 
+	messages.success(request,"Vous venez d'envoyer une demande d'adhésion à l'associaton SACADO. Ce bouton disparaitra lorsque notre trésorier traitera votre opération. Merci pour votre confiance. L'équipe SACADO.")
+
 	context =  {  'school' : school  , 'user' : user   }
-
-
 	return render(request, 'school/renew_school_adhesion.html', context)
 
 

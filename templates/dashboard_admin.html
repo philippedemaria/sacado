@@ -135,10 +135,9 @@
                  
                                 </div>
                                 <div class="inner">
-                                    Token 
-                                    <span class="helper_tip" style="font-size: 12px; color:#FFF"> <i class="fa fa-question-circle"></i>
-                                        <div class="helper_tip_text" >Ce token est à donner aux enseignants de votre établissement pour s'enregistrer.</div>
-                                    </span> :   {{ school.code_acad}}_{{ school.id }}  
+                                    {% if school.customer.is_display_button %} 
+                                        <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-warning">Demande d'adhésion</a>
+                                    {% endif %}
                                 </div>
 
  

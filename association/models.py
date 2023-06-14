@@ -328,10 +328,11 @@ class Customer(models.Model):
     phone     = models.CharField(max_length=255, blank=True ,  verbose_name="Téléphone")
     status    = models.PositiveSmallIntegerField(default=2,choices=STATUS)
     actual    = models.PositiveSmallIntegerField(default=1,choices=ACTUALS)
+    gestion   = models.CharField(max_length=255, default='En direct',  blank=True, choices=GESTIONS)    
     date_stop           = models.DateField( blank=True,  null=True,  verbose_name="Fin d'abonement")
     date_start_gar      = models.DateField( blank=True,  null=True,  verbose_name="Abonement GAR")
     gar_abonnement_id   = models.CharField(max_length=255, default='',  blank=True, editable=False)
-    gestion   = models.CharField(max_length=255, default='En direct',  blank=True, choices=GESTIONS)
+    is_display_button   = models.BooleanField(default=0,  blank=True, editable=False)
 
 
     def __str__(self):

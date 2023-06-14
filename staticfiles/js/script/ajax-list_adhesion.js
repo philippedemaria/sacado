@@ -82,8 +82,57 @@ define(['jquery', 'bootstrap' ], function ($) {
 
 
 
+ 
+        $('.displayer_button').on('click', function (event) {
+
+            let customer_id = $(this).data('customer_id');
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+ 
+                        'customer_id': customer_id,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "ajax_display_button",
+                    success: function (data) {
+
+                       $("#display_button"+customer_id).html(data.html) ;
+
+                    }
+                }
+            )
+        });
 
 
+ 
+        $('#display_button').on('click', function (event) {
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            if (confirm("Confirmer l'affichage de TOUS les boutons d'adhésion ?")) {
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: "ajax_display_all_buttons",
+                        success: function (data) {
+
+                           $(".displayer_button").html(data.html) ;
+
+                        }
+                    }
+                )
+                } 
+
+        });
 
 
 

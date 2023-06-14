@@ -1574,56 +1574,56 @@ def add_adhesion(request) :
 
     if request.method == "POST" :
         if form.is_valid():
-            #end = today + timedelta(days=7)
-            end = datetime(2022,8,31) 
-            form_user = form.save(commit=False)
-            form_user.closure = end
-            form_user.school_id = 50
-            form_user.cgu = 1
-            form_user.country_id = 4
-            form_user.user_type = 0
-            form_user.save()
-            level_id = request.POST.get("level")
-            student = Student.objects.create(user=form_user, level_id = level_id)
-            level   = Level.objects.get(pk = level_id)
-            u_parents = all_from_parent_user(request.user)
+            # #end = today + timedelta(days=7)
+            # end = datetime(2022,8,31) 
+            # form_user = form.save(commit=False)
+            # form_user.closure = end
+            # form_user.school_id = 50
+            # form_user.cgu = 1
+            # form_user.country_id = 4
+            # form_user.user_type = 0
+            # form_user.save()
+            # level_id = request.POST.get("level")
+            # student = Student.objects.create(user=form_user, level_id = level_id)
+            # level   = Level.objects.get(pk = level_id)
+            # u_parents = all_from_parent_user(request.user)
 
-            u_p_mails = []
-            for u_p in u_parents : 
-                u_p.parent.students.add(student)
-                u_p_mails.append(u_p.email)
+            # u_p_mails = []
+            # for u_p in u_parents : 
+            #     u_p.parent.students.add(student)
+            #     u_p_mails.append(u_p.email)
 
-            chrono = create_chrono(Facture,"F")
-            success = attribute_all_documents_to_student_by_level(level,student)
+            # chrono = create_chrono(Facture,"F")
+            # success = attribute_all_documents_to_student_by_level(level,student)
   
-            adhesion = Adhesion.objects.create(start = today, stop = end, student = student , level_id = level_id  , amount = 0  , formule_id = None ) 
-            facture = Facture.objects.create(chrono = chrono, file = "" , user = request.user , date = today     ) 
-            facture.adhesions.add(adhesion)
+            # adhesion = Adhesion.objects.create(start = today, stop = end, student = student , level_id = level_id  , amount = 0  , formule_id = None ) 
+            # facture = Facture.objects.create(chrono = chrono, file = "" , user = request.user , date = today     ) 
+            # facture.adhesions.add(adhesion)
 
-            msg = "Bonjour,\n\nVous venez de souscrire à une adhésion à la SACADO Académie. \n"
-            msg += "Votre référence d'adhésion est "+chrono+".\n\n"
-            msg += "Vous avez inscrit : \n"
-            msg += "- "+student.user.first_name+" "+student.user.last_name+", l'identifiant de connexion est : "+student.user.username +" \n"
-            msg += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
-            msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
+            # msg = "Bonjour,\n\nVous venez de souscrire à une adhésion à la SACADO Académie. \n"
+            # msg += "Votre référence d'adhésion est "+chrono+".\n\n"
+            # msg += "Vous avez inscrit : \n"
+            # msg += "- "+student.user.first_name+" "+student.user.last_name+", l'identifiant de connexion est : "+student.user.username +" \n"
+            # msg += "\n\nRetrouvez ces détails à partir de votre tableau de bord après votre connexion à https://sacado.xyz/academy\n\n"
+            # msg += "L'équipe de SACADO Académie vous remercie de votre confiance.\n\n"
 
 
 
-            msg += "Voici quelques conseils pour votre enfant :\n\nConnecte toi sur https://sacado.xyz/academy\n\n"
-            msg += "Indique ton Nom d’utilisateur et ton Mot de passe\n\n"
-            msg += "Clique sur le bouton « connexion »   -> Tu arrives ensuite sur ton profil. \n\n"   
-            msg += "Le menu est à gauche :\n\n"
-            msg += "« Compte » permet de changer ton mot de passe, te déconnecter et choisir ton avatar.\n\n"
-            msg += "« Matières » te permet d’accéder à tes parcours d’exercices. Tu cliques sur « accéder » pour entrer dans le dossier, puis tu choisis un thème."
-            msg += "A l’intérieur, tu auras tous les exercices.\n\n"
-            msg += "Tu vas à ton rythme, tu choisis les exercices que tu as besoin de travailler, de réviser…\n\n"
-            msg += "Tu enregistres quand tu as fait au moins 5 situations (parfois 10), si tu as fait des erreurs, c’est normal parce que tu apprends, essaie de bien comprendre la correction proposée, puis continue les exercices suivants pour améliorer ton score."
-            msg += "Une pastille de couleur sur un exercice permet de voir que tu l’as déjà fait (% de réussite).\n\n"
-            msg += "« Suivi » permet de voir ton évolution. Clique en bas sur les différents bilans et en haut à droite pour la synthèse.\n\n"
-            msg += "« Flashpack » : permet de créer des propres cartes de révision, pour entraîner ta mémoire.\n\n"
+            # msg += "Voici quelques conseils pour votre enfant :\n\nConnecte toi sur https://sacado.xyz/academy\n\n"
+            # msg += "Indique ton Nom d’utilisateur et ton Mot de passe\n\n"
+            # msg += "Clique sur le bouton « connexion »   -> Tu arrives ensuite sur ton profil. \n\n"   
+            # msg += "Le menu est à gauche :\n\n"
+            # msg += "« Compte » permet de changer ton mot de passe, te déconnecter et choisir ton avatar.\n\n"
+            # msg += "« Matières » te permet d’accéder à tes parcours d’exercices. Tu cliques sur « accéder » pour entrer dans le dossier, puis tu choisis un thème."
+            # msg += "A l’intérieur, tu auras tous les exercices.\n\n"
+            # msg += "Tu vas à ton rythme, tu choisis les exercices que tu as besoin de travailler, de réviser…\n\n"
+            # msg += "Tu enregistres quand tu as fait au moins 5 situations (parfois 10), si tu as fait des erreurs, c’est normal parce que tu apprends, essaie de bien comprendre la correction proposée, puis continue les exercices suivants pour améliorer ton score."
+            # msg += "Une pastille de couleur sur un exercice permet de voir que tu l’as déjà fait (% de réussite).\n\n"
+            # msg += "« Suivi » permet de voir ton évolution. Clique en bas sur les différents bilans et en haut à droite pour la synthèse.\n\n"
+            # msg += "« Flashpack » : permet de créer des propres cartes de révision, pour entraîner ta mémoire.\n\n"
 
                 
-            send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, u_p_mails )
+            # send_mail("Inscription SACADO Académie", msg, settings.DEFAULT_FROM_EMAIL, u_p_mails )
 
             return redirect("index")
  
