@@ -1818,26 +1818,6 @@ def create_accounting(request,tp,ids):
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0 ,current_year= this_year).update(amount = -am)  
                         Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1,current_year= this_year ).update(amount = am) 
 
-
-            elif tp == 2 :
-
-                if nf.is_credit :
-                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year):
-                        Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1, amount = am,current_year= this_year )  
-                        Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0, amount = -am,current_year= this_year ) 
-                    else :
-                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 1,current_year= this_year ).update(amount = am)  
-                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 0 ,current_year= this_year).update(amount = -am)  
-                else :
-                   
-                    if not Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year):
-                        Accountancy.objects.create(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0, amount = -am,current_year= this_year )  
-                        Accountancy.objects.create(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1, amount = am ,current_year= this_year)
-                    else :
-                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 1 , plan_id = nf.plan.code , is_credit = 0,current_year= this_year ).update(amount = -am)  
-                        Accountancy.objects.filter(accounting_id = nf.id , ranking = 2 , plan_id = nb , is_credit = 1,current_year= this_year ).update(amount = am)
-
-
             else :
 
                 if nf.is_credit :
@@ -2002,45 +1982,6 @@ def update_accounting(request, id,tp):
 
 
             if nf.is_credit :
-                # if form_abo.is_valid():
-                #     fa = form_abo.save(commit = False)
-                #     fa.user = request.user
-                #     fa.accounting = accounting
-                #     fa.school = school
-                #     Accounting.objects.filter(pk = accounting.id).update(is_abonnement = 1)
-                #     Accounting.objects.filter(pk = accounting.id).update(is_active = 1)
-                #     fa.is_active = 1
-                #     if nf.mode == "Période de test":
-                #         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 2 } )
-                #         messages.success(request,"Abonnement créé en période de Test")
-                #     if nf.date_payment:
-                #         customer , create = Customer.objects.get_or_create(school =  school , defaults={  'status' : 3 } )
-                #         if not create :
-                #             customer.status = 3
-                #             customer.save()
-                #         messages.success(request,"Abonnement payé.")
-
-                #     if fa.is_gar: # appel de la fonction qui valide le Web Service
-                #         School.objects.filter(pk= school.id).update(gar=1)                    
-                #         if not id_a_gar :
-                #             test, raison , header , decode ,ida   = create_abonnement_gar( today , nf  , request.user )
-                #             if test :
-                #                 fa.gar_abonnement_id = ida
-                #                 messages.success(request,"Activation du GAR réussie")
-                #             else :
-                #                 messages.error(request,"Activation du GAR échouée : {} \n\n {} \n\n {} ".format(raison, header , decode ))
-
-                #         else :
-                #             test, raison , header , decode , ida = update_abonnement_gar(  today , nf  )
-                #             if test :
-                #                 abonnement.save()
-                #                 messages.success(request,"Modification du GAR réussie")
-                #             else :
-                #                 messages.error(request,"Modification du GAR échouée..... Raison : {} \n\nHeader : {}\n\nDécodage : {} ".format(raison, header , decode ))
-
-                #     fa.save()
-                # else :
-                #     print(form_abo.errors)
 
 
                 if Accountancy.objects.filter(accounting_id = accounting.id , ranking = 1 , plan_id = 411 , is_credit = 0, current_year = current_year).count() == 0   : 
