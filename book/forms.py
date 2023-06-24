@@ -91,24 +91,33 @@ class BlocForm(forms.ModelForm):
 		fields = '__all__'
 
 	def __init__(self, *args, **kwargs):
-			book = kwargs.pop('book')
-			super(BlocForm, self).__init__(*args, **kwargs)
-			level   = book.level
-			subject = book.subject
 
-			thms       = level.themes.all()
-			skills     = Skill.objects.filter(subject=subject) 
-			knowledges = level.knowledges.filter(theme__subject=subject)
-			exercises  = level.exercises.filter(theme__subject=subject)
-			exotexs    = level.level_exotexs.filter(theme__subject=subject)
+		print(kwargs)
 
-			self.fields['knowledge']  = forms.ModelChoiceField(queryset=knowledges,  required=False)  
-			self.fields['theme']      = forms.ModelChoiceField(queryset=thms,  required=False)
-			self.fields['skills']     = forms.ModelMultipleChoiceField(queryset=skills, required=False)
-			self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False)  
+		book = kwargs.pop('book')
+		page = kwargs.pop('page')
 
-			self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
-			self.fields['exotexs']    = forms.ModelMultipleChoiceField(queryset=exotexs,  required=False)  
+		super(BlocForm, self).__init__(*args, **kwargs)
+		level   = book.level
+		subject = book.subject
+		paragraphs = page.paragraphs.order_by("ranking")
+
+
+		thms       = level.themes.all()
+		skills     = Skill.objects.filter(subject=subject) 
+		knowledges = level.knowledges.filter(theme__subject=subject)
+		exercises  = level.exercises.filter(theme__subject=subject)
+		exotexs    = level.level_exotexs.filter(theme__subject=subject)
+
+		self.fields['paragraph'] = forms.ModelChoiceField(queryset=paragraphs)  
+
+		self.fields['knowledge']  = forms.ModelChoiceField(queryset=knowledges,  required=False)  
+		self.fields['theme']      = forms.ModelChoiceField(queryset=thms,  required=False)
+		self.fields['skills']     = forms.ModelMultipleChoiceField(queryset=skills, required=False)
+		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False)  
+
+		self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
+		self.fields['exotexs']    = forms.ModelMultipleChoiceField(queryset=exotexs,  required=False)  
 
 
 

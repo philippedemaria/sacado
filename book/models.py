@@ -213,7 +213,6 @@ class Paragraph(models.Model):
     page    = models.ForeignKey(Page, on_delete=models.CASCADE,  blank=True, null=True,  related_name='paragraphs')
     title   = models.CharField(max_length=255,     verbose_name="Titre")
     number  = models.PositiveIntegerField( default=1 )
-
     ranking = models.PositiveIntegerField( default=0, null=True, blank=True)
 
     def __str__(self):
@@ -265,6 +264,6 @@ class Bloc(models.Model):
     exotexs      = models.ManyToManyField(Exotex  , blank=True, related_name='blocs', verbose_name="ExoTex connexes")
 
     def __str__(self):
-        return "{} {}".format(self.title,self.level.name)
+        return "{} > {}".format(self.title,self.typebloc.title)
 
 

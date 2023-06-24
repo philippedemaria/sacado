@@ -58,7 +58,7 @@ urlpatterns = [
 
     ##################################################################################################################################
     ##################################################################################################################################
-    # Student book
+    ################### Student book
     ##################################################################################################################################
     ##################################################################################################################################
 
@@ -69,15 +69,28 @@ urlpatterns = [
     path('update_page/<int:idb>/<int:idp>', update_page, name='update_page'),
     path('delete_page/<int:idb>/<int:idp>', delete_page, name='delete_page'),
 
-
-
     path('create_paragraph/<int:idb>/0', create_paragraph, name='create_paragraph'),
-    path('update_paragraph/<int:idb>/<int:idp>', update_paragraph, name='update_paragraph'),
-    path('delete_paragraph/<int:idb>/<int:idp>', delete_paragraph, name='delete_paragraph'),
+    path('update_paragraph/<int:idb>/<int:idp>/<int:idpa>', update_paragraph, name='update_paragraph'),
+    path('delete_paragraph/<int:idb>/<int:idp>/<int:idpa>', delete_paragraph, name='delete_paragraph'),
 
 
     path('typeblocs/0', typeblocs, name='typeblocs'),
     path('create_typebloc/0', create_typebloc, name='create_typebloc'),
-    path('update_typebloc/<int:idt>', update_typebloc, name='update_typebloc'),
-    path('delete_typebloc/<int:idt>', delete_typebloc, name='delete_typebloc'),
+    path('update_typebloc/<int:idb>/<int:idp>/<int:idt>', update_typebloc, name='update_typebloc'),
+    path('delete_typebloc', delete_typebloc, name='delete_typebloc'),
+
+ 
+
+    path('create_bloc/<int:idb>/<int:idp>', create_bloc, name='create_bloc'),
+    path('update_bloc/<int:idb>/<int:idp>/<int:idbl>', update_bloc, name='update_bloc'),
+    path('delete_bloc/<int:idb>/<int:idp>/<int:idbl>', delete_bloc, name='delete_bloc'),
+
+
+    ##################################################################################################################################
+    ##################################################################################################################################
+    ################### QR code
+    ##################################################################################################################################
+    ##################################################################################################################################
+
+
  ]

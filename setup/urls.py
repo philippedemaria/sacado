@@ -108,6 +108,15 @@ urlpatterns = [
     path('ajax_charge_school_by_rne', ajax_charge_school_by_rne, name='ajax_charge_school_by_rne'),
 
 
+    ############################################################################################
+    #######  after_qrcode
+    ############################################################################################
+    path('p/<slug:code>', goto_page_after_qrcode, name='goto_page_after_qrcode'),
+    path('e/<slug:code>', goto_exercise_after_qrcode, name='goto_exercise_after_qrcode'),
+
+
+
+
 ]
 
 

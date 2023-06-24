@@ -1,0 +1,193 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    {% if bloc %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    {% endif %}
+{% endblock %}
+
+
+{% block page_title %}
+    {{ book.level.shortname }} <img src="{% static 'img/angle-right.png' %}"/> Création du livret numérique Elève   <img src="{% static 'img/angle-right.png' %}"/>  
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+
+
+{% block body  %}  
+
+
+<section class="content_main"> 
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <form method="post" action="" enctype='multipart/form-data'>
+                {% csrf_token %}
+     
+ 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label>{{ form_b.typebloc.label_tag }}</label>
+                            {{ form_b.typebloc |add_class:"form-control" }}
+                            {{ form_b.typebloc.errors }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label>Paragraphe</label>
+                            {{ form_b.paragraph |add_class:"form-control" }}
+                            {{ form_b.paragraph.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <label>{{ form_b.title.label_tag }}</label>
+                            {{ form_b.title |add_class:"form-control" }}
+                            {{ form_b.title.errors }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.content_html.label_tag }}</label>
+                                {{ form_b.content_html |add_class:"form-control" }}
+                                {{ form_b.content_html.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.content.label_tag }}</label>
+                                {{ form_b.content |add_class:"form-control"|attr:"rows:13" }}
+                                {{ form_b.content.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.correction_html.label_tag }}</label>
+                                {{ form_b.correction_html |add_class:"form-control" }}
+                                {{ form_b.correction_html.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.correction.label_tag }}</label>
+                                {{ form_b.correction |add_class:"form-control"|attr:"rows:13" }}
+                                {{ form_b.correction.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>Savoir faire principal</label>
+                                {{ form_b.knowledge |add_class:"form-control select2" }}
+                                {{ form_b.knowledge.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>Thème</label>
+                                {{ form_b.theme |add_class:"form-control select2" }}
+                                {{ form_b.theme.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label>Compétences</label>
+                            {{ form_b.skills |add_class:"form-control select2" }}
+                            {{ form_b.skills.errors }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label>Savoir faire </label>
+                            {{ form_b.knowledges |add_class:"form-control select2" }}
+                            {{ form_b.knowledges.errors }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_calculator.label_tag }}</label>
+                                {{ form_b.is_calculator |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_calculator.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_python.label_tag }}</label>
+                                {{ form_b.is_python |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_python.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_scratch.label_tag }}</label>
+                                {{ form_b.is_scratch |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_scratch.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_tableur.label_tag }}</label>
+                                {{ form_b.is_tableur |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_tableur.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label>{{ form_b.is_annals.label_tag }}</label>
+                                {{ form_b.is_annals |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form_b.is_annals.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.exercises.label_tag }}</label>
+                                {{ form_b.exercises |add_class:"form-control select2" }}
+                                {{ form_b.exercises.errors }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label>{{ form_b.exotexs.label_tag }}</label>
+                                {{ form_b.exotexs |add_class:"form-control select2" }}
+                                {{ form_b.exotexs.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="submit" class="btn btn-primary" name="form_action" value="new_bloc">Enregistrer</button>   
+                        </div>
+                    </div>
+  
+
+
+
+
+
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock  %}   
+
+

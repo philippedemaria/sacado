@@ -2407,3 +2407,16 @@ def tweeter_delete(request, id):
     else :
         return redirect('index') 
 
+
+
+
+def goto_page_after_qrcode(request,code):
+    level_id  = code[0]
+    page      = code[1:]
+    book = Book.objects.get(is_student=1, level_id=level_id)
+    return redirect('show_student_book',book.id,page)
+
+
+
+def goto_exercise_after_qrcode(request,code):
+    return redirect('get_exercise_after_qrcode',code)

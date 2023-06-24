@@ -7,6 +7,9 @@
 {% block require %}
 
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-update_page']);
+    </script> 
 
 {% endblock %}
 
@@ -40,18 +43,23 @@
     </div>
     <div class="course_page_main">
         {% for paragraph in page.paragraphs.all %}
-            <div class="this_paragraph">
+            <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
                 <div class="row">
                     <div class="col-xs-12">
-                        <span class="paragraph_number">{{ paragraph.number }}</span>
-                        <span class="paragraph_title">{{ paragraph.title }}</span>
+                        <span class="paragraph_number" id="paragraph_number{{ paragraph.id }}">{{ paragraph.number }}</span>
+                        <span class="paragraph_title" id="paragraph_title{{ paragraph.id }}">{{ paragraph.title }}</span>
+                        <a href="#" data-toggle='modal'  data-target="#book_update_paragraph" class="this_updater_paragraph" data-paragraph_id="{{ paragraph.id }}"><i class="bi bi-pen"></i></a>
+                        <a href="{% url 'delete_paragraph'  book.id page.id paragraph.id  %}"  class="this_updater_paragraph" onclick="TestDelete('{{ paragraph.title}}')" ><i class="bi bi-trash"></i></a>
                     </div>
                 </div>
                 {% for bloc in paragraph.blocs.all %}
-                <div class="row">
+                <div class="row" id="this_bloc{{ bloc.id }}">
                     <div class="col-xs-12">
-                        <div class="{{ bloc.typebloc.css }}">
-                            <div class="bloc_title">{{ bloc.title }}
+                        <div class="{{ bloc.typebloc.css }}"> 
+                            <div class="bloc_title">
+                                {{ bloc.title }}
+                                <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="white"><i class="bi bi-pen"></i></a>
+                                <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="white" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a>
                             </div>
                             <div class="bloc_content">
                                 {{ bloc.content_html|safe }}
@@ -89,8 +97,17 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-12 col-md-2">
+                            <label>{{ form_p.number.label_tag }}</label>
+                            {{ form_p.number |add_class:"form-control" }}
+                            {{ form_p.number.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <button type="submit" class="btn btn-primary" name="form_action" value="new_paragraph">Enregistrer</button>   
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="form_action" value="new_paragraph">Enregistrer</button>  
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -98,6 +115,47 @@
         </div>
     </div> 
 </div>
+
+
+<div class="modal fade" id="book_update_paragraph" tabindex="-1" role="dialog" aria-labelledby="book_update_paragraph">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2>Modifier le paragraphe</h2>              
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <input type="text" name="id_parag" id="id_parag" /> 
+                            <input type="number" name="number_parag" id="number_parag" /> 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-2">
+                            <input type="text" name="title_parag" id="title_parag" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <a href="javascript:void(0)" class="btn btn-primary" id="book_update_submitter_paragraph">Enregistrer</a>  
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
 
 <div class="modal fade" id="book_new_typebloc" tabindex="-1" role="dialog" aria-labelledby="book_new_typebloc">        
     <div class="modal-dialog modal-lg" role="document"  style="width:750px">

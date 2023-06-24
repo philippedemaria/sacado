@@ -105,15 +105,15 @@ def update_book(request,idb):
     return render(request, 'book/form_book.html', context)
 
 
-@user_is_superuser 
 def delete_book(request):
 
+    if request.user.is_superuser :
 
-    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
-    request.session["subtdb"] = "Chapter"
+        request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+        request.session["subtdb"] = "Chapter"
 
-    book = Book.objects.get(id=idb)
-    book.delete()
+        book = Book.objects.get(id=idb)
+        book.delete()
     return redirect('books')
 
 
@@ -804,7 +804,7 @@ def update_page(request,idb, idp):
 
     form_page  = PageForm(request.POST or None,instance=page)
     form_p  = ParagraphForm(request.POST or None)
-    form_b  = BlocForm(request.POST or None,book=book)
+    form_b  = BlocForm(request.POST or None,book=book,page=page)
     form_tb = TypeblocForm(request.POST or None)
 
     if request.method == "POST" :
@@ -892,10 +892,10 @@ def create_paragraph(request,idb):
 
 
 @user_is_superuser 
-def update_paragraph(request,idb, idp):
+def update_paragraph(request,idb, idp, idpa):
 
     book = Book.objects.get(pk=idb)
-    paragraph = Paragraph.objects.get(id=idt)
+    paragraph = Paragraph.objects.get(id=idp)
     form = ParagraphForm(request.POST or None, book=book , instance=paragraph )
     if request.method == "POST" :
         if form.is_valid():
@@ -911,13 +911,13 @@ def update_paragraph(request,idb, idp):
 
 
 @user_is_superuser 
-def delete_paragraph(request, idb,idp):
+def delete_paragraph(request, idb,idp, idpa):
 
     book = Book.objects.get(pk=idb)
-    paragraph = Paragraph.objects.get(id=idt)
+    paragraph = Paragraph.objects.get(id=idp)
     paragraph.delete()
     messages.success(request, 'Le paragraphe a été supprimé avec succès !')
-    return redirect('paragraphs')
+    return redirect('update_page', idb,idp)
 
 
 #################################################################
@@ -978,3 +978,53 @@ def delete_typebloc(request, idt):
     return redirect('typeblocs')
 
 
+
+
+@user_is_superuser 
+def create_bloc(request, idb, idp):
+
+    book = Book.objects.get(id=idb)
+    page = Page.objects.get(id=idp)
+    bloc = Bloc.objects.get(id=idb)
+    form = BlocForm(request.POST or None  , book = book, page=page)
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Le bloc a été modifié avec succès !')
+            return redirect('update_page', idb, idp)
+        else:
+            print(form.errors)
+
+    context = {'form': form, 'communications' : [] , 'typebloc': typebloc,   }
+
+    return render(request, 'book/form_typebloc.html', context )
+
+
+
+@user_is_superuser 
+def update_bloc(request, idb, idp, idbl):
+
+    book = Book.objects.get(id=idb)
+    page = Page.objects.get(id=idp)
+    bloc = Bloc.objects.get(id=idbl)
+
+    form = BlocForm(request.POST or None, book = book , page=page  , instance=bloc )
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Le bloc a été modifié avec succès !')
+            return redirect('update_page', idb, idp)
+        else:
+            print(form.errors)
+
+    context = {'form_b': form,  'bloc': bloc,   }
+
+    return render(request, 'book/form_bloc.html', context )
+
+
+@user_is_superuser 
+def delete_bloc(request,idb, idp, idbl):
+    bloc = Bloc.objects.get(id=idbl)
+    bloc.delete()
+    messages.success(request, 'Le bloc a été supprimé avec succès !')
+    return redirect('update_page',idb, idp)

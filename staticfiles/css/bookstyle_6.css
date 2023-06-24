@@ -134,7 +134,7 @@ h1 {
 	border-radius: 5px;
 	color:#5d4391;
 	position:relative;
-	margin:30px 30px 30px 50px;
+	margin:30px 30px 0px 50px;
 	padding:0px;
 }
 
@@ -179,7 +179,7 @@ h1 {
 	border-radius: 5px;
 	color:#0960b5;
 	position:relative;
-	margin:30px 30px 30px 50px;
+	margin:30px 30px 0px 50px;
 	padding:0px;
 }
 
@@ -209,7 +209,7 @@ h1 {
 	border-radius: 5px;
 	color:#008B73;
 	position:relative;
-	margin:30px 30px 30px 50px;
+	margin:30px 30px 0px 50px;
 	padding:0px;
 }
 
