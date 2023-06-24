@@ -845,7 +845,7 @@ def update_page(request,idb, idp):
         return redirect('update_page',idb,idp)
 
     
-    use_this_css = "css/bookstyle_"+str(book.level.id)+".css"   
+    use_this_css = "css/bookstyle_6.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
 
     context = {'form_p': form_p,  'form_b': form_b,  'form_page': form_page, 'form_tb': form_tb, 'book': book, 'page': page,  'use_this_css' : use_this_css , }
 
