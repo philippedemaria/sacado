@@ -821,7 +821,6 @@ def update_page(request,idb, idp):
                 nf = form_p.save(commit=False)
                 nf.page  = page
                 nf.save() 
-                messages.success(request, 'Le paragraphe a été créé avec succès !')
             else:
                 print(form_p.errors)
 
@@ -829,7 +828,6 @@ def update_page(request,idb, idp):
         elif form_action == "new_bloc" :
             if form_b.is_valid():
                 nf = form_b.save()
-                messages.success(request, 'Le bloc a été créé avec succès !')
             else:
                 print(form_b.errors)
 
@@ -837,7 +835,6 @@ def update_page(request,idb, idp):
         elif form_action == "new_typebloc" :
             if form_tb.is_valid():
                 nf = form_tb.save()
-                messages.success(request, 'Le typebloc a été créé avec succès !')
             else:
                 print(form_tb.errors)
 
@@ -845,7 +842,6 @@ def update_page(request,idb, idp):
         elif form_action == "update_page" :
             if form_page.is_valid():
                 nf = form_page.save()
-                messages.success(request, 'La page a été modifiée avec succès !')
             else:
                 print(form.errors)
 
@@ -866,7 +862,6 @@ def delete_page(request, idb,idp):
     page.delete()
     if idp>0:
         idp -= 1
-    messages.success(request, 'La page a été supprimée avec succès !')
     return redirect('pages',idb,idp)
 
 @csrf_exempt
