@@ -9,6 +9,16 @@ define(['jquery', 'bootstrap'], function ($) {
         }); 
 
 
+        $("#id_typebloc").on('change', function (event) {
+
+            var t = $(this).find(':selected').text(); 
+
+            $("#book_new_bloc #id_title").val(t);
+        }); 
+
+
+
+
 
         $(".this_updater_paragraph").on('click', function (event) {
 
