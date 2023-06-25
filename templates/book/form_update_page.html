@@ -38,8 +38,17 @@
 {% block body  %}  
 
 
-    <div class="course_page_top">
-        Cours  
+    <div class="{{ page.css}}" id="top_page">
+        <span id="top_page_title">{{ page.title }} </span>                
+        <select name="type_page" id="type_de_page" data-book_id ="{{ book.id }}" data-page_id ="{{ page.id }}" style="float:right;font-size: 16px;color:black">
+            <option value="course_page_top">Type de page ?</option>
+            <option value="course_page_top">Cours</option>
+            <option value="ad_page_top">Application directe</option>
+            <option value="parcoursu_page_top">Parcours 1</option>
+            <option value="parcoursd_page_top">Parcours 2</option>
+            <option value="parcourst_page_top">Parcours 3</option>
+            <option value="auto_page_top">Autonomie</option>
+        </select>
     </div>
     <div class="course_page_main">
         {% for paragraph in page.paragraphs.all %}

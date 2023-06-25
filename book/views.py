@@ -788,7 +788,14 @@ def create_page(request,idb, idch):
         if total_number :
             tn = int(total_number)
             for i in range(tn) :
-                Page.objects.create(number=i , chapter = chapter , css="cours")
+                if i == tn-1 : title , css = "Auto-évaluation DTL" , "auto_page_top"
+                elif i == tn-2 : title , css = "Parcours 3" , "parcourst_page_top"
+                elif i == tn-3 : title , css = "Parcours 2" , "parcoursd_page_top"
+                elif i == tn-4 : title , css = "Parcours 1" , "parcoursu_page_top"
+                elif i%2 == 1 : title , css = "Cours" , "course_page_top"
+                elif i%2 == 0 and i > 0 : title , css = "Applications directe" , "ad_page_top"
+                else : title , css = "Introduction" , "intro_page_top"
+                Page.objects.create(title=title ,  number=i , chapter = chapter , css=css)
         return redirect('student_book_builder' , idb, 0)
     context = { }
 
@@ -855,7 +862,6 @@ def update_page(request,idb, idp):
 @user_is_superuser 
 def delete_page(request, idb,idp):
 
-    book = Book.objects.get(pk=idb)
     page = Page.objects.get(id=idp)
     page.delete()
     if idp>0:
@@ -863,8 +869,28 @@ def delete_page(request, idb,idp):
     messages.success(request, 'La page a été supprimée avec succès !')
     return redirect('pages',idb,idp)
 
+@csrf_exempt
+@user_is_superuser 
+def type_de_page(request):
 
+    book_id = request.POST.get("book_id",None)
+    page_id = request.POST.get("page_id",None)
+    type_page = request.POST.get("type_page","course_page_top")
+    if type_page == "course_page_top" : title = "Cours" 
+    elif type_page == "ad_page_top" : title = "Applications directes" 
+    elif type_page == "parcoursu_page_top" : title = "Parcours 1" 
+    elif type_page == "parcoursd_page_top" : title = "Parcours 2" 
+    elif type_page == "parcourst_page_top" : title = "Parcours 3" 
+    elif type_page == "auto_page_top" : title = "Autoévaluation DTL" 
 
+    Page.objects.filter(pk=page_id).update(css=type_page)
+    Page.objects.filter(pk=page_id).update(title=title)
+
+    data = {}
+    data['css'] = type_page
+    data['title'] = title
+
+    return JsonResponse(data)
 
 #################################################################
 # paragraphs
