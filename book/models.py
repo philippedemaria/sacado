@@ -235,10 +235,22 @@ class Typebloc(models.Model):
 
 class Bloc(models.Model):
 
+    SIZES = (
+        (12,"Page entière"),
+        (6, "1/2 page"),
+        (4, "1/3 page"),
+        (3, "1/4 page"),
+        (2, "1/6 page"),
+    )
+
+
     title     = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
     typebloc  = models.ForeignKey(Typebloc, on_delete=models.CASCADE, related_name='blocs', verbose_name="Type de bloc")
     paragraph = models.ForeignKey(Paragraph, on_delete=models.CASCADE, related_name='blocs')
     ranking   = models.PositiveIntegerField( default=0,  blank=True, null=True)
+
+ 
+    size       = models.PositiveSmallIntegerField(choices=SIZES, default=12, blank=True, verbose_name="Colonne")
 
     content = models.TextField( blank=True,  verbose_name="Enoncé en LaTeX")
     content_html = RichTextUploadingField( verbose_name="Enoncé pour html") 
