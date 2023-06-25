@@ -35,12 +35,17 @@
      
  
                     <div class="row">
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-4">
                             <label>{{ form_b.typebloc.label_tag }}</label>
                             {{ form_b.typebloc |add_class:"form-control" }}
                             {{ form_b.typebloc.errors }}
                         </div>
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-4">
+                            <label>{{ form_b.size.label_tag }}</label>
+                            {{ form_b.size |add_class:"form-control" }}
+                            {{ form_b.size.errors }}
+                        </div>
+                        <div class="col-sm-12 col-md-4">
                             <label>Paragraphe</label>
                             {{ form_b.paragraph |add_class:"form-control" }}
                             {{ form_b.paragraph.errors }}
@@ -53,7 +58,6 @@
                             {{ form_b.title.errors }}
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
