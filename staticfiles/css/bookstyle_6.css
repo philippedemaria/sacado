@@ -160,6 +160,8 @@ h1 {
 	font-weight: normal;
 }
 
+
+/*  paragraph_bloc_mt  */
 .paragraph_bloc_mt .bloc_title{
 	color :  #5d4391 ;
 	border-radius:0px 0px 3px 3px;
@@ -237,7 +239,7 @@ h1 {
 
 
 
-/*  paragraph_bloc_ex  */
+/*  paragraph_bloc_exe  */
 .paragraph_bloc_ex{
 	border: 2px solid  #0093CA;
 	border-radius: 5px;
@@ -258,6 +260,66 @@ h1 {
 
 .paragraph_bloc_ex .bloc_content{
 	color :  #0093CA ;
+	border-radius: 3px;
+	background-color:white;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+
+
+/*  paragraph_bloc_at  */
+.paragraph_bloc_at{
+	border: 2px solid  #cb2131;
+	border-radius: 5px;
+	color:#cb2131;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+.paragraph_bloc_at .bloc_title{
+	color :  white ;
+	background-image: linear-gradient(90deg, #cb2131 40%, #FFF 100%);
+	border-radius: 3px 3px 0px 0px;
+	background-color:#cb2131;
+	padding:10px;  
+	width:100%;
+}
+
+.paragraph_bloc_at .bloc_content{
+	color :  #cb2131 ;
+	border-radius: 3px;
+	background-color:white;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+
+
+/*  paragraph_bloc_vo  */
+.paragraph_bloc_vo{
+	border: 2px solid  #cb9500;
+	border-radius: 5px;
+	color:#cb9500;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+.paragraph_bloc_vo .bloc_title{
+	color :  white ;
+	background-image: linear-gradient(90deg, #cb9500 40%, #FFF 100%);
+	border-radius: 3px 3px 0px 0px;
+	background-color:#cb9500;
+	padding:10px;  
+	width:100%;
+}
+
+.paragraph_bloc_vo .bloc_content{
+	color :  #cb9500 ;
 	border-radius: 3px;
 	background-color:white;
 	padding:10px;
