@@ -182,9 +182,7 @@ def insert_only_input(arg,loop):
             st = tab[i] 
         string += st
     return string
-
-
-
+ 
 
 @register.filter
 def shuffle(arg):
@@ -1268,3 +1266,11 @@ def is_inside_my_lesson(obj,student):
 @register.simple_tag
 def get_day_slot(obj, slot,day):
     return obj.this_day_slot(slot,day) 
+
+
+
+
+@register.simple_tag
+def get_bloc_col_width(obj,loop):
+    return obj.col_width(loop) 
+ 

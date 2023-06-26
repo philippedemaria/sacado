@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.db import models
-
+from django.db.models import Sum
 from account.models import Teacher
 from bibliotex.models import Bibliotex , Exotex
 from flashcard.models import Flashpack , Flashcard
@@ -218,6 +218,27 @@ class Paragraph(models.Model):
 
     def __str__(self):
         return "{}".format(self.title )
+
+
+
+    def col_width(self,loop):
+        nb = 0
+        for b in self.blocs.values_list("size",flat=True).order_by("ranking")[:loop]:
+            nb += b
+        return nb
+
+
+
+
+    def total_size(self):
+        nb = 0
+        for b in self.blocs.values_list("size",flat=True).order_by("ranking"):
+            nb += b
+        return nb
+
+
+
+
 
 ##################################     doctypes     ################################################    
 ##  doctypes  ["définition","Exemple","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]

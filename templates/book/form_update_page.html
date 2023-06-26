@@ -62,7 +62,9 @@
                     </div>
                 </div>
                 <div class="row" id="this_bloc{{ paragraph.id }}">
-                    {% for bloc in paragraph.blocs.all %}
+                    
+                    {% for bloc in paragraph.blocs.all %} 
+                
                         <div class="col-xs-{{ bloc.size }}">
                             <div class="{{ bloc.typebloc.css }}"> 
                                 <div class="bloc_title">
@@ -75,8 +77,12 @@
                                 </div>
                             </div>
                         </div>
+                        {% get_bloc_col_width paragraph  forloop.counter as col_width %}
+                        {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}   
                     {% endfor %}
                 </div>
+
+
             </div>
         {% endfor %}
 
