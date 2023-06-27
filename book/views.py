@@ -441,20 +441,6 @@ def chapter_chrono_show_document(request,idb,idch):
 
 
 
-#def duplicate_book(request,level,subject):
-    
-    # level_id   = request.POST.get("level_id")
-    # subject_id = request.POST.get("subject_id")
-    # school_id  = request.POST.get("school_id")
-    # school     = School.objects.get(pk=school_id)
-
-    # book = Book.objects.get( level_id=level_id , subject_id =subject_id )
-    # for user in school.users.all() :
-    #     teacher = user.teacher
-    #     book.teachers.add(teacher)
-    #     titles = ["Activités","Cours","Exercices","Fichiers téléchargeables","Quizz","Questions Flash","Vidéos"]
-    #     for i in  range(len(titles)) :
-    #         Document.objects.get_or_create( title=titles[i] , teacher=teacher ,defaults={'ranking':i} )
 
 @csrf_exempt
 def publish_book_document(request):
