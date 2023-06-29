@@ -136,3 +136,9 @@ class QFlashBookForm(forms.ModelForm):
 		self.fields['levels'].initial  = book.level 
 
 
+
+class AppliquetteForm(forms.ModelForm):
+
+	class Meta:
+		model = Appliquette
+		fields = '__all__'

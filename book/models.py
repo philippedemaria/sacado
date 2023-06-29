@@ -301,3 +301,15 @@ class Bloc(models.Model):
         return "{} > {}".format(self.title,self.typebloc.title)
 
 
+
+class Appliquette(models.Model):
+
+
+    forme    = models.CharField(max_length=255,  default="", verbose_name="Forme")
+    title    = models.CharField(max_length=255,  default="", verbose_name="Titre")
+    url      = models.CharField(max_length=255,  default="", verbose_name="url")
+    iframe   = models.TextField( verbose_name="Iframe")
+    level    = models.ForeignKey(Level, on_delete=models.CASCADE, default="", blank=True, related_name='appliquettes', verbose_name="Niveau")
+
+    def __str__(self):
+        return "{} > {}".format(self.forme,self.title)

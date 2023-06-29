@@ -1,0 +1,77 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+ 
+
+
+    {% if subject %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+    <script>
+        require(['script/ajax-subject']);
+    </script> 
+    {% endif %}
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     Appliquette  <img src="{% static 'img/angle-right.png' %}"/>  
+     {% if book %}
+     <small>Modification {{ app }}</small>
+    {% else %}
+     <small>Nouvelle</small>
+    {% endif %} 
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+{% block body  %} 
+<section class="content_main">             
+    <form method="post" action="" enctype='multipart/form-data'>{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+                <label>{{ form.title.label_tag }}</label>
+                {{ form.title |add_class:"form-control" }}
+                {{ form.title.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.level.label_tag }}</label>
+                {{ form.level|add_class:"form-control select2" }}
+                {{ form.level.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.url.label_tag }}</label>
+                {{ form.url|add_class:"form-control" }}
+                {{ form.url.errors }}
+            </div>
+        </div>    
+        <div class="col-sm-12 col-md-8">
+            <div class="form-group">
+                <label>{{ form.forme.label_tag }}</label>
+                {{ form.forme|add_class:"form-control" }}
+                {{ form.forme.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.iframe.label_tag }}</label>
+                {{ form.iframe|add_class:"form-control" }}
+                {{ form.iframe.errors }}
+            </div>
+        </div>  
+        <div class="col-sm-12 col-md-12">         
+            <button type="submit" class="btn btn-primary">Enregistrer</button>   
+            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+        </div>
+    </div>
+    </form>
+</section>
+{% endblock  %}       
+
+ 

@@ -22,7 +22,10 @@ from tool.views import create_questions_flash_random_variable
 from socle.decorators import user_is_superuser
 from django.utils.html import escape
 
- 
+
+
+
+
 
 
 ##################################     doctypes     ################################################    
@@ -42,7 +45,7 @@ def books(request):
     teacher = request.user.teacher
     mybooks = Book.objects.filter(level__in=teacher.levels.all(), subject__in=teacher.subjects.all(),is_publish=1).order_by('subject','level')
     
-    levels   = teacher.levels.order_by("ranking")
+    levels  = teacher.levels.order_by("ranking")
     subjects = teacher.subjects.all()
 
     # mybooks = list()
@@ -1035,3 +1038,100 @@ def delete_bloc(request,idb, idp, idbl):
     bloc.delete()
     messages.success(request, 'Le bloc a été supprimé avec succès !')
     return redirect('update_page',idb, idp)
+
+
+
+
+
+ 
+
+@user_is_superuser 
+def create_csv_appliquettes(request) :
+
+
+    this_file = request.FILES.get("this_file")
+    file_data = this_file.readlines()
+
+    for line in file_data :
+ 
+        if ";" in line:
+            fields = line.split(";")
+        elif "," in line:
+            fields = line.split(",")
+
+        iframe = '<iframe scrolling="no" title="ill1_tab_entiers_6" src="https://www.geogebra.org/material/iframe/id/jswfw5bn/width/750/height/280/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="750px" height="280px" style="border:0px;"></iframe>'
+
+ 
+        if fields[1] != "" : forme = fields[1]
+        else :  forme = "sans forme"
+
+        if fields[2] != "" : title  = fields[2]
+        if fields[3] != "" : url    = fields[3]
+        if fields[4] != "" : iframe = fields[4]
+        
+        Appliquette.objects.get_or_create(forme=forme, title=title, url=url, iframe=iframe )
+
+
+    return redirect('update_page',idb, idp)
+
+
+
+
+@user_is_superuser 
+def list_appliquettes(request,idl):
+
+    if idl == 0 :
+        appliquettes = Appliquette.objects.order_by("level")
+    else :
+        appliquettes = Appliquette.objects.filter(level_id=idl).order_by("level")
+
+    context = {'appliquettes': appliquettes, 'idl' : idl }
+
+    return render(request, 'book/list_appliquettes.html', context )
+
+
+
+@user_is_superuser 
+def create_appliquette(request,idl):
+
+    form = AppliquetteForm(request.POST or None)
+    if request.method == "POST" :
+        if form.is_valid():
+            nf = form.save(commit=False)
+            nf.level.id = idl
+            nf.save()
+            return redirect('list_appliquettes',idl)
+        else:
+            print(form.errors)
+
+    context = {'form': form,  'idl' : idl }
+
+    return render(request, 'book/form_appliquette.html', context )
+
+
+
+@user_is_superuser 
+def update_appliquette(request, ida):
+
+    app = Appliquette.objects.get(id=ida)
+    form = AppliquetteForm(request.POST or None,instance=app)
+    if request.method == "POST" :
+        if form.is_valid():
+            form.save()
+            return redirect('list_appliquettes', app.level.idl)
+        else:
+            print(form.errors)
+
+    context = {'form': form,  'app' : app }
+
+    return render(request, 'book/form_appliquette.html', context )
+
+
+@user_is_superuser 
+def delete_appliquette(request,ida):
+
+    app = Appliquette.objects.get(id=ida)
+    level_id = app.level.idl
+    app.delete()
+    messages.success(request, "L'appliquette a été supprimée avec succès !")
+    return redirect('list_appliquettes', level_id)
