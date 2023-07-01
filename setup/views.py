@@ -2420,3 +2420,10 @@ def goto_page_after_qrcode(request,code):
 
 def goto_exercise_after_qrcode(request,code):
     return redirect('get_exercise_after_qrcode',code)
+
+
+def goto_appliquette(request,code):
+
+    appliquette = Appliquette.objects.get(code = code)
+    context = {'iframe': appliquette.iframe  }
+    return render(request, 'setup/goto_appliquette.html', context )

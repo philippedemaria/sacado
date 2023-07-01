@@ -1091,6 +1091,22 @@ def list_appliquettes(request,idl):
 
 
 
+
+def new_code(idl):
+
+    str_code = "123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ"
+    exist = True
+    while exist :
+        new_str = str(idl)
+        for i in range(3) :
+            new_str += str_code[ random.randint(0,60) ] 
+        if Appliquette.objects.filter(code=new_str).count() == 0: exist = False 
+    return new_str
+
+
+
+
+
 @user_is_superuser 
 def create_appliquette(request,idl):
 
@@ -1099,6 +1115,7 @@ def create_appliquette(request,idl):
         if form.is_valid():
             nf = form.save(commit=False)
             nf.level.id = idl
+            nf.code = new_code(idl)
             nf.save()
             return redirect('list_appliquettes',idl)
         else:
