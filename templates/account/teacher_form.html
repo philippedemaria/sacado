@@ -135,6 +135,7 @@
                         <a href="{% url 'avatar' %}">Choisir mon avatar</a><br/>
                         {% else  %}
                         <a href="#">Choisir mon avatar</a><br/>
+                        <div class="alert alert-danger">L'abonnement de votre établissement est expiré. Vos droits sont resteints.</div>
                         {% endif  %}
                         {% if user.avatar != "" %}  
                             <img src="{{ user.avatar  }}" class="avatar" />
