@@ -6501,14 +6501,14 @@ def insert_form(looper,fa,dico):
 
 def get_this_codebook(nf) :
 
-    carateres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    level_id = nf.level.id, 
+    caracteres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    level_id = nf.level.id
     subject_id = nf.theme.subject.id
-    exercise = Exercise.objects.filter(level=nf.level, knowledge__subject = nf.theme.subject).order_by("id").last()
+    exercise = Exercise.objects.filter(level=nf.level, knowledge = nf.knowledge).order_by("id").last()
     e_id     = exercise.id + 1
-    q        = e_id//len(caracteres)  
+    q        = (e_id//len(caracteres) )%len(caracteres)  
     r        = e_id%len(caracteres) 
-    codebook = caracteres[level] +str(subject)+ caracteres[q] + caracteres[r] 
+    codebook = caracteres[level_id] +str(subject_id)+ caracteres[q-1] + caracteres[r-1] 
     return codebook
  
 

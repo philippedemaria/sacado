@@ -73,7 +73,7 @@ ul#id_skills li{
                                 {% if qt.is_pseudo %}<span class="helper_tip"> <img src="{% static 'img/pseudo_shuffle.png' %}" width="15px" style="vertical-align: baseline;" />
                                 <div class="helper_tip_text" ><label>Pseudo aléatoire.</label> SACADO crée un exercice en choisissant aléatoirement des situations parmi vos choix enregistrés.</div>
                                     </span>{% endif %}<br/>
-                                    {{ qt.html }}
+                                    {{ qt.html|safe }}
                                 
                             </div>
                         </a>  

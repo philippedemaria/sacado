@@ -17,26 +17,12 @@ from qcm.models import  Relationship, Parcours, Studentanswer
 from django.db.models import Count, Q
 from sendmail.models import Communication
  
-
 from group.decorators import  user_is_group_teacher
 from general_fonctions import *
 
 import pytz
 import re
 import html
-
-##################################################################################################################################
-##################################################################################################################################
-##                     Def annexe
-##################################################################################################################################
-##################################################################################################################################
-
-
-
-
-
-
-
 
 ##################################################################################################################################
 ##################################################################################################################################
@@ -128,16 +114,24 @@ def insert_content_into_slot(request,idg):
     slot       = request.POST.get("slot")
     slot_start = request.POST.get("start")
     slot_start = datetime.strptime(slot_start, '%Y-%m-%d').date()
-    slotedt = Slotedt.objects.filter(users=user, start__startswith = slot_start, slot = slot , groups = group).first()
+
+    print(group.id, user.id , slot_start , slot  )
+
+    slotedt = Slotedt.objects.filter(users=user, start = slot_start, slot = slot , groups = group).first()
+
     if slotedt : content = slotedt.content
     else : content = None
-    form = ContentslotForm(request.POST or None,instance =slotedt)
+
+    form = ContentslotForm(request.POST or None,instance = slotedt)
+
     if form.is_valid() :
         nf = form.save(commit=True)
         if content :  nf.content = nf.content + content
         nf.save()
         nf.users.add(user)
         nf.groups.add(group)
+    else :
+        messages(request,form.errors)
     return redirect('progression_group',  idg )
 
 
@@ -218,24 +212,24 @@ def my_edt(request):
             if is_even == "" or is_even == 0 : is_even = False
             else : is_even = True 
 
-            template_edt,created = Template_edt.objects.update_or_create( edt= my_edt,slot=slot,day=day,is_half=is_half,is_even=is_even)
+            template_edt,created = Template_edt.objects.update_or_create( edt= my_edt , slot=slot , day=day , is_half=is_half , is_even=is_even )
             if created : template_edt.groups.add(group)
             else : 
                 template_edt.groups.clear()
                 template_edt.groups.add(group)
 
-            nextDay = start +   timedelta(days= int(day) - start.weekday() )
+            nextDay = start +   timedelta( days = int(day) - start.weekday() )
             if str(is_even) == "0"   : nextDay += timedelta(days= 7 )
             if is_half == 1 : hday = 14
             else  : hday = 7            
             while nextDay < stop :
-                slt, created  = Slotedt.objects.get_or_create( start=nextDay,slot=slot )
+                slt, created  = Slotedt.objects.get_or_create( start = nextDay , slot = slot )
                 nextDay +=  timedelta(days=hday)
                 slt.groups.add(group)
                 slt.users.add(user)
-
                 if not created :
                     slots.append(slt)
+
         messages.success(request,"Propagation réussie.")
         my_edt.slots.set(slots)
 
