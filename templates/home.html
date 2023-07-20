@@ -51,10 +51,17 @@ Intro Section -
             </div>
             {% endcomment %} 
 
+
+
+        <div class="alert alert-danger">
+            Du 14 juillet au 15 août, SACADO améliore l'ergonomie de la plateforme. Cependant, suite à vos nombreuses demandes, nous avons décidé de la laisser accessible. Néanmoins, des perturbations peuvent survenir lors de la mise en ligne en phase test.
+        </div>
+
+
+
+
             <div class="col-xs-12 col-md-12 col-lg-5">
-                {% if sacado_voyage %}
-                <h1><a href="{% url 'student_to_association' %}"><img src="{% static 'img/sacado_cahiers.jpg' %}" style="float:left"><span class="sacado">SACADO </span><br/> en voyage </a></h1>
-                {% endif %}
+ 
                 <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
                     <span class="exo">{{ nb_parcours }}</span> parcours <span class="helper_tip"><span style="position: relative; line-height: 0;top:-20px;color: #00B999"><i class="fa fa-question-circle"></i></span> 
                           <div class="helper_tip_text" >créés à partir de plus {{ nb_exercise }} exercices interactifs, corrigés à variables dynamiques aléatoires.</div>
