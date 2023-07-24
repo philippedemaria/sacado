@@ -1443,33 +1443,82 @@ define(['jquery','bootstrap'], function ($) {
         }); 
 
 
-    $('body').on('click', '.action_exotex',   function (event) {
+        $('body').on('click', '.action_exotex',   function (event) {
 
-        let relationtex_id     = $(this).data("relationtex_id");
-        let action             = $(this).data("action");
-        let csrf_token         = $("input[name='csrfmiddlewaretoken']").val();
-        $("#print_bibliotex_id").val(relationtex_id) ;
-        $.ajax(
-            {
-                type: "POST",
-                dataType: "json",
-                traditional: true,
-                data: {
-                    'relationtex_id' : relationtex_id,
-                    csrfmiddlewaretoken  : csrf_token
-                },
-                url : "../../../../bibliotex/ajax_print_bibliotex"    ,
-                success: function (data) {
- 
+            let relationtex_id     = $(this).data("relationtex_id");
+            let action             = $(this).data("action");
+            let csrf_token         = $("input[name='csrfmiddlewaretoken']").val();
+            $("#print_bibliotex_id").val(relationtex_id) ;
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'relationtex_id' : relationtex_id,
+                        csrfmiddlewaretoken  : csrf_token
+                    },
+                    url : "../../../../bibliotex/ajax_print_bibliotex"    ,
+                    success: function (data) {
+     
 
-                        $("#print_bibliotex_title").html(data.title) ;
-                        $("#print_bibliotex_body").html(data.html) ;
-                        
+                            $("#print_bibliotex_title").html(data.title) ;
+                            $("#print_bibliotex_body").html(data.html) ;
+                            
 
+                    }
                 }
-            }
-        )
-    });
+            )
+        });
+
+
+        $('body').on('click', '.publisher_docperso',   function (event) {
+ 
+                let docperso_id = $(this).data("docperso_id");
+                let from_url    = $(this).data("from");
+
+                console.log(from_url);
+
+                if (from_url == '2') { this_url = '../../ajax_publish_docperso' ;} else { this_url = '../../../ajax_publish_docperso' ;}
+
+                if ($(this).hasClass("selected_doc")){
+                    $(this).removeClass("selected_doc");
+                    var statut = "True";
+                    $('.disc'+docperso_id).addClass("disc_persistant");
+                    $('.disc'+docperso_id).removeClass("disc"); 
+                }else{
+                    $(this).addClass("selected_doc");
+                    var statut = "False";
+                    $('.disc'+docperso_id).addClass("disc"); 
+                    $('.disc'+docperso_id).removeClass("disc_persistant"); 
+                }
+                            
+                let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'docperso_id': docperso_id,
+                            'statut': statut,
+                            csrfmiddlewaretoken: csrf_token
+                        },
+                        url: this_url ,
+                        success: function (data) {
+                            console.log(data);
+                            $('.disc'+docperso_id).css("background-color",data.style);  
+                            $('#docperso_publisher_clic'+docperso_id).html("").html(data.publish);
+                            $('#docperso_publisher_clic'+docperso_id).removeClass(data.noclass);
+                            $('#docperso_publisher_clic'+docperso_id).addClass(data.class);
+                            $('#accueil_text_color'+docperso_id).html(data.publish_label);
+                            $('#accueil_text_color'+docperso_id).addClass(data.publish_label_css);
+                            $('#accueil_text_color'+docperso_id).removeClass(data.no_publish_label_css);
+                        }
+                    }
+                )
+            });   
+
+
 
 
     });

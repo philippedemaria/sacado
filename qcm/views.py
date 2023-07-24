@@ -4112,8 +4112,6 @@ def show_inside_parcours(request,idf, idp,code):
     else :
         quizzes = None
 
-
-
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : rq_user , 'form' : form , 
                 'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises, 'code' : code, 'quizzes' : quizzes,
                 'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'teacher' : teacher , 
@@ -13903,3 +13901,38 @@ def delete_docperso(request, idd, idp=0):
     else :
         return redirect('list_parcours_group',idg)
 
+
+def ajax_publish_docperso(request):
+
+    docperso_id = request.POST.get('docperso_id', None)
+    statut = request.POST.get("statut")
+    form = request.POST.get("from")
+    data = {}
+    if statut=="true" or statut == "True":
+        statut = 0
+        data["statut"]  = "False"
+        data["publish"] = "Dépublié"
+        data["style"]   = "#dd4b39"
+        data["class"]   = "legend-btn-danger"
+        data["noclass"] = "legend-btn-success"
+        data["label"]   = "Non publié"
+        data["publish_label"] = "Ce document n'est pas visible par vos élèves."
+        data["publish_label_css"] = "text-danger"
+        data["no_publish_label_css"] = "text-success"
+    else:
+        statut = 1
+        data["statut"]   = "True"
+        data["publish"] = "Publié"
+        data["style"]   = "#00a65a"
+        data["class"]   = "legend-btn-success"
+        data["noclass"] = "legend-btn-danger"
+        data["label"]   = "Publié"
+        data["publish_label"] = "Ce document est visible par vos élèves."
+        data["publish_label_css"] = "text-success"
+        data["no_publish_label_css"] = "text-danger"
+   
+    Docperso.objects.filter(pk = int(docperso_id)).update(is_publish = statut)  
+
+    print(data)  
+    return JsonResponse(data) 
+ 

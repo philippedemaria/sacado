@@ -542,4 +542,8 @@ urlpatterns = [
     path('create_docperso_parcours/<int:idp>', create_docperso_parcours, name='create_docperso_parcours'),
     path('update_docperso/<int:idp>/<int:idd>', update_docperso, name='update_docperso'),
     path('delete_docperso/<int:idp>/<int:idd>', delete_docperso, name='delete_docperso'),
+
+
+    path('ajax_publish_docperso', ajax_publish_docperso, name='ajax_publish_docperso'),
+    
  ]

@@ -378,40 +378,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
-    $('body').on('click', '.publisher',   function (event) {
-
- 
-        let bibliotex_id = $(this).data("bibliotex_id"); 
-        let statut = $(this).data("statut");
-        let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
- 
-        $.ajax(
-            { 
-                type: "POST",
-                dataType: "json",
-                traditional: true,
-                data: {
-                    'bibliotex_id' : bibliotex_id,
-                    'statut'       : statut,
-                    csrfmiddlewaretoken: csrf_token
-                },
-                url : "ajax_publish_bibliotex" ,
-
-                success: function (data) {
-                    $('#publisher'+bibliotex_id).removeClass(data.noget).addClass(data.get);
-                    $('#publisher'+bibliotex_id).attr("data-statut",data.statut);           
-                    $('#accueil_visible'+bibliotex_id).html("").html(data.publish);
-                    $('#bibliotex_publisher'+bibliotex_id).removeClass(data.noclass).addClass(data.class);
-                    $('#accueil_text_color'+bibliotex_id).addClass(data.legendclass).removeClass(data.nolegendclass);
-                    $('#disc'+bibliotex_id).attr("style",data.color).addClass(data.adddisc).removeClass(data.removedisc);
-
-
-                }
-            }
-        )
-    });
-
-
 
 
 

@@ -10,7 +10,7 @@
         <div class="handler widget-user-header">
             <!-- Add signet to folder --> 
             <span data-parcours_id="{{docperso.id }}" class="overlay_show white" style="cursor:pointer">
-                <div class="disc   disc{{docperso.id }}" style="background-color:{% if docperso.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                <div class="disc disc{{docperso.id }}" style="background-color:{% if docperso.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
                      <i class="fa fa-circle-o-notch"></i>
                 </div>
 
@@ -30,13 +30,12 @@
                     <a href="javascript:void();" data-parcours_id="{{docperso.id }}" class="overlay_show pull-right">
                         <i class="fa fa-times"></i>
                     </a>
-      
-     
+
                         <div class="btn-group"  style="padding:0px;margin:0px;">
-                            <a href="#" class="btn btn-default btn-publisher  publisher"  data-from="2" id="folder_publisher{{docperso.id}}" 
-                                data-parcours_id="{{docperso.id}}" data-statut="{{docperso.is_publish }}">  
+                            <a href="javascript:void(0);" class="btn btn-default btn-publisher publisher_docperso {% if docperso.is_publish %} selected_doc{% endif  %}"  
+                                data-from="{% if parcours %}3{% else %}2{% endif %}" id="docperso_publisher{{docperso.id}}" data-docperso_id="{{docperso.id}}">  
                                 <i class="fa fa-circle-o-notch"></i>
-                            </a><span class="legend-btn legend-btn-{% if not docperso.is_publish %}danger{% else  %}success{% endif  %} size15" id="parcours_statut{{docperso.id}}" style="cursor:auto" >  
+                            </a><span class="legend-btn legend-btn-{% if not docperso.is_publish %}danger{% else  %}success{% endif  %} size15" id="docperso_publisher_clic{{docperso.id}}" style="cursor:auto" >  
                               {% if docperso.is_publish %} Publié  {% else %} Non publié {% endif  %} 
                             </span>
                         </div>
@@ -53,10 +52,10 @@
                     </span>
 
                     {% if docperso.is_publish %}
-                    <span class="text-success" id="accueil_text_color{{ docperso.id }}" style="font-size:12px">Ce dossier <span id="accueil_visible{{docperso.id }}">est</span> visible par vos élèves.</span>
+                    <span class="text-success" id="accueil_text_color{{ docperso.id }}" style="font-size:14px">Ce dossier est visible par vos élèves.</span>
                     {% else %}
 
-                    <span class="text-danger" id="accueil_text_color{{ docperso.id }}" style="font-size:12px">Ce dossier <span id="accueil_visible{{docperso.id }}">n'est pas</span> visible par vos élèves.</span>
+                    <span class="text-danger" id="accueil_text_color{{ docperso.id }}" style="font-size:14px">Ce dossier n'est pas visible par vos élèves.</span>
                     {% endif %}
 
 
