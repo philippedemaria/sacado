@@ -132,7 +132,7 @@
  
                     </div> 
                 </div>
-         
+                {% if not group.recuperation %}
                 <div class="row">
                     <hr>
                     <div class="col-sm-8 col-md-10">
@@ -145,9 +145,21 @@
                         </label>
                     </div>
                     <div class="col-sm-4 col-md-2">
-                        {{ form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:OUI"|attr:"data-off:NON"}}
+                        {{ form.recuperation|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:OUI"|attr:"data-off:NON"}}
                     </div>
                 </div>
+                {% else %}
+                <div class="row">
+                    <hr>
+                    <div class="col-sm-8 col-md-10">
+                        <div class="alert alert-danger">
+                            Vous avez récupéré les documents pour ce groupe.
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
                 {% comment %}
                 <div class="row" id="choosen_parcours_for_this_level_and_subject">
                     <hr>

@@ -66,6 +66,35 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 }
 
 
+.section_bloc{
+  border-radius: 10px;
+  background-color: white;
+  margin: 20px 0px 10px 0px;
+  padding: 5px 10px;
+  border: 1px solid #E0E0E0;
+}
+
+.show_inside_parcours{
+  margin: 20px;
+  background-color: white;
+  padding: 10px;
+  border-radius:  5px;
+  display: block;
+  border: 3px solid ;
+  font-weight: normal;
+}
+
+.show_pacours_sub_label{
+  font-size:14px;
+  font-weight: 200;
+}
+
+
+
+
+
+
+
 
 .introduction_teacher{
   line-height: 28px;
@@ -389,7 +418,7 @@ table.puzzle td {
 .navbar-default{
     background-color: #FFF;
     border :  transparent !important;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     border-radius:0px;
 }
 
@@ -412,7 +441,8 @@ table.puzzle td {
 }
  
  .navbar{
-  margin-bottom: 25px;
+  /*margin-bottom: 25px;*/
+  padding-top: 5px;
   min-height: 45px;
 }
 
@@ -804,7 +834,7 @@ a.no_decoration:hover{
     background: #ffffff;
     border-top: 0px solid #d2d6de;
     padding: 0px;
-    width: 130px;
+    width: 310px;
     box-shadow: 0 5px 5px rgba(0,0,0,0.3);
     float: left;
     margin: 0px 31px 36px 5px;
@@ -818,7 +848,7 @@ a.no_decoration:hover{
     padding-bottom: 5px;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
-    height: 155px;
+    height: 140px;
     position: relative;
     width: 100%;
 }
@@ -1343,14 +1373,14 @@ p {
 }
 
 
-
+/*
 input:invalid {
   border: 2px solid red;
 }
 input:invalid:focus {
   background-color: #ff2a51;
 }
-
+*/
 .this_variable_active{
   border : 2px solid #48317C;
   color  : #48317C;
@@ -2365,13 +2395,17 @@ input[type=range].form-range {
 
 
 .list_exotex_in_tag{
-    list-style-type: square;
     color : #007bc9;
-    font-size:11px;
+    font-size:14px;
 }
 
 
 
+
+.docperso_tag{
+    padding:15px;
+    font-size:50px;
+}
 
 
 

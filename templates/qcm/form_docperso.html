@@ -1,0 +1,176 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
+    <script>
+        require(['script/ajax-docperso']);
+    </script>  
+ 
+
+
+
+{% endblock %}
+
+ 
+
+{% block page_title %}
+    <i class="bi bi-files"></i>
+    {% include 'qcm/breadcrumb.html' %}
+    {% if docperso %}  <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration  {% else %} Nouveau document   {% endif %} 
+    {% include 'modes.html' %}
+{% endblock %}
+
+
+{% block page_menu_right %}
+   
+{% endblock %}
+
+ 
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="#" method="POST"  enctype='multipart/form-data'>
+ 
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-12 col-md-8 form_card">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group"> 
+                            <label>Importer un fichier (ggb, doc, xls, odt, dtt, pdf, ...) ou écrire un lien externe</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+				            {{ form.title.label_tag }}
+				            {{ form.title|add_class:"form-control" }}
+                            {{ form.title.errors }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group"> 
+                            {{ form.file.label_tag }} <label><small>(50Ko )</small></label>
+                            {{ form.file|add_class:"btn btn-default" }}
+                        </div>
+                    </div>    
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group"> 
+                            {{ form.link.label_tag }}  
+                            {{ form.link|add_class:"form-control"|attr:"placeholder:https://" }}
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row {% if docperso or group %}no_visu{% endif %}">
+                    <div class="col-sm-12 col-md-6">
+                        <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span>
+                        <div class="alert alert-sacado form-group" id="grplist"  style="overflow-y: auto;height: 150px;">                          
+                            {{ form.groups|add_class:"select_all"   }}
+                            {{ form.groups.errors }}
+                        </div>
+	                </div>	
+                </div>
+                <div class="row {% if docperso or group %}no_visu{% endif %}"  id="folders_is_global">
+                    <div class="col-sm-12 col-md-6">
+                        <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="alert alert-sacado form-group" id="cblist"  style="margin-top:10px;overflow-y: auto;height: 200px;">
+                            {{ form.folders|add_class:"select_folders" }}
+                            {{ form.folders.errors }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="alert alert-sacado form-group" id="pclist" style="margin-top:10px;overflow-y: auto;height: 200px;">
+                            {{ form.parcours|add_class:"select_all_parcours" }}
+                            {{ form.parcours.errors }} 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 setup_ggb no_visu">
+                <div class="form_card">
+
+                <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
+                     <table class="table table-sacado borderless">
+                            <tr>
+                                <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Visible par les élèves.</div>
+                                    </span></td>
+                                <td>{{ form.is_publish |attr:"data-toggle:toggle"|attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                <td>{{ form.is_publish.errors }}</td>
+                            </tr>
+                            <tr id="publication_div">
+                                <td><label>Date de publication :</label>  
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                                <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                                <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                                </div>
+                                    </span>
+                                </td>
+                                <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                                <td></td>
+                            </tr>
+                            <tr id="publication_divd">
+                                <td>{{ form.stop.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text">Visible depuis ses groupes.</div>
+                                    </span> 
+                                </td>
+                                <td> {{ form.stop|add_class:"form-control datetimepicker"}}</td>
+                            </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+	    <div class="row">
+	        <div class="col-sm-8 col-md-8"> 
+	            <div class="form-group">
+
+                    <input value="Enregistrer" type="submit" class="btn btn-primary"/>
+
+	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+	            </div>
+	        </div>
+
+            {% if docperso %}
+                <div class="col-sm-4 col-md-4">  
+                    {% if parcours %}
+                    <a href="{% url 'delete_docperso' parcours.id docperso.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('ce document')" > 
+                        <i class="fa fa-trash"> </i>   Supprimer
+                    </a>
+                    {% else %}
+                    <a href="{% url 'delete_docperso' 0 docperso.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('ce document')" > 
+                        <i class="fa fa-trash"> </i>   Supprimer
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+
+	    </div>
+ 
+    </form>  
+</section>
+{% endblock %} 
+
+
+ 
+ 

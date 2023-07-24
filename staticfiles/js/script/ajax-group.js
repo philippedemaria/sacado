@@ -245,7 +245,7 @@ define(['jquery','bootstrap_popover', 'bootstrap','chart'], function ($) {
         });
 
 
-            $('.div_username').on('click', function (){  
+        $('.div_username').on('click', function (){  
  
                     let username_div = $(this).data("username_div");
 

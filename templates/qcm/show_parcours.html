@@ -32,16 +32,6 @@
 
     {% include 'qcm/breadcrumb.html' %}
 
-    {% if user.is_testeur or user.is_superuser %} 
-        <a href="#" data-toggle='modal' data-target='#reporting'>
-            <sup><i class="fa fa-comment fa-xs"></i></sup>
-        </a>
-    {% endif %} 
-
-    {% if nb_point_display %}
-        <small>{{ nb_point }}</small> 
-    {% endif %} 
-    <small>{{ parcours.exercises.count }} ex.  [{{ nb_time|int_minutes }} min.]</small> 
 
 {% endblock %}
 
@@ -89,512 +79,73 @@ body{
         </div>
         {% endif %}
 
-        {% if parcours.is_sequence %}
-            <div class="row">
-                <div class="col-sm-12 col-md-12" >
-                    <h1 class="thin">La séquence
-                        <a href="#" data-toggle='modal' data-target='#documentpopup' ><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                        </a>
-                    </h1>
-                </div>
-                <div class="col-sm-12 col-md-12"  id="sequence_sorter">
-                    {% for rc in relationships_customexercises %}
-                        {% if rc.type_id == 0 %}
-                            {%  if rc.exercise.supportfile.is_title %}     
-                                <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                    {% if rc.is_header_of_section  %}
-                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
-                                            {% if  rc.exercise.supportfile.title %}  
-                                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                            {% else %}
-                                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                    {% else %}
-                                        {% if  rc.exercise.supportfile.title %}  
-                                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                        {% else %}
-                                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                        {% endif %}
-                                    {% endif %}
-                                </h2>
-                            {%  elif rc.exercise.supportfile.is_subtitle %}
-                                <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                    {% if rc.is_header_of_section %}
-                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                    {% else %}
-                                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
-                                    {% endif %}
-                                </h3>
-                            {% else %}
-                                {% include 'details_document.html' %}
-                            {% endif %}  
-                        {% else %}
-                            {% include 'details_document.html' %}
-                        {% endif %}  
-                    {% endfor %}
 
-                </div>
+
+        <div class="row" >
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="{%  url 'show_inside_parcours' idf parcours.id 0 %}" style="border-color: {{ parcours.color  }}" class="show_inside_parcours">
+                    <i class="bi bi-explicit"></i> Exercices  <span class="fontLabel" style="background-color: {{ parcours.color  }}"  >{{ parcours.course.count }}</span>
+                    <div class="show_pacours_sub_label">
+
+                        {% comment %}<img src="{% static 'img/levels/level2_1.png' %}" width="100px" style="float:left;padding: 5px 10px 0px 0px"> {% endcomment %}
+
+                        Tous les exercices du parcours.  Créez, individualisez et configurez vos exercices. Récupérez nos exercices SACADO ou imaginez vos propres exercices.
+
+                    </div>
+                </a> 
             </div>
-        {% else %}
-            <div class="row {% if accordion %}documents_div documents_div_shadow{% endif %}">
-                <div class="col-sm-12 col-md-12"  id="exercise_sorter">
-                    
-
-                    <h1 class="thin">Les exercices 
-                        {% if accordion %}
-                        <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> 
-                        <span class="fontLabel" >{{ parcours.nb_exercises }} exercice{{ parcours.nb_exercises|pluralize }}</span> 
-                        {% endif %}
-                    </h1>
-     
-                    <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
-                    {% for rc in relationships_customexercises %}
-                            {%  if rc.exercise.supportfile.is_title %}     
-                                <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                    {% if rc.is_header_of_section  %}
-                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"    data-relation_id='{{ rc.id }}'  class="header_shower" title="Cours associé à cette section">                       
-                                            {% if  rc.exercise.supportfile.title %}  
-                                                {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                            {% else %}
-                                                {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                            {% endif %}   <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                    {% else %}
-                                        {% if  rc.exercise.supportfile.title %}  
-                                            {{  rc.exercise.supportfile.title|cleanhtml|capfirst }}  
-                                        {% else %}
-                                            {{ rc.exercise.supportfile.annoncement|cleanhtml }}
-                                        {% endif %}
-                                    {% endif %}
-                                </h2>
-                            {%  elif rc.exercise.supportfile.is_subtitle %}
-                                <h3 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
-                                    {% if rc.is_header_of_section %}
-                                        <a href="#" data-toggle='modal' data-target='#head_of_section' style="color:{{ parcours.color  }}"  data-relation_id='{{ rc.id }}' class="header_shower" title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }} <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
-                                    {% else %}
-                                        {{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
-                                    {% endif %}
-                                </h3>
-                            {% else %}  
-                                {% include 'qcm/details_all_cards.html' %}            
-                            {% endif %}  
-
-                    {% endfor %}
-
-                    {% if relationships_customexercises|length == 0   %}
-                        <a href="{% url 'parcours_create_custom_exercise' parcours.id 1 %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                            <div class="helper_tip_text_right" >Créer un exercice personnalisé dans {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</div>
-                        </a>                    
-                        <a href="{% url 'peuplate_parcours' parcours.id %}" class="helper_tip"><i class="bi bi-cloud-plus-fill btn-create-group" ></i> 
-                            <div class="helper_tip_text_right" >Sélectionner des exercices SACADO à {% if parcours.is_evaluation %} cette évaluation {% else %} ce parcours{% endif %}</div>
-                        </a>
-                    {% endif %}                   
-                   
-                </div>
-                {% if accordion %}<div class="shadow_bottom"></div>{% endif %}
-            </div>  
- 
-
-            {% if parcours.teacher == teacher %}
-
-                {% if parcours.course.count > 0  %}  
-                    <div class="row documents_div documents_div_shadow">           
-                        <div class="col-sm-12 col-md-12">
-                            <h1 class="thin">Les cours   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.course.count }} cours</span></h1>
-                            {% for course in parcours.course.all|dictsort:"ranking" %}
-                                {% include 'qcm/course/course_tag.html' %}
-                            {% endfor %}
-                            <a href="{% url 'create_course' 0 parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                                <div class="helper_tip_text" >Nouveau cours</div>
-                            </a>
-                        </div> 
-                        <div class="shadow_bottom"></div>
-                    </div>  
-                {% endif %} 
-
-
-
-                {% if parcours.quizz.count > 0  %}
-                    <div class="row documents_div documents_div_shadow">           
-                        <div class="col-sm-12 col-md-12">
-                            <h1 class="thin">Les quizz   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.quizz.count }} quizz</span></h1>
-                            {% for quizz in parcours.quizz.all %}
-                                {% include 'tool/quizz_tag.html' %}
-                            {% endfor %} 
-                            <a href="{% url 'create_quizz_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                                <div class="helper_tip_text" >Nouveau quizz</div>
-                            </a>
-                        </div> 
-                        <div class="shadow_bottom"></div>
-                    </div>  
-                {% endif %} 
-
-                {% if parcours.bibliotexs.count > 0  %}
-                    <div class="row documents_div documents_div_shadow">            
-                        <div class="col-sm-12 col-md-12" id="sort_bibliotex">
-                            <h1 class="thin">Les biblioTex   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.bibliotexs.count }} biblioTex</span> </h1>
-                            {% for bibliotex in parcours.bibliotexs.all|dictsort:"ranking" %}
-                                {% include 'bibliotex/bibliotex_tag.html' %}
-                            {% endfor %}
-                            <a href="{% url 'create_bibliotex_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                                <div class="helper_tip_text" >Nouveau bibliotex</div>
-                            </a>
-                        </div>
-                        <div class="shadow_bottom"></div>
-                    </div>  
-                {% endif %} 
-
-
-
-                {% if parcours.flashpacks.count > 0  %}  
-                    <div class="row documents_div documents_div_shadow">           
-                        <div class="col-sm-12 col-md-12" id="sort_flashpack">
-                            <h1 class="thin">Les flashpacks   <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ parcours.flashpacks.count }} flashpacks</span></h1>
-                            {% for flashpack in parcours.flashpacks.all  %}
-                                {% include 'flashcard/flashpack_tag.html' %}
-                            {% endfor %} 
-
-                            <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" class="helper_tip"><i class="fa fa-plus-circle fa-3x btn-create-group" ></i> 
-                                <div class="helper_tip_text" >Nouveau flaspack</div>
-                            </a>
-                        </div>
-                    <div class="shadow_bottom"></div> 
-                    </div>                     
-                {% endif %} 
-            {% endif %} 
-
-        {% endif %}
-
-
-
-
-        <div class="row" style="margin-top:50px">
-            <div class="col-sm-12 col-md-12">
-                <div class="form-group">
-                    {% if sacado_asso %}
-                        {% if parcours.teacher != teacher  and  parcours.is_share %}
-                            <a href="{% url 'clone_parcours' parcours.id 0 %}" class="btn btn-primary">Cloner ce parcours </a>    
-                            <a href="{% url 'clone_parcours' parcours.id 1 %}" class="btn btn-primary">Cloner ce parcours avec le cours associé</a>  
-                        {% endif %} 
-                    {% endif %}  
-                    <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
-                </div>
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="{%  url 'show_inside_parcours' idf parcours.id 4 %}" style="border-color: {{ parcours.color  }}"  class="show_inside_parcours">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16" style="float: left; margin-right:4px" >
+                    <path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"></path>
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"></path>
+                    </svg>
+                 Cours  <span class="fontLabel" style="background-color: {{ parcours.color  }}"  >{{ parcours.course.count }}  </span>
+                <div class="show_pacours_sub_label"> Tous les cours du parcours. Créez, individualisez et configurez vos cours. Récupérez nos cours SACADO ou imaginez vos propres cours.</div>
+                </a>
             </div>
-        </div>  
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="{%  url 'show_inside_parcours' idf parcours.id 3 %}" style="border-color: {{ parcours.color  }}"  class="show_inside_parcours">
+                    <i class="bi bi-bootstrap"></i> Bibliotex  <span class="fontLabel" style="background-color: {{ parcours.color  }}"  >{{ parcours.bibliotexs.count }}</span>
+                <div class="show_pacours_sub_label"> Toutes les bibliotex du parcours. Créez, individualisez et configurez vos bibliotex, ajouter des exercices au format LaTeX.</div>
+                </a>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="{%  url 'show_inside_parcours' idf parcours.id 5 %}" style="border-color: {{ parcours.color  }}"  class="show_inside_parcours">
+                    <i class="bi bi-aspect-ratio"></i> Quizz  <span class="fontLabel" style="background-color: {{ parcours.color  }}"  >{{ parcours.quizz.count }}</span>
+                <div class="show_pacours_sub_label"> Tous les quizz du parcours. Créez, individualisez et configurez vos quizz, ajouter des questions de type QCM, QCS, Réponse rédigée, V/F.</div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="{%  url 'show_inside_parcours' idf parcours.id 1 %}" style="border-color: {{ parcours.color  }}"  class="show_inside_parcours">
+                   <i class="bi bi-stack"></i>  Flashpacks  <span class="fontLabel" style="background-color: {{ parcours.color  }}"  >{{ parcours.flashpacks.count }}</span>
+                <div class="show_pacours_sub_label"> Tous les flashpacks du parcours. Utilisez les neuros sciences dans les apprentissages. Créez, individualisez et configurez vos flashpacks, ajouter des flashcards.</div>
+                </a>
+            </div>
+            {% if sacado_asso %}
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="{%  url 'show_inside_parcours' idf parcours.id 7 %}" style="border-color: {{ parcours.color  }}"  class="show_inside_parcours">
+                    <i class="bi bi-files"></i> Documents perso  <span class="fontLabel" style="background-color: {{ parcours.color  }}"  >{{ parcours.docpersos.count }}</span>
+                <div class="show_pacours_sub_label"> Tous les documents personnels du parcours. Importer vos images, vos liens, vos fichiers pour les agréger dans un seul et même espace.  </div>
+                </a>
+            </div>
+            {% else %}
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <a href="#"    class="show_inside_parcours no_sacado_asso" title="Version Etablissement requise">
+                    <i class="bi bi-files"></i> Documents perso  <span class="fontLabel" style="background-color: #CCC"  >{{ parcours.docpersos.count }}</span>
+                <div class="show_pacours_sub_label"> Tous les documents personnels du parcours. Importer vos images, vos liens, vos fichiers pour les regrouper dans un seul et même espace.  </div>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
 
 
     </section>
 </form>
  
-
-
-<div class="modal fade" id="documentpopup" tabindex="-1" role="dialog" aria-labelledby="sacadopopup" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="width:1000px;font-size: 16px">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2  class="sacado">Créer/Associer un document  </h2>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>                
-
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                    Exercices  
-                    </div>  
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-warning"> Associer des exercices SACADO </a>  
-                    </div> 
-                </div> 
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                    Exercices personnalisés
-                    </div>  
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_custom_parcours' parcours.id   %}" class="btn btn-warning"> Associer  un existant </a>  
-                    </div> 
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_custom_sequence' parcours.id  %}" class="btn btn-quizz_bank"> Créer  un nouveau</a>  
-                    </div> 
-                </div>        
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                    Cours
-                    </div>   
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_course_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
-                    </div>                     
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_course_sequence' parcours.id   %}" class="btn btn-quizz_bank"> Créer un nouveau</a>  
-                    </div> 
-                </div> 
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                    Quizz
-                    </div> 
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
-                    </div> 
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_quizz_sequence' parcours.id  %}" class="btn btn-quizz_bank"> Créer un nouveau</a>  
-                    </div> 
-                </div> 
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                    Flashpack
-                    </div> 
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_flashpack_parcours' parcours.id   %}" class="btn btn-warning"> Associer un existant</a>  
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_flashpack_sequence' parcours.id   %}" class="btn btn-quizz_bank"> Créer un nouveau</a>  
-                    </div> 
-                </div> 
-                <hr/>
-                <div class="row">
-                    <div class="col-sm-3 col-md-3">
-                    BiblioTex
-                    </div> 
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="btn btn-warning"> Associer une existante</a>  
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                    <a href="{% url 'create_bibliotex_sequence' parcours.id   %}" class="btn btn-quizz_bank"> Créer une nouvelle</a>  
-                    </div> 
-                </div> 
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-{% if user.is_testeur or user.is_superuser %} 
-<div class="modal fade" id="reporting" tabindex="-1" role="dialog" aria-labelledby="reporting"> 
-    <div class="modal-dialog" role="document" >
-        <div class="modal-content" style="padding-top :0px;">
-            <div class="modal-header">
-                <h3>Rapport d'erreurs
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                </h3>
-            </div>
-            <div class="modal-body">
-                <form action="{% url 'reporting' %}" method="POST" enctype='multipart/form-data'> 
-                  {% csrf_token %} 
-
-                  <label>Rapport d'erreurs</label>        
-                    {{ form_reporting.report }}
-
-                    <input name="document" value="parcours" type="hidden" /> 
-                    <input name="document_id"  value="{{ parcours.id }}" type="hidden" />
-                    <input name="user"  value="{{ user.id }}" type="hidden" />
-
-                    <input class="btn btn-primary" type="submit"/>          
-                    <a href="javascript:history.back()"><input type="button" value="Annuler" data-dismiss="modal" aria-label="Close" class="btn btn-default "/></a>
-                </form>
-            </div>
-        </div>
-    </div>           
-</div>
-{% endif %}
-
  
-<div class="modal fade" id="head_of_section" tabindex="-1" role="dialog" aria-labelledby="head_of_section">
-    <div class="modal-dialog" role="document"  style="width:95%;">
-        <div class="modal-content" style="padding-top :0px;">
-            <div class="modal-header">
-                <h3>Cours associé
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                </h3>
-            </div>
-            <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">   
-                              <div id="courses_from_section"></div>
-                        </div>   
-                    </div> 
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="remediation" tabindex="-1" role="dialog" aria-labelledby="remediation">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" >
-             
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h2  class='sacado'  >Ajouter une aide, une consigne</h2>
-            </div>
-            <div class="modal-body">
-                <div id="remediation_form">
-                </div>
-                 <div class="row audio" id="audio" >
-                    <form enctype="multipart/form-data" action="" method="post">                    
-                        <div class="col-sm-12 col-md-12"> 
-                            <label>Audio</label>           
-                            <div class="form-group">
-                                <div id="controls">
-                                    <button type="button" id="recordButton" class="btn btn-danger"><i class="fa fa-microphone"></i></button>
-                                    <button type="button" id="pauseButton" disabled  class="btn btn-default"><i class="fa fa-pause"></i> </button>
-                                    <button type="button" id="stopButton" disabled  class="btn btn-default"><i class="fa fa-stop"></i></button>
-                                </div>
-                                <div id="formats"></div>
-                                <label><small>Vous pouvez vous enregistrer plusieurs fois pour déterminer la meilleure prise.</small></label>
-                                <ol id="recordingsList"></ol>
-                                <!-- inserting these scripts at the end to be able to use all the elements in the DOM  -->
-                                <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-                                <script src="{% static 'js/script/recorder_voice.js' %}"></script>
-                            </div>
-                        </div>                
-                        <input name="id_relationship" id="id_relationship" type="hidden" />
-                        <input name="id_parcours" id="id_parcours" type="hidden" value="{{ parcours.id }}" />
-                    </form>                    
-                </div> 
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="change_parcours" tabindex="-1" role="dialog" aria-labelledby="change_parcours">
-    <div class="modal-dialog" role="document" >
-        <div class="modal-content" style="padding-top :0px;">
-            <form action="{% url 'replace_exercise_into_parcours' %}" method="POST" enctype='multipart/form-data'>
-            {% csrf_token %}
-                <div class="modal-header">
-                    <h3>Déplacer un exercice   
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button> 
-                    </h3>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">   
-                            <input  name="change_parcours_exercise_id" type="hidden" id="change_parcours_exercise_id"   />
-                            <input  name="change_parcours_parcours_id" type="hidden" id="change_parcours_parcours_id"   />
-                            <input  name="change_parcours_custom" type="hidden" id="change_parcours_custom"   />                            
-                        </div>   
-                    </div> 
-
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">  
-                                Si vous souhaitez conserver cet exercice dans le parcours actuel, 
-                                cocher aussi le parcours actuel signalé. Sinon l'exercice sera déplacé et n'apparaitra plus dans ce parcours.                       
-                        </div>   
-                    </div> 
-                    <hr/>
-
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12"> 
-                            <div class="form-group">
-                                {% for p in parcours_group %}
-
-                                   <label> 
-                                        <input type="checkbox" name="change_into_parcours" id="change_into_parcours{{ p.id }}"  value="{{ p.id }}" /> 
-                                        {% if p.id == parcours.id %}<b>{{ p.title}} <i class="fa fa-hand-o-right"></i> Parcours actuel</b>{% else %} {{ p.title}} {% endif%}
-                                    </label>
-                                    <br>
-
-                                {% endfor %}
-                            </div>
-                        </div>   
-                    </div> 
-
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12"> 
-                            <div class="form-group">
-                                <input  value="Déplacer cet exercice dans ces parcours" 
-                                        type="submit" class="btn btn-primary" 
-                                        onclick="changeExerciceIntoParcours()" />
-                                <a href="#" class="btn btn-default" data-dismiss="modal" aria-label="Close">Fermer</a>
-                            </div>
-                        </div>   
-                    </div> 
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="modal fade" id="quizz_choice" tabindex="-1" role="dialog" aria-labelledby="quizz_choice">
-    <div class="modal-dialog" role="document" style="width: 750px;">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h1 class='thin'>Création du quizz</h1>
-            </div>
-            <div class="modal-body">
-                <form action="{% url 'create_quizz' %}" method="POST"  enctype='multipart/form-data'>
-                    {% include 'tool/form_quizz_items.html' %}
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<script>
-MathJax = {
-  tex: {packages: {'[+]': ['input']} ,   inlineMath: [['$', '$']] , displayMath: [['$$', '$$'], ["\\[", "\\]"]],  },
-  startup: {
-    ready() {
-      const Configuration = MathJax._.input.tex.Configuration.Configuration;
-      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
-      const TEXCLASS = MathJax._.core.MmlTree.MmlNode.TEXCLASS;
-      
-      new CommandMap('input', {input: 'Input'}, {
-        Input(parser, name) {
-          const xml = parser.create('node', 'XML');
-          const id = parser.GetBrackets(name, '');
-          const w = parser.GetBrackets(name, '5em');
-          const value = parser.GetArgument(name);
-          xml.setXML(MathJax.startup.adaptor.node('input', {
-            id: id, name: id, value: value, style: {width: w}, xmlns: 'http://www.w3.org/1999/xhtml'
-          }), MathJax.startup.adaptor);
-          xml.getSerializedXML = function () {
-            return this.adaptor.outerHTML(this.xml) + '</input>';
-          }
-          parser.Push(
-            parser.create('node', 'TeXAtom', [
-              parser.create('node', 'semantics', [
-                parser.create('node', 'annotation-xml', [
-                  xml
-                ], {encoding: 'application/xhtml+xml'})
-              ])
-            ], {texClass: TEXCLASS.ORD})
-          );
-        }
-      });
-      Configuration.create('input', {handler: {macro: ['input']}});
-
-      MathJax.startup.defaultReady();
-    }
-  }
-};
-</script>
-<script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
 {% endblock %}
 
  

@@ -65,6 +65,10 @@ def file_directory_to_student(instance, filename):
     return "files/{}/{}".format(instance.customanswerbystudent.student.user.id, filename)
 
 
+def docperso_directory_path(instance, filename):
+    return "files/{}/{}".format(instance.teacher.user.id, filename)
+
+
 def audio_directory_path(instance,filename):
     return "audio/{}/{}".format(instance.id,filename)
 
@@ -1180,9 +1184,14 @@ class Parcours(ModelWithCode):
         data["nb_docs_published"]       = nb_docs_published
         data["docs_care"]               = ( nb_docs == nb_docs)
 
-
-
         return data
+
+
+    def qflash(self):
+        return  self.quizz.filter(is_random=1)
+
+
+
 
 #############################################################################################################################################
 #############################################################################################################################################
@@ -2850,3 +2859,67 @@ class Tracker(models.Model):
 
     def __str__(self):
         return "Traceur de : {}".format(self.user)
+
+
+
+#############################################################################################################################################
+#############################################################################################################################################
+##############################         Document perso                          ##############################################################
+#############################################################################################################################################
+#############################################################################################################################################
+class Docperso(models.Model):
+    """
+    Modèle représentant un associé.
+    """
+    title         = models.CharField( max_length=255, verbose_name="Titre") 
+    teacher       = models.ForeignKey(Teacher, related_name="docpersos", blank=True, on_delete=models.CASCADE, editable=False ) 
+    date_modified = models.DateTimeField(auto_now=True)
+
+    file       = models.FileField(upload_to=docperso_directory_path,  blank=True, verbose_name="Fichier")
+    link       = models.CharField( max_length=255, blank=True, verbose_name="Lien externe") 
+
+
+
+    is_share   = models.BooleanField(default=0, verbose_name="Mutualisé ?")
+    is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+
+    start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
+    stop  = models.DateTimeField(null=True, blank=True, verbose_name="Fin de publication")
+
+    groups       = models.ManyToManyField(Group, blank=True, related_name="docpersos" ) 
+    folders      = models.ManyToManyField(Folder, blank=True, related_name="docpersos"  )    
+    parcours     = models.ManyToManyField(Parcours, blank=True, related_name="docpersos"  ) 
+ 
+    students     = models.ManyToManyField(Student, blank=True,  related_name="docpersos",   editable=False)
+
+    def __str__(self):
+        return self.title 
+
+
+    def format_html(self) :
+
+        str_file =  str(self.file) 
+
+        if str_file == "" and self.link :
+            rtrn = "<i class='bi bi-link-45deg docperso_tag'></i><br/><small>"+str(self.link)+"</small>"
+
+        elif 'pdf' in str_file :
+            rtrn = "<img src='https://sacado.xyz/static/img/pdf.png' width='100px' />"
+        elif 'jpg' in str_file or 'png' in str_file or 'jpeg' in str_file  :  
+            rtrn = "<img src='"+self.file.url+"' width='290px' height='130px' />"
+        elif 'doc' in str_file :
+            rtrn = "<img src='https://sacado.xyz/static/img/doc.png' width='100px' />"
+        elif 'odt' in str_file:
+            rtrn = "<img src='https://sacado.xyz/static/img/odt.png' width='100px' />"
+        elif 'ggb' in str_file :
+            rtrn = "<img src='https://sacado.xyz/static/img/ggb.png' width='100px' />"
+        elif 'xls' in str_file :
+            rtrn = "<img src='https://sacado.xyz/static/img/xls.png' width='100px' />"
+        elif 'ods' in str_file :
+            rtrn = "<img src='https://sacado.xyz/static/img/ods.png' width='100px' />"
+        elif 'ppt' in str_file :
+            rtrn = "<img src='https://sacado.xyz/static/img/ppt.png' width='100px' />"
+
+        else :
+            rtrn = ""
+        return rtrn

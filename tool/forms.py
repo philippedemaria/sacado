@@ -169,6 +169,7 @@ class QFlashForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
+		group = kwargs.pop('group')
 		super(QFlashForm, self).__init__(*args, **kwargs)
 
 		groups =  teacher.groups.all() 
@@ -185,6 +186,7 @@ class QFlashForm(forms.ModelForm):
 		#teacher.levels.order_by("ranking")
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=levels, required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=False)
+		if group : self.fields['groups'].initial = group
  
 
 

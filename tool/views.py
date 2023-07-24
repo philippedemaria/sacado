@@ -3353,6 +3353,15 @@ def show_qrandom_admin(request,id):
     return render(request, 'tool/show_qr.html', {'qrandom': qrandom      })
 
 
+
+
+
+
+
+
+
+
+
 #####################################################################################################################################
 #####################################################################################################################################
 ####    admin_question_ia
@@ -3794,7 +3803,8 @@ def list_questions_flash(request):
     request.session["parcours_id"] = False
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
-
+    request.session["group_id"] = False
+    
     teacher = request.user.teacher     
     levels = teacher.levels.order_by("ranking") 
     delete_session_key(request, "quizz_id")
@@ -3830,7 +3840,23 @@ def list_questions_flash_sub(request,idl):
 
 
 
+@login_required(login_url= 'index')
+def list_questions_flash_by_group(request,idg):
 
+    request.session["parcours_id"] = False
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
+    request.session["group_id"] = idg
+
+    group = Group.objects.get(id=idg)   
+
+    quizzes = group.quizz.filter(is_random=1)   
+ 
+    delete_session_key(request, "quizz_id")
+
+    return render(request, 'tool/list_questions_flash_by_group.html', { 'group': group , 'quizzes': quizzes  })
+
+ 
 
 
 @login_required(login_url= 'index')
@@ -3858,8 +3884,13 @@ def create_questions_flash(request,idl):
     teacher = request.user.teacher
 
     level = Level.objects.get(pk=idl)
+    grp_id = request.session.get("group_id",None)
+    if grp_id :
+        grp = Group.objects.get(pk=grp_id)
+    else : grp = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp )
+
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
 
@@ -3904,13 +3935,91 @@ def create_questions_flash(request,idl):
                 mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
                 nf.mentaltitles.set( mentaltitles )  
 
-            return redirect('list_questions_flash_sub' , idl)
+            if grp_id : return redirect('list_questions_flash_by_group' , grp_id) 
+            else : return redirect('list_questions_flash_sub' , idl)
         else:
             print(form.errors)
 
     context = {'form': form, 'teacher': teacher,  'all_mentals' : all_mentals  , 'level' : level }
 
     return render(request, 'tool/form_question_flash.html', context)
+
+
+
+
+@login_required(login_url= 'index')
+def create_questions_flash_inside_parcours(request,idp):
+
+    teacher = request.user.teacher
+    parcours = Parcours.objects.get(pk=idp)
+    level = parcours.level
+
+    grp_id = request.session.get("group_id",None)
+    if grp_id :
+        grp = Group.objects.get(pk=grp_id)
+    else : grp = None
+
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp )
+
+    request.session["tdb"] = "Tools"
+    request.session["subtdb"] = "QFlash"
+
+    all_mentals = list()
+    subject = Subject.objects.get(pk=1)
+    mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
+ 
+    level_dict = dict()
+ 
+    level_dict["level"] = level 
+    list_mentals = list()
+    for mentaltitle in mentaltitles :
+        dict_mentals = dict()
+        mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+        is_mentals = False 
+        if mentals :
+            dict_mentals["mentaltitle"] = mentaltitle 
+            dict_mentals["mentals"] = mentals
+            list_mentals.append(dict_mentals)
+            is_mentals = True
+            level_dict["sub"] = list_mentals
+
+    all_mentals.append(level_dict)
+
+    if request.method == "POST":
+        if form.is_valid():
+            nf = form.save(commit = False)
+            nf.teacher = teacher
+            nf.is_questions = 1
+            nf.is_random = 1
+            nf.is_archive = 0
+            nf.interslide = 2
+            nf.save()
+            form.save_m2m()
+
+            for group_id in request.POST.getlist("groups") :
+                group = Group.objects.get(pk=group_id)
+                nf.students.set(group.students.all())
+
+            mental_ids = request.POST.getlist("mental_ids",None)
+            if len(mental_ids) :
+                mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
+                nf.mentaltitles.set( mentaltitles )  
+
+            if parcours : return redirect('show_inside_parcours' , idp)
+            elif grp_id : return redirect('list_questions_flash_by_group' , grp_id) 
+            else : return redirect('list_questions_flash_sub' , idl)
+        else:
+            print(form.errors)
+
+    context = {'form': form, 'teacher': teacher,  'all_mentals' : all_mentals  , 'level' : level }
+
+    return render(request, 'tool/form_question_flash.html', context)
+
+
+
+
+
+
 
 
 
@@ -3943,8 +4052,7 @@ def update_questions_flash(request,id):
 
     all_mentals.append(level_dict)
  
-
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , instance = quizz)
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = None  , instance = quizz)
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
 
@@ -4055,7 +4163,7 @@ def delete_all_questions_flash(request):
 def admin_test_mental(request,id):
 
     teacher = request.user.teacher
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher ,grp = None )
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "QFlash"
     mental = Mental.objects.get(pk=id)

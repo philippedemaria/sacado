@@ -1912,13 +1912,9 @@ def list_parcours_group(request,id):
     request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
     if request.session.has_key("subtdb"): del request.session["subtdb"]
 
-
+    request.session["group_id"] = group.id
     #On entre dans un groupe donc on garde sa clé dans la session
-    request.session["group_id"] = id
-
     role, group , group_id , access = get_complement(request, teacher, group)
-
-    group = Group.objects.get(pk = id) 
 
     if not authorizing_access(teacher,group, access ):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
@@ -1928,7 +1924,7 @@ def list_parcours_group(request,id):
     request.session.pop('folder_id', None)
 
     folders     = group.group_folders.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, is_archive=0, is_trash=0 ).distinct().order_by("ranking")
-
+    nb_folders  = folders.count()
     bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, folders = None, is_trash=0, is_testpos=0).distinct()
 
 
@@ -1945,12 +1941,10 @@ def list_parcours_group(request,id):
     bibliotexs = group.bibliotexs.filter(folders=None)
     quizzes    = group.quizz.filter(folders=None)
     flashpacks = group.flashpacks.filter(folders=None)
+    docpersos  = group.docpersos.filter(folders=None)
 
-
-
-
-    context =  { 'folders': folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
-                 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'nb_bases' : nb_bases }
+    context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
+                 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases }
 
     return render(request, 'qcm/list_parcours_group.html', context )
 
@@ -1967,8 +1961,8 @@ def list_sub_parcours_group(request,idg,idf):
     folder  = Folder.objects.get(pk = idf)
 
     role, groupe , group_id , access = get_complement(request, teacher, folder )
-    request.session["folder_id"] = folder.id
-    request.session["group_id"] = group_id
+    request.session["folder_id"] = idf
+    request.session["group_id"] = idg
     delete_session_key(request, "quizz_id")
 
     try :
@@ -4055,10 +4049,80 @@ def show_parcours(request, idf = 0, id=0):
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : rq_user , 'form' : form , 
-                  'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises,
+                  'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises, 'idf' : idf , 
                'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
 
     return render(request, 'qcm/show_parcours.html', context) 
+
+
+
+
+def show_inside_parcours(request,idf, idp,code):
+
+    group_id = request.session.get("group_id",None)
+
+    if idf > 0 :
+        folder = Folder.objects.get(id=idf)
+    else :
+        folder = None
+
+    parcours = Parcours.objects.get(id=idp)
+    rq_user = request.user
+
+    try :
+        teacher = rq_user.teacher
+    except :
+        return redirect ('index')
+
+    today = time_zone_user(rq_user)
+    delete_session_key(request, "quizz_id")
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+        return redirect('index')
+ 
+    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+
+    nb_point , nb_time = 0 , 0
+    nb_point_display = False
+    for rc in relationships_customexercises :
+        try : 
+            nb_point += rc.mark
+        except : pass
+        try : 
+            nb_time += rc.duration
+        except : pass
+
+    if nb_point > 0 :
+        nb_point = str(nb_point) + " points"
+        nb_point_display = True
+
+    accordion = get_accordion(parcours.course, parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
+
+    skills = Skill.objects.all()
+    request.session["parcours_id"] = parcours.id
+ 
+    form_reporting = DocumentReportForm(request.POST or None )
+
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
+ 
+    if code == '6' : 
+        quizzes = parcours.quizz.filter(is_random=1) 
+    else :
+        quizzes = None
+
+
+
+    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : rq_user , 'form' : form , 
+                'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises, 'code' : code, 'quizzes' : quizzes,
+                'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'teacher' : teacher , 
+                'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display }
+
+
+    template = 'qcm/show_inside_parcours.html'
+    return render(request, template , context) 
+
 
 
 
@@ -13724,4 +13788,118 @@ def repaired_reporting(request, pk,code ):
 def simulator(request):
     context = {}
     return render(request, 'qcm/simulator.html', context )
+
+
+def list_docpersos_group(request,idg):
+
+    group = Group.objects.get(pk=idg)
+    docpersos = group.docpersos.order_by("date_modified")
+    return render(request, 'qcm/list_docpersos.html', {'docpersos': docpersos, 'group' : group , })
+
+
+
+
+def create_docperso_parcours(request,idp=0):
+
+    parcours , folder , group = None ,  None, None
+
+    idg = request.session.get("group_id",None)
+    idf = request.session.get("folder_id",None)
+
+    if idf : 
+        folder = Folder.objects.get(pk=idf)
+    if idp : 
+        parcours = Parcours.objects.get(pk=idp)   
+    if idg : 
+        group = Group.objects.get(pk=idg)
+
+    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,parcours = parcours , folder = folder , group = group )
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher = request.user.teacher
+        nf.save()
+        if idf : 
+            folder = Folder.objects.get(pk=idf)
+            nf.folders.add(folder)
+        if idp : 
+            parcours = Parcours.objects.get(pk=idp)   
+            nf.parcours.add(parcours)
+        if idg : 
+            group = Group.objects.get(pk=idg)
+            nf.groups.add(group)
+
+        messages.success(request, 'Le document a été créé avec succès !')
+        return redirect('show_inside_parcours' , folder.id , parcours.id,7)
+    else:
+        print(form.errors)
+
+    context = {'form': form,   'docperso': None ,   'group': group , 'folder': folder,   'parcours': parcours  }
+
+    return render(request, 'qcm/form_docperso.html', context)
+
+
+
+
+def update_docperso(request, idp,idd):
+
+    docperso = Docperso.objects.get(id=idd)
+ 
+    idg = request.session.get("group_id",None)
+    idf = request.session.get("folder_id",None)
+
+    group , folder , parcours = None, None, None
+    if idf : 
+        folder = Folder.objects.get(pk=idf)
+    if idp : 
+        parcours = Parcours.objects.get(pk=idp)  
+    if idg : 
+        group = Group.objects.get(pk=idg)
+
+    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher, parcours = parcours , folder = folder , group = group, instance=docperso  )
+
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher = request.user.teacher
+        nf.save()
+        if idf : 
+            folder = Folder.objects.get(pk=idf)
+            nf.folders.add(folder)
+        if idp : 
+            parcours = Parcours.objects.get(pk=idp)   
+            nf.parcours.add(parcours)
+        
+        if idg : 
+            group = Group.objects.get(pk=idg)
+            nf.groups.add(group)
+
+        messages.success(request, 'Le document a été créé avec succès !')
+        return redirect('show_inside_parcours' , idf , idp ,7)
+    else:
+        print(form.errors)
+
+    context = {'form': form,   'docperso': docperso ,   'group': group , 'folder': folder,   'parcours': parcours  }
+
+    return render(request, 'qcm/form_docperso.html', context )
+
+
+
+def delete_docperso(request, idd, idp=0):
+
+    docperso = Docperso.objects.get(id=idd)
+ 
+    idg = request.session.get("group_id",None)
+    idf = request.session.get("folder_id",None)
+    docperso.delete()
+    if idf : 
+        folder = Folder.objects.get(pk=idf) 
+    if idg : 
+        group = Group.objects.get(pk=idg)
+
+    if idp : 
+        parcours = Parcours.objects.get(pk=idp) 
+        return redirect('show_inside_parcours' , idf , idp ,7)
+    else :
+        return redirect('list_parcours_group',idg)
 

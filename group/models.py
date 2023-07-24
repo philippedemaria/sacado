@@ -95,6 +95,7 @@ class Group(ModelWithCode):
         image = self.subjet.subject_vignettesubject.values_list("vignette__imagefile").filter(level=self.level).first()
 
         return image
+ 
 
 
 

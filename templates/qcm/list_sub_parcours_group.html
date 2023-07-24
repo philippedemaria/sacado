@@ -56,28 +56,29 @@
     {% regroup parcours_tab by is_evaluation as list_parcours %} 
 
         {% for parcours_sort in list_parcours %}  
-            <div class="row {% if accordion or list_parcours|length > 1 %}  documents_div documents_div_shadow {% endif %}">
-                <div class="col-sm-12 col-md-12">
-                    {% if  parcours_sort.grouper %}
-                        <h1 class="thin" id="evaluation" >Mes évaluations 
-                            <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span> 
-                            <span class="fontLabel" >{{ parcours_sort.list|length }} évaluation{{ parcours_sort.list|length|pluralize }}</span>
-                        </h1>
-                    {% else %}
-                        <h1 class="thin" >Mes parcours 
-                            {% if accordion or list_parcours|length > 1 %}   
-                                <span class="un_collapsed"> <i class="fa fa-angle-down"></i></span>
-                                <span class="fontLabel" >{{ parcours_sort.list|length }} parcours</span>  
-                            {% endif %}
-                        </h1>
-                    {% endif %}  
-                    <div id="subparcours_sortable" >
-                    {% for parcours in parcours_sort.list %}  
-                          {% include 'qcm/parcours_evaluation_tag.html' %} 
-                    {% endfor %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12">            
+                    <div class="section_bloc">
+                        {% if  parcours_sort.grouper %}
+                            <h1 class="thin" id="evaluation" >Mes évaluations 
+                                <span class="fontLabel" >{{ parcours_sort.list|length }} évaluation{{ parcours_sort.list|length|pluralize }}</span>
+                            </h1>
+                        {% else %}
+                            <h1 class="thin" >Mes parcours 
+                                {% if accordion or list_parcours|length > 1 %}   
+                                    <span class="fontLabel" >{{ parcours_sort.list|length }}  </span>  
+                                {% endif %}
+                            </h1>
+                        {% endif %}  
+                        <div id="subparcours_sortable" >
+                        {% for parcours in parcours_sort.list %}  
+                              {% include 'qcm/parcours_evaluation_tag.html' %} 
+                        {% endfor %}
+                        </div>
+                    <div style="clear:both"></div>                        
                     </div>
+
                 </div>
-                {% if accordion or list_parcours|length > 1 %}<div class="shadow_bottom"></div>{% endif %}
             </div>                
             {% empty %}   
              {% if not sequences %}
@@ -89,20 +90,23 @@
                 </div>
             </div> 
             {% endif %}  
-            {% endfor %}
+        {% endfor %}
 
 
     {% if sequences %}
     <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <h1 class="thin">Mes séquences    </h1>
-            <div class="row" > 
-                <div class="col-sm-12 col-md-12">
-                    {% for parcours in sequences %}   
-                          {% include 'qcm/parcours_evaluation_tag.html' %} 
-                    {% endfor %}
+        <div class="col-sm-12 col-md-12">            
+            <div class="section_bloc">
+                <h1 class="thin">Mes séquences    </h1>
+                <div class="row" > 
+                    <div class="col-sm-12 col-md-12">
+                        {% for parcours in sequences %}   
+                              {% include 'qcm/parcours_evaluation_tag.html' %} 
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            <div style="clear:both"></div>
         </div>
     </div>
     {% endif %}
@@ -111,35 +115,39 @@
 
 
     {% if quizzes %}
-    <div class="row documents_div documents_div_shadow">
-        <div class="col-sm-12 col-md-12">
-            <h1 class="thin">Mes quizz <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ quizzes.count }} quizz </span>  </h1>
-            <div class="row" > 
-                <div class="col-sm-12 col-md-12">
-                    {% for quizz in quizzes %}   
-                          {% include 'tool/quizz_tag.html' %} 
-                    {% endfor %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">            
+            <div class="section_bloc">
+                <h1 class="thin">Mes quizz <span class="fontLabel" >{{ quizzes.count }}   </span>  </h1>
+                <div class="row" > 
+                    <div class="col-sm-12 col-md-12">
+                        {% for quizz in quizzes %}   
+                              {% include 'tool/quizz_tag.html' %} 
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            <div style="clear:both"></div>
         </div>
-        <div class="shadow_bottom"></div>
     </div>
     {% endif %}
 
 
     {% if bibliotexs %}
-    <div class="row  documents_div documents_div_shadow">
-        <div class="col-sm-12 col-md-12">
-            <h1 class="thin" id="biliotex" >Mes biblioTex <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ bibliotexs.count }} biblioTex</span>    </h1>
-            <div class="row "> 
-                <div class="col-sm-12 col-md-12">
-                    {% for bibliotex in bibliotexs %}   
-                          {% include 'bibliotex/bibliotex_tag.html' %} 
-                    {% endfor %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">            
+            <div class="section_bloc">
+                <h1 class="thin" id="biliotex" >Mes biblioTex  <span class="fontLabel" >{{ bibliotexs.count }}  </span>    </h1>
+                <div class="row "> 
+                    <div class="col-sm-12 col-md-12">
+                        {% for bibliotex in bibliotexs %}   
+                              {% include 'bibliotex/bibliotex_tag.html' %} 
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            <div style="clear:both"></div>
         </div>
-        <div class="shadow_bottom"></div>
     </div>
     {% endif %}
 
@@ -147,17 +155,19 @@
 
     {% if flashpacks %}
     <div class="row  documents_div documents_div_shadow">
-        <div class="col-sm-12 col-md-12">
-            <h1 class="thin" id="biliotex" >Mes flashpack <span class="un_collapsed"><i class="fa fa-angle-down"></i></span> <span class="fontLabel" >{{ flashpacks.count }} flashpack</span>    </h1>
-            <div class="row "> 
-                <div class="col-sm-12 col-md-12">
-                    {% for flashpack in flashpacks %}   
-                          {% include 'flashcard/get_flashpack_tag.html' %} 
-                    {% endfor %}
+        <div class="col-sm-12 col-md-12">            
+            <div class="section_bloc">
+                <h1 class="thin" id="biliotex" >Mes flashpack <span class="fontLabel" >{{ flashpacks.count }}  </span>    </h1>
+                <div class="row "> 
+                    <div class="col-sm-12 col-md-12">
+                        {% for flashpack in flashpacks %}   
+                              {% include 'flashcard/get_flashpack_tag.html' %} 
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            <div style="clear:both"></div>
         </div>
-        <div class="shadow_bottom"></div>
     </div>
     {% endif %}
 

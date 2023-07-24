@@ -423,7 +423,7 @@ def set_up_by_level_subject(group, student):
     """  assigner les documents   """
     subject , level = group.subject ,  group.level
     teacher = group.teacher 
-    
+
     teacher_id = get_teacher_id_by_subject_id(subject.id)
     folders = Folder.objects.filter(subject=subject,level=level,teacher_id=teacher_id,is_trash=0,is_archive =0   )
 
@@ -431,73 +431,73 @@ def set_up_by_level_subject(group, student):
     teacher.levels.add(level)
 
     for folder in folders :
-        parcourses = folder.parcours.all() # récupération des parcours
-        folder.pk=None        
-        folder.teacher = group.teacher
-        folder.save()
-        folder.students.add(student)
-        folder.groups.add(group)
+            parcourses = folder.parcours.all() # récupération des parcours
+            folder.pk=None        
+            folder.teacher = group.teacher
+            folder.save()
+            folder.students.add(student)
+            folder.groups.add(group)
 
-        for parcours in parcourses :
+            for parcours in parcourses :
 
-            relationships   = parcours.parcours_relationship.all() # récupération des relations
-            courses         = parcours.course.all() # récupération des relations 
-            bibliotexs      = parcours.bibliotexs.all()                     
-            #clone du parcours
-            parcours.pk = None
-            parcours.teacher = teacher
-            parcours.is_publish = 1
-            parcours.is_archive = 0
-            parcours.is_share = 0
-            parcours.is_favorite = 1
-            parcours.is_sequence = 0
-            parcours.target_id = None
-            parcours.code = str(uuid.uuid4())[:8]
-            parcours.save()
-            parcours.students.add(student)
-            parcours.groups.add(group)
-            folder.parcours.add(parcours)
-            # fin du clone
- 
-            for course in courses : 
-                course.pk      = None
-                course.parcours = parcours
-                course.teacher = teacher
-                course.save()
-                course.students.add(student)
+                relationships   = parcours.parcours_relationship.all() # récupération des relations
+                courses         = parcours.course.all() # récupération des relations 
+                bibliotexs      = parcours.bibliotexs.all()                     
+                #clone du parcours
+                parcours.pk = None
+                parcours.teacher = teacher
+                parcours.is_publish = 1
+                parcours.is_archive = 0
+                parcours.is_share = 0
+                parcours.is_favorite = 1
+                parcours.is_sequence = 0
+                parcours.target_id = None
+                parcours.code = str(uuid.uuid4())[:8]
+                parcours.save()
+                parcours.students.add(student)
+                parcours.groups.add(group)
+                folder.parcours.add(parcours)
+                # fin du clone
+     
+                for course in courses : 
+                    course.pk      = None
+                    course.parcours = parcours
+                    course.teacher = teacher
+                    course.save()
+                    course.students.add(student)
 
-            for r in relationships :
-                skills = r.skills.all() 
-                r.pk       = None
-                r.parcours = parcours
-                r.save() 
-                r.students.add(student)
-                r.skills.set(skills)
-            
-            try :
-                for bibliotex in bibliotexs :
-                    reltexs = bibliotex.relationtexs.all()
-                    bibliotex.pk = None
-                    bibliotex.teacher = teacher
-                    bibliotex.save()
-                    bibliotex.students.add(student)
-                    bibliotex.folders.add(folder)
-                    bibliotex.groups.add(group)
-                    bibliotex.parcours.add(parcours)
-                    bibliotex.levels.add(group.level)
-                    bibliotex.subjects.add(group.subject)
+                for r in relationships :
+                    skills = r.skills.all() 
+                    r.pk       = None
+                    r.parcours = parcours
+                    r.save() 
+                    r.students.add(student)
+                    r.skills.set(skills)
+                
+                try :
+                    for bibliotex in bibliotexs :
+                        reltexs = bibliotex.relationtexs.all()
+                        bibliotex.pk = None
+                        bibliotex.teacher = teacher
+                        bibliotex.save()
+                        bibliotex.students.add(student)
+                        bibliotex.folders.add(folder)
+                        bibliotex.groups.add(group)
+                        bibliotex.parcours.add(parcours)
+                        bibliotex.levels.add(group.level)
+                        bibliotex.subjects.add(group.subject)
 
-                    for reltex in reltexs :
-                        skills           = reltex.skills.all()
-                        knowledges       = reltex.knowledges.all() 
-                        reltex.pk        = None
-                        reltex.teacher   = teacher
-                        reltex.bibliotex = bibliotex
-                        reltex.save()
-                        reltex.students.add(student)
-                        reltex.skills.set(skills)
-                        reltex.knowledges.set(knowledges)
-            except : pass
+                        for reltex in reltexs :
+                            skills           = reltex.skills.all()
+                            knowledges       = reltex.knowledges.all() 
+                            reltex.pk        = None
+                            reltex.teacher   = teacher
+                            reltex.bibliotex = bibliotex
+                            reltex.save()
+                            reltex.students.add(student)
+                            reltex.skills.set(skills)
+                            reltex.knowledges.set(knowledges)
+                except : pass
 
 
 @login_required(login_url= 'index')
@@ -754,6 +754,7 @@ def update_group(request, id):
         student = create_student_profile_inside(request, nf) 
         if not student :
             student = group.students.filter(user__username__contains="_e-test").first()
+        print(nf.recuperation)
         if nf.recuperation :
             set_up_by_level_subject(nf ,  student)
  

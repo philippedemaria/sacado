@@ -157,6 +157,48 @@ class FolderForm(forms.ModelForm):
 		except:
 			pass
 
+
+class DocpersoForm(forms.ModelForm):
+	class Meta:
+		model = Docperso
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		group   = kwargs.pop('group')
+		folder  = kwargs.pop('folder')
+		prcs    = kwargs.pop('parcours')
+		super(DocpersoForm, self).__init__(*args, **kwargs)
+		self.fields['stop'].required = False
+		if teacher and group :
+			groups        = teacher.groups.filter(level = group.level , subject = group.subject,is_hidden=0)
+			shared_groups = teacher.teacher_group.filter(level = group.level , subject = group.subject,is_hidden=0 )
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teacher")
+		else :
+			groups        = teacher.groups.filter( is_hidden=0 ) 
+			shared_groups = teacher.teacher_group.filter( is_hidden=0 )
+			these_groups  = groups|shared_groups
+			all_groups    = these_groups.order_by("teacher")
+ 
+		self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['groups'].initial = group
+
+		folders  = group.group_folders.order_by("title")
+		self.fields['folders']	      = forms.ModelMultipleChoiceField(queryset=folders, widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['folders'].initial = folder
+ 
+		parcours                = group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title")
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
+		self.fields['parcours'].initial = prcs
+		
+
+	def clean_content(self):
+		file = self.cleaned_data['file']
+		validation_file(file)
+
+
+
 class AudioForm(forms.ModelForm):
 	class Meta:
 		model = Exercise

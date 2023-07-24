@@ -7,9 +7,9 @@
 {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
 {% if folder and group %}  
-	<a href="{% url 'list_sub_parcours_group' group.id folder.id %}"   class="helper_tip" style="font-size:36px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"18" }}</a>
-		{% if folder.title.count > 18 %}
-	            <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ folder.color }};">
+	<a href="{% url 'list_sub_parcours_group' group.id folder.id %}"   class="helper_tip" style="font-size:16px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"25" }}</a>
+		{% if folder.title.count > 25 %}
+	            <div class="helper_tip_text_right thin" style="font-size:16px; color:{{ folder.color }};">
 	                 {{ folder.title }} 
 	            </div>
 		</span> <img src="{% static 'img/angle-right.png' %}"/>  
@@ -25,9 +25,9 @@
 
 
 
-	<span class="helper_tip" style="font-size:36px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"18" }}
-	{% if folder.title.count > 18 %}
-            <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ folder.color }};">
+	<span class="helper_tip" style="font-size:16px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"25" }}
+	{% if folder.title.count > 25 %}
+            <div class="helper_tip_text_right thin" style="font-size:16px; color:{{ folder.color }};">
                  {{ folder.title }} 
             </div>
 	</span> <img src="{% static 'img/angle-right.png' %}"/>  
@@ -37,11 +37,11 @@
 {% endif %}  
 
 {% if parcours %} 
-	<a href="{% url 'show_parcours' 0 parcours.id %}" class="helper_tip" style="font-size:36px; color:{{ parcours.color }}" >
-	{{ parcours.title|truncatechars:"18" }}  
+	<a href="{% url 'show_parcours' 0 parcours.id %}" class="helper_tip" style="font-size:16px; color:{{ parcours.color }}" >
+	{{ parcours.title|truncatechars:"25" }}  
 
-	{% if parcours.title.count > 18 %}
-        <div class="helper_tip_text_right thin" style="font-size:36px; color:{{ parcours.color }};">
+	{% if parcours.title.count > 25 %}
+        <div class="helper_tip_text_right thin" style="font-size:16px; color:{{ parcours.color }};">
              {{ parcours.title }}   
         </div>
  	{% endif %}  

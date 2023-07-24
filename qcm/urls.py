@@ -104,6 +104,9 @@ urlpatterns = [
     path('duplicate_folder', duplicate_folder, name='duplicate_folder'), 
 
 
+    path('show_inside_parcours/<int:idf>/<int:idp>/<slug:code>', show_inside_parcours, name='show_inside_parcours'),
+
+
     
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
     path('parcours_clone_folder/<int:id>', clone_folder, name='clone_folder'),
@@ -531,6 +534,12 @@ urlpatterns = [
 
 
     path('ajax_add_criterion', ajax_add_criterion, name='ajax_add_criterion'),
-    path('ajax_auto_evaluation', ajax_auto_evaluation, name='ajax_auto_evaluation'), 
+    path('ajax_auto_evaluation', ajax_auto_evaluation, name='ajax_auto_evaluation'),  
 
+    ####################################     Les documents perso  ##########################################
+
+    path('list_docpersos_group/<int:idg>', list_docpersos_group, name='list_docpersos_group'),  
+    path('create_docperso_parcours/<int:idp>', create_docperso_parcours, name='create_docperso_parcours'),
+    path('update_docperso/<int:idp>/<int:idd>', update_docperso, name='update_docperso'),
+    path('delete_docperso/<int:idp>/<int:idd>', delete_docperso, name='delete_docperso'),
  ]

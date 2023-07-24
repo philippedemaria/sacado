@@ -316,7 +316,6 @@ def avatar(request) :
     user = User.objects.get(pk = request.user.id )
     avatar_form = AvatarUserForm(request.POST or None, request.FILES or None, instance = user  ) 
 
-
     if request.method == 'POST':
         if avatar_form.is_valid():
             user.avatar = request.POST.get("avatar")

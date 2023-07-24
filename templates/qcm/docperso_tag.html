@@ -1,0 +1,116 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+    
+
+<div  class="box box-widget widget-user-2 folder_sorter" >
+
+
+        <div class="handler widget-user-header">
+            <!-- Add signet to folder --> 
+            <span data-parcours_id="{{docperso.id }}" class="overlay_show white" style="cursor:pointer">
+                <div class="disc   disc{{docperso.id }}" style="background-color:{% if docperso.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                     <i class="fa fa-circle-o-notch"></i>
+                </div>
+
+
+                <div class="{% if not docperso.is_publish %}
+                                disc_persistant
+                            {% else %}
+                                disc 
+                            {% endif %}
+                            disc{{docperso.id }}" style="background-color:{% if docperso.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
+                     <i class="fa fa-circle-o-notch"></i>
+                </div>
+            </span> 
+            <!-- Fenetre accessible par le disc   -->
+            <div class="overlay  overlay_show{{docperso.id }} no_visu_on_load" > 
+                <div class="overlay_expand">
+                    <a href="javascript:void();" data-parcours_id="{{docperso.id }}" class="overlay_show pull-right">
+                        <i class="fa fa-times"></i>
+                    </a>
+      
+     
+                        <div class="btn-group"  style="padding:0px;margin:0px;">
+                            <a href="#" class="btn btn-default btn-publisher  publisher"  data-from="2" id="folder_publisher{{docperso.id}}" 
+                                data-parcours_id="{{docperso.id}}" data-statut="{{docperso.is_publish }}">  
+                                <i class="fa fa-circle-o-notch"></i>
+                            </a><span class="legend-btn legend-btn-{% if not docperso.is_publish %}danger{% else  %}success{% endif  %} size15" id="parcours_statut{{docperso.id}}" style="cursor:auto" >  
+                              {% if docperso.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                            </span>
+                        </div>
+     
+                    {% if docperso.teacher != teacher %}<br><small  style="color:{{ folder.color }};"><b>Propriétaire :</b>    {{ docperso.teacher }}</small>{% endif %}
+                    <br>
+                    <span class="label_icon" style="color:{{ parcours.color }};">
+     
+                            {{  docperso.start|date:"d N Y H:i"  }}   
+                            {% if folder.stop %}
+                               - {{  docperso.stop|date:"d N Y H:i"  }}     
+                            {% endif %}                                
+     
+                    </span>
+
+                    {% if docperso.is_publish %}
+                    <span class="text-success" id="accueil_text_color{{ docperso.id }}" style="font-size:12px">Ce dossier <span id="accueil_visible{{docperso.id }}">est</span> visible par vos élèves.</span>
+                    {% else %}
+
+                    <span class="text-danger" id="accueil_text_color{{ docperso.id }}" style="font-size:12px">Ce dossier <span id="accueil_visible{{docperso.id }}">n'est pas</span> visible par vos élèves.</span>
+                    {% endif %}
+
+
+                </div>
+            </div>
+            <!-- Fin de la fenetre  -->
+            <!--EXPORTATION  -->
+         
+
+            <div style="{% if parcours %}color:{{ parcours.color }}{% else %}color:{{ group.color }}{% endif %}">
+                {{ docperso.format_html|safe  }}
+            </div>
+
+
+
+
+            <div class="box_title_underlay_vignette" style="background-color:{{ group.color }};">
+            </div> 
+            <div class="box_title_vignette"> 
+                {% if docperso.file %}
+                <a href="{{ docperso.file.url}}" style="color:{{ group.color|contrast_color }};" target="_blank">
+                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ docperso.title|truncatechars:"25" }}
+                        <div class="helper_tip_text_right">{{ docperso.title }}</div>
+                    </span>
+                </a>
+                {% else %}
+                <a href="{{ docperso.link }}" style="color:{{ group.color|contrast_color }};" target="_blank">
+                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px">{{ docperso.title|truncatechars:"25" }}
+                        <div class="helper_tip_text_right">{{ docperso.title }}</div>
+                    </span>
+                </a>
+                {% endif %}
+            </div>
+        </div>        
+        <!-- box-footer DES FONCTIONNALITES  -->
+
+            <div class="box-footer" style="position: relative; padding-top: 0px;">
+                <div class="row extend_parcours"> 
+                    <div class="col-xs-7 col-md-7">
+                        {% if parcours %}
+                        <a href="{% url 'update_docperso' parcours.id docperso.id  %}" class="edit" style="color:{{ parcours.color}};"><i class="bi bi-gear"></i> <span class="label_icon">Configurer</span> </a>
+                        {% else %}
+                        <a href="{% url 'update_docperso' 0 docperso.id  %}" class="edit" style="color:{{ group.color}};"><i class="bi bi-gear"></i> <span class="label_icon">Configurer</span> </a>
+                        {% endif %}
+                    </div> 
+                    <div class="col-xs-5 col-md-5"> 
+                        {% if parcours %}
+                        <a href="{% url 'delete_docperso' parcours.id docperso.id  %}" class="edit" style="color:{{ parcours.color}};" onclick="return TestDeleteFolder('ce document personnel')"><i class="bi bi-trash"></i> <span class="label_icon">Supprimer</span> </a>
+                        {% else %}
+                        <a href="{% url 'delete_docperso' 0 docperso.id  %}" class="edit" style="color:{{ group.color}};" onclick="return TestDeleteFolder('ce document personnel')"><i class="bi bi-trash"></i> <span class="label_icon">Supprimer</span> </a>
+                        {% endif %}
+                    </div> 
+                </div> 
+            </div>
+
+
+</div>   
