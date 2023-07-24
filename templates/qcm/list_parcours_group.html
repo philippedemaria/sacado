@@ -54,11 +54,11 @@
 
     
     <div class="row"> 
-        {% comment %}
+
         <div class="col-sm-6 col-md-3">
             <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-speedometer2"></i> Bureau virtuel de {{ group.name|truncatechars:"20" }}</a>
         </div>
-        {% endcomment %}
+
         <div class="col-sm-6 col-md-3">
             <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-webcam"></i>  Questions flash de {{ group.name }} </a>
         </div>
