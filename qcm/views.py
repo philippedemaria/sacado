@@ -13828,7 +13828,11 @@ def create_docperso_parcours(request,idp=0):
             nf.groups.add(group)
 
         messages.success(request, 'Le document a été créé avec succès !')
-        return redirect('show_inside_parcours' , folder.id , parcours.id,7)
+        if parcours : 
+            return redirect('show_inside_parcours' , folder.id , parcours.id,7)
+        else :
+            return redirect("list_parcours_group", idg)
+
     else:
         print(form.errors)
 
@@ -13873,7 +13877,10 @@ def update_docperso(request, idp,idd):
             nf.groups.add(group)
 
         messages.success(request, 'Le document a été créé avec succès !')
-        return redirect('show_inside_parcours' , idf , idp ,7)
+        if parcours :
+            return redirect('show_inside_parcours' , idf , idp ,7)
+        else :
+            return redirect("list_parcours_group", idg)
     else:
         print(form.errors)
 
