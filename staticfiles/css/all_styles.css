@@ -2407,7 +2407,20 @@ input[type=range].form-range {
     font-size:50px;
 }
 
+.tab-pane i {
+  padding:5px;
+}
+.tab-pane .fa {
+  padding:2px;
+}
+.btn .btn_label{
+  display:none;
+}
 
+.btn:hover .btn_label{
+  display:inline;
+  padding:3px;
+}
 
 /* General Links */
 a.select_correction {

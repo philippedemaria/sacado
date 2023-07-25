@@ -1519,6 +1519,28 @@ define(['jquery','bootstrap'], function ($) {
             });   
 
 
+        // Gestion des menus dans un groupe - nav-tabs
+
+
+        $('body').on('click', '.selector_tabs',   function (event) {
+            var bg = $(this).data("bg"); 
+            var color = $(this).data("color");
+            var id = $(this).data("id");
+            $(".selector_tabs").css("background-color",bg);
+            $(this).attr("style","");
+            $(".selector_tabs").css("color",color);
+            $('.selector_tabs').parent().removeClass("active"); 
+            $(this).parent().addClass("active");
+            $(this).css("color",bg);
+            $(".tab-pane").removeClass("active");
+            $("#"+id).addClass("active");
+            $("#"+id).css("color",bg);
+        });
+
+
+
+
+
 
 
     });

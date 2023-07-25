@@ -2878,8 +2878,6 @@ class Docperso(models.Model):
     file       = models.FileField(upload_to=docperso_directory_path,  blank=True, verbose_name="Fichier")
     link       = models.CharField( max_length=255, blank=True, verbose_name="Lien externe") 
 
-
-
     is_share   = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
 
@@ -2891,6 +2889,9 @@ class Docperso(models.Model):
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="docpersos"  ) 
  
     students     = models.ManyToManyField(Student, blank=True,  related_name="docpersos",   editable=False)
+
+    ranking = models.PositiveIntegerField(default=0,  editable= False) 
+
 
     def __str__(self):
         return self.title 

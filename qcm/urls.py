@@ -104,7 +104,7 @@ urlpatterns = [
     path('duplicate_folder', duplicate_folder, name='duplicate_folder'), 
 
 
-    path('show_inside_parcours/<int:idf>/<int:idp>/<slug:code>', show_inside_parcours, name='show_inside_parcours'),
+    #path('show_inside_parcours/<int:idf>/<int:idp>/<slug:code>', show_inside_parcours, name='show_inside_parcours'),
 
 
     
@@ -545,5 +545,5 @@ urlpatterns = [
 
 
     path('ajax_publish_docperso', ajax_publish_docperso, name='ajax_publish_docperso'),
-    
+
  ]

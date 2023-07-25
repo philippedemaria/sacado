@@ -10,7 +10,7 @@
     <div class="card-body" style="height:37px;">
           <input type="hidden" value="{{ rc.exercise.id }}" name="input_exercise_id" class="div_exercise_id" data-custom=0 /><!--  sert à classer les thèmes  -->
           <a href="" style="cursor:move;" class="move_inside" style="color:{{ parcours.color }}"> 
-          {% if not rc.is_publish %}<span style="color:#F5F5F5">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}
+          {% if not rc.is_publish %}<span style="color:#F5F5F5">{{ forloop.counter }}.</span>{% else %}{{ forloop.counter }}.{% endif %}
           </a>
                        
           <div class="card-score">
@@ -47,7 +47,7 @@
             <a href = "#" data-toggle = 'modal'
                 data-target = '#individualisation_exercice'  
                 class = "individualiser btn btn-warning" 
-                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-nb = "{% if not rc.is_publish %}{{ forloop.counter }}{% else %}{{forloop.counter }}{% endif %}" 
                 data-relationship_id = "{{ rc.id }}"
                 data-group_id = "{{ group.id }}"   
                 data-custom = 0  title = "Individualiser cet exercice" 
@@ -365,7 +365,7 @@
           ##############################################################################################################-->
           <a href="#card{{rc.id}}" class="detail_parcours"  data-exercise_id="{{ rc.exercise.id }}" 
               title="{% if rc.exercise.supportfile.title %}{{ rc.exercise.supportfile.title|cleanhtml|safe }}{% else %}{{ rc.exercise.supportfile.annoncement|cleanhtml|safe }}{% endif %}"
-              data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+              data-num_exo="{{ forloop.counter }}" 
               data-parcours_id="{{ parcours.id }}" data-custom=0 > 
               <div style="position:relative; height:195px;overflow-y:hidden;width:100%;padding-top:5px; ">
                 {% if rc.exercise.supportfile.imagefile %}
@@ -402,7 +402,7 @@
             <a class="helper_tip" style="color:{{ parcours.color|contrast_color }}">
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
-                  {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
+                  {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ forloop.counter }}.</span>{% else %}{{ forloop.counter }}.{% endif %}<br>
                   {% if rc.exercise.supportfile.imagefile %}
                   <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" loading="lazy" />
                   {% endif %}
@@ -509,7 +509,7 @@
              <a href = "#" data-toggle = 'modal'
                 data-target = '#reset_exercice'  
                 class = "reset horizontalmargin5" 
-                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-nb = "{{ forloop.counter }}" 
                 data-relationship_id = "{{ rc.id }}"
                 data-group_id = "{{ group.id }}"   
                 data-custom = 0    title = "Effacer les résultats de cet exercice" 
@@ -523,7 +523,7 @@
                 <a href = "#" data-toggle = 'modal' 
                     data-target = '#individualisation_exercice'  
                     class = "individualiser horizontalmargin5  {% if  data_rc.nb != only_real_student.count  %} checkbox_no_display  {% endif %}"  
-                    data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                    data-nb = "forloop.counter" 
                     data-relationship_id = "{{ rc.id }}"
                     data-group_id = "{{ group.id }}"   
                     data-custom = 0  title = "Individualiser cet exercice" 
@@ -559,7 +559,7 @@
     <div class="card-body" style="height:37px;">
           <input type="hidden" value="{{ rc.id }}" name="input_exercise_id" class="div_exercise_id" data-custom=1 /><!--  sert à classer les exercices  -->
           <a href="" style="cursor:move;" class="move_inside" style="color:{{ parcours.color }}"> 
-          {% if not rc.is_publish %}<span style="color:#F5F5F5">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}
+          {% if not rc.is_publish %}<span style="color:#F5F5F5">{{ forloop.counter }}.</span>{% else %}{{ forloop.counter }}.{% endif %}
           </a>
                        
           <div class="card-score">
@@ -606,7 +606,7 @@
           {% if  data_rc.nb == only_real_student.count  %}  
           <div  style="position: absolute; right : 0px; top:60px;" title="Cet exercice est indiviualisé à certains élèves. Cliquez sur l'icone dans la barre d'outil pour modifier."  >   
               <a href="#customcard{{rc.id}}" class="detail_parcours btn btn-warning" data-custom=1
-                 data-exercise_id="{{ rc.id }}"  data-num_exo="{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" data-parcours_id="{{ parcours.id }}">
+                 data-exercise_id="{{ rc.id }}"  data-num_exo="{{ forloop.counter0 }}" data-parcours_id="{{ parcours.id }}">
                 <i class="fa fa-users"></i><span id="nb_indiv_id_student{{rc.id }}">{{ data_rc.nb }} </span> 
               </a>
           </div>
@@ -740,7 +740,7 @@
  
           <!--  Image de la card  -->
           <a href="#customcard{{rc.id}}" class="detail_parcours"  data-exercise_id="{{ rc.id }}"  
-             data-num_exo="{{ nb_exo_only|index:forloop.counter0 }}" data-parcours_id="{{ parcours.id }}" data-custom=1>
+             data-num_exo="{{ forloop.counter}}" data-parcours_id="{{ parcours.id }}" data-custom=1>
              
                <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}" {% elif rc.is_python %}  src="{% static 'img/python.jpg' %}" 
                        {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} class="image_parcours_order" loading="lazy"  >
@@ -753,7 +753,7 @@
              <a class="helper_tip white">
                 <i class="fa fa-search-plus"></i>
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
-                  {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ nb_exo_only|index:forloop.counter0 }}.</span>{% else %}{{ nb_exo_visible|index:forloop.counter0 }}.{% endif %}<br>
+                  {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ forloop.counter }}.</span>{% else %}{{ forloop.counter }}.{% endif %}<br>
                   <img {% if rc.imagefile %} src="{{ rc.imagefile.url }}"
                        {% elif rc.is_python %}  src="{% static 'img/python.jpg' %}" 
                        {% else %}  src="{% static 'img/custom_exercise.jpg' %}" {% endif %} width="500px" loading="lazy" />
@@ -798,7 +798,7 @@
              <a href = "#" data-toggle = 'modal'
                 data-target = '#individualisation_exercice'  
                 class = "individualiser horizontalmargin5" 
-                data-nb = "{% if not rc.is_publish %}{{ nb_exo_only|index:forloop.counter0 }}{% else %}{{ nb_exo_visible|index:forloop.counter0 }}{% endif %}" 
+                data-nb = "{{ forloop.counter }}" 
                 data-relationship_id = "{{ rc.id }}"
                 data-group_id = "{{ group.id }}"   
                 data-custom = 1  title = "Individualiser cet exercice" 

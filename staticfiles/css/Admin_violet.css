@@ -496,11 +496,11 @@ a.inside_volet:hover{
 }
 
 .fontLabel {
-  font-size: 18px ; 
-  color : white ;
+  font-size: 12px ; 
   padding: 0px 5px;
   border-radius: 50%;
-  background-color: #0093CA ;
+  background-color: #FFF ;
+  color: #5d4391 ;
 }
 
 
@@ -4947,7 +4947,7 @@ h6,
 /* General Links */
 a {
   color: #5d4391 ; /*#007EE2;*/ 
-  font-weight: 100;
+  /*font-weight: 100;*/
 }
 a.normal {
   font-weight: normal;
@@ -8243,7 +8243,54 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
   padding-top: 3px;
 }
 
+
+/*
+ * Component: Nav
+ * --------------
+ */
+.content_list .navbar{
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+.content_list .nav > li > a {
+    position: relative;
+    display: block;
+    padding: 1px 6px;
+    padding-top: 2px;
+    margin-top: 14px; 
+}
+
  
+
+.content_list .nav > li > a:hover,
+.content_list .nav > li > a:active,
+.content_list .nav > li > a:focus {
+   background: #FFF;  
+   color: #5d4391 ;
+}
+
+.content_list .nav-tabs > li > a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid #bebebe;
+    border-bottom: 1px solid transparent;
+    border-radius: 7px 7px 0 0;    
+    font-size: 14px;
+}
+
+.content_list .nav-tabs > li.active > a, 
+.content_list .nav-tabs > li.active > a:hover, 
+.content_list .nav-tabs > li.active > a:focus {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    /* border: 1px solid #ddd; */
+    border-bottom-color: transparent;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 5px 10px 4px 10px;   
+    margin-top: 4px;
+}
 /*
  * Component: Nav
  * --------------

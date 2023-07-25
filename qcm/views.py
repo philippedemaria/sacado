@@ -1939,12 +1939,17 @@ def list_parcours_group(request,id):
     nb_bases = bases.count() + folders.count()
 
     bibliotexs = group.bibliotexs.filter(folders=None)
-    quizzes    = group.quizz.filter(folders=None)
+    quizzes    = group.quizz.filter(is_random=0,folders=None)
     flashpacks = group.flashpacks.filter(folders=None)
     docpersos  = group.docpersos.filter(folders=None)
+    qflashs     = group.quizz.filter(is_random=1,folders=None).order_by("-date_modified")
+
+
+
+
 
     context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
-                 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases }
+                 'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases }
 
     return render(request, 'qcm/list_parcours_group.html', context )
 
@@ -1970,20 +1975,28 @@ def list_sub_parcours_group(request,idg,idf):
     except :
         group = groupe
  
-    parcours_tab = folder.parcours.filter(is_archive=0 , is_sequence=0 , is_trash=0,is_testpos=0).order_by("is_evaluation", "ranking")
-    sequences    = folder.parcours.filter(is_archive=0 , is_sequence=1 , is_trash=0).order_by("ranking")
-    quizzes      = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
-    bibliotexs   = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
-    flashpacks   = folder.flashpacks.filter(Q(teacher=teacher),is_archive=0,parcours=None)
+    parcourses = folder.parcours.filter(is_archive=0 , is_evaluation=0 , is_sequence=0 , is_trash=0,is_testpos=0).order_by("ranking")
+    evaluations = folder.parcours.filter(is_archive=0 , is_evaluation=1 , is_trash=0,is_testpos=0).order_by("ranking")
+    sequences  = folder.parcours.filter(is_archive=0 , is_sequence=1 , is_trash=0).order_by("ranking")
+    quizzes    = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
+    bibliotexs = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
+    flashpacks = folder.flashpacks.filter(Q(teacher=teacher),is_archive=0,parcours=None)
+
+    docpersos  = folder.docpersos.filter(parcours=None)
+    qflashs     = folder.quizz.filter(is_random=1,parcours=None).order_by("-date_modified")
+
+
+
+
 
     accordion    = get_accordion(None, quizzes, bibliotexs, flashpacks)
 
     ###efface le realtime de plus de 2 h
-    clear_realtime(parcours_tab , today.now() ,  1800 )
+    clear_realtime(parcourses , today.now() ,  1800 )
 
 
-    context = { 'parcours_tab': parcours_tab , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'sequences' : sequences ,  'quizzes' : quizzes ,  
-                'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,    'role' : role , 'today' : today , 'accordion' : accordion  }
+    context = { 'parcourses': parcourses , 'evaluations': evaluations , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'sequences' : sequences ,  'quizzes' : quizzes ,  
+                'bibliotexs' : bibliotexs,   'flashpacks' : flashpacks,  'docpersos': docpersos , 'qflashs': qflashs ,  'role' : role , 'today' : today , 'accordion' : accordion  }
 
     return render(request, 'qcm/list_sub_parcours_group.html', context )
 
@@ -4021,7 +4034,8 @@ def show_parcours(request, idf = 0, id=0):
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
  
-    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+    #relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+    relationships_customexercises = parcours.parcours_relationship.prefetch_related('exercise__supportfile').order_by("ranking")
 
     nb_point , nb_time = 0 , 0
     nb_point_display = False
@@ -4037,89 +4051,91 @@ def show_parcours(request, idf = 0, id=0):
         nb_point = str(nb_point) + " points"
         nb_point_display = True
 
-    accordion = get_accordion(parcours.course, parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
-
     skills = Skill.objects.all()
 
     parcours_folder_id = request.session.get("folder_id",None)
     request.session["parcours_id"] = parcours.id
- 
-    form_reporting = DocumentReportForm(request.POST or None )
+
+    docpersos = parcours.docpersos.order_by("ranking")
+    bibliotexs = parcours.bibliotexs.filter(folders=None)
+    quizzes    = parcours.quizz.filter(is_random=0)
+    flashpacks = parcours.flashpacks.filter(folders=None)
+    qflashs    = parcours.quizz.filter(is_random=1).order_by("-date_modified")
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
-    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : rq_user , 'form' : form , 
-                  'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises, 'idf' : idf , 
-               'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
+    context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 
+                'relationships_customexercises': relationships_customexercises, 'idf' : idf , 'bibliotexs' : bibliotexs , 'quizzes' : quizzes , 'flashpacks' : flashpacks , 'qflashs' : qflashs , 
+                'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder, 'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
 
     return render(request, 'qcm/show_parcours.html', context) 
 
 
 
 
-def show_inside_parcours(request,idf, idp,code):
+# def show_inside_parcours(request,idf, idp,code):
 
-    group_id = request.session.get("group_id",None)
+#     group_id = request.session.get("group_id",None)
 
-    if idf > 0 :
-        folder = Folder.objects.get(id=idf)
-    else :
-        folder = None
+#     if idf > 0 :
+#         folder = Folder.objects.get(id=idf)
+#     else :
+#         folder = None
 
-    parcours = Parcours.objects.get(id=idp)
-    rq_user = request.user
+#     parcours = Parcours.objects.get(id=idp)
+#     rq_user = request.user
 
-    try :
-        teacher = rq_user.teacher
-    except :
-        return redirect ('index')
+#     try :
+#         teacher = rq_user.teacher
+#     except :
+#         return redirect ('index')
 
-    today = time_zone_user(rq_user)
-    delete_session_key(request, "quizz_id")
+#     today = time_zone_user(rq_user)
+#     delete_session_key(request, "quizz_id")
 
-    role, group , group_id , access = get_complement(request, teacher, parcours)
+#     role, group , group_id , access = get_complement(request, teacher, parcours)
 
-    if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
-        return redirect('index')
+#     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
+#         return redirect('index')
  
-    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
+#     relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
 
-    nb_point , nb_time = 0 , 0
-    nb_point_display = False
-    for rc in relationships_customexercises :
-        try : 
-            nb_point += rc.mark
-        except : pass
-        try : 
-            nb_time += rc.duration
-        except : pass
+#     nb_point , nb_time = 0 , 0
+#     nb_point_display = False
+#     for rc in relationships_customexercises :
+#         try : 
+#             nb_point += rc.mark
+#         except : pass
+#         try : 
+#             nb_time += rc.duration
+#         except : pass
 
-    if nb_point > 0 :
-        nb_point = str(nb_point) + " points"
-        nb_point_display = True
+#     if nb_point > 0 :
+#         nb_point = str(nb_point) + " points"
+#         nb_point_display = True
 
-    accordion = get_accordion(parcours.course, parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
+#     accordion = get_accordion(parcours.course, parcours.quizz, parcours.bibliotexs, parcours.flashpacks)
 
-    skills = Skill.objects.all()
-    request.session["parcours_id"] = parcours.id
+#     skills = Skill.objects.all()
+#     request.session["parcours_id"] = parcours.id
  
-    form_reporting = DocumentReportForm(request.POST or None )
+#     form_reporting = DocumentReportForm(request.POST or None )
 
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
+#     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
-    if code == '6' : 
-        quizzes = parcours.quizz.filter(is_random=1) 
-    else :
-        quizzes = None
+#     if code == '6' : 
+#         quizzes = parcours.quizz.filter(is_random=1) 
+#     else :
+#         quizzes = None
 
-    context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : rq_user , 'form' : form , 
-                'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises, 'code' : code, 'quizzes' : quizzes,
-                'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'teacher' : teacher , 
-                'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display }
+#     context = { 'parcours': parcours, 'teacher': teacher,  'communications' : [] ,  'today' : today , 'skills': skills,  'form_reporting': form_reporting, 'user' : rq_user , 'form' : form , 
+#                 'nb_exo_visible': nb_exo_visible ,   'relationships_customexercises': relationships_customexercises, 'code' : code, 'quizzes' : quizzes,
+#                 'nb_exo_only': nb_exo_only,'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder,  'teacher' : teacher , 
+#                 'accordion' : accordion,  'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display }
 
 
-    template = 'qcm/show_inside_parcours.html'
-    return render(request, template , context) 
+#     template = 'qcm/show_inside_parcours.html'
+#     return render(request, template , context) 
 
 
 
@@ -4944,6 +4960,10 @@ def stat_evaluation(request, id):
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
+    folder_id = request.session.get("folder_id",None) 
+    if folder_id : folder = Folder.objects.get(pk=folder_id)
+    else : folder = None
+
     stage = get_stage(teacher.user)
     parcours = Parcours.objects.get(id=id)
     skills = skills_in_parcours(request,parcours)
@@ -4975,7 +4995,7 @@ def stat_evaluation(request, id):
         student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
         stats.append(student)
 
-    context = { 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
+    context = { 'folder': folder, 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
 
     return render(request, 'qcm/stat_parcours.html', context )
 

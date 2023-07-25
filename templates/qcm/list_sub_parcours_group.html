@@ -5,14 +5,10 @@
 
 
 {% block require %}
- 
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
- 
+    <script src="{% static 'js/require.js' %}" data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
     <script>
         require(['script/ajax-parcours']);
     </script> 
-
-
 {% endblock %}
 
  
@@ -21,13 +17,6 @@
     <span style="color:{{ group.color  }}"><i class="bi bi-folder"></i></span>  
 
     {% include 'qcm/breadcrumb.html' %}
-
- 
-     
-    {% if role %}
-       <ul> {% include 'qcm/submenu_creation.html' %}</ul> 
-    {% endif %}
-
 
 {% endblock %}
 
@@ -50,133 +39,186 @@
 {% include 'preloader.html' %}
 
 <section class="content_list" id="principal_section"> 
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#2" data-toggle="tab" class="selector_tabs" data-id="2" data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="color:{{ group.color }}">
+                <i class="fa fa-th"></i> Parcours <span class="fontLabel">{{ parcourses.count }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="#3" data-toggle="tab" class="selector_tabs" data-id="3"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"><i class="fa fa-trophy" ></i> Evaluations <span class="fontLabel">{{ evaluations.count }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="#4" data-toggle="tab" class="selector_tabs" data-id="4"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"><i class="bi bi-files" ></i> Docs persos <span class="fontLabel">{{ docpersos.count }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="#5" data-toggle="tab" class="selector_tabs" data-id="5"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"><i class="bi bi-lightning" ></i> Questions flash <span class="fontLabel">{{ qflashs.count }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="#6" data-toggle="tab" class="selector_tabs" data-id="6"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"><i class="bi bi-aspect-ratio" ></i> Quiz <span class="fontLabel">{{ quizzes.count }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="#7" data-toggle="tab" class="selector_tabs" data-id="7" data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"><i class="bi bi-bootstrap" ></i> BiblioTex <span class="fontLabel">{{ bibliotexs.count }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="#8" data-toggle="tab" class="selector_tabs" data-id="8"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"><i class="bi bi-stack" ></i> Flashpack <span class="fontLabel">{{ flashpacks.count }}</span>
+            </a>
+        </li>
+    </ul>
 
- <form action="" methode="POST" > 
+    <div class="tab-content ">
+
+
+        <div class="tab-pane active" id="2">
+            <form action="" methode="POST" id="parcours_sortable"> 
+            <div class="row" style="margin-bottom: 20px"> 
+            {% if role %}
+                <div class="col-sm-12 ">
+                    <a href="{% url 'create_parcours' folder.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau parcours</span></a>
+                    <a href="{% url 'all_parcourses' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i> <span class="btn_label"> Récupérer un parcours mutualisé</span></a>
+                </div>
+            </div>
+            {% endif %}
+            {% for parcours in parcourses  %}  
+                {% include 'qcm/parcours_evaluation_tag.html' %}
+            {% endfor %}
+            </form>
+            <div style="clear:both"></div>
+        </div>
+
+        <div class="tab-pane" id="3">
+            <form action="" methode="POST" id="evaluations_sortable">
+            <div class="row" style="margin-bottom: 20px"> 
+                <div class="col-sm-12 ">
+     
+                {% if role %}
+                    {% if sacado_asso %} 
+                    <a href="{% url 'create_evaluation' folder.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer une nouvelle évaluation</span></a>
+                    <a href="{% url 'all_parcourses' 1 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i> <span class="btn_label"> Récupérer une évaluation mutualisée</span></a>
+                    {% else %}
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer une nouvelle évaluation</span></a>
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i> <span class="btn_label"> Récupérer une nouvelle mutualisée</span> </a>    
+                    {% endif %}
+                {% endif %}
+                </div>
+            </div>
+            {% for parcours in evaluations  %}  
+                {% include 'qcm/parcours_evaluation_tag.html' %}
+            {% endfor %}
+            </form><div style="clear:both"></div>
+        </div>
+        <div class="tab-pane" id="4">
+            <div class="row" style="margin-bottom: 20px"> 
+                <div class="col-sm-12 ">
+                    {% if role %}
+                    <label>
+                        <small>Documents externes aux {{parcourses.count}} parcours</small>
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
+                        </span>
+                    </label>
+                    <a href="{% url 'create_docperso_parcours' folder.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau document</span></a>
  
-    {% regroup parcours_tab by is_evaluation as list_parcours %} 
-
-        {% for parcours_sort in list_parcours %}  
-            <div class="row">
-                <div class="col-sm-12 col-md-12">            
-                    <div class="section_bloc">
-                        {% if  parcours_sort.grouper %}
-                            <h1 class="thin" id="evaluation" >Mes évaluations 
-                                <span class="fontLabel" >{{ parcours_sort.list|length }} évaluation{{ parcours_sort.list|length|pluralize }}</span>
-                            </h1>
-                        {% else %}
-                            <h1 class="thin" >Mes parcours 
-                                {% if accordion or list_parcours|length > 1 %}   
-                                    <span class="fontLabel" >{{ parcours_sort.list|length }}  </span>  
-                                {% endif %}
-                            </h1>
-                        {% endif %}  
-                        <div id="subparcours_sortable" >
-                        {% for parcours in parcours_sort.list %}  
-                              {% include 'qcm/parcours_evaluation_tag.html' %} 
-                        {% endfor %}
-                        </div>
-                    <div style="clear:both"></div>                        
-                    </div>
-
-                </div>
-            </div>                
-            {% empty %}   
-             {% if not sequences %}
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="alert alert-sacado">
-                        Ce dossier ne contient encore aucun parcours.
-                    </div>
-                </div>
-            </div> 
-            {% endif %}  
-        {% endfor %}
-
-
-    {% if sequences %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-                <h1 class="thin">Mes séquences    </h1>
-                <div class="row" > 
-                    <div class="col-sm-12 col-md-12">
-                        {% for parcours in sequences %}   
-                              {% include 'qcm/parcours_evaluation_tag.html' %} 
-                        {% endfor %}
-                    </div>
+                    {% endif %}
                 </div>
             </div>
-            <div style="clear:both"></div>
+
+            {% for docperso in docpersos %}   
+                  {% include 'qcm/docperso_tag.html' %} 
+            {% endfor %}<div style="clear:both"></div>
         </div>
-    </div>
-    {% endif %}
-
-
-
-
-    {% if quizzes %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-                <h1 class="thin">Mes quizz <span class="fontLabel" >{{ quizzes.count }}   </span>  </h1>
-                <div class="row" > 
-                    <div class="col-sm-12 col-md-12">
-                        {% for quizz in quizzes %}   
-                              {% include 'tool/quizz_tag.html' %} 
-                        {% endfor %}
-                    </div>
+        <div class="tab-pane" id="5">
+            <div class="row" style="margin-bottom: 20px"> 
+                <div class="col-sm-12 ">                    
+                    <label>
+                        <small>Questions flash externes aux {{parcourses.count}} parcours</small>
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
+                        </span>
+                    </label>
+                    <a href="{% url 'create_questions_flash' group.level.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer des questions flash</span></a>
                 </div>
             </div>
-            <div style="clear:both"></div>
+            {% include 'qcm/list_questions_flash_by_group.html' %}
         </div>
-    </div>
-    {% endif %}
-
-
-    {% if bibliotexs %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-                <h1 class="thin" id="biliotex" >Mes biblioTex  <span class="fontLabel" >{{ bibliotexs.count }}  </span>    </h1>
-                <div class="row "> 
-                    <div class="col-sm-12 col-md-12">
-                        {% for bibliotex in bibliotexs %}   
-                              {% include 'bibliotex/bibliotex_tag.html' %} 
-                        {% endfor %}
-                    </div>
+        <div class="tab-pane" id="6">
+            <div class="row" style="margin-bottom: 20px"> 
+                <div class="col-sm-12 ">
+                {% if role %}
+                    <label>
+                        <small>Quiz externes aux {{parcourses.count}} parcours</small>
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
+                        </span>
+                    </label>
+                    {% if sacado_asso %} 
+                        <a href="{% url 'create_quizz'  %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau quiz</span></a>
+                        <a href="{% url 'all_quizzes'   %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un quiz mutualisé</span></a>       
+                    {% else %}
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouveau quiz</span></a>
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i> <span class="btn_label"> Récupérer un quiz mutualisé</span> </a>    
+                    {% endif %}
+                {% endif %}
                 </div>
             </div>
+            {% for quizz in quizzes %}   
+                  {% include 'tool/quizz_tag.html' %} 
+            {% endfor %}
             <div style="clear:both"></div>
         </div>
-    </div>
-    {% endif %}
-
-
-
-    {% if flashpacks %}
-    <div class="row  documents_div documents_div_shadow">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-                <h1 class="thin" id="biliotex" >Mes flashpack <span class="fontLabel" >{{ flashpacks.count }}  </span>    </h1>
-                <div class="row "> 
-                    <div class="col-sm-12 col-md-12">
-                        {% for flashpack in flashpacks %}   
-                              {% include 'flashcard/get_flashpack_tag.html' %} 
-                        {% endfor %}
-                    </div>
+        <div class="tab-pane" id="7">
+            <div class="row" style="margin-bottom: 20px"> 
+                <div class="col-sm-12 ">
+                {% if role %}
+                    <label>
+                        <small>Bibliotex externes aux {{parcourses.count}} parcours</small>
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
+                        </span>
+                    </label>
+                    <a href="{% url 'create_bibliotex' folder.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer une nouvelle bibliotex</span> </a>
+ 
+                    <a href="{% url 'bibliotexs' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i> <span class="btn_label"> Récupérer une bibliotex mutualisée</span></a>
+                {% endif %}
                 </div>
             </div>
-            <div style="clear:both"></div>
+
+            {% for bibliotex in bibliotexs %}   
+                  {% include 'bibliotex/bibliotex_tag.html' %} 
+            {% endfor %}<div style="clear:both"></div>
         </div>
-    </div>
-    {% endif %}
+        <div class="tab-pane" id="8">
+            <div class="row" style="margin-bottom: 20px"> 
+                <div class="col-sm-12 ">
+                {% if role %}
+                    <label>
+                        <small>Flashpacks externes aux {{parcourses.count}} parcours</small>
+                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
+                        </span>
+                    </label>
 
 
+                    {% if sacado_asso %} 
+                        <a href="{% url 'create_flashpack' folder.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau flashpack</span></a>   
+                        <a href="{% url 'flashpacks' %}"   class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un flashpack mutualisé</span> </a>
+                    {% else %}
+                        <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <i class="bi bi-plus-circle-dotted"></i><span class="btn_label">Créer un flashpack</span></a>
+                        <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un flashpack mutualisé</span></a>      
+                    {% endif %}
+                {% endif %}
+                </div>
+            </div>
+            {% for flashpack in flashpacks %}   
+                  {% include 'flashcard/flashpack_tag.html' %} 
+            {% endfor %}<div style="clear:both"></div>
+        </div>
 
-
-
-
-</form>
   
 </section>
 

@@ -22,7 +22,10 @@
  
 
 {% block page_title %}
-    <span style="color:{{ group.color|contrast_color_title }}"><i class="bi bi-people"></i></span>{% include 'qcm/breadcrumb.html' %} <small>Tous les documents du groupe</small>
+    <span style="color:{{ group.color|contrast_color_title }}"><i class="bi bi-people"></i>      </span>          {% include 'qcm/breadcrumb.html' %}
+    {% if role %}
+           <ul> {% include 'qcm/submenu_creation.html' %}</ul>
+    {% endif %}
 {% endblock %}
 
 
@@ -49,199 +52,18 @@
 
 <section class="content_list" id="principal_section"> 
 
-    {% if role %}
-        {% include 'qcm/submenu_tabs.html' %}
-    {% endif %}
+    
+    <div class="row"> 
 
-
-
-
-    <div class="tab-content ">
-        <div class="tab-pane" id="0">
-
-
+        <div class="col-sm-6 col-md-3">
+            <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-speedometer2"></i> Bureau virtuel de {{ group.name|truncatechars:"20" }}</a>
         </div>
 
-        <div class="tab-pane {% if nb_folders %}active{% endif %}" id="1">
-            <div class="row" style="margin-bottom: 20px"> 
-
-                <div class="col-sm-12 ">
-                    <a href="{% url 'create_folder' group.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouveau dossier</span></a>
- 
-                    <a href="{% url 'all_folders' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un dossier mutualisé</span></a>
-                </div>
-            </div>
-
-            <form action="" methode="POST" id="folders_sortable"> 
-                {% for folder in folders  %}  
-                    {% include 'qcm/folder_tag.html' %}
-                {% endfor %}
-            </form> <div style="clear:both"></div>
-        </div>
-
-        <div class="tab-pane {% if not nb_folders %}active{% endif %}" id="2">
-            <form action="" methode="POST" id="parcours_sortable"> 
-
- 
-            <div class="row" style="margin-bottom: 20px"> 
-
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Parcours externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    <a href="{% url 'create_parcours' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> Créer un nouveau parcours</a>
- 
-                    <a href="{% url 'all_parcourses' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  Récupérer un parcours mutualisé</a>
-                </div>
-            </div>
-
-            {% for parcours in parcourses  %}  
-                
-                {% include 'qcm/parcours_evaluation_tag.html' %}
-     
-            {% endfor %}
-            </form><div style="clear:both"></div>
-        </div>
-
-        <div class="tab-pane" id="3">
-            <form action="" methode="POST" id="evaluations_sortable">
-            <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Evaluations externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    {% if sacado_asso %} 
-                    <a href="{% url 'create_evaluation' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer une nouvelle évaluation</span></a>
-                    <a href="{% url 'all_parcourses' 1 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer une évaluation mutualisée</span></a>
-                    {% else %}
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer une nouvelle évaluation</span></a>
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer une nouvelle mutualisée </span></a>    
-                    {% endif %}
-                </div>
-            </div>
-            {% for parcours in evaluations  %}  
-                {% include 'qcm/parcours_evaluation_tag.html' %}
-            {% endfor %}
-            </form><div style="clear:both"></div>
-        </div>
-        <div class="tab-pane" id="4">
-            <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Doc. perso. externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    <a href="{% url 'create_docperso_parcours' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label">  Créer un nouveau document</span></a>
- 
-                </div>
-            </div>
-
-            {% for docperso in docpersos %}   
-                  {% include 'qcm/docperso_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
-        </div>
-        <div class="tab-pane" id="5">
-            <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Questions flash externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    <a href="{% url 'create_questions_flash' group.level.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label">  Créer des questions flash</span></a>
-                </div>
-            </div>
-
-
-
-
-            {% include 'qcm/list_questions_flash_by_group.html' %}
-        </div>
-        <div class="tab-pane" id="6">
-            <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Quiz externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    {% if sacado_asso %} 
-                        <a href="{% url 'create_quizz'  %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau quiz</span></a>
-                        <a href="{% url 'all_quizzes'   %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i><span class="btn_label">  Récupérer un quiz mutualisé</span></a>       
-                    {% else %}
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau quiz</span></a>
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un quiz mutualisé </span></a>    
-                    {% endif %}
-                </div>
-            </div>
-            {% for quizz in quizzes %}   
-                  {% include 'tool/quizz_tag.html' %} 
-            {% endfor %}
-            <div style="clear:both"></div>
-        </div>
-        <div class="tab-pane" id="7">
-            <div class="row" style="margin-bottom: 20px"> 
-
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Bibliotex externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    <a href="{% url 'create_bibliotex' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer une nouvelle bibliotex </span></a>
- 
-                    <a href="{% url 'bibliotexs' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer une bibliotex mutualisée</span></a>
-                </div>
-            </div>
-
-            {% for bibliotex in bibliotexs %}   
-                  {% include 'bibliotex/bibliotex_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
-        </div>
-        <div class="tab-pane" id="8">
-
-            <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
-                    <label>
-                        <small>Flashpack externes aux {{nb_folders}} dossiers</small>
-                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                        </span>
-                    </label>
-                    {% if sacado_asso %} 
-                        <a href="{% url 'create_flashpack' 0  %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau flashpack</span></a>   
-                        <a href="{% url 'flashpacks' %}"   class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un flashpack mutualisé</span> </a>
-                    {% else %}
-                        <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <span class="btn_label">Créer un flashpack</span></a>
-                        <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <span class="btn_label">Récupérer un flashpack mutualisé</span></a>      
-                    {% endif %}
-                </div>
-
-
-            </div>
-            {% for flashpack in flashpacks %}   
-                  {% include 'flashcard/flashpack_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
+        <div class="col-sm-6 col-md-3">
+            <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-webcam"></i>  Questions flash de {{ group.name }} </a>
         </div>
     </div>
 
-
-
-
-
-
-{% comment %}
 
     {% if nb_folders %} 
     <div class="row"> 
@@ -406,7 +228,7 @@
     </div>
     {% endif %}
 
-{% endcomment %}
+
 
     {% if nb_bases == 0 %} 
         {% if role %}
