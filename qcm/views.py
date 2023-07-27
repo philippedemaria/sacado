@@ -137,6 +137,7 @@ def initialize_all_chapters(request,idb,idg) :
     book = Book.objects.get(pk=idb)
     group = Group.objects.get(pk=idg)
     i = 1
+    chaps = "Liste des chapitres créés : "
     for p in group.group_parcours.order_by("ranking") :
         courses    = p.course.all()
         exercises  = p.exercises.all()[:4]
@@ -176,8 +177,10 @@ def initialize_all_chapters(request,idb,idg) :
                                                                     teacher=request.user.teacher, 
                                                                     defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
             chapt.sections.add(section_exe)
-
+            chaps += str(chapt.title)+" "
         i+=1 # ranking du chapitre
+
+    messages.success(request,)
 
     return redirect("list_parcours_group", idg)
 
