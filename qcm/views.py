@@ -180,7 +180,7 @@ def initialize_all_chapters(request,idb,idg) :
             chaps += str(chapt.title)+" "
         i+=1 # ranking du chapitre
 
-    messages.success(request,)
+    messages.success(request,chaps)
 
     return redirect("list_parcours_group", idg)
 
