@@ -171,7 +171,7 @@ def initialize_all_chapters(request,idb,idg) :
             chapt.sections.add(section_tex)
 
             # Exercices auto-correctifs ###################################################################################################################
-            section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices auto-correctifs" , chapter = chapt , defaults = {'ranking': 4, })
+            section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices SACADO" , chapter = chapt , defaults = {'ranking': 4, })
             for exercise in exercises :
                 document,created = Document.objects.get_or_create(title=exercise.supportfile.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
                                                                     teacher=request.user.teacher, 
