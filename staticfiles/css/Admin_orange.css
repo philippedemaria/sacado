@@ -478,7 +478,13 @@ a.inside_volet:hover{
 }
 
 
-
+.fontLabel {
+  font-size: 12px ; 
+  padding: 0px 5px;
+  border-radius: 50%;
+  background-color: #FFF ;
+  color: #ffa600 ;
+}
 
 
 
@@ -4720,7 +4726,7 @@ h6,
 /* General Links */
 a {
   color: #ffa600 ; /*#007EE2;*/ 
-  font-weight: 100;
+/*  font-weight: 100;*/
 }
 a.normal {
   font-weight: normal;

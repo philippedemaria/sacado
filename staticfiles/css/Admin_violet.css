@@ -497,10 +497,12 @@ a.inside_volet:hover{
 
 .fontLabel {
   font-size: 12px ; 
-  padding: 0px 5px;
+  padding: 1px 5px;
   border-radius: 50%;
   background-color: #FFF ;
-  color: #5d4391 ;
+  color: #5d4391 ;      
+  display: inline-block;
+  font-weight: 400;
 }
 
 
@@ -3866,7 +3868,7 @@ a.menuright:hover{
 
 .book_main_page_section{
     width: 95%;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: white;
     padding: 0px;
     text-align: center;
@@ -3876,7 +3878,7 @@ a.menuright:hover{
 
 .book_main_page_section_title{
   width:100%;
-  border-radius: 18px 18px 0px 0px ;
+  border-radius: 8px 8px 0px 0px ;
   background-color: #9274C7;
   padding :7px 7px 7px 25px;
   text-align: left;
@@ -3887,6 +3889,7 @@ a.menuright:hover{
 }
 
 .book_main_page_section_document_detail{
+  display:block;
   font-size : 0.7em;
   color : #5d4391 ;
   float: left;
@@ -3895,8 +3898,21 @@ a.menuright:hover{
   height:100px;
   text-align: center;
   position: relative;
-  cursor: move;
+  cursor: grab;
 }
+
+
+.book_main_page_section_document_detail:hover{
+  border : 1px solid #CCC;
+  border-radius: 4px;
+}
+ 
+
+.book_main_page_section_document_detail:active{
+   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+ 
+
 
 
 .selector_book_section_document{
@@ -3940,7 +3956,7 @@ a.menuright:hover{
 }
 
 .book_document_choice{
-  font-size: 0.8em;
+  font-size: 12px;
   font-weight: normal;
   color:#5d4391 ;
   padding: 5px;
@@ -3949,11 +3965,11 @@ a.menuright:hover{
 
 
 .existant_book_document_choice,.selector_existant_book_document_choice{
-  font-size: 0.8em;
+  font-size: 12px;
   font-weight: normal;
   color:#9274C7 ;
   padding: 5px;
-  margin: 5px;
+  margin: 2px;
   display: block;
   float:left;
   text-align: center;
@@ -3961,14 +3977,8 @@ a.menuright:hover{
 
 
 .selector_existant_book_document_choice{
-  font-size: 0.8em;
-  font-weight: normal;
-  color:#9274C7 ;
-  padding: 5px;
-  margin: 5px;
-  display: block;
-  float:left;
-  text-align: center;
+  border:1px solid #CCC;
+  border-radius: 4px 4px 0px 0px;
 }
  
 
@@ -8244,53 +8254,7 @@ a.white, a.white:active, a.white:visited, a.white:hover, .white{
 }
 
 
-/*
- * Component: Nav
- * --------------
- */
-.content_list .navbar{
-  margin-bottom: 5px;
-  margin-top: 0px;
-}
-.content_list .nav > li > a {
-    position: relative;
-    display: block;
-    padding: 1px 6px;
-    padding-top: 2px;
-    margin-top: 14px; 
-}
 
- 
-
-.content_list .nav > li > a:hover,
-.content_list .nav > li > a:active,
-.content_list .nav > li > a:focus {
-   background: #FFF;  
-   color: #5d4391 ;
-}
-
-.content_list .nav-tabs > li > a {
-    margin-right: 2px;
-    line-height: 1.42857143;
-    border: 1px solid #bebebe;
-    border-bottom: 1px solid transparent;
-    border-radius: 7px 7px 0 0;    
-    font-size: 14px;
-}
-
-.content_list .nav-tabs > li.active > a, 
-.content_list .nav-tabs > li.active > a:hover, 
-.content_list .nav-tabs > li.active > a:focus {
-    color: #555;
-    cursor: default;
-    background-color: #fff;
-    /* border: 1px solid #ddd; */
-    border-bottom-color: transparent;
-    font-size: 17px;
-    font-weight: 600;
-    padding: 5px 10px 4px 10px;   
-    margin-top: 4px;
-}
 /*
  * Component: Nav
  * --------------

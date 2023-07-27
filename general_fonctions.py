@@ -17,6 +17,63 @@ from django.apps import apps
 import uuid
 
 
+
+
+def reset_all_chapters(request,idb) :
+
+    Document.objects.all().delete()
+    Section.objects.all().delete()
+    book = Book.objects.get(pk=idb)
+    i = 1
+    for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
+        courses    = p.course.all()
+        exercises  = p.exercises.all()[:4]
+        qfs        = p.quizz.filter(is_random=1)[:4]
+        bibliotexs = p.bibliotexs.all()
+
+        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
+
+        # QF ###################################################################################################################
+        section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
+        for qf in qfs :
+            document,created = Document.objects.get_or_create(title=qf.title, subject = book.subject, level=book.level, section  = section_qf , author_id=request.user.id , teacher=request.user.teacher, 
+                                                                defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : "Question flash" , 'doctype': 8 , 'doc_id' : qf.id })
+        chapt.sections.add(section_qf)
+
+        # Cours ###################################################################################################################
+        section, cre = Section.objects.get_or_create(title = "Cours" , chapter = chapt , defaults = {'ranking': 2, })
+        for c in courses :
+            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section  = section , author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+        chapt.sections.add(section)
+
+        # Exercices ###################################################################################################################
+        section_tex, cre_tex = Section.objects.get_or_create(title = "Exercices" , chapter = chapt , defaults = {'ranking': 3, })
+        for bib in bibliotexs :
+            for exo in bib.relationtexs.all():
+                document,created = Document.objects.get_or_create(title=exo.title, subject = book.subject, level=book.level, section  = section_tex , 
+                                                                    author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exo.content_html , 'doctype': 6 , 'doc_id' : exo.id })
+        chapt.sections.add(section_tex)
+
+        # Exercices auto-correctifs ###################################################################################################################
+        section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices auto-correctifs" , chapter = chapt , defaults = {'ranking': 4, })
+        for exercise in exercises :
+            document,created = Document.objects.get_or_create(title=exercise.supportfile.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
+                                                                teacher=request.user.teacher, 
+                                                                defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
+        chapt.sections.add(section_exe)
+
+        i+=1 # ranking du chapitre
+
+    return redirect('conception_book', idb , 0 )
+ 
+
+
+
+
+
+
+
+
 def delete_session_key(request,key):
     # supprime la clé key d'une session
     if request.session.has_key(key) :

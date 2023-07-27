@@ -9,7 +9,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
  
     <script>
-        require(['script/ajax-parcours']);
+        require(['script/ajax-parcours','script/ajax-organiser']);
     </script> 
 
 <style>
@@ -56,13 +56,13 @@
 
 
 
-    <div class="tab-content ">
+    <div class="tab-content">
         <div class="tab-pane" id="0">
 
-
+            {% include 'qcm/group_organiser.html' %}
         </div>
 
-        <div class="tab-pane {% if nb_folders %}active{% endif %}" id="1">
+        <div class="tab-pane  {% if nb_folders %}active{% endif %}" id="1">
             <div class="row" style="margin-bottom: 20px"> 
 
                 <div class="col-sm-12 ">
@@ -92,9 +92,9 @@
                                 <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
                         </span>
                     </label>
-                    <a href="{% url 'create_parcours' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> Créer un nouveau parcours</a>
+                    <a href="{% url 'create_parcours' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouveau parcours</span></a>
  
-                    <a href="{% url 'all_parcourses' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  Récupérer un parcours mutualisé</a>
+                    <a href="{% url 'all_parcourses' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un parcours mutualisé</span></a>
                 </div>
             </div>
 

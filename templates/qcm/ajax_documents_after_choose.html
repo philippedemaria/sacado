@@ -1,0 +1,25 @@
+{% load static %}
+{% load widget_tweaks %}    
+
+{% for document in documents %}
+    <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
+        <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
+        
+        <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
+             {{ document.icon_doctype|safe}}
+        </a>
+        <br/>
+        {% if document.author == request.user.teacher %}
+            <a href="{% url 'update_book_document' book.id chapter.id document.id %}"  class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >
+                {{ document.title|truncatechars:30 }}
+            </a> 
+        {% else %}
+            <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                {{ document.title|truncatechars:30  }}
+            </a>
+        {% endif  %}
+        <small>
+            <a href="javascript:void(0);" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
+        </small>
+    </div>
+{% endfor %}

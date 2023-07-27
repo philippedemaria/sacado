@@ -3884,12 +3884,21 @@ def create_questions_flash(request,idl):
     teacher = request.user.teacher
 
     level = Level.objects.get(pk=idl)
+
     grp_id = request.session.get("group_id",None)
+    fld_id = request.session.get("folder_id",None)
+    prc_id = request.session.get("parcours_id",None)
     if grp_id :
         grp = Group.objects.get(pk=grp_id)
     else : grp = None
+    if fld_id :
+        fld = Folder.objects.get(pk=fld_id)
+    else : fld = None
+    if prc_id :
+        prc = Parcours.objects.get(pk=prc_id)
+    else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc )
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
@@ -3955,11 +3964,19 @@ def create_questions_flash_inside_parcours(request,idp):
     level = parcours.level
 
     grp_id = request.session.get("group_id",None)
+    fld_id = request.session.get("folder_id",None)
+    prc_id = request.session.get("parcours_id",None)
     if grp_id :
         grp = Group.objects.get(pk=grp_id)
     else : grp = None
+    if fld_id :
+        fld = Folder.objects.get(pk=fld_id)
+    else : fld = None
+    if fld_id :
+        prc = Parcours.objects.get(pk=prc_id)
+    else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc )
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
@@ -4052,7 +4069,21 @@ def update_questions_flash(request,id):
 
     all_mentals.append(level_dict)
  
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = None  , instance = quizz)
+    grp_id = request.session.get("group_id",None)
+    fld_id = request.session.get("folder_id",None)
+    prc_id = request.session.get("parcours_id",None)
+    if grp_id :
+        grp = Group.objects.get(pk=grp_id)
+    else : grp = None
+    if fld_id :
+        fld = Folder.objects.get(pk=fld_id)
+    else : fld = None
+    if fld_id :
+        prc = Parcours.objects.get(pk=prc_id)
+    else : prc = None
+
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc , instance = quizz)
+
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
 
@@ -4163,7 +4194,7 @@ def delete_all_questions_flash(request):
 def admin_test_mental(request,id):
 
     teacher = request.user.teacher
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher ,grp = None )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = None , folder = None , parcours = None )
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "QFlash"
     mental = Mental.objects.get(pk=id)

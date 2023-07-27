@@ -52,6 +52,8 @@ urlpatterns = [
  
     path('book_chapter_show_document/<int:idb>/<int:idch>/<int:idd>', book_chapter_show_document, name='book_chapter_show_document'),
 
+    path('create_book_section', create_book_section, name='create_book_section'),
+    path('update_book_section', update_book_section, name='update_book_section'),
     path('delete_book_section', delete_book_section, name='delete_book_section'),
     path('sorter_book_section', sorter_book_section, name='sorter_book_section'),
     path('publish_book_section', publish_book_section, name='publish_book_section'),
@@ -92,8 +94,7 @@ urlpatterns = [
     ##################################################################################################################################
     ##################################################################################################################################
     path('type_de_page', type_de_page, name='type_de_page'),
-
-  
+    path('insert_document_into_section', insert_document_into_section, name='insert_document_into_section'),
     ##################################################################################################################################
     ##################################################################################################################################
     ################### 

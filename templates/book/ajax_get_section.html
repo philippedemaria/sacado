@@ -1,0 +1,22 @@
+{% load static %}
+{% load widget_tweaks %}    
+
+
+<div class="book_main_page_section"  id="book_main_page_section{{ section.id }}" data-over_section_id="{{ section.id }}" style="border-color: {{ section.color}}" >
+    <div class="book_main_page_section_title" id="book_main_page_section_title{{ section.id }}" style="background-color: {{ section.color}}">
+        <i class="fa fa-sort this_sorter_handle"></i> <span id="section_title{{ section.id }}">{{ section.title }}</span>   
+
+        <a href="javascript:void(0);" class="publish_section white" title="Visible en projection" data-section_id="{{ section.id }}">{% if section.is_publish %}<i class="bi bi-eye"></i>{% else %}<i class="bi bi-eye-slash"></i>{% endif %}</a>                
+
+        <a href="javascript:void(0);" data-toggle='modal' data-target='#update_section' class="section_up_and_del white" title="Modifier" data-section_id = "{{ section.id }}"><i class="bi bi-pen"></i></a>
+        
+        <a href="javascript:void(0);" class="delete_section white" title="Supprimer" data-section_id="{{ section.id }}"><i class="bi bi-trash"></i></a>
+    </div> 
+    <div class="book_main_page_body {% if not section.is_publish %}opacity_color{% endif %}" id="book_main_page_body{{ section.id }}" data-over_section_id="{{ section.id }}">
+
+
+    </div> 
+
+        <a href="javascript:void(0);" data-toggle='modal' data-target='#chapter_new_document' class="selector_book_section_document" title="Ajouter" data-chapter_id="{{ chapter.id }}" data-section_title="{{  section.title }}" data-section_id="{{  section.id }}"><i class="bi bi-file-plus-fill book_main_page_section_document_section"></i></a>        
+    <div style="clear:both"></div>
+</div>

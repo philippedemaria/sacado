@@ -543,7 +543,16 @@ urlpatterns = [
     path('update_docperso/<int:idp>/<int:idd>', update_docperso, name='update_docperso'),
     path('delete_docperso/<int:idp>/<int:idd>', delete_docperso, name='delete_docperso'),
 
-
     path('ajax_publish_docperso', ajax_publish_docperso, name='ajax_publish_docperso'),
+
+
+    ####################################    Organiser  ##########################################
+
+    path('ajax_rename_chapter', ajax_rename_chapter, name='ajax_rename_chapter'),
+    path('ajax_delete_chapter', ajax_delete_chapter, name='ajax_delete_chapter'),
+    path('initialize_all_chapters/<int:idb>/<int:idg>', initialize_all_chapters, name='initialize_all_chapters'),
+    path('get_inside_chapter_div', get_inside_chapter_div, name='get_inside_chapter_div'),
+
+
 
  ]

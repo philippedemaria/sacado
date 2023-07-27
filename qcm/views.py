@@ -19,6 +19,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from account.decorators import user_can_create, user_is_superuser, user_is_creator , user_is_testeur
 from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill
+from book.models import *
+from book.forms import SectionForm
 from account.forms import StudentForm, TeacherForm, UserForm
 from bibliotex.models import Bibliotex
 from flashcard.models import Flashpack
@@ -128,6 +130,59 @@ def change_code_exercises_to_book():
 
 
 
+def initialize_all_chapters(request,idb,idg) :
+
+    Document.objects.all().delete()
+    Section.objects.all().delete()
+    book = Book.objects.get(pk=idb)
+    group = Group.objects.get(pk=idg)
+    i = 1
+    for p in group.group_parcours.order_by("ranking") :
+        courses    = p.course.all()
+        exercises  = p.exercises.all()[:4]
+        qfs        = p.quizz.filter(is_random=1)[:4]
+        bibliotexs = p.bibliotexs.all()
+
+        chapt,crea  = Chapter.objects.get_or_create(book=book, parcours=p, defaults={ 'title' : p.title, 'author' : request.user.teacher ,  'teacher':request.user.teacher,  'is_publish':1,'ranking':i})
+        if crea :
+            # QF ###################################################################################################################
+            section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
+            for qf in qfs :
+                document,created = Document.objects.get_or_create(title=qf.title, subject = book.subject, level=book.level, section  = section_qf , author_id=request.user.id , teacher=request.user.teacher, 
+                                                                    defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : "Question flash" , 'doctype': 8 , 'doc_id' : qf.id })
+            chapt.sections.add(section_qf)
+
+            # Cours ###################################################################################################################
+            section, cre = Section.objects.get_or_create(title = "Cours" , chapter = chapt , defaults = {'ranking': 2, })
+            for c in courses :
+                document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section  = section , author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+            chapt.sections.add(section)
+
+            # Exercices ###################################################################################################################
+            section_tex, cre_tex = Section.objects.get_or_create(title = "Exercices" , chapter = chapt , defaults = {'ranking': 3, })
+            for bib in bibliotexs :
+                for exo in bib.relationtexs.all():
+                    try : 
+                        document,created = Document.objects.get_or_create(title=exo.exotex.title, subject = book.subject, level=book.level, section  = section_tex , 
+                                                                            author_id=request.user.id , teacher=request.user.teacher, 
+                                                                            defaults={'is_publish':1 , 'is_share':1 , 'ranking':i , 'content':exo.content_html , 'doctype':6 , 'doc_id' : exo.id })
+                    except : pass
+            chapt.sections.add(section_tex)
+
+            # Exercices auto-correctifs ###################################################################################################################
+            section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices auto-correctifs" , chapter = chapt , defaults = {'ranking': 4, })
+            for exercise in exercises :
+                document,created = Document.objects.get_or_create(title=exercise.supportfile.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
+                                                                    teacher=request.user.teacher, 
+                                                                    defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
+            chapt.sections.add(section_exe)
+
+        i+=1 # ranking du chapitre
+
+    return redirect("list_parcours_group", idg)
+
+ 
+ 
 
 
 #################################################################
@@ -1932,26 +1987,30 @@ def list_parcours_group(request,id):
     parcourses  = bases.filter( is_evaluation=0, is_sequence=0).order_by("ranking")
     sequences   = bases.filter( is_sequence=1).order_by("ranking")
 
-    parcours_tab = evaluations | parcourses
-
     ###efface le realtime de plus de 30min
-    clear_realtime(parcours_tab , today.now() ,  1800 )
+    clear_realtime(parcourses , today.now() ,  1800 )
     nb_bases = bases.count() + folders.count()
 
     bibliotexs = group.bibliotexs.filter(folders=None)
     quizzes    = group.quizz.filter(is_random=0,folders=None)
     flashpacks = group.flashpacks.filter(folders=None)
     docpersos  = group.docpersos.filter(folders=None)
-    qflashs     = group.quizz.filter(is_random=1,folders=None).order_by("-date_modified")
+    qflashs    = group.quizz.filter(is_random=1,folders=None).order_by("-date_modified")
 
+    book,create = Book.objects.get_or_create(  author = teacher, level = group.level, subject = group.subject ,  defaults = {'title' : "Organiser"+str(group.level.id) ,'is_student' : 0, 'imagefile' : "" , 'ranking' : 1,'price' : 0 })
+    book.teachers.add(teacher)
+    book.groups.add(group)
+ 
+    chapters = book.chapters.all()
 
-
-
+    formsec = SectionForm(request.POST or None)
 
     context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
-                 'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases }
+                 'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases , 'book' : book ,  'chapters' : chapters ,
+                 'formsec' : formsec }
 
     return render(request, 'qcm/list_parcours_group.html', context )
+
 
 
 @login_required(login_url= 'index')
@@ -13959,7 +14018,51 @@ def ajax_publish_docperso(request):
         data["no_publish_label_css"] = "text-danger"
    
     Docperso.objects.filter(pk = int(docperso_id)).update(is_publish = statut)  
-
-    print(data)  
+  
     return JsonResponse(data) 
- 
+
+@csrf_exempt
+def ajax_delete_chapter(request) :
+    chapter_id = request.POST.get('chapter_id', None)
+    chapter = Chapter.objects.get(pk=chapter_id)
+    chapter.delete()
+    data={}
+    return JsonResponse(data) 
+
+@csrf_exempt
+def ajax_rename_chapter(request) :
+
+    chapter_id = request.POST.get('chapter_id', None)
+    rename_chapter = request.POST.get('rename_chapter', None)
+    is_rename_parcours = request.POST.get('is_rename_parcours', None)
+
+    chapter = Chapter.objects.get(pk=chapter_id)
+    chapter.title = rename_chapter
+    chapter.save()
+    data={}
+    data["html"] = rename_chapter
+    if is_rename_parcours == "yes"  :
+        try :
+            Parcours.objects.filter(pk=chapter.parcours.id).update(title=rename_chapter)
+        except : pass
+
+    return JsonResponse(data) 
+
+
+
+@csrf_exempt
+def get_inside_chapter_div(request) :
+
+    book_id = request.POST.get('book_id', None)
+    chapter_id = request.POST.get('chapter_id', None)
+
+    book     = Book.objects.get(pk=book_id)
+    chapter  = Chapter.objects.get(pk=chapter_id)
+    sections = chapter.sections.order_by("ranking")
+
+    context = { 'book' : book , 'chapter' : chapter , 'sections' : sections }
+    data = {}
+    html = render_to_string('qcm/get_inside_chapter_div.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)

@@ -35,7 +35,7 @@ def quizz_directory_path(instance, filename):
     return "quizzes/{}/{}".format(instance.teacher.user.id, filename)
 
 def tool_directory_path(instance, filename):
-    return "tool/asso/{}".format( filename)
+    return "tool/asso/{}".format(filename)
 
 def variable_directory_path(instance, filename):
     return "tool/variable_qr/{}".format(filename)

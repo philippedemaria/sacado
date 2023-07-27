@@ -477,6 +477,44 @@ def book_document_is_done(request):
 #################################################################
 # section
 #################################################################
+@csrf_exempt
+def create_book_section(request):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    chapter_id = request.POST.get("chapter_id" , None )
+    chapter = Chapter.objects.get(pk=chapter_id)
+    title = request.POST.get("title" , None )
+    color = request.POST.get("color" , None )
+
+    section = Section.objects.create(title = title , color = color , chapter_id = chapter_id , ranking = 100 , is_publish =1 )
+    data = {}
+    context = { 'section' : section ,   'chapter' : chapter }
+    data['html'] = render_to_string('book/ajax_get_section.html', context )
+
+    return JsonResponse(data) 
+
+
+
+@csrf_exempt
+def update_book_section(request):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    section_id  = request.POST.get("section_id" , None )
+    title = request.POST.get("title" , None )
+    color = request.POST.get("color" , None )
+
+    section = Section.objects.get(pk=section_id) 
+    section.title = title
+    section.color = color
+    section.save()
+    data = {}
+    data['title'] = title
+    data['color'] = color
+    return JsonResponse(data) 
 
 
 @csrf_exempt
@@ -647,6 +685,8 @@ def sorter_book_document(request):
     section_id = request.POST.get("section_id")
     document_id = request.POST.get("document_id")
 
+    print(valeurs , document_section_id,  section_id , document_id)
+
     data = {}
     data['section_id'] =  document_section_id
 
@@ -657,9 +697,6 @@ def sorter_book_document(request):
         Document.objects.filter(pk = valeurs[i]).update(ranking = i)
 
     return JsonResponse(data) 
-
-
-
 
 
 @csrf_exempt
@@ -673,6 +710,8 @@ def sorter_book_chrono_document(request):
         except : pass
     return JsonResponse(data) 
 
+
+
 @csrf_exempt
 def get_type_book_document(request):
 
@@ -680,27 +719,30 @@ def get_type_book_document(request):
     level_id   = request.POST.get("level_id")
     subject_id = request.POST.get("subject_id")
     chapter_id = request.POST.get("chapter_id")
-    teacher    = request.user.teacher
+    n          = int(request.POST.get("n"))
 
+    teacher    = request.user.teacher
     data = {}
     level   = Level.objects.get(pk=level_id)
     chapter = Chapter.objects.get(pk=chapter_id)
     subject = Subject.objects.get(pk=subject_id)
 
     if this_type == "BiblioTex" :
-        documents = Bibliotex.objects.filter(Q(teacher=teacher)|Q( is_share=1),subjects = subject , levels = level )[:100]
+        documents = Bibliotex.objects.filter(Q(teacher=teacher)|Q( is_share=1),subjects = subject , levels = level )[(n-1)*100:n*100]
     elif this_type == "Course" :
-        documents = Course.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject = subject , level = level )[:100]
+        documents = Course.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject = subject , level = level )[(n-1)*100:n*100]
     elif this_type == "Exotex" :        
-        documents = Exotex.objects.filter(is_share=1,subject = subject , level = level )[:100]
+        documents = Exotex.objects.filter(is_share=1,subject = subject , level = level )[(n-1)*100:n*100]
     elif this_type == "GGB" : 
-        documents = Exercise.objects.filter(knowledge__theme__subject = subject , level  = level )[:100]
+        documents = Exercise.objects.filter(knowledge__theme__subject = subject , level  = level )[(n-1)*100:n*100]
     elif this_type == "Flashpack" :        
-        documents = Flashpack.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject = subject , levels  = level )[:100]
+        documents = Flashpack.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject = subject , levels  = level )[(n-1)*100:n*100]
     elif this_type == "Quizz" :
-        documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 0 )[:100]
+        documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 0 )[(n-1)*100:n*100]
     elif this_type == "QF" :
-        documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 1 )[:100]
+        documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 1 )[(n-1)*100:n*100]
+    elif this_type == "DocPerso" :
+        documents = DocPerso.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level )[(n-1)*100:n*100]
     else :
         documents = []
 
@@ -709,6 +751,63 @@ def get_type_book_document(request):
 
     return JsonResponse(data)
         
+
+
+
+
+@csrf_exempt
+def insert_document_into_section(request):
+
+    valeurs    = request.POST.getlist("valeurs")
+    this_type  = request.POST.get("type_doc")
+    section_id = request.POST.get("section_id")
+    level_id   = request.POST.get("level_id")
+    subject_id = request.POST.get("subject_id")
+
+    teacher  = request.user.teacher
+    documents = list()
+    for doc_id in valeurs :
+
+        if this_type == "BiblioTex"   :
+            b = Bibliotex.objects.get(pk=doc_id) 
+            doctype = 6 
+            title , author = b.title ,  b.author
+        elif this_type == "Course"    : 
+            b = Course.objects.get(pk=doc_id) 
+            doctype = 5 
+            title , author  = b.title ,  b.author
+        elif this_type == "Exotex"    : 
+            b = Exotex.objects.get(pk=doc_id)
+            doctype = 7      
+            title , author  = b.title ,  b.author
+        elif this_type == "GGB"       : 
+            b = Exercise.objects.get(pk=doc_id)
+            title  , author = b.supportfile.title ,  b.supportfile.author
+            doctype = 3  
+        elif this_type == "Flashpack" :
+            b = Flashpack.objects.get(pk=doc_id)
+            doctype = 8    
+            title  , author = b.title    ,  b.author
+        elif this_type == "QF" :
+            b = Quizz.objects.get(pk=doc_id)
+            doctype = 9 
+            title  , author = b.title ,  b.author
+        else : 
+            b = Quizz.objects.get(pk=doc_id)
+            doctype = 4 
+            title , author  = b.title ,  b.author
+
+        document = Document.objects.create(title = title, doc_id=doc_id , doctype = doctype, author = author, teacher = teacher, section_id = section_id , level_id = level_id, subject_id = subject_id,is_publish=1,is_share=0)
+        documents.append(document)
+
+    section = Section.objects.get(pk=section_id)
+
+    data = {}
+    context = { 'documents':documents , 'section' : section , }
+    data["html"] = render_to_string('qcm/ajax_documents_after_choose.html', context )
+ 
+
+    return JsonResponse(data)
 
 
 ###################################################################################################################################################################################################

@@ -497,6 +497,18 @@ hr.menu {
     min-height: 40px;
 }
 
+
+
+.fontLabel {
+  font-size: 12px ; 
+  padding: 0px 5px;
+  border-radius: 50%;
+  background-color: #FFF ;
+  color: #5d4391 ;
+}
+
+
+
 .btn-action  {
   color : #f1eef7!important;
   border-radius: 10px!important;
@@ -4783,7 +4795,7 @@ h6,
 /* General Links */
 a {
   color: #5d4391 ; /*#007EE2;*/ 
-  font-weight: 100;
+/*  font-weight: 100;*/
 }
 a.normal {
   font-weight: normal;

@@ -475,6 +475,13 @@ a.inside_volet:hover{
 }
 
 
+.fontLabel {
+  font-size: 12px ; 
+  padding: 0px 5px;
+  border-radius: 50%;
+  background-color: #FFF ;
+  color: #a81d1c ;
+}
 
 
 
@@ -4709,7 +4716,7 @@ h6,
 /* General Links */
 a {
   color: #a81d1c ; /*#007EE2;*/ 
-  font-weight: 100;
+/*  font-weight: 100;*/
 }
 a.normal {
   font-weight: normal;
@@ -8344,6 +8351,13 @@ table.text-center th {
   background-color: #d2d6de;
   color: #444;
 }
+
+
+
+
+
+
+
  
 /*
  * Component: modal

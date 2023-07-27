@@ -3,35 +3,33 @@
 
 
 {% for document in documents %}  
-
-    {% if this_type == "GGB" %}
-        <div class="this_css_template_all_document" >
-            <div class="this_search_document_get">
-                <input type="checkbox" name="select_this_document_for_chapter" value ='{{ document.id }}-GGB' />
-                <img src='{{ document.supportfile.imagefile.url }}' class='get_this_document this_css_template_exercise_document' 
-                        data-type="GGB" data-book_id='{{ book.id }}'  
-                     data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'/>
-            </div>
+    <div class="this_css_template_all_document" id="this_css_template_all_document{{ document.id }}">
+        <div class="this_search_document_get">
+            <input type="checkbox" name="select_this_document_for_chapter" class="select_document_into_section" value ='{{ document.id }}-{{ this_type}}' />
+            {% if this_type == "GGB" %}
+            <img src='{{ document.supportfile.imagefile.url }}' class='get_this_document this_css_template_exercise_document' 
+                    data-type="GGB" data-book_id='{{ book.id }}'  data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'/><br/>
+            {% else %}
+            <a href="javascript:void();" data-toggle='modal' data-target='#show_this_document' class="this_search_document_label" data-document_id='{{ document.id }}'>{{document.title|safe}}</a>
+            {% endif %}
         </div>
-
-    {% else %}
-        <div class="this_css_template_all_document" >
-            <div class="this_search_document_get">
-                <input type="checkbox" name="select_this_document_for_chapter" value ='{{ document.id }}-{{ this_type}}' />
-            </div>
-            <a href="javascript:void();" data-toggle='modal' data-target='#show_this_document'  class="this_search_document_label" data-document_id='{{ document.id }}'>{{document.title}} </a>
-        </div>
-    {% endif %}
-
-
+    </div>
 {% endfor %} 
 <div style="clear:both"></div>  
 
 <div class="row" align="left">
     <div class="col-sm-12 col-md-12">
         <div class="form-group">         
-            <button type="submit" class="btn btn-primary" name="form_type" value="get_doc" >Récupérer</button>   
-            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
+            <a href="javascript:void(0);" class="btn btn-primary" id="insert_document_into_this_section">Récupérer</a>   
+            <a href="javascript:history.back()" data-dismiss="modal" class="pull-right"><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
+            {% if this_type == "GGB" %}
+            <a href="javascript:void(0);" class="btn btn-xs btn-default modify_number_display" data-n="1" data-type="{{ this_type }}">100-200</a>
+            <a href="javascript:void(0);" class="btn btn-xs btn-default modify_number_display" data-n="2" data-type="{{ this_type }}">200-300</a>
+            <a href="javascript:void(0);" class="btn btn-xs btn-default modify_number_display" data-n="3" data-type="{{ this_type }}">300-400</a>
+            <a href="javascript:void(0);" class="btn btn-xs btn-default modify_number_display" data-n="4" data-type="{{ this_type }}">400-500</a>
+            <a href="javascript:void(0);" class="btn btn-xs btn-default modify_number_display" data-n="5" data-type="{{ this_type }}">500-600</a>
+            <a href="javascript:void(0);" class="btn btn-xs btn-default modify_number_display" data-n="6" data-type="{{ this_type }}">600-700</a>
+            {% endif %}
         </div>
     </div>
 </div>                                  
