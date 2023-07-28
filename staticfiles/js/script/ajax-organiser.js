@@ -315,10 +315,12 @@ define(['jquery', 'bootstrap'], function ($) {
 						$("#show_modal_document_body").html(data.body);
                         $("#show_this_document").css("padding-right","0px!important")	;	
                         $("#this_document_is_done").attr("data-document_id", document_id);
-
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 					}
                 }); 
         }); 
+
+
 
         $(".update_this_document").on('click', function (event) {
 
