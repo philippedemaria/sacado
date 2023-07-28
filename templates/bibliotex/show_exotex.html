@@ -1,0 +1,37 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+ 
+    {% include 'bibliotex/logo.html' %} Fichier Latex 
+    {{ exotex.title }}
+ 
+{% endblock %}
+
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+ 
+
+<div class="content_main">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="card">
+            {{ exotex.content_html|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

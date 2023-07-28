@@ -21,7 +21,7 @@ def image_book_path(instance,filename):
 def document_path(author,filename):
     return "chapter/{}/{}".format(author.user.id,filename)
 
-
+ 
 
 class Book(models.Model):
 
@@ -87,8 +87,8 @@ class Section(models.Model):
         unique_together = ('title', 'chapter')
 
 ##################################     doctypes     ################################################    
-##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
-##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
+##  doctypes  ["content","file","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF","DocPerso"]
+##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ,   10     ]
 ##################################     doctypes     ################################################
 
 class Document(models.Model):
@@ -118,26 +118,59 @@ class Document(models.Model):
         return "{} {}".format(self.title,self.level.name)
 
     def icon_doctype(self):
-
-        if self.doctype == 0 : icon = '<i class="bi bi-file-earmark book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 1 : icon = '<i class="bi bi-file book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 2 : icon = '<i class="bi bi-link  book_main_page_section_document_earmark"></i>'
+        doc_url = ""
+        doc_support_id = self.doc_id
+        if self.doctype == 0 : 
+            icon = '<i class="bi bi-file-earmark book_main_page_section_document_earmark"></i>'
+            doc_url = "show_this_exercise"
+        elif self.doctype == 1 : 
+            icon = '<i class="bi bi-file book_main_page_section_document_earmark"></i>'
+            doc_url = self.file
+        elif self.doctype == 2 : 
+            icon = '<i class="bi bi-link  book_main_page_section_document_earmark"></i>'
+            doc_url = self.url
         elif self.doctype == 3 : 
+            exercise = Exercise.objects.get(pk=self.doc_id)
             try :
-                exercise = Exercise.objects.get(pk=self.doc_id)
                 icon = "<img src='"+exercise.supportfile.imagefile.url+"' class='mini_imagefile' />"
             except :
                 icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
+            if exercise.supportfile.is_ggbfile :
+                doc_url = "show_this_exercise"
+            else :
+                doc_url = "show_all_type_exercise"
+                doc_support_id = exercise.supportfile.id
+        elif self.doctype == 4 : #quiz
+            icon = '<i class="bi bi-file-aspect-ratio  book_main_page_section_document_earmark"></i>'
+            doc_url = "show_quizz"
+        elif self.doctype == 5 :
+            icon = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16"><path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/></svg>'
+            doc_url = "show_one_course"
+        elif self.doctype == 6 : 
+            icon = '<i class="bi bi-bootstrap  book_main_page_section_document_earmark"></i>'
+            doc_url = "show_bibliotex"
+        elif self.doctype == 7 : 
+            icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
+            doc_url = "show_exotex"
+        elif self.doctype == 8 : 
+            icon = '<i class="bi bi-stack  book_main_page_section_document_earmark"></i>'
+            doc_url = "show_flashpack"
+        elif self.doctype == 9 : 
+            icon = '<i class="bi bi-lightning  book_main_page_section_document_earmark"></i>'
+            doc_url = "show_questions_flash"
+        elif self.doctype == 10 : 
+            icon = '<i class="bi bi-file  book_main_page_section_document_earmark"></i>'
+            doc_url = self.url
+        data = {}
+        data["icon"] = icon
+        data["url"] = doc_url
+        data["support_id"] = doc_support_id
+        return data
 
-        elif self.doctype == 4 : icon = '<i class="bi bi-file-aspect-ratio  book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 5 : icon = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-c-square" viewBox="0 0 16 16"><path d="M8.146 4.992c-1.212 0-1.927.92-1.927 2.502v1.06c0 1.571.703 2.462 1.927 2.462.979 0 1.641-.586 1.729-1.418h1.295v.093c-.1 1.448-1.354 2.467-3.03 2.467-2.091 0-3.269-1.336-3.269-3.603V7.482c0-2.261 1.201-3.638 3.27-3.638 1.681 0 2.935 1.054 3.029 2.572v.088H9.875c-.088-.879-.768-1.512-1.729-1.512Z"/><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2Zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2Z"/></svg>'
-        elif self.doctype == 6 : icon = '<i class="bi bi-bootstrap  book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 7 : icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 8 : icon = '<i class="bi bi-stack  book_main_page_section_document_earmark"></i>'
-        elif self.doctype == 9 : icon = '<i class="bi bi-lightning  book_main_page_section_document_earmark"></i>'
-        return icon
 
 
+
+ 
 
 class Documentex(models.Model):
 

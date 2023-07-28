@@ -34,6 +34,9 @@ urlpatterns = [
     path('exercise_bibliotex_duplicate', duplicate_bibliotex, name='duplicate_bibliotex'),
 
 
+    path('exercise_exotex_show/<int:id>', show_exotex , name='show_exotex'),
+
+
     path('update_relationtex/<int:id>', update_relationtex , name='update_relationtex'),
     path('delete_relationtex/<int:id>', delete_relationtex , name='delete_relationtex'),
 

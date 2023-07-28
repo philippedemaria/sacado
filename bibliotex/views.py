@@ -620,7 +620,16 @@ def delete_exotex(request, id):
     return redirect('admin_exotexs', level_id)
 
 
- 
+  
+def show_exotex(request, id):
+    exotex = Exotex.objects.get(id=id)
+  
+    context = { 'exotex': exotex,   }
+
+    return render(request, 'bibliotex/show_exotex.html', context )
+
+
+
 
 def ajax_action_exotex(request, id):
     pass

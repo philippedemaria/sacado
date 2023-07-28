@@ -20,13 +20,15 @@
 
                 <span id="span_this_document_is_done{{ document.id }}">{% if document.is_done %}<i class="fa fa-check this_document_is_done"></i>{% endif %}</span>
 
+                {% if document.doctype ==  0 %}
                 <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
-                     {{ document.icon_doctype|safe}}
+                     {{ document.icon_doctype.icon|safe}}
                 </a>
-
-
-
-
+                {% else %}
+                <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
+                     {{ document.icon_doctype.icon|safe}}
+                </a>
+                {% endif %}
                 <br/>
 
                 <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >

@@ -140,7 +140,7 @@ def initialize_all_chapters(request,idb,idg) :
     chaps = "Liste des chapitres créés : "
     for p in group.group_parcours.order_by("ranking") :
         courses    = p.course.all()
-        exercises  = p.exercises.all()[:4]
+        exercises  = p.exercises.filter(is_title=0)[:4]
         qfs        = p.quizz.filter(is_random=1)[:4]
         bibliotexs = p.bibliotexs.all()
 
@@ -160,7 +160,7 @@ def initialize_all_chapters(request,idb,idg) :
             chapt.sections.add(section)
 
             # Exercices ###################################################################################################################
-            section_tex, cre_tex = Section.objects.get_or_create(title = "Exercices" , chapter = chapt , defaults = {'ranking': 3, })
+            section_tex, cre_tex = Section.objects.get_or_create(title = "Exercices LaTeX" , chapter = chapt , defaults = {'ranking': 3, })
             for bib in bibliotexs :
                 for exo in bib.relationtexs.all():
                     try : 
