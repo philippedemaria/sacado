@@ -186,5 +186,5 @@ function clear_the_slot(){
 
 
 function reset_all_chapters() {
-    if (!confirm('Vous souhaitez réinitialiser tous les chapitres. Attention les données seront écrasées et perdues. \nConfirmer ?')) return false;
+    if (!confirm('Vous souhaitez réinitialiser tous les chapitres. Attention vos données actuelles seront écrasées et perdues. \nConfirmer ?')) return false;
 }

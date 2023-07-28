@@ -1,15 +1,7 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-book.js OK");
-
-    
-        $("#new_chapter_button").on('click', function (event) {
-
-            $("#modal_title").html("Nouveau chapitre");
-            $("#is_update").val(0);
  
-        }); 
-
 
         $(".get_the_title").on('click', function (event) {
             let title = $(this).data("title");
@@ -17,6 +9,38 @@ define(['jquery', 'bootstrap'], function ($) {
             $("#is_update").val(1);
             $("#pk_chapter_id").val( $(this).data("chapter_id") );
         }); 
+
+
+
+        $(document).on('click', "#submit_add_chapter" , function (event) {
+
+            var pk_book_id      = $(this).data('book_id');
+            var name_chapter     = $("#add_chapter").val();
+ 
+ 
+            var csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax({
+                    data: { 
+                        'book_id': pk_book_id,
+                        'name_chapter': name_chapter ,
+                        'csrf_token': csrf_token 
+                    } ,   
+                    type: "POST",
+                    dataType: "json",
+                    url: "../../ajax_add_chapter" ,
+                    traditional: true,
+                    success: function (data) {
+
+                        $("#droppable_sommary").append(data.html);
+                        $('#book_add_new_chapter').modal('hide');
+   
+                    }
+                }); 
+        }); 
+
+
+
 
 
 
@@ -52,6 +76,12 @@ define(['jquery', 'bootstrap'], function ($) {
                     }
                 }); 
         }); 
+
+
+
+
+
+
 
 
 

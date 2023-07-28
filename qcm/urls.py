@@ -547,7 +547,7 @@ urlpatterns = [
 
 
     ####################################    Organiser  ##########################################
-
+    path('ajax_add_chapter', ajax_add_chapter, name='ajax_add_chapter'),
     path('ajax_rename_chapter', ajax_rename_chapter, name='ajax_rename_chapter'),
     path('ajax_delete_chapter', ajax_delete_chapter, name='ajax_delete_chapter'),
     path('initialize_all_chapters/<int:idb>/<int:idg>', initialize_all_chapters, name='initialize_all_chapters'),

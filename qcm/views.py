@@ -14052,6 +14052,27 @@ def ajax_rename_chapter(request) :
     return JsonResponse(data) 
 
 
+@csrf_exempt
+def ajax_add_chapter(request) :
+
+    book_id = request.POST.get('book_id', None)
+    name_chapter = request.POST.get('name_chapter', None)
+    book = Book.objects.get(pk=book_id)
+
+    chapter = Chapter.objects.create(title=name_chapter , author = request.user.teacher , teacher = request.user.teacher , ranking=100, book = book , parcours = None)
+    
+    data={}
+    context = { 'book' : book , 'ch' : chapter  }
+
+    html = render_to_string('qcm/ajax_chapter_after_choose.html',context)
+    data['html'] = html       
+
+    return JsonResponse(data)
+
+
+
+
+
 
 @csrf_exempt
 def get_inside_chapter_div(request) :
