@@ -111,22 +111,26 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
+                                {% if group %}
                                 <label>Attribuer aux dossiers</label> 
                                 {{ form.folders|add_class:"select_folders"   }}
                                 {{ form.folders.errors }}
+                                {% endif %}
                             </div>
                         </div>
                     </div>  
                 </div>            
                 <div class="col-sm-12 col-md-6 setup_ggb no_visu">
                     <div class="row ">
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-6">                                
+                            {% if group %}
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
                                 <label>Attribuer aux parcours</label> 
                                 {{ form.parcours|add_class:"select_all_parcours"   }}
                                 {{ form.parcours.errors }}
                             </div>
-                        </div>
+                            {% endif %}
+                        </div>                 
                         <div class='col-sm-12 col-md-6 form_card'  style="height: 270px;">
                             <table class="table table-sacado borderless ">
                                 <tr>

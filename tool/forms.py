@@ -190,10 +190,12 @@ class QFlashForm(forms.ModelForm):
 		self.fields['title'].required = False
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=levels, required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset=group.group_folders.all(), widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['parcours']  = forms.ModelMultipleChoiceField(queryset=group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title"), widget=forms.CheckboxSelectMultiple, required=False)
 
-		if group : self.fields['groups'].initial = group
+		if group : 
+			self.fields['folders']  = forms.ModelMultipleChoiceField(queryset=group.group_folders.all(), widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['parcours']  = forms.ModelMultipleChoiceField(queryset=group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title"), widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['groups'].initial = group
+
 		if folder : self.fields['folders'].initial = folder
 		if parcours : self.fields['parcours'].initial = parcours
 
