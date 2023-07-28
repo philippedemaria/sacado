@@ -2793,6 +2793,14 @@ a.book_new_chapter:hover{
   left:10%;
 }
 
+.this_document_is_done{
+  position: absolute;
+  left:40%;
+  top:20px;
+  color : #1bc074;
+  font-size:18px;
+}
+
 .book_main_page_section_document_copy{
   color:#9274C7;
   position: absolute;

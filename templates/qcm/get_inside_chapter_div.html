@@ -17,10 +17,16 @@
         {% for document in section.documents.all|dictsort:'ranking' %}
             <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
                 <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
-                
+
+                <span id="span_this_document_is_done{{ document.id }}">{% if document.is_done %}<i class="fa fa-check this_document_is_done"></i>{% endif %}</span>
+
                 <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
                      {{ document.icon_doctype|safe}}
                 </a>
+
+
+
+
                 <br/>
 
                 <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >

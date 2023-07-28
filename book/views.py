@@ -466,13 +466,17 @@ def book_document_is_done(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
-
+    data = {}
     document_id  = request.POST.get("document_id" , None )
     document = Document.objects.get(pk=document_id)
-    if document.is_done : document.is_done = False
-    else : document.is_done = True
+    if document.is_done : 
+        document.is_done = False
+        data['html'] = ""
+    else : 
+        document.is_done = True
+        data['html'] = "<i class='fa fa-check this_document_is_done'></i>" 
     document.save()
-    data = {}
+
     return JsonResponse(data) 
 #################################################################
 # section

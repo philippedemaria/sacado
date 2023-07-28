@@ -307,13 +307,15 @@ define(['jquery', 'bootstrap'], function ($) {
                     } ,   
                     type: "POST",
                     dataType: "json",
-                    url: "../../show_book_document" ,
+                    url: "../../../book/show_book_document" ,
                     traditional: true,
 					success: function (data) {
 
 						$("#show_modal_document_title").html(data.title);
 						$("#show_modal_document_body").html(data.body);
-                        $("#show_this_document").css("padding-right","0px!important")	;					
+                        $("#show_this_document").css("padding-right","0px!important")	;	
+                        $("#this_document_is_done").attr("data-document_id", document_id);
+
 					}
                 }); 
         }); 
@@ -445,22 +447,10 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        $(".is_done_document").on('click', function (event) {
+        $(document).on('click', "#this_document_is_done" , function (event) {
 
             let document_id = $(this).data("document_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
-            if ($(this).hasClass("is_done")){
- 
-                $(this).removeClass("is_done");
-
-            } else {
-
- 
-                $(this).addClass("is_done");
-            }
-            
-
             $.ajax({
                     data: { 
                         'document_id': document_id ,  
@@ -469,7 +459,12 @@ define(['jquery', 'bootstrap'], function ($) {
                     type: "POST",
                     dataType: "json",
                     url: "../../../book/book_document_is_done" ,
-                    traditional: true
+                    traditional: true,
+                    success: function (data) {
+
+                        $("#span_this_document_is_done"+document_id).html(data.html)
+                        $('#show_this_document').modal('hide');
+                    }
                 }); 
         });
 

@@ -45,11 +45,14 @@
 
             <ul  style="margin-top:20px;">
 
-                <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">1. Initialisez vos chapitres.</span> <br/><small>Sacado transforme vos parcours en chapitres, en important vos cours et 4 exercices.</small> </li>
-                <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">2. Cliquez sur un chapitre et organiser vos documents par sections. </span> <br/><small>Sacado donne accès à tous vos documents des parcours pour les choisir et les intégrer dans votre organiser.</small> </li>
+                <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">1. Initialisez vos chapitres.</span> <br/><small>Sacado transforme vos parcours en chapitres, en important par défaut vos cours et 4 exercices.</small> </li>
+                <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">2. Cliquez sur un chapitre et organiser vos documents par sections. </span> <br/><small>Sacado donne accès à tous vos documents pour les choisir et les intégrer dans votre organiser.</small> </li>
                 <li class="sanspuce"><span class="sacado_color_text" style="font-weight:normal">3. Vidéo-projetez le chapitre en classe et enregistrez votre progression.</span> </li>
 
             </ul>
+
+            <h1 style="margin:20px;font-size:20px;" class="text-success">Vous avez {{ group.group_parcours.count }} parcours convertibles en chapitres dans ce groupe.</h1>
+
         </div>
     </div>
 </div>  
@@ -235,28 +238,6 @@
     </div> 
 </div>
 
-<div class="modal fade" id="show_this_document" tabindex="-1" role="dialog" aria-labelledby="show_this_document">
-    <div class="modal-dialog modal-lg" role="document"  style="width:1100px">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h2 id='show_modal_document_title' ></h2>              
-            </div>
-            <div class="modal-body">
-                <div class="row"  id='show_modal_document_body' >
-                    
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">         
-                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-</div>
 
 <div class="modal fade" id="update_section" tabindex="-1" role="dialog" aria-labelledby="update_section">
     <div class="modal-dialog modal-lg" role="document"  style="width:300px">
@@ -301,6 +282,32 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+<div class="modal fade" id="show_this_document" tabindex="-1" role="dialog" aria-labelledby="show_this_document">
+    <div class="modal-dialog modal-lg" role="document"  style="width:1100px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2 id='show_modal_document_title' ></h2>              
+            </div>
+            <div class="modal-body">
+                <div class="row"  id='show_modal_document_body' >
+                    
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12"> 
+                        <a href="javascript:void(0);" class="btn btn-success"  id='this_document_is_done'> Document traité en classe</a>
+                        <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div> 
