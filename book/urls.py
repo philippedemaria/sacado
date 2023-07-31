@@ -70,7 +70,7 @@ urlpatterns = [
     path('create_page/<int:idb>/<int:idch>', create_page, name='create_page'),
     path('update_page/<int:idb>/<int:idp>', update_page, name='update_page'),
     path('delete_page/<int:idb>/<int:idp>', delete_page, name='delete_page'),
-    path('add_page/<int:idb>/<int:idp>', add_page, name='add_page'),
+    path('add_page/<int:idb>/<int:idch>', add_page, name='add_page'),
 
     path('create_paragraph/<int:idb>/0', create_paragraph, name='create_paragraph'),
     path('update_paragraph/<int:idb>/<int:idp>/<int:idpa>', update_paragraph, name='update_paragraph'),
