@@ -56,11 +56,9 @@ def web_update_abonnement_xml(customer,id_abonnement):
         print(date_start, file=f)
         print("===> date_stop : ", file=f)
         print(date_stop, file=f)
-
         f.close()
     except :
         pass 
-
 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
@@ -70,8 +68,8 @@ def web_update_abonnement_xml(customer,id_abonnement):
     body += "<idRessource>ark:/46173/00001</idRessource>" #/46173/00001.p
     body += "<typeIdRessource>ark</typeIdRessource>"
     body += "<libelleRessource>SACADO</libelleRessource>"
-    body += "<debutValidite>"+date_start[0]+"</debutValidite>"
-    body += "<finValidite>"+date_stop[0]+"</finValidite>"
+    body += "<debutValidite>"+date_start+"</debutValidite>"
+    body += "<finValidite>"+date_stop+"</finValidite>"
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
