@@ -48,7 +48,7 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 def web_update_abonnement_xml(customer,id_abonnement):
     #Webservice du GAR
-    date_start, date_stop = customer.date_start_gar.isoformat().split("T"), customer.date_stop.isoformat().split("T") 
+    date_start, date_stop = customer.date_start_gar.isoformat(), customer.date_stop.isoformat()
 
     try :
         f = open('/var/www/sacado/logs/gar_connexions.log','a')
