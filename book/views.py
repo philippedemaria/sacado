@@ -899,8 +899,8 @@ def create_page(request,idb, idch):
 def add_page(request,idb, idch):
 
     add_page = request.POST.get("add_page",None)
-    if total_number :
-        tn = int(total_number)
+    if add_page :
+        tn = int(add_page)
         for i in range(tn) :
             Page.objects.create(title="Nouvelle page "+str(i) ,  number=i , chapter_id = idch , css="course_page_top")
     return redirect('student_book_builder' , idb, 0)
