@@ -115,8 +115,6 @@ body{
     </ul>
 
     <div class="tab-content ">
-
-
         <div class="tab-pane active" id="3">
             {% if role %}
             <div class="row" style="margin-bottom: 20px"> 
@@ -243,6 +241,8 @@ body{
 
         <div class="tab-pane" id="9">
             <form action="" methode="POST" id="course_sortable">
+                
+            <input value="{{ parcours.id }}" name="parcours_id" id="parcours_id"  type="hidden" >    
             <div class="row" style="margin-bottom: 20px"> 
                 <div class="col-sm-12 ">
                 {% if role %}

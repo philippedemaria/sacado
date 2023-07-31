@@ -6,10 +6,9 @@
 <div  class="box box-widget widget-user-2"  style="cursor: move; background-color:#f1eef7;">
     <div class="handler widget-user-header" >
         <div style="position: absolute; top:0px; z-index:99; left:0px; background-color:#f1eef7; width:310px; height:140px; opacity:0.8; border-radius: 10px"> 
-
         </div>
                
- 
+        <input class="course_sort" value="{{ course.id }}" name="course_sort" id="course_sort" type="hidden">
         <div class="display_annoncement_for_courses">{{ course.annoncement|no_table|no_image|no_iframe|close_div|safe|truncatewords_html:"10" }}</div>
  
 

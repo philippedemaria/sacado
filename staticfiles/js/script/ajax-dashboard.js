@@ -1312,7 +1312,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     let this_chapter_id = $(this).val();
                     valeurs = valeurs + this_chapter_id +"-";
                 });
-
+ 
 
                 $(ui.item).css("box-shadow", "0px 0px 0px transparent").css("background-color", "#dbcdf7").css("color", "#271942"); 
 

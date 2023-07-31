@@ -5571,15 +5571,17 @@ def ajax_is_calculator(request):
 
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_course_sorter(request):  
-    try :
-        course_ids = request.POST.get("valeurs")
-        course_tab = course_ids.split("-") 
-        parcours_id = int(request.POST.get("parcours_id"))
 
-        for i in range(len(course_tab)-1):
-            Course.objects.filter(parcours_id = parcours_id , pk = course_tab[i]).update(ranking = i)
-    except :
-        pass
+    course_ids = request.POST.get("valeurs")
+    course_tab = course_ids.split("-") 
+    parcours_id = int(request.POST.get("parcours_id"))
+
+    print(course_ids)
+
+    for i in range(len(course_tab)-1):
+        try : Course.objects.filter(parcours_id = parcours_id , pk = course_tab[i]).update(ranking = i)
+        except : pass
+
 
     data = {}
     return JsonResponse(data) 
