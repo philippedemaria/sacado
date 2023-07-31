@@ -28,26 +28,51 @@
 
 
 <section class="content_main"> 
-
-    <div class="col-sm-12 col-md-12">
-
-        <form method="post" action="" enctype='multipart/form-data'>
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-sm-12 col-md-4">
-                    <div class="form-group">
-                        <label>Nombre de pages ?</label>
-                        <input type="number" name="total_number"  min='0' step='0'   />
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h3>Initialiser des pages</h3>
+            <form method="post" action="" enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label>Nombre de pages ?</label>
+                            <input type="number" name="total_number"  min='0' step='0'   />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h3>Ajouter des pages</h3>
+            <form method="post" action="{% url 'add_page' idb  idch %}" enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label>Nombre de pages ?</label>
+                            <input type="number" name="add_page"  min='0' step='0'   />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>   
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
 </section>
 {% endblock  %}   
 

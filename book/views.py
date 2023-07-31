@@ -889,9 +889,26 @@ def create_page(request,idb, idch):
                 else : title , css = "Introduction" , "intro_page_top"
                 Page.objects.create(title=title ,  number=i , chapter = chapter , css=css)
         return redirect('student_book_builder' , idb, 0)
-    context = { }
+    context = { 'idb' : idb , 'idch' : idch }
 
     return render(request, 'book/form_page.html', context)
+
+
+
+@user_is_superuser 
+def add_page(request,idb, idch):
+
+    add_page = request.POST.get("add_page",None)
+    if total_number :
+        tn = int(total_number)
+        for i in range(tn) :
+            Page.objects.create(title="Nouvelle page "+str(i) ,  number=i , chapter_id = idch , css="course_page_top")
+    return redirect('student_book_builder' , idb, 0)
+
+
+
+
+
 
 
 
