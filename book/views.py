@@ -821,20 +821,31 @@ def insert_document_into_section(request):
 ###################################################################################################################################################################################################
 ###################################################################################################################################################################################################
 ###################################################################################################################################################################################################
+def get_the_page(idb,n):
+
+    book = Book.objects.get(pk=idb)
+    all_pages= dict()
+    for chapter in book.chapters.all() :
+        for page in chapter.pages.all() :
+            all_pages[page.number] = page
+
+    if n%2==0:
+        page = all_pages[n]
+        next_page = all_pages[n+1]
+    else :
+        page = all_pages[n-1]
+        next_page = all_pages[n]
+
+    return  page , next_page , all_pages
+
 
 def show_student_book(request,idb, n):
     book = Book.objects.get(pk=idb)
-    i = 1
-    for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
-        chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
-        i+=1
- 
-    try :
-        chapters = book.chapters.order_by("ranking")
-        context = {'book': book,  'chapters': chapters,  }
-    except :
-        context = {'book': book, }
-
+    page , next_page , all_pages = get_the_page(idb,n)
+    # Appel de la page n
+    numbers = [n for n in range(len(all_pages)) if n%2==0]
+    use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
+    context = {'book': book, "n" : n , 'page' : page , 'next_page' : next_page  , 'numbers' : numbers , 'use_this_css' : use_this_css }
     return render(request, 'book/show_student_page.html', context)
 
 
@@ -842,6 +853,15 @@ def show_student_book(request,idb, n):
 def student_book_builder(request,idb, n):
 
     book = Book.objects.get(pk=idb)
+    i = 0
+    # Création et organisation des pages à la volée
+    for chapter in book.chapters.order_by("ranking") :
+        for page in chapter.pages.order_by('number') :
+            page.number = i
+            page.chapter = chapter
+            page.save()
+            i += 1
+    request.session["this_organised_book_"+str(idb)] = False
 
     i = 1
     for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
