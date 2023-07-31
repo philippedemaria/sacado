@@ -32,10 +32,10 @@
             style="padding:5px;background-color:violet;border-radius:5px"
         {% elif  customer.status == 1 %}
             style="padding:5px;background-color:red;border-radius:5px"  
-        {% elif customer.status == 2 %}
-            style="padding:5px;background-color:orange;border-radius:5px"
-        {% else %}
+        {% elif customer.is_active_asso %}
             style="padding:5px;background-color:green;border-radius:5px"
+        {% else %}
+            style="padding:5px;background-color:orange;border-radius:5px"
         {% endif %} >
         <a href="#" data-target="#new_abo" data-toggle ="modal" style="color:white;font-weight:400">
         {% if customer.status == 0 %}
@@ -45,7 +45,9 @@
         {% elif customer.status == 2 %}
             {% if customer.actual == 0 %}<span class="badge">PE</span>{% endif %} En attente de paiement    
         {% elif  customer.is_active_asso %}
-            Abonné      
+            Abonné     
+        {% else%}
+            A renouveler
         {% endif %} 
     </a>
 
