@@ -121,7 +121,7 @@ body{
             {% if role %}
             <div class="row" style="margin-bottom: 20px"> 
                 <div class="col-sm-12 ">
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouvel exercice</span></span></a>
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouvel exercice</span></a>
                     <a href="{% url 'my_own_exercises' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un exercice mutualisé</span></a>
                     <a href="{% url 'individualise_parcours' parcours.id  %}" class="btn btn-xs btn-sacado" ><i class="bi bi-people"></i> <span class="btn_label">Individualiser les exercices</span></a> 
                     {% if sacado_asso %}
@@ -206,7 +206,7 @@ body{
             {% endif %}
 
 
-
+            <form action="" methode="POST" id="exercise_sorter">
             {% for rc in relationships_customexercises %}
                 {%  if rc.exercise.supportfile.is_title %}     
                     <h2 class="listing_div thin" style="padding-left: 30px; width:100%; clear:both"> 
@@ -236,7 +236,7 @@ body{
                 {% else %}  
                     {% include 'qcm/details_all_cards.html' %}            
                 {% endif %}  
-                {% endfor %}
+            {% endfor %}
             </form>
             <div style="clear:both"></div>
         </div>
@@ -305,7 +305,7 @@ body{
                     {% elif folder %}
                     <a href="{% url 'create_bibliotex' folder.id %}"  class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> Créer une biblioTex </a> 
                     {% else %}
-                    <a href="{% url 'create_bibliotex' 0 %}"  class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> Créer une biblioTex </em></a> 
+                    <a href="{% url 'create_bibliotex' 0 %}"  class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> Créer une biblioTex </a> 
                     {% endif %}
                     <a href="{% url 'bibliotexs' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  Récupérer une bibliotex mutualisée</a>
                 {% endif %}
@@ -336,13 +336,6 @@ body{
             {% endfor %}
             <div style="clear:both"></div>
         </div>
-
-
-
-
-     
-
-
 </section>
  
  
