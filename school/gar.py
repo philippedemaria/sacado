@@ -57,6 +57,9 @@ def web_update_abonnement_xml(customer,id_abonnement):
         print(date_start, file=f)
         print("===> date_stop : ", file=f)
         print(date_stop, file=f)
+        print("===> id_abonnement : ", file=f)
+        print(id_abonnement, file=f)
+        
         f.close()
     except :
         pass 
