@@ -17,7 +17,7 @@
 {% block page_title %}
      Livre élève  <b>{{ book.level.shortname }}</b> 
     {% if chapter %}
-    <img src="{% static 'img/angle-right.png' %}"/>   {{ chapter.title }}  
+    <img src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'student_book_builder' book.id 0 %}"> {{ chapter.title }}</a> 
     {% endif %}
     <img src="{% static 'img/angle-right.png' %}"/> page {{ page.number }}  
 {% endblock %}
