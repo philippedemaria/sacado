@@ -92,8 +92,6 @@ class BlocForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 
-		print(kwargs)
-
 		book = kwargs.pop('book')
 		page = kwargs.pop('page')
 

@@ -1097,7 +1097,7 @@ def type_de_page(request):
 def create_paragraph(request, idb):
 
     book = Book.objects.get(pk=idb)
-    form = ParagraphForm(request.POST or None , book=book )
+    form = ParagraphForm(request.POST or None )
 
     if form.is_valid():
         form.save()
@@ -1116,17 +1116,20 @@ def create_paragraph(request, idb):
 def update_paragraph(request,idb, idp, idpa):
 
     book = Book.objects.get(pk=idb)
-    paragraph = Paragraph.objects.get(id=idp)
-    form = ParagraphForm(request.POST or None, book=book , instance=paragraph )
+    page = Page.objects.get(pk=idp)
+    paragraph = Paragraph.objects.get(id=idpa)
+    form = ParagraphForm(request.POST or None,  instance=paragraph )
     if request.method == "POST" :
         if form.is_valid():
-            form.save()
+            nf = form.save(commit=False)
+            nf.page=page
+            nf.save()
             messages.success(request, 'Le paragraphe a été modifié avec succès !')
-            return redirect('paragraphs')
+            return redirect('update_page',idb,idp)
         else:
             print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'paragraph': paragraph,   }
+    context = {'form': form, 'book' : book , 'page' : page ,  'paragraph': paragraph,   }
 
     return render(request, 'book/form_paragraph.html', context )
 

@@ -1,0 +1,66 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+{% endblock %}
+
+ 
+
+{% block page_title %}
+     Livres numériques  <img src="{% static 'img/angle-right.png' %}"/>  {{ book.title }} <img src="{% static 'img/angle-right.png' %}"/> 
+      {{ page.title }} <img src="{% static 'img/angle-right.png' %}"/> 
+     {% if paragraph %}
+     <small>Modification {{ paragraph.title }}</small>
+    {% else %}
+     <small>Nouveau paragraphe</small>
+    {% endif %} 
+{% endblock %}
+
+{% block page_menu_right %}
+{% endblock %}
+
+
+
+
+
+{% block body  %} 
+<section class="content_main">             
+    <form method="post" action="" enctype='multipart/form-data'>{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <label>{{ form.title.label_tag }}</label>
+                {{ form.title |add_class:"form-control" }}
+                {{ form.title.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.number.label_tag }}</label>
+                {{ form.number |add_class:"form-control" }}
+                {{ form.number.errors }}
+            </div>
+
+            <div class="form-group">
+                <label>{{ form.ranking.label_tag }}</label>
+                {{ form.ranking|add_class:"form-control" }}
+                {{ form.ranking.errors }}
+            </div>
+            
+        </div>  
+        
+  
+        <div class="col-sm-12">         
+            <button type="submit" class="btn btn-primary">Enregistrer</button>   
+            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+        </div>
+    </div>
+    </form>
+</section>
+{% endblock  %}       
+
+ 
