@@ -617,8 +617,8 @@ def update_student_book_chapter(request,idb,idch):
     form = BookForm(request.POST or None, instance=chapter )
 
     if form.is_valid():
-        nf = form.save()
-        messages.success(request, 'Le chapitre a été modifié avec succès !')
+        form.save()
+        messages.success(request, 'Le chapitre '+chapter.title+' a été modifié avec succès !')
         return redirect('student_book_builder' , idb, 0)
     else:
         print(form.errors)

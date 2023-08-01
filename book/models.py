@@ -61,7 +61,7 @@ class Chapter(models.Model):
     is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
     is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     
-    ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
+    ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True)
 
     date_created  = models.DateTimeField( auto_now_add= True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
