@@ -1139,7 +1139,7 @@ def delete_paragraph(request, idb,idp, idpa):
     paragraph = Paragraph.objects.get(id=idp)
     paragraph.delete()
     messages.success(request, 'Le paragraphe a été supprimé avec succès !')
-    return redirect('update_page', idb,idp)
+    return redirect('update_page', idb,idpa)
 
 
 #################################################################
