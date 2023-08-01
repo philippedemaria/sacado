@@ -234,8 +234,8 @@ class Page(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,  blank=True,   null=True,  related_name='pages')
     css     = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Nom de la classe")
 
-    class Meta:
-        unique_together = ('number', 'chapter')
+    # class Meta:
+    #     unique_together = ('number', 'chapter')
 
 
     def __str__(self):
