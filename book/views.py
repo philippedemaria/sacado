@@ -930,7 +930,6 @@ def student_book_builder(request,idb, n):
             page.chapter = chapter
             page.save()
             i += 1
-    request.session["this_organised_book_"+str(idb)] = False
 
     # i = 1
     # for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
