@@ -573,7 +573,6 @@ def create_chapter(request,idb,idch):
         nf.book = book
         nf.author = request.user.teacher
         nf.teacher = request.user.teacher
-        nf.ranking=100
         nf.save()
         messages.success(request, 'Le chapitre a été crée avec succès !')
         return redirect('student_book_builder' , book.id , 0)
