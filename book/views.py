@@ -1095,7 +1095,7 @@ def type_de_page(request):
 
 
 @user_is_superuser 
-def create_paragraph(request,idb):
+def create_paragraph(request, idb):
 
     book = Book.objects.get(pk=idb)
     form = ParagraphForm(request.POST or None , book=book )
@@ -1133,13 +1133,13 @@ def update_paragraph(request,idb, idp, idpa):
 
 
 @user_is_superuser 
-def delete_paragraph(request, idb,idp, idpa):
+def delete_paragraph(request, idb, idp, idpa):
 
     book = Book.objects.get(pk=idb)
-    paragraph = Paragraph.objects.get(id=idp)
+    paragraph = Paragraph.objects.get(id=idpa)
     paragraph.delete()
     messages.success(request, 'Le paragraphe a été supprimé avec succès !')
-    return redirect('update_page', idb,idpa)
+    return redirect('update_page', idb, idp)
 
 
 #################################################################
