@@ -326,3 +326,31 @@ h1 {
 	width:100%;
 	font-weight: normal;
 }
+
+/*  paragraph_bloc_sf  */
+.paragraph_bloc_sf{
+	border: 2px solid  #5d4391;
+	border-radius: 5px;
+	color:#5d4391;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+.paragraph_bloc_sf .bloc_title{
+	color :  #5d4391 ;
+	border-radius: 3px 3px 0px 0px;
+	background-color: #f7e7ff;
+	padding:10px;  
+	width:100%;
+	font-weight:600; 
+}
+
+.paragraph_bloc_sf .bloc_content{
+	color :  #5d4391 ;
+	border-radius:0px 0px 3px 3px;
+	background-color: #f7e7ff;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
