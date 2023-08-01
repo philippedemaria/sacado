@@ -606,6 +606,30 @@ def update_chapter(request,idb,idch):
     return render(request, 'book/form_chapter.html', context)
 
 
+
+def update_student_book_chapter(request,idb,idch):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    
+    book = Book.objects.get(id=idb)
+    chapter = Chapter.objects.get(id=idch)
+    form = BookForm(request.POST or None, instance=chapter )
+
+    if form.is_valid():
+        nf = form.save()
+        messages.success(request, 'Le chapitre a été modifié avec succès !')
+        return redirect('student_book_builder' , idb, 0)
+    else:
+        print(form.errors)
+
+    context = {'form': form, 'chapter': chapter, 'book': book  }
+    return render(request, 'book/form_chapter.html', context)
+
+ 
+
+
+
 def delete_chapter(request,idb,idch):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -627,8 +651,6 @@ def delete_student_book_chapter(request,idb,idch):
     messages.success(request, 'Le chapitre '+chapter.title+' a été supprimé avec succès !')
     return redirect('student_book_builder' , idb, 0)
 
-
- 
 
 @csrf_exempt
 def sorter_chapter(request):

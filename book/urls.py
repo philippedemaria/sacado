@@ -28,6 +28,7 @@ urlpatterns = [
     path('update_chapter/<int:idb>/<int:idch>', update_chapter, name='update_chapter'),
     path('delete_chapter/<int:idb>/<int:idch>', delete_chapter, name='delete_chapter'),
 
+    path('update_student_book_chapter/<int:idb>/<int:idch>', update_student_book_chapter, name='update_student_book_chapter'),
     path('delete_student_book_chapter/<int:idb>/<int:idch>', delete_student_book_chapter, name='delete_student_book_chapter'),
 
     path('sorter_chapter', sorter_chapter, name='sorter_chapter'),

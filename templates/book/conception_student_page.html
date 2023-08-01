@@ -35,7 +35,11 @@
         <table class="table borderless">
         {% for chapter in chapters %}
             <tr>
-                <td width='450px'>{{ chapter }} <a href="{% url 'delete_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-trash"></i></td>
+                <td width='450px'>{{ chapter }} 
+                    <a href="{% url 'delete_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-trash"></i>
+                    <a href="{% url 'update_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-pencil"></i>
+     
+                </td>
                 <td width='40px'><a href="{% url 'create_page' book.id chapter.id %}" class="btn btn-sacado">+</a></td>
                 <td>
                     {% for page in chapter.pages.all|dictsort:"number" %}
