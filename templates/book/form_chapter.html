@@ -49,6 +49,9 @@
                 {{ form.is_share.errors }}
             </div>
 
+            <input name="level" id="id_level" value="{{ book.level.id }}" type="hidden"/>
+            <input name="subject" id="id_subject" value="{{ book.subject.id}}" type="hidden"/>
+
             <div class="form-group">
                 <label>{{ form.ranking.label_tag }}</label>
                 {{ form.ranking|add_class:"form-control" }}
