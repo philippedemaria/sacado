@@ -15,7 +15,11 @@
 
 
 {% block page_title %}
-    <b>{{ book.level.shortname }}</b> <img src="{% static 'img/angle-right.png' %}"/> Livre élève <img src="{% static 'img/angle-right.png' %}"/> page {{ page.number }}  
+     Livre élève  <b>{{ book.level.shortname }}</b> <img src="{% static 'img/angle-right.png' %}"/>
+    {% if chapter %}
+    <img src="{% static 'img/angle-right.png' %}"/>   {{ chapter.title }}  
+    {% endif %}
+    <img src="{% static 'img/angle-right.png' %}"/> page {{ page.number }}  
 {% endblock %}
 
 
