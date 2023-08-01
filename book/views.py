@@ -646,9 +646,9 @@ def delete_student_book_chapter(request,idb,idch):
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
 
-    chapter = Chapter.objects.get(id=idch)
-    chapter.delete()
-    messages.success(request, 'Le chapitre '+chapter.title+' a été supprimé avec succès !')
+    Chapter.objects.filter(id=idch).delete()
+
+    messages.success(request, 'Le chapitre  a été supprimé avec succès !')
     return redirect('student_book_builder' , idb, 0)
 
 
