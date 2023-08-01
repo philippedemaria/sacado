@@ -1008,7 +1008,7 @@ def update_page(request,idb, idp):
 
     book = Book.objects.get(pk=idb)
     page = Page.objects.get(id=idp)
-    chapter = page.chapters.first()
+    chapter = page.chapter 
 
     form_page  = PageForm(request.POST or None,instance=page)
     form_p  = ParagraphForm(request.POST or None)
