@@ -24,8 +24,12 @@ urlpatterns = [
     #################################################################
     # chapter
     #################################################################
+    path('create_chapter/<int:idb>/<int:idch>', create_chapter, name='create_chapter'),
     path('update_chapter/<int:idb>/<int:idch>', update_chapter, name='update_chapter'),
     path('delete_chapter/<int:idb>/<int:idch>', delete_chapter, name='delete_chapter'),
+
+    path('delete_student_book_chapter/<int:idb>/<int:idch>', delete_student_book_chapter, name='delete_student_book_chapter'),
+
     path('sorter_chapter', sorter_chapter, name='sorter_chapter'),
 
     path('reset_all_chapters/<int:idb>', reset_all_chapters, name='reset_all_chapters'),

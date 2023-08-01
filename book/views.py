@@ -560,13 +560,38 @@ def publish_book_section(request):
 #################################################################
 # chapter
 #################################################################
+
+def create_chapter(request,idb,idch):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    book = Book.objects.get(id=idb)
+    form = ChapterForm(request.POST or None  )
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.book = book
+        nf.author = request.user.teacher
+        nf.teacher = request.user.teacher
+        nf.ranking=100
+        nf.save()
+        messages.success(request, 'Le chapitre a été crée avec succès !')
+        return redirect('student_book_builder' , book.id , 0)
+    else:
+        print(form.errors)
+
+    context = {'form': form,   'book': book  }
+    return render(request, 'book/form_chapter.html', context)
+
+
+
 def update_chapter(request,idb,idch):
 
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
     
-
+    book = Book.objects.get(id=idb)
     chapter = Chapter.objects.get(id=idch)
     form = BookForm(request.POST or None, instance=chapter )
 
@@ -590,6 +615,17 @@ def delete_chapter(request,idb,idch):
     chapter.delete()
     messages.success(request, 'Le chapitre '+chapter.title+' a été supprimé avec succès !')
     return redirect('conception_book' , idb, 0)
+
+
+def delete_student_book_chapter(request,idb,idch):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+
+    chapter = Chapter.objects.get(id=idch)
+    chapter.delete()
+    messages.success(request, 'Le chapitre '+chapter.title+' a été supprimé avec succès !')
+    return redirect('student_book_builder' , idb, 0)
 
 
  
