@@ -641,6 +641,8 @@ def delete_chapter(request,idb,idch):
     return redirect('conception_book' , idb, 0)
 
 
+
+
 def delete_student_book_chapter(request,idb,idch):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -649,7 +651,17 @@ def delete_student_book_chapter(request,idb,idch):
     Chapter.objects.filter(id=idch).delete()
 
     messages.success(request, 'Le chapitre  a été supprimé avec succès !')
-    return redirect('student_book_builder' , idb, 0)
+    
+    book     = Book.objects.get(id=idb)
+    chapters = book.chapters.order_by("ranking")
+
+    context = {'book': book,  'chapters': chapters,  }
+
+    return render(request, 'book/conception_student_page.html', context)
+
+
+
+
 
 
 @csrf_exempt
