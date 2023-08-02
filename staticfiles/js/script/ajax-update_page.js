@@ -416,7 +416,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
         $("#course_page_main").sortable({ 
             connectWith: "#course_page_main" , 
-            items      : ".bloc_sorter" , 
+            items      : ".this_bloc_sort" , 
             axis       : "y" ,
             distance: 0 ,
             stop: function (event, ui) {

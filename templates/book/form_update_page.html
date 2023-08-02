@@ -69,9 +69,9 @@
                 
                 {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
             
-                    <div class="bloc_sorter col-xs-{{ bloc.size }}" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}" >
+                    <div class="col-xs-{{ bloc.size }} this_bloc_sort" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}"  >
                         <div class="{{ bloc.typebloc.css }}"> 
-                            <div class="bloc_title"><i class="fa fa-sort"></i>
+                            <div class="bloc_title"><i class="fa fa-sort bloc_sorter" data-bloc_id = "{{bloc.id}}"></i>
                                 {{ bloc.title }} {{ bloc.id }}
                                 <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="white"><i class="bi bi-pen"></i></a>
                                 <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="white" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a>
