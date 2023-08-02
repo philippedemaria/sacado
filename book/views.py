@@ -917,7 +917,7 @@ def show_student_book(request,idb, n):
 
 def student_book_builder(request,idb, n):
 
-    if request.user.is_super_user or request.user.id == 52402 :
+    if request.user.is_superuser or request.user.id == 52402 :
         book = Book.objects.get(pk=idb)
         i = 0
         # Création et organisation des pages à la volée
