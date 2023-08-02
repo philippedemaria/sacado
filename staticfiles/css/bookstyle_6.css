@@ -146,8 +146,8 @@ h1 {
 	font-weight: normal;
 }
 
-.ad_page_top .paragraph_number{
-	display:none;
+.this_paragraph .paragraph_number{
+	display:none!important;
 }
 
 .paragraph_title{
