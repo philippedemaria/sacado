@@ -914,7 +914,7 @@ def show_student_book(request,idb, n):
     return render(request, 'book/show_student_page.html', context)
 
 
-@user_is_superuser 
+
 def student_book_builder(request,idb, n):
 
     book = Book.objects.get(pk=idb)
