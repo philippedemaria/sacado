@@ -896,12 +896,10 @@ def get_the_page(idb,n):
         for page in chapter.pages.all() :
             all_pages[page.number] = page
 
-    if n%2==0:
-        page = all_pages[n]
-        next_page = all_pages[n+1]
-    else :
-        page = all_pages[n-1]
-        next_page = all_pages[n]
+
+    page = all_pages[n]
+    next_page = all_pages[n+1]
+
 
     return  page , next_page , all_pages
 
