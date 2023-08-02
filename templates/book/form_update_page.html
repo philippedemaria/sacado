@@ -56,7 +56,7 @@
 </div>
 <div class="course_page_main"  id="course_page_main">
     {% for paragraph in page.paragraphs.all %}
-        <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"  >
+        <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"  data-paragraph_id ="{{ paragraph.id }}">
             <div class="row">
                 <div class="col-xs-12">
                     <span class="paragraph_number" id="paragraph_number{{ paragraph.id }}">{{ paragraph.number }}</span>
@@ -65,7 +65,7 @@
                     <a href="{% url 'delete_paragraph' book.id  page.id  paragraph.id  %}" class="this_updater_paragraph" onclick="TestDelete('{{ paragraph.title}}')" ><i class="bi bi-trash"></i></a>
                 </div>
             </div>
-            <div class="row" id="this_bloc{{ paragraph.id }}" data-paragraph_id ="{{ paragraph.id }}">
+            <div class="row" id="this_bloc{{ paragraph.id }}" >
                 
                 {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
             
