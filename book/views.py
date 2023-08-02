@@ -1265,6 +1265,7 @@ def sorter_book_page_bloc(request):
     if this_paragraph_id != paragraph_id :
         Bloc.objects.filter(pk = this_bloc_id).update(paragraph_id = paragraph_id)
 
+    print(valeurs, this_paragraph_id , this_bloc_id , paragraph_id)
     for i in range(len(valeurs)):
         Bloc.objects.filter(pk = valeurs[i]).update(ranking = i)
 

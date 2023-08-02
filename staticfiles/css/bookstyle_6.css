@@ -24,6 +24,26 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 /********************************************* gris #657574 ***********************************************/
 /********************************************* beige #e6e2dd **********************************************/
 /********************************************* beige clair #f2f1f0*****************************************/
+.this_div_bloc_sort{
+	position:relative;
+}
+
+.to_sorter_div_left{
+	right:100px;
+	top:30px;
+	position: absolute;
+	z-index: 10;
+}
+
+.to_sorter_div{
+	right:50px;
+	top:30px;
+	position: absolute;
+	z-index: 10;
+}
+
+
+
 .content-wrapper, .right-side {
     min-height: 100%;
     margin-right: 0px;

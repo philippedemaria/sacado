@@ -28,6 +28,8 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 	cursor:pointer;
 }
 
+
+
 .content-wrapper, .right-side {
     min-height: 100%;
     margin-right: 0px;

@@ -423,7 +423,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
                 var this_paragraph_id = $(ui.item).data("paragraph_id");
                 var this_bloc_id      = $(ui.item).data("bloc_id");
-                var paragraph_id = $(ui.item).parent().parent().data("paragraph_id");
+                var paragraph_id = $(ui.item).parent().parent().parent().data("paragraph_id");
 
                 var valeurs = [];
                 $( ".bloc_sorter" ).each(function() {
