@@ -418,6 +418,7 @@ define(['jquery', 'bootstrap'], function ($) {
             connectWith: "#course_page_main" , 
             items      : ".bloc_sorter" , 
             axis       : "y" ,
+            distance: 0 ; 
             stop: function (event, ui) {
 
                 var this_paragraph_id = $(ui.item).data("paragraph_id");
