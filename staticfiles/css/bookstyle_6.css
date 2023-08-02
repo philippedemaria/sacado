@@ -374,3 +374,31 @@ h1 {
 	width:100%;
 	font-weight: normal;
 }
+
+/*  paragraph_bloc_sf  */
+.paragraph_bloc_rm{
+	border: 2px solid  #FF8B69;
+	border-radius: 5px;
+	color:#FF8B69;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+.paragraph_bloc_rm .bloc_title{
+	color :  #FF8B69 ;
+	border-radius: 3px 3px 0px 0px;
+	background-color: #f7e7ff;
+	padding:10px;  
+	width:100%;
+	font-weight:600; 
+}
+
+.paragraph_bloc_rm .bloc_content{
+	color :  #FF8B69 ;
+	border-radius:0px 0px 3px 3px;
+	background-color: white;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
