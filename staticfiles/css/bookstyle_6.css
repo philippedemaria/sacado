@@ -146,6 +146,10 @@ h1 {
 	font-weight: normal;
 }
 
+.ad_page_top .paragraph_number{
+	display:none;
+}
+
 .paragraph_title{
 	padding :10px;
 	color:#5d4391;
