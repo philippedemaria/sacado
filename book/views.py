@@ -910,7 +910,7 @@ def show_student_book(request,idb, n):
     book = Book.objects.get(pk=idb)
     page , next_page , all_pages = get_the_page(idb,n)
     # Appel de la page n
-    numbers = [n for n in range(len(all_pages)) if n%2==0]
+    numbers = [n for n in range(len(all_pages))]
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
     context = {'book': book, "n" : n , 'page' : page , 'next_page' : next_page  , 'numbers' : numbers , 'use_this_css' : use_this_css }
     return render(request, 'book/show_student_page.html', context)
