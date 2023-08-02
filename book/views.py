@@ -758,8 +758,6 @@ def sorter_book_document(request):
     section_id = request.POST.get("section_id")
     document_id = request.POST.get("document_id")
 
-    print(valeurs , document_section_id,  section_id , document_id)
-
     data = {}
     data['section_id'] =  document_section_id
 
@@ -1255,7 +1253,23 @@ def delete_bloc(request,idb, idp, idbl):
 
 
 
+@csrf_exempt
+def sorter_book_page_bloc(request):
+    valeurs           = request.POST.getlist("valeurs")
+    paragraph_id      = request.POST.get("paragraph_id")
+    this_paragraph_id = request.POST.get("this_paragraph_id")
+    this_bloc_id      = request.POST.get("this_bloc_id")
+ 
+    data = {}
+ 
+    if this_paragraph_id != paragraph_id :
+        Bloc.objects.filter(pk = this_bloc_id).update(paragraph_id = paragraph_id)
+        
+        
+    for i in range(len(valeurs)):
+        Bloc.objects.filter(pk = valeurs[i]).update(ranking = i)
 
+    return JsonResponse(data) 
 
  
 

@@ -413,6 +413,52 @@ define(['jquery', 'bootstrap'], function ($) {
                 }); 
     	}); 
 
+
+        $("#course_page_main").sortable({ 
+            connectWith: "#course_page_main" , 
+            items      : ".bloc_sorter" , 
+            axis       : "y" ,
+            stop: function (event, ui) {
+
+                var this_paragraph_id = $(ui.item).data("paragraph_id");
+                var this_bloc_id      = $(ui.item).data("bloc_id");
+                var paragraph_id = $(ui.item).parent().data("paragraph_id");
+
+                var valeurs = [];
+                $( ".bloc_sorter" ).each(function() {
+                    let bloc_id = $(this).data("bloc_id"); 
+                    valeurs.push(bloc_id);
+                });
+                this_url =  "../../sorter_book_page_bloc"  ;  
+                $.ajax({
+                        data:   { 
+                            'this_paragraph_id': this_paragraph_id  , 
+                            'this_bloc_id': this_bloc_id  , 
+                            'paragraph_id': paragraph_id  , 
+                             'valeurs': valeurs  ,                               
+                             } ,   
+                        type: "POST",
+                        dataType: "json",
+                        url: this_url,
+                        traditional: true,
+                    }); 
+                }
+            });
+
+
+
+        $(document).on('mousedown', ".book_main_page_section_document_move", function (event) {
+
+            var section_id = $(this).data("section_id");
+            var document_id =$(this).data("document_id");
+
+            sorter_document(document_id , section_id) ;
+ 
+        })
+
+
+
+
     });
 
 });

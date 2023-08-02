@@ -42,57 +42,54 @@
 {% block body  %}  
 
 
-    <div class="{{ page.css}}" id="top_page">
-        <span id="top_page_title">{{ page.title }} </span>                
-        <select name="type_page" id="type_de_page" data-book_id ="{{ book.id }}" data-page_id ="{{ page.id }}" style="float:right;font-size: 16px;color:black">
-            <option value="course_page_top">Type de page ?</option>
-            <option value="course_page_top">Cours</option>
-            <option value="ad_page_top">Application directe</option>
-            <option value="parcoursu_page_top">Parcours 1</option>
-            <option value="parcoursd_page_top">Parcours 2</option>
-            <option value="parcourst_page_top">Parcours 3</option>
-            <option value="auto_page_top">Autonomie</option>
-        </select>
-    </div>
-    <div class="course_page_main">
-        {% for paragraph in page.paragraphs.all %}
-            <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <span class="paragraph_number" id="paragraph_number{{ paragraph.id }}">{{ paragraph.number }}</span>
-                        <span class="paragraph_title" id="paragraph_title{{ paragraph.id }}">{{ paragraph.title }}</span>
-                        <a href="{% url 'update_paragraph' book.id  page.id  paragraph.id  %}" class="this_updater_paragraph"><i class="bi bi-pen"></i></a>
-                        <a href="{% url 'delete_paragraph' book.id  page.id  paragraph.id  %}" class="this_updater_paragraph" onclick="TestDelete('{{ paragraph.title}}')" ><i class="bi bi-trash"></i></a>
-                    </div>
+<div class="{{ page.css}}" id="top_page">
+    <span id="top_page_title">{{ page.title }} </span>                
+    <select name="type_page" id="type_de_page" data-book_id ="{{ book.id }}" data-page_id ="{{ page.id }}" style="float:right;font-size: 16px;color:black">
+        <option value="course_page_top">Type de page ?</option>
+        <option value="course_page_top">Cours</option>
+        <option value="ad_page_top">Application directe</option>
+        <option value="parcoursu_page_top">Parcours 1</option>
+        <option value="parcoursd_page_top">Parcours 2</option>
+        <option value="parcourst_page_top">Parcours 3</option>
+        <option value="auto_page_top">Autonomie</option>
+    </select>
+</div>
+<div class="course_page_main"  id="course_page_main">
+    {% for paragraph in page.paragraphs.all %}
+        <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"  >
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="paragraph_number" id="paragraph_number{{ paragraph.id }}">{{ paragraph.number }}</span>
+                    <span class="paragraph_title" id="paragraph_title{{ paragraph.id }}">{{ paragraph.title }}</span>
+                    <a href="{% url 'update_paragraph' book.id  page.id  paragraph.id  %}" class="this_updater_paragraph"><i class="bi bi-pen"></i></a>
+                    <a href="{% url 'delete_paragraph' book.id  page.id  paragraph.id  %}" class="this_updater_paragraph" onclick="TestDelete('{{ paragraph.title}}')" ><i class="bi bi-trash"></i></a>
                 </div>
-                <div class="row" id="this_bloc{{ paragraph.id }}">
-                    
-                    {% for bloc in paragraph.blocs.all %} 
+            </div>
+            <div class="row" id="this_bloc{{ paragraph.id }}" data-paragraph_id ="{{ paragraph.id }}">
                 
-                        <div class="col-xs-{{ bloc.size }}">
-                            <div class="{{ bloc.typebloc.css }}"> 
-                                <div class="bloc_title">
-                                    {{ bloc.title }}
-                                    <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="white"><i class="bi bi-pen"></i></a>
-                                    <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="white" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a>
-                                </div>
-                                <div class="bloc_content">
-                                    {{ bloc.content_html|safe }}
-                                </div>
+                {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
+            
+                    <div class="bloc_sorter col-xs-{{ bloc.size }}" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}" >
+                        <div class="{{ bloc.typebloc.css }}"> 
+                            <div class="bloc_title"><i class="fa fa-sort"></i>
+                                {{ bloc.title }} {{ bloc.id }}
+                                <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="white"><i class="bi bi-pen"></i></a>
+                                <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="white" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a>
+                            </div>
+                            <div class="bloc_content">
+                                {{ bloc.content_html|safe }}
                             </div>
                         </div>
-                        {% get_bloc_col_width paragraph  forloop.counter as col_width %}
-                        {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}   
-                    {% endfor %}
-                </div>
-
-
+                    </div>
+                    {% get_bloc_col_width paragraph  forloop.counter as col_width %}
+                    {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}   
+                {% endfor %}
             </div>
-        {% endfor %}
 
 
-
-    </div>
+        </div>
+    {% endfor %}
+</div>
 
 
 
