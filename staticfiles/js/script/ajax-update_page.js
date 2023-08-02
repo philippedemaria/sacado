@@ -425,11 +425,16 @@ define(['jquery', 'bootstrap'], function ($) {
                 var this_bloc_id      = $(ui.item).data("bloc_id");
                 var paragraph_id = $(ui.item).parent().data("paragraph_id");
 
+                alert( this_paragraph_id++this_bloc_id ++paragraph_id++  )
+
                 var valeurs = [];
                 $( ".bloc_sorter" ).each(function() {
                     let bloc_id = $(this).data("bloc_id"); 
                     valeurs.push(bloc_id);
                 });
+
+                alert( this_paragraph_id+"   "+this_bloc_id +"   "+paragraph_id+"   "+ valeurs ) ;
+
                 this_url =  "../../sorter_book_page_bloc"  ;  
                 $.ajax({
                         data:   { 
