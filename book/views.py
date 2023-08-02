@@ -19,7 +19,7 @@ from account.models import User
 from qcm.models import Parcours
 from tool.models import Mentaltitle, Quizz , Mental
 from tool.views import create_questions_flash_random_variable
-from socle.decorators import user_is_superuser
+from socle.decorators import user_is_extra
 from django.utils.html import escape
 
 
@@ -37,7 +37,7 @@ from django.utils.html import escape
 ########################    FONCTIONS ANNEXE    ################################################
 ################################################################################################
 
-@user_is_superuser 
+@user_is_extra 
 def books(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -65,7 +65,7 @@ def books(request):
     return render(request, 'book/books.html', {'other_books': other_books , 'mybooks': mybooks })
 
 
-@user_is_superuser 
+@user_is_extra 
 def create_book(request):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -88,7 +88,7 @@ def create_book(request):
     return render(request, 'book/form_book.html', context)
 
 
-@user_is_superuser 
+@user_is_extra 
 def update_book(request,idb):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
@@ -945,7 +945,7 @@ def student_book_builder(request,idb, n):
 # paragraphs
 #################################################################
 
-@user_is_superuser 
+@user_is_extra 
 def pages(request,idb, idp):
 
     book = Book.objects.get(pk=idb)
@@ -956,7 +956,7 @@ def pages(request,idb, idp):
     return render(request, 'book/form_page.html', context)
 
 
-@user_is_superuser 
+@user_is_extra 
 def create_page(request,idb, idch):
 
     book = Book.objects.get(pk=idb)
@@ -982,7 +982,7 @@ def create_page(request,idb, idch):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def add_page(request,idb, idch):
 
     add_page = request.POST.get("add_page",None)
@@ -1001,7 +1001,7 @@ def add_page(request,idb, idch):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def update_page(request,idb, idp):
 
     book = Book.objects.get(pk=idb)
@@ -1054,7 +1054,7 @@ def update_page(request,idb, idp):
     return render(request, 'book/form_update_page.html', context )
 
 
-@user_is_superuser 
+@user_is_extra 
 def delete_page(request, idb,idp):
 
     page = Page.objects.get(id=idp)
@@ -1064,7 +1064,7 @@ def delete_page(request, idb,idp):
     return redirect('pages',idb,idp)
 
 @csrf_exempt
-@user_is_superuser 
+@user_is_extra 
 def type_de_page(request):
 
     book_id = request.POST.get("book_id",None)
@@ -1092,7 +1092,7 @@ def type_de_page(request):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def create_paragraph(request, idb):
 
     book = Book.objects.get(pk=idb)
@@ -1111,7 +1111,7 @@ def create_paragraph(request, idb):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def update_paragraph(request,idb, idp, idpa):
 
     book = Book.objects.get(pk=idb)
@@ -1133,7 +1133,7 @@ def update_paragraph(request,idb, idp, idpa):
     return render(request, 'book/form_paragraph.html', context )
 
 
-@user_is_superuser 
+@user_is_extra 
 def delete_paragraph(request, idb, idp, idpa):
 
     book = Book.objects.get(pk=idb)
@@ -1148,7 +1148,7 @@ def delete_paragraph(request, idb, idp, idpa):
 #################################################################
 
 
-@user_is_superuser
+@user_is_extra
 def typeblocs(request):
  
     typeblocs = Typebloc.objects.all()
@@ -1157,7 +1157,7 @@ def typeblocs(request):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def create_typebloc(request):
 
     form = TypeblocForm(request.POST or None  )
@@ -1175,7 +1175,7 @@ def create_typebloc(request):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def update_typebloc(request, idt):
 
     typebloc = Typebloc.objects.get(id=idt)
@@ -1193,7 +1193,7 @@ def update_typebloc(request, idt):
     return render(request, 'book/form_typebloc.html', context )
 
 
-@user_is_superuser 
+@user_is_extra 
 def delete_typebloc(request, idt):
     typebloc = Typebloc.objects.get(id=idt)
     typebloc.delete()
@@ -1203,7 +1203,7 @@ def delete_typebloc(request, idt):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def create_bloc(request, idb, idp):
 
     book = Book.objects.get(id=idb)
@@ -1224,7 +1224,7 @@ def create_bloc(request, idb, idp):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def update_bloc(request, idb, idp, idbl):
 
     book = Book.objects.get(id=idb)
@@ -1245,7 +1245,7 @@ def update_bloc(request, idb, idp, idbl):
     return render(request, 'book/form_bloc.html', context )
 
 
-@user_is_superuser 
+@user_is_extra 
 def delete_bloc(request,idb, idp, idbl):
     bloc = Bloc.objects.get(id=idbl)
     bloc.delete()
@@ -1274,7 +1274,7 @@ def sorter_book_page_bloc(request):
 
  
 
-@user_is_superuser 
+@user_is_extra 
 def create_csv_appliquettes(request) :
 
 
@@ -1306,7 +1306,7 @@ def create_csv_appliquettes(request) :
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def list_appliquettes(request,idl):
 
     if idl == 0 :
@@ -1336,7 +1336,7 @@ def new_code(idl):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def create_appliquette(request,idl):
 
     form = AppliquetteForm(request.POST or None)
@@ -1356,7 +1356,7 @@ def create_appliquette(request,idl):
 
 
 
-@user_is_superuser 
+@user_is_extra 
 def update_appliquette(request, ida):
 
     app = Appliquette.objects.get(id=ida)
@@ -1373,7 +1373,7 @@ def update_appliquette(request, ida):
     return render(request, 'book/form_appliquette.html', context )
 
 
-@user_is_superuser 
+@user_is_extra 
 def delete_appliquette(request,ida):
 
     app = Appliquette.objects.get(id=ida)

@@ -14,3 +14,13 @@ def user_is_superuser(function):
 			raise PermissionDenied
 	return wrap
 
+
+
+
+def user_is_extra(function):
+	def wrap(request, *args, **kwargs):
+		if request.user.is_superuser or request.user.user_is_extra:
+			return function(request, *args, **kwargs)
+		else:
+			raise PermissionDenied
+	return wrap
