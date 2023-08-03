@@ -106,6 +106,7 @@ class BlocForm(forms.ModelForm):
 		knowledges = level.knowledges.filter(theme__subject=subject)
 		exercises  = level.exercises.filter(theme__subject=subject)
 		exotexs    = level.level_exotexs.filter(theme__subject=subject)
+		appliquettes = level.appliquettes.all()
 
 		self.fields['paragraph'] = forms.ModelChoiceField(queryset=paragraphs)  
 
@@ -116,7 +117,7 @@ class BlocForm(forms.ModelForm):
 
 		self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
 		self.fields['exotexs']    = forms.ModelMultipleChoiceField(queryset=exotexs,  required=False)  
-
+		self.fields['appliquettes'] = forms.ModelMultipleChoiceField(queryset=appliquettes,  required=False)  
 
 
 
