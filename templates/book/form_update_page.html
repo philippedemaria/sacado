@@ -375,7 +375,15 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label>{{ form_b.appliqettes.label_tag }}</label>
+                                {{ form_b.appliqettes |add_class:"form-control select2" }}
+                                {{ form_b.appliqettes.errors }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary" name="form_action" value="new_bloc">Enregistrer</button>   
