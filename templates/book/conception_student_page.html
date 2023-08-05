@@ -43,7 +43,7 @@
                 <td width='40px'><a href="{% url 'create_page' book.id chapter.id %}" class="btn btn-sacado">+</a></td>
                 <td>
                     {% for page in chapter.pages.all|dictsort:"number" %}
-                        <a href="{% url 'update_page' book.id page.id %}" class="btn btn-sacado">{{ page.number }}</a>
+                        <a href="{% url 'update_page' book.id page.id %}" class="btn btn-{% if this_page_id_created == page.id %}primary{% else %}sacado{% endif %}">{{ page.number }}</a>
                     {% endfor %}
                 </td>
             </tr>
