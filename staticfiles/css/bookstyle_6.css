@@ -390,7 +390,7 @@ h1 {
 	font-weight: normal;
 }
 
-/*  paragraph_bloc_sf  */
+/*  paragraph_bloc_rm  */
 .paragraph_bloc_rm{
 	border: 2px solid  #FF8B69;
 	border-radius: 5px;
@@ -413,6 +413,35 @@ h1 {
 	color :  #FF8B69 ;
 	border-radius:0px 0px 3px 3px;
 	background-color: white;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+
+ /*  paragraph_bloc_intro  */
+.paragraph_bloc_intro{
+	border: 2px solid  #fff;
+	border-radius: 5px;
+	color:#fff;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+.paragraph_bloc_intro .paragraph_number{
+	color :  #fff ;
+	border-radius: 3px 3px 0px 0px;
+	background-color: #fff;
+	padding:10px;  
+	width:100%;
+	font-weight:600; 
+}
+
+.paragraph_bloc_intro .paragraph_title{
+	color :  #fff ;
+	border-radius:0px 0px 3px 3px;
+	background-color: #fff;
 	padding:10px;
 	width:100%;
 	font-weight: normal;
