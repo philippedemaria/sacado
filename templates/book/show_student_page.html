@@ -54,7 +54,7 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-sm-12 col-md-6 {{ page.css}}">            
+        <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %} {{ page.css}}">            
             {% for paragraph in page.paragraphs.all %}
                 <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
                     <div class="row">
@@ -84,6 +84,7 @@
             {% endfor %}
 
         </div>
+        {% if not page in first_pages %}
         <div class="col-sm-12 col-md-6 {{ next_page.css}}">
             {% for paragraph in next_page.paragraphs.all %}
                 <div class="this_paragraph">
@@ -112,6 +113,8 @@
                 </div>
             {% endfor %}
         </div>
+        {% endif %} 
+
     </div>
 </section>
 
