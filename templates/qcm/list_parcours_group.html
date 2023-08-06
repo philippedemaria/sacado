@@ -57,12 +57,13 @@
 
 
     <div class="tab-content">
-        <div class="tab-pane" id="0">
+        <div class="tab-pane {% if organiser %}active{% endif %}" id="0">
 
             {% include 'qcm/group_organiser.html' %}
+
         </div>
 
-        <div class="tab-pane  {% if nb_folders %}active{% endif %}" id="1">
+        <div class="tab-pane  {% if nb_folders and not organiser %}active{% endif %}" id="1">
             <div class="row" style="margin-bottom: 20px"> 
 
                 <div class="col-sm-12 ">
@@ -79,7 +80,7 @@
             </form> <div style="clear:both"></div>
         </div>
 
-        <div class="tab-pane {% if not nb_folders %}active{% endif %}" id="2">
+        <div class="tab-pane {% if not nb_folders and not organiser %}active{% endif %}" id="2">
             <form action="" methode="POST" id="parcours_sortable"> 
 
  
@@ -237,176 +238,6 @@
     </div>
 
 
-
-
-
-
-{% comment %}
-
-    {% if nb_folders %} 
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">
-            <div class="section_bloc">
-            <h1 class="thin"><i class="fa fa-folder-open" ></i> Dossiers</h1> 
-                <form action="" methode="POST" id="folders_sortable"> 
-                {% for folder in folders  %}  
-                    {% include 'qcm/folder_tag.html' %}
-                {% endfor %}
-                </form> 
-                <div style="clear:both"></div>
-            </div>
-
-        </div>
-    </div>
-    {% endif %}
-
-    
-    {% if sequences %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-                <h1 class="thin"> <i class="bi bi-ladder" ></i> Séquences    </h1>
-                <div class="row"> 
-                    <div class="col-sm-12 col-md-12">
-                        {% for parcours in sequences %}   
-                              {% include 'qcm/parcours_evaluation_tag.html' %} 
-                        {% endfor %}
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-
-    
-    {% if parcourses.count > 0 %} 
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">            <div class="section_bloc">
-            <h1 class="thin"> <i class="fa fa-th" ></i> Parcours  {% if folders %} <small>externes aux {{nb_folders}} dossiers</small>{% endif %} <span class="helper_tip"> <i class="fa fa-question-circle" style="font-size:25px"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                            </span></h1>  
-                <form action="" methode="POST" id="parcours_sortable"> 
-                {% for parcours in parcourses  %}  
-                    
-                    {% include 'qcm/parcours_evaluation_tag.html' %}
-         
-                {% endfor %}
-                </form>
-                <div style="clear:both"></div>
-            </div>
-
-        </div>
-    </div>
-    {% endif %}
-    
-     
-    {% if evaluations.count > 0 %} 
-    <div class="row"> 
-        <div class="col-sm-12 col-md-12">           
-            <div class="section_bloc">
-            <h1 class="thin" id="evaluation"><i class="fa fa-trophy" ></i> Evaluations {% if folders %} <small>externes aux {{nb_folders}} dossiers</small>{% endif %}<span class="helper_tip"> <i class="fa fa-question-circle" style="font-size:25px"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier avec <i class="bi bi-gear"></i>.</div>
-                            </span></h1> 
-                <form action="" methode="POST" id="evaluations_sortable">
-                {% for parcours in evaluations  %}  
-                    
-                    {% include 'qcm/parcours_evaluation_tag.html' %}
-         
-                {% endfor %}
-                </form>
-                <div style="clear:both"></div>
-            </div>
-
-        </div>
-    </div>
-    {% endif %}
-
-    {% if docpersos %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <div class="section_bloc">
-                <h1 class="thin"><i class="bi bi-files" ></i> Documents personnels {% if folders %} <small>externes aux {{nb_folders}} dossiers</small>{% endif %} <span class="helper_tip"> <i class="fa fa-question-circle" style="font-size:25px"></i>
-                                    <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
-                                </span></h1>
-                <div class="row"> 
-                    <div class="col-sm-12 col-md-12">
-                        {% for docperso in docpersos %}   
-                              {% include 'qcm/docperso_tag.html' %} 
-                        {% endfor %}
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-
-        </div>
-    </div>
-    {% endif %}
-
-    {% if quizzes %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-            <h1 class="thin"><i class="bi bi-aspect-ratio" ></i> Quiz {% if folders %} <small>externes aux {{nb_folders}} dossiers</small>{% endif %} <span class="helper_tip"> <i class="fa fa-question-circle" style="font-size:25px"></i>
-                                <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier ou un parcours avec <i class="bi bi-gear"></i>.</div>
-                            </span></h1>
-            <div class="row"> 
-                <div class="col-sm-12 col-md-12">
-                    {% for quizz in quizzes %}   
-                          {% include 'tool/quizz_tag.html' %} 
-                    {% endfor %}
-                </div>
-            </div>
-                <div style="clear:both"></div>
-            </div>
-
-        </div>
-    </div>    
-    {% endif %}
-    {% if bibliotexs %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">            
-            <div class="section_bloc">
-                <h1 class="thin"><i class="bi bi-bootstrap" ></i> BiblioTex {% if folders %} <small>externes aux {{nb_folders}} dossiers</small>{% endif %} <span class="helper_tip"> <i class="fa fa-question-circle" style="font-size:25px"></i>
-                                    <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier ou un parcours avec <i class="bi bi-gear"></i>.</div>
-                                </span>
-                </h1>
-                <div class="row"> 
-                    <div class="col-sm-12 col-md-12">
-                        {% for bibliotex in bibliotexs %}   
-                              {% include 'bibliotex/bibliotex_tag.html' %} 
-                        {% endfor %}
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    {% if flashpacks %}
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <div class="section_bloc">
-                <h1 class="thin"><i class="bi bi-stack" ></i> Flashpacks {% if folders %} <small>externes aux {{nb_folders}} dossiers</small>{% endif %} <span class="helper_tip"> <i class="fa fa-question-circle" style="font-size:25px"></i>
-                                    <div class="helper_tip_text_right" >Vous avez la possibilité de les affecter dans un dossier ou un parcours avec <i class="bi bi-gear"></i>.</div>
-                                </span></h1>
-                <div class="row"> 
-                    <div class="col-sm-12 col-md-12">
-                        {% for flashpack in flashpacks %}   
-                              {% include 'flashcard/flashpack_tag.html' %} 
-                        {% endfor %}
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-
-        </div>
-    </div>
-    {% endif %}
-
-{% endcomment %}
 
     {% if nb_bases == 0 %} 
         {% if role %}

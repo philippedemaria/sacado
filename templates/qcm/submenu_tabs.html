@@ -3,16 +3,16 @@
 {% load item_tags %}
 
     <ul class="nav nav-tabs">
-        <li  >
+        <li {% if organiser %}class="active"{% endif %} >
             <a href="#0" data-toggle="tab" class="selector_tabs" data-id="0"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}">
                 <i class="fa fa-dashboard" ></i> <span class="legend_menu_tabs">Organiser</span></span>
             </a>
         </li>
-        <li {% if nb_folders %}class="active"{% endif %}>
+        <li {% if nb_folders and not organiser %}class="active"{% endif %}>
             <a href="#1" data-toggle="tab" data-id="1" class="selector_tabs" data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}"><i class="fa fa-folder-open" ></i> <span class="legend_menu_tabs">Dossiers </span><span class="fontLabel">{{ folders.count }}</span>
             </a>
         </li>
-        <li {% if not nb_folders %}class="active"{% endif %}>
+        <li {% if not nb_folders and not organiser %}class="active"{% endif %}>
             <a href="#2" data-toggle="tab" class="selector_tabs" data-id="2"   data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}">
                 <i class="fa fa-th" ></i><span class="legend_menu_tabs"> Parcours </span><span class="fontLabel">{{ parcourses.count }}</span> 
             </a>

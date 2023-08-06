@@ -140,7 +140,7 @@ def initialize_all_chapters(request,idb,idg) :
     chaps = "Liste des chapitres créés : "
     for p in group.group_parcours.order_by("ranking") :
         courses    = p.course.all()
-        exercises  = p.exercises.filter(is_title=0)[:4]
+        exercises  = p.exercises.filter(supportfile__is_title=0)[:4]
         qfs        = p.quizz.filter(is_random=1)[:4]
         bibliotexs = p.bibliotexs.all()
 
@@ -1985,7 +1985,6 @@ def list_parcours_group(request,id):
     nb_folders  = folders.count()
     bases       = group.group_parcours.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher), subject = group.subject, level = group.level , is_favorite=1, folders = None, is_trash=0, is_testpos=0).distinct()
 
-
     evaluations = bases.filter( is_evaluation=1, is_sequence=0).order_by("ranking")
     parcourses  = bases.filter( is_evaluation=0, is_sequence=0).order_by("ranking")
     sequences   = bases.filter( is_sequence=1).order_by("ranking")
@@ -2008,9 +2007,17 @@ def list_parcours_group(request,id):
 
     formsec = SectionForm(request.POST or None)
 
+    organiser = request.session.get("organiser",None)
+    if organiser :
+        chapter  = Chapter.objects.get(pk=organiser)
+        sections = chapter.sections.order_by("ranking")
+    else :
+        sections = None
+        chapter = None
+ 
     context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
                  'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases , 'book' : book ,  'chapters' : chapters ,
-                 'formsec' : formsec }
+                 'formsec' : formsec , 'organiser' : organiser , 'sections' : sections , 'chapter' : chapter }
 
     return render(request, 'qcm/list_parcours_group.html', context )
 
@@ -13900,6 +13907,7 @@ def create_docperso_parcours(request,idp=0):
     if form.is_valid():
         nf = form.save(commit=False)
         nf.teacher = request.user.teacher
+        if idg : nf.subject = group.subject
         nf.save()
         if idf : 
             folder = Folder.objects.get(pk=idf)
@@ -13910,6 +13918,7 @@ def create_docperso_parcours(request,idp=0):
         if idg : 
             group = Group.objects.get(pk=idg)
             nf.groups.add(group)
+            nf.levels.add(group.level)
 
         messages.success(request, 'Le document a été créé avec succès !')
         if parcours : 
@@ -13941,13 +13950,14 @@ def update_docperso(request, idp,idd):
         parcours = Parcours.objects.get(pk=idp)  
     if idg : 
         group = Group.objects.get(pk=idg)
-
+            
     form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher, parcours = parcours , folder = folder , group = group, instance=docperso  )
 
 
     if form.is_valid():
         nf = form.save(commit=False)
         nf.teacher = request.user.teacher
+        if idg : nf.subject = group.subject
         nf.save()
         if idf : 
             folder = Folder.objects.get(pk=idf)
@@ -13959,6 +13969,7 @@ def update_docperso(request, idp,idd):
         if idg : 
             group = Group.objects.get(pk=idg)
             nf.groups.add(group)
+            nf.levels.add(group.level)
 
         messages.success(request, 'Le document a été créé avec succès !')
         if parcours :
@@ -14062,9 +14073,9 @@ def ajax_add_chapter(request) :
     book = Book.objects.get(pk=book_id)
 
     chapter = Chapter.objects.create(title=name_chapter , author = request.user.teacher , teacher = request.user.teacher , ranking=100, book = book , parcours = None)
-    
+    new_counter = book.chapters.count() + 1
     data={}
-    context = { 'book' : book , 'ch' : chapter  }
+    context = { 'book' : book , 'ch' : chapter , 'new_counter' : new_counter }
 
     html = render_to_string('qcm/ajax_chapter_after_choose.html',context)
     data['html'] = html       

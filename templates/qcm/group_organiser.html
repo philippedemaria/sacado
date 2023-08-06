@@ -11,10 +11,10 @@
         <hr/>
         <div id="droppable_sommary">    
         {% for ch in chapters %}
-            <li class="book_chapters_in_menu sorter_chapter" data-chapter_id='{{ ch.id }}' id='chapter{{ ch.id }}'>
+            <li class="book_chapters_in_menu sorter_chapter {% if ch.id == organiser %}book_chapters_in_menu_selected{% endif %}" data-chapter_id='{{ ch.id }}' id='chapter{{ ch.id }}'>
                 <span class="book_chapter_number">{{ forloop.counter}}.</span> 
 
-                <a href="javascript:void(0);" class="get_inside_chapter_div" id="this_parcours_title{{ch.id}}" data-book_id='{{ book.id}}' data-chapter_id='{{ ch.id }}'>
+                <a href="javascript:void(0);" class="get_inside_chapter_div  {% if ch.id == organiser %}color_white{% endif %}" id="this_parcours_title{{ch.id}}" data-book_id='{{ book.id}}' data-chapter_id='{{ ch.id }}'>
                 {{ ch.title|truncatechars:28|lower|capfirst }}
                 </a>
                 <a href="javascript:void(0);" class="ajax_delete_chapter this_menu_tabs pull-right" data-book='{{ book.id }}' data-chapter_id='{{ ch.id }}'
@@ -30,32 +30,36 @@
     <div class="col-xs-6 col-md-8 col-lg-9">
         <div id="dropzone">
 
-            {% if not chapters %}
-            <h1 style="margin:20px;font-size:40px;" class="sacado_color_text">Préparez vos documents et vidéo-projetez en classe</h1>
+            {% if not sections %}
 
+                {% if not chapters %}
+                <h1 style="margin:20px;font-size:40px;" class="sacado_color_text">Préparez vos documents et vidéo-projetez en classe</h1>
 
+                Cet organiser permet de <span class="sacado_color_text">synthétiser tous vos documents</span> par parcours/chapitres pour créer vos <span class="sacado_color_text">séquences</span> de classe. 
 
-            Cet organiser permet de <span class="sacado_color_text">synthétiser tous vos documents</span> par parcours/chapitres pour créer vos <span class="sacado_color_text">séquences</span> de classe. 
+                <ul  style="margin-top:20px;">
 
-            <ul  style="margin-top:20px;">
+                    <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">1. Initialisez vos chapitres.</span> <br/><small>Sacado transforme vos parcours en chapitres, en important par défaut vos cours et 4 exercices.</small> </li>
+                    <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">2. Cliquez sur un chapitre et organiser vos documents par sections. </span> <br/><small>Sacado donne accès à tous vos documents pour les choisir et les intégrer dans votre organiser.</small> </li>
+                    <li class="sanspuce"><span class="sacado_color_text" style="font-weight:normal">3. Vidéo-projetez le chapitre en classe et enregistrez votre progression.</span> </li>
 
-                <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">1. Initialisez vos chapitres.</span> <br/><small>Sacado transforme vos parcours en chapitres, en important par défaut vos cours et 4 exercices.</small> </li>
-                <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">2. Cliquez sur un chapitre et organiser vos documents par sections. </span> <br/><small>Sacado donne accès à tous vos documents pour les choisir et les intégrer dans votre organiser.</small> </li>
-                <li class="sanspuce"><span class="sacado_color_text" style="font-weight:normal">3. Vidéo-projetez le chapitre en classe et enregistrez votre progression.</span> </li>
+                </ul>
 
-            </ul>
+                <div style="margin:20px;font-size:20px;" class="text-success">Vous avez {{ group.group_parcours.count }} parcours convertibles en chapitres dans ce groupe.</div>
+                {% else %}
 
-            <div style="margin:20px;font-size:20px;" class="text-success">Vous avez {{ group.group_parcours.count }} parcours convertibles en chapitres dans ce groupe.</div>
+                <h1 style="margin:50px;font-size:80px;" class="sacado_color_text">Préparez vos documents <br/><br/>Vidéo-projetez en classe</h1>
+
+                {% endif %}
+                <div align='center'>
+                <img src="{% static 'img/video_proj.jpg' %}" />
+                </div>
+
             {% else %}
 
-            <h1 style="margin:50px;font-size:80px;" class="sacado_color_text">Préparez vos documents <br/><br/>Vidéo-projetez en classe</h1>
+                {% include 'qcm/get_inside_chapter_div.html' %}
 
             {% endif %}
-            <div align='center'>
-            <img src="{% static 'img/video_proj.jpg' %}" />
-            </div>
-
-
         </div>
     </div>
 </div>  
@@ -148,7 +152,7 @@
                         <input type="hidden" name="book_section_id_get" id="book_section_id_get"  id="book_section_id_get" />
                         <input type="hidden" name="book_subject_id" id="book_subject_id" value="{{ book.subject.id }}" />
                         <input type="hidden" name="book_level_id"  id="book_level_id" value="{{ book.level.id }}" />
-                        <input type="hidden" name="book_chapter_id" id="book_chapter_id"  />
+                        <input type="hidden" name="book_chapter_id" id="book_chapter_id"    />
                         {% csrf_token %}
 
 

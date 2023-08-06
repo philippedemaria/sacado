@@ -13,10 +13,10 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Book, Chapter
+from .models import Book, Chapter   
 from .forms import *
 from account.models import User
-from qcm.models import Parcours
+from qcm.models import Parcours, Docperso
 from tool.models import Mentaltitle, Quizz , Mental
 from tool.views import create_questions_flash_random_variable
 from socle.decorators import user_is_extra
@@ -532,6 +532,7 @@ def delete_book_section(request):
 
     section_id  = request.POST.get("section_id" , None )
     Section.objects.filter(pk=section_id).delete()
+
     data = {}
     return JsonResponse(data) 
 
@@ -795,6 +796,7 @@ def get_type_book_document(request):
     chapter_id = request.POST.get("chapter_id")
     n          = int(request.POST.get("n"))
 
+
     teacher    = request.user.teacher
     data = {}
     level   = Level.objects.get(pk=level_id)
@@ -816,9 +818,13 @@ def get_type_book_document(request):
     elif this_type == "QF" :
         documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 1 )[(n-1)*100:n*100]
     elif this_type == "DocPerso" :
-        documents = DocPerso.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level )[(n-1)*100:n*100]
+        documents = Docperso.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject, levels  = level )[(n-1)*100:n*100]
     else :
         documents = []
+
+ 
+    request.session['organiser'] =  chapter.id
+
 
     context = { 'documents' : documents ,  'this_type' : this_type ,  'chapter' : chapter }
     data['html'] = render_to_string('book/ajax_get_documents.html', context )
@@ -875,6 +881,8 @@ def insert_document_into_section(request):
         documents.append(document)
 
     section = Section.objects.get(pk=section_id)
+
+    request.session['organiser'] = section.chapter.id
 
     data = {}
     context = { 'documents':documents , 'section' : section , }
