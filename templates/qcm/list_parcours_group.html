@@ -69,7 +69,7 @@
                 <div class="col-sm-12 ">
                     <a href="{% url 'create_folder' group.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouveau dossier</span></a>
  
-                    <a href="{% url 'all_folders' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un dossier mutualisé</span></a>
+                    <a href="{% url 'all_folders' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer un dossier mutualisé</span></a>
                 </div>
             </div>
 
@@ -95,7 +95,7 @@
                     </label>
                     <a href="{% url 'create_parcours' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouveau parcours</span></a>
  
-                    <a href="{% url 'all_parcourses' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un parcours mutualisé</span></a>
+                    <a href="{% url 'all_parcourses' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer un parcours mutualisé</span></a>
                 </div>
             </div>
 
@@ -119,10 +119,10 @@
                     </label>
                     {% if sacado_asso %} 
                     <a href="{% url 'create_evaluation' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer une nouvelle évaluation</span></a>
-                    <a href="{% url 'all_parcourses' 1 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer une évaluation mutualisée</span></a>
+                    <a href="{% url 'all_parcourses' 1 %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer une évaluation mutualisée</span></a>
                     {% else %}
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer une nouvelle évaluation</span></a>
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer une nouvelle mutualisée </span></a>    
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer une nouvelle mutualisée </span></a>    
                     {% endif %}
                 </div>
             </div>
@@ -178,10 +178,10 @@
                     </label>
                     {% if sacado_asso %} 
                         <a href="{% url 'create_quizz'  %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau quiz</span></a>
-                        <a href="{% url 'all_quizzes'   %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i><span class="btn_label">  Récupérer un quiz mutualisé</span></a>       
+                        <a href="{% url 'all_quizzes'   %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i><span class="btn_label">  Dupliquer un quiz mutualisé</span></a>       
                     {% else %}
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau quiz</span></a>
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un quiz mutualisé </span></a>    
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer un quiz mutualisé </span></a>    
                     {% endif %}
                 </div>
             </div>
@@ -202,7 +202,7 @@
                     </label>
                     <a href="{% url 'create_bibliotex' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer une nouvelle bibliotex </span></a>
  
-                    <a href="{% url 'bibliotexs' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer une bibliotex mutualisée</span></a>
+                    <a href="{% url 'bibliotexs' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer une bibliotex mutualisée</span></a>
                 </div>
             </div>
 
@@ -222,10 +222,10 @@
                     </label>
                     {% if sacado_asso %} 
                         <a href="{% url 'create_flashpack' 0  %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer un nouveau flashpack</span></a>   
-                        <a href="{% url 'flashpacks' %}"   class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un flashpack mutualisé</span> </a>
+                        <a href="{% url 'flashpacks' %}"   class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Dupliquer un flashpack mutualisé</span> </a>
                     {% else %}
                         <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <span class="btn_label">Créer un flashpack</span></a>
-                        <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <span class="btn_label">Récupérer un flashpack mutualisé</span></a>      
+                        <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso"> <span class="btn_label">Dupliquer un flashpack mutualisé</span></a>      
                     {% endif %}
                 </div>
 
@@ -253,7 +253,7 @@
                         </ol>
 
                         <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours mutualisés</label> 
-                            <p>La mutualisation des parcours vous permet de sélectionner tous les parcours de l'équipe SACADO ou de récupérer un parcours mutualisé par un enseignant de votre établissement. Il vous sera possible de le modifier une fois cloné.
+                            <p>La mutualisation des parcours vous permet de sélectionner tous les parcours de l'équipe SACADO ou de Dupliquer un parcours mutualisé par un enseignant de votre établissement. Il vous sera possible de le modifier une fois cloné.
                             </p>
                         </ol>
 

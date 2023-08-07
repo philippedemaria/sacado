@@ -63,6 +63,12 @@ a.color_white{
   display:none;
 }
 
+.this_input{
+  border:2px solid #CCC!important;
+  border-radius : 3px;
+}
+
+
 
 .no_visu_on_load_important{
   display:none!important;
