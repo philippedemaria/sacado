@@ -957,6 +957,17 @@ def student_book_builder(request,idb, n):
         return redirect("index")
 
  
+@csrf_exempt
+@user_is_extra 
+def sorter_book_pages(request):
+    valeurs = request.POST.getlist("valeurs")
+    data = {}
+ 
+    for i in range(len(valeurs)):
+        Page.objects.filter(pk = valeurs[i]).update(number = i)
+
+    return JsonResponse(data) 
+
 #################################################################
 # paragraphs
 #################################################################

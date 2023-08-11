@@ -615,8 +615,45 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        function sorter_pages($div_class , $exercise_class ) {
+
+            $($div_class).sortable({
+                axis: 'x' ,
+                start: function( event, ui ) { 
+                       $(ui.item).css("background-color", "gray");
+                   }, 
+                stop: function (event, ui) {
+
+                    var valeurs = [];
+
+                    $($exercise_class ).each(function() {
+                        let page_id = $(this).data("page_id"); 
+                        valeurs.push(page_id);
+                    });
+
+                    $(ui.item).css("background-color", "gray");
+
+                    this_url =  "../../sorter_book_pages"  ;                   
+  
+                    $.ajax({
+                            data:   { 'valeurs': valeurs    } ,   
+                            type: "POST",
+                            dataType: "json",
+                            url: this_url,
+                            traditional: true,
+                        }); 
+                    }
+                });
+
+            }
 
 
+        $(document).on('mousedown', ".book_sorter_page", function (event) {
+
+            var chapter_id = $(this).data("chapter_id");
+            sorter_pages('#this_page_is_sorter'+chapter_id , '.sorter_items_pages') ;
+ 
+        })
 
 
 

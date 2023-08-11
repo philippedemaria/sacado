@@ -63,6 +63,8 @@ urlpatterns = [
     path('sorter_book_section', sorter_book_section, name='sorter_book_section'),
     path('publish_book_section', publish_book_section, name='publish_book_section'),
 
+    path('sorter_book_pages', sorter_book_pages, name='sorter_book_pages'),
+
     ##################################################################################################################################
     ##################################################################################################################################
     ################### Student book
