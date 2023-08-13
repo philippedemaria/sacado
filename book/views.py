@@ -944,11 +944,6 @@ def student_book_builder(request,idb, n):
                 i += 1
 
         this_page_id_created = request.session.get('this_page_id_created')
-        # i = 1
-        # for p in Parcours.objects.filter(level=book.level,subject=book.subject,teacher__user_id=2480).order_by("ranking") :
-        #     chapt,crea  = Chapter.objects.get_or_create(book=book,title=p.title, author_id=2480 , teacher=request.user.teacher, defaults={'is_publish':1,'ranking':i})
-        #     i+=1
-     
         chapters = book.chapters.order_by("ranking")
         context = {'book': book,  'chapters': chapters, 'this_page_id_created' : this_page_id_created }
 
