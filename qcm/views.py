@@ -2000,7 +2000,7 @@ def list_parcours_group(request,id):
     qflashs    = group.quizz.filter(is_random=1,folders=None).order_by("-date_modified")
 
 
-    book,create = Book.objects.get_or_create(  author = teacher, level = group.level, subject = group.subject ,  is_student =  1, defaults = {'title' : "Organiser"+str(group.level.id) ,
+    book,create = Book.objects.get_or_create(  author = teacher, level = group.level, subject = group.subject ,  is_student =  0, defaults = {'title' : "Organiser"+str(group.level.id) ,
                                                                                                                            'imagefile' : "" , 
                                                                                                                             'ranking' : 1,'price' : 0 })
     book.teachers.add(teacher)
