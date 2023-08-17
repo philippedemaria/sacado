@@ -67,6 +67,14 @@ class PageForm(forms.ModelForm):
 		model = Page
 		fields = '__all__'
  
+	def __init__(self, *args, **kwargs):
+
+		book = kwargs.pop('book')
+		super(PageForm, self).__init__(*args, **kwargs)
+
+		chapters = book.chapters.order_by("ranking")
+		self.fields['chapter'] = forms.ModelChoiceField(queryset=chapters)  
+
 
 
 class TypeblocForm(forms.ModelForm):

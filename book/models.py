@@ -260,7 +260,7 @@ class Page(models.Model):
 
 
     def __str__(self):
-        return "{}".format(self.number)
+        return "{} : {}".format(self.number,self.title)
 
 
 class Paragraph(models.Model):

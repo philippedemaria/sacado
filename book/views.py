@@ -1031,7 +1031,7 @@ def update_page(request,idb, idp):
     page = Page.objects.get(id=idp)
     chapter = page.chapter 
 
-    form_page = PageForm(request.POST or None,instance=page)
+    form_page = PageForm(request.POST or None,book=book, instance=page)
     form_p  = ParagraphForm(request.POST or None)
     form_b  = BlocForm(request.POST or None,book=book,page=page)
     form_tb = TypeblocForm(request.POST or None)
@@ -1124,9 +1124,6 @@ def goto_update_page(request, idb,n):
 #################################################################
 # paragraphs
 #################################################################
-
-
-
 @user_is_extra 
 def create_paragraph(request, idb):
 
