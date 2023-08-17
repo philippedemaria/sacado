@@ -113,6 +113,33 @@ h1 {
 }
 
 
+.btn-course_page_top{
+  background-color: #5d4391;  
+  color:white;
+}
+.btn-ad_page_top{
+  background-color: #9274C7;  
+  color:white;
+}
+.btn-parcoursu_page_top{
+  background-color: #00B999;  
+  color:white;
+}
+.btn-parcoursd_page_top{
+  background-color: #0093CA;  
+  color:white;
+}
+.btn-parcourst_page_top{
+  background-color: #cb2131;
+  color:white;
+}
+.btn-auto_page_top{
+  background-color: #ffb400;  
+  color:white;
+}
+.btn-algo_page_top{
+  background-color: gray;
+}
 /******************************************* MAIN **********************************************************/
 
 .course_page_main{
@@ -409,3 +436,4 @@ h1 {
 	width:100%;
 	font-weight: normal;
 }
+

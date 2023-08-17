@@ -64,7 +64,7 @@ urlpatterns = [
     path('publish_book_section', publish_book_section, name='publish_book_section'),
 
     path('sorter_book_pages', sorter_book_pages, name='sorter_book_pages'),
-
+ 
     ##################################################################################################################################
     ##################################################################################################################################
     ################### Student book
@@ -76,6 +76,8 @@ urlpatterns = [
 
     path('create_page/<int:idb>/<int:idch>', create_page, name='create_page'),
     path('update_page/<int:idb>/<int:idp>', update_page, name='update_page'),
+    path('goto_update_page/<int:idb>/<int:n>', goto_update_page, name='goto_update_page'),
+    
     path('delete_page/<int:idb>/<int:idp>', delete_page, name='delete_page'),
     path('add_page/<int:idb>/<int:idch>', add_page, name='add_page'),
 

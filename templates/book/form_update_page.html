@@ -20,6 +20,12 @@
     <img src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'student_book_builder' book.id 0 %}"> {{ chapter.title }}</a> 
     {% endif %}
     <img src="{% static 'img/angle-right.png' %}"/> page {{ page.number }}  
+    {% if page.number > 0 %}
+    <a href="{% url 'goto_update_page' book.id page.number|add:-1   %}" class="btn btn-default" title="page précédente"><</a> 
+    {% endif %}
+    {% if page.number < book.total_page %} 
+    <a href="{% url 'goto_update_page' book.id page.number|add:1 %}" class="btn btn-default"  title="page suivante">></a>
+    {% endif %}
 {% endblock %}
 
 

@@ -1108,6 +1108,18 @@ def type_de_page(request):
 
     return JsonResponse(data)
 
+
+
+@user_is_extra 
+def goto_update_page(request, idb,n):
+
+    page = Page.objects.get(chapter__book=idb, number=n)
+    idp  = page.id
+ 
+    return redirect('update_page',idb,idp)
+ 
+
+
 #################################################################
 # paragraphs
 #################################################################

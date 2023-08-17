@@ -49,6 +49,12 @@ class Book(models.Model):
     def __str__(self):
         return "{}".format(self.title)
 
+    def total_page(self):
+        i = 0
+        for c in self.chapters.order_by("ranking") :
+            for p in c.pages.order_by("number") :
+                i+=1
+        return i
 
 
 class Chapter(models.Model):
