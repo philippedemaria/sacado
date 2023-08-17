@@ -2006,10 +2006,7 @@ def list_parcours_group(request,id):
     book.teachers.add(teacher)
     book.groups.add(group)
     chapters = book.chapters.all()
-
-
     formsec = SectionForm(request.POST or None)
-
     organiser = request.session.get("organiser",None)
     if organiser :
         chapter  = Chapter.objects.get(pk=organiser)
