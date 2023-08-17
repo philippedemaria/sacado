@@ -192,6 +192,13 @@
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
+                            <label>Titre</label>
+                            {{ form_page.title |add_class:"form-control" }}
+                            {{ form_page.title.errors }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
                             <label>Numéro de page</label>
                             {{ form_page.number |add_class:"form-control" }}
                             {{ form_page.number.errors }}
