@@ -72,7 +72,6 @@ class Chapter(models.Model):
 
     theme         = models.CharField(max_length=255, null=True, blank=True, choices=THEMES ,  verbose_name="Thème")
 
-
     is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
     is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     

@@ -596,7 +596,7 @@ def update_chapter(request,idb,idch):
     
     book = Book.objects.get(id=idb)
     chapter = Chapter.objects.get(id=idch)
-    form = BookForm(request.POST or None, instance=chapter )
+    form = ChapterForm(request.POST or None, instance=chapter )
 
     if form.is_valid():
         nf = form.save()
@@ -617,7 +617,7 @@ def update_student_book_chapter(request,idb,idch):
     
     book = Book.objects.get(id=idb)
     chapter = Chapter.objects.get(id=idch)
-    form = BookForm(request.POST or None, instance=chapter )
+    form = ChapterForm(request.POST or None, instance=chapter )
 
     if form.is_valid():
         form.save()
