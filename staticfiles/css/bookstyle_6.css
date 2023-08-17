@@ -123,6 +123,27 @@ h1 {
   font-weight: 700;
 }
 
+.intro_page_top{
+  height:50px;
+  background-color: #FCF8FF;
+  height:60px;
+  padding:20px 0px 0px 50px;
+  color:white;
+  font-size:30px;
+  font-weight: 700;
+}
+
+.algo_page_top{
+  height:50px;
+  background-color: #B0A8BA;
+  height:60px;
+  padding:20px 0px 0px 50px;
+  color:white;
+  font-size:30px;
+  font-weight: 700;
+}
+
+
 .btn-course_page_top{
   background-color: #5d4391;  
   color:white;
@@ -148,8 +169,13 @@ h1 {
   color:white;
 }
 .btn-algo_page_top{
-  background-color: gray;
+  background-color: #B0A8BA;
 }
+.btn-intro_page_top{
+  background-color: #FCF8FF;
+}
+
+
 /******************************************* MAIN **********************************************************/
 
 .course_page_main{
