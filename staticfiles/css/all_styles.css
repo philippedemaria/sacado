@@ -1094,9 +1094,16 @@ a.no_decoration:hover{
 }
 .btn-algo_page_top{
   background-color: gray;
+  color:#5d4391;
 }
 .btn-intro_page_top{
   background-color: white;
+  color:#5d4391;
+}
+
+.btn-selected_page_book{
+  background-color: #FFC05C;
+  color:#5d4391;
 }
 /***************************************************************************/
 /*********************      quizz     **************************************/

@@ -989,10 +989,11 @@ def create_page(request,idb, idch):
         if total_number :
             tn = int(total_number)
             for i in range(tn) :
-                if i == tn-1 : title , css = "Auto-évaluation DTL" , "auto_page_top"
-                elif i == tn-2 : title , css = "Parcours 3" , "parcourst_page_top"
-                elif i == tn-3 : title , css = "Parcours 2" , "parcoursd_page_top"
-                elif i == tn-4 : title , css = "Parcours 1" , "parcoursu_page_top"
+                if i == tn-1 : title , css = "Algorithmique" , "algo_page_top"
+                elif i == tn-2 : title , css = "Auto-évaluation DTL" , "auto_page_top"
+                elif i == tn-3 : title , css = "Parcours 3" , "parcourst_page_top"
+                elif i == tn-4 : title , css = "Parcours 2" , "parcoursd_page_top"
+                elif i == tn-5 : title , css = "Parcours 1" , "parcoursu_page_top"
                 elif i%2 == 1 : title , css = "Cours" , "course_page_top"
                 elif i%2 == 0 and i > 0 : title , css = "Applications directe" , "ad_page_top"
                 else : title , css = "Introduction" , "intro_page_top"
