@@ -58,10 +58,11 @@ class Chapter(models.Model):
         ("NC","Nombres et calculs"),
         ("G", "Géométrie"),
         ("F", "Fonctions"),
-        ("SP","Stats et probabilités"),
+        ("SP","Statistiques et probabilités"),
         ("GM","Grandeurs et Mesures"),
         ("A", "Algèbre"),
         ("OGD", "Organisation et Gestion de données"),
+        ("AP", "Algorithme et programmation"),
     )
  
 
