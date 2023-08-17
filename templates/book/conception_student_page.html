@@ -46,7 +46,7 @@
                 <td id="this_page_is_sorter{{ chapter.id }}" data-chapter_id="{{ chapter.id }}" class="book_sorter_page">
                     {% for page in chapter.pages.all|dictsort:"number" %}
                         <a href="{% url 'update_page' book.id page.id %}" data-page_id="{{ page.id }}"  
-                           class="btn btn-{% if this_page_id_created == page.id %}primary{% else %}{{ page.css }}{% endif %} sorter_items_pages">{{ page.number }}</a>
+                           class="btn btn-{% if this_page_id_created == page.id %}selected_page_book{% else %}{{ page.css }}{% endif %} sorter_items_pages">{{ page.number }}</a>
                     {% endfor %}
                 </td>
             </tr>
