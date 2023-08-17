@@ -57,7 +57,11 @@
                 {{ form.ranking|add_class:"form-control" }}
                 {{ form.ranking.errors }}
             </div>
-            
+            <div class="form-group">
+                <label>{{ form.theme.label_tag }}</label>
+                {{ form.theme|add_class:"form-control select2" }}
+                {{ form.theme.errors }}
+            </div>
         </div>  
         
   

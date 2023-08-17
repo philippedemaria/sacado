@@ -53,10 +53,25 @@ class Book(models.Model):
 
 class Chapter(models.Model):
 
+
+    THEMES = (
+        ("NC","Nombres et calculs"),
+        ("G", "Géométrie"),
+        ("F", "Fonctions"),
+        ("SP","Stats et probabilités"),
+        ("GM","Grandeurs et Mesures"),
+        ("A", "Algèbre"),
+        ("OGD", "Organisation et Gestion de données"),
+    )
+ 
+
     title         = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
 
     author        = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='author_chapters', blank=True,null=True,  verbose_name="Enseignant")
     teacher       = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="teacher_chapters", blank=True,null=True,  verbose_name="Participants")
+
+    theme         = models.CharField(max_length=255, null=True, blank=True, choices=THEMES ,  verbose_name="Thème")
+
 
     is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
     is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")
