@@ -29,10 +29,10 @@
 
 {% block page_menu_right %}
 {% if  prev_page %}
-<a href="{% url 'show_student_book' book.id prev_page %}" class="btn btn-default">Précédente</a>
+<a href="{% url 'show_student_book' book.id prev_page.id %}" class="btn btn-default">Précédente</a>
  {% endif %}
 {% if  next_page %}
-<a href="{% url 'show_student_book' book.id next_page %}" class="btn btn-default">Suivante</a>
+<a href="{% url 'show_student_book' book.id next_page.id %}" class="btn btn-default">Suivante</a>
  {% endif %}
 
 {% endblock %}
