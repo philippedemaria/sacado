@@ -49,7 +49,7 @@
                 {% if fpage %}
                 <a href="{% url 'show_student_book' book.id fpage.number %}" class="btn btn-{% if fpage.number == page.number %}primary{% else %}sacado{% endif %}"> 
                 
-                    <b>{% if fpage.chapter.theme %}  {{ fpage.chapter.theme }}{% else %}{{ fpage.chapter.title }} {% endif %} {{ forloop.counter }}</b>
+                    <b>{% if fpage.chapter.theme %}  {{ fpage.chapter.theme }}{% else %}{{ fpage.chapter.title }} {% endif %} {{ forloop.counter0 }}</b>
 
 
                 </a>
