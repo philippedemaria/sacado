@@ -904,7 +904,7 @@ def get_the_page(idb,n):
     book = Book.objects.get(pk=idb)
     all_pages   = dict()
     first_pages = list()
-    for chapter in book.chapters.all() :
+    for chapter in book.chapters.order_by('ranking'):
         pages = chapter.pages.order_by('number')
         first_pages.append(pages.first())
         for page in pages :
