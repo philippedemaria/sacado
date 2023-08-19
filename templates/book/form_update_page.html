@@ -233,7 +233,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary" name="form_action" value="update_page">Enregistrer</button>   
-                            <a href="{% url 'delete_page' book.id page.id %}"  class="btn btn-danger" >Supprimer</a>   
+                            <a href="{% url 'delete_page' book.id page.id %}"  class="btn btn-danger" onclick="return TestDelete('la page {{ page.title }}')">Supprimer</a>   
                         </div>
                     </div>
                 </form>
