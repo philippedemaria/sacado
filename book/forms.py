@@ -84,13 +84,14 @@ class TypeblocForm(forms.ModelForm):
 		fields = '__all__'
 
 
- 
+
 class ParagraphForm(forms.ModelForm):
 
 	class Meta:
 		model = Paragraph
 		fields = '__all__'
- 
+
+
 
 class BlocForm(forms.ModelForm):
 
