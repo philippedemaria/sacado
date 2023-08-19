@@ -38,7 +38,7 @@
         <table class="table borderless">
         {% for chapter in chapters %}
             <tr>
-                <td width='450px'>{{ forloop.counter }}. {{ chapter }} 
+                <td width='450px'>{{ forloop.counter0 }}. {{ chapter }} 
                     <a href="{% url 'delete_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-trash"></i>
                     <a href="{% url 'update_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-pencil"></i>
                 </td>
