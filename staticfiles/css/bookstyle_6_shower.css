@@ -437,3 +437,122 @@ h1 {
 	font-weight: normal;
 }
 
+
+
+ /*  paragraph_bloc_preuve  */
+.paragraph_bloc_pr{
+	border: 2px solid  #00A7B8;
+	border-radius: 5px;
+	color:#00A7B8;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+
+
+.paragraph_bloc_pr .bloc_title{
+	color :  #fff ;
+	border-radius:0px 0px 3px 3px;
+	background-image: linear-gradient(90deg, #00A7B8 40%, #fff 100%);
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+.paragraph_bloc_pr .bloc_content{
+	color :  #00A7B8 ;
+	border-radius:0px 0px 3px 3px;
+	background-color: #FFF;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+
+ /*  paragraph_bloc_regle  */
+.paragraph_bloc_rg{
+	border: 2px solid  #0960b5;
+	border-radius: 5px;
+	color:#0960b5;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+
+
+.paragraph_bloc_rg .bloc_title{
+	color :  #FFF ;
+	border-radius:0px 0px 3px 3px;
+	background-image: linear-gradient(90deg, #0960b5 40%, #fff 100%);
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+.paragraph_bloc_rg .bloc_content{
+	color :  #0960b5 ;
+	border-radius:0px 0px 3px 3px;
+	background-color: #FFF;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+
+/*  paragraph_bloc_preuve  */
+.paragraph_bloc_so{
+	color:#5d4391;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+}
+
+.paragraph_bloc_so .bloc_title{
+	color :  #5d4391 ;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+.paragraph_bloc_so .bloc_content{
+	color :  #5d4391 ;
+	background-color: #FFF;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+
+
+/*  paragraph_bloc_preuve  */
+.paragraph_bloc_mm{
+	border: 2px solid  #5d4391;
+	border-radius: 5px;
+	color:#5d4391;
+	position:relative;
+	margin:30px 20px 0px 50px;
+	padding:0px;
+
+}
+
+
+
+.paragraph_bloc_mm .bloc_title{
+	color :  #5d4391 ;
+	border-radius:0px 0px 3px 3px;
+	background-color:  #0960b5 ;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+.paragraph_bloc_mm .bloc_content{
+	color :  #5d4391 ;
+	border-radius:0px 0px 3px 3px;
+	background-color: #FFF;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
