@@ -1265,7 +1265,7 @@ define(['jquery','bootstrap'], function ($) {
                     },
                     url: "../../ajax_individualise_this_exercise",
                     success: function (data) {
-                        $('#indiv_this_exercise_nb').html(nb);
+                        // $('#indiv_this_exercise_nb').html(nb);
                         $('#indiv_this_exercise').html(data.html);
 
                     }

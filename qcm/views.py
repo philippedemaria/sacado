@@ -2629,7 +2629,6 @@ def duplicate_folder(request):
         folder.save()
         folder.students.set(students)
         folder.groups.set(groups)
-        folder.parcours.set(prcs)
         for g in groups :
             Folder.objects.filter(pk=folder.pk).update(level = group.level)
             Folder.objects.filter(pk=folder.pk).update(subject = group.subject)
@@ -2641,28 +2640,26 @@ def duplicate_folder(request):
         # ajoute le group au parcours si group    
         i = 0
         for p in prcs :
-            courses = p.course.all()
+            courses       = p.course.all()
+            relationships = p.parcours_relationship.all()
             p.pk = None
             p.code = str(uuid.uuid4())[:8] 
             p.teacher = teacher
-            for g in groups :
-                group     = Group.objects.get(pk=g)
-                p.subject = group.subject
-                p.level   = group.level
-                Folder.objects.filter(pk=folder.pk).update(level = group.level)
-                Folder.objects.filter(pk=folder.pk).update(subject = group.subject)
+            p.subject = folder.subject
+            p.level   = folder.level
             p.is_publish = 0
             p.is_archive = 0
             p.is_share = 0
             p.is_favorite = 1
             p.save()
-            p.students.set(students)
-            new_folder_id_tab.append(p)
+            folder.parcours.add(p) # ajout du nouveau parcours dupliqué dans le dossier dupliqué
+            p.groups.set(groups)
+            p.students.set(students) #Erreur les élèves ne voient pas leur parcours
             for course in courses :
                 old_relationships = course.relationships.all()
                 # clone le cours associé au parcours
                 course.pk = None
-                course.parcours = new_folder_id_tab[i]
+                course.parcours = p
                 course.save()
                 course.students.set(students)
                 # clone l'exercice rattaché au cours du parcours
@@ -2670,7 +2667,7 @@ def duplicate_folder(request):
                     for relationship in old_relationships : 
                         if not relationship.id in former_relationship_ids :
                             relationship.pk = None
-                            relationship.parcours = new_folder_id_tab[i]
+                            relationship.parcours = p
                             relationship.save()
                         course.relationships.add(relationship)
                         former_relationship_ids.append(relationship.id)
@@ -2679,16 +2676,16 @@ def duplicate_folder(request):
             #################################################
             # clone tous les exercices rattachés au parcours 
             #################################################
-            for relationship in p.parcours_relationship.all()  :
+            for relationship in relationships :
                 skills = relationship.skills.all()
                 try :
                     relationship.pk = None
-                    relationship.parcours_id = new_folder_id_tab[i]
+                    relationship.parcours = p
                     relationship.save()
                     relationship.skills.set(skills)    
                     relationship.students.set(students) 
                 except :
-                    pass
+                    print("erreur de duplication ", relationship.pk)
             i += 1
 
         data["validation"] = "Duplication réussie. Retrouvez-le depuis le menu Groupes."
@@ -5277,6 +5274,8 @@ def exercise_parcours_duplicate(request):
             parcours.save()
             students.update( group.students.all() )
 
+        print(students)
+
         parcours.students.set(students)
 
         former_relationship_ids = []
@@ -5308,7 +5307,8 @@ def exercise_parcours_duplicate(request):
                 relationship.pk = None
                 relationship.parcours = parcours
                 relationship.save() 
-                relationship.skills.set(skills) 
+                relationship.skills.set(skills)
+                relationship.students.set(students)
             except :
                 pass
 
