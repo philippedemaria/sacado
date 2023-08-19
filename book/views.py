@@ -1082,9 +1082,10 @@ def delete_page(request, idb,idp):
 
     page = Page.objects.get(id=idp)
     page.delete()
-    if idp>0:
-        idp -= 1
-    return redirect('pages',idb,idp)
+    return redirect('student_book_builder',idb,0)
+
+
+
 
 @csrf_exempt
 @user_is_extra 
