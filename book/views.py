@@ -911,10 +911,9 @@ def get_the_page(idb,n):
             all_pages[page.number] = page
 
     prev_page , next_page = None, None
+    page = all_pages[n]    
     if n > 0 : prev_page = all_pages[n-1]
-    page = all_pages[n]
     if n < len(all_pages)-1 : next_page = all_pages[n+1]
-
     return  prev_page , page , next_page , first_pages
 
 
