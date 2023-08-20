@@ -185,9 +185,19 @@ def initialize_all_chapters(request,idb,idg) :
     return redirect("list_parcours_group", idg)
 
  
- 
+@csrf_exempt
+def sorter_book_chapter(request):
 
+    valeurs = request.POST.getlist("valeurs")
+    i= 0
+    for v in valeurs:
+        try :
+            Chapter.objects.filter(pk = v).update(ranking = i)
+            i+=1
+        except :pass
 
+    data = {}
+    return JsonResponse(data) 
 #################################################################
 # Transformation de parcours en séquences
 #################################################################
@@ -2005,7 +2015,7 @@ def list_parcours_group(request,id):
                                                                                                                             'ranking' : 1,'price' : 0 })
     book.teachers.add(teacher)
     book.groups.add(group)
-    chapters = book.chapters.all()
+    chapters = book.chapters.order_by("ranking")
     formsec = SectionForm(request.POST or None)
     organiser = request.session.get("organiser",None)
     if organiser :
@@ -5580,8 +5590,6 @@ def ajax_course_sorter(request):
     course_ids = request.POST.get("valeurs")
     course_tab = course_ids.split("-") 
     parcours_id = int(request.POST.get("parcours_id"))
-
-    print(course_ids)
 
     for i in range(len(course_tab)-1):
         try : Course.objects.filter(parcours_id = parcours_id , pk = course_tab[i]).update(ranking = i)
