@@ -59,7 +59,6 @@ class Book(models.Model):
 
 class Chapter(models.Model):
 
-
     THEMES = (
         ("NC","Nombres et calculs"),
         ("G", "Géométrie"),
@@ -71,7 +70,6 @@ class Chapter(models.Model):
         ("AP", "Algorithme et programmation"),
     )
  
-
     title         = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
 
     author        = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='author_chapters', blank=True,null=True,  verbose_name="Enseignant")
