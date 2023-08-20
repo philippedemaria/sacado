@@ -26,7 +26,6 @@
 
         </div>
             <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-primary btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %}>{% if chapters %}MaJ {% else %}Initialisation {% endif %} des chapitres 
-                {% if chapters %}
             </a>
     </div>
     <div class="col-xs-6 col-md-8 col-lg-9">
