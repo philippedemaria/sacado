@@ -7,8 +7,14 @@
         <div class="this_search_document_get">
             <input type="checkbox" name="select_this_document_for_chapter" class="select_document_into_section" value ='{{ document.id }}-{{ this_type}}' />
             {% if this_type == "GGB" %}
-            <img src='{{ document.supportfile.imagefile.url }}' class='get_this_document this_css_template_exercise_document' 
-                    data-type="GGB" data-book_id='{{ book.id }}'  data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'/><br/>
+                {% if document.supportfile.imagefile %}
+                <img src='{{ document.supportfile.imagefile.url }}' class='get_this_document this_css_template_exercise_document' 
+                    data-type="GGB" data-book_id='{{ book.id }}'  data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'/>
+                {% else %}
+                <span class='get_this_document this_css_template_exercise_document' 
+                    data-type="GGB" data-book_id='{{ book.id }}'  data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'></span>
+                {% endif %}
+                    <br/>
             {% else %}
             <a href="javascript:void();" data-toggle='modal' data-target='#show_this_document' class="this_search_document_label" data-document_id='{{ document.id }}'>{{document.title|safe}}</a>
             {% endif %}
