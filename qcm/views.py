@@ -177,7 +177,7 @@ def initialize_all_chapters(request,idb,idg) :
                                                                     teacher=request.user.teacher, 
                                                                     defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
             chapt.sections.add(section_exe)
-            chaps += str(chapt.title)+" "
+            chaps += str(chapt.title)+", "
         i+=1 # ranking du chapitre
 
     messages.success(request,chaps)
@@ -5273,8 +5273,6 @@ def exercise_parcours_duplicate(request):
             parcours.subject = group.subject
             parcours.save()
             students.update( group.students.all() )
-
-        print(students)
 
         parcours.students.set(students)
 

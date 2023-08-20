@@ -25,7 +25,13 @@
 
 
         </div>
-            <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-primary btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %} >{% if chapters %}Ré-i{% else %}I{% endif %}nitialiser les chapitres</a>
+            <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-primary btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %}>{% if chapters %}Ré-i{% else %}I{% endif %}nitialiser les chapitres <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_card_flex" >Tous les parcours associés à ce groupe seront déclinés en chapitres directement<br/> 
+                                                                        accessibles. Chaque chapitre contient tous les cours, 4 exercices, 4 quiz et <br/> 
+                                                                        toutes les exercices des Bibliotex. A vous de compléter ou modifier à souhaits. </div>
+                                </span>
+
+            </a>
     </div>
     <div class="col-xs-6 col-md-8 col-lg-9">
         <div id="dropzone">
@@ -33,14 +39,14 @@
             {% if not sections %}
 
                 {% if not chapters %}
-                <h1 style="margin:20px;font-size:40px;" class="sacado_color_text">Préparez vos documents et vidéo-projetez en classe</h1>
+                <h1 style="margin:20px;font-size:35px;" class="sacado_color_text">Préparez vos documents et vidéo-projetez en classe</h1>
 
                 Cet organiser permet de <span class="sacado_color_text">synthétiser tous vos documents</span> par parcours/chapitres pour créer vos <span class="sacado_color_text">séquences</span> de classe. 
 
                 <ul  style="margin-top:20px;">
 
                     <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">1. Initialisez vos chapitres.</span> <br/><small>Sacado transforme vos parcours en chapitres, en important par défaut vos cours et 4 exercices.</small> </li>
-                    <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">2. Cliquez sur un chapitre et organiser vos documents par sections. </span> <br/><small>Sacado donne accès à tous vos documents pour les choisir et les intégrer dans votre organiser.</small> </li>
+                    <li class="sanspuce" style="margin-bottom:20px;"><span class="sacado_color_text" style="font-weight:normal">2. Cliquez sur un chapitre et organisez vos documents par sections. </span> <br/><small>Sacado donne accès à tous vos documents pour les choisir et les intégrer dans votre organiser.</small> </li>
                     <li class="sanspuce"><span class="sacado_color_text" style="font-weight:normal">3. Vidéo-projetez le chapitre en classe et enregistrez votre progression.</span> </li>
 
                 </ul>
