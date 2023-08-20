@@ -266,6 +266,240 @@ hr.divider {
   z-index: 99999999;
   top:15px;  
 }
+/*--------------------------------------------------------------
+#    Livre numérique
+--------------------------------------------------------------*/
+
+.book_menu{
+    background-color: #5d4391 ;
+    color: #f2f2f2;
+    padding:10px ;
+    width:23vw;    
+    float:left;
+    transform: translateX(3%);
+    -webkit-transform: translateX(3%);  
+    z-index: 2;
+
+}
+
+
+.book_chapters_in_menu_selected{
+    background-color: #9274C7!important ;
+    color:white;
+}
+
+
+.book_chapter_high_light_sorter{
+    background-color: #9274C7 ;
+    list-style: none;
+    height:40px;
+}
+
+.book_main_page_title{
+  color :  #5d4391 ;
+}
+
+.book_main_page_section{
+    width: 95%;
+    border-radius: 10px;
+    background-color: white;
+    padding: 0px;
+    text-align: center;
+    margin: 40px;
+    border: 2px solid #5d4391;
+}
+
+.book_main_page_section_title{
+  width:100%;
+  border-radius: 8px 8px 0px 0px ;
+  background-color: #9274C7;
+  padding :7px 7px 7px 25px;
+  text-align: left;
+  margin : 0px;
+  color:white;
+  font-variant-caps: small-caps;
+  font-weight: 600;
+}
+
+.book_main_page_section_document_detail{
+  display:block;
+  font-size : 0.7em;
+  color : #5d4391 ;
+  float: left;
+  margin: 12px;
+  width:100px;
+  height:100px;
+  text-align: center;
+  position: relative;
+  cursor: grab;
+}
+
+
+.book_main_page_section_document_detail:hover{
+  border : 1px solid #CCC;
+  border-radius: 4px;
+}
+ 
+
+.book_main_page_section_document_detail:active{
+   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+ 
+
+
+
+.selector_book_section_document{
+  font-size : 0.7em;
+  color : #9274C7 ;
+  float: left;
+  margin: 12px;
+  width:100px;
+  text-align: center;
+  position: relative;
+}
+
+
+.new_document_button_selector{
+  cursor:pointer;
+  font-size: 16px;
+  padding: 10px 10px 5px 10px;
+  font-weight: normal;
+}
+
+
+.new_document_button_selector:active{
+  border-bottom: 5px solid  #9274C7 ;
+}
+
+
+.book_main_page_section_document_section{
+  font-size : 4em;
+  color : #9274C7 ;
+}
+
+.book_main_page_section_document_section:hover{
+  font-size : 4em;
+  color : #5d4391 ;
+}
+
+
+.book_main_page_section_document_earmark{
+  font-size : 4em;
+  color : #5d4391 ;
+}
+
+.book_document_choice{
+  font-size: 12px;
+  font-weight: normal;
+  color:#5d4391 ;
+  padding: 5px;
+  margin: 5px;
+}
+
+
+.existant_book_document_choice,.selector_existant_book_document_choice{
+  font-size: 12px;
+  font-weight: normal;
+  color:#9274C7 ;
+  padding: 5px;
+  margin: 2px;
+  display: block;
+  float:left;
+  text-align: center;
+}
+
+
+.selector_existant_book_document_choice{
+  border:1px solid #CCC;
+  border-radius: 4px 4px 0px 0px;
+}
+ 
+
+.existant_book_document_choice:hover,
+.existant_book_document_choice:active,
+.existant_book_document_choice:focus,
+.existant_book_document_choice:visited{
+  background-color:#5d4391 ;
+  color : white ;
+  text-decoration: none;
+}
+ 
+.existant_book_document_choice_active{
+  background-color:#5d4391 ;
+  color : white ;
+}
+
+
+
+.book_main_page_add_document{
+  font-size: 10px;
+  width:45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #5d4391 ;
+  color:white;
+  padding: 5px 2px 2px 2px;
+  margin: 5px;
+  display: block;
+  text-align: center;
+}
+
+.book_main_page_add_document:hover, .book_main_page_add_document:focus, .book_main_page_add_document:active{
+  background-color: #9274C7 ;
+  text-decoration: none;  
+  color:white;
+}
+
+.this_css_template_all_document{
+  text-align: center;
+  margin:10px;
+  padding: 15px 5px 5px 5px;
+  font-size:14px;
+  width: 120px;
+  border: 2px solid #5d4391 ;
+  border-radius:5px;
+  color:#5d4391;
+  height:120px;
+  float:left;
+  position: relative;
+  cursor:pointer;
+}
+.this_css_template_all_document:hover{
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.get_this_document:hover{
+  background-color: #5d4391 ;
+  border-radius: 3px;
+  margin-top:2px;
+  margin-left:2px;
+  height:15px;
+  width: 15px;
+}
+
+
+
+.chapter_new_document_circle{
+    border-radius:50%;
+    border : 2px solid #5d4391 ;
+    padding: 1px 3px;
+}
+
+.chapter_new_document_circle:hover{
+    border-radius:50%;
+    border : 2px solid #5d4391 ;
+    padding: 1px 3px;
+    background-color: #9274C7 ;
+    color:white!important;
+}
+
+.book_main_page_section_document_is_done{
+
+    border : 2px solid #5d4391 ;
+    background-color: #FCF8FF ;
+}
+
+
 
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------      TWEETER        ------------------------------------*/
