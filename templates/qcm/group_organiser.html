@@ -25,12 +25,14 @@
 
 
         </div>
-            <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-primary btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %}>{% if chapters %}Ré-i{% else %}I{% endif %}nitialiser les chapitres <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+            <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-primary btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %}>{% if chapters %}Ré-i{% else %}I{% endif %}nitialiser les chapitres 
+                {% if chapters %}
+                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_card_flex" >Tous les parcours associés à ce groupe seront déclinés en chapitres directement<br/> 
                                                                         accessibles. Chaque chapitre contient tous les cours, 4 exercices, 4 quiz et <br/> 
                                                                         toutes les exercices des Bibliotex. A vous de compléter ou modifier à souhaits. </div>
-                                </span>
-
+                </span>
+                {% endif %}
             </a>
     </div>
     <div class="col-xs-6 col-md-8 col-lg-9">
