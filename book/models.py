@@ -87,7 +87,7 @@ class Chapter(models.Model):
     date_created  = models.DateTimeField( auto_now_add= True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
     book          = models.ForeignKey(Book, on_delete=models.CASCADE,  blank=True,   related_name='chapters', editable=False)
-    parcours      = models.OneToOneField(Parcours, blank=True, null= True, related_name="chapters", on_delete=models.CASCADE )
+    parcours      = models.ForeignKey(Parcours, on_delete=models.CASCADE , blank=True, null= True, related_name="chapters")
 
     def __str__(self):
         return "{}".format(self.title)
