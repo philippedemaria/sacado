@@ -2978,8 +2978,13 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
             if folder_id :
                 folder.parcours.add(nf) 
      
-            parcours_ids = request.POST.getlist("parcours",[])
-            group_ids = request.POST.getlist("groups",[])
+            folder_ids = request.POST.getlist("folders",[])
+            for f_id in folder_ids :
+                folder = Folder.objects.get(pk = f_id)
+                folder.parcours.add(nf) 
+
+
+            group_ids  = request.POST.getlist("groups",[])
 
             groups_students = set()
             for gid in group_ids :
