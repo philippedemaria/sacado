@@ -5,9 +5,21 @@
     <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
         <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
         
+ 
+
+        {% if document.doctype ==  0 %}
         <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
-             {{ document.icon_doctype|safe}}
+             {{ document.icon_doctype.icon|safe}}
         </a>
+        {% else %}
+        <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
+             {{ document.icon_doctype.icon|safe}}
+        </a>
+        {% endif %}
+
+
+
+
         <br/>
         {% if document.author == request.user.teacher %}
             <a href="{% url 'update_book_document' book.id chapter.id document.id %}"  class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >
