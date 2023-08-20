@@ -132,9 +132,9 @@ def change_code_exercises_to_book():
 
 def initialize_all_chapters(request,idb,idg) :
 
-    Document.objects.all().delete()
-    Section.objects.all().delete()
     book = Book.objects.get(pk=idb)
+    # Document.objects.filter(section__chapter__book=book).delete()
+    # Section.objects.filter(chapter__book=book).delete()
     group = Group.objects.get(pk=idg)
     i = 1
     chaps = "Liste des chapitres créés : "
@@ -145,39 +145,38 @@ def initialize_all_chapters(request,idb,idg) :
         bibliotexs = p.bibliotexs.all()
 
         chapt,crea  = Chapter.objects.get_or_create(book=book, parcours=p, defaults={ 'title' : p.title, 'author' : request.user.teacher ,  'teacher':request.user.teacher,  'is_publish':1,'ranking':i})
-        if crea :
-            # QF ###################################################################################################################
-            section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
-            for qf in qfs :
-                document,created = Document.objects.get_or_create(title=qf.title, subject = book.subject, level=book.level, section  = section_qf , author_id=request.user.id , teacher=request.user.teacher, 
-                                                                    defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : "Question flash" , 'doctype': 8 , 'doc_id' : qf.id })
-            chapt.sections.add(section_qf)
+        # QF ###################################################################################################################
+        section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
+        for qf in qfs :
+            document,created = Document.objects.get_or_create(title=qf.title, subject = book.subject, level=book.level, section  = section_qf , author_id=request.user.id , teacher=request.user.teacher, 
+                                                                defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : "Question flash" , 'doctype': 8 , 'doc_id' : qf.id })
+        chapt.sections.add(section_qf)
 
-            # Cours ###################################################################################################################
-            section, cre = Section.objects.get_or_create(title = "Cours" , chapter = chapt , defaults = {'ranking': 2, })
-            for c in courses :
-                document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section  = section , author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
-            chapt.sections.add(section)
+        # Cours ###################################################################################################################
+        section, cre = Section.objects.get_or_create(title = "Cours" , chapter = chapt , defaults = {'ranking': 2, })
+        for c in courses :
+            document,created = Document.objects.get_or_create(title=c.title, subject = book.subject, level=book.level, section  = section , author_id=request.user.id , teacher=request.user.teacher, defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : c.annoncement})
+        chapt.sections.add(section)
 
-            # Exercices ###################################################################################################################
-            section_tex, cre_tex = Section.objects.get_or_create(title = "Exercices LaTeX" , chapter = chapt , defaults = {'ranking': 3, })
-            for bib in bibliotexs :
-                for exo in bib.relationtexs.all():
-                    try : 
-                        document,created = Document.objects.get_or_create(title=exo.exotex.title, subject = book.subject, level=book.level, section  = section_tex , 
-                                                                            author_id=request.user.id , teacher=request.user.teacher, 
-                                                                            defaults={'is_publish':1 , 'is_share':1 , 'ranking':i , 'content':exo.content_html , 'doctype':6 , 'doc_id' : exo.id })
-                    except : pass
-            chapt.sections.add(section_tex)
+        # Exercices ###################################################################################################################
+        section_tex, cre_tex = Section.objects.get_or_create(title = "Exercices LaTeX" , chapter = chapt , defaults = {'ranking': 3, })
+        for bib in bibliotexs :
+            for exo in bib.relationtexs.all():
+                try : 
+                    document,created = Document.objects.get_or_create(title=exo.exotex.title, subject = book.subject, level=book.level, section  = section_tex , 
+                                                                        author_id=request.user.id , teacher=request.user.teacher, 
+                                                                        defaults={'is_publish':1 , 'is_share':1 , 'ranking':i , 'content':exo.content_html , 'doctype':6 , 'doc_id' : exo.id })
+                except : pass
+        chapt.sections.add(section_tex)
 
-            # Exercices auto-correctifs ###################################################################################################################
-            section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices SACADO" , chapter = chapt , defaults = {'ranking': 4, })
-            for exercise in exercises :
-                document,created = Document.objects.get_or_create(title=exercise.supportfile.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
-                                                                    teacher=request.user.teacher, 
-                                                                    defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
-            chapt.sections.add(section_exe)
-            chaps += str(chapt.title)+", "
+        # Exercices auto-correctifs ###################################################################################################################
+        section_exe, cre_exo = Section.objects.get_or_create(title = "Exercices SACADO" , chapter = chapt , defaults = {'ranking': 4, })
+        for exercise in exercises :
+            document,created = Document.objects.get_or_create(title=exercise.supportfile.title, subject = book.subject, level=book.level, section  = section_exe , author_id=request.user.id , 
+                                                                teacher=request.user.teacher, 
+                                                                defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : exercise.knowledge , 'doctype': 3 , 'doc_id' : exercise.id})
+        chapt.sections.add(section_exe)
+        chaps += str(chapt.title)+", "
         i+=1 # ranking du chapitre
 
     messages.success(request,chaps)
