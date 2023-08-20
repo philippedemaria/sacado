@@ -810,7 +810,7 @@ def get_type_book_document(request):
     elif this_type == "Exotex" :        
         documents = Exotex.objects.filter(is_share=1,subject = subject , level = level )[(n-1)*100:n*100]
     elif this_type == "GGB" : 
-        documents = Exercise.objects.filter(knowledge__theme__subject = subject , level  = level )[(n-1)*100:n*100]
+        documents = Exercise.objects.filter(knowledge__theme__subject = subject , level  = level, is_title=0 )[(n-1)*100:n*100]
     elif this_type == "Flashpack" :        
         documents = Flashpack.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject = subject , levels  = level )[(n-1)*100:n*100]
     elif this_type == "Quizz" :
