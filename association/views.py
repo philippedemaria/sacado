@@ -2132,11 +2132,6 @@ def delete_abonnement_gar(request,idg):
     return redirect("abonnements_gar"  )
 
 
-
-
-
-
-
 @user_passes_test(user_is_board)
 def direct_update_abonnement_gar(request):
 
@@ -2181,6 +2176,32 @@ def direct_update_abonnement_gar(request):
     else :
         messages.success(request,r.content.decode('utf-8'))
     return redirect("abonnements_gar"  )
+
+
+ 
+
+
+
+
+ 
+@user_passes_test(user_is_board)
+def purge_gar(request,user_type):
+
+    nb_teachers = User.objects.filter(user_type=2 , school__gar=1).exclude(is_superuser=1).count()
+    nb_students = User.objects.filter(user_type=0 , school__gar=1).count()
+
+
+    if user_type < 3 :
+        User.objects.filter(user_type=user_type , school__gar=1).delete()
+ 
+    context = {  'nb_teachers' : nb_teachers , 'nb_students' : nb_students }
+
+    return render(request, 'association/purge_gar.html', context)
+
+
+
+
+
 
 
 

@@ -284,8 +284,8 @@ def vignette(self):
 
 class Sharing_group(models.Model):
 
-    group = models.ForeignKey(Group, on_delete=models.PROTECT,  null=True, blank=True,   related_name='group_sharingteacher',  editable= False)
-    teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT, null=True, blank=True,  related_name='teacher_sharingteacher',  editable= False)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE,  null=True, blank=True,   related_name='group_sharingteacher',  editable= False)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, blank=True,  related_name='teacher_sharingteacher',  editable= False)
     role = models.BooleanField(default=0)
  
     

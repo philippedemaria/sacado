@@ -1,0 +1,52 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+
+ 
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+ 
+
+{% endblock %}
+
+
+
+{% block page_title %}
+        <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Purge GAR
+{% endblock %}
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+ 
+
+
+{% block body %}
+    <section class="content_main"> 
+
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+
+            <h2 class="thin">Purge des {{  nb_teachers }} enseignants</h2>
+
+               <a href="{% url 'purge_gar' 2 %}" class="btn btn-danger" onclick="return TestDelete('Les enseignant GAR')">Lancer la purge des enseignants</a>
+            </div> 
+            <div class="col-sm-12 col-md-6">
+
+            <h2 class="thin">Purge des  {{  nb_students }} élèves</h2>
+    
+
+               <a href="{% url 'purge_gar' 0 %}" class="btn btn-danger" onclick="return TestDelete('Les enseignant GAR')">Lancer la purge des élèves</a>
+            </div>
+        </div>
+
+
+
+    </section>
+{% endblock %}
+
+ 

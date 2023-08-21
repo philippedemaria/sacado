@@ -90,22 +90,16 @@
             <!-- small box -->
             <div class="small-box bg-purple">
                 <div class="inner">
-                     <span style="font-size: 35px">Tarifs </span>
+                     <span style="font-size: 35px">Outils </span>
                  </div>
 
-
-                <p style="text-align: center"><br/><br/><br/><br/>
-                
-                    <a href="{% url 'display_holidaybook' %}" class="white" style="font-size: 25px">Cahiers de vacances <br/></a>
-
-                    <small>{% if holidaybook.is_display %}ouvert{% else %}fermé{% endif %}</small>  
-                </p>
-
-
  
+                <div class="small-box-footer" >
+                    <a href="{% url 'list_rates' %}" class="white" title="Tarifs" style="font-size: 14px"> Tarifs</a>
+                    |
+                    <a href="{% url 'purge_gar' 10 %}"  class="white"  title="purge_gar" style="font-size: 14px"> Purge GAR</a>
+                </div>
 
-                <a href="{% url 'list_rates'  %}" class="small-box-footer"><i
-                        class="fa fa-arrow-circle-right"></i> En détails </a>
  
             </div>
         </div>
