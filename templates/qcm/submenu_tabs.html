@@ -25,10 +25,12 @@
             <a href="#4" data-toggle="tab" class="selector_tabs" data-id="4"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}"><i class="bi bi-files" ></i><span class="legend_menu_tabs"> Docs persos </span><span class="fontLabel">{{ docpersos.count }}</span>
             </a>
         </li>
+        {% if request.user.is_superuser %}
         <li>
             <a href="#5" data-toggle="tab" class="selector_tabs" data-id="5"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}"><i class="bi bi-lightning" ></i><span class="legend_menu_tabs"> Questions flash</span> <span class="fontLabel">{{ qflashs.count }}</span> 
             </a>
         </li>
+        {% endif %}
         <li>
             <a href="#6" data-toggle="tab" class="selector_tabs" data-id="6"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}"><i class="bi bi-aspect-ratio" ></i><span class="legend_menu_tabs"> Quiz </span><span class="fontLabel">{{ quizzes.count }}</span> 
             </a>
