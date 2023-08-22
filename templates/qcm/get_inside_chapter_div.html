@@ -23,10 +23,17 @@
                 <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
                      {{ document.icon_doctype.icon|safe}}
                 </a>
-                {% else %}
-                <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
-                     {{ document.icon_doctype.icon|safe}}
-                </a>
+                    {% comment %}
+                     {% elif document.doctype ==  10 and  document.icon_doctype.file %}
+                    <a href="{% url document.icon_doctype.file document.icon_doctype.support_id %}" target="_blank" >
+                         {{ document.icon_doctype.icon|safe}}
+                    </a>
+                    {% elif document.icon_doctype %}
+                    <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
+                         {{ document.icon_doctype.icon|safe}}
+                    </a> 
+                    {% endcomment %}
+
                 {% endif %}
                 <br/>
 

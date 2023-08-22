@@ -844,6 +844,8 @@ def insert_document_into_section(request):
     level_id   = request.POST.get("level_id")
     subject_id = request.POST.get("subject_id")
 
+    print(this_type)
+
     teacher  = request.user.teacher
     documents = list()
     for doc_id in valeurs :
@@ -871,11 +873,15 @@ def insert_document_into_section(request):
         elif this_type == "QF" :
             b = Quizz.objects.get(pk=doc_id)
             doctype = 9 
-            title  , author = b.title ,  b.author
+            title  , author = b.title ,  b.teacher
+        elif this_type == "DocPerso" :
+            b = Docperso.objects.get(pk=doc_id)
+            doctype = 10 
+            title  , author = b.title ,  b.teacher
         else : 
             b = Quizz.objects.get(pk=doc_id)
             doctype = 4 
-            title , author  = b.title ,  b.author
+            title , author  = b.title ,  b.teacher
 
         document = Document.objects.create(title = title, doc_id=doc_id , doctype = doctype, author = author, teacher = teacher, section_id = section_id , level_id = level_id, subject_id = subject_id,is_publish=1,is_share=0)
         documents.append(document)
