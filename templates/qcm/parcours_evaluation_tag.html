@@ -210,7 +210,7 @@
    
  
                     <div class="btn-group"  style="padding:0px;margin:0px;">
-                        <span style="cursor:pointer" class="btn btn-default btn-publisher  publisher"  data-from="{% if 'sub' in request.path %}0{% else %}2{% endif %}" id="parcours_publisher{{parcours.id}}" 
+                        <span style="cursor:pointer" class="btn btn-default btn-publisher publisher_p"  data-from="{% if 'sub' in request.path %}0{% else %}2{% endif %}" id="parcours_publisher{{parcours.id}}" 
                             data-parcours_id="{{parcours.id}}" data-statut="{{parcours.is_publish }}">  
                             <i class="fa fa-circle-o-notch"></i>
                         </span><span class="legend-btn legend-btn-{% if not parcours.is_publish %}danger{% else  %}success{% endif  %} size15" id="parcours_statut{{parcours.id}}" style="cursor:auto" >  

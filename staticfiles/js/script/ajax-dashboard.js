@@ -1790,7 +1790,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                 $actionner.on('click', function (event) {
                 let parcours_id = $(this).attr("data-parcours_id");
-                let statut = $(this).attr("data-statut");
+                let statut = $(this).attr("data-statut"); 
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
                 let from = $(this).attr("data-from");
 
@@ -1823,9 +1823,25 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             $($target+parcours_id).attr("data-statut",data.statut);                  
                             $($targetStatut+parcours_id).removeClass(data.noclass);
                             $($targetStatut+parcours_id).addClass(data.class);
+
+
+                            $("#parcours_statut"+parcours_id).html("").html(data.label);    
                             $($targetStatut+parcours_id).html("").html(data.label);
 
-                            if( $is_folder) {  $('#is_publish_label'+parcours_id).html(data.is_publish_label); }
+                            if( $is_folder) {  
+
+                                $('#is_publish_label'+parcours_id).html(data.is_publish_label); 
+
+                                if ($("#parcours_statut"+parcours_id).hasClass(data.noclass)) 
+                                    { 
+                                        $("#parcours_statut"+parcours_id).removeClass(data.noclass);
+                                        $("#parcours_statut"+parcours_id).addClass(data.class);
+                                    }
+                                else {
+                                        $("#parcours_statut"+parcours_id).addClass(data.noclass);
+                                        $("#parcours_statut"+parcours_id).removeClass(data.class);
+                                    }
+                            }
 
                             
                             if( from =="2" || from =="0") { 
@@ -1853,7 +1869,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 }); 
             } ;
 
-            publisher_parcours( $('.publisher') , '#parcours_publisher' ,'#parcours_statut' , 0 ) ;
+            publisher_parcours( $('.publisher_p') , '#parcours_publisher' ,'#parcours_statut' , 0 ) ;
             publisher_parcours( $('.publisher') , '#folder_publisher' ,'#folder_statut' , 1 ) ;
  
         // ==================================================================================================

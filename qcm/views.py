@@ -5718,6 +5718,7 @@ def ajax_publish_parcours(request):
     parcours_id = request.POST.get("parcours_id")
     statut = request.POST.get("statut")
     data = {}
+    print(statut)
     if statut=="true" or statut == "True":
         statut = 0
         data["statut"] = "false"
@@ -5773,6 +5774,8 @@ def ajax_publish_parcours(request):
     else :
         Folder.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
 
+
+    print(data)
     return JsonResponse(data) 
 
  
