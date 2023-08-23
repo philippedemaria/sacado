@@ -119,8 +119,8 @@ body{
             {% if role %}
             <div class="row" style="margin-bottom: 20px"> 
                 <div class="col-sm-12 ">
-                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouvel exercice</span></a>
-                    <a href="{% url 'my_own_exercises' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Récupérer un exercice mutualisé</span></a>
+                    <a href="{% url 'peuplate_parcours' parcours.id   %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Récupérer un exercice mutualisé</span></a>
+                    <a href="{% url 'my_own_exercises' %}" class="btn btn-xs btn-sacado"><i class="bi bi-cloud"></i>  <span class="btn_label">Créer un nouvel exercice</span></a>
                     <a href="{% url 'individualise_parcours' parcours.id  %}" class="btn btn-xs btn-sacado" ><i class="bi bi-people"></i> <span class="btn_label">Individualiser les exercices</span></a> 
                     {% if sacado_asso %}
                         <a href="{% url 'real_time' parcours.id %}" class="btn btn-xs btn-sacado"  >
