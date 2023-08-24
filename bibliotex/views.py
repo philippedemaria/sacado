@@ -644,7 +644,7 @@ def div_to_display_latex(request):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    file_path = settings.DIR_TMP_TEX+"/"+str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    file_path = settings.DIR_TMP_TEX+str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
@@ -1521,13 +1521,15 @@ def ajax_level_exotex(request):
         exotexs = base
 
         data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
-    
+        
+        print("ici")
 
     else :
         knowledges = Knowledge.objects.values_list("id","name").filter(theme_id__in=theme_ids, level_id = level_id  ) 
         knowledges_level = Knowledge.objects.values_list("id","name").filter(theme__subject__id = subject_id,  level_id = level_id  ) 
         data['knowledges']       =  list( knowledges )
         data['knowledges_level'] =  list( knowledges_level )
+
     return JsonResponse(data)
 
  

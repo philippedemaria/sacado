@@ -127,16 +127,17 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
                                 knowledges = data["knowledges"] ; 
+
                                 $('select[name=knowledge]').empty("");
                                 if (knowledges.length >0)
-                                { 
+                                {  
                                     for (let i = 0; i < knowledges.length; i++) {
                                             
                                             let knowledges_id = knowledges[i][0];
                                             let knowledges_name =  knowledges[i][1]  ;
 
                                             if (i%2==0){ classe="checkbox_ajax" ;} else { classe="checkbox_ajax_" ;} 
-                                            $('#knowledge_list').empty("");
+                                            
                                             $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledge" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
 
                                         }
