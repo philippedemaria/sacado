@@ -3904,7 +3904,8 @@ def create_questions_flash(request,idl):
         prc = Parcours.objects.get(pk=prc_id)
     else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc, initial= { 'levels':  [level], } )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc, initial= {   'levels':  [level], } )
+
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
@@ -3982,7 +3983,7 @@ def create_questions_flash_inside_parcours(request,idp):
         prc = Parcours.objects.get(pk=prc_id)
     else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc , initial= {   'levels':  [level], } )
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
@@ -4088,7 +4089,7 @@ def update_questions_flash(request,id):
         prc = Parcours.objects.get(pk=prc_id)
     else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc , instance = quizz)
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc , instance = quizz )
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
