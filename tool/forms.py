@@ -184,7 +184,6 @@ class QFlashForm(forms.ModelForm):
 		else :
 			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 
-
 		levels = Level.objects.exclude(pk__gt=8).order_by("ranking")
 		#teacher.levels.order_by("ranking")
 		self.fields['title'].required = False
