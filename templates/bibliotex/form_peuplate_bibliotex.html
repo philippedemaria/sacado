@@ -16,22 +16,22 @@
         {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
 
 
-        <a href="#" data-toggle='modal' data-target='#modal_search_exotex' class="btn btn-action">Ajouter des exercices</a>
+        {% if relationtexs %}<a href="#" data-toggle='modal' data-target='#modal_search_exotex' class="btn btn-action">Ajouter des exercices</a>{% endif %}
 {% endblock %}
 
 
 
 {% block page_menu_right %}
     <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
+
+    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}"  class="btn btn-new-violet" >Ma biblioTex</a>
 {% endblock %}
 
 
 
 {% block styleMk4ht %}
-    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
-{% endblock %} 
-
-
+    <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}">  
+{% endblock %}
 
 {% block body %}  
 <section class="content_main">
@@ -46,6 +46,42 @@
                         {% with exotex=relationtex.exotex  %}
                         {% include 'bibliotex/exotex_tag.html' %}
                         {% endwith %}
+                    {% empty %}
+
+                        <form action="" method="POST" enctype='multipart/form-data'>
+                            <div class="modal-content" >
+                                <div class="modal-header">
+                                    <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
+                                    {% csrf_token %} 
+                                    <div class="row">
+                                        <div class="col-sm-6 col-md-3">
+                                            <select name="subject_id" id="subject_id" class="form-control select2 level_search">
+                                            {% for s in teacher.subjects.all %}
+                                                <option value="{{ s.id }}" >{{ s.name }}</option>
+                                            {% endfor%}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6 col-md-3">
+                                            <select name="level_id" id="level_id" class="form-control select2 level_search">
+                                            {% for l in levels %}
+                                                <option value="{{ l.id }}">{{ l.name }}</option>
+                                            {% endfor%}
+                                            </select>
+                                        </div>
+                 
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="body_search_result" >
+                                        Choisir une matière et un niveau <img src="{% static 'img/fleche_up_right_violet.png' %}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+
                     {% endfor %}
                     
                 </div>

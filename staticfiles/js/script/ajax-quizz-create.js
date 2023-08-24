@@ -107,8 +107,6 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
                     }
 
 
-
-
                     parcours = data["parcours"] ; 
                     $('#pclist').empty("");
 

@@ -1154,7 +1154,9 @@ def ajax_charge_folders(request):
     else :
         data['folders'] =  []
         data['parcours'] =  []
+
     return JsonResponse(data)
+
 
 @login_required(login_url= 'index')
 def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder aussi
@@ -3825,15 +3827,19 @@ def list_questions_flash_sub(request,idl):
 
     level = Level.objects.get(pk=idl)
     teacher = request.user.teacher 
-    quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, levels = level , folders=None).order_by("levels","-id") # non inclus dans un dossier, 
+    #quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, levels = level , folders=None).order_by("levels","-id") # non inclus dans un dossier, 
     delete_session_key(request, "quizz_id")
+
+    quizzees = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, levels = level).order_by("levels","-id") # non inclus dans un dossier, 
+
+ 
 
     grps = teacher.groups.filter(is_hidden=0, level  = level)
     shared_grps_id = teacher.teacher_sharingteacher.values_list("group_id", flat=True) 
     sgps    = Group.objects.filter(pk__in=shared_grps_id, level  = level,is_hidden=0) 
     groupes =  grps | sgps
     groups  = groupes.order_by("level__ranking") 
-    return render(request, 'tool/list_questions_flash_sub.html', { 'quizzes': quizzes , 'teacher': teacher , 'groups': groups , 'level' : level })
+    return render(request, 'tool/list_questions_flash_sub.html', { 'quizzes': quizzees , 'teacher': teacher , 'groups': groups , 'level' : level })
 
 
 
@@ -3898,7 +3904,7 @@ def create_questions_flash(request,idl):
         prc = Parcours.objects.get(pk=prc_id)
     else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc, initial= { 'levels':  [level], } )
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"

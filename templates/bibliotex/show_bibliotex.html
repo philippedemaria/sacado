@@ -202,17 +202,14 @@
 
  
 
-
-
-
-
-
-
-
-
-
-
-
+{% empty %}
+<div class="row"> 
+    <div class="col-12-xs alert-sacado" style='padding:40px'> 
+        <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}"  >
+            <i class="bi bi-cloud-plus big_icon" title="Ajouter des exercices"></i> 
+        </a> 
+    </div>
+</div>
 
 {% endfor %}
 <div style="clear:both"></div>

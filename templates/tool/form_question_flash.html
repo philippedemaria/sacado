@@ -60,7 +60,7 @@
                             {{ form.title.errors }}
                         </div>
                         <div class="col-sm-6 text-danger">
-                            Actuellement, les questions flash ne sont proposées qu'en Maths 
+                            Actuellement, les questions flash ne sont proposées qu'en Maths jusqu'en 4è. Notre équipe développe les autres niveaux. 
                         </div>
                     </div>
                     <div class="row form-group">  
@@ -93,12 +93,14 @@
                             {% comment %}
                             <label>Enseignement</label>
                             {{ form.subject|add_class:"form-control select2" }}
-                            {{ form.subject.errors }}
+                            {{ form.subject.errors }}<input name="levels" type="hidden" value="{{ level.id }}" />
                             {% endcomment %}
-
+                            <label>Niveau cible</label>
+                            {{ form.levels|add_class:"form-control select2" }}
+                            {{ form.levels.errors }}
                             <input id="id_subject"  name="subject" type="hidden" value="1" />
                             <input name="color" type="hidden" value="#5d4391" /> 
-                            <input name="levels" type="hidden" value="{{ level.id }}" />
+                            
                         </div>
                     </div> 
                     <div class="row ">
@@ -111,27 +113,29 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
+                                <div id="cblist">
                                 {% if group %}
                                 <label>Attribuer aux dossiers</label> 
                                 {{ form.folders|add_class:"select_folders"   }}
                                 {{ form.folders.errors }}
                                 {% endif %}
+                                </div>                                
                             </div>
                         </div>
                     </div>  
                 </div>            
                 <div class="col-sm-12 col-md-6 setup_ggb no_visu">
                     <div class="row ">
-                        <div class="col-sm-12 col-md-6">                                
-                            
+                        <div class="col-sm-12 col-md-6">                              
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
+                                <div id="pclist">
                                 {% if group %}
                                 <label>Attribuer aux parcours</label> 
                                 {{ form.parcours|add_class:"select_all_parcours"   }}
                                 {{ form.parcours.errors }}
                                 {% endif %}
+                                </div> 
                             </div>
-
                         </div>                 
                         <div class='col-sm-12 col-md-6 form_card'  style="height: 270px;">
                             <table class="table table-sacado borderless ">
