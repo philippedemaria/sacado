@@ -41,7 +41,7 @@
     {% endif %}
 
     {% if request.user.user_type == 2 %}
-    <a href="{% url 'list_questions_flash' %}" class="btn btn-new">Mes questions flash </a>
+    <a href="{% url 'list_questions_flash' %}" class="btn btn-default">Retour </a>
     {% else %}
     <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>
     {% endif %}
