@@ -54,6 +54,22 @@ class Tool(models.Model):
     """
     Modèle représentant un associé.
     """
+
+    LEVELS = (
+        (0, "Primaire"),
+        (1, "Collège"),
+        (2, "Lycée"),
+    )
+ 
+    THEMES = (
+        (0, "Nombres et calculs"),
+        (1, "Numération"),
+        (2, "Géométrie"),
+        (3, "Grandeurs et mesures"),
+        (4, "Stats proba"),
+        (5, "Utilitaires"),
+    )
+
     title         = models.CharField(max_length=255, default='',  blank=True, verbose_name="Titre")  
     remark        = RichTextUploadingField( blank=True, verbose_name="Texte*") 
     teachers      = models.ManyToManyField(Teacher, related_name = "tools", blank=True,   editable=False ) 
@@ -63,8 +79,13 @@ class Tool(models.Model):
     is_publish    = models.BooleanField(default=1, verbose_name="Publié ?")
     is_asso       = models.BooleanField(default=1, verbose_name="Nécessite l'adhésion SACADO ?")
     is_ebep       = models.BooleanField(default=0, verbose_name="Outils EBEP ?")
-    url           =  models.CharField(max_length=255, default='' ,   blank=True, verbose_name="url de substitution")  
+    url           = models.CharField(max_length=255, default='' ,   blank=True, verbose_name="url de substitution")  
     exercises     = models.ManyToManyField(Exercise, blank=True, related_name='tools', verbose_name="Outils inclusifs", editable=False)
+    level         = models.PositiveSmallIntegerField(choices=LEVELS,default = 0)
+    theme         = models.PositiveSmallIntegerField(choices=THEMES,default = 0)
+    ranking       = models.PositiveSmallIntegerField(default=0)
+
+
 
     def __str__(self):
         return self.title 
