@@ -279,7 +279,7 @@ def index(request):
 
         nb_parcours = Parcours.objects.filter(is_trash = 0).count()
 
-        exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_title=0 )
+        exercises = Exercise.objects.select_related("supportfile").filter(supportfile__is_ggbfile=1, supportfile__is_title=0 )
         nb_exercise = exercises.count() - 1
 
         nb_exotex = Exotex.objects.count() 
