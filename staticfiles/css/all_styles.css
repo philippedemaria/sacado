@@ -100,10 +100,14 @@ a.color_white{
 }
 
 
-
-
-
-
+.div_to_display{
+  height:400px;
+  padding: 15px;
+  background-color: white; 
+  border : 1px solid #CCC;   
+  font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
+  overflow-y: auto;
+}
 
 
 .introduction_teacher{

@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-exercise.js OK");
+        console.log("chargement JS ajax-exotex.js OK");
 
 
 
@@ -102,7 +102,7 @@ define(['jquery', 'bootstrap'], function ($) {
             let bibliotex_id = $("#bibliotex_id").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-            console.log(subject_id  ) ;
+ 
             url= "../ajax_level_exotex" ; 
 
 
@@ -136,7 +136,7 @@ define(['jquery', 'bootstrap'], function ($) {
                                             let knowledges_name =  knowledges[i][1]  ;
 
                                             if (i%2==0){ classe="checkbox_ajax" ;} else { classe="checkbox_ajax_" ;} 
-                                            
+                                            $('#knowledge_list').empty("");
                                             $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledge" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
 
                                         }
@@ -188,6 +188,37 @@ define(['jquery', 'bootstrap'], function ($) {
                 }
             )
         }
+
+
+        $("#click_to_display_latex").on("click", function (event) {
+
+
+            var this_text = $("#id_content").val() ;
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'this_text': this_text,                   
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../div_to_display_latex" ,
+                    success: function (data) {
+
+
+
+                    }
+                }
+            )
+
+
+
+        } )
+
+
 
  
 

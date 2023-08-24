@@ -169,7 +169,12 @@ urlpatterns = [
     path('delete_all_questions_flash', delete_all_questions_flash, name='delete_all_questions_flash'), 
     path('show_questions_flash/<int:id>', show_questions_flash, name='show_questions_flash'),
     path('ajax_select_style_questions', ajax_select_style_questions, name='ajax_select_style_questions'), 
- 
+    path('ajax_select_questions_on_the_list', ajax_select_questions_on_the_list, name='ajax_select_questions_on_the_list'),  
+
+
+
+
+
 
     path('list_questions_flash_student', list_questions_flash_student, name='list_questions_flash_student'), 
 

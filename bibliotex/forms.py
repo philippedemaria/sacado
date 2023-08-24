@@ -18,14 +18,16 @@ class ExotexForm(forms.ModelForm):
 			levels   = teacher.levels.order_by("ranking")
 			if knowledge :
 				skills = knowledge.theme.subject.skill.all()
+				knowledges = Knowledge.objects.filter(Q(level_id = knowledge.level.id )|Q(level_id = knowledge.level.id-1 ))
+				self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True)  
+				self.fields['knowledges'].required = False
 			else :
 				skills = Skill.objects.all()
-			knowledges = Knowledge.objects.filter(Q(level_id = knowledge.level.id )|Q(level_id = knowledge.level.id-1 ))
+			
 			self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
 			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
-			self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True)  
-			self.fields['knowledges'].required = False 
+			 
 
 
 class BibliotexForm(forms.ModelForm):

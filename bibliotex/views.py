@@ -547,7 +547,7 @@ def set_exotex_in_bibliotex(request,id):
     else:
         print(form.errors)
 
-    context = {'form': form, 'exotex': "init"  }
+    context = {'form': form, 'exotex': "init" , 'knowledge': None  }
 
     return render(request, 'bibliotex/form_exotex.html', context)
 
@@ -634,6 +634,25 @@ def show_exotex(request, id):
 def ajax_action_exotex(request, id):
     pass
  
+
+
+def div_to_display_latex(request):
+
+    this_text = request.POST.get('this_text')
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
+    # pour le serveur Linux
+    file_path = settings.DIR_TMP_TEX+"/"+str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    ################################################################# 
+    ################################################################# 
+    with open(file_path, 'w') as file:
+        file.write(this_text)
+        file.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
 
 

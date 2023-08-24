@@ -3832,8 +3832,6 @@ def list_questions_flash_sub(request,idl):
 
     quizzees = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, levels = level).order_by("levels","-id") # non inclus dans un dossier, 
 
- 
-
     grps = teacher.groups.filter(is_hidden=0, level  = level)
     shared_grps_id = teacher.teacher_sharingteacher.values_list("group_id", flat=True) 
     sgps    = Group.objects.filter(pk__in=shared_grps_id, level  = level,is_hidden=0) 
@@ -3941,7 +3939,7 @@ def create_questions_flash(request,idl):
             nf.interslide = 2
             nf.save()
             form.save_m2m()
-
+            nf.levels.add(level)
             for group_id in request.POST.getlist("groups") :
                 group = Group.objects.get(pk=group_id)
                 nf.students.set(group.students.all())
@@ -4351,6 +4349,7 @@ def ajax_select_style_questions(request):
         all_mentals = list()
         subject = Subject.objects.get(pk=subject_id)
         mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
+
         for level_id in level_ids :
             level_dict = dict()
             level = Level.objects.get(pk=level_id)
@@ -4359,19 +4358,67 @@ def ajax_select_style_questions(request):
             for mentaltitle in mentaltitles :
                 dict_mentals = dict()
                 mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
-                is_mentals = False 
                 if mentals :
                     dict_mentals["mentaltitle"] = mentaltitle 
                     dict_mentals["mentals"] = mentals
                     list_mentals.append(dict_mentals)
-                    is_mentals = True
                     level_dict["sub"] = list_mentals
 
         all_mentals.append(level_dict)
 
         data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  , 'teacher' :  teacher  })
-
+        print(data)
     return JsonResponse(data)
+
+
+
+
+def ajax_select_questions_on_the_list(request):
+
+    subject_id = request.POST.get('subject_id',None)
+    level_ids  = request.POST.getlist('level_ids',[])
+    is_questions_quizz = request.POST.get('is_questions_quizz',None)
+    teacher = request.user.teacher
+    data = {}
+ 
+    if is_questions_quizz and level_ids and is_questions_quizz == "true" :
+        is_quizz = True
+        quizzes = set()
+        for level_id in level_ids :
+            level = Level.objects.get(pk=level_id)
+            quizzes.update( teacher.teacher_quizz.filter(subject_id = subject_id, levels = level,is_random=0) )
+        all_questions = set()
+        for quizz in quizzes:
+            if quizz.questions.count() :
+                all_questions.update(quizz.questions.all())
+        data['html'] = render_to_string('tool/ajax_questions_flash.html', {'all_questions' : all_questions , 'is_quizz' : is_quizz , 'teacher' :  teacher })
+    else :
+        is_quizz = False
+        all_mentals = list()
+        subject = Subject.objects.get(pk=subject_id)
+        mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
+
+        for level_id in level_ids :
+            level_dict = dict()
+            level = Level.objects.get(pk=level_id)
+            level_dict["level"] = level 
+            list_mentals = list()
+            for mentaltitle in mentaltitles :
+                dict_mentals = dict()
+                mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+                if mentals :
+                    dict_mentals["mentaltitle"] = mentaltitle 
+                    dict_mentals["mentals"] = mentals
+                    list_mentals.append(dict_mentals)
+                    level_dict["sub"] = list_mentals
+
+        all_mentals.append(level_dict)
+
+        data['html'] = render_to_string('tool/ajax_list_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  , 'teacher' :  teacher  })
+        print(data)
+    return JsonResponse(data)
+
+
 
 
 #####################################################################################################################################

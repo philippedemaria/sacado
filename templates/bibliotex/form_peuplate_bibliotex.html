@@ -23,8 +23,6 @@
 
 {% block page_menu_right %}
     <a href="{% url 'my_bibliotexs' %}"  class="btn btn-new-violet" > Mes BiblioTex </a> 
-
-    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}"  class="btn btn-new-violet" >Ma biblioTex</a>
 {% endblock %}
 
 
@@ -41,7 +39,7 @@
             <div class="col-sm-12 col-md-12">
                 <div id="loader">
                 </div>
-                <div id="content_exercises" class="list_choice_bibliotex"> 
+                <div id="content_exercises" class="list_choice_bibliotex">
                     {% for relationtex in relationtexs %}
                         {% with exotex=relationtex.exotex  %}
                         {% include 'bibliotex/exotex_tag.html' %}
@@ -54,6 +52,9 @@
                                     <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
                                     {% csrf_token %} 
                                     <div class="row">
+                                        <div class="col-sm-6 col-md-2">
+                                            Importer un exercice :
+                                        </div>
                                         <div class="col-sm-6 col-md-3">
                                             <select name="subject_id" id="subject_id" class="form-control select2 level_search">
                                             {% for s in teacher.subjects.all %}
@@ -68,7 +69,9 @@
                                             {% endfor%}
                                             </select>
                                         </div>
-                 
+                                        <div class="col-sm-6 col-md-3">
+                                            ou <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id %}" class="btn btn-sacado">Créer un exercice</a> 
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-body">

@@ -110,7 +110,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             is_quizz = false ;
                         }
  
-
             $("#question_choice_style").html("<i class='fa fa-spinner fa-pulse fa-fw fa-3x'></i>"); 
 
             if(subject_id==''){ alert("Renseigner l'enseignement"); $('#is_questions_quizz').prop('checked', false); }
@@ -126,7 +125,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         'is_questions_quizz': is_quizz,
                         csrfmiddlewaretoken: csrf_token
                     },
-                    url: "../ajax_select_style_questions",
+                    url: "../ajax_select_questions_on_the_list",
                     success: function (data) {
 
                         $('#question_choice_style').html("").html(data.html);

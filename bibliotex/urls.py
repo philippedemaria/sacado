@@ -103,4 +103,8 @@ urlpatterns = [
     path('link_to_relationship/<int:idr>', link_to_relationship, name='link_to_relationship'),
 
 
+    path('div_to_display_latex', div_to_display_latex, name='div_to_display_latex'),
+
+
+
  ]

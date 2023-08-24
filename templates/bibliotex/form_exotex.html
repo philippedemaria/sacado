@@ -113,7 +113,7 @@ ul#id_skills li{
                             {{ form.theme.errors }}
                         </div>
                         <div class="form-group">
-                            {{ form.title.label_tag }} <small>Optionnel</small> 
+                            {{ form.title.label_tag }} 
                             {{ form.title |add_class:"form-control textarea_more_shown"  }}
                             {{ form.title.errors }}
                         </div>
@@ -213,14 +213,33 @@ ul#id_skills li{
                             {{ form.content.errors }}
                         </div>
                     </div>
+                   
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
+                            {% if not 'set_exotex_in_bibliotex' in request.path  %}
                             {{ form.content_html.label_tag }} <small>Enoncé en html (enregistrement rapide)</small><br/>
                             {{ form.content_html|add_class:"form-control textarea_more_shown"|attr:"rows:15"   }}
                             {{ form.content.errors }}
+                            {% else %}
+
+                                <div class="form-group"> 
+                                    {{ form.correction.label_tag }} <small>Optionnel</small><br/>   
+                                    {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
+                                    {{ form.correction.errors }}
+                                </div>
+                            {% endif %}                            
                         </div>
                     </div>
                 </div>
+                {% if 'set_exotex_in_bibliotex' in request.path  %}     
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">                        
+                        <div class="form-group"> 
+                            <a href="javascript:void(0);" class="btn btn-sacado" id="click_to_display_latex" ><i class="bi bi-eye"></i> Visualisation du latex en pdf</a> 
+                        </div>
+                    </div> 
+                </div>            
+                {% else %}
                 <div class="row">
                     <div class="col-sm-12 col-md-6">                        
                         <div class="form-group"> 
@@ -228,17 +247,18 @@ ul#id_skills li{
                             {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
                             {{ form.correction.errors }}
                         </div>
-                    </div> 
-
+                    </div>
                     <div class="col-sm-12 col-md-6">                        
-                        <div class="form-group"> 
+                        <div class="form-group">                        
                             {{ form.correction_html.label_tag }} <small>Correction en html (enregistrement rapide)</small> <br/>      
                             {{ form.correction_html|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
                             {{ form.correction_html.errors }}
+                                                  
                         </div>
                     </div> 
-                </div>
 
+                </div>   
+                {% endif %}    
 
 
 
