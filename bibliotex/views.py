@@ -644,7 +644,10 @@ def div_to_display_latex(request):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    file_path = settings.DIR_TMP_TEX+str(datetime.now().timestamp()).split(".")[0]
+    dossier = settings.DIR_TMP_TEX+str(request.user.id)
+    os.makedirs(dossier, exist_ok=True)
+    file_path = os.path.join(dossier, str(datetime.now().timestamp()).split(".")[0])
+ 
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
