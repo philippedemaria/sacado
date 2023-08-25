@@ -195,6 +195,9 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
             var this_text = $("#id_content").val() ;
+            var this_correction = $("#id_correction").val() ;
+
+            
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             $("#waiting_loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
             $.ajax(
@@ -203,7 +206,8 @@ define(['jquery', 'bootstrap'], function ($) {
                     dataType: "json",
                     traditional: true,
                     data: {
-                        'this_text': this_text,                   
+                        'this_text': this_text, 
+                        'this_correction': this_correction,             
                         csrfmiddlewaretoken: csrf_token
                     },
                     url : "../div_to_display_latex" ,

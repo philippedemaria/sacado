@@ -206,7 +206,7 @@ ul#id_skills li{
                             {% else %}
 
                                 <div class="form-group"> 
-                                    {{ form.correction.label_tag }} <small>Optionnel </small><br/>   
+                                    {{ form.correction.label_tag }} <br/>   
                                     {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
                                     {{ form.correction.errors }}
                                 </div>
@@ -234,14 +234,14 @@ ul#id_skills li{
                 <div class="row">
                     <div class="col-sm-12 col-md-6">                        
                         <div class="form-group"> 
-                            {{ form.correction.label_tag }} <small>Optionnel</small><br/>   
+                            {{ form.correction.label_tag }} <br/>   
                             {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
                             {{ form.correction.errors }}
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6">                        
                         <div class="form-group">                        
-                            {{ form.correction_html.label_tag }} <small>Correction en html (enregistrement rapide)</small> <br/>      
+                            {{ form.correction_html.label_tag }}  <br/>      
                             {{ form.correction_html|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
                             {{ form.correction_html.errors }}
                                                   

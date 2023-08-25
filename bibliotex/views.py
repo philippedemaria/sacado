@@ -639,7 +639,7 @@ def ajax_action_exotex(request, id):
 def div_to_display_latex(request):
 
     this_text = request.POST.get('this_text')
-
+    this_correction = request.POST.get('this_correction',None)
 
     preamb = settings.TEX_PREAMBULE_PDF_FILE
 
@@ -649,6 +649,11 @@ def div_to_display_latex(request):
 
     elements +=r"\begin{document}"+"\n"  
     elements += this_text
+    elements += r"\newpage"
+    if not this_correction : 
+        elements += r"\centerline{ \fbox{Correction} }"
+        elements += this_correction
+
     elements +=  r"\end{document}"
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
