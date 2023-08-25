@@ -54,7 +54,7 @@
         <option value="course_page_top">Type de page ?</option>
         <option value="intro_page_top">Introduction</option>
         <option value="course_page_top">Cours</option>
-        <option value="ad_page_top">Application directe</option>
+        <option value="ad_page_top">Applications directes</option>
         <option value="parcoursu_page_top">Parcours 1</option>
         <option value="parcoursd_page_top">Parcours 2</option>
         <option value="parcourst_page_top">Parcours 3</option>
@@ -86,6 +86,7 @@
    
                             </div>
                             <div class="bloc_content">
+                                {% if bloc.display_qr %}<a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" class="pull-right" target="_blank">lien</a>{% endif %}
                                 {{ bloc.content_html|safe }}
                             </div>
                         </div>
