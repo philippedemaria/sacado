@@ -119,8 +119,8 @@ ul#id_skills li{
                     </div>
                 </div> 
                 {% endif %}  
-                <div class="row">
-                    {% if request.user.is_superuser %}
+                {% if request.user.is_superuser %}
+                <div class="row"> 
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group"> 
                             <label>Autres savoir faire  </label> :<small> Optionnel</small>                   
@@ -128,7 +128,7 @@ ul#id_skills li{
                             {{ form.knowledges.errors }}
                         </div>
                     </div>
-                    {% endif %}
+
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group"> 
                             <label>Compétences ciblées </label>                        
@@ -136,7 +136,8 @@ ul#id_skills li{
                             {{ form.skills.errors }}
                         </div>
                     </div>
-                </div>
+                </div>                    
+                {% endif %}
                 {% if request.user.is_superuser %}
                 <div class="row">
                     <div class="col-sm-12 col-md-2">
