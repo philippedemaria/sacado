@@ -210,7 +210,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     success: function (data) {
 
                         $("#waiting_loader").html("");   
-                        if  (data.test) {  $("#error_loader").html("<span class='text-danger'>Ereur dans la compilation du document. Télécharger et lire le log.</span>");   }
+                        if  (data.test) {  $("#error_loader").html("<span class='text-danger'>Erreur dans la compilation du document. Télécharger et lire le log.</span>");   }
 
                         window.open(data.html,'popup');
 
