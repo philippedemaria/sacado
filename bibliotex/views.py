@@ -655,7 +655,8 @@ def div_to_display_latex(request):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    link = str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    file_path = settings.DIR_TMP_TEX + link
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
@@ -665,7 +666,7 @@ def div_to_display_latex(request):
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
     #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     data={}
-    data["html"] = '<iframe src="'+file_path+'.pdf" height="200" width="47%"></iframe>'
+    data["html"] = '<iframe src="https://sacado.xyz/ressources/tex/tmp_tex/'+link+'.pdf" height="600" width="47%"></iframe>'
     return JsonResponse(data)
 
  
