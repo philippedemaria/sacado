@@ -650,7 +650,7 @@ def div_to_display_latex(request):
     elements +=r"\begin{document}"+"\n"  
     elements += this_text
     elements += r"\newpage"
-    if not this_correction : 
+    if  this_correction : 
         elements += r"\centerline{ \fbox{Corrigé} }"
         elements += this_correction
 
