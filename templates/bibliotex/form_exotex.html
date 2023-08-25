@@ -98,7 +98,7 @@ ul#id_skills li{
                             {{ form.title |add_class:"form-control textarea_more_shown"  }}
                             {{ form.title.errors }}
                         </div>
-                        {% if not request.user.is_superuser %}
+                        {% if  request.user.is_superuser %}
                             <div class="form-group">
                                 {{ form.point.label_tag }} <small>Optionnel (utile si utilisation en DS)</small> 
                                 {{ form.point |add_class:"form-control"  }}
@@ -120,7 +120,7 @@ ul#id_skills li{
                 </div> 
                 {% endif %}  
                 <div class="row">
-                    {% if not request.user.is_superuser %}
+                    {% if request.user.is_superuser %}
                     <div class="col-sm-12 col-md-8">
                         <div class="form-group"> 
                             <label>Autres savoir faire  </label> :<small> Optionnel</small>                   
@@ -137,7 +137,7 @@ ul#id_skills li{
                         </div>
                     </div>
                 </div>
-                {% if not request.user.is_superuser %}
+                {% if request.user.is_superuser %}
                 <div class="row">
                     <div class="col-sm-12 col-md-2">
                         <table class="table table-sacado borderless">
