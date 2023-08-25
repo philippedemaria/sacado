@@ -196,7 +196,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
             var this_text = $("#id_content").val() ;
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-            // $("#waiting_loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
+            $("#waiting_loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
             $.ajax(
                 {
                     type: "POST",
@@ -209,9 +209,8 @@ define(['jquery', 'bootstrap'], function ($) {
                     url : "../div_to_display_latex" ,
                     success: function (data) {
 
-                        $("#waiting_loader").html("");
+                        $("#waiting_loader").html("");    
 
-                        //$("#loader_file").html(data.html);
                         window.open(data.html)
 
 
