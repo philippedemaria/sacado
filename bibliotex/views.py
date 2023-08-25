@@ -424,13 +424,13 @@ def printer_bibliotex_by_student(bibliotex):
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+"/"+document
+    file = settings.DIR_TMP_TEX+ str(request.user.id)+"/"+document
     ################################################################# 
     ################################################################# 
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
     f_tex.close()
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX + str(request.user.id) ,  file ])
     return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
  
@@ -665,8 +665,7 @@ def div_to_display_latex(request):
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
     return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
-
-
+ 
  
 def update_relationtex(request, id):
 
