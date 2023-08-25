@@ -211,6 +211,9 @@ define(['jquery', 'bootstrap'], function ($) {
 
                         $("#waiting_loader").html("");
 
+                        $("#loader_file").html(data.html);
+
+
                     }
                 }
             )

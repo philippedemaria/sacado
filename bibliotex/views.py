@@ -663,7 +663,10 @@ def div_to_display_latex(request):
         file.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
-    return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+    #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+    data={}
+    data["html"] = '<iframe src="'+file_path+'.pdf" height="200" width="47%"></iframe>'
+    return JsonResponse(data)
 
  
  
