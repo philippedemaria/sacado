@@ -118,4 +118,8 @@ urlpatterns = [
     path('delete_appliquette/<int:ida>', delete_appliquette, name='delete_appliquette'),
 
 
+    path('display_details_bloc_by_qr/<int:idbl>', display_details_bloc_by_qr, name='display_details_bloc_by_qr'),
+
+
+
  ]

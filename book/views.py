@@ -1291,7 +1291,6 @@ def delete_bloc(request,idb, idp, idbl):
     return redirect('update_page',idb, idp)
 
 
-
 @csrf_exempt
 def sorter_book_page_bloc(request):
     valeurs           = request.POST.getlist("valeurs")
@@ -1304,13 +1303,25 @@ def sorter_book_page_bloc(request):
     if this_paragraph_id != paragraph_id :
         Bloc.objects.filter(pk = this_bloc_id).update(paragraph_id = paragraph_id)
 
-    print(valeurs, this_paragraph_id , this_bloc_id , paragraph_id)
     for i in range(len(valeurs)):
         Bloc.objects.filter(pk = valeurs[i]).update(ranking = i)
 
     return JsonResponse(data) 
 
  
+
+def display_details_bloc_by_qr(request,idbl):
+
+    bloc = Bloc.objects.get(pk=idbl)
+    exercises = bloc.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1)
+    exotexs    = bloc.exotexs.all()
+    appliquettes = bloc.appliquettes.all()
+    use_this_css = "css/bookstyle_6.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
+    context = { 'bloc': bloc, 'exercises': exercises,'exotexs': exotexs,'appliquettes': appliquettes, 'use_this_css' : use_this_css     }
+
+    return render(request, 'book/details_bloc_by_qr.html', context )
+
+
 
 @user_is_extra 
 def create_csv_appliquettes(request) :

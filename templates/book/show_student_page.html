@@ -76,6 +76,7 @@
                                         {{ bloc.title }}
                                     </div>
                                     <div class="bloc_content">
+                                        {% if bloc.display_qr %}<a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" class="pull-right" target="_blank">lien</a>{% endif %}
                                         {{ bloc.content_html|safe }}
                                     </div>
                                 </div>
