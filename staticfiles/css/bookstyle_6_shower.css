@@ -283,8 +283,8 @@ h1 {
 
  
 
-/*  paragraph_bloc_exe  */
-.paragraph_bloc_rm{
+/*  paragraph_bloc_exo  */
+.paragraph_bloc_exo{
 	border: 2px solid  #0093CA;
 	border-radius: 5px;
 	color:#0093CA;
@@ -294,7 +294,7 @@ h1 {
 	font-size: 12px;
 }
 
-.paragraph_bloc_rm .bloc_title{
+.paragraph_bloc_exo .bloc_title{
 	color :  white ;
 	background-image: linear-gradient(90deg, #0093CA 40%, #FFF 100%);
 	border-radius: 3px 3px 0px 0px;
@@ -303,7 +303,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_rm .bloc_content{
+.paragraph_bloc_exo .bloc_content{
 	color :  #0093CA ;
 	border-radius: 3px;
 	background-color:white;

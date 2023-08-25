@@ -1000,7 +1000,7 @@ def create_page(request,idb, idch):
                 elif i == tn-4 : title , css = "Parcours 2" , "parcoursd_page_top"
                 elif i == tn-5 : title , css = "Parcours 1" , "parcoursu_page_top"
                 elif i%2 == 1 : title , css = "Cours" , "course_page_top"
-                elif i%2 == 0 and i > 0 : title , css = "Applications directe" , "ad_page_top"
+                elif i%2 == 0 and i > 0 : title , css = "Applications directes" , "ad_page_top"
                 else : title , css = "Introduction" , "intro_page_top"
                 Page.objects.create(title=title ,  number=i , chapter = chapter , css=css)
         return redirect('student_book_builder' , idb, 0)
