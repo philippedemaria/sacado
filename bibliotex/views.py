@@ -666,7 +666,7 @@ def div_to_display_latex(request):
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
     #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     data={}
-    data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/'+link+'.pdf"
+    data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".pdf"
     return JsonResponse(data)
 
  
