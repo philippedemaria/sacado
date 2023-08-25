@@ -319,7 +319,7 @@ def printer(request, relationtex_id, collection,output , obj):
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+"/"+document
+    file = settings.DIR_TMP_TEX+ str(request.user.id)+"/"+document
     ################################################################# 
     ################################################################# 
 
@@ -329,7 +329,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
 
     if output=="pdf" :
-        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file ])
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output == "html" or output== "html_cor" :
@@ -662,7 +662,7 @@ def div_to_display_latex(request):
         file.write(elements)
         file.close()
 
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file_path ])
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
     return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
 
