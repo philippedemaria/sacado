@@ -60,7 +60,7 @@
                             <div class="row">                                      
                                 <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
                                     {% get_nb_qf_subject group teacher.user.id as nb_qf %}
-                                    <a href="{% url 'list_questions_flash_by_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
+                                    <a href="{% url 'list_questions_flash_by_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;"> 
                                         Accéder aux questions flash  <b>[{{  nb_qf }}]</b>                           
                                     </a>
                                     
