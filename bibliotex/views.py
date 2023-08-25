@@ -667,8 +667,12 @@ def div_to_display_latex(request):
     #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     data={}
     
-    if result.returncode : data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".log"
-    else : data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".pdf"
+    if result.returncode : 
+        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".log"
+        data["test"] = True
+    else : 
+        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".pdf"
+        data["test"] = False
     return JsonResponse(data)
 
  

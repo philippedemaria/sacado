@@ -209,9 +209,11 @@ define(['jquery', 'bootstrap'], function ($) {
                     url : "../div_to_display_latex" ,
                     success: function (data) {
 
-                        $("#waiting_loader").html("");    
+                        $("#waiting_loader").html("");   
+                        if  (data.test) {  $("#error_loader").html("<span class='text-danger'>Ereur dans la compilation du document. Télécharger et lire le log.</span>");   }
 
-                        window.open(data.html)
+                        window.open(data.html,'popup');
+
 
 
                     }
