@@ -124,7 +124,7 @@
                 <div class="col-sm-12 col-md-6 setup_ggb no_visu">
                     <div class="row ">
                         <div class="col-sm-12 col-md-6">                              
-                            <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
+                            <div class="exercise_body_shared no_visu form_card" style="height: 470px;">
                                 <div id="pclist">
                                 {% if group %}
                                 <label>Attribuer aux parcours</label> 
@@ -136,14 +136,14 @@
                         </div>                 
                         <div class='col-sm-12 col-md-6 form_card'  style="height: 270px;">
                             <table class="table table-sacado borderless ">
-                                <tr>
+                                <tr style="display:none">
                                     <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                             <div class="helper_tip_text" >Visible par les élèves.</div>
                                         </span></td>
                                     <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                                     <td>{{ form.is_publish.errors }}</td>
                                 </tr>
-                                <tr id="publication_div">
+                                <tr style="display:none" id="publication_div">
                                     <td><label>Date de publication :</label>  
                                         <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                             <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>

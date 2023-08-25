@@ -1151,11 +1151,11 @@ def get_nb_level_subject(obj, subject_id):
     return obj.nb_level_subject(subject_id)  
 
 @register.simple_tag 
-def get_nb_qf_subject(obj, subject_id,teacher_id):
+def get_nb_qf_subject(obj, teacher_id):
     """
     Donne le nombre d'exercices sur un niveau dans une matière donnée
     """
-    return obj.nb_qf_subject(subject_id,teacher_id)  
+    return obj.nb_qf_subject(teacher_id)  
 
 
 @register.simple_tag 

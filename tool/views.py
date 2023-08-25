@@ -3808,18 +3808,18 @@ def list_questions_flash(request):
     request.session["group_id"] = False
     
     teacher = request.user.teacher     
-    levels = teacher.levels.order_by("ranking") 
+ 
     delete_session_key(request, "quizz_id")
 
-    subjects = teacher.subjects.all()
-    return render(request, 'tool/list_questions_flash.html', { 'levels': levels , 'teacher': teacher , 'subjects' : subjects   })
+    groups = teacher.groups.all()
+    return render(request, 'tool/list_questions_flash.html', {   'teacher': teacher , 'groups' : groups   })
 
 
 
 
 
 @login_required(login_url= 'index')
-def list_questions_flash_sub(request,idl):
+def list_questions_flash_sub(request,idg):
 
     request.session["parcours_id"] = False
     request.session["tdb"] = "Tools"
@@ -3954,7 +3954,7 @@ def create_questions_flash(request,idl):
         else:
             print(form.errors)
 
-    context = {'form': form, 'teacher': teacher,  'all_mentals' : all_mentals  , 'level' : level }
+    context = {'form': form, 'teacher': teacher,  'all_mentals' : all_mentals  , 'level' : level , 'group' : grp  }
 
     return render(request, 'tool/form_question_flash.html', context)
 

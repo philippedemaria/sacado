@@ -215,11 +215,7 @@ class Level(models.Model):
         return self.level_folders.filter(teacher = teacher)
 
 
-    def nb_qf_subject(self, subject_id,teacher_id):
-        nb = self.quizz.filter(is_random=1,subject_id=subject_id,teacher_id=teacher_id).count()
-        for q in  self.quizz.filter(is_random=1,subject_id=subject_id,teacher_id=teacher_id) :
-            print(q.id)
-        return nb
+
 
 
 

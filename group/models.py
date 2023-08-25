@@ -266,6 +266,12 @@ class Group(ModelWithCode):
         return test
 
 
+
+    def nb_qf_subject(self,teacher_id):
+        return self.quizz.filter(is_random=1,teacher_id=teacher_id).count()
+ 
+
+
 def vignette(self):
 
     try :
