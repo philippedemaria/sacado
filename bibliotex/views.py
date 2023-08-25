@@ -651,7 +651,7 @@ def div_to_display_latex(request):
         file.write(this_text)
         file.close()
 
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file ])
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file_path ])
     return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
 
