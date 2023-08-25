@@ -59,7 +59,6 @@
     </div>
     <hr/>
     <div class="row">
-        qqqqqqqqqqqqqqqqqq : {{ page.paragraphs.all }}
         <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %} {{ page.css}}">            
             {% for paragraph in page.paragraphs.all %}
                 <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
@@ -70,7 +69,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        {{ paragraph.blocs.all }}
                         {% for bloc in paragraph.blocs.all %} 
                             <div class="col-xs-{{ bloc.size }} to_projection" data-toggle='modal'   data-target='#book_shower_page' >
                                 <div class="{{ bloc.typebloc.css }}" > 
