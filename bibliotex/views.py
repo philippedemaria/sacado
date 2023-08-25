@@ -417,7 +417,7 @@ def printer_bibliotex_by_student(bibliotex):
     # Fermeture du texte dans le fichier tex
     elements +=  r"\end{document}"
 
-    elements +=  settings.DIR_TMP_TEX    
+    #elements +=  settings.DIR_TMP_TEX    
 
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
@@ -639,6 +639,17 @@ def ajax_action_exotex(request, id):
 def div_to_display_latex(request):
 
     this_text = request.POST.get('this_text')
+
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    elements +=r"\begin{document}"+"\n"  
+    elements += this_text
+    elements +=  r"\end{document}"
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
     # pour windows
@@ -648,7 +659,7 @@ def div_to_display_latex(request):
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
-        file.write(this_text)
+        file.write(elements)
         file.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX ,  file_path ])
