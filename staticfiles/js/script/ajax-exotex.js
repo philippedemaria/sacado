@@ -138,7 +138,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
                                             if (i%2==0){ classe="checkbox_ajax" ;} else { classe="checkbox_ajax_" ;} 
                                             
-                                            $('#knowledge_list').html('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledge" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
+                                            $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledge" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
 
                                         }
                                 }
@@ -197,7 +197,7 @@ define(['jquery', 'bootstrap'], function ($) {
             var this_text = $("#id_content").val() ;
             var this_correction = $("#id_correction").val() ;
 
-
+            
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
             $("#waiting_loader").html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>");
             $.ajax(
