@@ -43,11 +43,6 @@
                     </td>
                     <td>  
                         <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('ces Questions flash')"><i class="bi bi-trash"></i></a>
-                        <div class="btn-group no_padding_margin" >
-                            <span class="btn btn-{% if  q.is_publish %}success{% else  %}danger{% endif  %}" id="quizz{{q.id}}" style="cursor:auto;display:inline;padding:3px 6px"  >  
-                              {% if q.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
-                            </span>
-                        </div>
                     </td>
                 </tr> 
                 {% endfor %}

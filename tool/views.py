@@ -3949,8 +3949,8 @@ def create_questions_flash(request,idl):
                 mentaltitles = create_questions_flash_random_variable(mental_ids, nf, nf.nb_slide)
                 nf.mentaltitles.set( mentaltitles )  
 
-            if grp_id : return redirect('list_parcours_group' , grp_id) 
-            else : return redirect('list_questions_flash_sub' , idl)
+            if grp_id : return redirect('list_questions_flash_by_group' , grp_id) 
+            else : return redirect('list_questions_flash')
         else:
             print(form.errors)
 
@@ -4029,7 +4029,7 @@ def create_questions_flash_inside_parcours(request,idp):
 
             if parcours : return redirect('show_inside_parcours' , idp)
             elif grp_id : return redirect('list_questions_flash_by_group' , grp_id) 
-            else : return redirect('list_questions_flash_sub' , idl)
+            else : return redirect('list_questions_flash')
         else:
             print(form.errors)
 

@@ -34,7 +34,7 @@
 
  
 
-{% block body %}
+{% block body %} 
 <form action="{% url 'delete_all_questions_flash' %}" method="POST" enctype='multipart/form-data'>     
     {% csrf_token %}
     <section class="content_main"> 
@@ -48,7 +48,7 @@
                     <th>Nb questions</th>
                     <th>Groupes</th>
                     <th style="width:200px">Support</th>
-                    <th style="width:150px;"></th>
+                    <th style="width:50px;"></th>
                 </tr> 
             </thead>
             <tbody>

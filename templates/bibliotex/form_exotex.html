@@ -127,6 +127,7 @@ ul#id_skills li{
                         </div>
                     </div>
                 </div>
+                {% if not request.user.is_superuser %}
                 <div class="row">
                     <div class="col-sm-12 col-md-2">
                         <table class="table table-sacado borderless">
@@ -186,6 +187,7 @@ ul#id_skills li{
                         </table>
                     </div>
                 </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">

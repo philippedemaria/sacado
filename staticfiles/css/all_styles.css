@@ -2246,8 +2246,9 @@ input[type=range].form-range {
  
 
 .big_icon{
-  font-size: 100px;
-  color : #A383D9 ;
+    font-size: 70px;
+    color : #47C2DD ;
+    padding: 10px;
 }
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------      CUSTOMEXERCISE ------------------------------------*/
@@ -2390,7 +2391,6 @@ input[type=range].form-range {
 }
 
 .new_exotex {
-    width: 47%;
     color: #666;
     padding: 0px; 
     background-color: #FFF;
