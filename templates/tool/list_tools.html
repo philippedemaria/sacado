@@ -57,14 +57,16 @@
                                 <td style="line-height: 200px">
                                     <a href="{% url 'show_tool' tool.id  %}"><img src="{{ tool.imagefile.url }}" height="190px" border="0px" /></a> 
                                 </td>
-                                <td style="line-height: 200px">
+                                <td>
                                     {% for d in tool.degres.all %}
                                     <li>{{ d.title }}</li>
+                                    {% empty %} Non renseigné 
                                     {% endfor %} 
                                 </td>
-                                <td style="line-height: 200px">
+                                <td>
                                     {% for t in tool.themes.all %}
                                     <li>{{ t.title }}</li>
+                                    {% empty %} Non renseigné 
                                     {% endfor %} 
                                 </td>
                                 <td style="line-height: 200px">
