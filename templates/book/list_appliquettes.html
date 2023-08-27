@@ -31,25 +31,25 @@
             <table class="table table-sacado  table-hover standard_tab_sort2000" style="width:100%">
                   <thead>
                       <tr>
-                        <th style="width:10px">Code</th>                       
-<!--                         <th  style="width:200px">Titre</th>                  
-                        <th>url</th>  -->
+                        <th style="width:10px">Forme</th>                       
+                        <th  style="width:200px">Titre</th>                  
+                        <th>url</th> 
                         <th>iframe</th>
                       </tr>
                   </thead>
                   <tbody>
                         {% for appliquette in appliquettes %}
                         <tr> 
-                          <td>{{ appliquette.code }}</td>
-<!--                           <td>
+                          <td>{{ appliquette.forme }}</td>
+                          <td>
                               <a href="{% url 'update_appliquette' appliquette.level.id %}">{{ appliquette.title }} </a> 
                               <a href="{% url 'delete_appliquette' appliquette.level.id %}"  onclick="return TestDelete('ce niveau')"><i class='fa fa-trash pull-right'></i></a>
-                          </td> 
+                          </td>
                           <td>
                              {{ appliquette.url }}
-                          </td>-->
+                          </td>
                           <td>
-                             {{ appliquette.iframe|safe }}
+                             {{ appliquette.iframe }}
                           </td>
                         </tr>
                         {% endfor %}
