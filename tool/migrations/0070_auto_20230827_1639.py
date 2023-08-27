@@ -10,30 +10,4 @@ class Migration(migrations.Migration):
         ('tool', '0069_auto_20230825_0015'),
     ]
 
-    operations = [
-        migrations.CreateModel(
-            name='Degre',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(default='Primaire', max_length=255, verbose_name='Niveau')),
-            ],
-        ),
-        migrations.RemoveField(
-            model_name='tool',
-            name='level',
-        ),
-        migrations.RemoveField(
-            model_name='tool',
-            name='theme',
-        ),
-        migrations.AddField(
-            model_name='tool',
-            name='themes',
-            field=models.ManyToManyField(blank=True, related_name='tools', to='socle.Theme', verbose_name='Thèmes'),
-        ),
-        migrations.AddField(
-            model_name='tool',
-            name='degres',
-            field=models.ManyToManyField(blank=True, related_name='tools', to='tool.Degre', verbose_name='Degrés'),
-        ),
-    ]
+ 
