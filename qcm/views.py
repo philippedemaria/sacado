@@ -7872,8 +7872,8 @@ def execute_exercise_from_book(request, ide):
 
     exercise = Exercise.objects.get(id= ide)
 
-    relationships  = exercise.exercise_relationship.objects.filter(students=request.user.student)
-    if relationships  :
+    relationships  = Relationship.objects.filter(exercise=exercise, students=request.user.student)
+    if relationships.count()  :
         relation = relationships.first()
         parcours = relation.parcours
     else :
