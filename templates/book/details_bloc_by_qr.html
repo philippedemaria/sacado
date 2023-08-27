@@ -75,7 +75,7 @@
         {% endif %}
         {% if exercises %}
         <div class="col-sm-12 col-md-4" align='center'>  
-            <h3>Exercises GGB</h3>              
+            <h3>Exercices GGB</h3>              
             {% for e in exercises %}
                {% if e.supportfile.imagefile %}
                     <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank"><img src="{{ e.supportfile.imagefile.url }}" width="300px"></a>

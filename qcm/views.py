@@ -7861,22 +7861,20 @@ def execute_exercise(request, idp,ide):
 def execute_exercise_from_book(request, ide):
     """ Execution d'un exerice pour un élève depuis un qrcode """ 
     if not request.user.is_authenticated :
-        messages.error(request,"Utilisateur non authentifié")
+        messages.error(request,"Utilisateur non authentifié.")
         return redirect("index")
         
     try :
         student = request.user.student
     except :
-        messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
+        messages.error(request,"Vous n'êtes pas élève.")
         return redirect('index')
 
-    
     exercise = Exercise.objects.get(id= ide)
 
-
-    relationship  = Relationship.objects.filter(exercise=exercise, students=request.user.student)
-    if relationship.count()  :
-        relation = relationship.first()
+    relationships  = exercise.exercise_relationship.objects.filter(students=request.user.student)
+    if relationships  :
+        relation = relationships.first()
         parcours = relation.parcours
     else :
         messages.error(request,"Vous ne faites pas partie des utilisateurs de cet exercice. Demandez à votre enseignant de vérifier que vous êtes dans le liste des utilisateurs de l'exercice.")
