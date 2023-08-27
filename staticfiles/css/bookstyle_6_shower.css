@@ -211,9 +211,8 @@ h1 {
 	border-radius: 5px;
 	color:#00A7B8;
 	position:relative;
-	margin: 10px 0px 0px 0px;
+	margin:30px 20px 0px 50px;
 	padding:0px;
-	font-size: 12px;
 }
 
 
@@ -328,18 +327,16 @@ h1 {
 	font-weight: normal;
 }
 
+ 
 /*  paragraph_bloc_rm  */
 .paragraph_bloc_rm{
 	border: 2px solid  #FF8B69;
 	border-radius: 5px;
 	color:#FF8B69;
 	position:relative;
-	margin: 10px 0px 0px 0px;
+	margin:30px 20px 0px 50px;
 	padding:0px;
-	font-size: 12px;
 }
-
-
 
 .paragraph_bloc_rm .bloc_title{
 	color :  #FF8B69 ;
