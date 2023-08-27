@@ -48,6 +48,7 @@ def qtype_directory_path(instance, filename):
     return "tool/qtype/{}".format(filename)
 
 
+ 
 
 
 
@@ -83,9 +84,9 @@ class Tool(models.Model):
     url           = models.CharField(max_length=255, default='' ,   blank=True, verbose_name="url de substitution")  
     exercises     = models.ManyToManyField(Exercise, blank=True, related_name='tools', verbose_name="Outils inclusifs", editable=False)
  
- 
     ranking       = models.PositiveSmallIntegerField(default=0)
- 
+
+
 
     def __str__(self):
         return self.title 
