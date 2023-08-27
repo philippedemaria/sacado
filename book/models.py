@@ -321,7 +321,7 @@ class Appliquette(models.Model):
     code     = models.CharField(max_length=255,  default="",  blank=True, verbose_name="code")
 
     def __str__(self):
-        return "{} > {}".format(self.forme,self.title)
+        return "{} > {}".format(self.code,self.title)
 
 
 
