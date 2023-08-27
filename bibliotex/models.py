@@ -66,6 +66,10 @@ class Exotex(models.Model):
 
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
+
+    bloc_id = models.PositiveIntegerField(  blank=True, null=True, editable=False) # permet de lier un bloc à un exotex
+
+
     def __str__(self): 
         knowledge = self.knowledge.name[:20]       
         return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)

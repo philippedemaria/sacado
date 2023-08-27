@@ -1056,11 +1056,11 @@ def update_page(request,idb, idp):
             if form_b.is_valid():
                 nf = form_b.save()
                 if nf.typebloc.id==6 :
-                    exo,created=Exotex.objects.get_or_create(title = nf.title, 
+                    exo=Exotex.objects.create(title = nf.title, 
                                                             content = nf.content, 
                                                             content_html =nf.content_html,
                                                             author = request.user.teacher , 
-                                                            calculator = nf.calculator,
+                                                            calculator = nf.is_calculator,
                                                             subject = page.chapter.book.subject,  
                                                             knowledge = nf.knowledge,   
                                                             level = page.chapter.book.level, 
@@ -1071,29 +1071,12 @@ def update_page(request,idb, idp):
                                                              is_tableur   =  nf.is_tableur,
                                                              is_corrected = 1,
                                                              is_annals   = nf.is_annals,
-                                                             point = nf.point,
+                                                             point = 0,
                                                              correction = nf.correction,
                                                              correction_html =nf.correction_html,
                                                              bloc_id=nf.id)
-                    if created :
-                        Exotex.objects.filter(blod_id=nf.id).update(title = nf.title, 
-                                                            content = nf.content, 
-                                                            content_html =nf.content_html,
-                                                            calculator = nf.calculator,
-                                                            knowledge = nf.knowledge,   
-                                                            theme = nf.theme,
-                                                             is_share     = 1,
-                                                             is_python    = nf.is_python,
-                                                             is_scratch   =  nf.is_scratch,
-                                                             is_tableur   =  nf.is_tableur,
-                                                             is_corrected = 1,
-                                                             is_annals   = nf.is_annals,
-                                                             point = nf.point,
-                                                             correction = nf.correction,
-                                                             correction_html =nf.correction_html)
-
-                    exo.skills.set( nf.skills)
-                    exo.knowledges.set(nf.knowledges)
+                    exo.skills.set( nf.skills.all())
+                    exo.knowledges.set(nf.knowledges.all())
 
 
             else:
@@ -1313,7 +1296,23 @@ def update_bloc(request, idb, idp, idbl):
     form = BlocForm(request.POST or None, book = book , page=page  , instance=bloc )
     if request.method == "POST" :
         if form.is_valid():
-            form.save()
+            nf = form.save()
+            Exotex.objects.filter(bloc_id=nf.id).update(title = nf.title, 
+                                                            content = nf.content, 
+                                                            content_html =nf.content_html,
+                                                            calculator = nf.is_calculator,
+                                                            knowledge = nf.knowledge,   
+                                                            theme = nf.theme,
+                                                             is_share     = 1,
+                                                             is_python    = nf.is_python,
+                                                             is_scratch   =  nf.is_scratch,
+                                                             is_tableur   =  nf.is_tableur,
+                                                             is_corrected = 1,
+                                                             is_annals   = nf.is_annals,
+                                                             correction = nf.correction,
+                                                             correction_html =nf.correction_html)
+
+
             messages.success(request, 'Le bloc a été modifié avec succès !')
             return redirect('update_page', idb, idp)
         else:
