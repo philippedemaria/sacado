@@ -85,7 +85,7 @@
                         <div class="{{ bloc.typebloc.css }}"> 
                             <div class="bloc_title"><i class="fa fa-sort bloc_sorter" data-bloc_id = "{{bloc.id}}"></i>
                                 {{ bloc.title }} 
-   
+                                {% if bloc.display_qr %}<span class="pull-right">Compléments</span>
                             </div>
                             <div class="bloc_content">
                                 {{ bloc.content_html|safe }}
