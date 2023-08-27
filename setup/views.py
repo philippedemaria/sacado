@@ -40,6 +40,7 @@ from school.gar import *
 from socle.models import Level, Subject 
 from tool.models import Quizz, Question, Choice , Qtype
 from bibliotex.models import Exotex
+from book.models import Appliquette
 from datetime import date, datetime , timedelta
 
 from itertools import chain
