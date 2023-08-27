@@ -43,9 +43,10 @@
                     <tr>
                         <th style="width:30px">Choix</th>
                         <th  style="width:300px">Vue</th>
-                        <th> </th>
-                        <th> </th>
                         <th>Titre</th>
+                        <th> </th>
+                        <th   style="width:200px"> </th>                        
+                        <th> </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,9 @@
                                 </td>
                                 <td style="line-height:200px">
                                     <a href="{% url 'show_tool' tool.id  %}"><img src="{{ tool.imagefile.url }}" height="190px" border="0px" /></a> 
+                                </td>
+                                <td>
+                                   <a href="{% url 'show_tool' tool.id  %}">{{ tool.title }}</a> 
                                 </td>
                                 <td>
                                     {% for d in tool.degres.all %}
@@ -69,8 +73,7 @@
                                     {% empty %} Non renseigné 
                                     {% endfor %} 
                                 </td>
-                                <td style="line-height: 200px">
-                                   <a href="{% url 'show_tool' tool.id  %}">{{ tool.title }}</a> 
+                                <td>
                                     {% if request.user.is_superuser %}
                                         <a href="{% url 'delete_tool'  tool.id %}"  class="pull-right" onclick="return TestDelete('cet outil')">Supprimer</a> 
                                         <span class="pull-right">|</span>                                        
