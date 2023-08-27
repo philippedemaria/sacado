@@ -66,7 +66,7 @@
 
 
         {% if appliquettes %}
-        <div class="col-sm-12 col-md-4"> 
+        <div class="col-sm-12 col-md-4" align='center'> 
             <h3>appliquettes</h3>      
             {% for a in appliquettes %}
                 <li>{{ a.title }}</li>
@@ -74,12 +74,11 @@
         </div>
         {% endif %}
         {% if exercises %}
-        <div class="col-sm-12 col-md-4">  
+        <div class="col-sm-12 col-md-4" align='center'>  
             <h3>Exercises GGB</h3>              
             {% for e in exercises %}
                {% if e.supportfile.imagefile %}
-                <img src="{{ e.supportfile.imagefile.url }}" width="300px">
-
+                    <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank"><img src="{{ e.supportfile.imagefile.url }}" width="300px"></a>
                 {% endif %}
             {% endfor %}
         </div>
