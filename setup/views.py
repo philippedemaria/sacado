@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail, EmailMessage
-
+from django.utils.http import is_safe_url
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -245,8 +245,16 @@ def index(request):
             context = {'parent': parent, 'students': students, 'today' : today , 'index_tdb' : index_tdb, 'is_not_set_up' : is_not_set_up ,  }
             template = 'dashboard.html'
 
-        return render(request, template , context)
-    
+        if request.session.get("login_url", None) : 
+            redirect_to = request.session.get('login_url', None)
+            del request.session["login_url"]
+            if redirect_to :
+                return redirect(redirect_to)
+            else :
+                return render(request, template , context)
+
+        else : 
+            return render(request, template , context)
     else:  ## Anonymous
         #########
         ###################
@@ -295,6 +303,12 @@ def index(request):
                      'communications': communications,
                     'nb_exotex': nb_exotex, 'nb_exercise': nb_exercise, 'exercise': exercise,  'nb_student': nb_student, 'nb_parcours' : nb_parcours , 
                     'rates': rates, 'school_year': school_year, 'subjects': subjects,  'sacado_voyage' : sacado_voyage,  'customers' : customers}
+
+
+        if request.GET.get("next", '') : 
+            print("next")
+            redirect_to = request.GET.get('next', '')
+            request.session["login_url"]=redirect_to
 
         response = render(request, 'home.html', context)
         return response
