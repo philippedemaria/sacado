@@ -1055,6 +1055,47 @@ def update_page(request,idb, idp):
         elif form_action == "new_bloc" :
             if form_b.is_valid():
                 nf = form_b.save()
+                if nf.typebloc.id==6 :
+                    exo,created=Exotex.objects.get_or_create(title = nf.title, 
+                                                            content = nf.content, 
+                                                            content_html =nf.content_html,
+                                                            author = request.user.teacher , 
+                                                            calculator = nf.calculator,
+                                                            subject = page.chapter.book.subject,  
+                                                            knowledge = nf.knowledge,   
+                                                            level = page.chapter.book.level, 
+                                                            theme = nf.theme,
+                                                             is_share     = 1,
+                                                             is_python    = nf.is_python,
+                                                             is_scratch   =  nf.is_scratch,
+                                                             is_tableur   =  nf.is_tableur,
+                                                             is_corrected = 1,
+                                                             is_annals   = nf.is_annals,
+                                                             point = nf.point,
+                                                             correction = nf.correction,
+                                                             correction_html =nf.correction_html,
+                                                             bloc_id=nf.id)
+                    if created :
+                        Exotex.objects.filter(blod_id=nf.id).update(title = nf.title, 
+                                                            content = nf.content, 
+                                                            content_html =nf.content_html,
+                                                            calculator = nf.calculator,
+                                                            knowledge = nf.knowledge,   
+                                                            theme = nf.theme,
+                                                             is_share     = 1,
+                                                             is_python    = nf.is_python,
+                                                             is_scratch   =  nf.is_scratch,
+                                                             is_tableur   =  nf.is_tableur,
+                                                             is_corrected = 1,
+                                                             is_annals   = nf.is_annals,
+                                                             point = nf.point,
+                                                             correction = nf.correction,
+                                                             correction_html =nf.correction_html)
+
+                    exo.skills.set( nf.skills)
+                    exo.knowledges.set(nf.knowledges)
+
+
             else:
                 print(form_b.errors)
 
