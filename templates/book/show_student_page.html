@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-    {{ book.level.shortname }} <img src="{% static 'img/angle-right.png' %}"/> Création du livret numérique Elève   <img src="{% static 'img/angle-right.png' %}"/>  
+    {{ book.level.shortname }} <img src="{% static 'img/angle-right.png' %}"/> Livret numérique Elève   <img src="{% static 'img/angle-right.png' %}"/> pages {{ n }} - {{ n|add:"1" }}
 {% endblock %}
 
 
@@ -59,7 +59,11 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %} {{ page.css}}">            
+        <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %}">
+            <div class="{{ page.css}}">
+                {{ page.title }}
+                <span class="pull-right">- {{ n }} </span>
+            </div>            
             {% for paragraph in page.paragraphs.all %}
                 <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
                     <div class="row">
@@ -90,7 +94,11 @@
 
         </div>
         {% if not page in first_pages %}
-        <div class="col-sm-12 col-md-6 {{ next_page.css}}">
+        <div class="col-sm-12 col-md-6">
+            <div class="{{ next_page.css}}">
+                {{ next_page.title }}
+                <span class="pull-right">- {{ next_page.number }} </span>
+            </div>    
             {% for paragraph in next_page.paragraphs.all %}
                 <div class="this_paragraph">
                     <div class="row">
