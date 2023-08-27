@@ -58,7 +58,7 @@ class Degre(models.Model):
 
 
 
-class Tool(models.Model)
+class Tool(models.Model):
     """
     Modèle représentant un associé.
     """
