@@ -4,13 +4,15 @@
 {% load static %}
 {% load item_tags %}
 
+
+
  
 
 {% block body %} 
 <section class="content_main"> 
       <div class="row">
             <div class="col-sm-12 col-md-12">
-                  {{ iframe }}
+                  {{ iframe|safe }}
             </div>
       </div>
 </section>
