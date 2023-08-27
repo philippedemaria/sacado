@@ -9,15 +9,3 @@ class Migration(migrations.Migration):
         ('tool', '0070_auto_20230827_1639'),
     ]
 
-    operations = [
-        migrations.AddField(
-            model_name='tool',
-            name='level',
-            field=models.PositiveSmallIntegerField(default=0),
-        ),
-        migrations.AddField(
-            model_name='tool',
-            name='theme',
-            field=models.PositiveSmallIntegerField(default=0),
-        ),
-    ]
