@@ -75,9 +75,8 @@
                                 </td>
                                 <td>
                                     {% if request.user.is_superuser %}
-                                        <a href="{% url 'delete_tool'  tool.id %}"  class="pull-right" onclick="return TestDelete('cet outil')">Supprimer</a> 
-                                        <span class="pull-right">|</span>                                        
-                                        <a href="{% url 'update_tool'  tool.id %}" class="pull-right" >Modifier</a>
+                                        <a href="{% url 'update_tool'  tool.id %}">Modifier</a>                                    
+                                        <a href="{% url 'delete_tool'  tool.id %}"  onclick="return TestDelete('cet outil')">Supprimer</a> 
                                     {% endif %}
                                 </td>
                             </tr>
