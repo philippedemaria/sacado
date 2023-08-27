@@ -185,7 +185,8 @@ class QFlashForm(forms.ModelForm):
 			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 
 
-		levels = Level.objects.exclude(pk__gt=8).order_by("ranking")
+		if teacher.user.is_superuser :  levels = Level.objects.exclude(pk=13).order_by("ranking")
+		else : levels = Level.objects.exclude(pk__gt=8).order_by("ranking")
 		#teacher.levels.order_by("ranking")
 		self.fields['title'].required = False
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=levels, required=False)
