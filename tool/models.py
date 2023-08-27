@@ -48,8 +48,11 @@ def qtype_directory_path(instance, filename):
     return "tool/qtype/{}".format(filename)
 
 
- 
 
+class Degre(models.Model):
+    title  = models.CharField(max_length=255, default='',  verbose_name="Niveau")  
+    def __str__(self):
+        return self.title 
 
 
 class Tool(models.Model):
@@ -83,7 +86,8 @@ class Tool(models.Model):
     is_ebep       = models.BooleanField(default=0, verbose_name="Outils EBEP ?")
     url           = models.CharField(max_length=255, default='' ,   blank=True, verbose_name="url de substitution")  
     exercises     = models.ManyToManyField(Exercise, blank=True, related_name='tools', verbose_name="Outils inclusifs", editable=False)
- 
+    degres        = models.ManyToManyField(Degre, blank=True, related_name='tools', verbose_name="Degrés")
+    themes        = models.ManyToManyField(Theme, blank=True, related_name='tools', verbose_name="Thèmes")
     ranking       = models.PositiveSmallIntegerField(default=0)
 
 
