@@ -7858,7 +7858,7 @@ def execute_exercise(request, idp,ide):
 
 
 @login_required(login_url= 'index')
-def execute_exercise_from_qrcode(request, ide):
+def execute_exercise_from_book(request, ide):
     """ Execution d'un exerice pour un élève depuis un qrcode """ 
     if not request.user.is_authenticated :
         messages.error(request,"Utilisateur non authentifié")
