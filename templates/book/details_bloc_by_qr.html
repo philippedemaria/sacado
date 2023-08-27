@@ -69,7 +69,7 @@
         <div class="col-sm-12 col-md-4" align='center'> 
             <h3>appliquettes</h3>      
             {% for a in appliquettes %}
-                <li>{{ a.title }}</li>
+                <li><a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank">{{ a.title }}</a></li>
             {% endfor %}
         </div>
         {% endif %}
@@ -87,7 +87,7 @@
         <div class="col-sm-12 col-md-4">
             <h3>Exo Latex</h3>             
             {% for e in exotexs %}
-                <li>{{ e.title }} </li>
+                <li><a href="{% url 'show_exotex' e.id %}" target="_blank">{{ e.title }}</a></li>
             {% endfor %}
         </div>
         {% endif %}
