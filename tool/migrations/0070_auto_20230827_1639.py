@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Degre',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(default='', max_length=255, verbose_name='Niveau')),
+                ('title', models.CharField(default='Primaire', max_length=255, verbose_name='Niveau')),
             ],
         ),
         migrations.RemoveField(
