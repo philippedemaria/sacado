@@ -79,7 +79,7 @@
                     <div class="this_div_bloc_sort">
                     <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="to_sorter_div_left"><i class="bi bi-pen"></i></a>
                     <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="to_sorter_div" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a> 
-                    <a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" target="_blank"><i class="bi bi-link"></i></a>
+                    <a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" class="to_sorter_div_sub_left" target="_blank"><i class="bi bi-link"></i></a>
 
                     <div class="col-xs-{{ bloc.size }} this_bloc_sort" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}"  >
                         <div class="{{ bloc.typebloc.css }}"> 
