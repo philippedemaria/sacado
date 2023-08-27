@@ -50,12 +50,18 @@ def qtype_directory_path(instance, filename):
 
 
 class Degre(models.Model):
+
     title  = models.CharField(max_length=255, default='',  verbose_name="Niveau")  
     def __str__(self):
         return self.title 
 
 
 
+class TestBook(models.Model):
+
+    title         = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    def __str__(self):
+        return "{}".format(self.title)
 
 
 class Tool(models.Model):

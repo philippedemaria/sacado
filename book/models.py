@@ -21,7 +21,7 @@ def image_book_path(instance,filename):
 def document_path(author,filename):
     return "chapter/{}/{}".format(author.user.id,filename)
 
- 
+
 
 class Book(models.Model):
 
@@ -260,7 +260,7 @@ class Page(models.Model):
     def __str__(self):
         return "{} : {}".format(self.number,self.title)
 
- 
+
 
 class Paragraph(models.Model):
 
