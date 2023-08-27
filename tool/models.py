@@ -90,8 +90,6 @@ class Tool(models.Model):
     degres        = models.ManyToManyField(Degre, blank=True, related_name='tools', verbose_name="Degrés")
     themes        = models.ManyToManyField(Theme, blank=True, related_name='tools', verbose_name="Thèmes")
     ranking       = models.PositiveSmallIntegerField(default=0)
-    level       = models.PositiveSmallIntegerField(default=0)
-    theme       = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.title 
