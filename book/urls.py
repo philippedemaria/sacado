@@ -117,9 +117,11 @@ urlpatterns = [
     path('update_appliquette/<int:ida>', update_appliquette, name='update_appliquette'),
     path('delete_appliquette/<int:ida>', delete_appliquette, name='delete_appliquette'),
 
-
     path('display_details_bloc_by_qr/<int:idbl>', display_details_bloc_by_qr, name='display_details_bloc_by_qr'),
 
+
+
+    path('ajax_display_correcion_bloc', ajax_display_correcion_bloc, name='ajax_display_correcion_bloc'),
 
 
  ]

@@ -17,7 +17,30 @@
 
 
 {% block page_title %}
-    {{ book.level.shortname }} <img src="{% static 'img/angle-right.png' %}"/> Livret numérique Elève   <img src="{% static 'img/angle-right.png' %}"/> pages {{ n }} - {{ n|add:"1" }}
+    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }} 
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0" > <i class="bi bi-cc-circle-fill text-danger" id="cc_chapter{{ this_chapter.id }}"></i> 
+            <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du chapitre. </div>
+        </span>
+        <img src="{% static 'img/angle-right.png' %}"/> pages {{ n }} 
+        {% if 'cours' not in this_page.title %}
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1" > <i class="bi bi-cc-circle-fill text-danger" id="cc_page{{ this_page.id }}"></i> 
+            <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices de la page {{ n }}. </div>
+        </span>
+        {% else %}
+        <span class="helper_tip"> <i class="bi bi-question-circle" id="this_page"></i> 
+            <div class="helper_tip_text" >Page de cours. Pas d'exercice affichable. </div>
+        </span>
+        {% endif %}
+        - {{ n|add:"1" }} 
+        {% if 'cours' not in next_page.title %}
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{next_page.id}}" data-type_id = "1" > <i class="bi bi-cc-circle-fill text-danger" id="cc_page{{next_page.id}}"></i> 
+            <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices de la page {{ n|add:"1" }}. </div>
+        </span>
+        {% else %}
+        <span class="helper_tip" > <i class="bi bi-question-circle text-danger" id="next_page"></i> 
+            <div class="helper_tip_text" >Page de cours. Pas d'exercice affichable. </div>
+        </span>
+        {% endif %}
 {% endblock %}
 
 

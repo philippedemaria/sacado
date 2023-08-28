@@ -342,13 +342,13 @@ class Bloc(models.Model):
     paragraph = models.ForeignKey(Paragraph, on_delete=models.CASCADE, related_name='blocs')
     ranking   = models.PositiveIntegerField( default=0,  blank=True, null=True)
 
- 
     size       = models.PositiveSmallIntegerField(choices=SIZES, default=12, blank=True, verbose_name="Colonne")
 
-    content = models.TextField( blank=True,  verbose_name="Enoncé en LaTeX")
-    content_html = RichTextUploadingField( verbose_name="Enoncé pour html") 
-    correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
-    correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html")  
+    content         = models.TextField( blank=True,  verbose_name="Enoncé en LaTeX")
+    content_html    = RichTextUploadingField( verbose_name="Enoncé pour html") 
+    correction      = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
+    correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html")
+    is_correction   = models.BooleanField(default=0, editable=False)  
     #### pour validation si le qcm est noté
 
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")

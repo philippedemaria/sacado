@@ -277,8 +277,8 @@ a.no_underline:hover{
 }
 }
 
-.helper_tip_text{
-   cursor:help;
+.helper_tip, .helper_tip_text{
+   cursor:help!important;
 }
 
 .play_alea{
@@ -937,7 +937,7 @@ a.no_decoration:hover{
   opacity:0.97;
 }
 
-.remove_more, .remove_sub_more {
+.remove_more, .remove_sub_more, .display_correction_bloc_button {
   cursor: pointer ;
 }
 

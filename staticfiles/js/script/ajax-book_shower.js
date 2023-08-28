@@ -27,7 +27,49 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+ 
+        $(document).on('click', '.display_correction_bloc_button' , function (event) {
+            
+            let source_id = $(this).data("source_id");
+            let type_id   = $(this).data("type_id");
+ 
+            if ($(this).children().first().hasClass('text-success')){ var status = "on";}
+            else { var status = "off";}
 
+ 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        'type_id'   : type_id,
+                        'source_id' : source_id ,
+                        'status'    : status ,
+                    },
+                    url: "../../ajax_display_correcion_bloc",
+                    success: function (data) {
+ 
+                        if(type_id == "0") { 
+                            $("#cc_chapter"+source_id).addClass(data.css);
+                            $("#cc_chapter"+source_id).removeClass(data.nocss);
+                        }
+                        else if (type_id == "1") { 
+                            $("#cc_page"+source_id).addClass(data.css);
+                            $("#cc_page"+source_id).removeClass(data.nocss);
+                        }
+                        else if(type_id == "2") { 
+                            $("#cc_paragraph"+source_id).addClass(data.css);
+                            $("#cc_paragraph"+source_id).removeClass(data.nocss);
+                        }
+                        else if(type_id == "3") { 
+                            $("#cc_bloc"+source_id).addClass(data.css);
+                            $("#cc_bloc"+source_id).removeClass(data.nocss);
+                        }
+
+                    }
+                }
+            )
+        }); 
 
 
 
