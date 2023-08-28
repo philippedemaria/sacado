@@ -583,9 +583,9 @@ h1 {
 
 /*  paragraph_bloc_preuve  */
 .paragraph_bloc_mm{
-	border: 2px solid  #0960b5;
+	border: 2px solid  #4D8075;
 	border-radius: 5px;
-	color:#0960b5;
+	color:#4D8075;
 	position:relative;
 	margin:30px 20px 0px 50px;
 	padding:0px;
@@ -595,18 +595,18 @@ h1 {
 
 
 .paragraph_bloc_mm .bloc_title{
-	color :  #fff ;
+	color :  #4D8075 ;
 	border-radius:0px 0px 3px 3px;
-	background-color:  #0960b5 ;
+	background-color:  #e6F8F5 ;
 	padding:10px;
 	width:100%;
 	font-weight: normal;
 }
 
 .paragraph_bloc_mm .bloc_content{
-	color :  #0960b5 ;
+	color :  #4D8075 ;
 	border-radius:0px 0px 3px 3px;
-	background-color: #FFF;
+	background-color: #e6F8F5;
 	padding:10px;
 	width:100%;
 	font-weight: normal;
