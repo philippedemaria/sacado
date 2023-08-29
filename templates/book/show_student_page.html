@@ -18,12 +18,14 @@
 
 {% block page_title %}
     Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }} 
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0" > <i class="bi bi-cc-circle-fill text-danger" id="cc_chapter{{ this_chapter.id }}"></i> 
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0" > 
+            <i class="bi bi-cc-circle-fill text-{% if this_chapter.is_correction %}success{% else %}danger{% endif %}" id="cc_chapter{{ this_chapter.id }}"></i> 
             <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du chapitre. </div>
         </span>
         <img src="{% static 'img/angle-right.png' %}"/> pages {{ n }} 
         {% if 'cours' not in this_page.title %}
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1" > <i class="bi bi-cc-circle-fill text-danger" id="cc_page{{ this_page.id }}"></i> 
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1" > 
+            <i class="bi bi-cc-circle-fill text-{% if this_page.is_correction %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
             <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices de la page {{ n }}. </div>
         </span>
         {% else %}
@@ -33,7 +35,8 @@
         {% endif %}
         - {{ n|add:"1" }} 
         {% if 'cours' not in next_page.title %}
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{next_page.id}}" data-type_id = "1" > <i class="bi bi-cc-circle-fill text-danger" id="cc_page{{next_page.id}}"></i> 
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{next_page.id}}" data-type_id = "1" > 
+            <i class="bi bi-cc-circle-fill text-{% if this_page.is_correction %}success{% else %}danger{% endif %}" id="cc_page{{next_page.id}}"></i> 
             <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices de la page {{ n|add:"1" }}. </div>
         </span>
         {% else %}
@@ -93,6 +96,13 @@
                         <div class="col-xs-12">
                             <span class="paragraph_number">{{ paragraph.number }}</span>
                             <span class="paragraph_title">{{ paragraph.title }}</span>
+
+                            <span class="helper_tip display_correction_bloc_button pull-right" data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
+                                <i class="bi bi-cc-circle-fill text-{% if paragraph.is_correction %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du paragraphe. </div>
+                            </span>
+
+
                         </div>
                     </div>
                     <div class="row">
@@ -101,6 +111,12 @@
                                 <div class="{{ bloc.typebloc.css }}" > 
                                     <div class="bloc_title">
                                         {{ bloc.title }}
+
+                                        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-type_id = "3" > 
+                                            <i class="bi bi-cc-circle-fill text-{% if bloc.is_correction %}success{% else %}danger{% endif %} these_blocs" id="cc_bloc{{ bloc.id }}"></i> 
+                                            <div class="helper_tip_text" >Publier/Dépublier la correction.</div>
+                                        </span>
+
                                     </div>
                                     <div class="bloc_content">
                                         {% if bloc.display_qr %}<a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" class="pull-right" target="_blank">lien</a>{% endif %}

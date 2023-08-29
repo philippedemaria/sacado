@@ -91,6 +91,18 @@ class Chapter(models.Model):
         return "{}".format(self.title)
 
 
+    def is_correction(self):
+        test = False
+        for page in self.pages.all():
+            for paragraph in page.paragraphs.all():
+                for bloc in paragraph.blocs.all():
+                    if bloc.is_correction == False : test = False
+                    break
+        return test
+
+
+
+
 class Section(models.Model):
 
     title      = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
@@ -260,6 +272,13 @@ class Page(models.Model):
     def __str__(self):
         return "{} : {}".format(self.number,self.title)
 
+    def is_correction(self):
+        test = False
+        for paragraph in self.paragraphs.all():
+            for bloc in paragraph.blocs.all():
+                if bloc.is_correction == False : test = False
+                break
+        return test
 
 
 class Paragraph(models.Model):
@@ -290,7 +309,12 @@ class Paragraph(models.Model):
         return nb
 
 
-
+    def is_correction(self):
+        test = False
+        for bloc in self.blocs.all():
+            if bloc.is_correction == False : test = False
+            break
+        return test
 
 
 ##################################     doctypes     ################################################    

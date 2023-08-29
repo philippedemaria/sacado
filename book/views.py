@@ -1484,30 +1484,28 @@ def ajax_display_correcion_bloc(request):
     if status == "off" : status , css , nocss = True ,  "text-success",  "text-danger"
     else : status , css,nocss =  False , "text-danger",  "text-success"
 
-    print(type_id, source_id , status )
 
-
-    if type_id == 0 :     
+    if type_id == "0" :     
         chapter = Chapter.objects.get(pk=source_id)
         for p in page.chapter.pages.all():
             for paragraph in p.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
                     Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
 
-    elif type_id == 1 :  
+    elif type_id == "1" :  
         page = Page.objects.get(pk=source_id) 
         for paragraph in p.paragraphs.all():
             for bloc in  paragraph.blocs.all():
-                Bloc.objects.filter(pk=bloc_id).update(is_correction = status)
+                Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
 
 
-    elif type_id == 2 : 
+    elif type_id == "2" : 
         paragraph = Paragraph.objects.get(pk=source_id) 
         for bloc in  paragraph.blocs.all():
-            Bloc.objects.filter(pk=bloc_id).update(is_correction = status)
+            Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
 
 
-    elif  type_id == 3 : 
+    elif  type_id == "3" : 
         Bloc.objects.filter(pk=source_id).update(is_correction = status)
         
 

@@ -60,6 +60,11 @@ define(['jquery', 'bootstrap'], function ($) {
                         else if(type_id == "2") { 
                             $("#cc_paragraph"+source_id).addClass(data.css);
                             $("#cc_paragraph"+source_id).removeClass(data.nocss);
+
+                            $(".these_blocs").addClass(data.css);
+                            $(".these_blocs").removeClass(data.nocss);
+
+
                         }
                         else if(type_id == "3") { 
                             $("#cc_bloc"+source_id).addClass(data.css);
