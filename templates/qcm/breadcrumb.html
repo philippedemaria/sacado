@@ -3,6 +3,7 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
+<img src="{% static 'img/angle-right.png' %}"/>
 
 {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
