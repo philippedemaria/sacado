@@ -555,4 +555,4 @@ urlpatterns = [
     path('sorter_book_chapter', sorter_book_chapter, name='sorter_book_chapter'),
     path('duplicate_parcours_organiser/<int:idch>', duplicate_parcours_organiser, name='duplicate_parcours_organiser'),
     path('book_duplicate_summary', book_duplicate_summary, name="book_duplicate_summary"),
- ]
+    path('ajax_in_out_progression', ajax_in_out_progression, name="ajax_in_out_progression"), ]

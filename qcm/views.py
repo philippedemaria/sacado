@@ -2017,19 +2017,24 @@ def list_parcours_group(request,id):
                                                                                                                             'ranking' : 1,'price' : 0 })
     book.teachers.add(teacher)
     book.groups.add(group)
-    chapters = book.chapters.order_by("ranking")
+    chapters = book.chapters.filter(is_progression=1).order_by("ranking")
+    chapterbis = book.chapters.filter(is_progression=0).order_by("ranking")
     formsec = SectionForm(request.POST or None)
     organiser = request.session.get("organiser",None)
     if organiser :
-        chapter  = Chapter.objects.get(pk=organiser)
-        sections = chapter.sections.order_by("ranking")
+        try :
+            chapter  = Chapter.objects.get(pk=organiser)
+            sections = chapter.sections.order_by("ranking")
+        except :
+            sections = None
+            chapter = None
     else :
         sections = None
         chapter = None
  
     context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
                  'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases , 'book' : book ,  'chapters' : chapters ,
-                 'formsec' : formsec , 'organiser' : organiser , 'sections' : sections , 'chapter' : chapter , 'groups' : groups }
+                 'formsec' : formsec , 'organiser' : organiser , 'sections' : sections , 'chapter' : chapter , 'groups' : groups, 'chapterbis' : chapterbis }
 
     return render(request, 'qcm/list_parcours_group.html', context )
 
@@ -14184,6 +14189,25 @@ def ajax_add_chapter(request) :
 
     return JsonResponse(data)
 
+
+
+@csrf_exempt
+def ajax_in_out_progression(request) :
+
+    book_id = request.POST.get('book_id', None)
+    chapter_id = request.POST.get('chapter_id', None)
+    book = Book.objects.get(pk=book_id)
+    chapter = Chapter.objects.get(pk=chapter_id)
+    if chapter.is_progression : 
+        chapter.is_progression = 0
+    else : 
+        chapter.is_progression = 1
+    chapter.save()
+    new_counter = book.chapters.count() + 1
+    data={} 
+    context = { 'book' : book , 'ch' : chapter , 'new_counter' : new_counter }
+    data['html'] = render_to_string('qcm/ajax_chapter_after_choose.html',context)    
+    return JsonResponse(data)
 
 
 

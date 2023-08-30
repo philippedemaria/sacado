@@ -857,6 +857,53 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+        $(document).on('click', ".in_out_progression" , function (event) {
+
+            var book_id    = $(this).data('book');
+            var title      = $(this).data('title');
+
+            var chapter_id = $(this).data('chapter_id');
+            var inside     = parseInt($(this).data('in'));
+
+
+            if (confirm('Êtes-vous sûr de vouloir déplacer ce chapitre '+title+' ?')) {
+
+                $.ajax({
+                        data: { 
+                            'book_id'   : book_id,
+                            'chapter_id': chapter_id,
+                        } ,   
+                        type: "POST",
+                        dataType: "json",
+                        url: "../../ajax_in_out_progression" ,
+                        traditional: true,
+                        success: function (data) {
+                            $("#chapter"+chapter_id).remove()
+
+                            if (inside == 1){  
+                                $("#out_sommary").append(data.html);  
+                            }
+                            else {  
+                                $("#droppable_sommary").append(data.html);
+                            }
+
+
+                            var n = 1 ;
+                            $("#out_sommary .book_chapter_number").each(function() {
+                                    $(this).text(n+". "); n++; 
+                                });
+                        
+                            var n = 1 ;
+                            $("#droppable_sommary .book_chapter_number").each(function() {
+                                    $(this).text(n+". "); n++; 
+                                });
+
+                        }
+                    });     
+                }
+            }); 
+
+
 
 });
 
