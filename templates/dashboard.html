@@ -609,7 +609,7 @@
         </div>
     </div>
     <hr/>
-    {% if request.user.is_superuser %}
+    {% comment %}
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'sequences' %}"  title="Voir la liste de mes séquences" {% if request.session.subtdb == 'Sequences' %} class="active_selected"{% endif %}><i class="bi bi-ladder" ></i> Séquences<sup class="text-danger">Nouveauté</sup> </a>    
@@ -618,7 +618,7 @@
         </div>
     </div>
     <hr/>
-    {% endif %}
+    {% endcomment %}
     <div class="row">
         <div class="col-lg-12 col-xs-12 inside_volet_show_submenu">
             <a href="{% url 'parcours' %}" {% if request.session.subtdb == 'Parcours' %} class="active_selected"{% endif %} title="Voir la liste de mes parcours"><i class="fa fa-th" ></i> Parcours </a>  
