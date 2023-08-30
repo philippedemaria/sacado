@@ -144,13 +144,15 @@ def initialize_all_chapters(request,idb,idg) :
         qfs        = p.quizz.filter(is_random=1)[:4]
         bibliotexs = p.bibliotexs.all()
 
-        chapt,crea  = Chapter.objects.get_or_create(book=book, parcours=p, defaults={ 'title' : p.title, 'author' : request.user.teacher ,  'teacher':request.user.teacher,  'is_publish':1,'ranking':i})
+        chapt,crea  = Chapter.objects.get_or_create(book=book, parcours=p, defaults={ 'title' : p.title, 'author' : request.user.teacher ,  'teacher':request.user.teacher,  'is_publish':1, 'is_progression':1, 'ranking':i})
         # QF ###################################################################################################################
         section_qf, cre_qf = Section.objects.get_or_create(title = "Questions flash & Rituels" , chapter = chapt , defaults = {'ranking': 1, })
         for qf in qfs :
             document,created = Document.objects.get_or_create(title=qf.title, subject = book.subject, level=book.level, section  = section_qf , author_id=request.user.id , teacher=request.user.teacher, 
                                                                 defaults={'is_publish':1,'is_share':1,'ranking':i,'content' : "Question flash" , 'doctype': 8 , 'doc_id' : qf.id })
         chapt.sections.add(section_qf)
+
+        if i == 1 : request.session["organiser"] = chapt.id
 
         # Cours ###################################################################################################################
         section, cre = Section.objects.get_or_create(title = "Cours" , chapter = chapt , defaults = {'ranking': 2, })

@@ -79,7 +79,7 @@ class Chapter(models.Model):
 
     is_publish    = models.BooleanField(default=0, verbose_name="Publié ?")
     is_share      = models.BooleanField(default=0, verbose_name="Mutualisé ?")
-    
+    is_progression = models.BooleanField(default=1, verbose_name="Dans ma progression ?")
     ranking       = models.PositiveIntegerField( default=0,  blank=True, null=True)
 
     date_created  = models.DateTimeField( auto_now_add= True)
