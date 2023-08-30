@@ -13,13 +13,16 @@
         {% for ch in chapters %}
             <li class="book_chapters_in_menu sorter_chapter {% if ch.id == organiser %}book_chapters_in_menu_selected{% endif %}" data-chapter_id='{{ ch.id }}' id='chapter{{ ch.id }}'>
                 <span class="book_chapter_number">{{ forloop.counter}}.</span> 
-
                 <a href="javascript:void(0);" class="get_inside_chapter_div  {% if ch.id == organiser %}color_white{% endif %}" id="this_parcours_title{{ch.id}}" data-book_id='{{ book.id}}' data-chapter_id='{{ ch.id }}'>
                 {{ ch.title|truncatechars:28|lower|capfirst }}
                 </a>
                 <a href="javascript:void(0);" class="ajax_delete_chapter this_menu_tabs pull-right" data-book='{{ book.id }}' data-chapter_id='{{ ch.id }}'
-                    title="Supprimer"><i class="bi bi-trash"></i></a>
-                <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="this_menu_tabs pull-right get_the_title" title="Renommer le parcours"  data-title="{{ ch.title }}" data-chapter_id="{{ ch.id }}"><i class="bi bi-pen"></i></a>                     
+                    title="Supprimer le chapitre"><i class="bi bi-trash"></i></a>
+
+                <a href="{% url 'duplicate_parcours_organiser' ch.id  %}" class="this_menu_tabs pull-right" title="Dupliquer le chapitre (utile pour découper le chapitre en parties)"><i class="bi bi-clipboard-plus"></i></a> 
+
+                <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="this_menu_tabs pull-right get_the_title" title="Renommer le chapitre"  data-title="{{ ch.title }}" data-chapter_id="{{ ch.id }}"><i class="bi bi-pen"></i></a> 
+
             </li>
         {% endfor %}
 

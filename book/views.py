@@ -1514,4 +1514,3 @@ def ajax_display_correcion_bloc(request):
     data['nocss'] = nocss
     return JsonResponse(data) 
  
- 

@@ -14015,6 +14015,38 @@ def delete_docperso(request, idd, idp=0):
         return redirect('list_parcours_group',idg)
 
 
+
+
+def duplicate_parcours_organiser(request,idch):
+
+    idg = request.session.get("group_id",None)
+    request.session["organiser"] = idch
+    chapter = Chapter.objects.get(pk=idch)
+    sections = chapter.sections.all()
+    chapter.pk=None
+    chapter.title +=" (1)"
+    chapter.save()
+    for section in sections :
+        documents = section.documents.all()
+        section.pk=None
+        section.chapter=chapter
+        section.save()
+        for document in documents :
+            documentexs = document.documentexs.all()
+            document.pk=None
+            document.save()
+            for dtex in documentexs : 
+                skills = dtex.skills.all()
+                knowledges = dtex.knowledges.all()
+                dtex.pk = None
+                dtex.document = document
+                dtex.skills.set(skills)
+                dtex.knowledges.set(knowledges)
+    if idg :
+        return redirect('list_parcours_group',idg)
+    else : 
+        return redirect('index')
+
 def ajax_publish_docperso(request):
 
     docperso_id = request.POST.get('docperso_id', None)
@@ -14114,3 +14146,5 @@ def get_inside_chapter_div(request) :
     data['html'] = html       
 
     return JsonResponse(data)
+
+
