@@ -860,13 +860,12 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', ".in_out_progression" , function (event) {
 
             var book_id    = $(this).data('book');
-            var title      = $(this).data('title');
 
             var chapter_id = $(this).data('chapter_id');
             var inside     = parseInt($(this).data('in'));
 
 
-            if (confirm('Êtes-vous sûr de vouloir déplacer ce chapitre '+title+' ?')) {
+            if (confirm('Êtes-vous sûr de vouloir déplacer ce chapitre  ?')) {
 
                 $.ajax({
                         data: { 
