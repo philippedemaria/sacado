@@ -21,7 +21,7 @@
 
                 <a href="{% url 'duplicate_parcours_organiser' ch.id  %}" class="this_menu_tabs pull-right" title="Dupliquer le chapitre (utile pour découper le chapitre en parties)"><i class="bi bi-clipboard-plus"></i></a>
 
-                <a href="javascript:void(0);" class="in_out_progression this_menu_tabs pull-right" data-in='1' data-book='{{ book.id }}' data-chapter_id='{{ ch.id }}' 
+                <a href="javascript:void(0);" class="in_out_progression this_menu_tabs pull-right" data-in='1' data-book='{{ book.id }}' data-chapter_id='{{ ch.id }}'   data-title="{{ ch.title }}"
                     title="Sortir ce chapitre de la progression"><i class="bi bi-database-x"></i></a>
 
                 <a href="#" data-toggle='modal' data-target='#book_new_chapter' class="this_menu_tabs pull-right get_the_title" title="Renommer le chapitre"  data-title="{{ ch.title }}" data-chapter_id="{{ ch.id }}"><i class="bi bi-pen"></i></a> 
