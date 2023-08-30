@@ -586,12 +586,16 @@ class Skill(models.Model):
 
 
 class Bo(models.Model):
+
+    title = models.CharField(max_length=255, default="", verbose_name="Nom")
     level = models.ForeignKey(Level, related_name="bos", default="", on_delete=models.CASCADE, null = True ,  verbose_name="Niveau")
     subject = models.ForeignKey(Subject, related_name="bos", default="", on_delete=models.CASCADE, null = True ,  verbose_name="Enseignement")
-    link = models.CharField(max_length=255, verbose_name="Nom")
+    programme = models.CharField(max_length=255, default="", verbose_name="url programme")
+    document  = models.CharField(max_length=255, default="", verbose_name="url document accompagnement")
+
  
     def __str__(self):
-        return "{}>{}>{}".format(self.subject.shortname,self.level.shortname,self.link)
+        return "{}>{}>{}".format(self.title, self.subject.shortname, self.level.shortname)
 
 
 
