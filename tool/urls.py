@@ -163,8 +163,6 @@ urlpatterns = [
     path('create_questions_flash_inside_parcours/<int:idp>', create_questions_flash_inside_parcours, name='create_questions_flash_inside_parcours'),
  
     path('create_questions_flash/<int:idl>', create_questions_flash, name='create_questions_flash'),
-    path('duplicate_questions_flash/<int:id>', duplicate_questions_flash, name='duplicate_questions_flash'),
-    path('update_questions_flash/<int:id>', update_questions_flash, name='update_questions_flash'),
     path('delete_questions_flash/<int:id>', delete_questions_flash, name='delete_questions_flash'),
     path('delete_all_questions_flash', delete_all_questions_flash, name='delete_all_questions_flash'), 
     path('show_questions_flash/<int:id>', show_questions_flash, name='show_questions_flash'),

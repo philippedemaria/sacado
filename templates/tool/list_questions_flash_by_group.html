@@ -56,8 +56,7 @@
                 <tr> 
                     <td><input type="checkbox"  name="selected_checkbox" value="{{ q.id }}" class="items_to_be_selected" /></td>
                     <td>{{ q.date_modified|date:"Y-m-d" }}</td> 
-                    <td style="width:200px"><a href="{% url 'update_questions_flash' q.id %}" title="Modifier la configuration">{{ q.title }}</a>
-                        <a href="{% url 'duplicate_questions_flash' q.id %}" title="Dupliquer le format de ces questions"><i class="bi bi-clipboard-plus"></i></a></td>
+                    <td style="width:200px"> {{ q.title }} </td>
                     <td>{% for ma in q.mentaltitles.all %}{{ ma }}  
                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text" style="width:400px" >
