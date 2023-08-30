@@ -858,16 +858,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 });
 
 });

@@ -28,8 +28,11 @@
 
 
         </div>
-            <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-primary btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %}>{% if chapters %}MaJ {% else %}Initialisation {% endif %} des chapitres 
+            <a href="{% url 'initialize_all_chapters' book.id group.id %}" class="btn btn-default btn-xs" {% if chapters %} onclick="return reset_all_chapters()"{% endif %}>{% if chapters %}MaJ {% else %}Initialisation {% endif %} des chapitres 
             </a>
+            <a href="#" data-toggle='modal' data-target='#book_duplicate_summary' class="btn btn-default btn-xs" title="Dupliquer ce sommaire" data-chapter_id="{{ ch.id }}">Dupliquer</a> 
+
+
     </div>
     <div class="col-xs-6 col-md-8 col-lg-9">
         <div id="dropzone">
@@ -343,6 +346,59 @@
                         <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+<div class="modal fade" id="book_duplicate_summary" tabindex="-1" role="dialog" aria-labelledby="book_duplicate_summary">
+    <div class="modal-dialog modal-lg" role="document"  style="width:750px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4>{{ group.name }} <img src="{% static 'img/angle-right.png' %}"/> Dupliquer le sommaire</h4>              
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'book_duplicate_summary' %}" enctype='multipart/form-data' id="new_chapter"> 
+                    {% csrf_token %}   
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <label>Choisir les groupes destinations.<small class="text-danger">Si l'organiser d'un groupe n'est pas vide, il sera complété par cet organiser.</small></label>
+                        </div>
+                    </div>             
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <input type="hidden" name='group_id' value="{{ group.id }}" />
+                            <input type="hidden" name='book_id' value="{{ book.id }}" />
+                            <div class="form-group">
+                                {% for grp in groups %}
+                                    <li class="sanspuce">
+                                        <label>
+                                            <input type="checkbox" name="group_ids" value="{{ grp.id}}">
+                                            <i class="fa fa-square" style="color: {{grp.color}}"></i> {{ grp.name }}  {% if group.books.count %}<small>(L'organiser contient des chapitres)</small>{% endif %}
+                                        </label>
+                                    </li>
+                                {% empty %}
+                                    <label class="text-danger">Vous devez posséder au moins un groupe. </label>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-group">
+                                <li class="sanspuce"><label>Format</label></li>
+                                <li class="sanspuce"><label><input type="radio" name="format_new" value="yes"> Créer un sommaire indépendant pour chaque groupe.</label></li>
+                                <li class="sanspuce"><label><input type="radio" name="format_new" value="no"> Associer ces groupes à ce sommaire. <small>Ce sommaire sera visible depuis tous les groupes liés et sa modification sera effective dans tous les groupes liés.</small></label></li>                               
+                            </div>
+                        </div>    
+                        <div class="col-sm-12 col-md-12">         
+                            <button type="submit" class="btn btn-primary" id="submit_duplicate_symmary">Enregistrer</button>   
+                            <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div> 

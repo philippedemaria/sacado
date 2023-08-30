@@ -1975,6 +1975,7 @@ def list_parcours_group(request,id):
 
     today = time_zone_user(request.user)
     group = Group.objects.get(pk = id) 
+    groups = teacher.groups.exclude(pk=group.id)
 
     request.session["tdb"] = "Documents" # permet l'activation du surlignage de l'icone dans le menu gauche
     if request.session.has_key("subtdb"): del request.session["subtdb"]
@@ -2026,7 +2027,7 @@ def list_parcours_group(request,id):
  
     context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
                  'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases , 'book' : book ,  'chapters' : chapters ,
-                 'formsec' : formsec , 'organiser' : organiser , 'sections' : sections , 'chapter' : chapter }
+                 'formsec' : formsec , 'organiser' : organiser , 'sections' : sections , 'chapter' : chapter , 'groups' : groups }
 
     return render(request, 'qcm/list_parcours_group.html', context )
 
@@ -14046,6 +14047,62 @@ def duplicate_parcours_organiser(request,idch):
         return redirect('list_parcours_group',idg)
     else : 
         return redirect('index')
+
+
+
+def book_duplicate_summary(request):
+
+    book_id    = request.POST.get("book_id",None)
+    grp_id   = request.POST.get("group_id",None)
+    group_ids  = request.POST.getlist("group_ids",None)
+    format_new = request.POST.get("format_new",None)
+
+    if book_id :
+        book = Book.objects.get(pk=book_id)
+        if format_new == "no" : # créer des livres avec des sommaires indépendants les uns des autres.
+            book.groups.set(group_ids)
+        else :  # créer des livres avec des sommaires liés les uns aux autres.
+            chapters = book.chapters.all() # tous les chapitres du livre du groupe dans lequel on se trouve
+            for group_id in group_ids :
+                group = Group.objects.get(pk=group_id)
+                if group.books.count() :
+                    n_book = group.books.first() 
+                else :
+                    n_book = Book.onjects.create(title = book.title , level=book.level , subject=book.subject ,author=book.author, is_student=1)
+                    n_book.teachers.add(book.teacher) 
+                    n_book.groups.add(group)
+                for chapter in book.chapters.all() :
+                    sections = chapter.sections.all()
+                    chapter.pk=None
+                    chapter.book = n_book
+                    chapter.save()
+                    for section in sections :
+                        documents = section.documents.all()
+                        section.pk=None
+                        section.chapter=chapter
+                        section.save()
+                        for document in documents :
+                            documentexs = document.documentexs.all()
+                            document.pk=None
+                            document.save()
+                            for dtex in documentexs : 
+                                skills = dtex.skills.all()
+                                knowledges = dtex.knowledges.all()
+                                dtex.pk = None
+                                dtex.document = document
+                                dtex.skills.set(skills)
+                                dtex.knowledges.set(knowledges)
+
+    messages.success(request,"Duplication réussie. Organiser des groupes sélectionnés complété, à retrouver dans chaque groupe.")
+        
+    if grp_id :
+        return redirect('list_parcours_group',grp_id)
+    else : 
+        return redirect('index')
+
+
+
+
 
 def ajax_publish_docperso(request):
 

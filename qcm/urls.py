@@ -553,5 +553,6 @@ urlpatterns = [
     path('initialize_all_chapters/<int:idb>/<int:idg>', initialize_all_chapters, name='initialize_all_chapters'),
     path('get_inside_chapter_div', get_inside_chapter_div, name='get_inside_chapter_div'),
     path('sorter_book_chapter', sorter_book_chapter, name='sorter_book_chapter'),
-    path('duplicate_parcours_organiser/<int:idch>', duplicate_parcours_organiser, name='duplicate_parcours_organiser')
+    path('duplicate_parcours_organiser/<int:idch>', duplicate_parcours_organiser, name='duplicate_parcours_organiser'),
+    path('book_duplicate_summary', book_duplicate_summary, name="book_duplicate_summary"),
  ]
