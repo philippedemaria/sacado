@@ -1,0 +1,88 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load item_tags %}
+{% load widget_tweaks %}
+ 
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+
+{% block page_title %}
+
+
+    <a href="{% url 'list_questions_flash'  %}"><i class="bi bi-lightning"></i></a> Mes Questions Flash 
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block page_menu_right %}
+
+  
+
+{% endblock %}
+
+ 
+
+{% block body %}
+
+<section class="content_main"> 
+
+ 
+
+
+        <div class="row">
+            {% for group in groups %}
+                <div class="col-xs-6 col-md-4 col-lg-3" >
+                    <div class="small-box" style="background-color:#007bc9;color:white;height:250px">
+                    <!-- modal qui affiche la liste des élèves -->
+                        <div class="inner" style="color:white;opacity:0.9"><br/>
+                            <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"15" }} </span>  <br/><br><br>
+                            <br/> <br/>
+                        </div>
+                        <div class="small-box-footer" >
+                            <div class="row">                                      
+                                <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
+                                    {% get_nb_qf_subject group teacher.user.id as nb_qf %}
+                                    <a href="{% url 'list_questions_flash_by_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;"> 
+                                        Accéder aux questions flash  <b>[{{  nb_qf }}]</b>                           
+                                    </a>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+
+                <div class="col-xs-12" >
+                    <div class="alert alert-danger">
+                             Vous devez créer au moins un groupe pour créer des question flash.
+                    </div>
+                </div>
+            {% endfor %}
+ 
+</section>
+
+{% endblock %}
+
+
+ 
+
+     
+ 
+
+
+ 
+{% block modale %}
+
+
+{% endblock %}

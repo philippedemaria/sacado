@@ -3811,8 +3811,8 @@ def list_questions_flash(request):
  
     delete_session_key(request, "quizz_id")
 
-    groups = teacher.groups.all()
-    return render(request, 'tool/list_questions_flash.html', {   'teacher': teacher , 'groups' : groups   })
+    qflashes = teacher.teacher_quizz.filter(is_random=1).order_by("-date_modified")
+    return render(request, 'tool/list_questions_flash.html', {   'teacher': teacher , 'qflashes' : qflashes   })
 
 
 
@@ -3887,8 +3887,6 @@ def list_questions_flash_student(request):
 def create_questions_flash(request,idl):
     teacher = request.user.teacher
 
-    level = Level.objects.get(pk=idl)
-
     grp_id = request.session.get("group_id",None)
     fld_id = request.session.get("folder_id",None)
     prc_id = request.session.get("parcours_id",None)
@@ -3902,7 +3900,12 @@ def create_questions_flash(request,idl):
         prc = Parcours.objects.get(pk=prc_id)
     else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc, initial= {   'levels':  [level], } )
+    if idl : 
+        level = Level.objects.get(pk=idl)
+        form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc, initial= {   'levels':  [level], } )
+    else :
+        level = None
+        form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc )
 
 
     request.session["tdb"] = "Tools"
@@ -3912,27 +3915,28 @@ def create_questions_flash(request,idl):
     subject = Subject.objects.get(pk=1)
     mentaltitles = Mentaltitle.objects.filter(subjects = subject, is_display=1).order_by("ranking")
  
-    level_dict = dict()
- 
-    level_dict["level"] = level 
-    list_mentals = list()
-    for mentaltitle in mentaltitles :
-        dict_mentals = dict()
-        mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
-        is_mentals = False 
-        if mentals :
-            dict_mentals["mentaltitle"] = mentaltitle 
-            dict_mentals["mentals"] = mentals
-            list_mentals.append(dict_mentals)
-            is_mentals = True
-            level_dict["sub"] = list_mentals
+    if idl : 
+        level_dict = dict()
+        level_dict["level"] = level 
+        list_mentals = list()
+        for mentaltitle in mentaltitles :
+            dict_mentals = dict()
+            mentals = Mental.objects.filter(mentaltitle  = mentaltitle, levels = level, is_display=1 ).order_by("ranking")
+            is_mentals = False 
+            if mentals :
+                dict_mentals["mentaltitle"] = mentaltitle 
+                dict_mentals["mentals"] = mentals
+                list_mentals.append(dict_mentals)
+                is_mentals = True
+                level_dict["sub"] = list_mentals
 
-    all_mentals.append(level_dict)
+        all_mentals.append(level_dict)
 
     if request.method == "POST":
         if form.is_valid():
             nf = form.save(commit = False)
             nf.teacher = teacher
+            nf.is_share = 0
             nf.is_questions = 1
             nf.is_random = 1
             nf.is_archive = 0
@@ -4310,14 +4314,29 @@ def ajax_select_questions_on_the_list(request):
                     list_mentals.append(dict_mentals)
                     level_dict["sub"] = list_mentals
 
-        all_mentals.append(level_dict)
+            all_mentals.append(level_dict)
 
         data['html'] = render_to_string('tool/ajax_list_questions_flash.html', {'all_mentals' : all_mentals , 'is_quizz' : is_quizz  , 'teacher' :  teacher  })
-        print(data)
+
     return JsonResponse(data)
 
 
+@csrf_exempt
+def ajax_publish_question_flash(request):
+    qflash_id  = request.POST.get("qflash_id")
+    is_publish = request.POST.get("is_publish")
+    qflash = Quizz.objects.get(pk=qflash_id)
 
+    data = dict()
+    if  int(is_publish) == 1  : 
+        data['html'] = "Non publié"
+        qflash.is_publish = 0
+        qflash.save()
+    else :
+        data['html'] = "Publié"
+        qflash.is_publish = 1
+        qflash.save()
+    return JsonResponse(data)
 
 #####################################################################################################################################
 #####################################################################################################################################

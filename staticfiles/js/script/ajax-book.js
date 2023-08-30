@@ -660,7 +660,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-
 });
 
 });

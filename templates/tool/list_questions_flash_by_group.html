@@ -34,7 +34,7 @@
 
  
 
-{% block body %} 
+{% block body %}   
 <form action="{% url 'delete_all_questions_flash' %}" method="POST" enctype='multipart/form-data'>     
     {% csrf_token %}
     <section class="content_main"> 
@@ -48,6 +48,7 @@
                     <th>Nb questions</th>
                     <th>Groupes</th>
                     <th style="width:200px">Support</th>
+                    <th style="width:50px;"></th>
                     <th style="width:50px;"></th>
                 </tr> 
             </thead>
@@ -113,7 +114,14 @@
 
                         <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('cette Questions flash')"><i class="bi bi-trash"></i></a>
                     </td>
-            
+                    <td>
+                        <div class="btn-group"  style="padding:0px;margin:0px;">
+                            <a href="javascript:void();" 
+                                class="btn btn-xs btn-{% if not q.is_publish %}danger{% else  %}success{% endif  %} qf_publisher"  data-qflash_id ="{{q.id}}"  id="qf_publish{{q.id}}"  >  
+                              {% if q.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                            </a>
+                        </div>   
+                    </td>
                 </tr> 
                 {% endfor %}
             </tbody>
@@ -122,7 +130,7 @@
     </section>
 </form>
 
- <div class="modal fade" id="quizz_to_pdf_modal" tabindex="-1" role="dialog" aria-labelledby="quizz_to_pdf_modal">
+<div class="modal fade" id="quizz_to_pdf_modal" tabindex="-1" role="dialog" aria-labelledby="quizz_to_pdf_modal">
     <div class="modal-dialog" role="document" style="width: 750px;">
         <div class="modal-content" >
             <div class="modal-header">

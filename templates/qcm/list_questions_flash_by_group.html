@@ -16,6 +16,7 @@
                     <th>Nb questions</th>
                     <th>Support</th>
                     <th></th>
+                    <th></th>
                 </tr> 
             </thead>
             <tbody>
@@ -43,6 +44,14 @@
                     </td>
                     <td>  
                         <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('ces Questions flash')"><i class="bi bi-trash"></i></a>
+                    </td>
+                    <td>
+                        <div class="btn-group"  style="padding:0px;margin:0px;">
+                            <a href="javascript:void(0);" 
+                                class="btn btn-xs btn-{% if not q.is_publish %}danger{% else  %}success{% endif  %} qf_publisher"  data-qflash_id ="{{q.id}}"  id="qf_publish{{q.id}}"  >  
+                              {% if q.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                            </a>
+                        </div>   
                     </td>
                 </tr> 
                 {% endfor %}

@@ -171,7 +171,7 @@ urlpatterns = [
 
 
 
-
+    path('ajax_publish_question_flash', ajax_publish_question_flash, name='ajax_publish_question_flash'),  
 
 
     path('list_questions_flash_student', list_questions_flash_student, name='list_questions_flash_student'), 

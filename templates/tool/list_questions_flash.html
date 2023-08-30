@@ -5,18 +5,24 @@
  
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
-
+    <script>
+        require(['script/ajax-list-question-flash']);
+    </script>  
 {% endblock %}
 
 
 
 {% block page_title %}
+    <a href="{% url 'list_questions_flash'  %}"><i class="bi bi-lightning"></i> Mes Questions flash </a><img src="{% static 'img/angle-right.png' %}" width="25px"/> 
 
-
-    <a href="{% url 'list_questions_flash'  %}"><i class="bi bi-lightning"></i></a> Mes Questions Flash 
-
-
-
+    <ul>
+        <li>{% if level %}
+            <a href="{% url 'create_questions_flash'  level.id %}" class="btn btn-new pull-right">Nouvelle série de questions Flash</a>
+            {% else %}
+            <a href="{% url 'create_questions_flash'  0 %}" class="btn btn-new pull-right">Nouvelle série de questions Flash</a>
+            {% endif %}
+        </li>
+    </ul> 
 
 {% endblock %}
 
@@ -27,51 +33,149 @@
 {% block page_menu_right %}
 
   
+ 
 
 {% endblock %}
 
  
 
-{% block body %}
-
-<section class="content_main"> 
-
- 
-
-
-        <div class="row">
-            {% for group in groups %}
-                <div class="col-xs-6 col-md-4 col-lg-3" >
-                    <div class="small-box" style="background-color:#007bc9;color:white;height:250px">
-                    <!-- modal qui affiche la liste des élèves -->
-                        <div class="inner" style="color:white;opacity:0.9"><br/>
-                            <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"15" }} </span>  <br/><br><br>
-                            <br/> <br/>
-                        </div>
-                        <div class="small-box-footer" >
-                            <div class="row">                                      
-                                <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
-                                    {% get_nb_qf_subject group teacher.user.id as nb_qf %}
-                                    <a href="{% url 'list_questions_flash_by_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;"> 
-                                        Accéder aux questions flash  <b>[{{  nb_qf }}]</b>                           
-                                    </a>
+{% block body %} 
+<form action="{% url 'delete_all_questions_flash' %}" method="POST" enctype='multipart/form-data'>     
+    {% csrf_token %}
+    <section class="content_main"> 
+        <table class="table table-sacado table-hovered ordering_tab_1000"  style="position:relative; width:100%" >
+            <thead> 
+                <tr> 
+                    <th style="width:30px"><input type="checkbox" id="select_all_these_items" /></th>
+                    <th style="width:80px">Date</th>
+                    <th style="width:200px">Titre</th>
+                    <th>Savoir faire ciblés</th>
+                    <th>Nb questions</th>
+                    <th>Groupes</th>
+                    <th>Support</th>
+                    <th></th>
+                    <th></th>
+                </tr> 
+            </thead>
+            <tbody>
+                {% for q in qflashes %}
+                <tr> 
+                    <td><input type="checkbox"  name="selected_checkbox" value="{{ q.id }}" class="items_to_be_selected" /></td>
+                    <td>{{ q.date_modified|date:"Y-m-d" }}</td> 
+                    <td style="width:200px"> {{ q.title }} </td>
+                    <td>{% for ma in q.mentaltitles.all %}{{ ma }}  
+                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                <div class="helper_tip_text" style="width:400px" >
+                                    {% for m in q.mental_activities %}<b>+</b> {{ m }}{% if not forloop.last %}<br/>{% endif %}{% endfor %}
                                 </div>
-                            </div>
-                           
+                            </span>
+
+                            {% if not forloop.last %}<br/>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ q.nb_slide }} <small>[{{ q.duration|time_done }}]</small></td> 
+                    <td style="position:relative">
+                        <span id="new_group_affected{{ q.id}}">
+                        {% for g in  q.groups.all  %}
+                            <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
+                        {% endfor %}
+                        </span>
+                        <span class="select_div_group"  data-relationship_id="{{q.id}}"   title="Ajouter des groupes" ><i class="fa fa-plus-circle helper_tip"></i></span> 
+                        <!-- Ajout de groupes par Ajax --->
+                        <div id="affectation{{ q.id }}" class="card-skill no_visu_on_load"> 
+                          <div class="row">
+                                <div class="col-sm-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{q.id}}"><i class="fa fa-times"></i></span>         
+                                    Affecter aux Groupes 
+                                </div>
+                           </div> 
+                        <hr style="padding:0px; margin:10px 0px"/><br>
+                            {% for g in groups %}  
+                                  <label style="font-size:12px">
+                                  <input type="checkbox" name="affectation" data-group_id="{{g.id}}" data-status="quizz" value="{{q.id}}" class="prcrs_selector" {% if g in q.groups.all %} checked  {% endif %}  />
+                                  {{ g.name }} <span id="loader{{g.id}}"></span>
+                                  </label>{% if not forloop.last %}<br>{% endif %}
+                            {% endfor %}
                         </div>
-                    </div>
-                </div>
-            {% empty %}
-
-                <div class="col-xs-12" >
-                    <div class="alert alert-danger">
-                             Vous devez créer au moins un groupe pour créer des question flash.
-                    </div>
-                </div>
-            {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'show_questions_flash' q.id %}" title="Projeter les questions"><i class="bi bi-webcam"></i></a>
  
-</section>
+                        <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ q.title }}"  data-idq="{{ q.id }}"  class="quizz_to_pdf_modal"  title="Télécharger les questions en pdf"><i class="bi bi-file-pdf"></i>    </a>
 
+                    </td>
+                    <td>
+                        {% comment %}  
+                        {% if q.is_numeric %}
+                        <a href="{% url 'result_quizz' q.id 0 %}" title="Résultats des questions"><i class="fa fa-trophy"></i></a>
+                            <a href="{% url 'goto_quizz_numeric' q.id %}" target='_blank' title="Voir le test - Nouvel onglet"><i class="bi bi-laptop"></i></a>
+                            
+                            <span class="helper_tip"> 
+                                <small>{% if q.students.count %}{{q.students.count}}{% else %} 0 {% endif %} </small>
+                                <div class="helper_tip_text" >Elèves en passation.<br/>{% for s in q.students.all %}{{ s }}<br/>{% endfor %}</div>
+                            </span> 
+                        {% endif %} 
+                        {% endcomment %}  
+                        <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('cette Questions flash')"><i class="bi bi-trash"></i></a>
+                    </td>
+                    <td>
+                        <div class="btn-group"  style="padding:0px;margin:0px;">
+                            <a href="javascript:void();" 
+                                class="btn btn-xs btn-{% if not q.is_publish %}danger{% else  %}success{% endif  %} qf_publisher"  data-qflash_id ="{{q.id}}"  id="qf_publish{{q.id}}"  >  
+                              {% if q.is_publish %} Publié  {% else %} Non publié {% endif  %} 
+                            </a>
+                        </div>   
+                    </td>
+                </tr> 
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="sbmit" class="btn btn-danger" onclick="return TestDelete('ces Questions flashs')"><i class="bi bi-trash"></i> Supprimer les questions sélectionnées</button>
+    </section>
+</form>
+
+ <div class="modal fade" id="quizz_to_pdf_modal" tabindex="-1" role="dialog" aria-labelledby="quizz_to_pdf_modal">
+    <div class="modal-dialog" role="document" style="width: 750px;">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h1 class='thin'><i class="bi bi-printer"></i> Imprimer <span id="idq_title"></span> en pdf</h1>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'print_qf_to_pdf' %}" method="POST">
+                    <div class="row">            {% csrf_token %}
+                        <div class="col-sm-12 col-md-12"> 
+                            <input type="hidden" id="index_idq" name="idq" />
+                            <table class="table table-sacado borderless">
+                                <tr>
+                                    <td>Imprimer le corrigé ? <small>Feuille séparée</small></td>
+                                    <td><input type="checkbox" name="is_correction" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
+                                </tr>                                
+                                <tr style="display:none;">
+                                    <td>Noter ?</td>
+                                    <td><input type="checkbox" name="is_mark" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non"/>
+                                </tr>
+                                <tr style="display:none;">
+                                    <td>Modifier les points par question ?  <small>1 par défaut</small></td>
+                                    <td><input type="number" name="point"  value="1" min="0" />
+                                </tr>
+                            </table>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12"> 
+                            <div class="form-group">
+                                <input value="Valider" type="submit" class="btn btn-primary"/>
+                                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
+                            </div>
+                        </div>    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 

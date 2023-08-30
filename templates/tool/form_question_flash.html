@@ -16,7 +16,7 @@
  
 
 {% block page_title %}
-    <span class="sacado_color_text"><i class="bi bi-lightning"></i></span>  
+    <a href="{% url 'list_questions_flash' %}" class="sacado_color_text"><i class="bi bi-lightning"></i> Mes questions flash</a>  
     {% include 'qcm/breadcrumb.html' %}
 
     {% if quizz %} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration</small> {% else %} Nouvelles questions flash {% endif %}
@@ -57,16 +57,15 @@
                             {{ form.title.errors }}
                         </div>
                         <div class="col-sm-6 text-danger">
-                            Actuellement, les questions flash ne sont proposées qu'en Maths jusqu'en 4è. Notre équipe développe les autres niveaux. 
+                            <label>Actuellement, les questions flash ne sont proposées qu'en Maths jusqu'en 4è. Notre équipe développe les autres niveaux. </label>
                         </div>
                     </div>
                     <div class="row form-group">  
-                        <div class='col-sm-12 col-md-7'>
+                        <div class='col-sm-12 col-md-4'>
+                            {% comment %}
                             <table class="table table-sacado borderless">
                                 <tr>
-                                    <td>Nombre de questions <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >Visibles par les élèves.</div>
-                                        </span></td>
+                                    <td>Nombre de questions</td>
                                     <td style="width:80px">{{ form.nb_slide|add_class:"form-control"  }}</td>
                                     <td>{{ form.nb_slide.errors }}</td>
                                 </tr>
@@ -85,6 +84,10 @@
                                     <td></td>
                                 </tr>
                             </table>
+                            {% endcomment %}
+                            <label>Nombre de questions</label><br/>
+                            {{ form.nb_slide|add_class:"form-control" }}
+                            {{ form.nb_slide.errors }}
                         </div>
                         <div class="col-sm-12 col-md-5">
                             {% comment %}
@@ -92,7 +95,7 @@
                             {{ form.subject|add_class:"form-control select2" }}
                             {{ form.subject.errors }}<input name="levels" type="hidden" value="{{ level.id }}" />
                             {% endcomment %}
-                            <label>Autre niveau cible</label>
+                            <label>Niveau</label>
                             {{ form.levels|add_class:"form-control select2" }}
                             {{ form.levels.errors }}
                             <input id="id_subject"  name="subject" type="hidden" value="1" />
@@ -195,7 +198,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-12" style="margin-top: 10px" id="question_choice_style">
-   
+                {% if level %}
                 <table class="table table-hover borderless display1000" style="width:100%;" >
                     <thead> 
                         <tr>
@@ -233,7 +236,12 @@
                             {% endfor %}
                         {% endfor %}
                     </tbody>
-                </table> 
+                </table>
+                {% else %}
+                <div class="alert alert-danger">
+                    Choisir au moins un niveau.
+                </div>
+                {% endif %}
             </div> 
         </div>
 	    <div class="row">
