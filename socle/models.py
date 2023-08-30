@@ -585,6 +585,13 @@ class Skill(models.Model):
 
 
 
+class Bo(models.Model):
+    level = models.ForeignKey(Level, related_name="bos", default="", on_delete=models.CASCADE, null = True ,  verbose_name="Niveau")
+    subject = models.ForeignKey(Subject, related_name="bos", default="", on_delete=models.CASCADE, null = True ,  verbose_name="Enseignement")
+    link = models.CharField(max_length=255, verbose_name="Nom")
+ 
+    def __str__(self):
+        return "{}>{}>{}".format(self.subject.shortname,self.level.shortname,self.link)
 
 
 
