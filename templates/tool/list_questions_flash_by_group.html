@@ -98,6 +98,7 @@
 
                     </td>
                     <td>
+                        {% comment %}  
                         {% if q.is_numeric %}
                         <a href="{% url 'result_quizz' q.id 0 %}" title="Résultats des questions"><i class="fa fa-trophy"></i></a>
                             <a href="{% url 'goto_quizz_numeric' q.id %}" target='_blank' title="Voir le test - Nouvel onglet"><i class="bi bi-laptop"></i></a>
@@ -106,8 +107,8 @@
                                 <small>{% if q.students.count %}{{q.students.count}}{% else %} 0 {% endif %} </small>
                                 <div class="helper_tip_text" >Elèves en passation.<br/>{% for s in q.students.all %}{{ s }}<br/>{% endfor %}</div>
                             </span> 
-
-                        {% endif %}  
+                        {% endif %} 
+                        {% endcomment %}  
 
 
                         <a href="{% url 'delete_questions_flash' q.id %}" title="Supprimer les questions" onclick="return TestDelete('cette Questions flash')"><i class="bi bi-trash"></i></a>
