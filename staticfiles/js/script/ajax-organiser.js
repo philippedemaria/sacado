@@ -47,22 +47,13 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', "#submit_rename_parcours" , function (event) {
 
             var pk_chapter_id      = $("#pk_chapter_id").val();
-            var rename_chapter     = $("#rename_chapter").val();
-
-            if ($("#is_rename_parcours").is(":checked")){
-                var is_rename_parcours = "yes";
-            } else {
-                var is_rename_parcours = "no";
-            }
-        
+ 
             var csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
             $.ajax({
                     data: { 
                         'chapter_id': pk_chapter_id ,
                         'rename_chapter': rename_chapter ,
-                        'is_rename_parcours': is_rename_parcours ,
-
                         'csrf_token': csrf_token 
                     } ,   
                     type: "POST",

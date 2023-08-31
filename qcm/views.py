@@ -14157,18 +14157,12 @@ def ajax_rename_chapter(request) :
 
     chapter_id = request.POST.get('chapter_id', None)
     rename_chapter = request.POST.get('rename_chapter', None)
-    is_rename_parcours = request.POST.get('is_rename_parcours', None)
 
     chapter = Chapter.objects.get(pk=chapter_id)
     chapter.title = rename_chapter
     chapter.save()
     data={}
     data["html"] = rename_chapter
-    if is_rename_parcours == "yes"  :
-        try :
-            Parcours.objects.filter(pk=chapter.parcours.id).update(title=rename_chapter)
-        except : pass
-
     return JsonResponse(data) 
 
 
