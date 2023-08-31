@@ -402,7 +402,7 @@
                 </div> 
                 {% if is_gar_check %}
                     {% if request.user.is_manager %}     
-                        {% if teacher.user.username|make_list|length < 40  %}
+                        {% if teacher and teacher.user.username|make_list|length < 40  %}
                         <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 <a href="{% url 'dissociate_teacher' teacher.user.id %}" class="btn btn-warning" onclick="return TestRemove('cet enseignant')" > Dissocier cet enseignant de mon établissement</a>
