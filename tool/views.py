@@ -311,7 +311,10 @@ def send_type_qf(request):
 
     msg = "\n\nDemande envoyée par : "+teacher+"\n\nTitre : "+ title+"\n\nNiveau : "+ level+"\n\nEnoncé :\n"+ enonce
     send_mail('SACADO : Demande de question flash', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
-
+    try :
+        send_mail('SACADO : Demande de question flash', msg ,settings.DEFAULT_FROM_EMAIL,[request.user.email, ])
+    except :
+        pass
     return JsonResponse(data)
 
 ############################################################################################################
