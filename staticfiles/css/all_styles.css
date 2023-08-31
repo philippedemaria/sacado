@@ -24,11 +24,20 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 /********************************************* gris #657574 ***************************************/
 /********************************************* beige #e6e2dd ***************************************/
 /********************************************* beige clair #f2f1f0***************************************/
-
+/*
 .the_null_body{
     height: 100vh;
     background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c), color-stop(#485DA6), color-stop(#00a1ba), color-stop(#00BF98), to(#36C486));background-image:-webkit-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:-o-linear-gradient(left bottom, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);background-image:linear-gradient(to right top, #6d327c, #485DA6, #00a1ba, #00BF98, #36C486);
 }
+*/
+
+
+.the_null_body{
+    height: 100vh;
+    background-color:#E3C1FF;
+}
+
+
 
 .advises{
   background-color: white;
