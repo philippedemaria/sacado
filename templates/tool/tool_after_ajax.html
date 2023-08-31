@@ -5,12 +5,12 @@
 <table id="standard_tab" class="table table-sacado  table-hover">
     <thead>
     <tr>
-        <th style="width:30px">Choix</th>
+        <th style="width:40px">Choisir</th>
+        <th>Titre</th>        
         <th  style="width:300px">Vue</th>
-        <th>Titre</th>
+        {% if request.user.is_superuser %}          
         <th style="width:200px">Degrés </th>
-        <th style="width:200px">Thèmes </th>  
-        {% if request.user.is_superuser %}                    
+        <th style="width:200px">Thèmes </th>            
         <th> </th>
         {% endif %}
     </tr>
@@ -21,12 +21,13 @@
                 <td>
                      <input type="checkbox" name="get_this_tools" class="get_this_tool" data-tool_id="{{ tool.id }}"/>
                 </td>
+                <td>
+                   <a href="{% url 'show_tool' tool.id  %}">{{ tool.title }}</a> 
+                </td>                
                 <td style="line-height:200px">
                     <a href="{% url 'show_tool' tool.id  %}"><img src="{{ tool.imagefile.url }}" class="image_tool" /></a> 
                 </td>
-                <td>
-                   <a href="{% url 'show_tool' tool.id  %}">{{ tool.title }}</a> 
-                </td>
+                {% if request.user.is_superuser %}                
                 <td>
                     {% for d in tool.degres.all %}
                     <li class='sanspuce'>{{ d.title }}</li>
@@ -39,7 +40,6 @@
                     {% empty %} <small class='text-danger'>Non renseigné</small> 
                     {% endfor %} 
                 </td>
-                {% if request.user.is_superuser %}
                 <td>
                     <a href="{% url 'update_tool'  tool.id %}" class="btn btn-default"  title="Modifier"><i class="bi bi-pen"></i></a>   <br/><br/>                                 
                     <a href="{% url 'delete_tool'  tool.id %}" class="btn btn-danger"   onclick="return TestDelete('cet outil')"  title="Supprimer"><i class="bi bi-trash"></i></a> 
