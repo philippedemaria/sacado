@@ -166,7 +166,34 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+ 
+        $('body').on('click', '#send_qf_to_sacado' , function (event) {  
 
+            let title = $("#title").val();
+            let enonce  = $("#enonce").val();
+            let level  = $("#level").val();
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",                    
+                    traditional: true, // Permet d'envoyer une liste.
+                    data: {
+                        'title'  : title,
+                        'enonce' : enonce,
+                        'level'  : level,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url: "../send_type_qf",
+                    success: function (data) {
+
+                        $('#ask_question').modal('hide');
+  
+                    }
+                }
+            )
+         });
 
 
 

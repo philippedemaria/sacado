@@ -124,76 +124,80 @@
                         </div>
                     </div>  
                 </div>            
-                <div class="col-sm-12 col-md-6 setup_ggb no_visu">
-                    <div class="row ">
-                        <div class="col-sm-12 col-md-6">                              
-                            <div class="exercise_body_shared no_visu form_card" style="height: 470px;">
-                                <div id="pclist">
-                                {% if group %}
-                                <label>Attribuer aux parcours</label> 
-                                {{ form.parcours|add_class:"select_all_parcours"   }}
-                                {{ form.parcours.errors }}
-                                {% endif %}
-                                </div> 
-                            </div>
-                        </div>                 
-                        <div class='col-sm-12 col-md-6 form_card'  style="height: 270px;">
-                            <table class="table table-sacado borderless ">
-                                <tr style="display:none">
-                                    <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                                            <div class="helper_tip_text" >Visible par les élèves.</div>
-                                        </span></td>
-                                    <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-                                    <td>{{ form.is_publish.errors }}</td>
-                                </tr>
-                                <tr style="display:none" id="publication_div">
-                                    <td><label>Date de publication :</label>  
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                            <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
-                                            <span class="text-danger">Pour modifier la date, vider le champ.</span>
-                                            </div>
-                                        </span>
-                                    </td>
-                                    <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
-                                    <td></td>
-                                </tr>
 
-                                <tr style="display:none">
-                                    <td>{{ form.is_share.label_tag }} 
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                            <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
-                                        </span> 
-                                    </td>
-                                    <td> {{ form.is_share|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                </tr>                            
-     
-                                <tr style="display:none">
-                                    <td class="no_border">{{ form.is_result.label_tag }} 
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                            <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
-                                        </span> 
-                                    </td>
-                                    <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
-                                </tr>
-                                <tr>
-                                    <td class="no_border">{{ form.is_result_final.label_tag }} 
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                            <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
-                                        </span> 
-                                    </td>
-                                    <td colspan="2">{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
-                                </tr>
-                                <tr class="div_interslide">
-                                    <td class="no_border"> Variation de la durée <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
-                                                    <div class="helper_tip_text" >Permet de ralentir (+) ou d'accélérer (-) la durée donnée dans les formats de question.</div>
-                                                </span> </td>
-                                    <td style="width:80px">{{ form.delta_duration|add_class:"form-control" }}</td>
-                                    <td><small>sec.</small></td>
-                                </tr>
-                            </table>
+                <div class="col-sm-12 col-md-3  setup_ggb no_visu">                              
+                    <div class="exercise_body_shared no_visu form_card" style="height: 470px;">
+                        <div id="pclist">
+                        {% if group %}
+                        <label>Attribuer aux parcours</label> 
+                        {{ form.parcours|add_class:"select_all_parcours"   }}
+                        {{ form.parcours.errors }}
+                        {% endif %}
                         </div> 
                     </div>
-                </div>
+                </div>                 
+                <div class='col-sm-12 col-md-3'  style="height: 270px;">
+                    <table class="table table-sacado borderless form_card   setup_ggb no_visu">
+                        <tr style="display:none">
+                            <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                    <div class="helper_tip_text" >Visible par les élèves.</div>
+                                </span></td>
+                            <td>{{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                            <td>{{ form.is_publish.errors }}</td>
+                        </tr>
+                        <tr style="display:none" id="publication_div">
+                            <td><label>Date de publication :</label>  
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Date à partir de laquelle le parcours est publié.<br/>
+                                    <span class="text-danger">Pour modifier la date, vider le champ.</span>
+                                    </div>
+                                </span>
+                            </td>
+                            <td>{{ form.start|add_class:"form-control datetimepicker"}}</td>
+                            <td></td>
+                        </tr>
+
+                        <tr style="display:none">
+                            <td>{{ form.is_share.label_tag }} 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Si Mutualisé, vos collègues peuvent le lire. Il est alors préférable de renseigner l'enseignement, le niveau et le thème pour le retrouver plus facilement.</div>
+                                </span> 
+                            </td>
+                            <td> {{ form.is_share|attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                        </tr>                            
+
+                        <tr style="display:none">
+                            <td class="no_border">{{ form.is_result.label_tag }} 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Affiche les réponses pour les élèves dans leur espace. Utile après la passation. Attention de faire passer tous les groupes avant l'affichage.</div>
+                                </span> 
+                            </td>
+                            <td>{{ form.is_result|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
+                        </tr>
+                        <tr>
+                            <td class="no_border">{{ form.is_result_final.label_tag }} 
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                    <div class="helper_tip_text" >Affiche les réponses en fin de quizz ou entre chaque question.  Les durées d'affichage de la question et de la réponse sont égales.</div>
+                                </span> 
+                            </td>
+                            <td colspan="2">{{ form.is_result_final|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Fin de quizz"|attr:"data-off:Intercalée"|attr:"data-width:130" }}  </td>
+                        </tr>
+                        <tr class="div_interslide">
+                            <td class="no_border"> Variation de la durée <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                            <div class="helper_tip_text" >Permet de ralentir (+) ou d'accélérer (-) la durée donnée dans les formats de question.</div>
+                                        </span> </td>
+                            <td style="width:80px">{{ form.delta_duration|add_class:"form-control" }}</td>
+                            <td><small>sec.</small></td>
+                        </tr>
+                    </table>
+
+
+                    <div class="col-sm-6 col-md-6 form_card"   style="margin-top: 20px;"> 
+                        <a href="javascript:void(0);" data-toggle="modal" data-target="#ask_question" class="btn btn-sacado">Proposer <br/>un type de <br/>question flash</a>
+                    </div> 
+
+                </div> 
+
             </div>
         </div>
         <div class="row">
@@ -255,4 +259,66 @@
  
     </form>  
 </section>
+
+
+<div class="modal fade" id="ask_question" tabindex="-1" role="dialog" aria-labelledby="ask_question">
+    <div class="modal-dialog modal-maxsize" role="document">
+        <div class="modal-content" >
+            <div class="modal-header">            
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4>...et SACADO le code pour vous. </h4>  
+            </div>
+            <div class="modal-body">
+                <form  action="" method="POST">
+                    {% csrf_token %}
+                    <div class="row">  
+                        <div class='col-sm-12'>
+                            <div class='form-group'> 
+                                <input type="text" name="title" id="title"  class="form-control" required placeholder="Titre" />
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">  
+                        <div class='col-sm-12'>
+                            <div class='form-group'> 
+                                <select name="level" id="level"  class="form-control select2"  required>
+                                    <option value="Maternelle">Maternelle</option>
+                                    <option value="CP">CP</option>
+                                    <option value="CE 1">CE 1</option>
+                                    <option value="CE 2">CE 2</option>
+                                    <option value="CM 1">CM 1</option>
+                                    <option value="CM 2">CM 2</option>
+                                    <option value="6 ème">6 ème</option>
+                                    <option value="5 ème">5 ème</option>
+                                    <option value="4 ème">4 ème</option>
+                                    <option value="3 ème">3 ème</option>
+                                    <option value="2 nde">2 nde</option>
+                                    <option value="1 ère">1 ère</option>
+                                    <option value="T ale">T ale</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">  
+                        <div class='col-sm-12'>
+                            <div class='form-group'> 
+                                <textarea name="enonce"  id="enonce"  class="form-control" required placeholder="Enoncé ou exemple"></textarea> 
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="row">  
+                        <div class='col-sm-12'>
+                            <div class='form-group'> 
+                                <a href="javascript:void(0);" id="send_qf_to_sacado" class="btn btn-sacado">Envoyer l'énoncé</a> 
+                            </div>
+                        </div>    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+
 {% endblock %} 

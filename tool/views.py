@@ -301,6 +301,18 @@ def ajax_chargethemes_tool(request):
     return JsonResponse(data)
 
 
+def send_type_qf(request):
+
+    title  = request.POST.get("title")
+    enonce = request.POST.get("enonce")
+    level  = request.POST.get("level")
+    data = {}
+    teacher = request.user.first_name +" "+ request.user.last_name  +"\nEtalissement : "+ request.user.school.name +", "+ request.user.school.country.name
+
+    msg = "\n\nDemande envoyée par : "+teacher+"\n\nTitre : "+ title+"\n\nNiveau : "+ level+"\n\nEnoncé :\n"+ enonce
+    send_mail('SACADO : Demande de question flash', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
+
+    return JsonResponse(data)
 
 ############################################################################################################
 ############################################################################################################
