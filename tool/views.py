@@ -274,7 +274,6 @@ def ajax_chargethemes_tool(request):
 
     id_degre =  request.POST.get("id_degre")
     id_themes =  request.POST.getlist("id_themes", None)
-    print(id_themes)
 
     data  = {}
     degre =  Degre.objects.get(pk = id_degre)
@@ -291,7 +290,8 @@ def ajax_chargethemes_tool(request):
     thms = list()
     for tool in tools :
         for t in tool.themes.values_list('id', 'name' ):
-            thms.append(  t  )
+            if t not in thms :
+                thms.append(  t  )
  
     data['themes'] = thms
 
