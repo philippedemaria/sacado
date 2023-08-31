@@ -197,6 +197,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 $("#helper_div_title").html("Les progressions "); 
                 value = $("#helper_progression_text").html();
             }
+            else if (condition == "tools") 
+            {
+                $("#helper_div_title").html("Les outils pédagogiques "); 
+                value = $("#helper_tool_text").html();
+            }
+
+
+
             $("#helper_div_in").html(value) ;
         });
 
