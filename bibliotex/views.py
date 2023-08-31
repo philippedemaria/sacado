@@ -1210,10 +1210,22 @@ def show_bibliotex(request, id):
     request.session["tdb"] = "Documents"  
     request.session["subtdb"] = "Bibliotex"
 
+    group_id = request.session.get('group_id',None)
+    group = None
+    if group_id :
+        group = Group.objects.get(pk=group_id)
+
+
+    folder_id = request.session.get('folder_id',None)
+    folder = None
+    if folder_id :
+        folder = Folder.objects.get(pk=folder_id)
+
+
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id).order_by("ranking")
 
-    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, }
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'group' : group, 'folder' : folder }
 
     return render(request, 'bibliotex/show_bibliotex.html', context )
 

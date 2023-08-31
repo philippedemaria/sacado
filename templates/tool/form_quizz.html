@@ -85,9 +85,7 @@
                 {% endif %}
                 <div class="row {% if group %}no_visu{% endif %}">
                     <div class="col-sm-12 col-md-6"  >
-                        <label>Attribuer aux groupes ?</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                        </span>
+                        <label>Attribuer aux groupes</label>
                         <div class="alert alert-sacado form-group" id="grplist">                          
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}

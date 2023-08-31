@@ -20,17 +20,14 @@
             </a>   
         </div>
 
-
         <div class="exo_tex_scrollbar">     
             {% for e in  bibliotex.exotexs.all %}
                 <li class="list_exotex_in_tag sanspuce">{{ forloop.counter}}. {{ e.title|truncatechars:40}}</li>
+            {% empty %}
+                <li class="text-danger sanspuce"><label>Aucun exercice</label></li>
             {% endfor %}
  
         </div> 
-
-
-
-
 
         <div class="group_show  no_visu_on_load" id="group_show{{bibliotex.id }}"> 
             <label>Cette bibliotex est attribuée à</label>
@@ -44,8 +41,6 @@
             {% endfor %}
             <div style="clear:both"></div>
         </div>
-
-
 
         <div class="group_show  no_visu_on_load" id="bibliotex_show{{bibliotex.id }}"> 
              <div class="row"> 
@@ -76,27 +71,6 @@
         </div>
 
 
-        <!-- Fenetre des options -->
-        <div class="group_show  no_visu_on_load" id="bibliotex_options{{bibliotex.id }}"> 
-            <div class="row extend" align="center"> 
-                <div class="col-lg-6 col-xs-6">
-                    <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit" title="Imprimer"><i class="bi bi-printer"></i> 
-                    </a>
-                </div>
-                <div class="col-lg-6 col-xs-6">
-                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit" title="Ajouter des exercices" ><i class="bi bi-plus-circle-dotted"></i>  </a> 
-                </div> 
-            </div>
-
-            <div class="row" align="center">  
-                <div class="col-lg-6 col-xs-6">
-                    <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit" title="Individualiser" ><i class="bi bi-person"></i> </a> 
-                </div>
-                <div class="col-lg-6 col-xs-6">
-                    <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Dupliquer" ><i class="bi bi-clipboard-plus"></i> </a> 
-                </div>
-            </div>
-        </div>
         <!-- ================================ -->
 
 
@@ -148,25 +122,39 @@
  
 
         <div class="row"> 
-           <div class="col-lg-3 col-xs-3">
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Configuration"><i class="bi bi-gear"></i>   </a> 
+           <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Configurer"><i class="bi bi-gear"></i>   </a> 
             </div>
-
-            <div class="col-lg-3 col-xs-3">
-                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"  title="Groupes attribués"><i class="bi bi-people"></i> </span>
+            <div class="col-lg-1 col-xs-1">
+                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"  title="Lire les compétences et savoir faire"><i class="bi bi-c-circle"></i> 
                 </span>
             </div> 
 
+            <div class="col-lg-1 col-xs-1">
+                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"  title="Voir les groupes attribués"><i class="bi bi-people"></i> </span>
+            </div> 
 
+            <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit" title="Individualiser" ><i class="bi bi-person"></i> </a> 
+            </div> 
              
-            <div class="col-lg-3 col-xs-3">
-                <span href="#" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"  title="Compétences et savoir faire"><i class="bi bi-c-circle"></i> 
-                </span>
+
+     
+            <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Dupliquer" ><i class="bi bi-clipboard-plus"></i> </a> 
             </div> 
+
+
             <div class="col-lg-3 col-xs-3">
-                <a href="javascript: void(0)" data-bibliotex_id="{{ bibliotex.id}}" class="edit open_options_bibliotex pull-right" title="Ouvrir les options" >
-                    <i class="fa fa-ellipsis-v" style="font-size:14px;padding-top: 2px;"></i>
+                 <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit" title="Imprimer"><i class="bi bi-printer"></i> 
                 </a>
+            </div> 
+ 
+             <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id  %}" class="edit" title="Créer des exercices" ><i class="bi bi-plus-circle-dotted"></i>  </a>
+            </div> 
+            <div class="col-lg-1 col-xs-1">
+                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="edit" title="Dupliquer des exercices" ><i class="bi bi-file-plus"></i> </a> 
             </div> 
         </div>
 

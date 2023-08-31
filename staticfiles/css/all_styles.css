@@ -2263,10 +2263,19 @@ input[type=range].form-range {
  
 
 .big_icon{
-    font-size: 70px;
-    color : #47C2DD ;
+    font-size: 50px;
+    color : #d7ceef ;
     padding: 10px;
 }
+
+ 
+
+.big_icon:hover{
+    font-size: 50px;
+    color : #ab99dd ;
+    padding: 10px;
+}
+
 /* ------------------------------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------      CUSTOMEXERCISE ------------------------------------*/
 /* ------------------------------------------------------------------------------------------------------------*/
@@ -2483,7 +2492,7 @@ input[type=range].form-range {
 
 
 .tab-pane i {
-  padding:2px;
+  padding:1px;
 }
  
 .btn .btn_label{

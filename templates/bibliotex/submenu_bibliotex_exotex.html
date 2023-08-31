@@ -15,9 +15,7 @@
                 <i class="fa fa-fw fa-print"></i> Télécharger en pdf 
             </a>
         </li>
-        <li {% if 'peuplate' in request.path %}class="active"{% endif %}>
-            <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}"  ><i class="fa fa-fw fa-cloud"></i> Sélectionner des exercices</a> 
-        </li>
+ 
         <li {% if 'update' in request.path %}class="active"{% endif %}>
             <a href="{% url 'update_bibliotex' bibliotex.id  %}"  ><i class="fa fa-fw fa-clone"></i> Dupliquer</a> 
         </li>
@@ -26,11 +24,6 @@
         </li>
         <li {% if 'results' in request.path %}class="active"{% endif %}>
             <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="fa fa-fw fa-bar-chart"></i> Lire les résultats</a> 
-        </li>
-
-        <li class="divider"></li>
-        <li>
-            <a href="{% url 'my_bibliotexs' %}" > {% include 'bibliotex/logo.html' %} Mes BiblioTex </a> </li>
         </li>
 
     </ul>
