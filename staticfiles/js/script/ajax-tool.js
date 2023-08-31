@@ -139,12 +139,93 @@ define(['jquery',  'bootstrap'], function ($) {
                 }
             )
          });
-
-
  
+        $(document).on('change', '#id_degre',  function (event) {
+
+            let id_degre = $(this).val();
+            let id_themes  = $('#id_themes').val();
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+            $("#loading").show(); 
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_degre' : id_degre, 
+                        'id_themes': id_themes,                       
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "ajax_chargethemes_tool",
+                    success: function (data) {
+
+                        themes = data["themes"];
+                        $('select[name=themes]').empty("");
+                        if (themes.length >0)
+
+                        { for (let i = 0; i < themes.length; i++) {
+                                    
+                                console.log(themes[i]);
+                                let themes_id = themes[i][0];
+                                let themes_name =  themes[i][1]  ;
+                                let option = $("<option>", {
+                                    'value': Number(themes_id),
+                                    'html': themes_name
+                                });
+                                $('select[name=themes]').append(option);
+                            }
+                        }
+                        else
+                        {
+                            let option = $("<option>", {
+                                'value': 0,
+                                'html': "Aucun contenu disponible"
+                            });
+                            $('select[name=themes]').append(option);
+                        }
 
 
+                        $('#result_search').html("").html(data.html);
 
+                        $("#loading").hide(500); 
+                    }
+                }
+            )
+        });
+
+
+        $(document).on('change', '#id_themes',  function (event) {
+
+            let id_themes = $(this).val();
+            let id_degre  = $('#id_degre').val();
+
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+
+            $("#loading").html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+            $("#loading").show(); 
+
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'id_degre' : id_degre, 
+                        'id_themes': id_themes,                        
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "ajax_chargethemes_tool",
+                    success: function (data) {
+
+                        $('#result_search').html("").html(data.html);
+
+                        $("#loading").hide(500); 
+                    }
+                }
+            )
+        });
  
     });
 });

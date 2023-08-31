@@ -142,7 +142,8 @@ def list_tools(request):
     else :
         tools = Tool.objects.filter(is_publish=1, is_ebep=0).exclude(teachers = teacher)
     form = ToolForm(request.POST or None, request.FILES or None   )
-    return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools })
+    degres = Degre.objects.all()
+    return render(request, 'tool/list_tools.html', {'form': form , 'tools' : tools, 'degres' : degres, 'teacher' : teacher})
 
 
 
@@ -150,13 +151,10 @@ def create_tool(request):
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "Projections"
-
     form = ToolForm(request.POST or None, request.FILES or None,   )
- 
-
+    print(form)
     if form.is_valid():
         form.save()
-
         return redirect('list_tools')
     else:
         print(form.errors)
@@ -175,7 +173,6 @@ def update_tool(request, id):
  
     teacher = request.user.teacher   
     form = ToolForm(request.POST or None, request.FILES or None, instance = tool  )
-
     if form.is_valid():
         form.save()
         return redirect('list_tools')
@@ -272,6 +269,39 @@ def ajax_attribute_this_tool_to_exercise(request):
     return JsonResponse(data)
 
 
+@csrf_exempt
+def ajax_chargethemes_tool(request):
+
+    id_degre =  request.POST.get("id_degre")
+    id_themes =  request.POST.getlist("id_themes", None)
+    print(id_themes)
+
+    data  = {}
+    degre =  Degre.objects.get(pk = id_degre)
+
+    if id_themes and id_themes[0] != "" :
+        tools = list()
+        for theme_id in id_themes :
+            theme = Theme.objects.get(pk = theme_id)
+            tls = Tool.objects.filter(degres=degre, themes = theme).order_by("ranking")
+            for tool in tls :
+                tools.append(tool) 
+    else : tools = Tool.objects.filter(degres=degre).order_by("ranking")
+
+    thms = list()
+    for tool in tools :
+        for t in tool.themes.values_list('id', 'name' ):
+            thms.append(  t  )
+ 
+    data['themes'] = thms
+
+    context = { 'tools' : tools , }
+    data['html'] = render_to_string('tool/tool_after_ajax.html', context)
+ 
+    return JsonResponse(data)
+
+
+
 ############################################################################################################
 ############################################################################################################
 ########## Quizz
@@ -284,6 +314,7 @@ def user_list_of_school(teacher):
     else :
         user_ids = [2480]
     return user_ids
+
 
 @login_required(login_url= 'index')
 def all_quizzes(request):

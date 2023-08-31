@@ -85,6 +85,7 @@ urlpatterns = [
 
     ############## Ajax
     path('delete_my_tool', delete_my_tool, name='delete_my_tool'),
+    path('ajax_chargethemes_tool', ajax_chargethemes_tool, name='ajax_chargethemes_tool'),
 
     path('ajax_chargeknowledges', ajax_chargeknowledges, name='ajax_chargeknowledges'),
     path('ajax_chargewaitings', ajax_chargewaitings, name='ajax_chargewaitings'),

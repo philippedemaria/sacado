@@ -36,53 +36,44 @@
  
 
     <section class="content_main"> 
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <table id="standard_tab" class="table table-sacado  table-hover">
-                    <thead>
-                    <tr>
-                        <th style="width:30px">Choix</th>
-                        <th  style="width:300px">Vue</th>
-                        <th>Titre</th>
-                        <th>Degrés </th>
-                        <th   style="width:200px">Thèmes </th>                        
-                        <th> </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for tool in tools %}
-                            <tr id="this_tool_id{{ tool.id }}">
-                                <td>
-                                     <input type="checkbox" name="get_this_tools" class="get_this_tool" data-tool_id="{{ tool.id }}"/>
-                                </td>
-                                <td style="line-height:200px">
-                                    <a href="{% url 'show_tool' tool.id  %}"><img src="{{ tool.imagefile.url }}" height="190px" border="0px" /></a> 
-                                </td>
-                                <td>
-                                   <a href="{% url 'show_tool' tool.id  %}">{{ tool.title }}</a> 
-                                </td>
-                                <td>
-                                    {% for d in tool.degres.all %}
-                                    <li>{{ d.title }}</li>
-                                    {% empty %} Non renseigné 
-                                    {% endfor %} 
-                                </td>
-                                <td>
-                                    {% for t in tool.themes.all %}
-                                    <li>{{ t.title }}</li>
-                                    {% empty %} Non renseigné 
-                                    {% endfor %} 
-                                </td>
-                                <td>
-                                    {% if request.user.is_superuser %}
-                                        <a href="{% url 'update_tool'  tool.id %}">Modifier</a>                                    
-                                        <a href="{% url 'delete_tool'  tool.id %}"  onclick="return TestDelete('cet outil')">Supprimer</a> 
-                                    {% endif %}
-                                </td>
-                            </tr>
+        <form method="POST">
+        {% csrf_token %}
+        <div class="row" style="margin-left:0px; margin-right:0px; border:1px solid #CCC; background: #F0F0F0; background-image: url({% static 'img/fond_search.png' %});">
+            <div class="col-sm-12 col-md-1 col-lg-1">
+                <div class="form-group" style="padding-top:20px;">
+                    <span class="thin" style="background: #FFF; padding :5px; padding-top :4px;  border-radius:10px;font-size:1vw"> Recherche</span>
+                </div>
+            </div>
+            <div class="col-sm-10 col-md-3 col-lg-2">
+                <div class="form-group">
+                    <select id="id_degre" name="degre" class="form-control select2" >
+                        <option value=" ">Choisir un degré</option>
+                        {% for d in degres %}
+                            <option value="{{d.id}}">{{ d.title }}</option>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-1 col-lg-1">
+                <div class="form-group" id="loading">
+                </div>
+            </div>
+
+            <div class="col-sm-10 col-md-3 col-lg-4">
+                <div class="form-group">
+                    <select id="id_themes" name="themes" class="form-control select2" multiple>
+                        <option value=" ">Choisir un degré puis un thème</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        </form>
+
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12" id="result_search">
+                {% include 'tool/tool_after_ajax.html' %}
             </div>
         </div>
  
