@@ -189,7 +189,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                     success: function (data) {
 
                         $('#ask_question').modal('hide');
-  
+                        $("#sender_qf_ok").html("Question envoyée");
                     }
                 }
             )
