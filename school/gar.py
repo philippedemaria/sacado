@@ -48,8 +48,10 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 def web_update_abonnement_xml(customer,id_abonnement):
     #Webservice du GAR
-    suf = "T00:00:00.000000"
-    date_start, date_stop = str(customer.date_start_gar)+suf, str(customer.date_stop)+suf
+    #suf = "T00:00:00.000000"
+    #date_start, date_stop = str(customer.date_start_gar)+suf, str(customer.date_stop)+suf
+
+    date_start, date_stop = str(customer.date_start_gar).isoformat(), str(customer.date_stop).isoformat()
 
     try :
         f = open('/var/www/sacado/logs/gar_connexions.log','a')
@@ -63,6 +65,8 @@ def web_update_abonnement_xml(customer,id_abonnement):
         f.close()
     except :
         pass 
+
+
 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
@@ -78,6 +82,22 @@ def web_update_abonnement_xml(customer,id_abonnement):
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
     body += "<nbLicenceEleve>"+str(customer.school.nbstudents)+"</nbLicenceEleve>"
+
+
+
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        print("===> date_start : ", file=f)
+        print(date_start, file=f)
+        print("===> date_stop : ", file=f)
+        print(date_stop, file=f)
+        print("===> id_abonnement : ", file=f)
+        print(id_abonnement, file=f)
+        print("===> body : ", file=f)
+        print(body, file=f)
+        f.close()
+    except :
+        pass 
 
     if not customer.school.is_primaire :
         body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
