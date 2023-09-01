@@ -294,8 +294,18 @@ position: absolute;
     }
 
 
-    .content_title, .content_list {
+
+     .content_list {
         margin-left: 20px!important;
+    }
+
+
+    .content_title {
+      margin-left: 0px!important;
+      padding: 10px;
+      background-color: #FFF;
+      margin-left: 0px;
+      min-height: 40px;
     }
 
     .navbarRight-nav{

@@ -460,6 +460,29 @@ table.puzzle td {
     min-height: 40px;  
 }
 
+
+@media (max-width: 768px) {
+.content_title {
+    padding-left: 10px;
+    background-color: #FFF;
+    margin-left: 0px ;
+    min-height: 40px;  
+}
+
+
+.no_visu_xs {
+    display:none;
+}
+
+ 
+.content_main {
+    margin: 10px!important;
+}
+ 
+
+}
+
+
 .main-header .navbar {
   -webkit-transition: margin-left 0.3s ease-in-out;
   -o-transition: margin-left 0.3s ease-in-out;

@@ -37,7 +37,7 @@
 {% block body  %}  
 <section class="content_main">
  
-     <div class="col-sm-1 col-md-1 col-lg-1" align="center">
+     <div class="col-sm-1 col-md-1 col-lg-1 no_visu_xs" align="center" >
 
         <div class="exercise_buttons">
           {% if exercise.supportfile.calculator %}
@@ -124,7 +124,7 @@
         </div>
     </div> 
 
-    <div class="col-sm-12 col-md-12 col-lg-3">
+    <div class="col-sm-12 col-md-12 col-lg-3 no_visu_xs">
         <div class="pull-right">
             {% with  exercise.level.image   as level_image %}
                <img src="{% static level_image %}"  />
