@@ -53,20 +53,6 @@ def web_update_abonnement_xml(customer,id_abonnement):
 
     date_start, date_stop = str(customer.date_start_gar).isoformat(), str(customer.date_stop).isoformat()
 
-    try :
-        f = open('/var/www/sacado/logs/gar_connexions.log','a')
-        print("===> date_start : ", file=f)
-        print(date_start, file=f)
-        print("===> date_stop : ", file=f)
-        print(date_stop, file=f)
-        print("===> id_abonnement : ", file=f)
-        print(id_abonnement, file=f)
-        
-        f.close()
-    except :
-        pass 
-
-
 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
