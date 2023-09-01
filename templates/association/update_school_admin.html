@@ -3,7 +3,9 @@
 {% load widget_tweaks %}
 
 {% block page_title %} 
-   <a href="{% url 'admin_tdb' %}"> <i class="fa fa-bank"></i></a> {{ school.name }}
+   <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> <img src="{% static 'img/angle-right.png' %}" width="25px"/>
+
+   <a href="{% url 'adhesions' %}"> Liste des établissements</a> <img src="{% static 'img/angle-right.png' %}" width="25px"/> {{ school.name }}
  
 
 {% endblock  %}
