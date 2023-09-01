@@ -120,7 +120,10 @@
                                 {{ customer.school.country.name }},  {{ customer.school.town }}
                             </td>
                             <td>
-                                {% if customer.school.gar %}<img src="{% static 'img/approche_gar.png' %}" height="20px" />{% endif %}
+                                {% if customer.school.gar %}<img src="{% static 'img/approche_gar.png' %}" height="15px" />{% endif %}
+                                {% if customer.gar_abonnement_id %}<small>{{ customer.gar_abonnement_id }}</small>{% endif %}
+
+
                             </td>
                             <td style="font-size: 10px">
                                 <span class="helper_tip" style="color:black">
