@@ -96,7 +96,7 @@
                     {% for customer in customers %}
                         <tr id="this_tr_{{ accounting.id }}" class="this_tr_all">
                             <td>
-                                <span >{{ customer.last_accounting.chrono }}</span> 
+                                <span class="text-{% if customer.status == 3 %}success{% else %}warning{% endif %}">{{ customer.last_accounting.chrono }}</span> 
                             </td>                            
                             <td>
                                 <span >{{ customer.date_stop|date:"Y-m-d" }} </span> 
