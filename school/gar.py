@@ -10,8 +10,8 @@ def date_abonnement(today):
     date_stop  = datetime(today.year+1,7,14)  # Année suivante
 
     suf = "T00:00:00.000000"
-    date_start, date_stop = str(today)+suf, str(date_stop)+suf
-    
+    date_start, date_stop = str(today), str(date_stop.isoformat())
+
     return date_start, date_stop
 
 
