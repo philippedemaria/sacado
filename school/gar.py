@@ -71,19 +71,18 @@ def web_update_abonnement_xml(customer,id_abonnement):
 
 
 
-    try :
-        f = open('/var/www/sacado/logs/gar_connexions.log','a')
-        print("===> date_start : ", file=f)
-        print(date_start, file=f)
-        print("===> date_stop : ", file=f)
-        print(date_stop, file=f)
-        print("===> id_abonnement : ", file=f)
-        print(id_abonnement, file=f)
-        print("===> body : ", file=f)
-        print(body, file=f)
-        f.close()
-    except :
-        pass 
+
+    f = open('/var/www/sacado/logs/gar_connexions.log','a')
+    print("===> date_start : ", file=f)
+    print(date_start, file=f)
+    print("===> date_stop : ", file=f)
+    print(date_stop, file=f)
+    print("===> id_abonnement : ", file=f)
+    print(id_abonnement, file=f)
+    print("===> body : ", file=f)
+    print(body, file=f)
+    f.close()
+
 
     if not customer.school.is_primaire :
         body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
