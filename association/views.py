@@ -2192,7 +2192,7 @@ def purge_gar(request,user_type):
 
 
     if user_type < 3 :
-        User.objects.filter(user_type=user_type , school__gar=1).delete()
+        User.objects.filter(user_type=user_type , school__gar=1).delete()[:2000]
  
     context = {  'nb_teachers' : nb_teachers , 'nb_students' : nb_students }
 
