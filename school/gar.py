@@ -7,8 +7,11 @@ import requests
 def date_abonnement(today):
     """Création d'un abonnement dans la base de données"""
     date_start = today.isoformat() # Année en cours
-    date_stop  = datetime(today.year+1,7,14).isoformat() # Année suivante
+    date_stop  = datetime(today.year+1,7,14)  # Année suivante
 
+    suf = "T00:00:00.000000"
+    date_start, date_stop = str(today)+suf, str(date_stop)+suf
+    
     return date_start, date_stop
 
 
@@ -16,6 +19,7 @@ def date_abonnement(today):
 def web_abonnement_xml(accounting,id_abonnement , today):
     #Webservice du GAR
     date_start, date_stop = date_abonnement(today)
+
     body = "<?xml version='1.0' encoding='UTF-8'?>"
     body += "<abonnement xmlns='http://www.atosworldline.com/wsabonnement/v1.0/'>"
     body += "<idAbonnement>" + id_abonnement +"</idAbonnement>"
@@ -41,6 +45,23 @@ def web_abonnement_xml(accounting,id_abonnement , today):
     body += "<publicCible>ENSEIGNANT</publicCible>"
     body += "<publicCible>ELEVE</publicCible>"
     
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        print("===> date_start : ", file=f)
+        print(date_start, file=f)
+        print("===> date_stop : ", file=f)
+        print(date_stop, file=f)
+        print("===> id_abonnement : ", file=f)
+        print(id_abonnement, file=f)
+        print("===> body : ", file=f)
+        print(body, file=f)
+        f.close()
+    except :
+        pass 
+
+
+
+
     body += "</abonnement>"
     return body
 
@@ -48,10 +69,10 @@ def web_abonnement_xml(accounting,id_abonnement , today):
 
 def web_update_abonnement_xml(customer,id_abonnement):
     #Webservice du GAR
-    #suf = "T00:00:00.000000"
-    #date_start, date_stop = str(customer.date_start_gar)+suf, str(customer.date_stop)+suf
+    suf = "T00:00:00.000000"
+    date_start, date_stop = str(customer.date_start_gar)+suf, str(customer.date_stop)+suf
 
-    date_start, date_stop = str(customer.date_start_gar).isoformat(), str(customer.date_stop).isoformat()
+    #date_start, date_stop = str(customer.date_start_gar).isoformat(), str(customer.date_stop).isoformat()
 
 
     body = "<?xml version='1.0' encoding='UTF-8'?>"
@@ -71,18 +92,19 @@ def web_update_abonnement_xml(customer,id_abonnement):
 
 
 
-
-    f = open('/var/www/sacado/logs/gar_connexions.log','a')
-    print("===> date_start : ", file=f)
-    print(date_start, file=f)
-    print("===> date_stop : ", file=f)
-    print(date_stop, file=f)
-    print("===> id_abonnement : ", file=f)
-    print(id_abonnement, file=f)
-    print("===> body : ", file=f)
-    print(body, file=f)
-    f.close()
-
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        print("===> date_start : ", file=f)
+        print(date_start, file=f)
+        print("===> date_stop : ", file=f)
+        print(date_stop, file=f)
+        print("===> id_abonnement : ", file=f)
+        print(id_abonnement, file=f)
+        print("===> body : ", file=f)
+        print(body, file=f)
+        f.close()
+    except :
+        pass 
 
     if not customer.school.is_primaire :
         body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
@@ -99,10 +121,10 @@ def web_update_abonnement_xml(customer,id_abonnement):
 
 
 
-def create_abonnement_gar(today,accounting ,user): 
+def create_abonnement_gar(today,customer ,user): 
     """Création d'un abonnement dans la base de données"""
  
-    id_abonnement = "SACADO_" + str(accounting.school.code_acad)+"_"+str(today)
+    id_abonnement = "SACADO_" + str(customer.school.code_acad)+"_"+str(today)
     #host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
 
     host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi
@@ -110,7 +132,7 @@ def create_abonnement_gar(today,accounting ,user):
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
-    body      = web_abonnement_xml(accounting,id_abonnement, today) 
+    body      = web_abonnement_xml(customer,id_abonnement, today) 
     r         = requests.put(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
     if r.status_code == 201 or r.status_code==200 :
@@ -120,19 +142,19 @@ def create_abonnement_gar(today,accounting ,user):
 
 
 
-def update_abonnement_gar(today,accounting):
+def update_abonnement_gar(today,customer):
     """update d'un abonnement dans la base de données"""
 
     #host   = "https://abonnement.partenaire.test-gar.education.fr/"+id_abonnement  # Adresse d'envoi
 
-    id_abonnement = accounting.school.customer.gar_abonnement_id
+    id_abonnement = customer.school.customer.gar_abonnement_id
 
     host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi
     directory = '/home/sacado/'
 
     header  =  { 'Content-type': 'application/xml;charset=utf-8' , 'Accept' : 'application/xml' } 
 
-    body      = web_update_abonnement_xml(accounting,id_abonnement) 
+    body      = web_update_abonnement_xml(customer,id_abonnement) 
 
     r         = requests.post(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
 
