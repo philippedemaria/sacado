@@ -6,17 +6,17 @@ import requests
 
 def date_abonnement(today):
     """Création d'un abonnement dans la base de données"""
-    date_start = today.isoformat() # Année en cours
+    date_start = today # Année en cours
     date_stop  = datetime(today.year+1,7,14)  # Année suivante
 
     suf = "T00:00:00.000000"
-    date_start, date_stop = str(today), str(date_stop.isoformat())
+    date_start, date_stop = str(today)+suf, str(date_stop.isoformat())
 
     return date_start, date_stop
 
 
 
-def web_abonnement_xml(accounting,id_abonnement , today):
+def web_abonnement_xml(customer,id_abonnement , today):
     #Webservice du GAR
     date_start, date_stop = date_abonnement(today)
 
@@ -30,13 +30,13 @@ def web_abonnement_xml(accounting,id_abonnement , today):
     body += "<libelleRessource>SACADO</libelleRessource>"
     body += "<debutValidite>"+date_start+"</debutValidite>"
     body += "<finValidite>"+date_stop+"</finValidite>"
-    body += "<uaiEtab>"+accounting.school.code_acad+"</uaiEtab>"
+    body += "<uaiEtab>"+customer.school.code_acad+"</uaiEtab>"
     body += "<categorieAffectation>transferable</categorieAffectation>"
     body += "<typeAffectation>INDIV</typeAffectation>"
     body += "<nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant>"
-    body += "<nbLicenceEleve>"+str(accounting.school.nbstudents)+"</nbLicenceEleve>"
+    body += "<nbLicenceEleve>"+str(customer.school.nbstudents)+"</nbLicenceEleve>"
 
-    if not accounting.school.is_primaire :
+    if not customer.school.is_primaire :
         body += "<nbLicenceProfDoc>100</nbLicenceProfDoc>"
         body += "<nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel>"
         body += "<publicCible>DOCUMENTALISTE</publicCible>"
