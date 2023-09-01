@@ -1276,13 +1276,22 @@ def can_inscribe_students(school, compare):
 
 
 def oversize_students(school):
+
     nbsa = school.users.filter(user_type=0).exclude(username__contains="_e-test").count()
-    nbss = school.nbstudents
-    nb_students = nbsa - nbss
     test = False
-    if nb_students > 0 :
-        test = True
+
+    if school.customer < 2 :
+        nbss = 150
+    else :
+        nbss = school.nbstudents
+
+    if nbsa >  nbss : test = True
+
     return test , nbss , nbsa
+
+
+
+
 
 def espacenb_ent(arg):
     arg = str(arg)
