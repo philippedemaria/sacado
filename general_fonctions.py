@@ -1280,7 +1280,7 @@ def oversize_students(school):
     nbsa = school.users.filter(user_type=0).exclude(username__contains="_e-test").count()
     test = False
 
-    if school.customer < 2 :
+    if school.customer.status < 2 :
         nbss = 150
     else :
         nbss = school.nbstudents
