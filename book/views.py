@@ -6,7 +6,7 @@ from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
 from django.db.models import Q , Sum , Avg
 from django.core.mail import send_mail
-from django.http import JsonResponse 
+from django.http import JsonResponse  , FileResponse
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.template.loader import render_to_string
@@ -21,8 +21,8 @@ from tool.models import Mentaltitle, Quizz , Mental
 from tool.views import create_questions_flash_random_variable
 from socle.decorators import user_is_extra
 from django.utils.html import escape
-
-
+from datetime import datetime , timedelta ,date
+import subprocess
 
 
 
@@ -966,6 +966,60 @@ def sorter_book_pages(request):
         Page.objects.filter(pk = valeurs[i]).update(number = i)
 
     return JsonResponse(data) 
+
+
+
+
+def print_latex_to_pdf(request,idch,idp):
+
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+    elements +=r"\begin{document}"+"\n"  
+
+
+    if idch :
+
+        chapter = Chapter.objects.get(pk=idch)
+        elements += r'\chapter{'+chapter.title+r'}'
+        for page in chapter.pages.order_by("ranking"):
+            for paragraph in page.paragraphs.order_by("ranking"):
+                elements += r'\section{'+paragraph.title+r'}'
+                for bloc in paragraph.blocs.order_by("ranking"):
+                    elements +=  bloc.typebloc_latex
+
+
+
+    elif idp :
+        page = Page.objects.get(pk=idp)
+        for paragraph in page.paragraphs.order_by("ranking"):
+            elements += r'\section{'+paragraph.title+r'}'
+            for bloc in paragraph.blocs.order_by("ranking"):
+                elements += r'\subsection*{'+bloc.title+r'}'
+                elements +=  bloc.content 
+ 
+
+    elements +=  r"\end{document}"
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
+    # pour le serveur Linux
+    link = str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    file_path = settings.DIR_TMP_TEX+"/"+ link
+    ################################################################# 
+    ################################################################# 
+    with open(file_path, 'w') as file:
+        file.write(elements)
+        file.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+"/"+ str(request.user.id) ,  file_path ])
+    return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+
+
 
 #################################################################
 # paragraphs

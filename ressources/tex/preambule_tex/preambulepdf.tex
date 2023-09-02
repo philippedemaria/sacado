@@ -250,3 +250,93 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \setlength{\parindent}{0cm}
 \usepackage[left=1cm,right=1cm,top=1cm,bottom=1.5cm]{geometry}
 \usepackage{multicol}
+
+
+\newcounter{cpt}
+
+\newenvironment{defT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Définition \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{thT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Théorème \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{ppT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Proposition \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{exT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Exemple \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{mtT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Méthode \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{exoT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Exercice \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{sfT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Savoir faire \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{atT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Attention \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+
+
+\newenvironment{voT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Vocabulaire \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{rmT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Remarque \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{mmT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Mathématiciennes et mathématiciens \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+
+\newenvironment{soT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Sommaire \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{prT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Preuve \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{rgT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+title= \stepcounter{cpt} Règle \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}

@@ -1312,7 +1312,6 @@ def register_teacher(request):
             user = authenticate(username=username, password=password)
             login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             teacher = Teacher.objects.create(user=user)
- 
 
             try :
                 #teacher.notify_registration()
@@ -1322,8 +1321,6 @@ def register_teacher(request):
                     send_mail('INSCRIPTION SACADO', msg ,settings.DEFAULT_FROM_EMAIL,[user.email, ])
             except :
                 pass
-
-
         else:
             messages.error(request, user_form.errors)
 

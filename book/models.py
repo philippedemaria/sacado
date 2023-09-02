@@ -401,4 +401,11 @@ class Bloc(models.Model):
     def display_qr(self):
         return self.exercises.count() or self.exotexs.count() or self.appliquettes.count()
 
+    def typebloc_latex(self):
 
+        try :
+            suffixe = self.typebloc.split("_")[2] + "T"
+        except :
+            suffixe = exo
+
+        return r"\begin{"+suffixe+r"}{"+self.title+r"}"+self.content+r"\end{"+suffixe+r"}"

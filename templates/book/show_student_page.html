@@ -87,7 +87,7 @@
     <div class="row">
         <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %}">
             <div class="{{ page.css}}">
-                {{ page.title }}
+                {{ page.title }} <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ n }} </span>
             </div>            
             {% for paragraph in page.paragraphs.all %}
