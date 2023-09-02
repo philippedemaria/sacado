@@ -1012,7 +1012,7 @@ def print_latex_to_pdf(request,idch,idp):
     file_path = settings.DIR_TMP_TEX+ link
     ################################################################# 
     ################################################################# 
-    with open(file_path, 'w') as file:
+    with open(file_path+".tex" , 'w') as file:
         file.write(elements)
         file.close()
 
