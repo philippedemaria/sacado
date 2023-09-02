@@ -369,7 +369,7 @@ class Bloc(models.Model):
     size       = models.PositiveSmallIntegerField(choices=SIZES, default=12, blank=True, verbose_name="Colonne")
 
     content         = models.TextField( blank=True,  verbose_name="Enoncé en LaTeX")
-    content_html    = RichTextUploadingField( verbose_name="Enoncé pour html") 
+    content_html    = RichTextUploadingField( blank=True,   verbose_name="Enoncé pour html") 
     correction      = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
     correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html")
     is_correction   = models.BooleanField(default=0, editable=False)  

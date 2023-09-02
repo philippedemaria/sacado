@@ -120,6 +120,6 @@ urlpatterns = [
     path('display_details_bloc_by_qr/<int:idbl>', display_details_bloc_by_qr, name='display_details_bloc_by_qr'),
 
     path('ajax_display_correcion_bloc', ajax_display_correcion_bloc, name='ajax_display_correcion_bloc'),
-
+    path('ajax_create_exercise_from_scratch', ajax_create_exercise_from_scratch, name='ajax_create_exercise_from_scratch'),
 
  ]

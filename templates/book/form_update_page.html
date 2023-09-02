@@ -276,7 +276,19 @@
                             {{ form_b.paragraph.errors }}
                         </div>
                     </div>
-                    <div class="row">
+
+
+
+                    <div class="row no_visu_on_load" id="select_choice_exercise">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <a href="javascript:void(0);" id="get_exercise_from_database" class="btn btn-sacado">Exercice existant dans la base de donnée</a>
+                                <a href="javascript:void(0);" id="create_exercise_from_scratch"  class="btn btn-sacado no_visu_on_load">Nouvel exercice</a>
+                            </div>
+                        </div>
+                    </div>
+  
+                    <div class="row div_exercise_from_scratch">
                         <div class="col-sm-12 col-md-12">
                             <label>{{ form_b.title.label_tag }}</label>
                             {{ form_b.title |add_class:"form-control" }}
@@ -284,7 +296,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
+
+                    <div class="row div_exercise_from_scratch">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
                                 <label>{{ form_b.content_html.label_tag }}</label>
@@ -301,7 +314,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row div_exercise_from_scratch">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
                                 <label>{{ form_b.correction_html.label_tag }}</label>
@@ -318,7 +331,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row div_exercise_from_scratch">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
                                 <label>Savoir faire principal</label>
@@ -335,7 +348,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row div_exercise_from_scratch">
                         <div class="col-sm-12 col-md-6">
                             <label>Compétences</label>
                             {{ form_b.skills |add_class:"form-control select2" }}
@@ -348,7 +361,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row div_exercise_from_scratch">
                         <div class="col-sm-6 col-md-2">
                             <div class="form-group">
                                 <label>{{ form_b.is_calculator.label_tag }}</label>
@@ -386,6 +399,19 @@
                         </div>
                     </div>
 
+
+                    <div class="row div_exercise_from_database no_visu_on_load" id="super_exercise_from_database">
+                        <input name="id_level_book" id="id_book" type="hidden" value="{{ book.id}}" />
+                        <input name="get_from_database" id="get_from_database" type="hidden"  />
+                        <div class="col-sm-12 col-md-12" id="search_exercise_from_database">
+                        </div>
+                    </div>
+
+                    <div class="row" >
+                        <div class="col-sm-12">
+                            <hr/><label>Association d'appliquettes, d'exercices GGB et/ou Latex. </label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">

@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], function ($) {
+define(['jquery', 'bootstrap','ckeditor'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-book.js OK");
 
@@ -460,6 +460,65 @@ define(['jquery', 'bootstrap'], function ($) {
         })
 
 
+
+        $(document).on('change', "#id_typebloc" , function (event) {
+
+            if( $(this).val() == 6 ) {
+                $("#select_choice_exercise").show(500) ;
+            }
+            else {
+                $("#select_choice_exercise").hide(500) ;
+                $("#get_from_database").val(0);
+                $(".div_exercise_from_scratch").removeClass("no_visu_on_load") ;
+                $("#super_exercise_from_database").addClass("no_visu_on_load") ;
+                $(".class_this_exercise_id").prop('checked', false);
+            }
+
+        });
+
+
+        $(document).on('click', "#create_exercise_from_scratch" , function (event) {
+            
+            $(this).removeClass("btn-sacado").addClass("btn-primary") ;
+            $("#get_exercise_from_database").addClass("btn-sacado").removeClass("btn-primary") ;
+
+            $("#get_from_database").val(0);
+            $(".div_exercise_from_scratch").show(500) ;
+            $("#super_exercise_from_database").addClass("no_visu_on_load") ;
+            $(".class_this_exercise_id").prop('checked', false);
+        });
+
+ 
+
+        $(document).on('click', "#get_exercise_from_database" , function (event) {
+            $(this).removeClass("btn-sacado").addClass("btn-primary") ;
+            $("#create_exercise_from_scratch").addClass("btn-sacado").removeClass("btn-primary") ; ;
+
+            $(".div_exercise_from_scratch").hide(500) ;
+            $("#super_exercise_from_database").removeClass("no_visu_on_load") ;
+            $("#get_from_database").val(1);
+
+            $("#create_exercise_from_scratch").removeClass("no_visu_on_load") ;
+
+            var id_book = $("#id_book").val();
+
+            $.ajax({
+                    data: { 
+                        'id_book' : id_book ,
+                    } ,   
+                    type: "POST",
+                    dataType: "json",
+                    url: "../../ajax_create_exercise_from_scratch" ,
+                    traditional: true,
+                    success:function(data){
+
+                       $("#search_exercise_from_database").html(data.html);
+
+                    }
+                }); 
+
+
+        });
 
 
     });

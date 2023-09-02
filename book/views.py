@@ -844,8 +844,6 @@ def insert_document_into_section(request):
     level_id   = request.POST.get("level_id")
     subject_id = request.POST.get("subject_id")
 
-    print(this_type)
-
     teacher  = request.user.teacher
     documents = list()
     for doc_id in valeurs :
@@ -1054,9 +1052,31 @@ def update_page(request,idb, idp):
 
 
         elif form_action == "new_bloc" :
+
+            get_from_database    = request.POST.get("get_from_database",None)
+            get_this_exercise_id = request.POST.get("get_this_exercise_id",None)
+
             if form_b.is_valid():
                 nf = form_b.save()
-                if nf.typebloc.id==6 :
+                if nf.typebloc.id == 6 and get_from_database and get_from_database == "1" :
+                    exo = Exotex.objects.get(pk = get_this_exercise_id)
+                    nf.content = exo.content
+                    nf.content_html = exo.content_html
+                    nf.correction = exo.correction
+                    nf.correction_html = exo.correction_html
+                    nf.knowledge  = exo.knowledge
+                    nf.theme      = exo.theme
+                    nf.is_calculator = exo.calculator
+                    nf.is_python    = exo.is_python 
+                    nf.is_scratch   = exo.is_scratch
+                    nf.is_tableur   = exo.is_tableur
+                    nf.is_corrected = 1
+                    nf.is_annals    = exo.is_annals
+                    nf.save()
+
+                    nf.skills.set( exo.skills.all())
+                    nf.knowledges.set(exo.knowledges.all())
+                else :
                     exo=Exotex.objects.create(title = nf.title, 
                                                             content = nf.content, 
                                                             content_html =nf.content_html,
@@ -1150,6 +1170,25 @@ def goto_update_page(request, idb,n):
  
     return redirect('update_page',idb,idp)
  
+
+
+@csrf_exempt
+def ajax_create_exercise_from_scratch(request):
+
+    id_book  = request.POST.get("id_book")
+    book     = Book.objects.get(pk=id_book)
+    waitings = book.level.waitings.filter(theme__subject = book.subject).order_by("theme") 
+    data = dict()
+    context = { 'waitings':waitings}
+
+
+
+    data["html"] = render_to_string('book/ajax_list_exotexs_for_creation.html', context )
+ 
+
+    return JsonResponse(data)
+
+
 
 
 #################################################################
