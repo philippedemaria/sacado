@@ -1076,7 +1076,7 @@ def update_page(request,idb, idp):
 
                     nf.skills.set( exo.skills.all())
                     nf.knowledges.set(exo.knowledges.all())
-                else :
+                elif nf.typebloc.id == 6 :
                     exo=Exotex.objects.create(title = nf.title, 
                                                             content = nf.content, 
                                                             content_html =nf.content_html,
