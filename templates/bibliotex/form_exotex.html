@@ -200,6 +200,19 @@ ul#id_skills li{
                             </tr> 
                         </table>
                     </div>
+
+                    <div class="col-sm-12 col-md-2">
+                        <table class="table table-sacado borderless">
+                            <tr>
+                                <td>{{ form.is_read.label_tag }}
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                        <div class="helper_tip_text" >Vérification par un tiers.</div>
+                                    </span></td>
+                                <td>{{ form.is_read |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                                {{ form.is_read.errors }}</td>
+                            </tr> 
+                        </table>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-6">
@@ -262,17 +275,6 @@ ul#id_skills li{
          
                 </div>  
                 {% endif %}             
-                        
-                <div class="row">
-                    <div class="col-sm-12 col-md-4"> 
-                        <div class="form-group">
-                            {{ form.is_read.label_tag }}  <br/>   
-                            {{ form.is_read |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
-                            {{ form.is_read.errors }}
-                        </div>
-                    </div> 
-                </div>  
-
                 <div class="row">
                     <div class="col-sm-12 col-md-4">                        
                         <div class="form-group"> 
