@@ -1009,7 +1009,7 @@ def print_latex_to_pdf(request,idch,idp):
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
     link = str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
-    file_path = settings.DIR_TMP_TEX+"/"+ link
+    file_path = settings.DIR_TMP_TEX+ link
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
