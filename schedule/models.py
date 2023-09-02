@@ -82,21 +82,24 @@ class Edt(models.Model):
     def this_day_slot(self,slot,day):
         template_edts = self.template_edts.filter(slot=slot,day=day)
         data = {}
-        if template_edts :
+        if template_edts.count() :
             boolean = True
             tedt = template_edts.first() 
             group = tedt.groups.first() 
-            if tedt.is_half : data["group_name"] = "1sem/2 : "+ group.name
-            else : data["group_name"] =  group.name
-            data["group_id"] =  group.id
-            data["style"] = "background-color:"+group.color+";color:white;text-align:center"
-            data["slot"]  = slot
-            data["is_half"]   = tedt.is_half
-            data["day"]   = day
+            try :
+                if tedt.is_half : data["group_name"] = "1sem/2 : "+ group.name
+                else : data["group_name"] =  group.name
+                data["group_id"] =  group.id
+                data["style"] = "background-color:"+group.color+";color:white;text-align:center"
+                data["slot"]  = slot
+                data["is_half"]   = tedt.is_half
+                data["day"]   = day
+            except :
+                boolean = False
         else :
             boolean = False
-
         data["boolean"] = boolean
+
         return data
 
 class Template_edt(models.Model):
