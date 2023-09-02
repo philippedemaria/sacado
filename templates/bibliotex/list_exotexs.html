@@ -73,6 +73,9 @@
                                     {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td>
+                                                {% if  exotex.is_read  %}
+                                                    <i class="fa fa-check  text-success" title="Exercice vérifié"></i> 
+                                                {% endif %}
                                                 <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
                                                 {% if  exotex.correction  %}
                                                     <i class="fa fa-copyright  text-success" title="correction"></i> 

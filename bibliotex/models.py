@@ -60,14 +60,13 @@ class Exotex(models.Model):
     is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
 
     point = models.PositiveIntegerField(  default=0,  blank=True, null=True ,  verbose_name="Points") 
-
     correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
     correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html") 
-
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
-
     bloc_id = models.PositiveIntegerField(  blank=True, null=True, editable=False) # permet de lier un bloc à un exotex
+
+    is_read = models.BooleanField(default=0, verbose_name="Relu et vérifié ?")
 
 
     def __str__(self): 

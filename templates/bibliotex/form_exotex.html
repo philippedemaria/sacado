@@ -262,8 +262,17 @@ ul#id_skills li{
          
                 </div>  
                 {% endif %}             
+                        
+                <div class="row">
+                    <div class="col-sm-12 col-md-4"> 
+                        <div class="form-group">
+                            {{ form.is_read.label_tag }}  <br/>   
+                            {{ form.is_read |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                            {{ form.is_read.errors }}
+                        </div>
+                    </div> 
+                </div>  
 
-   
                 <div class="row">
                     <div class="col-sm-12 col-md-4">                        
                         <div class="form-group"> 
