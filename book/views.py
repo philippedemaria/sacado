@@ -998,8 +998,7 @@ def print_latex_to_pdf(request,idch,idp):
         for paragraph in page.paragraphs.order_by("ranking"):
             elements += r'\section{'+paragraph.title+r'}'
             for bloc in paragraph.blocs.order_by("ranking"):
-                elements += r'\subsection*{'+bloc.title+r'}'
-                elements +=  bloc.content 
+                elements +=  bloc.typebloc_latex
  
 
     elements +=  r"\end{document}"
