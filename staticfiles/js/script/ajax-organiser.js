@@ -318,13 +318,14 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', ".show_this_document" ,  function (event) {
 
             let document_id = $(this).data("document_id");
-            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
+            let csrf_token  = $("input[name='csrfmiddlewaretoken']").val();
+            let this_type   = $(this).data("this_type");
 
             $.ajax({
                     data: { 
                     	'document_id': document_id ,  
-                    	'csrf_token': csrf_token 
+                        'this_type'  : this_type , 
+                    	'csrf_token' : csrf_token 
                     } ,   
                     type: "POST",
                     dataType: "json",

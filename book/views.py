@@ -736,39 +736,49 @@ def show_book_document(request):
     request.session["subtdb"] = "Chapter"
 
     document_id  = request.POST.get("document_id" , None )
-    document = Document.objects.get(pk=document_id)
+    this_type  = request.POST.get("this_type" , None )
+    docu = Document.objects.get(pk=document_id)
+
     data = {}
 
-    if document.content : content = document.content
-    else : 
-        doctype = document.doctype
-        doc_id  = document.doc_id
-        if doctype == 4 or doctype == 9 :
-            doc = Quizz.objects.get(pk=doc_id)
-            content = ""
-        elif doctype == 5 :
-            doc = Course.objects.get(pk=doc_id)
-            content = doc.annoncement
-        elif doctype == 6 :
-            doc = BiblioTex.objects.get(pk=doc_id)
-            content = "Bibliotex"
-        elif doctype == 7 :
-            doc = Exotex.objects.get(pk=doc_id)
-            content = doc.content_html
-        elif doctype == 8 :
-            doc = Flashpack.objects.get(pk=doc_id)
-            content = "Flashpack"
-        elif doctype == 10 :
-            doc = DocPerso.objects.get(pk=doc_id)
-            content = doc.format_html()
-        elif doctype == 11 :
-            doc = Bloc.objects.get(pk=doc_id)
-            content = doc.content_html
+    print(document_id , this_type)
 
+    if this_type == "6" :
+        doc = BiblioTex.objects.get(pk=docu.doc_id)
+        title = doc.title
+        content = str(doc.relationtexs.count()) + " exercices"
+    elif this_type == "5" :
+        doc = Course.objects.get(pk=docu.doc_id)
+        title = doc.title
+        content = doc.annoncement
+    elif this_type == "7" :        
+        doc = Exotex.objects.get(pk=docu.doc_id)
+        title = doc.title
+        content = doc.content_html
+    elif this_type == "8" :        
+        doc = Flashpack.objects.get(pk=docu.doc_id)
+        title = doc.title
+        content = str(doc.flashcards.count()) + " flashcards"
+    elif this_type == "9" or  this_type == "4" :
+        doc = Quizz.objects.get(pk=docu.doc_id)
+        title = doc.title
+        content = str(doc.questions.count()) + " questions"
+    elif this_type == "10" :
+        doc = DocPerso.objects.get(pk=docu.doc_id)
+        title = doc.title
+        if doc.link : content =  "<a href='"+doc.link+"'><i class='bi bi-link'></i></a>"
+        else : content = "<a href='"+doc.file.url+"'><i class='bi bi-file'></i></a>"
+    elif this_type == "11" :
+        doc = Bloc.objects.get(pk=docu.doc_id)
+        content = doc.content_html
+        title = doc.title
+    else :
+        content = docu.content
+        title   = docu.title
 
     data["body"] = content
 
-    data["title"] = document.title 
+    data["title"] = title 
 
     return JsonResponse(data) 
  

@@ -17,30 +17,34 @@
             <div class="book_main_page_section_document_detail" id="this_document{{ document.id }}" data-document_id="{{ document.id }}"  data-section_id="{{ section.id }}" >
                 <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
 
-                <span id="span_this_document_is_done{{ document.id }}">{% if document.is_done %}<i class="fa fa-check this_document_is_done"></i>{% endif %}</span>
+                
 
                 {% if document.doctype ==  0 %}
                 <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
                      {{ document.icon_doctype.icon|safe}}
                 </a>
-                    {% comment %}
-                     {% elif document.doctype ==  10 and  document.icon_doctype.file %}
-                    <a href="{% url document.icon_doctype.file document.icon_doctype.support_id %}" target="_blank" >
-                         {{ document.icon_doctype.icon|safe}}
-                    </a>
-                    {% elif document.icon_doctype %}
-                    <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
-                         {{ document.icon_doctype.icon|safe}}
-                    </a> 
-                    {% endcomment %}
 
-                {% endif %}
-                <br/>
+                {% elif document.doctype == 5 %}
 
-                <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
+                <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}"  data-this_type='{{ document.doctype }}'>
                     {{ document.title|truncatechars:30|safe  }}
                 </a>
 
+                {% elif document.doctype ==  10 and  document.icon_doctype.file %}
+                <a href="{% url document.icon_doctype.file document.icon_doctype.support_id %}" target="_blank" >
+                     {{ document.icon_doctype.icon|safe}}<br/>
+                     {{ document.title|truncatechars:30|safe}}
+                </a>
+                {% else %}
+                <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
+                     {{ document.icon_doctype.icon|safe}}<br/>
+                     {{ document.title|truncatechars:30|safe}}
+                </a> 
+
+
+                {% endif %} 
+                <br/> 
+                <span id="span_this_document_is_done{{ document.id }}">{% if document.is_done %}<i class="fa fa-check this_document_is_done"></i>{% endif %}</span>
                 <small>
                     <a href="javascript:void(0);" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
                 </small>

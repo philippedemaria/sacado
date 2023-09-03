@@ -6,30 +6,30 @@
         <i class="bi bi-arrows-move book_main_page_section_document_move"></i>
         
  
+                {% if document.doctype ==  0 %}
+                <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
+                     {{ document.icon_doctype.icon|safe}}
+                </a>
 
-        {% if document.doctype ==  0 %}
-        <a href="javascript:void();" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir : {{document.title}}" data-document_id="{{ document.id }}" >
-             {{ document.icon_doctype.icon|safe}}
-        </a>
-        {% else %}
-        <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
-             {{ document.icon_doctype.icon|safe}}
-        </a>
-        {% endif %}
+                {% elif document.doctype == 5 %}
 
+                <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}"  data-this_type='{{ document.doctype }}'>
+                    {{ document.title|truncatechars:30|safe  }}
+                </a>
 
+                {% elif document.doctype ==  10 and  document.icon_doctype.file %}
+                <a href="{% url document.icon_doctype.file document.icon_doctype.support_id %}" target="_blank" >
+                     {{ document.icon_doctype.icon|safe}}<br/>
+                     {{ document.title|truncatechars:30|safe}}
+                </a>
+                {% else %}
+                <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
+                     {{ document.icon_doctype.icon|safe}}<br/>
+                     {{ document.title|truncatechars:30|safe}}
+                </a> 
 
+                {% endif %} 
 
-        <br/>
-        {% if document.author == request.user.teacher %}
-            <a href="{% url 'update_book_document' book.id chapter.id document.id %}"  class="update_this_document" title="Modifier {{document.title}}" data-document_id="{{ document.id }}" >
-                {{ document.title|truncatechars:30 }}
-            </a> 
-        {% else %}
-            <a href="#" data-toggle='modal' class="show_this_document" data-target='#show_this_document' title="Voir  {{document.title}}" data-document_id="{{ document.id }}" >
-                {{ document.title|truncatechars:30  }}
-            </a>
-        {% endif  %}
         <small>
             <a href="javascript:void(0);" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
         </small>
