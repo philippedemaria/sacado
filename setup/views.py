@@ -2122,8 +2122,20 @@ def admin_tdb(request):
     teachers = Teacher.objects.filter(user__school=school, user__user_type=2)
 
     nb_teachers = teachers.count()
-    nb_students = User.objects.filter(school=school, user_type=0).exclude(username__contains="_e-test_").count()
-    nb_groups   = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school)).count()
+    nb_studts = User.objects.filter(school=school, user_type=0).exclude(username__contains="_e-test_").count()
+
+    nbs = 0
+    groups   = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school))
+    for group in groups :
+        nbs += group.students.count()
+
+
+    print(nb_studts , nbs)
+
+    nb_students = max(nb_studts , nbs)
+    nb_groups   = groups.count()
+
+    print(nb_students)
     
     is_lycee = False
     try :
