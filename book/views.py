@@ -990,8 +990,13 @@ def print_latex_to_pdf(request,idch,idp):
                 elements += r'\section{'+paragraph.title+r'}'
                 for bloc in paragraph.blocs.order_by("ranking"):
                     elements +=  bloc.typebloc_latex()
-
-
+                    elements = 'Documents supports : '
+                    for e in bloc.exercises.all() :
+                        elements +=  "Exe : "+e.supportfile.code +" | "
+                    for e in bloc.exotexs.all() :
+                        elements +=  "ExoTex : "+e.id +" | "
+                    for a in bloc.appliquettes.all() :
+                        elements +=  r" https://sacado.xyz/a/"+str(a.code)+" | "
 
     elif idp :
         page = Page.objects.get(pk=idp)
@@ -999,7 +1004,17 @@ def print_latex_to_pdf(request,idch,idp):
             elements += r'\section{'+paragraph.title+r'}'
             for bloc in paragraph.blocs.order_by("ranking"):
                 elements +=  bloc.typebloc_latex()
+                elements = 'Documents supports : '
+                for e in bloc.exercises.all() :
+                    elements +=  "Exe : "+e.supportfile.code +" | "
+                for e in bloc.exotexs.all() :
+                    elements +=  "ExoTex : "+e.id +" | "
+                for a in bloc.appliquettes.all() :
+                    elements +=  r" https://sacado.xyz/a/"+str(a.code)+" | "
+
+
  
+
 
     elements +=  r"\end{document}"
     ################################################################# 

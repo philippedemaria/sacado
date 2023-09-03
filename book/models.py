@@ -395,11 +395,15 @@ class Bloc(models.Model):
 
     appliquettes = models.ManyToManyField(Appliquette, blank=True, related_name='blocs', verbose_name="Appliquettes")
 
+
+
     def __str__(self):
         return "{} > {}".format(self.title,self.typebloc.title)
 
+
     def display_qr(self):
         return self.exercises.count() or self.exotexs.count() or self.appliquettes.count()
+
 
     def typebloc_latex(self):
 
