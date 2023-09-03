@@ -738,8 +738,38 @@ def show_book_document(request):
     document_id  = request.POST.get("document_id" , None )
     document = Document.objects.get(pk=document_id)
     data = {}
-    data["body"] = document.content
+
+    if document.content : content = document.content
+    else : 
+        doctype = document.doctype
+        doc_id  = document.doc_id
+        if doctype == 4 or doctype == 9 :
+            doc = Quizz.objects.get(pk=doc_id)
+            content = ""
+        elif doctype == 5 :
+            doc = Course.objects.get(pk=doc_id)
+            content = doc.annoncement
+        elif doctype == 6 :
+            doc = BiblioTex.objects.get(pk=doc_id)
+            content = "Bibliotex"
+        elif doctype == 7 :
+            doc = Exotex.objects.get(pk=doc_id)
+            content = doc.content_html
+        elif doctype == 8 :
+            doc = Flashpack.objects.get(pk=doc_id)
+            content = "Flashpack"
+        elif doctype == 10 :
+            doc = DocPerso.objects.get(pk=doc_id)
+            content = doc.format_html()
+        elif doctype == 11 :
+            doc = Bloc.objects.get(pk=doc_id)
+            content = doc.content_html
+
+
+    data["body"] = content
+
     data["title"] = document.title 
+
     return JsonResponse(data) 
  
 
