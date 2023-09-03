@@ -265,6 +265,14 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 \newcounter{cpt}
 
+\newenvironment{GeneriqueT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt}  #1  \thecpt \;: #2.]}
+{%
+\end{tcolorbox}\par}
+
+
+
 \newenvironment{defT}[1]{%
 \medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
 title= \stepcounter{cpt} Définition \thecpt \;: #1.]}
