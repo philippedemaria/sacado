@@ -996,7 +996,7 @@ def print_latex_to_pdf(request,idch,idp):
                     appliquettes = bloc.appliquettes.all()
 
                     if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
-                    
+
                     for e in bloc.exercises.all() :
                         elements +=  "Exe : "+e.supportfile.code +" | "
                     for e in bloc.exotexs.all() :
@@ -1026,7 +1026,8 @@ def print_latex_to_pdf(request,idch,idp):
 
     elements +=  r"\end{document}"
     ################################################################# 
-    ################################################################# Attention ERREUR si non modif
+    ###########################################
+    ###################### Attention ERREUR si non modif
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
