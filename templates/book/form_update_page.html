@@ -17,7 +17,7 @@
 {% block page_title %}
      Livre élève  <b>{{ book.level.shortname }}</b> 
     {% if chapter %}
-    <img src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'student_book_builder' book.id 0 %}"> {{ chapter.title }}</a> 
+    <img src="{% static 'img/angle-right.png' %}"/> <a href="{% url 'student_book_builder' book.id 0 %}"> {{ chapter.title }}</a>  <a href="{% url 'print_latex_to_pdf'  chapter.id 0 %}" class="white"><i class="bi bi-printer"></i></a>
     {% endif %}
     <img src="{% static 'img/angle-right.png' %}"/> page {{ page.number }}  
     {% if page.number > 0 %}
@@ -49,7 +49,7 @@
 
 
 <div class="{{ page.css}}" id="top_page">
-    <span id="top_page_title">{{ page.title }} </span>                
+    <span id="top_page_title">{{ page.title }} </span> <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white"><i class="bi bi-printer"></i></a>               
     <select name="type_page" id="type_de_page" data-book_id ="{{ book.id }}" data-page_id ="{{ page.id }}" style="float:right;font-size: 16px;color:black">
         <option value="course_page_top">Type de page ?</option>
         <option value="intro_page_top">Introduction</option>
