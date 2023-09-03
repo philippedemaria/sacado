@@ -1032,9 +1032,9 @@ def print_latex_to_pdf(request,idch,idp):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
 
-    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
-    if os.path.isfile(file_path+".out"):os.remove(file_path+".aux")    
-    if os.path.isfile(file_path+".out"):os.remove(file_path+".log")
+    # if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+    # if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
+    # if os.path.isfile(file_path+".log"):os.remove(file_path+".log")
 
 
     return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
