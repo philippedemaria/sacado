@@ -988,11 +988,11 @@ def print_latex_to_pdf(request,idch,idp):
         elements +=  r" \hrule \vspace {0.1cm}"
         for page in chapter.pages.order_by("number"):
             if page.paragraphs.count()>0 :
-                if 'Cours' in page.title : elements += r'\section{'+page.title+r'}'
-                else : elements += r'\section*{'+page.title+r'}' 
+                elements +=  r'{\huge '+ page.title+r'}'
                 elements +=  r" \hrule \vspace {0.1cm}"
             for paragraph in page.paragraphs.order_by("ranking"):
-                elements += r'\section{'+paragraph.title+r'}'
+                if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
+                else : elements += r'\section*{'+paragraph.title+r'}' 
                 for bloc in paragraph.blocs.order_by("ranking"):
                     elements +=  bloc.typebloc_latex()
 
