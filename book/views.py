@@ -983,12 +983,10 @@ def print_latex_to_pdf(request,idch,idp):
 
     if idch :
  
-        chapter = Chapter.objects.get(pk=idch)
-        elements += r'{\Huge '+chapter.title+r'}'
-        elements +=  r" \hrule \vspace {0.1cm}"
+ 
         for page in chapter.pages.order_by("number"):
             if page.paragraphs.count()>0 :
-                elements +=  r'{\huge '+ page.title+r'}'
+                elements +=  r'{\huge '+ page.title+r'} \hfill '+chapter.title
                 elements +=  r" \hrule \vspace {0.1cm}"
             for paragraph in page.paragraphs.order_by("ranking"):
                 if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
@@ -1012,7 +1010,7 @@ def print_latex_to_pdf(request,idch,idp):
 
     elif idp :
         page = Page.objects.get(pk=idp)
-        elements +=  r'{\huge '+ page.title+r'}'
+        elements +=  r'{\huge '+ page.title+r'}  \hfill '+chapter.title
         elements +=  r" \hrule \vspace {0.1cm}"
         for paragraph in page.paragraphs.order_by("ranking"):
             if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
