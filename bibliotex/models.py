@@ -69,9 +69,8 @@ class Exotex(models.Model):
     is_read = models.BooleanField(default=0, verbose_name="Relu et vérifié ?")
 
 
-    def __str__(self): 
-        knowledge = self.knowledge.name[:20]       
-        return "{} > {} > {}".format(self.level.name, self.theme.name, knowledge)
+    def __str__(self):    
+        return "#{} > {}".format(self.id, self.title)
 
 
 
