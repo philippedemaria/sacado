@@ -820,7 +820,7 @@ def get_type_book_document(request):
     elif this_type == "DocPerso" :
         documents = Docperso.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject, levels  = level )[(n-1)*100:n*100]
     elif this_type == "Bloc" :
-        documents = Bloc.objects.filter( knowledge__theme__subject  = subject, knowledge__level  = level )
+        documents = Bloc.objects.filter( paragraph__page__chapter__book__subject  = subject, paragraph__page__chapter__book__level  = level )
 
     else :
         documents = []
