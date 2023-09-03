@@ -990,7 +990,13 @@ def print_latex_to_pdf(request,idch,idp):
                 elements += r'\section{'+paragraph.title+r'}'
                 for bloc in paragraph.blocs.order_by("ranking"):
                     elements +=  bloc.typebloc_latex()
-                    elements += r'\textbf{Supports} : '
+
+                    exercises = bloc.exercises.all() 
+                    exotexs = bloc.exotexs.all()
+                    appliquettes = bloc.appliquettes.all()
+
+                    if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
+                    
                     for e in bloc.exercises.all() :
                         elements +=  "Exe : "+e.supportfile.code +" | "
                     for e in bloc.exotexs.all() :
@@ -1004,17 +1010,19 @@ def print_latex_to_pdf(request,idch,idp):
             elements += r'\section{'+paragraph.title+r'}'
             for bloc in paragraph.blocs.order_by("ranking"):
                 elements +=  bloc.typebloc_latex()
-                elements += r'\textbf{Supports} : '
-                for e in bloc.exercises.all() :
+
+                exercises = bloc.exercises.all() 
+                exotexs = bloc.exotexs.all()
+                appliquettes = bloc.appliquettes.all()
+
+                if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
+
+                for e in exercises :
                     elements +=  "exe : "+e.supportfile.code +" | "
-                for e in bloc.exotexs.all() :
+                for e in exotexs :
                     elements +=  "tex : "+e.id +" | "
-                for a in bloc.appliquettes.all() :
+                for a in appliquettes :
                     elements +=  r" https://sacado.xyz/a/"+str(a.code)+" | "
-
-
- 
-
 
     elements +=  r"\end{document}"
     ################################################################# 
