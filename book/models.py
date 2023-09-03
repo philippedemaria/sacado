@@ -404,7 +404,7 @@ class Bloc(models.Model):
     def typebloc_latex(self):
 
         try :
-            suffixe = self.typebloc.title.split("_")[2] + "T"
+            suffixe = self.typebloc.css.split("_")[2] + "T"
         except :
             suffixe = "exoT"
 
