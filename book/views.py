@@ -23,7 +23,7 @@ from socle.decorators import user_is_extra
 from django.utils.html import escape
 from datetime import datetime , timedelta ,date
 import subprocess
-
+import os
 
 
 
@@ -1008,7 +1008,7 @@ def print_latex_to_pdf(request,idch,idp):
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
  
-    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
+    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(idp)
     ################################################################# 
     ################################################################# 
     with open(file_path+".tex" , 'w') as file:
@@ -1016,6 +1016,12 @@ def print_latex_to_pdf(request,idch,idp):
         file.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
+
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".aux")    
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".log")
+
+
     return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
 
