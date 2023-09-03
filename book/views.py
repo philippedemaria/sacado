@@ -990,7 +990,7 @@ def print_latex_to_pdf(request,idch,idp):
                 elements += r'\section{'+paragraph.title+r'}'
                 for bloc in paragraph.blocs.order_by("ranking"):
                     elements +=  bloc.typebloc_latex()
-                    elements = 'Documents supports : '
+                    elements += 'Documents supports : '
                     for e in bloc.exercises.all() :
                         elements +=  "Exe : "+e.supportfile.code +" | "
                     for e in bloc.exotexs.all() :
@@ -1004,7 +1004,7 @@ def print_latex_to_pdf(request,idch,idp):
             elements += r'\section{'+paragraph.title+r'}'
             for bloc in paragraph.blocs.order_by("ranking"):
                 elements +=  bloc.typebloc_latex()
-                elements = 'Documents supports : '
+                elements += 'Documents supports : '
                 for e in bloc.exercises.all() :
                     elements +=  "Exe : "+e.supportfile.code +" | "
                 for e in bloc.exotexs.all() :
