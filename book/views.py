@@ -1009,14 +1009,14 @@ def print_latex_to_pdf(request,idch,idp):
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
  
-    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     ################################################################# 
     ################################################################# 
     with open(file_path+".tex" , 'w') as file:
         file.write(elements)
         file.close()
 
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+str(request.user.id) ,  file_path ])
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
     return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
 
