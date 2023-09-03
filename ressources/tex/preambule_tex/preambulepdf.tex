@@ -174,7 +174,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \usepackage{fancybox}
 \usepackage{fancyhdr}
 
-
+\definecolor{gray}{HTML}{c8caca}
 \definecolor{bleusad}{HTML}{0056B3}
 \newcommand{\titreFiche}[3]{\centerline{\Ovalbox{\parbox[t]{0.7\textwidth}{
 \vspace{-0.5em}\begin{center} \bf \large #1
@@ -199,6 +199,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 \definecolor{bleu2}{rgb}{0,0.58,0.79}
 \definecolor{violet}{rgb}{0.79,0.66,0.98}
+\definecolor{gray}{rgb}{0.79,0.66,0.98}
 
 \newcommand{\exercice}[1]{ % Exercice directement dans la page
 \vspace{0.2cm}
@@ -264,90 +265,90 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 
 \newcounter{cpt}
 
-\newenvironment{defT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Définition \thecpt : #1.]}
+\newenvironment{defT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Définition \thecpt \;: #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{thT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Théorème \thecpt : #1.]}
+\newenvironment{thT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Théorème \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{ppT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Proposition \thecpt : #1.]}
+\newenvironment{ppT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Proposition \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{exT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Exemple \thecpt : #1.]}
+\newenvironment{exT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Exemple \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{mtT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Méthode \thecpt : #1.]}
+\newenvironment{mtT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Méthode \thecpt \;: #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{exoT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Exercice \thecpt : #1.]}
+\newenvironment{exoT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Exercice \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{sfT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Savoir faire \thecpt : #1.]}
+\newenvironment{sfT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Savoir faire \thecpt \;: #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{atT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Attention \thecpt : #1.]}
+\newenvironment{atT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Attention \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
 
 
-\newenvironment{voT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Vocabulaire \thecpt : #1.]}
+\newenvironment{voT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Vocabulaire \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{rmT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Remarque \thecpt : #1.]}
+\newenvironment{rmT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Remarque \thecpt \;: #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{mmT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
+\newenvironment{mmT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
 title= \stepcounter{cpt} Mathématiciennes et mathématiciens \thecpt : #1.]}
 {%
 \end{tcolorbox}\par}
 
 
-\newenvironment{soT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Sommaire \thecpt : #1.]}
+\newenvironment{soT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Sommaire \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{prT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Preuve \thecpt : #1.]}
+\newenvironment{prT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Preuve \thecpt \;: #1.]}
 {%
 \end{tcolorbox}\par}
 
-\newenvironment{rgT}[2]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=violet,
-title= \stepcounter{cpt} Règle \thecpt : #1.]}
+\newenvironment{rgT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=black ,colframe=gray,
+title= \stepcounter{cpt} Règle \thecpt\; : #1.]}
 {%
 \end{tcolorbox}\par}
 
