@@ -2940,7 +2940,7 @@ a.book_new_chapter:hover{
 }
 
 
-.bloc_content ol li , .bloc_content p, .bloc_content * {
+.bloc_content ol li , .bloc_content p, .bloc_content ul li {
   line-height:28px;
 }
 
