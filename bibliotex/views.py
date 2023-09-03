@@ -330,6 +330,12 @@ def printer(request, relationtex_id, collection,output , obj):
 
     if output=="pdf" :
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file ])
+
+
+        if os.path.isfile(file+".out"):os.remove(file+".out")
+        if os.path.isfile(file+".aux"):os.remove(file+".aux")    
+        if os.path.isfile(file+".log"):os.remove(file+".log")
+
         return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output == "html" or output== "html_cor" :
@@ -431,6 +437,11 @@ def printer_bibliotex_by_student(bibliotex):
     f_tex.write(elements)
     f_tex.close()
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX + str(request.user.id) ,  file ])
+
+    if os.path.isfile(file+".out"):os.remove(file+".out")
+    if os.path.isfile(file+".aux"):os.remove(file+".aux")    
+    if os.path.isfile(file+".log"):os.remove(file+".log")
+
     return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
 
  
@@ -669,6 +680,11 @@ def div_to_display_latex(request):
         file.close()
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
+
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+    if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
+    if os.path.isfile(file_path+".log"):os.remove(file_path+".log")
+    
     #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     data={}
     
