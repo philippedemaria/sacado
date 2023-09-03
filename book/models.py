@@ -415,7 +415,7 @@ class Bloc(models.Model):
 
         splitter = self.title.split(".")
 
-        if len(splitter)>1 : stringer = r"\begin{GeneriqueT}{"+splitter[0]+r"}{"+self.splitter[1]+r"}"+self.content+r"\end{GeneriqueT}"
+        if len(splitter)>1 : stringer = r"\begin{GeneriqueT}{"+splitter[0]+r"}{"+splitter[1]+r"}"+self.content+r"\end{GeneriqueT}"
         else : stringer = r"\begin{GeneriqueT}{"+self.title+r"}{\;}"+self.content+r"\end{GeneriqueT}"
 
 
