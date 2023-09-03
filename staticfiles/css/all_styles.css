@@ -2938,6 +2938,16 @@ a.book_new_chapter:hover{
   font-size: 16px;
   padding-right: 20px;
 }
+
+
+.bloc_content ol li , .bloc_content p, .bloc_content * {
+  line-height:28px;
+}
+
+
+
+
+
 /*--------------------------------------------------------------
 #   fin ---->  Livre numérique
 --------------------------------------------------------------*/
