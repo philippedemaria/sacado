@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Book, Chapter   
+from .models import Book, Chapter , Page ,  Bloc   
 from .forms import *
 from account.models import User
 from qcm.models import Parcours, Docperso
@@ -819,6 +819,9 @@ def get_type_book_document(request):
         documents = Quizz.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject , levels  = level , is_random = 1 )[(n-1)*100:n*100]
     elif this_type == "DocPerso" :
         documents = Docperso.objects.filter(Q(teacher=teacher)|Q( is_share=1),subject  = subject, levels  = level )[(n-1)*100:n*100]
+    elif this_type == "Bloc" :
+        documents = Bloc.objects.filter( knowledge__theme__subject  = subject, knowledge__level  = level )
+
     else :
         documents = []
 
@@ -867,7 +870,7 @@ def insert_document_into_section(request):
         elif this_type == "Flashpack" :
             b = Flashpack.objects.get(pk=doc_id)
             doctype = 8    
-            title  , author = b.title    ,  b.author
+            title  , author = b.title    ,  b.teacher
         elif this_type == "QF" :
             b = Quizz.objects.get(pk=doc_id)
             doctype = 9 
@@ -876,6 +879,10 @@ def insert_document_into_section(request):
             b = Docperso.objects.get(pk=doc_id)
             doctype = 10 
             title  , author = b.title ,  b.teacher
+        elif this_type == "Bloc" :
+            b = Bloc.objects.get(pk=doc_id)
+            doctype = 11 
+            title  , author = b.title , request.user.teacher
         else : 
             b = Quizz.objects.get(pk=doc_id)
             doctype = 4 

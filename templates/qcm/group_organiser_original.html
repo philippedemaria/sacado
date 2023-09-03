@@ -165,11 +165,16 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h4>Ajouter un document à <span id="this_document_section_title"></span>. <small> Choisir vos documents existants</small></h4>              
+                <h4>Ajouter un document à <span id="this_document_section_title"></span></h4>              
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
+                        <label>Choisir vos documents existants</label>
+                    </div>
+                </div>
+
+                <div id="get_this_existing_document">
                     <form method="POST" action="" enctype='multipart/form-data'>
                         <input type="hidden" name="book_section_id_get" id="book_section_id_get"  id="book_section_id_get" />
                         <input type="hidden" name="book_subject_id" id="book_subject_id" value="{{ book.subject.id }}" />
@@ -209,12 +214,6 @@
                                     <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Flashpack" id="this_type_document8">
                                         <i class="bi bi-stack"></i> Flashpack
                                     </a>
-                                    {% if request.user.is_superuser %}
-                                    <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Bloc" id="this_type_document11">
-                                        <i class="bi bi-app"></i> Bloc
-                                    </a>
-                                    {% endif %}
-
                                 </div>
                             </div>  
                         </div> 
@@ -222,7 +221,27 @@
 
                         </div> 
                     </form>
-                    </div>
+                </div>
+                <div id="create_a_new_document" class="no_visu_on_load">
+                    <hr/>
+                    <a href="{% url 'create_questions_flash' group.level.id %}" class="btn btn-xs btn-default"> 
+                        <i class="bi bi-lightning"></i> Questions flash
+                    </a>
+                    <a href="{% url 'create_quizz'  %}" class="btn btn-xs btn-default"> 
+                        <i class="bi bi-aspect-ratio"></i> Quizz
+                    </a>
+                    <a href="{% url 'create_docperso_parcours' 0 %}" class="btn btn-xs btn-default"> 
+                        <i class="bi bi-aspect-ratio"></i> Doc Perso
+                    </a>
+                    <a href="{% url 'create_bibliotex' 0 %}" class="btn btn-xs btn-default" > 
+                         <i class="bi bi-bootstrap"></i> BiblioTex
+                    </a>
+                    <a href="{% url 'create_flashpack' 0  %}" class="btn btn-xs btn-default"> 
+                        <i class="bi bi-explicit-fill"></i> Exercice LaTeX
+                    </a>
+                    <a href="{% url 'create_flashpack' 0  %}" class="btn btn-xs btn-default">
+                        <i class="bi bi-stack"></i> Flashpack
+                    </a>
                 </div>
             </div>
         </div>
