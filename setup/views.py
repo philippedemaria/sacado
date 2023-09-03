@@ -2127,7 +2127,7 @@ def admin_tdb(request):
     nbs = 0
     groups   = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school))
     for group in groups :
-        nbs += group.students.exclude(username__contains="_e-test_").count()
+        nbs += group.students.exclude(user__username__contains="_e-test_").count()
 
 
     nb_students = max(nb_studts , nbs)
