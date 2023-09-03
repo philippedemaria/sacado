@@ -985,7 +985,7 @@ def print_latex_to_pdf(request,idch,idp):
 
         chapter = Chapter.objects.get(pk=idch)
         elements += r'\chapter{'+chapter.title+r'}'
-        for page in chapter.pages.order_by("ranking"):
+        for page in chapter.pages.order_by("number"):
             for paragraph in page.paragraphs.order_by("ranking"):
                 elements += r'\section{'+paragraph.title+r'}'
                 for bloc in paragraph.blocs.order_by("ranking"):
