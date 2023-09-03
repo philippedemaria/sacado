@@ -2127,15 +2127,12 @@ def admin_tdb(request):
     nbs = 0
     groups   = Group.objects.filter(Q(teacher__user__school=school)|Q(teacher__user__schools=school))
     for group in groups :
-        nbs += group.students.count()
+        nbs += group.students.exclude(username__contains="_e-test_").count()
 
-
-    print(nb_studts , nbs)
 
     nb_students = max(nb_studts , nbs)
     nb_groups   = groups.count()
 
-    print(nb_students)
     
     is_lycee = False
     try :
