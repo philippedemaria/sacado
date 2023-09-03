@@ -407,5 +407,5 @@ class Bloc(models.Model):
             suffixe = self.typebloc.css.split("_")[2] + "T"
         except :
             suffixe = "exoT"
-
+        suffixe = self.typebloc.css.split("_")[2] + "T"
         return r"\begin{"+suffixe+r"}{"+self.title+r"}"+self.content+r"\end{"+suffixe+r"}"
