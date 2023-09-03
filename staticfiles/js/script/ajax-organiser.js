@@ -471,7 +471,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        $(document).on('click', "#this_document_is_done" , function (event) {
+        $(document).on('click', ".is_this_document_is_done" , function (event) {
 
             let document_id = $(this).data("document_id");
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();

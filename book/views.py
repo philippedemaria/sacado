@@ -737,44 +737,43 @@ def show_book_document(request):
 
     document_id  = request.POST.get("document_id" , None )
     this_type  = request.POST.get("this_type" , None )
-    docu = Document.objects.get(pk=document_id)
-
-    data = {}
 
     print(document_id , this_type)
 
-    if this_type == "6" :
-        doc = BiblioTex.objects.get(pk=docu.doc_id)
+    data = {}
+
+    if this_type == "BiblioTex" :
+        doc = BiblioTex.objects.get(pk=document_id)
         title = doc.title
         content = str(doc.relationtexs.count()) + " exercices"
-    elif this_type == "5" :
-        doc = Course.objects.get(pk=docu.doc_id)
+    elif this_type == "Course" :
+        doc = Course.objects.get(pk=document_id)
         title = doc.title
         content = doc.annoncement
-    elif this_type == "7" :        
-        doc = Exotex.objects.get(pk=docu.doc_id)
+    elif this_type == "Exotex" :        
+        doc = Exotex.objects.get(pk=document_id)
         title = doc.title
         content = doc.content_html
-    elif this_type == "8" :        
-        doc = Flashpack.objects.get(pk=docu.doc_id)
+    elif this_type == "Flashpack" :        
+        doc = Flashpack.objects.get(pk=document_id)
         title = doc.title
         content = str(doc.flashcards.count()) + " flashcards"
-    elif this_type == "9" or  this_type == "4" :
-        doc = Quizz.objects.get(pk=docu.doc_id)
+    elif this_type == "Quizz" or  this_type == "QF" :
+        doc = Quizz.objects.get(pk=document_id)
         title = doc.title
         content = str(doc.questions.count()) + " questions"
-    elif this_type == "10" :
-        doc = DocPerso.objects.get(pk=docu.doc_id)
+    elif this_type == "DocPerso" :
+        doc = Docperso.objects.get(pk=document_id)
         title = doc.title
-        if doc.link : content =  "<a href='"+doc.link+"'><i class='bi bi-link'></i></a>"
-        else : content = "<a href='"+doc.file.url+"'><i class='bi bi-file'></i></a>"
-    elif this_type == "11" :
-        doc = Bloc.objects.get(pk=docu.doc_id)
+        if doc.link !="" : content =  "<a href='"+doc.link+"'><i class='bi bi-link'></i> "+doc.title+"</a>"
+        else : content = "<a href='"+doc.file.url+"'><i class='bi bi-file'></i> "+doc.title+" </a>"
+    elif this_type == "Bloc" :
+        doc = Bloc.objects.get(pk=document_id)
         content = doc.content_html
         title = doc.title
     else :
-        content = docu.content
-        title   = docu.title
+        content = ""
+        title   = ""
 
     data["body"] = content
 

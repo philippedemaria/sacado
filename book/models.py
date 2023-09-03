@@ -6,7 +6,7 @@ from account.models import Teacher
 from bibliotex.models import Bibliotex , Exotex
 from flashcard.models import Flashpack , Flashcard
 from group.models import Group
-from qcm.models import Course, Exercise , Parcours
+from qcm.models import Course, Exercise , Parcours, Docperso
 from tool.models import Quizz, Question
 from socle.models import Level , Subject , Skill , Knowledge , Theme
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -191,7 +191,9 @@ class Document(models.Model):
             doc_url = "show_questions_flash"
         elif self.doctype == 10 : 
             icon = '<i class="bi bi-file  book_main_page_section_document_earmark"></i>'
-            doc_url = self.url
+            docu = Docperso.objects.get(pk=self.doc_id)
+            if docu.link : doc_url = docu.link
+            else : doc_url = docu.file.url
         data = {}
         data["icon"] = icon
         data["url"] = doc_url

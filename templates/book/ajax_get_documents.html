@@ -15,8 +15,10 @@
                     data-type="GGB" data-book_id='{{ book.id }}'  data-document_id='{{ document.id }}'  data-chapter_id='{{ chapter.id }}'></span>
                 {% endif %}
                     <br/>
-            {% else %}
+            {% elif this_type == "Course" %}
             <a href="javascript:void();" data-toggle='modal' data-target='#show_this_document' class="show_this_document" data-document_id='{{ document.id }}' data-this_type='{{ this_type }}'>{{document.title|safe}}</a>
+            {% else %}
+            <span class="show_this_document">{{document.title|safe}}</span>
             {% endif %}
         </div>
     </div>

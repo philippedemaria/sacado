@@ -30,11 +30,18 @@
                     {{ document.title|truncatechars:30|safe  }}
                 </a>
 
-                {% elif document.doctype ==  10 and  document.icon_doctype.file %}
-                <a href="{% url document.icon_doctype.file document.icon_doctype.support_id %}" target="_blank" >
+                {% elif document.doctype ==  10 and  document.icon_doctype %}
+                <a href="{{ document.icon_doctype.url  }}" target="_blank" >
                      {{ document.icon_doctype.icon|safe}}<br/>
                      {{ document.title|truncatechars:30|safe}}
                 </a>
+
+                {% elif document.doctype ==  10 and not document.icon_doctype %}
+                <a href="{% url document.icon_doctype.url  %}" target="_blank" >
+                     {{ document.icon_doctype.icon|safe}}<br/>
+                     {{ document.title|truncatechars:30|safe}}
+                </a>
+
                 {% else %}
                 <a href="{% url document.icon_doctype.url document.icon_doctype.support_id %}" target="_blank" >
                      {{ document.icon_doctype.icon|safe}}<br/>
@@ -44,7 +51,14 @@
 
                 {% endif %} 
                 <br/> 
-                <span id="span_this_document_is_done{{ document.id }}">{% if document.is_done %}<i class="fa fa-check this_document_is_done"></i>{% endif %}</span>
+                <span id="span_this_document_is_done{{ document.id }}">
+                    {% if document.is_done %}<i class="fa fa-check this_document_is_done"></i>
+
+                    {% else %}
+                        <a href="javascript:void(0);" class='is_this_document_is_done' title="Document traité en classe ?" data-document_id="{{document.id}}" > <i class="fa fa-check "></i> </a>
+                    {% endif %}
+                </span>
+
                 <small>
                     <a href="javascript:void(0);" class="book_main_page_section_document_eraser" title="Supprimer {{document.title}}" data-document_id="{{ document.id }}" onclick="return TestDelete('{{document.title}}')"><i class="bi bi-trash text-danger"></i></a>
                 </small>
