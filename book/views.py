@@ -1101,7 +1101,7 @@ def print_latex_to_pdf(request,idch,idp):
     try :
         return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     except :
-        return FileResponse(open(file_path+".log", 'rb'),  as_attachment=True, content_type='application/pdf')
+        return FileResponse(open(file_path+".log", 'rb'),  as_attachment=True, content_type='text/plain')
 
 
 
