@@ -4122,11 +4122,13 @@ def delete_questions_flash(request,id):
         if question.quizz.count()==1:
             question.delete()
     quizz.delete()
-    idg = request.session.get("group_id")
+    idg = request.session.get("group_id",None)
     messages.success(request,'Questions flash Supprimée.')
-
-    return redirect('list_questions_flash_by_group' , idg)
-
+    if idg:
+        return redirect('list_parcours_group' , idg)
+    else :
+        return redirect('list_questions_flash')
+ 
 
 
 @login_required(login_url= 'index')
