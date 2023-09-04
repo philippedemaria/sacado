@@ -20,7 +20,7 @@ from qcm.views import get_teacher_id_by_subject_id, all_levels
 from group.models import Group , Sharing_group
 from socle.models import  Knowledge , Level , Skill , Waiting , Subject , Theme
 from bibliotex.models import  Bibliotex , Exotex , Relationtex , Blacklistex
-from bibliotex.forms import  BibliotexForm , ExotexForm , RelationtexForm
+from bibliotex.forms import  BibliotexForm , ExotexForm , RelationtexForm , SetExotexForm
 from django.views.decorators.csrf import csrf_exempt
 from tool.consumers import *
 
