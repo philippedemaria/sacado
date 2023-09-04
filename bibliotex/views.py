@@ -319,7 +319,7 @@ def printer(request, relationtex_id, collection,output , obj):
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+ str(request.user.id)+"/"+document
+    file = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+document
     ################################################################# 
     ################################################################# 
 
@@ -329,7 +329,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
 
     if output=="pdf" :
-        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file ])
+        result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file ])
 
 
         if os.path.isfile(file+".out"):os.remove(file+".out")
@@ -430,13 +430,13 @@ def printer_bibliotex_by_student(bibliotex):
     # pour windows
     #file = settings.DIR_TMP_TEX+r"\\"+document
     # pour le serveur Linux
-    file = settings.DIR_TMP_TEX+ str(request.user.id)+"/"+document
+    file = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+document
     ################################################################# 
     ################################################################# 
     f_tex = open(file+".tex","w")
     f_tex.write(elements)
     f_tex.close()
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX + str(request.user.id) ,  file ])
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file ])
 
     if os.path.isfile(file+".out"):os.remove(file+".out")
     if os.path.isfile(file+".aux"):os.remove(file+".aux")    
@@ -671,7 +671,7 @@ def div_to_display_latex(request):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    link = str(request.user.id)+"/"+str(datetime.now().timestamp()).split(".")[0]
+    link = str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     file_path = settings.DIR_TMP_TEX + link
     ################################################################# 
     ################################################################# 
@@ -679,7 +679,7 @@ def div_to_display_latex(request):
         file.write(elements)
         file.close()
 
-    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX+ str(request.user.id) ,  file_path ])
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
 
     if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
     if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
