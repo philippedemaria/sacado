@@ -29,7 +29,32 @@ class ExotexForm(forms.ModelForm):
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
 			 
 
+class SetExotexForm(forms.ModelForm):
+	class Meta:
+		model = Exotex 
+		fields = '__all__'
 
+	def __init__(self, *args, **kwargs):
+		teacher = kwargs.pop('teacher')
+		knowledge = kwargs.pop('knowledge')
+
+		super(ExotexForm, self).__init__(*args, **kwargs)
+		if teacher:
+			subjects = teacher.subjects.all()
+			levels   = teacher.levels.order_by("ranking")
+			if knowledge :
+				skills = knowledge.theme.subject.skill.all()
+				knowledges = Knowledge.objects.filter(Q(level_id = knowledge.level.id )|Q(level_id = knowledge.level.id-1 ))
+				self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True)  
+				self.fields['knowledges'].required = False
+			else :
+				skills = Skill.objects.all()
+
+			self.fields['knowledge'].required = False
+			self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
+			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
+			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
+			 
 class BibliotexForm(forms.ModelForm):
 	class Meta:
 		model = Bibliotex 

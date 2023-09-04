@@ -530,7 +530,7 @@ def set_exotex_in_bibliotex(request,id):
 
     bibliotex = Bibliotex.objects.get(id=id)
     teacher = request.user.teacher
-    form = ExotexForm(request.POST or None,request.FILES or None, teacher = teacher , knowledge = None )
+    form = SetExotexForm(request.POST or None,request.FILES or None, teacher = teacher , knowledge = None )
 
     if form.is_valid():
         nf = form.save(commit = False) 
