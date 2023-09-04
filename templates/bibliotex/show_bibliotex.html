@@ -179,8 +179,6 @@
                 <span class="legend_exotex_parameter"> Individualiser  </span> </span>
             </li>
             {% endcomment %}
-
-
         </div>
         <div class="body_exotex">
 
@@ -210,11 +208,7 @@
     </div>
 {% endfor %}
  
-<div class="new_exotex col-md-12 col-lg-6" style="overflow-y:hidden;padding:10px">
 
-        <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id  %}"  ><i class="bi bi-plus-circle-dotted big_icon" title="Créer un exercice"></i></a> 
-        <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}"  ><i class="bi bi-clipboard-plus big_icon" title="Dupliquer des exercices"></i></a> 
-</div>
 
 <div style="clear:both"></div>
 <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>

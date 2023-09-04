@@ -14,9 +14,6 @@
 {% block page_title %}
         {% include 'bibliotex/logo.html' %}
         {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
-
-
-        {% if relationtexs %}<a href="#" data-toggle='modal' data-target='#modal_search_exotex' class="btn btn-action">Ajouter des exercices</a>{% endif %}
 {% endblock %}
 
 
@@ -40,49 +37,43 @@
                 <div id="loader">
                 </div>
                 <div id="content_exercises" class="list_choice_bibliotex">
-                    {% for relationtex in relationtexs %}
-                        {% with exotex=relationtex.exotex  %}
-                        {% include 'bibliotex/exotex_tag.html' %}
-                        {% endwith %}
-                    {% empty %}
-                        <form action="" method="POST" enctype='multipart/form-data'>
-                            <div class="modal-content" >
-                                <div class="modal-header">
-                                    <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
-                                    {% csrf_token %} 
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-2">
-                                            Importer un exercice :
-                                        </div>
-                                        <div class="col-sm-6 col-md-3">
-                                            <select name="subject_id" id="subject_id" class="form-control select2 level_search">
-                                            {% for s in teacher.subjects.all %}
-                                                <option value="{{ s.id }}" >{{ s.name }}</option>
-                                            {% endfor%}
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6 col-md-3">
-                                            <select name="level_id" id="level_id" class="form-control select2 level_search">
-                                            {% for l in levels %}
-                                                <option value="{{ l.id }}">{{ l.name }}</option>
-                                            {% endfor%}
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6 col-md-3">
-                                            ou <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id %}" class="btn btn-sacado">Créer un exercice</a> 
-                                        </div>
-                                    </div>
+                </div>
+                
+                <form action="" method="POST" enctype='multipart/form-data'>
+                    <div class="modal-content" >
+                        <div class="modal-header">
+                            <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
+                            {% csrf_token %} 
+                            <div class="row">
+                                <div class="col-sm-6 col-md-2">
+                                    <label>Importer un exercice :</label>
                                 </div>
-                                <div class="modal-body">
-                                    <div id="body_search_result" >
-                                        Choisir une matière et un niveau <img src="{% static 'img/fleche_up_right_violet.png' %}" />
-                                    </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <select name="subject_id" id="subject_id" class="form-control select2 level_search">
+                                    {% for s in teacher.subjects.all %}
+                                        <option value="{{ s.id }}" >{{ s.name }}</option>
+                                    {% endfor%}
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <select name="level_id" id="level_id" class="form-control select2 level_search">
+                                    {% for l in levels %}
+                                        <option value="{{ l.id }}">{{ l.name }}</option>
+                                    {% endfor%}
+                                    </select>
                                 </div>
                             </div>
-                        </form>
-                    {% endfor %}
+                        </div>
+                        <div class="modal-body">
+                            <div id="body_search_result" >
+                                Choisir une matière et un niveau <img src="{% static 'img/fleche_up_right_violet.png' %}" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+ 
                     
-                </div>
+
                 <div style="clear: both;"> </div>
             </div>
         </div> 
@@ -98,53 +89,7 @@
     </div>
 </section>  
 
-
-
-<div class="modal fade" id="modal_search_exotex" tabindex="-1" role="dialog" aria-labelledby="modal_search_exotex">
-    <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="POST" enctype='multipart/form-data'>
-            <div class="modal-content" >
-                <div class="modal-header">
-                    <input id="bibliotex_id" value="{{ bibliotex.id }}" type="hidden"/>
-                    {% csrf_token %} 
-                    <div class="row">
-                        <div class="col-sm-3 col-md-5">
-                            <b>{{ bibliotex.title }}</b>
-                        </div>
-                        <div class="col-sm-4 col-md-3">
-                            <select name="subject_id" id="subject_id" class="form-control select2 level_search">
-                            {% for s in teacher.subjects.all %}
-                                <option value="{{ s.id }}" >{{ s.name }}</option>
-                            {% endfor%}
-                            </select>
-                        </div>
-                        <div class="col-sm-4 col-md-3">
-                            <select name="level_id" id="level_id" class="form-control select2 level_search">
-                            {% for l in levels %}
-                                <option value="{{ l.id }}">{{ l.name }}</option>
-                            {% endfor%}
-                            </select>
-                        </div>
-                        <div class="col-sm-1 col-md-1">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> 
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div id="body_search_result" >
-                        <div align="center">
-                        Choisir une matière et un niveau <img src="{% static 'img/fleche_up_right_violet.png' %}" />
-                        </div>
-                    </div>
-                    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}" class="btn btn-primary">Ma biblioTex</a>
-                </div>
-            </div>
-        </form>
-    </div> 
-</div>
-
+                    
 
 
 <div class="modal fade" id="show_exotex_by_pop" tabindex="-1" role="dialog" aria-labelledby="show_exotex_by_pop">
