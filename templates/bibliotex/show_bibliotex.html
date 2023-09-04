@@ -145,17 +145,17 @@
             <li class="relative_div_exotex action_print_tex  {% if not r.is_publish %}no_visu_on_load{% endif %}"   data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="20px" style="padding:3px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
             </li>
-
-            {% if sacado_asso %}
-            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}">  
-                <a href="{% url 'link_to_relationship' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices </span></a>
-            </li>
-            {% else %}
-            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load_important{% endif %}">  
-                <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices (V. etab.)</span></a>
-            </li>
+            {% if request.user.is_superuser %}
+                {% if sacado_asso %}
+                <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}">  
+                    <a href="{% url 'link_to_relationship' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices </span></a>
+                </li>
+                {% else %}
+                <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load_important{% endif %}">  
+                    <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices (V. etab.)</span></a>
+                </li>
+                {% endif %}
             {% endif %}
-
             <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
                 <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
             </li>
