@@ -81,7 +81,7 @@
         
                 {% if request.user.user_type == 2 %}
                     {% if r.correction  or r.exotex.correction  %}
-                            <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                            <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="Correction"></i></a>
                             <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
                             {% if r.is_publish_cor %}
                                   <i class="fa fa-eye text-green" title="Vue et impression par les élèves de la correction autorisées"></i>
@@ -108,11 +108,11 @@
 
                 {% elif request.user.user_type == 0 and r.is_publish_cor %}
                     {% if r.correction  or r.exotex.correction  %}
-                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="correction"></i></a>
+                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction"><i class="fa fa-copyright" title="Correction"></i></a>
                     {% endif %}
                 {% endif %}
 
-                <span class="show_exotex_knowledges"> <i class="bi bi-cc-circle" title="correction" style="font-size:18px"></i>
+                <span class="show_exotex_knowledges"> <i class="bi bi-cc-circle" title="Compétences et savoir faire" style="font-size:18px"></i>
                     <div class="exotex_knowledges text-blue" style="font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
                         {% for s in r.exotex.skills.all %}
                             {{ s.name }}.
