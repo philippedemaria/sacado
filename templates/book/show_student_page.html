@@ -17,7 +17,7 @@
 
 
 {% block page_title %}
-    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }}   <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"><small><i class="bi bi-printer"></i></small></a>
+    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }}   <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}" target="_blank"><small><i class="bi bi-printer"></i></small></a>
         <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0" > 
             <i class="bi bi-cc-circle-fill text-{% if this_chapter.is_correction %}success{% else %}danger{% endif %}" id="cc_chapter{{ this_chapter.id }}"></i> 
             <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du chapitre. </div>
@@ -84,7 +84,7 @@
     <div class="row">
         <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %}">
             <div class="{{ page.css}}">
-                {{ page.title }} <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white"><i class="bi bi-printer"></i></a>
+                {{ page.title }} <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white"  target="_blank"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ n }} </span>
             </div>            
             {% for paragraph in page.paragraphs.all %}
@@ -142,7 +142,7 @@
         {% if not page in first_pages %}
         <div class="col-sm-12 col-md-6">
             <div class="{{ next_page.css}}">
-                {{ next_page.title }} <a href="{% url 'print_latex_to_pdf' 0 next_page.id  %}" class="white"><i class="bi bi-printer"></i></a>
+                {{ next_page.title }} <a href="{% url 'print_latex_to_pdf' 0 next_page.id  %}" class="white"  target="_blank"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ next_page.number }} </span>
             </div>    
             {% for paragraph in next_page.paragraphs.all %}
