@@ -28,6 +28,12 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 	position:relative;
 }
 
+
+.this_div_bloc_complements{
+	position:relative;	
+	left:70px;
+}
+
 .to_sorter_div_left{
 	left:30px;
 	top:30px;

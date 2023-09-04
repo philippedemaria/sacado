@@ -7875,29 +7875,31 @@ def execute_exercise_from_book(request, ide):
     try :
         student = request.user.student
     except :
-        messages.error(request,"Vous n'êtes pas élève.")
-        return redirect('index')
+        student = None
 
     exercise = Exercise.objects.get(id= ide)
-
-    relationships  = Relationship.objects.filter(exercise=exercise, students=request.user.student)
-    if relationships.count()  :
-        relation = relationships.first()
-        parcours = relation.parcours
-    else :
-        messages.error(request,"Vous ne faites pas partie des utilisateurs de cet exercice. Demandez à votre enseignant de vérifier que vous êtes dans le liste des utilisateurs de l'exercice.")
-        return redirect('index')
-
     start_time =  time.time()
     today = time_zone_user(request.user)
     timer = today.time()
- 
-    if exercise.supportfile.qtype != 100 :
-        return show_supportfile_student(request,relation)
 
+    if student :
+        relationships  = Relationship.objects.filter(exercise=exercise, students=request.user.student)
+        if relationships.count()  :
+            relation = relationships.first()
+            parcours = relation.parcours
+        else :
+            messages.error(request,"Vous ne faites pas partie des utilisateurs de cet exercice. Demandez à votre enseignant de vérifier que vous êtes dans le liste des utilisateurs de l'exercice.")
+            return redirect('index')
+        if exercise.supportfile.qtype != 100 :
+            return show_supportfile_student(request,relation)
+        else :
+            context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today }
+            return render(request, 'qcm/show_relation.html', context)
     else :
-        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today }
-        return render(request, 'qcm/show_relation.html', context)
+        if exercise.supportfile.qtype != 100 :
+            return show_supportfile_student(request,exercise.exercise_relationship.first().id)
+        else :
+            return redirect('show_this_exercise', exercise.id)
 
 
 
