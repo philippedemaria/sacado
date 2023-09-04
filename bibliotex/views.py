@@ -549,6 +549,12 @@ def set_exotex_in_bibliotex(request,id):
         form.save_m2m() 
         save_html = compile_html(request,nf)
         bibliotex.exotexs.add(nf)
+        try :
+            msg = "Salut Bruno, Philippe, \n\nUn exercice Latex vient d'être posté. Vous devriez aller y jeter quand même un oeil.\n\n ===> https://savado.xyz/bibliotex/exercise_exotex_update/"+str(nf.pk)
+        except : msg = "Erreur dans le message d'envoi."
+
+        send_mail('SACADO : Exercice Latex', msg ,settings.DEFAULT_FROM_EMAIL,['brunoserres33@gmail.com', 'philippe.demaria83@gmail.com'])
+        
         if save_html :
             messages.success(request, "L'exercice a été créé avec succès !")
         else :
