@@ -1032,7 +1032,7 @@ def print_latex_to_pdf(request,idch,idp):
         chapter = Chapter.objects.get(pk=idch)
         for page in chapter.pages.order_by("number"):
             if page.paragraphs.count()>0 :
-                elements +=  r'{\huge '+ page.title+r'} \hfill '+ chapter.title
+                elements +=  r'{\huge '+ page.title+r'} \hfill '+str(chapter.book.level.shortname)+". "+  chapter.title
                 elements +=  r" \hrule \vspace {0.1cm}"
             for paragraph in page.paragraphs.order_by("ranking"):
                 if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
