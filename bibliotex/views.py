@@ -1426,8 +1426,10 @@ def exercise_bibliotex_peuplate(request, id):
 
     waitings = level.waitings.filter(theme__subject = subject ).order_by("theme__subject" , "theme")
 
- 
-    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject    }
+    group_id = request.session.get("group_id",None)
+
+
+    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject ,'group_id' : group_id   }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex.html', context )
  
