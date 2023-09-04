@@ -698,15 +698,10 @@ font-size: 26px;
         }
 
     .full_screen_size{
-      font-size:12px;
-      text-align: center;
-      height:60px;
+      display: none;
     }
 
-    .full_screen_size_details{
-      display: inline;
-      padding: 10px;
-    }
+
    
     .img_size_square_75{
       width:45px ;
