@@ -17,18 +17,8 @@
  
 
 {% block page_title %}
-<span style="color:{{ parcours.color }}">  
-    {% if parcours.is_testpos %}
-    <span class="helper_tip">
-        <i class="bi bi-geo"></i> 
-        <div class="helper_tip_text_right" >Test de positionnement</div>
-    </span>
-    {% elif parcours.is_sequence %}
-        <i class="bi bi-ladder"></i>
-    {% else %}
-        <i class="fa fa-th"></i>
-    {% endif %}
-</span>
+
+
 
     {% include 'qcm/breadcrumb.html' %}
 
