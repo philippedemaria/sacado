@@ -984,7 +984,7 @@ def show_student_book_one_page(request,idb, n):
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
     context = {'book': book, "n" : n ,  'this_chapter' : this_chapter ,  'page' : this_page , 'next_page' : next_page  ,'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
-    return render(request, 'book/show_student_book_one_page.html', context)
+    return render(request, 'book/show_student_page_one_page.html', context)
 
 
 def student_book_builder(request,idb, n):
