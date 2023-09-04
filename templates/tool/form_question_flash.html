@@ -57,7 +57,7 @@
                             {{ form.title.errors }}
                         </div>
                         <div class="col-sm-6 text-danger">
-                            <label>Actuellement, les questions flash ne sont proposées qu'en Maths jusqu'en 4è. Notre équipe développe les autres niveaux. </label>
+                            <label>Actuellement, les questions flash ne sont proposées qu'en Maths du CP à la 4è. Notre équipe développe les autres niveaux. </label>
                         </div>
                     </div>
                     <div class="row form-group">  
@@ -113,11 +113,13 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
+                                <label>Attribuer aux dossiers</label> 
                                 <div id="cblist">
                                 {% if group %}
-                                <label>Attribuer aux dossiers</label> 
                                 {{ form.folders|add_class:"select_folders"   }}
                                 {{ form.folders.errors }}
+                                {% else %}
+                                    <small>Choisir au moins un groupe</small>
                                 {% endif %}
                                 </div>                                
                             </div>
@@ -127,11 +129,13 @@
 
                 <div class="col-sm-12 col-md-3  setup_ggb no_visu">                              
                     <div class="exercise_body_shared no_visu form_card" style="height: 470px;">
-                        <div id="pclist">
+                        <label>Attribuer aux parcours</label>
+                        <div id="pclist">                         
                         {% if group %}
-                        <label>Attribuer aux parcours</label> 
                         {{ form.parcours|add_class:"select_all_parcours"   }}
                         {{ form.parcours.errors }}
+                        {% else %}
+                            <small>Choisir au moins un groupe</small>
                         {% endif %}
                         </div> 
                     </div>
