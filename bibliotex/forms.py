@@ -38,7 +38,7 @@ class SetExotexForm(forms.ModelForm):
 		teacher = kwargs.pop('teacher')
 		knowledge = kwargs.pop('knowledge')
 
-		super(ExotexForm, self).__init__(*args, **kwargs)
+		super(SetExotexForm, self).__init__(*args, **kwargs)
 		if teacher:
 			subjects = teacher.subjects.all()
 			levels   = teacher.levels.order_by("ranking")
