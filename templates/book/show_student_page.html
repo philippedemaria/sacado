@@ -142,7 +142,7 @@
         {% if not page in first_pages %}
         <div class="col-sm-12 col-md-6">
             <div class="{{ next_page.css}}">
-                {{ next_page.title }} <a href="{% url 'print_latex_to_pdf' 0 next_page.id  %}" class="white"  target="_blank"><i class="bi bi-printer"></i></a>
+                {{ next_page.title }} <a href="{% url 'print_latex_to_pdf' 0 next_page.id  %}" class="white"   target="_blank"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ next_page.number }} </span>
             </div>    
             {% for paragraph in next_page.paragraphs.all %}
