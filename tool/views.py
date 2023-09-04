@@ -3870,8 +3870,9 @@ def list_questions_flash_sub(request,idg):
     request.session["parcours_id"] = False
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
-
-    level = Level.objects.get(pk=idl)
+    
+    group = Group.objects.get(id=idg)   
+    level = group.level
     teacher = request.user.teacher 
     #quizzes = teacher.teacher_quizz.filter(is_archive=0 , is_random=1, levels = level , folders=None).order_by("levels","-id") # non inclus dans un dossier, 
     delete_session_key(request, "quizz_id")
