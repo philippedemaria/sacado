@@ -467,6 +467,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                     $("#print_correction"+relationtex_id).find('i').addClass(data.addClass);
                     $("#print_correction"+relationtex_id).find('i').removeClass(data.removeClass);
+                    $("#print_correction"+relationtex_id).find('i').attr('title',data.title);               
 
                 }
             }
