@@ -46,7 +46,7 @@ class Exotex(models.Model):
 
     ###### Socle
     subject = models.ForeignKey(Subject, default =1 , on_delete=models.PROTECT,  related_name='subject_exotexs', verbose_name="Enseignement associé")
-    knowledge = models.ForeignKey(Knowledge, on_delete=models.PROTECT,  related_name='knowledge_exotexs', verbose_name="Savoir faire associé")
+    knowledge = models.ForeignKey(Knowledge,  null=True, on_delete=models.PROTECT,  related_name='knowledge_exotexs', verbose_name="Savoir faire associé")
     level = models.ForeignKey(Level, related_name="level_exotexs", on_delete=models.PROTECT, verbose_name="Niveau")
     theme = models.ForeignKey(Theme, related_name="theme_exotexs", on_delete=models.PROTECT, verbose_name="Thème")
     skills = models.ManyToManyField(Skill, blank=True, related_name='skills_exotexs', verbose_name="Compétences ciblées")
