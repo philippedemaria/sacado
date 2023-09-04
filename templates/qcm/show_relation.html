@@ -27,16 +27,14 @@
     {% get_parcours_available parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas : même code que get_available pour une parcours -->
     <div class="col-sm-12 col-md-1 col-lg-1 full_screen_size">
         {% if student.ebep %}
-        <div class="calculator_img"  class="calculator_img double_bottom_padding">
+        <div class="calculator_img"  class="calculator_img double_bottom_padding full_screen_size_details">
               <a href="#" id="use_tools" ><img src="{% static 'img/situation.png' %}"  class="img_size_square_75" /></a>            
               <p>Outils</p>
         </div>
         {% endif  %} 
 
-        <div class=" double_bottom_padding">
+        <div class="full_screen_size_details double_bottom_padding">
         {% if relation.is_calculator %}
- 
- 
             {% if exercise.level < 7  %}
                 <a href="#" data-toggle='modal' data-target='#calculator'>
                     <img src="{% static 'img/calculator.png' %}"  class="img_size_square_75" />
@@ -64,7 +62,7 @@
         </div>
         {% endcomment %}
 
-        <div class="">
+        <div class="full_screen_size_details">
             {% if relation.duration == 5 %}
               <img src="{% static 'img/horloge5.png' %}"   class="img_size_square_75" />
             {% elif relation.duration == 10 %}
@@ -102,11 +100,11 @@
         {% endif  %} 
 
         
-        <div class="">
+        <div class="full_screen_size_details">
              <i class="fa fa-save refresh_5x" style="color : #5d4391"></i>
             <p>{{ relation.situation }} situation{{ relation.situation|pluralize }}</p>
         </div>
-        <div class="" > 
+        <div class="full_screen_size_details" align="center" > 
           {% if  parcours.maxexo > -1 %}
               {% with nb_attempt=parcours_available.nbleft  %}
 
@@ -134,12 +132,12 @@
           {% endif %}
         </div>
 
-        <div class=" coefficient_small" style="text-align: center">
+        <div class="full_screen_size_details coefficient_small" style="text-align: center">
             <div style="font-weight:800;font-size: 25px;" >{{ relation.coefficient }}</div>
             <p class="coefficient_small_label">Coefficient</p>
         </div>
 
-        <div class=" left_attempt">
+        <div class="full_screen_size_details left_attempt">
             <i class="fa fa-barcode fa-4x"></i>
             <p>{{ relation.exercise.supportfile.code }}</p>
         </div>
