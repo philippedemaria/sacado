@@ -4109,8 +4109,11 @@ def show_questions_flash(request,id):
 def goto_questions_flash(request,id):
     pass
 
+
+
 @login_required(login_url= 'index')
 def delete_questions_flash(request,id):
+    
     quizz = Quizz.objects.get(pk = id)
 
     level     = quizz.levels.first()
@@ -4119,9 +4122,10 @@ def delete_questions_flash(request,id):
         if question.quizz.count()==1:
             question.delete()
     quizz.delete()
+    idg = request.session.get("group_id")
     messages.success(request,'Questions flash Supprimée.')
 
-    return redirect('list_questions_flash_sub' , level.id)
+    return redirect('list_questions_flash_by_group' , idg)
 
 
 
