@@ -84,13 +84,15 @@
                             <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="Correction"></i></a>
                             <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
                             {% if r.is_publish_cor %}
-                                  <i class="fa fa-eye text-green" title="Correction publiée"></i>
+                                  <i class="fa fa-eye text-green" title="Correction : Publier"></i>
                             {% else %}
-                                  <i class="fa fa-eye-slash text-danger" title="Correction dépubliée"></i>
+                                  <i class="fa fa-eye-slash text-danger" title="Correction : Publier"></i>
                             {% endif %}
                             </a>
                     {% endif %}
-
+ 
+                    <a href="#" class="expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i> </a>
+     
                     {% if r.relationships.count %}
                         <span class="show_exotex_knowledges"> <i class="bi bi-link"  style="font-size:18px"></i>
                             <div class="exotex_knowledges text-blue">
@@ -153,12 +155,6 @@
                 <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices (V. etab.)</span></a>
             </li>
             {% endif %}
-
-
-
-            <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load_important{% endif %}"> 
-                <a href="#" class="exotex_div_menu_label expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i><span class="legend_exotex_parameter"> Vidéoprojeter </span></a>
-            </li>
 
             <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
                 <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
