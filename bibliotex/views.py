@@ -536,7 +536,8 @@ def set_exotex_in_bibliotex(request,id):
         nf = form.save(commit = False) 
         nf.author = teacher
         nf.teacher = teacher
-        nf.is_share = 1
+        nf.is_share = 0
+        nf.is_read = 0
         knowledges = request.POST.getlist("knowledge")
         nf.knowledge = Knowledge.objects.get(pk = knowledges[0])
         try :

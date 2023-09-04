@@ -14,7 +14,7 @@
  
 
 {% block page_title %}
-    <span style="color:{{ group.color  }}"><i class="bi bi-folder"></i></span>  
+    <a href="{% url 'index'  %}" style="color:{{ group.color|contrast_color_title }}"><i class="bi bi-people"></i></a>   
 
     {% include 'qcm/breadcrumb.html' %}
 

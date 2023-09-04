@@ -22,7 +22,7 @@
  
 
 {% block page_title %}
-    <a href="{% url 'index'  %}" style="color:{{ group.color|contrast_color_title }}"><i class="bi bi-people"></i></a> {% include 'qcm/breadcrumb.html' %} <small>Tous les documents du groupe</small>
+    {% include 'qcm/breadcrumb.html' %} <small>Tous les documents du groupe</small>
 {% endblock %}
 
 
