@@ -122,27 +122,25 @@
                                         {{ bloc.content_html|safe }}
                                     </div>
                                 </div>
+                                {% if bloc.display_qr %} 
+                                <div style="margin-left:20px">  
+                                    <label><small>Compléments :</small></label> 
+                                    {% for a in bloc.appliquettes.all %}
+                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
+                                    {% endfor %}
+                                    {% for e in bloc.exercises.all %} 
+                                       {% if e.supportfile.imagefile %}
+                                            <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" width="20px"></a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for e in bloc.exotexs.all %} 
+                                        <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
+                                    {% endfor %}
+                                 </div>
+                                 {% endif %}                                
                             </div>
-                            {% if bloc.display_qr %} 
-                            <div style="margin-left:20px">  
-                                <label><small>Compléments :</small></label> 
-                                {% for a in bloc.appliquettes.all %}
-                                    <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
-                                {% endfor %}
-                                {% for e in bloc.exercises.all %} 
-                                   {% if e.supportfile.imagefile %}
-                                        <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" width="20px"></a>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for e in bloc.exotexs.all %} 
-                                    <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
-                                {% endfor %}
-                             </div>
-                             {% endif %}
+
                             {% get_bloc_col_width paragraph  forloop.counter as col_width %}
-
-
- 
                             {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}   
                         {% endfor %}
                     </div>
