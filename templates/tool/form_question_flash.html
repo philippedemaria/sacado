@@ -49,7 +49,7 @@
     	{% csrf_token %}
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-12 col-md-6 form_card">
+                <div class="col-sm-12 col-md-9 form_card">
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Titre des questions flash <small>(optionnel)</small></label>
@@ -104,14 +104,14 @@
                         </div>
                     </div> 
                     <div class="row ">
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-4">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
                                 <label>Attribuer aux groupes</label> 
                                 {{ form.groups|add_class:"select_all"   }}
                                 {{ form.groups.errors }}
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-4">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
                                 <label>Attribuer aux dossiers</label> 
                                 <div id="cblist">
@@ -124,22 +124,26 @@
                                 </div>                                
                             </div>
                         </div>
+
+                        <div class="col-sm-12 col-md-4">
+                            <div class="exercise_body_shared no_visu form_card" style="height: 470px;">
+                                <label>Attribuer aux parcours</label> 
+                                <div id="pclist">                         
+                                {% if group %}
+                                {{ form.parcours|add_class:"select_all_parcours"   }}
+                                {{ form.parcours.errors }}
+                                {% else %}
+                                    <small>Choisir au moins un groupe</small>
+                                {% endif %}
+                                </div>                                
+                            </div>
+                        </div>
+
+
                     </div>  
                 </div>            
 
-                <div class="col-sm-12 col-md-3  setup_ggb no_visu">                              
-                    <div class="exercise_body_shared no_visu form_card" style="height: 470px;">
-                        <label>Attribuer aux parcours</label>
-                        <div id="pclist">                         
-                        {% if group %}
-                        {{ form.parcours|add_class:"select_all_parcours"   }}
-                        {{ form.parcours.errors }}
-                        {% else %}
-                            <small>Choisir au moins un groupe</small>
-                        {% endif %}
-                        </div> 
-                    </div>
-                </div>                 
+               
                 <div class='col-sm-12 col-md-3'  style="height: 270px;">
                     <table class="table table-sacado borderless form_card   setup_ggb no_visu">
                         <tr style="display:none">
