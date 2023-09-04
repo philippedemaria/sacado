@@ -16,8 +16,8 @@
  
 
 {% block page_title %}
-    <a href="{% url 'list_questions_flash' %}" class="sacado_color_text"><i class="bi bi-lightning"></i> Mes questions flash</a>  
-    {% include 'qcm/breadcrumb.html' %}
+     <i class="bi bi-lightning"></i>  
+    {% include 'qcm/breadcrumb.html' %} 
 
     {% if quizz %} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration</small> {% else %} Nouvelles questions flash {% endif %}
 

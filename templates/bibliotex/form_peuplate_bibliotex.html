@@ -12,7 +12,7 @@
 
 
 {% block page_title %}
-        {% include 'bibliotex/logo.html' %}
+        {% include 'bibliotex/logo.html' %}    {% include 'qcm/breadcrumb.html' %} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
         {{ bibliotex }} <img src="{% static 'img/angle-right.png' %}" width="25px"/> 
 {% endblock %}
 
@@ -38,7 +38,7 @@
                 </div>
                 <div id="content_exercises" class="list_choice_bibliotex">
                 </div>
-                
+
                 <form action="" method="POST" enctype='multipart/form-data'>
                     <div class="modal-content" >
                         <div class="modal-header">

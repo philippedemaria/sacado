@@ -59,7 +59,7 @@
 <input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
 {% csrf_token %}
 {% for r in relationtexs %} 
-    <div class="col-md-12 col-lg-6 new_exotex relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
+    <div class="col-xs-12 col-md-6 col-lg-6 new_exotex relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         <div style="padding-left:10px;">
         <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
         <span class="container_checkbox_title" style="font-size:22px!important">{{ r.exotex.title }} </span>

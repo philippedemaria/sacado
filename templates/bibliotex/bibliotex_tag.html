@@ -9,7 +9,7 @@
         <!-- Add signet to folder -->
 
         <div>
-            <a href="{% url 'show_bibliotex' bibliotex.id  %}" style="font-size:20px;font-weight:600" >             
+            <a href="{% url 'show_bibliotex' bibliotex.id  %}" style="font-size:20px;font-weight:600" title="Voir les exercices dans la bibliotex" >             
                 {% if bibliotex.title|length > 50 %}
                 <span class="helper_tip">{{ bibliotex.title|truncatechars:"50" }}
                     <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
