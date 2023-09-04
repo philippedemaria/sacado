@@ -57,7 +57,7 @@
 
 
 
-<a href="{% url 'show_student_book' book.id prev_page.number %}" class="btn btn-default"><i class="bi bi-book"></i></a>
+<a href="{% url 'show_student_book' book.id n %}" class="btn btn-default"><i class="bi bi-book"></i></a>
 {% if  prev_page %}
 <a href="{% url 'show_student_book_one_page' book.id prev_page.number %}" class="btn btn-default">Précédente</a>
  {% endif %}
