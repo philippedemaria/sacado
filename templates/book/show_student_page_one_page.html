@@ -120,7 +120,7 @@
                                 </div>
                                 {% if bloc.display_qr %} 
                                 <div style="margin-left:20px">  
-                                    <label><small>Compléments :</small></label> 
+                                    <label>Compléments :</label> 
                                     {% for a in bloc.appliquettes.all %}
                                         <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
                                     {% endfor %}
