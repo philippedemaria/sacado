@@ -75,6 +75,8 @@ urlpatterns = [
     ##################################################################################################################################
 
     path('show_student_book/<int:idb>/<int:n>', show_student_book, name='show_student_book'),
+    path('show_student_book_one_page/<int:idb>/<int:n>', show_student_book_one_page, name='show_student_book_one_page'),
+
     path('student_book_builder/<int:idb>/<int:n>', student_book_builder, name='student_book_builder'),
 
     path('create_page/<int:idb>/<int:idch>', create_page, name='create_page'),

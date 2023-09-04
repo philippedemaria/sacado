@@ -56,12 +56,13 @@
 {% block page_menu_right %}
 
 
-<a href="{% url 'show_student_book_one_page' book.id n %}" class="btn btn-default"><i class="bi bi-book-half"></i></a>
+
+<a href="{% url 'show_student_book' book.id prev_page.number %}" class="btn btn-default"><i class="bi bi-book"></i></a>
 {% if  prev_page %}
-<a href="{% url 'show_student_book' book.id prev_page.number %}" class="btn btn-default">Précédente</a>
+<a href="{% url 'show_student_book_one_page' book.id prev_page.number %}" class="btn btn-default">Précédente</a>
  {% endif %}
 {% if  next_page %}
-<a href="{% url 'show_student_book' book.id next_page.number %}" class="btn btn-default">Suivante</a>
+<a href="{% url 'show_student_book_one_page' book.id next_page.number %}" class="btn btn-default">Suivante</a>
  {% endif %}
 
 {% endblock %}
@@ -85,8 +86,8 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-sm-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %}">
-            <div class="{{ page.css}}">
+        <div class="col-sm-12 col-md-12">
+            <div class="{{ page.css}}" style="font-size:20px">
                 {{ page.title }} <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ n }} </span>
             </div>            
@@ -142,60 +143,6 @@
             {% endfor %}
 
         </div>
-        {% if not page in first_pages %}
-        <div class="col-sm-12 col-md-6">
-            <div class="{{ next_page.css}}">
-                {{ next_page.title }} <a href="{% url 'print_latex_to_pdf' 0 next_page.id  %}" class="white"   target="_blank"><i class="bi bi-printer"></i></a>
-                <span class="pull-right">- {{ next_page.number }} </span>
-            </div>    
-            {% for paragraph in next_page.paragraphs.all %}
-                <div class="this_paragraph">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <span class="paragraph_number">{{ paragraph.number }}</span>
-                            <span class="paragraph_title">{{ paragraph.title }}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        {% for bloc in paragraph.blocs.all %} 
-                            <div class="col-xs-{{ bloc.size }} to_projection"  data-toggle='modal'   data-target='#book_shower_page' >
-                                <div class="{{ bloc.typebloc.css }}"> 
-                                    <div class="bloc_title">
-                                        {{ bloc.title }}
-                                        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-type_id = "3" > 
-                                            <i class="bi bi-cc-circle-fill text-{% if bloc.is_correction %}success{% else %}danger{% endif %} these_blocs" id="cc_bloc{{ bloc.id }}"></i> 
-                                            <div class="helper_tip_text" >Publier/Dépublier la correction.</div>
-                                        </span>
-                                    </div>
-                                    <div class="bloc_content">
-                                        {{ bloc.content_html|safe }}
-                                    </div>
-                                </div>
-                                {% if bloc.display_qr %} 
-                                <div style="margin-left:20px">  
-                                    <label><small>Compléments :</small></label> 
-                                    {% for a in bloc.appliquettes.all %}
-                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
-                                    {% endfor %}
-                                    {% for e in bloc.exercises.all %} 
-                                       {% if e.supportfile.imagefile %}
-                                            <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" width="20px"></a>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% for e in bloc.exotexs.all %} 
-                                        <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
-                                    {% endfor %}
-                                 </div>
-                                 {% endif %} 
-                            </div>
-                            {% get_bloc_col_width paragraph  forloop.counter as col_width %}
-                            {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}   
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        {% endif %} 
 
     </div>
 </section>
