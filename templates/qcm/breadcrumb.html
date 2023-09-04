@@ -3,8 +3,6 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
-<img src="{% static 'img/angle-right.png' %}"/>
-
 {% if group %} 
 
 <a href="{% url 'index'  %}" style="color:{{ group.color|contrast_color_title }}"><i class="bi bi-people"></i></a> <img src="{% static 'img/angle-right.png' %}"/>
