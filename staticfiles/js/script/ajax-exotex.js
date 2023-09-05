@@ -127,7 +127,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
                                 knowledges = data["knowledges"] ; 
-
+                                $('select[name=knowledges]').empty("");
                                 $('select[name=knowledge]').empty("");
                                 if (knowledges.length >0)
                                 {  
@@ -136,9 +136,16 @@ define(['jquery', 'bootstrap'], function ($) {
                                             let knowledges_id = knowledges[i][0];
                                             let knowledges_name =  knowledges[i][1]  ;
 
-                                            if (i%2==0){ classe="checkbox_ajax" ;} else { classe="checkbox_ajax_" ;} 
-                                            
-                                            $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledgess" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
+                                            for (let i = 0; i < knowledges_level.length; i++) {
+                                                    let knowledges_id = knowledges_level[i][0];
+                                                    let knowledges_name =  knowledges_level[i][1]  ;
+                                                    let option = $("<option>", {
+                                                        'value': Number(knowledges_id),
+                                                        'html': knowledges_name
+                                                    });
+                                                    $('select[name=knowledge]').append(option);
+                       
+                                                }
 
                                         }
 
@@ -152,7 +159,6 @@ define(['jquery', 'bootstrap'], function ($) {
                                     $('select[name=knowledge]').append(option);
                                 }
 
-
                                 knowledges_level = data["knowledges_level"] ; 
                                 $('select[name=knowledges]').empty("");
                                 if (knowledges_level.length >0)
@@ -164,18 +170,14 @@ define(['jquery', 'bootstrap'], function ($) {
                                                 'value': Number(knowledges_id),
                                                 'html': knowledges_name
                                             });
-                                            $('select[name=knowledge]').append(option);
-                                            $('select[name=knowledges]').append(option);
+ 
+                                            if (i%2==0){ classe="checkbox_ajax" ;} else { classe="checkbox_ajax_" ;} 
+                                            
+                                            $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledges" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
+
                                         }
                                 }
-                                else
-                                {
-                                    let option = $("<option>", {
-                                        'value': 0,
-                                        'html': "Aucun contenu disponible"
-                                    });
-                                    $('select[name=knowledges]').append(option);
-                                }
+
 
 
 
