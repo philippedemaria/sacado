@@ -248,14 +248,16 @@ def my_edt_delete(request):
             s.delete()
         for t in my_edt.template_edts.all():
             t.delete()
-        messages.success(request,"Suppression des progressions")
+        messages.success(request,"Suppression des progressions réussie.")
     return redirect('my_edt')
 
 
 def my_edt_group_attribution(request):
 
     id_group = request.POST.get("id_group",None)
+    slot     = request.POST.get("slot",None)
     data     = {}
+ 
     if id_group and int(id_group) > 0 :   
         group   =  Group.objects.get(pk = id_group)
         data['style']    = "background-color:"+group.color+";color:white"

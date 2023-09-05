@@ -42,25 +42,37 @@ define(['jquery', 'bootstrap'], function ($) {
 
                         if ( parseInt(id_group) != 0){ 
                             $('#slot-'+slot).attr('style',data.style);
-                            time = data.name ;
-                            hf_slot = 0 ;
-                            hf_even = 0 ;
+                            var time = data.name ;
+                            var hf_slot = 0 ;
+                            var hf_even = 0 ;
                             if (half) 
                                 { 
 
                                 if (even) 
                                     { 
-                                        time = '1sem/2 A : '+data.name  ; hf_even = 1; 
+                                        time = data.name +'[A]' ; hf_even = 1; 
                                     }
                                 else{
-                                    time = '1sem/2 B: '+data.name ; hf_even = 0; 
+                                        time = data.name +'[B]'  ; hf_even = 0; 
                                     }
                                     hf_slot = 1; 
                                 }
 
-                            $('#slot-'+slot).html(time);
+                            
                             $('#edt_modal').modal('toggle');
-                            $('#annual_slot-'+slot).val(data.group_id+'-'+slot+'-'+hf_slot+'-'+hf_even);                            
+                            if (  $('#annual_slot-'+slot).val()){
+                                var value = $('#annual_slot-'+slot).val() ;
+                                var grpi_id = value.split('-')[0];
+                                $('#annual_slot-'+slot).val(grpi_id+","+data.group_id+'-'+slot+'-'+hf_slot+'-'+hf_even);  
+                                var texte = $('#slot-'+slot).text(); 
+                                $('#slot-'+slot).html(texte+","+time);  
+                                $('#slot-'+slot).attr('style','background-color:gray;color:white');
+                            }
+                            else {
+                                $('#annual_slot-'+slot).val(data.group_id+'-'+slot+'-'+hf_slot+'-'+hf_even);
+                                $('#slot-'+slot).html(time);  
+                            }
+                                                      
                         }
                         else{
                             $('#slot-'+slot).attr('style',data.style);
@@ -76,7 +88,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
-        $('.get_this_slot').on('click', function (event) { 
+        $(document).on('click', '.get_this_slot', function (event) { 
 
             let data_slot = $(this).data("slot");
             $("#this_slot").val(data_slot) ;

@@ -85,12 +85,23 @@ class Edt(models.Model):
         if template_edts.count() :
             boolean = True
             tedt = template_edts.first() 
-            group = tedt.groups.first() 
+            groups = tedt.groups.all() 
             try :
-                if tedt.is_half : data["group_name"] = "1sem/2 : "+ group.name
-                else : data["group_name"] =  group.name
-                data["group_id"] =  group.id
-                data["style"] = "background-color:"+group.color+";color:white;text-align:center"
+                nameg , group_ids = "", ""
+                i=1
+                for group in groups :
+                    if i%2 == 0 : sem ="A"
+                    else : sem = "B"
+                    if groups.count() == i : 
+                        nameg += group.name +"[" +sem+"]"
+                        group_ids += group.id
+                    else : 
+                        nameg += group.name +"[" +sem+"] /"
+                        group_ids += str(group.id)+"/"
+                data["group_name"] =  nameg
+                data["group_id"] = group_ids
+                if groups.count() == 1 : data["style"] = "background-color:"+group.color+";color:white;text-align:center"
+                else : data["style"] = "background-color:gray;color:white;font-size:9px;"
                 data["slot"]  = slot
                 data["is_half"]   = tedt.is_half
                 data["day"]   = day
@@ -100,9 +111,10 @@ class Edt(models.Model):
             boolean = False
         data["boolean"] = boolean
 
+
         return data
 
-class Template_edt(models.Model):
+class Template_edt(models.Model):# ensembles des slots sur l'année
 
     edt     = models.ForeignKey(Edt, related_name='template_edts',   blank = True, on_delete=models.CASCADE, editable=False)
     slot    = models.PositiveIntegerField(default=1, editable=False)
