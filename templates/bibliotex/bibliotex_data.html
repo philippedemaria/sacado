@@ -27,8 +27,9 @@
         {{ nbe }} exercice{{ nbe|pluralize }}
     {% endwith  %}
 
-    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}" title="Ajouter des exercices déjà existants" class="helper_tip" ><i class="bi bi-cloud"></i></a>
     <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id %}" title="Créer/modifer des exercices" class="helper_tip" ><i class="bi bi-plus-circle"></i></a>
+    <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id %}" title="Ajouter des exercices déjà existants" class="helper_tip" ><i class="bi bi-clipboard-plus"></i></a>
+
 
 
 
@@ -70,13 +71,6 @@
           {% if bibliotex.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
         </span>
     </div>
-</td>
-<td style="padding-left: 40px ">
-    {% if  bibliotex.is_coanimation   %}
-        <i class="fa fa-check text-success"></i> 
-    {% else %}
-        <i class="fa fa-times text-danger"></i>
-    {% endif %}
 </td>
 <td style="width:160px">
     <div class="btn-group"  style="padding:0px;margin:0px;">
