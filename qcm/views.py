@@ -9322,8 +9322,6 @@ def ajax_search_exercise(request):
     data = {}
     too_much = 'no'
 
- 
-
     if (knowledges.count())>2:
         too_much = 'yes'
         html = ""
@@ -9339,13 +9337,15 @@ def ajax_search_exercise(request):
             parcourses = request.user.teacher.teacher_parcours.values_list('id',flat=True).distinct()
 
         relationships = Relationship.objects.filter(Q(exercise__knowledge_id__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code) , parcours_id__in=parcourses)
-
+ 
         if relationships.count() > 15 :
             too_much = 'yes'
             html = ""
         else :
             html = render_to_string('qcm/search_exercises.html',{ 'relationships' : relationships , 'parcourses' : parcourses , 'student' : student })
      
+
+
     data['html'] = html       
     data['too_much'] = too_much
     return JsonResponse(data)

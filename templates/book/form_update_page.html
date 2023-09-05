@@ -49,7 +49,7 @@
 
 
 <div class="{{ page.css}}" id="top_page">
-    <i class="bi bi-{% if page.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span id="top_page_title">{{ page.title }} </span> <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" title="imprimer le pdf depuis Latex"  target="_blank"><i class="bi bi-printer"></i></a>               
+    <i class="bi bi-{% if page.is_publish %}eye{% else %}eye-slash{% endif %}"></i> <span id="top_page_title">{{ page.title }} </span> <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" title="imprimer le pdf depuis Latex"  target="_blank"><i class="bi bi-printer"></i></a>               
     <select name="type_page" id="type_de_page" data-book_id ="{{ book.id }}" data-page_id ="{{ page.id }}" style="float:right;font-size: 16px;color:black">
         <option value="course_page_top">Type de page ?</option>
         <option value="intro_page_top">Introduction</option>
