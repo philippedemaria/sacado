@@ -136,16 +136,13 @@ define(['jquery', 'bootstrap'], function ($) {
                                             let knowledges_id = knowledges[i][0];
                                             let knowledges_name =  knowledges[i][1]  ;
 
-                                            for (let i = 0; i < knowledges_level.length; i++) {
-                                                    let knowledges_id = knowledges_level[i][0];
-                                                    let knowledges_name =  knowledges_level[i][1]  ;
-                                                    let option = $("<option>", {
-                                                        'value': Number(knowledges_id),
-                                                        'html': knowledges_name
-                                                    });
-                                                    $('select[name=knowledge]').append(option);
-                       
-                                                }
+                            
+                                            let option = $("<option>", {
+                                                'value': Number(knowledges_id),
+                                                'html': knowledges_name
+                                            });
+                                            $('select[name=knowledge]').append(option);
+                        
 
                                         }
 
