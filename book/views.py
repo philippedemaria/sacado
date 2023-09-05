@@ -1037,7 +1037,7 @@ def print_latex_to_pdf(request,idch,idp):
     if idch :
  
         chapter = Chapter.objects.get(pk=idch)
-        for page in chapter.pages.order_by("number"):
+        for page in chapter.pages.filter(is_publish=1).order_by("number"):
             if page.paragraphs.count()>0 :
                 elements +=  r'{\huge '+ page.title+r'} \hfill '+str(chapter.book.level.shortname)+". "+  chapter.title
                 elements +=  r" \hrule \vspace {0.1cm}"

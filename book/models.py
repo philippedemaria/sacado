@@ -266,6 +266,7 @@ class Page(models.Model):
     number  = models.PositiveIntegerField( default=0,  blank=True, null=True)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,  blank=True,   null=True,  related_name='pages')
     css     = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Nom de la classe")
+    is_publish = models.BooleanField(default=1, verbose_name="Publiée ?")
 
     # class Meta:
     #     unique_together = ('number', 'chapter')

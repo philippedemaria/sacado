@@ -226,10 +226,17 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-6 col-md-6">
                             <label>Numéro de page</label>
                             {{ form_page.number |add_class:"form-control" }}
                             {{ form_page.number.errors }}
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                          <div class="form-group">
+                              <label>{{ form_page.is_publish.label_tag }}</label>
+                              {{ form_page.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
+                              {{ form_page.is_publish.errors }}
+                          </div>
                         </div>
                     </div>
                     <div class="row">
