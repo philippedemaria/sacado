@@ -9317,7 +9317,8 @@ def content_is_done(request, id ): #id  = id_content
 
 def ajax_search_exercise(request):
 
-    code =  request.POST.get("search") 
+    code =  request.POST.get("search",None)
+    if code : code = code.lower() 
     knowledges = Knowledge.objects.values_list('id',flat=True).filter(name__contains= code).distinct()
     data = {}
     too_much = 'no'
