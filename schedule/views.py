@@ -114,9 +114,7 @@ def insert_content_into_slot(request,idg):
     slot       = request.POST.get("slot")
     slot_start = request.POST.get("start")
     slot_start = datetime.strptime(slot_start, '%Y-%m-%d').date()
-
-    print(group.id, user.id , slot_start , slot  )
-
+ 
     slotedt = Slotedt.objects.filter(users=user, start = slot_start, slot = slot , groups = group).first()
 
     if slotedt : content = slotedt.content
@@ -238,6 +236,21 @@ def my_edt(request):
     return render(request, 'schedule/my_edt.html', context )
 
  
+def my_edt_delete(request):
+
+
+    user = request.user
+    teacher = user.teacher
+    groups = teacher.groups.all()
+    if user.edt  :  
+        my_edt = user.edt
+        for s in my_edt.slots.all():
+            s.delete()
+        for t in my_edt.template_edts.all():
+            t.delete()
+        messages.success(request,"Suppression des progressions")
+    return redirect('my_edt')
+
 
 def my_edt_group_attribution(request):
 
