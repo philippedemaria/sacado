@@ -9345,8 +9345,6 @@ def ajax_search_exercise(request):
         else :
             html = render_to_string('qcm/search_exercises.html',{ 'relationships' : relationships , 'parcourses' : parcourses , 'student' : student })
      
-
-
     data['html'] = html       
     data['too_much'] = too_much
     return JsonResponse(data)
