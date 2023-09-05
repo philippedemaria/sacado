@@ -138,9 +138,10 @@ define(['jquery', 'bootstrap'], function ($) {
 
                                             if (i%2==0){ classe="checkbox_ajax" ;} else { classe="checkbox_ajax_" ;} 
                                             
-                                            $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledge" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
+                                            $('#knowledge_list').append('<div class="'+classe+'"><label for="cb'+Number(knowledges_id)+'"><input type="checkbox" id="cb'+Number(knowledges_id)+'" name="knowledgess" value="'+Number(knowledges_id)+'" /> '+knowledges_name+'</label></div>')
 
                                         }
+
                                 }
                                 else
                                 {
@@ -163,6 +164,7 @@ define(['jquery', 'bootstrap'], function ($) {
                                                 'value': Number(knowledges_id),
                                                 'html': knowledges_name
                                             });
+                                            $('select[name=knowledge]').append(option);
                                             $('select[name=knowledges]').append(option);
                                         }
                                 }
