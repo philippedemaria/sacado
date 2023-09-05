@@ -425,7 +425,7 @@ def set_up_by_level_subject(group, student):
     teacher = group.teacher 
 
     teacher_id = get_teacher_id_by_subject_id(subject.id)
-    folders = Folder.objects.filter(subject=subject,level=level,teacher_id=teacher_id,is_trash=0,is_archive =0   )
+    folders = Folder.objects.filter(subject=subject,level=level,teacher_id=teacher_id,is_trash=0,is_archive =0,is_share =1)
 
     teacher.subjects.add(subject)
     teacher.levels.add(level)
@@ -754,7 +754,7 @@ def update_group(request, id):
         student = create_student_profile_inside(request, nf) 
         if not student :
             student = group.students.filter(user__username__contains="_e-test").first()
-        print(nf.recuperation)
+
         if nf.recuperation :
             set_up_by_level_subject(nf ,  student)
  
