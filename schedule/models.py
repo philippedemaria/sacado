@@ -101,7 +101,7 @@ class Edt(models.Model):
                 data["group_name"] =  nameg
                 data["group_id"] = group_ids
                 if groups.count() == 1 : data["style"] = "background-color:"+group.color+";color:white;text-align:center"
-                else : data["style"] = "background-color:gray;color:white;font-size:9px;"
+                else : data["style"] = "background-color:gray;color:white;font-size:11px;"
                 data["slot"]  = slot
                 data["is_half"]   = tedt.is_half
                 data["day"]   = day
