@@ -205,28 +205,26 @@ def my_edt(request):
             if a_s != "" : annual_slots.append(a_s)
  
         for a_slot in annual_slots :
-            group_id, slot , day , is_half , is_even  = a_slot.split("-")
-            group = Group.objects.get(pk=group_id)
-            if is_even == "" or is_even == 0 : is_even = False
-            else : is_even = True 
+            group_ids, slot , day , is_half , is_even  = a_slot.split("-")
+            for group_id in group_ids.split(","):
+                group = Group.objects.get(pk=group_id)
+                if is_even == "" or is_even == 0 : is_even = False
+                else : is_even = True 
 
-            template_edt,created = Template_edt.objects.update_or_create( edt= my_edt , slot=slot , day=day , is_half=is_half , is_even=is_even )
-            if created : template_edt.groups.add(group)
-            else : 
-                template_edt.groups.clear()
+                template_edt,created = Template_edt.objects.get_or_create( edt= my_edt , slot=slot , day=day , is_half=is_half , is_even=is_even )
                 template_edt.groups.add(group)
 
-            nextDay = start +   timedelta( days = int(day) - start.weekday() )
-            if str(is_even) == "0"   : nextDay += timedelta(days= 7 )
-            if is_half == 1 : hday = 14
-            else  : hday = 7            
-            while nextDay < stop :
-                slt, created  = Slotedt.objects.get_or_create( start = nextDay , slot = slot )
-                nextDay +=  timedelta(days=hday)
-                slt.groups.add(group)
-                slt.users.add(user)
-                if not created :
-                    slots.append(slt)
+                nextDay = start +   timedelta( days = int(day) - start.weekday() )
+                if str(is_even) == "0"   : nextDay += timedelta(days= 7 )
+                if is_half == 1 : hday = 14
+                else  : hday = 7            
+                while nextDay < stop :
+                    slt, created  = Slotedt.objects.get_or_create( start = nextDay , slot = slot )
+                    nextDay +=  timedelta(days=hday)
+                    slt.groups.add(group)
+                    slt.users.add(user)
+                    if not created :
+                        slots.append(slt)
 
         messages.success(request,"Propagation réussie.")
         my_edt.slots.set(slots)
