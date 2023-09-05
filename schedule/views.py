@@ -215,7 +215,7 @@ def my_edt(request):
                 template_edt.groups.add(group)
 
                 nextDay = start +   timedelta( days = int(day) - start.weekday() )
-                if str(is_even) == "0"   : nextDay += timedelta(days= 7 )
+                if str(is_even) == "0" : nextDay += timedelta(days= 7 )
                 if is_half == 1 : hday = 14
                 else  : hday = 7            
                 while nextDay < stop :

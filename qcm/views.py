@@ -5726,7 +5726,7 @@ def ajax_publish_parcours(request):
     parcours_id = request.POST.get("parcours_id")
     statut = request.POST.get("statut")
     data = {}
-    print(statut)
+
     if statut=="true" or statut == "True":
         statut = 0
         data["statut"] = "false"
@@ -5758,8 +5758,8 @@ def ajax_publish_parcours(request):
 
     is_folder = request.POST.get("is_folder",None)
     is_quizz = request.POST.get("is_quizz",None)
-
-    if is_quizz == "yes" :
+ 
+    if is_quizz == "quizz_yes" :
         Quizz.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
     elif is_folder == "no" :
         if statut == 1 :
@@ -5782,8 +5782,7 @@ def ajax_publish_parcours(request):
     else :
         Folder.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
 
-
-    print(data)
+ 
     return JsonResponse(data) 
 
  
