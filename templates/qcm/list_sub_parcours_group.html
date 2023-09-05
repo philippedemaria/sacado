@@ -134,14 +134,19 @@
         </div>
         <div class="tab-pane" id="5">
             <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">                    
+                <div class="col-sm-12 "> 
+                
                     <label>
                         <small>Questions flash externes aux {{parcourses.count}} parcours</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text_right" >Possibilité de les affecter dans un parcours avec <i class="bi bi-gear"></i>.</div>
                         </span>
-                    </label>
+                    </label>                    
+                    {% if group %}   
                     <a href="{% url 'create_questions_flash' group.level.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer des questions flash</span></a>
+                    {% else %}  
+                    <a href="#" class="btn btn-xs btn-sacado no_button" title="Vous devez créer un groupe"><i class="bi bi-plus-circle-dotted"></i><span class="btn_label"> Créer des questions flash</span></a>
+                    {% endif %}  
                 </div>
             </div>
             {% include 'qcm/list_questions_flash_by_group.html' %}
