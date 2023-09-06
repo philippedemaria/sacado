@@ -1133,8 +1133,10 @@ def update_bibliotex(request, id):
 
         group_ids = request.POST.getlist("groups",[])
         folder_ids = request.POST.getlist("folders",[])
+        parcours_ids = request.POST.getlist("parcours",[])
         nf.groups.set(group_ids)
         nf.folders.set(folder_ids)
+        nf.parcours.set(parcours_ids)
         all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
         
         save_form = request.POST.get("save_form",None)
