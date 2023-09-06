@@ -1139,7 +1139,12 @@ def update_bibliotex(request, id):
         
         save_form = request.POST.get("save_form",None)
 
-        if save_form : return redirect('my_bibliotexs')
+        if group_id :
+            return redirect('list_parcours_group', group_id)
+        elif group_id and folder_id :
+            return redirect('list_sub_parcours_group', group_id,folder_id)
+
+        elif save_form : return redirect('my_bibliotexs')
         else : return redirect('exercise_bibliotex_peuplate', nf.id)
 
     else:
