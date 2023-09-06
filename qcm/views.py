@@ -4144,11 +4144,11 @@ def show_parcours(request, idf = 0, id=0):
     parcours_folder_id = request.session.get("folder_id",None)
     request.session["parcours_id"] = parcours.id
 
-    docpersos = parcours.docpersos.order_by("ranking")
-    bibliotexs = parcours.bibliotexs.filter(folders=None)
-    quizzes    = parcours.quizz.filter(is_random=0)
-    flashpacks = parcours.flashpacks.filter(folders=None)
-    qflashs    = parcours.quizz.filter(is_random=1).order_by("-date_modified")
+    docpersos = parcours.docpersos.filter(folders=folder).order_by("ranking")
+    bibliotexs = parcours.bibliotexs.filter(folders=folder)
+    quizzes    = parcours.quizz.filter(is_random=0,folders=folder)
+    flashpacks = parcours.flashpacks.filter(folders=folder)
+    qflashs    = parcours.quizz.filter(is_random=1,folders=folder).order_by("-date_modified")
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
