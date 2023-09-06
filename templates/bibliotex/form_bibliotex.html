@@ -153,7 +153,7 @@
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                         <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
                                     </span> {% endif %}
-                            <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;">
+                            <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;"  id="grplist">
                             {{ form.groups|add_class:"select_all" }}
                             {{ form.groups.errors }}
                             </div>
