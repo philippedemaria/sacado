@@ -1122,7 +1122,7 @@ def update_bibliotex(request, id):
         folder = None
 
 
-    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = folder, group = group,  )
+    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = folder, group = group, initial ={'groups':[group],'folders':[folder] }  )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1134,11 +1134,11 @@ def update_bibliotex(request, id):
         group_ids = request.POST.getlist("groups",[])
         folder_ids = request.POST.getlist("folders",[])
         parcours_ids = request.POST.getlist("parcours",[])
-        print(parcours_ids)
+
         nf.groups.set(group_ids)
         nf.folders.set(folder_ids)
         nf.parcours.set(parcours_ids)
-        print(nf.parcours.all())
+
         all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
         
         save_form = request.POST.get("save_form",None)
