@@ -157,13 +157,15 @@ def student_dashboard(request,group_id):
     if not request.user.is_student :
 
         messages.error(request,"Elève non identifié")
-        return template , context =  "dashboard.html" , False
-
+        template , context =  "dashboard.html" , False
+        return template , context 
+        
     try :
         student = request.user.student
     except :
         messages.error(request,"Elève non identifié")
-        return template , context =  "dashboard.html" , False
+        template , context =  "dashboard.html" , False
+        return template , context 
 
 
     groups = student.students_to_group.all()
