@@ -184,7 +184,7 @@ def printer(request, relationtex_id, collection,output , obj):
                 skill_dpl = r"\competence{" +skills_display+r"}"
             else : skill_dpl = ""
 
-            elements += r"\\ \vspace{0,1cm}"
+            elements += r"\\ \vspace{0.1cm}"
 
             pref_image = '/var/www/sacado/static/img/'
 
@@ -232,7 +232,9 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements += r" \item " +  k.name  
 
                 elements += r"}"
-                elements += r" \vspace{0.2cm} "
+
+                elements += r" \vspace{0.2cm} \\"
+
             if output == "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
                 else                       : ctnt =  relationtex.exotex.correction
