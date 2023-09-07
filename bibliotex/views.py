@@ -232,7 +232,7 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements += r" \item " +  k.name  
 
                 elements += r"}"
-
+                elements += r" \vspace{0.2cm} "
             if output == "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
                 else                       : ctnt =  relationtex.exotex.correction
@@ -240,7 +240,7 @@ def printer(request, relationtex_id, collection,output , obj):
                 if  relationtex.content : ctnt =  relationtex.content
                 else                    : ctnt =  relationtex.exotex.content
             else :
-                elements += r"\vspace{0.2cm} "
+
                 ctnt =  relationtex.exotex.content
 
             elements += ctnt
