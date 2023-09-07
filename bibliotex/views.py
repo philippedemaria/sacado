@@ -1919,11 +1919,11 @@ def ajax_display_correction_exotex(request):
     if r.is_publish_cor : 
         r.is_publish_cor = 0
         data["addClass"]    = "fa-eye-slash text-danger"
-        data["removeClass"] = "fa-eye text-green"
+        data["removeClass"] = "fa-eye text-success"
         data["title"]       = "Correction publiée"
     else :  
         r.is_publish_cor = 1
-        data["addClass"]    = "fa-eye text-green"
+        data["addClass"]    = "fa-eye text-success"
         data["removeClass"] = "fa-eye-slash text-danger"
         data["title"]       = "Correction dépubliée"
     r.save()
