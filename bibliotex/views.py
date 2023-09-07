@@ -196,15 +196,15 @@ def printer(request, relationtex_id, collection,output , obj):
 
             if relationtex.exotex.is_python : 
                 img_python = pref_image +'is_python.png'
-                details += r'\includegraphics[scale=0.6]{'+img_python+r'}'
+                details += r'\includegraphics[scale=0.4]{'+img_python+r'}'
 
             if relationtex.exotex.is_scratch : 
                 img_scratch = pref_image +'is_scratch.png'
-                details += r'\includegraphics[scale=0.6]{'+img_scratch+r'}'
+                details += r'\includegraphics[scale=0.4]{'+img_scratch+r'}'
 
             if relationtex.exotex.is_tableur : 
                 img_tableur = pref_image + 'is_tableur.png'
-                details += r'\includegraphics[scale=0.6]{'+img_tableur+r'}'
+                details += r'\includegraphics[scale=0.4]{'+img_tableur+r'}'
 
 
 
@@ -240,6 +240,7 @@ def printer(request, relationtex_id, collection,output , obj):
                 if  relationtex.content : ctnt =  relationtex.content
                 else                    : ctnt =  relationtex.exotex.content
             else :
+                elements += r"\vspace{0.2cm} "
                 ctnt =  relationtex.exotex.content
 
             elements += ctnt
