@@ -1,0 +1,32 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+           
+ 
+<div  class="box box-widget widget-user-2 sorter_bibliotex"  data-id="{{ bibliotex.id }}"
+      style="padding:10px 10px 0px 10px; cursor: move;{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}'); background-size: cover; {% endif %}">
+    <div class="handler widget-user-header widget_bibliotex">
+        <!-- Add signet to folder -->
+
+        <div>
+            <a href="{% url 'show_bibliotex' bibliotex.id  %}" style="font-size:20px;font-weight:600" title="Voir les exercices dans la bibliotex" >             
+                {% if bibliotex.title|length > 50 %}
+                <span class="helper_tip">{{ bibliotex.title|truncatechars:"50" }}
+                    <div class="helper_tip_text_right" style="font-size:14px;">{{ bibliotex.title }}</div>
+                </span>
+                {% else %}
+                    {{ bibliotex.title}}
+                {% endif %}
+            </a>   
+        </div>
+
+        <div class="exo_tex_scrollbar" style="height:170px;">     
+            {% for e in  bibliotex.exotexs.all %}
+                <li class="list_exotex_in_tag sanspuce">{{ forloop.counter}}. {{ e.title|truncatechars:40}}</li>
+            {% empty %}
+                <li class="text-danger sanspuce"><label>Aucun exercice</label></li>
+            {% endfor %}
+ 
+        </div> 
+    </div>
+</div>    

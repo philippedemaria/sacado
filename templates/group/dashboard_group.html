@@ -136,7 +136,58 @@
                     {% get_min_score evaluation student as data_min %} 
                     {% include 'qcm/evaluation_tag_student.html' %}
                 {% endfor %}
+            {% endif %} 
+
+
+            <!-- ******************************************************************************************** -->
+            <!-- ************************************* Bibliotex  ****************************************** -->
+            {%  if bibliotexs %}
+            <div class="row"></div> 
+            <h2 class='thin'>BiblioTex</h2>
+                {%  for bibliotex in  bibliotexs %} 
+                    {% include 'bibliotex/bibliotex_tag_student.html' %}
+                {% endfor %}
             {% endif %}  
+
+
+            <!-- ******************************************************************************************** -->
+            <!-- ************************************* Quizz  ****************************************** -->
+            {%  if quizzes %}
+            <div class="row"></div> 
+            <h2 class='thin'>Quizz</h2>
+                {%  for quizz in  quizzes %} 
+                    {% include 'bibliotex/bibliotex_tag.html' %}
+                {% endfor %}
+            {% endif %}  
+
+
+
+            <!-- ******************************************************************************************** -->
+            <!-- ************************************* qflashs  ****************************************** -->
+            {%  if qflashs %}
+            <div class="row"></div> 
+            <h2 class='thin'>Questions flash</h2>
+                {%  for qflash in  qflashs %} 
+                    {% include 'bibliotex/bibliotex_tag.html' %}
+                {% endfor %}
+            {% endif %}  
+
+
+
+
+
+            <!-- ******************************************************************************************** -->
+            <!-- ************************************* flashpacks  ****************************************** -->
+            {%  if flashpacks %}
+            <div class="row"></div> 
+            <h2 class='thin'>Flashpacks</h2>
+                {%  for flashpack in  flashpacks %} 
+                    {% include 'flashcard/flashpack_tag.html' %}
+                {% endfor %}
+            {% endif %}  
+
+
+
             <!-- ******************************************************************************************** -->
             <!-- *********************************** Tache à faire ****************************************** -->            
             {% if relationships_in_tasks|length > 0 %}

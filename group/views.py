@@ -217,10 +217,11 @@ def student_dashboard(request,group_id):
 
 
     parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")
-    sequences   = sequences_brut.filter(folders = None).order_by("ranking")
+    #sequences   = sequences_brut.filter(folders = None).order_by("ranking")
     evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
    
-
+    bibliotexs =  student.bibliotexs.filter(folders = None,  is_publish = 1).distinct()
+ 
     parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
 
     flashpacks = Flashpack.objects.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today), students=student,is_global=1).exclude(madeflashpack__date=today).distinct()
@@ -260,9 +261,9 @@ def student_dashboard(request,group_id):
     relationships_in_tasks = relationships_in_base.filter(date_limit__gte=today).order_by("date_limit")
 
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
-               'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups ,
+               'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups , 'bibliotexs' : bibliotexs, 
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
-               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index , 'sequences' : sequences}
+               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index  }
 
     return template, context
 

@@ -70,8 +70,7 @@
                             disc 
                         {% endif %}" style="background-color:{% if bibliotex.is_publish %}#00a65a{% else  %}#dd4b39{% endif  %} "> 
                  <i class="fa fa-circle-o-notch"></i>
-            </div>
-        </span> 
+            </div></span> 
 
         <div class="overlay no_visu_on_load" id="bib_overlay_show{{bibliotex.id }}"> 
             <div class="overlay_expand">
@@ -82,8 +81,7 @@
                     <span style="cursor:pointer" class="btn btn-default btn-publisher bibliotex_publisher {% if not bibliotex.is_publish %}noget{% endif  %}" id="bib_publisher{{bibliotex.id}}" 
                             data-bibliotex_id="{{bibliotex.id}}" data-statut="{{ bibliotex.is_publish }}">  
                         <i class="fa fa-circle-o-notch"></i>
-                    </span>
-                    <span class="legend-btn legend-btn-{% if not bibliotex.is_publish %}danger{% else  %}success{% endif  %} size15" id="bibliotex_publisher{{bibliotex.id}}" style="cursor:auto" >  
+                    </span><span class="legend-btn legend-btn-{% if not bibliotex.is_publish %}danger{% else  %}success{% endif  %} size15" id="bibliotex_publisher{{bibliotex.id}}" style="cursor:auto" >  
                       {% if bibliotex.is_publish %} Publié  {% else %} Non publié {% endif  %} 
                     </span>
                 </div>
