@@ -1231,13 +1231,13 @@ def peuplate_bibliotex_parcours(request,idp):
 
 def delete_bibliotex(request, id):
     group_id = request.session.get('group_id',None)
+    folder_id = request.session.get('folder_id',None)
 
     bibliotex = Bibliotex.objects.get(id=id)
     if request.user == bibliotex.author.user :
         bibliotex.delete()
     
     if folder_id :
-
         return redirect('list_sub_parcours_group' , group_id , folder_id)
 
     elif group_id :
