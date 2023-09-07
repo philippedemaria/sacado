@@ -2103,12 +2103,13 @@ def list_sub_parcours_group_student(request,idg,idf):
     parcourses = bases.filter( is_evaluation=0).order_by("ranking")
     evaluations = bases.filter( is_evaluation=1).order_by("ranking")
 
-    quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  , parcours=None) 
+    quizzes    = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 ,is_random=0 , parcours=None) 
+    qflashes   = folder.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 ,is_random=1 , parcours=None) 
     flashpacks = folder.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0  , parcours=None) 
     bibliotexs = folder.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = student , is_archive=0 , parcours=None).order_by("ranking")
 
 
-    context = {'parcourses': parcourses , 'evaluations': evaluations , 'quizzes': quizzes , 'flashpacks': flashpacks , 'bibliotexs': bibliotexs , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
+    context = {'parcourses': parcourses , 'evaluations': evaluations , 'quizzes': quizzes , 'flashpacks': flashpacks , 'qflashes' : qflashes ,  'bibliotexs': bibliotexs , 'student' : student , 'group' : group ,  'folder' : folder,    'today' : today }
 
     return render(request, 'qcm/list_sub_parcours_group_student.html', context )
     
@@ -4452,7 +4453,22 @@ def list_parcours_quizz_student(request, idp):
     parcours = Parcours.objects.get(id=idp)
     user = request.user
     today = time_zone_user(user)
-    quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("-date_modified")
+    quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today),is_random=0).order_by("-date_modified")
+
+    context = { 'quizzes': quizzes ,   'parcours': parcours , 'today' : today ,  }
+
+    return render(request, 'qcm/list_parcours_quizz_student.html', context)
+
+ 
+
+
+@login_required(login_url= 'index')
+def list_parcours_qflash_student(request, idp):
+
+    parcours = Parcours.objects.get(id=idp)
+    user = request.user
+    today = time_zone_user(user)
+    quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today),is_random=1).order_by("-date_modified")
 
     context = { 'quizzes': quizzes ,   'parcours': parcours , 'today' : today ,  }
 

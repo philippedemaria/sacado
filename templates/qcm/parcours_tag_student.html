@@ -56,6 +56,16 @@
                 </div>   
             </div>
             {% endif %}
+            {% if  data_min.nb_qflash  %}
+            <div class="row extend_student"> 
+                <div class="col-xs-12">  
+                    <a href="{% url 'list_parcours_qflash_student' parcours.id %}" class="edit"><i class="bi bi-list-ul" ></i>  {{ data_min.nb_qflash }} Qflash  </a>                                                
+                </div>   
+            </div>
+            {% endif %}
+
+
+
             {% if  data_min.nb_bibliotex  %}
             <div class="row extend_student">  
                 <div class="col-xs-12">  
