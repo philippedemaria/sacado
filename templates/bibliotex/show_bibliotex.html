@@ -310,7 +310,8 @@
 
 
 {% endfor %}
- 
+
+    {% if request.user.is_teacher %}
     <div class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_empty" style="margin-bottom:20px;padding:60px;text-align: center"  >
    
          
@@ -321,7 +322,7 @@
 
 
     </div>
-
+    {%  endif %}
 <div style="clear:both"></div>
 <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
 
