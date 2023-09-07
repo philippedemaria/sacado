@@ -60,6 +60,12 @@
     <div class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_width relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         <div style="padding-left:10px;">
         <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
+            {% if request.user.user_type == 2 %}
+            <span class="pull-right action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
+                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye text-success{% else %}eye-slash text-danger{% endif %}"></i></a>
+            </span>
+            {% endif %}
+
             {% if r.exotex.calculator  %}
                  <img src="{% static 'img/calculator.png' %}" width="24px"   />
             {% else %}
@@ -76,9 +82,8 @@
             {% endif %}
 
         
+
             {% if request.user.user_type == 2 %}
-
-
                 <a href="#" class="expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i> </a>
  
                 {% if r.relationships.count %}
@@ -123,28 +128,22 @@
             </li>
             {% endif %}
             <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"> 
-                <span class="exotex_div_menu_label" ><i class="bi bi-cc-square"></i><span class="legend_exotex_parameter show_this_exotex_knowledges"> Savoir faire et compétences
-
-
- 
-                    <div class="show_this_exotex_knowledges_display text-blue" style="font-size:12px; font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
-                        {% for s in r.exotex.skills.all %}
-                            {{ s.name }}.
-                        {% endfor %}                            
-                        <hr/>
-                        {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-                        {% for k in r.exotex.knowledges.all %}
-                            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
-                        {% endfor %}
-                    </div>
-          
-            </span></span>
-
-
+                <span class="exotex_div_menu_label" ><i class="bi bi-cc-square"></i>
+                    <span class="legend_exotex_parameter show_this_exotex_knowledges"> Savoir faire et compétences
+                        <div class="show_this_exotex_knowledges_display text-blue" style="font-size:12px; font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
+                            {% for s in r.exotex.skills.all %}
+                                {{ s.name }}.
+                            {% endfor %}                            
+                            <hr/>
+                            {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+                            {% for k in r.exotex.knowledges.all %}
+                                {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
+                            {% endfor %}
+                        </div>
+                    </span>
+                </span>
             </li>
-            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
-                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
-            </li>
+
 
 
             <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
@@ -199,9 +198,9 @@
                    
                     <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
                     {% if r.is_publish_cor %}
-                          <i class="fa fa-eye text-green" title="Correction : Publier"></i>
+                          <i class="fa fa-eye text-success pull-right" title="Correction : Publier"></i>
                     {% else %}
-                          <i class="fa fa-eye-slash text-danger" title="Correction : Publier"></i>
+                          <i class="fa fa-eye-slash text-danger pull-right" title="Correction : Publier"></i>
                     {% endif %}
                     </a>
                     <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" > Correction <i class="fa fa-caret-down"></i></a>

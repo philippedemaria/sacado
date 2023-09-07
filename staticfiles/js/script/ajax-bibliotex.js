@@ -361,16 +361,16 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                         if ( $("#display"+relationtex_id).find("i").hasClass("bi-eye") ) 
                             { 
-                                $("#display"+relationtex_id).find("i").addClass("bi-eye-slash"); 
-                                $("#display"+relationtex_id).find("i").removeClass("bi-eye") ; 
+                                $("#display"+relationtex_id).find("i").addClass("bi-eye-slash text-danger"); 
+                                $("#display"+relationtex_id).find("i").removeClass("bi-eye text-success") ; 
                                 $(".relationtex"+relationtex_id).addClass("no_visu_on_load_important") ; 
                                 $("#display"+relationtex_id).parent().find('li').addClass("no_visu_on_load_important") ; 
                                 $("#display"+relationtex_id).removeClass("no_visu_on_load_important") ; 
                             }
                         else 
                             { 
-                                $("#display"+relationtex_id).find("i").removeClass("bi-eye-slash");
-                                $("#display"+relationtex_id).find("i").addClass("bi-eye") ; 
+                                $("#display"+relationtex_id).find("i").removeClass("bi-eye-slash text-danger");
+                                $("#display"+relationtex_id).find("i").addClass("bi-eye text-success") ; 
                                 $(".relationtex"+relationtex_id).removeClass("no_visu_on_load_important") ;
                                 $("#display"+relationtex_id).parent().find('li').removeClass("no_visu_on_load_important") ; 
                             }
