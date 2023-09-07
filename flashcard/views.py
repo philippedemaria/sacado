@@ -713,6 +713,8 @@ def flashpack_actioner(request):
 
     teacher = request.user.teacher 
     idbs = request.POST.getlist("selected_flashpacks")
+
+
     if  request.POST.get("action") == "deleter" :  
         for idb in idbs :
             flashpack = Flashpack.objects.get(id=idb) 
