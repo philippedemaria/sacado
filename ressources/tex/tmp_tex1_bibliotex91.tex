@@ -1,0 +1,403 @@
+\documentclass[12pt]{article}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xspace}
+\usepackage{array}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{fancyvrb} %verbatim
+\usepackage{tabularx}
+\usepackage{eurosym}
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+\usepackage{amssymb}
+\usepackage[?]{amsmath}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{pifont}
+\usepackage{enumerate}
+\usepackage[np]{numprint} %\np{12345} donne 12 345 
+\usepackage{multicol}
+\newcommand{\second}{2\up{d}\xspace}
+\newcommand{\seconde}{2\up{de}\xspace}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Rp}{\R_+}
+\newcommand{\Rpe}{\R_+^*}
+\newcommand{\Rm}{\R_-}
+\newcommand{\Rme}{\R_-^*}
+\newcommand{\N}{\mathbb N}
+\newcommand{\D}{\mathbb D}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\C}{\mathbb C}
+\newcommand{\grs}{\mathfrak S}
+\newcommand{\IN}[1]{\llbracket 1,#1\rrbracket}
+\newcommand{\card}{\text{Card}\,}
+\usepackage{mathrsfs}
+\newcommand{\parties}{\mathscr P}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\rmd}{\text{d}}
+\newcommand{\diff}{\mathrm D}
+\newcommand{\Id}{{\rm Id}}
+\newcommand{\e}{{\rm e}}
+\newcommand{\I}{{\rm i}}
+\newcommand{\J}{{\rm j}}
+\newcommand{\ro}{\circ}
+\newcommand{\exu}{\exists\,!\,}
+\newcommand{\telq}{\,\, \mid \,\,}
+\newcommand{\para}{\raisebox{0.1em}{\text{\footnotesize /\hspace{-0.1em}/}}}   
+\newcommand{\vect}[1]{\overrightarrow{#1}}
+\newcommand{\scal}[2]{\left(\, #1 \mid #2 \, \right)}
+\newcommand{\ortho}[1]{{#1}^\perp}
+\newcommand{\veci}{\vec{\text{\it \i}}}
+\newcommand{\vecj}{\vec{\text{\it \j}}}
+\newcommand{\rep}{$(O;\veci,\vecj,\vec{k})$\xspace}
+\newcommand{\Oijk}{$(O, \veci,\vecj,\vec{k})$\xspace}
+\newcommand{\rond}{repÃ¨re orthonormal direct}
+\newcommand{\bond}{base orthonormale directe}
+\newcommand{\eq}{\Longleftrightarrow}
+\newcommand{\implique}{\Longrightarrow}
+\newcommand{\noneq}{\ \ \ /\hspace{-1.45em}\eq}
+\newcommand{\tend}{\longrightarrow}
+\newcommand{\egx}[2]{\underset{#1 \tend #2}=}
+\newcommand{\asso}{\longmapsto}
+\newcommand{\vers}{\longrightarrow}
+\newcommand{\eqn}{~\underset{n \rightarrow \infty}{\sim}~}
+\newcommand{\eqx}[2]{~\underset{#1 \rightarrow #2}{\sim}~}
+\newcommand{\egn}{~\underset{n \rightarrow \infty}{=}~}
+\renewcommand{\descriptionlabel}{\hspace{\labelsep}$\bullet$}
+\renewcommand{\bar}{\overline}
+\DeclareMathOperator{\ash}{{Argsh}}
+\DeclareMathOperator{\cotan}{{cotan}}
+\DeclareMathOperator{\ach}{{Argch}}
+\DeclareMathOperator{\ath}{{Argth}}
+\DeclareMathOperator{\sh}{{sh}}
+\DeclareMathOperator{\ch}{{ch}}
+%\DeclareMathOperator{\tanh}{{th}}
+\DeclareMathOperator{\Mat}{{Mat}}
+\DeclareMathOperator{\Vect}{{Vect}}
+\DeclareMathOperator{\trace}{{tr}}
+\newcommand{\tr}{{}^{\mathrm t}}
+\newcommand{\divi}{~\big|~}
+\newcommand{\ndivi}{~\not{\big|}~}
+\newcommand{\et}{\wedge}
+\newcommand{\ou}{\vee}
+%\DeclareMathOperator{\trace}{{trace}}
+\renewcommand{\det}{\operatorname{\text{dÃ©t}}}
+%\DeclareMathOperator{\det}{{dÃ©t}}
+\DeclareMathOperator{\grad}{{grad}}
+%\DeclareMathOperator{\th}{th}
+%\renewcommand{\tanh}{\mathop{\mathrm{th}}{}}
+\renewcommand{\arcsin}{{\mathop{\mathrm{Arcsin}}}}
+\renewcommand{\arccos}{{\mathop{\mathrm{Arccos}}}}
+\renewcommand{\arctan}{{\mathop{\mathrm{Arctan}}}}
+%\DeclareMathOperator{\arctan}{{Arctan}}
+\renewcommand{\tanh}{{\mathop{\mathrm{th}}}}
+\newcommand{\pgcd}{\mathop{\mathrm{pgcd}}}
+\newcommand{\ppcm}{\mathop{\mathrm{ppcm}}}
+\newcommand{\fonc}[4]{\left\{\begin{tabular}{ccc}$#1$ & $\vers$ & $#2$ \\
+$#3$ & $\asso$ & $#4$ \end{tabular}\right.}
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\Re}{\text{\rm Re}}
+\renewcommand{\Im}{\text{\rm Im}}
+\renewcommand{\ker}{\mathop{\mathrm{Ker}}}
+\newcommand{\Lin}{\mathcal L}
+\newcommand{\GO}{\mathcal O}
+\newcommand{\GSO}{\mathcal{SO}}
+\newcommand{\GL}{\mathcal{GL}}
+\renewcommand{\emptyset}{\varnothing}
+\newcommand{\arc}[1]{\overset{\frown}{#1}}
+\newcommand{\rg}{\mathop{\mathrm{rg}}}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\co}[3]{\begin{pmatrix}#1 \\ #2 \\ #3\end{pmatrix}}
+\newcommand{\demi}{\frac 1 2}
+
+\newcommand{\exod}[1]{\addtocounter{cexo}{1} \vskip 1em 
+\noindent{\bf \large Exercice \thecexo.\ #1}}
+\newcounter{cact}
+\renewcommand{\thecact}{\arabic{cact}}
+\newcommand{\act}{\addtocounter{cact}{1} \vskip 1em \noindent{\bf ActivitÃƒÂ© \thecact.\ }}
+%\renewcommand{\labelitemi}{\m@th$\star$}
+\newcommand{\limi}[2]{\underset{#1 \rightarrow #2}\lim}    
+\newcommand{\nterme}[1]{{\em #1}}
+\newcommand{\dif}[1]{#1}
+\renewcommand{\FrenchLabelItem}{\textbullet} %bullet dans les items
+%\renewcommand{\labelitemi}{\textbullet}
+%\renewcommand{\labelitemii}{\textbullet}
+%\renewcommand{\labelitemiii}{\textbullet}
+%\renewcommand{\theenumi}{\alph{enumi}}
+%\setenumerate[0]{label=\alph}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{textcomp} %pour les ' dans lstlisting
+\usepackage{listings}
+%------------------ info
+\lstset{
+  language=Python,
+  commentstyle=\color{red},
+  upquote=true,
+  literate={Ã©}{{\'e}}1
+           {Ãª}{{\^e}}1
+           {Ã }{{\`a}}1
+           {Ã¨}{{\`e}}1
+           {Ã®}{{\^i}}1
+           {Ã¯}{{\"i}}1
+           {Ã«}{{\"e}}1
+           {Ã¹}{{\`u}}1,  
+  columns=flexible,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{blue},
+  %identifierstyle=\color{green},
+  stringstyle=\ttfamily,
+  showstringspaces=false,
+  %numbers=left, 
+  %numberstyle=\tiny, 
+  %stepnumber=1, 
+  %numbersep=5pt,
+  frame=L
+}
+
+ 
+\ifdefined\HCode
+  \def\pgfsysdriver{pgfsys-dvisvgm4ht.def}
+\fi 
+\usepackage{pgf,tikz,pgfplots}
+\usepackage{tkz-tab,tkz-fct}
+\pgfplotsset{compat=1.16}
+%\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+
+%-----------------------
+\usepackage{fancybox}
+\usepackage{fancyhdr}
+
+\definecolor{gray}{HTML}{c8caca}
+\definecolor{bleusad}{HTML}{0056B3}
+\newcommand{\titreFiche}[3]{\centerline{\Ovalbox{\parbox[t]{0.7\textwidth}{
+\vspace{-0.5em}\begin{center} \bf \large #1
+\end{center}
+\vspace{-0.5em}}}}
+
+  \bigskip
+\fancyfoot[L]{\includegraphics[height=1em]{/var/www/sacado/static/img/sacadoA1.png}\textcolor{bleusad}{\textsf{\ \raisebox{2pt}{ {{\footnotesize https://sacado.xyz > #3}}}}}}
+\fancypagestyle{Page1}{\fancyhead{}\renewcommand{\headrulewidth}{0pt}}
+\thispagestyle{Page1}
+\fancyhead[L]{#1}
+\fancyfoot[R]{\textsc{#2}}
+\renewcommand{\footrulewidth}{0.4pt}
+\pagestyle{fancy}
+}
+
+\newcounter{cexo}
+\renewcommand{\thecexo}{\arabic{cexo}}
+\newcommand{\exo}{\refstepcounter{cexo} \vskip 1.5em \noindent{\bf Exercice \thecexo.\ }}
+
+
+
+\definecolor{bleu2}{rgb}{0,0.58,0.79}
+\definecolor{violet}{rgb}{0.79,0.66,0.98}
+\definecolor{gray}{rgb}{0.79,0.66,0.98}
+
+\newcommand{\exercice}[1]{ % Exercice directement dans la page
+\vspace{0.2cm}
+\tikz\node[rounded corners=2pt, fill=bleu2]{\color{white}\textbf{#1}};
+\vspace{0.1cm}
+}
+
+\newcommand{\sacado}[1]{ % Exercice directement dans la page
+\vspace{0.2cm}
+\tikz\node[rounded corners=2pt, fill=violet]{\color{white}\textbf{#1}};
+}
+
+
+\newcommand{\competence}[1]{
+  \hfill\textcolor{bleusad}{#1}
+}
+\newcommand{\competences}[1]{
+  {\bf CompÃƒÂ©tences ciblÃƒÂ©es : }
+  \begin{enumerate}
+   \item   #1
+  \end{enumerate}
+
+  \medskip
+}
+
+\newcommand{\savoir}[1]{
+  {\bf Autre savoir-faire ciblÃƒÂ© : } 
+  #1
+  \medskip
+}
+
+\newcommand{\savoirs}[1]{
+  %  {\bf Autres savoir-faire ciblÃƒÂ©s : }
+ \vspace{-1em}
+  \textcolor{bleusad}{\it \begin{itemize}
+   \item  #1
+  \end{itemize}
+  \centerline{\rule[0.5em]{5cm}{0.5pt}}}
+  \medskip
+}
+
+
+\newcommand{\entreexo}{ % entre les exos}
+  \medskip
+  \centerline{\hrule{5cm}{1pt}}
+  \medskip
+}
+
+\setlength{\parindent}{0cm}
+\usepackage[left=1cm,right=1cm,top=1cm,bottom=1.5cm]{geometry}
+\usepackage{multicol}
+
+%%%%% Pour faire des boites
+\usepackage[tikz]{bclogo}
+\usepackage{bclogo}
+\usepackage{framed}
+\usepackage[skins]{tcolorbox}
+\tcbuselibrary{breakable}
+\tcbuselibrary{skins}
+\usetikzlibrary{quotes,babel,arrows.meta,shadows,decorations.pathmorphing,decorations.markings,patterns}
+\usepackage{tikzpagenodes}
+\usetikzlibrary{plotmarks}
+
+\newcounter{cpt}
+
+\newenvironment{GeneriqueT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
+{%
+\end{tcolorbox}\par}
+
+
+
+\newenvironment{defT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Définition \thecpt \;: #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{thT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Théorème \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{ppT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Proposition \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{exT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Exemple \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{mtT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Méthode \thecpt \;: #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{exoT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Exercice \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{sfT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Savoir faire \thecpt \;: #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{atT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Attention \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+
+
+\newenvironment{voT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Vocabulaire \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{rmT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Remarque \thecpt \;: #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{mmT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Mathématiciennes et mathématiciens \thecpt : #1.]}
+{%
+\end{tcolorbox}\par}
+
+
+\newenvironment{soT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Sommaire \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{prT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Preuve \thecpt \;: #1.]}
+{%
+\end{tcolorbox}\par}
+
+\newenvironment{rgT}[1]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt} Règle \thecpt\; : #1.]}
+{%
+\end{tcolorbox}\par}
+
+
+\newcommand{\point}[1]{\vspace{0.1cm}\multido{}{#1}{ \dotfill \medskip \endgraf}}
+\newcommand{\ligne}[1]{\vspace{0.1cm}\multido{}{#1}{ {\color{cqcqcq}\hrulefill} \medskip \endgraf}}\setlength{\columnseprule}{1pt}\setlength{\columnseprule}{1pt}\begin{document}
+\titreFiche{Sujet de BAC 2020}{M. Demaria}{}\\ \vspace{0.1cm}\exercice{Exercice 1} \includegraphics[scale=0.6]{/var/www/sacado/static/img/no_calculator.png} \vspace{0.2cm}Soit $x$ un r�el. �crire sous forme d'intervalle ou de r�union d'intervalles le plus grand ensemble auquel appartient $x$.
+
+\begin{enumerate}
+	\item $7x -4 \geq 3$ ou $1-x>0 $   . 
+	\item $x \leq 2$ ou $-4x \leq 20$.
+	\item $x < 3$ et $x > -6$.
+	\item $2x+1 \leq 3$ et $3x-1 \geq 0$.
+	\item $3(2-a)<3$ et $a-1 \geq 2$.
+\end{enumerate}\\ \\ \vspace{0.1cm}\exercice{Exercice 2} \includegraphics[scale=0.6]{/var/www/sacado/static/img/no_calculator.png} \vspace{0.2cm}Factorise les expressions suivantes :
+\begin{enumerate}
+\begin{minipage}{4cm}
+\item $A=7x+7y$
+\item $B=3x+6y$ 
+\item $C=7a+6a$
+\item $D=3\pi+5\pi$
+\end{minipage}
+\begin{minipage}{4cm}
+\item $E=7x+21$
+\item $F=x^2-2x$ 
+\item $G=4a-8a^2$ 
+\item $H=54-18b$ 
+\end{minipage}
+\begin{minipage}{4cm}
+\item $I=-5b-25$ 
+\item $J=3xy-9y^2$ 
+\item $K=49x-21xy$ 
+\item $L=-36a+63z$ 
+\end{minipage}
+\end{enumerate}\\ \\ \vspace{0.1cm}\exercice{Exercice 3} \includegraphics[scale=0.6]{/var/www/sacado/static/img/no_calculator.png} \vspace{0.2cm}Repr�senter graphiquement dans le plan muni d'un rep�re orthonormal 
+ 
+\begin{enumerate}
+\item l'ensemble des points $M(x;y)$ tes que  $1 < x < 4$ et $-2 \leq y <4$.
+\item l'ensemble des points $M(x;y)$ tes que  $1 \leq  2x+1 \leq  5$ et $-2 \leq 3y + 4  \leq  13$.
+\end{enumerate}\\ \\ \vspace{0.1cm}\exercice{Exercice 4} \includegraphics[scale=0.6]{/var/www/sacado/static/img/calculator.png}\includegraphics[scale=0.4]{/var/www/sacado/static/img/is_python.png}\includegraphics[scale=0.4]{/var/www/sacado/static/img/is_scratch.png}\includegraphics[scale=0.4]{/var/www/sacado/static/img/is_tableur.png} \vspace{0.2cm}essai\\ \\ \vspace{0.1cm}\exercice{Exercice 5} \includegraphics[scale=0.6]{/var/www/sacado/static/img/no_calculator.png} \vspace{0.2cm}\begin{enumerate}
+\item Tracer une droite gradu�e avec un rep�re d'origine O et d'unit� 3 cm.
+\item Placer les points $M$ tel que $\vert OM \vert = 1$. On notera $M_1$ et $M_2$.
+\item Placer les points $A$ tel que $\vert OA \vert = \frac{2}{3}$. On notera $A_1$ et $A_2$.
+\end{enumerate}\\ \end{document}

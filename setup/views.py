@@ -2109,6 +2109,8 @@ def change_color(filename, color, code):
         file.write(filedata)
 
 
+
+@login_required(login_url= 'index')
 @is_manager_of_this_school
 def admin_tdb(request):
 

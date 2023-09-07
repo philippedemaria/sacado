@@ -153,17 +153,17 @@ def student_dashboard(request,group_id):
     #######Groupes de l'élève. 
     # si plusieurs matières alors on envoie sur dashboard_group 
     # si une seule matière alors  sur dashboard
-
-
+ 
     if not request.user.is_student :
+
         messages.error(request,"Elève non identifié")
-        return redirect("logout")
+        return template , context =  "dashboard.html" , False
 
     try :
         student = request.user.student
     except :
         messages.error(request,"Elève non identifié")
-        return redirect("logout")
+        return template , context =  "dashboard.html" , False
 
 
     groups = student.students_to_group.all()
@@ -171,6 +171,7 @@ def student_dashboard(request,group_id):
     parcourses_on_fire = []
 
     student_index = False
+
     if groups.count() > 1  :
         template = "dashboard.html" 
         student_index = True
@@ -221,7 +222,7 @@ def student_dashboard(request,group_id):
     evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
    
     bibliotexs =  student.bibliotexs.filter(folders = None,  is_publish = 1).distinct()
- 
+
     parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
 
     flashpacks = Flashpack.objects.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today), students=student,is_global=1).exclude(madeflashpack__date=today).distinct()
@@ -644,7 +645,9 @@ def get_out_this_group(request, id):
 
 def dashboard_group(request, id):
     template, context = student_dashboard(request,id)
-    return render(request, template , context )
+    if context :
+        return render(request, template , context )
+    else : return redirect('index')
 
 @login_required(login_url= 'index')
 def list_groups(request):

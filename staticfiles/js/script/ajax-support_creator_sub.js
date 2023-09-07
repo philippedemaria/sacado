@@ -172,6 +172,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
                     success: function (data) {
                         $('select[name=knowledge]').html("");
                         // Remplir la liste des choix avec le résultat de l'appel Ajax
+                        if (data.error == "no") {
                         let knowledges = JSON.parse(data["knowledges"]);
                         for (let i = 0; i < knowledges.length; i++) {
 
@@ -184,6 +185,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable','ckeditor'], function ($) {
 
                             $('#id_knowledge').append(option);
                         }
+                        }  
                     }
                 }
             )

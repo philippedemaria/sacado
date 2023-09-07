@@ -6693,7 +6693,13 @@ def get_this_codebook(nf) :
     caracteres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     level_id = nf.level.id
     subject_id = nf.theme.subject.id
-    exercise = Exercise.objects.filter(level=nf.level, knowledge = nf.knowledge).order_by("id").last()
+
+    exercises = Exercise.objects.filter(level=nf.level, knowledge = nf.knowledge)
+    if exercises :
+        exercise = exercises.order_by("id").last()
+    else :
+        exercise = Exercise.objects.order_by("id").last()
+
     e_id     = exercise.id + 1
     q        = (e_id//len(caracteres) )%len(caracteres)  
     r        = e_id%len(caracteres) 
@@ -9219,10 +9225,12 @@ def ajax_knowledge_exercise(request):
     theme_id = request.POST.get('theme_id', None)
     level_id = request.POST.get('level_id', None)
     data = {}
- 
-    knowledges = Knowledge.objects.filter(theme_id=theme_id,level_id=level_id )
-    data = {'knowledges': serializers.serialize('json', knowledges)}
-
+    
+    if theme_id and level_id :
+        knowledges = Knowledge.objects.filter(theme_id=theme_id,level_id=level_id )
+        data = {'knowledges': serializers.serialize('json', knowledges) , 'error' : 'no'}
+    else : 
+        data['error'] = 'yes'
 
     return JsonResponse(data)
 
