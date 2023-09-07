@@ -233,7 +233,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
                 elements += r"}"
 
-                elements += r" \vspace{0.2cm} \\"
+            elements += r" \vspace{0.2cm} \\"
 
             if output == "html_cor" :
                 if  relationtex.correction : ctnt =  relationtex.correction
