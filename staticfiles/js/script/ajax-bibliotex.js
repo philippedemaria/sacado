@@ -234,11 +234,6 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
  
-    $('body').on('click', '.group_shower' , function (event) {
-            let bibliotex_id = $(this).data("bibliotex_id");
-            $("#group_show"+bibliotex_id).toggle(500);
-
-        });
 
 
     $('body').on('click', '.bibliotex_shower' , function (event) {
@@ -268,8 +263,25 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem" ><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+label+'<hr/>'+content+'</div>'); 
        
-            $(window).scrollTop(position);
+ 
         });
+
+
+
+
+    $('body').on('click', '.expand_video_correction', function () {
+
+            var exotex_id = $(this).data("exotex_id");  
+            var content = $("#correction"+exotex_id).html();
+            var label = '<label for="customRange3" class="form-label">Taille de police</label><input type="range" value="3" class="form-range" min="3" max="5.5" step="0.5" id="customRange" style="width:200px">' ; 
+
+            $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem" ><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+label+'<hr/>'+content+'</div>'); 
+ 
+        });
+
+
+
+
 
 
     $('body').on('click', ".closer_projection_div", function () {
@@ -467,7 +479,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                     $("#print_correction"+relationtex_id).find('i').addClass(data.addClass);
                     $("#print_correction"+relationtex_id).find('i').removeClass(data.removeClass);
-                    $("#print_correction"+relationtex_id).find('i').attr('title',data.title);               
+                    $("#print_correction"+relationtex_id).find('i').attr('title',data.title);
+
+                    if ($("#correction"+relationtex_id).hasClass("exotex_correction_no_display")){
+
+                        $("#correction"+relationtex_id).addClass('exotex_correction');
+                        $("#correction"+relationtex_id).removeClass('exotex_correction_no_display');
+                    } 
+                    else {
+                        $("#correction"+relationtex_id).addClass('exotex_correction_no_display');
+                        $("#correction"+relationtex_id).removeClass('exotex_correction');
+
+                    }
+                   
+
 
                 }
             }

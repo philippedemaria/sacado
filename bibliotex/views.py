@@ -161,6 +161,12 @@ def printer(request, relationtex_id, collection,output , obj):
         else: relationtexs=[relationtex]
 
 
+        if texte_supplement : 
+            elements +=  r"\\  "
+            elements +=  texte_supplement 
+            elements +=  r"\\  "
+
+
         if columns : elements += r"\begin{multicols}{2}"
         
         j = 1
@@ -211,11 +217,6 @@ def printer(request, relationtex_id, collection,output , obj):
             except :
                 elements += r"\exercice{Exercice "+ str(j) + r"} "+ details +   skill_dpl
             
-            if texte_supplement : 
-                elements +=  r"\\  "
-                elements +=  texte_supplement 
-            elements +=  r"\\  "
-
             j+=1
 
             if knowledges_printer :  
@@ -257,10 +258,6 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements +=  text_linked 
 
             elements +=  r"\\ "
-
-
-
-
 
     else : #pour la création d'un exercise ou son update*
 
@@ -331,12 +328,10 @@ def printer(request, relationtex_id, collection,output , obj):
     if output=="pdf" :
         result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file ])
 
-
-        if os.path.isfile(file+".out"):os.remove(file+".out")
-        if os.path.isfile(file+".aux"):os.remove(file+".aux")    
-        if os.path.isfile(file+".log"):os.remove(file+".log")
-
-        return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+        try :
+            return FileResponse(open(file+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
+        except :
+            return FileResponse(open(file+".log", 'rb'),  as_attachment=True, content_type='application/pdf')
 
     elif output == "html" or output== "html_cor" :
         #result = subprocess.run(["make4ht" ,  "-u" ,  file+".tex" , "mathml"] , cwd = settings.DIR_TMP_TEX )
@@ -2057,7 +2052,6 @@ def ajax_individualise(request):
                 data["noclass"] = "btn btn-success"
                 data["alert"] = False
  
-
             else:
                 relationtex.students.add(student)
                 if Blacklistex.objects.filter(relationtex=relationtex, student = student ).count()  > 0 :
@@ -2090,6 +2084,36 @@ def ajax_individualise_exotex(request):
 
     return JsonResponse(data)
 
+
+def change_publications_in_all_exotex(request,idf,idb):
+
+    bibliotex = Bibliotex.objects.get(pk=idb)
+    relationtexs = bibliotex.relationtexs.order_by("ranking")
+ 
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+
+    if request.method == "POST" :
+        global_publication = request.POST.get('global', 0)
+
+        for r in relationtexs :
+            Relationtex.objects.filter(pk=r.id).update(is_publish = global_publication)
+
+        bibliotex_publication = request.POST.get('bibliotex', 0)
+        # si tous les exercices sont dépubliés, on dépublie le parcours et si vous publiez tous 
+        Bibliotex.objects.filter(pk=idb).update(is_publish = bibliotex_publication)
+
+        return redirect('show_bibliotex' ,  idb )
+
+
+
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs ,  'teacher': teacher   }
+
+    return render(request, 'bibliotex/change_publications.html', context)
 
 
 ############################################################################################################

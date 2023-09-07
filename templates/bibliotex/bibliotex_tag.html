@@ -28,21 +28,9 @@
             {% endfor %}
  
         </div> 
+ 
 
-        <div class="group_show  no_visu_on_load" id="group_show{{bibliotex.id }}"> 
-            <label>Cette bibliotex est attribuée à</label>
-            {% for g in bibliotex.groups.all %}
-                <li class="sanspuce">{{ g.name }} [{{ g.just_students_count }} élèves]</li>
-            {% endfor %}
-            <br/>
-            <label>et aux dossiers</label>
-            {% for f in bibliotex.folders.all %}
-                <li class="sanspuce">{{ f.title }} [{{ f.folder_only_students_count.nb }} élèves]</li>
-            {% endfor %}
-            <div style="clear:both"></div>
-        </div>
-
-        <div class="group_show  no_visu_on_load" id="bibliotex_show{{bibliotex.id }}"> 
+        <div class="group_show  no_visu_on_load exo_tex_scrollbar no_width_scroll" id="bibliotex_show{{bibliotex.id }}"> 
              <div class="row"> 
                 <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
                     <b>Savoir faire ciblés</b>
@@ -117,7 +105,7 @@
 
 
 
-    <div class="box-footer" style="position: relative; padding-top: 0px;">
+    <div class="box-footer" style="position: relative; padding: 5px 0px 0px 10px;">
  
  
 
@@ -130,9 +118,7 @@
                 </span>
             </div> 
 
-            <div class="col-lg-1 col-xs-1">
-                <span href="#" class="edit group_shower" data-group_id="{{bibliotex.id }}"  title="Voir les groupes attribués"><i class="bi bi-people"></i> </span>
-            </div> 
+ 
 
             <div class="col-lg-1 col-xs-1">
                 <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}" class="edit" title="Individualiser" ><i class="bi bi-person"></i> </a> 

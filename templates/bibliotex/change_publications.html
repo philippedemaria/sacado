@@ -1,0 +1,117 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
+
+
+
+{% endblock %} 
+
+
+{% block page_title %}
+ 
+   <i class="bi bi-folder sacado_color_text"></i> 
+ 
+
+      {% include 'qcm/breadcrumb.html' %} {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/>   Publication globale
+ 
+{% endblock %}
+
+
+{% block page_menu_right %}
+    
+
+{% endblock %}
+
+ 
+
+
+{% block body %}  
+<section class="content_main">
+ 
+
+    <form action="" method="POST" enctype='multipart/form-data'> 
+            {% csrf_token %}
+
+            <div class="alert alert-sacado"> 
+                <div class="row">
+                <div class="col-sm-4 col-md-4">
+                    <div class="form-group"> <label>Publication à répercuter sur <b>TOUS</b> les exercices de la bibliotex</label> 
+                    </div>
+                </div> 
+                <div class="col-sm-6 col-md-6">
+                    <div class="form-group"> 
+                        <input name="global" type="checkbox" value="1"  data-toggle="toggle"  data-onstyle="success" data-offstyle="danger" data-on="Publié" data-off="Dépublié" data-width=100 /> 
+                    </div>
+                </div> 
+                </div>
+                <div class="row">
+                <div class="col-sm-4 col-md-4">
+                    <div class="form-group"> <label>Publication  de la Bibliotex</label> 
+                    
+                    </div>
+                </div> 
+                <div class="col-sm-6 col-md-6">
+                        <input name="bibliotex" type="checkbox" value="1"  data-toggle="toggle"  data-onstyle="success" data-offstyle="danger" data-on="Publié" data-off="Dépublié" data-width=100 /> 
+                    </div>
+                </div> 
+                <div class="row">
+                <div class="col-sm-6 col-md-6">
+                <div class="form-group">
+                    <input value="Enregistrer" type="submit"  class="btn btn-primary"  />
+                    <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default"/></a>
+                </div>
+                </div>               
+                </div>
+
+            </div>
+ 
+
+    </form> 
+
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div  class="alert alert-sacado">
+                    <table border=0 >
+                    {% for r in relationtexs %}
+                        <tr>
+                            <td>{{ r.exotex.title }}</td>
+                            <td >{% if r.is_publish %}  
+
+                                <span class="legend-btn legend-btn-success" >  
+                                   Publié   
+                                </span>
+                                 {% else %}   
+
+                                <span class="legend-btn legend-btn-danger" >  
+                                   Dépublié   
+                                </span>
+
+
+                             {% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div> 
+        </div>
+
+
+</section>   
+
+
+
+
+
+{% endblock %}
+
+
+      
+ 
+ 

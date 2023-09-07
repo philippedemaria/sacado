@@ -1010,7 +1010,10 @@ a.no_decoration:hover{
   display: block;
 }
 
-
+.exo_tex_scrollbar{
+  height:140px;
+  overflow-y: auto;
+}
 .exo_tex_scrollbar::-webkit-scrollbar {
   height: 10px;
   width: 5px;
@@ -1029,7 +1032,10 @@ a.no_decoration:hover{
   border-radius: 10px;
 }
 
-
+.no_width_scroll{
+   overflow-x: hidden;
+   width: 290px!important;
+}
 
 /***************************************************************************/
 /*********************       btn      **************************************/
@@ -2392,16 +2398,13 @@ input[type=range].form-range {
   border-radius: 3px; 
 }
 
-.show_exotex_knowledges{
-    position:relative;
-    display: inline;
-    font-size:16px;
-    cursor:help;
-}
+.show_this_exotex_knowledges_display{ display:none;}
 
-.show_exotex_knowledges:hover .exotex_knowledges{
-    font-size:16px; 
+.show_this_exotex_knowledges:hover .show_this_exotex_knowledges_display{
+    padding:10px;
+    font-size:18px; 
     position:absolute;
+    top:20px;
     display: block;
     min-height:130;  
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
@@ -2411,8 +2414,10 @@ input[type=range].form-range {
     border-radius: 5px;
     background-color: #FFF;
     z-index: 99;    
-    text-align : left ;  
+    text-align : left ; 
+    background-color: white; 
 }
+
 
 .exotex_knowledges{
     font-size:16px; 
@@ -2429,7 +2434,7 @@ input[type=range].form-range {
     background-color: #fff ;   
 }
 
-.ecbx-1200{
+.ecbx-1200,.printer_correction{
   font-size:16px;
 }
 .exotex_shower_content{  
@@ -2467,8 +2472,48 @@ input[type=range].form-range {
     overflow-y: auto;
     border-radius: 5px;  
     font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
-    line-height: :22px 
+    line-height: :22px ;
 }
+
+.new_exotex_width{
+  width       : 48%;
+  margin-right: 2%;
+  overflow-x  : hidden;
+  padding:10px;
+}
+
+
+
+@media (max-width:770){
+
+    .new_exotex_width{
+      width        : 98%;  
+      margin-right : 2%;
+      overflow-x   : hidden;
+      padding:10px;
+    }
+
+}
+
+
+.new_exotex_empty {
+    color: #666;
+    background-color: #FFF;
+    height: 350px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.new_exotex_empty_button{
+  font-size: 10em;
+  color: #C7A6FE;
+}
+
+
+
+
+
 
 .exotex_show_exercice{
   border-radius: 5px 5px 0px 0px;
@@ -2487,6 +2532,24 @@ input[type=range].form-range {
   border-radius: 5px;  
   font-size:20px;
 }
+
+
+
+.exotex_correction_no_display{  
+  font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
+  padding: 20px;
+  line-height:35px;
+  max-width:1100px;
+  background-color: #fcd6d1 ;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
+  -moz-  box-shadow:0px 2px 2px rgba(0, 0, 0, 0.5);
+  border: 2px solid #913225 ;  
+  border-radius: 5px;  
+  font-size:20px;
+}
+
+
 
 .titles_details{
   margin-bottom: 0px;
@@ -2575,16 +2638,17 @@ input[type=range].form-range {
 
 /* General Links */
 a.select_correction {
-  color: #00B999 ; /*#007EE2;*/ 
+  color: #334A52 ; /*#007EE2;*/ 
+  font-size:14px;
 }
  
 
 a.select_correction:hover,
 a.select_correction:active,
 a.select_correction:focus {
-  outline: none;
+ 
   text-decoration: underline;
-  color: #4bfb5a ;
+  color: #00B999 ; /*#007EE2;*/ 
 }
 
 .textarea_more_shown{

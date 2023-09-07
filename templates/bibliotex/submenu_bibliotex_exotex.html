@@ -22,10 +22,19 @@
         <li {% if 'individualise' in request.path %}class="active"{% endif %}>
             <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}"  ><i class="fa fa-fw fa-user"></i> Individualiser</a> 
         </li>
+        {% comment %}
         <li {% if 'results' in request.path %}class="active"{% endif %}>
             <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="fa fa-fw fa-bar-chart"></i> Lire les résultats</a> 
         </li>
-
+        {% endcomment %}
+        <li class="divider"></li>       
+        <li {% if 'change_publications/' in request.path %} class="active" {% endif %}>
+            {% if folder %}
+            <a href="{% url 'change_publications_in_all_exotex' folder.id  bibliotex.id  %}" ><i class="fa fa-circle-o-notch"></i> Gérer les publications</a> 
+            {% else %}
+            <a href="{% url 'change_publications_in_all_exotex' 0 bibliotex.id  %}" ><i class="fa fa-circle-o-notch"></i> Gérer les publications</a> 
+            {% endif %}
+        </li>
     </ul>
 </li>
 </form>

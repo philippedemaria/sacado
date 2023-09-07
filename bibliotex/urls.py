@@ -32,7 +32,7 @@ urlpatterns = [
     path('exercise_bibliotex_peuplate/<int:id>', exercise_bibliotex_peuplate, name='exercise_bibliotex_peuplate'),
     path('exercise_bibliotex_show/<int:id>', show_bibliotex, name='show_bibliotex'),
     path('exercise_bibliotex_duplicate', duplicate_bibliotex, name='duplicate_bibliotex'),
-
+ 
 
     path('exercise_exotex_show/<int:id>', show_exotex , name='show_exotex'),
 
@@ -105,6 +105,6 @@ urlpatterns = [
 
     path('div_to_display_latex', div_to_display_latex, name='div_to_display_latex'),
 
-
+    path('change_publications_in_all_exotex/<int:idf>/<int:idb>', change_publications_in_all_exotex, name='change_publications_in_all_exotex'),
 
  ]

@@ -22,11 +22,9 @@
   
 {% block page_title %}
 
-    {% if group %}
-       <a href="{% url 'index' %}" >  <i class="bi bi-people"></i> </a> {% include 'qcm/breadcrumb.html' %} 
-    {% else %}
-    <a href="{% url 'my_bibliotexs' %}" >   {% include 'bibliotex/logo.html' %} Mes BiblioTex </a> <img src="{% static 'img/angle-right.png' %}"/>
-    {% endif %}
+
+       {% include 'qcm/breadcrumb.html' %} 
+
 
 
 
@@ -59,7 +57,7 @@
 <input type="hidden" value="{{ bibliotex.id }}" name="bibliotex" id="bibliotex" /><!-- pour le tri -->
 {% csrf_token %}
 {% for r in relationtexs %} 
-    <div class="col-xs-12 col-md-6 col-lg-6 new_exotex relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
+    <div class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_width relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         <div style="padding-left:10px;">
         <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
         <span class="container_checkbox_title" style="font-size:22px!important">{{ r.exotex.title }} </span>
@@ -80,16 +78,7 @@
 
         
                 {% if request.user.user_type == 2 %}
-                    {% if r.correction  or r.exotex.correction  %}
-                            <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" >  <i class="fa fa-copyright" title="Correction"></i></a>
-                            <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
-                            {% if r.is_publish_cor %}
-                                  <i class="fa fa-eye text-green" title="Correction : Publier"></i>
-                            {% else %}
-                                  <i class="fa fa-eye-slash text-danger" title="Correction : Publier"></i>
-                            {% endif %}
-                            </a>
-                    {% endif %}
+
  
                     <a href="#" class="expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i> </a>
      
@@ -114,18 +103,7 @@
                     {% endif %}
                 {% endif %}
 
-                <span class="show_exotex_knowledges"> <i class="bi bi-cc-circle" title="Compétences et savoir faire" style="font-size:18px"></i>
-                    <div class="exotex_knowledges text-blue" style="font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
-                        {% for s in r.exotex.skills.all %}
-                            {{ s.name }}.
-                        {% endfor %}                            
-                        <hr/>
-                        {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-                        {% for k in r.exotex.knowledges.all %}
-                            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
-                        {% endfor %}
-                    </div>
-                </span> 
+
         </div>
         <div class="menu_exotex">
 
@@ -139,6 +117,31 @@
                 <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-gear"></i><span class="legend_exotex_parameter"> Configurer </span></a>
             </li>
             {% endif %}
+            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"> 
+                <span class="exotex_div_menu_label" ><i class="bi bi-cc-square"></i><span class="legend_exotex_parameter show_this_exotex_knowledges"> Savoir faire et compétences
+
+
+ 
+                    <div class="show_this_exotex_knowledges_display text-blue" style="font-size:12px; font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
+                        {% for s in r.exotex.skills.all %}
+                            {{ s.name }}.
+                        {% endfor %}                            
+                        <hr/>
+                        {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+                        {% for k in r.exotex.knowledges.all %}
+                            {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
+                        {% endfor %}
+                    </div>
+          
+            </span></span>
+
+
+            </li>
+            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
+                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
+            </li>
+
+
             <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
             </li>
@@ -156,14 +159,21 @@
                 </li>
                 {% endif %}
             {% endif %}
-            <li class="relative_div_exotex action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
-                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye{% else %}eye-slash{% endif %}"></i><span class="legend_exotex_parameter"> Publier </span></a>
+             
+            {%  if group %}
+            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}" > 
+                <a href="javascript:void(0);" data-target="#individualise_tex{{ r.id }}"  data-toggle='modal' class="exotex_div_menu_label" ><i class="bi bi-person"></i></i><span class="legend_exotex_parameter"> Individualiser l'exercice</span></a>
             </li>
+            {%  endif %}
+ 
 
 
-            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="students" data-relationtex_id="{{ r.id }}"> 
-                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="bi bi-x"></i><span class="legend_exotex_parameter"> Supprimer </span></a>
+
+
+            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="students" data-relationtex_id="{{ r.id }}" onclick="return TestDelete('cet exercice')" > 
+                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="bi bi-x"></i><span class="legend_exotex_parameter"> Supprimer de cette bibliotex</span></a>
             </li>
+
 
 
             {% comment %}
@@ -186,25 +196,133 @@
                 {% endif %}
             </div>  
 
-            <div class="no_visu_on_load" id="correction{{ r.id }}"> 
-                <div class="exotex_correction"> 
-                    {% if r.correction_html %}
-                        {{ r.correction_html|safe }} 
+            {% if r.correction  or r.exotex.correction  %}<hr/>
+                   
+                    <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
+                    {% if r.is_publish_cor %}
+                          <i class="fa fa-eye text-green" title="Correction : Publier"></i>
                     {% else %}
-                        {{ r.exotex.correction_html|safe }} 
+                          <i class="fa fa-eye-slash text-danger" title="Correction : Publier"></i>
                     {% endif %}
-                </div>
-            </div>
+                    </a>
+                    <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" > Correction <i class="fa fa-caret-down"></i></a>
 
+                    <a href="javascript:void();" class="expand_video_correction" data-exotex_id="{{ r.id }}"><i class="bi bi-webcam"></i> </a>
+
+
+                    <div id="correction{{ r.id }}" class="no_visu_on_load {% if r.is_publish_cor %}exotex_correction{% else %}exotex_correction_no_display{% endif %}"> 
+                 
+                            {% if r.correction_html %}
+                                {{ r.correction_html|safe }} 
+                            {% else %}
+                                {{ r.exotex.correction_html|safe }} 
+                            {% endif %}
+                      
+                    </div>
+            {% endif %}
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
-
         </div>
 
 
     </div>
+
+{% if group %}
+
+<div class="modal fade" id="individualise_tex{{ r.id }}" tabindex="-1" role="dialog" aria-labelledby="individualise_tex{{ r.id }}">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">     
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+
+                <h2>Individualiser l'exercice</h2>  
+            </div>
+            <div class="modal-body">
+                 <div class="row"  >
+                    <div class="col-sm-12 col-md-6" >        
+  
+                        
+          
+                        {% if r.calculator %}
+                          <img src="{% static 'img/calculator.png' %}" width="20px" />
+                        {% else %}
+                          <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
+                        {% endif  %} {{ r.exotex.title|cleanhtml|capfirst }} 
+                        <span id="loading{{ relationtex.id }}" class="pull-right"></span>
+                       
+        
+                         {% if r.is_publish %} 
+                            <span class="pull-right" style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #00a65a; color: #FFF"> Exercice publié </span> 
+                         {% else %}
+                            <span class="pull-right" style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #cb2131; color: #FFF"> Exercice non publié </span> 
+                         {% endif %}
+
+                        <hr/>
+                        {% if r.r %}
+                            {{ relationtex.content_html|safe }} 
+                         {% else %}
+                            {{ r.exotex.content_html|safe }} 
+                         {% endif %}
+                    </div> 
+                    <div  class="col-sm-12 col-md-6">
+                            <span class="btn btn-info select_student" 
+                                id="selecteur{{r.exercise.id}}"    
+                                data-student_id="0"   data-custom=0
+                                data-relationtex_id="{{ r.id }}" 
+                                data-statut="False" style="min-width:75px; margin:1px; margin-right:0px" >Tous
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"    
+                                data-relationtex_id="{{ r.id }}" 
+                                data-statut="False"    />
+                            </span>
+                            <span class="btn btn-warning select_student" 
+                                id="selecteur{{r.exercise.id}}"    
+                                data-student_id="0" 
+                                data-relationtex_id="{{ r.id }}" 
+                                data-statut="True" style="min-width:75px; margin:1px; margin-left:0px" >Aucun
+
+                                <input  type="checkbox"  style="display:none"
+                                data-student_id="0"    data-custom=0
+                                data-relationtex_id="{{ r.id }}" 
+                                data-statut="True" />
+                            </span>
+                        
+                        {% get_only_students bibliotex group as  only_students %} 
+                         {%  for s in  only_students.students.all %}
+
+                            {% get_exercise s relationtex as has_it %}
+                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationtex.id}} selected_studentExo{{s.user.id }}" 
+                                id="student{{relationtex.id}}-{{s.user.id }}"
+                                data-student_id="{{ s.user.id }}" data-relationtex_id="{{ relationtex.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                                style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:4 }}
+                            </span>
+                        {%  endfor %}
+                       
+                    </div>   
+                </div> 
+            </div>
+        </div>
+    </div> 
+</div>
+ {%  endif %}
+
+
+
+
 {% endfor %}
  
+    <div class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_empty" style="margin-bottom:20px;padding:60px;text-align: center"  >
+   
+         
+                <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id  %}" class="new_exotex_empty_button" title="Créer des exercices" ><i class="bi bi-plus-circle-dotted"></i></a>
 
+
+                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="new_exotex_empty_button" title="Dupliquer des exercices" ><i class="bi bi-file-plus"></i></a> 
+
+
+    </div>
 
 <div style="clear:both"></div>
 <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
@@ -324,6 +442,7 @@
         </div>
     </div> 
 </div>
+
 
 {% endblock %}                        
  
