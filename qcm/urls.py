@@ -455,6 +455,7 @@ urlpatterns = [
     path('list_parcours_qflash_student/<int:idp>/', list_parcours_qflash_student, name='list_parcours_qflash_student'),
     path('list_parcours_bibliotex_student/<int:idp>/', list_parcours_bibliotex_student, name='list_parcours_bibliotex_student'),
     path('list_parcours_flashpack_student/<int:idp>/', list_parcours_flashpack_student, name='list_parcours_flashpack_student'),
+    path('list_parcours_docperso_student/<int:idp>/', list_parcours_docperso_student, name='list_parcours_docperso_student'),   
 
     path('parcours_show_bibliotex_student/<int:idp>/<int:id>', parcours_show_bibliotex_student, name='parcours_show_bibliotex_student'),
 

@@ -76,10 +76,23 @@
             {% if  data_min.nb_flashpack  %}
             <div class="row extend_student">  
                 <div class="col-xs-12">  
-                    <a href="{% url 'list_parcours_flashpack_student' parcours.id %}" class="edit"><i class="bi bi-stack" ></i>  {{ data_min.nb_flashpack }} flashpacks</a>
+                    <a href="{% url 'list_parcours_flashpack_student' parcours.id %}" class="edit"><i class="bi bi-stack" ></i>   {{ data_min.nb_flashpack }} flashpacks</a>
                 </div>  
             </div>
             {% endif %}
+
+
+            {% if  data_min.nb_docperso  %}
+            <div class="row extend_student">  
+                <div class="col-xs-12">  
+                    <a href="{% url 'list_parcours_docperso_student' parcours.id %}" class="edit"><i class="bi bi-link-45deg" ></i> {{ data_min.nb_docperso }} document</a>
+                </div>  
+            </div>
+            {% endif %}
+
+
+
+
  
         </div>
     </div>

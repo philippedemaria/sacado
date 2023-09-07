@@ -96,6 +96,7 @@
 
             {%  if folders %}
             <div class="row"></div> 
+                <h2 class='thin'>Dossiers</h2>
                 {% for folder in folders %}
                     {% include 'qcm/folder_tag_student.html' %}
                 {% endfor  %} 
@@ -157,6 +158,17 @@
             <h2 class='thin'>Flashpacks</h2>
                 {%  for flashpack in  flashpacks %} 
                     {% include 'flashcard/flashpack_tag.html' %}
+                {% endfor %}
+            {% endif %}  
+
+
+            <!-- ******************************************************************************************** -->
+            <!-- ************************************* Docpersos  ****************************************** -->
+            {%  if docpersos %}
+            <div class="row"></div> 
+            <h2 class='thin'>Documents</h2>
+                {%  for docperso in docpersos %} 
+                    {% include 'qcm/docperso_tag_student.html' %}
                 {% endfor %}
             {% endif %}  
 

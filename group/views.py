@@ -17,7 +17,7 @@ from account.models import Student, Teacher, Parent, Adhesion, User, Resultknowl
 from account.forms import UserForm
 from group.models import * 
 from socle.models import Knowledge, Theme, Level, Skill
-from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker , Folder
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker , Folder , Docperso
 from group.forms import GroupForm , GroupTeacherForm
 from flashcard.models import Flashpack
 from sendmail.models import Email
@@ -229,6 +229,8 @@ def student_dashboard(request,group_id):
 
     flashpacks = Flashpack.objects.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today), students=student,is_global=1).exclude(madeflashpack__date=today).distinct()
 
+    docpersos = student.docpersos.filter( folders = None,is_publish=1).distinct()
+
     customexercises_set = set()
     nb_custom = 0
     for p in parcourses_brut :
@@ -266,7 +268,7 @@ def student_dashboard(request,group_id):
     context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups , 'bibliotexs' : bibliotexs, 
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
-               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index  }
+               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index  , 'docpersos' : docpersos }
 
     return template, context
 

@@ -4523,6 +4523,20 @@ def list_parcours_flashpack_student(request, idp):
 
 
 
+@login_required(login_url= 'index')
+def list_parcours_docperso_student(request, idp):
+
+    parcours = Parcours.objects.get(id=idp)
+    user = request.user
+    today = time_zone_user(user)
+    docpersos = parcours.docpersos.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)|Q(stop__gte=today),students=user.student) 
+
+    context = { 'docpersos': docpersos , 'parcours': parcours , 'parcours': parcours , 'student' : user.student ,  'today' : today  }
+
+    return render(request, 'qcm/list_parcours_docperso_student.html', context)
+
+
+
 
 @login_required(login_url= 'index')
 @parcours_exists

@@ -1113,14 +1113,14 @@ class Parcours(ModelWithCode):
             bibliotex  = self.parcours_relationship.filter(type_id=5)
             quizz      = self.parcours_relationship.filter(type_id=3)
             flashpacks = self.parcours_relationship.filter( type_id=4 )
-
+            docpersos  = self.parcours_relationship.filter( type_id=10 )
         else :
             exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
             courses    = self.course.all()
             bibliotex  = self.bibliotexs.all() 
             quizz      = self.quizz.all()
             flashpacks = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) )
-
+            docpersos  = self.docpersos.all()
 
         nb_exercises_published = exercises.filter(is_publish = 1).count() + self.parcours_customexercises.filter(is_publish = 1).count()
         nb_cours_published     = courses.filter(is_publish = 1).count() 
@@ -1138,8 +1138,12 @@ class Parcours(ModelWithCode):
         nb_flashpack_published = flashpacks.filter(is_publish = 1).count() 
 
 
-        nb_docs_published = nb_exercises_published + nb_cours_published + nb_quizz_published + nb_flashpack_published + nb_bibliotex_published 
-        nb_docs = nb_exercises + nb_cours + nb_quizz + nb_flashpack + nb_bibliotex 
+        nb_docperso           = docpersos.count() 
+        nb_docperso_published = docpersos.filter(is_publish = 1).count() 
+
+
+        nb_docs_published = nb_exercises_published + nb_cours_published + nb_quizz_published + nb_flashpack_published + nb_bibliotex_published + nb_docperso_published
+        nb_docs = nb_exercises + nb_cours + nb_quizz + nb_flashpack + nb_bibliotex + nb_docperso
 
 
         data["nb_exercises"]            = nb_exercises
@@ -1162,9 +1166,13 @@ class Parcours(ModelWithCode):
         data["nb_bibliotex_published"]  = nb_bibliotex_published
         data["bibliotex_care"]          = ( nb_bibliotex == nb_bibliotex_published)
 
+        data["nb_docperso"]             = nb_docperso        
+        data["nb_docperso_published"]   = nb_docperso_published
+        data["docperso_care"]           = ( nb_docperso == nb_docperso_published)
+
         data["nb_docs"]                 = nb_docs        
         data["nb_docs_published"]       = nb_docs_published
-        data["docs_care"]               = ( nb_docs == nb_docs)
+        data["docs_care"]               = ( nb_docs == nb_docs_published)
 
         return data
 
@@ -1376,7 +1384,7 @@ class Folder(models.Model):
 
         data["nb_flashpack"] = self.flashpacks.filter(is_publish=1, students=student).count()
         data["nb_bibliotex"] = self.bibliotexs.filter(is_publish=1, students=student).count()
-
+        data["nb_docperso"]  = self.docpersos.filter(is_publish=1, students=student).count()
 
 
         try :
@@ -1553,7 +1561,7 @@ class Folder(models.Model):
         data["is_bibliotex_exists"]      = False
         data["is_course_exists"]         = False
         data["is_flashpack_exists"]      = False
-
+        data["is_docperso_exists"]       = False
 
         group_students  = group.students.exclude(user__username__contains= "_e-test")
         folder_students = self.students.exclude(user__username__contains= "_e-test")
@@ -1562,6 +1570,7 @@ class Folder(models.Model):
 
         parcours        = self.parcours.filter(is_evaluation=0, is_trash=0) 
         evaluations     = self.parcours.filter(is_evaluation=1, is_trash=0)
+
 
         nb_parcours_published    = parcours.filter(is_publish = 1).count() 
         nb_evaluations_published = evaluations.filter(is_publish = 1).count() 
@@ -1572,11 +1581,12 @@ class Folder(models.Model):
         quizzes     = self.quizz.all()  
         bibliotexs  = self.bibliotexs.all()
         flashpacks  = self.flashpacks.all()
+        docpersos   = self.docpersos.all()
 
         nb_quizz     = quizzes.count() 
         nb_bibliotex = bibliotexs.count()
         nb_flashpack = flashpacks.count() 
-
+        nb_docperso  = docpersos.count() 
 
         for p in parcours :
             if p.course.count():
@@ -1596,6 +1606,8 @@ class Folder(models.Model):
         data["nb_quizzes"]   = nb_quizz
         data["nb_bibliotex"] = nb_bibliotex
         data["nb_flashpack"] = nb_flashpack
+        data["nb_docperso"]  = nb_docperso
+
 
         if nb_parcours      :
             data["is_parcours_exists"]    = True
@@ -1609,6 +1621,9 @@ class Folder(models.Model):
             data["is_bibliotex_exists"] = True
         if nb_flashpack   :
             data["is_flashpack_exists"] = True
+        if nb_docperso   :
+            data["is_docperso_exists"] = True
+
 
         to_validate = False
         flashpacks_to_validate = self.flashpacks.filter(is_creative = 1)
