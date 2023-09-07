@@ -107,9 +107,11 @@
                             </div> 
                         </div>
                         <div class="row"> 
-                           <div class="col-lg-6 col-xs-6">
+                            {% comment %}
+                            <div class="col-lg-6 col-xs-6">
                                 <a href="{% url 'print_bibliotex_by_student' bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-download"></i>  <span class="label_icon">Télécharger</span>  </a>
                             </div>
+                            {% endcomment %}
                             <div class="col-lg-6 col-xs-6">
                                 <a href="javascript:void();" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
                                 </a>
