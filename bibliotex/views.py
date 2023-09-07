@@ -1362,7 +1362,6 @@ def ajax_publish_bibliotex(request):
     bibliotex_id = request.POST.get('bibliotex_id', None)
     statut = request.POST.get("statut")
 
-
     if statut == "True":
         data["statut"] = "False"
         data["publish"] = " n'est pas "
@@ -1390,7 +1389,7 @@ def ajax_publish_bibliotex(request):
         data["get"] = "get"
         data["noget"] = ""
         status = 1
-   
+ 
     Bibliotex.objects.filter(pk = int(bibliotex_id)).update(is_publish = status)    
     return JsonResponse(data) 
 
@@ -1439,10 +1438,10 @@ def exercise_bibliotex_peuplate(request, id):
 
     waitings = level.waitings.filter(theme__subject = subject ).order_by("theme__subject" , "theme")
 
-    group_id = request.session.get("group_id",None)
+    group_id  = request.session.get("group_id",None)
+    folder_id = request.session.get("folder_id",None)
 
-
-    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject ,'group_id' : group_id   }
+    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject ,'folder_id' : folder_id  ,'group_id' : group_id   }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex.html', context )
  

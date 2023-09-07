@@ -372,16 +372,6 @@ define(['jquery', 'bootstrap'], function ($) {
                         $("#selected_exotex"+exotex_id).removeClass(data.noclass) ;
                         $("#selected_exotex"+exotex_id).attr("data-statut",data.statut) ;
 
-                        if ($("#selected_exotex"+exotex_id).is(":checked") ) 
-                            { 
-                                $("#selected_exotex"+exotex_id).prop("checked",true) ;
-                                $("#content_exercises").html(data.html) ;
-                            } 
-                        else 
-                            { 
-                                $("#selected_exotex"+exotex_id).prop("checked",false) ;
-                                $("#id_for_erase_exotex"+exotex_id).remove() ;
-                            } 
 
                     }
                 }

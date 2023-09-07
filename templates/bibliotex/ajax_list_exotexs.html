@@ -16,7 +16,9 @@
                 {% regroup waitings by theme as theme_list %}
                 {% for theme in theme_list  %} 
                     <tr style="background:#5d4391; color:white">
-                        <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td> 
+                        <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td>  
+                        <td> </td>                                    
+                        <td></td> 
                     </tr> 
 
 
@@ -24,7 +26,9 @@
                     {% for waiting in theme.list  %}
                     
                         <tr style="background:#aa98cd; cursor: pointer; color: white" class="opener out"  id="{{ waiting.id }}">
-                            <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name}}   <small><b>{{  waiting.exotexs_counter }} exercice{{ waiting.exotexs_counter|pluralize  }}</b>  </small> </td> 
+                            <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name}}   <small><b>{{  waiting.exotexs_counter }} exercice{{ waiting.exotexs_counter|pluralize  }}</b>  </small> </td>
+                            <td></td>                                    
+                            <td></td> 
                         </tr>  
              
 
@@ -38,6 +42,8 @@
                                         <a href="{% url 'create_exotex_knowledge' knowledge.id %}" ><i class='fa fa-plus pull-right' style="margin-right:20px"></i></a>
                                         {% endif %}
                                     </td>
+                                    <td style="font-size:14px">Déjà utilisé dans</td>                                    
+                                    <td style="font-size:14px">Créé par</td> 
                                 </tr>
                             {% if k_e_c > 0 %}
 
@@ -51,7 +57,7 @@
 
                                             <span class="checkmark"  style="top:13px;"></span>
 
-                                            <b><span class="number_exotex">{{ exotex.id}}</span>{% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Exercice sans titre {% endif %}</b> 
+                                            <b><span class="number_exotex">{{ exotex.id}}</span> {% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Exercice sans titre {% endif %}</b> 
                                             </label>
                                             
                                             {% if  exotex.is_annals  %}
@@ -72,11 +78,24 @@
                                                 {% endfor %}
                                             </small>
 
-
                                             <div class="admin_exotex">
                                             {{ exotex.content_html|safe}}
                                             </div>
                                        </td>
+                                        <td>{% get_exo_is_in_used_in_biliotex exotex teacher as bibliotex_created %}
+
+                                            {{ bibliotex_created|safe}}
+ 
+                                        </td> 
+
+                                        <td>
+                                            {% if exotex.author.user.is_superuser %}
+                                                <img src="{% static 'img/sacadoLogo.png' %}" title="Equipe sacado"/>
+                                            {% else %}
+                                                <i class="bi bi-person-video3" style="font-size:30px;" title="Enseignant.e mutualisateur"></i>
+                                            {% endif %}
+                                        </td>
+
                                     </tr>
                                 {% endfor %} 
                             {% endif %}

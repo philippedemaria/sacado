@@ -1274,3 +1274,11 @@ def get_day_slot(obj, slot,day):
 def get_bloc_col_width(obj,loop):
     return obj.col_width(loop) 
  
+
+
+@register.simple_tag
+def get_exo_is_in_used_in_biliotex(obj,teacher): 
+    """
+    retourne  la liste en str des bibliotex utilisées par un exerciceTex
+    """
+    return obj.is_used_in_bibliotex(teacher) 

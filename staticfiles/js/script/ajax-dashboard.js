@@ -482,6 +482,59 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             value =  $(this).attr("data-student_id"); 
             $('.overdiv_show'+value).toggle(500);
         });
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// Bibliotex 
+        /////////////////////////////////////////////////////////////////////////////////
+
+        $(document).on('click', '.bibliotex_overlay_show' , function (event) {
+            let bibliotex_id = $(this).data("bibliotex_id");
+            $("#bib_overlay_show"+bibliotex_id).toggle(500);
+        });
+
+        $('body').on('click', '.bibliotex_publisher',   function (event) {
+
+     
+            let bibliotex_id = $(this).data("bibliotex_id"); 
+
+            if ($('#bib_publisher'+bibliotex_id).hasClass('noget')) { var statut = "False";} else  { var statut = "True";}
+ 
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+     
+            $.ajax(
+                { 
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'bibliotex_id' : bibliotex_id,
+                        'statut'       : statut,
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../../../bibliotex/ajax_publish_bibliotex" ,
+
+                    success: function (data) {
+
+
+                        if ($('#bib_publisher'+bibliotex_id).hasClass('noget')) { $('#bib_publisher'+bibliotex_id).removeClass('noget'); } else  { $('#bib_publisher'+bibliotex_id).addClass('noget'); }
+
+                        $('#accueil_visible'+bibliotex_id).html("").html(data.publish);
+                        $
+                        ('#bibliotex_publisher'+bibliotex_id).removeClass(data.noclass);
+                        $('#bibliotex_publisher'+bibliotex_id).addClass(data.class);
+
+                        $('#accueil_text_color'+bibliotex_id).removeClass(data.nolegendclass);                        
+                        $('#accueil_text_color'+bibliotex_id).addClass(data.legendclass);
+
+                        $('#disc'+bibliotex_id).attr("style",data.color).addClass(data.adddisc).removeClass(data.removedisc);
+
+
+                    }
+                }
+            )
+        });
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
 
 
         $('.content-wrapper').removeAttr("style");

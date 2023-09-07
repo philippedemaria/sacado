@@ -63,7 +63,7 @@
 
 
 
-        <span style="cursor:pointer" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show white" >
+        <span style="cursor:pointer" data-bibliotex_id="{{bibliotex.id }}" class="bibliotex_overlay_show white" >
             <div id="disc{{bibliotex.id }}" class="{% if not bibliotex.is_publish %}
                             disc_persistant
                         {% else %}
@@ -73,13 +73,13 @@
             </div>
         </span> 
 
-        <div class="overlay   no_visu_on_load" id="overlay_show{{bibliotex.id }}"> 
+        <div class="overlay no_visu_on_load" id="bib_overlay_show{{bibliotex.id }}"> 
             <div class="overlay_expand">
-                <a href="#" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show pull-right">
+                <a href="javascript:void(0);" data-bibliotex_id="{{bibliotex.id }}" class="overlay_show pull-right">
                     <i class="fa fa-times"></i>
                 </a>
                 <div class="btn-group"  style="padding:0px;margin:0px;">
-                    <span style="cursor:pointer" class="btn btn-default btn-publisher publisher" id="publisher{{bibliotex.id}}" 
+                    <span style="cursor:pointer" class="btn btn-default btn-publisher bibliotex_publisher {% if not bibliotex.is_publish %}noget{% endif  %}" id="bib_publisher{{bibliotex.id}}" 
                             data-bibliotex_id="{{bibliotex.id}}" data-statut="{{ bibliotex.is_publish }}">  
                         <i class="fa fa-circle-o-notch"></i>
                     </span>

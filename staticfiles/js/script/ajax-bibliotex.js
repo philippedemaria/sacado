@@ -242,7 +242,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         });
 
 
-    $('body').on('click', '.overlay_show' , function (event) {
+    $(document).on('click', '.overlay_show' , function (event) {
             let bibliotex_id = $(this).data("bibliotex_id");
             $("#overlay_show"+bibliotex_id).toggle(500);
         });

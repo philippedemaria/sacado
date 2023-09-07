@@ -83,7 +83,15 @@ class Exotex(models.Model):
             pass
         return test
 
- 
+
+
+    def is_used_in_bibliotex(self,teacher):
+
+        bibliotexs = ""
+        for r in self.relationtexs.all() :
+            bibliotexs+='<div class="btn-info btn btn-xs">'+r.bibliotex.title +'</div>'
+        return bibliotexs
+
 
 
 class Bibliotex(models.Model):
