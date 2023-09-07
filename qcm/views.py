@@ -13964,8 +13964,8 @@ def create_docperso_parcours(request,idp=0):
             nf.levels.add(group.level)
 
         messages.success(request, 'Le document a été créé avec succès !')
-        if parcours : 
-            return redirect('show_inside_parcours' , folder.id , parcours.id,7)
+        if folder and parcours : 
+            return redirect('show_parcours' , folder.id , parcours.id)
         else :
             return redirect("list_parcours_group", idg)
 
@@ -14015,8 +14015,8 @@ def update_docperso(request, idp,idd):
             nf.levels.add(group.level)
 
         messages.success(request, 'Le document a été créé avec succès !')
-        if parcours :
-            return redirect('show_inside_parcours' , idf , idp ,7)
+        if parcours and folder : 
+            return redirect('show_parcours' , folder.id , parcours.id)
         else :
             return redirect("list_parcours_group", idg)
     else:
@@ -14040,13 +14040,11 @@ def delete_docperso(request, idd, idp=0):
     if idg : 
         group = Group.objects.get(pk=idg)
 
-    if idp : 
-        parcours = Parcours.objects.get(pk=idp) 
-        return redirect('show_inside_parcours' , idf , idp ,7)
+
+    if idp and idf : 
+        return redirect('show_parcours' , idf , idp)
     else :
-        return redirect('list_parcours_group',idg)
-
-
+        return redirect("list_parcours_group", idg)
 
 
 def duplicate_parcours_organiser(request,idch):
