@@ -1228,12 +1228,25 @@ def peuplate_bibliotex_parcours(request,idp):
 
 
 
+
 def delete_bibliotex(request, id):
+    group_id = request.session.get('group_id',None)
+
     bibliotex = Bibliotex.objects.get(id=id)
     if request.user == bibliotex.author.user :
         bibliotex.delete()
+    
+    if folder_id :
 
-    return redirect('bibliotexs')
+        return redirect('list_sub_parcours_group' , group_id , folder_id)
+
+    elif group_id :
+        return redirect('list_parcours_group' , group_id )
+
+    else :
+        return redirect('my_bibliotexs')
+
+
 
 
 
