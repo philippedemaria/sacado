@@ -193,7 +193,7 @@
                 {{ r.exotex.content_html|safe }}
                 {% endif %}
             </div>  
-
+            {% if request.user.is_teacher %}
             {% if r.correction  or r.exotex.correction  %}<hr/>
                    
                     <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
@@ -218,6 +218,7 @@
                       
                     </div>
             {% endif %}
+            {% endif %} 
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
         </div>
 
