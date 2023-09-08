@@ -34,70 +34,94 @@
         <div class="row"> 
             <div class="col-xs-12 col-md-12 col-lg-12" >
                 <div id="advises" class="advises">
+                    <h1 class="thin sacado_color" >Accès au GAR. <b>A lire attentivement cette nouvelle version.</b></h1>
 
-                        <h1 class="thin sacado_color" >Accès au GAR. <b>A lire attentivement cette nouvelle version.</b></h1>
 
-                        <div class="row sacado_color"> 
-                            <div class="col-xs-6 col-md-12 col-lg-6" >
-                                <h2>Primaire  <small>(Maternelle et élémentaire)</small></h2>
-                                <ul> Avant toute utilisation, vous devez par étapes :
-                                    <li class="sanspuce">1. Renseigner votre matière et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
-                                    <li class="sanspuce">2. Récupérer vos élèves dans votre classe</li>
-                                    <li class="sanspuce">3. Utiliser les ressources SACADO comme indiqué ci-dessous</li>
-                                </ul>
-                                <a href="https://sacado.xyz/ressources/tuto_gar_2022_primaire.pdf" target ="_blank" class="btn btn-outline-danger" >
-                                     Tutoriel de démarrage Primaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
-                                </a>
-                            </div>
-                            <div class="col-xs-6 col-md-12 col-lg-6" >
-                                <h2>Secondaire <small>(Collège et lycée)</small></h2>
-                                <ul> Avant toute utilisation, vous devez par étapes :
-                                    <li class="sanspuce">1. Renseigner votre matière et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
-                                    <li class="sanspuce">2. Vérifier la matière et le niveau de chaque groupe avec <i class="bi bi-gear"></i>.</li>
-                                    <li class="sanspuce">3. Utiliser les ressources SACADO comme indiqué ci-dessous</li>
-                                    <li class="sanspuce"><b>Remarque fondamentale :</b> Vos groupes sont initialement vides.
-                                    <ul>    
-                                        <li class="sanspuce text-danger">Demander aux élèves de se connecter à SACADO via le GAR après avoir vérifié vos groupes et attrubué vos documents.</li> 
-                                    </ul>
-                                </ul>
-                                <h4>Création d'un groupe personnalisé</h4>
-                                <ul> 
-                                    <li class="sanspuce">1. Une fois tous les élèves connectés au GAR, il apparaissant dans les élèves de votre établissement. ils peuvent être ajoutés à un groupe.</li>
-                                    <li class="sanspuce">2. Se connecter à SACADO via le GAR en mode enseignant qui est aussi un compte Admin</li>
-                                    <li class="sanspuce">3. Dans l'onglet Admin , cliquer sur Gestion des groupes, puis vérifier si le groupe existe déjà ou pas (normalement il y a toutes les classes, mais pas les demi-groupes, groupes de spé;, options;.. )</li>
-                                    <li class="sanspuce">4. Créer le groupe si besoin, puis cliquer sur le nom du groupe pour choisir le niveau, la matière et l'enseignant et enregistrer</li>
-                                    <li class="sanspuce">5. Cliquer sur le bouton  sur la même ligne que le groupe pour y ajouter les élèves, il est possible de trier par classe ou de les chercher par leur nom / puis le bouton ASSIGNER</li>
-                                </ul>
 
-                                <a href="https://sacado.xyz/ressources/tuto_gar_2022_secondaire.pdf" target ="_blank" class="btn btn-outline-danger" >
-                                     Tutoriel de démarrage Secondaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
-                                </a>
-                            </div>
+                    <div class="row sacado_color"> 
+                        <div class="col-xs-12 col-md-12 col-lg-12" >
+                            <h2>Vérifier vos groupes</h2>
+
+                            <b>Remarque fondamentale :</b> Vos groupes sont initialement vides.
+                                Demander aux élèves de se connecter à SACADO via le GAR, ils apparaitront dans vos groupes.
+                        </div>
+                    </div>
+
+                    <div class="row sacado_color"> 
+                        <div class="col-xs-6 col-md-12 col-lg-6" >
+                            <h2>Primaire  <small>(Maternelle et élémentaire)</small></h2>
+                            <ul> Avant toute utilisation, vous devez par étapes :
+                                <li class="sanspuce">1. Renseigner votre matière et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
+                                <li class="sanspuce">2. Récupérer vos élèves dans votre classe</li>
+                            </ul>
+                            <a href="https://sacado.xyz/ressources/tuto_gar_2022_primaire.pdf" target ="_blank" class="btn btn-outline-danger" >
+                                 Tutoriel de démarrage Primaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                            </a>
+                        </div>
+                        <div class="col-xs-6 col-md-12 col-lg-6" >
+                            <h2>Secondaire <small>(Collège et lycée)</small></h2>
+                            <ul> Avant toute utilisation, vous devez par étapes :
+                                <li class="sanspuce">1. Renseigner votre matière et vos niveaux enseignés. <a href="{% url 'profile' %}">Cliquer ici</a></li>
+                                <li class="sanspuce">2. Vérifier la matière et le niveau de chaque groupe avec <i class="bi bi-gear"></i>.</li>
+                            </ul>
+                            <a href="https://sacado.xyz/ressources/tuto_gar_2022_secondaire.pdf" target ="_blank" class="btn btn-outline-danger" >
+                                 Tutoriel de démarrage Secondaire <small>15 min.</small> <img src="{% static 'img/pdf.png' %}" width="15px"/>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row sacado_color"> 
+                        <div class="col-xs-6 col-md-12 col-lg-6" >
+                            <h4>Création d'un groupe personnalisé</h4>
+                            <ul> 
+                                <li class="sanspuce">1. Les élèves connectés via le GAR apparaissent votre interface Admin. Ils peuvent être ajoutés à un groupe.</li>
+                                <li class="sanspuce">2. Cliquer sur l'icone Admin</li>
+                                <li class="sanspuce">3. Cliquer sur Gestion des groupes, puis vérifier si le groupe existe déjà ou pas (normalement il y a toutes les classes, mais pas les demi-groupes, groupes de spé;, options;.. )</li>
+                                <li class="sanspuce">4. Créer le groupe si besoin, puis cliquer sur le nom du groupe pour choisir le niveau, la matière et l'enseignant et enregistrer</li>
+                                <li class="sanspuce">5. Cliquer sur le bouton  sur la même ligne que le groupe pour y ajouter les élèves, il est possible de trier par classe ou de les chercher par leur nom / puis le bouton ASSIGNER</li>
+                            </ul>
+
+                        </div>
+                    </div>
+                    <div class="alert alert-danger">Sacado vous conseille dans tous les cas de créer un copte HORS du GAR pour conserver vos documents. CHaque année, le GAR  nousd emande de purger les comptes. Et donc nous sommes obligés de supprier vos dossiers, parcours, documents. Il faut donc les sauvegarder dans votre compte hors GAR. </div>
+                    
+
+                    <hr/>
+                    <div class="row sacado_color"> 
+                        <div class="col-xs-12 col-md-12 col-lg-12" >
+                            <h2>Récupérer les ressources SACADO ou vos ressources propres</h2>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-12 col-md-6" >
+                            <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous utilisiez déjà SACADO</b>. Vous pouvez faire une migration de votre compte Perso vers le compte géré par le GAR.</p>
+                            <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
+                                Je comprends et je fais la migration.
+                            </a>
+                            <hr/>
                         </div>
 
-                        <div class="alert alert-danger">Sacado vous conseille dans tous les cas de créer un copte HORS du GAR pour conserver vos documents. CHaque année, le GAR  nousd emande de purger les comptes. Et donc nous sommes obligés de supprier vos dossiers, parcours, documents. Il faut donc les sauvegarder dans votre compte hors GAR. </div>
-                        <hr/>
-                        <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous utilisiez déjà SACADO</b>. Vous pouvez faire une migration de votre compte Perso vers le compte géré par le GAR.</p>
-                        <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
-                            Je comprends et je fais la migration.
-                        </a>
-                        <hr/>
 
-                        <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous n'utilisiez pas SACADO</b>. Comment récupérer les documents de SACADO groupe par groupe ?</p>
-                            <ul> 
-                                <li class="sanspuce">1. Choisir un groupe et cliquer sur <span class="btn btn-default btn-accueil" style="width:280px;color:#46119c">Accéder aux documents</span></li>
-                                <li class="sanspuce">2. Choisir l'onglet Dossiers puis clqiuer sur <span class="btn btn-sacado"><i class="bi bi-clipboard-plus"></i></span></li>
-                                <li class="sanspuce">3. Sélectioner le niveau de votre groupe.</li>
-                                <li class="sanspuce">4. Dupliquer le dossier.</li>
-                                <li class="sanspuce">5. Publier le dossier via sa configuration.</li>
-                                <li class="sanspuce">6. Recommencer la procédure pour chaque dossier, par groupe.</li>
-                            </ul>
-                        <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
-                            J'ai fini les étapes de configuration de chaque groupe.
-                        </a>
+
+                        <div class="col-xs-12 col-md-6" >
+                            <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous n'utilisiez pas SACADO</b>. Comment récupérer les documents de SACADO groupe par groupe ?</p>
+                                <ul> 
+                                    <li class="sanspuce">1. Choisir un groupe et cliquer sur <span class="btn btn-default btn-accueil" style="width:280px;color:#46119c">Accéder aux documents</span></li>
+                                    <li class="sanspuce">2. Choisir l'onglet Dossiers puis clqiuer sur <span class="btn btn-sacado"><i class="bi bi-clipboard-plus"></i></span></li>
+                                    <li class="sanspuce">3. Sélectioner le niveau de votre groupe.</li>
+                                    <li class="sanspuce">4. Dupliquer le dossier.</li>
+                                    <li class="sanspuce">5. Publier le dossier via sa configuration.</li>
+                                    <li class="sanspuce">6. Recommencer la procédure pour chaque dossier, par groupe puis cliquer le bouton ci-dessous.</li>
+                                </ul>
+                                <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
+                                    J'ai fini les étapes de configuration de chaque groupe.
+                                </a>                                    
+                        </div>
+
                     </div>
                 </div>
-            </div> 
+            </div>
+        </div> 
         {% endif %}
     {% endif %}
 
