@@ -15,12 +15,22 @@
 
 
 {% block page_title %}
-    Récupérer les données avant le GAR
+    Migrer vos données d'un compte à un autre.
 
 {% endblock %}
 
 {% block body %}
 <section class="content_list"> 
+
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <p>Cette interface migre vos données d'un compte vers un autre.</p>
+        <p>Cliquer sur un de vos comptes ci-dessous pour transférer les données vers ce compte atuel, celui dans lequel vous êtes actuellement connecté. Il est <b>fortement recommandé</b> de conserver votre compte hors GAR pour sauvegarder en fin d'année vos documents et ainsi garder l'ensemble de vos documents d'une année sur l'autre.</p>
+        <p>Les comptes GAR sont supprimés en fin d'année (en aout) avec leurs documents associés.</p>
+        <p>Lorsque la migration est effectuée, récupérer vos documents via l'interface de duplication des dossiers, parcours, documents,....</p>
+    </div>
+</div>
+
 <div class="row"> 
     <div class="col-sm-12 col-md-9">
         <div class="row">
@@ -29,10 +39,11 @@
                 <form method="POST"  enctype='multipart/form-data'> 
                     <div class="box box-widget widget-user-2" style="padding:10px 30px 30px 30px;height:300px" >
                         <div class="handler widget-user-header">
-                            <input type="hidden" name="user_id" value="{{ u.id }}"  required /><label><h3 class="thin">{{ u.first_name }} {{ u.last_name }}</h3>Id : {{ u.username }}</label><br/><br/>
+                            <input type="hidden" name="user_id" value="{{ u.id }}"  required /><label>
+                            <h3 class="thin">{{ u.first_name }} {{ u.last_name }}</h3>Id : {% if  u.username.count > 45 %}Id_GAR{% else %}{{ u.username }}{% endif %}</label><br/><br/>
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger get_gar_dataset" data-user_id ='{{ u.id }}' name="keep" value="no" onclick="return get_data_to_gar('{{ u.username }} et supprimer le compte HORS GAR')">Migrer les données <br/>et<br/> supprimer le compte HORS GAR</button>   <br/><br/>
-                            <button type="submit" class="btn btn-sacado get_gar_dataset" data-user_id ='{{ u.id }}' name="keep" value="yes" onclick="return get_data_to_gar('{{ u.username }} et conserver le compte HORS GAR')">Migrer les données <br/>et<br/> conserver le compte HORS GAR</button> 
+                            <button type="submit" class="btn btn-sacado get_gar_dataset" data-user_id ='{{ u.id }}' name="keep" value="yes" onclick="return get_data_to_gar('{{ u.username }} et conserver le compte HORS GAR')">Migrer les données <br/>et<br/> conserver le compte HORS GAR<br/>(Conseillé)</button>  <br/><br/>
+                             <button type="submit" class="btn btn-danger get_gar_dataset" data-user_id ='{{ u.id }}' name="keep" value="no" onclick="return get_data_to_gar('{{ u.username }} et supprimer le compte HORS GAR')">Migrer les données <br/>et<br/> supprimer le compte HORS GAR<br/>(Déconseillé)</button> 
                             <div id='loader{{ u.id }}'></div>
                         </div>
                     </div>

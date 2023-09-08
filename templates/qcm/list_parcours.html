@@ -222,50 +222,6 @@
         </div>
     </div>
 </form>
-{% else %}
-
-    {% if 'parcours' in request.path %}
-
-        <div class="row"> 
-            <div class="col-sm-12 col-md-12">
-                <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Si un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscription via le lien <span style="color:#271942">https://sacado.xyz/group/{% if  group %}{{ group.code }}{% else %}code_du_groupe{% endif %}</span><br>
-                <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
-                </div>
-            </div>
-        </div>
-        
-        <div class="row"> 
-            <div class="col-sm-12 col-md-12">
-                <h2 class='thin'><i class="fa fa-recycle"></i> 2 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
-                
-                <ol><i class="fa fa-hand-o-right"></i>  Les parcours mutualisés 
-                    <p>La mutualisation des parcours vous permet de choisir un parcours déjà existant prêt à l'emploi. Il vous sera possible de le modifier une fois cloné. <br>Récupérer un parcours existant d'un enseignant mutualisateur
-
-                    {% if sacado_asso %}
-                        <a href="{% url 'all_parcourses' 0 %}"   ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
-                    {% else %}    
-                        <a href="#" class="no_sacado_asso"  ><i class="fa fa-caret-right"></i> Parcours mutualisés</a>
-                    {% endif %}
-                    </p>
-                </ol>
-                <ol><i class="fa fa-hand-o-right"></i>  
-                    Les parcours personnalisés <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br/>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. 
-                        <a href="{% url 'create_parcours' 0 %}"   ><i class="fa fa-caret-right"></i>  Nouveau parcours</a></p>
-                </ol>
-            </div>
-        </div>
-
-    {% elif 'sequences' in request.path %}
-
-                <div class="row">
-                    <div class="round" style="margin-top: 50px ; background-color: #0093CA ; "> 
-                        <h1 class="sacado"><br/><a href="{% url 'create_sequence' 0 %}">Créer <br/>une séquence</a></h1>
-                    </div>
-                </div>
-
-    {% endif %}
-
-
 {% endif  %}
 </section>
 

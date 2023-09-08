@@ -232,60 +232,6 @@
             {% endfor %}<div style="clear:both"></div>
         </div>
     </div>
-
-
-
-    {% if nb_bases == 0 %} 
-        {% if role %}
-        <div class="row"> 
-            <div class="col-sm-12 col-md-12">
-                <div class="alert alert-setup">
-                    <h2 class='thin'> 2 façons de disposer d'un parcours </h2>  
-                    
-                        <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours personnalisés</label> 
-                            <p>Vous souhaitez tout paramétrer et créer le parcours en simplement quelques clics. Cet espace vous est dédié.<br>  Créer votre parcours personnalisé dans un premier temps puis sélectionner les exercices de votre choix. 
-                                
-                            </p>
-                        </ol>
-
-                        <ol><i class="fa fa-hand-o-right"></i> <label style="font-size:18px"> Les parcours mutualisés</label> 
-                            <p>La mutualisation des parcours vous permet de sélectionner tous les parcours de l'équipe SACADO ou de Dupliquer un parcours mutualisé par un enseignant de votre établissement. Il vous sera possible de le modifier une fois cloné.
-                            </p>
-                        </ol>
-
-                </div>
-                <h3 class='thin' style="color:white">Conseils : Classer vos parcours par dossier - 2 approches au choix.</h3> 
-                <div class="col-sm-6 col-md-6 col-lg-4">
-                    <div class="alert alert-setup">
-                        <ol>Méthode privilégiée <i class="fa fa-check text-success"></i> </ol>
-                        <ol><label style="font-size:18px">1. Créer un dossier</label> </ol>
-                        <ol><label style="font-size:18px">2. Depuis le dossier, créer vos parcours</label></ol>
-                        <div align="center">
-                        <img src="{% static 'img/dossier2.png' %}" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-4">
-                    <div class="alert alert-setup">
-                        <ol><label style="font-size:18px">1. Créer vos parcours</label> </ol>
-                        <ol><label style="font-size:18px">2. Créer votre dossier</label></ol>
-                        <ol><label style="font-size:18px">3. Inclure les parcours créés dans le dossier</label></ol>
-                        <div align="center">
-                        <img src="{% static 'img/dossier1.png' %}"  />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% else %}
-            <div class="row"> 
-                <div class="col-sm-12 col-md-12">
-                    <div class="alert alert-sacado">Aucun parcours n'est affecté à ce groupe. 
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endif %}
 </section>
 
 <div class="modal fade" id="parcours_default_modal" tabindex="-1" role="dialog" aria-labelledby="parcours_default_modal">

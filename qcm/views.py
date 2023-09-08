@@ -2003,8 +2003,7 @@ def list_parcours_group(request,id):
 
     ###efface le realtime de plus de 30min
     clear_realtime(parcourses , today.now() ,  1800 )
-    nb_bases = bases.count() + folders.count()
-
+ 
     bibliotexs = group.bibliotexs.filter(folders=None)
     quizzes    = group.quizz.filter(is_random=0,folders=None)
     flashpacks = group.flashpacks.filter(folders=None)
@@ -2033,7 +2032,7 @@ def list_parcours_group(request,id):
         chapter = None
  
     context =  { 'folders': folders , 'nb_folders' : nb_folders , 'teacher' : teacher , 'group': group,  'parcours' : None ,  'role' : role , 'today' : today , 'bibliotexs' : bibliotexs,  'quizzes' : quizzes,  'flashpacks' : flashpacks, 
-                 'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'nb_bases' : nb_bases , 'book' : book ,  'chapters' : chapters ,
+                 'qflashs': qflashs , 'parcourses': parcourses , 'sequences' : sequences ,  'evaluations' : evaluations , 'docpersos' : docpersos , 'book' : book ,  'chapters' : chapters ,
                  'formsec' : formsec , 'organiser' : organiser , 'sections' : sections , 'chapter' : chapter , 'groups' : groups, 'chapterbis' : chapterbis }
 
     return render(request, 'qcm/list_parcours_group.html', context )

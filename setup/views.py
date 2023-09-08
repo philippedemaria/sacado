@@ -314,8 +314,6 @@ def index(request):
         return response
  
 
- 
-
 def div_gro(divs , gros):
     liste_div_gro = [] 
     try :
@@ -613,8 +611,6 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
     'DIV_APP': ['199001~GOA22_3E3G1||199001~3EME3##3EME3', '199001~GOA22_3E3G2||199001~3EME3##3EME3', '199001~GOA22_3E4G1||199001~3EME4##3EME4', '199001~GOA22_3E4G2||199001~3EME4##3EME4', '199001~GOA22_6E4G1||199001~6EME4##6EME4', '199001~GOA22_6E4G2||199001~6EME4##6EME4', '199001~GOA22_EPA||199001~3EME2##3EME2', '199001~GOA22_EPA||199001~3EME3##3EME3'], 
     'IDO': ['2bec13600ce5c8c0f887ebb3430b4c4e3509260b6287208415eb9768ecec146f49a4873bb6839de4cfad019f1826357c1009dc162889c66301b81b25aee8ee68'], 
     'P_MEL': [None], 'UAI': ['0320740F']} 
-
-
 
     gars =   [{"key":"DIV","values":["199001~4EME4##4EME4"]},{"key":"CIV","values":["M."]},{"key":"DIV_APP",
     "values":["199001~GOA22_4E4G1||199001~4EME4##4EME4","199001~GOA22_4E4NONLAT||199001~4EME4##4EME4"]},

@@ -221,22 +221,24 @@ def myaccount(request):
 def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde le compte ante-gar Mais il ne sera plus mis à jour.
  
     if request.user.is_teacher:
-        teacher = request.user.teacher
-        school  = teacher.user.school
-        users   = User.objects.filter(last_name=teacher.user.last_name , first_name=teacher.user.first_name , school=school , user_type=2)
+        teacher_target = request.user.teacher
+        school_target  = teacher_target.user.school
+        users          = User.objects.filter(last_name=school_target.user.last_name , first_name=teacher_target.user.first_name , school=school_target , user_type=2).exclude()
+        
         if request.method== "POST" :
-            user_id = request.POST.get("user_id",None)
+            user_id = request.POST.get("user_id",None) # Enseignant qui donne ses documents
 
-            if teacher.is_migration == 0 :
-                if user_id  and teacher.is_migration == 0 :
+            if school_target.is_migration == 0 :
+
+                if user_id  and school_target.is_migration == 0 :
                     teacher = Teacher.objects.get(user_id=user_id)
 
                     if request.POST.get("keep") == "yes" : 
                         keep_it = "Le compte personel est conservé avec les mêmes identifiants."
-                        test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 1)
+                        test, raison = migrate_all_documents_to_gar(teacher , teacher_target , 1)
                     else : 
                         keep_it = "Le compte personel est supprimé."
-                        test, raison = migrate_all_documents_to_gar(teacher , request.user.teacher , 0)
+                        test, raison = migrate_all_documents_to_gar(teacher , teacher_target , 0)
                     
                     if test :
                         teacher.is_migration = 1
