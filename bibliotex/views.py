@@ -681,7 +681,7 @@ def div_to_display_latex(request):
     file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     ################################################################# 
     ################################################################# 
-    with open(file_path, 'w') as file:
+    with open(file_path+".tex", 'w') as file:
         file.write(elements)
         file.close()
 
@@ -776,7 +776,7 @@ def exotex_display_pdf(request,ide):
     file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     ################################################################# 
     ################################################################# 
-    with open(file_path, 'w') as file:
+    with open(file_path+".tex", 'w') as file:
         file.write(elements)
         file.close()
 
