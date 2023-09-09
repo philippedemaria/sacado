@@ -73,7 +73,7 @@
                                     {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td>
-                                                <a href="javascript:void(0);" data-exotex_id="{{ exotex.id }}"  class="btn btn-sacado pull-right projection_exotex_admin"><i class='bi bi-webcam'></i></a>
+                                                <a href="#" data-exotex_id="{{ exotex.id }}"  class="btn btn-sacado pull-right projection_exotex_admin"><i class='bi bi-webcam'></i></a>
                                                 <a href="{% url 'exotex_display_pdf' exotex.id %}" target="_blank" class="btn btn-sacado pull-right"><i class='bi bi-file-pdf'></i></a>
 
                                                 {% if  exotex.is_read  %}
