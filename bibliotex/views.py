@@ -1237,11 +1237,6 @@ def create_bibliotex_from_parcours(request,idp=0):
 
 
 
-
-
-
-
-
 def peuplate_bibliotex_parcours(request,idp):
 
     teacher = request.user.teacher
@@ -1252,15 +1247,6 @@ def peuplate_bibliotex_parcours(request,idp):
     context = {'parcours': parcours, 'teacher': teacher , 'bibliotexs' : bibliotexs , 'type_of_document' : 5 }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex_parcours.html', context)
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1280,8 +1266,6 @@ def delete_bibliotex(request, id):
 
     else :
         return redirect('my_bibliotexs')
-
-
 
 
 
