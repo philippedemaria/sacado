@@ -1300,10 +1300,10 @@ def register_teacher(request):
         if user_form.is_valid():
             user = user_form.save(commit=False)
             user.user_type = User.TEACHER
-            if request.POST.get("school",None) :
 
-                user.school_id  =  request.POST.get("school",None)
-
+            school_id = request.POST.get("school",None)
+            if school_id :
+                user.school_id  =  school_id
                 user.country_id =  request.POST.get("country_school",None)
 
             user.set_password(user_form.cleaned_data["password1"])
@@ -1314,6 +1314,14 @@ def register_teacher(request):
             user = authenticate(username=username, password=password)
             login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
             teacher = Teacher.objects.create(user=user)
+
+            try :#Envoi de mail aux admin de l'établissement
+                school = School.objects.get(pk=school_id)
+                for u in school.users.filter(is_manager=1) :
+                    msg = "Bonjour "+ u.first_name +" " + u.last_name+",\n\nL'enseignant "+user.first_name +" " + user.last_name+" vient de s'inscrire comme collègue de votre établissement.\n\nIl va donc avoir accès à vos documents mutualisés.\n\nSi ce collègue n'appartient pas à votre établissement, attention à bien le désinscrire depuis votre interface ADMIN.\n\nIl est possible que ce soit un élève qui veuille avoir accès à vos données mutualiséses ou un collègue qui s'est trompé d'établissement.\n\nCe mail est automatique, merci de ne pas répondre mais de faire le nécessaire le cas échéant."
+                    send_mail('INSCRIPTION SACADO', msg ,settings.DEFAULT_FROM_EMAIL,[u.email, ])
+            except :
+                pass
 
             try :
                 #teacher.notify_registration()
