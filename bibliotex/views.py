@@ -785,7 +785,7 @@ def exotex_display_pdf(request,ide):
 
     if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
     if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
-    
+
     if result.returncode : 
         return FileResponse(open(file_path+".pdf", 'rb'))
     else : 
