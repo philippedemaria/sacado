@@ -73,12 +73,15 @@
                                     {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
                                         <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
                                             <td>
+                                                <a href="javascript:void(0);" data-exotex_id="{{ exotex.id }}"  class="btn btn-sacado pull-right projection_exotex_admin"><i class='bi bi-webcam'></i></a>
+                                                <a href="{% url 'exotex_display_pdf' exotex.id %}" target="_blank" class="btn btn-sacado pull-right"><i class='bi bi-file-pdf'></i></a>
+
                                                 {% if  exotex.is_read  %}
                                                     <i class="fa fa-check  text-success" title="Exercice vérifié"></i> 
                                                 {% endif %}
                                                 <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
                                                 {% if  exotex.correction  %}
-                                                    <i class="fa fa-copyright  text-success" title="correction"></i> 
+                                                    <a href="javascript:void(0);" class="show_exotex_correction_html" data-exotex_id="{{ exotex.id }}"><i class="fa fa-copyright  text-success" title="correction"></i></a> 
                                                 {% endif %}
 
                                                 <a href="{% url 'update_exotex'  exotex.id   %}" class="listing" style="font-size: 18px">
@@ -92,9 +95,14 @@
                                                     {% else %}
                                                       <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                                     {% endif  %}
-                                                <div class="admin_exotex">
+                                                <div class="admin_exotex" id="exotex_content_html{{ exotex.id }}">
                                                 {{ exotex.content_html|safe}}
                                                 </div>
+                                                {% if  exotex.correction %}
+                                                <div class="admin_exotex no_visu_on_load" id="exotex_correction_html{{ exotex.id }}">
+                                                {{ exotex.correction_html|safe}}
+                                                </div>
+                                                {% endif %}
 
                                            </td>
                                         </tr>
@@ -121,6 +129,11 @@
  
 
 </section>
+
+
+
+
+
 {% endblock %}                        
 
  

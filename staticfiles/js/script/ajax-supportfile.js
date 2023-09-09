@@ -181,6 +181,37 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         
  
  
+    $('body').on('click', '.projection_exotex_admin', function () {
+
+            var exotex_id  = $(this).data("exotex_id");  
+            var content    = $("#exotex_content_html"+exotex_id).html();
+            if ($("#exotex_correction_html"+exotex_id))
+            {var correction = $("#exotex_correction_html"+exotex_id).html();}
+            else { var correction ="Sans correction";}
+            var label = '<label for="customRange3" class="form-label">Taille de police</label><input type="range" value="3" class="form-range" min="3" max="5.5" step="0.5" id="customRange" style="width:200px">' ; 
+
+            $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem" ><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+label+'<hr/>'+content+'+<hr/>Correction<hr/>'+correction+'</div>'); 
+ 
+        });
+
+
+
+
+    $('body').on('click', ".closer_projection_div", function () {
+             $("#projection_div").remove();
+        });
+
+
+    $('body').on('change', "#customRange", function (e) {
+            size  = $("#customRange").val() ; 
+            $("#projection_div").attr("style","font-size:"+size+"rem");
+        });
+
+
+    $(document).on('click','show_exotex_correction_html',function(){
+            var exotex_id  = $(this).data("exotex_id");  
+            $("#exotex_correction_html"+exotex_id).toggle();
+    })
 
 
 

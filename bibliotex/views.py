@@ -750,6 +750,48 @@ def delete_relationtex(request, id):
 
 
 
+
+def exotex_display_pdf(request,ide):
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    exotex = Exotex.objects.get(pk=ide)
+
+    elements +=r"\begin{document}"+"\n"  
+    elements += exotex.content
+    elements += r"\newpage"
+    elements += r"\centerline{ \fbox{Corrigé} }"
+    elements += exotex.correction
+
+    elements +=  r"\end{document}"
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
+    # pour le serveur Linux
+    link = str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
+    file_path = settings.DIR_TMP_TEX + link
+    ################################################################# 
+    ################################################################# 
+    with open(file_path, 'w') as file:
+        file.write(elements)
+        file.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
+
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+    if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
+    
+    if result.returncode : 
+        return FileResponse(open(file_path+".pdf", 'rb'))
+    else : 
+        return FileResponse(open(file_path+".log", 'rb'))
+
+
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Bibliotex
