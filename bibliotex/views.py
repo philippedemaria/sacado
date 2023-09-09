@@ -690,16 +690,13 @@ def div_to_display_latex(request):
     #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     data={}
     
-    if result.returncode : 
+    if result.returncode :  
+        return FileResponse(open(file_path+".log", 'rb'))
+    else : 
         if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
         if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
-        if os.path.isfile(file_path+".log"):os.remove(file_path+".log")
-        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+file_path+".pdf"
-        data["test"] = True
-    else : 
-        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+file_path+".log"
-        data["test"] = False
-    return JsonResponse(data)
+        if os.path.isfile(file_path+".log"):os.remove(file_path+".log") 
+        return FileResponse(open(file_path+".pdf", 'rb'))
 
  
  
@@ -771,7 +768,7 @@ def exotex_display_pdf(request,ide):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    file_path = settings.DIR_TMP_TEX[:-1] + str(request.user.id)+"_bliotex_display"
+    file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_bliotex_display"
     ################################################################# 
     ################################################################# 
     with open(file_path+".tex", 'w') as file:
@@ -780,13 +777,13 @@ def exotex_display_pdf(request,ide):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
 
-    if result.returncode : 
+    if result.returncode :  
+        return FileResponse(open(file_path+".log", 'rb'))
+    else : 
         if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
         if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
-        if os.path.isfile(file_path+".log"):os.remove(file_path+".log")  
+        if os.path.isfile(file_path+".log"):os.remove(file_path+".log") 
         return FileResponse(open(file_path+".pdf", 'rb'))
-    else : 
-        return FileResponse(open(file_path+".log", 'rb'))
 
 
 #########################################################################################################################################
