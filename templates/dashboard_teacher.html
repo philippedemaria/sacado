@@ -70,9 +70,54 @@
                         </div>
                     </div>
 
+
+                    <div class="alert alert-danger">Sacado vous conseille dans tous les cas de créer un copte HORS du GAR pour conserver vos documents. CHaque année, le GAR  nousd emande de purger les comptes. Et donc nous sommes obligés de supprier vos dossiers, parcours, documents. Il faut donc les sauvegarder dans votre compte hors GAR. </div>
+                    
+
+                    <hr/>
+                    <div class="row sacado_color"> 
+                        <div class="col-xs-12 col-md-12 col-lg-12" >
+                            <h2>Récupérer vos ressources propres</h2>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-12 col-md-12" >
+                            <p><b class="sacado_color">Vous utilisez déjà SACADO avec un compte hors GAR</b></p>
+                            <p>Vous pouvez faire une migration de votre compte Perso vers le compte géré par le GAR.</p>
+                            <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
+                                Je comprends et je souhaite procéder à la migration.
+                            </a>
+                            <hr/>
+                        </div>
+                       
+                    </div>
+                    <hr/>
+                    <div class="row sacado_color"> 
+                        <div class="col-xs-12 col-md-12 col-lg-12" >
+                            <h2>Récupérer les ressources SACADO</h2>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-12 col-md-6" >
+                            <p><b class="sacado_color">Vous débuter avec SACADO</b>. </p>
+                            <p>Nous vous mettons à disposition tous nos documents.</p>
+                                <ul> 
+                                    <li class="sanspuce">1. Choisir un groupe et cliquer sur <i class="bi bi-gear"></i></li>
+                                    <li class="sanspuce">2. Choisir l'option oui<br/><img src="{% static 'img/gar_group.png' %}"/></li>
+                                    <li class="sanspuce">3. Enregistrer.</li>
+                                    <li class="sanspuce">4. Recommencer la procédure pour chaque groupe, puis cliquer sur le bouton orange ci-dessous pour terminer.</li>
+                                </ul>
+                                <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
+                                    Terminer, <small>j'ai fini la récupération pour chaque groupe.</small>
+                                </a>                                    
+                        </div>
+                    </div>
+
+
+
                     <div class="row sacado_color"> 
                         <div class="col-xs-6 col-md-12 col-lg-12" >
-                            <h4>Création d'un groupe personnalisé</h4>
+                            <h2>Création d'un groupe personnalisé</h2>
                             <ul> 
                                 <li class="sanspuce">1. Les élèves connectés via le GAR apparaissent votre interface Admin. Ils peuvent être ajoutés à un groupe.</li>
                                 <li class="sanspuce">2. Cliquer sur l'icone Admin</li>
@@ -83,44 +128,8 @@
 
                         </div>
                     </div>
-                    <div class="alert alert-danger">Sacado vous conseille dans tous les cas de créer un copte HORS du GAR pour conserver vos documents. CHaque année, le GAR  nousd emande de purger les comptes. Et donc nous sommes obligés de supprier vos dossiers, parcours, documents. Il faut donc les sauvegarder dans votre compte hors GAR. </div>
-                    
-
-                    <hr/>
-                    <div class="row sacado_color"> 
-                        <div class="col-xs-12 col-md-12 col-lg-12" >
-                            <h2>Récupérer les ressources SACADO ou vos ressources propres</h2>
-                        </div>
-                    </div>
-                    <div class="row"> 
-                        <div class="col-xs-12 col-md-6" >
-                            <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous utilisiez déjà SACADO</b>. </p>
-                            <p>Vous pouvez faire une migration de votre compte Perso vers le compte géré par le GAR.</p>
-                            <a href="{% url 'get_dataset_to_gar' %}" class="btn btn-danger" >
-                                Je comprends et je fais la migration.
-                            </a>
-                            <hr/>
-                        </div>
 
 
-
-                        <div class="col-xs-12 col-md-6" >
-                            <p>Avant l'arrivée du GAR dans SACADO, <b class="sacado_color">vous n'utilisiez pas SACADO</b>. </p>
-                            <p> Comment récupérer les documents de SACADO groupe par groupe ?</p>
-                                <ul> 
-                                    <li class="sanspuce">1. Choisir un groupe et cliquer sur <span class="btn btn-default btn-accueil" style="width:280px;color:#46119c">Accéder aux documents</span></li>
-                                    <li class="sanspuce">2. Choisir l'onglet Dossiers puis cliquer sur <span class="btn btn-sacado"><i class="bi bi-clipboard-plus"></i></span></li>
-                                    <li class="sanspuce">3. Sélectioner le niveau de votre groupe.</li>
-                                    <li class="sanspuce">4. Dupliquer le dossier.</li>
-                                    <li class="sanspuce">5. Publier le dossier via sa configuration.</li>
-                                    <li class="sanspuce">6. Recommencer la procédure pour chaque dossier, par groupe puis cliquer le bouton ci-dessous.</li>
-                                </ul>
-                                <a href="{% url 'get_dataset_to_gar_by_link' %}" class="btn btn-warning" >
-                                    J'ai fini les étapes de configuration de chaque groupe.
-                                </a>                                    
-                        </div>
-
-                    </div>
                 </div>
             </div>
         </div> 

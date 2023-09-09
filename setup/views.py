@@ -450,7 +450,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
     
             else :
                 level = Level.objects.get(pk=1)
-                group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level , 'is_gar' : 1 }  )
+                group, c_g        = Group.objects.get_or_create(school = school, name = name , defaults = { 'level' : level , 'is_gar' : 1, 'recuperation' : 0 }  )
                 user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "time_zone" : time_zone, "civilite" : civilite , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,   "country" : country , })
                 student,created_s = Student.objects.get_or_create(user = user, defaults = { "task_post" : 0 , "level" : level })
                 group.students.add(student)
@@ -519,7 +519,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                         level = Level.objects.get(pk=level_id)
                         teacher.levels.add(level)
 
-                        grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 , 'level_id' : level_id , "lock" : 0 , "is_gar" : 1   })
+                        grp, creat = Group.objects.get_or_create(name = name ,  teacher = teacher , school = school , defaults = { 'subject_id' : 1 , 'level_id' : level_id , "lock" : 0 , "is_gar" : 1 , 'recuperation' : 0  })
                         try :  # Profil élève
                             if creat :
                                 username_student_profile  = username+"_e-test_"+str(uuid.uuid4())[:4]
@@ -542,7 +542,7 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 else :
                     this_student = None
 
-                grp, creat = Group.objects.get_or_create(name = name ,  school = school , defaults = {  'subject_id' : 1 ,  'teacher' : teacher ,  'level_id' : level_id , "lock" : 0 , "is_gar" : 1 })
+                grp, creat = Group.objects.get_or_create(name = name ,  school = school , defaults = {  'subject_id' : 1 ,  'teacher' : teacher ,  'level_id' : level_id , "lock" : 0 , "is_gar" : 1 , 'recuperation' : 0 })
                 try :  # Profil élève
                     if this_student :
                         grp.students.add(this_student)
