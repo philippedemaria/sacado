@@ -190,7 +190,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             else { var correction ="Sans correction";}
             var label = '<label for="customRange3" class="form-label">Taille de police</label><input type="range" value="3" class="form-range" min="3" max="5.5" step="0.5" id="customRange" style="width:200px">' ; 
 
-            $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem" ><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+label+'<hr/>'+content+'+<hr/>Correction<hr/>'+correction+'</div>'); 
+            $("body").append('<div class="projection_div"  id="projection_div" style="font-size:3rem" ><span class="pull-right closer_projection_div" style="font-size:20px" ><i class="fa fa-times fa-2x"></i></span>'+label+'<hr/>'+content+'<hr/>Correction<hr/>'+correction+'</div>'); 
  
         });
 
