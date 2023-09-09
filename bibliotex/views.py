@@ -771,7 +771,7 @@ def exotex_display_pdf(request,ide):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_bliotex_display"
+    file_path = settings.DIR_TMP_TEX[:-1] + str(request.user.id)+"_bliotex_display"
     ################################################################# 
     ################################################################# 
     with open(file_path+".tex", 'w') as file:
