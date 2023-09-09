@@ -678,8 +678,7 @@ def div_to_display_latex(request):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    link = str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
-    file_path = settings.DIR_TMP_TEX + link
+    file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
@@ -774,7 +773,7 @@ def exotex_display_pdf(request,ide):
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
     link = str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
-    file_path = settings.DIR_TMP_TEX + link
+    file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     ################################################################# 
     ################################################################# 
     with open(file_path, 'w') as file:
@@ -783,10 +782,10 @@ def exotex_display_pdf(request,ide):
 
     result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
 
-    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
-    if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
-
     if result.returncode : 
+        if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+        if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
+        if os.path.isfile(file_path+".log"):os.remove(file_path+".log")  
         return FileResponse(open(file_path+".pdf", 'rb'))
     else : 
         return FileResponse(open(file_path+".log", 'rb'))
