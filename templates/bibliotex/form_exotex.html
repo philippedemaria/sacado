@@ -75,6 +75,32 @@ ul#id_skills li{
                         </div>
                     </div>
                 </div> 
+                    {% if request.user.is_superuser %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                    <label>Enseignement :</label>
+                                    {{ form.subject |add_class:"form-control select2" }}
+                                    {{ form.subject.errors }}
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label>Niveau :</label>
+                                {{ form.level |add_class:"form-control select2" }}
+                                {{ form.level.errors }}
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                {{ form.theme.label_tag }}
+                                {{ form.theme |add_class:"form-control select2" }}
+                                {{ form.theme.errors }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12"> 
+                                <label>Savoir faire  </label> :<small> Obligatoire</small>                   
+                                {{ form.knowledge|add_class:"form-control select2" }}
+                                {{ form.knowledge.errors }}
+                            </div>
+                        </div>
+                    {% endif %}
                 {% else %}  
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
@@ -101,17 +127,11 @@ ul#id_skills li{
                             {{ form.title |add_class:"form-control textarea_more_shown"  }}
                             {{ form.title.errors }}
                         </div>
-
- 
                         <div class="form-group"> 
                             <label>Savoir faire  </label> :<small> Obligatoire</small>                   
                             {{ form.knowledge|add_class:"form-control select2" }}
                             {{ form.knowledge.errors }}
                         </div>
- 
-
-
-
                         {% if  request.user.is_superuser %}
                             <div class="form-group">
                                 {{ form.point.label_tag }} <small>Optionnel (utile si utilisation en DS)</small> 

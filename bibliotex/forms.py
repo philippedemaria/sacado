@@ -21,13 +21,24 @@ class ExotexForm(forms.ModelForm):
 				knowledges = Knowledge.objects.filter(Q(level_id = knowledge.level.id )|Q(level_id = knowledge.level.id-1 ))
 				self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True)  
 				self.fields['knowledges'].required = False
+
+				self.fields['subject']	     = forms.ModelChoiceField(queryset=subjects,  required=True) 
+				self.fields['subject'].initial =  knowledge.theme.subject
+				self.fields['level']	     = forms.ModelChoiceField(queryset=levels,  required=True)  
+				self.fields['level'].initial =  knowledge.level.id
+				self.fields['theme'].initial =  knowledge.theme.id
+
 			else :
 				skills = Skill.objects.all()
 			
-			self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
-			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
+				self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
+				self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
+			
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
 			 
+
+
+
 
 class SetExotexForm(forms.ModelForm):
 	class Meta:

@@ -603,8 +603,7 @@ def association_index(request):
     nb_students  = Student.objects.all().count()#.exclude(user__username__contains="_e-test_")
     nb_exercises = Exercise.objects.filter(supportfile__is_title=0).count()
 
-    abonnements  = get_active_abonnements(request.user)
-    nb_schools   = abonnements.count()
+    nb_schools   = Customer.objects.filter(status=3).count()
 
     months       = [1,2,3,4,5,6,7,8,9,10,11,12]
     days         = [31,28,31,30,31,30,31,31,30,31,30,31]
