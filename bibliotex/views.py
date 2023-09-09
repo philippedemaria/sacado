@@ -694,10 +694,10 @@ def div_to_display_latex(request):
         if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
         if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
         if os.path.isfile(file_path+".log"):os.remove(file_path+".log")
-        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".pdf"
+        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+file_path+".pdf"
         data["test"] = True
     else : 
-        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+link+".log"
+        data["html"] = "https://sacado.xyz/ressources/tex/tmp_tex/"+file_path+".log"
         data["test"] = False
     return JsonResponse(data)
 
@@ -771,7 +771,6 @@ def exotex_display_pdf(request,ide):
     # pour windows
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
-    link = str(request.user.id)+"_"+str(datetime.now().timestamp()).split(".")[0]
     file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_bliotex_display"
     ################################################################# 
     ################################################################# 
