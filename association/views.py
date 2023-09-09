@@ -1321,10 +1321,20 @@ def create_accountancy(request):
 
 @user_passes_test(user_is_board)
 def list_accountancy(request):
-    year = Activeyear.objects.get(is_active=1).year
-    accontancies = Accountancy.objects.filter(current_year=year)
-    return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies   })
 
+    if request.method=='POST' :
+        year_id = int(request.POST.get('this_year_id'))
+        year = Activeyear.objects.get(pk=year_id).year
+        messages.success(request,"L'année de visualisation est modifiée. Par contre si tu veux modifier l'année d'activité, il faut aller dans le tableau de bord et modifier l'année. ")
+    else :
+        year = Activeyear.objects.get(is_active=1).year
+        year_id = None
+    years = Activeyear.objects.all()
+    accontancies = Accountancy.objects.filter(current_year=year)
+    return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies , 'years' : years ,'year_id' : year_id })
+
+
+ 
 
 @user_passes_test(user_is_board)
 def print_big_book(request):
