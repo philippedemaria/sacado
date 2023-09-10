@@ -349,7 +349,7 @@ class Exercise(models.Model):
     codebook    = models.CharField(max_length=5,  blank=True, default='', verbose_name="Code Livre",editable=False)
 
     def __str__(self):
-        return "{}".format(self.knowledge.name)
+        return "#{} > {}".format(self.id, self.knowledge.name)
 
     class Meta:
         unique_together = ('knowledge', 'supportfile')
