@@ -176,7 +176,7 @@ def printer(request, relationtex_id, collection,output , obj):
             elements +=r"\begin{tabular}{|p{14cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|}" 
             elements +=r" \hline "  
             elements += r" SAVOIR FAIRE & MF & ECA & BM & TBM  \\"
-            elements +=r"\hline"
+            elements +=r" \hline "
             if knowledges_printer :
                 k_ids = []
                 k_string = ""
@@ -184,15 +184,15 @@ def printer(request, relationtex_id, collection,output , obj):
                 for relationtex in relationtexs :
                     k_id_display = relationtex.exotex.knowledge.id
                     if not k_id_display in k_ids :
-                        elements += r"\raggedright " + relationtex.exotex.knowledge.name+"  &   &   & \\" 
-                        elements +=r"\hline"   
+                        elements += r" \raggedright " + relationtex.exotex.knowledge.name+"  &   &   & \\" 
+                        elements +=r" \hline "   
                         k_ids.append(k_id_display)
                     if relationtex.knowledges.count()          : kws =  relationtex.knowledges.distinct()
                     elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.distinct()
                     else : kws = []
                     for k in kws : 
                         elements += r"\raggedright " + k.name+"  &   &   & \\" 
-                        elements +=r"\hline"   
+                        elements +=r" \hline "   
 
 
                 elements +=r"\end{tabular}"
@@ -210,7 +210,7 @@ def printer(request, relationtex_id, collection,output , obj):
                     sks =  relationtex.exotex.skills.all()
                 for s in sks :
                     elements += r"\raggedright " + s.name+"  &   &   & \\" 
-                    elements +=r"\hline" 
+                    elements +=r" \hline " 
                 elements +=r"\end{tabular}"
  
                 
