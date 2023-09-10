@@ -1305,7 +1305,6 @@ def create_accountancy(request):
     form = AccountancyForm(request.POST or None )
     plan = Plancomptable.objects.order_by("code")
 
-
     if request.method == "POST":    
         date = request.POST.get("date")
         year = date.split("-")[0]
@@ -1316,22 +1315,28 @@ def create_accountancy(request):
         Accountancy.objects.create(accounting_id = 0 , ranking = 1 , plan_id = int(plan_id_d) , is_credit = 0, amount = -float(amount) , current_year = year )  
         return redirect('list_accountancy')
 
-    return render(request, 'association/form_accountancy.html', {'form': form , 'plan': plan ,    })
+    return render(request, 'association/form_accountancy.html' , {'form': form , 'plan': plan })
 
 
  
 
 @user_passes_test(user_is_board)
 def list_accountancy(request):
-
+    years = Activeyear.objects.all()
     if request.method=='POST' :
         year_id = int(request.POST.get('this_year_id'))
-        year = Activeyear.objects.get(pk=year_id).year
-        messages.success(request,"L'année de visualisation est modifiée. Par contre si tu veux modifier l'année d'activité, il faut aller dans le tableau de bord et modifier l'année. ")
+        for a in years :
+            a.is_active=0
+            a.save()
+        Activeyear.objects.filter(pk=year_id).update(is_active=1)
+        ay = Activeyear.objects.get(pk=year_id)
+        ay.is_active=1
+        ay.save()
+        year = ay.year
+        messages.success(request,"L'année de visualisation est modifiée. L'année active est "+str(year)+"-"+str(year+1))
     else :
-        year = Activeyear.objects.get(is_active=1).year
+        year    = Activeyear.objects.get(is_active=1).year
         year_id = None
-    years = Activeyear.objects.all()
     accontancies = Accountancy.objects.filter(current_year=year)
     return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies , 'years' : years ,'year_id' : year_id })
 
