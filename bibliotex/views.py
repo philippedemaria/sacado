@@ -175,10 +175,10 @@ def printer(request, relationtex_id, collection,output , obj):
         if sf_skills_first_printer :
             if knowledges_printer :
                 k_ids = []
+                k_string = ""
                 # impression des savoir faire
                 for relationtex in relationtexs :
                     k_id_display = relationtex.exotex.knowledge.id
-                    k_string = ""
                     if not k_id_display in k_ids :
                         k_string += r"\item " + relationtex.exotex.knowledge.name
                         k_ids.append(k_id_display)
@@ -186,11 +186,9 @@ def printer(request, relationtex_id, collection,output , obj):
                     elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.distinct()
                     else : kws = []
                     for k in kws : 
-                        k_string += r" \item " +  k.name  
-                
+                        k_string += r" \item " +  k.name 
 
                 elements +=  r"\savoirs{ "+k_string+r" }"
-
 
             skills_display = ""
             if skills_printer :   
