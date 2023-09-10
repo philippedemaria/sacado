@@ -172,30 +172,43 @@ def printer(request, relationtex_id, collection,output , obj):
         
         j = 1
 
-        if knowledges_printer and sf_skills_first_printer :
-            k_ids = []
-            # impression des savoir faire
-            for relationtex in relationtexs :
-                k_id_display = relationtex.exotex.knowledge.id
-                k_string = ""
-                if not k_id_display in k_ids :
-                    k_string += r"\item " + relationtex.exotex.knowledge.name
-                    k_ids.append(k_id_display)
-                if relationtex.knowledges.count()          : kws =  relationtex.knowledges.distinct()
-                elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.distinct()
-                else : kws = []
-                for k in kws : 
-                    k_string += r" \item " +  k.name  
-            
+        if sf_skills_first_printer :
+            if knowledges_printer :
+                k_ids = []
+                # impression des savoir faire
+                for relationtex in relationtexs :
+                    k_id_display = relationtex.exotex.knowledge.id
+                    k_string = ""
+                    if not k_id_display in k_ids :
+                        k_string += r"\item " + relationtex.exotex.knowledge.name
+                        k_ids.append(k_id_display)
+                    if relationtex.knowledges.count()          : kws =  relationtex.knowledges.distinct()
+                    elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.distinct()
+                    else : kws = []
+                    for k in kws : 
+                        k_string += r" \item " +  k.name  
+                
 
-            elements +=  r"\savoirs{ "+k_string+r" }"
+                elements +=  r"\savoirs{ "+k_string+r" }"
+
+
+            skills_display = ""
+            if skills_printer :   
+                if relationtex.skills.count():
+                    sks =  relationtex.skills.all()
+                else :
+                    sks =  relationtex.exotex.skills.all()
+                for s in sks :
+                    skills_display +=  s.name+". "
+                skill_dpl = r"\competence{" +skills_display+r"}"
+            else : skill_dpl = ""
 
 
 
         for relationtex in relationtexs :
         
             skills_display = ""
-            if skills_printer :   
+            if not sf_skills_first_printer and skills_printer :  
                 if relationtex.skills.count():
                     sks =  relationtex.skills.all()
                 else :
@@ -241,7 +254,7 @@ def printer(request, relationtex_id, collection,output , obj):
             j+=1
 
             # impression des savoir faire
-            if knowledges_printer and not sf_skills_first_printer :  
+            if not sf_skills_first_printer and knowledges_printer :  
                 k_display = relationtex.exotex.knowledge.name
                 elements += r"\savoirs{  \item " +  k_display 
                 if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
