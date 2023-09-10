@@ -199,6 +199,7 @@
                     <a href="{% url 'create_bibliotex' 0 %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer une nouvelle bibliotex </span></a>
  
                     <a href="{% url 'bibliotexs' %}" class="btn btn-xs btn-sacado"><i class="bi bi-clipboard-plus"></i>  <span class="btn_label">Dupliquer une bibliotex mutualisée</span></a>
+                    <a href="https://sacado.xyz/ressources/tuto_bibliotex.pdf"  class="btn btn-xs btn-sacado" target="_blank"> Tuto Bibliotex <img src="{% static 'img/pdf.png'  %}" width="15px"/></a> 
                 </div>
             </div>
 
@@ -224,8 +225,6 @@
                         <a href="#"  class="btn btn-xs btn-sacado no_sacado_asso" title="Version Etablissement requise"><i class="bi bi-clipboard-plus"></i> <span class="btn_label">Dupliquer un flashpack mutualisé</span></a>      
                     {% endif %}
                 </div>
-
-
             </div>
             {% for flashpack in flashpacks %}   
                   {% include 'flashcard/flashpack_tag.html' %} 
