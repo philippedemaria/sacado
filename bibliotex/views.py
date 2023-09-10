@@ -150,6 +150,7 @@ def printer(request, relationtex_id, collection,output , obj):
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
         relationtex_ids    = request.POST.getlist("relationtexs",None)
+        sf_skills_first_printer = request.POST.get("sf_skills_first",None)  
         
         today = datetime.now()
         if collection and relationtex_ids :
@@ -170,6 +171,20 @@ def printer(request, relationtex_id, collection,output , obj):
         if columns : elements += r"\begin{multicols}{2}"
         
         j = 1
+
+        if knowledges_printer and sf_skills_first_printer :
+            # impression des savoir faire
+            for relationtex in relationtexs :
+                k_display = relationtex.exotex.knowledge.name
+                elements += r"\savoirs{  \item " +  k_display 
+                if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
+                elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
+                else : kws = []
+                for k in kws : 
+                    elements += r" \item " +  k.name  
+                elements += r"}"
+
+
 
         for relationtex in relationtexs :
         
@@ -219,19 +234,18 @@ def printer(request, relationtex_id, collection,output , obj):
             
             j+=1
 
-            if knowledges_printer :  
+            # impression des savoir faire
+            if knowledges_printer and not sf_skills_first_printer :  
                 k_display = relationtex.exotex.knowledge.name
                 elements += r"\savoirs{  \item " +  k_display 
-
-
                 if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
                 elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
                 else : kws = []
-                
                 for k in kws : 
                     elements += r" \item " +  k.name  
-
                 elements += r"}"
+
+
 
             elements += r" \vspace{0.2cm}"
 
