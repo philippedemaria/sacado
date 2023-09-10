@@ -193,8 +193,6 @@ def printer(request, relationtex_id, collection,output , obj):
                     for k in kws : 
                         elements += r"\raggedright " + k.name+r"  &   &   & \\" 
                         elements +=r" \hline "   
-
-
                 elements +=r"\end{tabular}"
 
 

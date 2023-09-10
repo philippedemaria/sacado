@@ -1303,9 +1303,12 @@ def print_balance(request):
 @user_passes_test(user_is_board)
 def create_accountancy(request):
     form = AccountancyForm(request.POST or None )
-    year = Activeyear.objects.get(is_active=1).year
     plan = Plancomptable.objects.order_by("code")
-    if request.method == "POST":
+
+
+    if request.method == "POST":    
+        date = request.POST.get("date")
+        year = date.split("-")[0]
         plan_id_c = request.POST.get("plan_id_c",None)
         plan_id_d = request.POST.get("plan_id_d",None)
         amount = request.POST.get("amount",None)
