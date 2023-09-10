@@ -80,6 +80,13 @@
                     </div>
                     {% if is_gar_check %}
                     <div class="row">
+                        <div class="col-sm-4 col-md-2">
+                            <div class="form-group">
+                                {{ user_form.civilite.label_tag }}
+                                {{ user_form.civilite  |add_class:"form-control select2" }}
+                                {{ user_form.civilite.errors }}
+                            </div>
+                        </div>                        
                         <div class="col-sm-8 col-md-10">
                             <div class="form-group">                        
                                 {{ user_form.last_name.label_tag }}
