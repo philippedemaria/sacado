@@ -5811,7 +5811,6 @@ def ajax_publish_parcours(request):
     else :
         Folder.objects.filter(pk = int(parcours_id)).update(is_publish = statut)
 
- 
     return JsonResponse(data) 
 
  
