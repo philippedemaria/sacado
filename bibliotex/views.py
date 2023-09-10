@@ -175,7 +175,7 @@ def printer(request, relationtex_id, collection,output , obj):
         if sf_skills_first_printer :
             elements +=r"\begin{tabular}{|p{14cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|}" 
             elements +=r"\hline"  
-            elements +=r"SAVOIR FAIRE & MF & ECA & BM & TBM"  
+            elements +=r"SAVOIR FAIRE & MF & ECA & BM & TBM  \tabularnewline"
             elements +=r"\hline"
             if knowledges_printer :
                 k_ids = []
@@ -201,7 +201,7 @@ def printer(request, relationtex_id, collection,output , obj):
             if skills_printer : 
                 elements +=r"\begin{tabular}{|p{14cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|}" 
                 elements +=r"\hline"  
-                elements +=r"COMPETENCES & MF & ECA & BM & TBM"  
+                elements +=r"COMPETENCES & MF & ECA & BM & TBM \tabularnewline"  
                 elements +=r"\hline"
 
                 if relationtex.skills.count():
