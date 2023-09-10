@@ -46,18 +46,18 @@
 <section class="content_list" id="principal_section"> 
 
  
-        {% if sacado_asso %}    
+    
             {% for flashpack in flashpacks %}
                 {% include 'flashcard/flashpack_student_data.html' %} 
+
+            {% empty %}
+                <div class="alert alert-danger">
+                    <i class="fa fa-ban"></i> Aucune flashcard n'est publiée par votre enseignant.
+                </div>
+
             {% endfor %}
 
-        {% else %}
-            <div class="alert alert-danger">
-                <i class="fa fa-ban"></i> Version établissement nécessaire
-            </div>
-        {% endif %}
-
-  
+ 
 </section>
 
  

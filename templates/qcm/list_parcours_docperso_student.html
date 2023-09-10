@@ -43,17 +43,19 @@
 
 <section class="content_list" id="principal_section"> 
 
- 
-        {% if sacado_asso %}    
+  
             {% for docperso in docpersos %}
                 {% include 'qcm/docperso_tag_student.html' %} 
+
+            {% empty %}
+                <div class="alert alert-danger">
+                    <i class="fa fa-ban"></i> Aucun document n'est publié par votre enseignant.
+                </div>
+
+
             {% endfor %}
 
-        {% else %}
-            <div class="alert alert-danger">
-                <i class="fa fa-ban"></i> Version établissement nécessaire
-            </div>
-        {% endif %}
+ 
 
   
 </section>
