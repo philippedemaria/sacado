@@ -173,6 +173,10 @@ def printer(request, relationtex_id, collection,output , obj):
         j = 1
 
         if sf_skills_first_printer :
+            elements +=r"\begin{tabular}{|p{14cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|}" 
+            elements +=r"\hline"  
+            elements +=r"SAVOIR FAIRE & MF & ECA & BM & TBM"  
+            elements +=r"\hline"
             if knowledges_printer :
                 k_ids = []
                 k_string = ""
@@ -180,27 +184,36 @@ def printer(request, relationtex_id, collection,output , obj):
                 for relationtex in relationtexs :
                     k_id_display = relationtex.exotex.knowledge.id
                     if not k_id_display in k_ids :
-                        k_string += r"\item " + relationtex.exotex.knowledge.name
+                        elements += r"\raggedright " + relationtex.exotex.knowledge.name+"  &   &   &" 
+                        elements +=r"\hline"   
                         k_ids.append(k_id_display)
                     if relationtex.knowledges.count()          : kws =  relationtex.knowledges.distinct()
                     elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.distinct()
                     else : kws = []
                     for k in kws : 
-                        k_string += r" \item " +  k.name 
+                        elements += r"\raggedright " + k.name+"  &   &   &" 
+                        elements +=r"\hline"   
 
-                elements +=  r"\savoirs{ "+k_string+r" }"
 
-            skills_display = ""
-            if skills_printer :   
+                elements +=r"\end{tabular}"
+
+
+            if skills_printer : 
+                elements +=r"\begin{tabular}{|p{14cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|}" 
+                elements +=r"\hline"  
+                elements +=r"COMPETENCES & MF & ECA & BM & TBM"  
+                elements +=r"\hline"
+
                 if relationtex.skills.count():
                     sks =  relationtex.skills.all()
                 else :
                     sks =  relationtex.exotex.skills.all()
                 for s in sks :
-                    skills_display +=  s.name+". "
-                skill_dpl = r"\competence{" +skills_display+r"}"
-            else : skill_dpl = ""
-
+                    elements += r"\raggedright " + s.name+"  &   &   &" 
+                    elements +=r"\hline" 
+                elements +=r"\end{tabular}"
+ 
+                
 
 
         for relationtex in relationtexs :
