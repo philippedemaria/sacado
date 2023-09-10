@@ -197,6 +197,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
 
             if skills_printer : 
+                elements +=r"\\"
                 elements +=r"\begin{tabular}{|p{14cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|p{0.8cm}|}" 
                 elements +=r"\hline"  
                 elements +=r" COMPETENCES & MF & ECA & BM & TBM \\"  
