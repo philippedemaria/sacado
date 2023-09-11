@@ -1983,8 +1983,6 @@ def list_evaluations_archives(request):
 @login_required(login_url= 'index')
 def list_parcours_group(request,id):
 
-    parcours_are_in_trash()
-
     try :
         teacher = request.user.teacher
     except :
