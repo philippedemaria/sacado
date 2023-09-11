@@ -86,7 +86,8 @@
     
     <td style="position:relative">
         <span id="new_group_affected{{ parcours.id}}">
-        {% for g in  parcours.groups.all  %}
+        {% get_teacher_group_list parcours teacher as teacher_group_list %}   
+        {% for g in teacher_group_list  %}
             <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
         {% endfor %}
         </span>

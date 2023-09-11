@@ -1290,3 +1290,12 @@ def get_teacher_folders(obj,teacher):
     retourne  la liste en str des bibliotex utilisées par un exerciceTex
     """
     return obj.teacher_folders(teacher) 
+
+
+
+@register.simple_tag
+def get_teacher_group_list(obj,teacher): 
+    """
+    retourne  la liste en str des bibliotex utilisées par un exerciceTex
+    """
+    return obj.teacher_group_list(teacher)

@@ -24,8 +24,8 @@
             {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
        
 
-
-        {% for f in  parcours.folders.all  %}
+        {% get_teacher_folders parcours teacher as parcours_teacher_folders %}
+        {% for f in  parcours_teacher_folders   %}
 
             <a href="{% url 'show_parcours' f.id parcours.id %}" title="{{ parcours.title }} dans le dossier {{ f.title }}"><b><i class="bi bi-eye-fill"></i></b> </a>
 
@@ -63,7 +63,8 @@
     </td>
     <td style="position:relative">
         <span id="new_group_affected{{ parcours.id}}">
-        {% for g in  parcours.groups.all  %}
+        {% get_teacher_group_list parcours teacher as teacher_group_list %}   
+        {% for g in teacher_group_list  %}
             <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
         {% endfor %}
         </span>
