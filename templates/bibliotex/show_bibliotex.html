@@ -156,7 +156,7 @@
             </li>
             {% else %}
             <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
-                <a href="{% url 'print_exotex_by_student' r.id  %}" class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </a> 
+                <a href="{% url 'print_exotex_by_student' r.id  %}" target="_blank" class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </a> 
             </li>
             {% endif %}
 
