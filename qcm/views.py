@@ -4503,6 +4503,10 @@ def list_parcours_bibliotex_student(request, idp):
     return render(request, 'qcm/list_parcours_bibliotex_student.html', context)
 
 
+
+
+
+
 @login_required(login_url= 'index')
 def parcours_show_bibliotex_student(request, idp,id):
 
