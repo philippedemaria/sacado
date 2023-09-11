@@ -38,12 +38,8 @@
 {% block page_menu_right %}
 
 
-    {% if request.user.user_type == 2 %}
-        {% include 'bibliotex/submenu_bibliotex_exotex.html' %}
-    {% else %}
-        {% if not parcours.is_sequence %}
+    {% if request.user.user_type == 0 and not parcours.is_sequence %}
             {% include 'qcm/submenu_parcours_student.html' %}
-        {% endif %}
     {% endif %}
 
 {% endblock %}
@@ -218,87 +214,87 @@
 
     </div>
 
-{% if group %}
+    {% if group %}
 
-<div class="modal fade" id="individualise_tex{{ r.id }}" tabindex="-1" role="dialog" aria-labelledby="individualise_tex{{ r.id }}">
-    <div class="modal-dialog" role="document" style="width:70%">
-        <div class="modal-content" >
-            <div class="modal-header">     
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
+    <div class="modal fade" id="individualise_tex{{ r.id }}" tabindex="-1" role="dialog" aria-labelledby="individualise_tex{{ r.id }}">
+        <div class="modal-dialog" role="document" style="width:70%">
+            <div class="modal-content" >
+                <div class="modal-header">     
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> 
 
-                <h2>Individualiser l'exercice</h2>  
-            </div>
-            <div class="modal-body">
-                 <div class="row"  >
-                    <div class="col-sm-12 col-md-6" >        
-  
-                        
-          
-                        {% if r.calculator %}
-                          <img src="{% static 'img/calculator.png' %}" width="20px" />
-                        {% else %}
-                          <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
-                        {% endif  %} {{ r.exotex.title|cleanhtml|capfirst }} 
-                        <span id="loading{{ relationtex.id }}" class="pull-right"></span>
-                       
-        
-                         {% if r.is_publish %} 
-                            <span class="pull-right" style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #00a65a; color: #FFF"> Exercice publié </span> 
-                         {% else %}
-                            <span class="pull-right" style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #cb2131; color: #FFF"> Exercice non publié </span> 
-                         {% endif %}
+                    <h2>Individualiser l'exercice</h2>  
+                </div>
+                <div class="modal-body">
+                     <div class="row"  >
+                        <div class="col-sm-12 col-md-6" >        
+      
+                            
+              
+                            {% if r.calculator %}
+                              <img src="{% static 'img/calculator.png' %}" width="20px" />
+                            {% else %}
+                              <img src="{% static 'img/no_calculator.png' %}"  width="20px" />
+                            {% endif  %} {{ r.exotex.title|cleanhtml|capfirst }} 
+                            <span id="loading{{ relationtex.id }}" class="pull-right"></span>
+                           
+            
+                             {% if r.is_publish %} 
+                                <span class="pull-right" style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #00a65a; color: #FFF"> Exercice publié </span> 
+                             {% else %}
+                                <span class="pull-right" style="clear: both; width:150px; padding:5px; border-radius: 4px; background-color: #cb2131; color: #FFF"> Exercice non publié </span> 
+                             {% endif %}
 
-                        <hr/>
-                        {% if r.r %}
-                            {{ relationtex.content_html|safe }} 
-                         {% else %}
-                            {{ r.exotex.content_html|safe }} 
-                         {% endif %}
+                            <hr/>
+                            {% if r.r %}
+                                {{ relationtex.content_html|safe }} 
+                             {% else %}
+                                {{ r.exotex.content_html|safe }} 
+                             {% endif %}
+                        </div> 
+                        <div  class="col-sm-12 col-md-6">
+                                <span class="btn btn-info select_student" 
+                                    id="selecteur{{r.exercise.id}}"    
+                                    data-student_id="0"   data-custom=0
+                                    data-relationtex_id="{{ r.id }}" 
+                                    data-statut="False" style="min-width:75px; margin:1px; margin-right:0px" >Tous
+
+                                    <input  type="checkbox"  style="display:none"
+                                    data-student_id="0"    
+                                    data-relationtex_id="{{ r.id }}" 
+                                    data-statut="False"    />
+                                </span>
+                                <span class="btn btn-warning select_student" 
+                                    id="selecteur{{r.exercise.id}}"    
+                                    data-student_id="0" 
+                                    data-relationtex_id="{{ r.id }}" 
+                                    data-statut="True" style="min-width:75px; margin:1px; margin-left:0px" >Aucun
+
+                                    <input  type="checkbox"  style="display:none"
+                                    data-student_id="0"    data-custom=0
+                                    data-relationtex_id="{{ r.id }}" 
+                                    data-statut="True" />
+                                </span>
+                            
+                            {% get_only_students bibliotex group as  only_students %} 
+                             {%  for s in  only_students.students.all %}
+
+                                {% get_exercise s relationtex as has_it %}
+                                <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationtex.id}} selected_studentExo{{s.user.id }}" 
+                                    id="student{{relationtex.id}}-{{s.user.id }}"
+                                    data-student_id="{{ s.user.id }}" data-relationtex_id="{{ relationtex.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
+                                    style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:4 }}
+                                </span>
+                            {%  endfor %}
+                           
+                        </div>   
                     </div> 
-                    <div  class="col-sm-12 col-md-6">
-                            <span class="btn btn-info select_student" 
-                                id="selecteur{{r.exercise.id}}"    
-                                data-student_id="0"   data-custom=0
-                                data-relationtex_id="{{ r.id }}" 
-                                data-statut="False" style="min-width:75px; margin:1px; margin-right:0px" >Tous
-
-                                <input  type="checkbox"  style="display:none"
-                                data-student_id="0"    
-                                data-relationtex_id="{{ r.id }}" 
-                                data-statut="False"    />
-                            </span>
-                            <span class="btn btn-warning select_student" 
-                                id="selecteur{{r.exercise.id}}"    
-                                data-student_id="0" 
-                                data-relationtex_id="{{ r.id }}" 
-                                data-statut="True" style="min-width:75px; margin:1px; margin-left:0px" >Aucun
-
-                                <input  type="checkbox"  style="display:none"
-                                data-student_id="0"    data-custom=0
-                                data-relationtex_id="{{ r.id }}" 
-                                data-statut="True" />
-                            </span>
-                        
-                        {% get_only_students bibliotex group as  only_students %} 
-                         {%  for s in  only_students.students.all %}
-
-                            {% get_exercise s relationtex as has_it %}
-                            <span class="btn btn-{% if has_it %}success{% else  %}default{% endif  %} select_student selected_student{{relationtex.id}} selected_studentExo{{s.user.id }}" 
-                                id="student{{relationtex.id}}-{{s.user.id }}"
-                                data-student_id="{{ s.user.id }}" data-relationtex_id="{{ relationtex.id }}"  data-statut="{% if has_it %}True{% else  %}False{% endif  %}"  
-                                style="min-width:155px; margin:1px"/>{{ s.user.last_name }} {{ s.user.first_name|truncatechars:4 }}
-                            </span>
-                        {%  endfor %}
-                       
-                    </div>   
-                </div> 
+                </div>
             </div>
-        </div>
-    </div> 
-</div>
- {%  endif %}
+        </div> 
+    </div>
+     {%  endif %}
 
 
 
@@ -318,7 +314,7 @@
     </div>
     {%  endif %}
 <div style="clear:both"></div>
-<input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
+        <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>  
 
 </section> 
 </form>

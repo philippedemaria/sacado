@@ -289,7 +289,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         processData: false
                 }
             )
-         });
+        });
 
 
     });

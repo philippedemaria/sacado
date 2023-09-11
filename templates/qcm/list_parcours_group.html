@@ -9,7 +9,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4.js' %}"></script>
  
     <script>
-        require(['script/ajax-parcours','script/ajax-organiser']);
+        require(['script/ajax-parcours','script/ajax-organiser' ]);
     </script> 
 
 <style>
@@ -288,5 +288,9 @@
         </div>
     </div> 
 </div> 
+
+
+{% include 'bibliotex/duplication_modal.html' %}
+
 
 {% endblock  %}   

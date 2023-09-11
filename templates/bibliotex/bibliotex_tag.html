@@ -125,9 +125,21 @@
 
      
             <div class="col-lg-1 col-xs-1">
-                <a href="{% url 'update_bibliotex' bibliotex.id  %}" class="edit" title="Dupliquer" ><i class="bi bi-clipboard-plus"></i> </a> 
+                <a  href="#" data-toggle='modal' data-target='#duplication_modal'  class="edit" title="Dupliquer"  
+                    id='duplication_document' 
+                    data-document_id='{{ bibliotex.id }}' data-document_title='{{ bibliotex.title }}'><i class="bi bi-clipboard-plus"></i>
+                </a>  
+ 
             </div> 
 
+     
+            <div class="col-lg-1 col-xs-1">
+                {% if folder %}
+                <a href="{% url 'change_publications_in_all_exotex' folder.id  bibliotex.id  %}" class="edit" title="Gérer les publications"><i class="fa fa-circle-o-notch"></i> </a> 
+                {% else %}
+                <a href="{% url 'change_publications_in_all_exotex' 0 bibliotex.id  %}" class="edit" title="Gérer les publications"><i class="fa fa-circle-o-notch"></i>  </a> 
+                {% endif %}
+            </div> 
 
             <div class="col-lg-3 col-xs-3">
                  <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex_out" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex edit" title="Imprimer"><i class="bi bi-printer"></i> 
