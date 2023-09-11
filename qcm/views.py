@@ -13681,27 +13681,19 @@ def delete_folder_and_contents(request,id,idg):
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
-    folder = Folder.objects.get(id=id)
+    folder = folder.objects.get(id=id)
 
-    if folder.teacher.id == 2480 :
-        messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
-        return redirect('index')
-
-    if not authorizing_access(teacher,parcours, True ):
-        messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
-        return redirect('index')
-
-    if parcours.teacher == teacher or request.user.is_superuser :
+    if folder.teacher == teacher or request.user.is_superuser :
         for p in folder.parcours.all()  :
             if p.teacher == teacher or request.user.is_superuser :
                 p.is_trash=1
                 p.save()
-        parcours.is_trash=1
-        parcours.save()
-        messages.success(request, "Le dossier "+ parcours.title +" et les parcours associés sont supprimés.")
+        folder.is_trash=1
+        folder.save()
+        messages.success(request, "Le dossier "+ folder.title +" et les parcours associés sont supprimés.")
     
     else :
-        messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ parcours.title +". Contacter le propriétaire.")
+        messages.error(request, "Vous ne pouvez pas supprimer le dossier "+ folder.title +". Contacter le propriétaire.")
     
     if idg == 0 :
         return redirect ("parcours" )  

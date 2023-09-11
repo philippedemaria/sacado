@@ -207,13 +207,13 @@ def student_dashboard(request,group_id):
             group = None
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
-        bases = student.students_to_parcours.all() 
+        bases = student.students_to_parcours.filter(is_trash=0).order_by("ranking") 
         last_exercises_done = student.answers.order_by("-date")[:5]
 
 
 
-    parcours_sequences = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_evaluation=0, is_trash=0)
-    evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_evaluation=1,is_trash=0).order_by("ranking") 
+    parcours_sequences = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_evaluation=0).order_by("ranking") 
+    evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_evaluation=1).order_by("ranking") 
        
     parcourses_brut  = parcours_sequences.filter(is_sequence=0).order_by("ranking")
     sequences_brut   = parcours_sequences.filter(is_sequence=1).order_by("ranking")
