@@ -20,20 +20,16 @@
             </div>
 
 
-
-
-            <div class="box_title_underlay_vignette" style="background-color:{{ group.color }};">
-            </div> 
             <div class="box_title_vignette"> 
                 {% if docperso.file %}
-                <a href="{{ docperso.file.url}}" style="color:{{ group.color|contrast_color }};" target="_blank">
-                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100">{{ docperso.title|truncatechars:"25" }}
+                <a href="{{ docperso.file.url}}"  target="_blank">
+                    <span class="helper_tip" style="color:{{ parcours.color }};font-size:20px;font-weight: 100">{{ docperso.title|truncatechars:"25" }}
                         <div class="helper_tip_text_right">{{ docperso.title }}</div>
                     </span>
                 </a>
                 {% else %}
-                <a href="{{ docperso.link }}" style="color:{{ group.color|contrast_color }};" target="_blank">
-                    <span class="helper_tip" style="color:{{ parcours.color|contrast_color }};font-size:20px;font-weight: 100">{{ docperso.title|truncatechars:"25" }}
+                <a href="{{ docperso.link }}" target="_blank">
+                    <span class="helper_tip" style="color:{{ parcours.color }};font-size:20px;font-weight: 100">{{ docperso.title|truncatechars:"25" }}
                         <div class="helper_tip_text_right">{{ docperso.title }}</div>
                     </span>
                 </a>
