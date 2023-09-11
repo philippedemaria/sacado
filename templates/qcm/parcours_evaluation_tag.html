@@ -61,7 +61,7 @@
                         {% else %}
                              
                             <a href="{% url 'create_flashpack_from_parcours' parcours.id %}" class="edit" title="Ajouter un flashpack à ce dossier">   
-                                  <span class="label_icon">F-pack</span>
+                                <i class="bi bi-stack"></i><span class="label_icon">F-pack</span>
                             </a>
                 
                         {% endif  %}
@@ -95,7 +95,7 @@
                         <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="edit" title="Associer un quiz"> <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz <i class="bi bi-patch-plus-fill"></i></span> </a> 
                         {% else %}
                         <a href="{% url 'create_quizz_parcours'  parcours.id %}" class="edit" title="Ajouter un quizz à ce dossier">   
-                            <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> > 
+                            <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span>  
                         </a> 
                         {% endif  %}
                     {% else  %}
