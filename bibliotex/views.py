@@ -829,6 +829,41 @@ def exotex_display_pdf(request,ide):
         return FileResponse(open(file_path+".pdf", 'rb'))
 
 
+def print_exotex_by_student(request,ide):
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+
+    exotex = Exotex.objects.get(pk=ide)
+
+    elements +=r"\begin{document}"+"\n"  
+    elements += exotex.content
+    elements +=  r"\end{document}"
+    ################################################################# 
+    ################################################################# Attention ERREUR si non modif
+    # pour windows
+    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
+    # pour le serveur Linux
+    file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_exotex_display"
+    ################################################################# 
+    ################################################################# 
+    with open(file_path+".tex", 'w') as file:
+        file.write(elements)
+        file.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
+
+    if result.returncode :  
+        return FileResponse(open(file_path+".log", 'rb'))
+    else : 
+        if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+        if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
+        if os.path.isfile(file_path+".log"):os.remove(file_path+".log") 
+        return FileResponse(open(file_path+".pdf", 'rb'))
+
 #########################################################################################################################################
 #########################################################################################################################################
 ######## Bibliotex

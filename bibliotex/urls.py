@@ -108,6 +108,7 @@ urlpatterns = [
     path('exotex_display_pdf/<int:ide>', exotex_display_pdf, name='exotex_display_pdf'),
 
 
+    path('print_exotex_by_student/<int:ide>', print_exotex_by_student, name='print_exotex_by_student'),
 
     path('change_publications_in_all_exotex/<int:idf>/<int:idb>', change_publications_in_all_exotex, name='change_publications_in_all_exotex'),
 
