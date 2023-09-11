@@ -837,10 +837,13 @@ def print_exotex_by_student(request,ide):
     elements=entetes.read()
     entetes.close()
 
-    exotex = Exotex.objects.get(pk=ide)
+    relationtex = Relationtex.objects.get(pk=ide)
 
-    elements +=r"\begin{document}"+"\n"  
-    elements += exotex.content
+    elements +=r"\begin{document}"+"\n"
+    if relationtex.content : 
+        elements += relationtex.content
+    else :
+        elements += relationtex.exotex.content
     elements +=  r"\end{document}"
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
