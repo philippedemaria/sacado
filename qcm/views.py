@@ -82,7 +82,21 @@ import xlwt
 #                 relationship.duration = int(seconde_avg['average'] // 60) + 2
 #                 relationship.save()
 
- 
+
+def parcours_are_in_trash() :
+
+    for f in Folder.objects.filter(is_trash=1):
+        for p in f.parcours.all():
+            p.is_trash=1
+            p.save()
+
+
+
+
+
+
+
+
 
 def is_sacado_asso(this_user, today):
     is_sacado = False
@@ -1968,6 +1982,8 @@ def list_evaluations_archives(request):
 
 @login_required(login_url= 'index')
 def list_parcours_group(request,id):
+
+    parcours_are_in_trash()
 
     try :
         teacher = request.user.teacher
