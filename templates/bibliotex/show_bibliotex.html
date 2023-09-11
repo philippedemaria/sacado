@@ -150,9 +150,17 @@
 
 
 
+            {% if request.user.is_teacher %}
             <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
             </li>
+            {% else %}
+            <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
+                <a href="{% url 'print_exotex_by_student' r.id  %}" class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
+            </li>
+            {% endif %}
+
+
             {% if request.user.is_teacher %}
             <li class="relative_div_exotex action_print_tex  {% if not r.is_publish %}no_visu_on_load{% endif %}"   data-relationtex_id="{{ r.id }}">  
                 <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="20px" style="padding:3px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
@@ -194,6 +202,7 @@
             {% if r.correction  or r.exotex.correction  %}<hr/>
                    
                     <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
+
                     {% if r.is_publish_cor %}
                           <i class="fa fa-eye text-success pull-right" title="Correction : Publier"></i>
                     {% else %}
