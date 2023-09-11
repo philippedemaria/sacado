@@ -119,14 +119,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         //////////////////////////////////////////////////////////////////////////////////////////////////
         // ACTIONNER LA FLECHE DES ACCORDIONS
         //////////////////////////////////////////////////////////////////////////////////////////////////
-        $('.actionner_accordion').on('click', function (event) {
+        $(document).on('click', '.actionner_accordion', function (event) {
                 let loop = $(this).data("loop") ; 
                 if  ($("#collapser_angle"+loop).hasClass("fa-angle-up"))
                 {
-                    setTimeout( change_direction('bottom',loop) , 1000 ); 
+                    change_direction('bottom',loop) ; 
                 }
                 else{
-                    setTimeout( change_direction('top',loop) , 1000 );
+                     change_direction('top',loop) ;
                 }
             });
 

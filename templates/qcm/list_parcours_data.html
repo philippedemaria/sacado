@@ -26,9 +26,8 @@
           {{ parcours.title }} 
             {% if is_lock %}<span class="helper_tip"><i class="fa fa-lock"></i><div class="helper_tip_text_right">Le parcours est verrouillé. Il n'est plus possible de soumettre des exercices.</div></span>{% endif %}
         
-
-        {% for f in  parcours.folders.all  %}
-
+        {% get_teacher_folders parcours teacher as parcours_teacher_folders %}
+        {% for f in  parcours_teacher_folders   %}
             <a href="{% url 'show_parcours' f.id parcours.id %}" title="Voir les exercices du parcours" > <b><i class="bi bi-eye-fill"></i></b> </a>
         {% empty %}
 

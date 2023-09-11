@@ -1282,3 +1282,11 @@ def get_exo_is_in_used_in_biliotex(obj,teacher):
     retourne  la liste en str des bibliotex utilisées par un exerciceTex
     """
     return obj.is_used_in_bibliotex(teacher) 
+
+
+@register.simple_tag
+def get_teacher_folders(obj,teacher): 
+    """
+    retourne  la liste en str des bibliotex utilisées par un exerciceTex
+    """
+    return obj.teacher_folders(teacher) 

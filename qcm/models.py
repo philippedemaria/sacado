@@ -1181,6 +1181,8 @@ class Parcours(ModelWithCode):
         return  self.quizz.filter(is_random=1)
 
 
+    def teacher_folders(self,teacher):
+        return  self.folders.filter(teacher=teacher)
 
 
 #############################################################################################################################################

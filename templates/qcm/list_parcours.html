@@ -78,7 +78,9 @@
                          {% endif %}  
                          {{ folder.title }} <i class="fa fa-angle-down" id="collapser_angle{{ forloop.counter }}"></i>
                             <span class="list_label list_subject">{{ folder.subject.shortname }}  </span>
-                            <span class="list_label">{{ folder.level.name }} </span>
+                            <span class="list_label">
+                            {% for g in folder.groups.all %}{{ g.name }}{% endfor %} 
+                            </span>
                         </a>
                         </h4>
                     </div>
