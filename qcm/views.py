@@ -13980,6 +13980,7 @@ def create_docperso_parcours(request,idp=0):
             group = Group.objects.get(pk=idg)
             nf.groups.add(group)
             nf.levels.add(group.level)
+            nf.students.set(group.students.all())
 
         messages.success(request, 'Le document a été créé avec succès !')
         if folder and parcours : 
