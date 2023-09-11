@@ -13973,9 +13973,11 @@ def create_docperso_parcours(request,idp=0):
         if idf : 
             folder = Folder.objects.get(pk=idf)
             nf.folders.add(folder)
+            nf.students.set(folder.students.all())
         if idp : 
             parcours = Parcours.objects.get(pk=idp)   
             nf.parcours.add(parcours)
+            nf.students.set(parcours.students.all())
         if idg : 
             group = Group.objects.get(pk=idg)
             nf.groups.add(group)
@@ -14024,14 +14026,16 @@ def update_docperso(request, idp,idd):
         if idf : 
             folder = Folder.objects.get(pk=idf)
             nf.folders.add(folder)
+            nf.students.set(folder.students.all())
         if idp : 
             parcours = Parcours.objects.get(pk=idp)   
             nf.parcours.add(parcours)
-        
+            nf.students.set(parcours.students.all())
         if idg : 
             group = Group.objects.get(pk=idg)
             nf.groups.add(group)
             nf.levels.add(group.level)
+            nf.students.set(group.students.all())
 
         messages.success(request, 'Le document a été créé avec succès !')
         if parcours and folder : 
