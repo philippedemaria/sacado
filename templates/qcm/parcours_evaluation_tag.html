@@ -76,7 +76,7 @@
                     
                 </div> 
                 <div class="col-xs-4 col-md-4 col-lg-4">
-                    {% if request.user.is_sacado_member %}
+                    {% if sacado_asso %}
                         {% if parcours.is_sequence %}
                             <a href="{% url 'peuplate_bibliotex_parcours' parcours.id   %}" class="edit"  title="Associer une biblioTex"> <i class="bi bi-bootstrap"></i> <span class="label_icon">BiblioTex <i class="bi bi-patch-plus-fill"></i></span> </a>
                         {% else %}
@@ -92,11 +92,10 @@
 
                 </div> 
                 <div class="col-xs-4 col-md-4 col-lg-4">
-                    {% if request.user.is_sacado_member %}
+                    {% if sacado_asso %}
                         {% if parcours.is_sequence %}
                         <a href="{% url 'peuplate_quizz_parcours' parcours.id   %}" class="edit" title="Associer un quiz"> <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz <i class="bi bi-patch-plus-fill"></i></span> </a> 
                         {% else %}
- >
                         <a href="{% url 'create_quizz_parcours'  parcours.id %}" style="font-size: 10px" class="edit" title="Ajouter un quizz à ce dossier">   
                             <i class="bi bi-aspect-ratio"></i> <span class="label_icon">Quizz</span> > 
                         </a> 
