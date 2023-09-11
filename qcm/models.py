@@ -1017,7 +1017,7 @@ class Parcours(ModelWithCode):
         data["nb_exercise"]  = nb_exo_in_parcours
         data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
         data["nb_flashpack"] = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) ,  is_publish =1, students = student ).count()
-
+        data["nb_docperso"]  = self.docpersos.filter(is_publish=1, students=student).count()
 
 
         try :
