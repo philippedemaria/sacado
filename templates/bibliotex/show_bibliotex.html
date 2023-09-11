@@ -199,7 +199,7 @@
                 {% endif %}
             </div>  
             {% if request.user.is_teacher %}
-            {% if r.correction  or r.exotex.correction  %}<hr/>
+                {% if r.correction  or r.exotex.correction  %}<hr/>
                    
                     <a href="javascript:void();" data-relationtex_id="{{ r.id }}" class="printer_correction" id="print_correction{{ r.id }}"  >
 
@@ -222,8 +222,22 @@
                                 {{ r.exotex.correction_html|safe }} 
                             {% endif %}
                       
+                    </div>            
+                {% endif %}
+            {% else %}
+                {% if r.correction  or r.exotex.correction  %}<hr/>
+                    <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" > Correction <i class="fa fa-caret-down"></i></a>
+                    <div id="correction{{ r.id }}" class="no_visu_on_load {% if r.is_publish_cor %}exotex_correction{% else %}exotex_correction_no_display{% endif %}"> 
+                 
+                            {% if r.correction_html %}
+                                {{ r.correction_html|safe }} 
+                            {% else %}
+                                {{ r.exotex.correction_html|safe }} 
+                            {% endif %}
+                      
                     </div>
-            {% endif %}
+
+                {% endif %}
             {% endif %} 
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
         </div>
