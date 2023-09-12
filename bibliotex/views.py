@@ -729,15 +729,17 @@ def div_to_display_latex(request):
 
     #return FileResponse(open(file_path+".pdf", 'rb'),  as_attachment=True, content_type='application/pdf')
     data={}
-    
-    if result.returncode :  
-        return FileResponse(open(file_path+".log", 'rb'))
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+    if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")   
+    if result.returncode : 
+        data['test'] = False
+        data['html'] = file_path+".log"
     else : 
-        if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
-        if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")     
-        return FileResponse(open(file_path+".pdf", 'rb'))
+        if os.path.isfile(file_path+".log"):os.remove(file_path+".log") 
+        data['test'] = True
+        data['html'] = file_path+".pdf"
 
- 
+    return JsonResponse(data)
  
 def update_relationtex(request, id):
 
