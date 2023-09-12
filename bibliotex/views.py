@@ -733,11 +733,11 @@ def div_to_display_latex(request):
     if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")   
     if result.returncode : 
         data['test'] = False
-        data['html'] = file_path+".log"
+        data['html'] = "https://sacado.xyz/ressources/tex/tmp_tex/"+str(request.user.id)+"_exotex_display.log"
     else : 
         if os.path.isfile(file_path+".log"):os.remove(file_path+".log") 
         data['test'] = True
-        data['html'] = file_path+".pdf"
+        data['html'] = "https://sacado.xyz/ressources/tex/tmp_tex/"+str(request.user.id)+"_exotex_display.pdf"
 
     return JsonResponse(data)
  
