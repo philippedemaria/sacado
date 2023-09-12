@@ -718,9 +718,6 @@ def div_to_display_latex(request):
     elements +=  r" \end{document}"
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
-    # pour windows
-    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
-    # pour le serveur Linux
     file_path = settings.DIR_TMP_TEX + str(request.user.id)+"_exotex_display"
     ################################################################# 
     ################################################################# 
@@ -738,7 +735,7 @@ def div_to_display_latex(request):
     else : 
         if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
         if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")     
-        return FileResponse(open("/var/www/sacado/ressources/tex/tmp_tex"+ str(request.user.id)+"_exotex_display.pdf", 'rb'))
+        return FileResponse(open(file_path+".pdf", 'rb'))
 
  
  
