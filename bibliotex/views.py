@@ -708,14 +708,14 @@ def div_to_display_latex(request):
     elements=entetes.read()
     entetes.close()
 
-    elements +=r"\begin{document}"+"\n"  
+    elements +=r" \begin{document} " 
     elements += this_text
-    elements += r"\newpage"
+    elements += r" \newpage "
     if  this_correction : 
-        elements += r"\centerline{ \fbox{Corrigé} }"
+        elements += r" \centerline{ \fbox{Corrigé} } "
         elements += this_correction
 
-    elements +=  r"\end{document}"
+    elements +=  r" \end{document}"
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
     # pour windows
