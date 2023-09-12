@@ -738,7 +738,7 @@ def div_to_display_latex(request):
     else : 
         if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
         if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")     
-        return FileResponse(open(settings.DIR_TMP_TEX[:-1]+ str(request.user.id)+"_bibliotex_display.pdf", 'rb'))
+        return FileResponse(open("/var/www/sacado/ressources/tex/tmp_tex/"+ str(request.user.id)+"_bibliotex_display.pdf", 'rb'))
 
  
  
